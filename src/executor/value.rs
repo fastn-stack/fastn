@@ -49,7 +49,63 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
         line_number: v_line_number,
         properties,
         value,
-    } = find_value_by_argument(sources.as_slice(), properties, doc, argument, line_number)?;
+    } = find_value_by_argument(
+        sources.as_slice(),
+        properties,
+        doc,
+        argument,
+        line_number,
+        false,
+    )?;
+    let expected_kind = value.as_ref().map(|v| v.kind());
+    if !expected_kind
+        .as_ref()
+        .map_or(true, |v| v.is_same_as(&argument.kind.kind))
+    {
+        return ftd::executor::utils::parse_error(
+            format!(
+                "Expected kind {:?}, found: `{:?}`",
+                expected_kind, argument.kind.kind
+            ),
+            doc.name,
+            line_number,
+        );
+    }
+
+    Ok(ftd::executor::Value::new(value, v_line_number, properties))
+}
+
+pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    is_dummy: bool,
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
+    let argument =
+        arguments
+            .iter()
+            .find(|v| v.name.eq(key))
+            .ok_or(ftd::executor::Error::ParseError {
+                message: format!("Cannot find `{}` argument", key),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+
+    let sources = argument.to_sources();
+    let ftd::executor::Value {
+        line_number: v_line_number,
+        properties,
+        value,
+    } = find_value_by_argument(
+        sources.as_slice(),
+        properties,
+        doc,
+        argument,
+        line_number,
+        is_dummy,
+    )?;
     let expected_kind = value.as_ref().map(|v| v.kind());
     if !expected_kind
         .as_ref()
@@ -99,6 +155,7 @@ pub(crate) fn find_value_by_argument(
     doc: &ftd::executor::TDoc,
     argument: &ftd::interpreter2::Argument,
     line_number: usize,
+    is_dummy: bool,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
     let properties = ftd::executor::value::find_properties_by_source(
         source,
@@ -110,12 +167,29 @@ pub(crate) fn find_value_by_argument(
 
     let mut value = None;
     let mut line_number = None;
-    for p in properties.iter() {
-        if let Some(v) = p.resolve(&doc.itdoc())? {
-            value = Some(v);
-            line_number = Some(p.line_number);
-            if p.condition.is_some() {
-                break;
+    if !is_dummy {
+        for p in properties.iter() {
+            if let Some(v) = p.resolve(&doc.itdoc())? {
+                value = Some(v);
+                line_number = Some(p.line_number);
+                if p.condition.is_some() {
+                    break;
+                }
+            }
+        }
+    } else {
+        for p in properties.iter() {
+            if let Ok(Some(v)) = p.resolve(&doc.itdoc()) {
+                value = Some(v);
+                line_number = Some(p.line_number);
+                if p.condition.is_some() {
+                    break;
+                }
+            } else if p.condition.is_none() {
+                if let Some(v) = p.value.get_reference_or_clone() {
+                    value = Some(ftd::interpreter2::Value::new_string(v));
+                    line_number = Some(p.line_number);
+                }
             }
         }
     }
@@ -432,6 +506,42 @@ pub fn optional_string(
         arguments,
         doc,
         line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::String { text }) => Ok(ftd::executor::Value::new(
+            Some(text),
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional string, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
+pub fn dummy_optional_string(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    is_dummy: bool,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+        is_dummy,
     )?;
 
     match value.value.and_then(|v| v.inner()) {

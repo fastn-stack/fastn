@@ -10,6 +10,8 @@ pub enum Element {
     Code(Code),
     Iframe(Iframe),
     TextInput(TextInput),
+    RawElement(RawElement),
+    IterativeElement(IterativeElement),
     CheckBox(CheckBox),
     Null,
 }
@@ -29,8 +31,35 @@ impl Element {
             Element::TextInput(i) => Some(&i.common),
             Element::CheckBox(c) => Some(&c.common),
             Element::Null => None,
+            Element::RawElement(_) => None,
+            Element::IterativeElement(i) => i.element.get_common(),
         }
     }
+
+    pub(crate) fn get_children(&mut self) -> Option<&mut Vec<Element>> {
+        match self {
+            Element::Row(r) => Some(&mut r.container.children),
+            Element::Column(c) => Some(&mut c.container.children),
+            Element::RawElement(r) => Some(&mut r.children),
+            _ => None,
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct RawElement {
+    pub name: String,
+    pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub condition: Option<ftd::interpreter2::Expression>,
+    pub children: Vec<Element>,
+    pub events: Vec<Event>,
+    pub line_number: usize,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct IterativeElement {
+    pub element: Box<ftd::executor::Element>,
+    pub iteration: ftd::interpreter2::Loop,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -421,10 +450,17 @@ pub fn text_from_properties(
     condition: &Option<ftd::interpreter2::Expression>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
+    is_dummy: bool,
     line_number: usize,
 ) -> ftd::executor::Result<Text> {
-    let text =
-        ftd::executor::value::optional_string("text", properties, arguments, doc, line_number)?;
+    let text = ftd::executor::value::dummy_optional_string(
+        "text",
+        properties,
+        arguments,
+        doc,
+        is_dummy,
+        line_number,
+    )?;
     if text.value.is_none() && condition.is_none() {
         // TODO: Check condition if `value is not null` is there
         return ftd::executor::utils::parse_error(

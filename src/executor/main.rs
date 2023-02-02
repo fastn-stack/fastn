@@ -6,6 +6,8 @@ pub struct ExecuteDoc<'a> {
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
     pub instructions: &'a [ftd::interpreter2::Component],
+    pub dummy_instructions: &'a mut ftd::Map<ftd::executor::DummyElement>,
+    pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -14,17 +16,23 @@ pub struct RT {
     pub aliases: ftd::Map<String>,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub main: ftd::executor::Column,
+    pub dummy_instructions: ftd::Map<ftd::executor::DummyElement>,
+    pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
 }
 
 impl<'a> ExecuteDoc<'a> {
     #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
+        let mut dummy_instructions = Default::default();
+        let mut element_constructor = Default::default();
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &mut document.data,
             instructions: &document.tree,
+            dummy_instructions: &mut dummy_instructions,
+            element_constructor: &mut element_constructor,
         }
         .execute()?;
         let mut main = ftd::executor::element::default_column();
@@ -35,6 +43,8 @@ impl<'a> ExecuteDoc<'a> {
             aliases: document.aliases,
             bag: document.data,
             main,
+            dummy_instructions,
+            element_constructor,
         })
     }
     #[tracing::instrument(skip_all)]
@@ -43,17 +53,20 @@ impl<'a> ExecuteDoc<'a> {
             name: self.name,
             aliases: self.aliases,
             bag: self.bag,
+            dummy_instructions: self.dummy_instructions,
+            element_constructor: self.element_constructor,
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
     }
 
-    fn get_instructions_from_instructions(
+    pub(crate) fn get_instructions_from_instructions(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
+    {
         let mut elements = vec![];
         let mut count = 0;
         for instruction in instructions.iter() {
@@ -64,7 +77,7 @@ impl<'a> ExecuteDoc<'a> {
                 count,
                 inherited_variables,
             )?;
-            count += instructions.len();
+            count += instructions.iter().filter(|(v, _, _)| v.is_none()).count();
             elements.extend(instructions)
         }
         Ok(elements)
@@ -76,7 +89,8 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
+    {
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,
@@ -88,7 +102,7 @@ impl<'a> ExecuteDoc<'a> {
         } else {
             let mut local_container = parent_container.to_vec();
             local_container.push(start_index);
-            Ok(vec![(local_container, instruction.to_owned())])
+            Ok(vec![(None, local_container, instruction.to_owned())])
         }
     }
 
@@ -110,7 +124,7 @@ impl<'a> ExecuteDoc<'a> {
             true,
         )?;
 
-        update_local_variable_references_in_component(
+        ftd::executor::utils::update_local_variable_references_in_component(
             &mut component_definition.definition,
             &local_variable_map,
             inherited_variables,
@@ -120,18 +134,18 @@ impl<'a> ExecuteDoc<'a> {
         );
 
         if let Some(condition) = instruction.condition.as_ref() {
-            update_condition_in_component(
+            ftd::executor::utils::update_condition_in_component(
                 &mut component_definition.definition,
                 condition.to_owned(),
             );
         }
 
-        update_events_in_component(
+        ftd::executor::utils::update_events_in_component(
             &mut component_definition.definition,
             instruction.events.to_owned(),
         );
 
-        insert_local_variables(
+        ftd::executor::utils::insert_local_variables(
             &component_definition.name,
             inherited_variables,
             &local_variable_map,
@@ -147,7 +161,8 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
+    {
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
             iteration
         } else {
@@ -178,7 +193,7 @@ impl<'a> ExecuteDoc<'a> {
                 local_container.push(index + start_index);
                 local_container
             };
-            let new_instruction = update_instruction_for_loop_element(
+            let new_instruction = ftd::executor::utils::update_instruction_for_loop_element(
                 instruction,
                 doc,
                 index,
@@ -187,7 +202,28 @@ impl<'a> ExecuteDoc<'a> {
                 inherited_variables,
                 local_container.as_slice(),
             )?;
-            elements.push((local_container, new_instruction));
+            elements.push((None, local_container, new_instruction));
+        }
+        if iteration.on.is_mutable() && iteration.on.reference_name().is_some() {
+            let local_container = {
+                let mut local_container = parent_container.to_vec();
+                local_container.push(start_index);
+                local_container
+            };
+            let component = ftd::executor::utils::create_dummy_instruction_for_loop_element(
+                instruction,
+                doc,
+                iteration.alias.as_str(),
+                reference_name,
+                inherited_variables,
+                local_container.as_slice(),
+            )?;
+
+            elements.push((
+                iteration.on.reference_name().map(|v| v.to_string()),
+                local_container,
+                component,
+            ))
         }
         Ok(elements)
     }
@@ -206,8 +242,19 @@ impl<'a> ExecuteDoc<'a> {
             &mut inherited_variables,
         )?;
         while !instructions.is_empty() {
-            let (container, mut instruction) = instructions.remove(0);
+            let (dummy_reference, container, mut instruction) = instructions.remove(0);
             loop {
+                if let Some(dummy_reference) = dummy_reference {
+                    ftd::executor::DummyElement::from_instruction(
+                        instruction,
+                        doc,
+                        dummy_reference,
+                        container.as_slice(),
+                        &mut inherited_variables,
+                    )?;
+                    break;
+                }
+
                 if let Some(condition) = instruction.condition.as_ref() {
                     if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
                         ExecuteDoc::insert_element(
@@ -218,6 +265,7 @@ impl<'a> ExecuteDoc<'a> {
                         break;
                     }
                 }
+
                 let component_definition = {
                     // NOTE: doing unwrap to force bug report if we following fails, this function
                     // must have validated everything, and must not fail at run time
@@ -227,7 +275,7 @@ impl<'a> ExecuteDoc<'a> {
                 };
 
                 if component_definition.definition.name.eq("ftd.kernel") {
-                    update_inherited_reference_in_instruction(
+                    ftd::executor::utils::update_inherited_reference_in_instruction(
                         &mut instruction,
                         &mut inherited_variables,
                         container.as_slice(),
@@ -241,6 +289,7 @@ impl<'a> ExecuteDoc<'a> {
                             doc,
                             container.as_slice(),
                             &component_definition,
+                            false,
                             &mut inherited_variables,
                         )?,
                     );
@@ -433,11 +482,12 @@ impl<'a> ExecuteDoc<'a> {
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
     }*/
 
-    fn execute_kernel_components(
+    pub(crate) fn execute_kernel_components(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         component_definition: &ftd::interpreter2::ComponentDefinition,
+        is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         use itertools::Itertools;
@@ -451,6 +501,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.condition.as_ref(),
                     doc,
                     local_container,
+                    is_dummy,
                     instruction.line_number,
                 )?)
             }
@@ -600,420 +651,5 @@ impl<'a> ExecuteDoc<'a> {
             }
             _ => unimplemented!(),
         })
-    }
-}
-
-fn update_instruction_for_loop_element(
-    instruction: &ftd::interpreter2::Component,
-    doc: &mut ftd::executor::TDoc,
-    index_in_loop: usize,
-    alias: &str,
-    reference_name: &str,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    local_container: &[usize],
-) -> ftd::executor::Result<ftd::interpreter2::Component> {
-    let mut instruction = instruction.clone();
-    let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
-        .get_reference_name(alias, &doc.itdoc());
-    let replace_with = format!("{}.{}", reference_name, index_in_loop);
-    let map =
-        std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
-    let replace_property_value = std::iter::IntoIterator::into_iter([(
-        doc.itdoc()
-            .resolve_name(ftd::interpreter2::FTD_LOOP_COUNTER),
-        ftd::interpreter2::Value::Integer {
-            value: index_in_loop as i64,
-        }
-        .into_property_value(false, instruction.line_number),
-    )])
-    .collect();
-
-    update_local_variable_references_in_component(
-        &mut instruction,
-        &map,
-        inherited_variables,
-        &replace_property_value,
-        local_container,
-        doc,
-    );
-    Ok(instruction)
-}
-
-fn update_reference_value(
-    property_value: &mut ftd::interpreter2::PropertyValue,
-    reference_replace_pattern: &str,
-    replace_with: &str,
-) {
-    match property_value {
-        ftd::interpreter2::PropertyValue::Clone { name, .. }
-        | ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-            *name = name.replace(reference_replace_pattern, replace_with);
-        }
-        _ => {}
-    }
-}
-
-fn update_condition_in_component(
-    component: &mut ftd::interpreter2::Component,
-    outer_condition: ftd::interpreter2::Expression,
-) {
-    if let Some(condition) = component.condition.as_mut() {
-        let references = {
-            let mut reference = outer_condition.references;
-            reference.extend(condition.references.to_owned());
-            reference
-        };
-        let new_condition = ftd::interpreter2::Expression {
-            expression: ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
-                .add_children(vec![ftd::evalexpr::ExprNode::new(
-                    ftd::evalexpr::Operator::And,
-                )
-                .add_children(vec![
-                    outer_condition.expression,
-                    condition.expression.to_owned(),
-                ])]),
-            references,
-            line_number: 0,
-        };
-        *condition = new_condition;
-        return;
-    }
-    component.condition = Box::new(Some(outer_condition));
-}
-
-fn update_events_in_component(
-    component: &mut ftd::interpreter2::Component,
-    outer_event: Vec<ftd::interpreter2::Event>,
-) {
-    component.events.extend(outer_event);
-}
-
-fn insert_local_variables(
-    component_name: &str,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    local_variable_map: &ftd::Map<String>,
-    local_container: &[usize],
-) {
-    for (k, v) in local_variable_map {
-        let key = k.trim_start_matches(format!("{}.", component_name).as_str());
-        inherited_variables.insert(key.to_string(), (v.to_string(), local_container.to_vec()));
-    }
-}
-
-fn update_inherited_reference_in_instruction(
-    component_definition: &mut ftd::interpreter2::Component,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    update_local_variable_references_in_component(
-        component_definition,
-        &Default::default(),
-        inherited_variables,
-        &Default::default(),
-        local_container,
-        doc,
-    );
-}
-
-fn update_local_variable_references_in_component(
-    component: &mut ftd::interpreter2::Component,
-    local_variable_map: &ftd::Map<String>,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    for property in component.properties.iter_mut() {
-        update_local_variable_reference_in_property(
-            property,
-            local_variable_map,
-            inherited_variables,
-            replace_property_value,
-            local_container,
-            doc,
-        );
-    }
-
-    for events in component.events.iter_mut() {
-        for action in events.action.values.values_mut() {
-            update_local_variable_reference_in_property_value(
-                action,
-                local_variable_map,
-                inherited_variables,
-                replace_property_value,
-                local_container,
-                doc,
-            );
-        }
-    }
-
-    if let Some(condition) = component.condition.as_mut() {
-        update_local_variable_reference_in_condition(
-            condition,
-            local_variable_map,
-            inherited_variables,
-            replace_property_value,
-            local_container,
-            doc,
-        );
-    }
-
-    if let Some(ftd::interpreter2::Loop { on, .. }) = component.iteration.as_mut() {
-        update_local_variable_reference_in_property_value(
-            on,
-            local_variable_map,
-            inherited_variables,
-            replace_property_value,
-            local_container,
-            doc,
-        );
-    }
-
-    for child in component.children.iter_mut() {
-        update_local_variable_references_in_component(
-            child,
-            local_variable_map,
-            inherited_variables,
-            &Default::default(),
-            local_container,
-            doc,
-        );
-    }
-}
-
-fn update_local_variable_reference_in_property(
-    property: &mut ftd::interpreter2::Property,
-    local_variable: &ftd::Map<String>,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    update_local_variable_reference_in_property_value(
-        &mut property.value,
-        local_variable,
-        inherited_variables,
-        replace_property_value,
-        local_container,
-        doc,
-    );
-    if let Some(ref mut condition) = property.condition {
-        update_local_variable_reference_in_condition(
-            condition,
-            local_variable,
-            inherited_variables,
-            replace_property_value,
-            local_container,
-            doc,
-        );
-    }
-}
-
-fn update_local_variable_reference_in_condition(
-    condition: &mut ftd::interpreter2::Expression,
-    local_variable: &ftd::Map<String>,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    for reference in condition.references.values_mut() {
-        update_local_variable_reference_in_property_value(
-            reference,
-            local_variable,
-            inherited_variables,
-            replace_property_value,
-            local_container,
-            doc,
-        );
-    }
-}
-
-fn update_local_variable_reference_in_property_value(
-    property_value: &mut ftd::interpreter2::PropertyValue,
-    local_variable: &ftd::Map<String>,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    let reference_or_clone = match property_value {
-        ftd::interpreter2::PropertyValue::Reference { name, .. }
-        | ftd::interpreter2::PropertyValue::Clone { name, .. } => name.to_string(),
-        ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
-            for property_value in function_call.values.values_mut() {
-                update_local_variable_reference_in_property_value(
-                    property_value,
-                    local_variable,
-                    inherited_variables,
-                    replace_property_value,
-                    local_container,
-                    doc,
-                );
-            }
-            return;
-        }
-        ftd::interpreter2::PropertyValue::Value { value, .. } => {
-            return match value {
-                ftd::interpreter2::Value::List { data, .. } => {
-                    for d in data.iter_mut() {
-                        update_local_variable_reference_in_property_value(
-                            d,
-                            local_variable,
-                            inherited_variables,
-                            replace_property_value,
-                            local_container,
-                            doc,
-                        );
-                    }
-                }
-                ftd::interpreter2::Value::Record { fields, .. }
-                | ftd::interpreter2::Value::Object { values: fields } => {
-                    for d in fields.values_mut() {
-                        update_local_variable_reference_in_property_value(
-                            d,
-                            local_variable,
-                            inherited_variables,
-                            replace_property_value,
-                            local_container,
-                            doc,
-                        );
-                    }
-                }
-                ftd::interpreter2::Value::UI { component, .. } => {
-                    update_local_variable_references_in_component(
-                        component,
-                        local_variable,
-                        inherited_variables,
-                        &Default::default(),
-                        local_container,
-                        doc,
-                    )
-                }
-                ftd::interpreter2::Value::OrType { value, .. } => {
-                    update_local_variable_reference_in_property_value(
-                        value,
-                        local_variable,
-                        inherited_variables,
-                        replace_property_value,
-                        local_container,
-                        doc,
-                    );
-                }
-                _ => {}
-            }
-        }
-    };
-
-    if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
-        if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {
-            Some(reference_or_clone.replace(k, v))
-        } else {
-            None
-        }
-    }) {
-        property_value.set_reference_or_clone(local_variable.as_str());
-        return;
-    }
-
-    if let Some(replace_with) = replace_property_value.get(reference_or_clone.as_str()) {
-        *property_value = replace_with.to_owned();
-        return;
-    }
-
-    update_inherited_reference_in_property_value(
-        property_value,
-        reference_or_clone.as_str(),
-        inherited_variables,
-        local_container,
-        doc,
-    )
-}
-
-fn update_inherited_reference_in_property_value(
-    property_value: &mut ftd::interpreter2::PropertyValue,
-    reference_or_clone: &str,
-    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    local_container: &[usize],
-    doc: &mut ftd::executor::TDoc,
-) {
-    let values = if reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
-        let reference_or_clone = reference_or_clone
-            .trim_start_matches(format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str());
-        inherited_variables.get_value_and_rem(reference_or_clone)
-    } else {
-        return;
-    };
-
-    let mut is_reference_updated = false;
-
-    for ((reference, container), rem) in values.iter().rev() {
-        if container.len() > local_container.len() {
-            continue;
-        }
-        let mut found = true;
-        for (idx, i) in container.iter().enumerate() {
-            if *i != local_container[idx] {
-                found = false;
-                break;
-            }
-        }
-        if found {
-            is_reference_updated = true;
-            property_value.set_reference_or_clone(
-                if let Some(rem) = rem {
-                    format!("{}.{}", reference, rem)
-                } else {
-                    reference.to_string()
-                }
-                .as_str(),
-            );
-            break;
-        }
-    }
-
-    if !is_reference_updated
-        && (reference_or_clone
-            .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
-            || reference_or_clone
-                .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
-    {
-        if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
-            ftd::interpreter2::PropertyValue::from_ast_value(
-                ftd::ast::VariableValue::String {
-                    // TODO: ftd#default-colors, ftd#default-types
-                    value: {
-                        format!(
-                            "$ftd#default-{}{}",
-                            if reference_or_clone.starts_with(
-                                format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str()
-                            ) {
-                                "types"
-                            } else {
-                                "colors"
-                            },
-                            reference_or_clone
-                                .trim_start_matches(
-                                    format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str()
-                                )
-                                .trim_start_matches(
-                                    format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()
-                                )
-                        )
-                    },
-                    line_number: 0,
-                },
-                &mut doc.itdoc(),
-                property_value.is_mutable(),
-                Some(&property_value.kind().into_kind_data()),
-            )
-        {
-            *property_value = property;
-        } else {
-            property_value.set_reference_or_clone(
-                format!("ftd#{}", reference_or_clone.trim_start_matches("ftd.")).as_str(),
-            );
-        }
     }
 }

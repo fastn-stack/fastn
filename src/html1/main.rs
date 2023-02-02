@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 pub struct HtmlUI {
     pub html: String,
     pub dependencies: String,
@@ -28,6 +26,16 @@ impl HtmlUI {
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
 
+        for (dependency, dummy_node) in node_data.dummy_nodes {
+            let dummy_html = DummyHtmlGenerator::from_node(id, &tdoc, dummy_node.main);
+            // dbg!("dummy_nodes", &dependency, &dummy_html);
+        }
+
+        for (dependency, raw_node) in node_data.raw_nodes {
+            let raw_html = DummyHtmlGenerator::from_node(id, &tdoc, raw_node.node);
+            // dbg!("raw_nodes", &dependency, &raw_html);
+        }
+
         Ok(HtmlUI {
             html,
             dependencies,
@@ -37,6 +45,29 @@ impl HtmlUI {
             variable_dependencies,
             outer_events,
         })
+    }
+}
+
+#[derive(Debug, Default)]
+pub(crate) struct DummyHtmlGenerator {
+    pub name: String,
+    pub html: String,
+    pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub properties_string: Option<String>,
+    pub iteration: Option<ftd::interpreter2::Loop>,
+    pub helper_html: ftd::Map<DummyHtmlGenerator>,
+    pub children: Vec<DummyHtmlGenerator>,
+}
+
+impl DummyHtmlGenerator {
+    pub(crate) fn from_node(
+        id: &str,
+        doc: &ftd::interpreter2::TDoc,
+        node: ftd::node::Node,
+    ) -> DummyHtmlGenerator {
+        let mut dummy_html = Default::default();
+        HtmlGenerator::new(id, doc).to_dummy_html(node, &mut dummy_html);
+        dummy_html
     }
 }
 
@@ -53,12 +84,143 @@ impl<'a> HtmlGenerator<'a> {
         }
     }
 
+    pub fn to_dummy_html(
+        &self,
+        node: ftd::node::Node,
+        dummy_html: &mut DummyHtmlGenerator,
+    ) -> ftd::html1::Result<()> {
+        if let Some(raw_data) = node.raw_data {
+            dummy_html.iteration = raw_data.iteration;
+            dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+                self.id.as_str(),
+                raw_data.properties.as_slice(),
+                self.doc,
+            );
+            dummy_html.properties = raw_data.properties;
+            dummy_html.html = node.node.to_string();
+            dummy_html.name = node.node.to_string();
+            for child in node.children {
+                let mut child_dummy_html = Default::default();
+                self.to_dummy_html(child, &mut child_dummy_html);
+                dummy_html.children.push(child_dummy_html);
+            }
+        } else {
+            let data = self.to_dummy_html_(node, dummy_html)?;
+            dummy_html.html = data.0;
+        }
+
+        Ok(())
+    }
+
     pub fn to_html_and_outer_events(
         &self,
         node: ftd::node::Node,
     ) -> ftd::html1::Result<(String, String)> {
         let (html, events) = self.to_html_(node)?;
         Ok((html, ftd::html1::utils::events_to_string(events)))
+    }
+
+    pub fn to_dummy_html_(
+        &self,
+        node: ftd::node::Node,
+        dummy_html: &mut DummyHtmlGenerator,
+    ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
+        if node.is_null() {
+            return Ok(("".to_string(), vec![]));
+        }
+
+        if let Some(raw_data) = node.raw_data {
+            let number = ftd::html1::utils::get_new_number(
+                &dummy_html
+                    .helper_html
+                    .iter()
+                    .map(|v| v.0.to_string())
+                    .collect(),
+                node.node.as_str(),
+            );
+            let node_name = format!("{}_{}", node.node, number);
+            dummy_html
+                .helper_html
+                .insert(node_name.to_string(), Default::default());
+            let helper_dummy_html = dummy_html.helper_html.get_mut(node_name.as_str()).unwrap();
+            helper_dummy_html.iteration = raw_data.iteration;
+            helper_dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+                self.id.as_str(),
+                raw_data.properties.as_slice(),
+                self.doc,
+            );
+            helper_dummy_html.properties = raw_data.properties;
+            helper_dummy_html.html = node_name.to_string();
+            helper_dummy_html.name = node_name.to_string();
+            for child in node.children {
+                let mut child_dummy_html = Default::default();
+                self.to_dummy_html(child, &mut child_dummy_html);
+                dummy_html.children.push(child_dummy_html);
+            }
+            return Ok((node_name.to_string(), vec![]));
+        }
+
+        let style = format!(
+            "style=\"{}\"",
+            self.style_to_html(&node, /*self.visible*/ true)
+        );
+        let classes = self.class_to_html(&node);
+
+        let mut outer_events = vec![];
+        let attrs = {
+            let mut attr = self.attrs_to_html(&node);
+            let events = self.group_by_js_event(&node.events)?;
+            for (name, actions) in events {
+                if name.eq("onclickoutside") || name.starts_with("onglobalkey") {
+                    let event = format!(
+                        "window.ftd.handle_event(event, '{}', '{}', this)",
+                        self.id, actions
+                    );
+                    outer_events.push((
+                        ftd::html1::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
+                        name,
+                        event,
+                    ));
+                } else {
+                    let event = format!(
+                        "window.ftd.handle_event(event, '{}', '{}', this)",
+                        self.id,
+                        actions.replace('\"', "&quot;")
+                    );
+                    attr.push(' ');
+                    attr.push_str(&format!("{}={}", name, quote(&event)));
+                }
+            }
+            attr
+        };
+
+        let body = match node.text.value.as_ref() {
+            Some(v) => v.to_string(),
+            None => node
+                .children
+                .into_iter()
+                .map(|v| match self.to_html_(v) {
+                    Ok((html, events)) => {
+                        outer_events.extend(events);
+                        Ok(html)
+                    }
+                    Err(e) => Err(e),
+                })
+                .collect::<ftd::html1::Result<Vec<String>>>()?
+                .join(""),
+        };
+
+        Ok((
+            format!(
+                "<{node} {attrs} {style} {classes}>{body}</{node}>",
+                node = node.node.as_str(),
+                attrs = attrs,
+                style = style,
+                classes = classes,
+                body = body,
+            ),
+            outer_events,
+        ))
     }
 
     #[allow(clippy::type_complexity)]

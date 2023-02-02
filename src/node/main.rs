@@ -12,6 +12,13 @@ pub struct Node {
     pub null: bool,
     pub data_id: String,
     pub line_number: usize,
+    pub raw_data: Option<RawNodeData>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct RawNodeData {
+    pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub iteration: Option<ftd::interpreter2::Loop>,
 }
 
 pub type Event = ftd::executor::Event;
@@ -36,6 +43,7 @@ impl Node {
             events: common.event.clone(),
             data_id: common.data_id.clone(),
             line_number: common.line_number,
+            raw_data: None,
         }
     }
 
@@ -73,6 +81,7 @@ impl Node {
             data_id: common.data_id.to_string(),
             line_number: common.line_number,
             display: s(display),
+            raw_data: None,
         }
     }
 
@@ -108,7 +117,43 @@ impl ftd::executor::Element {
                 null: true,
                 data_id: "".to_string(),
                 line_number: 0,
+                raw_data: None,
             },
+            ftd::executor::Element::RawElement(r) => r.to_node(doc_id),
+            ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id),
+        }
+    }
+}
+
+impl ftd::executor::IterativeElement {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut node = self.element.clone().to_node(doc_id);
+        if let Some(raw_data) = &mut node.raw_data {
+            raw_data.iteration = Some(self.iteration.clone());
+        }
+        node
+    }
+}
+
+impl ftd::executor::RawElement {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        Node {
+            node: s(self.name.as_str()),
+            display: s("flex"),
+            condition: self.condition.to_owned(),
+            attrs: Default::default(),
+            style: Default::default(),
+            children: self.children.iter().map(|v| v.to_node(doc_id)).collect(),
+            text: Default::default(),
+            classes: Default::default(),
+            null: true,
+            events: self.events.clone(),
+            data_id: format!("{}_id", self.name),
+            line_number: self.line_number,
+            raw_data: Some(RawNodeData {
+                properties: self.properties.clone(),
+                iteration: None,
+            }),
         }
     }
 }

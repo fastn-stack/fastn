@@ -539,3 +539,65 @@ fn to_key(key: &str) -> String {
     }
     .to_string()
 }
+
+pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
+    let mut number = 0;
+    for key in keys {
+        if let Some(str_number) = key.strip_prefix(format!("{}_", name).as_str()) {
+            let found_number = str_number.parse::<usize>().unwrap();
+            if found_number >= number {
+                number = found_number;
+            }
+        }
+    }
+    number
+}
+
+pub(crate) fn to_properties_string(
+    id: &str,
+    properties: &[(String, ftd::interpreter2::Property)],
+    doc: &ftd::interpreter2::TDoc,
+) -> Option<String> {
+    let mut properties_string = "".to_string();
+    for (key, properties) in group_vec_to_map(properties).value {
+        let mut expressions = vec![];
+        for property in properties {
+            let condition = property
+                .condition
+                .as_ref()
+                .map(ftd::html1::utils::get_condition_string);
+            if let Ok(Some(value_string)) =
+                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                    id,
+                    doc,
+                    &property.value,
+                    &None,
+                    None,
+                    false,
+                )
+            {
+                let value = format!("var {} = {};", key, value_string);
+                expressions.push((condition, value));
+            }
+        }
+        let value =
+            ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()), "null");
+        properties_string = format!("{}\n\n{}", properties_string, value);
+    }
+    if properties_string.is_empty() {
+        None
+    } else {
+        Some(properties_string.trim().to_string())
+    }
+}
+
+fn group_vec_to_map<T>(vec: &[(String, T)]) -> ftd::VecMap<T>
+where
+    T: PartialEq + Clone,
+{
+    let mut map: ftd::VecMap<T> = ftd::VecMap::new();
+    for (key, value) in vec {
+        map.insert(key.to_string(), value.clone());
+    }
+    map
+}
