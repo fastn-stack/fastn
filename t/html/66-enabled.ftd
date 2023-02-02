@@ -1,0 +1,10 @@
+-- boolean $flag: true
+
+-- ftd.checkbox:
+checked: true
+enabled: true
+$on-click$: $ftd.set-bool($a = $flag, v = $CHECKED)
+
+-- ftd.text-input:
+type: text
+enabled: $flag
