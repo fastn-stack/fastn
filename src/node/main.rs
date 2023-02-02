@@ -590,8 +590,6 @@ impl ftd::executor::CheckBox {
             ),
         );
 
-        dbg!(&n.attrs);
-
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         n

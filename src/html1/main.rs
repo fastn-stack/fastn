@@ -172,7 +172,6 @@ impl<'a> HtmlGenerator<'a> {
                     return None;
                 }
                 v.value.as_ref().map(|v| {
-                    dbg!(&k,&v);
                     if v.is_empty(){
                         return s("");
                     }
