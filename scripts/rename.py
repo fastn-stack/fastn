@@ -32,9 +32,23 @@ def replace_in_ftd_files(root_dir):
                     .replace('fpm.dev', 'fastn.io')
                 with open(file_path, 'w') as f:
                     f.write(contents)
+
             if file == 'FPM.ftd':
                 old_file_path = os.path.join(subdir, file)
                 new_file_path = os.path.join(subdir, 'FASTN.ftd')
+                os.rename(old_file_path, new_file_path)
+                continue
+
+            if 'fpm' in file:
+                old_file_path = os.path.join(subdir, file)
+                new_file = file.replace('fpm', 'fastn')
+                new_file_path = os.path.join(subdir, new_file)
+                os.rename(old_file_path, new_file_path)
+
+            if 'FPM' in file:
+                old_file_path = os.path.join(subdir, file)
+                file.replace('FPM', 'FASTN')
+                new_file_path = os.path.join(subdir, new_file)
                 os.rename(old_file_path, new_file_path)
 
 
