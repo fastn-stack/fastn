@@ -1,5 +1,7 @@
 -- boolean $flag: true
 
+-- boolean $a: false
+
 -- ftd.boolean: $flag
 padding.px: 20
 
@@ -22,8 +24,11 @@ padding-horizontal.px: 20
 spacing.fixed.px: 10
 
 -- ftd.text: This is a checkbox
+$on-click$: $ftd.toggle($a = $a)
 
 -- ftd.checkbox:
+enabled if { a }: false
+enabled: true
 checked: $show-checkbox.is-checked
 $on-click$: $ftd.set-bool($a = $flag, v = $CHECKED)
 
