@@ -7385,7 +7385,13 @@ pub fn checkbox_function() -> ftd::interpreter2::ComponentDefinition {
                 ftd::interpreter2::Kind::boolean()
                     .into_optional()
                     .into_kind_data(),
-            )],
+            ),
+             ftd::interpreter2::Argument::default(
+                 "enabled",
+                 ftd::interpreter2::Kind::boolean()
+                     .into_optional()
+                     .into_kind_data(),
+             )],
         ]
         .concat()
         .into_iter()

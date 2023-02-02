@@ -569,13 +569,28 @@ impl ftd::executor::CheckBox {
             ftd::node::Value::from_executor_value(
                 self.checked
                     .to_owned()
-                    .map(|v| v.map(|b| b.to_string()))
+                    .map(|v| v.map(|b| { if b {s("checked")} else {s("")}}))
                     .value,
                 self.checked.to_owned(),
-                None,
+                Some(ftd::executor::CheckBox::checked_pattern()),
                 doc_id,
             ),
         );
+
+        n.attrs.check_and_insert(
+            "disabled",
+            ftd::node::Value::from_executor_value(
+                self.enabled
+                    .to_owned()
+                    .map(|v| v.map(|b| if b {s("")} else {s("disabled")}))
+                    .value,
+                self.enabled.to_owned(),
+                Some(ftd::executor::CheckBox::enabled_pattern()),
+                doc_id,
+            ),
+        );
+
+        dbg!(&n.attrs);
 
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());

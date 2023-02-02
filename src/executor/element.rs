@@ -1238,7 +1238,37 @@ pub fn text_input_from_properties(
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct CheckBox {
     pub checked: ftd::executor::Value<Option<bool>>,
+    pub enabled: ftd::executor::Value<Option<bool>>,
     pub common: Common,
+}
+
+impl CheckBox {
+
+    pub fn checked_pattern() -> (String, bool) {
+        (
+            indoc::indoc! {"
+                if ({0}) {
+                    \"checked\"
+                } else {
+                    \"\"
+                }
+            "}.to_string(),
+            true,
+        )
+    }
+
+    pub fn enabled_pattern() -> (String, bool) {
+        (
+            indoc::indoc! {"
+                if ({0}) {
+                    \"\"
+                } else {
+                    \"disabled\"
+                }
+            "}.to_string(),
+            true,
+        )
+    }
 }
 
 pub fn checkbox_from_properties(
@@ -1253,6 +1283,9 @@ pub fn checkbox_from_properties(
     let checked =
         ftd::executor::value::optional_bool("checked", properties, arguments, doc, line_number)?;
 
+    let enabled =
+        ftd::executor::value::optional_bool("enabled", properties, arguments, doc, line_number)?;
+
     let common = common_from_properties(
         properties,
         events,
@@ -1263,5 +1296,5 @@ pub fn checkbox_from_properties(
         line_number,
     )?;
 
-    Ok(CheckBox { checked, common })
+    Ok(CheckBox { checked, enabled, common })
 }
