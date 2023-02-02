@@ -3,6 +3,7 @@
 mod test;
 
 mod code;
+mod dummy;
 mod element;
 mod main;
 mod markup;
@@ -12,8 +13,10 @@ mod utils;
 mod value;
 mod youtube_id;
 
+pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
-    CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text, TextInput,
+    CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement,
+    RawElement, Row, Text, TextInput,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{

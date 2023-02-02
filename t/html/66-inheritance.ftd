@@ -3,6 +3,7 @@ ftd.color-scheme colors: $blue
 
 -- ftd.text: Hello there
 color: $inherited.colors.custom.one
+background.solid: $inherited.colors.custom.two
 
 -- end: page
 

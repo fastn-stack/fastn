@@ -82,6 +82,12 @@ pub struct VecMap<T> {
 }
 
 impl<T: std::cmp::PartialEq> VecMap<T> {
+    pub fn new() -> VecMap<T> {
+        VecMap {
+            value: Default::default(),
+        }
+    }
+
     pub fn insert(&mut self, key: String, value: T) {
         if let Some(v) = self.value.get_mut(&key) {
             v.push(value);

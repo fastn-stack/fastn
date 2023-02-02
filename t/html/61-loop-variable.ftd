@@ -8,9 +8,6 @@
 -- end: $names
 
 
--- ftd.text: Click me!
-$on-click$: $append($a = $names, v = FifthTry)
-
 
 -- foo: $obj
 idx: $LOOP.COUNTER
@@ -29,8 +26,6 @@ spacing.fixed.px: 30
 $on-click$: $ftd.increment($a = $foo.value)
 
 -- ftd.text: $foo.name
--- ftd.integer: $foo.idx
--- ftd.integer: $foo.value
 
 -- end: ftd.row
 

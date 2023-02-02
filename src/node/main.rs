@@ -12,6 +12,13 @@ pub struct Node {
     pub null: bool,
     pub data_id: String,
     pub line_number: usize,
+    pub raw_data: Option<RawNodeData>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct RawNodeData {
+    pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub iteration: Option<ftd::interpreter2::Loop>,
 }
 
 pub type Event = ftd::executor::Event;
@@ -36,6 +43,7 @@ impl Node {
             events: common.event.clone(),
             data_id: common.data_id.clone(),
             line_number: common.line_number,
+            raw_data: None,
         }
     }
 
@@ -73,6 +81,7 @@ impl Node {
             data_id: common.data_id.to_string(),
             line_number: common.line_number,
             display: s(display),
+            raw_data: None,
         }
     }
 
@@ -108,7 +117,43 @@ impl ftd::executor::Element {
                 null: true,
                 data_id: "".to_string(),
                 line_number: 0,
+                raw_data: None,
             },
+            ftd::executor::Element::RawElement(r) => r.to_node(doc_id),
+            ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id),
+        }
+    }
+}
+
+impl ftd::executor::IterativeElement {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut node = self.element.clone().to_node(doc_id);
+        if let Some(raw_data) = &mut node.raw_data {
+            raw_data.iteration = Some(self.iteration.clone());
+        }
+        node
+    }
+}
+
+impl ftd::executor::RawElement {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        Node {
+            node: s(self.name.as_str()),
+            display: s("flex"),
+            condition: self.condition.to_owned(),
+            attrs: Default::default(),
+            style: Default::default(),
+            children: self.children.iter().map(|v| v.to_node(doc_id)).collect(),
+            text: Default::default(),
+            classes: Default::default(),
+            null: true,
+            events: self.events.clone(),
+            data_id: format!("{}_id", self.name),
+            line_number: self.line_number,
+            raw_data: Some(RawNodeData {
+                properties: self.properties.clone(),
+                iteration: None,
+            }),
         }
     }
 }
@@ -473,12 +518,29 @@ impl ftd::executor::Iframe {
             ),
         );
 
-        n.attrs
-            .check_and_insert("allow", ftd::node::Value::from_string("fullscreen"));
-
         n.attrs.check_and_insert(
             "allowfullscreen",
             ftd::node::Value::from_string("allowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "mozallowfullscreen",
+            ftd::node::Value::from_string("mozallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "msallowfullscreen",
+            ftd::node::Value::from_string("msallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "oallowfullscreen",
+            ftd::node::Value::from_string("oallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "webkitallowfullscreen",
+            ftd::node::Value::from_string("webkitallowfullscreen"),
         );
 
         n.attrs.check_and_insert(
@@ -515,6 +577,27 @@ impl ftd::executor::TextInput {
                 self.placeholder.to_owned().value,
                 self.placeholder.to_owned(),
                 None,
+                doc_id,
+            ),
+        );
+
+        n.attrs.check_and_insert(
+            "disabled",
+            ftd::node::Value::from_executor_value(
+                self.enabled
+                    .to_owned()
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            } else {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            }
+                        })
+                    })
+                    .value,
+                self.enabled.to_owned(),
+                Some(ftd::executor::TextInput::enabled_pattern()),
                 doc_id,
             ),
         );
@@ -583,10 +666,39 @@ impl ftd::executor::CheckBox {
             ftd::node::Value::from_executor_value(
                 self.checked
                     .to_owned()
-                    .map(|v| v.map(|b| b.to_string()))
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            } else {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            }
+                        })
+                    })
                     .value,
                 self.checked.to_owned(),
-                None,
+                Some(ftd::executor::CheckBox::checked_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.attrs.check_and_insert(
+            "disabled",
+            ftd::node::Value::from_executor_value(
+                self.enabled
+                    .to_owned()
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            } else {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            }
+                        })
+                    })
+                    .value,
+                self.enabled.to_owned(),
+                Some(ftd::executor::CheckBox::enabled_pattern()),
                 doc_id,
             ),
         );
