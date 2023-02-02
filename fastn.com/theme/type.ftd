@@ -102,7 +102,7 @@ color: $inherited.colors.text
 
 -- end: ds.output
 
--- ds.h1: `inherited.types.copy-tight`
+-- ds.h1: `inherited.types.copy-small`
 
 line-height: 20
 
@@ -115,12 +115,12 @@ lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 
 -- ds.output:
 
 -- ftd.text: FifthTry
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 color: $inherited.colors.text
 
 -- end: ds.output
@@ -141,12 +141,12 @@ lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 -- ds.output:
 
 -- ftd.text: FifthTry
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 color: $inherited.colors.text
 
 -- end: ds.output
@@ -190,12 +190,12 @@ lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $inherited.types.label-big
+role: $inherited.types.label-large
 
 -- ds.output:
 
 -- ftd.text: FifthTry
-role: $inherited.types.label-big
+role: $inherited.types.label-large
 color: $inherited.colors.text
 
 

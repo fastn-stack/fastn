@@ -88,7 +88,7 @@ width: fill-container
 width: fill-container
 
 -- ftd.text: $packages.title
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 color: $inherited.colors.text
 ;;color if $MOUSE-IN: $inherited.colors.text-strong
 ;;style: bold
@@ -242,7 +242,7 @@ overflow-y: auto
 
 -- ftd.text: 
 text: $packages.body
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 color: $inherited.colors.text
 height.fixed.px: 62
 
@@ -256,7 +256,7 @@ align-self: end
 -- ftd.row:
 if: {$packages.last-updated != NULL}
 width: fill-container
-spacing.px: 12
+spacing.fixed.px: 12
 margin-top.px: 6
 
 -- ftd.text: Last updated:

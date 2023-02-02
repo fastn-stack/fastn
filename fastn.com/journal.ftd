@@ -1868,7 +1868,7 @@ We decide and removed this prelude feature {recently}.
 -- ftd.text: recently
 link: https://github.com/FifthTry/fpm/pull/57
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 
 
@@ -5050,14 +5050,14 @@ wc -l tags
 if: {$show-t-py}
 $on-click$: $ftd.toggle($a = $show-t-py)
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 
 -- ftd.text: Show `t.py`
 if: {!$show-t-py}
 $on-click$: $ftd.toggle($a = $show-t-py)
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 
 -- ds.code:

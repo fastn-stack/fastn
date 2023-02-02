@@ -2,7 +2,7 @@
 -- import: fpm.dev/assets
 
 
--- ft.page:
+-- ds.page:
 toc: $config.empty-toc
 
 -- lib.create-section:
@@ -53,3 +53,4 @@ link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
 image: $assets.files.static.images.blue-sapphire-dark.jpg
 live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
 
+-- end: ds.page

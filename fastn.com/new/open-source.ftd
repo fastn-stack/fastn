@@ -1,7 +1,7 @@
 -- import: fpm.dev/lib
 -- import: fpm.dev/assets
 
--- ft.page:
+-- ds.page:
 toc: $config.empty-toc
 
 -- lib.create-section:
@@ -38,3 +38,5 @@ if: $ftd.dark-mode
 link: https://github.com/FifthTry/jupiter-foss-template/generate
 image: $assets.files.static.images.dark-jupiter-foss.png
 live_preview: https://fifthtry.github.io/jupiter-foss-template/
+
+-- end: ds.page

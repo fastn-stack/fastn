@@ -27,7 +27,7 @@ round-avatar: true
 
 -- ftd.column:
 width: fill-container
-open: true
+;;;;open: true
 ;;append-at: content-container
 padding-vertical.px: 30
 
@@ -67,10 +67,10 @@ caption title:
 ftd.image-src image:
 
 -- ftd.column:
-open: true
+;;open: true
 ;;append-at: main-container
 
--- hero-desktop.px: $hero.title
+-- hero-desktop: $hero.title
 if: {ftd.device != "mobile"}
 ;;id: main-container
 image: $hero.image
@@ -93,7 +93,7 @@ image: $hero.image
 
 
 
--- component hero-desktop.px:
+-- component hero-desktop:
 caption title:
 ftd.image-src image:
 
@@ -102,21 +102,21 @@ width: fill-container
 background.solid: $inherited.colors.background.base
 padding-horizontal.px: $ft.content-padding.px
 padding-vertical.px: 50
-spacing.px: 40
-open: true
+spacing.fixed.px: 40
+;;open: true
 ;;append-at: desktop.px-action-container
 
 -- ftd.row:
 width: fill-container
 
--- ftd.text: $hero-desktop.px.title
+-- ftd.text: $hero-desktop.title
 color: $inherited.colors.text
 width.fixed.percent:: 75
 ;;position: center
 role: $inherited.types.heading-large
 
 -- ftd.image:
-src: $hero-desktop.px.image
+src: $hero-desktop.image
 width.fixed.percent: 15
 height: auto
 ;;position: right.px
@@ -125,13 +125,13 @@ height: auto
 
 -- ftd.row:
 ;;id: desktop.px-action-container
-spacing.px: 40
+spacing.fixed.px: 40
 
 -- end: ftd.row
 
 -- end: ftd.column
 
--- end: hero-desktop.px
+-- end: hero-desktop
 
 
 
@@ -151,8 +151,8 @@ width: fill-container
 background.solid: $inherited.colors.background.base
 padding-horizontal.px: 20
 padding-vertical.px: 50
-spacing.px: 30
-open: true
+spacing.fixed.px: 30
+;;open: true
 ;;append-at: mobile-action-container
 
 -- ftd.image:
@@ -172,7 +172,7 @@ role: $inherited.types.heading-large
 ;;id: mobile-action-container
 ;;position: center
 padding-top.px.px: 10
-spacing.px: 30
+spacing.fixed.px: 30
 
 -- end: ftd.column
 
@@ -241,14 +241,14 @@ role: $inherited.types.heading-large
 
 -- ftd.row:
 width: fill-container
-open: true
+;;open: true
 ;;append-at: main-container
 
 -- ftd.row:
 width: fill-container
 if: {ftd.device != "mobile"}
 padding-horizontal.px: $ft.content-padding
-spacing-mode: space-between
+spacing: space-between
 wrap: true
 padding-bottom.px.px: 60
 ;;id: main-container
@@ -259,7 +259,7 @@ padding-bottom.px.px: 60
 if: {ftd.device == "mobile"}
 width: fill-container
 padding-horizontal.px: 20
-spacing-mode: space-around
+spacing: space-around
 wrap: true
 padding-bottom.px.px: 40
 ;;id: main-container
@@ -287,7 +287,7 @@ body body:
 -- ftd.column:
 width.fixed.percent: 30
 width if {ftd.device == "mobile"}: fill-container
-spacing.px: 15
+spacing.fixed.px: 15
 padding-top.px.px: 60
 align-self: start
 
@@ -312,14 +312,14 @@ color if {$ftd.dark-mode}: $inherited.colors.text
 -- ftd.row:
 width: fill-container
 background.solid: $inherited.colors.background.base
-open: true
+;;open: true
 ;;append-at: main-container
 
 -- ftd.row:
 width: fill-container
 if: {ftd.device != "mobile"}
 padding-horizontal.px: $ft.content-padding.px
-spacing-mode: space-between
+spacing: space-between
 wrap: true
 padding-bottom.px.px: 60
 ;;id: main-container
@@ -332,7 +332,7 @@ padding-bottom.px.px: 60
 if: {ftd.device == "mobile"}
 width: fill-container
 padding-horizontal.px: 20
-spacing-mode: space-around
+spacing: space-around
 wrap: true
 padding-bottom.px.px: 40
 ;;id: main-container
@@ -361,7 +361,7 @@ body body:
 -- ftd.column:
 width.fixed.percent: 30
 width if {ftd.device == "mobile"}: fill-container
-spacing.px: 15
+spacing.fixed.px: 15
 padding-top.px.px: 60
 
 -- ftd.image:
@@ -407,7 +407,7 @@ color: $inherited.colors.text
 
 -- ftd.column:
 width: fill-container
-open: true
+;;open: true
 ;;append-at: main-container
 padding-top.px.px: 20
 
@@ -418,7 +418,7 @@ align-self: center
 -- ftd.row:
 width: fill-container
 if: {ftd.device != "mobile"}
-spacing-mode: space-between
+spacing: space-between
 wrap: true
 padding-bottom.px.px: 60
 ;;id: main-container
@@ -431,7 +431,7 @@ padding-bottom.px.px: 60
 if: {ftd.device == "mobile"}
 width: fill-container
 padding-horizontal.px: 20
-spacing-mode: space-between
+spacing: space-between
 wrap: true
 padding-bottom.px.px: 40
 ;;id: main-container
@@ -462,7 +462,7 @@ string cta-text:
 width.fixed.px: 400
 height.fixed.px: 225
 width if {ftd.device == "mobile"}: fill-container
-spacing.px: 15
+spacing.fixed.px: 15
 ;;background-image: $template.image
 border-radius.px: 4
 border-width.px: 1
@@ -532,7 +532,7 @@ optional string live_preview:
 width.fixed.px: 400
 height.fixed.px: 225
 width if {ftd.device == "mobile"}: fill-container
-spacing.px: 15
+spacing.fixed.px: 15
 ;;background-image: $theme.image
 border-radius.px: 4
 border-width.px: 1
@@ -597,11 +597,11 @@ role: $inherited.types.label-big
 
 -- ftd.row:
 padding-vertical.px: 20
-open: true
+;;;;open: true
 ;;append-at: main-container
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 ;;id: main-container
 
 -- end: ftd.row
@@ -624,7 +624,7 @@ caption title:
 optional string link:
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 
 -- ftd.text: $crumb.title
 if: {$crumb.link != NULL}

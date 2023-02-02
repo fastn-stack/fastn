@@ -217,7 +217,7 @@ boolean readonly: false
 body body:
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 width: fill-container
 
 -- ds.h1: $var.name
@@ -226,16 +226,16 @@ width: fill-container
 border-width.px: 1
 border-color: $inherited.colors.text
 padding.px: 20
-spacing.px: 5
+spacing.fixed.px: 5
 width: fill-container
 
 -- ftd.text: Type:
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 -- ftd.text: $var.type
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 -- end: ftd.row
 
@@ -244,17 +244,17 @@ width: fill-container
 border-width.px: 1
 border-color: $inherited.colors.text
 padding.px: 20
-spacing.px: 5
+spacing.fixed.px: 5
 if: {$var.default != NULL}
 
 -- ftd.text: Default Value:
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 -- ftd.text: $var.default
 if: {$var.default != NULL}
 color: $inherited.colors.text
-role: $inherited.types.copy-relaxed
+role: $inherited.types.copy-regular
 
 -- end: ftd.row
 
