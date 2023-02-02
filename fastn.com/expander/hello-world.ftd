@@ -6,10 +6,29 @@
 
 -- ds.markdown:
 
-3 changes made
+Update: On development side, We had three changes.
+
+Accordingly these videos will be updated. Meanwhile, please be catious with the following changes:
+
+-- ds.code: Change 1: Package manager is renamed
+lang: ftd
+
+<FPM> is now <FASTN> (use-case sensitive, i.e. <fpm> is <fastn> )
+
+-- ds.code: Change 2: New way to create local host
+lang: ftd
+
+<fpm serve --edition 2022> is now <fastn serve>
+
+-- ds.code: Change 3: Syntax change
+lang: ftd
+
+<spacing.px> is now <spacing.fixed.px>
+<spacing-mode> is now <spacing>
 
 -- ds.youtube:
 v: v1u-TmNE0bA
+
 
 -- ds.h3: Install FASTN for MacOS
 
