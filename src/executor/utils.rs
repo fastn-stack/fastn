@@ -48,7 +48,7 @@ pub(crate) fn validate_properties_and_set_default(
         if let Some(ref default_value) = argument.value {
             properties.push(ftd::interpreter2::Property {
                 value: default_value.to_owned(),
-                source: Default::default(),
+                source: ftd::interpreter2::PropertySource::Default,
                 condition: None,
                 line_number: argument.line_number,
             });
@@ -72,4 +72,23 @@ pub(crate) fn get_string_container(local_container: &[usize]) -> String {
         .map(|v| v.to_string())
         .collect::<Vec<String>>()
         .join(",")
+}
+
+pub fn found_parent_containers(containers: &[&(String, Vec<usize>)], container: &[usize]) -> bool {
+    for (_, item_container) in containers.iter().rev() {
+        if item_container.len() > container.len() {
+            continue;
+        }
+        let mut found = true;
+        for (idx, i) in item_container.iter().enumerate() {
+            if *i != container[idx] {
+                found = false;
+                break;
+            }
+        }
+        if found {
+            return true;
+        }
+    }
+    false
 }
