@@ -473,12 +473,29 @@ impl ftd::executor::Iframe {
             ),
         );
 
-        n.attrs
-            .check_and_insert("allow", ftd::node::Value::from_string("fullscreen"));
-
         n.attrs.check_and_insert(
             "allowfullscreen",
             ftd::node::Value::from_string("allowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "mozallowfullscreen",
+            ftd::node::Value::from_string("mozallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "msallowfullscreen",
+            ftd::node::Value::from_string("msallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "oallowfullscreen",
+            ftd::node::Value::from_string("oallowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "webkitallowfullscreen",
+            ftd::node::Value::from_string("webkitallowfullscreen"),
         );
 
         n.attrs.check_and_insert(
