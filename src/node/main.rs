@@ -152,19 +152,26 @@ impl ftd::executor::Row {
             ),
         );
 
-        n.style.check_and_insert(
-            "justify-content",
-            ftd::node::Value::from_executor_value(
-                self.container
-                    .spacing
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                    .value,
-                self.container.spacing.to_owned(),
-                Some(ftd::executor::Spacing::justify_content_pattern()),
-                doc_id,
-            ),
-        );
+        // TODO: Need to fix this later for condition
+        if let Some(v) = n.style.get("justify-content"){
+            if let Some(jc) = &v.value {
+                if jc.eq("start"){
+                    n.style.check_and_insert(
+                        "justify-content",
+                        ftd::node::Value::from_executor_value(
+                            self.container
+                                .spacing
+                                .to_owned()
+                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                                .value,
+                            self.container.spacing.to_owned(),
+                            Some(ftd::executor::Spacing::justify_content_pattern()),
+                            doc_id,
+                        ),
+                    );
+                }
+            }
+        }
 
         n.style.check_and_insert(
             "align-items",
@@ -223,19 +230,26 @@ impl ftd::executor::Column {
             ),
         );
 
-        n.style.check_and_insert(
-            "justify-content",
-            ftd::node::Value::from_executor_value(
-                self.container
-                    .spacing
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                    .value,
-                self.container.spacing.to_owned(),
-                Some(ftd::executor::Spacing::justify_content_pattern()),
-                doc_id,
-            ),
-        );
+        // TODO: Need to fix this later for condition
+        if let Some(v) = n.style.get("justify-content"){
+            if let Some(jc) = &v.value {
+                if jc.eq("start"){
+                    n.style.check_and_insert(
+                        "justify-content",
+                        ftd::node::Value::from_executor_value(
+                            self.container
+                                .spacing
+                                .to_owned()
+                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                                .value,
+                            self.container.spacing.to_owned(),
+                            Some(ftd::executor::Spacing::justify_content_pattern()),
+                            doc_id,
+                        ),
+                    );
+                }
+            }
+        }
 
         n.style.check_and_insert(
             "align-items",
