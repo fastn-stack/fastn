@@ -120,6 +120,8 @@ impl<'a> ExecuteDoc<'a> {
             component_definition.arguments.as_slice(),
             local_container,
             instruction.line_number,
+            inherited_variables,
+            true,
         )?;
 
         ftd::executor::utils::update_local_variable_references_in_component(
@@ -288,6 +290,7 @@ impl<'a> ExecuteDoc<'a> {
                             container.as_slice(),
                             &component_definition,
                             false,
+                            &mut inherited_variables,
                         )?,
                     );
                     let children_instructions = ExecuteDoc::get_instructions_from_instructions(
@@ -485,7 +488,10 @@ impl<'a> ExecuteDoc<'a> {
         local_container: &[usize],
         component_definition: &ftd::interpreter2::ComponentDefinition,
         is_dummy: bool,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
+        use itertools::Itertools;
+
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
                 ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
@@ -532,17 +538,51 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
-            "ftd#row" => ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
-                instruction.properties.as_slice(),
-                instruction.events.as_slice(),
-                component_definition.arguments.as_slice(),
-                instruction.condition.as_ref(),
-                doc,
-                local_container,
-                instruction.line_number,
-                vec![],
-            )?),
+            "ftd#row" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+
+                ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                    vec![],
+                )?)
+            }
             "ftd#column" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),

@@ -48,7 +48,7 @@ pub(crate) fn validate_properties_and_set_default(
         if let Some(ref default_value) = argument.value {
             properties.push(ftd::interpreter2::Property {
                 value: default_value.to_owned(),
-                source: Default::default(),
+                source: ftd::interpreter2::PropertySource::Default,
                 condition: None,
                 line_number: argument.line_number,
             });
@@ -446,7 +446,7 @@ fn update_inherited_reference_in_property_value(
     let mut is_reference_updated = false;
 
     for ((reference, container), rem) in values.iter().rev() {
-        if container.len() >= local_container.len() {
+        if container.len() > local_container.len() {
             continue;
         }
         let mut found = true;
@@ -513,4 +513,23 @@ fn update_inherited_reference_in_property_value(
             );
         }
     }
+}
+
+pub fn found_parent_containers(containers: &[&(String, Vec<usize>)], container: &[usize]) -> bool {
+    for (_, item_container) in containers.iter().rev() {
+        if item_container.len() > container.len() {
+            continue;
+        }
+        let mut found = true;
+        for (idx, i) in item_container.iter().enumerate() {
+            if *i != container[idx] {
+                found = false;
+                break;
+            }
+        }
+        if found {
+            return true;
+        }
+    }
+    false
 }

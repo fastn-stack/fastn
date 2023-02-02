@@ -360,7 +360,8 @@
             },
             "null": false,
             "data_id": "0,0",
-            "line_number": 34
+            "line_number": 34,
+            "raw_data": null
           },
           {
             "classes": [],
@@ -621,7 +622,8 @@
                 },
                 "null": false,
                 "data_id": "0,1,0",
-                "line_number": 34
+                "line_number": 34,
+                "raw_data": null
               }
             ],
             "text": {
@@ -632,7 +634,8 @@
             },
             "null": false,
             "data_id": "0,1",
-            "line_number": 31
+            "line_number": 31,
+            "raw_data": null
           },
           {
             "classes": [],
@@ -893,7 +896,8 @@
                 },
                 "null": false,
                 "data_id": "0,2,0",
-                "line_number": 34
+                "line_number": 34,
+                "raw_data": null
               },
               {
                 "classes": [],
@@ -1154,7 +1158,8 @@
                     },
                     "null": false,
                     "data_id": "0,2,1,0",
-                    "line_number": 34
+                    "line_number": 34,
+                    "raw_data": null
                   }
                 ],
                 "text": {
@@ -1165,7 +1170,8 @@
                 },
                 "null": false,
                 "data_id": "0,2,1",
-                "line_number": 31
+                "line_number": 31,
+                "raw_data": null
               }
             ],
             "text": {
@@ -1176,7 +1182,8 @@
             },
             "null": false,
             "data_id": "0,2",
-            "line_number": 31
+            "line_number": 31,
+            "raw_data": null
           }
         ],
         "text": {
@@ -1187,7 +1194,8 @@
         },
         "null": false,
         "data_id": "0",
-        "line_number": 31
+        "line_number": 31,
+        "raw_data": null
       }
     ],
     "text": {
@@ -1198,7 +1206,8 @@
     },
     "null": false,
     "data_id": "",
-    "line_number": 0
+    "line_number": 0,
+    "raw_data": null
   },
   "bag": {
     "foo#print-toc-item": {
@@ -1689,5 +1698,7 @@
   "aliases": {
     "ftd": "ftd",
     "inherited": "inherited"
-  }
+  },
+  "dummy_nodes": {},
+  "raw_nodes": {}
 }

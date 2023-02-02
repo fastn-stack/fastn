@@ -356,7 +356,8 @@
             },
             "null": false,
             "data_id": "0,0",
-            "line_number": 4
+            "line_number": 4,
+            "raw_data": null
           },
           {
             "classes": [
@@ -465,7 +466,8 @@
             },
             "null": false,
             "data_id": "0,1",
-            "line_number": 6
+            "line_number": 6,
+            "raw_data": null
           }
         ],
         "text": {
@@ -476,7 +478,8 @@
         },
         "null": false,
         "data_id": "0",
-        "line_number": 1
+        "line_number": 1,
+        "raw_data": null
       }
     ],
     "text": {
@@ -487,11 +490,14 @@
     },
     "null": false,
     "data_id": "",
-    "line_number": 0
+    "line_number": 0,
+    "raw_data": null
   },
   "bag": {},
   "aliases": {
     "ftd": "ftd",
     "inherited": "inherited"
-  }
+  },
+  "dummy_nodes": {},
+  "raw_nodes": {}
 }

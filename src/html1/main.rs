@@ -28,12 +28,12 @@ impl HtmlUI {
 
         for (dependency, dummy_node) in node_data.dummy_nodes {
             let dummy_html = DummyHtmlGenerator::from_node(id, &tdoc, dummy_node.main);
-            dbg!("dummy_nodes", &dependency, &dummy_html);
+            // dbg!("dummy_nodes", &dependency, &dummy_html);
         }
 
         for (dependency, raw_node) in node_data.raw_nodes {
             let raw_html = DummyHtmlGenerator::from_node(id, &tdoc, raw_node.node);
-            dbg!("raw_nodes", &dependency, &raw_html);
+            // dbg!("raw_nodes", &dependency, &raw_html);
         }
 
         Ok(HtmlUI {

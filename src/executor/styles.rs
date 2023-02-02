@@ -1104,7 +1104,7 @@ impl Spacing {
             Spacing::SpaceBetween => "space-between".to_string(),
             Spacing::SpaceEvenly => "space-evenly".to_string(),
             Spacing::SpaceAround => "space-around".to_string(),
-            Spacing::Fixed(_) => "flex-start".to_string(),
+            Spacing::Fixed(_) => "start".to_string(),
         }
     }
 
@@ -1114,7 +1114,7 @@ impl Spacing {
                 if (\"{0}\" == \"space-between\" || \"{0}\" == \"space-around\" || \"{0}\" == \"space-evenly\") {
                     \"{0}\"
                 } else {
-                    \"flex-start\"
+                    \"start\"
                 }
             "}
             .to_string(),
