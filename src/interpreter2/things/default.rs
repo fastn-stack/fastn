@@ -7680,13 +7680,13 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "colors",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_COLOR_SCHEME)
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR_SCHEME)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "types",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TYPE_DATA)
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE_DATA)
                 .into_optional()
                 .into_kind_data(),
         ),

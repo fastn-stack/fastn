@@ -285,18 +285,24 @@ pub enum PropertySource {
     Body,
     Header { name: String, mutable: bool },
     Subsection,
+    Default,
 }
 
 impl PropertySource {
     pub fn is_equal(&self, other: &PropertySource) -> bool {
         match self {
-            PropertySource::Caption | PropertySource::Body | PropertySource::Subsection => {
-                self.eq(other)
-            }
+            PropertySource::Caption
+            | PropertySource::Body
+            | PropertySource::Subsection
+            | PropertySource::Default => self.eq(other),
             PropertySource::Header { name, .. } => matches!(other, PropertySource::Header {
                     name: other_name, ..
                } if other_name.eq(name)),
         }
+    }
+
+    pub fn is_default(&self) -> bool {
+        matches!(self, PropertySource::Default)
     }
 
     pub fn header(name: &str) -> PropertySource {
