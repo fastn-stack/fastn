@@ -146,7 +146,14 @@ window.ftd = (function() {
         args[0].value = array;
         change_value(args, data, id);
         if (!!window.append_data_main && !!window.append_data_main[args[0].reference]) {
-            window.append_data_main[args[0].reference](data);
+            let [htmls, data_id, start_index] = window.append_data_main[args[0].reference](data);
+            let html = htmls[htmls.length - 1];
+            let nodes = stringToHTML(html);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            for (var j=0, len = nodes.childElementCount ; j < len; ++j) {{
+                // @ts-ignore
+                main.insertBefore(nodes.children[j], main.children[start_index + htmls.length - 1]);
+            }}
         }
         return array;
     }

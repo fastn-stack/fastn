@@ -42,6 +42,7 @@ impl<'a> DummyHtmlGenerator<'a> {
                 indoc::indoc! {"
                     window.append_data_{id}[\"{dependency}\"] = function(all_data) {{
                         let list = resolve_reference(\"{dependency}\", all_data);
+                        let htmls = [];
                         for (var i = 0; i < list.length; i++) {{
                             let new_data = {{
                                 \"{alias}\": list[i],
@@ -54,12 +55,9 @@ impl<'a> DummyHtmlGenerator<'a> {
                                 data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                             }}
                             let html = \"{html}\".replace_format(data);
-                            let nodes = stringToHTML(html);
-                            let main = document.querySelector(`[data-id=\"{data_id}\"]`);
-                            for (var j=0, len = nodes.childElementCount ; j < len; ++j) {{
-                                main.insertBefore(nodes.children[j], main.children[{start_index}]);
-                            }}
+                            htmls.push(html);
                          }}
+                         return [htmls, \"{data_id}\", {start_index}]
                     }}"
                 },
                 dependency = dependency,
@@ -87,11 +85,7 @@ impl<'a> DummyHtmlGenerator<'a> {
                             data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                         }}
                         let html = \"{html}\".replace_format(data);
-                        let nodes = stringToHTML(html);
-                        let main = document.querySelector(`[data-id=\"{data_id}\"]`);
-                        for(var j=0, len = nodes.childElementCount ; j < len; ++j) {{
-                            main.insertBefore(nodes.children[j], main.children[{start_index}]);
-                        }}
+                        return [html, \"{data_id}\", {start_index}]
                     }}"
                 },
                 dependency = dependency,
@@ -170,7 +164,7 @@ impl<'a> HelperHtmlGenerator<'a> {
             dependency = dependency,
             arguments = argument_string.unwrap_or_default(),
             node = raw_html.name,
-            html = dbg!(raw_html.html.replace("\"", "\\\"")),
+            html = raw_html.html.replace("\"", "\\\""),
             id = self.id,
         )
     }
