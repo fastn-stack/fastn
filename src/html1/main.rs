@@ -172,11 +172,10 @@ impl<'a> HtmlGenerator<'a> {
                     return None;
                 }
                 v.value.as_ref().map(|v| {
-                    dbg!(&k,&v);
-                    if v.eq(ftd::interpreter2::FTD_IGNORE_KEY){
+                    if v.eq(ftd::interpreter2::FTD_IGNORE_KEY) {
                         return s("");
                     }
-                    if v.eq(ftd::interpreter2::FTD_NO_VALUE){
+                    if v.eq(ftd::interpreter2::FTD_NO_VALUE) {
                         return s(k);
                     }
                     let v = if k.eq("data-id") {

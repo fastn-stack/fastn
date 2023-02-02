@@ -1180,7 +1180,7 @@ impl TextInput {
                     \"disabled\"
                 }
             "}
-                .to_string(),
+            .to_string(),
             true,
         )
     }
@@ -1216,13 +1216,8 @@ pub fn text_input_from_properties(
         line_number,
     )?;
 
-    let enabled = ftd::executor::value::optional_bool(
-        "enabled",
-        properties,
-        arguments,
-        doc,
-        line_number,
-    )?;
+    let enabled =
+        ftd::executor::value::optional_bool("enabled", properties, arguments, doc, line_number)?;
 
     let default_value = ftd::executor::value::optional_string(
         "default-value",

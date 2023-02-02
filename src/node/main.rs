@@ -510,7 +510,15 @@ impl ftd::executor::TextInput {
             ftd::node::Value::from_executor_value(
                 self.enabled
                     .to_owned()
-                    .map(|v| v.map(|b| if b { s(ftd::interpreter2::FTD_IGNORE_KEY) } else { s(ftd::interpreter2::FTD_NO_VALUE) }))
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            } else {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            }
+                        })
+                    })
                     .value,
                 self.enabled.to_owned(),
                 Some(ftd::executor::TextInput::enabled_pattern()),
@@ -582,7 +590,15 @@ impl ftd::executor::CheckBox {
             ftd::node::Value::from_executor_value(
                 self.checked
                     .to_owned()
-                    .map(|v| v.map(|b| if b { s(ftd::interpreter2::FTD_NO_VALUE) } else { s(ftd::interpreter2::FTD_IGNORE_KEY) }))
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            } else {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            }
+                        })
+                    })
                     .value,
                 self.checked.to_owned(),
                 Some(ftd::executor::CheckBox::checked_pattern()),
@@ -595,7 +611,15 @@ impl ftd::executor::CheckBox {
             ftd::node::Value::from_executor_value(
                 self.enabled
                     .to_owned()
-                    .map(|v| v.map(|b| if b { s(ftd::interpreter2::FTD_IGNORE_KEY) } else { s(ftd::interpreter2::FTD_NO_VALUE) }))
+                    .map(|v| {
+                        v.map(|b| {
+                            if b {
+                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                            } else {
+                                s(ftd::interpreter2::FTD_NO_VALUE)
+                            }
+                        })
+                    })
                     .value,
                 self.enabled.to_owned(),
                 Some(ftd::executor::CheckBox::enabled_pattern()),
