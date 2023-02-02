@@ -6,6 +6,7 @@ pub struct HtmlUI {
     pub variable_dependencies: String,
     pub outer_events: String,
     pub dummy_html: String,
+    pub raw_html: String,
 }
 
 impl HtmlUI {
@@ -36,10 +37,14 @@ impl HtmlUI {
             ftd::html1::DummyHtmlGenerator::new(id, &tdoc).from_dummy_nodes(&node_data.dummy_nodes);
         dbg!(&dummy_html);
 
-        for (dependency, raw_node) in node_data.raw_nodes {
+        let raw_html =
+            ftd::html1::HelperHtmlGenerator::new(id, &tdoc).from_raw_nodes(&node_data.raw_nodes);
+        dbg!(&raw_html);
+
+        /*for (dependency, raw_node) in node_data.raw_nodes {
             let raw_html = RawHtmlGenerator::from_node(id, &tdoc, raw_node.node);
             dbg!("raw_nodes", &dependency, &raw_html);
-        }
+        }*/
 
         Ok(HtmlUI {
             html,
@@ -50,6 +55,7 @@ impl HtmlUI {
             variable_dependencies,
             outer_events,
             dummy_html,
+            raw_html,
         })
     }
 }
@@ -104,7 +110,7 @@ impl<'a> HtmlGenerator<'a> {
                 node.node.as_str(),
             );
             dummy_html.properties = raw_data.properties;
-            dummy_html.html = node.node.to_string();
+            dummy_html.html = format!("{{{}}}", node.node);
             dummy_html.name = node.node.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
@@ -158,7 +164,7 @@ impl<'a> HtmlGenerator<'a> {
                 node_name.as_str(),
             );
             helper_dummy_html.properties = raw_data.properties;
-            helper_dummy_html.html = node_name.to_string();
+            helper_dummy_html.html = format!("{{{}}}", node_name);
             helper_dummy_html.name = node_name.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();

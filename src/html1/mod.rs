@@ -11,7 +11,7 @@ mod main;
 pub mod utils;
 mod variable_dependencies;
 
-pub(crate) use dummy_html::DummyHtmlGenerator;
+pub(crate) use dummy_html::{DummyHtmlGenerator, HelperHtmlGenerator};
 pub use events::Action;
 pub use functions::{ExpressionGenerator, FunctionGenerator};
 pub use main::HtmlUI;

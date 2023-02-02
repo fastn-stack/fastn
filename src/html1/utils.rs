@@ -592,6 +592,36 @@ pub(crate) fn to_properties_string(
     }
 }
 
+pub(crate) fn to_argument_string(
+    id: &str,
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::interpreter2::TDoc,
+    node: &str,
+) -> Option<String> {
+    let mut properties_string = "".to_string();
+    for argument in arguments {
+        let mut result_value = "null".to_string();
+        if let Some(ref value) = argument.value {
+            if let Ok(Some(value_string)) =
+                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                    id, doc, value, &None, None, false,
+                )
+            {
+                result_value = value_string;
+            }
+        }
+        properties_string = format!(
+            "{}\nargs[\"{}.{}\"] = {};",
+            properties_string, node, argument.name, result_value
+        );
+    }
+    if properties_string.is_empty() {
+        None
+    } else {
+        Some(format!("var args= {{}};\n{}", properties_string.trim()))
+    }
+}
+
 fn group_vec_to_map<T>(vec: &[(String, T)]) -> ftd::VecMap<T>
 where
     T: PartialEq + Clone,

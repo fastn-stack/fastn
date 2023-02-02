@@ -1422,16 +1422,30 @@ args["foo#foo.name"] = resolve_reference("foo#obj", data);
 
 args["foo#foo.value"] = 0;
 data = {...args, ...all_data};
-if (!!"foo#foo".trim() && !!window["function_main"] && !!window.function_main["foo#foo"]) {
-data["foo#foo"] = window.function_main["foo#foo"](data);
+if (!!"foo#foo".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main["foo#foo"]) {
+data["foo#foo"] = window.raw_nodes_main["foo#foo"](data);
 }
-let html = "foo#foo".replace_format(data);
-let nodes = stringToHTML(html).children;
+let html = "{foo#foo}".replace_format(data);
+let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="main"]`);
-for (var child in nodes) {
-main.insertBefore(nodes[child], main.children[1]);
+for (var j=0, len = nodes.childElementCount ; j < len; ++j) {
+main.insertBefore(nodes.children[j], main.children[1]);
 }
 }
+}
+window.raw_nodes_main = {};
+
+window.raw_nodes_main["foo#foo"] = function(all_data){
+var args= {};
+args["foo#foo.name"] = null;
+args["foo#foo.idx"] = null;
+args["foo#foo.value"] = 0;
+let data = {...args, ...all_data};
+if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
+data[""] = window.raw_nodes_main[""](data);
+}
+let html = "<div data-id=\"main\" onclick=\"window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo.value&quot;}]]}]', this)\" style=\"align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto\" ><div data-id=\"0:main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#foo.name}</div></div>".replace_format(data);
+return html;
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
