@@ -1,6 +1,6 @@
--- ds.page: `fpm::Document`
+-- ds.page: `fastn::Document`
 
-`fpm::Document` struct keeps track of a "document". Document is a [`file` in fpm
+`fastn::Document` struct keeps track of a "document". Document is a [`file` in fastn
 package](crate/file/), which is either a ftd file, a markdown file, or a code
 file.
 

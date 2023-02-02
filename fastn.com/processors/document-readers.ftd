@@ -7,7 +7,7 @@
 -- ds.code:
 lang: ftd
 
-\-- fpm.user-group-compat group:
+\-- fastn.user-group-compat group:
 $processor$: document-readers
 document: /
 
@@ -16,6 +16,6 @@ document: /
 This will initialize the `group` variable with group who have permission to read
 for passed `document`.
 
-Check type [user-group-compat](/theme/fpm/#user-group-compat)
+Check type [user-group-compat](/theme/fastn/#user-group-compat)
 
 -- end: ds.page

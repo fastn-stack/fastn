@@ -7,15 +7,15 @@ group `id`. Each group have unique `id`.
 -- ds.code:
 lang: ftd
 
-\-- fpm.user-group-compat group:
+\-- fastn.user-group-compat group:
 $processor$: user-group-by-id
 
 
 -- ds.markdown:
 
 This will initialize the `group` variable with group which are present in the
-current FPM package by it's `id`.
+current FASTN package by it's `id`.
 
-Check type [user-group-compat](/theme/fpm/#user-group-compat)
+Check type [user-group-compat](/theme/fastn/#user-group-compat)
 
 -- end: ds.page

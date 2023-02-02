@@ -1,0 +1,12 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: `import: fastn`
+
+
+-- ft.h1: `document-id: String`
+
+The current document being processed.

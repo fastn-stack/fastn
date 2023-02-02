@@ -13,14 +13,14 @@ lang: en
 -- $ft-core.toc:
 $processor$: ft-toc
 
-- fifthtry/fpm/hello
+- fifthtry/fastn/hello
   Hello World
 
 
 -- ft.page:
 
 
--- ft.h1: fpm
+-- ft.h1: fastn
 
 
 -- ft.markdown:

@@ -1,12 +1,12 @@
 -- ds.page: `$processor$: full-sitemap`
 
-`full-sitemap` processor returns content of `FPM.ftd`s `fpm.sitemap`.
+`full-sitemap` processor returns content of `FASTN.ftd`s `fastn.sitemap`.
 
 
--- ds.code: Sitemap in `FPM.ftd`
+-- ds.code: Sitemap in `FASTN.ftd`
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 readers: <group name>
 writers: <group name>
 
@@ -30,9 +30,9 @@ writers: <group name>
 -- ds.markdown:
 
 In `full-sitemap` processor sitemap get parse into a record `sitemap-compat-data`.
-This record is present in `fpm` The record looks like this
+This record is present in `fastn` The record looks like this
 
--- ds.code: record `sitemap-compat-data` (fpm.ftd)
+-- ds.code: record `sitemap-compat-data` (fastn.ftd)
 lang: ftd
 
 \-- record sitemap-compat-data:

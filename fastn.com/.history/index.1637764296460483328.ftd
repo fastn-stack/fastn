@@ -13,22 +13,22 @@ lang: en
 -- $ft-core.toc:
 $processor$: ft-toc
 
-- fifthtry/fpm/roadmap
+- fifthtry/fastn/roadmap
   Roadmap
-- fifthtry/fpm/journal
+- fifthtry/fastn/journal
   Journal
 
 
 -- $ft-core.header:
 $processor$: ft-toc
 
-- fifthtry/fpm/roadmap
+- fifthtry/fastn/roadmap
   Roadmap
-- fifthtry/fpm/journal
+- fifthtry/fastn/journal
   Journal
 
 
 -- ft.page:
 
 
--- ft.h1: `fpm`: FTD Package Manager
+-- ft.h1: `fastn`: FTD Package Manager

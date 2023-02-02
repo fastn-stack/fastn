@@ -2,7 +2,7 @@
 
 -- ds.markdown:
 
-A fpm package can limit who has read or write access. We do it by organising a
+A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
@@ -15,14 +15,14 @@ logged-in user will only be allowed to access a page if he/she liked a tweet.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: liked-tweets
+\-- fastn.user-group: liked-tweets
 twitter-liking: 1603372330595807233
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Twitter Liking: /
 readers: liked-tweets
@@ -47,14 +47,14 @@ of the account.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: follower-group
+\-- fastn.user-group: follower-group
 twitter-followers: VillageBoota
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Twitter Follower: /
 readers: follower-group
@@ -79,14 +79,14 @@ followed by the account.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: following-group
+\-- fastn.user-group: following-group
 twitter-follows: VillageBoota
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Twitter Following: /
 readers: following-group
@@ -112,14 +112,14 @@ has retweeted the tweet.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: tweet-retweet
+\-- fastn.user-group: tweet-retweet
 twitter-retweet: 1606211310009597952
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Retweet: /
 readers: tweet-retweet

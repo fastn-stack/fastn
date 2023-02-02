@@ -1,6 +1,6 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
--- ds.page: FPM Login Flow with GitHub
+-- ds.page: FASTN Login Flow with GitHub
 
 -- ds.markdown:
 

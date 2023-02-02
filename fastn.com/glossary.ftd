@@ -1,19 +1,19 @@
 -- ds.page: Glossary
 
-An FPM Glossary
+An FASTN Glossary
 
 -- ds.h2: clone
 
 As a verb: Clone a [remote](glossary/#remote) into a new directory which becomes
 a clone project.
 
-As a noun: An [fpm project](glossary/#fpm-project) which is a clone to the
+As a noun: An [fastn project](glossary/#fastn-project) which is a clone to the
 [remote](glossary/#remote) and tracks it. The interaction with remote is
 established using [sync](glossary/#sync).
 
 -- ds.h2: document
 
-The [file](glossary/#file) with extension that are compiled using FPM.
+The [file](glossary/#file) with extension that are compiled using FASTN.
 Currently, there are two such extensions `.md` and `.ftd`.
 
 -- ds.h2: document-name
@@ -81,7 +81,7 @@ See also [sitemap](sitemap/).
 
 -- ds.h2: file
 
-The unit of storage in FPM. It is uniquely identified by the
+The unit of storage in FASTN. It is uniquely identified by the
 [filename](glossary/#filename).
 
 -- ds.h2: filename
@@ -98,9 +98,9 @@ The file, in conflict-state, is never considered to be synced unless its
 conflict is resolved.
 ```
 
--- ds.h2: fpm project
+-- ds.h2: fastn project
 
-The unit folder that contains `FPM.ftd` and any number of folders or files of
+The unit folder that contains `FASTN.ftd` and any number of folders or files of
 any extension along with states (server-state and/or client-state).
 
 -- ds.h2: module
@@ -110,7 +110,7 @@ can only be with extension `.ftd`.
 
 -- ds.h2: remote
 
-An fpm project which is used to track the same project but resides somewhere
+An fastn project which is used to track the same project but resides somewhere
 else. To communicate with remote, see [clone](glossary/#clone) or
 [sync](glossary/#sync).
 
@@ -139,7 +139,7 @@ To bring the contents of [clone](glossary/#clone) into the
 diverged into the clone project. In the end results the remote and the clone
 to be exact copy of each other.
 
-Sync is specific to a file. Though the [`fpm sync`](cli/sync/) commands
+Sync is specific to a file. Though the [`fastn sync`](cli/sync/) commands
 results in syncing of all the changed file.
 
 Syncing is performed by an automatic process that identifies changes made since
@@ -154,14 +154,14 @@ of the file.
 
 Three-way merges use a dedicated [version](glossary/#version), also known
 as base version, to tie together the histories in remote and [un-synced
-file](glossary/#un-synced-file) in clone. FPM uses three state of file to
+file](glossary/#un-synced-file) in clone. FASTN uses three state of file to
 generate the new version: first: latest version in remote, second: un-synced
 file in clone and third: their common ancestor version.
 
 -- ds.h2: tracked file
 
-The file that is considered part of [`fpm project`](glossary/#fpm-project) and
-has entry in workspace i.e. it will be synced when [fpm sync](/sync/) is used if
+The file that is considered part of [`fastn project`](glossary/#fastn-project) and
+has entry in workspace i.e. it will be synced when [fastn sync](/sync/) is used if
 it's not [file-with-conflict](glossary/#file-with-conflict).
 
 -- ds.h2: un-synced file
@@ -176,11 +176,11 @@ has no entry in workspace.
 
 -- ds.h2: version
 
-As a noun: A single point in the FPM project history of a file; the entire
+As a noun: A single point in the FASTN project history of a file; the entire
 history of a file in a project is represented as a series of versions.
 
 As a verb: The action of storing a new snapshot of the file’s state in the
-[fpm project](glossary/#fpm-project) history, by creating a new version
+[fastn project](glossary/#fastn-project) history, by creating a new version
 representing the current state of the file. The new version is created by
 [sync](glossary/#sync) action.
 
@@ -189,6 +189,6 @@ representing the current state of the file. The new version is created by
 The workspace contains all the files present in the
 [remote-manifest](glossary/#remote-manifest), plus any local changes that have
 been made but not yet synced. It also includes the new files added to workspace
-using [`fpm add <file-name>`](cli/add).
+using [`fastn add <file-name>`](cli/add).
 
 -- end: ds.page

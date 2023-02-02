@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.page:
 
@@ -15,15 +15,15 @@ color: white
 
 -- ft.content:
 
---- ft.h1: fpm: FTD Package Manager
+--- ft.h1: fastn: FTD Package Manager
 
-[What is FPM?](/about/)
+[What is FASTN?](/about/)
 
 Checkout what is planned in [Roadmap](/roadmap/), and day to day updates in the
 [Journal](/journal/).
 
-Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
-Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
+Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)
+Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
 
 
 --- ft.youtube:

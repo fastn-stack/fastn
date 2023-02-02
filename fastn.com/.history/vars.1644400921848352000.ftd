@@ -1,54 +1,54 @@
 -- import: ft
--- import: fpm
--- import: fpm.dev/config
+-- import: fastn
+-- import: fastn.dev/config
 
 -- ft.doc-page:
 toc: $config.themes-toc
 
--- ft.h0: `fpm` Variables
+-- ft.h0: `fastn` Variables
 
 
--- var: fpm.mobile
+-- var: fastn.mobile
 type: boolean
 readonly: true
 dynamic: true
 
 This variable is set to true when the browser is mobile like. We detect mobile
-or desktop based on browser width. `fpm.mobile-breakpoint` can be used to
+or desktop based on browser width. `fastn.mobile-breakpoint` can be used to
 customize when we switch from mobile to desktop.
 
-`fpm.mobile` automatically changes when browser resizes.
+`fastn.mobile` automatically changes when browser resizes.
 
 
--- var: fpm.mobile-breakpoint
+-- var: fastn.mobile-breakpoint
 type: integer
 default: 768
 
 This is the width below which we consider show the mobile view.
 
--- var: fpm.language
+-- var: fastn.language
 type: optional string
 readonly: true
 
-This variable tells you the language of current package if provided in FPM.ftd file.
+This variable tells you the language of current package if provided in FASTN.ftd file.
 This is generally the case when translation is enabled.
 
--- var: fpm.home-url
+-- var: fastn.home-url
 type: string
 readonly: true
 
 It gives the home url of the package which basically is https://<package.name> or http://<package.name>
 
 
--- var: fpm.translation-status-url
+-- var: fastn.translation-status-url
 type: string
 readonly: true
 default: home url
 
 By default the value is home url, but in case of translation package, the value is
-<package.name>/FPM/translation-status
+<package.name>/FASTN/translation-status
 
--- var: fpm.language-toc
+-- var: fastn.language-toc
 type: language-toc-item list
 readonly: true
 
@@ -65,30 +65,30 @@ string url:
 
 It contains the list of all the available languages.
 
--- var: fpm.current-document-last-modified-on
+-- var: fastn.current-document-last-modified-on
 type: optional string
 readonly: true
 
 This gives the `last modified on` in datetime format for the current document.
 It fetches it from the .history snapshots (which is available only after running
-`fpm sync`)
+`fastn sync`)
 
--- var: fpm.last-modified-on
+-- var: fastn.last-modified-on
 type: optional string
 readonly: true
 
 This gives the `last modified on` in datetime format for the current package.
 It fetches it from the .history snapshots (which is available only after running
-`fpm sync`)
+`fastn sync`)
 
--- var: fpm.package-name
+-- var: fastn.package-name
 type: string
 readonly: true
 
 This gives the current package name
 
 
--- var: fpm.number-of-documents
+-- var: fastn.number-of-documents
 type: optional string
 readonly: true
 
@@ -100,13 +100,13 @@ Note: It fetches it from .history snapshot latest record. So if the package is n
 It gives nothing.
 
 
--- var: fpm.diff
+-- var: fastn.diff
 type: optional string
 readonly: true
 
 This show the difference in document on out of date translation state
 
--- var: fpm.translation-status
+-- var: fastn.translation-status
 type: optional string
 readonly: true
 
@@ -116,13 +116,13 @@ NeverMarked
 UptoDate
 Outdated
 
--- var: fpm.is-translation-package
+-- var: fastn.is-translation-package
 type: boolean
 readonly: true
 
 This gives true if the package is the translation package, false otherwise
 
--- var: fpm.has-translations
+-- var: fastn.has-translations
 type: boolean
 readonly: true
 
@@ -144,35 +144,35 @@ width: fill
 
 --- ftd.row:
 border-width: 1
-border-color if $fpm.dark-mode: white
+border-color if $fastn.dark-mode: white
 padding: 20
 spacing: 5
 width: fill
 
 --- ftd.text: Type
 style: bold
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- ftd.text: $type
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- container: ftd.main
 
 --- ftd.row:
 width: fill
 border-width: 1
-border-color if $fpm.dark-mode: white
+border-color if $fastn.dark-mode: white
 padding: 20
 spacing: 5
 if: $default is not null
 
 --- ftd.text: Default Value
 style: bold
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- ftd.text: $default
 if: $default is not null
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- container: ftd.main
 

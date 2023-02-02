@@ -1,7 +1,7 @@
 -- ds.page: Twitter OAuth
 
 
-For Twitter Oauth using FPM. Follow please setps given below:
+For Twitter Oauth using FASTN. Follow please setps given below:
 
 - [How to create a Github App](/how-to/oauth/gh-app/)
 - [Login Flow](/how-to/oauth/gh-login/)

@@ -1,18 +1,18 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
--- ds.page: FPM Online Editor
+-- ds.page: FASTN Online Editor
 
-FPM has a built in, online editor. If you are using [fpm server](/server/), you
+FASTN has a built in, online editor. If you are using [fastn server](/server/), you
 can edit your website directly from your site, without needing to download.
 
 -- ds.image: Screenshot of the editor
 src: $assets.files.static.editor-dark.png
 width: fill-container
 
-The editor is fully integrated with the [fpm version control system](/vcs/), and
+The editor is fully integrated with the [fastn version control system](/vcs/), and
 acts as an integrated development environment for ftd projects.
 
-Fun fact: fpm editor is itself built using
+Fun fact: fastn editor is itself built using
 `ftd`.
 
 Learn more about the editor in the [editor manual](/editor/manual/).

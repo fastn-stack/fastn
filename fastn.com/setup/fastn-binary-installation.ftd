@@ -1,0 +1,40 @@
+-- import: fastn.dev/assets
+
+
+-- ds.page:
+
+-- ds.h1: FASTN binary Installation Using Windows
+
+-- ds.markdown:
+
+download the latest version [fastn binary installation](https://github.com/ftd-lang/fastn/releases)
+
+-- ds.image:
+src: $assets.files.static.images.setup.fastn.png
+;; scale: 1
+width: fill-container
+
+-- ds.markdown:
+
+Make a folder and added fastn release on it.
+
+-- ds.image:
+src: $assets.files.static.images.setup.fastn-folder.png
+;; scale: 1
+width: fill-container
+
+
+-- ds.markdown:
+
+Go to Menu Bar
+- advanced settings -> environment-variables -> edit path variable -> set path
+
+
+-- ds.image:
+src: $assets.files.static.images.setup.setup-fastn.png
+;; scale: 1
+width: fill-container
+
+
+
+-- end: ds.page

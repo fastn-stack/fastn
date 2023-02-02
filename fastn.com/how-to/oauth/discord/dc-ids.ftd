@@ -2,7 +2,7 @@
 
 -- ds.markdown:
 
-A fpm package can limit who has read or write access. We do it by organising a
+A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
@@ -15,14 +15,14 @@ logged-in user has joined the server or not.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: server-members
+\-- fastn.user-group: server-members
 discord-server: FifthTry.com
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Discord Server: /
 readers: server-members
@@ -47,14 +47,14 @@ he/she is member of the thread.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: thread-members
+\-- fastn.user-group: thread-members
 discord-thread: 1050487724727091291
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Discord Thread: /
 readers: thread-members
@@ -78,14 +78,14 @@ logged-in user will only be allowed to access a page if he/she joined the event.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: event-members
+\-- fastn.user-group: event-members
 discord-event: 1050685780747620362
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Discord Event: /
 readers: event-members
@@ -110,14 +110,14 @@ has been given specific permission.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: permitted-members
+\-- fastn.user-group: permitted-members
 discord-permission: 1051824761375834193
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Discord Permission: /
 readers: permitted-members

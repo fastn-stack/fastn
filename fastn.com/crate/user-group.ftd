@@ -1,12 +1,14 @@
--- ft.page: `fpm::UserGroup`
+-- import: ds as ft
 
-`fpm::UserGroup` keeps information about [user-group](/dev/user-group/), which
-are the part of `FPM.ftd` file.
+-- ft.page: `fastn::UserGroup`
+
+`fastn::UserGroup` keeps information about [user-group](/dev/user-group/), which
+are the part of `FASTN.ftd` file.
 
 
 For More check: [user-group](/dev/user-group/)
 
-Code File: [`fpm::src::user_groups.rs`](https://github.com/FifthTry/fpm/blob/main/src/user_group.rs)
+Code File: [`fastn::src::user_groups.rs`](https://github.com/FifthTry/fastn/blob/main/src/user_group.rs)
 
 -- ft.code:
 lang: rs
@@ -38,7 +40,7 @@ impl UserGroup {
     // TODO:
     // This function will check whether given identities are part or given groups or not,
     // It will return true if all are part of provided groups
-    // pub fn belongs_to(_identities: &[&str], _groups: &[UserGroup]) -> fpm::Result<bool> {
+    // pub fn belongs_to(_identities: &[&str], _groups: &[UserGroup]) -> fastn::Result<bool> {
     //     Ok(false)
     // }
 }

@@ -1,4 +1,4 @@
-;;-- import: fpm.dev/lib
+;;-- import: fastn.dev/lib
 -- import: fifthtry.github.io/bling/tip
 -- import: fifthtry.github.io/admonitions as cbox
 
@@ -6,16 +6,16 @@
 
 
 
--- ds.page: `fpm package` File System Organization
+-- ds.page: `fastn package` File System Organization
 
 -- ds.h1: Package
 
-`fpm` organizes [`ftd`](https://ftd.dev) files in "packages". Any folder is a
-`fpm package` if it contains a valid `FPM.ftd` file.
+`fastn` organizes [`ftd`](https://ftd.dev) files in "packages". Any folder is a
+`fastn package` if it contains a valid `FASTN.ftd` file.
 
--- ds.h1: `FPM.ftd`
+-- ds.h1: `FASTN.ftd`
 
-Every package folder has a file [`FPM.ftd`](/fpm-ftd-file/).
+Every package folder has a file [`FASTN.ftd`](/fastn-ftd-file/).
 
 -- ds.h2: Package Name
 
@@ -30,7 +30,7 @@ assume `https`).
 
 -- ds.h1: `.build` folder
 
-`fpm` can be used as a static site generator, [`fpm build`](/build/) will
+`fastn` can be used as a static site generator, [`fastn build`](/build/) will
 convert all `ftd`, `markdown` files to `html` and store them in `.build` folder.
 
 If you are using static site hosting solution, eg Github Pages, Vercel,
@@ -39,7 +39,7 @@ static site host.
 
 -- tip.tip: `.build` Is Ignore-able Folder
 
-`.build` folder should be added to `.gitignore` if you are storing fpm package
+`.build` folder should be added to `.gitignore` if you are storing fastn package
 in a git repository.
 
 -- ds.h1: `.packages` folder
@@ -53,28 +53,28 @@ downloaded and stored in `.packages` folder.
 
 -- ds.h1: `.packages/<package-name.ftd>` file
 
-When a fpm package is translated, a source package needs information about all
+When a fastn package is translated, a source package needs information about all
 the translation packages, to show on the translation status page. But we do not
 need the entire content of the translation packages.
 
-To avoid downloading entire package, we just download the `FPM.ftd` for the
+To avoid downloading entire package, we just download the `FASTN.ftd` for the
 translation packages in this case.
 
 -- ds.h1: `.history` folder
 
-`fpm` is also a version control system and can be used instead of say `git`.
+`fastn` is also a version control system and can be used instead of say `git`.
 History of all edits are kept in `history tracking`, and creates a snapshot of
 every file that is modified in `.history` folder.
 
-You can create a new history snapshot by using `fpm sync`.
+You can create a new history snapshot by using `fastn sync`.
 
-If this package uses `fpm` as the respository, `.history` folder is managed by
-the `fpm server`. If the package is stored in `git` repository, then `fpm sync`
+If this package uses `fastn` as the respository, `.history` folder is managed by
+the `fastn server`. If the package is stored in `git` repository, then `fastn sync`
 creates local snapshots.
 
 /-- lib.ganesh: But amitu!
 /-- lib.ganesh: Why Do We Need `.history` When We Using `git`?
-/-- lib.amitu: `fpm` supports translation and ad-hoc tracking features.
+/-- lib.amitu: `fastn` supports translation and ad-hoc tracking features.
 
 /-- lib.amitu:
 
@@ -92,12 +92,12 @@ looks like this:
 -- ds.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.snapshot: FPM.ftd
+\-- fastn.snapshot: FASTN.ftd
 timestamp: 1646494343706523000
 
-\-- fpm.snapshot: foo/index.ftd
+\-- fastn.snapshot: foo/index.ftd
 timestamp: 1638625721072234000
 
 -- end: ds.page

@@ -1,14 +1,14 @@
 -- ds.page: `/-/clear-cache/` API
 
-This API `/-/clear-cache/` clear files from where the `fpm` instance is running.
+This API `/-/clear-cache/` clear files from where the `fastn` instance is running.
 
-`fpm` downloads them from the internet with given [
+`fastn` downloads them from the internet with given [
 `download-base-url`](/crate/package/#download-base-url) and caches it so
-next time when someone asks for the same files again from `fpm` to serve, it
+next time when someone asks for the same files again from `fastn` to serve, it
 will not download from the internet, It will serve from local cache.
 
 So to serve an updated version of files we have to remove those files or
-packages from `fpm` local cache, which can be done using this API.
+packages from `fastn` local cache, which can be done using this API.
 
 -- ds.h1: API: `/-/clear-cache/`
 
@@ -33,7 +33,7 @@ not present then remove it from `.packages`.
 
 -- ds.h2: Query Parameter `package`
 
-`package` provides the name of the package which `fpm` `main` package in
+`package` provides the name of the package which `fastn` `main` package in
 dependent on.
 
 E.g.: `main`, `<package-name>`
@@ -64,7 +64,7 @@ entries from `.packages` directory.
 Tested it with [`abrark`](https://github.com/abrarNitk/abrark). Clone, and
 follow the below steps for testing.
 
-Run `fpm` with `fpm serve --download-base-url https://raw.githubusercontent.com/AbrarNitk/abrark/main/`
+Run `fastn` with `fastn serve --download-base-url https://raw.githubusercontent.com/AbrarNitk/abrark/main/`
 
 - Remove all the dependencies
   - `http://127.0.0.1:8001/-/clear-cache/?all-dependencies=true`

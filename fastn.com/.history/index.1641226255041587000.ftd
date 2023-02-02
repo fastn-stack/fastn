@@ -13,7 +13,7 @@ url: https://play.fifthtry.com/
 background-color: #54c7ec
 color: white
 
--- ft.banner: ftd has some dynamic features, which an be used when using fpm-repo.
+-- ft.banner: ftd has some dynamic features, which an be used when using fastn-repo.
 
 -- ft.feature-list:
 
@@ -67,15 +67,15 @@ so that I don’t have to spend a week each time spinning up a new one.
 
 -- ft.content:
 
---- ft.h1: fpm: FTD Package Manager
+--- ft.h1: fastn: FTD Package Manager
 
-[What is FPM?](/fpm/about/)
+[What is FASTN?](/fastn/about/)
 
-Checkout what is planned in [Roadmap](/fpm/roadmap/), and day to day updates in 
-the [Journal](/fpm/journal/).
+Checkout what is planned in [Roadmap](/fastn/roadmap/), and day to day updates in 
+the [Journal](/fastn/journal/).
 
-Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)  
-Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
+Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)  
+Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
 
 
 --- ft.youtube:

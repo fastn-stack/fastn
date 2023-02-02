@@ -1,16 +1,16 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 
 -- ds.page: Known Issues
 
 You can find the list of [open issues on
-Github](https://github.com/FifthTry/fpm/issues/).
+Github](https://github.com/FifthTry/fastn/issues/).
 
 Here are some other issues that can cause problems with their solutions.
 
 -- ds.h1: Speed in server mode
 
-When using `fpm` in [server mode](/server/), currently it takes about a second
+When using `fastn` in [server mode](/server/), currently it takes about a second
 or so to generate the page. This is much slower than what we intend.
 
 This is a regression, when adding dark mode support, we ended up adding a really
@@ -42,15 +42,15 @@ src: $assets.files.static.images.fJZOxoN.jpg
 But cool down, let's do it in steps.
 
 
--- ds.h1: Translation Tracking Doesn't Work If You Do Not `fpm sync`
+-- ds.h1: Translation Tracking Doesn't Work If You Do Not `fastn sync`
 
-From time to time you will have to call `fpm sync`. You can do it every time you
+From time to time you will have to call `fastn sync`. You can do it every time you
 modify any file that is part of the package in fact.
 
 At some point we will remove this requirement, maybe we will work off of `git`
 commit-hashes instead of last modified time stamps as per `.history` folder, but
 for now we need `.history` folder updated regularly.
 
-Call `fpm sync` often.
+Call `fastn sync` often.
 
 -- end: ds.page

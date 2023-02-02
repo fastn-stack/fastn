@@ -1,29 +1,29 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 -- import: fifthtry.github.io/admonitions as cbox
-;;-- import: fpm.dev/static
+;;-- import: fastn.dev/static
 
 -- ds.page: Publishing Static Site On github pages
 
-Easiest way to get started with `fpm` is using the github pages to host your
+Easiest way to get started with `fastn` is using the github pages to host your
 built assets.
 
 -- cbox.warning: You Lose Many Dynamic Features In Static Modes
 
-FPM comes with a lot of dynamic features, which are only available when you are
-using [fpm server](/server/) for hosting.
+FASTN comes with a lot of dynamic features, which are only available when you are
+using [fastn server](/server/) for hosting.
 
-The main feature you will miss when using fpm as static site generator is
-authentication, you can not create private fpm sites, or fpm sites with mixed
+The main feature you will miss when using fastn as static site generator is
+authentication, you can not create private fastn sites, or fastn sites with mixed
 mode, some pages public and some accessible to only few people.
 
 -- ds.h1: Using the template repository
 
-You can use our template repository [fpm-blog](https://github.com/fifthtry/fpm-blog/)
+You can use our template repository [fastn-blog](https://github.com/fifthtry/fastn-blog/)
 to create your own repo.
 
 -- ds.h2: Step 1: Creating your own repo
 
-Open the [fpm-blog](https://github.com/fifthtry/fpm-blog/) repository in your
+Open the [fastn-blog](https://github.com/fifthtry/fastn-blog/) repository in your
 browser and click on the `Use this template` button
 
 -- ds.image: Step I: Use the template repository to initialize your repository
@@ -35,15 +35,15 @@ width: fill-container
 In order to use the package properly, you'll need to make the following changes
 in your codebase.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: <username_or_orgname>.github.io/<repo_name>
+\-- fastn.package: <username_or_orgname>.github.io/<repo_name>
 zip: github.com/<username_or_orgname>/<repo_name>/archive/refs/heads/main.zip
 
-\-- fpm.dependency: fifthtry.github.io/blog-theme
+\-- fastn.dependency: fifthtry.github.io/blog-theme
 
 -- ds.h2: Step 3: Activate the `Github Pages` environment on your repo
 

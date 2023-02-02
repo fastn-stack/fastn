@@ -1,6 +1,6 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
--- ds.page: FPM Login Flow with Twitter
+-- ds.page: FASTN Login Flow with Twitter
 
 -- ds.markdown:
 

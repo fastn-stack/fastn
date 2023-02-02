@@ -1,21 +1,21 @@
 -- ds.page: Roadmap
 
 
--- ds.h1: FPM as kick-ass SSG tool
+-- ds.h1: FASTN as kick-ass SSG tool
 
 - package cargo binary for different os/arch
 - docs:
-  - fpm tutorial
+  - fastn tutorial
   - github pages how to
 - static assets
 - markdown file handling
 - `README.md` handling
 - Include fonts from dependencies
-- fpm client variables
+- fastn client variables
 - Package dependencies full version
 
 
--- ds.h1: Rust Book using FPM
+-- ds.h1: Rust Book using FASTN
 
 - translation tracking: UI pending
 - `$processor$: include-file`
@@ -26,17 +26,17 @@
 - sqlite support
 - package database
 - dynamic/data-driven documents
-- fpm actions
+- fastn actions
 - search
 - package interface
-- `fpm serve`, figure out how to do http serving
+- `fastn serve`, figure out how to do http serving
 - logical linking
-- `fpm-repo`, auth & `fpm sync` for two way sync
+- `fastn-repo`, auth & `fastn sync` for two way sync
 - version tracking
 - cr tracking
 - access control
 - `$processor$`: with ftd json constructor
-- `fpm fmt`: formatter
+- `fastn fmt`: formatter
 - banner support
 - encryption support
 
@@ -61,24 +61,24 @@
 -- ds.h1: Tutorials & Documentation
 
 - hello world
-- how to create a new fpm component library
-- translating projects using fpm
+- how to create a new fastn component library
+- translating projects using fastn
 - documentation of versioned software
-- how to use github for collaboration over a `fpm` package
-- how to setup your own `fpm-repo` on heroku
+- how to use github for collaboration over a `fastn` package
+- how to setup your own `fastn-repo` on heroku
 
 
 -- ds.h1: Developer / Author Productivity
 
-- live reload for `fpm serve`
+- live reload for `fastn serve`
 - syntax highlighting for editors
-- LSP for ftd/fpm
+- LSP for ftd/fastn
 
 
 -- ds.h1: Backlog
 
 - optimisation: only include font when needed
-- `fpm diff <path>` filtered diff
+- `fastn diff <path>` filtered diff
 - ~display programming file etc as code block?~
 
 

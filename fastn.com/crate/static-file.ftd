@@ -1,6 +1,6 @@
--- ds.page: `fpm::StaticFile`
+-- ds.page: `fastn::StaticFile`
 
-`fpm::StaticFile` struct keeps track of "static files".
+`fastn::StaticFile` struct keeps track of "static files".
 
 -- ds.code:
 lang: rs

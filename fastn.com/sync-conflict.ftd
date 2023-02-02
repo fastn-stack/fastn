@@ -1,11 +1,11 @@
--- ds.page: Understanding FPM Sync Conflict
+-- ds.page: Understanding FASTN Sync Conflict
 
 Prerequisite: [How Sync Works](dev/sync/)
 
--- ds.h1: What is an FPM Sync Conflict?
+-- ds.h1: What is an FASTN Sync Conflict?
 
-FPM can handle most [sync](glossary/#sync) operations on its own with
-automatic merging features. A sync conflict is when FPM is unable to
+FASTN can handle most [sync](glossary/#sync) operations on its own with
+automatic merging features. A sync conflict is when FASTN is unable to
 automatically resolve differences in the file between latest
 [version](glossary/#version) available on the [remote](glossary/#remote)
 and the changes done against [clone](glossary/#clone)'s latest
@@ -16,17 +16,17 @@ remote in the following cases:
 - They have changed the same lines in a file
 - if one clone deleted a file while another clone was modifying it.
 
-In these cases, FPM cannot automatically determine what is correct. Conflicts
+In these cases, FASTN cannot automatically determine what is correct. Conflicts
 only affect the clone conducting the sync, the rest of the clones are unaware
-of the conflict. FPM notifies that the file gets in
+of the conflict. FASTN notifies that the file gets in
 [conflict-state](glossary/#file-with-conflict) and halt the syncing
 process for that file. Though, the rest of the file gets synced. It is then the
 clone's responsibility to resolve the conflict.
 
-Now that we have gone through the basics of the fpm sync conflict, let’s look
+Now that we have gone through the basics of the fastn sync conflict, let’s look
 at the various types of conflicts next.
 
--- ds.h1: Types of FPM Sync Conflicts
+-- ds.h1: Types of FASTN Sync Conflicts
 
 A conflict can be of various types depending on how it occurs.
 
@@ -36,7 +36,7 @@ The `edit-edit-conflict` occurs when two clones try to sync the file in which
 they have done the independent changes and three-way merge of the file has
 failed.
 
-Let's assume there are two clones A and B for some remote having fpm project
+Let's assume there are two clones A and B for some remote having fastn project
 XYZ. Both of them sync the same file from the remote which has the latest
 version v1 and try to make various amendments to that file. After making the
 changes, A syncs the file to the remote from its local. The remote, then,
@@ -52,13 +52,13 @@ changes against the version v1. Now remote doesn't know what is correct.
 The `edit-delete-conflict` occurs when the remote contains a new version of the
 file and the clone tries to delete the same file against some older version.
 
-Let's again assume there are two clones A and B for some remote having fpm
+Let's again assume there are two clones A and B for some remote having fastn
 project XYZ. Both of them sync the same file from the remote which has the latest
 version v1. After making some changes, A syncs the file to the remote from
 its local. The remote, then, create a new version of the file v2, containing
 content sent by A and responds back to A. Now A and remote have the same version
 of the file v2, i.e. they are in sync. B, then, deletes the same file using
-[`fpm rm <file>`](cli/rm/) and tries to sync it, but it fails to do so, as the
+[`fastn rm <file>`](cli/rm/) and tries to sync it, but it fails to do so, as the
 remote and B are out of sync with respect to that file, i.e. the remote has new
 version v2 of that file and B has deleted it against the version v1.
 Now remote doesn't know what to do.
@@ -69,7 +69,7 @@ Now remote doesn't know what to do.
 The `edit-delete-conflict` occurs when on the remote, the file is deleted and
 the clone tries to edit the same file against some older version.
 
-Let's again assume there are two clones A and B for some remote having fpm
+Let's again assume there are two clones A and B for some remote having fastn
 project XYZ. Both of them sync the same file from the remote which has the latest
 version v1. A deletes the file and syncs it to the remote from its local.
 The remote, then, deletes the file and responds back to A. Now A and remote
@@ -84,7 +84,7 @@ Now remote doesn't know what to do.
 The `add-add-conflict` occurs when two clones create a new file with same
 filename and independent content and try to sync the file.
 
-Let's assume there are two clones A and B for some remote having fpm project
+Let's assume there are two clones A and B for some remote having fastn project
 XYZ. Both of them create a new file with same filename and have added their own
 content. Afterwards, A syncs the file to the remote from its local. The remote,
 then, create a new version of the file v1, containing content sent by A and
@@ -97,9 +97,9 @@ and B has created its own new file. Now remote doesn't know what is correct.
 
 -- ds.h1: How to identify sync conflicts
 
-On sync, FPM produces some descriptive output letting us know that a CONFLICT
+On sync, FASTN produces some descriptive output letting us know that a CONFLICT
 has occurred. We can gain further insight by running the
-[`fpm sync-status`](cli/sync-status/) command. The output from `fpm sync-status`
+[`fastn sync-status`](cli/sync-status/) command. The output from `fastn sync-status`
 indicates that there are some [un-synced file](glossary/#un-synced-file) s due
 to a conflict. These files cannot be synced in future syncs too unless their
 conflicts have been resolved.
@@ -109,7 +109,7 @@ conflicts have been resolved.
 -- ds.h1: How to resolve sync conflicts
 
 Once knowing the files that have conflicts, you can resolve their conflicts
-using the [`fpm resolve-conflict <file-name>`](cli/resolve-conflict/) command.
+using the [`fastn resolve-conflict <file-name>`](cli/resolve-conflict/) command.
 This command gives you various endpoints to address conflict according to its
 type.
 

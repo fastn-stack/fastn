@@ -1,21 +1,21 @@
--- ds.page: `fpm::File`
+-- ds.page: `fastn::File`
 
-`fpm::File` enum represents a file found in fpm package.
+`fastn::File` enum represents a file found in fastn package.
 
 -- ds.code:
 lang: rs
 
 #[derive(Debug, Clone)]
-pub enum fpm::File {
-    Ftd(fpm::Document),
-    Static(fpm::Static),
-    Markdown(fpm::Document),
-    Code(fpm::Document),
-    Image(fpm::Static),
+pub enum fastn::File {
+    Ftd(fastn::Document),
+    Static(fastn::Static),
+    Markdown(fastn::Document),
+    Code(fastn::Document),
+    Image(fastn::Static),
 }
 
 -- ds.markdown:
 
-[`fpm::Document`](crate/document/). [`fpm::StaticFile`](crate/static-file/).
+[`fastn::Document`](crate/document/). [`fastn::StaticFile`](crate/static-file/).
 
 -- end: ds.page

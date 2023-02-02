@@ -2,7 +2,7 @@
 toc: $config.dev-toc
 
 
--- ft.h0: FPM Journal
+-- ft.h0: FASTN Journal
 
 
 -- ft.h1: Thoughts: Browsing History
@@ -19,7 +19,7 @@ So links never break (and original author can keep updating document URL at whim
 -- ft.h1: Git Tracking
 
 
--- ft.h1: More than one fpm package per git repo
+-- ft.h1: More than one fastn package per git repo
 
 
 -- ft.h1: Article Out
@@ -31,34 +31,34 @@ header/sidebar/footer etc).
 
 21st Feb 2022
 
-We recently spoke about WASM packages. We have fpm packages that will be used
-to distribute static assets. We want FPM packages for font support. We also need
-FPM packages to distribute syntax definitions and syntax themes. We can maybe
-create FPM package to distribute SQLite or CSV data files.
+We recently spoke about WASM packages. We have fastn packages that will be used
+to distribute static assets. We want FASTN packages for font support. We also need
+FASTN packages to distribute syntax definitions and syntax themes. We can maybe
+create FASTN package to distribute SQLite or CSV data files.
 
-In many cases the advantage of creating FPM package exists, even when the end
+In many cases the advantage of creating FASTN package exists, even when the end
 users of the thing being distribuetd, font, sqlite, syntax definition, is not
-going to use FPM itself.
+going to use FASTN itself.
 
 Say you have created a font, you would want to distribute the font to both
-general audiance, and to people who want to use your font in a FPM package. In
-such a case it would make sense for you to create FPM package as FPM package
-can become the website for you, tomorrow when we have FPM repo in place you can
+general audiance, and to people who want to use your font in a FASTN package. In
+such a case it would make sense for you to create FASTN package as FASTN package
+can become the website for you, tomorrow when we have FASTN repo in place you can
 easily monetise and otherwise control the distribution of your font.
 
 -- ft.h2: Package Interfaces
 
 Each kind of special package, will have a package interface, eg for fonts we
-will have `fpm.dev/font`, which will designate that this package is a font
+will have `fastn.dev/font`, which will designate that this package is a font
 package, and is being used as font package. Both would be required? Not sure,
 explicit is better, so there is that.
 
-FPM cli will verify that the package is a proper font package if you say it
-`implements: fpm.dev/font`, which could mean anything, say font file must have
+FASTN cli will verify that the package is a proper font package if you say it
+`implements: fastn.dev/font`, which could mean anything, say font file must have
 so and so file name, or must come with fallback fonts, or it must have some meta
 data to be used to create CSS `@font-face` statement etc.
 
-Based on the interface fpm will do something custom, font will be used in the
+Based on the interface fastn will do something custom, font will be used in the
 generated HTML, syntax definition and syntax theme would be passed to syntact
 during syntax highlighting and so on.
 
@@ -68,22 +68,22 @@ during syntax highlighting and so on.
 
 
 
--- ft.h1: Static FPM Repo
+-- ft.h1: Static FASTN Repo
 
 20th Feb 2022
 
 Once translation feature is polished, and special packages are imeplemented,
-processors are done, we have to start thinking about FPM Repo. It is planned but
-no work has started on it. FPM Repo is quite ambitious, we want to do a lot but
+processors are done, we have to start thinking about FASTN Repo. It is planned but
+no work has started on it. FASTN Repo is quite ambitious, we want to do a lot but
 how do we begin?
 
-One option is we become target for static hosting. FPM is going to have dynamic
+One option is we become target for static hosting. FASTN is going to have dynamic
 features, but we have not yet built them, so we can at least do static hosting.
-Once static fpm repo is done we can look at dynamic stuff (fpm processors
+Once static fastn repo is done we can look at dynamic stuff (fastn processors
 running on page request time instead of publish time) and CR/online editing
 stuff (not sure in which order, static -> dynamic -> CR seems logical because
 dynamic does not have frontend UI, is purely backend work, and also maybe we
-will build CR/editor etc using dynamic FPM).
+will build CR/editor etc using dynamic FASTN).
 
 -- ft.h2: Read Permissions
 
@@ -98,28 +98,28 @@ authorisation rules, meaning if you are using Hugo and hosting on Vercel, it's
 not easy to just say allow access to poeple from my company, you will have to do
 some coding.
 
-With Static FPM Repo we can support authorisation rules in FPM.ftd itself. If we
+With Static FASTN Repo we can support authorisation rules in FASTN.ftd itself. If we
 compare with Hugo on Vercel, it would be akin to Hugo supporting authorisation.
 
 Hugo and Vercel are independent products, and any integration between the two
-requires effort. FPM and FPM-Repo are being developed in parallel and can have
+requires effort. FASTN and FASTN-Repo are being developed in parallel and can have
 complimentary features.
 
 -- ft.h2: Publishers Advantage
 
-Imagine if one can say this fpm package is only readable to people in my org,
+Imagine if one can say this fastn package is only readable to people in my org,
 meaning they have a `@foo.com` email address. Or to people who have followed a
 certain account on Twitter, or liked a certain repository on Github etc, or part
 of some Discord or Telegram community etc etc.
 
-The first version of fpm-repo is being designed to realise this publisher
+The first version of fastn-repo is being designed to realise this publisher
 advantage. We can start with something simple like Google Signin for company
 email verifiction, and then add other plugins for Slack, Telegram etc later.
 
 -- ft.h2: Paid Packages
 
 As a logical next step to this would be package monetisation. If you want to
-charge for your package, fpm-repo can help you with that as well.
+charge for your package, fastn-repo can help you with that as well.
 
 
 
@@ -131,9 +131,9 @@ charge for your package, fpm-repo can help you with that as well.
 
 19th Feb 2022
 
-We currently ship [3-4 processors as part of FPM](/ftd-host/). These are part of
-FPM source code, and are implemented in Rust. We also ship [a few "host
-methods"](https://github.com/FifthTry/fpm/blob/main/fpm.js), which FTD can call
+We currently ship [3-4 processors as part of FASTN](/ftd-host/). These are part of
+FASTN source code, and are implemented in Rust. We also ship [a few "host
+methods"](https://github.com/FifthTry/fastn/blob/main/fastn.js), which FTD can call
 using `message-host` event handlers. These are implemented in JavaScript.
 
 Having only a few such processors and methods is obviously not great because
@@ -143,9 +143,9 @@ their own.
 
 -- ft.h2: WASM: Processor And Host Method Packages
 
-Ideally we should be able to distribute them as FPM packages themselves, so no
+Ideally we should be able to distribute them as FASTN packages themselves, so no
 one has to install cargo or npm etc. This is possible if we somehow use wasm,
-and ship wasm files as part of FPM packages.
+and ship wasm files as part of FASTN packages.
 
 We have two alternatives, [wasmer](https://wasmer.io) and wasmtime.
 
@@ -154,11 +154,11 @@ We have two alternatives, [wasmer](https://wasmer.io) and wasmtime.
 Currently processors are written for parsing toc, which is pure computation.
 Then we have a processor to read file (include processor). This one needs disc
 access. We have a processor to do HTTP request and another to do SQLite queries
-against sqlite databases stored in FPM package.
+against sqlite databases stored in FASTN package.
 
 -- ft.h2: Processors And Reproducibility
 
-If an FPM package is pure, or depends on current package content, it is
+If an FASTN package is pure, or depends on current package content, it is
 reproducible, meaning if I add that package as a dependency to some package,
 the package will work as expected. But if a processor allows a processor access
 to some resource only that machine has, say it makes an HTTP request to some
@@ -189,26 +189,26 @@ in current package.
 
 -- ft.h2: Cloud Consideration: CPU and RAM Limits
 
-FPM is not going only run locally. Tomorrow we will have fpm-repo, and we may
-even hope github pages etc start supporting fpm-repo. So what one can do using
-the processors has to be designed in such a way that when fpm is not running
+FASTN is not going only run locally. Tomorrow we will have fastn-repo, and we may
+even hope github pages etc start supporting fastn-repo. So what one can do using
+the processors has to be designed in such a way that when fastn is not running
 locally but on cloud, things stay manageable.
 
-One option is we expect every fpm-repo to run everything in an isolated server,
+One option is we expect every fastn-repo to run everything in an isolated server,
 with CPU and RAM limits imposed at
 [docker](https://docs.docker.com/config/containers/resource_constraints/)
 /[pod](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 etc level.
 
-Other option is we build resource checks in FPM itself. It seems something like
+Other option is we build resource checks in FASTN itself. It seems something like
 this is possible with [wasmer](https://github.com/wasmerio/wasmer/issues/221).
 [Ethereum implementation of wasm has support for
 limits](https://ewasm.readthedocs.io/en/mkdocs/metering/). Restricting RAM
 should be possible based on my current understanding of WASM model (wasm runs
 against pre-allocated memory).
 
-In general, having such limits is also good for FPM running locally. We want
-people to have as much confidence as possible when running untrusted FPM
+In general, having such limits is also good for FASTN running locally. We want
+people to have as much confidence as possible when running untrusted FASTN
 packages, we do not want crypto miners and other such nasties running on our
 end users laptops.
 
@@ -226,22 +226,22 @@ access and safe.
 
 -- ft.h2: Processor WASM API
 
-For now we will only allow one method: `fpm_host.get_document(id: String) ->
+For now we will only allow one method: `fastn_host.get_document(id: String) ->
 Option<String>`, this will allow a package to read a file in current package.
 We will have a permission "can-read-package-files", which will have to be
 enabled before this will work.
 
--- ft.code: FPM.ftd
+-- ft.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.dependency: amitu.com/include-processor as aip
+\-- fastn.dependency: amitu.com/include-processor as aip
 allow: can-read-package-files
-implements: fpm.dev/processor
+implements: fastn.dev/processor
 
 -- ft.markdown:
 
 We have explicitly allowed this permission. Every package that wants to act as
-fpm processor has to implement `fpm.dev/processor` interface. We can use this
+fastn processor has to implement `fastn.dev/processor` interface. We can use this
 processor in our FTD file now using:
 
 -- ft.code:
@@ -257,7 +257,7 @@ $file$: hello.rs
 -- ft.markdown:
 
 Here we are trying to use `amitu.com/include-processor`, which is aliased to
-`aip` in `FPM.ftd` file. By using explicit `import` we get to use namespacing
+`aip` in `FASTN.ftd` file. By using explicit `import` we get to use namespacing
 offered by FTD.
 
 In future we will slowly allow access to TCP, HTTP, more file operations and so
@@ -273,24 +273,24 @@ fragmentation. We believe in batteries included. We have the luxury of only
 including the code of a host method if that method is being called from the
 current page. So a big library is okay.
 
-Host methods will be able to call the "fpm stdlib", it would be tricky to detect
+Host methods will be able to call the "fastn stdlib", it would be tricky to detect
 what libraries have been called tho, one can not do source code analysis, source
 is already compiled into wasm. Maybe we can analyse wasm to see all calls to
 outside world. But for the purpose of this discussion lets assume it is
 possible (if not we will have to create some sort of opt in, a method can only
 call stdlib functions it has declred in some form of manifest file, sucks, but
 what can we do, we can not include entire stdlib in all pages generated using
-FPM after all).
+FASTN after all).
 
 -- ft.code: host-method package dependency
 lang: ftd
 
-\-- fpm.dependency: amitu.com/parse-date
-implements: fpm.dev/host-method
+\-- fastn.dependency: amitu.com/parse-date
+implements: fastn.dev/host-method
 
 -- ft.markdown:
 
-Any package that provides a host method shoud implement `fpm.dev/host-methods`
+Any package that provides a host method shoud implement `fastn.dev/host-methods`
 package interface.
 
 -- ft.code:
@@ -308,7 +308,7 @@ this.
 
 -- ft.h2: Where Would WASM Files Be Stored?
 
-We can store wasm files in FPM folder. Maybe we can have each wasm file export
+We can store wasm files in FASTN folder. Maybe we can have each wasm file export
 a single function, so we only include the minimum amount of code. For processors
 we can club all of them together in one file.
 
@@ -528,15 +528,15 @@ imports at top of each file. With `main` we manage that. But now we lose
 discoverablity, where does a symbol come from. In main proposal the fact `author`
 is coming from `foo.com/book-theme` is not obvious as you are writing:
 
--- ft.code: FPM.dev
+-- ft.code: FASTN.dev
 lang: ftd
 
-\-- fpm.dependency: foo.com/book-theme
-implements: fpm.dev/blog
+\-- fastn.dependency: foo.com/book-theme
+implements: fastn.dev/blog
 
 -- ft.markdown:
 
-`fpm.dev/blog` declairs `main: book, author` which tells you that because of
+`fastn.dev/blog` declairs `main: book, author` which tells you that because of
 the `implements` every module in current package has access to `author`.
 
 -- ft.h2: Revised proposal
@@ -544,10 +544,10 @@ the `implements` every module in current package has access to `author`.
 The idea of `main:` was to ensure we do not have all the code in index file, so
 we can then have `auto-import` feature:
 
--- ft.code: FPM.dev
+-- ft.code: FASTN.dev
 lang: ftd
 
-\-- fpm.dependency: foo.com/book-theme
+\-- fastn.dependency: foo.com/book-theme
 auto-import: foo.com/book-theme/author
 auto-import: foo.com/book-theme/article as ft
 
@@ -558,7 +558,7 @@ With this `author` would be available to every module in current package.
 Further we will not have `:` (reason: when using / we get a full URL that we can
 paste in browser and see doc of individual module) and we will always refer to
 current package either as `package` keyword, or we can even allow `as` alias
-syntax in the `-- fpm.package:` line.
+syntax in the `-- fastn.package:` line.
 
 
 
@@ -572,14 +572,14 @@ syntax in the `-- fpm.package:` line.
 Lets say we let any package specify some `exports`, these could be images or even
 ftd files (eg contact-us, about-us can be auto created without cluttering).
 
--- ft.code: theme/FPM.ftd
+-- ft.code: theme/FASTN.ftd
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: theme
-\-- fpm.export: images/
+\-- import: fastn
+\-- fastn.package: theme
+\-- fastn.export: images/
 default: true
-\-- fpm.export: sample/about-us.ftd as about-us.ftd
+\-- fastn.export: sample/about-us.ftd as about-us.ftd
 default: false
 
 -- ft.markdown:
@@ -589,7 +589,7 @@ When I am using the `theme` I can be explicit:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: theme
+\-- fastn.dependency: theme
 include: *
 
 -- ft.markdown:
@@ -627,7 +627,7 @@ in a theme refers to images in the theme via relative URL, eg `images/bg.png`.
 One option is we always use full URL: foo.com/book-theme/images/bg.png. At least
 in this case, because URL starts with package name, we know it belongs to that
 package, and so we can know if its either https://foo.com/book-theme/images/bg.png
-or https://author.com/FPM/foo.com/book-theme/images/bg.png. If the theme component
+or https://author.com/FASTN/foo.com/book-theme/images/bg.png. If the theme component
 referred to the URL using protocol, then it would be absolute and we do not want
 to analyze.
 
@@ -652,11 +652,11 @@ email subscription dialog, and yet universally are driven to clicking that red
 icon.
 
 -- ft.image:
-src: -/fpm.dev/images/notifications.png
+src: -/fastn.dev/images/notifications.png
 width: 500
 align: center
 
-Imagine any FPM page shows a notifications icon like this in the header. We do
+Imagine any FASTN page shows a notifications icon like this in the header. We do
 not have login but we have cookie, we keep track of what you have read via
 cookie or local store. In the future we can also include signup via email option
 as in the notification drop down. Even subscribe via browser using [Push
@@ -664,12 +664,12 @@ API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API).
 
 Email and Push will require server side support, but basic notification without
 that is also quite useful and can be easily implemented: if we somehow solve the
-how in FPM package the notifications are stored problem.
+how in FASTN package the notifications are stored problem.
 
-What to show in drop down and link for each of them has to discoverable by fpm
+What to show in drop down and link for each of them has to discoverable by fastn
 somehow. Maybe we can have:
 
--- ft.code: `fpm.ftd` notification variable
+-- ft.code: `fastn.ftd` notification variable
 lang: ftd
 
 \-- record news-item:
@@ -688,9 +688,9 @@ So people can create notifications in say `config.ftd`:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.news: Package Notifications
+\-- fastn.news: Package Notifications
 link: /journal/#package-notification
 created-on: 2022-02-03 11:30AM IST
 
@@ -701,13 +701,13 @@ A spec for showing notifications in header has been just added to Journal.
 We will ask people to keep only some meaningful number of items in news, say
 10, and keep deleting the old ones. Or we can keep the entire archive and only
 consider the first 10 when showing the notifications. We can also show all the
-news items in `/FPM/news/` page.
+news items in `/FASTN/news/` page.
 
 We will create a package: fifthtry.github.io/notifications which will act as
-the widget, read the `fpm.news` and show. We will have a message-host function
+the widget, read the `fastn.news` and show. We will have a message-host function
 to store the latest notification created-on in a cookie, and on page load the
-value of the cookie would be made available on `fpm.latest-news-read` variable,
-so any news items later than `fpm.latest-news-read` will be shown as unread.
+value of the cookie would be made available on `fastn.latest-news-read` variable,
+so any news items later than `fastn.latest-news-read` will be shown as unread.
 
 We will mark the news as read when the notification icon is clicked.
 
@@ -715,7 +715,7 @@ To impelment this we need `date-time` type ideally. Else if we store `created-on
 as `string`, we still need `>` check. We also need a way to get first item from
 a list. To show the dot on the closed icon state, we need check of cookie value
 vs created-on of latest news. created-on of latest news can be stored as a
-another fpm variable for convenience till we get first item of a list support.
+another fastn variable for convenience till we get first item of a list support.
 Once the UI is open, we will want to show what all is new, so we will def need
 string comparison operator, `>`.
 
@@ -727,14 +727,14 @@ string comparison operator, `>`.
 
 
 
--- ft.h1: FPM Package Registry
+-- ft.h1: FASTN Package Registry
 
-Currently FPM is fully distributed, each FPM package is published on a URL
+Currently FASTN is fully distributed, each FASTN package is published on a URL
 controlled by the owner of the package. To aid discoverablity tt would be cool
 if there was a package registry though, a central place where you can quickly
 discover packages.
 
-Is this going against our decentral design? Not really. FPM does not really
+Is this going against our decentral design? Not really. FASTN does not really
 depend on the registry unlike other package managers. You can depend on any
 package and if some package is removed from package registry, all it will lose
 is a listing one some site. The package itself would be still available and
@@ -747,34 +747,34 @@ can be a good proxy for people who want to create a dependency on that package,
 a package that is quite popular for example maybe safer to use than a package
 that just came up yesterday and no one is using it.
 
-We will make `fpm.dev` the "fpm central" or "fpm package repository", which
-means eventually `fpm.dev` will have dynamic stuff. Can we build the dynamic
-stuff using our proposed [FPM Web
+We will make `fastn.dev` the "fastn central" or "fastn package repository", which
+means eventually `fastn.dev` will have dynamic stuff. Can we build the dynamic
+stuff using our proposed [FASTN Web
 Framework](/journal/#explanation-of-dynamic-documents-and-actions)? Time will
-tell. We will not block on it. FPM package repository can tomorrow become an
-open source real world showcase of fpm web framework when it is in place tho.
+tell. We will not block on it. FASTN package repository can tomorrow become an
+open source real world showcase of fastn web framework when it is in place tho.
 
--- ft.h2: `fpm ping`
+-- ft.h2: `fastn ping`
 
 The way the registry would work is by a package pinging the central repository
 that the package has been updated. The ping itself will not be trusted, we will
-not have API keys, signup etc. `fpm ping` will simply call an end point and pass
-the package name as the only information. FPM registry will then schedule a
-crawl of the fpm package and get the information from the published package.
+not have API keys, signup etc. `fastn ping` will simply call an end point and pass
+the package name as the only information. FASTN registry will then schedule a
+crawl of the fastn package and get the information from the published package.
 
 -- ft.h2: Registry and News
 
-We just discussed adding news support in FPM packages. FPM registry can show the
+We just discussed adding news support in FASTN packages. FASTN registry can show the
 news, and may give quick notify me when this package has news button next to
 each package listed.
 
 -- ft.h2: Registry And Web Hook
 
-Say you are authoring an FPM package and it depends a few FPM packages, it would
-be cool to auto re-publish your fpm package every time any of the dependencies
+Say you are authoring an FASTN package and it depends a few FASTN packages, it would
+be cool to auto re-publish your fastn package every time any of the dependencies
 changes.
 
-Since `fpm ping` is notifying the registry when package changes, fpm registry
+Since `fastn ping` is notifying the registry when package changes, fastn registry
 can tomorrow also notify arbitrary webhook end points when a news is published
 about any package. You can listen for that and review and republish or
 auto-republish.
@@ -796,7 +796,7 @@ registry network will know about updates to your package.
 
 2nd Feb 2022
 
-THe idea is we will create `package.zip` in `.build` folder whenever we do `fpm
+THe idea is we will create `package.zip` in `.build` folder whenever we do `fastn
 build`. Currently the zip file we download is generated by Github and contains
 the source of entire repo.
 
@@ -805,7 +805,7 @@ In the `package.zip` we will include the entire repo.
 -- ft.code:
 lang: txt
 
-- FPM.ftd
+- FASTN.ftd
 - src
   - index.ftd
 - code.rs
@@ -813,45 +813,45 @@ lang: txt
 -- ft.markdown:
 
 In this case the repo has a single package, and the build will simply include
-all the files of the package minus the files ignored by `fpm build` (we auto
-ignore some files like `.git` etc, and we allow `FPM.ftd` to specify other
+all the files of the package minus the files ignored by `fastn build` (we auto
+ignore some files like `.git` etc, and we allow `FASTN.ftd` to specify other
 files and patters to ignore).
 
-Consider a repo with multiple FPM packages:
+Consider a repo with multiple FASTN packages:
 
 -- ft.code:
 lang: txt
 
 - en/
-  - FPM.ftd
+  - FASTN.ftd
   - index.ftd
   - a.ftd
   - image.png
 - hi/
-  - FPM.ftd
+  - FASTN.ftd
 - code.rs
 
 -- ft.markdown:
 
-In this case when we are are calling `fpm build` we have to `cd` into one of the
+In this case when we are are calling `fastn build` we have to `cd` into one of the
 two folders, and each `en` and `hi` will get their own `.build` folders
 containging their own `package.zip` files.
 
 The zip will still include all the files in the repo based on previous ignore
 logic. We will introduce a new ignore heuristic, if you come across a file that
-belongs to another FPM package, auto ignore it as well. So when building
+belongs to another FASTN package, auto ignore it as well. So when building
 `package.zip` for `en` folder, `code.rs` will be included but not `hi` folder.
 
 A package can opt out of `auto-ignore-other-packages-in-zip` heuristic by
-overwriting this key to false in `FPM.ftd`. This heuristic is only to reduce the
+overwriting this key to false in `FASTN.ftd`. This heuristic is only to reduce the
 `package.zip` size.
 
-The `package.zip` will also contain `FPM.manifest.ftd` file which will be
-currently contain only one setting: the location of `FPM.ftd` file that should
+The `package.zip` will also contain `FASTN.manifest.ftd` file which will be
+currently contain only one setting: the location of `FASTN.ftd` file that should
 be the starting point. Since if we have disabled
 `auto-ignore-other-packages-in-zip` heuristic, `en/.build/package.zip` will
 contain both `en` and `hi` folders, and without the manifest file we do not know
-where the `FPM.ftd` file is so we need the manifest file.
+where the `FASTN.ftd` file is so we need the manifest file.
 
 -- ft.h2: Confusion On Ignore
 
@@ -859,16 +859,16 @@ Currently we use "ignored files" terminology to refer to both files that never
 want to know about, eg `.git` files, vs the files we know about but currently we
 want to not copy them to `.build` folder, eg `.history` or `.track` folders.
 
-Now onwards "ignored files" terminology means files that ignored from all fpm
+Now onwards "ignored files" terminology means files that ignored from all fastn
 commands, they are as good as they are not on disc.
 
 Among the non ignore files, there are files like .history folder files which
-some fpm commands need but not others.
+some fastn commands need but not others.
 
-Currently we assumed ignored means files that `fpm build` ignores, but now we
-want to say `ignored` files are files that entire fpm system ignores, and non
-ignored files but files which are still ignored by `fpm build` has no global
-name, its `fpm build`'s internal detail, and fpm build handle it how so ever is
+Currently we assumed ignored means files that `fastn build` ignores, but now we
+want to say `ignored` files are files that entire fastn system ignores, and non
+ignored files but files which are still ignored by `fastn build` has no global
+name, its `fastn build`'s internal detail, and fastn build handle it how so ever is
 effecient.
 
 -- ft.h2: `code.rs` is part of package?
@@ -879,12 +879,12 @@ Say we have this folder structure:
 lang: txt
 
 - en/
-  - FPM.ftd
+  - FASTN.ftd
   - index.ftd
   - a.ftd
   - image.png
 - hi/
-  - FPM.ftd
+  - FASTN.ftd
 - code.rs
 
 -- ft.markdown:
@@ -903,15 +903,15 @@ fallback logic.
 
 One option is we do not let people go out of `en` folder, and if any file has to
 live outside, that file can only be accessed after it has been explictily bound
-In FPM.ftd:
+In FASTN.ftd:
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: en
-\-- fpm.bind: ../code.rs as foo.rs
-\-- fpm.bind: ../images
+\-- import: fastn
+\-- fastn.package: en
+\-- fastn.bind: ../code.rs as foo.rs
+\-- fastn.bind: ../images
 
 -- ft.markdown:
 
@@ -927,7 +927,7 @@ content of en folder, and then all `bind` files/dirs. So we will do
 
 -- ft.h2: Solution: Final?
 
-We have explict bind in FPM.ftd. When generating zip we keep the repo structure,
+We have explict bind in FASTN.ftd. When generating zip we keep the repo structure,
 we only copy files that are bound. We will also generate manifest file.
 
 
@@ -945,15 +945,15 @@ When creating a new package we have to write, e.g.:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: fifthtry.github.io/dark-mode-switcher
+\-- fastn.package: fifthtry.github.io/dark-mode-switcher
 zip: github.com/fifthtry/dark-mode-switcher/archive/refs/heads/main.zip
 
 -- ft.markdown:
 
 Which is annoying. We need the publish URL, and that is good, we are going to
-share it everywhere. But we need zip also, and its only used by fpm for internal
+share it everywhere. But we need zip also, and its only used by fastn for internal
 purpose (downloading the package). But writing the zip key and reading it is
 both noise for humans.
 
@@ -992,7 +992,7 @@ We can implement the abrupt scroll behaviour currently, we give each heading a
 unique `id`, or authors can specify their own `id`. So link targets can be
 `#foo`. But this will jump abruptly.
 
-So we will give the following fpm host function:
+So we will give the following fastn host function:
 
 -- ft.code:
 lang: ftd
@@ -1016,10 +1016,10 @@ We should eventually be able to do:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- ftd.text: About Us
-$on-click$: message-host $fpm.scroll-to:
+$on-click$: message-host $fastn.scroll-to:
 > id: foo
 
 -- ft.markdown:
@@ -1029,10 +1029,10 @@ Or even better:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- ftd.text: About Us
-$on-click$: $fpm.scroll-to: id=foo
+$on-click$: $fastn.scroll-to: id=foo
 
 
 
@@ -1094,11 +1094,11 @@ syntax definitions, we currently ship with whatever is shipped with
 in ftd repo.
 
 We have to allow people to define both extra language support and theme support.
-Also we have to ship language and themes as FPM Packages, so they can added as
-dependencies. We would need some meta data in FPM Package to indicate they are
+Also we have to ship language and themes as FASTN Packages, so they can added as
+dependencies. We would need some meta data in FASTN Package to indicate they are
 special theme or syntax definition package. We can do it by package interface,
-if a package is defined to implement a package interface, e.g. `fpm/syntax` of
-`fpm/syntax-theme`, we would look for special files in such packages that are
+if a package is defined to implement a package interface, e.g. `fastn/syntax` of
+`fastn/syntax-theme`, we would look for special files in such packages that are
 dependency of current package and make them available to ftd.
 
 
@@ -1132,21 +1132,21 @@ So both? I tend to prefer one. Rust does `crate`. But they also have to rename
 21st Jan 2022
 
 Shobhit has been implementing some release automatons off late. Now our [Github
-Action](https://github.com/FifthTry/fpm/blob/main/.github/workflows/release.yml)
+Action](https://github.com/FifthTry/fastn/blob/main/.github/workflows/release.yml)
 creates binaries for the three supported platforms (we only run our unit tests
 on Linux, so technically Windows is not completely supported right now, but we
 still want to, if you come across any issue please let us know and we will
 resolve asap). The workflow also creates a release.
 
-We have a script, [install-fpm.sh](https://github.com/FifthTry/fpm/blob/main/install-fpm.sh),
+We have a script, [install-fastn.sh](https://github.com/FifthTry/fastn/blob/main/install-fastn.sh),
 which we recommend you use for you CI systems for installing latest release of
-`fpm`. It supports both Linux and Mac. Also it lets you chose if you want to
-use the latest pre-release or the latest release of `fpm`.
+`fastn`. It supports both Linux and Mac. Also it lets you chose if you want to
+use the latest pre-release or the latest release of `fastn`.
 
-You can use `install-fpm.sh --pre-release` to get the pre-release. Without the
+You can use `install-fastn.sh --pre-release` to get the pre-release. Without the
 argument it installs the latest release.
 
-FPM.dev, ftd.dev and a bunch of FifthTry sites use fpm in `--pre-release` mode
+FASTN.dev, ftd.dev and a bunch of FifthTry sites use fastn in `--pre-release` mode
 so as to catch bugs and regressions early.
 
 
@@ -1156,7 +1156,7 @@ so as to catch bugs and regressions early.
 
 -- ft.h1: TOC Syntax
 
-We have been discussing the toc syntax off late. `fpm` comes with an ftd
+We have been discussing the toc syntax off late. `fastn` comes with an ftd
 `$preprocessor$`, [`toc`](/toc/). Currently it has the syntax like this:
 
 -- ft.code:
@@ -1280,7 +1280,7 @@ So yesterday we settled with this as solution for our prelude problem:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 ft: j.ft
 
@@ -1291,10 +1291,10 @@ not discuss a "default" exports for every "package interface", nor are we using
 the planned `implements` syntax yet. The idea is when you import a dependency,
 you may want to use it only because it implements the package interface of a
 package you are interested in. Say you want something that implements
-`fpm.dev/blog`, and you found `Jay/Fancy-Blog-Theme`. Now `Jay/Fancy-Blog-Theme`
-may implement more than just `fpm.dev/blog`. It may implement other packages.
+`fastn.dev/blog`, and you found `Jay/Fancy-Blog-Theme`. Now `Jay/Fancy-Blog-Theme`
+may implement more than just `fastn.dev/blog`. It may implement other packages.
 Also `Jay/Fancy-Blog-Theme` may define some components that are not part of
-`fpm.dev/blog`, which means if you used them, switching to another theme would
+`fastn.dev/blog`, which means if you used them, switching to another theme would
 become hard as that other theme may not implement `Jay/Fancy-Blog-Theme`.
 
 So we do not want to access all modules and symbols of a package, we want to
@@ -1304,17 +1304,17 @@ proposed `implements` syntax:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
 -- ft.markdown:
 
 Using `implements` does three things: 1. ensures `fifthtry.github.io/Jupiter-theme`
-has modules and compatible symbols as defined in `fpm.dev/blog`, 2. any attempt
-to access any extra modules are symbols, that are not part of `fpm.dev/blog`
-lead to error, and 3. makes `fpm.dev/blog` an alias for
+has modules and compatible symbols as defined in `fastn.dev/blog`, 2. any attempt
+to access any extra modules are symbols, that are not part of `fastn.dev/blog`
+lead to error, and 3. makes `fastn.dev/blog` an alias for
 `fifthtry.github.io/Jupiter-theme`, so if any document has imported
-`fpm.dev/blog`, they will be getting `fifthtry.github.io/Jupiter-theme` instead.
+`fastn.dev/blog`, they will be getting `fifthtry.github.io/Jupiter-theme` instead.
 
 We can use `implements` more than once on a dependency.
 
@@ -1329,9 +1329,9 @@ a package can define default imports / "main" modules:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: fpm.dev/blog
+\-- fastn.package: fastn.dev/blog
 main: blog, post, author
 
 -- ft.markdown:
@@ -1341,8 +1341,8 @@ Say with that definition of `main`, say this:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
 
 -- ft.markdown:
@@ -1352,8 +1352,8 @@ Is equivalent to:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 blog: j.blog
 post: j.post
 author: j.author
@@ -1366,11 +1366,11 @@ to write the explicit lines, we follow `implements`, and look at `main` for the
 package being implemented, and auto import the `main` modules.
 
 So while it obviously is a lot of "magic", we are getting a consistency, everyone
-refers to `fpm.dev/blog.author` with the alias `author`, even when we are using
+refers to `fastn.dev/blog.author` with the alias `author`, even when we are using
 different theme. So modifying the theme becomes easy. All the main imports would
 get well known soon etc.
 
-What will happen when say both `fpm.dev/blog` and `fpm.dev/book` have defined
+What will happen when say both `fastn.dev/blog` and `fastn.dev/book` have defined
 say a module named `author`?
 
 In this case we can go on and define things explicitly:
@@ -1378,41 +1378,41 @@ In this case we can go on and define things explicitly:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
-\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as j
-implements: fpm.dev/book
+\-- fastn.dependency: fifthtry.github.io/Some-Book-theme as j
+implements: fastn.dev/book
 book-author: j.author
 
 -- ft.markdown:
 
-Lets assume `fpm.dev/blog` has `main: blog, post, author` and `fpm.dev/book` has
+Lets assume `fastn.dev/blog` has `main: blog, post, author` and `fastn.dev/book` has
 `main: book, author`, `author` conflicts between the two. So just putting the
 two dependencie without `author: j.author` line, eg:
 
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
-\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as j
-implements: fpm.dev/book
+\-- fastn.dependency: fifthtry.github.io/Some-Book-theme as j
+implements: fastn.dev/book
 
 -- ft.markdown:
 
-would be an error. `fpm` will say both expose `author` and its ambiguous. So we
+would be an error. `fastn` will say both expose `author` and its ambiguous. So we
 will have to explicitly map the author to some other name for one of the packages.
 
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
-\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as k
-implements: fpm.dev/book
+\-- fastn.dependency: fifthtry.github.io/Some-Book-theme as k
+implements: fastn.dev/book
 book-author: k.author
 
 
@@ -1426,11 +1426,11 @@ We can even support this syntax:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
-implements: fpm.dev/blog
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fastn.dev/blog
 
-\-- fpm.dependency: fifthtry.GitHub.io/Some-Book-theme as k
-implements: fpm.dev/book
+\-- fastn.dependency: fifthtry.GitHub.io/Some-Book-theme as k
+implements: fastn.dev/book
 author: book-author
 
 -- ft.markdown:
@@ -1526,17 +1526,17 @@ try to be as strict as possible. Maybe even bad formatting should be considered
 an error in strict mode. All arguments in component definition must come before
 the properties for example.
 
-We will then have `fpm build` not use the strict mode, so authors can quickly
-try things out. And finally we should have `fpm build --release`, which will use
+We will then have `fastn build` not use the strict mode, so authors can quickly
+try things out. And finally we should have `fastn build --release`, which will use
 `ftd` in strict mode, forcing people to ensure all sloppy-ness is fixed before
 something is published.
 
-We can also have `fpm check` which will test for all warnings, and can be used
+We can also have `fastn check` which will test for all warnings, and can be used
 as part of `pre-commit` hooks.
 
 -- ft.h1: Added And Removed `git2`
 
-We used to depend on `git` when doing validation of `fpm.package.zip` URL. This
+We used to depend on `git` when doing validation of `fastn.package.zip` URL. This
 failed on Ganesh's Windows machine as he does not have `git` cli installed. We
 learned that `Github Desktop` does not install `git` cli on Windows.
 
@@ -1548,32 +1548,32 @@ contained.
 While I was doing that I realised the reason we use `git` is currently not strong
 enough, so Arpita removed `git2`.
 
--- ft.h1: `FPM Editor` Plans
+-- ft.h1: `FASTN Editor` Plans
 
-In future we may be bringing `git2` dependency back though, when `fpm` becomes
-a full blown "editor" as well. We want `fpm` to one day be only binary authors
+In future we may be bringing `git2` dependency back though, when `fastn` becomes
+a full blown "editor" as well. We want `fastn` to one day be only binary authors
 need, it will be the editor, so you do not say SublimeText etc, it will have
-`git` internally so you can clone and commit from `fpm` editor itself, we will
-make `fpm` run as a web server, and maybe a side by side preview with auto reload.
+`git` internally so you can clone and commit from `fastn` editor itself, we will
+make `fastn` run as a web server, and maybe a side by side preview with auto reload.
 
 Integrated Authoring Environment it would be, IAE.
 
--- ft.h1: `fpm-ui` -> `fpm`
+-- ft.h1: `fastn-ui` -> `fastn`
 
-We used to have a special module named `fpm-ui` with a bunch of variables for
-translation etc. It used to also contain `ftd-ui.mobile` and `fpm-ui.dark-mode`
-flags as well. We also had another special module `fpm`, with other set of
+We used to have a special module named `fastn-ui` with a bunch of variables for
+translation etc. It used to also contain `ftd-ui.mobile` and `fastn-ui.dark-mode`
+flags as well. We also had another special module `fastn`, with other set of
 similar variables.
 
 It was an implementation detail, there was some feature missing in FTD (ability
 to refer to record fields defined in another module), and Arpita did not like
-"polluting" `fpm` with such variables which would tomorrow become `record`
-fields, so she created `fpm-ui`.
+"polluting" `fastn` with such variables which would tomorrow become `record`
+fields, so she created `fastn-ui`.
 
 Since then Arpita has implemented the fix, you can now do `foo.bar.baz` and
 `foo` maybe another module, `foo.bar` an instance of some record, and `.baz` a
-field on that record. So she cleaned things up by removing `fpm-ui` and moving
-all the variables to `fpm`.
+field on that record. So she cleaned things up by removing `fastn-ui` and moving
+all the variables to `fastn`.
 
 We have not yet properly documented those variables which we will be doing soon.
 
@@ -1582,7 +1582,7 @@ We have not yet properly documented those variables which we will be doing soon.
 
 13th Jan 2022
 
-We had a feature called prelude. You can define a file `FPM/prelude.ftd`, and
+We had a feature called prelude. You can define a file `FASTN/prelude.ftd`, and
 this file is prepended to the top of every `.ftd` file in the package when its
 being evaluated by FTD.
 
@@ -1602,12 +1602,12 @@ lang: ftd
 Here we wanted to be able to import different modules from inside any dependency
 to all files.
 
-We can do dependency aliasing, so `some-dependency` is defined in `FPM.ftd` as
-`-- fpm.dependency: some-org.github.io/Some-Dependency as some-dependency`.
+We can do dependency aliasing, so `some-dependency` is defined in `FASTN.ftd` as
+`-- fastn.dependency: some-org.github.io/Some-Dependency as some-dependency`.
 
 The other main use cases was config. In every package we may want to set some
 global variables that should be available to all FTD files in that package. We
-can but them in say `config.ftd`, and then in `FPM/prelude.ftd` we can import
+can but them in say `config.ftd`, and then in `FASTN/prelude.ftd` we can import
 the `config`, and it becomes available everywhere.
 
 -- ft.h2: This Approach Did Not Workout
@@ -1632,20 +1632,20 @@ hold on to question of recursive module imports and not link it with prelude.
 We decide and removed this prelude feature {recently}.
 
 -- ftd.text recently: recently
-link: https://github.com/FifthTry/fpm/pull/57
+link: https://github.com/FifthTry/fastn/pull/57
 
 -- ft.h2: The Second Try
 
-Instead of `FPM/prelude.ftd` we decided what if we have a section `prelude` in
-`FPM.ftd` itself:
+Instead of `FASTN/prelude.ftd` we decided what if we have a section `prelude` in
+`FASTN.ftd` itself:
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: some-package
-\-- fpm.dependency: some-org.github.io/Some-Dependency as some-dependency
-\-- fpm.prelude:
+\-- import: fastn
+\-- fastn.package: some-package
+\-- fastn.dependency: some-org.github.io/Some-Dependency as some-dependency
+\-- fastn.prelude:
 ft: some-dependency.some-module-in-the-theme
 foo: foo
 
@@ -1663,10 +1663,10 @@ document analysis, see that `bar` is importing `foo` and `foo` is "special", so
 treat `bar` too as special and do not do auto import prelude stuff, but we felt
 its too magical, and generally did not like it.
 
-We also considered and then rejected to put the entire "prelude" chain in `FPM`
+We also considered and then rejected to put the entire "prelude" chain in `FASTN`
 folder itself, so we know what documents are special, and prelude can only import
-from FPM and not elsewhere, but it too was too much magic. And there was also a
-risk that it may bring every document in `FPM` folder due to transitive
+from FASTN and not elsewhere, but it too was too much magic. And there was also a
+risk that it may bring every document in `FASTN` folder due to transitive
 dependencies.
 
 -- ft.h2: The Next Attempt
@@ -1784,14 +1784,14 @@ What if we did this:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 ft: j.ft
 
 
 -- ft.h2: A Detour: Index Only Or Package Interface Specific Documents?
 
-In FPM we have concept of "package-interface". The idea is any package can act
+In FASTN we have concept of "package-interface". The idea is any package can act
 as a package interface, and then any number of other packages can implement that
 package interface, and all packages implementing a given package interfaces can
 be used interchangeably.
@@ -1815,7 +1815,7 @@ module.
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/K-theme as k
+\-- fastn.dependency: fifthtry.github.io/K-theme as k
 
 -- ft.markdown:
 
@@ -1910,7 +1910,7 @@ So lets review this:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 a: j.article
 
@@ -1926,10 +1926,10 @@ do:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 
-\-- fpm.dependency: fifthtry.github.io/Some-Other-theme as k
+\-- fastn.dependency: fifthtry.github.io/Some-Other-theme as k
 a: k.article
 
 -- ft.markdown:
@@ -1939,11 +1939,11 @@ And we will make the following an error:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+\-- fastn.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 a: j.article
 
-\-- fpm.dependency: fifthtry.github.io/Some-Other-theme as k
+\-- fastn.dependency: fifthtry.github.io/Some-Other-theme as k
 a: k.article
 
 -- ft.h2: But What Happened To `config.ftd`?
@@ -1955,8 +1955,8 @@ We can do the same thing at current package as well:
 -- ft.code:
 lang: ftd
 
-\-- fpm.package: fpm.dev
-zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+\-- fastn.package: fastn.dev
+zip: github.com/fifthtry/fastn.dev/archive/refs/heads/main.zip
 config: config
 
 -- ft.markdown:
@@ -1973,7 +1973,7 @@ it comes time for me to merge it.
 
 -- ft.h1: Thought: What About Search?
 
-I was showing a demo of FPM against Docusaurus to a friend today, and I feel we
+I was showing a demo of FASTN against Docusaurus to a friend today, and I feel we
 have done quite a decent job. What they have over us right now is Versioning and
 Search.
 
@@ -2046,17 +2046,17 @@ lang: json
 -- ft.markdown:
 
 This way changes will flow from FTD to JavaScript. In JavaScript, specifically,
-`fpm.js` we will call `search()` method, with `params` as input parameter.
+`fastn.js` we will call `search()` method, with `params` as input parameter.
 `search()` will perform a fetch from say Algolia.
 
 -- ft.h2: Passing Results Back From JavaScript
 
 JavaScript can modify any of the variables defined in FTD files. We are already
-using that to set `fpm.mobile`, `fpm.dark-mode` etc using that mechanism in `fpm.js`.
+using that to set `fastn.mobile`, `fastn.dark-mode` etc using that mechanism in `fastn.js`.
 
-We will have some fpm variables for search state. Say we can have
-`fpm.search-loading: boolean` to indicate show search is in progress. And
-`fpm.search-result: list result-item`, where `result-item` is some record which
+We will have some fastn variables for search state. Say we can have
+`fastn.search-loading: boolean` to indicate show search is in progress. And
+`fastn.search-result: list result-item`, where `result-item` is some record which
 represents individual search result.
 
 Once these variables are passed, the ftd "re-renders" the document. This way
@@ -2069,7 +2069,7 @@ Should not be very hard to implement.
 
 2nd Jan 2022
 
-Still can't believe 22 is here! So I have been thinking about `fpm update` recently
+Still can't believe 22 is here! So I have been thinking about `fastn update` recently
 and came across [nostr](https://github.com/fiatjaf/nostr) that implements something
 very close to what I had in mind.
 
@@ -2089,7 +2089,7 @@ to someone with no interest in honouring the old contracts.
 
 If not domain name then what? One candidate is cryptographic keys. But they are too
 hard, at least when you are targeting billions of publishers, like Twitter and
-Facebook does. Eventually your FPM packages should be your twitter/Facebook
+Facebook does. Eventually your FASTN packages should be your twitter/Facebook
 profile, but how do you manage identity?
 
 WhatsApp etc, E2E, End To End-Encryption systems rely on some shared identity, eg
@@ -2112,7 +2112,7 @@ only the corresponding private key can de-crypt the message.
 So in this sense, a key pair can be your identity. But key pairs are just numbers,
 and unlike phone numbers, they are much bigger. So exchanging these numbers is not
 fun, it's opaque, no one can remember them, nor can see what they are referring to
-if we see a huge number representing a public key in someone's `FPM.ftd` file as a
+if we see a huge number representing a public key in someone's `FASTN.ftd` file as a
 dependency.
 
 So we need a way for the key pair to get an alias. The domain name is a good alias.
@@ -2156,21 +2156,21 @@ name. We need a distributed store of keypair to DNS mapping, so you can switch
 the domain for your keypair. Some sort of "key server" is needed. Your followers
 where initially thinking that the Github generated keypair was the true identity,
 but since you update your identity, github will notify them about the true
-identity and your FPM will now store the true identity of what you are following.
+identity and your FASTN will now store the true identity of what you are following.
 
 We also will have to allow for "key revocation", say one of the guardians went
 rogue, got bought out, hacked etc, and starts sending updates on your behalf to
 your followers, you had signed that key-pair with your key, so now you have to
 revoke that key-pair. The key-server can do that as well.
 
-So the protocol is: in `FPM.ftd` you see domains. You keep a cache of domain to
+So the protocol is: in `FASTN.ftd` you see domains. You keep a cache of domain to
 keypair id on your file system. Periodically you check with key-server if the
-domain for any keypair has changed, if so `fpm` commands start reporting warnings
-that domain entries are out of date, please update ASAP. `fpm` can now chose to,
+domain for any keypair has changed, if so `fastn` commands start reporting warnings
+that domain entries are out of date, please update ASAP. `fastn` can now chose to,
 if you so want, start using the latest entries from key-server for the
 identities, so say if dependencies say you are publishing on
 `<username>.github.io`, but since `key-server` says domain moved to
-`<username>.com`, `fpm` will start fetching from `<username>.com`.
+`<username>.com`, `fastn` will start fetching from `<username>.com`.
 
 
 
@@ -2183,7 +2183,7 @@ she has done so far.
 
 
 -- ft.image: You can see the translation banner and available languages
-src: -/fpm.dev/images/translation/english-with-dropdown.jpg
+src: -/fastn.dev/images/translation/english-with-dropdown.jpg
 width: fill
 
 Consider [this page for example](https://arpita-jaiswal.github.io/vivekanand/), it
@@ -2205,8 +2205,8 @@ So this page was translated someday, but the message is saying that is now not
 up-to date with original, English version. She has used the excellent [Project
 Fluent](https://projectfluent.org) by Mozilla to translate the UI messages as well.
 You can see the the Rust code in
-[`src/i18n`](https://github.com/FifthTry/fpm/tree/main/src/i18n) and translation
-files in [`i18n`](https://github.com/FifthTry/fpm/tree/main/i18n) folders. The
+[`src/i18n`](https://github.com/FifthTry/fastn/tree/main/src/i18n) and translation
+files in [`i18n`](https://github.com/FifthTry/fastn/tree/main/i18n) folders. The
 translation itself needs a lot of improvements, please send PR if you find some
 way you can improve the messaging 😅.
 
@@ -2238,19 +2238,19 @@ This page is translated in Hindi as well for example.
 
 UI needs work, messaging needs work, but we are so proud of what's working already.
 Also you can modify each of those UI by creating and editing
-[`FPM/translation/{missing, upto-date,
-etc}.ftd`](https://github.com/FifthTry/fpm/tree/main/ftd/translation), we ship the
+[`FASTN/translation/{missing, upto-date,
+etc}.ftd`](https://github.com/FifthTry/fastn/tree/main/ftd/translation), we ship the
 UI shown above as fallback, we first look for corresponding files in package's
-`FPM` folder.
+`FASTN` folder.
 
 
--- ft.h1: FPM Package Info Page
+-- ft.h1: FASTN Package Info Page
 
-We are accumulating a lot of package meta-data in generated `FPM.ftd` file during
+We are accumulating a lot of package meta-data in generated `FASTN.ftd` file during
 build time, now Arpita has started displaying that data as well on
-[/FPM/](https://arpita-jaiswal.github.io/vivekanand/FPM/) URL for any fpm built
+[/FASTN/](https://arpita-jaiswal.github.io/vivekanand/FASTN/) URL for any fastn built
 package. Currently the URL is almost empty, but after we merge [this
-PR](https://github.com/FifthTry/fpm/pull/43) it will start looking a bit like this:
+PR](https://github.com/FifthTry/fastn/pull/43) it will start looking a bit like this:
 
 
 -- ft.image:
@@ -2263,33 +2263,33 @@ will also include the `README.md` of the project if its hosted on Github etc on
 this page.
 
 This page is fully customisable. You can modify
-[`FPM/info.ftd`](https://github.com/FifthTry/fpm/blob/7655e4e10bebc602bdf92251f40176bece494827/ftd/info.ftd)
+[`FASTN/info.ftd`](https://github.com/FifthTry/fastn/blob/7655e4e10bebc602bdf92251f40176bece494827/ftd/info.ftd)
 file and tweak it based on your need.
 
 
--- ft.h1: "FPM Theme"
+-- ft.h1: "FASTN Theme"
 
 So now we are building a lot of UI that is going to be part of a website you
-create. The website you create using FPM/FTD can be exactly how you want it to be,
+create. The website you create using FASTN/FTD can be exactly how you want it to be,
 you have absolute control over every pixel of the page. But then we have our UI
-elements, things that are needed for FPM to work correctly, `FPM/info.ftd` file,
-`FPM/translation/*.ftd` files and so on.
+elements, things that are needed for FASTN to work correctly, `FASTN/info.ftd` file,
+`FASTN/translation/*.ftd` files and so on.
 
 And you can totally edit those files, copy them from our source, tomorrow we may
 give you some cli helper for that, and edit them to your hearts desire.
 
 But we do not believe that is ideal. We are going to create a theme, a "document
 interface" in our terminology, which will contain all the components needed for
-FPM related UI that gets included in your site.
+FASTN related UI that gets included in your site.
 
 Once that document interface is finalised, we will create a few themes
-implementing fpm interface, and hopefully end users can as well. License permitting
+implementing fastn interface, and hopefully end users can as well. License permitting
 you can use any of them interchangeably.
 
-Ideally all the main themes should also implement FPM Theme document interface as
+Ideally all the main themes should also implement FASTN Theme document interface as
 well, so most theme you find for your blog, resume, book, open source project page,
 startup landing page etc, will come with compatible elements, but if the theme you
-picked for rest of your site does not come with the FPM Theme elements, then you
+picked for rest of your site does not come with the FASTN Theme elements, then you
 can use another theme visually compatible with your theme, or create your own.
 
 You have full power over entire UI, the interaction, style, and you only need to
@@ -2298,19 +2298,19 @@ HTML/CSS/JS for doing this kind of job. FTD that is designed for non programmers
 even.
 
 
--- ft.h1: Thought: How Should `fpm update` Work?
+-- ft.h1: Thought: How Should `fastn update` Work?
 
 So we recently introduced this command, and currently it simply re-downloads all
 the dependencies, which is fine for our demos and initial usability testing etc,
 but clearly not something we want to eventually.
 
-We are designing FPM infra to be as "distributed" as possible, this means we can
+We are designing FASTN infra to be as "distributed" as possible, this means we can
 not have a central entity knowing the status of all the packages as is done by many
 other package managers.
 
-We can poll, re-fetch each `<dependency>/FPM.ftd`, with etag handling etc, but this
-is still not great. How often to poll? On every `fpm` command invocation? Every
-minute/hr/day? Every time user says `fpm update`?
+We can poll, re-fetch each `<dependency>/FASTN.ftd`, with etag handling etc, but this
+is still not great. How often to poll? On every `fastn` command invocation? Every
+minute/hr/day? Every time user says `fastn update`?
 
 Sure. We can come up with some such scheme. But can we have some sort of middle
 ground? Not central, yet we do not have to poll everyone? Poll is not great, we
@@ -2321,22 +2321,22 @@ the lid there was an update to a package, I would want that to be available to m
 
 Posing problem like this, no central, and yet want push, means we create a few, a
 few hundred, thousand maybe "central" agents. Say there is a new component
-`fpm bastion`, probably using that word incorrectly, some sort of `fpm aggregator`,
-and say each package can pick say 10 of such aggregators. People can maintain fpm
-aggregator lists, some will be available via `fpm.dev`, but say its down, under
+`fastn bastion`, probably using that word incorrectly, some sort of `fastn aggregator`,
+and say each package can pick say 10 of such aggregators. People can maintain fastn
+aggregator lists, some will be available via `fastn.dev`, but say its down, under
 attack, sold out, there are others lists, and each package may include a list of
 aggregators they know of so one can look at all aggregators from all the package
 they currently have.
 
 So there are so many aggregators. And they themselves are chatter boxes, gossiping
-with each other. For each package they keep track of the `FPM.ftd` file. We can
-always use public key infrastructure to ensure the `FPM.ftd` file I receive from
+with each other. For each package they keep track of the `FASTN.ftd` file. We can
+always use public key infrastructure to ensure the `FASTN.ftd` file I receive from
 an aggregator is trustworthy (they can lie about not giving me the latest update,
-but they can not modify `FPM.ftd` without getting trivially detected).
+but they can not modify `FASTN.ftd` without getting trivially detected).
 
-Each FPM package should pick a dozen or so aggregators from the list. And every
-time there is an update, every time `fpm sync` runs, the content is uploaded to
-`fpm-repo` but also sent to aggregators.
+Each FASTN package should pick a dozen or so aggregators from the list. And every
+time there is an update, every time `fastn sync` runs, the content is uploaded to
+`fastn-repo` but also sent to aggregators.
 
 Aggregators are chattering and they will communicate to others if any change has
 happened. Aggregators may even be paid to give guarantees that they talk to
@@ -2349,24 +2349,24 @@ prior work. Maybe even use [IPFS etc](https://github.com/rs-ipfs/rust-ipfs) and
 not re-invent things.
 
 Or we can go old fashioned, sort of reverse mail relay, DNS for any domain (or
-current version of FPM.ftd if its not too old) can tell you the preferred
+current version of FASTN.ftd if its not too old) can tell you the preferred
 aggregator for this package. We can also do the aggregator push, like my preferred
 aggregators are say this list, then when I am fetching a package from your
-`fpm-repo`, I can tell the repo about that list, and tell `fpm-repo` to notify to
+`fastn-repo`, I can tell the repo about that list, and tell `fastn-repo` to notify to
 one of my preferred aggregators.
 
 Anyways, so we have a bunch of aggregators, or we have full blown IPFS infra,
-whatever. We will now need our `fpm` to have a demon that will run in background
-and keep fetching stuff. All of this can be done by your `fpm-reader`.
+whatever. We will now need our `fastn` to have a demon that will run in background
+and keep fetching stuff. All of this can be done by your `fastn-reader`.
 
-`fpm-reader` would be a service for consuming FPM packages. You can install other
+`fastn-reader` would be a service for consuming FASTN packages. You can install other
 packages as dependency of a package you are building, but can also "subscribe" to
-packages via `fpm reader`, which can be running on your machine (as part of `fpm`
+packages via `fastn reader`, which can be running on your machine (as part of `fastn`
 binary maybe), or on your Heroku/DigitalOcean instance if you have devops
 bandwidth, or you can buy it from a SAAS provider.
 
-If you are using a cloud `fpm-reader` (meaning not running on your machine), your
-`fpm daemon` will connect with `fpm-reader` and get the updates via a web-socket/
+If you are using a cloud `fastn-reader` (meaning not running on your machine), your
+`fastn daemon` will connect with `fastn-reader` and get the updates via a web-socket/
 push mechanism.
 
 Update: Turns out [nostr](https://github.com/fiatjaf/nostr) describes the protocol
@@ -2379,7 +2379,7 @@ very close to what I had in my mind.
 We have a feature that allows you to query SQLite databases. In general it is good
 feature, if you have SQLite database, sure, go ahead and query it. But we call the
 query processor `package-query`, because the original intent of that processor was
-to be able to query a special database that shows FPM package data. Our first
+to be able to query a special database that shows FASTN package data. Our first
 design was to do a `build-package-database` that generates a `sqlite` file, and
 then run queries on that sqlite file.
 
@@ -2422,8 +2422,8 @@ features she is now focussing on data presentation. Some of the UIs that are rea
 
 For package in original language (which is being translated in other languages), we
 create a translation status page now. The URL is
-`<domain>/FPM/translation-status/`, eg
-[arpita-jaiswal.github.io/vivekanand/FPM/translation-status/](https://arpita-jaiswal.github.io/vivekanand/FPM/translation-status/),
+`<domain>/FASTN/translation-status/`, eg
+[arpita-jaiswal.github.io/vivekanand/FASTN/translation-status/](https://arpita-jaiswal.github.io/vivekanand/FASTN/translation-status/),
 which looks like this (screenshot added to capture current state, it so we can see
 the progress):
 
@@ -2433,7 +2433,7 @@ src: https://i.imgur.com/eL3C99a.jpg
 width: fill
 
 Here we are seeing the status of the original language, which is English. We see
-that the English FPM package was last modified on `2021-12-29T20:55` and has 13
+that the English FASTN package was last modified on `2021-12-29T20:55` and has 13
 documents.
 
 We see that it is translated in 2 languages, `hi`, 2 letter ISO 639-1 code for
@@ -2444,7 +2444,7 @@ documents are "Partially? translated but **Never Marked** up to date", "**Missin
 modified.
 
 This gives a very good overall picture of the project. We plan to add word counts
-too as progress of library work, which is what FPM packages contain often, are
+too as progress of library work, which is what FASTN packages contain often, are
 better tracked by word counts, not file counts.
 
 We have to try to strike a balance between too much data making the UI confusing vs
@@ -2457,7 +2457,7 @@ proper UX people etc. But its a good start, quite happy with it.
 
 So you saw overall status of translations across all languages, but you would want
 to dig deep and see more details for any language. For this we have Language Detail
-Page, which has the URL: `<domain-of-translation>/FPM/translation-status/`. Not
+Page, which has the URL: `<domain-of-translation>/FASTN/translation-status/`. Not
 too fond of naming the page "Language Detail Page" but the URL containing
 "translation-status" when we already have another page called "Translation Status
 Page". But I like the URLs too, its technically translation status of that
@@ -2465,7 +2465,7 @@ language, but what do call it then, "Translation Status Of Translation Page"? Th
 would be monstrosity, "Language Detail Page" seems obvious.
 
 Anyways, so this is how say Hindi version of
-[arpita-jaiswal.github.io/vivekanand-hi/FPM/translation-status/](https://arpita-jaiswal.github.io/vivekanand-hi/FPM/translation-status/)
+[arpita-jaiswal.github.io/vivekanand-hi/FASTN/translation-status/](https://arpita-jaiswal.github.io/vivekanand-hi/FASTN/translation-status/)
 looks like:
 
 
@@ -2488,7 +2488,7 @@ modified and when the translation was last modified also in this table.
 
 -- ft.h2: A Note On Upto-Date-ness Of These Pages
 
-The `Translation Status Page` is built as part of original language `fpm package`
+The `Translation Status Page` is built as part of original language `fastn package`
 and `Language Detail Page` is built as part of each translation. But they
 translation status page depends on data of all translations, and language detail
 page depends on data of the current language and the original language package.
@@ -2501,12 +2501,12 @@ still have a central repository, or maybe even say
 package was last built at what time, so we can auto refresh the entire page or
 just the `translation-status.html` file.
 
-Other approach could be we do client side fetching of `FPM.ftd` file, so when you
+Other approach could be we do client side fetching of `FASTN.ftd` file, so when you
 go to Translation Status Page, we show the last built version but we then download
-`FPM.ftd` for each of the translations, and recompute the data.
+`FASTN.ftd` for each of the translations, and recompute the data.
 
 I am not too happy with the frontend approach, every single visitor will
-re-download everything, think about the global warming people, FPM is trying to be
+re-download everything, think about the global warming people, FASTN is trying to be
 network resilient, if we create multi-planetary civilisations, HTTP based lets just
 fetch what we want when we want won't work, and such federated, change when needed,
 show stale but refresh etc approaches would be needed.
@@ -2514,11 +2514,11 @@ show stale but refresh etc approaches would be needed.
 
 -- ft.h2: UI Customization
 
-The screenshots you see are the UI that's shipped as default with `fpm`, but you
-can easily customise it by creating `FPM/translation/original-status.ftd` and
-`FPM/translation/translation-status.ftd` files.
+The screenshots you see are the UI that's shipped as default with `fastn`, but you
+can easily customise it by creating `FASTN/translation/original-status.ftd` and
+`FASTN/translation/translation-status.ftd` files.
 
-We will soon create a "document interface" for FPM Package Info, which will include
+We will soon create a "document interface" for FASTN Package Info, which will include
 translation banners (will talk about them soon), translation status page, and
 upcoming: package info page, package and document history pages, change request
 pages and so on.
@@ -2533,7 +2533,7 @@ tried and tested, i18n approach, say we use [Mozilla's
 Fluent](https://projectfluent.org). We can define special strings we have in our
 source code, and we invest in comprehensive translation so no one has need to
 improve it (meaning it can not be done by writing FTD files, you must recompile
-`fpm`).
+`fastn`).
 
 I am not fond of that approach, primarily because while we can do that for strings
 we know about, but what about themes and other kind of content people create? Say
@@ -2547,7 +2547,7 @@ We need to think more about this.
 -- ft.h1: Thought: Language IDs
 
 Currently we are using 2 letter ISO 639-1 code to represent language names, eg in
-`FPM.ftd` file:
+`FASTN.ftd` file:
 
 
 -- ft.code:
@@ -2560,7 +2560,7 @@ translation: foo.com/hi
 
 -- ft.markdown:
 
-2 letter codes are okay, but in FTD/FPM we tend to stick with full names instead of
+2 letter codes are okay, but in FTD/FASTN we tend to stick with full names instead of
 short versions, like `integer` instead of `int`, or `language` instead of `lang`,
 since we believe things are written once and read many many times, and we have
 immense capability in getting confused. How many people can guess `gu` stands for
@@ -2613,11 +2613,11 @@ barrier itself? Can you read a book written for absolute beginner of a topic if 
 are in advanced stage, and vice versa? Can these two people really talk to each
 other meaningfully? Isn't there is a need for a translation there?
 
-And consider this also: say I am describing the strict specification of what FPM
+And consider this also: say I am describing the strict specification of what FASTN
 does, shouldn't there be a document like this? Which assumes you know everything,
-and you are only interested in exact description of precise behaviour of what FPM
+and you are only interested in exact description of precise behaviour of what FASTN
 does? Of course that document must exist. But is that just a document? It must be
-a package right? And then we have the "end user documentation" of FPM. Isn't that
+a package right? And then we have the "end user documentation" of FASTN. Isn't that
 just a "translation" of the formal spec?
 
 Conclusion: we will allow `language: Gujarati | ગુજરાતી` syntax. First part must be
@@ -2630,7 +2630,7 @@ entire value of `language:` key. So you can not have two translations with
 
 -- ft.h1: Thought: Font/Asset Packages
 
-What if there were fonts that can be distributed as FPM package? They can chose to
+What if there were fonts that can be distributed as FASTN package? They can chose to
 inline the `.woff` etc file in the package itself, but they can also link to CDN
 hosted font files (this is a bit privacy issue, we do not want Google etc to know
 what page is being viewed, and today Browsers re download all assets, I may be
@@ -2638,14 +2638,14 @@ wrong, to avoid timing attacks for [fingerprinting who you are or what websites
 you visit](https://www.sciencedaily.com/releases/2018/10/181030102802.htm)).
 
 We can do the same to distribute other assets, say you want to share images with
-the world, you can upload it to unsplash or create a FPM package and put it on
+the world, you can upload it to unsplash or create a FASTN package and put it on
 Github.
 
 Soon people will start indexing such packages, and you will get a more direct
 reference, if anyone is using your assets you will be credited in the
-`fpm.dependency` of that package.
+`fastn.dependency` of that package.
 
-One question would be should these assets be copies over or given that each FPM
+One question would be should these assets be copies over or given that each FASTN
 package has a URL those assets are directly linked? Direct linking may not be good,
 as people will have to pay for their package getting popular. We should copy over.
 
@@ -2690,18 +2690,18 @@ testing](https://jestjs.io/docs/snapshot-testing)", we create "snapshots" of
 generated HTML files, and ensure they do not change.
 
 I find HTML a bit noisy, reviewing change in generated HTML is not fun. Further
-there is a question of coverage - not all features of `fpm` could have been used
+there is a question of coverage - not all features of `fastn` could have been used
 in the `.ftd` file, maybe it is bare-bones, and when someone uses realistic `.ftd`
 files, maybe things would not go as expected.
 
 
--- ft.h2: `fpm.ftd` snapshotting
+-- ft.h2: `fastn.ftd` snapshotting
 
-We are currently creating one main dynamic file, `fpm.ftd`, its a virtual file,
+We are currently creating one main dynamic file, `fastn.ftd`, its a virtual file,
 does not exist on disc, is generated on run time, for each document getting
 rendered, and it contains data related to that document.
 
-We should snapshot the generated `fpm.ftd` file as well on file system, and ensure
+We should snapshot the generated `fastn.ftd` file as well on file system, and ensure
 it doesn't change without review, so all the variables are asserted upon.
 
 
@@ -2709,56 +2709,56 @@ it doesn't change without review, so all the variables are asserted upon.
 
 There are some special files, eg `translation-stats`, its provided by us, and it
 cant really have any bug per se, I mean we can ship some broken
-`FPM/translation/status.ftd` file, sure, but its just a text file, I do not want to
-see the generated `.html` file for. Similarly we have `FPM/markdown.ftd` file,
+`FASTN/translation/status.ftd` file, sure, but its just a text file, I do not want to
+see the generated `.html` file for. Similarly we have `FASTN/markdown.ftd` file,
 which again, would do what it would do, and not much point storing the `.html` of.
 
 Not sure. The thought that's coming to me is in such cases we need not necessarily
-store the `.html` file, we just stored the corresponding dynamic context, `fpm.ftd`
+store the `.html` file, we just stored the corresponding dynamic context, `fastn.ftd`
 or whatever, and snapshotting `.ftd` is enough. We will have more readable and
 smaller diffs. I guess I just trying to reduce the amount of code review I have to
 do 😅.
 
 
--- ft.h1: `fpm update` Implemented
+-- ft.h1: `fastn update` Implemented
 
-A few days back, as part of some other larger PR, Arpita implemented `fpm update`.
+A few days back, as part of some other larger PR, Arpita implemented `fastn update`.
 It's currently pretty "hacky", deletes the `.packages` folder, and re-downloads all
 the dependencies.
 
 
--- ft.h1: `FPM/prelude.fpm` Added
+-- ft.h1: `FASTN/prelude.fastn` Added
 
 Shobhit just [implemented support for
-`FPM/prelude.ftd`](https://github.com/FifthTry/fpm/pull/37/files), this file if
-found, is prepended to every `.ftd` file being processed (except `FPM.ftd` file).
+`FASTN/prelude.ftd`](https://github.com/FifthTry/fastn/pull/37/files), this file if
+found, is prepended to every `.ftd` file being processed (except `FASTN.ftd` file).
 
 Usually you would have a `config.ftd` file that can store a bunch of things that
 you want available everywhere. Also you would want to include one or more component
-libraries in your `ftd` files. Putting them all in `FPM/prelude.ftd` saves you from
+libraries in your `ftd` files. Putting them all in `FASTN/prelude.ftd` saves you from
 repeating the same lines in every document, making documents that bit cleaner.
 
 
--- ft.h1: Thought: Publishing `FPM.ftd` With Extra Data, and Better /FPM/ Page
+-- ft.h1: Thought: Publishing `FASTN.ftd` With Extra Data, and Better /FASTN/ Page
 
-Recently we discussed we will start publishing (copying) `FPM.ftd` in `.build`
-folder during build, and how we can sometime download just the `FPM.ftd` for an
-FPM package instead of downloading the entire package `.zip` file. It sounded like
+Recently we discussed we will start publishing (copying) `FASTN.ftd` in `.build`
+folder during build, and how we can sometime download just the `FASTN.ftd` for an
+FASTN package instead of downloading the entire package `.zip` file. It sounded like
 a great idea, and Arpita implemented it right away, and she did one better, she
-included some extra data also in the `FPM.ftd` file.
+included some extra data also in the `FASTN.ftd` file.
 
 This opens up interesting possibilities, now we can include all sorts of generated
-package meta data and make it part of the published `FPM.ftd` file. We can show
+package meta data and make it part of the published `FASTN.ftd` file. We can show
 number of files or word count of the package, we can include LICENSE, even sitemap,
 latest snapshot versions etc etc. We can anticipate a lot of need, and most of the
-"metadata" needs of `fpm` can be satisfied by putting data in `FPM.ftd`.
+"metadata" needs of `fastn` can be satisfied by putting data in `FASTN.ftd`.
 
-So currently we also publish `/FPM/index.html`, which is generated out of `FPM.ftd`
-file in the package. With this idea, of making lot more data available to `FPM.ftd`
+So currently we also publish `/FASTN/index.html`, which is generated out of `FASTN.ftd`
+file in the package. With this idea, of making lot more data available to `FASTN.ftd`
 that becomes even more interesting.
 
-We will create `FPM/info.ftd` file, which will have all the `FPM.ftd` data
-available, and would be rendered in `FPM/index.html`, so we can have a proper
+We will create `FASTN/info.ftd` file, which will have all the `FASTN.ftd` data
+available, and would be rendered in `FASTN/index.html`, so we can have a proper
 package meta data page as well.
 
 
@@ -2767,11 +2767,11 @@ package meta data page as well.
 For any package, we have two potential source of truth, the repository where you
 can get the package source from, where it is presumably being maintained, say
 Github, or the actual built and deployed URL where things are hosted. Both contain
-`FPM.ftd` file.
+`FASTN.ftd` file.
 
 Consider translation status. Say the original package is trying to create a status
 dashboard for all translation packages, showing like how many documents in that
-translation are upto date, missing etc. To compute this information `fpm` can
+translation are upto date, missing etc. To compute this information `fastn` can
 download the latest version of each translation package, but this information is
 coming from where source repo, like Github, so `zip` may point to `main` branch's
 `.zip` file.
@@ -2782,8 +2782,8 @@ so and so language, but when the click on the link they may find that its not so
 as there is a possibility that things have landed in `main` branch, but not yet
 built and published. This can happen because say deploy failed due to some reason.
 
-So it seems that the `<package-name>/FPM.ftd` should be considered source of truth
-when its materially different from `<package-repo>/FPM.ftd`.
+So it seems that the `<package-name>/FASTN.ftd` should be considered source of truth
+when its materially different from `<package-repo>/FASTN.ftd`.
 
 
 -- ft.h1: Domain In Package Support Done
@@ -2792,18 +2792,18 @@ when its materially different from `<package-repo>/FPM.ftd`.
 
 Seems it takes less time for Arpita to build a feature than for me write what
 should be built! Just like that she implemented [package with Golang like
-identifiers](https://github.com/FifthTry/fpm/pull/34/files).
+identifiers](https://github.com/FifthTry/fastn/pull/34/files).
 
-Consider this [FPM.ftd](https://github.com/Arpita-Jaiswal/vivekanand/blob/main/FPM.ftd)
+Consider this [FASTN.ftd](https://github.com/Arpita-Jaiswal/vivekanand/blob/main/FASTN.ftd)
 file for instance:
 
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: arpita-jaiswal.github.io/vivekanand
+\-- fastn.package: arpita-jaiswal.github.io/vivekanand
 language: en
 zip: github.com/arpita-jaiswal/vivekanand/archive/refs/heads/main.zip
 translation: arpita-jaiswal.github.io/vivekanand-hi
@@ -2818,26 +2818,26 @@ for the package in the package repo, and hoping the repo index page links to the
 published version somewhere.
 
 Arpita pointed out that one of the cool side effect of this design (the fact that
-`FPM.ftd` is now downloadable, without having to download the entire FPM package)
+`FASTN.ftd` is now downloadable, without having to download the entire FASTN package)
 is that for many cases we will not have to download full package, eg when
-specifying translations, when a FPM package is specifying the translations, we only
-specify the package name, the actual language of the package is part of `FPM.ftd`
-meta-data of that package, and she used to have to download the entire FPM package
+specifying translations, when a FASTN package is specifying the translations, we only
+specify the package name, the actual language of the package is part of `FASTN.ftd`
+meta-data of that package, and she used to have to download the entire FASTN package
 zip file just to get the language (so she can show it in the translation dropdown).
 
 
 -- ft.h1: Idea: Canonical URL Support
 
-So we are going to approach few open source projects to checkout FPM and our
+So we are going to approach few open source projects to checkout FASTN and our
 translation features soon. For us to setup the demo properly and get the discussion
 rolling, it would be good to import a the project we are targeting, convert them
-to a FPM package and publish on some temporary URL for demo purpose.
+to a FASTN package and publish on some temporary URL for demo purpose.
 
 But we do not want Google to index our page. We can do robots.txt and block
 indexing, but its even better to add canonical URL so Google gives proper credit to
 original URL for improving their search ranking.
 
-So we will support `canonical-url` key in `fpm.package`:
+So we will support `canonical-url` key in `fastn.package`:
 
 
 -- ft.code:
@@ -2864,18 +2864,18 @@ lang: html
 In the generate file, with `href` pointing to corresponding URL.
 
 
--- ft.h2: `fpm.canonical-url`
+-- ft.h2: `fastn.canonical-url`
 
-In future we will also allow `canonical-url` on a special module `fpm`, so any
-document can `-- import: fpm` and overwrite `fpm.canonical-url: <some url>` to
+In future we will also allow `canonical-url` on a special module `fastn`, so any
+document can `-- import: fastn` and overwrite `fastn.canonical-url: <some url>` to
 specify arbitrary canonical URL on a per document basis if they wanted to.
 
 
 -- ft.h1: Document Title Support Implemented
 
 Shobhit [implemented document title
-support](https://github.com/FifthTry/fpm/pull/32/files) yesterday. Till now all
-HTML files generated by FPM used to have title `ftd`, after this pull request the
+support](https://github.com/FifthTry/fastn/pull/32/files) yesterday. Till now all
+HTML files generated by FASTN used to have title `ftd`, after this pull request the
 title is picked from content of FTD document being process right now.
 
 In FTD we have a concept called [`region`](/ftd/common/), any FTD element can use
@@ -2898,12 +2898,12 @@ step close to changing a theme should be just one line change (its a bit harder
 than other systems where theming is well defined, you always know what you are
 theming, Wordpress support Wordpress themes, which only work for blogs, and say
 Winamp supports Winamp "Skins", which only works Winamp, you cant use Winamp skin
-with your Wordpress blog for example[1], with FPM you all sorts of UI, music
+with your Wordpress blog for example[1], with FASTN you all sorts of UI, music
 player to Browser, to pricing page to Resume etc can all be "themed", and we want
 cross portability across all of them "as long as it makes sense": follows the same
 "document interface").
 
-[pr]: https://github.com/FifthTry/fpm/pull/33/files
+[pr]: https://github.com/FifthTry/fastn/pull/33/files
 
 This is how you create an alias:
 
@@ -2911,12 +2911,12 @@ This is how you create an alias:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: fifthtry.github.io/amitu
+\-- fastn.package: fifthtry.github.io/amitu
 zip: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
-\-- fpm.dependency: fifthtry.github.io/blog-theme as theme
+\-- fastn.dependency: fifthtry.github.io/blog-theme as theme
 
 
 -- ft.markdown:
@@ -2946,13 +2946,13 @@ Note: We can also import the full package name if we wanted.
      player, say you want to show how the UI works, what would you do? Take a
      screenshot? And you call that action of a sane mind? What will happen if that
      theme changes? Are you going to come back and update the screenshot? _That_
-     would be lunacy my friend. Just import the FPM package for the Winamp theme,
+     would be lunacy my friend. Just import the FASTN package for the Winamp theme,
      pass the data that Winamp would have passed it (if we were living in the world
      where people are not, you know, insane -- creating UI in platform after
      platform, even more insane where UI of one "framework" on same platform can't
      use UI of another frame, I am looking at you JavaScript, with your framework
-     pared -- and using FPM for example), and now you blog post contains always
-     refreshing, true, intractable Winamp screen. FPM makes it possible. Why would
+     pared -- and using FASTN for example), and now you blog post contains always
+     refreshing, true, intractable Winamp screen. FASTN makes it possible. Why would
      you not?
 
 
@@ -2983,7 +2983,7 @@ package from.
 -- ft.h2: Decentralisation
 
 We need to know where to download a package from because of our decentralised
-design. We do not want a single central infrastructure in FPM like they have in
+design. We do not want a single central infrastructure in FASTN like they have in
 other languages, eg `crates.io` for Rust or `npmjs.com` for Javascript and so on.
 Centralisation has many problems, censorship becomes easy, single point of attack
 for bad players, difficulty with confidentiality (what if you have some
@@ -2993,20 +2993,20 @@ to work with their team: I am sure they are very responsive etc, but they cant b
 as responsive as your own self hosted repo, that you can tweak and deploy hourly
 if you wanted to).
 
-But for FPM, centralisation is especially a problem: other package managers only
+But for FASTN, centralisation is especially a problem: other package managers only
 distribute packages to be downloaded once at build time, when you are doing a
 deploy, you will download the `.zip` file from package repository, and won't
 download again till another dependency is added or version changes. No end user
 goes to `crates.io`/`npmjs.com` etc.
 
-FPM packages on the other hand are actual websites. So FPM repository is used by
-all end users, and all your site traffic goes to your `fpm-repo`. One single
+FASTN packages on the other hand are actual websites. So FASTN repository is used by
+all end users, and all your site traffic goes to your `fastn-repo`. One single
 website or a company can not host the entire Internet (live traffic, not like
 `Archive.org`).
 
-We also envisage that `fpm-repo` will be giving differential features, some may
+We also envisage that `fastn-repo` will be giving differential features, some may
 give load balanced deployment with support for Edge caching, some other may focus
-on Math related computation etc. FPM and FTD has a lot of dynamic features, and
+on Math related computation etc. FASTN and FTD has a lot of dynamic features, and
 that means there is a lot of play in features offered, pricing and business models
 and so on.
 
@@ -3037,7 +3037,7 @@ So can we have:
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: amitu.com/realm
+\-- fastn.dependency: amitu.com/realm
 
 
 -- ft.markdown:
@@ -3048,11 +3048,11 @@ Instead of
 -- ft.code:
 lang: ftd
 
-\-- fpm.dependency: amitu/realm
+\-- fastn.dependency: amitu/realm
 repo: github
 
 
--- ft.h2: `fpm build` to copy `FPM.ftd`
+-- ft.h2: `fastn build` to copy `FASTN.ftd`
 
 For this to work we will need the meta data about the package that we want to
 download. The URL may point to static site hosting URL, and that URL does not give
@@ -3061,10 +3061,10 @@ us entire package source.
 We can chose to upload the latest package along with the static build, but that
 forces us to use `.zip` path, where as if we know the repo is a git repo, we can do
 more optimal downloads (eg `git pull` instead of full download). Git or upcoming
-`fpm-repo` also gives us more features like branch, get things from other folder
+`fastn-repo` also gives us more features like branch, get things from other folder
 etc, so uploading `.zip` is not optimal.
 
-We must copy just the `FPM.ftd` file instead.
+We must copy just the `FASTN.ftd` file instead.
 
 
 -- ft.h2: The New Package Download Scheme
@@ -3072,11 +3072,11 @@ We must copy just the `FPM.ftd` file instead.
 Currently we assume each package is hosted on Github and construct the `.zip` URL
 when we have to download a package, and download it in `.packages` folder.
 
-What we want to do now is given the package name, append `/FPM.ftd` to it, download
-the `FPM.ftd` file, parse it, and get `fpm.package.zip` attribute.
+What we want to do now is given the package name, append `/FASTN.ftd` to it, download
+the `FASTN.ftd` file, parse it, and get `fastn.package.zip` attribute.
 
 Earlier we used the `repo` key, which was a single key to contain different kind
-of value, could have been `zip` URL, `Github` etc, or the URL of the `fpm-repo`.
+of value, could have been `zip` URL, `Github` etc, or the URL of the `fastn-repo`.
 
 Now we will have dedicated keys, if the package is to be officially distributed as
 zip file, set the `zip` key, if its on `github`, set it with the `git-url` (URL
@@ -3086,11 +3086,11 @@ The package name can not contain `https://`, for cleanliness. We will do what
 modern browsers do, first check if `https://` is opening, else try `http://`.
 
 
--- ft.h1: `fpm build --base=/foo/` for Github Pages
+-- ft.h1: `fastn build --base=/foo/` for Github Pages
 
 26th Dec 2021
 
-When using `fpm build` locally vs when using it for GitHub Pages hosted site there
+When using `fastn build` locally vs when using it for GitHub Pages hosted site there
 is a difference. Locally we build everything in `.build` folder directly, and URLs
 are /x/ for `x.ftd` file. But when hosting a site on Github Pages, without using
 custom domain, the URL GitHub Pages gives us is `<account-name>.github.io/<repo-name>/x/`.
@@ -3109,28 +3109,28 @@ prefix.
 Not sure the pros and cons of the two. Former is implemented already so that's one
 pro. Later somehow feels cleaner to me. Not yet sure.
 
-If you are using GitHub Pages, build your files with `fpm build --base=/` locally
-and `fpm build --base=/repo-name/` in your GitHub Actions, and use remove use `x/`
+If you are using GitHub Pages, build your files with `fastn build --base=/` locally
+and `fastn build --base=/repo-name/` in your GitHub Actions, and use remove use `x/`
 instead of `/x/` when creating links in your ftd files.
 
 
--- ft.h1: `fpm` CLI now Supports Windows
+-- ft.h1: `fastn` CLI now Supports Windows
 
-`fpm` already supported macOS (we develop it on macOS) and Linux (our CI runs our
+`fastn` already supported macOS (we develop it on macOS) and Linux (our CI runs our
 test suite on Linux), but we never tried it on Windows so far.
 
-Ganesh has been trying to use FPM on windows, and he had to install Visual Studio
+Ganesh has been trying to use FASTN on windows, and he had to install Visual Studio
 and Rust to build it. He had Windows 7, 32-bit based really old laptop, and turns
 out Visual Studio itself doesn't support Windows 7/32-bit combination. He upgraded
 his laptop's hard disc to SSD, and updated to Windows 11, and got Rust to compile
-FPM. We came across SQLite related issue, some SQLite DLL was required, so I
+FASTN. We came across SQLite related issue, some SQLite DLL was required, so I
 [switched to bundled
-SQLite](https://github.com/FifthTry/fpm/commit/429e957aa17ec8291fc7dc1dd102676764a3ce28),
+SQLite](https://github.com/FifthTry/fastn/commit/429e957aa17ec8291fc7dc1dd102676764a3ce28),
 and it finally compiled.
 
-But the `fpm build` did not work! It did not find any file. Turns out our code had
+But the `fastn build` did not work! It did not find any file. Turns out our code had
 hard coded `/` in a bunch of places, Shobhit found and [fixed some of those
-issues](https://github.com/FifthTry/fpm/pull/26/files), and after this `fpm build`
+issues](https://github.com/FifthTry/fastn/pull/26/files), and after this `fastn build`
 is working for Ganesh.
 
 Shobhit basically followed [Microsoft Documentation about Rust
@@ -3139,8 +3139,8 @@ just worked. Cool thing is the compiled exe works even on machines without Rust,
 of course, and Visual Studio (was not sure about this) installed.
 
 We have not yet created any automation for creating exe every time a new release on
-FPM is created, we will figure out this soon (Jan end timeframe). For now if you
-need latest FPM exe, shout out to Shobhit on or discord channel and he will do it
+FASTN is created, we will figure out this soon (Jan end timeframe). For now if you
+need latest FASTN exe, shout out to Shobhit on or discord channel and he will do it
 for you.
 
 We have not yet run our test suite on Windows actually, only verified basic feature
@@ -3149,7 +3149,7 @@ framework for CLI applications, we have developed at FifthTry, but it too doesn'
 support Windows yet.
 
 
--- ft.h1: Thought: Unicode in FPM/FTD
+-- ft.h1: Thought: Unicode in FASTN/FTD
 
 Was looking at this thread on Reddit: [Filename with dots or Unicode chars not
 working](https://www.reddit.com/r/rust/comments/2pvksp/filename_with_dots_or_unicode_chars_not_working/)
@@ -3167,7 +3167,7 @@ listed there:
 Overall I believe we should go ahead with it. Rust has decided to despite the
 issues so should we.
 
-What would it entail? What would we have to do? We should support unicode in FPM
+What would it entail? What would we have to do? We should support unicode in FASTN
 package names, as well as identified (component, variable, record names etc) in
 FTD. Any character is allowed in names? No, [`ID_Start` and `ID_Continue` character
 classes are defined in
@@ -3176,19 +3176,19 @@ all our "id"s should accept allow them (minis keywords reserved by FTD itself, e
 `record`).
 
 
--- ft.h1: Thoughts: Package Naming Restrictions & `$FPM_HOME`
+-- ft.h1: Thoughts: Package Naming Restrictions & `$FASTN_HOME`
 
 Other than Unicode stuff in package names, we actually have some restricts on
 package naming, so wanted to write down my thoughts about them. Currently all
 packages in FTM are distributed via Github. In short future ~ Jan-Feb 2022
-timeframe we should also have `fpm-repo` that can be used for publishing packages.
+timeframe we should also have `fastn-repo` that can be used for publishing packages.
 
-`fpm-repo` is going to be self host-able, as well as SAAS version. But the
+`fastn-repo` is going to be self host-able, as well as SAAS version. But the
 distinction, if something is self hosted or on some package repository should not
 exposed to users of package, so authors should easily move their package from
 self-hosting to SAAS or back without breaking anything.
 
-Moving from Github to `fpm-repo` should ideally also be seamless, but currently we
+Moving from Github to `fastn-repo` should ideally also be seamless, but currently we
 expect the package to specify `repo: github`. We also have `domain` setting for
 each package, so domain name can be considered as part of a package, if we did that
 then the published version of package may include some information about how to
@@ -3204,7 +3204,7 @@ I was going in another direction, but I think I like this decision even more.
 
 After [fixing font issue in
 FTD](https://github.com/FifthTry/ftd/commit/0ce8a3cc3a115a0dca06b9d06824641bc4bc42a4),
-finally we got FPM working with custom Google Fonts (any font for that matter
+finally we got FASTN working with custom Google Fonts (any font for that matter
 should work).
 
 We had an easy way to fix and a "correct" way to fix it. The problem is Font is not
@@ -3264,11 +3264,11 @@ and created an equivalent for the same:
 -- ft.code:
 lang: ftd
 
-\-- fpm.font: Roboto
+\-- fastn.font: Roboto
 woff2: https://fonts.gstatic.com/s/roboto/v29-normal.woff2
 style: normal
 
-\-- fpm.font: Roboto
+\-- fastn.font: Roboto
 woff2: https://fonts.gstatic.com/s/roboto/v29-italic.woff2
 style: italic
 
@@ -3301,7 +3301,7 @@ lang: css
 
 -- ft.markdown:
 
-We support all the attributes on `fpm.font`, with simplified names, eg `name`
+We support all the attributes on `fastn.font`, with simplified names, eg `name`
 instead of `font-family`, or `style` instead of `font-style` etc, and removed `src`
 in favour of individual font types supported, eg `woff` or `opentype` etc.
 
@@ -3309,9 +3309,9 @@ So now we generate the CSS instead of getting the CSS from user, this was we kno
 how to translate this transparently to Android when we come around to supporting
 native Android rendering and so on.
 
-In future we may create a utility `fpm css2font` that will take the css URL from
+In future we may create a utility `fastn css2font` that will take the css URL from
 Google Font etc, and auto convert it to `ftd.font` specs that can be added to
-`FPM.ftd` file.
+`FASTN.ftd` file.
 
 
 -- ft.h1: Doc/TOC Subtree Re-levelling Problem
@@ -3385,7 +3385,7 @@ But here was have to replace each instance of `foo.h2` with an `foo.h1`, and
 So how do we find what are the promotion/demotion rules for any component in any
 package.
 
-We can try to solve it by creating promotion rule entry in `FPM.ftd`:
+We can try to solve it by creating promotion rule entry in `FASTN.ftd`:
 
 
 -- ft.code:
@@ -3418,7 +3418,7 @@ If the documents know about their role, eg the title of a document was "section
 1: introduction", it will read wrong if it's included as a chapter. Also chapter
 numbering must not be part of the document.
 
-One thought for this is to define variables like `fpm.role` and `fpm.role-number`,
+One thought for this is to define variables like `fastn.role` and `fastn.role-number`,
 and asking documents to use these variables instead of making assumptions about
 their roles etc.
 
@@ -3433,7 +3433,7 @@ allow people to include content from package into another.
 Things are easier with data. Say you have a package that has defined some list or
 variable or some record, you can easily import that package, and iterate through
 that list or use the variable, and create your custom visualisations etc. This
-part of FTD/FPM is working well already.
+part of FTD/FASTN is working well already.
 
 But when it comes to text content, it proving to be surprisingly hard.
 
@@ -3502,7 +3502,7 @@ learning paths for specific audiences.
 20th Dec 2021
 
 Me and Arpita worked further on the design of translation UI. Check out [this
-commit](https://github.com/FifthTry/fpm/commit/20e709dfb5f30cae9db33d3ca2b97357c4fc3872)
+commit](https://github.com/FifthTry/fastn/commit/20e709dfb5f30cae9db33d3ca2b97357c4fc3872)
 to see the basic skeleton of our design.
 
 The key idea is now we will have multiple base HTML files, `with-fallback.html`
@@ -3520,8 +3520,8 @@ messages that our "message ftd" file will be able to trigger using `$on-click$:
 message-host show-main` etc.
 
 We are quite happy with this design for now. I wrote couple of feature requests
-that can be implemented using this: ["banner support"](/fpm/~/32/) and [encryption
-support](/fpm/~/33/).
+that can be implemented using this: ["banner support"](/fastn/~/32/) and [encryption
+support](/fastn/~/33/).
 
 
 -- ft.h1: Can Translation Package Use Tracking?
@@ -3599,7 +3599,7 @@ Where does it leave us? Disallow tracking in translation packages?
 17th Dec 2021
 
 So Arpita has heroically built the entire translation feature almost.
-`fpm translation-status` is working. It looks for status of all documents in
+`fastn translation-status` is working. It looks for status of all documents in
 original package by reviewing content of `.track` and shows status for each file
 like "Never Marked", "Update Date" etc.
 
@@ -3608,7 +3608,7 @@ TODO: Arpita to give me sample output of the command.
 She has also implement fallback based build: if `django-hi/intro.ftd` doesn't exist
 we look for `django/intro.ftd`.
 
-Next: We will build `fpm mark-upto-date` to keep updating translation status.
+Next: We will build `fastn mark-upto-date` to keep updating translation status.
 
 We also discussed if django has N dependencies do we auto include them in
 `django-hi` if `django-hi` is a translation? Or should each translation mention
@@ -3616,7 +3616,7 @@ each dependency explicitly? For translation we may want to use the translation o
 a dependency instead of the original package, and while doing so we would need to
 be able to rename and keep using the same name.
 
-Next we also have to add `language` in `fpm::Package`, and ensure that key is set
+Next we also have to add `language` in `fastn::Package`, and ensure that key is set
 if current package is `translation-of` some "original package". Original package
 must also have the `language` set and the languages must be different. Also
 `translation-of` can't be "chained", if this package is a translation of some other
@@ -3630,18 +3630,18 @@ are seeing the English version because this document is not yet translated in
 Hindi. Similarly we need UI for "never marked", "out-of-date" and "upto date".
 
 We want people to be able to control these messages, these messages themselves must
-be translated. We will have files `FPM/{missing, never-marked, out-of-date}.ftd`,
+be translated. We will have files `FASTN/{missing, never-marked, out-of-date}.ftd`,
 if they are not present we will have some fallback message. When creating a new
-translation using a future `fpm create-translation` command we will auto create
+translation using a future `fastn create-translation` command we will auto create
 these files maybe.
 
 In never-marked and out-of-date scenarios we will have three FTD files to build,
 which will go in the generated `.html` file. The "message" file will show on the
 top of the page, and then one of the two, original and translation, would be shown
 and the "message" file will have a button with an `$on-click$: call-js
-<function-name>`, and we will have FPM.js file, which will have functions
+<function-name>`, and we will have FASTN.js file, which will have functions
 `show-original` and `show-translation` (and a "client variable:
-`fpm.showing-original`).
+`fastn.showing-original`).
 
 We will also need other server variables to be used when building "message" file
 with variables like `original-language`, `translation-language`,
@@ -3669,7 +3669,7 @@ to ignore that path, you have to no ignore `x/` folder as well as `x.ftd` file.
 
 We also have complications around import path in ftd documents vs file paths on
 command line. If you want to import `x.ftd` you write `-- import: x`, without the
-extension. Does that mean when you want to refer to `x.ftd` anywhere in FPM context
+extension. Does that mean when you want to refer to `x.ftd` anywhere in FASTN context
 it must be `x`? Like on command line if you want to add tracking on `x.ftd` or sync
 `x.ftd` do you use `x` or `x.ftd`?
 
@@ -3678,7 +3678,7 @@ statement, you can not import a `.txt` file, but you can track `.txt` file, so i
 only `.ftd` is allowed for something we use the path without `.ftd` extension and
 any file can be passed we use the extension.
 
-We can also standardise on file vs document terminology. Document in FPM context
+We can also standardise on file vs document terminology. Document in FASTN context
 strictly means it is a FTD file, where as file means any file. So function names,
 parameters etc can use `print_file()` or `print_document()` etc naming convention.
 
@@ -3699,7 +3699,7 @@ would you link to the file? Say you want to open an image in a new tab?
 
 14th Dec 2021
 
-`fpm` cli currently is littered with `println()` and `eprintln()` calls all over
+`fastn` cli currently is littered with `println()` and `eprintln()` calls all over
 the place. This works okay if we assume that output will always be on terminal, but
 we want to support JSON output as well. Also even if we did not want to, in
 general this is bad software design as if the code on how to show output is spread
@@ -3731,31 +3731,31 @@ individual command handler functions.
 13th Dec 2021
 
 
-- [x] `fpm sync <list of files file>`
-- [x] `fpm status <file>` to show all statuses for the file
-- [x] `fpm status` to show status of adhoc tracking but not translation stuff
-- [x] `fpm stop-tracking`
-- [x] `fpm diff <file>` to show all diffs (including tracking diff, translation
+- [x] `fastn sync <list of files file>`
+- [x] `fastn status <file>` to show all statuses for the file
+- [x] `fastn status` to show status of adhoc tracking but not translation stuff
+- [x] `fastn stop-tracking`
+- [x] `fastn diff <file>` to show all diffs (including tracking diff, translation
        diff)
-- [x] `fpm diff -a` to show everything for every file`
+- [x] `fastn diff -a` to show everything for every file`
 - [x] support tracking, sync, diff for any file, not just ftd files
 - [x] allow any file type to track any file type
-- [ ] `fpm translation-status`
-- [ ] `fpm translation-status <file or folder>`
-- [ ] `fpm mark-upto-date a --target b --on <timestamp>`
-- [ ] `fpm diff <optional-folder>` to only show regular diff (only changes from
+- [ ] `fastn translation-status`
+- [ ] `fastn translation-status <file or folder>`
+- [ ] `fastn mark-upto-date a --target b --on <timestamp>`
+- [ ] `fastn diff <optional-folder>` to only show regular diff (only changes from
       `.history` file)
 
 
--- ft.h1: `fpm::document` refactor
+-- ft.h1: `fastn::document` refactor
 
 12th Dec 2021
 
-Been looking at code and found a struct `fpm::document::Document`. Not too happy
+Been looking at code and found a struct `fastn::document::Document`. Not too happy
 with its design right now.
 
 The idea is we have a lot of commands, and many of these commands go through
-all the documents in the current package, and `fpm::document::Document` and the
+all the documents in the current package, and `fastn::document::Document` and the
 corresponding `get_documents()` gives you a vector of these documents for easier
 time handling all files. The main job this `get_documents()` is abstracting over
 the directory walking so you do not have to worry about anything and you can just
@@ -3781,7 +3781,7 @@ src: https://i.imgur.com/EKBUF48.jpg
 width: fill
 
 So our bullock-cart should be `std::path::PathBuf`. Also instead of framework - a
-full on abstraction over file system, as that is what the `fpm::document` module
+full on abstraction over file system, as that is what the `fastn::document` module
 is trying to be, an abstraction over file system so you do not have to deal with
 file system API - we should think of use cases and write helper methods.
 
@@ -3832,10 +3832,10 @@ storing paths, so we do not have to do `.unwrap()` when converting path to str
 everywhere.
 
 
--- ft.h2: Contract 4: If `fpm::Config` exists we can be sure its a proper package
+-- ft.h2: Contract 4: If `fastn::Config` exists we can be sure its a proper package
 
-We only create `fpm::Config` after verifying the package is proper (it may not
-have all the valid ftd files etc, but its FPM.ftd exists and is valid, and its
+We only create `fastn::Config` after verifying the package is proper (it may not
+have all the valid ftd files etc, but its FASTN.ftd exists and is valid, and its
 dependencies have been checked).
 
 We generally want to make as many such guarantee, if there is ever a
@@ -3865,9 +3865,9 @@ the only thing, this is the last resort, all best practices should be used when
 creating paths.
 
 
--- ft.h1: `fpm fmt`
+-- ft.h1: `fastn fmt`
 
-Added a new [CR about fpm formatter](/fpm/~/31/).
+Added a new [CR about fastn formatter](/fastn/~/31/).
 
 
 -- ft.h1: Markdown Index Support and 0.1.5 Release
@@ -3876,7 +3876,7 @@ Added a new [CR about fpm formatter](/fpm/~/31/).
 
 We already supported the conversion of markdown files to HTML during the build
 process. Shobhit has further [added "markdown index"
-support](https://github.com/FifthTry/fpm/pull/16), any directory that says `a` with
+support](https://github.com/FifthTry/fastn/pull/16), any directory that says `a` with
 `README.md` in it, without a corresponding `.ftd` file, we render the content of
 the `README.md` at `/a/`.
 
@@ -3893,17 +3893,17 @@ The motivation for package interface, and aliases, is to make it easy to change
 themes and "component libraries", without doing much change in your package.
 
 When using a theme or a component library you have to first add them as a
-dependency in your `FPM.ftd`:
+dependency in your `FASTN.ftd`:
 
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo
+\-- fastn.package: foo
 
-\-- fpm.dependency: some-lib
+\-- fastn.dependency: some-lib
 
 
 -- ft.markdown:
@@ -3973,7 +3973,7 @@ the two libraries. If the two were compatible we would only have to change one l
 in each ftd file when switching a library.
 
 
--- ft.h2: Using Package Alias in `FPM.ftd`
+-- ft.h2: Using Package Alias in `FASTN.ftd`
 
 We can do better by supporting package alias:
 
@@ -3981,16 +3981,16 @@ We can do better by supporting package alias:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo
+\-- fastn.package: foo
 
-\-- fpm.dependency: some-lib as lib
+\-- fastn.dependency: some-lib as lib
 
 
 -- ft.markdown:
 
-Here we have aliased `some-lib` to `lib` in `FPM.ftd` itself, so all the ftd files
+Here we have aliased `some-lib` to `lib` in `FASTN.ftd` itself, so all the ftd files
 in the package can just import `lib` now, and we have to do that much fewer change
 when switching:
 
@@ -4039,7 +4039,7 @@ then a package can declare that they implement `fifthtry/blog` by using
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- package: some-lib
 implements: fifthtry/blog
@@ -4048,7 +4048,7 @@ implements: fifthtry/blog
 -- ft.markdown:
 
 And say `new-lib` also has declared that they implement the same. Now our
-`fpm check` (and `fpm build` etc) will check if the contract is indeed valid, if
+`fastn check` (and `fastn build` etc) will check if the contract is indeed valid, if
 indeed `some-lib` has exactly the same types and components with compatible names
 and arguments as `fifthtry/blog`, else everything fails.
 
@@ -4062,11 +4062,11 @@ Now when someone is using `some-lib` they can do the following:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo
+\-- fastn.package: foo
 
-\-- fpm.dependency: some-lib
+\-- fastn.dependency: some-lib
 interface: fifthtry/blog
 
 
@@ -4085,11 +4085,11 @@ package is long etc, you can also use alias.
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo
+\-- fastn.package: foo
 
-\-- fpm.dependency: some-lib as blog
+\-- fastn.dependency: some-lib as blog
 interface: fifthtry/blog
 
 
@@ -4222,24 +4222,24 @@ scroll to read the docs, so patching source is also needed.
 9th Dec 2021
 
 
-- [x] `fpm sync <list of files file>`
-- [x] `fpm status <file>` to show all statuses for the file
-- [x] `fpm status` to show status of adhoc tracking but not translation stuff
-- [ ] `fpm translation-status`
-- [ ] `fpm translation-status <file or folder>`
-- [ ] `fpm stop-tracking`
-- [ ] `fpm mark-upto-date a --target b --on <timestamp>`
-- [ ] `fpm diff <optional-folder>` to only show regular diff (only changes from
+- [x] `fastn sync <list of files file>`
+- [x] `fastn status <file>` to show all statuses for the file
+- [x] `fastn status` to show status of adhoc tracking but not translation stuff
+- [ ] `fastn translation-status`
+- [ ] `fastn translation-status <file or folder>`
+- [ ] `fastn stop-tracking`
+- [ ] `fastn mark-upto-date a --target b --on <timestamp>`
+- [ ] `fastn diff <optional-folder>` to only show regular diff (only changes from
       .history file)
-- [ ] `fpm diff <file>` to show all diffs (including tracking diff, translation
+- [ ] `fastn diff <file>` to show all diffs (including tracking diff, translation
        diff)
-- [ ] `fpm diff -a` to show everything for every file`
+- [ ] `fastn diff -a` to show everything for every file`
 
 
 -- ft.h1: Ad hoc Tracking Is Here!
 
-Arpita has finished implementing the first version of `fpm start-tracking` and
-`fpm mark-upto-date` commands, and updated `fpm status` and `fpm diff` to support
+Arpita has finished implementing the first version of `fastn start-tracking` and
+`fastn mark-upto-date` commands, and updated `fastn status` and `fastn diff` to support
 ad-hoc tracking.
 
 
@@ -4281,7 +4281,7 @@ Here we are assuming if a file is deleted and another file with the same name is
 created later, the two files are logically not related at all and just happen to
 share the name.
 
-We can also show users a warning when they do `fpm status` etc, saying a file is
+We can also show users a warning when they do `fastn status` etc, saying a file is
 gone and prompt them to `stop-tracking` explicitly.
 
 
@@ -4312,30 +4312,30 @@ We can use the db aliases in the query.
 
 One of the issues with SQLite is we may not be able to do an optimisation.
 
-When things are rendered via `fpm-repo` things are fine, but when using `fpm build`,
+When things are rendered via `fastn-repo` things are fine, but when using `fastn build`,
 things can become a problem if the package size or complexity grows. With support
 for HTTP request handling and SQLite queries, and we will be adding a lot of stuff,
-we are just getting started, the time it takes `fpm build` may start becoming an
+we are just getting started, the time it takes `fastn build` may start becoming an
 issue.
 
 One way to speed things could be to do build caching, do not rebuild something that
 has no change. Consider the simple case, `a.ftd`, which does not import any other
-document. Consider also we do not have dynamic features like `fpm.now` which
+document. Consider also we do not have dynamic features like `fastn.now` which
 returns the current time. In such cases, we can choose to not rebuild `a.ftd` if
 the content of `a.ftd` hasn't changed.
 
 We can detect if a document uses another document or dynamic features, and we can
 store this information, and use it when to decide if we should rebuild things or
-not. Eg, if we know some document has used `fpm.now` and has no other dependency and
+not. Eg, if we know some document has used `fastn.now` and has no other dependency and
 that document's content hasn't changed, we still want to regenerate the
-corresponding html, as `fpm.now` returns a different value on every run.
+corresponding html, as `fastn.now` returns a different value on every run.
 
 We can do this optimisation for `sqlite` as well if a random sqlite file has been
 used. If the sqlite database file has changed then we need to rebuild the document
 that queries that sqlite database even if the document itself hasn't changed.
 
 But when we talk about query against package database, a sqlite database that we
-would be creating/updating based on the content of all documents in an fpm package,
+would be creating/updating based on the content of all documents in an fastn package,
 that sqlite will always change, and any document that queries that package database
 can never be cached.
 
@@ -4364,21 +4364,21 @@ performance of the build at all? Because we currently do not support auto reload
 
 Auto reload means we have to support the demand generation of pages, in which
 case we don't have to worry about caching, the moment we introduce support for
-`fpm server`, even without auto reload feature, this whole discussion would go
+`fastn server`, even without auto reload feature, this whole discussion would go
 moot.
 
-Making `fpm build` fast would be important, but then we can ignore it as it's no
+Making `fastn build` fast would be important, but then we can ignore it as it's no
 longer urgent, as so far my concern was author edit workflow, which would be
-improve much more by auto reload and fpm serve than making `fpm build` fast.
+improve much more by auto reload and fastn serve than making `fastn build` fast.
 
 
 -- ft.h1: Merged: Static File Support Is Here!
 
-Till now `fpm build` used to only process `.ftd` files in an fpm package. Shobhit
+Till now `fastn build` used to only process `.ftd` files in an fastn package. Shobhit
 has added support for handling static files (files other than ftd and markdown, and
-not ignored by `.gitignore`/`fpm.ignore` etc).
+not ignored by `.gitignore`/`fastn.ignore` etc).
 
-Now we can add images etc as part of an FPM package and they get included in
+Now we can add images etc as part of an FASTN package and they get included in
 generated static site.
 
 Since we kind of now include all files in the current directory, it may be a good
@@ -4388,7 +4388,7 @@ published, both for performance and security reasons.
 
 -- ft.h1: Thoughts: Security
 
-One kind of thing we have to be constantly aware of when writing/reviewing any FPM
+One kind of thing we have to be constantly aware of when writing/reviewing any FASTN
 code is accidentally copying say `/etc/passwd` to the built file. This can happen
 say if we started support symlinks, and someone has a package that you are
 contributing to, and symlink gets you to accidentally copy more stuff to `.build`
@@ -4413,10 +4413,10 @@ any harm either.
 Our FTD must not get any feature, for instance, letting people directly execute
 commands from a package, without user understanding the command (this can happen
 when a package is being downloaded for the first time, we should show all the
-external commands this fpm package is going to be able to run etc).
+external commands this fastn package is going to be able to run etc).
 
 The thing is this is very tricky, we can not say we don't want to let package
-authors run anything, that will significantly decrease the power of FPM packages.
+authors run anything, that will significantly decrease the power of FASTN packages.
 We have to allow people to query data from their trusted data stores, to make it
 part of generated documents, *if they want to*. But we can not surprise people.
 Even HTTP requests are sensitive, not just command execution.
@@ -4424,8 +4424,8 @@ Even HTTP requests are sensitive, not just command execution.
 
 -- ft.h1: Markdown Special Variables
 
-- fpm.markdown-filename etc
-- fpm.package.name vs FPM.package-specific-variable
+- fastn.markdown-filename etc
+- fastn.package.name vs FASTN.package-specific-variable
 - import path disambiguation, can be use : as separator
 - `import: <package>:` is ugly, import foo means foo is either in current package
   or a package which is a direct dependency of current package
@@ -4453,24 +4453,24 @@ exposing: y
 Here, `x` is either a document in current package or a package.
 
 
--- ft.code: fpm and markdown
+-- ft.code: fastn and markdown
 lang: ftd
 
 \-- import: vars
-from: fpm
+from: fastn
 
-\-- import: fpm
+\-- import: fastn
 
 
 -- ft.markdown:
 
-What if we have `fpm.ftd` in current package, who to import it?
+What if we have `fastn.ftd` in current package, who to import it?
 
 
--- ft.code: fpm and markdown
+-- ft.code: fastn and markdown
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 from: .
 
 
@@ -4495,10 +4495,10 @@ lang: py
 
 import os
 
-# FPM-START: foo
+# FASTN-START: foo
 def foo():
     print("this is foo")
-# FPM-END: foo
+# FASTN-END: foo
 
 
 -- ft.markdown:
@@ -4509,24 +4509,24 @@ extend it to use on component construction as well.
 We may also want to specify more than just the body as well, eg other headers.
 
 
--- ft.h1: `fpm tracks` and `fpm mark` is here!
+-- ft.h1: `fastn tracks` and `fastn mark` is here!
 
 Arpita implemented these two commands.
 
-We had a funky `fpm a tracks b` idea, which no command line tool does. She used
-the `fpm tracks destination source` syntax. We should make it maybe:
-`fpm start-tracking <f1> --target <f2>`. Also the code assumes we will only track
+We had a funky `fastn a tracks b` idea, which no command line tool does. She used
+the `fastn tracks destination source` syntax. We should make it maybe:
+`fastn start-tracking <f1> --target <f2>`. Also the code assumes we will only track
 `ftd` files, but we have to be able to track any file. Remove `.ftd` prefix
 handling.
 
-`fpm mark-upto-date <f1> --target <f2>`. Here target would be optional eventually,
+`fastn mark-upto-date <f1> --target <f2>`. Here target would be optional eventually,
 if the target was missing and `f1` tracks more than one file then the cli would
 prompt which file.
 
 If the file is not found it silently returns, should report the error. If file is
 already being tracked it should show some message.
 
-Not sure if `fpm diff` should show all the diffs, local modifications and tracking
+Not sure if `fastn diff` should show all the diffs, local modifications and tracking
 diff, or should we have a separate command.
 
 
@@ -4534,7 +4534,7 @@ diff, or should we have a separate command.
 
 8th Dec 2021
 
-Recorded a design review of what I am calling the upcoming "FPM Web Framework".
+Recorded a design review of what I am calling the upcoming "FASTN Web Framework".
 
 
 -- ft.youtube:
@@ -4544,14 +4544,14 @@ id: SdpCVTk84DM
 -- ft.h1: 100th Commit! We now honour `.gitignore` etc
 
 Shobhit just [implemented support ignoring files that `git`
-ignores](https://github.com/FifthTry/fpm/commit/c9aded47ef26785a6d49949ddf8b71a09921b5dd).
-You can also ignore more files by populating `fpm.ignore: string list` with
+ignores](https://github.com/FifthTry/fastn/commit/c9aded47ef26785a6d49949ddf8b71a09921b5dd).
+You can also ignore more files by populating `fastn.ignore: string list` with
 patterns that are compatible with `.gitignore` file patterns.
 
 
 -- ft.h1: Some thoughts on Versioning
 
-FPM is for storing documentation and not software. Git is for storing software and
+FASTN is for storing documentation and not software. Git is for storing software and
 people also use it for storing documentation.
 
 
@@ -4906,7 +4906,7 @@ the project while maintaining the highest quality documentation).
 7th Dec 2021
 
 Yesterday I [started implementing SQLite
-support](https://github.com/FifthTry/fpm/commit/3c2662a6797495c7ead4b7b3bb9c431616b1bf00)
+support](https://github.com/FifthTry/fastn/commit/3c2662a6797495c7ead4b7b3bb9c431616b1bf00)
 for FTD documents via `$processor$` mechanism of `ftd`. It was stuck on some
 missing helper utilities in FTD, you can see the two functions at the end with
 `todo!()` as their body.
@@ -4916,8 +4916,8 @@ implementing those functions in ftd](https://github.com/FifthTry/ftd/pull/24). S
 can't not work even when down it seems!
 
 On that change landed I got the [`$processor$: package-query`
-working](https://github.com/FifthTry/fpm/commit/89d8ba1d1d5f93b5f8b58e306dd8b6b8965f1fb5).
-Update the [documentation](/fpm/package-query/) as well.
+working](https://github.com/FifthTry/fastn/commit/89d8ba1d1d5f93b5f8b58e306dd8b6b8965f1fb5).
+Update the [documentation](/fastn/package-query/) as well.
 
 During implementation, I found out that [`serde-json` support for
 rusqlite](https://docs.rs/rusqlite/0.26.1/rusqlite/types/trait.FromSql.html#impl-FromSql-for-Value) is
@@ -4925,7 +4925,7 @@ actually, umm, not sure what word to use, not buggy per se, but kind of not as
 useful as I first thought it would be. It converts only the text field to
 `serde_json::Value`, when other fields like integer, float etc can also be easily
 converted to `serde_json::Value`. I implemented a [simple converter for other
-sqlite data types as well](https://github.com/FifthTry/fpm/blob/53492bb14f16983569184f0acfd9c1f45ddf1c32/src/library/sqlite.rs#L102-L108).
+sqlite data types as well](https://github.com/FifthTry/fastn/blob/53492bb14f16983569184f0acfd9c1f45ddf1c32/src/library/sqlite.rs#L102-L108).
 
 We are not done yet. We need the ability to pass parameters to queries. Also, those
 parameters should be able to refer to other ftd variables. And finally, we should
@@ -4943,7 +4943,7 @@ tracked.
 
 Once we have ad-hoc tracking, we are going to work on translation tracking, where
 a package would be able to designate itself to be a translation of another package
-using `translation-of` key in `FPM.ftd`. When a package tracks another package like
+using `translation-of` key in `FASTN.ftd`. When a package tracks another package like
 this it means two things.
 
 
@@ -4953,7 +4953,7 @@ All files of the translation package are assumed to be tracking the correspondin
 file for the original package being translated.
 
 In ad-hoc tracking, you have to explicitly add tracking information using planned
-`fpm a tracks b` command. But with translation, tracking relationships are
+`fastn a tracks b` command. But with translation, tracking relationships are
 implicitly assumed.
 
 
@@ -5017,12 +5017,12 @@ logical place.
 We can also create a dedicated "document info" area, say a banner at the top, and
 then theme does not need to bother with all that.
 
-We can even let people customise say `FPM/document-info.ftd` file whose content
+We can even let people customise say `FASTN/document-info.ftd` file whose content
 would be included in the special area.
 
 And finally, we can let these writers specify that they have indeed included the
-document info in the theme itself and `fpm` should not show
-`FPM/document-info.ftd`, maybe we inherit `FPM/document-info` from the theme and
+document info in the theme itself and `fastn` should not show
+`FASTN/document-info.ftd`, maybe we inherit `FASTN/document-info` from the theme and
 let the theme set it to an empty file?
 
 There is a little complexity when an FTD document basically says unload me and load
@@ -5053,28 +5053,28 @@ This is still under works.
 -- ft.h1: SQLite Support
 
 Since we are anyways going to implement some sqlite support for [package
-database](/fpm/~/16/), we may as well let people include arbitrary sqlite files in
+database](/fastn/~/16/), we may as well let people include arbitrary sqlite files in
 the package, and let people do arbitrary SQL queries on top of any of the sqlite
 databases in the package or any package that is a dependency of this package.
 
-[Change Request](/fpm/~/26/).
+[Change Request](/fastn/~/26/).
 
 [Partially implemented `$processor$:
-package-query`](https://github.com/FifthTry/fpm/commit/3c2662a6797495c7ead4b7b3bb9c431616b1bf00).
+package-query`](https://github.com/FifthTry/fastn/commit/3c2662a6797495c7ead4b7b3bb9c431616b1bf00).
 Need two methods in `ftd` crate, waiting for Arpita to get better and implement
 them.
 
 
--- ft.h1: Dynamic Documents and FPM Action
+-- ft.h1: Dynamic Documents and FASTN Action
 
 Recently I implemented `$processor$: http`, which paves the way for almost fully
-fledged ["dynamic"/data drive documents](///www.fifthtry.com/fpm/~/20/). To really
+fledged ["dynamic"/data drive documents](///www.fifthtry.com/fastn/~/20/). To really
 expose this feature, we can implement arbitrary URL handing, currently only the
 URLs corresponding to actual FTD files is available, this is too limiting as we can
 not have author page for example, where we need a URL for each author, and author
 list maybe in a table, or spread all over ftd documents.
 
-With a `FPM/URLs.ftd`, we can define URL patterns that can contain dynamic data, eg
+With a `FASTN/URLs.ftd`, we can define URL patterns that can contain dynamic data, eg
 `/<username>/` etc. We can map each URL pattern to a FTD file, and the file can
 extract the data by defining a schema (eg a record), where the fields of record
 would be populated by URL query parameters, URL fragments (eg `username`) here, or
@@ -5083,54 +5083,54 @@ even request body if its available.
 We will sometime need redirect etc, eg if you need login to access something, or
 if the page has moved etc. So we need a mechanism to early return, currently its
 not possible in a FTD document to let a document say we are done processing the
-page. At least we can have some standard variable, eg `fpm.redirect-url`, which
-when set, FPM will ignore the document and return the content of `fpm.redirect-url`
-instead, along with some instruction to `fpm.js` to update the URL displayed in
+page. At least we can have some standard variable, eg `fastn.redirect-url`, which
+when set, FASTN will ignore the document and return the content of `fastn.redirect-url`
+instead, along with some instruction to `fastn.js` to update the URL displayed in
 browser.
 
 This is almost the design of [`realm`](///www.amitu.com/realm/). Once I wrote that
 I realised we also need an equivalent of "realm actions", and turned out the design
-is really easy. Wrote about it in another CR: [fpm
-actions](///www.fifthtry.com/fpm/~/24/).
+is really easy. Wrote about it in another CR: [fastn
+actions](///www.fifthtry.com/fastn/~/24/).
 
-The key element of actions is now we need a `fpm.js`, which will have some
-behaviour, and this paves the way for [fpm client
-variables](///www.fifthtry.com/fpm/~/25/).
+The key element of actions is now we need a `fastn.js`, which will have some
+behaviour, and this paves the way for [fastn client
+variables](///www.fifthtry.com/fastn/~/25/).
 
 
 -- ft.h1: Client Variables
 
-Some variables can only be computed by client. So we need to ship a `fpm.js`, which
+Some variables can only be computed by client. So we need to ship a `fastn.js`, which
 will compute them, and pass them to FTD. Some of these variables would also change
 during the lifetime of the page.
 
-`fpm.js` will also do some browser history control, for managing server side
-"internal redirect", and `fpm actions`.
+`fastn.js` will also do some browser history control, for managing server side
+"internal redirect", and `fastn actions`.
 
 
--- ft.h1: `fpm sync`, `fpm status` and `fpm diff`
+-- ft.h1: `fastn sync`, `fastn status` and `fastn diff`
 
 5th Dec 2021
 
-Arpita has been on fire, implemented these three commands. This makes `fpm` puts
-some "version control" features in `fpm`. Our goal is not become simplified git,
+Arpita has been on fire, implemented these three commands. This makes `fastn` puts
+some "version control" features in `fastn`. Our goal is not become simplified git,
 we definitely take a lot of inspiration from them, but more like advance
 Dropbox/iCloud.
 
-`fpm repo` is needed before we can really call ourselves version control or compare
+`fastn repo` is needed before we can really call ourselves version control or compare
 ourselves with Dropbox/iCloud etc. But if you are using Dropbox/iCloud, you can
 already benefit from these commands.
 
-Our goal now is to implement [`adhoc tracking`](/fpm/~/12/), and get to
-[`translation tracking`](/fpm/~/3/).
+Our goal now is to implement [`adhoc tracking`](/fastn/~/12/), and get to
+[`translation tracking`](/fastn/~/3/).
 
 
 -- ft.h1: `$processor$: toc` and `$processor$: http`
 
 5th Dec 2021
 
-We implemented [these two processors](/fpm/processors/). TOC processor helps you
-when you are trying to create navigation bars, or table of content of your FPM
+We implemented [these two processors](/fastn/processors/). TOC processor helps you
+when you are trying to create navigation bars, or table of content of your FASTN
 site (this is not the intra page TOC, which we still do not know how to implement).
 
 `$processor$: http` lets you fetch data from any HTTP endpoint that returns JSON
@@ -5142,9 +5142,9 @@ data from all sorts of places, data driven graphs and tables etc can be created.
 
 4th Dec 2021
 
-We just added font support. This allows people to use custom fonts with FTD/FPM.
+We just added font support. This allows people to use custom fonts with FTD/FASTN.
 
-You can specify the fonts you want loaded in [`FPM.ftd`](/fpm/FPM/) file.
+You can specify the fonts you want loaded in [`FASTN.ftd`](/fastn/FASTN/) file.
 
 
 -- ft.h1: Package Dependency Fetching
@@ -5155,7 +5155,7 @@ Shobhit added support for adding package dependency, and fetching dependencies f
 Github or any tar file. We store the dependencies in `.packages`.
 
 Lots still pending, recursive package dependency, or any way to update a package,
-looking for packages in FPM_HOME, but its exciting to have this feature land so
+looking for packages in FASTN_HOME, but its exciting to have this feature land so
 soon.
 
 
@@ -5163,36 +5163,36 @@ soon.
 
 1st Dec 2021
 
-Wrote about the design of [package database](/fpm/~/16/), basically a sqlite
-database that we will maintain in the initial phase of `fpm build`, and a way to
+Wrote about the design of [package database](/fastn/~/16/), basically a sqlite
+database that we will maintain in the initial phase of `fastn build`, and a way to
 query that database to get data stored in different ftd documents that are part
-of the FPM package.
+of the FASTN package.
 
-This can make fpm packages the ideal data sharing format. You can have data
-authored in FTD, and packaged as FPM package, along with some UI code, and publish
-them to `fpm repo`. And then other packages can have a dependency on the original
-data package, fpm will download the data, and they can do something more with it,
+This can make fastn packages the ideal data sharing format. You can have data
+authored in FTD, and packaged as FASTN package, along with some UI code, and publish
+them to `fastn repo`. And then other packages can have a dependency on the original
+data package, fastn will download the data, and they can do something more with it,
 create more visualisations, augment data even more using `$processors$` etc, and
 maybe publish that package again for other to consume.
 
 
 -- ft.h1: Update for 30th Nov 2021
 
-Shobhit is working full time on FPM now. We managed to nail down quite a bit of
+Shobhit is working full time on FASTN now. We managed to nail down quite a bit of
 our design now.
 
 
--- ft.h2: `fpm build` working
+-- ft.h2: `fastn build` working
 
-Finally we can start using `fpm`. We have created a template repo:
-[FifthTry/fpm-blog](https://github.com/FifthTry/fpm-blog), [rendered
-version](https://fifthtry.github.io/fpm-blog/), which shows how to create a blog
-using FTD and FPM.
+Finally we can start using `fastn`. We have created a template repo:
+[FifthTry/fastn-blog](https://github.com/FifthTry/fastn-blog), [rendered
+version](https://fifthtry.github.io/fastn-blog/), which shows how to create a blog
+using FTD and FASTN.
 
 
 -- ft.h2: Design Review With Arpita
 
-Me and Arpita recorded a detailed design review of FPM.
+Me and Arpita recorded a detailed design review of FASTN.
 
 
 -- ft.youtube:
@@ -5206,17 +5206,17 @@ id: rny1EGkqw_M
 We have started working on this project now. We have written design docs for quite
 a few elements:
 
-- `fpm build`: [file system organization](/fpm/~/1/)
-- [logical linking](/fpm/~/2/)
-- [translation tracking](/fpm/~/3/)
-- [version tracking](/fpm/~/5/)
-- [history tracking](/fpm/~/4/)
-- [cr tracking](/fpm/~/6/)
-- [upstream tracking: two way sync](/fpm/~/7/)
-- [`fpm-repo` authentication](/fpm/~/8/)
-- [package dependencies](/fpm/~/9/)
-- [access control](/fpm/~/10/)
+- `fastn build`: [file system organization](/fastn/~/1/)
+- [logical linking](/fastn/~/2/)
+- [translation tracking](/fastn/~/3/)
+- [version tracking](/fastn/~/5/)
+- [history tracking](/fastn/~/4/)
+- [cr tracking](/fastn/~/6/)
+- [upstream tracking: two way sync](/fastn/~/7/)
+- [`fastn-repo` authentication](/fastn/~/8/)
+- [package dependencies](/fastn/~/9/)
+- [access control](/fastn/~/10/)
 
 [Shobhit](https://github.com/sharmashobit) is taking the lead of implementing this.
 We are hoping to create a minimal version that can convert ftd files to HTML so
-`fpm` can be considered an alternative to static site generators.
+`fastn` can be considered an alternative to static site generators.

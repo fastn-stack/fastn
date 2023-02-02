@@ -7,27 +7,27 @@
 -- ft.h0: Roadmap
 
 
--- ft.h1: FPM as kickass SSG tool
+-- ft.h1: FASTN as kickass SSG tool
 
-- `fpm build`: [file system organization](/fpm/~/1/)
-- [package dependencies](/fpm/~/9/)
+- `fastn build`: [file system organization](/fastn/~/1/)
+- [package dependencies](/fastn/~/9/)
 - package cargo binary for different os/arch
-- [`$processor$`](https://www.fifthtry.com/fpm/~/14/)
+- [`$processor$`](https://www.fifthtry.com/fastn/~/14/)
 
 
 -- ft.h1: Core Features
 
 - search
-- [package interface](/fpm/~/11/)
-- `fpm serve`, figure out how to do http serving
-- [logical linking](/fpm/~/2/)
-- `fpm-repo`, [auth](/fpm/~/8/) & [`fpm sync` for two way sync](/fpm/~/7/)
-- [history tracking](/fpm/~/4/)
-- [ad-hoc tracking](/fpm/~/12/)
-- [translation tracking](/fpm/~/3/)
-- [version tracking](/fpm/~/5/)
-- [cr tracking](/fpm/~/6/)
-- [access control](/fpm/~/10/)
+- [package interface](/fastn/~/11/)
+- `fastn serve`, figure out how to do http serving
+- [logical linking](/fastn/~/2/)
+- `fastn-repo`, [auth](/fastn/~/8/) & [`fastn sync` for two way sync](/fastn/~/7/)
+- [history tracking](/fastn/~/4/)
+- [ad-hoc tracking](/fastn/~/12/)
+- [translation tracking](/fastn/~/3/)
+- [version tracking](/fastn/~/5/)
+- [cr tracking](/fastn/~/6/)
+- [access control](/fastn/~/10/)
 
 
 -- ft.h1: Importer & Exporters
@@ -50,8 +50,8 @@
 -- ft.h1: Tutorials & Documentation
 
 - hello world
-- how to create a new fpm component library
-- translating projects using fpm
+- how to create a new fastn component library
+- translating projects using fastn
 - documentation of versioned software
-- how to use github for collaboration over a `fpm` package
-- how to setup your own `fpm-repo` on heroku
+- how to use github for collaboration over a `fastn` package
+- how to setup your own `fastn-repo` on heroku

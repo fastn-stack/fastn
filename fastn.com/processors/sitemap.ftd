@@ -1,10 +1,10 @@
 -- ds.page: `$processor$: sitemap`
 
 
--- ds.code: Sitemap in `FPM.ftd`
+-- ds.code: Sitemap in `FASTN.ftd`
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 readers: <group name>
 writers: <group name>
 
@@ -30,10 +30,10 @@ writers: <group name>
 
 -- ds.markdown:
 
-The sitemap get parse into a record `sitemap-data`. This record is present in `fpm`
+The sitemap get parse into a record `sitemap-data`. This record is present in `fastn`
 The record looks like this
 
--- ds.code: record `sitemap-data` (fpm.ftd)
+-- ds.code: record `sitemap-data` (fastn.ftd)
 lang: ftd
 
 \-- record sitemap-data:

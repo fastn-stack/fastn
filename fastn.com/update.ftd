@@ -1,9 +1,9 @@
--- ds.page: `fpm update`
+-- ds.page: `fastn update`
 
 
 -- ds.markdown: 
 
-`fpm update` updates all the dependencies of the package.
+`fastn update` updates all the dependencies of the package.
 
 Note: Currently we simply delete `.packages` folder and re-download everything, so
 do not do any modifications in `.packages` or do not run this command.

@@ -4,26 +4,26 @@
 $processor$: toc
 
 - index.html
-  fpm: FTD Package Manager
+  fastn: FTD Package Manager
 - about/
-  About `fpm`
+  About `fastn`
 - roadmap/
   Roadmap
 - journal/
   Journal
 - fs/
   File System Organization
-  - fpm-ftd-file/
-    `FPM.ftd`
+  - fastn-ftd-file/
+    `FASTN.ftd`
 - install/
-  Install `fpm`
+  Install `fastn`
 - usage/
-  `fpm` Usage
+  `fastn` Usage
   - build/
-    `fpm build`
+    `fastn build`
   - sync/
-    `fpm sync`
+    `fastn sync`
   - status/
-    `fpm status`
+    `fastn status`
   - diff/
-    `fpm diff`
+    `fastn diff`

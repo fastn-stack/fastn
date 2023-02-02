@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 
 
@@ -7,12 +7,12 @@
 toc: $ft.toc
 
 
--- ft.h0: `fpm diff`
+-- ft.h0: `fastn diff`
 
-`fpm diff` shows the changes in the package, compared with what was last synced
-using `fpm sync`.
+`fastn diff` shows the changes in the package, compared with what was last synced
+using `fastn sync`.
 
--- ft.code: fpm diff
+-- ft.code: fastn diff
 lang: diff
 
 diff: foo.ftd

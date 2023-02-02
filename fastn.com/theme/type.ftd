@@ -1,8 +1,8 @@
--- ds.page: FPM Typography
+-- ds.page: FASTN Typography
 
 -- ds.markdown: 
 
-FPM Typography
+FASTN Typography
 
 -- ds.h1: `inherited.types.heading-large`
 
@@ -15,7 +15,7 @@ weight: 400
 -- ds.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- ftd.text: FifthTry
 role: $inherited.types.heading-large

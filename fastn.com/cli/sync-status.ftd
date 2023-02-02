@@ -1,9 +1,11 @@
--- ft.page: `fpm sync-status`
+-- import: ds as ft
+
+-- ft.page: `fastn sync-status`
 
 This command shows the [workspace](glossary/#workspace) status.
 
 It displays files that have differences between the [remote-manifest](glossary/#remote-manifest)
-and your workspace, and new files in the workspace that are not tracked by FPM
+and your workspace, and new files in the workspace that are not tracked by FASTN
 
 -- ft.h1: Options
 
@@ -19,7 +21,7 @@ This commands gives following status of the file.
 -- ft.h2: `Added`
 
 This is the status for the new files added to workspace using
-[`fpm add <file-name>`](cli/add/).
+[`fastn add <file-name>`](cli/add/).
 
 -- ft.h2: `Updated`
 
@@ -29,13 +31,13 @@ modified but not yet synced.
 -- ft.h2: `Deleted`
 
 This is the status for the files that already exist in workspace and are
-marked deleted using [`fpm rm <file-name>`](cli/rm/)
+marked deleted using [`fastn rm <file-name>`](cli/rm/)
 
 -- ft.h2: `Up-to-date`
 
 This is the status for the files that already exist in workspace and are
 unchanged. This status is only visible when trying to check the status of
-unchanged file using `fpm sync-status <file-name>`.
+unchanged file using `fastn sync-status <file-name>`.
 
 -- ft.h2: `Conflict`
 

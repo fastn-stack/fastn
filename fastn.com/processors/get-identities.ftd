@@ -14,25 +14,25 @@ $processor$: get-identities
 
 This will initialise the list `identities` with the user's identities.
 
-If user groups defined in project `FPM.ftd` like below so `get-identities`
+If user groups defined in project `FASTN.ftd` like below so `get-identities`
 processor for URL `/page/` will return `readers` group `identities` including
 `writers` group identities which are [`email: abrark@gmail.com`,
 `email: abrark1@gmail.com`, `email: arpita1@gmail.com`].
 
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: readers
+\-- fastn.user-group: readers
 email: abrark@gmail.com
 -github: amitu
 group: writers
 
-\-- fpm.user-group: writers
+\-- fastn.user-group: writers
 email: abrark1@gmail.com
 email: arpita1@gmail.com
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Section: /
 

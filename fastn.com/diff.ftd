@@ -1,13 +1,13 @@
--- ds.page: `fpm diff`
+-- ds.page: `fastn diff`
 
 
 -- ds.markdown: 
 
-`fpm diff` shows the changes in the package, compared with what was last synced
-using `fpm sync`.
+`fastn diff` shows the changes in the package, compared with what was last synced
+using `fastn sync`.
 
 
--- ds.code: fpm diff
+-- ds.code: fastn diff
 lang: diff
 
 diff: foo.ftd

@@ -1,11 +1,11 @@
--- import: fpm
+-- import: fastn
 -- import: ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.doc-page:
 toc: $ft.toc
 
--- ft.h0: About `fpm`
+-- ft.h0: About `fastn`
 
 [`ftd`](https://ftd.dev) is a {language} to create web pages or documents for
 publishing on the web. It starts with Markdown, but adds features to create full
@@ -13,36 +13,36 @@ page layouts, lets you create reusable "ftd components", and has first class
 support for data modelling, so the `ftd` document can be used as an data exchange
 format as well (as a replacement of JSON/CSV etc).
 
-`fpm` is "`ftd` package manager", defines a package format for packaging `ftd`
-files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
+`fastn` is "`ftd` package manager", defines a package format for packaging `ftd`
+files. `fastn` packages can depend on other `fastn` packages, and `fastn` can install
 all the dependencies of a package.
 
-`fpm` can also convert `ftd` files to static HTML files, so you can publish FTD
+`fastn` can also convert `ftd` files to static HTML files, so you can publish FTD
 files on github pages, S3 etc static site hosting sites.
 
 
 
 
 -- ftd.text language: This is the language
-background-color if not $fpm.dark-mode: yellow
-color if $fpm.dark-mode: yellow
+background-color if not $fastn.dark-mode: yellow
+color if $fastn.dark-mode: yellow
 
 
--- ft.h1: `fpm-repo`
+-- ft.h1: `fastn-repo`
 
-`fpm` packages can be shared with others by using `.tar.gz` format defined by `fpm`
-or via Git repository (any version control system for that matter). `fpm` is
+`fastn` packages can be shared with others by using `.tar.gz` format defined by `fastn`
+or via Git repository (any version control system for that matter). `fastn` is
 capable of downloading package dependencies for packages that are hosted on version
 control systems or tarballs served over HTTP.
 
-`fpm` has a sister project, `fpm-repo` (under development), which can be used for
-first class package hosting. You can chose if your `fpm` package would be natively
-hosted on say Github or via a `fpm-repo` you have created or available as SAAS.
+`fastn` has a sister project, `fastn-repo` (under development), which can be used for
+first class package hosting. You can chose if your `fastn` package would be natively
+hosted on say Github or via a `fastn-repo` you have created or available as SAAS.
 
-`fpm-repo` has advantages over Github etc hosting as a `fpm` package is inherently
-a web site, and `fpm-repo` shows the site directly, without a static build step.
+`fastn-repo` has advantages over Github etc hosting as a `fastn` package is inherently
+a web site, and `fastn-repo` shows the site directly, without a static build step.
 
-`ftd` has some dynamic features, which an be used when using `fpm-repo`.
+`ftd` has some dynamic features, which an be used when using `fastn-repo`.
 
-`fpm-repo` also offers web based editing experience, with built in version control,
+`fastn-repo` also offers web based editing experience, with built in version control,
 change request based workflow (equivalent to Github Pull Request workflow).

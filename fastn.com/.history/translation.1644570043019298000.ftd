@@ -1,12 +1,12 @@
 -- import: ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.doc-page:
 toc: $ft.toc
 
 -- ft.h0: Using translations
 
-FPM provides a first class support for translations of the documents. A particular
+FASTN provides a first class support for translations of the documents. A particular
 package can either be a translation or have translations pointing to other 
 packages. At the build time, we process your translations and generate metadata
 for each and every page in the corresponding package to ensure you as the project
@@ -27,20 +27,20 @@ this marks the current package as the `translation-of` of another package. You
 can now go ahead and start creating the corresponding ftd files in your 
 translation package.
 
--- ft.code: foo.com/FPM.ftd
+-- ft.code: foo.com/FASTN.ftd
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo.com
+\-- fastn.package: foo.com
 language: English
 
--- ft.code: bar.com/FPM.ftd
+-- ft.code: bar.com/FASTN.ftd
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: bar.com
+\-- fastn.package: bar.com
 translation-of: foo.com
 language: hi
 
@@ -48,18 +48,18 @@ language: hi
 
 Once you have a translation candidate ready, you can publish and deploy it to 
 your domain(bar.com). The translation repository(bar.com) can be marked an 
-official translation of `foo.com` by mapping the the same in `foo.com/FPM.ftd`
+official translation of `foo.com` by mapping the the same in `foo.com/FASTN.ftd`
 file along with providing the name of the language the current package belongs to.
 
 The translation
 
--- ft.code: foo.com/FPM.ftd
+-- ft.code: foo.com/FASTN.ftd
 lang: ftd
 
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo.com
+\-- fastn.package: foo.com
 language: English
 translation: bar.com
 

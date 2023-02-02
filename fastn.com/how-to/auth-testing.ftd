@@ -1,4 +1,4 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 -- ds.page: Auth Testing
 
@@ -8,33 +8,33 @@ package for `remote` and `local` testing.
 -- ds.h1: Local Testing with CLI Parameter `--identities`
 
 For authorization purpose we have to define [user groups](/dev/user-group/)
-in `FPM.ftd`.
+in `FASTN.ftd`.
 
--- ds.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FASTN.ftd`
 
 In the below group using `email` as identity.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: abrark-readers
+\-- fastn.user-group: abrark-readers
 email: abrark.asahi@gmail.com
 
 -- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Home: /
 readers: abrark-readers
 
--- ds.h2: Build `fpm` Binary
+-- ds.h2: Build `fastn` Binary
 
-Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
+Clone [`FifthTry/fastn`](https://github.com/fifthtry/fastn) and build it.
 
 -- ds.code:
 lang: sh
@@ -42,55 +42,55 @@ lang: sh
 cargo install --path=.
 
 
--- ds.h2: Run `fpm` with CLI Parameter `--identities`
+-- ds.h2: Run `fastn` with CLI Parameter `--identities`
 
 By setting `--identities` as `email: abrark.asahi@gmail.com` we are saying that
 at every http request this `email` is the user identity and check the permission
 against this user identity.
 
-Run `fpm` with cli parameter `--identities` in your package.
+Run `fastn` with cli parameter `--identities` in your package.
 
 -- ds.code:
 lang: sh
 
-fpm serve --port 8000 --identities 'email: abrark.asahi@gmail.com'
+fastn serve --port 8000 --identities 'email: abrark.asahi@gmail.com'
 
 
 -- ds.markdown:
 
 Open `/` in the browser, It will let access to `/` page. If you will change
-`email` identity in `FPM.ftd` to other email and reload page again, so it will
+`email` identity in `FASTN.ftd` to other email and reload page again, so it will
 show unauthorized access.
 
 
 -- ds.h1: Local Testing with Cookie `identities`
 
--- ds.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FASTN.ftd`
 
 In the below group using `email` as identity.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: abrark-readers
+\-- fastn.user-group: abrark-readers
 email: abrark.asahi@gmail.com
 
 -- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Home: /
 readers: abrark-readers
 
 
--- ds.h2: Build `fpm` Binary
+-- ds.h2: Build `fastn` Binary
 
-Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
+Clone [`FifthTry/fastn`](https://github.com/fifthtry/fastn) and build it.
 
 -- ds.code:
 lang: sh
@@ -98,14 +98,14 @@ lang: sh
 cargo install --path=.
 
 
--- ds.h2: Run `fpm`
+-- ds.h2: Run `fastn`
 
-Run `fpm` binary in your package.
+Run `fastn` binary in your package.
 
 -- ds.code:
 lang: sh
 
-fpm serve --port 8000
+fastn serve --port 8000
 
 
 -- ds.h2: Set Cookie `identities`
@@ -130,24 +130,24 @@ package. So if you starred [AbrarNitk/abrark](https://github.com/abrarnitk/abrar
 repository so it should let you access the document otherwise give unauthorized
 access.
 
--- ds.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FASTN.ftd`
 
 In the below group using `github-like` as identity.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: abrark-readers
+\-- fastn.user-group: abrark-readers
 github-like: AbrarNitk/abrark
 
 -- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Home: /
 readers: abrark-readers
@@ -194,25 +194,25 @@ lang: json
 Now copy `sid` cookie from `https://abrark.com/` and paste it in
 `http://127.0.0.1:8000` cookie with `sid` key.
 
-Note: Go to `fpm::controller::get_remote_identities` and change `remote_host` in
-`fpm`, to `abrark.com`.
+Note: Go to `fastn::controller::get_remote_identities` and change `remote_host` in
+`fastn`, to `abrark.com`.
 
 
--- ds.h2: Build `fpm` with Remote Feature
+-- ds.h2: Build `fastn` with Remote Feature
 
 -- ds.code:
 lang: sh
 
 cargo install --path=. --features remote
 
--- ds.h2: Run `fpm`
+-- ds.h2: Run `fastn`
 
-Run `fpm` binary in your package.
+Run `fastn` binary in your package.
 
 -- ds.code:
 lang: sh
 
-fpm serve --port 8000
+fastn serve --port 8000
 
 -- ds.markdown:
 

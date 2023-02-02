@@ -1,8 +1,8 @@
--- ds.page: `fpm::Package`
+-- ds.page: `fastn::Package`
 
-`fpm::Package` struct keeps track of a single fpm package.
+`fastn::Package` struct keeps track of a single fastn package.
 
-[Source Code](https://github.com/FifthTry/fpm/blob/main/src/config.rs)
+[Source Code](https://github.com/FifthTry/fastn/blob/main/src/config.rs)
 
 -- ds.code:
 lang: rs
@@ -17,23 +17,23 @@ pub struct Package {
     pub about: Option<String>,
     pub zip: Option<String>,
     pub download_base_url: Option<String>,
-    pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
+    pub translation_status_summary: Option<fastn::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
-    pub dependencies: Vec<fpm::Dependency>,
-    pub auto_import: Vec<fpm::AutoImport>,
-    pub fpm_path: Option<camino::Utf8PathBuf>,
+    pub dependencies: Vec<fastn::Dependency>,
+    pub auto_import: Vec<fastn::AutoImport>,
+    pub fastn_path: Option<camino::Utf8PathBuf>,
     pub ignored_paths: Vec<String>,
-    pub fonts: Vec<fpm::Font>,
+    pub fonts: Vec<fastn::Font>,
     pub import_auto_imports_from_original: bool,
     pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
-    pub sitemap: Option<fpm::sitemap::Sitemap>,
-    pub sitemap_temp: Option<fpm::sitemap::SitemapTemp>,
+    pub sitemap: Option<fastn::sitemap::Sitemap>,
+    pub sitemap_temp: Option<fastn::sitemap::SitemapTemp>,
     pub favicon: Option<String>,
 }
 
 -- ds.markdown:
 
-[`fpm::Font`](crate/font/).
+[`fastn::Font`](crate/font/).
 
 -- ds.h1: Package Properties
 
@@ -43,33 +43,33 @@ pub struct Package {
 
 -- ds.h2: `versioned`
 
-The `versioned` stores the boolean value storing of the fpm package is versioned
+The `versioned` stores the boolean value storing of the fastn package is versioned
 or not.
 
 -- ds.h2: `dependencies`
 
 `dependencies` keeps track of direct dependencies of a given package. This too
-should be moved to `fpm::Package` to support recursive dependencies etc.
+should be moved to `fastn::Package` to support recursive dependencies etc.
 
 
 -- ds.h2: `auto_import`
 
 `auto_import` keeps track of the global auto imports in the package.
 
--- ds.h2: `fpm_path`
+-- ds.h2: `fastn_path`
 
-`fpm_path` contains the fpm package root. This value is found in `FPM.ftd` or
-`FPM.manifest.ftd` file.
+`fastn_path` contains the fastn package root. This value is found in `FASTN.ftd` or
+`FASTN.manifest.ftd` file.
 
 -- ds.h2: `ignored_path`
 
-`ignored_path` keeps track of files that are to be ignored by `fpm build`,
-`fpm sync` etc.
+`ignored_path` keeps track of files that are to be ignored by `fastn build`,
+`fastn sync` etc.
 
 -- ds.h2: `fonts`
 
 `fonts` keeps track of the fonts used by the package.
-Note that this too is kind of bad design, we will move fonts to `fpm::Package`
+Note that this too is kind of bad design, we will move fonts to `fastn::Package`
 struct soon.
 
 -- ds.h2: `groups`
@@ -89,7 +89,7 @@ documents in package into the corresponding to structure.
 Optional path for favicon icon to be used.
 
 By default if any file favicon.* is present in package and favicon is not
-specified in FPM.ftd, that file will be used.
+specified in FASTN.ftd, that file will be used.
 
 If more than one favicon.* file is present, we will use them
 in following priority: .ico > .svg > .png > .jpg
@@ -98,25 +98,25 @@ in following priority: .ico > .svg > .png > .jpg
 
 `download_base_url` is base url from where package data has to download. We have
 to pass it also as command line parameter `--download-base-url` for main package,
-if `FPM.ftd` does not exists.
+if `FASTN.ftd` does not exists.
 
 
 -- ds.h1: Package Functions
 
--- ds.h2: `fpm::Package::generate_canonical_url()`
+-- ds.h2: `fastn::Package::generate_canonical_url()`
 
-`FPM.ftd` file can contain `canonical-url` key in `fpm.package` declaration. If
+`FASTN.ftd` file can contain `canonical-url` key in `fastn.package` declaration. If
 this key is present this function returns the canonical-url, else it returns
 empty string.
 
 -- ds.code:
 lang: rs
 
-pub fn fpm::Package::generate_canonical_url(&self, id: &str) -> String
+pub fn fastn::Package::generate_canonical_url(&self, id: &str) -> String
 
 -- ds.markdown:
 
 `id` is the identifier of the document for which we want the canonical-url. `id`
-is appended to `canonical-url` found in `FPM.ftd` file.
+is appended to `canonical-url` found in `FASTN.ftd` file.
 
 -- end: ds.page

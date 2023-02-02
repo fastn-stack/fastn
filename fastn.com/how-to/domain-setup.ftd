@@ -1,9 +1,9 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 
--- ds.page: FPM & FTD Domain Setup
+-- ds.page: FASTN & FTD Domain Setup
 
-Follow this documentation to setup your FPM & FTD domain.
+Follow this documentation to setup your FASTN & FTD domain.
 
 
 -- ds.h2: 1: Registering your domain on [Godaddy.com](https://www.godaddy.com/)
@@ -39,7 +39,7 @@ width: fill-container
 -- ds.h2: 2: GitHub repository 
 ;;id: step-2
 
-Let’s understand fpm project creation in just 5 minutes by playing!
+Let’s understand fastn project creation in just 5 minutes by playing!
 
 With this we are also going to create our new FTD website by following the very 
 short embedded tutorial.
@@ -53,13 +53,13 @@ Or
 Create your GitHub account by following simple steps by the 
 [GitHub sign-up process](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home).
 
-Now as you signed into your GitHub account, lets start creating our first fpm 
+Now as you signed into your GitHub account, lets start creating our first fastn 
 website project on GitHub.
 
-To start with it, create a repository using fpm-template - [Click here](https://github.com/ftd-lang/fpm-template/generate)
+To start with it, create a repository using fastn-template - [Click here](https://github.com/ftd-lang/fastn-template/generate)
 
 
--- ds.image: Figure 3: How to create new repository using fpm-template
+-- ds.image: Figure 3: How to create new repository using fastn-template
 src: $assets.files.images.domains.figure-3.png
 width: fill-container
 
@@ -77,7 +77,7 @@ Once you click on Create repository from template your first ever FTD web
 repository is ready.
 
 
--- ds.image: Figure 4: Creating GitHub repository using fpm-template
+-- ds.image: Figure 4: Creating GitHub repository using fastn-template
 src: $assets.files.images.domains.figure-4.png
 width: fill-container
 
@@ -92,7 +92,7 @@ Follow below steps to make your first `FTD` web-site live.
 {$ds.greenmarker: Update README.md} workflow ran successfully.
 
 
--- ds.image: Figure 5: Creating GitHub repository using fpm-template
+-- ds.image: Figure 5: Creating GitHub repository using fastn-template
 src: $assets.files.images.domains.figure-5.png
 width: fill-container
 

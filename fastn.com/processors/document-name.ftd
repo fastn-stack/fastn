@@ -5,7 +5,7 @@ document.
 
 Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` for file
 `foo/abc.ftd`, so filename will be `foo/abc.ftd`, It is relative path with
-respect to your project `FPM.ftd` file.
+respect to your project `FASTN.ftd` file.
 
 
 -- ds.code:

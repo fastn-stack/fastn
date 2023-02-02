@@ -1,24 +1,24 @@
--- ds.page: `fpm::render`
+-- ds.page: `fastn::render`
 
 
-`fpm::render()` renders a single ftd file that is part of current FPM package.
+`fastn::render()` renders a single ftd file that is part of current FASTN package.
 
 Implementation Note: This function is implemented in `src/render.rs`.
 
 -- ds.code:
 lang: rs
 
-pub async fn fpm::render(
-    config: &fpm::Config,
+pub async fn fastn::render(
+    config: &fastn::Config,
     id: &str,  // eg "/foo/"
     base_url: &str,
-) -> fpm::Result<String>
+) -> fastn::Result<String>
 
 -- ds.markdown:
 
-`fpm::render()` returns `fpm::Result` of rendered HTML as `String`.
+`fastn::render()` returns `fastn::Result` of rendered HTML as `String`.
 
-`fpm::render()` gets ["data" for `get-data`](processors/get-data/) via
-[`fpm::Config`](crate/config/#fpm-config-attach-data).
+`fastn::render()` gets ["data" for `get-data`](processors/get-data/) via
+[`fastn::Config`](crate/config/#fastn-config-attach-data).
 
 -- end: ds.page

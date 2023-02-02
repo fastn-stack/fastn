@@ -1,6 +1,8 @@
--- ft.page: `fpm::UserGroupTemp`
+-- import: ds as ft
 
-`fpm::UserGroupTemp` is used for deserializing [fpm.user-group](/dev/user-group),
+-- ft.page: `fastn::UserGroupTemp`
+
+`fastn::UserGroupTemp` is used for deserializing [fastn.user-group](/dev/user-group),
 
 means used for converting `ftd-code` to `rust-struct`.
 
@@ -52,7 +54,7 @@ impl UserGroupTemp {
 
     pub fn user_groups(
         user_groups: Vec<UserGroupTemp>,
-    ) -> fpm::Result<std::collections::BTreeMap<String, UserGroup>>
+    ) -> fastn::Result<std::collections::BTreeMap<String, UserGroup>>
 
-    pub fn to_user_group(self) -> fpm::Result<UserGroup>
+    pub fn to_user_group(self) -> fastn::Result<UserGroup>
 }

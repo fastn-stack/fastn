@@ -1,8 +1,8 @@
--- ds.page: Using `fpm` Crate
+-- ds.page: Using `fastn` Crate
 
-`fpm` is available as a Rust crate.
+`fastn` is available as a Rust crate.
 
-Important things exposed by this crate are [`fpm::Config`](crate/config/) and
-[`fpm::render()`](crate/render/).
+Important things exposed by this crate are [`fastn::Config`](crate/config/) and
+[`fastn::render()`](crate/render/).
 
 -- end: ds.page

@@ -1,11 +1,11 @@
--- ds.page: FPM OAuth Integrations
+-- ds.page: FASTN OAuth Integrations
 
--- ds.h1: FPM with GitHub Authentication
+-- ds.h1: FASTN with GitHub Authentication
 
--- ds.h1: FPM with Twitter Authentication
+-- ds.h1: FASTN with Twitter Authentication
 
--- ds.h1: FPM with Telegram Authentication
+-- ds.h1: FASTN with Telegram Authentication
 
--- ds.h1: FPM with Discord Authentication
+-- ds.h1: FASTN with Discord Authentication
 
 -- end: ds.page

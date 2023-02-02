@@ -1,6 +1,6 @@
--- ds.page: `fpm::Error`
+-- ds.page: `fastn::Error`
 
-`fpm::Error` is the main Error enum that is returned by most of our functions.
+`fastn::Error` is the main Error enum that is returned by most of our functions.
 
 -- ds.code:
 lang: rs

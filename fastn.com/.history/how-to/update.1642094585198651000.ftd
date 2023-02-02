@@ -1,13 +1,13 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.doc-page:
 toc: $ft.toc
 
--- ft.h0: Upgrade `fpm`
+-- ft.h0: Upgrade `fastn`
 
 
-As of Rust 1.41.0, `cargo install fpm` does an auto upgrade of eg `fpm` if it
+As of Rust 1.41.0, `cargo install fastn` does an auto upgrade of eg `fastn` if it
 is already installed.
 
 If you are using older Rust, then run the following to upgrade.
@@ -16,4 +16,4 @@ If you are using older Rust, then run the following to upgrade.
 -- ft.code:
 lang: sh
 
-cargo install --force fpm
+cargo install --force fastn

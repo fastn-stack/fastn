@@ -1,9 +1,9 @@
--- ds.page: Install `fpm`
+-- ds.page: Install `fastn`
 
 
 -- ds.markdown: 
 
-You can download `fpm` in multiple ways. The easiest way being just download the
+You can download `fastn` in multiple ways. The easiest way being just download the
 binary and install it in your local system.
 
 -- ds.h1: Pre-built library
@@ -11,23 +11,23 @@ binary and install it in your local system.
 -- ds.h2: Linux / MacOS Installation
 
 You can get our pre-compiled binaries in the 
-[Releases](https://github.com/ftd-lang/fpm/releases) section. 
+[Releases](https://github.com/ftd-lang/fastn/releases) section. 
 
 -- ds.code:
 lang: sh
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install-fastn.sh)"
 
 
 -- ds.h2: Windows Installation
 
 -- ds.h3: Download and map the binaries
 
-- Download the executable from the [Releases](https://github.com/ftd-lang/fpm/releases) 
+- Download the executable from the [Releases](https://github.com/ftd-lang/fastn/releases) 
   page.
-- Use the reference to `fpm.exe` in your terminal to invoke ftd.
+- Use the reference to `fastn.exe` in your terminal to invoke ftd.
 
-  [Read more](setup/fpm-binary-installation)
+  [Read more](setup/fastn-binary-installation)
 
 
 -- ds.h1: `Cargo install` the latest version
@@ -35,30 +35,30 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/i
 -- ds.code:
 lang: sh
 
-cargo install fpm
+cargo install fastn
 
 
--- ds.h1: Building FPM from Source
+-- ds.h1: Building FASTN from Source
 
-`fpm` is open source project. You can clone the fpm git repo:
+`fastn` is open source project. You can clone the fastn git repo:
 
 
 -- ds.code:
 lang: sh
 
-git clone git@github.com:ftd-lang/fpm.git
+git clone git@github.com:ftd-lang/fastn.git
 
 
 -- ds.markdown:
 
-`fpm` is implemented using Rust, using 2021 edition, so minimum supported Rust
+`fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
 version (MSRV) is 1.56.0.
 
 
 -- ds.code:
 lang: sh
 
-cd fpm
+cd fastn
 cargo test
 cargo build
 

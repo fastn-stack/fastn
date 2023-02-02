@@ -2,22 +2,22 @@
 
 There are two ways by which we can use favicon:
 
--- ds.h2: Using favicon header under fpm.package
+-- ds.h2: Using favicon header under fastn.package
 
-Pass the path to your favicon file as header under fpm.package in FPM.ftd.
+Pass the path to your favicon file as header under fastn.package in FASTN.ftd.
 This favicon path should be relative to the root package folder.
 
 -- ds.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: amitu.com
+\-- import: fastn
+\-- fastn.package: amitu.com
 favicon: assets/favicon.ico
 
 -- ds.h2: Using default favicon
 
 If any favicon.* file is present in the root package folder it will be picked up by default assuming that no favicon is specified under
-fpm.package in FPM.ftd.
+fastn.package in FASTN.ftd.
 
 -- ds.h1: Favicon.* conflict
 

@@ -1,42 +1,42 @@
 -- import: ft
 
--- ft.site-name: FPM
+-- ft.site-name: FASTN
 -- ft.site-icon: static/images/logo.svg
--- ft.github: https://github.com/fifthtry/fpm
+-- ft.github: https://github.com/fifthtry/fastn
 -- ft.site-url: /
 
 -- ft.header-toc:
 $processor$: toc
 
 - Docs: about/
-- `fpm` CLI Manual: usage/
+- `fastn` CLI Manual: usage/
 - Development: journal/
 - Themes: themes/
 
 -- ft.toc:
 $processor$: toc
 
-- About `fpm`: /about/
-  - Why Not `fpm`?: why-not/
+- About `fastn`: /about/
+  - Why Not `fastn`?: why-not/
 - File System Organization: /fs/
-  - `FPM.ftd`: /fpm-ftd-file/
+  - `FASTN.ftd`: /fastn-ftd-file/
 - FTD Host Features: /ftd-host/ 
   - `$processor$: http`: /http/
   - `$processor$: toc`: /toc/
   - `$processor$: package-query`: /package-query/
-  - `import: fpm`: /fpm-vars/
+  - `import: fastn`: /fastn-vars/
 - How To: /how-to/
-  - Install `fpm`: /how-to/install/
-  - Update `fpm`: /how-to/update/
+  - Install `fastn`: /how-to/install/
+  - Update `fastn`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
   - Enable Translations: /translation/
-- `fpm` Usage: /usage/
-  - `fpm build`: /build/
-  - `fpm sync`: /sync/
-  - `fpm status`: /status/
-  - `fpm diff`: /diff/
-  - `fpm update`: /update/
+- `fastn` Usage: /usage/
+  - `fastn build`: /build/
+  - `fastn sync`: /sync/
+  - `fastn status`: /status/
+  - `fastn diff`: /diff/
+  - `fastn update`: /update/
 - Known Issues: /known-issues/
 
 
@@ -60,7 +60,7 @@ $processor$: toc
 - Dark Mode: /theme/dark-mode/
 - Components: /theme/components/
   - Dark Mode: /theme/header/
-- FPM Variables: /vars/
+- FASTN Variables: /vars/
 
 -- ft.toc-item list learn:
 $processor$: toc

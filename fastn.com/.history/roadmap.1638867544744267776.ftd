@@ -7,41 +7,41 @@
 -- ft.h0: Roadmap
 
 
--- ft.h1: FPM as kickass SSG tool
+-- ft.h1: FASTN as kickass SSG tool
 
 - package cargo binary for different os/arch
 - docs:
-  - fpm tutorial
+  - fastn tutorial
   - github pages how to
 - ignore files that are ignored by git while processing
-- [markdown file handling](/fpm/~/23/)
-- [`README.md` handling](/fpm/~/22/)
-- [Include fonts from dependencies](/fpm/~/18/)
-- [fpm client variables](/fpm/~/25/)
-- [Package dependencies full version](/fpm/~/27/)
+- [markdown file handling](/fastn/~/23/)
+- [`README.md` handling](/fastn/~/22/)
+- [Include fonts from dependencies](/fastn/~/18/)
+- [fastn client variables](/fastn/~/25/)
+- [Package dependencies full version](/fastn/~/27/)
 
 
--- ft.h1: Rust Book using FPM
+-- ft.h1: Rust Book using FASTN
 
-- [ad-hoc tracking](/fpm/~/12/)
-- [translation tracking](/fpm/~/3/)
+- [ad-hoc tracking](/fastn/~/12/)
+- [translation tracking](/fastn/~/3/)
 
 
 -- ft.h1: Core Features
 
-- [sqlite support](/fpm/~/26/)
-- [package database](/fpm/~/16/)
-- [dynamic/data-driven documents](/fpm/~/20/)
-- [fpm actions](/fpm/~/24/)
+- [sqlite support](/fastn/~/26/)
+- [package database](/fastn/~/16/)
+- [dynamic/data-driven documents](/fastn/~/20/)
+- [fastn actions](/fastn/~/24/)
 - search
-- [package interface](/fpm/~/11/)
-- `fpm serve`, figure out how to do http serving
-- [logical linking](/fpm/~/2/)
-- `fpm-repo`, [auth](/fpm/~/8/) & [`fpm sync` for two way sync](/fpm/~/7/)
-- [version tracking](/fpm/~/5/)
-- [cr tracking](/fpm/~/6/)
-- [access control](/fpm/~/10/)
-- [`$processor$`: with ftd json constructor](/fpm/~/14/)
+- [package interface](/fastn/~/11/)
+- `fastn serve`, figure out how to do http serving
+- [logical linking](/fastn/~/2/)
+- `fastn-repo`, [auth](/fastn/~/8/) & [`fastn sync` for two way sync](/fastn/~/7/)
+- [version tracking](/fastn/~/5/)
+- [cr tracking](/fastn/~/6/)
+- [access control](/fastn/~/10/)
+- [`$processor$`: with ftd json constructor](/fastn/~/14/)
 
 
 -- ft.h1: Importer & Exporters
@@ -64,14 +64,14 @@
 -- ft.h1: Tutorials & Documentation
 
 - hello world
-- how to create a new fpm component library
-- translating projects using fpm
+- how to create a new fastn component library
+- translating projects using fastn
 - documentation of versioned software
-- how to use github for collaboration over a `fpm` package
-- how to setup your own `fpm-repo` on heroku
+- how to use github for collaboration over a `fastn` package
+- how to setup your own `fastn-repo` on heroku
 
 
 -- ft.h1: Backlog
 
-- optimisation: [only include font when needed](/fpm/~/19/)
-- [`fpm diff <path>` filtered diff](/fpm/~/21/)
+- optimisation: [only include font when needed](/fastn/~/19/)
+- [`fastn diff <path>` filtered diff](/fastn/~/21/)

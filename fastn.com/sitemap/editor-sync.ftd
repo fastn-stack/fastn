@@ -1,7 +1,7 @@
 -- ds.page: `editor-sync` API
 
-`editor-sync` API is called from `fpm editor` to sync the local content with
-remote server. It worked same as [`fpm sync`](/sitemap/sync/) worked.
+`editor-sync` API is called from `fastn editor` to sync the local content with
+remote server. It worked same as [`fastn sync`](/sitemap/sync/) worked.
 
 -- ds.h1: URL and Parameters
 

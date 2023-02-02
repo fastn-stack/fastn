@@ -1,14 +1,14 @@
--- ds.page: `fpm::Result`
+-- ds.page: `fastn::Result`
 
-Most `fpm` operations return `fpm::Result<T>`.
+Most `fastn` operations return `fastn::Result<T>`.
 
 -- ds.code:
 lang: rs
 
-pub type fpm::Result<T> = std::result::Result<T, fpm::Error>;
+pub type fastn::Result<T> = std::result::Result<T, fastn::Error>;
 
 -- ds.markdown:
 
-`fpm::Result` is a wrapper over [`fpm::Error`](crate/error/).
+`fastn::Result` is a wrapper over [`fastn::Error`](crate/error/).
 
 -- end: ds.page

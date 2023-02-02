@@ -1,19 +1,19 @@
--- ds.page: `fpm` Usage
+-- ds.page: `fastn` Usage
 
 
 -- ds.markdown: 
 
-`fpm` CLI uses a few sub-commands to do different things:
+`fastn` CLI uses a few sub-commands to do different things:
 
-- `fpm -h` or `fpm --help` to print help-text and exit.
-- [`fpm build`](build/)
-- [`fpm sync`](cli/sync/)
-- [`fpm status`](status/)
-- [`fpm diff`](diff/)
-- [`fpm serve`](serve/)
-- [`fpm start-project`](start-project/)
+- `fastn -h` or `fastn --help` to print help-text and exit.
+- [`fastn build`](build/)
+- [`fastn sync`](cli/sync/)
+- [`fastn status`](status/)
+- [`fastn diff`](diff/)
+- [`fastn serve`](serve/)
+- [`fastn start-project`](start-project/)
 
-Running `fpm` without any argument prints the help-text, which lists all available
-subcommands and general instructions on how to use `fpm`.
+Running `fastn` without any argument prints the help-text, which lists all available
+subcommands and general instructions on how to use `fastn`.
 
 -- end: ds.page

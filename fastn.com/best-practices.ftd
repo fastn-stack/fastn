@@ -1,4 +1,4 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 -- ds.page: Best practices for `FTD`
 
@@ -61,8 +61,8 @@ boolean show-bar: false
 string marktext:
 string blah:
 integer number:
-width: fill
-background-color: $fpm.color.main.background.base
+width: fill-container
+background-color: $fastn.color.main.background.base
 
 \-- end: my-ftd-component
 

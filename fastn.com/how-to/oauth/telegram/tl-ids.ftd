@@ -2,7 +2,7 @@
 
 -- ds.markdown:
 
-A fpm package can limit who has read or write access. We do it by organising a
+A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
@@ -16,14 +16,14 @@ is admin of the group.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: group-admins
-telegram-admin: @fpmgrp
+\-- fastn.user-group: group-admins
+telegram-admin: @fastngrp
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Telegram Admin: /
 readers: group-admins
@@ -50,14 +50,14 @@ has joined group.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: group-members
-telegram-group: @fpmgrp
+\-- fastn.user-group: group-members
+telegram-group: @fastngrp
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Telegram Group: /
 readers: group-members
@@ -84,14 +84,14 @@ has been included in channel.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: channel-members
-telegram-channel: @fpmapp
+\-- fastn.user-group: channel-members
+telegram-channel: @fastnapp
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Telegram Channel: /
 readers: channel-members

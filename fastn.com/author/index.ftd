@@ -1,11 +1,11 @@
 -- ds.page: Author Manual
 
 
-`fpm` helps you create your website. In this manual you will learn when and how
-to use `fpm`.
+`fastn` helps you create your website. In this manual you will learn when and how
+to use `fastn`.
 
-Everything related to hows and whats related to FPM usage are covered in this
+Everything related to hows and whats related to FASTN usage are covered in this
 section. This is the manual for the author to design their page using
-FPM.
+FASTN.
 
 -- end: ds.page

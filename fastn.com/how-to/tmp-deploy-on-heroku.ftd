@@ -1,6 +1,8 @@
--- import: fpm.dev/assets
+-- import: ds as ft
 
--- ft.page: Deploy FPM Package On Heroku
+-- import: fastn.dev/assets
+
+-- ft.page: Deploy FASTN Package On Heroku
 
 -- ft.h1: 1️⃣ Create Heroku APP
 
@@ -107,16 +109,16 @@ Save this token for later use.
 For more details: Visit [How should I generate an API key that allows me to use
 the Heroku Platform API?](https://help.heroku.com/PBGP6IDE/how-should-i-generate-an-api-key-that-allows-me-to-use-the-heroku-platform-api)
 
--- ft.h1: 2️⃣ Create FPM Package Repository Using Github Template
+-- ft.h1: 2️⃣ Create FASTN Package Repository Using Github Template
 
 -- ft.h2: ▶️ Creating Repository From Template
 
-- On GitHub.com, navigate to the main page of the [fpm-template repository](https://github.com/FifthTry/fpm-template/).
+- On GitHub.com, navigate to the main page of the [fastn-template repository](https://github.com/FifthTry/fastn-template/).
 - Above the file list, click `Use this template`.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-1.png
-width: fill
+width: fill-container
 
 - Do the appropriate fill outs in github page and then click `Create repository
 from template.`
@@ -125,7 +127,7 @@ For more details: Visit [Creating a repository from a template](https://docs.git
 
 -- ft.h2: ▶️ Update GitHub Workflow
 
-- In repository, Go to [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
+- In repository, Go to [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fastn-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
 file and replace `<heroku-app-name>` with heroku app name. In our case,
 `<heroku-app-name>` get replaced with `abrark-app`.
 
@@ -141,11 +143,11 @@ lang: diff
 
 -- ft.markdown:
 
-- Same as above, Go to [`.github/workflows/update-fpm-binary.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/update-fpm-binary.yml#L25)
+- Same as above, Go to [`.github/workflows/update-fastn-binary.yml`](https://github.com/FifthTry/fastn-template/blob/main/.github/workflows/update-fastn-binary.yml#L25)
 file and replace `<heroku-app-name>` with heroku app name. In our case,
 `<heroku-app-name>` get replaced with `abrark-app`.
 
--- ft.code: `update-fpm-binary.yml`
+-- ft.code: `update-fastn-binary.yml`
 lang: diff
 
 -  --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
@@ -160,20 +162,20 @@ For more details: Visit [Creating encrypted secrets for a repository](https://do
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-2.png
-width: fill
+width: fill-container
 
 
 -- ft.h1: 3️⃣ Deploy on Heroku Using Github
 
--- ft.h2: ▶️ Create FPM Heroku Repository Using Template
+-- ft.h2: ▶️ Create FASTN Heroku Repository Using Template
 
-- On GitHub.com, navigate to the main page of the [fpm-heroku repository](https://github.com/FifthTry/fpm-heroku/).
+- On GitHub.com, navigate to the main page of the [fastn-heroku repository](https://github.com/FifthTry/fastn-heroku/).
 - Above the file list, click `Use this template`.
 
 ;; TODO: Need to change the image
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-1.png
-width: fill
+width: fill-container
 
 - Do the appropriate fill outs in github page and then click `Create repository
 from template.`
@@ -183,7 +185,7 @@ For more details: Visit [Creating a repository from a template](https://docs.git
 
 -- ft.h2: Change `download-base-url` in Deploy File
 
-- In repository, Go to [`run.sh`](https://github.com/FifthTry/fpm-heroku/blob/main/run.sh#L3)
+- In repository, Go to [`run.sh`](https://github.com/FifthTry/fastn-heroku/blob/main/run.sh#L3)
 file and replace `<repo-owner>` with your repository owner, replace `<repo-name>`
 with your repository name and replace `<branch-name>` with your branch name.
 
@@ -211,5 +213,7 @@ lang: diff
 
 
 - Heroku app setup
-- use `fpm-template` github template for fpm package which id to be deployed
-- Heroku push using `fpm-heroku` repo as github template
+- use `fastn-template` github template for fastn package which id to be deployed
+- Heroku push using `fastn-heroku` repo as github template
+
+-- end: ft.page

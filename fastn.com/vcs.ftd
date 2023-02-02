@@ -1,18 +1,18 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ds.page: `fpm`: Version Control for Masses
+-- ds.page: `fastn`: Version Control for Masses
 
--- cbox.warning: `fpm` VCS Is Under Development
+-- cbox.warning: `fastn` VCS Is Under Development
 
-Currently `fpm` only implements two way sync. The change request feature is
+Currently `fastn` only implements two way sync. The change request feature is
 still under development.
 
 -- ds.markdown:
 
-`fpm` comes with a built in version control system. The version control system
-is fully integrated with the [online fpm editor](/editor/).
+`fastn` comes with a built in version control system. The version control system
+is fully integrated with the [online fastn editor](/editor/).
 
-The version control feature of fpm can only be used if you are using [fpm
+The version control feature of fastn can only be used if you are using [fastn
 server](/server/). In the server mode you can [clone a package](/offline/) to
 create a local copy of the package if you have appropriate permission.
 

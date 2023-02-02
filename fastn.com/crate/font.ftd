@@ -1,7 +1,7 @@
--- ds.page: `fpm::Font`
+-- ds.page: `fastn::Font`
 
-`fpm::Font` struct keeps track of a font. Fonts are defined in `FPM.ftd` file
-and are stored in [`fpm::Package`](crate/package/) struct after parsing.
+`fastn::Font` struct keeps track of a font. Fonts are defined in `FASTN.ftd` file
+and are stored in [`fastn::Package`](crate/package/) struct after parsing.
 
 -- ds.code:
 lang: rs

@@ -1,6 +1,6 @@
 -- ds.page: How Versioning Works
 
-FPM uses fallback based file tracking technique to implement versioning.
+FASTN uses fallback based file tracking technique to implement versioning.
 
 -- ds.h1: Versioning Happens At Project Level
 
@@ -15,7 +15,7 @@ Normal layout looks like this:
 lang: txt
 
 - package-folder
-  - FPM.ftd
+  - FASTN.ftd
   - index.ftd
   - foo.ftd
 
@@ -27,7 +27,7 @@ For a project with versioning enabled:
 lang: txt
 
 - package-folder
-  - FPM.ftd
+  - FASTN.ftd
   - v1/
     - index.ftd
     - foo.ftd
@@ -39,22 +39,22 @@ lang: txt
 Notice that `foo.ftd` does not exist in `v2` folder, since it has not been
 edited in v2.
 
--- ds.h2: `fpm.package`
+-- ds.h2: `fastn.package`
 
-`fpm.package` includes one more field `versioned` of boolean type with
+`fastn.package` includes one more field `versioned` of boolean type with
 default value as false. Set this field to true to enable versioning.
 
 -- ds.code:
 lang: ftd
 
-\-- fpm.package: <package-name>
+\-- fastn.package: <package-name>
 versioned: true
 
 
 
--- ds.h2: Versioning FPM.ftd
+-- ds.h2: Versioning FASTN.ftd
 
-No FPM versioning. All versions will use same dependencies etc.
+No FASTN versioning. All versions will use same dependencies etc.
 
 
 -- ds.h1: Package URLs
@@ -90,13 +90,13 @@ the version number, eg `foo.com/v2/` not `foo.com/` even though the two have
 same content.
 
 
--- ds.h1: FPM Variables
+-- ds.h1: FASTN Variables
 
-To assist themes with versioning we have the following fpm variables:
+To assist themes with versioning we have the following fastn variables:
 
 
 
--- ds.h2: `ftd.toc-item list fpm.versions`
+-- ds.h2: `ftd.toc-item list fastn.versions`
 
 All version prefixes, eg `v1`, `v2`, and so on. The link will point to the
 current document's URL in that version. If the current document is not present

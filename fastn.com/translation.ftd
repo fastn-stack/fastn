@@ -1,48 +1,51 @@
+
+-- ds.page:
+
 -- ds.h1: Translation Tracking
 
-FPM has a unique translation tracking feature. An FPM package can declare it can
+FASTN has a unique translation tracking feature. An FASTN package can declare it can
 be translated by adding a language key:
 
 -- ds.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: fpm.dev
-zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+\-- fastn.package: fastn.dev
+zip: github.com/fifthtry/fastn.dev/archive/refs/heads/main.zip
 language: English
-translation: hi.fpm.dev
+translation: hi.fastn.dev
 
 -- ds.markdown:
 
 Here we have declared that this package supports translation by adding the
 language key. Also we have already got one "accepted translation",
-[`hi.fpm.dev`](https://hi.fpm.dev).
+[`hi.fastn.dev`](https://hi.fastn.dev).
 
-Once you have enabled translation, you can create a new fpm package, here
-`hi.fpm.dev`, and give it a FPM.ftd file:
+Once you have enabled translation, you can create a new fastn package, here
+`hi.fastn.dev`, and give it a FASTN.ftd file:
 
 -- ds.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: hi.fpm.dev
-zip: github.com/fifthtry/fpm.dev-hi/archive/refs/heads/main.zip
+\-- fastn.package: hi.fastn.dev
+zip: github.com/fifthtry/fastn.dev-hi/archive/refs/heads/main.zip
 language: hi
-translation-of: fpm.dev
+translation-of: fastn.dev
 
 -- ds.markdown:
 
 This can be your entire package when you create a new translation. When you
-build a translated FPM package, FPM is aware it is a translation, and it builds
-all the files in the original, which if `fpm.dev`, so you do not have to copy
+build a translated FASTN package, FASTN is aware it is a translation, and it builds
+all the files in the original, which if `fastn.dev`, so you do not have to copy
 any files.
 
-FPM uses a fallback based logic, for every missing file, it builds the
+FASTN uses a fallback based logic, for every missing file, it builds the
 corresponding file from original package. So say if `index.ftd` is missing in
-Hindi translation, because it is not yet translated, FPM will pick the
-`index.ftd` from the English/original version and `hi.fpm.dev` will be a
+Hindi translation, because it is not yet translated, FASTN will pick the
+`index.ftd` from the English/original version and `hi.fastn.dev` will be a
 "complete website".
 
 Once a file has been created in translation package, it can be in other of three

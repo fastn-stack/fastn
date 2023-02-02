@@ -1,4 +1,4 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 
 
@@ -14,11 +14,11 @@
 
 -- ds.markdown:
 
-We have designed and developed below components using `FTD` and `FPM` package. 
+We have designed and developed below components using `FTD` and `FASTN` package. 
 Use them for writing e-books, blogs, web technical documentation etc. 
 
 These components can be used inside your personal web sites or organizational static 
-web sites developed using `FPM` package.
+web sites developed using `FASTN` package.
 
 -- grid-view: Documentation Sites:
 if: {$show-grid}
@@ -387,7 +387,7 @@ licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
 github-url: https://github.com/FifthTry/color-doc/
 
 `fifthtry.github.io/color-doc` is a grey color scheme. Our web sites are using
-this color scheme. For ex. [`fpm.dev`](https://fpm.dev/), [`ftd.dev`](https://ftd.dev/) etc.
+this color scheme. For ex. [`fastn.dev`](https://fastn.dev/), [`ftd.dev`](https://ftd.dev/) etc.
 
 -- template: Forest CS
 template-url: https://fifthtry.github.io/forest-cs/

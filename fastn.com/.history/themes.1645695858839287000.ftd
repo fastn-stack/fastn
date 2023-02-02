@@ -2,21 +2,21 @@
 toc: $config.themes-toc
 
 
--- ft.h0: About FPM Themes
+-- ft.h0: About FASTN Themes
 
-When authoring content using FPM, we maintain a {ft.highlight: separation of
+When authoring content using FASTN, we maintain a {ft.highlight: separation of
 content from presentation}. FTD comes with a few "kernel" UI components, using
 them one can create any design or presentation. But using them directly is not
 recommended when authoring content.
 
-For this reason themes should be designed as separate FPM package that are to be
+For this reason themes should be designed as separate FASTN package that are to be
 used by content packages as a dependency. The content packages should not use
 FTD kernel components, instead they should only use components defined by
 the one or more themes they depend on.
 
 -- ft.h1: Package Interface
 
-Each package in FPM exposes a bunch of "modules" (ftd documents in a package),
+Each package in FASTN exposes a bunch of "modules" (ftd documents in a package),
 and each of those modules exposes some "symbols", e.g. record definitions,
 variables, and components defined in that module.
 
@@ -63,49 +63,49 @@ PI, package interface, has been picked, the theme must implement all the modules
 and symbols of that PI.
 
 In future the fact that a theme implements some PI would be declared in the
-`FPM.ftd` file for that theme:
+`FASTN.ftd` file for that theme:
 
 -- ft.code:
 lang: ftd
 
-\-- import fpm:
+\-- import fastn:
 
-\-- fpm.package: foo.github.io/some-theme
-implements: fpm.dev/resume
+\-- fastn.package: foo.github.io/some-theme
+implements: fastn.dev/resume
 
 -- ft.markdown:
 
 {ft.highlight: `implements:` is not yet implemented.} Once it is implemented,
-FPM will ensure that all the modules and symbols exported by `fpm.dev/resume`
+FASTN will ensure that all the modules and symbols exported by `fastn.dev/resume`
 have corresponding compatible counterparts in `foo.github.io/some-theme`, else
 it will fail to build the package.
 
-Similarly, in future, when adding the dependency of `some-theme`, a `FPM.ftd`
+Similarly, in future, when adding the dependency of `some-theme`, a `FASTN.ftd`
 will be able to declare it is expecting it to implement some PI:
 
 -- ft.code:
 lang: ftd
 
-\-- import fpm:
+\-- import fastn:
 
-\-- fpm.package: amitu.github.io/resume
-\-- fpm.dependency: foo.github.io/some-theme
-implements: fpm.dev/resume
+\-- fastn.package: amitu.github.io/resume
+\-- fastn.dependency: foo.github.io/some-theme
+implements: fastn.dev/resume
 
 -- ft.markdown:
 
-Here `amitu.github.io/resume` is a FPM package that depends on
+Here `amitu.github.io/resume` is a FASTN package that depends on
 `foo.github.io/some-theme`. But since it has explicitly declared this dependency
-`implements` `fpm.dev/resume`, only the modules and symbols exported by
-`fpm.dev/resume` would be available on `foo.github.io/some-theme`.
+`implements` `fastn.dev/resume`, only the modules and symbols exported by
+`fastn.dev/resume` would be available on `foo.github.io/some-theme`.
 
 The idea is that {ft.highlight: a theme package may implement more than what is
 specified in the packages it implements.} A theme can provide extra modules or
 symbols. But since `amitu.github.io/resume` has imported
-`foo.github.io/some-theme` as `fpm.dev/resume`, when processing
-`amitu.github.io/resume`, only the `fpm.dev/resume` modules and symbols would be
+`foo.github.io/some-theme` as `fastn.dev/resume`, when processing
+`amitu.github.io/resume`, only the `fastn.dev/resume` modules and symbols would be
 available, not the extra ones found on `foo.github.io/some-theme`.
 
 If `amitu.github.io/resume` was interested in all the modules and symbols exported
 by `foo.github.io/some-theme`, they can chose to not specify the `implements:`
-directive in the FPM.ftd file.
+directive in the FASTN.ftd file.

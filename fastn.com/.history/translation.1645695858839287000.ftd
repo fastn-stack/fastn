@@ -1,9 +1,9 @@
 -- ft.doc-page:
 toc: $ft.toc
 
--- ft.h0: Step by Step guide to setup translation with `fpm`
+-- ft.h0: Step by Step guide to setup translation with `fastn`
 
-FPM provides a first class support for translations of the documents. A particular
+FASTN provides a first class support for translations of the documents. A particular
 package can either be a translation or have translations pointing to other 
 packages. At the build time, we process your translations and generate metadata
 for each and every page in the corresponding package to ensure you as the project
@@ -16,7 +16,7 @@ A translation is a two way agreement between two packages.
 
 -- ft.h1: Prerequisites
 
-You'll need to set up two `fpm` packages to enable translation across the two of
+You'll need to set up two `fastn` packages to enable translation across the two of
 them.
 
 For this example, we'll be using `foo.com` and `bar.com` where `bar.com` is the 
@@ -34,12 +34,12 @@ The `master` package needs to specify the language it's targetting. At the very
 core, this is the bare minimum setting you'll require to enable the translations
 for your `master` package
 
--- ft.code: foo.com/FPM.ftd
+-- ft.code: foo.com/FASTN.ftd
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo.com
+\-- fastn.package: foo.com
 language: English
 
 -- ft.markdown:
@@ -51,19 +51,19 @@ lang: shell
 
 \$/foo.com/> touch example{01..05}.ftd
 
--- ft.h2: `fpm sync`
+-- ft.h2: `fastn sync`
 
-`fpm sync` command allows you to synchronize your changes and create a snapshot
+`fastn sync` command allows you to synchronize your changes and create a snapshot
 of the package at the current timestamp in the `.history` folder in the root 
 directory of your package.
 
--- ft.code: `fpm sync` output
+-- ft.code: `fastn sync` output
 lang: shell
 
-\$ /foo.com/> fpm sync
+\$ /foo.com/> fastn sync
 
 Repo for foo.com is github, directly syncing with .history.
-FPM.ftd
+FASTN.ftd
 example01.ftd
 example02.ftd
 example03.ftd
@@ -79,12 +79,12 @@ We can now push the code and deploy our package.
 The `translation` package must specify the `translation-of` package. Specifying 
 this marks the current package as the `translation-of` of another package.
 
--- ft.code: bar.com/FPM.ftd
+-- ft.code: bar.com/FASTN.ftd
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: bar.com
+\-- fastn.package: bar.com
 translation-of: foo.com
 language: hi
 
@@ -100,9 +100,9 @@ lang: shell
 -- ft.code: Translation status
 lang: shell
 
-\$/bar.com/> fpm translation-status
+\$/bar.com/> fastn translation-status
 
-Never marked: FPM.ftd
+Never marked: FASTN.ftd
 Never marked: example01.md
 Never marked: example02.ftd
 Never marked: example03.ftd
@@ -111,10 +111,10 @@ Missing: example05.ftd
 
 -- ft.markdown:
 
-The `fpm translation-status` command will give you a complete overview of the 
+The `fastn translation-status` command will give you a complete overview of the 
 documents in the current package.
 
--- ft.h2: `fpm mark-upto-date`
+-- ft.h2: `fastn mark-upto-date`
 
 You can invoke this command along with a module path to mark that particular 
 document as `upto date` in the translation tree. Doing so will create a `track`
@@ -123,17 +123,17 @@ of your document at the current timestamp.
 -- ft.code: Mark up to date
 lang: shell
 
-\$/bar.com/> fpm mark-upto-date example01.ftd
+\$/bar.com/> fastn mark-upto-date example01.ftd
 
 example01.ftd is now marked upto date
 
-\$/bar.com/> fpm mark-upto-date example02.ftd
+\$/bar.com/> fastn mark-upto-date example02.ftd
 
 example02.ftd is now marked upto date
 
-\$/bar.com/> fpm translation-status
+\$/bar.com/> fastn translation-status
 
-Never marked: FPM.ftd
+Never marked: FASTN.ftd
 Up to date: example01.md
 Up to date: example02.ftd
 Never marked: example03.ftd
@@ -146,31 +146,31 @@ While anyone can start a package as a translation candidate to your `master` pac
 you get to decide what all packages act as **official** for your package.
 
 The translation candidate repository(bar.com) can be marked an official 
-translation of `foo.com` by mapping the the same in `foo.com/FPM.ftd` file along
+translation of `foo.com` by mapping the the same in `foo.com/FASTN.ftd` file along
 with providing the name of the language the current package belongs to.
 
 The translation
 
--- ft.code: foo.com/FPM.ftd
+-- ft.code: foo.com/FASTN.ftd
 lang: ftd
 
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: foo.com
+\-- fastn.package: foo.com
 language: English
 translation: bar.com
 
 -- ft.h2: Checking translation status of the master package
 
 You can check the translation status of the various `official` translations of 
-your package by using the `fpm translation-status` command. For a `master` 
+your package by using the `fastn translation-status` command. For a `master` 
 package, it returns a global view across all the translations
 
--- ft.code: `master` fpm translation-status
+-- ft.code: `master` fastn translation-status
 lang: shell
 
-\$/foo.com/> fpm translation-status
+\$/foo.com/> fastn translation-status
 
 Status for `bar.com` package:
 Never marked: 2
@@ -189,23 +189,23 @@ lang: shell
 
 \$/foo.com/> echo "\n-- ftd.text: Hello World" >> example01.ftd
 
-\$/foo.com/> fpm sync
+\$/foo.com/> fastn sync
 
 Repo for foo.com is github, directly syncing with .history.
 example01.ftd
 
 -- ft.markdown:
 
-Once this package is deployed, the next time we run `fpm translation-status` in 
+Once this package is deployed, the next time we run `fastn translation-status` in 
 context of the `translation` package(/bar.com/), we should see the `Out-dated`
 document status
 
 -- ft.code: `bar.com` translation-status
 lang: shell
 
-\$/bar.com/> fpm translation-status
+\$/bar.com/> fastn translation-status
 
-Never marked: FPM.ftd
+Never marked: FASTN.ftd
 Out-dated: example01.md
 Up to date: example02.ftd
 Never marked: example03.ftd

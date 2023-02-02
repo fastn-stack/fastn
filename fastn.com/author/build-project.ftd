@@ -1,17 +1,17 @@
--- ds.page: Build fpm project locally
+-- ds.page: Build fastn project locally
 
 
-To build the fpm project, Change the current working directory to the
-fpm project and run the following command in terminal
+To build the fastn project, Change the current working directory to the
+fastn project and run the following command in terminal
 
 -- ds.code:
 lang: sh
 
-fpm build
+fastn build
 
 -- ds.markdown:
 
-`fpm build` command builds the whole project. It converts the ftd files
+`fastn build` command builds the whole project. It converts the ftd files
 into the corresponding html file and stores them in `.build` folder.
 
 
@@ -23,12 +23,12 @@ command
 -- ds.code:
 lang: sh
 
-fpm build <file-name>
+fastn build <file-name>
 
 -- ds.markdown:
 
-`fpm build <file-name>` command builds only the <file-name> file.
-Eg: if we want to build `foo.ftd` only, then run `fpm build foo.ftd` in the
+`fastn build <file-name>` command builds only the <file-name> file.
+Eg: if we want to build `foo.ftd` only, then run `fastn build foo.ftd` in the
 terminal.
 
 -- end: ds.page

@@ -1,39 +1,39 @@
 -- import: fifthtry.github.io/admonitions as cbox
--- ds.page: fpm: FTD Package Manager & Static Site Generator
+-- ds.page: fastn: FTD Package Manager & Static Site Generator
 
 
-FPM is a command line tool written in Rust that acts as both package manager for
+FASTN is a command line tool written in Rust that acts as both package manager for
 [FTD](https://ftd.dev/) programs as well as static site generator that converts
 `.ftd` files to `.html` files you can ship on [Github Pages](/how-to/github-pages/),
 [Vercel](/how-to/vercel/) etc.
 
-These are the key [features of `fpm`](/features/):
+These are the key [features of `fastn`](/features/):
 
 - Supports [ftd](https://ftd.dev)
 - [package manager](/package-manager/)
 - [static site generator](/static/)
 - [Remixing Sites](/remixing/)
-- [FPM Server](/server/)
+- [FASTN Server](/server/)
 - [Offline Sync](/offline/)
 - [Version Control For Masses](/vcs/)
 - [Online Editor](/editor/)
 - [Color Scheme](/cs/)
 - [Authentication and fine grained access control](/acl/)
 
--- cbox.warning: `fpm` Performance Issues
+-- cbox.warning: `fastn` Performance Issues
 
-Currently fpm takes about `> a second` to generate a typical page, and the
+Currently fastn takes about `> a second` to generate a typical page, and the
 generated HTML is about `>1MB` in size. We are working on these.
 
 Learn about other [known issues here](/known-issues/).
 
 -- ds.h1: Learning Resource
 
-We are writing three manuals to help you learn FPM:
+We are writing three manuals to help you learn FASTN:
 
-- [Author Manual](/author/), if you want to use `fpm` as a end user, to power
+- [Author Manual](/author/), if you want to use `fastn` as a end user, to power
   your next blog, book, portfolio site, product landing page etc.
-- [Bulder Manual](/themes/), if you want to create `fpm packages` that other
+- [Bulder Manual](/themes/), if you want to create `fastn packages` that other
   people can use.
 
 
@@ -42,7 +42,7 @@ We are writing three manuals to help you learn FPM:
 Checkout what is planned in [Roadmap](/roadmap/), and day to day updates in the
 [Journal](/journal/).
 
-Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
-Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
+Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)
+Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
 
 -- end: ds.page

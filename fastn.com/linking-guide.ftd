@@ -6,6 +6,6 @@ We put all links without slash in front. And we always put slash in end.
 
 Example:
 
-Instead of using `[fpm build](/build/)` or `[fpm build](/build)`, use like `[fpm build](build/)`
+Instead of using `[fastn build](/build/)` or `[fastn build](/build)`, use like `[fastn build](build/)`
 
 -- end: ds.page

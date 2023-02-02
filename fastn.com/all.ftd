@@ -1,4 +1,4 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 
 
@@ -834,16 +834,16 @@ status: Outdated
 
 `Rocky-Blog-Template` is `FTD` blog theme for bloggers. Its outdated and should not be used into `FTD` packages.
 
-- package: `fpm-book`
-package-url: https://fifthtry.github.io/fpm-book
-package-name: fifthtry.github.io/fpm-book
-github-url: https://github.com/FifthTry/fpm-book
+- package: `fastn-book`
+package-url: https://fifthtry.github.io/fastn-book
+package-name: fifthtry.github.io/fastn-book
+github-url: https://github.com/FifthTry/fastn-book
 package-type: DS
-licence-url: https://github.com/FifthTry/fpm-book/blob/main/LICENSE
+licence-url: https://github.com/FifthTry/fastn-book/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`fpm-book` is `FTD` book theme for authors. Its outdated and should not be used into `FTD` packages.
+`fastn-book` is `FTD` book theme for authors. Its outdated and should not be used into `FTD` packages.
 
 - package: `Forest-FOSS-Template`
 package-url: https://fifthtry.github.io/Forest-FOSS-Template
@@ -898,7 +898,7 @@ licence-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`Docusaurus-theme` allows you to get started with a FPM powered blog.
+`Docusaurus-theme` allows you to get started with a FASTN powered blog.
 
 -- package: `blog-theme`
 package-url: https://fifthtry.github.io/blog-theme
@@ -909,7 +909,7 @@ licence-url: https://github.com/FifthTry/blog-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`blog-theme` is a simple blog theme for fpm packages.
+`blog-theme` is a simple blog theme for fastn packages.
 
 -- package: `Green-theme`
 package-url: https://fifthtry.github.io/Green-theme
@@ -920,7 +920,7 @@ licence-url: https://github.com/FifthTry/Green-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`Green-theme` is a theme for creating FPM powered open source project page.
+`Green-theme` is a theme for creating FASTN powered open source project page.
 
 -- package: `Jupiter-theme`
 package-url: https://fifthtry.github.io/Jupiter-theme
@@ -931,7 +931,7 @@ licence-url: https://github.com/FifthTry/Jupiter-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`Jupiter-theme` is a part of `Flash-theme`. Template for book written as FPM Package.
+`Jupiter-theme` is a part of `Flash-theme`. Template for book written as FASTN Package.
 
 -- package: `Flash-theme`
 package-url: https://fifthtry.github.io/Flash-theme
@@ -942,7 +942,7 @@ licence-url: https://github.com/FifthTry/Flash-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
 
-`Flash-theme` is a template for book written as FPM Package.
+`Flash-theme` is a template for book written as FASTN Package.
 
 -- package: `spider-book-ds`
 package-url: https://fifthtry.github.io/spider-book-ds
@@ -1118,7 +1118,7 @@ licence-url: https://github.com/FifthTry/package-doc/blob/main/LICENSE
 licence-name: BSD 2-Clause
 status: Documented
 
-`package-doc` is a FPM Package Documentation Helpers.
+`package-doc` is a FASTN Package Documentation Helpers.
 
 -- package: `demo-day`
 package-url: https://github.com/FifthTry/demo-day

@@ -1,18 +1,18 @@
 -- ds.page: User Group
 
-A fpm package can limit who has read or write access. We do it by organising a
+A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
-User groups are defined in any package by using `fpm.user-group`:
+User groups are defined in any package by using `fastn.user-group`:
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: amitu.com
+\-- import: fastn
+\-- fastn.package: amitu.com
 
-\-- fpm.user-group: fifthtry-people
+\-- fastn.user-group: fifthtry-people
 title: FifthTry People
 email-domain: fifthtry.com
 github-team: FifthTry/everyone
@@ -49,7 +49,7 @@ Identities in a user-group contains `email`, `-email`, `group`, `-group`, etc...
 
 -- ds.h3: All Supported Identities
 
-These are all supported identities for [fpm.user-group](/theme/fpm/#user-group).
+These are all supported identities for [fastn.user-group](/theme/fastn/#user-group).
 
 - `email`
 - `-email`
@@ -75,7 +75,7 @@ In the below group, `email` key can be used multiple times, `-email` means that
 -- ds.code: User Group
 lang: ftd
 
-\fpm.user-group:
+\fastn.user-group:
 email: abrark@fifthtry.com
 -email: amitu@fifthtry.com
 email: shobhit@fifthtry.com
@@ -92,14 +92,14 @@ github-team: abrarnitk/team-a
 User groups can be imported from other packages as well.
 
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: amitu.com/python
-\-- fpm.dependency: amitu.com
+\-- import: fastn
+\-- fastn.package: amitu.com/python
+\-- fastn.dependency: amitu.com
 
-\-- fpm.user-group: fifthtry-people
+\-- fastn.user-group: fifthtry-people
 group: amitu.com/fifthtry-people
 email: gvr@gmail.com
 
@@ -118,14 +118,14 @@ first as shown above.
 We can also remove some of the users defined in the group that is being
 imported.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- import: fpm
-\-- fpm.package: amitu.com/python
-\-- fpm.dependency: amitu.com
+\-- import: fastn
+\-- fastn.package: amitu.com/python
+\-- fastn.dependency: amitu.com
 
-\-- fpm.user-group: fifthtry-people
+\-- fastn.user-group: fifthtry-people
 group: amitu.com/fifthtry-people
 -email: foo@bar.com
 email: gvr@gmail.com

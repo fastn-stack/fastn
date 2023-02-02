@@ -1,9 +1,9 @@
--- ds.page: `fpm clone <url>`
+-- ds.page: `fastn clone <url>`
 
 Clones a [remote project](glossary/#remote) into a newly created
 directory which then becomes the [clone](glossary/#clone).
 
-After the clone, a [`fpm sync`](cli/sync/) will keep the clone project in sync
+After the clone, a [`fastn sync`](cli/sync/) will keep the clone project in sync
 with remote.
 
 This default configuration is achieved by creating `.client-state` and take all

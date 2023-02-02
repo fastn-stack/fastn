@@ -2,7 +2,7 @@
 
 -- ds.markdown:
 
-A fpm package can limit who has read or write access. We do it by organising a
+A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
@@ -16,14 +16,14 @@ the input repo.
 
 -- ds.h2: How To Use It
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: starred-repos
-github-starred: ftd-lang/fpm
+\-- fastn.user-group: starred-repos
+github-starred: ftd-lang/fastn
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Starred: /
 readers: starred-repos
@@ -53,14 +53,14 @@ the input repo.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: watched-repos
+\-- fastn.user-group: watched-repos
 github-watches: ftd-lang/ftd
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Watched: /
 readers: watched-repos
@@ -89,14 +89,14 @@ the input repo.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: followed-repos
+\-- fastn.user-group: followed-repos
 github-follows: ftd-lang
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Followed: /
 readers: followed-repos
@@ -125,14 +125,14 @@ of input repo.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: contributed-repos
-github-contributor: ftd-lang/fpm
+\-- fastn.user-group: contributed-repos
+github-contributor: ftd-lang/fastn
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Contributor: /
 readers: contributed-repos
@@ -161,13 +161,13 @@ of input repo.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: collaborated-repos
-github-collaborator: ftd-lang/fpm
+\-- fastn.user-group: collaborated-repos
+github-collaborator: ftd-lang/fastn
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Collaborated: /
 readers: collaborated-repos
@@ -196,14 +196,14 @@ is part of the team.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: fifthtry-teams
+\-- fastn.user-group: fifthtry-teams
 github-team: fifthtry/fifthtry-team
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Teams: /
 readers: fifthtry-teams
@@ -232,14 +232,14 @@ has sponsored the user.
 
 [User Identity](/dev/user-identity/)
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.user-group: sponsored-account
+\-- fastn.user-group: sponsored-account
 github-sponsor: weiznich
 
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Github Sponsor: /
 readers: sponsored-account

@@ -1,6 +1,6 @@
 -- ds.page: User Identity
 
-A fpm package can limit who has read or write access. We do it by storing
+A fastn package can limit who has read or write access. We do it by storing
 [user groups](/dev/user-group/) in [sitemap](/sitemap/). An `identity
 group` contains one or more `user identity`.
 

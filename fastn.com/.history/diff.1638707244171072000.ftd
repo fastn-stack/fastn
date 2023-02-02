@@ -4,9 +4,9 @@
 -- ft.page:
 
 
--- ft.h0: `fpm diff`
+-- ft.h0: `fastn diff`
 
-`fpm diff` can show difference between local version and `.history` version of a
+`fastn diff` can show difference between local version and `.history` version of a
 file.
 
 With no command line arguments it shows diff for all changed files. One or more
@@ -19,7 +19,7 @@ It behaves almost exactly like `git diff`.
 -- ft.code:
 lang: diff
 
-fpm diff
+fastn diff
 diff: foo.ftd
 \--- original
 +++ modified

@@ -1,12 +1,12 @@
--- ds.page: `fpm serve`
+-- ds.page: `fastn serve`
 
 
-`fpm serve [<port>]` creates an `http` server, which dynamically builds ftd files when serving.
+`fastn serve [<port>]` creates an `http` server, which dynamically builds ftd files when serving.
 
 -- ds.h1: Usage
 
-- `fpm serve`, It will create and run server at default port `8000`
-- `fpm serve 8080`, It will create and run server at port `8080`
+- `fastn serve`, It will create and run server at default port `8000`
+- `fastn serve 8080`, It will create and run server at port `8080`
 
 -- ds.h2: TODO
 

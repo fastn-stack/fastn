@@ -112,7 +112,7 @@ If on remote, v2 and our changes do not merge cleanly with v1 version as based,
 remote notifies the clone that the sync for that file failed. Remote sends the
 v2 version of file which clone stored in `.remote-state` folder. `workspace.ftd`
 and `file.ftd` in workspace are not modified. This conflict, then, can be
-resolved by clone using [`fpm resolve-conflict <file>`](cli/resolve-conflict).
+resolved by clone using [`fastn resolve-conflict <file>`](cli/resolve-conflict).
 
 
 -- ds.h2: Only a file with no known conflicts are sent to remote
@@ -126,9 +126,9 @@ three way merge, and if the merge fails, we know there is conflict.
 
 -- ds.h2: Deleting a file, no edits on remote case
 
-If a file is deleted from workspace and if [`fpm rm <file>`](/cli/rm/) command
+If a file is deleted from workspace and if [`fastn rm <file>`](/cli/rm/) command
 has been run, this sets deleted in `workspace.ftd` entry, we send this
-information to remote on `fpm sync`, and our version number. remote will see our
+information to remote on `fastn sync`, and our version number. remote will see our
 version numbers match, so remote will create a new version number to mark
 deletion of the file, and update the `.remote-state/history.ftd`. And the clone
 will delete the entry from `.clone-state/workspace.ftd`.
@@ -141,7 +141,7 @@ version number, and return a conflict message along with the latest content of
 the file. Our conflict detector will spot that we have deleted a file
 corresponding to a version number in workspace.ftd that is no longer the latest
 version of that file, and treat is as conflict and not send it to remote on next
-fpm sync.
+fastn sync.
 
 
 

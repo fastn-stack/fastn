@@ -4,7 +4,7 @@ TODO:
 
 A document may show different content based on who is visiting the document. To
 do that the document can request if the current user belongs to any [`group`
-defined in FPM.dsd](/dev/user-group/).
+defined in FASTN.dsd](/dev/user-group/).
 
 -- ds.code:
 lang: dsd

@@ -6,17 +6,17 @@
 
 -- ft.h0: Roadmap
 
-- `fpm build`: [file system organization](/fpm/~/1/)
-- [package dependencies](/fpm/~/9/)
+- `fastn build`: [file system organization](/fastn/~/1/)
+- [package dependencies](/fastn/~/9/)
 - package cargo binary for different os/arch, and also brew, apt
 - figure out how to do http serving
-- `fpm serve`
-- [logical linking](/fpm/~/2/)
-- [translation tracking](/fpm/~/3/)
-- [version tracking](/fpm/~/5/)
-- `fpm-repo` & `fpm sync`
-- [history tracking](/fpm/~/4/)
-- [cr tracking](/fpm/~/6/)
-- [upstream tracking: two way sync](/fpm/~/7/)
-- [`fpm-repo` authentication](/fpm/~/8/)
-- [access control](/fpm/~/10/)
+- `fastn serve`
+- [logical linking](/fastn/~/2/)
+- [translation tracking](/fastn/~/3/)
+- [version tracking](/fastn/~/5/)
+- `fastn-repo` & `fastn sync`
+- [history tracking](/fastn/~/4/)
+- [cr tracking](/fastn/~/6/)
+- [upstream tracking: two way sync](/fastn/~/7/)
+- [`fastn-repo` authentication](/fastn/~/8/)
+- [access control](/fastn/~/10/)

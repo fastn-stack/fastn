@@ -1,51 +1,51 @@
--- ds.page: About `fpm`
+-- ds.page: About `fastn`
 
 -- ds.markdown: 
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for
-publishing on the web. `fpm` takes markdown, and adds features to create full
+publishing on the web. `fastn` takes markdown, and adds features to create full
 page layouts, lets you create reusable "ftd components", and has first class
 support for data modelling, so the `ftd` document can be used as an data exchange
 format as well (as a replacement of JSON/CSV etc).
 
--- ds.h1: FPM: Package Manager
+-- ds.h1: FASTN: Package Manager
 
-`fpm` is "`ftd` package manager", defines a package format for packaging `ftd`
-files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
+`fastn` is "`ftd` package manager", defines a package format for packaging `ftd`
+files. `fastn` packages can depend on other `fastn` packages, and `fastn` can install
 all the dependencies of a package.
 
 [Learn more](/package-manager/).
 
--- ds.h1: FPM: Static Site Generator
+-- ds.h1: FASTN: Static Site Generator
 
-`fpm` can also convert `ftd` files to static HTML files, so you can use it as
+`fastn` can also convert `ftd` files to static HTML files, so you can use it as
 a static site generator, and publish FTD files on github pages, S3 etc static
 site hosting sites.
 
-[Learn more about FPM as static site generator](/static/).
+[Learn more about FASTN as static site generator](/static/).
 
--- ds.h1: FPM for Remixing/Curating Documentation
+-- ds.h1: FASTN for Remixing/Curating Documentation
 
-FPM has a feature that let's you reuse content, you can include the same
+FASTN has a feature that let's you reuse content, you can include the same
 document in multiple places in your site, and you can also include content
 present in other packages.
 
 Learn mode about [remixing packages here](/remixing/).
 
 
--- ds.h1: FPM for Distributing Static Assets
+-- ds.h1: FASTN for Distributing Static Assets
 
-FPM can be used for distributing images, and fonts as packages.
+FASTN can be used for distributing images, and fonts as packages.
 
 
 
 -- ds.h1: Features
 
-- Web Server(fpm serve)
-- FPM CLI
+- Web Server(fastn serve)
+- FASTN CLI
   - static site generator
-  - fpm serve
-  - fpm version
+  - fastn serve
+  - fastn version
 - FTD
   - Packages and Dependencies
     - VCS

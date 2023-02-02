@@ -11,7 +11,7 @@ from HTTP.
 
 -- cbox.warning: Static Vs Dynamic
 
-The http request is made on build time if you are using fpm in [static site
+The http request is made on build time if you are using fastn in [static site
 mode](/static/), and instead if you are using [server mode](/server/) then this
 processor makes http request on every page load.
 

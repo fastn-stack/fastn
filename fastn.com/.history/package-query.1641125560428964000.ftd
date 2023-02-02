@@ -4,7 +4,7 @@
 -- ft.h0: `$processor$: package-query`
 
 `package-query` processor allows you to execute SQL queries against SQLite files
-present in your `fpm` package.
+present in your `fastn` package.
 
 Say you have a record and a variable like this:
 

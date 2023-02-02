@@ -1,7 +1,7 @@
 -- ds.page: `edit` API
 
-`edit` API is called by the `fpm editor` to update  the local content of fpm
-package where `fpm serve` is running.
+`edit` API is called by the `fastn editor` to update  the local content of fastn
+package where `fastn serve` is running.
 
 -- ds.h1: API
 

@@ -1,22 +1,22 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
 -- ds.page: Remixing Static Site Generator
 
-FPM is a static site generator. What it means it generates a set of static files
+FASTN is a static site generator. What it means it generates a set of static files
 that we can host on any static site host, eg nginx on your custom server, or on
 [Github Pages](https://pages.github.com),
 [Vercel](https://vercel.com/guides/custom-404-page#static-site-generator-(ssg))
 etc.
 
-If you checkout fpm.dev, this site is built using fpm. The document that you are
-[reading right now is here](https://github.com/FifthTry/fpm.dev/blob/main/remixing.ftd).
+If you checkout fastn.dev, this site is built using fastn. The document that you are
+[reading right now is here](https://github.com/FifthTry/fastn.dev/blob/main/remixing.ftd).
 
 -- ds.code: remixing.ftd gets published on /remixing/ that you are reading right now
 lang: ftd
 
 \-- ds.page: Remixing Static Site Generator
 
-FPM is a static site generator. What it means it generates a set of
+FASTN is a static site generator. What it means it generates a set of
 static files that we can host on any static site host, eg nginx on
 your custom server, or on [Github Pages](https://pages.github.com),
 [Vercel](https://vercel.com/guides/custom-404-page#static-site-generator-(ssg))
@@ -26,7 +26,7 @@ etc.
 
 -- ds.markdown:
 
-So someone has written the above code, and when we "build it", using `fpm build`,
+So someone has written the above code, and when we "build it", using `fastn build`,
 it generates and HTML page that looks like this.
 
 This is what static site generators do. `ssg` or static site generator is a
@@ -44,11 +44,11 @@ argue, it started the entire category. It was created by
 [Tom Preston-Werner](https://en.wikipedia.org/wiki/Tom_Preston-Werner), founder
 of Github!
 
-Most (all?) of these are open source licensed and `fpm` is also open source, BSD
+Most (all?) of these are open source licensed and `fastn` is also open source, BSD
 licensed. We hope to be on that list, someday we will send a pull request to
 them.
 
-So FPM is a static site generator like all these ones, but compared to them, we
+So FASTN is a static site generator like all these ones, but compared to them, we
 have a special feature: remixing sites.
 
 -- ds.h1: What Does Remixing Site Mean?

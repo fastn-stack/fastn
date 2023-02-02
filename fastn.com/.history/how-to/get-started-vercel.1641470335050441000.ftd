@@ -11,14 +11,14 @@ or you can deploy your existing repository(Step 2).
 
 -- ft.h2: Step 1.1. Start from scratch: New Repository
 
-Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fpm-blog&template=other) to initialize. Check out step 2 for the configuration setup.
+Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fastn-blog&template=other) to initialize. Check out step 2 for the configuration setup.
 
 --- ft.image: Just choose your repository name and click on the Create button
 src: /how-to/vercel-new-template.png
 
 -- ft.h2: Step 1.2. Deploy an existing repository
 
-Deploying an existing FPM repository on vercel is quite easy. On your vercel 
+Deploying an existing FASTN repository on vercel is quite easy. On your vercel 
 dashboard, click on [New Project](https://vercel.com/new) and select your git 
 provider and the repository accordingly.
 
@@ -29,7 +29,7 @@ Step 2.
 -- ft.image:
 src: /how-to/vercel-new-from-repo.png
 
--- ft.h1: Step 2. Vercel FPM configuration
+-- ft.h1: Step 2. Vercel FASTN configuration
 
 Once the application is up and ready, head over to Settings > General and enter 
 the following configuration in the __Build & Development Settings__
@@ -37,7 +37,7 @@ the following configuration in the __Build & Development Settings__
 -- ft.code: Build Command
 lang: sh
 
-fpm build --base=/
+fastn build --base=/
 
 -- ft.code: Output Directory
 lang: sh
@@ -47,11 +47,11 @@ lang: sh
 -- ft.code: Install Command
 lang: sh
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fastn/main/install-fastn.sh)"
 
 
 -- ft.image:
 src: /how-to/vercel-deploy-settings.
 
-Congratulations, your FPM package is now sucessfully hosted. You can head over to 
+Congratulations, your FASTN package is now sucessfully hosted. You can head over to 
 the application dashboard to see your deployment domain(s).

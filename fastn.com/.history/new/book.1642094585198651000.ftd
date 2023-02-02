@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.page:
 
@@ -15,7 +15,7 @@ link: /
 -- ft.template-list:
 
 --- ft.theme: Jupiter
-link: https://github.com/FifthTry/fpm-book/generate
+link: https://github.com/FifthTry/fastn-book/generate
 image: images/jupiter.png
-live_preview: https://fifthtry.github.io/fpm-book/
+live_preview: https://fifthtry.github.io/fastn-book/
 

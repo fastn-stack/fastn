@@ -1,5 +1,5 @@
--- import: fpm.dev/assets
--- import: fpm.dev/featured as ft-ui
+-- import: fastn.dev/assets
+-- import: fastn.dev/featured as ft-ui
 
 
 

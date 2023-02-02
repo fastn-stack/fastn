@@ -5,8 +5,8 @@ parameters. In future we will implement this processor to get data from request
 body. It can POST method body, or form body.
 
 
-- `request-data` processor: [Github Discussion](https://github.com/FifthTry/fpm/discussions/516)
-- Named Parameter Support: [GitHub Discussion](https://github.com/ftd-lang/fpm/discussions/551)
+- `request-data` processor: [Github Discussion](https://github.com/FifthTry/fastn/discussions/516)
+- Named Parameter Support: [GitHub Discussion](https://github.com/ftd-lang/fastn/discussions/551)
 
 
 E.g.:
@@ -50,10 +50,10 @@ Let's say if we have a url mapping like below in sitemap. If request come for
 `/abrark/manager/28/`, So we will be able to get `username` and `age` at
 `person-manager.ftd` document.
 
--- ds.code: FPM.ftd
+-- ds.code: FASTN.ftd
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fastn.sitemap:
 
 # Manager
 url: /<string:username>/manager/<integer:age>/
@@ -75,10 +75,10 @@ $processor$: request-data
 \;; Using the information
 \;; It will show username as `abrark`
 \-- ftd.text: $p.username
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 \;; It will show age as `28`
 \-- ftd.integer: $p.age
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 -- end: ds.page

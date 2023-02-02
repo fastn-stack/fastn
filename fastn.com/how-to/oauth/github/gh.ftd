@@ -1,7 +1,7 @@
 -- ds.page: Github OAuth
 
 
-For Github Oauth using FPM. Follow please setps given below:
+For Github Oauth using FASTN. Follow please setps given below:
 
 - [How to create a Github App](/how-to/oauth/github/gh-app/)
 - [Login Flow](/how-to/oauth/github/gh-login/)

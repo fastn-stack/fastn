@@ -1,5 +1,5 @@
 -- import: ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 
 
@@ -8,7 +8,7 @@ toc: $ft.toc
 
 
 
--- ft.h0: `fpm status`
+-- ft.h0: `fastn status`
 
 Status: Planned
 
@@ -20,7 +20,7 @@ folder.
 -- ft.code:
 lang: sh
 
-fpm status
+fastn status
 modified    a/b.ftd
 added       f.ftd
 removed     g/f.ftd

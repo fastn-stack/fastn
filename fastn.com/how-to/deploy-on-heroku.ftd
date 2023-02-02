@@ -1,17 +1,19 @@
--- import: fpm.dev/assets
+-- import: ds as ft
 
--- ft.page: Deploy FPM Package On Heroku
+-- import: fastn.dev/assets
 
--- ft.h1: 1️⃣ Create FPM Package Repository Using Github Template
+-- ft.page: Deploy FASTN Package On Heroku
+
+-- ft.h1: 1️⃣ Create FASTN Package Repository Using Github Template
 
 -- ft.h2: ▶️ Creating Repository From Template
 
-- On GitHub.com, navigate to the main page of the [fpm-template repository](https://github.com/FifthTry/fpm-template/).
+- On GitHub.com, navigate to the main page of the [fastn-template repository](https://github.com/FifthTry/fastn-template/).
 - Above the file list, click `Use this template`.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-1.png
-width: fill
+width: fill-container
 
 - Do the appropriate fill outs in github page and then click `Create repository
 from template.`
@@ -22,48 +24,48 @@ Note: Wait till the `Rename the project from template` workflow executed success
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-3.png
-width: fill
+width: fill-container
 
 -- ft.h1: Deploy on Heroku
 
-The above repository that you have created using `fpm-template`, it should
+The above repository that you have created using `fastn-template`, it should
 contain `Deploy to Heroku` button in the project `README` file. By clicking on
 this button, you should be landed to `heroku.com`.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-6.png
-width: fill
+width: fill-container
 
 
 -- ft.markdown:
 
 After click on the `Deploy on Heroku` button you will be landed to below page.
 Fill the `App name` which should be unique to heroku apps and click on
-`Deploy app`. I have used `fpm-heroku-app` as `App name`.
+`Deploy app`. I have used `fastn-heroku-app` as `App name`.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-7.png
-width: fill
+width: fill-container
 
 After filling the `App name` and clicking on the `Deploy app`, you should see
 the below output(build logs) and `Your app was successfully deployed`.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-8.png
-width: fill
+width: fill-container
 
-Now click on `View` button, and your FPM App is ready with Heroku.
+Now click on `View` button, and your FASTN App is ready with Heroku.
 
 Yay!!! 💃
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-9.png
-width: fill
+width: fill-container
 
 
--- ft.h1: How To Redeploy FPM Package
+-- ft.h1: How To Redeploy FASTN Package
 
-Till now we have seen, How to deploy FPM application on Heroku. In this part
+Till now we have seen, How to deploy FASTN application on Heroku. In this part
 I will show you how to update content on Heroku.
 
 So now we have to update content on Heroku, to accomplish we are using GitHub
@@ -78,7 +80,7 @@ give a token.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-10.png
-width: fill
+width: fill-container
 
 
 -- ft.h2: Set Heroku Auth Token to GitHub Repository
@@ -90,17 +92,17 @@ Heroku Auth token in the `Secret` and click on the `Add secret` button.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-11.png
-width: fill
+width: fill-container
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-12.png
-width: fill
+width: fill-container
 
 -- ft.h2: Update GitHub Workflow Actions
 
-In your GitHub repository, open file [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
+In your GitHub repository, open file [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fastn-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
 and replace `<heroku-app-name>` with your heroku app name. In my case, `<heroku-app-name>`
-get replaced with `fpm-heroku-app`.
+get replaced with `fastn-heroku-app`.
 
 -- ft.code: `refresh-content-on-heroku.yml`
 lang: diff
@@ -110,19 +112,19 @@ lang: diff
 -   --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
 + run: |
 +   curl --location --request POST \
-+   --url 'https://fpm-heroku-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
++   --url 'https://fastn-heroku-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
 
 -- ft.markdown:
 
-Same as above, open file [`.github/workflows/update-fpm-binary.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/update-fpm-binary.yml#L25)
+Same as above, open file [`.github/workflows/update-fastn-binary.yml`](https://github.com/FifthTry/fastn-template/blob/main/.github/workflows/update-fastn-binary.yml#L25)
 and replace `<heroku-app-name>` with your heroku app name. In my case,
-`<heroku-app-name>` get replaced with `fpm-heroku-app`.
+`<heroku-app-name>` get replaced with `fastn-heroku-app`.
 
--- ft.code: `update-fpm-binary.yml`
+-- ft.code: `update-fastn-binary.yml`
 lang: diff
 
 -  --url https://api.heroku.com/apps/<heroku-app-name>/dynos/${{ github.event.inputs.dynoNumber }}
-+  --url https://api.heroku.com/apps/fpm-heroku-app/dynos/${{ github.event.inputs.dynoNumber }}
++  --url https://api.heroku.com/apps/fastn-heroku-app/dynos/${{ github.event.inputs.dynoNumber }}
 
 
 -- ft.h2: How To Refresh Content On Heroku
@@ -132,22 +134,22 @@ above.
 
 Now open your GitHub Repository, click to `Actions`, click on
 `Update Content On Heroku`, click on `Run workflow` dropdown, and then click on
-`Run workflow` button as in the below image. By doing this `fpm` will
+`Run workflow` button as in the below image. By doing this `fastn` will
 automatically fetch your new content from your GitHub repository.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-13.png
-width: fill
+width: fill-container
 
 
--- ft.h2: How to Update `fpm` Binary on Heroku
+-- ft.h2: How to Update `fastn` Binary on Heroku
 
 Before doing that make sure you have setup the Heroku Auth token as described
 above.
 
 Now open your GitHub Repository, click to `Actions`, click on
-`Deploy FPM on Heroku`, click on `Run workflow` dropdown, and then click on
-`Run Workflow` button as in the below image. By doing this `fpm` will
+`Deploy FASTN on Heroku`, click on `Run workflow` dropdown, and then click on
+`Run Workflow` button as in the below image. By doing this `fastn` will
 automatically updated on Heroku.
 
 Note: You may have to check Heroku `dyno-id`, this you can check with in your
@@ -155,7 +157,7 @@ Heroku application, by default it uses `web.1` if you have not changed it.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-14.png
-width: fill
+width: fill-container
 
 
 -- ft.h1: Contact Us
@@ -163,4 +165,6 @@ width: fill
 If you are getting any issue while deploying or with the above process, feel
 free to contact us on [Discord](https://discord.gg/CPNtd3TF).
 
-If you think it worked well, Please starred [FPM](https://github.com/FifthTry/fpm).
+If you think it worked well, Please starred [FASTN](https://github.com/FifthTry/fastn).
+
+-- end: ft.page

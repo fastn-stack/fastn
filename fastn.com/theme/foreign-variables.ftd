@@ -1,7 +1,7 @@
 -- ds.page: `foreign-variables`
 
 Foreign Variables are the variables that are not defined in any module but whose
-value can be defined by application (like FPM). It's value is populated by
+value can be defined by application (like FASTN). It's value is populated by
 application during interpreter's runtime.
 
 
@@ -12,18 +12,18 @@ can use foreign variables.
 
 It can be used to fetch data provided by application.
 
--- ds.h1: `fpm/time.now-str`
+-- ds.h1: `fastn/time.now-str`
 
 -- ds.code: foo.ftd
 lang: ftd
 
-\-- import: fpm/time
+\-- import: fastn/time
 
 \-- ftd.text: $time.now-str
 
 -- ds.markdown:
 
-The `-- import: fpm/time` statement exposes foreign variable `fpm/time.now-str`
+The `-- import: fastn/time` statement exposes foreign variable `fastn/time.now-str`
 which returns the current date and time as a string.
 
 The output looks something like this

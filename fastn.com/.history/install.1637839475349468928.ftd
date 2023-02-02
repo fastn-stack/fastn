@@ -4,18 +4,18 @@
 -- ft.page:
 
 
--- ft.h0: Install `fpm`
+-- ft.h0: Install `fastn`
 
-`fpm` is available as a crate, you can install it using:
+`fastn` is available as a crate, you can install it using:
 
 
 -- ft.code:
 lang: sh
 
-cargo install fpm
+cargo install fastn
 
 
--- ft.h1: Upgrade `fpm`
+-- ft.h1: Upgrade `fastn`
 
 As of Rust 1.41.0, `cargo install` does an auto upgrade of a package if it is 
 already installed. 
@@ -26,4 +26,4 @@ If you are using older Rust, then run the following to upgrade.
 -- ft.code:
 lang: sh
 
-cargo install --force fpm
+cargo install --force fastn

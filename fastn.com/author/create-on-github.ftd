@@ -1,8 +1,8 @@
--- import: fpm.dev/assets
+-- import: fastn.dev/assets
 
--- ds.page: How to create new fpm project using `fpm-template` on GitHub?
+-- ds.page: How to create new fastn project using `fastn-template` on GitHub?
 
-Let's understand `fpm` project creation in just 5 minutes by playing! 
+Let's understand `fastn` project creation in just 5 minutes by playing! 
 
 With this we are also going to create our new `FTD` website by following the very 
 short embedded tutorial.
@@ -15,12 +15,12 @@ Or
 
 Create your GitHub account by following simple steps by [GitHub sign-up process](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home).
 
-Now as you signed into your GitHub account, lets start creating our first `fpm` 
+Now as you signed into your GitHub account, lets start creating our first `fastn` 
 website project on GitHub.
 
-To start with it, create a repository using `fpm-template` - [Click here](https://github.com/ftd-lang/fpm-template/generate)
+To start with it, create a repository using `fastn-template` - [Click here](https://github.com/ftd-lang/fastn-template/generate)
 
--- ds.image: How to create new repository using `fpm-template`
+-- ds.image: How to create new repository using `fastn-template`
 src: $assets.files.static.docs.create-new-repository.png
 width: fill-container
 
@@ -32,7 +32,7 @@ You can also add description of your `FTD` website(optional).
 Once you click on `Create repository from template` your first ever `FTD` web 
 repository is ready.
 
--- ds.image: Creating GitHub repository using `fpm-template`
+-- ds.image: Creating GitHub repository using `fastn-template`
 src: $assets.files.static.docs.example-ftd-website-repository.png
 width: fill-container
 
@@ -91,7 +91,7 @@ width: fill-container
 
 -- ds.h3: Updating default theme
 
-Your repository is now ready to use. You are now FTD website user. `FPM.ftd` 
+Your repository is now ready to use. You are now FTD website user. `FASTN.ftd` 
 file contains all dependencies you are using. 
 
 Let's change default theme, by following below step.
@@ -99,13 +99,13 @@ Let's change default theme, by following below step.
 -- ds.code: 
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/doc-site as ds
+\-- fastn.dependency: fifthtry.github.io/doc-site as ds
 
 
 -- ds.code: Just replace above line with
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/dash-dash-ds as ds
+\-- fastn.dependency: fifthtry.github.io/dash-dash-ds as ds
 
 
 -- ds.markdown:

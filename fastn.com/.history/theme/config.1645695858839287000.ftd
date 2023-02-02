@@ -52,7 +52,7 @@ By using variables appropriately many aspects of themes can be customizable.
 
 -- ft.h1: Table Of Content
 
-FPM comes with [`toc` processor](/toc/),
+FASTN comes with [`toc` processor](/toc/),
 
 -- ft.code:
 lang: ftd

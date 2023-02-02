@@ -51,7 +51,7 @@ By using variables appropriately many aspects of themes can be customizable.
 
 -- ds.h1: Table Of Content
 
-FPM comes with [`toc` processor](/toc/),
+FASTN comes with [`toc` processor](/toc/),
 
 -- ds.code:
 lang: ftd

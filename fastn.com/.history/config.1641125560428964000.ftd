@@ -4,19 +4,19 @@
 $processor$: toc
 
 - index.html
-  fpm: FTD Package Manager
+  fastn: FTD Package Manager
 - about/
-  About `fpm`
+  About `fastn`
   - why-not/
-    Why Not `fpm`?
+    Why Not `fastn`?
 - roadmap/
   Roadmap
 - journal/
   Journal
 - fs/
   File System Organization
-  - FPM/
-    `FPM.ftd`
+  - FASTN/
+    `FASTN.ftd`
 - ftd-host/
   FTD Host Features
   - http/
@@ -25,22 +25,22 @@ $processor$: toc
     `$processor$: toc`
   - package-query/
     `$processor$: package-query`
-  - fpm-vars/
-    `import: fpm`
+  - fastn-vars/
+    `import: fastn`
 - install/
-  Install `fpm`
+  Install `fastn`
 - usage/
-  `fpm` Usage
+  `fastn` Usage
   - build/
-    `fpm build`
+    `fastn build`
   - sync/
-    `fpm sync`
+    `fastn sync`
   - status/
-    `fpm status`
+    `fastn status`
   - diff/
-    `fpm diff`
+    `fastn diff`
   - update/
-    `fpm update`
+    `fastn update`
 - known-issues/
   Known Issues
 

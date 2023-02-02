@@ -1,9 +1,11 @@
--- ft.page: `fpm::UserGroupCompat`
+-- import: ds as ft
 
-`fpm::UserGroupCompat` is used in `ftd` for UI purpose, means it gets serialized
-into [fpm.user-group-compat](/theme/fpm/#user-group-compat).
+-- ft.page: `fastn::UserGroupCompat`
 
-Code File: [`fpm::src::user_groups.rs`](https://github.com/FifthTry/fpm/blob/main/src/user_group.rs)
+`fastn::UserGroupCompat` is used in `ftd` for UI purpose, means it gets serialized
+into [fastn.user-group-compat](/theme/fastn/#user-group-compat).
+
+Code File: [`fastn::src::user_groups.rs`](https://github.com/FifthTry/fastn/blob/main/src/user_group.rs)
 
 -- ft.code:
 lang: rs
@@ -16,5 +18,5 @@ pub struct UserGroupCompat {
     groups: Vec<String>,
     // It will contain all group members, like group, email and -email, etc...
     #[serde(rename = "group-members")]
-    group_members: Vec<fpm::library::full_sitemap::KeyValueData>,
+    group_members: Vec<fastn::library::full_sitemap::KeyValueData>,
 }

@@ -51,7 +51,7 @@ This two state switcher should be considered an anti pattern.
 This kind of UI is preferred today:
 
 -- ft.image: Dark Mode Switcher
-src: -/fpm.dev/theme/dark-mode-switcher.png
+src: -/fastn.dev/theme/dark-mode-switcher.png
 align: center
 
 In the collapsed state it should show the icon showing the mode that is currently
@@ -59,50 +59,50 @@ being used based on combination of user and system preference. Unlike the image
 shown above, the icon for system mode should show the value system is
 recommending right now.
 
--- ft.h1: `fpm.dark-mode`
+-- ft.h1: `fastn.dark-mode`
 
-To support dark mode in your themes, you should use `fpm.dark-mode` variable,
-which is set by FPM based on past user preference, and current OS settings.
+To support dark mode in your themes, you should use `fastn.dark-mode` variable,
+which is set by FASTN based on past user preference, and current OS settings.
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- ftd.text highlight: $title
 caption title:
-color if $fpm.dark-mode: yellow
-background-color if not $fpm.dark-mode: yellow
+color if $fastn.dark-mode: yellow
+background-color if not $fastn.dark-mode: yellow
 
 -- ft.markdown:
 
-We have used `$fpm.dark-mode` to change color and background colors here.
+We have used `$fastn.dark-mode` to change color and background colors here.
 
 
--- ft.h1: `fpm.follow-system-dark-mode` and `fpm.system-dark-mode`
+-- ft.h1: `fastn.follow-system-dark-mode` and `fastn.system-dark-mode`
 
-`fpm.follow-system-dark-mode` tells you if user has asked to follow system dark
+`fastn.follow-system-dark-mode` tells you if user has asked to follow system dark
 mode or user has explicitly selected dark or light mode, over-riding the system
 preference.
 
-And `fpm.system-dark-mode` tells you if the system prefers dark-mode.
+And `fastn.system-dark-mode` tells you if the system prefers dark-mode.
 
 These two variable should not be used for style switching in most of your code,
-you should use `fpm.dark-mode` for that. These two variables are only to help
+you should use `fastn.dark-mode` for that. These two variables are only to help
 you create the dark mode switcher.
 
 
 -- ft.h1: Preferences Are Stored In A Cookie
 
 On first page load a cookie is created from JavaScript, indicating the dark-mode
-setting. The name of the cookie is `fpm-dark-mode`, and it contains value in this
+setting. The name of the cookie is `fastn-dark-mode`, and it contains value in this
 format: `user or system | system prefers light or dark | final setting dark or
 light` e.g., `user | dark | light`: meaning what we are following right now is
 user's override, system is `dark` and user prefers `light`.
 
 The exact cookie format may change in future, this is only for informational
-value that the settings are preserved. When `fpm-repo` is ready, or if the
-FPM files are being served via a dynamic host instead of static file servers,
+value that the settings are preserved. When `fastn-repo` is ready, or if the
+FASTN files are being served via a dynamic host instead of static file servers,
 the cookie would be used to set the way initial page is rendered. Currently when
 the page loads, the site is assumed to be light mode, so there is a slight flash
 when the mode switches back to dark.
@@ -117,8 +117,8 @@ For these we have exposed three message host "actions": `$on-click$:
 message-host enable-dark-mode` or `message-host enable-light-mode` or
 `message-host enable-system-mode`.
 
-The host functions, "enable-dark-mode" etc, are provided by fpm, and they will
-update the cookie, and change `fpm.dark-mode`, `fpm.follow-system-dark-mode` and
-`fpm.system-dark-mode` FTD variables.
+The host functions, "enable-dark-mode" etc, are provided by fastn, and they will
+update the cookie, and change `fastn.dark-mode`, `fastn.follow-system-dark-mode` and
+`fastn.system-dark-mode` FTD variables.
 
 

@@ -1,7 +1,7 @@
 -- ds.page: `sync` API
 
-`sync` API is called by the `fpm cli` to sync the local content of fpm package
-with the remote server. It is available only in FPM `remote` feature.
+`sync` API is called by the `fastn cli` to sync the local content of fastn package
+with the remote server. It is available only in FASTN `remote` feature.
 
 
 -- ds.h1: URL And Parameters

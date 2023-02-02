@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 
 
@@ -7,9 +7,9 @@
 toc: $ft.toc
 
 
--- ft.h0: `fpm update`
+-- ft.h0: `fastn update`
 
-`fpm update` updates all the dependencies of the package.
+`fastn update` updates all the dependencies of the package.
 
 Note: Currently we simply delete `.packages` folder and re-download everything, so
 do not do any modifications in `.packages` or do not run this command.

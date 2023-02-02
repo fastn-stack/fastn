@@ -2,15 +2,15 @@
 
 We have created some Google Fonts listed in featured page:
 
-include fifthtry.github.io/inter package into FPM.ftd file
+include fifthtry.github.io/inter package into FASTN.ftd file
 
 
--- ds.code: Add Dependency To `FPM.ftd`
+-- ds.code: Add Dependency To `FASTN.ftd`
 lang: ftd
 
-\-- fpm.dependency: fifthtry.github.io/inter
+\-- fastn.dependency: fifthtry.github.io/inter
 
-\-- fpm.auto-import: fifthtry.github.io/inter
+\-- fastn.auto-import: fifthtry.github.io/inter
 
 
 -- ds.markdown:
@@ -21,7 +21,7 @@ Inside your .ftd file to change for any specific token use:
 -- ds.code: using font
 lang: ftd
 
-\-- fpm.type.headline-small.font: $inter.fonts.Inter
+\-- fastn.type.headline-small.font: $inter.fonts.Inter
 
 \-- ftd.text:
 role: $inherited.types.heading-small

@@ -1,9 +1,9 @@
--- ds.page: `fpm sync`
+-- ds.page: `fastn sync`
 
 
 -- ds.markdown: 
 
-`fpm sync` operates in two modes. If the package is hosted on `fpm-repo` then it
+`fastn sync` operates in two modes. If the package is hosted on `fastn-repo` then it
 syncs the content of local folder with remote [not yet implemented]. If the package
 is hosted on `github` etc, then `sync` creates a snapshot of modified files in
 `.history` folder.
@@ -15,23 +15,23 @@ is hosted on `github` etc, then `sync` creates a snapshot of modified files in
 -- ds.code:
 lang: sh
 
-fpm sync
+fastn sync
 Repo for amitu is github, directly syncing with .history.
 a/b.ftd
 index.ftd
-FPM.ftd
+FASTN.ftd
 
 
 -- ds.code: when everything is up to date.
 lang: sh
 
-fpm sync
+fastn sync
 Everything is upto date.
 
 
 -- ds.markdown:
 
-`fpm sync` first reports the repo of the package name, if its `github` it says
+`fastn sync` first reports the repo of the package name, if its `github` it says
 its `directly syncing with .history`.
 
 Then it lists all the files that have been modified and updated.

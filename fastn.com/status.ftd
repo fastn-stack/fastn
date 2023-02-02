@@ -1,4 +1,4 @@
--- ds.page: `fpm status`
+-- ds.page: `fastn status`
 
 
 
@@ -14,7 +14,7 @@ folder.
 -- ds.code:
 lang: sh
 
-fpm status
+fastn status
 modified    a/b.ftd
 added       f.ftd
 removed     g/f.ftd

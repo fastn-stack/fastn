@@ -1,13 +1,13 @@
 -- import: ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 -- ft.doc-page:
 toc: $ft.toc
 
 
--- ft.h0: Install `fpm`
+-- ft.h0: Install `fastn`
 
-You can download `fpm` in multiple ways. The easiest way being just download the
+You can download `fastn` in multiple ways. The easiest way being just download the
 binary and install it in your local system.
 
 -- ft.h1: Pre-built library
@@ -15,35 +15,35 @@ binary and install it in your local system.
 -- ft.h2: Linux Installation
 
 You can get our pre-compiled binaries in the 
-[Releases](https://github.com/FifthTry/fpm/releases) section. 
+[Releases](https://github.com/FifthTry/fastn/releases) section. 
 
 -- ft.h3: One line snippet
 
 --- ft.code:
 lang: sh
 
-\$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/releases/releases/linux_musl_x86_64/install-fpm.sh)"
+\$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fastn/releases/releases/linux_musl_x86_64/install-fastn.sh)"
 
 -- ft.h3: Download and map the binaries
 
-- Download the binaries from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the binaries from the [Releases](https://github.com/FifthTry/fastn/releases) 
   page.
-- Move the `fpm` binary and the `ftd.d` file to the `/usr/local/bin/`.
+- Move the `fastn` binary and the `ftd.d` file to the `/usr/local/bin/`.
 
 -- ft.h2: MacOS Installation
 
 -- ft.h3: Download and map the binaries
 
-- Download the binaries from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the binaries from the [Releases](https://github.com/FifthTry/fastn/releases) 
   page.
-- Move the `fpm` binary and the `ftd.d` file to the `/usr/local/bin/`.
+- Move the `fastn` binary and the `ftd.d` file to the `/usr/local/bin/`.
 
 
 -- ft.h2: Windows Installation
 
-- Download the executable from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the executable from the [Releases](https://github.com/FifthTry/fastn/releases) 
   page.
-- Use the reference to `fpm.exe` in your terminal to invoke ftd.
+- Use the reference to `fastn.exe` in your terminal to invoke ftd.
 
 
 -- ft.h1: `Cargo install` the latest version
@@ -51,30 +51,30 @@ lang: sh
 -- ft.code:
 lang: sh
 
-cargo install fpm
+cargo install fastn
 
 
--- ft.h1: Building FPM from Source
+-- ft.h1: Building FASTN from Source
 
-`fpm` is open source project. You can clone the fpm git repo:
+`fastn` is open source project. You can clone the fastn git repo:
 
 
 -- ft.code:
 lang: sh
 
-git clone git@github.com:FifthTry/fpm.git
+git clone git@github.com:FifthTry/fastn.git
 
 
 -- ft.markdown:
 
-`fpm` is implemented using Rust, using 2021 edition, so minimum supported Rust
+`fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
 version (MSRV) is 1.56.0.
 
 
 -- ft.code:
 lang: sh
 
-cd fpm
+cd fastn
 cargo test
 cargo build
 

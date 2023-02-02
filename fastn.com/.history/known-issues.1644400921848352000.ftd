@@ -1,5 +1,5 @@
 -- import: ft
--- import: fpm.dev/config
+-- import: fastn.dev/config
 
 
 -- ft.doc-page:
@@ -27,13 +27,13 @@ src: https://i.imgur.com/fJZOxoN.jpg
 But cool down, let's do it in steps.
 
 
--- ft.h1: Translation Tracking Doesn't Work If You Do Not `fpm sync`
+-- ft.h1: Translation Tracking Doesn't Work If You Do Not `fastn sync`
 
-From time to time you will have to call `fpm sync`. You can do it every time you
+From time to time you will have to call `fastn sync`. You can do it every time you
 modify any file that is part of the package in fact.
 
 At some point we will remove this requirement, maybe we will work off of `git`
 commit-hashes instead of last modified time stamps as per `.history` folder, but
 for now we need `.history` folder updated regularly.
 
-Call `fpm sync` often.
+Call `fastn sync` often.

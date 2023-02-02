@@ -1,5 +1,5 @@
--- import: fpm.dev/assets
--- import: fpm.dev/featured as ft-ui
+-- import: fastn.dev/assets
+-- import: fastn.dev/featured as ft-ui
 
 
 
@@ -8,7 +8,7 @@
 -- ds.page: Components Library
 
 We haver developed many components using our `FTD` language. You can use these
-components on your `FPM` package. Click on each component to see how to use it.
+components on your `FASTN` package. Click on each component to see how to use it.
 
 -- ft-ui.grid-view:
 templates: $bling

@@ -1,6 +1,6 @@
 -- ds.page: `view-src` API
 
-`view-src` is called from FPM Editor to view source code of the `ftd` and
+`view-src` is called from FASTN Editor to view source code of the `ftd` and
 `markdown` files inside the editor.
 
 -- ds.h1: API
