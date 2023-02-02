@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 2 February 2023
+- [Added enabled property in ftd.checkbox and ftd.text-input](https://github.com/ftd-lang/ftd/commit/12425b68b56c2f475f3630ddb0484de70479aad0)
+
 ## 1 February 2023
 
 <details>

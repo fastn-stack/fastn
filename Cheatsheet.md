@@ -406,6 +406,7 @@ multiline: true
 ### `placeholder`: `optional string` -> Adjusts a visible text inside the input field
 ### `value`: `optional string`
 ### `default-value`: `optional string`
+### `enabled`: `optional boolean` -> Sets whether the text-input is enabled or disabled
 ### `multiline`: `optional boolean` -> To allow multiline input
 ### `type`: `optional ftd.text-input-type` -> Sets the type of text input
 
@@ -440,6 +441,7 @@ $on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
 ## `ftd.checkbox` Attributes
 
 ### `checked`: `optional boolean` -> Default checkbox value
+### `enabled`: `optional boolean` -> Sets whether the checkbox is enabled or disabled
 
 By default, `checkbox` is not selected
 
