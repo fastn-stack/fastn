@@ -1166,7 +1166,24 @@ pub struct TextInput {
     pub multiline: ftd::executor::Value<bool>,
     pub default_value: ftd::executor::Value<Option<String>>,
     pub type_: ftd::executor::Value<Option<ftd::executor::TextInputType>>,
+    pub enabled: ftd::executor::Value<Option<bool>>,
     pub common: Common,
+}
+
+impl TextInput {
+    pub fn enabled_pattern() -> (String, bool) {
+        (
+            indoc::indoc! {"
+                if ({0}) {
+                    \"\"
+                } else {
+                    \"disabled\"
+                }
+            "}
+                .to_string(),
+            true,
+        )
+    }
 }
 
 pub fn text_input_from_properties(
@@ -1195,6 +1212,14 @@ pub fn text_input_from_properties(
         properties,
         arguments,
         false,
+        doc,
+        line_number,
+    )?;
+
+    let enabled = ftd::executor::value::optional_bool(
+        "enabled",
+        properties,
+        arguments,
         doc,
         line_number,
     )?;
@@ -1232,6 +1257,7 @@ pub fn text_input_from_properties(
         default_value,
         common,
         type_,
+        enabled,
     })
 }
 

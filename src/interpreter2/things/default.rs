@@ -7435,6 +7435,12 @@ pub fn text_input_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter2::Argument::default(
+                    "enabled",
+                    ftd::interpreter2::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
                     "type",
                     ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_INPUT_TYPE)
                         .into_optional()
