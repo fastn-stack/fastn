@@ -50,14 +50,14 @@ impl<'a> DummyHtmlGenerator<'a> {
                             let data = {{...new_data, ...all_data}};
                             {arguments}
                             data = {{...args, ...all_data}};
-                            if (!!\"{node}\".trim() && !!window[\"function_{id}\"] && !!window.function_{id}[\"{node}\"]) {{
-                                data[\"{node}\"] = window.function_{id}[\"{node}\"](data);
+                            if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
+                                data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                             }}
                             let html = \"{html}\".replace_format(data);
-                            let nodes = stringToHTML(html).children;
+                            let nodes = stringToHTML(html);
                             let main = document.querySelector(`[data-id=\"{data_id}\"]`);
-                            for (var child in nodes) {{
-                                main.insertBefore(nodes[child], main.children[{start_index}]);
+                            for (var j=0, len = nodes.childElementCount ; j < len; ++j) {{
+                                main.insertBefore(nodes.children[j], main.children[{start_index}]);
                             }}
                          }}
                     }}"
@@ -83,14 +83,14 @@ impl<'a> DummyHtmlGenerator<'a> {
                     window.append_data_{id}[\"{dependency}\"] = function(all_data){{
                         {arguments}
                         let data = {{...args, ...all_data}};
-                        if (!!\"{node}\".trim() && !!window[\"function_{id}\"] && !!window.function_{id}[\"{node}\"]) {{
-                            data[\"{node}\"] = window.function_{id}[\"{node}\"](data);
+                        if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
+                            data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                         }}
                         let html = \"{html}\".replace_format(data);
-                        let nodes = stringToHTML(html).children;
+                        let nodes = stringToHTML(html);
                         let main = document.querySelector(`[data-id=\"{data_id}\"]`);
-                        for (var child in nodes) {{
-                            main.insertBefore(nodes[child], main.children[{start_index}]);
+                        for(var j=0, len = nodes.childElementCount ; j < len; ++j) {{
+                            main.insertBefore(nodes.children[j], main.children[{start_index}]);
                         }}
                     }}"
                 },
@@ -109,5 +109,69 @@ impl<'a> DummyHtmlGenerator<'a> {
                 start_index = dummy_node.start_index
             )
         }
+    }
+}
+
+pub(crate) struct HelperHtmlGenerator<'a> {
+    pub id: String,
+    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+}
+
+impl<'a> HelperHtmlGenerator<'a> {
+    pub fn new(id: &str, doc: &'a ftd::interpreter2::TDoc<'a>) -> HelperHtmlGenerator<'a> {
+        HelperHtmlGenerator {
+            id: id.to_string(),
+            doc,
+        }
+    }
+
+    pub fn from_raw_nodes(&self, raw_nodes: &ftd::Map<ftd::node::RawNode>) -> String {
+        let mut raw_dependency = "".to_string();
+        for (dependency, raw_node) in raw_nodes {
+            raw_dependency = format!(
+                "{}\n{}",
+                raw_dependency,
+                self.from_raw_node(raw_node, dependency)
+            )
+        }
+        if raw_dependency.trim().is_empty() {
+            "".to_string()
+        } else {
+            format!("window.raw_nodes_{} = {{}};\n{}", self.id, raw_dependency)
+        }
+    }
+
+    pub fn from_raw_node(&self, raw_node: &ftd::node::RawNode, dependency: &str) -> String {
+        let raw_html = ftd::html1::RawHtmlGenerator::from_node(
+            self.id.as_str(),
+            self.doc,
+            raw_node.node.to_owned(),
+        );
+
+        let argument_string = ftd::html1::utils::to_argument_string(
+            self.id.as_str(),
+            raw_node.arguments.as_slice(),
+            self.doc,
+            dependency,
+        );
+
+        format!(
+            indoc::indoc! {"
+                window.raw_nodes_{id}[\"{dependency}\"] = function(all_data){{
+                    {arguments}
+                    let data = {{...args, ...all_data}};
+                    if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
+                        data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
+                    }}
+                    let html = \"{html}\".replace_format(data);
+                    return html;
+                }}"
+            },
+            dependency = dependency,
+            arguments = argument_string.unwrap_or_default(),
+            node = raw_html.name,
+            html = dbg!(raw_html.html.replace("\"", "\\\"")),
+            id = self.id,
+        )
     }
 }
