@@ -1243,7 +1243,6 @@ pub struct CheckBox {
 }
 
 impl CheckBox {
-
     pub fn checked_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
@@ -1252,7 +1251,8 @@ impl CheckBox {
                 } else {
                     \"\"
                 }
-            "}.to_string(),
+            "}
+            .to_string(),
             true,
         )
     }
@@ -1265,7 +1265,8 @@ impl CheckBox {
                 } else {
                     \"disabled\"
                 }
-            "}.to_string(),
+            "}
+            .to_string(),
             true,
         )
     }
@@ -1296,5 +1297,9 @@ pub fn checkbox_from_properties(
         line_number,
     )?;
 
-    Ok(CheckBox { checked, enabled, common })
+    Ok(CheckBox {
+        checked,
+        enabled,
+        common,
+    })
 }
