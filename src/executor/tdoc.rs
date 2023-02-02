@@ -155,9 +155,6 @@ impl<'a> TDoc<'a> {
             ftd::interpreter2::Thing::Variable(variable),
         );
 
-        Ok(Some((
-            name_in_component_definition,
-            variable_name.to_string(),
-        )))
+        Ok(Some((name_in_component_definition, variable_name)))
     }
 }
