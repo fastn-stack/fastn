@@ -9,7 +9,7 @@ mod main;
 mod markup;
 mod styles;
 mod tdoc;
-mod utils;
+pub(crate) mod utils;
 mod value;
 mod youtube_id;
 

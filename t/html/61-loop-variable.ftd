@@ -8,6 +8,8 @@
 -- end: $names
 
 
+-- ftd.text: Click here
+$on-click$: $append($a = $names, v = FifthTry)
 
 -- foo: $obj
 idx: $LOOP.COUNTER
@@ -37,4 +39,4 @@ $on-click$: $ftd.increment($a = $foo.value)
 string list $a:
 string v:
 
-a = ftd.append(a, v);
+ftd.append(a, v);

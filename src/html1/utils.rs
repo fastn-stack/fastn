@@ -40,7 +40,7 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
 }
 
 pub(crate) fn js_reference_name(s: &str) -> String {
-    s.replace("\\\\", "/").replace('\\', "/")
+    ftd::interpreter2::utils::js_reference_name(s)
 }
 
 pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
@@ -263,7 +263,7 @@ impl ftd::interpreter2::PropertyValue {
     ) -> ftd::html1::Result<Option<String>> {
         Ok(match self {
             ftd::interpreter2::PropertyValue::Reference { name, .. } => Some(format!(
-                "resolve_reference(\"{}\", data, null){}",
+                "resolve_reference(\"{}\", data){}",
                 js_reference_name(name),
                 field
                     .map(|v| format!(".{}", v))
@@ -557,6 +557,7 @@ pub(crate) fn to_properties_string(
     id: &str,
     properties: &[(String, ftd::interpreter2::Property)],
     doc: &ftd::interpreter2::TDoc,
+    node: &str,
 ) -> Option<String> {
     let mut properties_string = "".to_string();
     for (key, properties) in group_vec_to_map(properties).value {
@@ -576,7 +577,7 @@ pub(crate) fn to_properties_string(
                     false,
                 )
             {
-                let value = format!("var {} = {};", key, value_string);
+                let value = format!("args[\"{}.{}\"] = {};", node, key, value_string);
                 expressions.push((condition, value));
             }
         }
@@ -587,7 +588,7 @@ pub(crate) fn to_properties_string(
     if properties_string.is_empty() {
         None
     } else {
-        Some(properties_string.trim().to_string())
+        Some(format!("var args= {{}};\n{}", properties_string.trim()))
     }
 }
 

@@ -8,23 +8,11 @@ function isObject(obj: object) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 
-function resolve_reference(reference: string, data: any, value: any) {
-    if (reference === "VALUE") {
-        return value;
-    }
-    if (!!data[reference]) {
-        return deepCopy(data[reference]);
-    }
-    let [var_name, remaining] = get_name_and_remaining(reference);
-    let initial_value = data[var_name];
-    while (!!remaining) {
-        let [p1, p2] = split_once(remaining, ".");
-        initial_value = initial_value[p1];
-        remaining = p2;
-    }
-    return deepCopy(initial_value);
-}
-
+function stringToHTML(str: string) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, 'text/html');
+    return doc.body;
+};
 
 function get_name_and_remaining(name: string): [string, string | null] {
     let part1 = "";
@@ -95,6 +83,23 @@ String.prototype.format = function() {
 };
 
 
+String.prototype.replace_format = function() {
+    var formatted = this;
+    if (arguments.length > 0){
+        // @ts-ignore
+        for (let [header, value] of Object.entries(arguments[0])) {
+            var regexp = new RegExp('\\{'+header+'(\\..*)?\\}', 'gi');
+            let matching = formatted.match(regexp);
+            for(let i in matching) {
+                // @ts-ignore
+                formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length -1), arguments[0]));
+            }
+        }
+    }
+    return formatted;
+};
+
+
 function set_data_value(data: any, name: string, value: any) {
     if (!!data[name]) {
         data[name] = deepCopy(set(data[name], null, value));
@@ -115,11 +120,17 @@ function set_data_value(data: any, name: string, value: any) {
     }
 }
 
-function get_data_value(data: any, name: string) {
-    if (!!data[name]) {
-        return deepCopy(data[name]);
+function resolve_reference(reference: string, data: any, value: any, checked: any) {
+    if (reference === "VALUE") {
+        return value;
     }
-    let [var_name, remaining] = get_name_and_remaining(name);
+    if (reference === "CHECKED") {
+        return checked;
+    }
+    if (!!data[reference]) {
+        return deepCopy(data[reference]);
+    }
+    let [var_name, remaining] = get_name_and_remaining(reference);
     let initial_value = data[var_name];
     while (!!remaining) {
         let [p1, p2] = split_once(remaining, ".");
@@ -127,6 +138,11 @@ function get_data_value(data: any, name: string) {
         remaining = p2;
     }
     return deepCopy(initial_value);
+}
+
+
+function get_data_value(data: any, name: string) {
+    resolve_reference(name, data, null, null)
 }
 
 function JSONstringify(f: any) {
