@@ -8,7 +8,7 @@ lang: ftd
 
 \-- component <component-name>:
 
-\--end: <component-name>
+\-- end: <component-name>
 
 -- ds.code: Syntax for refering the component
 lang: ftd

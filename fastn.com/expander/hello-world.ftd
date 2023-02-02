@@ -13,18 +13,18 @@ Accordingly these videos will be updated. Meanwhile, please be catious with the 
 -- ds.code: Change 1: Package manager is renamed
 lang: ftd
 
-<FPM> is now <FASTN> (use-case sensitive, i.e. <fpm> is <fastn> )
+FPM  ->  FASTN (use-case sensitive, i.e. <fpm> is <fastn>)
 
 -- ds.code: Change 2: New way to create local host
 lang: ftd
 
-<fpm serve --edition 2022> is now <fastn serve>
+fpm serve --edition 2022   ->   fastn serve
 
 -- ds.code: Change 3: Syntax change
 lang: ftd
 
-<spacing.px> is now <spacing.fixed.px>
-<spacing-mode> is now <spacing>
+spacing.px  ->  spacing.fixed.px
+spacing-mode  ->  spacing
 
 -- ds.youtube:
 v: v1u-TmNE0bA
