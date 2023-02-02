@@ -213,8 +213,6 @@ impl<'a> ExecuteDoc<'a> {
             let component = ftd::executor::utils::create_dummy_instruction_for_loop_element(
                 instruction,
                 doc,
-                iteration.alias.as_str(),
-                reference_name,
                 inherited_variables,
                 local_container.as_slice(),
             )?;

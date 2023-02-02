@@ -187,7 +187,9 @@ pub(crate) fn find_value_by_argument(
                 }
             } else if p.condition.is_none() {
                 if let Some(v) = p.value.get_reference_or_clone() {
-                    value = Some(ftd::interpreter2::Value::new_string(v));
+                    value = Some(ftd::interpreter2::Value::new_string(
+                        format!("{{{}}}", v).as_str(),
+                    ));
                     line_number = Some(p.line_number);
                 }
             }

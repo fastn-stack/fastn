@@ -52,6 +52,12 @@ impl FunctionGenerator {
             ftd::html1::utils::name_with_id(function.name.as_str(), self.id.as_str()).as_str(),
         );
 
+        let mut arguments = arguments.iter().map(|(k, _)| k).join(",");
+
+        if !arguments.is_empty() {
+            arguments = format!("{},args,data,id", arguments);
+        }
+
         Ok(format!(
             indoc::indoc! {"
                 function {function_name}({arguments}){{
@@ -60,7 +66,7 @@ impl FunctionGenerator {
 
             "},
             function_name = function_name,
-            arguments = arguments.iter().map(|(k, _)| k).join(","),
+            arguments = arguments,
             expressions = expressions
         ))
     }
@@ -144,6 +150,9 @@ impl ExpressionGenerator {
                     result.push(value);
                 }
             }
+            result.push("args".to_string());
+            result.push("data".to_string());
+            result.push("id".to_string());
             return format!("{}({})", function_name, result.join(","));
         }
 
