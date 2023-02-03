@@ -6,14 +6,10 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#foo:idx:1": 0,
-"foo#foo:idx:2": 1,
-"foo#foo:idx:3": 2,
-"foo#foo:idx:4": 3,
-"foo#foo:value:1": 0,
-"foo#foo:value:2": 0,
-"foo#foo:value:3": 0,
-"foo#foo:value:4": 0,
+"foo#foo:idx:0,1,0": 0,
+"foo#foo:idx:0,1,1": 1,
+"foo#foo:idx:0,1,2": 2,
+"foo#foo:idx:0,1,3": 3,
 "foo#names": [
 "John",
 "Alice",
@@ -630,7 +626,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><input data-id="0:main" placeholder="Type any text ..." type="text" onchange="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: 400px" class="ft_md"></input><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:value:1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">John</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:value:2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Alice</div></div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:value:3&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Tom</div></div><div data-id="4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:value:4&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="4,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Jerry</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: center; align-self: center; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; gap: 100px; height: auto; justify-content: center; padding: 60px; text-decoration: none; width: 70%" ><div data-id="0,0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0,0:main" style="align-self: center; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Create a card:</div><input data-id="0,0,1:main" placeholder="Type any text ..." type="text" onchange="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-color: rgba(65,125,239,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; height: 35px; padding: 10px; text-decoration: none; width: 300px" class="ft_md"></input></div><div data-id="0,1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: wrap; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,1,0:main" style="align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto" ><div data-id="0,1,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">John</div></div><div data-id="0,1,1:main" style="align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto" ><div data-id="0,1,1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Alice</div></div><div data-id="0,1,2:main" style="align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto" ><div data-id="0,1,2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Tom</div></div><div data-id="0,1,3:main" style="align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto" ><div data-id="0,1,3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Jerry</div></div></div></div></div>
 
 
 <script>
@@ -1382,17 +1378,17 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#names.0", data);
+window.node_change_main["0,1,0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1,0,0:main"]`).innerHTML = resolve_reference("foo#names.0", data);
 }
-window.node_change_main["2,0:main__text"] = function(data) {
-document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("foo#names.1", data);
+window.node_change_main["0,1,1,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1,1,0:main"]`).innerHTML = resolve_reference("foo#names.1", data);
 }
-window.node_change_main["3,0:main__text"] = function(data) {
-document.querySelector(`[data-id="3,0:main"]`).innerHTML = resolve_reference("foo#names.2", data);
+window.node_change_main["0,1,2,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1,2,0:main"]`).innerHTML = resolve_reference("foo#names.2", data);
 }
-window.node_change_main["4,0:main__text"] = function(data) {
-document.querySelector(`[data-id="4,0:main"]`).innerHTML = resolve_reference("foo#names.3", data);
+window.node_change_main["0,1,3,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1,3,0:main"]`).innerHTML = resolve_reference("foo#names.3", data);
 }
 window.set_value_main = {};
 window.set_value_main["foo#names"] = function (data, new_value, remaining) {
@@ -1402,13 +1398,40 @@ set_data_value(data, "foo#names" + "." + remaining, new_value);
 set_data_value(data, "foo#names", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0:main__text"]){window.node_change_main["0,1,0,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,1,0:main__text"]){window.node_change_main["0,1,1,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__text"]){window.node_change_main["3,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,2,0:main__text"]){window.node_change_main["0,1,2,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,3,0:main__text"]){window.node_change_main["0,1,3,0:main__text"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__border-color"]){window.node_change_main["0,0,1:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__background-color"]){window.node_change_main["0,1,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__border-color"]){window.node_change_main["0,1,0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__background-color"]){window.node_change_main["0,1,1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__border-color"]){window.node_change_main["0,1,1:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,2:main__background-color"]){window.node_change_main["0,1,2:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,2:main__border-color"]){window.node_change_main["0,1,2:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,3:main__background-color"]){window.node_change_main["0,1,3:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,3:main__border-color"]){window.node_change_main["0,1,3:main__border-color"](data);
 }
 };
 
@@ -1428,9 +1451,6 @@ args["foo#foo.idx"] = resolve_reference("LOOP__COUNTER", data);
 
 
 args["foo#foo.name"] = resolve_reference("foo#obj", data);
-
-
-args["foo#foo.value"] = 0;
 data = {...args, ...all_data};
 if (!!"foo#foo".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main["foo#foo"]) {
 data["foo#foo"] = window.raw_nodes_main["foo#foo"](data);
@@ -1438,7 +1458,7 @@ data["foo#foo"] = window.raw_nodes_main["foo#foo"](data);
 let html = "{foo#foo}".replace_format(data);
 htmls.push(html);
 }
-return [htmls, "main", 1]
+return [htmls, "0,1:main", 0]
 }
 window.raw_nodes_main = {};
 
@@ -1446,12 +1466,11 @@ window.raw_nodes_main["foo#foo"] = function(all_data){
 var args= {};
 args["foo#foo.name"] = null;
 args["foo#foo.idx"] = null;
-args["foo#foo.value"] = 0;
 let data = {...args, ...all_data};
 if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
 data[""] = window.raw_nodes_main[""](data);
 }
-let html = "<div data-id=\"main\" onclick=\"window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo.value&quot;}]]}]', this)\" style=\"align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; text-decoration: none; width: auto\" ><div data-id=\"0:main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#foo.name}</div></div>".replace_format(data);
+let html = "<div data-id=\"main\" style=\"align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto\" ><div data-id=\"0:main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#foo.name}</div></div>".replace_format(data);
 return html;
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");

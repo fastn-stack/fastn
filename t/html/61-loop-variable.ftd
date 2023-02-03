@@ -8,16 +8,42 @@
 -- end: $names
 
 
+
+-- ftd.column:
+padding.px: 60
+align-content: center
+align-self: center
+width.fixed.percent: 70
+spacing.fixed.px: 100
+
+-- ftd.row:
+spacing.fixed.px: 20
+
+-- ftd.text: Create a card:
+align-self: center
+
 -- ftd.text-input:
 placeholder: Type any text ...
 type: text
-width.fixed.px: 400
+width.fixed.px: 300
+height.fixed.px: 35
 border-width.px: 2
+border-color: #417DEF
+padding.px: 10
 $on-change$: $append($a = $names, v = $VALUE)
+
+-- end: ftd.row
+
+-- ftd.row:
+wrap: true
 
 -- foo: $obj
 idx: $LOOP.COUNTER
 $loop$: $names as $obj
+
+-- end: ftd.row
+
+-- end: ftd.column
 
 
 
@@ -25,11 +51,15 @@ $loop$: $names as $obj
 -- component foo:
 caption name:
 integer idx:
-integer $value: 0
 
 -- ftd.row:
 spacing.fixed.px: 30
-$on-click$: $ftd.increment($a = $foo.value)
+margin.px: 20
+padding.px: 20
+background.solid: #efb341
+border-width.px: 10
+border-color: #417DEF
+border-radius.px: 10
 
 -- ftd.text: $foo.name
 
