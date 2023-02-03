@@ -16,7 +16,7 @@ You can get our pre-compiled binaries in the
 -- ds.code:
 lang: sh
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install-fastn.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
 
 -- ds.h2: Windows Installation
