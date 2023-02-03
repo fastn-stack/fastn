@@ -872,16 +872,33 @@ array.push(value);
 args["CHANGE_VALUE"] = false;
 args[0].value = array;
 change_value(args, data, id);
-if (!!window.append_data_main && !!window.append_data_main[args[0].reference]) {
-let [htmls, data_id, start_index] = window.append_data_main[args[0].reference](data);
-let html = htmls[htmls.length - 1];
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let list = resolve_reference(args[0].reference, data);
+let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
 {
 // @ts-ignore
-main.insertBefore(nodes.children[j], main.children[start_index + htmls.length - 1]);
+main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
 }
+}
+}
+return array;
+};
+exports.clear = function (array, args, data, id) {
+args["CHANGE_VALUE"] = false;
+// @ts-ignore
+let length = resolve_reference(args[0].reference, data).length;
+args[0].value = [];
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+for (var i = length - 1 + start_index; i >= start_index; i--) {
+// @ts-ignore
+main.removeChild(main.children[i]);
 }
 }
 return array;
