@@ -21,8 +21,9 @@ declare global {
         set_value_by_id(id: string, variable: string, value: any): any;
         get_value(id: string, variable: string): any;
         is_empty(str: any): boolean;
-        append(array: any[], value: any, args: any, data: any, id: string): any[]
-        clear(array: any[], args: any, data: any, id: string): any[]
+        append(array: any[], value: any, args: any, data: any, id: string): any[];
+        clear(array: any[], args: any, data: any, id: string): any[];
+        insert_at(array: any[], value: any, idx: number, args: any, data: any, id: string): any[];
     }
 
     interface String {

@@ -4,16 +4,28 @@
 -- end: $names
 
 
+-- string $value: Fifthtry
+
+
 
 -- ftd.column:
 padding.px: 60
 align-content: center
 align-self: center
 width.fixed.percent: 70
-spacing.fixed.px: 100
+spacing.fixed.px: 50
+
+-- ftd.row:
+spacing.fixed.px: 10
+
+-- ftd.text: Current value:
+-- ftd.text: $value
+
+-- end: ftd.row
 
 -- ftd.row:
 spacing.fixed.px: 20
+align-content: center
 
 -- ftd.text: Create a card:
 align-self: center
@@ -22,19 +34,22 @@ align-self: center
 placeholder: Type any text ...
 type: text
 width.fixed.px: 300
-height.fixed.px: 35
 border-width.px: 2
 border-color: #417DEF
 padding.px: 10
-$on-change$: $append($a = $names, v = $VALUE)
+$on-input$: $ftd.set-string($a = $value, v = $VALUE)
 
+-- ftd.text: Insert
+padding.px: 10
+background.solid: green
+$on-click$: $append($a = $names, v = $value)
 
 -- ftd.text: Clear
-align-self: center
 padding.px: 10
 background.solid: #efb341
-height.fixed.px: 35
 $on-click$: $clear($a = $names)
+
+-- counter:
 
 -- end: ftd.row
 
@@ -84,3 +99,41 @@ ftd.append(a, v);
 string list $a:
 
 ftd.clear(a);
+
+
+-- void insert_at(a,v,num):
+string list $a:
+string v:
+integer num:
+
+ftd.insert_at(a, v, num);
+
+
+
+
+
+
+-- component counter:
+integer $num: 0
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 5
+padding.px: 4
+border-width.px: 2
+
+-- ftd.text: ◀️
+$on-click$: $ftd.increment-by($a = $counter.num, v = -1)
+
+-- ftd.integer: $counter.num
+$on-click$: $insert_at($a = $names, v = $value, num = $counter.num)
+background.solid: lightgrey
+padding.px: 6
+
+-- ftd.text: ▶️
+$on-click$: $ftd.increment($a = $counter.num)
+
+-- end: ftd.row
+
+
+-- end: counter
