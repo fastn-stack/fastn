@@ -1341,11 +1341,19 @@ if(function(){
 return (resolve_reference("foo#hello:check:0", data)%3==1);
 }()){
 document.querySelector(`[data-id="0:main"]`).setAttribute("id", "hello-world-text1");
+
+if (document.querySelector(`[data-id="0:main"]`).getAttribute("id") == "REMOVE-ATTRIBUTE"){
+document.querySelector(`[data-id="0:main"]`).removeAttribute("id");
+}
 }
 else if(function(){
 return (resolve_reference("foo#hello:check:0", data)%3==2);
 }()){
 document.querySelector(`[data-id="0:main"]`).setAttribute("id", "hello-world-text2");
+
+if (document.querySelector(`[data-id="0:main"]`).getAttribute("id") == "REMOVE-ATTRIBUTE"){
+document.querySelector(`[data-id="0:main"]`).removeAttribute("id");
+}
 }
 else { document.querySelector(`[data-id="0:main"]`).removeAttribute("id"); }
 }

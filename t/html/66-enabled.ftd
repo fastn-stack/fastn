@@ -1,12 +1,28 @@
--- boolean $flag: true
+-- boolean $is-enabled: true
 
--- ftd.boolean: $flag
+-- ftd.row:
+spacing.fixed.px: 10
+padding.px: 20
 
--- ftd.checkbox:
-checked: true
-enabled: true
-$on-click$: $ftd.set-bool($a = $flag, v = $CHECKED)
+-- ftd.text: Enter some text
 
 -- ftd.text-input:
 type: text
-enabled: $flag
+placeholder: Type here
+border-width.px: 1
+border-color: black
+enabled: $is-enabled
+
+-- end: ftd.row
+
+-- ftd.row:
+padding.px: 20
+spacing.fixed.px: 10
+
+-- ftd.text: Enabled
+
+-- ftd.checkbox:
+checked: $is-enabled
+$on-click$: $ftd.set-bool($a = $is-enabled, v = $CHECKED)
+
+-- end: ftd.row

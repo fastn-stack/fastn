@@ -1357,31 +1357,47 @@ document.querySelector(`[data-id="2:main"]`).style["display"] = "block";
 else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
 }
 window.node_change_main["3,1:main__checked"] = function(data) {
-document.querySelector(`[data-id="3,1:main"]`).setAttribute("checked", eval(`if ({0}) {
+document.querySelector(`[data-id="3,1:main"]`).setAttribute("checked", eval(`
+if ({0}) {
 ""
 } else {
-"set-property-to-false"
+"REMOVE-ATTRIBUTE"
 }
 `.format(JSONstringify(resolve_reference("foo#flag", data, null)))));
+
+if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("checked") == "REMOVE-ATTRIBUTE"){
+document.querySelector(`[data-id="3,1:main"]`).removeAttribute("checked");
+}
 }
 
 window.node_change_main["3,1:main__disabled"] = function(data) {
 if(function(){
 return resolve_reference("foo#a", data);
 }()){
-document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if ({0}) {
-"set-property-to-false"
+document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`
+if ({0}) {
+"REMOVE-ATTRIBUTE"
 } else {
 ""
 }
 `.format(JSONstringify(false))));
+
+if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("disabled") == "REMOVE-ATTRIBUTE"){
+document.querySelector(`[data-id="3,1:main"]`).removeAttribute("disabled");
 }
-else {document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if ({0}) {
-"set-property-to-false"
+}
+else {document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`
+if ({0}) {
+"REMOVE-ATTRIBUTE"
 } else {
 ""
 }
-`.format(JSONstringify(true))));}
+`.format(JSONstringify(true))));
+
+if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("disabled") == "REMOVE-ATTRIBUTE"){
+document.querySelector(`[data-id="3,1:main"]`).removeAttribute("disabled");
+}
+}
 }
 window.set_value_main = {};
 window.set_value_main["foo#a"] = function (data, new_value, remaining) {
