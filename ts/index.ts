@@ -170,13 +170,13 @@ window.ftd = (function() {
             let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
             let nodes = stringToHTML(html);
             let main = document.querySelector(`[data-id="${data_id}"]`);
-            if (idx > list.length) {
-                idx = list.length;
-            } else if (idx <= 0) {
-                idx = 1;
+            if (idx >= list.length) {
+                idx = list.length - 1;
+            } else if (idx < 0) {
+                idx = 0;
             }
             // @ts-ignore
-            main.insertBefore(nodes.children[0], main.children[start_index + idx - 1]);
+            main.insertBefore(nodes.children[0], main.children[start_index + idx]);
         }
         return array;
     }
@@ -202,12 +202,12 @@ window.ftd = (function() {
     exports.delete_at = function(array: any[], idx: number, args: any, data: any, id: string) {
         // @ts-ignore
         let length = resolve_reference(args[0].reference, data).length;
-        if (idx > length) {
-            idx = length;
-        } else if (idx <= 0) {
-            idx = 1;
+        if (idx >= length) {
+            idx = length-1;
+        } else if (idx < 0) {
+            idx = 0;
         }
-        array.splice(idx-1, 1);
+        array.splice(idx, 1);
         args["CHANGE_VALUE"]= false;
         args[0].value = array;
         change_value(args, data, id);
@@ -216,7 +216,7 @@ window.ftd = (function() {
             let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
             let main = document.querySelector(`[data-id="${data_id}"]`);
             // @ts-ignore
-            main.removeChild(main.children[start_index + idx -1]);
+            main.removeChild(main.children[start_index + idx]);
         }
         return array;
     }
