@@ -969,6 +969,28 @@ main.removeChild(main.children[i]);
 }
 return array;
 };
+exports.delete_at = function (array, idx, args, data, id) {
+// @ts-ignore
+let length = resolve_reference(args[0].reference, data).length;
+if (idx > length) {
+idx = length;
+}
+else if (idx <= 0) {
+idx = 1;
+}
+array.splice(idx - 1, 1);
+args["CHANGE_VALUE"] = false;
+args[0].value = array;
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+// @ts-ignore
+main.removeChild(main.children[start_index + idx - 1]);
+}
+return array;
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1539,15 +1561,15 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
 };
 
@@ -1558,9 +1580,9 @@ set_data_value(data, "foo#rrtype" + "." + remaining, new_value);
 set_data_value(data, "foo#rrtype", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
@@ -1577,13 +1599,13 @@ set_data_value(data, "foo#rtype" + "." + remaining, new_value);
 set_data_value(data, "foo#rtype", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
@@ -1596,15 +1618,15 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
 };
 

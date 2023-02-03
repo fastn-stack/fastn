@@ -926,6 +926,28 @@ main.removeChild(main.children[i]);
 }
 return array;
 };
+exports.delete_at = function (array, idx, args, data, id) {
+// @ts-ignore
+let length = resolve_reference(args[0].reference, data).length;
+if (idx > length) {
+idx = length;
+}
+else if (idx <= 0) {
+idx = 1;
+}
+array.splice(idx - 1, 1);
+args["CHANGE_VALUE"] = false;
+args[0].value = array;
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+// @ts-ignore
+main.removeChild(main.children[start_index + idx - 1]);
+}
+return array;
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1474,9 +1496,9 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:res
 let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:resize:1", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
@@ -1491,9 +1513,9 @@ set_data_value(data, "foo#foo:align:1" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:align:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 };
 
@@ -1504,9 +1526,9 @@ set_data_value(data, "foo#foo:px:1" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:px:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
 };
 
@@ -1524,13 +1546,13 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#foo:px:1"] = function(data) {
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:px:1", 30);
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
 }
-else {set_data_value(data, "foo#foo:px:1", 40);}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
 
 }
 window.resolve_value_main["foo#foo:align:1"] = function(data) {
@@ -1542,13 +1564,13 @@ set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
 else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
 
 }
-window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+window.resolve_value_main["foo#foo:px:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
+set_data_value(data, "foo#foo:px:1", 30);
 }
-else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
+else {set_data_value(data, "foo#foo:px:1", 40);}
 
 }
 
