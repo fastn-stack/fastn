@@ -55,7 +55,7 @@ border-color: #417DEF
 padding.px: 10
 $on-input$: $ftd.set-string($a = $value, v = $VALUE)
 
--- ftd.text: Insert
+-- ftd.text: Append
 padding.px: 10
 background.solid: #7acb7a
 $on-click$: $append($a = $names, v = $value)
@@ -65,13 +65,14 @@ padding.px: 10
 background.solid: #f19494
 $on-click$: $clear($a = $names)
 
+-- ftd.text: ft-zens
+padding.px: 10
+background.solid: #949ef1
+$on-click$: $set_list($a = $names, v = $our-names)
+
 -- counter:
 -- delete-counter:
 
--- ftd.text: ft-zens
-padding.px: 10
-background.solid: #f19494
-$on-click$: $set_list($a = $names, v = $our-names)
 
 -- end: ftd.row
 
