@@ -24,6 +24,7 @@ declare global {
         append(array: any[], value: any, args: any, data: any, id: string): any[];
         clear(array: any[], args: any, data: any, id: string): any[];
         insert_at(array: any[], value: any, idx: number, args: any, data: any, id: string): any[];
+        delete_at(array: any[], idx: number, args: any, data: any, id: string): any[];
     }
 
     interface String {

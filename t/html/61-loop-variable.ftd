@@ -50,6 +50,7 @@ background.solid: #efb341
 $on-click$: $clear($a = $names)
 
 -- counter:
+-- delete-counter:
 
 -- end: ftd.row
 
@@ -110,6 +111,14 @@ ftd.insert_at(a, v, num);
 
 
 
+-- void delete_at(a,num):
+string list $a:
+integer num:
+
+ftd.delete_at(a, num);
+
+
+
 
 
 
@@ -121,6 +130,7 @@ align-content: center
 spacing.fixed.px: 5
 padding.px: 4
 border-width.px: 2
+border-color: green
 
 -- ftd.text: ◀️
 $on-click$: $ftd.increment-by($a = $counter.num, v = -1)
@@ -137,3 +147,31 @@ $on-click$: $ftd.increment($a = $counter.num)
 
 
 -- end: counter
+
+
+
+-- component delete-counter:
+integer $num: 0
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 5
+padding.px: 4
+border-width.px: 2
+border-color: red
+
+-- ftd.text: ◀️
+$on-click$: $ftd.increment-by($a = $delete-counter.num, v = -1)
+
+-- ftd.integer: $delete-counter.num
+$on-click$: $delete_at($a = $names, num = $delete-counter.num)
+background.solid: lightgrey
+padding.px: 6
+
+-- ftd.text: ▶️
+$on-click$: $ftd.increment($a = $delete-counter.num)
+
+-- end: ftd.row
+
+
+-- end: delete-counter
