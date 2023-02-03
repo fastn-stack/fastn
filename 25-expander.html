@@ -875,6 +875,26 @@ set_data_value(data, variable, value);
 exports.is_empty = function (str) {
 return (!str || str.length === 0);
 };
+exports.set_list = function (array, value, args, data, id) {
+args["CHANGE_VALUE"] = false;
+window.ftd.clear(array, args, data, id);
+args[0].value = value;
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let list = resolve_reference(args[0].reference, data);
+let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+for (let i in htmls) {
+let nodes = stringToHTML(htmls[i]);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+// @ts-ignore
+main.insertBefore(nodes.children[j], main.children[start_index + i]);
+}
+}
+}
+return array;
+};
 exports.append = function (array, value, args, data, id) {
 array.push(value);
 args["CHANGE_VALUE"] = false;
@@ -904,14 +924,14 @@ let list = resolve_reference(args[0].reference, data);
 let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
-if (idx > list.length) {
-idx = list.length;
+if (idx >= list.length) {
+idx = list.length - 1;
 }
-else if (idx <= 0) {
-idx = 1;
+else if (idx < 0) {
+idx = 0;
 }
 // @ts-ignore
-main.insertBefore(nodes.children[0], main.children[start_index + idx - 1]);
+main.insertBefore(nodes.children[0], main.children[start_index + idx]);
 }
 return array;
 };
@@ -934,13 +954,13 @@ return array;
 exports.delete_at = function (array, idx, args, data, id) {
 // @ts-ignore
 let length = resolve_reference(args[0].reference, data).length;
-if (idx > length) {
-idx = length;
+if (idx >= length) {
+idx = length - 1;
 }
-else if (idx <= 0) {
-idx = 1;
+else if (idx < 0) {
+idx = 0;
 }
-array.splice(idx - 1, 1);
+array.splice(idx, 1);
 args["CHANGE_VALUE"] = false;
 args[0].value = array;
 change_value(args, data, id);
@@ -949,7 +969,7 @@ if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
 let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 // @ts-ignore
-main.removeChild(main.children[start_index + idx - 1]);
+main.removeChild(main.children[start_index + idx]);
 }
 return array;
 };
@@ -1585,11 +1605,11 @@ set_data_value(data, "foo#box:open:0,1" + "." + remaining, new_value);
 set_data_value(data, "foo#box:open:0,1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__display"]){window.node_change_main["0,1,1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2:main__display"]){window.node_change_main["0,1,0,2:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,1:main__display"]){window.node_change_main["0,1,0,1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2:main__display"]){window.node_change_main["0,1,0,2:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__display"]){window.node_change_main["0,1,1:main__display"](data);
 }
 };
 
@@ -1600,9 +1620,9 @@ set_data_value(data, "foo#box:open:0,2" + "." + remaining, new_value);
 set_data_value(data, "foo#box:open:0,2", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,2:main__display"]){window.node_change_main["0,2,0,2:main__display"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,1:main__display"]){window.node_change_main["0,2,0,1:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,2:main__display"]){window.node_change_main["0,2,0,2:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2,1:main__display"]){window.node_change_main["0,2,1:main__display"](data);
 }
