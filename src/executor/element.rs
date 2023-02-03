@@ -1209,14 +1209,16 @@ pub struct TextInput {
 impl TextInput {
     pub fn enabled_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
-                    \"set-property-to-false\"
-                } else {
+            format!(
+                "
+                if ({{0}}) {{
+                    \"{}\"
+                }} else {{
                     \"\"
-                }
-            "}
-            .to_string(),
+                }}
+            ",
+                ftd::interpreter2::FTD_REMOVE_ATTRIBUTE
+            ),
             true,
         )
     }
@@ -1302,28 +1304,32 @@ pub struct CheckBox {
 impl CheckBox {
     pub fn checked_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
+            format!(
+                "
+                if ({{0}}) {{
                     \"\"
-                } else {
-                    \"set-property-to-false\"
-                }
-            "}
-            .to_string(),
+                }} else {{
+                    \"{}\"
+                }}
+            ",
+                ftd::interpreter2::FTD_REMOVE_ATTRIBUTE
+            ),
             true,
         )
     }
 
     pub fn enabled_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
-                    \"set-property-to-false\"
-                } else {
+            format!(
+                "
+                if ({{0}}) {{
+                    \"{}\"
+                }} else {{
                     \"\"
-                }
-            "}
-            .to_string(),
+                }}
+            ",
+                ftd::interpreter2::FTD_REMOVE_ATTRIBUTE
+            ),
             true,
         )
     }

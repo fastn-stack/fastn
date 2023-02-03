@@ -215,7 +215,8 @@ impl<'a> DependencyGenerator<'a> {
                                 )),
                             ])
                                 .collect(),
-                            Some(key.as_str()),attribute
+                            Some(key.as_str()),
+                            attribute
                                 .default
                                 .as_ref()
                                 .map(|v| {
@@ -366,10 +367,20 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                         self.doc,
                     );
-                    let value = format!(
+                    let mut value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
                         node_data_id, key, value_string
                     );
+
+                    let remove_case = format!(
+                        "if (document.querySelector(`[data-id=\"{}\"]`).getAttribute(\"{}\") == \"{}\")\
+                        {{
+                            document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");
+                        }}
+                        ",
+                        node_data_id, key, ftd::interpreter2::FTD_REMOVE_ATTRIBUTE, node_data_id, key
+                    );
+                    value = format!("{}\n\n{}", value, remove_case);
                     expressions.push((condition, value));
                 }
             }

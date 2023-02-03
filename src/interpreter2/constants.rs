@@ -178,6 +178,7 @@ pub const FTD_DEFAULT_TYPES: &str = "default-types";
 pub const FTD_DEFAULT_COLORS: &str = "default-colors";
 pub const FTD_NO_VALUE: &str = "NO-VALUE";
 pub const FTD_IGNORE_KEY: &str = "IGNORE-KEY";
+pub const FTD_REMOVE_ATTRIBUTE: &str = "REMOVE-ATTRIBUTE";
 
 pub const FTD_BORDER_STYLE: &str = "ftd#border-style";
 pub const FTD_BORDER_STYLE_DOTTED: &str = "ftd#border-style.dotted";
