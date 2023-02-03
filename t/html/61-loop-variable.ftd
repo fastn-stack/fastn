@@ -1,9 +1,5 @@
 -- string list $names:
 
--- string: John
--- string: Alice
--- string: Tom
--- string: Jerry
 
 -- end: $names
 
@@ -33,7 +29,7 @@ padding.px: 10
 $on-change$: $append($a = $names, v = $VALUE)
 
 
-/-- ftd.text: Clear
+-- ftd.text: Clear
 align-self: center
 padding.px: 10
 background.solid: #efb341
