@@ -4,6 +4,21 @@
 -- end: $names
 
 
+-- string list our-names:
+
+-- string: Fifthtry
+-- string: AmitU
+-- string: Arpita
+-- string: Abrar
+-- string: Ganesh
+-- string: Rithik
+-- string: Priyanka
+-- string: Meenu
+
+-- end: our-names
+
+
+
 -- string $value: Fifthtry
 
 
@@ -53,6 +68,11 @@ $on-click$: $clear($a = $names)
 -- counter:
 -- delete-counter:
 
+-- ftd.text: ft-zens
+padding.px: 10
+background.solid: #f19494
+$on-click$: $set_list($a = $names, v = $our-names)
+
 -- end: ftd.row
 
 -- ftd.row:
@@ -88,6 +108,12 @@ border-radius.px: 10
 
 -- end: foo
 
+
+-- void set_list(a,v):
+string list $a:
+string list v:
+
+ftd.set_list(a, v);
 
 
 -- void append(a,v):
