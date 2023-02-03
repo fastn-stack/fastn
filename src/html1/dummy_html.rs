@@ -11,13 +11,16 @@ impl<'a> DummyHtmlGenerator<'a> {
         }
     }
 
-    pub fn from_dummy_nodes(&self, dummy_nodes: &ftd::Map<ftd::node::DummyNode>) -> String {
+    pub fn as_string_from_dummy_nodes(
+        &self,
+        dummy_nodes: &ftd::Map<ftd::node::DummyNode>,
+    ) -> String {
         let mut dummy_dependency = "".to_string();
         for (dependency, dummy_node) in dummy_nodes {
             dummy_dependency = format!(
                 "{}\n{}",
                 dummy_dependency,
-                self.from_dummy_node(dummy_node, dependency)
+                self.as_string_from_dummy_node(dummy_node, dependency)
             )
         }
         if dummy_dependency.trim().is_empty() {
@@ -30,7 +33,11 @@ impl<'a> DummyHtmlGenerator<'a> {
         }
     }
 
-    pub fn from_dummy_node(&self, dummy_node: &ftd::node::DummyNode, dependency: &str) -> String {
+    pub fn as_string_from_dummy_node(
+        &self,
+        dummy_node: &ftd::node::DummyNode,
+        dependency: &str,
+    ) -> String {
         let dummy_html = ftd::html1::RawHtmlGenerator::from_node(
             self.id.as_str(),
             self.doc,
@@ -130,13 +137,13 @@ impl<'a> HelperHtmlGenerator<'a> {
         }
     }
 
-    pub fn from_raw_nodes(&self, raw_nodes: &ftd::Map<ftd::node::RawNode>) -> String {
+    pub fn as_string_from_raw_nodes(&self, raw_nodes: &ftd::Map<ftd::node::RawNode>) -> String {
         let mut raw_dependency = "".to_string();
         for (dependency, raw_node) in raw_nodes {
             raw_dependency = format!(
                 "{}\n{}",
                 raw_dependency,
-                self.from_raw_node(raw_node, dependency)
+                self.as_string_from_raw_node(raw_node, dependency)
             )
         }
         if raw_dependency.trim().is_empty() {
@@ -146,7 +153,11 @@ impl<'a> HelperHtmlGenerator<'a> {
         }
     }
 
-    pub fn from_raw_node(&self, raw_node: &ftd::node::RawNode, dependency: &str) -> String {
+    pub fn as_string_from_raw_node(
+        &self,
+        raw_node: &ftd::node::RawNode,
+        dependency: &str,
+    ) -> String {
         let raw_html = ftd::html1::RawHtmlGenerator::from_node(
             self.id.as_str(),
             self.doc,
@@ -175,7 +186,7 @@ impl<'a> HelperHtmlGenerator<'a> {
             dependency = dependency,
             arguments = argument_string.unwrap_or_default(),
             node = raw_html.name,
-            html = raw_html.html.replace("\"", "\\\""),
+            html = raw_html.html.replace('\"', "\\\""),
             id = self.id,
         )
     }

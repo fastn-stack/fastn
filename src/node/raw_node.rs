@@ -13,7 +13,7 @@ impl RawNode {
         RawNode {
             name: element_constructor.name.to_string(),
             node: element_constructor.element.to_node(doc_id),
-            arguments: element_constructor.arguments.clone(),
+            arguments: element_constructor.arguments,
         }
     }
     pub(crate) fn from_element_constructors(

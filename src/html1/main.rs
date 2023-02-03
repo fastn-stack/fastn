@@ -28,11 +28,11 @@ impl HtmlUI {
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
 
-        let dummy_html =
-            ftd::html1::DummyHtmlGenerator::new(id, &tdoc).from_dummy_nodes(&node_data.dummy_nodes);
+        let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
+            .as_string_from_dummy_nodes(&node_data.dummy_nodes);
 
-        let raw_html =
-            ftd::html1::HelperHtmlGenerator::new(id, &tdoc).from_raw_nodes(&node_data.raw_nodes);
+        let raw_html = ftd::html1::HelperHtmlGenerator::new(id, &tdoc)
+            .as_string_from_raw_nodes(&node_data.raw_nodes);
 
         /*for (dependency, raw_node) in node_data.raw_nodes {
             let raw_html = RawHtmlGenerator::from_node(id, &tdoc, raw_node.node);
@@ -71,7 +71,10 @@ impl RawHtmlGenerator {
         node: ftd::node::Node,
     ) -> RawHtmlGenerator {
         let mut dummy_html = Default::default();
-        HtmlGenerator::new(id, doc).to_dummy_html(node, &mut dummy_html);
+        //TODO: Remove result
+        HtmlGenerator::new(id, doc)
+            .to_dummy_html(node, &mut dummy_html)
+            .unwrap();
         dummy_html
     }
 }
@@ -107,7 +110,7 @@ impl<'a> HtmlGenerator<'a> {
             dummy_html.name = node.node.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html);
+                self.to_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
         } else {
@@ -126,6 +129,7 @@ impl<'a> HtmlGenerator<'a> {
         Ok((html, ftd::html1::utils::events_to_string(events)))
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn to_dummy_html_(
         &self,
         node: ftd::node::Node,
@@ -161,7 +165,7 @@ impl<'a> HtmlGenerator<'a> {
             helper_dummy_html.name = node_name.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html);
+                self.to_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
             return Ok((node_name.to_string(), vec![]));

@@ -134,20 +134,6 @@ pub(crate) fn update_instruction_for_loop_element(
     Ok(instruction)
 }
 
-fn update_reference_value(
-    property_value: &mut ftd::interpreter2::PropertyValue,
-    reference_replace_pattern: &str,
-    replace_with: &str,
-) {
-    match property_value {
-        ftd::interpreter2::PropertyValue::Clone { name, .. }
-        | ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-            *name = name.replace(reference_replace_pattern, replace_with);
-        }
-        _ => {}
-    }
-}
-
 pub(crate) fn update_condition_in_component(
     component: &mut ftd::interpreter2::Component,
     outer_condition: ftd::interpreter2::Expression,
