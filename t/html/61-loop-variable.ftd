@@ -32,6 +32,14 @@ border-color: #417DEF
 padding.px: 10
 $on-change$: $append($a = $names, v = $VALUE)
 
+
+/-- ftd.text: Clear
+align-self: center
+padding.px: 10
+background.solid: #efb341
+height.fixed.px: 35
+$on-click$: $clear($a = $names)
+
 -- end: ftd.row
 
 -- ftd.row:
@@ -74,3 +82,9 @@ string list $a:
 string v:
 
 ftd.append(a, v);
+
+
+-- void clear(a):
+string list $a:
+
+ftd.clear(a);

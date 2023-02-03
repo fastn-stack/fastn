@@ -264,6 +264,22 @@ window.ftd = (function () {
         }
         return array;
     };
+    exports.clear = function (array, args, data, id) {
+        args["CHANGE_VALUE"] = false;
+        // @ts-ignore
+        let length = resolve_reference(args[0].reference, data).length;
+        args[0].value = [];
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            for (var i = length - 1 + start_index; i >= start_index; i--) {
+                // @ts-ignore
+                main.removeChild(main.children[i]);
+            }
+        }
+        return array;
+    };
     return exports;
 })();
 window.ftd.post_init = function () {
