@@ -881,11 +881,31 @@ let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](dat
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-{
 // @ts-ignore
 main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
 }
 }
+return array;
+};
+exports.insert_at = function (array, value, idx, args, data, id) {
+array.push(value);
+args["CHANGE_VALUE"] = false;
+args[0].value = array;
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let list = resolve_reference(args[0].reference, data);
+let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+let nodes = stringToHTML(html);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+if (idx > list.length) {
+idx = list.length;
+}
+else if (idx <= 0) {
+idx = 1;
+}
+// @ts-ignore
+main.insertBefore(nodes.children[0], main.children[start_index + idx - 1]);
 }
 return array;
 };
@@ -1440,11 +1460,11 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-nam
 let value = resolve_reference("foo#name", data, null);
 set_data_value(data, "foo#new-name", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 };
 
@@ -1455,9 +1475,9 @@ set_data_value(data, "foo#new-name" + "." + remaining, new_value);
 set_data_value(data, "foo#new-name", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
@@ -1468,9 +1488,9 @@ set_data_value(data, "foo#number" + "." + remaining, new_value);
 set_data_value(data, "foo#number", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 
