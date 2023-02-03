@@ -18,7 +18,7 @@ spacing.fixed.px: 10
 spacing: space-between
 border-bottom-width.px: 1
 
--- ds.h3: UI design of web-page
+-- ds.h3: UI design of webpage
 
 -- ds.image:
 src: $assets.files.images.box-ui-design.png
@@ -27,7 +27,6 @@ width: fill-container
 
 
 -- ds.h3: Container Components
-
 
 Column (top to bottom): 
 -- ds.image:
