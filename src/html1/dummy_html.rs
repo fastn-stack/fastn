@@ -24,7 +24,7 @@ impl<'a> DummyHtmlGenerator<'a> {
             "".to_string()
         } else {
             format!(
-                "window.append_data_{} = {{}};\n{}",
+                "window.dummy_data_{} = {{}};\n{}",
                 self.id, dummy_dependency
             )
         }
@@ -40,13 +40,11 @@ impl<'a> DummyHtmlGenerator<'a> {
         if let Some(iteration) = dummy_html.iteration {
             format!(
                 indoc::indoc! {"
-                    window.append_data_{id}[\"{dependency}\"] = function(all_data) {{
-                        let list = resolve_reference(\"{dependency}\", all_data);
-                        let htmls = [];
-                        for (var i = 0; i < list.length; i++) {{
+                    window.dummy_data_{id}[\"{dependency}\"] = function(all_data, index) {{
+                        function dummy_data(list, all_data, index) {{
                             let new_data = {{
-                                \"{alias}\": list[i],
-                                \"LOOP__COUNTER\": i
+                                \"{alias}\": list[index],
+                                \"LOOP__COUNTER\": index
                             }};
                             let data = {{...new_data, ...all_data}};
                             {arguments}
@@ -54,10 +52,23 @@ impl<'a> DummyHtmlGenerator<'a> {
                             if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
                                 data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                             }}
-                            let html = \"{html}\".replace_format(data);
-                            htmls.push(html);
+                            return \"{html}\".replace_format(data);
+                        }}
+                        
+                        let list = resolve_reference(\"{dependency}\", all_data);
+                        if (index !== null && index !== undefined) {{
+                            if (index.toString().toUpperCase() === \"LAST\") {{
+                                index = list.length - 1;
+                            }} else if (index.toString().toUpperCase() === \"START\") {{
+                                index = 0;
+                            }}
+                           return [dummy_data(list, all_data, index), \"{data_id}\", {start_index}];
+                        }}
+                        let htmls = [];
+                        for (var i = 0; i < list.length; i++) {{
+                            htmls.push(dummy_data(list, all_data, i));
                          }}
-                         return [htmls, \"{data_id}\", {start_index}]
+                         return [htmls, \"{data_id}\", {start_index}];
                     }}"
                 },
                 dependency = dependency,
@@ -78,7 +89,7 @@ impl<'a> DummyHtmlGenerator<'a> {
         } else {
             format!(
                 indoc::indoc! {"
-                    window.append_data_{id}[\"{dependency}\"] = function(all_data){{
+                    window.dummy_data_{id}[\"{dependency}\"] = function(all_data){{
                         {arguments}
                         let data = {{...args, ...all_data}};
                         if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
