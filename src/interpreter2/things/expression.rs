@@ -215,7 +215,10 @@ impl ftd::evalexpr::ExprNode {
                 references.get(identifier)
             {
                 operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                    identifier: format!("resolve_reference(\"{}\", data)", name),
+                    identifier: format!(
+                        "resolve_reference(\"{}\", data)",
+                        ftd::interpreter2::utils::js_reference_name(name)
+                    ),
                 }
             }
         }

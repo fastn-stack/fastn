@@ -77,21 +77,19 @@ pub(crate) fn get_string_container(local_container: &[usize]) -> String {
 pub(crate) fn create_dummy_instruction_for_loop_element(
     instruction: &ftd::interpreter2::Component,
     doc: &mut ftd::executor::TDoc,
-    alias: &str,
-    reference_name: &str,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
 ) -> ftd::executor::Result<ftd::interpreter2::Component> {
     let mut instruction = instruction.clone();
-    let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
+    /*let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
     let replace_with = format!("{}.INDEX", reference_name);
     let map =
-        std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
+        std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();*/
 
     update_local_variable_references_in_component(
         &mut instruction,
-        &map,
+        &Default::default(),
         inherited_variables,
         &Default::default(),
         local_container,
@@ -134,20 +132,6 @@ pub(crate) fn update_instruction_for_loop_element(
         doc,
     );
     Ok(instruction)
-}
-
-fn update_reference_value(
-    property_value: &mut ftd::interpreter2::PropertyValue,
-    reference_replace_pattern: &str,
-    replace_with: &str,
-) {
-    match property_value {
-        ftd::interpreter2::PropertyValue::Clone { name, .. }
-        | ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-            *name = name.replace(reference_replace_pattern, replace_with);
-        }
-        _ => {}
-    }
 }
 
 pub(crate) fn update_condition_in_component(

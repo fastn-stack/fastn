@@ -8,9 +8,6 @@ function enable_light_mode() {
 function enable_system_mode() {
     window.enable_system_mode();
 }
-function is_empty(str) {
-    return (!str || str.length === 0);
-}
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -137,6 +134,7 @@ window.ftd = (function () {
             window.ftd.post_init();
         }
     };
+    exports.data = ftd_data;
     function handle_function(evt, id, action, obj, function_arguments) {
         console.log(id, action);
         console.log(action.name);
@@ -152,7 +150,7 @@ window.ftd = (function () {
                         let obj_checked = null;
                         try {
                             obj_value = obj.value;
-                            obj_checked = obj.checked
+                            obj_checked = obj.checked;
                         }
                         catch (_a) {
                             obj_value = null;
@@ -173,12 +171,15 @@ window.ftd = (function () {
                 }
             }
         }
-        return window[action.name](...function_arguments);
+        return window[action.name](...function_arguments, function_arguments, ftd_data[id], id);
     }
     function handle_event(evt, id, action, obj) {
         let function_arguments = [];
         handle_function(evt, id, action, obj, function_arguments);
-        change_value(function_arguments, ftd_data[id], id);
+        // @ts-ignore
+        if (function_arguments["CHANGE_VALUE"] !== false) {
+            change_value(function_arguments, ftd_data[id], id);
+        }
     }
     exports.handle_event = function (evt, id, event, obj) {
         console_log(id, event);
@@ -243,8 +244,102 @@ window.ftd = (function () {
     exports.is_empty = function (str) {
         return (!str || str.length === 0);
     };
-    exports.append = function (array, value) {
+    exports.set_list = function (array, value, args, data, id) {
+        args["CHANGE_VALUE"] = false;
+        window.ftd.clear(array, args, data, id);
+        args[0].value = value;
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            // @ts-ignore
+            let list = resolve_reference(args[0].reference, data);
+            let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+            for (let i in htmls) {
+                let nodes = stringToHTML(htmls[i]);
+                let main = document.querySelector(`[data-id="${data_id}"]`);
+                for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+                    // @ts-ignore
+                    main.insertBefore(nodes.children[j], main.children[start_index + i]);
+                }
+            }
+        }
+        return array;
+    };
+    exports.append = function (array, value, args, data, id) {
         array.push(value);
+        args["CHANGE_VALUE"] = false;
+        args[0].value = array;
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            // @ts-ignore
+            let list = resolve_reference(args[0].reference, data);
+            let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+            let nodes = stringToHTML(html);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+                // @ts-ignore
+                main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
+            }
+        }
+        return array;
+    };
+    exports.insert_at = function (array, value, idx, args, data, id) {
+        array.push(value);
+        args["CHANGE_VALUE"] = false;
+        args[0].value = array;
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            // @ts-ignore
+            let list = resolve_reference(args[0].reference, data);
+            let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+            let nodes = stringToHTML(html);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            if (idx >= list.length) {
+                idx = list.length - 1;
+            }
+            else if (idx < 0) {
+                idx = 0;
+            }
+            // @ts-ignore
+            main.insertBefore(nodes.children[0], main.children[start_index + idx]);
+        }
+        return array;
+    };
+    exports.clear = function (array, args, data, id) {
+        args["CHANGE_VALUE"] = false;
+        // @ts-ignore
+        let length = resolve_reference(args[0].reference, data).length;
+        args[0].value = [];
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            for (var i = length - 1 + start_index; i >= start_index; i--) {
+                // @ts-ignore
+                main.removeChild(main.children[i]);
+            }
+        }
+        return array;
+    };
+    exports.delete_at = function (array, idx, args, data, id) {
+        // @ts-ignore
+        let length = resolve_reference(args[0].reference, data).length;
+        if (idx >= length) {
+            idx = length - 1;
+        }
+        else if (idx < 0) {
+            idx = 0;
+        }
+        array.splice(idx, 1);
+        args["CHANGE_VALUE"] = false;
+        args[0].value = array;
+        change_value(args, data, id);
+        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+            // @ts-ignore
+            let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+            let main = document.querySelector(`[data-id="${data_id}"]`);
+            // @ts-ignore
+            main.removeChild(main.children[start_index + idx]);
+        }
         return array;
     };
     return exports;
@@ -536,25 +631,12 @@ function console_log(...message) {
 function isObject(obj) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
-function resolve_reference(reference, data, value, checked) {
-    if (reference === "VALUE") {
-        return value;
-    }
-    if (reference === "CHECKED") {
-        return checked;
-    }
-    if (!!data[reference]) {
-        return deepCopy(data[reference]);
-    }
-    let [var_name, remaining] = get_name_and_remaining(reference);
-    let initial_value = data[var_name];
-    while (!!remaining) {
-        let [p1, p2] = split_once(remaining, ".");
-        initial_value = initial_value[p1];
-        remaining = p2;
-    }
-    return deepCopy(initial_value);
+function stringToHTML(str) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, 'text/html');
+    return doc.body;
 }
+;
 function get_name_and_remaining(name) {
     let part1 = "";
     let pattern_to_split_at = name;
@@ -617,6 +699,21 @@ String.prototype.format = function () {
     }
     return formatted;
 };
+String.prototype.replace_format = function () {
+    var formatted = this;
+    if (arguments.length > 0) {
+        // @ts-ignore
+        for (let [header, value] of Object.entries(arguments[0])) {
+            var regexp = new RegExp('\\{' + header + '(\\..*)?\\}', 'gi');
+            let matching = formatted.match(regexp);
+            for (let i in matching) {
+                // @ts-ignore
+                formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length - 1), arguments[0]));
+            }
+        }
+    }
+    return formatted;
+};
 function set_data_value(data, name, value) {
     if (!!data[name]) {
         data[name] = deepCopy(set(data[name], null, value));
@@ -635,11 +732,17 @@ function set_data_value(data, name, value) {
         return initial_value;
     }
 }
-function get_data_value(data, name) {
-    if (!!data[name]) {
-        return deepCopy(data[name]);
+function resolve_reference(reference, data, value, checked) {
+    if (reference === "VALUE") {
+        return value;
     }
-    let [var_name, remaining] = get_name_and_remaining(name);
+    if (reference === "CHECKED") {
+        return checked;
+    }
+    if (!!data[reference]) {
+        return deepCopy(data[reference]);
+    }
+    let [var_name, remaining] = get_name_and_remaining(reference);
     let initial_value = data[var_name];
     while (!!remaining) {
         let [p1, p2] = split_once(remaining, ".");
@@ -647,6 +750,9 @@ function get_data_value(data, name) {
         remaining = p2;
     }
     return deepCopy(initial_value);
+}
+function get_data_value(data, name) {
+    resolve_reference(name, data, null, null);
 }
 function JSONstringify(f) {
     if (typeof f === 'object') {

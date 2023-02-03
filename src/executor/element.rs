@@ -443,6 +443,7 @@ pub fn default_column() -> Column {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn text_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],

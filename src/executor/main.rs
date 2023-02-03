@@ -60,6 +60,7 @@ impl<'a> ExecuteDoc<'a> {
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
     }
 
+    #[allow(clippy::type_complexity)]
     pub(crate) fn get_instructions_from_instructions(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,
@@ -83,6 +84,7 @@ impl<'a> ExecuteDoc<'a> {
         Ok(elements)
     }
 
+    #[allow(clippy::type_complexity)]
     fn get_instructions_from_instruction(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
@@ -155,6 +157,7 @@ impl<'a> ExecuteDoc<'a> {
         Ok(component_definition.definition)
     }
 
+    #[allow(clippy::type_complexity)]
     fn get_loop_instructions(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
@@ -213,8 +216,6 @@ impl<'a> ExecuteDoc<'a> {
             let component = ftd::executor::utils::create_dummy_instruction_for_loop_element(
                 instruction,
                 doc,
-                iteration.alias.as_str(),
-                reference_name,
                 inherited_variables,
                 local_container.as_slice(),
             )?;

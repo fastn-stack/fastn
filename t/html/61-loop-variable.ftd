@@ -1,17 +1,91 @@
 -- string list $names:
 
--- string: John
--- string: Alice
--- string: Tom
--- string: Jerry
 
 -- end: $names
 
 
+-- string list our-names:
+
+-- string: Fifthtry
+-- string: AmitU
+-- string: Arpita
+-- string: Abrar
+-- string: Ganesh
+-- string: Rithik
+-- string: Priyanka
+-- string: Meenu
+
+-- end: our-names
+
+
+
+-- string $value: Fifthtry
+
+
+
+-- ftd.column:
+padding.px: 60
+align-content: center
+align-self: center
+width.fixed.percent: 70
+spacing.fixed.px: 50
+
+-- ftd.row:
+spacing.fixed.px: 10
+
+-- ftd.text: Current value:
+-- ftd.text: $value
+color: #d42bd4
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 20
+align-content: center
+
+-- ftd.text: Create a card:
+align-self: center
+
+-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 300
+border-width.px: 2
+border-color: #417DEF
+padding.px: 10
+$on-input$: $ftd.set-string($a = $value, v = $VALUE)
+
+-- ftd.text: Append
+padding.px: 10
+background.solid: #7acb7a
+$on-click$: $append($a = $names, v = $value)
+
+-- ftd.text: Clear
+padding.px: 10
+background.solid: #f19494
+$on-click$: $clear($a = $names)
+
+-- ftd.text: ft-zens
+padding.px: 10
+background.solid: #949ef1
+$on-click$: $set_list($a = $names, v = $our-names)
+
+-- counter:
+-- delete-counter:
+
+
+-- end: ftd.row
+
+-- ftd.row:
+wrap: true
 
 -- foo: $obj
 idx: $LOOP.COUNTER
 $loop$: $names as $obj
+
+-- end: ftd.row
+
+-- end: ftd.column
 
 
 
@@ -19,11 +93,15 @@ $loop$: $names as $obj
 -- component foo:
 caption name:
 integer idx:
-integer $value: 0
 
 -- ftd.row:
 spacing.fixed.px: 30
-$on-click$: $ftd.increment($a = $foo.value)
+margin.px: 20
+padding.px: 20
+background.solid: #efb341
+border-width.px: 10
+border-color: #417DEF
+border-radius.px: 10
 
 -- ftd.text: $foo.name
 
@@ -32,9 +110,98 @@ $on-click$: $ftd.increment($a = $foo.value)
 -- end: foo
 
 
+-- void set_list(a,v):
+string list $a:
+string list v:
+
+ftd.set_list(a, v);
+
 
 -- void append(a,v):
 string list $a:
 string v:
 
-a = ftd.append(a, v);
+ftd.append(a, v);
+
+
+-- void clear(a):
+string list $a:
+
+ftd.clear(a);
+
+
+-- void insert_at(a,v,num):
+string list $a:
+string v:
+integer num:
+
+ftd.insert_at(a, v, num);
+
+
+
+-- void delete_at(a,num):
+string list $a:
+integer num:
+
+ftd.delete_at(a, num);
+
+
+
+
+
+
+-- component counter:
+integer $num: 0
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 5
+padding.px: 4
+border-width.px: 2
+border-color: green
+background.solid: #d9f2d9
+
+-- ftd.text: ◀️
+$on-click$: $ftd.increment-by($a = $counter.num, v = -1)
+
+-- ftd.integer: $counter.num
+$on-click$: $insert_at($a = $names, v = $value, num = $counter.num)
+background.solid: #7acb7a
+padding.px: 6
+
+-- ftd.text: ▶️
+$on-click$: $ftd.increment($a = $counter.num)
+
+-- end: ftd.row
+
+
+-- end: counter
+
+
+
+-- component delete-counter:
+integer $num: 0
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 5
+padding.px: 4
+border-width.px: 2
+border-color: red
+background.solid: #f4cece
+
+-- ftd.text: ◀️
+$on-click$: $ftd.increment-by($a = $delete-counter.num, v = -1)
+
+-- ftd.integer: $delete-counter.num
+$on-click$: $delete_at($a = $names, num = $delete-counter.num)
+background.solid: #f19494
+padding.px: 6
+
+-- ftd.text: ▶️
+$on-click$: $ftd.increment($a = $delete-counter.num)
+
+-- end: ftd.row
+
+
+-- end: delete-counter

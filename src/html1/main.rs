@@ -5,6 +5,8 @@ pub struct HtmlUI {
     pub functions: String,
     pub variable_dependencies: String,
     pub outer_events: String,
+    pub dummy_html: String,
+    pub raw_html: String,
 }
 
 impl HtmlUI {
@@ -26,15 +28,16 @@ impl HtmlUI {
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
 
-        for (dependency, dummy_node) in node_data.dummy_nodes {
-            let dummy_html = DummyHtmlGenerator::from_node(id, &tdoc, dummy_node.main);
-            // dbg!("dummy_nodes", &dependency, &dummy_html);
-        }
+        let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
+            .as_string_from_dummy_nodes(&node_data.dummy_nodes);
 
-        for (dependency, raw_node) in node_data.raw_nodes {
-            let raw_html = DummyHtmlGenerator::from_node(id, &tdoc, raw_node.node);
-            // dbg!("raw_nodes", &dependency, &raw_html);
-        }
+        let raw_html = ftd::html1::HelperHtmlGenerator::new(id, &tdoc)
+            .as_string_from_raw_nodes(&node_data.raw_nodes);
+
+        /*for (dependency, raw_node) in node_data.raw_nodes {
+            let raw_html = RawHtmlGenerator::from_node(id, &tdoc, raw_node.node);
+            dbg!("raw_nodes", &dependency, &raw_html);
+        }*/
 
         Ok(HtmlUI {
             html,
@@ -44,30 +47,34 @@ impl HtmlUI {
             functions,
             variable_dependencies,
             outer_events,
+            dummy_html,
+            raw_html,
         })
     }
 }
 
 #[derive(Debug, Default)]
-pub(crate) struct DummyHtmlGenerator {
+pub(crate) struct RawHtmlGenerator {
     pub name: String,
     pub html: String,
     pub properties: Vec<(String, ftd::interpreter2::Property)>,
     pub properties_string: Option<String>,
     pub iteration: Option<ftd::interpreter2::Loop>,
-    pub helper_html: ftd::Map<DummyHtmlGenerator>,
-    pub children: Vec<DummyHtmlGenerator>,
+    pub helper_html: ftd::Map<RawHtmlGenerator>,
+    pub children: Vec<RawHtmlGenerator>,
 }
 
-impl DummyHtmlGenerator {
-    // pub(crate) fn from_dummy_element( dummy_node: ftd::Map<ftd::node::DummyNode>,)
+impl RawHtmlGenerator {
     pub(crate) fn from_node(
         id: &str,
         doc: &ftd::interpreter2::TDoc,
         node: ftd::node::Node,
-    ) -> DummyHtmlGenerator {
+    ) -> RawHtmlGenerator {
         let mut dummy_html = Default::default();
-        HtmlGenerator::new(id, doc).to_dummy_html(node, &mut dummy_html);
+        //TODO: Remove result
+        HtmlGenerator::new(id, doc)
+            .to_dummy_html(node, &mut dummy_html)
+            .unwrap();
         dummy_html
     }
 }
@@ -88,7 +95,7 @@ impl<'a> HtmlGenerator<'a> {
     pub fn to_dummy_html(
         &self,
         node: ftd::node::Node,
-        dummy_html: &mut DummyHtmlGenerator,
+        dummy_html: &mut RawHtmlGenerator,
     ) -> ftd::html1::Result<()> {
         if let Some(raw_data) = node.raw_data {
             dummy_html.iteration = raw_data.iteration;
@@ -96,13 +103,14 @@ impl<'a> HtmlGenerator<'a> {
                 self.id.as_str(),
                 raw_data.properties.as_slice(),
                 self.doc,
+                node.node.as_str(),
             );
             dummy_html.properties = raw_data.properties;
-            dummy_html.html = node.node.to_string();
+            dummy_html.html = format!("{{{}}}", node.node);
             dummy_html.name = node.node.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html);
+                self.to_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
         } else {
@@ -121,10 +129,11 @@ impl<'a> HtmlGenerator<'a> {
         Ok((html, ftd::html1::utils::events_to_string(events)))
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn to_dummy_html_(
         &self,
         node: ftd::node::Node,
-        dummy_html: &mut DummyHtmlGenerator,
+        dummy_html: &mut RawHtmlGenerator,
     ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
         if node.is_null() {
             return Ok(("".to_string(), vec![]));
@@ -149,13 +158,14 @@ impl<'a> HtmlGenerator<'a> {
                 self.id.as_str(),
                 raw_data.properties.as_slice(),
                 self.doc,
+                node_name.as_str(),
             );
             helper_dummy_html.properties = raw_data.properties;
-            helper_dummy_html.html = node_name.to_string();
+            helper_dummy_html.html = format!("{{{}}}", node_name);
             helper_dummy_html.name = node_name.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html);
+                self.to_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
             return Ok((node_name.to_string(), vec![]));

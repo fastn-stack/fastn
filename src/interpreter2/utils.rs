@@ -486,3 +486,11 @@ pub(crate) fn get_value(
         _ => None,
     })
 }
+
+pub(crate) fn js_reference_name(s: &str) -> String {
+    let mut s = s.replace("\\\\", "/").replace('\\', "/");
+    if s.contains("LOOP.COUNTER") {
+        s = "LOOP__COUNTER".to_string();
+    }
+    s
+}
