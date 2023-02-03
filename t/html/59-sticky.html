@@ -871,6 +871,26 @@ set_data_value(data, variable, value);
 exports.is_empty = function (str) {
 return (!str || str.length === 0);
 };
+exports.set_list = function (array, value, args, data, id) {
+args["CHANGE_VALUE"] = false;
+window.ftd.clear(array, args, data, id);
+args[0].value = value;
+change_value(args, data, id);
+if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
+// @ts-ignore
+let list = resolve_reference(args[0].reference, data);
+let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+for (let i in htmls) {
+let nodes = stringToHTML(htmls[i]);
+let main = document.querySelector(`[data-id="${data_id}"]`);
+for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+// @ts-ignore
+main.insertBefore(nodes.children[j], main.children[start_index + i]);
+}
+}
+}
+return array;
+};
 exports.append = function (array, value, args, data, id) {
 array.push(value);
 args["CHANGE_VALUE"] = false;
