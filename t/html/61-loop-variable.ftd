@@ -20,6 +20,7 @@ spacing.fixed.px: 10
 
 -- ftd.text: Current value:
 -- ftd.text: $value
+color: #d42bd4
 
 -- end: ftd.row
 
@@ -41,12 +42,12 @@ $on-input$: $ftd.set-string($a = $value, v = $VALUE)
 
 -- ftd.text: Insert
 padding.px: 10
-background.solid: green
+background.solid: #7acb7a
 $on-click$: $append($a = $names, v = $value)
 
 -- ftd.text: Clear
 padding.px: 10
-background.solid: #efb341
+background.solid: #f19494
 $on-click$: $clear($a = $names)
 
 -- counter:
@@ -131,13 +132,14 @@ spacing.fixed.px: 5
 padding.px: 4
 border-width.px: 2
 border-color: green
+background.solid: #d9f2d9
 
 -- ftd.text: ◀️
 $on-click$: $ftd.increment-by($a = $counter.num, v = -1)
 
 -- ftd.integer: $counter.num
 $on-click$: $insert_at($a = $names, v = $value, num = $counter.num)
-background.solid: lightgrey
+background.solid: #7acb7a
 padding.px: 6
 
 -- ftd.text: ▶️
@@ -159,13 +161,14 @@ spacing.fixed.px: 5
 padding.px: 4
 border-width.px: 2
 border-color: red
+background.solid: #f4cece
 
 -- ftd.text: ◀️
 $on-click$: $ftd.increment-by($a = $delete-counter.num, v = -1)
 
 -- ftd.integer: $delete-counter.num
 $on-click$: $delete_at($a = $names, num = $delete-counter.num)
-background.solid: lightgrey
+background.solid: #f19494
 padding.px: 6
 
 -- ftd.text: ▶️
