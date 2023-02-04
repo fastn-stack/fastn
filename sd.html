@@ -6,7 +6,24 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#sample-text": "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept—",
+"foo#toast": [
+{
+"border": {
+"dark": "#df2b2b",
+"light": "#df2b2b"
+},
+"cta-bg": {
+"dark": "#f5bdbb",
+"light": "#f5bdbb"
+},
+"cta-text": "close",
+"cta-text-color": {
+"dark": "#c62a21",
+"light": "#c62a21"
+},
+"toast": "Beep Beep! I am an error !"
+}
+],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -617,7 +634,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 10px; text-decoration: none; white-space: normal; width: 400px" class="ft_md">But ere she from the church-door stepped She smiled and told us why:</p> <p>‘It was a wicked woman’s curse,’ Quoth she, ‘and what care I?’ She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 10px; text-decoration: none; white-space: nowrap; width: 400px" class="ft_md">But ere she from the church-door stepped She smiled and told us why:</p> <p>‘It was a wicked woman’s curse,’ Quoth she, ‘and what care I?’ She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 10px; text-decoration: none; white-space: pre; width: 400px" class="ft_md">But ere she from the church-door stepped She smiled and told us why:</p> <p>‘It was a wicked woman’s curse,’ Quoth she, ‘and what care I?’ She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 10px; text-decoration: none; white-space: break-spaces; width: 400px" class="ft_md">But ere she from the church-door stepped She smiled and told us why:</p> <p>‘It was a wicked woman’s curse,’ Quoth she, ‘and what care I?’ She smiled, and smiled, and passed it off Ere from the door she stept—</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; background-color: rgba(245,189,187,1); border-bottom-width: 0px; border-color: rgba(223,43,43,1); border-left-width: 5px; border-radius: 4px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(198,42,33,1); display: flex; flex-direction: row; gap: 24px; height: auto; justify-content: start; padding-bottom: 16px; padding-left: 16px; padding-right: 16px; padding-top: 16px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: 100%" class="ft_md">Beep Beep! I am an error !</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: auto" class="ft_md">close</div></div></div>
 
 
 <script>
@@ -1442,33 +1459,191 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+window.node_change_main["0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#toast.0.cta-bg", data).light;
 }
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
-}
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
-}
-window.node_change_main["3:main__text"] = function(data) {
-document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
-}
-window.set_value_main = {};
-window.set_value_main["foo#sample-text"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#sample-text" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#sample-text", new_value);
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#toast.0.cta-bg", data).dark;}
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+window.node_change_main["0:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["border-color"] = resolve_reference("foo#toast.0.border", data).light;
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+else {document.querySelector(`[data-id="0:main"]`).style["border-color"] = resolve_reference("foo#toast.0.border", data).dark;}
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+
+window.node_change_main["0:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#toast.0.cta-text-color", data).light;
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#toast.0.cta-text-color", data).dark;}
+}
+
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#toast.0.toast", data);
+}
+
+window.node_change_main["0,0:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,0:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,0:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,0:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,0:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+window.node_change_main["0,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#toast.0.cta-text", data);
+}
+
+window.node_change_main["0,1:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,1:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,1:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,1:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+
+window.node_change_main["0,1:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.label-large", data).mobile)));}
+}
+window.set_value_main = {};
+window.set_value_main["foo#toast"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#toast" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#toast", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+}
+};
+
+window.set_value_main["ftd#default-types"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#default-types", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+}
+};
+
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#device", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
 };
 
