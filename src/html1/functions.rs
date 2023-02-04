@@ -56,6 +56,8 @@ impl FunctionGenerator {
 
         if !arguments.is_empty() {
             arguments = format!("{},args,data,id", arguments);
+        } else {
+            arguments = "args,data,id".to_string();
         }
 
         Ok(format!(
