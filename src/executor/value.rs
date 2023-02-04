@@ -34,45 +34,15 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
-    let argument =
-        arguments
-            .iter()
-            .find(|v| v.name.eq(key))
-            .ok_or(ftd::executor::Error::ParseError {
-                message: format!("Cannot find `{}` argument", key),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
-
-    let sources = argument.to_sources();
-    let ftd::executor::Value {
-        line_number: v_line_number,
+    get_value_from_properties_using_key_and_arguments_dummy(
+        key,
         properties,
-        value,
-    } = find_value_by_argument(
-        sources.as_slice(),
-        properties,
+        arguments,
         doc,
-        argument,
         line_number,
         false,
-    )?;
-    let expected_kind = value.as_ref().map(|v| v.kind());
-    if !expected_kind
-        .as_ref()
-        .map_or(true, |v| v.is_same_as(&argument.kind.kind))
-    {
-        return ftd::executor::utils::parse_error(
-            format!(
-                "Expected kind {:?}, found: `{:?}`",
-                expected_kind, argument.kind.kind
-            ),
-            doc.name,
-            line_number,
-        );
-    }
-
-    Ok(ftd::executor::Value::new(value, v_line_number, properties))
+        &Default::default(),
+    )
 }
 
 pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
@@ -82,6 +52,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     doc: &ftd::executor::TDoc,
     line_number: usize,
     is_dummy: bool,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
     let argument =
         arguments
@@ -105,6 +76,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
         argument,
         line_number,
         is_dummy,
+        inherited_variables,
     )?;
     let expected_kind = value.as_ref().map(|v| v.kind());
     if !expected_kind
@@ -156,6 +128,7 @@ pub(crate) fn find_value_by_argument(
     argument: &ftd::interpreter2::Argument,
     line_number: usize,
     is_dummy: bool,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
     let properties = ftd::executor::value::find_properties_by_source(
         source,
@@ -169,7 +142,7 @@ pub(crate) fn find_value_by_argument(
     let mut line_number = None;
     if !is_dummy {
         for p in properties.iter() {
-            if let Some(v) = p.resolve(&doc.itdoc())? {
+            if let Some(v) = p.resolve(&doc.itdoc(), inherited_variables)? {
                 value = Some(v);
                 line_number = Some(p.line_number);
                 if p.condition.is_some() {
@@ -179,7 +152,7 @@ pub(crate) fn find_value_by_argument(
         }
     } else {
         for p in properties.iter() {
-            if let Ok(Some(v)) = p.resolve(&doc.itdoc()) {
+            if let Ok(Some(v)) = p.resolve(&doc.itdoc(), inherited_variables) {
                 value = Some(v);
                 line_number = Some(p.line_number);
                 if p.condition.is_some() {
@@ -536,6 +509,7 @@ pub fn dummy_optional_string(
     doc: &ftd::executor::TDoc,
     is_dummy: bool,
     line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
@@ -544,6 +518,7 @@ pub fn dummy_optional_string(
         doc,
         line_number,
         is_dummy,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {
@@ -643,12 +618,35 @@ pub fn optional_record(
     rec_name: &str,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter2::PropertyValue>>>>
 {
-    let value = get_value_from_properties_using_key_and_arguments(
+    optional_record_inherited(
         key,
         properties,
         arguments,
         doc,
         line_number,
+        rec_name,
+        &Default::default(),
+    )
+}
+
+pub fn optional_record_inherited(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    rec_name: &str,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter2::PropertyValue>>>>
+{
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+        false,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {

@@ -395,12 +395,10 @@ fn update_local_variable_reference_in_property_value(
         }
     }) {
         property_value.set_reference_or_clone(local_variable.as_str());
-        return;
     }
 
     if let Some(replace_with) = replace_property_value.get(reference_or_clone.as_str()) {
         *property_value = replace_with.to_owned();
-        return;
     }
 
     update_inherited_reference_in_property_value(
@@ -434,6 +432,14 @@ fn update_inherited_reference_in_property_value(
             continue;
         }
         let mut found = true;
+
+        if container.len() > 0
+            && container.len() == local_container.len()
+            && container[container.len() - 1] != local_container[container.len() - 1]
+        {
+            continue;
+        }
+
         for (idx, i) in container.iter().enumerate() {
             if *i != local_container[idx] {
                 found = false;

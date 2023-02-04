@@ -504,6 +504,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     is_dummy,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#integer" => {
@@ -515,6 +516,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#boolean" => {
@@ -526,6 +528,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#decimal" => {
@@ -537,6 +540,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#row" => {
@@ -565,6 +569,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     vec![],
+                    inherited_variables,
                 )?)
             }
             "ftd#column" => {
@@ -593,6 +598,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     vec![],
+                    inherited_variables,
                 )?)
             }
             "ftd#image" => {
@@ -604,6 +610,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#code" => {
@@ -615,6 +622,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#iframe" => {
@@ -626,6 +634,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             "ftd#text-input" => ftd::executor::Element::TextInput(
@@ -637,6 +646,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?,
             ),
             "ftd#checkbox" => {
@@ -648,6 +658,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
+                    inherited_variables,
                 )?)
             }
             _ => unimplemented!(),

@@ -916,14 +916,16 @@ impl Color {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Color>>> {
-        let record_values = ftd::executor::value::optional_record(
+        let record_values = ftd::executor::value::optional_record_inherited(
             key,
             properties,
             arguments,
             doc,
             line_number,
             ftd::interpreter2::FTD_COLOR,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(

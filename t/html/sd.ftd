@@ -1,0 +1,60 @@
+-- record toast-list:
+string cta-text:
+string toast:
+ftd.color border:
+ftd.color cta-text-color:
+ftd.color cta-bg:
+
+-- toast-list list toast:
+
+-- toast-list:
+border: $inherited.colors.error.border
+cta-text-color: $inherited.colors.error.text
+cta-bg: $inherited.colors.error.base
+cta-text: close
+toast: Beep Beep! I am an error !
+
+
+-- end: toast
+
+
+-- toast-section:
+border: $obj.border
+cta-text-color: $obj.cta-text-color
+cta-bg:  $obj.cta-bg
+cta-text: $obj.cta-text
+toast: $obj.toast
+$loop$: $toast as $obj
+
+
+
+-- component toast-section:
+string cta-text:
+string toast:
+ftd.color border:
+ftd.color cta-text-color:
+ftd.color cta-bg:
+
+-- ftd.row:
+width: fill-container
+border-radius.px: 4
+border-left-width.px: 5
+color: $toast-section.cta-text-color
+background.solid: $toast-section.cta-bg
+border-color: $toast-section.border
+padding-vertical.px: 16
+padding-horizontal.px: 16
+spacing.fixed.px: 24
+
+-- ftd.text:
+text: $toast-section.toast
+role: $inherited.types.label-large
+width: fill-container
+
+-- ftd.text:
+text: $toast-section.cta-text
+role: $inherited.types.label-large
+
+-- end: ftd.row
+
+-- end: toast-section

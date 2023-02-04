@@ -494,3 +494,78 @@ pub(crate) fn js_reference_name(s: &str) -> String {
     }
     s
 }
+
+pub(crate) fn find_inherited_variables(
+    reference_or_clone: &str,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    local_container: Option<&[usize]>,
+) -> Option<String> {
+    if !reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
+        return None;
+    }
+    let values = if reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
+        let reference_or_clone = reference_or_clone
+            .trim_start_matches(format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str());
+        inherited_variables.get_value_and_rem(reference_or_clone)
+    } else {
+        vec![]
+    };
+
+    if local_container.is_none() {
+        if let Some(((reference, _), rem)) = values.last() {
+            return Some(if let Some(rem) = rem {
+                format!("{}.{}", reference, rem)
+            } else {
+                reference.to_string()
+            });
+        }
+    }
+
+    if let Some(local_container) = local_container {
+        for ((reference, container), rem) in values.iter() {
+            if container.len() > 0
+                && container.len() == local_container.len()
+                && container[container.len()] != local_container[container.len()]
+            {
+                continue;
+            }
+
+            for (idx, i) in container.iter().enumerate() {
+                if *i != local_container[idx] {
+                    break;
+                }
+            }
+
+            return Some(if let Some(rem) = rem {
+                format!("{}.{}", reference, rem)
+            } else {
+                reference.to_string()
+            });
+        }
+    }
+
+    if values.is_empty()
+        && (reference_or_clone
+            .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+            || reference_or_clone
+                .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
+    {
+        return Some(format!(
+            "ftd#default-{}{}",
+            if reference_or_clone
+                .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+            {
+                "types"
+            } else {
+                "colors"
+            },
+            reference_or_clone
+                .trim_start_matches(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+                .trim_start_matches(
+                    format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()
+                )
+        ));
+    }
+
+    None
+}

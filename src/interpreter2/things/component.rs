@@ -343,10 +343,15 @@ impl Property {
     pub(crate) fn resolve(
         &self,
         doc: &ftd::interpreter2::TDoc,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::Value>> {
         Ok(match self.condition {
             Some(ref condition) if !condition.eval(doc)? => None,
-            _ => Some(self.value.clone().resolve(doc, self.line_number)?),
+            _ => Some(self.value.clone().resolve_with_inherited(
+                doc,
+                self.line_number,
+                inherited_variables,
+            )?),
         })
     }
 

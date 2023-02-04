@@ -170,44 +170,60 @@ impl<'a> TDoc<'a> {
             name.to_string()
         })
     }
-
     pub(crate) fn resolve(
         &self,
         name: &str,
         kind: &ftd::interpreter2::KindData,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
-        let (value, _var_name, _var_line_number, remaining) =
-            if let Ok(v) = self.get_initial_variable(name, line_number) {
-                let mut value = v.0.value;
-                for conditional in v.0.conditional_value.iter() {
-                    if conditional.condition.eval(self)? {
-                        value = conditional.value.clone();
-                        break;
-                    }
+        self.resolve_with_inherited(name, kind, line_number, &Default::default())
+    }
+
+    pub(crate) fn resolve_with_inherited(
+        &self,
+        name: &str,
+        kind: &ftd::interpreter2::KindData,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        let (value, _var_name, _var_line_number, remaining) = if let Ok(v) =
+            self.get_initial_variable_with_inherited(name, line_number, inherited_variables)
+        {
+            let mut value = v.0.value;
+            for conditional in v.0.conditional_value.iter() {
+                if conditional.condition.eval(self)? {
+                    value = conditional.value.clone();
+                    break;
                 }
-                (value, v.0.name, v.0.line_number, v.1)
-            } else if let Ok(v) = self.get_component(name, line_number) {
-                (
-                    ftd::interpreter2::PropertyValue::Value {
-                        value: v.to_value(kind),
-                        is_mutable: false,
-                        line_number: v.line_number,
-                    },
-                    v.name,
-                    v.line_number,
-                    None,
-                )
-            } else {
-                return ftd::interpreter2::utils::e2(
-                    format!("Cannot find {} in get_thing", name),
-                    self.name,
-                    line_number,
-                );
-            };
-        let value = value.resolve(self, line_number)?;
+            }
+            (value, v.0.name, v.0.line_number, v.1)
+        } else if let Ok(v) = self.get_component(name, line_number) {
+            (
+                ftd::interpreter2::PropertyValue::Value {
+                    value: v.to_value(kind),
+                    is_mutable: false,
+                    line_number: v.line_number,
+                },
+                v.name,
+                v.line_number,
+                None,
+            )
+        } else {
+            return ftd::interpreter2::utils::e2(
+                format!("Cannot find {} in get_thing", name),
+                self.name,
+                line_number,
+            );
+        };
+        let value = value.resolve_with_inherited(self, line_number, inherited_variables)?;
         if let Some(remaining) = remaining {
-            return resolve_(remaining.as_str(), &value, line_number, self);
+            return resolve_(
+                remaining.as_str(),
+                &value,
+                line_number,
+                self,
+                inherited_variables,
+            );
         }
         return Ok(value);
 
@@ -216,6 +232,7 @@ impl<'a> TDoc<'a> {
             value: &ftd::interpreter2::Value,
             line_number: usize,
             doc: &ftd::interpreter2::TDoc,
+            inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
             let (p1, p2) = ftd::interpreter2::utils::split_at(name, ".");
             match value {
@@ -231,9 +248,15 @@ impl<'a> TDoc<'a> {
                             line_number,
                         })?
                         .clone()
-                        .resolve(doc, line_number)?;
+                        .resolve_with_inherited(doc, line_number, inherited_variables)?;
                     if let Some(p2) = p2 {
-                        return resolve_(p2.as_str(), &field, line_number, doc);
+                        return resolve_(
+                            p2.as_str(),
+                            &field,
+                            line_number,
+                            doc,
+                            inherited_variables,
+                        );
                     }
                     Ok(field)
                 }
@@ -250,9 +273,15 @@ impl<'a> TDoc<'a> {
                             line_number,
                         })?
                         .clone()
-                        .resolve(doc, line_number)?;
+                        .resolve_with_inherited(doc, line_number, inherited_variables)?;
                     if let Some(p2) = p2 {
-                        return resolve_(p2.as_str(), &value, line_number, doc);
+                        return resolve_(
+                            p2.as_str(),
+                            &value,
+                            line_number,
+                            doc,
+                            inherited_variables,
+                        );
                     }
                     Ok(value)
                 }
@@ -906,7 +935,17 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<(ftd::interpreter2::Variable, Option<String>)> {
-        let (initial_thing, remaining) = self.get_initial_thing(name, line_number)?;
+        self.get_initial_variable_with_inherited(name, line_number, &Default::default())
+    }
+
+    pub fn get_initial_variable_with_inherited(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter2::Result<(ftd::interpreter2::Variable, Option<String>)> {
+        let (initial_thing, remaining) =
+            self.get_initial_thing_with_inherited(name, line_number, inherited_variables)?;
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
     }
 
@@ -1392,10 +1431,29 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<(ftd::interpreter2::Thing, Option<String>)> {
+        self.get_initial_thing_with_inherited(name, line_number, &Default::default())
+    }
+
+    pub fn get_initial_thing_with_inherited(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter2::Result<(ftd::interpreter2::Thing, Option<String>)> {
         let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
+
+        if let Some(name) =
+            ftd::interpreter2::utils::find_inherited_variables(name, inherited_variables, None)
+        {
+            return self.get_initial_thing_with_inherited(
+                name.as_str(),
+                line_number,
+                inherited_variables,
+            );
+        }
 
         let name = self.resolve_name(name);
 

@@ -85,11 +85,20 @@ impl PropertyValue {
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        self.resolve_with_inherited(doc, line_number, &Default::default())
+    }
+
+    pub(crate) fn resolve_with_inherited(
+        self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         match self {
             ftd::interpreter2::PropertyValue::Value { value, .. } => Ok(value),
             ftd::interpreter2::PropertyValue::Reference { name, kind, .. }
             | ftd::interpreter2::PropertyValue::Clone { name, kind, .. } => {
-                doc.resolve(name.as_str(), &kind, line_number)
+                doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
             }
             ftd::interpreter2::PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall {
                 name,

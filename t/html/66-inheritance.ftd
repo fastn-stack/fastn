@@ -2,8 +2,9 @@
 ftd.color-scheme colors: $blue
 
 -- ftd.text: Hello there
-color: $inherited.colors.custom.one
-background.solid: $inherited.colors.custom.two
+color: $inherited.colors.error.border
+background.solid: $inherited.colors.error.border
+border-color: $inherited.colors.error.border
 
 -- end: page
 

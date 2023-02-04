@@ -159,6 +159,7 @@ pub fn code_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Code> {
     // TODO: `text`, `lang` and `theme` cannot have condition
 
@@ -210,6 +211,7 @@ pub fn code_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
 
     Ok(Code {
@@ -249,6 +251,7 @@ pub fn iframe_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Iframe> {
     // TODO: `youtube` should not be conditional
     let srcdoc =
@@ -317,6 +320,7 @@ pub fn iframe_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
 
     Ok(Iframe {
@@ -453,6 +457,7 @@ pub fn text_from_properties(
     local_container: &[usize],
     is_dummy: bool,
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
     let text = ftd::executor::value::dummy_optional_string(
         "text",
@@ -461,6 +466,7 @@ pub fn text_from_properties(
         doc,
         is_dummy,
         line_number,
+        inherited_variables,
     )?;
     if text.value.is_none() && condition.is_none() {
         // TODO: Check condition if `value is not null` is there
@@ -479,6 +485,7 @@ pub fn text_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     Ok(Text {
         text,
@@ -508,6 +515,7 @@ pub fn integer_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::i64("value", properties, arguments, doc, line_number)?;
     let num = format_num::NumberFormat::new();
@@ -533,6 +541,7 @@ pub fn integer_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     Ok(Text {
         text,
@@ -562,6 +571,7 @@ pub fn decimal_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::f64("value", properties, arguments, doc, line_number)?;
     let num = format_num::NumberFormat::new();
@@ -587,6 +597,7 @@ pub fn decimal_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     Ok(Text {
         text,
@@ -616,6 +627,7 @@ pub fn boolean_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::bool("value", properties, arguments, doc, line_number)?;
     let text = value.map(|v| ftd::executor::element::markup_inline(v.to_string().as_str()));
@@ -627,6 +639,7 @@ pub fn boolean_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     Ok(Text {
         text,
@@ -656,6 +669,7 @@ pub fn image_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Image> {
     let src = {
         let src = ftd::executor::value::record(
@@ -681,6 +695,7 @@ pub fn image_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     Ok(Image { src, common })
 }
@@ -695,6 +710,7 @@ pub fn row_from_properties(
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Row> {
     let common = common_from_properties(
         properties,
@@ -704,6 +720,7 @@ pub fn row_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Row { container, common })
@@ -719,6 +736,7 @@ pub fn column_from_properties(
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Column> {
     let common = common_from_properties(
         properties,
@@ -728,6 +746,7 @@ pub fn column_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Column { container, common })
@@ -741,6 +760,7 @@ pub fn common_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Common> {
     let is_visible = if let Some(condition) = condition {
         condition.eval(&doc.itdoc())?
@@ -963,6 +983,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-color",
+            inherited_variables,
         )?,
         border_bottom_width: ftd::executor::Length::optional_length(
             properties,
@@ -977,6 +998,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-bottom-color",
+            inherited_variables,
         )?,
         border_top_width: ftd::executor::Length::optional_length(
             properties,
@@ -991,6 +1013,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-top-color",
+            inherited_variables,
         )?,
         border_left_width: ftd::executor::Length::optional_length(
             properties,
@@ -1005,6 +1028,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-left-color",
+            inherited_variables,
         )?,
         border_right_width: ftd::executor::Length::optional_length(
             properties,
@@ -1019,6 +1043,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-right-color",
+            inherited_variables,
         )?,
         border_top_left_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1122,6 +1147,7 @@ pub fn common_from_properties(
             doc,
             line_number,
             "color",
+            inherited_variables,
         )?,
         align_self: ftd::executor::AlignSelf::optional_align_self(
             properties,
@@ -1231,6 +1257,7 @@ pub fn text_input_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<TextInput> {
     // TODO: `youtube` should not be conditional
     let placeholder = ftd::executor::value::optional_string(
@@ -1280,6 +1307,7 @@ pub fn text_input_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
 
     Ok(TextInput {
@@ -1338,6 +1366,7 @@ pub fn checkbox_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<CheckBox> {
     let checked =
         ftd::executor::value::optional_bool("checked", properties, arguments, doc, line_number)?;
@@ -1353,6 +1382,7 @@ pub fn checkbox_from_properties(
         doc,
         local_container,
         line_number,
+        inherited_variables,
     )?;
 
     Ok(CheckBox {
