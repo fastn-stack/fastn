@@ -171,7 +171,7 @@ window.ftd = (function () {
                 }
             }
         }
-        return window[action.name](...function_arguments, function_arguments, ftd_data[id], id);
+        return window[action.name](function_arguments, ftd_data[id], id, ...function_arguments);
     }
     function handle_event(evt, id, action, obj) {
         let function_arguments = [];
@@ -244,7 +244,7 @@ window.ftd = (function () {
     exports.is_empty = function (str) {
         return (!str || str.length === 0);
     };
-    exports.set_list = function (array, value, args, data, id) {
+    exports.set_list = function (args, data, id, array, value) {
         args["CHANGE_VALUE"] = false;
         window.ftd.clear(array, args, data, id);
         args[0].value = value;
@@ -264,7 +264,7 @@ window.ftd = (function () {
         }
         return array;
     };
-    exports.append = function (array, value, args, data, id) {
+    exports.append = function (args, data, id, array, value) {
         array.push(value);
         args["CHANGE_VALUE"] = false;
         args[0].value = array;
@@ -282,7 +282,7 @@ window.ftd = (function () {
         }
         return array;
     };
-    exports.insert_at = function (array, value, idx, args, data, id) {
+    exports.insert_at = function (args, data, id, array, value, idx) {
         array.push(value);
         args["CHANGE_VALUE"] = false;
         args[0].value = array;
@@ -304,7 +304,7 @@ window.ftd = (function () {
         }
         return array;
     };
-    exports.clear = function (array, args, data, id) {
+    exports.clear = function (args, data, id, array) {
         args["CHANGE_VALUE"] = false;
         // @ts-ignore
         let length = resolve_reference(args[0].reference, data).length;
@@ -320,7 +320,7 @@ window.ftd = (function () {
         }
         return array;
     };
-    exports.delete_at = function (array, idx, args, data, id) {
+    exports.delete_at = function (args, data, id, array, idx) {
         // @ts-ignore
         let length = resolve_reference(args[0].reference, data).length;
         if (idx >= length) {
