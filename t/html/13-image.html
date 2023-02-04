@@ -1384,7 +1384,7 @@ remaining = p2;
 return deepCopy(initial_value);
 }
 function get_data_value(data, name) {
-resolve_reference(name, data, null, null);
+return resolve_reference(name, data, null, null);
 }
 function JSONstringify(f) {
 if (typeof f === 'object') {

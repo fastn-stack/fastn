@@ -142,7 +142,7 @@ function resolve_reference(reference: string, data: any, value: any, checked: an
 
 
 function get_data_value(data: any, name: string) {
-    resolve_reference(name, data, null, null)
+    return resolve_reference(name, data, null, null)
 }
 
 function JSONstringify(f: any) {
