@@ -55,7 +55,7 @@ impl FunctionGenerator {
         let mut arguments = arguments.iter().map(|(k, _)| k).join(",");
 
         if !arguments.is_empty() {
-            arguments = format!("args,data,id,{}", arguments);
+            arguments = format!("{},args,data,id", arguments);
         } else {
             arguments = "args,data,id".to_string();
         }
@@ -142,7 +142,7 @@ impl ExpressionGenerator {
         }
 
         if let Some(function_name) = self.function_name(node.operator()) {
-            let mut result = vec!["args".to_string(), "data".to_string(), "id".to_string()];
+            let mut result = vec![];
             if let Some(child) = node.children().first() {
                 for children in child.children() {
                     let mut value = self.to_string(children, false, arguments);
@@ -152,6 +152,7 @@ impl ExpressionGenerator {
                     result.push(value);
                 }
             }
+            result.extend(["args".to_string(), "data".to_string(), "id".to_string()]);
             return format!("{}({})", function_name, result.join(","));
         }
 

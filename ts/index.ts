@@ -48,7 +48,7 @@ window.ftd = (function() {
             }
         }
 
-        return window[action.name](function_arguments, ftd_data[id], id, ...function_arguments);
+        return window[action.name](...function_arguments, function_arguments, ftd_data[id], id);
     }
 
 
@@ -140,7 +140,7 @@ window.ftd = (function() {
         return (!str || str.length === 0 );
     }
 
-    exports.set_list = function(args: any, data: any, id: string, array: any[], value: any[]) {
+    exports.set_list = function(array: any[], value: any[], args: any, data: any, id: string) {
         args["CHANGE_VALUE"]= false;
         window.ftd.clear(array, args, data, id);
         args[0].value = value;
@@ -161,7 +161,7 @@ window.ftd = (function() {
         return array;
     }
 
-    exports.append = function(args: any, data: any, id: string, array: any[], value: any) {
+    exports.append = function(array: any[], value: any, args: any, data: any, id: string) {
         array.push(value);
         args["CHANGE_VALUE"]= false;
         args[0].value = array;
@@ -180,7 +180,7 @@ window.ftd = (function() {
         return array;
     }
 
-    exports.insert_at = function(args: any, data: any, id: string, array: any[], value: any, idx: number) {
+    exports.insert_at = function(array: any[], value: any, idx: number, args: any, data: any, id: string) {
         array.push(value);
         args["CHANGE_VALUE"]= false;
         args[0].value = array;
@@ -202,7 +202,7 @@ window.ftd = (function() {
         return array;
     }
 
-    exports.clear = function(args: any, data: any, id: string, array: any[]) {
+    exports.clear = function(array: any[], args: any, data: any, id: string) {
         args["CHANGE_VALUE"]= false;
         // @ts-ignore
         let length = resolve_reference(args[0].reference, data).length;
@@ -220,7 +220,7 @@ window.ftd = (function() {
     }
 
 
-    exports.delete_at = function(args: any, data: any, id: string, array: any[], idx: number) {
+    exports.delete_at = function(array: any[], idx: number, args: any, data: any, id: string) {
         // @ts-ignore
         let length = resolve_reference(args[0].reference, data).length;
         if (idx >= length) {

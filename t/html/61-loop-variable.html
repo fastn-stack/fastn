@@ -808,7 +808,7 @@ function_arguments.push(value);
 }
 }
 }
-return window[action.name](function_arguments, ftd_data[id], id, ...function_arguments);
+return window[action.name](...function_arguments, function_arguments, ftd_data[id], id);
 }
 function handle_event(evt, id, action, obj) {
 let function_arguments = [];
@@ -881,7 +881,7 @@ set_data_value(data, variable, value);
 exports.is_empty = function (str) {
 return (!str || str.length === 0);
 };
-exports.set_list = function (args, data, id, array, value) {
+exports.set_list = function (array, value, args, data, id) {
 args["CHANGE_VALUE"] = false;
 window.ftd.clear(array, args, data, id);
 args[0].value = value;
@@ -901,7 +901,7 @@ main.insertBefore(nodes.children[j], main.children[start_index + i]);
 }
 return array;
 };
-exports.append = function (args, data, id, array, value) {
+exports.append = function (array, value, args, data, id) {
 array.push(value);
 args["CHANGE_VALUE"] = false;
 args[0].value = array;
@@ -919,7 +919,7 @@ main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1
 }
 return array;
 };
-exports.insert_at = function (args, data, id, array, value, idx) {
+exports.insert_at = function (array, value, idx, args, data, id) {
 array.push(value);
 args["CHANGE_VALUE"] = false;
 args[0].value = array;
@@ -941,7 +941,7 @@ main.insertBefore(nodes.children[0], main.children[start_index + idx]);
 }
 return array;
 };
-exports.clear = function (args, data, id, array) {
+exports.clear = function (array, args, data, id) {
 args["CHANGE_VALUE"] = false;
 // @ts-ignore
 let length = resolve_reference(args[0].reference, data).length;
@@ -957,7 +957,7 @@ main.removeChild(main.children[i]);
 }
 return array;
 };
-exports.delete_at = function (args, data, id, array, idx) {
+exports.delete_at = function (array, idx, args, data, id) {
 // @ts-ignore
 let length = resolve_reference(args[0].reference, data).length;
 if (idx >= length) {
@@ -1402,32 +1402,32 @@ return f;
 
 
 
-function foo__append___main(args,data,id,a,v){
-return (ftd.append(args,data,id,a.value,v));
+function foo__append___main(a,v,args,data,id){
+return (ftd.append(a.value,v,args,data,id));
 }
 
 
 
-function foo__clear___main(args,data,id,a){
-return (ftd.clear(args,data,id,a.value));
+function foo__clear___main(a,args,data,id){
+return (ftd.clear(a.value,args,data,id));
 }
 
 
 
-function foo__delete_at___main(args,data,id,a,num){
-return (ftd.delete_at(args,data,id,a.value,num));
+function foo__delete_at___main(a,num,args,data,id){
+return (ftd.delete_at(a.value,num,args,data,id));
 }
 
 
 
-function foo__insert_at___main(args,data,id,a,v,num){
-return (ftd.insert_at(args,data,id,a.value,v,num));
+function foo__insert_at___main(a,v,num,args,data,id){
+return (ftd.insert_at(a.value,v,num,args,data,id));
 }
 
 
 
-function foo__set_list___main(args,data,id,a,v){
-return (ftd.set_list(args,data,id,a.value,v));
+function foo__set_list___main(a,v,args,data,id){
+return (ftd.set_list(a.value,v,args,data,id));
 }
 
 
@@ -1450,37 +1450,37 @@ return (enable_system_mode(args,data,id));
 
 
 
-function ftd__increment___main(args,data,id,a){
+function ftd__increment___main(a,args,data,id){
 return (a.value += 1);
 }
 
 
 
-function ftd__increment_by___main(args,data,id,a,v){
+function ftd__increment_by___main(a,v,args,data,id){
 return (a.value += v);
 }
 
 
 
-function ftd__set_bool___main(args,data,id,a,v){
+function ftd__set_bool___main(a,v,args,data,id){
 a.value = v
 }
 
 
 
-function ftd__set_integer___main(args,data,id,a,v){
+function ftd__set_integer___main(a,v,args,data,id){
 a.value = v
 }
 
 
 
-function ftd__set_string___main(args,data,id,a,v){
+function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
 
 
 
-function ftd__toggle___main(args,data,id,a){
+function ftd__toggle___main(a,args,data,id){
 a.value = !a.value
 }
 
