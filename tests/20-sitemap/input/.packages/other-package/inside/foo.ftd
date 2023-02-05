@@ -1,7 +1,0 @@
--- string data: Nothing is passed
-$processor$: get-data
-
-
--- ftd.text: Hello from other package foo
-
--- ftd.text: $data

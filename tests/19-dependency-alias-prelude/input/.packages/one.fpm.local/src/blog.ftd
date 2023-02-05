@@ -1,6 +1,0 @@
--- ftd.row block:
-
--- config.some-data: test
-
-// This should not happen
-\\-- test.hello-msg: Here's the text

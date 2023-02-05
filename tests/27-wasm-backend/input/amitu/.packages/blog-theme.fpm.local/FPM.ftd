@@ -1,5 +1,0 @@
--- import: fpm
-
--- fpm.package: blog-theme.fpm.local
-
--- fpm.dependency: blog-backend.fpm.local

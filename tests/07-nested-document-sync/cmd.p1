@@ -1,5 +1,5 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test sync index.ftd nested/document.ftd && $FBT_CWD/target/debug/fpm --test sync
+cmd: cd amitu && $FBT_CWD/target/debug/fastn --test sync index.ftd nested/document.ftd && $FBT_CWD/target/debug/fastn --test sync
 output: amitu/.history
 skip: `fpm sync` is not supporting offline mode
 

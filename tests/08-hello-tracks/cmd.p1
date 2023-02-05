@@ -1,5 +1,5 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test start-tracking index-track.ftd --target index.ftd && $FBT_CWD/target/debug/fpm --test start-tracking index-track.ftd --target hello.txt && $FBT_CWD/target/debug/fpm --test start-tracking index-track.ftd --target hello.txt && $FBT_CWD/target/debug/fpm status && $FBT_CWD/target/debug/fpm --test mark-upto-date index-track.ftd && $FBT_CWD/target/debug/fpm --test mark-upto-date index-track.ftd --target index.ftd && $FBT_CWD/target/debug/fpm --test stop-tracking index-track.ftd --target hello.txt
+cmd: cd amitu && $FBT_CWD/target/debug/fastn --test start-tracking index-track.ftd --target index.ftd && $FBT_CWD/target/debug/fastn --test start-tracking index-track.ftd --target hello.txt && $FBT_CWD/target/debug/fastn --test start-tracking index-track.ftd --target hello.txt && $FBT_CWD/target/debug/fastn status && $FBT_CWD/target/debug/fastn --test mark-upto-date index-track.ftd && $FBT_CWD/target/debug/fastn --test mark-upto-date index-track.ftd --target index.ftd && $FBT_CWD/target/debug/fastn --test stop-tracking index-track.ftd --target hello.txt
 output: amitu/.tracks
 
 

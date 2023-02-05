@@ -1,0 +1,189 @@
+[package]
+name = "fastn-core"
+version = "0.1.0"
+authors = [
+    "Abrar Khan <abrark@fifthtry.com>",
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Arpita Jaiswal <arpita@fifthtry.com>",
+]
+edition = "2021"
+description = "fastn: FTD Package Manager"
+license = "MIT"
+repository = "https://github.com/ftd-lang/fastn"
+homepage = "https://fastn.dev"
+
+[features]
+default = ["auth"]
+# fastn comes with some feature to integrate with fastn controller. fastn controller is a
+# separate software, optional. fastn controller is responsible for creating a new fastn
+# package, and deploying it on some server, backing content up and so on. fastn has to
+# speak with fastn controller, when fastn is managed by fastn controller. Enabling the
+# "controller" feature enables that communication.
+controller = ["remote"]
+
+# fastn runs in local mode (to be used on your local laptop, or single use server), and in
+# remote mode (to be used as a shared server for your entire team). The default is
+# local mode.
+#
+# In local mode the editor acts like a local file editor, any changes done directly
+# update the file. In remote mode, only sync can be called, and no direct edits are
+# allowed. In future we will also have workspace mode, in which in remote a workspace
+# is created for every user, and local edits in the workspace is allowed.
+remote = []
+
+auth = ["github-auth"]
+github-auth = ["dep:oauth2"]
+
+[dependencies]
+# Please do not specify a dependency more precisely than needed. If version "1" works, do
+# not specify "1.1.42". This reduces the number of total dependencies, as if you specify
+# 1.1.42 and someone else who only needed "1" also specified 1.1.37, we end up having same
+# dependency compiled twice.
+#
+# In future we may discover that our code does not indeed work with "1", say it ony works
+# for 1.1 onwards, or 1.1.25 onwards, in which case use >= 1.1.25 etc. Saying our code
+# only works for 1.1.42 and not 1.1.41 nor 1.1.43 is really weird, and most likely wrong.
+#
+# If you are not using the latest version intentionally, please do not list it in this section
+# and create it's own [dependencies.<name>] section, and document it with why are you not
+# using the latest dependency, and what is the plan.
+
+antidote = "1"
+async-lock = "2"
+async-recursion = "1"
+actix-web = "4"
+camino = "1"
+clap = "4"
+colored = "2"
+diffy = "0.3"
+edit = "0.1"
+fluent = "0.16"
+futures = "0.3"
+ignore = "0.4"
+indoc = "2"
+intl-memoizer = "0.5"
+itertools = "0.10"
+oauth2 = { version = "4.3.0", optional = true }
+once_cell = "1"
+mime_guess = "2"
+realm-lang = "0.1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+slug = { version = "0.1" }
+sha2 = "0.10"
+thiserror = "1.0.38"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+url = "2"
+zip = "0.6"
+env_logger = "0.10.0"
+
+
+#wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
+#fastn-utils = { git = "https://github.com/ftd-lang/fastn-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
+# fastn-utils = { path = "../fastn-utils/crates/fastn-utils-host"}
+
+[dependencies.tracing-forest]
+version = "0.1"
+features = [
+    "ansi", # This is for printing the ColorLevel in the events
+    "smallvec",
+    "serde",
+    "tokio",
+
+    # "uuid",  # This is for printing uuid for every request
+    # "chrono", # This is for printing the time of the event
+    # "env-filter",
+]
+
+[dependencies.magic-crypt]
+version = "3.1.12"
+default-features = false
+
+[dependencies.hyper]
+version = "0.14"
+default-features = false
+features = ["http1", "server"]
+
+[dependencies.notify]
+# Read the following why we disable the default feature:
+# https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
+version = "5.0.0"
+default-features = false
+features=["macos_kqueue"]
+
+[dependencies.ftd]
+# We are currently using the git version of ftd as we are not publishing every change
+# to ftd for now. We are currently in active development, and we are not using proper
+# semantic versioning (https://semver.org), which will force us to increment version
+# numbers based on breaking change, and will force as to go to 1.0, when we are not
+# ready for 1.0 right now.
+#
+# Once we are closer to release we will stop using this and adopot semver.
+git = "https://github.com/ftd-lang/ftd"
+rev = "e446f4c5"
+#
+# If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
+# same folder and uncomment the next `path` line to use local ftd.
+#
+# Note: you do not have to comment out the git/rev above, Cargo uses `path` with
+# higher priority over them if `path` is provided.
+#
+# path = "../ftd"
+
+[dependencies.reqwest]
+# We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`
+# does too much (bundled) tls for example, that we can not.
+version = "0.11"
+features = [
+    # Check the note on bundling rusqlite later in this file. Without bundling
+    # we will have a dependency on libssl.
+    "native-tls-vendored",
+    "json",
+    "blocking",
+]
+
+[dependencies.tokio]
+version = "1"
+features = [
+    "sync",
+    "macros", # tokio::select! macro
+
+    # We are currently using the "heavier" schedule.
+    #
+    # > rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
+    # > rt-multi-thread: Enables the heavier, multi-threaded, work-stealing scheduler.
+    #
+    # Is it justified?
+    "rt-multi-thread",
+
+    # https://docs.rs/tokio/1.20.1/tokio/fs/#usage says:
+    #
+    # > Warning: These adapters may create a large number of temporary tasks, especially when reading
+    # > large files. When performing a lot of operations in one batch, it may be significantly faster
+    # > to use spawn_blocking directly.
+    #
+    # We may be suffering from this problem, we do a lot of reads, each read becomes a task.
+    "fs",
+]
+
+[dependencies.rusqlite]
+version = "0.28"
+features = [
+    # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
+    # dependency. By default, if we do not bundle, our binary will link against system
+    # provided sqlite, which would have been a good thing, if we used system sqlite, our
+    # binary size would be smaller, compile time lesser, but unfortunately we can not assume
+    # sqlite dynamic library is installed on everyone's machine. We can chose to give two
+    # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
+    "bundled",
+]
+
+[dev-dependencies]
+indoc = "2"
+pretty_assertions = "1"
+
+[dev-dependencies.fbt-lib]
+git = "https://github.com/FifthTry/fbt"
+rev = "ea0ee98"

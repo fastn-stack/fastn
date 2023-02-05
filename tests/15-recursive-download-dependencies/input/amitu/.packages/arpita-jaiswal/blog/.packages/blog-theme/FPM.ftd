@@ -1,6 +1,0 @@
--- import: fpm
-
--- fpm.package: blog-theme
-zip: blog-theme
-
--- fpm.dependency: theme

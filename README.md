@@ -6,7 +6,7 @@
 </div>
 
 <div align="center">
-    <img src="FPM.svg" width="150" alt="FPM"/>
+    <img src="FASTN.svg" width="150" alt="FPM"/>
 </div>
 
 

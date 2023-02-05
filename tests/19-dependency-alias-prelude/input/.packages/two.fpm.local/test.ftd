@@ -1,5 +1,0 @@
--- ftd.row hello-msg:
-caption msg:
-
---- ftd.text:
-text: $msg

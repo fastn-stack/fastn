@@ -1,7 +1,0 @@
--- import: blog-theme
-
--- ftd.row say-hello:
-
---- blog-theme.say-hello:
-
---- ftd.text: blog says hello

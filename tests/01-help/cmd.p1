@@ -1,15 +1,15 @@
 -- fbt:
-cmd: $FBT_CWD/target/debug/fpm --test --help
+cmd: $FBT_CWD/target/debug/fastn --test --help
 
 Will have to be updated every time version changes.
 
 -- stdout:
 
-Usage: fpm [OPTIONS] [COMMAND]
+Usage: fastn [OPTIONS] [COMMAND]
 
 Commands:
-  create-package  Create a new FPM package
-  build           Build static site from this fpm package
+  create-package  Create a new fastn package
+  build           Build static site from this fastn package
   update          Reinstall all the dependency packages
   serve           Serve package content over HTTP
   help            Print this message or the help of the given subcommand(s)

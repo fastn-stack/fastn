@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ftd.text: hello
 
@@ -18,9 +18,9 @@ role: $body-large
 
 -- ftd.text: hello_h1
 region: h1
-role: $fpm.type.copy-relaxed
-color: $fpm.color.main.text
+role: $fastn.type.copy-relaxed
+color: $fastn.color.main.text
 
 -- ftd.text: hello_h0
 region: h0
-role: $fpm.type.copy-tight
+role: $fastn.type.copy-tight

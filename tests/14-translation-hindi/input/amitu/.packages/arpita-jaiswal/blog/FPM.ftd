@@ -1,5 +1,0 @@
--- import: fpm
-
--- fpm.package: arpita-jaiswal/blog
-language: en
-zip: www.blog.com
