@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO: //
 # This script should be run via curl:
 # sh -c "$(curl -fsSL https://fpm.dev/install.sh)"
 # or via wget
