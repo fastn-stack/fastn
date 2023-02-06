@@ -1,0 +1,15 @@
+-- boolean $flag: true
+
+-- foo:
+my-color if { flag }: green
+my-color: yellow
+$on-click$: $ftd.toggle($a = $flag)
+
+
+-- component foo:
+ftd.color my-color:
+
+-- ftd.text: Hello there
+color: $foo.my-color
+
+-- end: foo

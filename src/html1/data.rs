@@ -14,9 +14,17 @@ impl<'a> DataGenerator<'a> {
                 value,
                 mutable,
                 line_number,
+                conditional_value,
                 ..
             }) = v
             {
+                let mut value = value.clone();
+                for conditional in conditional_value.iter() {
+                    if conditional.condition.eval(self.doc)? {
+                        value = conditional.value.clone();
+                        break;
+                    }
+                }
                 match value.clone().resolve(self.doc, value.line_number()) {
                     Ok(value) => {
                         if let Some(value) = ftd::interpreter2::utils::get_value(self.doc, &value)?

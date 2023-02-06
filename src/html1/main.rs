@@ -19,19 +19,14 @@ impl HtmlUI {
         );
 
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
-        dbg!("1");
         let (dependencies, var_dependencies) =
             ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
                 .get_dependencies()?;
-        dbg!("2");
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies)?;
-        dbg!("3");
-        let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
-        dbg!("4");
+        let variables = ftd::html1::data::DataGenerator::new(&tdoc).getgst_data()?;
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
-        dbg!("5");
         let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
             .as_string_from_dummy_nodes(&node_data.dummy_nodes);
 
