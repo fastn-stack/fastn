@@ -24,7 +24,7 @@ impl HtmlUI {
                 .get_dependencies()?;
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies)?;
-        let variables = ftd::html1::data::DataGenerator::new(&tdoc).getgst_data()?;
+        let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
         let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
