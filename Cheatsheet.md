@@ -858,7 +858,6 @@ optional string font-family:
 
 # Default functions
 
-
 ## `append($a: mutable list, v: string)`
 
 This is a default ftd function that will append a string `v`
@@ -875,7 +874,7 @@ ftd.append(a, v);
 ## `insert_at($a: mutable list, v: string, num: integer)`
 
 This is a default ftd function that will insert a string `v`
-at the index `num` of the given mutable string list `a`.
+at the index `num` in the given mutable string list `a`.
 
 ```ftd
 -- void insert_at(a,v,num):
@@ -888,8 +887,8 @@ ftd.insert_at(a, v, num);
 
 ## `delete_at($a: mutable list, v: integer)`
 
-This is a default ftd function that will delete a existing string
-from index `num` of the given mutable string list `a`.
+This is a default ftd function that will delete the string
+from index `num` from the given mutable string list `a`.
 
 ```ftd
 -- void delete_at(a,num):
@@ -913,7 +912,7 @@ ftd.clear(a);
 
 ## `set-list($a: mutable list, v: list)`
 
-This is a default ftd function that will assign the a new list `v` to the
+This is a default ftd function that will assign a new list `v` to the
 existing mutable list `a`.
 
 ```ftd
