@@ -205,7 +205,7 @@
                     "text": {
                       "value": {
                         "original": "Hello World",
-                        "rendered": "Hello World"
+                        "rendered": "<p>Hello World</p>"
                       },
                       "line_number": 8,
                       "properties": [
@@ -881,7 +881,7 @@
                     "text": {
                       "value": {
                         "original": "Hello Again",
-                        "rendered": "Hello Again"
+                        "rendered": "<p>Hello Again</p>"
                       },
                       "line_number": 8,
                       "properties": [

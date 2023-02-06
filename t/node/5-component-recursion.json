@@ -329,7 +329,7 @@
             },
             "children": [],
             "text": {
-              "value": "TOC title 1",
+              "value": "<p>TOC title 1</p>",
               "properties": [
                 {
                   "property": {
@@ -591,7 +591,7 @@
                 },
                 "children": [],
                 "text": {
-                  "value": "TOC title 2",
+                  "value": "<p>TOC title 2</p>",
                   "properties": [
                     {
                       "property": {
@@ -865,7 +865,7 @@
                 },
                 "children": [],
                 "text": {
-                  "value": "TOC title 3",
+                  "value": "<p>TOC title 3</p>",
                   "properties": [
                     {
                       "property": {
@@ -1127,7 +1127,7 @@
                     },
                     "children": [],
                     "text": {
-                      "value": "TOC title 4",
+                      "value": "<p>TOC title 4</p>",
                       "properties": [
                         {
                           "property": {
