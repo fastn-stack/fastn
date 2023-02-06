@@ -27,7 +27,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main
   page.
 - Use the reference to `fastn.exe` in your terminal to invoke ftd.
 
-  [Read more](setup/fastn-binary-installation)
+  [Read more](setup/windows)
 
 
 -- ds.h1: `Cargo install` the latest version
