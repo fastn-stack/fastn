@@ -1,8 +1,4 @@
-/-- ft-core.concept:
-
 -- ds.page: `ftd::p1` grammar
-
--- ds.markdown: 
 
 `ftd` is based on a low-level grammar called `ftd::p1` grammar.
 
@@ -13,8 +9,8 @@ A `ftd::p1` file is composed of "sections". A section looks like this:
 -- ds.code: an `ftd::p1` file with two sections
 lang: ftd
 
-\-- some section: the caption of the section
-header-1: some header value
+\-- section-kind section: the caption of the section
+header-kind header-1: some header value
 hello: world
 
 the body of the first section
@@ -28,10 +24,39 @@ Each section starts with `-- `.
 
 The section has these properties:
 
+-- ds.h2: `section kind`
+
+The section kind can be define after `-- ` and before the section name. This is
+optional parameter.
+
+In our case the `section-kind` is the section kind.
+
+Since section kind is optional, so a section can be defined with or without
+section kind.
+
+-- ds.code: section with section kind
+lang: ftd
+
+;; section kind in `string`
+\-- string name: Some caption
+
+;; section kind is `string list`
+\-- string list name:
+
+
+-- ds.code: section without section kind
+lang: ftd
+
+;; No section kind present
+\-- my-section:
+
+
+
 -- ds.h2: `section name`
 
 The section name is the only **mandatory parameter** for a section. Name starts 
-after `-- `, and ends with the first `:`. Trailing `:` is mandatory.
+after `-- ` or section kind if present, and ends with the first `:`. Trailing
+`:` is mandatory.
 
 In our example, the name of the first section is `some section`, and the second 
 section's name is `something`.
@@ -55,14 +80,72 @@ Leading and trailing whitespaces are not considered part of the caption.
 
 -- ds.h2: `section headers`
 
-After the "section line" (the first line that starts with `-- `, zero or more
-section headers can be passed. In our example, the first section has two headers,
-`header-1` and `hello`, with values `some header value` and `world` respectively.
+After the "section line" (the first line that starts with `-- `), zero or more
+section headers can be passed. Header can be passed in two ways: `inline` and
+`block`
 
-An empty newline or the start of a new section
-marks the end of the headers.
+A section header consists of name (mandantory), kind (optional) and value
+(optional).
+
+-- ds.h3: `inline header`
+
+In our example, the section has two headers, having names `header-1` and
+`hello`, with values `some header value` and `world` respectively. Also the
+first header `header-1` has kind `header-kind`
+
+An empty newline or the start of a new section marks the end of the headers.
 
 Leading and trailing whitespaces of both header name and header value are ignored.
+
+-- ds.code: `inline` header
+lang: ftd
+
+\-- section-kind section: the caption of the section
+header-kind header-1: some header value
+hello: world
+
+-- ds.h3: `block header`
+
+We can also pass headers in block. This is commonly used when the value of
+header is long and passing it in `inline` creates readability issue.
+
+-- ds.code: `block` header
+lang: ftd
+
+\-- section-kind section-name:
+
+\-- section-name.block-header:
+
+Lorem ipsum dolor sit amet. Vel magni dolorum et doloremque nostrum aut dicta unde 33 quod quisquam sed ducimus placeat et placeat reiciendis ad nostrum rerum. Qui quasi eserunt ut aliquid galisum et harum porro et libero facilis cum corporis voluptatem est beatae minima non voluptatem maxime. Est quod ipsum sed neque labore ut tempora porro ut quae distinctio ad enim voluptatem ex praesentium molestiae. Ea iusto consectetur ab sequi voluptatem et inventore iste.
+
+
+-- ds.markdown:
+
+The block header can be declared after `inline` header. It starts with `-- `,
+follow by header kind, if present, then section name with `.` and after
+this header name. Now, header value can be passed in caption or body area.
+
+In above example, the header name is `block-header` and has long value as `Lorem
+ipsum dolor...` which is passed as body
+
+Header value can also take list of sections as value. And in that case, it needs
+`end` statement to show the closing of header.
+
+
+-- ds.code: `block` header
+lang: ftd
+
+\-- section-kind section-name:
+
+\-- section-name.block-header:
+
+\-- some section:
+
+\-- another section:
+
+\-- end: section-name.block-header
+
+
 
 -- ds.h2: `section body`
 
