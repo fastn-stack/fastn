@@ -19,17 +19,18 @@ pub fn markup(i: &str) -> String {
 }
 
 pub fn markup_inline(i: &str) -> String {
-    let mut o = markup(i);
+    let o = markup(i);
     let (space_before, space_after) = spaces(i);
 
     // if output is wrapped in `<p>`, we are trying to remove it, because this is a single text
     // which may go in button etc.
-    if o.starts_with("<p>") {
+    // Todo:
+    /*if o.starts_with("<p>") {
         let l1 = o.chars().count();
         let l2 = "<p></p>".len();
         let l = if l1 > l2 { l1 - l2 } else { l1 };
         o = o.chars().skip("<p>".len()).take(l).collect::<String>();
-    }
+    }*/
 
     format!(
         "{}{o}{}",
