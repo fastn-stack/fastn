@@ -128,7 +128,9 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
-pub(crate) async fn get_number_of_documents(config: &fastn_core::Config) -> fastn_core::Result<String> {
+pub(crate) async fn get_number_of_documents(
+    config: &fastn_core::Config,
+) -> fastn_core::Result<String> {
     let mut no_of_docs = fastn_core::snapshot::get_latest_snapshots(&config.root)
         .await?
         .len()
@@ -553,7 +555,7 @@ pub fn replace_markers_2022(
                 .as_str(),
             )
             .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-            .replace("__ftd_css__", "")
+            .replace("__ftd_css__", ftd::css())
             .replace("__ftd_element_css__", "")
             .replace("__base_url__", base_url)
             .as_str(),
@@ -613,7 +615,10 @@ pub(crate) async fn copy(
     fastn_core::utils::update(to, content.as_slice()).await
 }
 
-pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> fastn_core::Result<()> {
+pub(crate) async fn update(
+    root: impl AsRef<camino::Utf8Path>,
+    data: &[u8],
+) -> fastn_core::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
