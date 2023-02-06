@@ -73,9 +73,9 @@ print "hello world"
 In this case the body would be: `/import os\n\nprint "hello world"`.
 
 
--- ds.h1: Comment using `;`
+-- ds.h1: Comment using `;;`
 
-Similarly any attribute can be commented out by following with `;`:
+Similarly any attribute can be commented out by following with `;;`:
 
 -- ds.code:
 lang: ftd
@@ -83,7 +83,7 @@ lang: ftd
 
 \-- ds.code:
 lang: ftd
-\;color: red
+;; color: red
 
 
 -- ds.markdown:
