@@ -11,12 +11,30 @@ impl<'a> DataGenerator<'a> {
         let mut d: ftd::Map<serde_json::Value> = Default::default();
         for (k, v) in self.doc.bag().iter() {
             if let ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
-                value, ..
+                value,
+                mutable,
+                line_number,
+                ..
             }) = v
             {
-                let value = value.clone().resolve(self.doc, value.line_number())?;
-                if let Some(value) = ftd::interpreter2::utils::get_value(self.doc, &value)? {
-                    d.insert(ftd::html1::utils::js_reference_name(k), value);
+                match value.clone().resolve(self.doc, value.line_number()) {
+                    Ok(value) => {
+                        if let Some(value) = ftd::interpreter2::utils::get_value(self.doc, &value)?
+                        {
+                            d.insert(ftd::html1::utils::js_reference_name(k), value);
+                        }
+                    }
+                    Err(e) if *mutable => {
+                        return Err(ftd::html1::Error::ParseError {
+                            message: format!(
+                                "Mutablility for inherited is not yet supported, {}",
+                                e.to_string()
+                            ),
+                            doc_id: self.doc.name.to_string(),
+                            line_number: *line_number,
+                        })
+                    }
+                    _ => continue,
                 }
             }
         }

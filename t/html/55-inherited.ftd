@@ -1,7 +1,9 @@
+-- string inherited-name: $inherited.name
+
 -- foo:
 name: Foo
 
--- ftd.text: $inherited.name
+-- ftd.text: $inherited-name
 -- bar:
 
 -- foo:

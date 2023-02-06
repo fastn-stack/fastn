@@ -178,13 +178,16 @@ pub fn string_list(
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<String>>> {
-    let value = get_value_from_properties_using_key_and_arguments(
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
         arguments,
         doc,
         line_number,
+        false,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {
@@ -405,13 +408,16 @@ pub fn optional_i64(
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<i64>>> {
-    let value = get_value_from_properties_using_key_and_arguments(
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
         arguments,
         doc,
         line_number,
+        false,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {
@@ -546,13 +552,16 @@ pub fn optional_bool(
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<bool>>> {
-    let value = get_value_from_properties_using_key_and_arguments(
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
         arguments,
         doc,
         line_number,
+        false,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {
@@ -609,26 +618,6 @@ pub fn optional_f64(
     }
 }
 
-pub fn optional_record(
-    key: &str,
-    properties: &[ftd::interpreter2::Property],
-    arguments: &[ftd::interpreter2::Argument],
-    doc: &ftd::executor::TDoc,
-    line_number: usize,
-    rec_name: &str,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter2::PropertyValue>>>>
-{
-    optional_record_inherited(
-        key,
-        properties,
-        arguments,
-        doc,
-        line_number,
-        rec_name,
-        &Default::default(),
-    )
-}
-
 pub fn optional_record_inherited(
     key: &str,
     properties: &[ftd::interpreter2::Property],
@@ -676,14 +665,17 @@ pub fn optional_or_type(
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<(String, ftd::interpreter2::PropertyValue)>>>
 {
-    let value = get_value_from_properties_using_key_and_arguments(
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
         arguments,
         doc,
         line_number,
+        false,
+        inherited_variables,
     )?;
 
     match value.value.and_then(|v| v.inner()) {

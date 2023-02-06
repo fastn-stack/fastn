@@ -112,6 +112,7 @@ impl Length {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Length>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -120,6 +121,7 @@ impl Length {
             doc,
             line_number,
             ftd::interpreter2::FTD_LENGTH,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -136,6 +138,7 @@ impl Length {
         line_number: usize,
         key: &str,
         default: Length,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Length>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -144,6 +147,7 @@ impl Length {
             doc,
             line_number,
             ftd::interpreter2::FTD_LENGTH,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -355,6 +359,7 @@ impl Alignment {
         line_number: usize,
         key: &str,
         default: ftd::executor::Alignment,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Alignment>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -363,6 +368,7 @@ impl Alignment {
             doc,
             line_number,
             ftd::interpreter2::FTD_ALIGN,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -380,6 +386,7 @@ impl Alignment {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Alignment>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -388,6 +395,7 @@ impl Alignment {
             doc,
             line_number,
             ftd::interpreter2::FTD_ALIGN,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -617,6 +625,7 @@ impl Resizing {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Resizing>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -625,6 +634,7 @@ impl Resizing {
             doc,
             line_number,
             ftd::interpreter2::FTD_RESIZING,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -641,6 +651,7 @@ impl Resizing {
         line_number: usize,
         key: &str,
         default: Resizing,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Resizing>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -649,6 +660,7 @@ impl Resizing {
             doc,
             line_number,
             ftd::interpreter2::FTD_RESIZING,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -791,6 +803,7 @@ impl Background {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Background>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -799,6 +812,7 @@ impl Background {
             doc,
             line_number,
             ftd::interpreter2::FTD_BACKGROUND,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -916,7 +930,7 @@ impl Color {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
-        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Color>>> {
         let record_values = ftd::executor::value::optional_record_inherited(
             key,
@@ -1068,6 +1082,7 @@ impl Spacing {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Spacing>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1076,6 +1091,7 @@ impl Spacing {
             doc,
             line_number,
             ftd::interpreter2::FTD_SPACING,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1181,6 +1197,7 @@ impl AlignSelf {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<AlignSelf>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1189,6 +1206,7 @@ impl AlignSelf {
             doc,
             line_number,
             ftd::interpreter2::FTD_ALIGN_SELF,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1252,6 +1270,7 @@ impl Overflow {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Overflow>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1260,6 +1279,7 @@ impl Overflow {
             doc,
             line_number,
             ftd::interpreter2::FTD_OVERFLOW,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1322,6 +1342,7 @@ impl Resize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Resize>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1330,6 +1351,7 @@ impl Resize {
             doc,
             line_number,
             ftd::interpreter2::FTD_RESIZE,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1393,6 +1415,7 @@ impl TextAlign {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<TextAlign>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1401,6 +1424,7 @@ impl TextAlign {
             doc,
             line_number,
             ftd::interpreter2::FTD_TEXT_ALIGN,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1527,6 +1551,7 @@ impl Cursor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Cursor>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -1535,6 +1560,7 @@ impl Cursor {
             doc,
             line_number,
             ftd::interpreter2::FTD_CURSOR,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1891,14 +1917,16 @@ impl ResponsiveType {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<ResponsiveType>>> {
-        let record_values = ftd::executor::value::optional_record(
+        let record_values = ftd::executor::value::optional_record_inherited(
             key,
             properties,
             arguments,
             doc,
             line_number,
             ftd::interpreter2::FTD_RESPONSIVE_TYPE,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -1993,6 +2021,7 @@ impl Anchor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Anchor>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2001,6 +2030,7 @@ impl Anchor {
             doc,
             line_number,
             ftd::interpreter2::FTD_ANCHOR,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2063,6 +2093,7 @@ impl TextInputType {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<TextInputType>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2071,6 +2102,7 @@ impl TextInputType {
             doc,
             line_number,
             ftd::interpreter2::FTD_TEXT_INPUT_TYPE,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2139,6 +2171,7 @@ impl Region {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<Region>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2147,6 +2180,7 @@ impl Region {
             doc,
             line_number,
             ftd::interpreter2::FTD_REGION,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2217,6 +2251,7 @@ impl WhiteSpace {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<WhiteSpace>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2225,6 +2260,7 @@ impl WhiteSpace {
             doc,
             line_number,
             ftd::interpreter2::FTD_WHITESPACE,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2295,6 +2331,7 @@ impl TextTransform {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<TextTransform>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2303,6 +2340,7 @@ impl TextTransform {
             doc,
             line_number,
             ftd::interpreter2::FTD_TEXT_TRANSFORM,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2377,6 +2415,7 @@ impl BorderStyle {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Option<BorderStyle>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2385,6 +2424,7 @@ impl BorderStyle {
             doc,
             line_number,
             ftd::interpreter2::FTD_BORDER_STYLE,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -2460,6 +2500,7 @@ impl Loading {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Value<Loading>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
@@ -2468,6 +2509,7 @@ impl Loading {
             doc,
             line_number,
             ftd::interpreter2::FTD_LOADING,
+            inherited_variables,
         )?;
 
         Ok(ftd::executor::Value::new(
