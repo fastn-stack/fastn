@@ -1,7 +1,5 @@
 -- ds.page: Data Modelling With `ftd`
 
--- ds.markdown: 
-
 `ftd` is an alternative to XML/JSON for storing data.
 
 -- ds.h1: Optimized For Human Readability

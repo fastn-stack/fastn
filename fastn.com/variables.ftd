@@ -1,14 +1,9 @@
-\-- ft-core.concept:
-
-
 -- ds.page: Variables
 
+`ftd` has support for [rich data modelling](data-modelling/), and it supports
+declaring variables.
 
--- ds.markdown: 
-
-`ftd` has support for [rich data modelling](data-modelling/), and it
-supports declaring variables.
-
+A variable is a named storage that programs can manipulate.
 
 -- ds.code:
 lang: ftd
@@ -21,27 +16,49 @@ lang: ftd
 Variables have `type`s.
 
 
--- ds.h1: Auto Guessing Basic Types
-
-For [built-in types](built-in-types/), integer, boolean,  etc,
-`ftd` can guess the type based on the value:
-
-
--- ds.code:
-lang: ftd
-
-\-- integer x: 20
-
-
 -- ds.h1: Types
+
+The data type is mandatory while declaring a variable in FTD.
 
 Type of a variable can be one of the [built-in types](built-in-types/),
 a [record](record/), or an [or-type](or-type/).
 
 
--- ds.h1: Referring To Another Variable
+-- ds.h1: Immutable
 
-A variable can be defined as referring to another variable.
+By default, variables are immutable − read only in FTD. In other words, the
+variable's value cannot be changed once a value is bound to a variable name.
+
+-- ds.code:
+lang: ftd
+
+\-- integer x: 10
+
+\-- ftd.integer: $x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+The output will be as shown below:
+
+-- ds.code:
+lang: txt
+
+Cannot have mutable reference of immutable variable `x`
+
+-- ds.markdown:
+
+The error message indicates the cause of the error - Cannot have mutable
+reference of immutable variable `x`. This is one of the many ways FTD allows
+programmers to write code and takes advantage of the safety.
+
+-- ds.h1: Mutable
+
+Variables are immutable by default. Prefix the variable name with `$` to make it
+mutable. The value of a mutable variable can be changed.
+
+The syntax for declaring a mutable variable is as shown below −
 
 
 -- ds.code:
@@ -49,12 +66,84 @@ lang: ftd
 
 \-- integer x: 10
 
+\-- ftd.integer: $x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+The output will be as shown below:
+Click on `10`.
+
+-- ds.output:
+
+-- ftd.integer: $x
+$on-click$: $ftd.increment($a = $x)
+color: $inherited.colors.text
+
+-- end: ds.output
+
+
+-- ds.h1: Referring To Another Variable
+
+A variable can be defined as referring to another variable. This means if the
+referenced variable get changed the referer will change too.
+
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
 \-- integer y: $x
 
+\-- ftd.integer: $x
 
--- ds.h1: Accessing the value of a Variable
+\-- ftd.integer: $y
 
-A value of the variable can be accessed by de-referencing the variable reference.
+\-- ftd.text: I change x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+Here, if x changes, y also changes.
+
+The output will be as shown below:
+Click on `I change x :)` to see the result.
+
+-- ds.output:
+
+-- ftd.row:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+-- ftd.text: x:
+-- ftd.integer: $x
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+-- ftd.text: y:
+-- ftd.integer: $y
+
+-- end: ftd.row
+
+-- ftd.text: I change x :)
+$on-click$: $ftd.increment($a = $x)
+color: $inherited.colors.text
+
+-- end: ds.output
+
+
+-- ds.h1: Clone the value of a Variable
+
+A value of the variable can be cloned by de-referencing the variable reference.
+This means that cloning creates a duplicate value and if the cloned value
+changes, the object, that clones it, will not change.
 
 
 -- ds.code:
@@ -63,6 +152,43 @@ lang: ftd
 \-- integer x: 10
 
 \-- integer y: *$x
+
+\-- ftd.text: I change x :)
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+Here, if x changes, y doesn't changes.
+
+The output will be as shown below:
+Click on `I change x :)` to see the result.
+
+-- ds.output:
+
+-- ftd.row:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+-- ftd.text: x:
+-- ftd.integer: $x
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+-- ftd.text: y:
+-- ftd.integer: $z
+
+-- end: ftd.row
+
+-- ftd.text: I change x :)
+$on-click$: $ftd.increment($a = $x)
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
 -- ds.h1: Updating a Variable
@@ -123,4 +249,28 @@ value, `hello, world` and returns its upper case value. In this case the variabl
 greeting will hold the value: `HELLO, WORLD`.
 
 
+-- ds.h1: Foreign variables
+
+Like `$processor$`, the platform provides foreign variables against a module.
+The FTD stuck itself to fetch value of foreign value, which is, then, provided
+by platform.
+
+The most common foreign variable is `assets`
+
+-- ds.code:
+lang: ftd
+
+
+\-- import: module/assets
+
+\-- ftd.image:
+src: $assets.files.images.image1
+
+
+
 -- end: ds.page
+
+
+-- integer $x: 10
+-- integer y: $x
+-- integer z: *$x
