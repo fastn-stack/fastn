@@ -149,14 +149,59 @@ lang: ftd
 
 -- ds.h2: `section body`
 
-After the first empty line that comes after the section header, till the start
-of next section is considered the body of the section.
-
+Like header, body can be passed in two ways: `inline` and `block`
 The body is optional.
 
 Leading and trailing newlines are not considered part of the body.
 
-/-- ds.h1: `sub-section`
+-- ds.h3: `inline` body
+
+After the first empty line that comes after the section header, till the start
+of next section is considered the body of the section.
+
+-- ds.code: Section with inline body
+lang: ftd
+
+\-- some section:
+
+This is body
+
+
+\-- another section:
+header: header value
+
+This is body
+
+
+-- ds.h3: `block` body
+
+A section body can be passed as a `block`. This is particularly helpful in case
+if the `block` headers are defined. In that case, the `body` can't be passed in
+`inline`.
+
+-- ds.code: Section with block body
+lang: ftd
+
+\-- some my-section:
+
+.... some block headers
+
+\-- my-section.my-body:
+
+This is body
+
+
+-- ds.markdown:
+
+In above example, `my-body` is the body of section.
+
+Unlike `header`, `body` doesn't accept list of sections as value.
+
+
+
+
+
+-- ds.h1: `sub-section`
 
 A section can contain zero or more `sub-sections`:
 
@@ -165,39 +210,32 @@ lang: ftd
 
 \-- some-section:
 
-optional body of "some-section"
+\-- subsection1: yo yo
 
-this one has a body
+\-- subsection2:
 
-/-- ds.markdown:
+subsection2 body
 
-`sub-section` starts with `--- `. If `section` has `body`, body comes before any
-of the `sub-section`s.
+\-- end: some-section
 
-The sub-section has exactly the same properties as a section, `sub-section name`, 
-optional `caption`, zero or more headers, and an optional body.
+-- ds.markdown:
 
-In our example, `some-section` `section` has two `sub-section`s, with names 
-`sub-section-1` and `lalala` respectively. The first one has a caption, `yo yo`, 
-and the second doesn't. First `sub-section-1` has one header, and no body, `lalala`
-has no header but has a body: `this one has a body`.
+`subsections` are nothing but list of sections itself. If subsections are
+defined, the section need to mark it's end using `end` keyword.
 
-/-- ds.h1: Philosophy, and why there is no `sub-sub-section`
+In above example, `subsection1` and `subsection2` are two subsections for
+`some-section` section. Also, the section is marked as end using `-- end: some-section`
+statement.
 
-Check out our [philosophy guide](philosophy/) to understand why we 
-have taken some of these decisions.
+In above example, `some-section` section has two `sub-section`s, with names
+`subsection1` and `subsection2` respectively. The first one has a caption, `yo yo`,
+and the second one has a body, `subsection2 body`.
+
 
 -- ds.h1: Programmatic Access
 
-`ftd::p1` module in `ftd` crate can be used to read `ftd.p1` files. Wrappers of
+`ftd::p11` module in `ftd` crate can be used to read `ftd.p1` files. Wrappers of
 this crate in Python and other programming languages would hopefully come soon.
 
--- ds.h2: File Extension
-
-Each user of `ftd::p1` should come up with their own extension, but `.p1` is an
-extension which can be used by convention in some cases.
-
-Also consider using `ftd` itself, instead of this low-level library, this library 
-should only be used as a fallback.
 
 -- end: ds.page
