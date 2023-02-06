@@ -52,6 +52,7 @@ impl Node {
         container: &ftd::executor::Container,
         doc_id: &str,
         display: &str,
+        anchor_ids: &mut Vec<String>,
     ) -> Node {
         use itertools::Itertools;
 
@@ -74,7 +75,7 @@ impl Node {
             children: container
                 .children
                 .iter()
-                .map(|v| v.to_node(doc_id))
+                .map(|v| v.to_node(doc_id, anchor_ids))
                 .collect_vec(),
             null: common.is_dummy,
             events: common.event.clone(),
@@ -802,13 +803,27 @@ impl ftd::executor::Common {
         d
     }
 
-    fn style(&self, doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
+    fn style(
+        &self,
+        doc_id: &str,
+        _classes: &mut [String],
+        anchor_ids: &mut Vec<String>,
+    ) -> ftd::Map<ftd::node::Value> {
         use ftd::node::utils::CheckMap;
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
         if !self.event.is_empty() {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
+        }
+
+        if let Some(anchor_id) = self.anchor_id.value {
+            anchor_ids.push(anchor_id);
+            d.check_and_insert("position", ftd::node::Value::from_string("absolute"));
+        }
+
+        if anchor_ids.contains(self.id.value) {
+            d.check_and_insert("position", ftd::node::Value::from_string("relative"));
         }
 
         d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
