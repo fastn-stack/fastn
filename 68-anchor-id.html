@@ -6,7 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -617,7 +616,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">true</div><input  data-id="1:main" disabled="IGNORE-KEY" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"></input><input data-id="2:main" disabled="IGNORE-KEY" type="text" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"></input></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" id="c1" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; padding: 20px; position: relative; text-decoration: none; width: 600px" ><div data-id="0,0:main" id="c2" style="align-items: start; background-color: rgba(0,128,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; padding: 20px; text-decoration: none; width: 400px" ><div data-id="0,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); height: auto; left: 0px; position: absolute; text-decoration: none; top: 0px; width: auto" class="ft_md"><p>Hello world</p></div></div></div></div>
 
 
 <script>
@@ -1442,28 +1441,36 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#flag", data);
+window.node_change_main["0,0,0:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0,0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text-strong", data).light;
 }
-window.node_change_main["2:main__disabled"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).setAttribute("disabled", eval(`if ({0}) {
-"set-property-to-false"
-} else {
-""
-}
-`.format(JSONstringify(resolve_reference("foo#flag", data)))));
+else {document.querySelector(`[data-id="0,0,0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text-strong", data).dark;}
 }
 window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#flag" + "." + remaining, new_value);
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#flag", new_value);
+set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__disabled"]){window.node_change_main["2:main__disabled"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
+}
+};
+
+window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#default-colors" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#default-colors", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
 }
 };
 

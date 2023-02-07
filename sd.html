@@ -634,7 +634,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; background-color: rgba(245,189,187,1); border-bottom-width: 0px; border-color: rgba(223,43,43,1); border-left-width: 5px; border-radius: 4px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(198,42,33,1); display: flex; flex-direction: row; gap: 24px; height: auto; justify-content: start; padding-bottom: 16px; padding-left: 16px; padding-right: 16px; padding-top: 16px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: 100%" class="ft_md">Beep Beep! I am an error !</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: auto" class="ft_md">close</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; background-color: rgba(245,189,187,1); border-bottom-width: 0px; border-color: rgba(223,43,43,1); border-left-width: 5px; border-radius: 4px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(198,42,33,1); display: flex; flex-direction: row; gap: 24px; height: auto; justify-content: start; padding-bottom: 16px; padding-left: 16px; padding-right: 16px; padding-top: 16px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: 100%" class="ft_md"><p>Beep Beep! I am an error !</p></div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 19px; text-decoration: none; width: auto" class="ft_md"><p>close</p></div></div></div>
 
 
 <script>
@@ -1566,11 +1566,11 @@ set_data_value(data, "foo#toast", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
 };
 
@@ -1583,9 +1583,9 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
 };
 
@@ -1596,25 +1596,25 @@ set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
 set_data_value(data, "ftd#default-types", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
 }
 };
 
@@ -1625,25 +1625,25 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
 }
 };
 
