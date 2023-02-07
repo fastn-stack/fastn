@@ -24,7 +24,6 @@ pub struct RawNodeData {
 pub type Event = ftd::executor::Event;
 
 impl Node {
-
     fn from_common(
         node: &str,
         display: &str,
