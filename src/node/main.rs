@@ -1,5 +1,3 @@
-use ftd::executor::Anchor;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -26,8 +24,11 @@ pub struct RawNodeData {
 pub type Event = ftd::executor::Event;
 
 impl Node {
-
-    fn update_position_from_anchor(&mut self, anchor_ids: &mut Vec<String>, node_common: Option<&ftd::executor::Common>) {
+    fn update_position_from_anchor(
+        &mut self,
+        anchor_ids: &mut Vec<String>,
+        node_common: Option<&ftd::executor::Common>,
+    ) {
         use ftd::node::utils::CheckMap;
 
         let node_style = &mut self.style;
@@ -35,16 +36,16 @@ impl Node {
         if let Some(common) = node_common {
             if let Some(id) = common.id.value.as_ref() {
                 if anchor_ids.contains(id) {
-                    node_style.check_and_insert("position", ftd::node::Value::from_string("relative"));
+                    node_style
+                        .check_and_insert("position", ftd::node::Value::from_string("relative"));
                 }
             }
 
-            if let Some(ftd::executor::Anchor::Id(anchor_id)) = common.anchor.value.as_ref(){
+            if let Some(ftd::executor::Anchor::Id(anchor_id)) = common.anchor.value.as_ref() {
                 anchor_ids.push(anchor_id.clone());
                 node_style.check_and_insert("position", ftd::node::Value::from_string("absolute"));
             }
         }
-
     }
 
     fn from_common(
@@ -52,14 +53,13 @@ impl Node {
         display: &str,
         common: &ftd::executor::Common,
         doc_id: &str,
-        anchor_ids: &mut Vec<String>,
     ) -> Node {
         Node {
             node: s(node),
             display: s(display),
             condition: common.condition.to_owned(),
             attrs: common.attrs(doc_id),
-            style: common.style(doc_id, &mut [], anchor_ids),
+            style: common.style(doc_id, &mut []),
             children: vec![],
             text: Default::default(),
             classes: common.classes(),
@@ -84,7 +84,7 @@ impl Node {
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
         classes.extend(common.classes());
-        let mut style = common.style(doc_id, &mut classes, anchor_ids);
+        let mut style = common.style(doc_id, &mut classes);
         style.extend(container.style(doc_id));
 
         let node = common.node();
@@ -126,15 +126,15 @@ impl ftd::executor::Element {
         match self {
             ftd::executor::Element::Row(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Column(c) => c.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Text(t) => t.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Integer(t) => t.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Decimal(t) => t.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Boolean(t) => t.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Image(i) => i.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Code(c) => c.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Iframe(i) => i.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::TextInput(i) => i.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::CheckBox(c) => c.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Text(t) => t.to_node(doc_id),
+            ftd::executor::Element::Integer(t) => t.to_node(doc_id),
+            ftd::executor::Element::Decimal(t) => t.to_node(doc_id),
+            ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
+            ftd::executor::Element::Image(i) => i.to_node(doc_id),
+            ftd::executor::Element::Code(c) => c.to_node(doc_id),
+            ftd::executor::Element::Iframe(i) => i.to_node(doc_id),
+            ftd::executor::Element::TextInput(i) => i.to_node(doc_id),
+            ftd::executor::Element::CheckBox(c) => c.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -351,11 +351,11 @@ impl ftd::executor::Column {
 }
 
 impl ftd::executor::Text {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
         let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id, anchor_ids);
+        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
 
         if self.common.region.value.is_some() {
             n.attrs.insert_if_not_contains(
@@ -443,11 +443,11 @@ impl ftd::executor::Text {
 }
 
 impl ftd::executor::Code {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
         let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id, anchor_ids);
+        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
 
         n.style.check_and_insert(
             "text-align",
@@ -528,10 +528,10 @@ impl ftd::executor::Code {
 }
 
 impl ftd::executor::Iframe {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_common("iframe", "block", &self.common, doc_id, anchor_ids);
+        let mut n = Node::from_common("iframe", "block", &self.common, doc_id);
 
         n.attrs.check_and_insert(
             "src",
@@ -595,7 +595,7 @@ impl ftd::executor::Iframe {
 }
 
 impl ftd::executor::TextInput {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
         let node = if self.multiline.value {
@@ -604,7 +604,7 @@ impl ftd::executor::TextInput {
             "input"
         };
 
-        let mut n = Node::from_common(node, "block", &self.common, doc_id, anchor_ids);
+        let mut n = Node::from_common(node, "block", &self.common, doc_id);
 
         n.attrs.check_and_insert(
             "placeholder",
@@ -686,12 +686,12 @@ impl ftd::executor::TextInput {
 }
 
 impl ftd::executor::CheckBox {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
         let node = "input";
 
-        let mut n = Node::from_common(node, "block", &self.common, doc_id, anchor_ids);
+        let mut n = Node::from_common(node, "block", &self.common, doc_id);
 
         n.attrs
             .check_and_insert("type", ftd::node::Value::from_string(s("checkbox")));
@@ -745,23 +745,23 @@ impl ftd::executor::CheckBox {
 }
 
 impl ftd::executor::Image {
-    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         return if self.common.link.value.is_some() {
-            let mut n = Node::from_common("a", "block", &self.common, doc_id, anchor_ids);
+            let mut n = Node::from_common("a", "block", &self.common, doc_id);
             n.attrs.insert(
                 s("data-id"),
                 ftd::node::Value::from_string(format!("{}:parent", self.common.data_id).as_str()),
             );
 
-            let img = update_img(self, doc_id, anchor_ids);
+            let img = update_img(self, doc_id);
             n.children.push(img);
             n
         } else {
-            update_img(self, doc_id, anchor_ids)
+            update_img(self, doc_id)
         };
 
-        fn update_img(image: &ftd::executor::Image, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
-            let mut n = Node::from_common("img", "block", &image.common, doc_id, anchor_ids);
+        fn update_img(image: &ftd::executor::Image, doc_id: &str) -> Node {
+            let mut n = Node::from_common("img", "block", &image.common, doc_id);
             n.classes.extend(image.common.add_class());
             n.attrs.insert(
                 s("src"),
@@ -837,12 +837,7 @@ impl ftd::executor::Common {
         d
     }
 
-    fn style(
-        &self,
-        doc_id: &str,
-        _classes: &mut [String],
-        anchor_ids: &mut Vec<String>,
-    ) -> ftd::Map<ftd::node::Value> {
+    fn style(&self, doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
         use ftd::node::utils::CheckMap;
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
