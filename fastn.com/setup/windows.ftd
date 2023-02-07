@@ -7,7 +7,7 @@
 
 -- ds.markdown:
 
-download the latest version [fastn binary installation](https://github.com/ftd-lang/fastn/releases)
+Go to Releases page and download the fastn binary for Windows
 
 -- ds.image:
 src: $assets.files.static.images.setup.fastn.png

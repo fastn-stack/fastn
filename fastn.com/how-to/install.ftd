@@ -3,8 +3,7 @@
 
 -- ds.markdown: 
 
-You can download `fastn` in multiple ways. The easiest way being just download the
-binary and install it in your local system.
+You can download `fastn` in multiple ways. The easiest way being just download the binary and install it in your local system.
 
 -- ds.h1: Pre-built library
 
@@ -27,7 +26,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main
   page.
 - Use the reference to `fastn.exe` in your terminal to invoke ftd.
 
-  [Read more](setup/windows)
+  [Read more](setup/windows/)
 
 
 -- ds.h1: `Cargo install` the latest version
