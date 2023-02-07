@@ -2052,7 +2052,7 @@ impl Anchor {
         match self {
             Anchor::Window => "fixed".to_string(),
             Anchor::Parent => "absolute".to_string(),
-            Anchor::Id(_) => "relative".to_string(),
+            Anchor::Id(_) => "absolute".to_string(),
         }
     }
 }
