@@ -26,6 +26,27 @@ pub struct RawNodeData {
 pub type Event = ftd::executor::Event;
 
 impl Node {
+
+    fn update_position_from_anchor(&mut self, anchor_ids: &mut Vec<String>, node_common: Option<&ftd::executor::Common>) {
+        use ftd::node::utils::CheckMap;
+
+        let node_style = &mut self.style;
+
+        if let Some(common) = node_common {
+            if let Some(id) = common.id.value.as_ref() {
+                if anchor_ids.contains(id) {
+                    node_style.check_and_insert("position", ftd::node::Value::from_string("relative"));
+                }
+            }
+
+            if let Some(ftd::executor::Anchor::Id(anchor_id)) = common.anchor.value.as_ref(){
+                anchor_ids.push(anchor_id.clone());
+                node_style.check_and_insert("position", ftd::node::Value::from_string("absolute"));
+            }
+        }
+
+    }
+
     fn from_common(
         node: &str,
         display: &str,
@@ -68,7 +89,7 @@ impl Node {
 
         let node = common.node();
 
-        Node {
+        let mut n = Node {
             node: s(node.as_str()),
             attrs,
             style,
@@ -78,7 +99,11 @@ impl Node {
             children: container
                 .children
                 .iter()
-                .map(|v| v.to_node(doc_id, anchor_ids))
+                .map(|v| {
+                    let mut child_node = v.to_node(doc_id, anchor_ids);
+                    child_node.update_position_from_anchor(anchor_ids, v.get_common());
+                    child_node
+                })
                 .collect_vec(),
             null: common.is_dummy,
             events: common.event.clone(),
@@ -86,7 +111,9 @@ impl Node {
             line_number: common.line_number,
             display: s(display),
             raw_data: None,
-        }
+        };
+        n.update_position_from_anchor(anchor_ids, Some(common));
+        n
     }
 
     pub(crate) fn is_null(&self) -> bool {
@@ -822,21 +849,6 @@ impl ftd::executor::Common {
 
         if !self.event.is_empty() {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
-        }
-
-        dbg!(&self.node());
-        dbg!(&self.anchor.value);
-        dbg!(&self.id.value);
-
-        if let Some(Anchor::Id(id)) = self.anchor.value.as_ref() {
-            anchor_ids.push(id.clone());
-            d.check_and_insert("position", ftd::node::Value::from_string("absolute"));
-        }
-
-        if let Some(id) = self.id.value.as_ref() {
-            if anchor_ids.contains(id) {
-                d.check_and_insert("position", ftd::node::Value::from_string("relative"));
-            }
         }
 
         d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
