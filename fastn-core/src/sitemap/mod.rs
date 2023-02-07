@@ -819,7 +819,11 @@ impl Sitemap {
                 locations.push((
                     file_location,
                     &section.translation_file_location,
-                    get_id(section.id.as_str()),
+                    section
+                        .document
+                        .as_ref()
+                        .map(|_| section.id.to_string())
+                        .or_else(|| get_id(section.id.as_str())),
                 ));
             }
             for subsection in section.subsections.iter() {
@@ -828,7 +832,13 @@ impl Sitemap {
                         locations.push((
                             file_location,
                             &subsection.translation_file_location,
-                            subsection.id.as_ref().and_then(|v| get_id(v.as_str())),
+                            subsection
+                                .document
+                                .as_ref()
+                                .and_then(|_| subsection.id.clone())
+                                .or_else(|| {
+                                    subsection.id.as_ref().and_then(|v| get_id(v.as_str()))
+                                }),
                         ));
                     }
                 }
@@ -837,7 +847,10 @@ impl Sitemap {
                         locations.push((
                             file_location,
                             &toc.translation_file_location,
-                            get_id(toc.id.as_str()),
+                            toc.document
+                                .as_ref()
+                                .map(|_| toc.id.to_string())
+                                .or_else(|| get_id(toc.id.as_str())),
                         ));
                     }
                     locations.extend(get_toc_locations(toc));
@@ -866,7 +879,11 @@ impl Sitemap {
                     locations.push((
                         file_location,
                         &child.translation_file_location,
-                        get_id(child.id.as_str()),
+                        child
+                            .document
+                            .as_ref()
+                            .map(|_| child.id.to_string())
+                            .or_else(|| get_id(child.id.as_str())),
                     ));
                 }
                 locations.extend(get_toc_locations(child));
