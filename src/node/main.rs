@@ -24,29 +24,6 @@ pub struct RawNodeData {
 pub type Event = ftd::executor::Event;
 
 impl Node {
-    fn update_position_from_anchor(
-        &mut self,
-        anchor_ids: &mut Vec<String>,
-        node_common: Option<&ftd::executor::Common>,
-    ) {
-        use ftd::node::utils::CheckMap;
-
-        let node_style = &mut self.style;
-
-        if let Some(common) = node_common {
-            if let Some(id) = common.id.value.as_ref() {
-                if anchor_ids.contains(id) {
-                    node_style
-                        .check_and_insert("position", ftd::node::Value::from_string("relative"));
-                }
-            }
-
-            if let Some(ftd::executor::Anchor::Id(anchor_id)) = common.anchor.value.as_ref() {
-                anchor_ids.push(anchor_id.clone());
-                node_style.check_and_insert("position", ftd::node::Value::from_string("absolute"));
-            }
-        }
-    }
 
     fn from_common(
         node: &str,
@@ -88,7 +65,7 @@ impl Node {
 
         let node = common.node();
 
-        let mut n = Node {
+        Node {
             node: s(node.as_str()),
             attrs,
             condition: common.condition.to_owned(),
@@ -110,9 +87,7 @@ impl Node {
             line_number: common.line_number,
             display: s(display),
             raw_data: None,
-        };
-        n.update_position_from_anchor(anchor_ids, Some(common));
-        n
+        }
     }
 
     pub(crate) fn is_null(&self) -> bool {
