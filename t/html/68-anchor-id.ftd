@@ -1,0 +1,21 @@
+-- ftd.column:
+id: c1
+padding.px: 20
+background.solid: red
+width.fixed.px: 600
+
+-- ftd.column:
+id: c2
+padding.px: 20
+background.solid: green
+width.fixed.px: 400
+
+-- ftd.text: Hello world
+color: $inherited.colors.text-strong
+anchor.id: c1
+top.px: 0
+left.px: 0
+
+-- end: ftd.column
+
+-- end: ftd.column

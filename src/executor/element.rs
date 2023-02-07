@@ -151,6 +151,7 @@ pub struct Code {
     pub common: Common,
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn code_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -245,6 +246,7 @@ pub struct Iframe {
     pub common: Common,
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn iframe_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -512,6 +514,7 @@ pub fn text_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn integer_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -570,6 +573,7 @@ pub fn integer_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn decimal_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -628,6 +632,7 @@ pub fn decimal_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn boolean_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -672,6 +677,7 @@ pub fn boolean_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn image_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -777,6 +783,7 @@ pub fn column_from_properties(
     Ok(Column { container, common })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -1335,6 +1342,7 @@ impl TextInput {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn text_input_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -1451,6 +1459,7 @@ impl CheckBox {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn checkbox_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],

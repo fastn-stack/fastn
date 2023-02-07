@@ -523,7 +523,7 @@ pub(crate) fn find_inherited_variables(
 
     if let Some(local_container) = local_container {
         for ((reference, container), rem) in values.iter() {
-            if container.len() > 0
+            if !container.is_empty()
                 && container.len() == local_container.len()
                 && container[container.len()] != local_container[container.len()]
             {

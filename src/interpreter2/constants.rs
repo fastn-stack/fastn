@@ -126,6 +126,7 @@ pub const FTD_RESPONSIVE_TYPE_DESKTOP: &str = "ftd#responsive-type.desktop";
 pub const FTD_ANCHOR: &str = "ftd#anchor";
 pub const FTD_ANCHOR_WINDOW: &str = "ftd#anchor.window";
 pub const FTD_ANCHOR_PARENT: &str = "ftd#anchor.parent";
+pub const FTD_ANCHOR_ID: &str = "ftd#anchor.id";
 
 pub const FTD_COLOR_SCHEME: &str = "ftd#color-scheme";
 pub const FTD_BACKGROUND_COLOR: &str = "ftd#background-colors";

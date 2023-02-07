@@ -433,7 +433,7 @@ fn update_inherited_reference_in_property_value(
         }
         let mut found = true;
 
-        if container.len() > 0
+        if !container.is_empty()
             && container.len() == local_container.len()
             && container[container.len() - 1] != local_container[container.len() - 1]
         {
