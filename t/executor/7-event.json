@@ -84,7 +84,7 @@
             "text": {
               "value": {
                 "original": "Click here",
-                "rendered": "Click here"
+                "rendered": "<p>Click here</p>"
               },
               "line_number": 9,
               "properties": [

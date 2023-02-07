@@ -792,7 +792,7 @@ string dark: $color.light
 
 ```ftd
 -- record responsive-type:
-ftd.type desktop:
+caption ftd.type desktop:
 ftd.type mobile: $responsive-type.desktop
 
 -- record type:

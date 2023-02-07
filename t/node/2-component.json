@@ -329,7 +329,7 @@
             },
             "children": [],
             "text": {
-              "value": "Hello World",
+              "value": "<p>Hello World</p>",
               "properties": [
                 {
                   "property": {
@@ -439,7 +439,7 @@
             },
             "children": [],
             "text": {
-              "value": "again",
+              "value": "<p>again</p>",
               "properties": [
                 {
                   "property": {

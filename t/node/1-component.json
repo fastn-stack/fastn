@@ -376,7 +376,7 @@
             },
             "children": [],
             "text": {
-              "value": "Hello World",
+              "value": "<p>Hello World</p>",
               "properties": [
                 {
                   "property": {
@@ -533,7 +533,7 @@
             },
             "children": [],
             "text": {
-              "value": "again",
+              "value": "<p>again</p>",
               "properties": [
                 {
                   "property": {
@@ -850,7 +850,7 @@
             },
             "children": [],
             "text": {
-              "value": "Hello",
+              "value": "<p>Hello</p>",
               "properties": [
                 {
                   "property": {
@@ -1007,7 +1007,7 @@
             },
             "children": [],
             "text": {
-              "value": "again",
+              "value": "<p>again</p>",
               "properties": [
                 {
                   "property": {
@@ -1176,7 +1176,7 @@
         },
         "children": [],
         "text": {
-          "value": "Hello from text",
+          "value": "<p>Hello from text</p>",
           "properties": [
             {
               "property": {

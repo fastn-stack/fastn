@@ -28,7 +28,7 @@
             "text": {
               "value": {
                 "original": "Hello World",
-                "rendered": "Hello World"
+                "rendered": "<p>Hello World</p>"
               },
               "line_number": 1,
               "properties": [
