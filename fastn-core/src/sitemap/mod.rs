@@ -611,7 +611,12 @@ impl Sitemap {
             config: &mut fastn_core::Config,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
-                .get_file_path_and_resolve(&section.get_file_id())
+                .get_file_path_and_resolve(
+                    &section
+                        .document
+                        .clone()
+                        .unwrap_or_else(|| section.get_file_id()),
+                )
                 .await
             {
                 (
@@ -675,8 +680,14 @@ impl Sitemap {
             config: &mut fastn_core::Config,
         ) -> fastn_core::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
-                let (file_location, translation_file_location) = if let Ok(file_name) =
-                    config.get_file_path_and_resolve(id).await
+                let (file_location, translation_file_location) = if let Ok(file_name) = config
+                    .get_file_path_and_resolve(
+                        &subsection
+                            .document
+                            .clone()
+                            .unwrap_or_else(|| id.to_string()),
+                    )
+                    .await
                 {
                     (
                         Some(config.root.join(file_name.as_str())),
@@ -728,8 +739,11 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
             config: &mut fastn_core::Config,
         ) -> fastn_core::Result<()> {
-            let (file_location, translation_file_location) = if let Ok(file_name) =
-                config.get_file_path_and_resolve(&toc.get_file_id()).await
+            let (file_location, translation_file_location) = if let Ok(file_name) = config
+                .get_file_path_and_resolve(
+                    &toc.document.clone().unwrap_or_else(|| toc.get_file_id()),
+                )
+                .await
             {
                 (
                     Some(config.root.join(file_name.as_str())),
@@ -1173,7 +1187,8 @@ impl Sitemap {
                 };
 
                 if current_page.is_none() {
-                    found_here = fastn_core::utils::ids_matches(toc_item.get_file_id().as_str(), id);
+                    found_here =
+                        fastn_core::utils::ids_matches(toc_item.get_file_id().as_str(), id);
                     if found_here {
                         let mut current_toc = current_toc.clone();
                         if let Some(ref title) = toc_item.nav_title {

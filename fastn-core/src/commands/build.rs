@@ -27,7 +27,9 @@ pub async fn build(
 
         match main {
             fastn_core::File::Ftd(doc) => {
-                if !config.ftd_edition.eq(&fastn_core::config::FTDEdition::FTD2021)
+                if !config
+                    .ftd_edition
+                    .eq(&fastn_core::config::FTDEdition::FTD2021)
                     && doc.id.eq("FASTN.ftd")
                 {
                     tokio::fs::copy(
@@ -51,9 +53,14 @@ pub async fn build(
                     }
                 }
             }
-            fastn_core::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
+            fastn_core::File::Static(sa) => {
+                process_static(sa, &config.root, &config.package).await?
+            }
             fastn_core::File::Markdown(doc) => {
-                if !config.ftd_edition.eq(&fastn_core::config::FTDEdition::FTD2021) {
+                if !config
+                    .ftd_edition
+                    .eq(&fastn_core::config::FTDEdition::FTD2021)
+                {
                     continue;
                 }
                 let resp = process_markdown(config, doc, base_url, no_static).await;
@@ -70,7 +77,10 @@ pub async fn build(
             }
             fastn_core::File::Image(main_doc) => {
                 process_static(main_doc, &config.root, &config.package).await?;
-                if config.ftd_edition.eq(&fastn_core::config::FTDEdition::FTD2021) {
+                if config
+                    .ftd_edition
+                    .eq(&fastn_core::config::FTDEdition::FTD2021)
+                {
                     let resp = process_image(config, main_doc, base_url, no_static).await;
                     match (resp, ignore_failed) {
                         (Ok(r), _) => r,
@@ -95,7 +105,10 @@ pub async fn build(
                     &config.package,
                 )
                 .await?;
-                if config.ftd_edition.eq(&fastn_core::config::FTDEdition::FTD2021) {
+                if config
+                    .ftd_edition
+                    .eq(&fastn_core::config::FTDEdition::FTD2021)
+                {
                     let resp = process_code(config, doc, base_url, no_static).await;
                     match (resp, ignore_failed) {
                         (Ok(r), _) => r,
@@ -319,7 +332,8 @@ async fn process_markdown(
             return Ok(None);
         };
         let id = convert_md_to_ftd_extension(doc_id.as_str())?;
-        let new_content = fastn_core::package_info_markdown(config, id.as_str(), doc.content.as_str())?;
+        let new_content =
+            fastn_core::package_info_markdown(config, id.as_str(), doc.content.as_str())?;
 
         let new_doc = {
             let mut new_doc = doc.to_owned();
