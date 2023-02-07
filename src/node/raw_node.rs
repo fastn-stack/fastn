@@ -12,7 +12,7 @@ impl RawNode {
     ) -> RawNode {
         RawNode {
             name: element_constructor.name.to_string(),
-            node: element_constructor.element.to_node(doc_id),
+            node: element_constructor.element.to_node(doc_id, &mut vec![]),
             arguments: element_constructor.arguments,
         }
     }
@@ -61,7 +61,7 @@ impl DummyNode {
         DummyNode::new(
             dummy_element.parent_container.to_owned(),
             dummy_element.start_index,
-            dummy_element.element.to_node(doc_id),
+            dummy_element.element.to_node(doc_id, &mut vec![]),
         )
     }
 

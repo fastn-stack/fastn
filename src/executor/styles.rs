@@ -1984,6 +1984,7 @@ impl ResponsiveType {
 pub enum Anchor {
     Window,
     Parent,
+    Id(String),
 }
 
 impl Anchor {
@@ -2007,6 +2008,13 @@ impl Anchor {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_ANCHOR_WINDOW => Ok(Anchor::Window),
             ftd::interpreter2::FTD_ANCHOR_PARENT => Ok(Anchor::Parent),
+            ftd::interpreter2::FTD_ANCHOR_ID => Ok(Anchor::Id(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+            )),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.anchor`", t),
                 doc.name,
@@ -2044,6 +2052,7 @@ impl Anchor {
         match self {
             Anchor::Window => "fixed".to_string(),
             Anchor::Parent => "absolute".to_string(),
+            Anchor::Id(_) => "relative".to_string(),
         }
     }
 }
