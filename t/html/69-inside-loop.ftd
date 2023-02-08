@@ -1,0 +1,49 @@
+-- string list names:
+
+-- string: Fifthtry
+-- string: AmitU
+-- string: Arpita
+-- string: Abrar
+-- string: Ganesh
+-- string: Rithik
+-- string: Priyanka
+-- string: Meenu
+-- string: Ajit
+
+-- end: names
+
+
+-- bar:
+
+
+-- component foo:
+caption name:
+integer idx:
+
+-- ftd.row:
+spacing.fixed.px: 30
+margin.px: 20
+padding.px: 20
+background.solid: #efb341
+border-width.px: 10
+border-color: #417DEF
+border-radius.px: 10
+
+-- ftd.text: $foo.name
+
+-- end: ftd.row
+
+-- end: foo
+
+
+-- component bar:
+
+-- ftd.column:
+
+-- foo: $obj
+idx: $LOOP.COUNTER
+$loop$: $names as $obj
+
+-- end: ftd.column
+
+-- end: bar
