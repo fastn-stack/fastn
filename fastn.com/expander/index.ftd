@@ -8,6 +8,12 @@
 -- ds.youtube:
 v: jKx-F5wCAVE
 
+
+
+
+
+
+
 -- ds.markdown:
 
 Welcome to the FTD Crash Course, my name is Ajit Garg.
@@ -16,7 +22,6 @@ In this crash course I will help you to create an Expander project from
 scratch, using FTD language.
 
 
--- ds.markdown:
 
 We will see how to make the following:
 
@@ -24,17 +29,16 @@ We will see how to make the following:
 -- expander.box: Test Box, Click Me!
 
 
-
 Expander Package is running component box.
 This is a component element and we named it as box.
 
 It takes three events: 
 
-on-click - Body expands and collapses when click on Header area
+- on-click - Body expands and collapses when click on Header area
 
-on-mouse-enter - Header area is highlighted when mouse hovers over Header area
+- on-mouse-enter - Header area is highlighted when mouse hovers over Header area
 
-on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
+- on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
 
 
 And, it also responds to your system mode preference.

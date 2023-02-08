@@ -1,63 +1,178 @@
 -- $ds.site-name: FTD
 
 
-
 -- my-ds.page: Part 1: Hello World
 
--- ds.markdown:
-
-Update: On development side, We had three changes.
-
-Accordingly these videos will be updated. Meanwhile, please be catious with the following changes:
-
--- ds.code: Change 1: Package manager is renamed
-lang: ftd
-
-FPM  ->  FASTN (use-case sensitive, i.e. <fpm> is <fastn>)
-
--- ds.code: Change 2: New way to create local host
-lang: ftd
-
-fpm serve --edition 2022   ->   fastn serve
-
--- ds.code: Change 3: Syntax change
-lang: ftd
-
-spacing.px  ->  spacing.fixed.px
-spacing-mode  ->  spacing
 
 -- ds.youtube:
 v: v1u-TmNE0bA
 
 
--- ds.h3: Install FASTN for MacOS
 
--- ds.youtube:
-v: 4kKj1TOL9-g
 
--- ds.markdown:
 
-Run the following command in your machine's terminal:
 
--- ds.code: Installer Script
-lang: ftd
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install-fastn.sh)"
+
+
+
+
+
+
+
+
 
 -- ds.h3: Install FASTN for Windows
 
-- **First Step:** To install fastn, go to Resource Section of this *Crash Course* in te Overview part.
+-- ds.youtube:
+v: lw-qVPCJgZs
 
-- **Second Step:** Set a Path for FASTN in your machine's Environment Variable.
+-- ds.markdown:
+
+- **First Step:** To install FASTN, go to Resource Section of this Crash Course in the *Overview part*.
+
+- **Second Step:** Click on latest release
+
+- **Third Step:** Get the latest executable file for windows in the releases page, under Assets 
+
+- **Fourth Step:** Create a folder named FASTN in your C drive.
+
+- **Fifth Step:** Go to Settings and search Environment Variable
+
+- **Sixth Step:** In the System Settings box, click Environment Variable
+
+- **Seventh Step:** Double click on Path
+
+- **Eighth Step:** Click on New button
+
+- **Ninth Step:** Set a Path for FASTN in your machine's Environment Variable.
 
 -- ds.code: New Path
 lang: ftd
 
 C:\FASTN
 
+-- ds.markdown:
+
+- **Tenth Step:** Click OK
+
+-- ds.markdown:
+
+FASTN is installed.
+To verify, open the Terminal(cmd) and execute the command, fastn
+
+-- ds.markdown: 
+
+If you see the Help text of the fastn command, it confirms that FASTN is successfully installed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h3: Install FASTN for MacOS
+
+-- ds.youtube:
+v: cWdivkyoOTA
+
+-- ds.markdown:
+
+- **First Step:** Copy the following command:
+
+-- ds.code: Installer Script
+lang: ftd
+
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+
+-- ds.markdown:
+
+- **Second Step:** Open the Terminal 
+
+You can find Terminal on the Dock or you can search for Terminal using Spotlight Search.
+Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your keyboard.
+
+-- ds.markdown:
+
+- **Third Step:** Run the Installer Script
+
+Paste the command and hit enter. When prompted, enter your System Password that you use to open your machine and enter.
+
+-- ds.markdown:
+
+Let the FASTN installation complete.
+
+You can verify it by running the command, fastn, in the Terminal.
+
+-- ds.markdown: 
+
+If you see the Help text of the fastn command, it confirms that FASTN is successfully installed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: Start Coding Hello World
+
+Let's create a FASTN package and start coding Hello World.
+
+-- ds.code: What is FASTN package?
+lang: ftd
+
+FASTN package is a folder that requires atleast two files:
+
+- FASTN.ftd
+- index.ftd
+
+There can be any number of .ftd file but these two files are essential.
+
+-- ds.markdown:
+
+Create a New Folder and rename it as expander, anywhere in your machine. Let's say, Desktop.
+
+Open the folder in any text editor. For example, Sublime Text.
+
+If you don't have any editor, you can download the text editor of your liking from internet.
+
+
+-- ds.markdown:
+
+Open the folder and add two new files to create the FASTN package which we discussed above.
+
+Save the files with the same name to create the FASTN package. 
+
+
 -- ds.h3: FASTN.ftd
 
-We import FASTN
+It is a special file which keeps package configuration related data like
+
+- package name
+- package dependencies 
+- sitemap, etc
+
 
 -- ds.code: Code
 lang: ftd
@@ -91,4 +206,6 @@ lang: ftd
 
 Continue with the [part 2 now](/expander/basic-ui/).
 
--- end: config.my-page
+
+-- end: my-ds.page
+
