@@ -11,12 +11,77 @@ greatly impact the look and feel of a website. It is a powerful tool in web
 design, and it can greatly influence the way users perceive and interact with a
 website.
 
-Here, we'll showcase different sections using different color schemes to
-demonstrate how minimal changes are required to switch from one color scheme to
-another. Hence achieve the impact the colors have on the website's design and
-the emotion they evoke.
+In this showcase, we will present different sections using different color
+schemes to highlight how minimal changes are required to switch from one color
+scheme to another. Hence achieve the impact the colors have on the website's
+design and the emotion they evoke.
+
+Take a look at the following color scheme cards:
+
+-- color-schemes:
+
+-- ds.markdown:
+
+There are following notable things:
+
+- All of the scheme cards look identical except for the color. This demonstrates
+ the effect that color has on the look and feel of a website.
+- Both dark mode and light mode are supported.
 
 
+-- ds.h1: Code changes required for different color scheme
+
+How many lines of code change were required to make this possible?
+
+The answer is only one.
+
+
+To understand this, let's examine the code of interest for the above cards. To
+initialize the card, we only need to invoke the `color-display` component:
+
+-- ds.code: Invoking `color-display` component
+lang: ftd
+
+\-- color-display:
+
+-- ds.markdown:
+
+Then how can we achieve different color scheme?
+
+
+To achieve different color schemes, First, we import the corresponding color
+scheme package. Then we wrap the call to the `color-display` component in another
+container that contains the colors from the imported color scheme package. This
+color, then, is inherited by `color-display`.
+
+-- ds.code: Using forest cs
+lang: ftd
+
+\-- import: fifthtry.github.io/forest-cs
+
+\-- ftd.column:
+colors: $forest-cs.main
+
+\-- color-display:
+
+\-- end: ftd.column
+
+
+-- ds.markdown:
+
+Similarly, the rest of the color scheme packages are imported and referred by
+their respective containers that contain the color-display component.
+
+
+-- end: my-ds.page
+
+
+
+
+
+
+
+-- component color-schemes:
 
 -- ftd.column:
 width: fill-container
@@ -36,6 +101,8 @@ wrap: true
 width.fixed.percent: 49
 colors: $winter-cs.main
 
+-- ds.h3: Winter
+
 -- color-display:
 
 -- end: ftd.column
@@ -46,6 +113,8 @@ colors: $winter-cs.main
 width.fixed.percent: 49
 colors: $coal-cs.main
 
+-- ds.h3: Coal
+
 -- color-display:
 
 -- end: ftd.column
@@ -55,6 +124,8 @@ colors: $coal-cs.main
 -- ftd.column:
 width.fixed.percent: 49
 colors: $forest-cs.main
+
+-- ds.h3: Forest
 
 -- color-display:
 
@@ -67,6 +138,8 @@ colors: $forest-cs.main
 width.fixed.percent: 49
 colors: $sunset-cs.main
 
+-- ds.h3: Sunset
+
 -- color-display:
 
 -- end: ftd.column
@@ -75,11 +148,7 @@ colors: $sunset-cs.main
 -- end: ftd.row
 -- end: ftd.column
 
--- end: my-ds.page
-
-
-
-
+-- end: color-schemes
 
 
 
