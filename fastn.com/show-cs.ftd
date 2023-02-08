@@ -1,6 +1,7 @@
 -- import: fifthtry.github.io/ds-set1-cs as winter-cs
 -- import: fifthtry.github.io/fastn-cs as coal-cs
 -- import: fifthtry.github.io/forest-cs as forest-cs
+-- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
 
 
 -- my-ds.page: Showcase Color Scheme
@@ -47,6 +48,17 @@ colors: $coal-cs.main
 -- ftd.column:
 width.fixed.percent: 49
 colors: $forest-cs.main
+
+-- color-display:
+
+-- end: ftd.column
+
+
+
+
+-- ftd.column:
+width.fixed.percent: 49
+colors: $sunset-cs.main
 
 -- color-display:
 

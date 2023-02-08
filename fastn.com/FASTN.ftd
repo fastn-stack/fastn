@@ -18,6 +18,7 @@ implements: fifthtry.github.io/theme
 -- fastn.dependency: fifthtry.github.io/ds-set1-cs
 -- fastn.dependency: fifthtry.github.io/fastn-cs
 -- fastn.dependency: fifthtry.github.io/forest-cs
+-- fastn.dependency: fifthtry.github.io/saturated-sunset-cs
 
 
 -- fastn.auto-import: ds
