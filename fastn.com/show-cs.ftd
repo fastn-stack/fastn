@@ -1,0 +1,343 @@
+-- import: fifthtry.github.io/ds-set1-cs as winter-cs
+-- import: fifthtry.github.io/fastn-cs as coal-cs
+-- import: fifthtry.github.io/forest-cs as forest-cs
+
+
+-- my-ds.page: Showcase Color Scheme
+
+Color is an integral part of web design, and choosing the right color scheme can
+greatly impact the look and feel of a website. It is a powerful tool in web
+design, and it can greatly influence the way users perceive and interact with a
+website.
+
+Here, we'll showcase different sections using different color schemes to
+demonstrate how minimal changes are required to switch from one color scheme to
+another. Hence achieve the impact the colors have on the website's design and
+the emotion they evoke.
+
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+padding.px: 10
+spacing.fixed.px: 10
+wrap: true
+
+
+-- ftd.column:
+width.fixed.percent: 49
+colors: $winter-cs.main
+
+-- color-display:
+
+-- end: ftd.column
+
+
+
+-- ftd.column:
+width.fixed.percent: 49
+colors: $coal-cs.main
+
+-- color-display:
+
+-- end: ftd.column
+
+
+
+-- ftd.column:
+width.fixed.percent: 49
+colors: $forest-cs.main
+
+-- color-display:
+
+-- end: ftd.column
+
+
+
+-- end: ftd.row
+
+-- end: my-ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component color-display:
+
+-- ftd.row:
+width: fill-container
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.error.base
+border-width.px: 4
+
+-- custom-dots:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.base
+border-width.px: 4
+border-color: $inherited.colors.shadow
+
+-- header:
+
+
+-- ftd.column:
+width: fill-container
+padding.px: 10
+spacing.fixed.px: 30
+
+-- primary-dots:
+
+-- content:
+
+-- love-color-text:
+
+-- secondary-dots:
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: color-display
+
+
+
+
+
+
+-- component love-color-text:
+
+-- ftd.text: I love colors!
+padding.px: 12
+background.solid: $inherited.colors.shadow
+align-self: center
+color: $inherited.colors.text-strong
+
+-- end: love-color-text
+
+
+
+
+
+-- component header:
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+padding-horizontal.px: 10
+border-bottom-width.px: 4
+border-color: $inherited.colors.border-strong
+
+-- ds.h3: Color scheme
+
+-- end: ftd.row
+
+
+-- end: header
+
+
+
+
+
+
+
+
+
+-- component content:
+
+-- ds.markdown:
+
+Color can have a significant impact on the human brain and can evoke various
+emotions and responses.
+
+Color plays a crucial role in how we perceive and respond to our
+environment, and understanding the impact of color on the brain can be valuable
+in fields such as design, marketing, and psychology.
+
+-- end: content
+
+
+
+
+
+-- component primary-dots:
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing: space-between
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.base
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.hover
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.pressed
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.disabled
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.focused
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.border
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-primary.text
+
+-- end: ftd.row
+
+-- end: primary-dots
+
+
+
+
+
+
+
+
+
+-- component secondary-dots:
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing: space-between
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.base
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.hover
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.pressed
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.disabled
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.focused
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.border
+
+-- ftd.column:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.cta-secondary.text
+
+-- end: ftd.row
+
+-- end: secondary-dots
+
+
+
+
+
+
+
+
+
+
+
+-- component custom-dots:
+
+-- ftd.column:
+spacing.fixed.px: 15
+padding-horizontal.px: 2
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.one
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.two
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.three
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.four
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.five
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.six
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.seven
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.eight
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.nine
+
+-- ftd.row:
+width.fixed.px: 15
+height.fixed.px: 15
+background.solid: $inherited.colors.custom.ten
+
+-- end: ftd.column
+
+-- end: custom-dots

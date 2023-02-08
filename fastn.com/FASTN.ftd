@@ -15,6 +15,9 @@ implements: fifthtry.github.io/theme
 -- fastn.dependency: fifthtry.github.io/color-doc as cd
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fifthtry.github.io/roboto-mono as mono
+-- fastn.dependency: fifthtry.github.io/ds-set1-cs
+-- fastn.dependency: fifthtry.github.io/fastn-cs
+-- fastn.dependency: fifthtry.github.io/forest-cs
 
 
 -- fastn.auto-import: ds
