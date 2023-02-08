@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/fastn-cs as coal-cs
 -- import: fifthtry.github.io/forest-cs as forest-cs
 -- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
-
+-- import: fifthtry.github.io/button
 
 -- my-ds.page: Showcase Color Scheme
 
@@ -17,10 +17,17 @@ another. Hence achieve the impact the colors have on the website's design and
 the emotion they evoke.
 
 
--- ftd.row:
+
+-- ftd.column:
 width: fill-container
 background.solid: $inherited.colors.background.step-2
 padding.px: 10
+spacing.fixed.px: 20
+
+-- dark-mode-switcher:
+
+-- ftd.row:
+width: fill-container
 spacing.fixed.px: 10
 wrap: true
 
@@ -65,8 +72,8 @@ colors: $sunset-cs.main
 -- end: ftd.column
 
 
-
 -- end: ftd.row
+-- end: ftd.column
 
 -- end: my-ds.page
 
@@ -173,10 +180,6 @@ border-color: $inherited.colors.border-strong
 
 Color can have a significant impact on the human brain and can evoke various
 emotions and responses.
-
-Color plays a crucial role in how we perceive and respond to our
-environment, and understanding the impact of color on the brain can be valuable
-in fields such as design, marketing, and psychology.
 
 -- end: content
 
@@ -353,3 +356,58 @@ background.solid: $inherited.colors.custom.ten
 -- end: ftd.column
 
 -- end: custom-dots
+
+
+
+
+
+
+-- component dark-mode-switcher:
+
+-- ftd.row:
+width: fill-container
+spacing: space-around
+
+-- button.button: Dark Mode
+role: primary
+large: true
+$on-click$: $ftd.enable-dark-mode()
+
+-- button.button: Light Mode
+role: secondary
+large: true
+$on-click$: $ftd.enable-light-mode()
+
+-- button.button: System Mode
+role: tertiary
+large: true
+$on-click$: $ftd.enable-system-mode()
+
+
+-- end: ftd.row
+
+-- end: dark-mode-switcher
+
+
+
+
+
+
+
+
+
+/-- component button:
+ftd.color color:
+caption cta:
+
+-- ftd.text: $button.cta
+padding-horizontal.px: 16
+padding-vertical.px: 12
+background.solid: $button.color
+border-radius.px: 2
+color: $inherited.colors.text-strong
+width.fixed.px: 132
+text-align: center
+
+
+-- end: button
