@@ -1,4 +1,4 @@
--- config.page: Comments In `ftd` Files
+-- my-ds.page: Comments In `ftd` Files
 
 -- ds.h1: Block comment
 
@@ -96,4 +96,4 @@ and it will comment out that line.
 
 
 
--- end: config.page
+-- end: my-ds.page

@@ -4,7 +4,7 @@
 /-- import: new/lib as lib
 
 
--- config.page:
+-- my-ds.page:
 ;; toc: $config.empty-toc
 
 
@@ -156,4 +156,4 @@ color: $fastn.color.main.text
 FTD is funded, thanks to its sponsors!
 
 
--- end: config.page
+-- end: my-ds.page

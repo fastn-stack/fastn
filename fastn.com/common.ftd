@@ -6,7 +6,7 @@ light: red
 dark: red
 
 
--- config.page: Common Kernel Attributes
+-- my-ds.page: Common Kernel Attributes
 
 -- ds.markdown: 
 
@@ -1583,4 +1583,4 @@ and smiled, and passed it off Ere from the door she stept—
 
 -- end: ds.output
 
--- end: config.page
+-- end: my-ds.page

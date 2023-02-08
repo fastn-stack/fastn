@@ -1,6 +1,6 @@
 \-- ft-core.concept:
 
--- config.page: Built-in Types
+-- my-ds.page: Built-in Types
 
 -- ds.markdown: 
 
@@ -325,4 +325,4 @@ This would return `red` color in light mode and `orange` color in dark mode.
 - `vw <integer>`: Relative to 1% of the width of the viewport
 - `<integer>`: Gives <integer>px unit space.
 
--- end: config.page
+-- end: my-ds.page

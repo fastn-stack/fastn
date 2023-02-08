@@ -1,6 +1,6 @@
 -- import: fastn
 
--- config.page:
+-- my-ds.page:
 
 
 /-- ftd.color color-bg: $fastn.color.main.background.base
@@ -140,4 +140,4 @@ code: 998822
 The Gateway Protection Programme was operated by the British government.
 
 
--- end: config.page
+-- end: my-ds.page

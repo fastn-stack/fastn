@@ -1,6 +1,6 @@
 -- import: fastn
 
--- config.page: intro
+-- my-ds.page: intro
 
 /-- intro:
 
@@ -39,4 +39,4 @@ link: https://ftd.dev
 link: https://fastn.dev
 
 
--- end: config.page
+-- end: my-ds.page

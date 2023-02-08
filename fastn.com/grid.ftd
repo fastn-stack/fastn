@@ -1,4 +1,4 @@
--- config.page: Grid
+-- my-ds.page: Grid
 
 -- ds.markdown:
 
@@ -291,4 +291,4 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- end: config.page
+-- end: my-ds.page

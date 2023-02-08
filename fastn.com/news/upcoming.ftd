@@ -1,8 +1,8 @@
--- config.page: Upcoming Events
+-- my-ds.page: Upcoming Events
 
 -- ds.markdown:
 
 This includes the upcoming events related to the FTD.
 
 
--- end: config.page
+-- end: my-ds.page

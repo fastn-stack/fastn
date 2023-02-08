@@ -1,4 +1,4 @@
--- config.page: FTD Crash Course
+-- my-ds.page: FTD Crash Course
 
 20 mins Video Course
 
@@ -9,4 +9,4 @@ section body
 FTD is a programming lang created for non programmers
 
 
--- end: config.page
+-- end: my-ds.page

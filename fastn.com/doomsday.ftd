@@ -1,4 +1,4 @@
--- config.page: Doomsday
+-- my-ds.page: Doomsday
 toc: $ds.toc
 
 -- ds.markdown: 
@@ -17,4 +17,4 @@ Github: [github.com/FifthTry/doomsday](https://github.com/FifthTry/doomsday).
 v: GWhxP1TFFvA
 
 
--- end: config.page
+-- end: my-ds.page

@@ -2,7 +2,7 @@
 -- import: fastn
 
 
--- config.page: `component`
+-- my-ds.page: `component`
 
 -- ds.markdown: 
 
@@ -315,7 +315,7 @@ based on the value of the `dark-mode` variable.
 Read more about it in [conditional components guide](if/).
 
 
--- end: config.page
+-- end: my-ds.page
 
 
 

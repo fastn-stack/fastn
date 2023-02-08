@@ -1,4 +1,4 @@
--- config.page: Inner Container
+-- my-ds.page: Inner Container
 
 
 -- ds.markdown: 
@@ -67,7 +67,7 @@ This is the output of the above code:
 -- ftd.text: r2 element 2
 
 
--- end: config.page
+-- end: my-ds.page
 
 
 

@@ -1,4 +1,4 @@
--- config.page: Boolean
+-- my-ds.page: Boolean
 
 -- ds.markdown: 
 
@@ -25,4 +25,4 @@ Boolean accepts the below attributes as well all the [common attributes ](common
 - `font`
 - `line_height`
 
--- end: config.page
+-- end: my-ds.page

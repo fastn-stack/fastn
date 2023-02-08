@@ -1,4 +1,4 @@
--- config.page: Why FTD
+-- my-ds.page: Why FTD
 
 
 -- ds.h1: FTD Is Easy To Learn
@@ -30,4 +30,4 @@ FTD aims to live for long. FTD is open source. It compiles your content into a
 very small set of HTML/CSS/JS that will be supported for a long time. FTD will
 hopefully soon have other rendering engines, open source.
 
--- end: config.page
+-- end: my-ds.page

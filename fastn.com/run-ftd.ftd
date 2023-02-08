@@ -1,4 +1,4 @@
--- config.page: How To Run `ftd` Locally
+-- my-ds.page: How To Run `ftd` Locally
 toc: $ds.toc
 
 
@@ -40,4 +40,4 @@ python -m http.server 8000
 
 And visit: `http://localhost:8000/`.
 
--- end: config.page
+-- end: my-ds.page

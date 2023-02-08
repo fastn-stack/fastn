@@ -1,4 +1,4 @@
--- config.page: `ftd.iframe`
+-- my-ds.page: `ftd.iframe`
     
 `ftd.iframe` can be used to create an [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
 
@@ -27,4 +27,4 @@ The value of `loading` can be either `lazy` (default) or `eager`. This field
 [controls lazy
 loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
 
--- end: config.page
+-- end: my-ds.page

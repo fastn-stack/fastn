@@ -1,6 +1,6 @@
 \-- ft-core.concept:
 
--- config.page: `record`
+-- my-ds.page: `record`
 
 -- ds.markdown: 
 
@@ -215,4 +215,4 @@ let instance: Person = doc.only_instance("person")?;
 This allows you an "ergonomic" way to declare data in `ftd` files.
 
 
--- end: config.page
+-- end: my-ds.page

@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fastn
 
--- config.page: Building Dark-Mode Switcher Using FTD
+-- my-ds.page: Building Dark-Mode Switcher Using FTD
 
 -- ds.markdown: 
 
@@ -194,4 +194,4 @@ package name must URL where the package has been "published".
 
 
 
--- end: config.page
+-- end: my-ds.page

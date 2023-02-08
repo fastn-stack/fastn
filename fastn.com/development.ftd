@@ -1,4 +1,4 @@
--- config.page: `ftd` Development
+-- my-ds.page: `ftd` Development
 
 
 -- ds.markdown: 
@@ -17,4 +17,4 @@ This is a longish list of where the project is headed.
 [Changelog](/changelog/) is for keeping track of releases, migration guide etc.
 We haven't had a "proper" release yet, so this page is not yet being maintained.
 
--- end: config.page
+-- end: my-ds.page

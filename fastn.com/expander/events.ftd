@@ -1,4 +1,4 @@
--- config.page: Part 4: Event Handing
+-- my-ds.page: Part 4: Event Handing
 
 -- ds.youtube:
 v: ECRMeL9pIoc
@@ -64,4 +64,4 @@ In Part 5, you will learn how to publish it as a package on GitHub.
 
 Continue with the [part 5 now](/expander/publish/).
 
--- end: config.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- config.page: AJAX calls in `ftd`
+-- my-ds.page: AJAX calls in `ftd`
 
 -- ds.h1: AJAX Calls
 
@@ -75,4 +75,4 @@ lang: json
     "age": 28
 }
 
--- end: config.page
+-- end: my-ds.page

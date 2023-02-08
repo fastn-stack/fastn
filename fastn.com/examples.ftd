@@ -13,7 +13,7 @@ $processor$: pr.toc
 - Dark Mode: /examples/dark-mode/
 - Conditional Variable: /examples/conditional-variable/
 
--- config.page: Examples
+-- my-ds.page: Examples
 
 
 -- ds.markdown: 
@@ -28,4 +28,4 @@ padding.px: 5
 
 
 
--- end: config.page
+-- end: my-ds.page

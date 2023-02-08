@@ -6,7 +6,7 @@
 
 -- string foo: empty
 
--- config.page: Conditional Variable
+-- my-ds.page: Conditional Variable
 
 /-- foo: Ayushi
 if: { $ayushi }
@@ -59,4 +59,4 @@ if: $ayushi
 if: $arpita
 
 
--- end: config.page
+-- end: my-ds.page

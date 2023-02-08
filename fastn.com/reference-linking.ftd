@@ -1,6 +1,6 @@
 -- import: fastn
 
--- config.page: Reference linking in FTD
+-- my-ds.page: Reference linking in FTD
 
 -- ds.markdown:
 
@@ -74,4 +74,4 @@ Cross Linking of components between two different packages is not supported yet.
 - This linking logic will only work in `ftd.text` and the components derived using this `ftd.text` component.
 
 
--- end: config.page
+-- end: my-ds.page

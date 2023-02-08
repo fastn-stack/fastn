@@ -1,4 +1,4 @@
--- config.page: Why Not MDX?
+-- my-ds.page: Why Not MDX?
 
 -- ds.markdown: 
 
@@ -295,4 +295,4 @@ lang: ftd
 It's great to avoid duplication.
 
 
--- end: config.page
+-- end: my-ds.page

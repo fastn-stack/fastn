@@ -1,6 +1,6 @@
 -- string $name: Foo
 
--- config.page: Global Key Event Handling
+-- my-ds.page: Global Key Event Handling
 
 There are two different global events in `ftd`
 `$on-global-key[<keys sequence>]$` and `$on-global-key-seq[<keys sequence>]$`.
@@ -72,7 +72,7 @@ $on-global-key-seq[space-dash]$:  $set($a = $name, v = Jatinderjit)
 
 -- end: ds.output
 
--- end: config.page
+-- end: my-ds.page
 
 
 

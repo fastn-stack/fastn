@@ -1,4 +1,4 @@
--- config.page: Part 5: Publishing a package
+-- my-ds.page: Part 5: Publishing a package
 
 
 -- ds.youtube:
@@ -9,4 +9,4 @@ v: 8M_Cl0P_IhE
 
 Continue with the [part 6 now](/expander/reuse/).
 
--- end: config.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- config.page: Code
+-- my-ds.page: Code
 
 -- ds.markdown:
 
@@ -285,4 +285,4 @@ value = "hello world"
 print(value)
 
 
--- end: config.page
+-- end: my-ds.page

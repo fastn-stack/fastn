@@ -1,4 +1,4 @@
--- config.page: Internals
+-- my-ds.page: Internals
 
 
 -- ds.h1: FTD Original Source Location
@@ -24,4 +24,4 @@ event handling runtime, which is much smaller than `wasm`, and also is much fast
 because we do dependency analysis based updates to DOM instead of the older nuke
 everything and recreated DOM `wasm` approach we had earlier.
 
--- end: config.page
+-- end: my-ds.page

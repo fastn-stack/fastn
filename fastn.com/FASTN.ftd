@@ -19,7 +19,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 -- fastn.auto-import: ds
 -- fastn.auto-import: ws
 -- fastn.auto-import: fastn
--- fastn.auto-import: ftd.dev/FASTN/config
+-- fastn.auto-import: ftd.dev/FASTN/config as my-ds
 -- fastn.auto-import: dms
 -- fastn.auto-import: cbox
 

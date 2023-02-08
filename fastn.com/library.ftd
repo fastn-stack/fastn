@@ -1,3 +1,3 @@
--- config.page: `ftd::Library`
+-- my-ds.page: `ftd::Library`
     
--- end: config.page
+-- end: my-ds.page

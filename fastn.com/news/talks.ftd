@@ -1,8 +1,8 @@
--- config.page: Talks & Videos
+-- my-ds.page: Talks & Videos
 
 -- ds.markdown:
 
 This includes the talks and videos related to the FTD.
 
 
--- end: config.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- config.page: Building UIs with `ftd`
+-- my-ds.page: Building UIs with `ftd`
 
 
 -- ds.markdown: 
@@ -12,4 +12,4 @@ possibly also a low-level implementation for embedded devices.
 reading about it.
 
 
--- end: config.page
+-- end: my-ds.page

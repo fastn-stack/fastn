@@ -1,4 +1,4 @@
--- config.page: Kernel Components
+-- my-ds.page: Kernel Components
     
 -- ds.markdown: 
 
@@ -42,4 +42,4 @@ the text "hello world" in the UI.
 - [`ftd.grid`](grid/)
 
 
--- end: config.page
+-- end: my-ds.page

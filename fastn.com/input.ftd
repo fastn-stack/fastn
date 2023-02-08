@@ -1,7 +1,7 @@
 -- import: fastn
 
 
--- config.page: Input
+-- my-ds.page: Input
 
 
 -- ds.code:
@@ -48,4 +48,4 @@ Integer accepts the below attributes along with the
 Either use value or default-value, using both is not allowed.
 
 
--- end: config.page
+-- end: my-ds.page

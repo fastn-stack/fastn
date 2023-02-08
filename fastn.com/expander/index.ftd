@@ -2,7 +2,7 @@
 -- import: gargajit.github.io/expander
 -- import: gargajit.github.io/expander/assets
 
--- config.page: Expander Crash Course
+-- my-ds.page: Expander Crash Course
 
 
 -- ds.youtube:
@@ -63,4 +63,4 @@ Start with the [part 1 now](/expander/hello-world/).
 
 Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
 
--- end: config.page
+-- end: my-ds.page

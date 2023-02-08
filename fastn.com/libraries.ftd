@@ -1,4 +1,4 @@
--- config.page: Libraries
+-- my-ds.page: Libraries
 toc: $ds.toc
     
--- end: config.page
+-- end: my-ds.page

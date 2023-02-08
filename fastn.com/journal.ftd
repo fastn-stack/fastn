@@ -8,7 +8,7 @@
 
 
 
--- config.page: FTD Journal
+-- my-ds.page: FTD Journal
 
 -- ds.h1: Conditional Variable
 
@@ -2584,7 +2584,7 @@ overriding `<a>`. Basically we were attaching `href` on top of `img` tag.
 Now we create `<img>` tag and make it child of `<a>`.
 
 
--- end: config.page
+-- end: my-ds.page
 
 
 

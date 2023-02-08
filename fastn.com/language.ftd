@@ -1,4 +1,4 @@
--- config.page: FTD Language
+-- my-ds.page: FTD Language
 toc: $ds.toc
 
 
@@ -203,4 +203,4 @@ As a goal we want `ftd` files to be renderable in the browser, as well as in oth
 modes, like in Terminal using curses UI, natively on Mobile devices, Emacs,
 rendering from scratch using just C/assembly for low-powered devices and so on.
 
--- end: config.page
+-- end: my-ds.page

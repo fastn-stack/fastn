@@ -1,4 +1,4 @@
--- config.page: Data Modelling With `ftd`
+-- my-ds.page: Data Modelling With `ftd`
 
 `ftd` is an alternative to XML/JSON for storing data.
 
@@ -68,4 +68,4 @@ Read more about it in ["reading data" guide](/reading-data/).
 or data in one file and refer it from other files.
 
 
--- end: config.page
+-- end: my-ds.page

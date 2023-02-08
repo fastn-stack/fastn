@@ -30,7 +30,7 @@ dark: #f09483
 /-- ftd.color yellow: yellow
 dark: yellow
 
--- config.page: An Architecture Diagram
+-- my-ds.page: An Architecture Diagram
 
 -- ds.markdown: 
 
@@ -570,4 +570,4 @@ Kubernetes supports several container runtimes: Docker, containerd, CRI-O, and
 any implementation of the Kubernetes CRI (Container Runtime Interface).
 
 
--- end: config.page
+-- end: my-ds.page
