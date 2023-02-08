@@ -1,4 +1,4 @@
--- ds.page: `/-/clear-cache/` API
+-- my-ds.page: `/-/clear-cache/` API
 
 This API `/-/clear-cache/` clear files from where the `fastn` instance is running.
 
@@ -91,4 +91,4 @@ Run `fastn` with `fastn serve --download-base-url https://raw.githubusercontent.
   - `http://127.0.0.1:8001/-/clear-cache/?package=fifthtry.github.io/doc-site&package=fifthtry.github.io/typography&package=fifthtry.github.io/toc`
     - Status: Working
 
--- end: ds.page
+-- end: my-ds.page

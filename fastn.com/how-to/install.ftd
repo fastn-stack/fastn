@@ -1,4 +1,4 @@
--- ds.page: Install `fastn`
+-- my-ds.page: Install `fastn`
 
 
 -- ds.markdown: 
@@ -79,4 +79,4 @@ lang: sh
 
 sudo apt-get install libsqlite3-dev libssl-dev
 
--- end: ds.page
+-- end: my-ds.page

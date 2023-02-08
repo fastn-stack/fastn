@@ -1,4 +1,4 @@
--- ds.page: `$processor$: full-sitemap`
+-- my-ds.page: `$processor$: full-sitemap`
 
 `full-sitemap` processor returns content of `FASTN.ftd`s `fastn.sitemap`.
 
@@ -87,4 +87,4 @@ The record `sitemap-compat-data` contains sections, section contains
 subsections, subsections contains list of toc, and toc again contains list of
 toc.
 
--- end: ds.page
+-- end: my-ds.page

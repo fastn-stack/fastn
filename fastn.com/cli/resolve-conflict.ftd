@@ -1,4 +1,4 @@
--- ds.page: `fastn resolve-conflict <file-name>`
+-- my-ds.page: `fastn resolve-conflict <file-name>`
 
 This command is used to resolve the [conflict](sync-conflict/) in the file
 introduced by attempt, done by the [clone](glossary/#clone), to sync a file
@@ -72,4 +72,4 @@ It keeps the changes of the file from server version, in case of
 changes, in case of [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict)
 and the file is no longer [file-with-conflict](glossary/#file-with-conflict).
 
--- end: ds.page
+-- end: my-ds.page

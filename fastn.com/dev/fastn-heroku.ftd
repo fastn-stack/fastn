@@ -1,4 +1,4 @@
--- ds.page: Deploy FASTN on Heroku
+-- my-ds.page: Deploy FASTN on Heroku
 
 ## Steps:
 - Setup Heroku `abrark-app` with `fastn-heroku`
@@ -14,4 +14,4 @@ For Public:
 - Deploy Rust Binary On Heroku
 - Deploy FASTN on Heroku
 
--- end: ds.page
+-- end: my-ds.page

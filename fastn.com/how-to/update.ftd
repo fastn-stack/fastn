@@ -1,4 +1,4 @@
--- ds.page: Upgrade `fastn`
+-- my-ds.page: Upgrade `fastn`
 
 -- ds.markdown: 
 
@@ -14,4 +14,4 @@ lang: sh
 
 cargo install --force fastn
 
--- end: ds.page
+-- end: my-ds.page

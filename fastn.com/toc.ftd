@@ -1,4 +1,4 @@
--- ds.page: `$processor$: toc`
+-- my-ds.page: `$processor$: toc`
 
 
 
@@ -50,4 +50,4 @@ possible.
 
 Currently the parser is strict, rules must be followed exactly.
 
--- end: ds.page
+-- end: my-ds.page

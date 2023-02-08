@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Common Header Component
+-- my-ds.page: Common Header Component
 
 -- ds.markdown: 
 
@@ -52,4 +52,4 @@ lang: ftd
 
 Header links can be specified using `fastn.
 
--- end: ds.page
+-- end: my-ds.page

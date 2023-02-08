@@ -10,7 +10,7 @@
 
 
 
--- ds.page: Featured components
+-- my-ds.page: Featured components
 
 -- ds.markdown:
 
@@ -46,7 +46,7 @@ templates: $font
 more-link-text: How to use fonts
 more-link: /featured/fonts/
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

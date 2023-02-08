@@ -1,4 +1,4 @@
--- ds.page: Twitter OAuth
+-- my-ds.page: Twitter OAuth
 
 
 For Twitter Oauth using FASTN. Follow please setps given below:
@@ -8,4 +8,4 @@ For Twitter Oauth using FASTN. Follow please setps given below:
 - [Identities](/how-to/oauth/gh-ids/)
 - [Access Control List](/how-to/oauth/gh-acl/)
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `fastn::Document`
+-- my-ds.page: `fastn::Document`
 
 `fastn::Document` struct keeps track of a "document". Document is a [`file` in fastn
 package](crate/file/), which is either a ftd file, a markdown file, or a code
@@ -15,4 +15,4 @@ pub struct Document {
     pub parent_path: String,
 }
 
--- end: ds.page
+-- end: my-ds.page

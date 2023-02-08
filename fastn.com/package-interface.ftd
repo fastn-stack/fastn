@@ -1,4 +1,4 @@
--- ds.page: Fungible Packages - Package Interface
+-- my-ds.page: Fungible Packages - Package Interface
 
 An FASTN package contains one or more "ftd modules", and the modules export one or
 more "symbols", eg [records](https://ftd.dev/record/),
@@ -11,4 +11,4 @@ interface" of that package. FASTN lets one package declare that it is
 are interchangeable without changing any code, and only updating the dependency
 in `FASTN.ftd` file.
 
--- end: ds.page
+-- end: my-ds.page

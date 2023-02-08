@@ -1,4 +1,4 @@
--- ds.page: Translation Philosphy
+-- my-ds.page: Translation Philosphy
 
 -- ds.markdown: 
 
@@ -34,4 +34,4 @@ An out of date document implies that the document `foo.com/document.ftd` has
 been updated and moved ahead since the last time we approved the document
 `bar.com/document.ftd`
 
--- end: ds.page
+-- end: my-ds.page

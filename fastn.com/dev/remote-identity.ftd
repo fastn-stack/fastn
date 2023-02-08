@@ -1,4 +1,4 @@
--- ds.page: Remote Identity
+-- my-ds.page: Remote Identity
 
 When `fastn serve` is running with on remote, it needs to get all the identities
 of the user who is currently making the HTTP request to decide if the user has
@@ -74,4 +74,4 @@ TODO:
 readable by the specific user making request. If the URL is public, readable by
 the world, then there is no need to do any checks.
 
--- end: ds.page
+-- end: my-ds.page

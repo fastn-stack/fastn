@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: How To Create Developer App On Github
+-- my-ds.page: How To Create Developer App On Github
 
 -- ds.markdown:
 
@@ -49,4 +49,4 @@ with code and state after login.
 src: $assets.files.static.images.auth.github.github-app-4.png
 ;;align-content: center
 
--- end: ds.page
+-- end: my-ds.page

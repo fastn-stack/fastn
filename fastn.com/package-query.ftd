@@ -1,4 +1,4 @@
--- ds.page: `$processor$: package-query`
+-- my-ds.page: `$processor$: package-query`
 
 -- ds.markdown: 
 
@@ -79,4 +79,4 @@ person p:
 
 The name of `sqlite` database file is provided by the key `db`.
 
--- end: ds.page
+-- end: my-ds.page

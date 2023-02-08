@@ -1,4 +1,4 @@
--- ds.page: User Group
+-- my-ds.page: User Group
 
 A fastn package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
@@ -140,4 +140,4 @@ will be explicitly removed from the combined set.
 
 Please check [this](/sitemap/#readers-and-writers-in-sitemap)
 
--- end: ds.page
+-- end: my-ds.page

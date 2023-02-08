@@ -1,4 +1,4 @@
--- ds.page: `static`: Serve Static Files
+-- my-ds.page: `static`: Serve Static Files
 
 `static` serves all the non `ftd` files. We guess the file type based on content
 of the file using the [`infer` crate](/crate/deps/infer/).
@@ -13,4 +13,4 @@ The static files from dependencies are downloaded only on demand, and cached in
 
 The URL of the static files follow the pattern: `/-/<package-name>/file/name.jpg`.
 
--- end: ds.page
+-- end: my-ds.page

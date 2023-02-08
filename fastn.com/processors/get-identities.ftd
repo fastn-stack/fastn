@@ -1,4 +1,4 @@
--- ds.page: `get-identities` processor
+-- my-ds.page: `get-identities` processor
 
 `get-identities` processor can be used to find all the
 [identities](/dev/user-identity/) for a document of the user making request.
@@ -41,4 +41,4 @@ email: arpita1@gmail.com
 - Toc: /page/
 readers: readers
 
--- end: ds.page
+-- end: my-ds.page

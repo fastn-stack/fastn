@@ -1,4 +1,4 @@
--- ds.page: How To Update Failing Snapshot Tests
+-- my-ds.page: How To Update Failing Snapshot Tests
 
 We can fix the failing tests which is due to snapshot mismatch in output folder.
 
@@ -13,4 +13,4 @@ This will update the snapshots of all the tests
 
 Prerequisite: Read this [How To Run Tests](day-to-day/how-to-run-tests/)
 
--- end: ds.page
+-- end: my-ds.page

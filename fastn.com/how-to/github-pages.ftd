@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 ;;-- import: fastn.dev/static
 
--- ds.page: Publishing Static Site On github pages
+-- my-ds.page: Publishing Static Site On github pages
 
 Easiest way to get started with `fastn` is using the github pages to host your
 built assets.
@@ -57,4 +57,4 @@ Choose the `build` branch in the dropdown and in the directory dropdown, choose
 src: $assets.files.how-to.github-pages-initialize.png
 width: fill-container
 
--- end: ds.page
+-- end: my-ds.page

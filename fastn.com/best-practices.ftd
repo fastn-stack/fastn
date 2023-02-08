@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Best practices for `FTD`
+-- my-ds.page: Best practices for `FTD`
 
 We at FifthTry suggest below practices to be followed while writing your `.ftd`
 files.
@@ -66,4 +66,4 @@ background-color: $fastn.color.main.background.base
 
 \-- end: my-ftd-component
 
--- end: ds.page
+-- end: my-ds.page

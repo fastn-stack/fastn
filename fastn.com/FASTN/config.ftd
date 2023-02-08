@@ -1,32 +1,16 @@
--- import: ds as ft
--- import: ps
--- import: fbs
+-- import: ds
 -- import: fastn.dev/assets
--- import: fastn/processors as pr
 
+-- component page:
+children wrapper:
+optional caption title:
+optional body body:
 
--- $ps.current-product: 3
+-- ds.page:
+$site-logo: *$assets.files.static.logo-fifthtry.svg
+title: $page.title
+body: $page.body
+site-name: Fastn
+wrapper: $page.wrapper
 
-/-- ft.site-url: /
-
--- $ft.site-logo:
-light: $assets.files.static.logo-fifthtry.svg.light
-dark: $assets.files.static.logo-fifthtry-dark.svg.dark
-
--- $ft.site-name:
-
--- $ft.parent-brand: false
-
--- $ft.brand-caption: Created by
-
--- $ft.brand-site-name: FASTN
-
-
--- $ft.brand-site-logo:
-light: $assets.files.static.images.fastn.png.light
-dark: $assets.files.static.images.fastn.png.dark
-
--- $ft.github: https://github.com/fifthtry/fastn
-
-
--- pr.toc-item list empty-toc:
+-- end: page

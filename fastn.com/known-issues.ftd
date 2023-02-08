@@ -1,7 +1,7 @@
 -- import: fastn.dev/assets
 
 
--- ds.page: Known Issues
+-- my-ds.page: Known Issues
 
 You can find the list of [open issues on
 Github](https://github.com/FifthTry/fastn/issues/).
@@ -53,4 +53,4 @@ for now we need `.history` folder updated regularly.
 
 Call `fastn sync` often.
 
--- end: ds.page
+-- end: my-ds.page

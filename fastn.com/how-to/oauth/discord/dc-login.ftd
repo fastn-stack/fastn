@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: FASTN Login Flow with Discord
+-- my-ds.page: FASTN Login Flow with Discord
 
 -- ds.markdown:
 
@@ -54,4 +54,4 @@ lang: ftd
 Url: https://discord.com/api/users/@me
 Method: Get
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,5 +1,5 @@
 
--- ds.page: How to create `font` package
+-- my-ds.page: How to create `font` package
 
 Follow below instructions:
 
@@ -87,4 +87,4 @@ python3 read_google_font.py
 - Run `fastn build` on your repository
 - Push repository code to `GitHub`
 
--- end: ds.page
+-- end: my-ds.page

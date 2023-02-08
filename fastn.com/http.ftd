@@ -4,7 +4,7 @@
 
 
 
--- ds.page: `$processor$: http`
+-- my-ds.page: `$processor$: http`
 
 This processor is used to initialise some FTD variable with content of JSON fetched
 from HTTP.
@@ -63,4 +63,4 @@ Each key value pair is passed added to the URL as query params.
 The response of the JSON must match with type of the variable where we are storing
 the result, here it is `r` of type `record` defined above.
 
--- end: ds.page
+-- end: my-ds.page

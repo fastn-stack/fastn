@@ -1,4 +1,4 @@
--- ds.page: Step by Step guide to setup translation with `fastn`
+-- my-ds.page: Step by Step guide to setup translation with `fastn`
 
 -- ds.markdown: 
 
@@ -211,4 +211,4 @@ Never marked: example03.dsd
 Missing: example04.dsd
 Missing: example05.dsd
 
--- end: ds.page
+-- end: my-ds.page

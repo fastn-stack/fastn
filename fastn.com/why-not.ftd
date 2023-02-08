@@ -1,4 +1,4 @@
--- ds.page: Why not to use `fastn`?
+-- my-ds.page: Why not to use `fastn`?
 
 -- ds.markdown: 
 
@@ -45,4 +45,4 @@ etc, so if you just like the promise of `ftd`/`fastn` but can not yet make time
 for a less than optimal learning experience, you may want to stay away from
 `fastn` for now.
 
--- end: ds.page
+-- end: my-ds.page

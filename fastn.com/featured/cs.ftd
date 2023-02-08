@@ -5,7 +5,7 @@
 
 
 
--- ds.page: Color schemes
+-- my-ds.page: Color schemes
 
 We have designed and developed below color schemes. You can use them
 to change your `FTD` web site color scheme. 
@@ -13,7 +13,7 @@ to change your `FTD` web site color scheme.
 -- ft-ui.grid-view:
 templates: $schemes
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

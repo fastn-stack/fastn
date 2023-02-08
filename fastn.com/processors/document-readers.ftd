@@ -1,4 +1,4 @@
--- ds.page: `document-readers` processor
+-- my-ds.page: `document-readers` processor
 
 `document-readers` processor is used to find all the readers
 [groups](/dev/user-group/) by `document`.
@@ -18,4 +18,4 @@ for passed `document`.
 
 Check type [user-group-compat](/theme/fastn/#user-group-compat)
 
--- end: ds.page
+-- end: my-ds.page

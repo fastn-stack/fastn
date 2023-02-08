@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: FASTN Login Flow with GitHub
+-- my-ds.page: FASTN Login Flow with GitHub
 
 -- ds.markdown:
 
@@ -48,4 +48,4 @@ We need to pass Client Id,Client Secret and Code(returned after authorization).
 In response we will get `access_token` that can be saved in our cookies,
 session or database to be used for accessing other Github Apis.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `fastn::Result`
+-- my-ds.page: `fastn::Result`
 
 Most `fastn` operations return `fastn::Result<T>`.
 
@@ -11,4 +11,4 @@ pub type fastn::Result<T> = std::result::Result<T, fastn::Error>;
 
 `fastn::Result` is a wrapper over [`fastn::Error`](crate/error/).
 
--- end: ds.page
+-- end: my-ds.page

@@ -2,10 +2,10 @@
 
 
 
--- ds.page: FASTN Color
+-- my-ds.page: FASTN Color
 
 /-- cd.color-display:
 color: $inherited.colors
 minimize: true
 
--- end: ds.page
+-- end: my-ds.page

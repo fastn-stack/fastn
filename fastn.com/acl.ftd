@@ -1,4 +1,4 @@
--- ds.page: Authentication And Fine Grained Access Control
+-- my-ds.page: Authentication And Fine Grained Access Control
 
 When fastn is used in [server mode](/server/) it has access to access control of
 packages.
@@ -21,4 +21,4 @@ It is also possible in fastn to have areas of document protected, so a part of
 page can be made private, only visible to you or your team, and rest of the page
 is accessible to everyone.
 
--- end: ds.page
+-- end: my-ds.page

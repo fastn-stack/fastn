@@ -1,4 +1,4 @@
--- ds.page: User Identity
+-- my-ds.page: User Identity
 
 A fastn package can limit who has read or write access. We do it by storing
 [user groups](/dev/user-group/) in [sitemap](/sitemap/). An `identity
@@ -32,4 +32,4 @@ All these strings are now known as `user identity`.
 
 Find all identities [here](/dev/user-group/#all-supported-identities)
 
--- end: ds.page
+-- end: my-ds.page

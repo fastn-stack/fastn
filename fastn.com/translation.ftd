@@ -1,5 +1,5 @@
 
--- ds.page:
+-- my-ds.page:
 
 -- ds.h1: Translation Tracking
 
@@ -64,4 +64,4 @@ when Hindi version was last marked up to date, to current English version.
 We also create a translation status page that shows a summary information for
 all languages how many documents are upto date, missing etc.
 
--- end: ds.page
+-- end: my-ds.page

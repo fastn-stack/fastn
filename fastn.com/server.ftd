@@ -1,4 +1,4 @@
--- ds.page: FASTN Server
+-- my-ds.page: FASTN Server
 
 FASTN can act as an HTTP server as well. Using FASTN server is an alterantive to
 using [fastn static site generator](/static/).
@@ -11,4 +11,4 @@ features.
 - [`get-data`](/processors/get-data/) has access to request parameters
   ([planned](https://github.com/FifthTry/fastn/discussions/386))
 
--- end: ds.page
+-- end: my-ds.page

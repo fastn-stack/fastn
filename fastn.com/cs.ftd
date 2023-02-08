@@ -1,4 +1,4 @@
--- ds.page: `fastn` Color Scheme Packages
+-- my-ds.page: `fastn` Color Scheme Packages
 
 If you are maintaining a website, it is a good idea to keep the color scheme
 (and typography for that matter) separate from your main code base, so you can
@@ -21,4 +21,4 @@ such color schemes, and in future we are also planning to create a way to
 `design.json`](https://github.com/FifthTry/fastn/discussions/313), so you can use
 the color schemes even from a non fastn package.
 
--- end: ds.page
+-- end: my-ds.page

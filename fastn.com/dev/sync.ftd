@@ -1,4 +1,4 @@
--- ds.page: How Sync Works
+-- my-ds.page: How Sync Works
 
 We have two states, "remote state" and "clone state".
 
@@ -153,4 +153,4 @@ merge-abe using three way merge operation.
 
 Clone will show the conflict message.
 
--- end: ds.page
+-- end: my-ds.page

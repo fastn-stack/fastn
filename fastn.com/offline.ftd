@@ -1,4 +1,4 @@
--- ds.page: `fastn`: Offline Sync
+-- my-ds.page: `fastn`: Offline Sync
 
 `fastn` comes with ability to "clone" any `fastn` package, and view and modify it
 offline. We support *two way sync*, with first class conflict handling, so you
@@ -38,4 +38,4 @@ able to bring the site content to your machine, make edits and upload it back to
 the `fastn server` opens gates for many use cases, not possible with a purely
 web based editor.
 
--- end: ds.page
+-- end: my-ds.page

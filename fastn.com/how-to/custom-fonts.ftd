@@ -1,4 +1,4 @@
--- ds.page: How to use Fonts
+-- my-ds.page: How to use Fonts
 
 We have created some Google Fonts listed in featured page:
 
@@ -26,4 +26,4 @@ lang: ftd
 \-- ftd.text:
 role: $inherited.types.heading-small
 
--- end: ds.page
+-- end: my-ds.page

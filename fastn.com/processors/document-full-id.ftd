@@ -1,4 +1,4 @@
--- ds.page: `document-full-id` processor
+-- my-ds.page: `document-full-id` processor
 
 `document-full-id` processor is used to get `document-full-id`
 
@@ -18,4 +18,4 @@ $processor$: document-full-id
 \-- ftd.text: $document-full-id
 color: $white
 
--- end: ds.page
+-- end: my-ds.page

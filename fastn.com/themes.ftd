@@ -1,4 +1,4 @@
--- ds.page: About FASTN Themes
+-- my-ds.page: About FASTN Themes
 
 
 -- ds.markdown: 
@@ -109,4 +109,4 @@ If `amitu.github.io/resume` was interested in all the modules and symbols export
 by `foo.github.io/some-theme`, they can chose to not specify the `implements:`
 directive in the FASTN.ftd file.
 
--- end: ds.page
+-- end: my-ds.page

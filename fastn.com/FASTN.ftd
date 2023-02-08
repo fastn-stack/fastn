@@ -18,7 +18,7 @@ implements: fifthtry.github.io/theme
 
 
 -- fastn.auto-import: ds
--- fastn.auto-import: fastn.dev/FASTN/config
+-- fastn.auto-import: fastn.dev/FASTN/config as my-ds
 -- fastn.auto-import: fastn
 
 

@@ -1,4 +1,4 @@
--- ds.page: `fastn build`
+-- my-ds.page: `fastn build`
 
 
 -- ds.markdown: 
@@ -34,4 +34,4 @@ The generated HTML files are stored in `.build` folder, which is found next to t
 `fastn build` also downloads all the dependencies specified in the `FASTN.ftd` file and
 stores in `.packages` folder.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: How To Use GitHub Identities
+-- my-ds.page: How To Use GitHub Identities
 
 -- ds.markdown:
 
@@ -255,4 +255,4 @@ Header Parameters
 Authorization: Bearer {access_token}
 Query: query { user(login:{user_name}){isSponsoredBy(accountLogin:{sponsored_by})}}
  
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: FASTN OAuth Integrations
+-- my-ds.page: FASTN OAuth Integrations
 
 -- ds.h1: FASTN with GitHub Authentication
 
@@ -8,4 +8,4 @@
 
 -- ds.h1: FASTN with Discord Authentication
 
--- end: ds.page
+-- end: my-ds.page

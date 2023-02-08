@@ -1,4 +1,4 @@
--- ds.page: `fastn serve`
+-- my-ds.page: `fastn serve`
 
 
 `fastn serve [<port>]` creates an `http` server, which dynamically builds ftd files when serving.
@@ -13,4 +13,4 @@
 - static directory should be configurable
 - default error page or list the directory in case of file not found
 
--- end: ds.page
+-- end: my-ds.page

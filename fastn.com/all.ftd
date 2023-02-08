@@ -4,12 +4,12 @@
 
 
 
--- ds.page: All `FTD` components
+-- my-ds.page: All `FTD` components
 
 -- all:
 packages: $package-list
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

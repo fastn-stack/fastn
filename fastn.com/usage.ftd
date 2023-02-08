@@ -1,4 +1,4 @@
--- ds.page: `fastn` Usage
+-- my-ds.page: `fastn` Usage
 
 
 -- ds.markdown: 
@@ -16,4 +16,4 @@
 Running `fastn` without any argument prints the help-text, which lists all available
 subcommands and general instructions on how to use `fastn`.
 
--- end: ds.page
+-- end: my-ds.page

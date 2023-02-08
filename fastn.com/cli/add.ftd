@@ -1,6 +1,6 @@
--- ds.page: `fastn add <file-name>`
+-- my-ds.page: `fastn add <file-name>`
 
 This would create entry in workspace.ftd and only the files added would be
 consider for sync.
 
--- end: ds.page
+-- end: my-ds.page

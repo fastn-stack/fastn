@@ -1,7 +1,7 @@
 -- import: fastn.dev/assets
 
 
--- ds.page: FASTN & FTD Domain Setup
+-- my-ds.page: FASTN & FTD Domain Setup
 
 Follow this documentation to setup your FASTN & FTD domain.
 
@@ -277,4 +277,4 @@ for your domain.
 
 Congratulations! your `www.johnywalker.com` domain is now public live.
 
--- end: ds.page
+-- end: my-ds.page

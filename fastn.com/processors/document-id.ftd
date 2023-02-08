@@ -1,4 +1,4 @@
--- ds.page: `document-id` processor
+-- my-ds.page: `document-id` processor
 
 `document-id` processor is used to get id of the document
 
@@ -17,4 +17,4 @@ $processor$: document-id
 
 \-- ftd.text: $document-id
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Remixing Static Site Generator
+-- my-ds.page: Remixing Static Site Generator
 
 FASTN is a static site generator. What it means it generates a set of static files
 that we can host on any static site host, eg nginx on your custom server, or on
@@ -14,7 +14,7 @@ If you checkout fastn.dev, this site is built using fastn. The document that you
 -- ds.code: remixing.ftd gets published on /remixing/ that you are reading right now
 lang: ftd
 
-\-- ds.page: Remixing Static Site Generator
+\-- my-ds.page: Remixing Static Site Generator
 
 FASTN is a static site generator. What it means it generates a set of
 static files that we can host on any static site host, eg nginx on
@@ -110,4 +110,4 @@ code, you do not have to download the packages, the package manager downloads
 your dependencies. Your package manage can also check if the packages have been
 updated.
 
--- end: ds.page
+-- end: my-ds.page

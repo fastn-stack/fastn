@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Sitemap
+-- my-ds.page: Sitemap
 
 "FASTN Sitemap" is the structure we recommend for sites. This recommendation is
 optional, you can  create any [sitemap](glossary/#sitemap) you want for your
@@ -750,4 +750,4 @@ writers: writers
   readers: readers
   writers: writers
 
--- end: ds.page
+-- end: my-ds.page

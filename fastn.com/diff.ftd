@@ -1,4 +1,4 @@
--- ds.page: `fastn diff`
+-- my-ds.page: `fastn diff`
 
 
 -- ds.markdown: 
@@ -46,4 +46,4 @@ Note that this creates a diff which is slightly incompatible with `git diff`
 output, so we cant use [`elm-diff`](https://terezka.github.io/elm-diff/) for
 example.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `clone` API
+-- my-ds.page: `clone` API
 
 `clone` API is called from `fastn cli` with command `fastn clone`. This API clones
 FASTN package to local. This API is only available in FASTN `remote` feature.
@@ -32,4 +32,4 @@ pub struct CloneResponse {
 
 This API ideally should take URL of FASTN package to clone.
 
--- end: ds.page
+-- end: my-ds.page

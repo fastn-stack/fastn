@@ -1,4 +1,4 @@
--- ds.page: `document-name` processor
+-- my-ds.page: `document-name` processor
 
 `document-name` processor is used to get filename in system of accessed
 document.
@@ -18,4 +18,4 @@ $processor$: document-name
 
 \-- ftd.text: $document-name
 
--- end: ds.page
+-- end: my-ds.page

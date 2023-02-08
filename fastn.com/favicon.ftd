@@ -1,4 +1,4 @@
--- ds.page: How to Use Favicon
+-- my-ds.page: How to Use Favicon
 
 There are two ways by which we can use favicon:
 
@@ -24,4 +24,4 @@ fastn.package in FASTN.ftd.
 In case of multiple favicon.* files in the same package folder,
 then the favicon file will be selected in the priority order `ico > svg > png > jpg`.
 
--- end: ds.page
+-- end: my-ds.page

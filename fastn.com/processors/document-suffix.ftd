@@ -1,4 +1,4 @@
--- ds.page: `document-suffix` processor
+-- my-ds.page: `document-suffix` processor
 
 `document-suffix` processor is used to find suffix of a requested document.
 
@@ -16,4 +16,4 @@ $processor$: document-suffix
 
 \-- ftd.text: $document-suffix
 
--- end: ds.page
+-- end: my-ds.page

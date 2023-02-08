@@ -1,4 +1,4 @@
--- ds.page: `fastn::Font`
+-- my-ds.page: `fastn::Font`
 
 `fastn::Font` struct keeps track of a font. Fonts are defined in `FASTN.ftd` file
 and are stored in [`fastn::Package`](crate/package/) struct after parsing.
@@ -24,4 +24,4 @@ pub struct Font {
     stretch: Option<String>,
 }
 
--- end: ds.page
+-- end: my-ds.page

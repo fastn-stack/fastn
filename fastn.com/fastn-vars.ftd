@@ -1,4 +1,4 @@
--- ds.page: `import: fastn`
+-- my-ds.page: `import: fastn`
 
 
 
@@ -25,4 +25,4 @@ language-toc-item list children:
 Title contains the language of the translation package and url contains the
 link to the page in the translated version.
 
--- end: ds.page
+-- end: my-ds.page

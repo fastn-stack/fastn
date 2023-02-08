@@ -1,4 +1,4 @@
--- ds.page: Available `$processor$`s
+-- my-ds.page: Available `$processor$`s
 
 -- ds.markdown: 
 
@@ -8,4 +8,4 @@ FASTN comes with following built in `ftd` `$processor$`s.
 - [`$processor$: toc`](/fastn/toc/)
 - [`$processor$: package-query`](/fastn/package-query/)
 
--- end: ds.page
+-- end: my-ds.page

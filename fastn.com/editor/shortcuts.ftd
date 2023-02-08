@@ -1,4 +1,4 @@
--- ds.page: FASTN Editor Keyboard Shortcuts
+-- my-ds.page: FASTN Editor Keyboard Shortcuts
 
 FASTN Editor comes with keyboard shortcuts to help users more efficiently perform
 editing tasks.
@@ -14,4 +14,4 @@ file selected.
 You can press `.` or `Ctrl-.` to exit the editor if the editor is currently
 open. If the focus is in text entry box, only `Ctrl-.` works.
 
--- end: ds.page
+-- end: my-ds.page

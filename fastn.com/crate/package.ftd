@@ -1,4 +1,4 @@
--- ds.page: `fastn::Package`
+-- my-ds.page: `fastn::Package`
 
 `fastn::Package` struct keeps track of a single fastn package.
 
@@ -119,4 +119,4 @@ pub fn fastn::Package::generate_canonical_url(&self, id: &str) -> String
 `id` is the identifier of the document for which we want the canonical-url. `id`
 is appended to `canonical-url` found in `FASTN.ftd` file.
 
--- end: ds.page
+-- end: my-ds.page

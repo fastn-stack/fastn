@@ -1,4 +1,4 @@
--- ds.page: `sync` API
+-- my-ds.page: `sync` API
 
 `sync` API is called by the `fastn cli` to sync the local content of fastn package
 with the remote server. It is available only in FASTN `remote` feature.
@@ -72,4 +72,4 @@ pub struct File {
     pub content: Vec<u8>,
 }
 
--- end: ds.page
+-- end: my-ds.page

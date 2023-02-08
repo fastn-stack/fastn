@@ -1,4 +1,4 @@
--- ds.page: FASTN Typography
+-- my-ds.page: FASTN Typography
 
 -- ds.markdown: 
 
@@ -272,4 +272,4 @@ color: $inherited.colors.text
 
 -- end: ds.output
 
--- end: ds.page
+-- end: my-ds.page

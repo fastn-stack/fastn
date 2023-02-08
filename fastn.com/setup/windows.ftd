@@ -1,7 +1,7 @@
 -- import: fastn.dev/assets
 
 
--- ds.page:
+-- my-ds.page:
 
 -- ds.h1: FASTN binary Installation Using Windows
 
@@ -37,4 +37,4 @@ width: fill-container
 
 
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: How To Use Telegram Identities
+-- my-ds.page: How To Use Telegram Identities
 
 -- ds.markdown:
 
@@ -108,4 +108,4 @@ Header Parameters
 Accept: application/json
 user-agent: {user_agent}
 
--- end: ds.page
+-- end: my-ds.page

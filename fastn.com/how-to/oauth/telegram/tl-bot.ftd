@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: How To Create New Bot On Telegram
+-- my-ds.page: How To Create New Bot On Telegram
 
 -- ds.markdown:
 
@@ -36,4 +36,4 @@ src: $assets.files.static.images.auth.telegram.telegram-bot-3.png
 In result it will give `Telegram Token`. Please save 
 `Telegram Token` and `Telegram Bot` user name to access Http API.
 
--- end: ds.page
+-- end: my-ds.page

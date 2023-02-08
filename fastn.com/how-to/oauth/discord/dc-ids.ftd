@@ -1,4 +1,4 @@
--- ds.page: How To Use Discord Identities
+-- my-ds.page: How To Use Discord Identities
 
 -- ds.markdown:
 
@@ -132,4 +132,4 @@ Method: Get
 Header Parameters
 Authorization: Bot {bot_id}
 
--- end: ds.page
+-- end: my-ds.page
