@@ -1394,7 +1394,7 @@ return (copy_to_clipboard(text,args,data,id));
 
 
 function foo__http_call___main(url,method,name,args,data,id){
-return (http(url,method,name,args,data,id));
+return (http(url,method,(["name",name]),args,data,id));
 }
 
 
