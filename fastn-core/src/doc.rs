@@ -205,9 +205,13 @@ pub async fn interpret_helper<'a>(
                 )?;
                 let line_number = ast.line_number();
                 let value = lib
-                    .process(ast, processor, &mut state.tdoc(doc.as_str(), line_number)?)
+                    .process(
+                        ast.clone(),
+                        processor,
+                        &mut state.tdoc(doc.as_str(), line_number)?,
+                    )
                     .await?;
-                s = state.continue_after_processor(value)?;
+                s = state.continue_after_processor(value, ast)?;
             }
             ftd::interpreter2::Interpreter::StuckOnForeignVariable {
                 state,
