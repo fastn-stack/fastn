@@ -702,12 +702,12 @@ impl InterpreterState {
     pub fn continue_after_processor(
         mut self,
         value: ftd::interpreter2::Value,
+        ast: ftd::ast::AST,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        let (id, ast_to_process) = self.to_process.stack.last().unwrap(); //TODO: remove unwrap & throw error
+        let (id, _ast_to_process) = self.to_process.stack.last().unwrap(); //TODO: remove unwrap & throw error
         let parsed_document = self.parsed_libs.get(id).unwrap();
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
-        let ast = ast_to_process.first().unwrap().clone().1; // TODO: remove unwrap
         let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());

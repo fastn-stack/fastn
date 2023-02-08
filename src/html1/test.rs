@@ -39,7 +39,7 @@ pub fn interpret_helper(
             ftd::interpreter2::Interpreter::StuckOnProcessor {
                 state, ast, module, ..
             } => {
-                let variable_definition = ast.get_variable_definition(module.as_str())?;
+                let variable_definition = ast.clone().get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
                 let value = ftd::interpreter2::Value::String {
                     text: variable_definition
@@ -49,7 +49,7 @@ pub fn interpret_helper(
                         .to_uppercase()
                         .to_string(),
                 };
-                s = state.continue_after_processor(value)?;
+                s = state.continue_after_processor(value, ast)?;
             }
             ftd::interpreter2::Interpreter::StuckOnForeignVariable {
                 state,

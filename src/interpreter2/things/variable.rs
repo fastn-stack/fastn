@@ -127,7 +127,7 @@ impl Variable {
                     )?;
                     return Ok(ftd::interpreter2::StateWithThing::new_continue());
                 }
-                Ok(ftd::interpreter2::StateWithThing::new_state(
+                let result = ftd::interpreter2::StateWithThing::new_state(
                     ftd::interpreter2::InterpreterWithoutState::StuckOnProcessor {
                         ast,
                         module: doc_name,
@@ -138,7 +138,17 @@ impl Variable {
                         },
                         caller_module: doc.name.to_string(),
                     },
-                ))
+                );
+                let initial_length = if let Some(state) = doc.state() {
+                    state.pending_imports.stack.len()
+                } else {
+                    return Ok(result);
+                };
+                ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+                if initial_length < doc.state().unwrap().pending_imports.stack.len() {
+                    return Ok(ftd::interpreter2::StateWithThing::new_continue());
+                }
+                Ok(result)
             } else {
                 doc.err(
                     "not found",
