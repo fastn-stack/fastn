@@ -29,7 +29,7 @@ There are following notable things:
 - Both dark mode and light mode are supported.
 
 
--- ds.h1: Code changes required for different color scheme
+-- ds.h1: Code changes required
 
 How many lines of code change were required to make this possible?
 
@@ -70,7 +70,21 @@ colors: $forest-cs.main
 -- ds.markdown:
 
 Similarly, the rest of the color scheme packages are imported and referred by
-their respective containers that contain the color-display component.
+their respective containers that contain the `color-display` component.
+
+
+
+-- ds.h1: Understanding inheritance
+
+How does the `color-display` component inherits the colors from it's parent?
+
+This is achieved through the use of the special keyword `inherited`. The
+`inherited` keyword gives access to the variables of its ancestors, allowing the
+component to search for the referred variable starting from its immediate
+parent, and then moving up to its grandparent and so on.
+
+As you can see in above code the container `ftd.column` contains a property
+`color` where we have passed the reference to `ftd.color-scheme` type variable.
 
 
 -- end: my-ds.page

@@ -397,6 +397,15 @@ github-url: https://github.com/FifthTry/forest-cs/
 
 `fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
 
+-- template: Saturated Sunset CS
+template-url: https://fifthtry.github.io/saturated-sunset-cs/
+screenshot: $assets.files.static.saturated-sunset-cs.png
+licence-url: https://github.com/FifthTry/saturated-sunset-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/saturated-sunset-cs/
+
+`fifthtry.github.io/saturated-sunset-cs` is a saturated sunset color scheme.
+
+
 -- end: schemes
 
 
