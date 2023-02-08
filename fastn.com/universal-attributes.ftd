@@ -16,7 +16,7 @@ light: green
 dark: orange
 light: orange
 
--- ds.page: Universal Attributes
+-- config.page: Universal Attributes
 
 -- ds.markdown:
 
@@ -638,4 +638,4 @@ should be assign to the child component.
 
 Refer: [ftd.grid](grid/)
 
--- end: ds.page
+-- end: config.page

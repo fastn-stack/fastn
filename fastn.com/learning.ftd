@@ -1,4 +1,4 @@
--- ds.page: Learning FTD
+-- config.page: Learning FTD
 
 -- ds.h1: `c0`: Crash Course
 
@@ -6,4 +6,4 @@
 
 -- ds.h1: `h1`: Handsone FTD Wrokshop
 
--- end: ds.page
+-- end: config.page

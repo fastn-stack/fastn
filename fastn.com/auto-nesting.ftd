@@ -1,4 +1,4 @@
--- ds.page: Auto Nesting
+-- config.page: Auto Nesting
 
 -- ds.markdown: 
 
@@ -65,4 +65,4 @@ subtree rooted at that `id` into another document.
 Note: both of these are not yet possible, and need some more development, we have
 only implemented one piece of infra yet.
 
--- end: ds.page
+-- end: config.page

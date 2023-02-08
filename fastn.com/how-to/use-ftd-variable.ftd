@@ -1,4 +1,4 @@
--- ds.page: How to Use FTD Variable in JavaScript
+-- config.page: How to Use FTD Variable in JavaScript
 
 If we have created a new [FTD variable](/ftd-variables/), then how to use that
 variable in JavaScript.
@@ -18,4 +18,4 @@ lang: js
 window.ftd.get_value("main", "ftd#markdown-color.link.light")
 
 
--- end: ds.page
+-- end: config.page

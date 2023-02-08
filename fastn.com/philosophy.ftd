@@ -1,7 +1,7 @@
 \-- ft-core.concept:
 
 
--- ds.page: Philosophy Behind `ftd`
+-- config.page: Philosophy Behind `ftd`
 
 
 -- ds.markdown: 
@@ -111,4 +111,4 @@ Read how we do ["container management"](container/) to attempt this.
 
 What we are trying is very hard. We will have to make compromises somewhere.
 
--- end: ds.page
+-- end: config.page

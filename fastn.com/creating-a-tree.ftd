@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fastn
 
--- ds.page: How to create a tree using `ftd`?
+-- config.page: How to create a tree using `ftd`?
 
 
 -- ds.markdown: 
@@ -472,7 +472,7 @@ name: Mango Juice
 
 -- end: ftd.column
 
--- end: ds.page
+-- end: config.page
 
 
 

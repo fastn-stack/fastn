@@ -3,7 +3,7 @@
 -- boolean mobile: false
 
 
--- ds.page: Grid Layout
+-- config.page: Grid Layout
 
 
 -- ds.h1: Grid Using Area
@@ -331,4 +331,4 @@ text-align: center
 height: fill
 
 
--- end: ds.page
+-- end: config.page

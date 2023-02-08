@@ -1,4 +1,4 @@
--- ds.page: Workshop: Patna
+-- config.page: Workshop: Patna
 
 We are going to have a FTD Handson Workshop In Patna.
 
@@ -248,4 +248,4 @@ if there is no urgency to learn FTD probably there is none to learn React.
         - events
         - processor etc
         
--- end: ds.page
+-- end: config.page

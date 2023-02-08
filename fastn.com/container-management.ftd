@@ -1,5 +1,5 @@
 
--- ds.page: Container Management
+-- config.page: Container Management
 
 -- ds.markdown: 
 
@@ -249,4 +249,4 @@ This would place the element `-- ftd.text: hello` as a child inside `c1` of `foo
 with id `foo-1`. For more example, visit this [link](inner-container/)
 
 
--- end: ds.page
+-- end: config.page

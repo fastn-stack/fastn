@@ -1,4 +1,4 @@
--- ds.page: How to Create FTD Variable
+-- config.page: How to Create FTD Variable
 
 To create FTD variables, we have to use it's [primitive types](/variables/).
 
@@ -27,4 +27,4 @@ color code:
 \-- ftd.text: Link Code
 color: $ftd.markdown-color.link
 
--- end: ds.page
+-- end: config.page

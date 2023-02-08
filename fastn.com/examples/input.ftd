@@ -1,6 +1,6 @@
 -- import: fastn
 
--- ds.page: Input Example
+-- config.page: Input Example
 
 
 -- ds.markdown: 
@@ -35,4 +35,4 @@ You have typed: {value}
 color: $fastn.color.main.text
 role: $fastn.type.label-big
 
--- end: ds.page
+-- end: config.page

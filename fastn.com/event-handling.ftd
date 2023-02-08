@@ -1,7 +1,7 @@
 -- boolean $open: true
 
 
--- ds.page: Event Handling
+-- config.page: Event Handling
 
 
 -- ds.markdown: 
@@ -100,4 +100,4 @@ This event is used to track mouse clicks.
 
 This action is used to toggle a Boolean variable.
 
--- end: ds.page
+-- end: config.page

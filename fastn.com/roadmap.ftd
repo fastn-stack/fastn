@@ -1,4 +1,4 @@
--- ds.page: Roadmap & RFCs
+-- config.page: Roadmap & RFCs
 
 
 -- ds.markdown: 
@@ -182,4 +182,4 @@ things on which we do not have a clarity on how things should work.
 - ftd-lambda
 
 
--- end: ds.page
+-- end: config.page

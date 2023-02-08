@@ -1,6 +1,6 @@
 -- import: fastn
 
--- ds.page: `import`
+-- config.page: `import`
 
 `ftd` code in one page/component gains access to the code in another page by 
 the process of importing it. It takes input like this:
@@ -28,4 +28,4 @@ lang: ftd
 \-- import: fifthtry.github.io/footer/assets
 
 
--- end: ds.page
+-- end: config.page

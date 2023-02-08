@@ -1,4 +1,4 @@
--- ds.page: Scene
+-- config.page: Scene
 
 -- ds.markdown:
 
@@ -91,4 +91,4 @@ instance, [architectural diagram](examples/diagram/) or
 [comic](examples/comic/)
 
 
--- end: ds.page
+-- end: config.page

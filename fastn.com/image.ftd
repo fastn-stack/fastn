@@ -1,4 +1,4 @@
--- ds.page: `ftd.image`: Image Kernel Element
+-- config.page: `ftd.image`: Image Kernel Element
     
 -- ds.markdown: 
 
@@ -31,4 +31,4 @@ The value of `loading` can be either `lazy` (default) or `eager`. This field
 
 If this is specified the image is cropped to fit the container.
 
--- end: ds.page
+-- end: config.page

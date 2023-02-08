@@ -1,8 +1,8 @@
--- ds.page: Alternatives
+-- config.page: Alternatives
 
 -- ds.markdown: 
 
 - [MDX](/why/not-mdx/)
 
 
--- end: ds.page
+-- end: config.page

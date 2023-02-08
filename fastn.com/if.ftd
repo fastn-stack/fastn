@@ -1,5 +1,5 @@
 
--- ds.page: `if`: Conditional Components
+-- config.page: `if`: Conditional Components
     
 -- ds.markdown: 
 
@@ -77,4 +77,4 @@ Only show the component if `$foo` is `false`, otherwise same as `if: { $foo }`.
 `if: { false }` can be used to disable a component without deleting it. `if: { true } ` is
 no-op, can be safely deleted.
 
--- end: ds.page
+-- end: config.page

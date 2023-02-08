@@ -2,7 +2,7 @@
 
 
 
--- ds.page: Learn X In Y Minutes, where X=FTD
+-- config.page: Learn X In Y Minutes, where X=FTD
 
 FTD is created with the goal to make programming accessible to more people.
 {ds.highlight: FTD compiles to HTML/CSS/JS and is used to create web pages}.
@@ -66,5 +66,4 @@ some sections also have an end marker:
 Sections start with `-- `. The space after `-- ` is optional, but we are strict
 so we may make it mandatory.
 
--- end: ds.page
-
+-- end: config.page

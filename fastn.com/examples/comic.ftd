@@ -7,13 +7,13 @@ dark: cadetblue
 -- ftd.color white: white
 dark: white
 
--- ds.page: Once upon a time...
+-- config.page: Once upon a time...
 
 
 /-- comic:
 
 
--- end: ds.page
+-- end: config.page
 
 /-- ftd.scene comic:
 background-color: $cadetblue

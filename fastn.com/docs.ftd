@@ -1,4 +1,4 @@
--- ds.page: `ftd` Documentation
+-- config.page: `ftd` Documentation
 
 
 -- ds.markdown: 
@@ -26,4 +26,4 @@ Having trouble? We'd like to help!
 - Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
 
--- end: ds.page
+-- end: config.page

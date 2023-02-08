@@ -1,6 +1,6 @@
 -- boolean present: false
 
--- ds.page: Conditional Attributes
+-- config.page: Conditional Attributes
 
 
 -- ds.markdown: 
@@ -221,7 +221,7 @@ Conditional attributes only work with the variables defined in the document, and
 do not get updated when the value of the variable changes as a response to events.
 
 
--- end: ds.page
+-- end: config.page
 
 
 

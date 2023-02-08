@@ -1,4 +1,4 @@
--- ds.page: Variables
+-- config.page: Variables
 
 `ftd` has support for [rich data modelling](data-modelling/), and it supports
 declaring variables.
@@ -268,7 +268,7 @@ src: $assets.files.images.image1
 
 
 
--- end: ds.page
+-- end: config.page
 
 
 -- integer $x: 10

@@ -1,6 +1,6 @@
 -- import: ftd.dev/assets
 
--- ds.page: Part 2: Basic UI
+-- config.page: Part 2: Basic UI
 
 -- ds.youtube:
 v: -VzrI1o6IzU
@@ -61,4 +61,4 @@ lang: ftd
 
 Continue with the [part 3 now](/expander/components/).
 
--- end: ds.page
+-- end: config.page

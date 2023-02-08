@@ -1,6 +1,6 @@
 -- boolean $shown: true
 
--- ds.page: FTD markup syntax
+-- config.page: FTD markup syntax
 
 Text in FTD support Markdown syntax. We also support, what we call "ftd markup"
 syntax.
@@ -119,4 +119,4 @@ border-radius.px: 2
 padding.px: 3
 
 
--- end: ds.page
+-- end: config.page

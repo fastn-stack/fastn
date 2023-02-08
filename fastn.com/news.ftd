@@ -1,4 +1,4 @@
--- ds.page: FTD News
+-- config.page: FTD News
 
 
 -- ds.markdown: 
@@ -6,4 +6,4 @@
 Checkout the [developer journal](/journal/) for internal news.
 
 
--- end: ds.page
+-- end: config.page

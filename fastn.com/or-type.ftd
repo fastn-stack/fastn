@@ -1,6 +1,6 @@
 /-- ft-core.concept:
 
--- ds.page: `or-type`
+-- config.page: `or-type`
     
 -- ds.markdown: 
 
@@ -108,4 +108,4 @@ You can read more details of reading `ftd` files ["Reading FTD
 Files"](reading-data/) guide.
 
 
--- end: ds.page
+-- end: config.page

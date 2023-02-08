@@ -2,7 +2,7 @@
 
 
 
--- ds.page: Part 1: Hello World
+-- config.page: Part 1: Hello World
 
 -- ds.markdown:
 
@@ -91,4 +91,4 @@ lang: ftd
 
 Continue with the [part 2 now](/expander/basic-ui/).
 
--- end: ds.page
+-- end: config.my-page

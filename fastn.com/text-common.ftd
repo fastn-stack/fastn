@@ -1,7 +1,7 @@
 -- import: fastn
 
 
--- ds.page: Common Text Kernel Attributes
+-- config.page: Common Text Kernel Attributes
 
 -- ds.markdown:
 
@@ -186,7 +186,7 @@ tempor incididunt ut labore et dolore magna aliqua.
 
 -- end: ds.output
 
--- end: ds.page
+-- end: config.page
 
 
 

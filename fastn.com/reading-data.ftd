@@ -1,4 +1,4 @@
--- ds.page: Reading FTD Files
+-- config.page: Reading FTD Files
     
 -- ds.markdown: 
 
@@ -34,4 +34,4 @@ it is `"some/id"`, and similarly when getting a variable out parsed state, we ha
 to use `<doc-id>#<variable-name>` format to generate "full id" of any variable.
 
 
--- end: ds.page
+-- end: config.page

@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fastn
 
--- ds.page: ID in `ftd`
+-- config.page: ID in `ftd`
 
 
 -- ds.h1: What is `id`?
@@ -218,4 +218,4 @@ id available for element which you want to refer to.
 src: $assets.files.images.ftd-give-me-an-element-with-id.png
 width: fill-container
 
--- end: ds.page
+-- end: config.page

@@ -1,4 +1,4 @@
--- ds.page: `ftd::p1`: A JSON/YML Replacement
+-- config.page: `ftd::p1`: A JSON/YML Replacement
 
 
 -- ds.markdown:
@@ -389,4 +389,4 @@ pub fn to_string(p1: &[crate::p1::Section]) -> String {}
 The returned string is "pretty printed".
 
 
--- end: ds.page
+-- end: config.page

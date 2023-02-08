@@ -1,4 +1,4 @@
--- ds.page: `$loop$`: Looping Over Lists
+-- config.page: `$loop$`: Looping Over Lists
     
 -- ds.markdown: 
 
@@ -75,4 +75,4 @@ body: $obj.bio
 \-- end: ftd.column
 
 
--- end: ds.page
+-- end: config.page

@@ -1,4 +1,4 @@
--- ds.page: FTD Courses
+-- config.page: FTD Courses
 
 
 -- ds.h1: Part 1
@@ -51,5 +51,4 @@ C3. Creating a dropdown using ftd (10 mins)
 C4. Creating todo app (10 mins)
 
 
--- end: ds.page
-
+-- end: config.page

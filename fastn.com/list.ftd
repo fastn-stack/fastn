@@ -1,6 +1,6 @@
 /-- ft-core.concept:
 
--- ds.page: `list`
+-- config.page: `list`
 
 -- ds.markdown: 
 
@@ -118,4 +118,4 @@ You can read more details of reading `ftd` files ["Reading FTD Files"](/reading-
 guide.
 
 
--- end: ds.page
+-- end: config.page

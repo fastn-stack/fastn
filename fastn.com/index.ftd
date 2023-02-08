@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/doc-site as ds
 
 
--- ds.page: FTD: Programming Language For Prose
+-- config.page: FTD: Programming Language For Prose
 
 [Learn FTD in Y Minutes](/y/).
 
@@ -232,7 +232,7 @@ v: n341w3GwdrQ
 v: qyP8bBBAu98
 
 
--- end: ds.page
+-- end: config.page
 
 
 

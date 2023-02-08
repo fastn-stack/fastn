@@ -1,4 +1,4 @@
--- ds.page: Integer
+-- config.page: Integer
 
 
 -- ds.markdown: 
@@ -62,4 +62,4 @@ You can find documentation of formatting strings
 - `font`
 - `line_height`
 
--- end: ds.page
+-- end: config.page

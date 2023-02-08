@@ -1,4 +1,4 @@
--- ds.page: `ftd::p1` grammar
+-- config.page: `ftd::p1` grammar
 
 `ftd` is based on a low-level grammar called `ftd::p1` grammar.
 
@@ -238,4 +238,4 @@ and the second one has a body, `subsection2 body`.
 this crate in Python and other programming languages would hopefully come soon.
 
 
--- end: ds.page
+-- end: config.page

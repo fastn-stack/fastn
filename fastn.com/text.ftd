@@ -1,7 +1,7 @@
 -- boolean $show-theme-demos: false
 
 
--- ds.page: `ftd.text`: Text Block Kernel Element
+-- config.page: `ftd.text`: Text Block Kernel Element
 
 
 -- ds.markdown: 
@@ -394,4 +394,4 @@ if: { $show-theme-demos }
 color: $inherited.colors.text-strong
 $on-click$: $ftd.set-bool($a = $show-theme-demos, v = true) 
 
--- end: ds.page
+-- end: config.page

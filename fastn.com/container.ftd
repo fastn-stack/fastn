@@ -1,4 +1,4 @@
--- ds.page: Container Attributes
+-- config.page: Container Attributes
 
 
 -- ds.markdown:
@@ -80,7 +80,7 @@ The `children` property places the children inside the container having the same
 To understand it better, refer to [container management](container-management/)
 
 
--- end: ds.page
+-- end: config.page
 
 
 

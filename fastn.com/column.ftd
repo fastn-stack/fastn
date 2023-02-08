@@ -1,4 +1,4 @@
--- ds.page: Column
+-- config.page: Column
 
 -- ds.markdown: 
 
@@ -25,4 +25,4 @@ lang: ftd
 Column accepts the [container attributes ](container/) as well all the [common attributes ](common/).
 
 
--- end: ds.page
+-- end: config.page

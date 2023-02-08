@@ -1,4 +1,4 @@
--- ds.page: Changelog
+-- config.page: Changelog
 
 -- ds.markdown: 
 
@@ -20,4 +20,4 @@ Since things are too much in flux right now we are not updating the Changelog.
 
 - `ftd::p1` is almost usable now.
 
--- end: ds.page
+-- end: config.page

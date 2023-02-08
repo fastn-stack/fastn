@@ -1,4 +1,4 @@
--- ds.page: FTD Variables
+-- config.page: FTD Variables
 
 
 -- ds.h1: `color`
@@ -87,4 +87,4 @@ color: $ftd.markdown-background-color.link-visited-code
 color: $ftd.markdown-background-color.ul-ol-li-before
 
 
--- end: ds.page
+-- end: config.page

@@ -1,4 +1,4 @@
--- ds.page: Decimal
+-- config.page: Decimal
 
 -- ds.markdown: 
 
@@ -25,4 +25,4 @@ Decimal accepts the below attributes as well all the [common attributes ](common
 - `font`
 - `line_height`
 
--- end: ds.page
+-- end: config.page
