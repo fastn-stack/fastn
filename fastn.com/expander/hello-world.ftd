@@ -5,10 +5,7 @@
 
 
 -- ds.youtube:
-v: v1u-TmNE0bA
-
-
-
+v: p7Q9gLRSfHU
 
 
 
@@ -64,15 +61,6 @@ To verify, open the Terminal(cmd) and execute the command, fastn
 -- ds.markdown: 
 
 If you see the Help text of the fastn command, it confirms that FASTN is successfully installed.
-
-
-
-
-
-
-
-
-
 
 
 
@@ -174,19 +162,33 @@ It is a special file which keeps package configuration related data like
 - sitemap, etc
 
 
--- ds.code: Code
+-- ds.code: Import fastn
 lang: ftd
 
 \-- import: fastn
 
 -- ds.markdown:
 
-Then, we create a new fastn package
+Then, we create a new fastn package after giving line-space
 
--- ds.code: Code
+-- ds.code: Create a fastn package
 lang: ftd
 
-\-- fastn.pacakge: <project-name>
+\-- fastn.package: <project-name>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- ds.h3: index.ftd
 
