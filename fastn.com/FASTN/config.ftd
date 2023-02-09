@@ -1,6 +1,6 @@
 -- import: ds
 -- import: fastn.dev/assets
--- import: fifthtry.github.io/fastn-cs as coal-cs
+-- import: fifthtry.github.io/fastn-cs as dark-flame-cs
 
 -- component page:
 children wrapper:
@@ -9,10 +9,10 @@ optional body body:
 
 -- ftd.column:
 width: fill-container
-colors: $coal-cs.main
+colors: $dark-flame-cs.main
 
 -- ds.page:
-$site-logo: *$assets.files.images.fastn.svg
+site-logo: $assets.files.images.fastn.svg
 title: $page.title
 body: $page.body
 wrapper: $page.wrapper

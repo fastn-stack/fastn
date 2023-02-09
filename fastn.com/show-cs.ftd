@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/ds-set1-cs as winter-cs
--- import: fifthtry.github.io/fastn-cs as coal-cs
+-- import: fifthtry.github.io/fastn-cs as dark-flame-cs
 -- import: fifthtry.github.io/forest-cs as forest-cs
 -- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
 -- import: fifthtry.github.io/button
@@ -361,9 +361,9 @@ color: $inherited.colors.text-strong
 
 -- ftd.column:
 width.fixed.percent: 49
-colors: $coal-cs.main
+colors: $dark-flame-cs.main
 
--- ftd.text: Coal
+-- ftd.text: Dark flame
 role: $inherited.types.heading-small
 color: $inherited.colors.text-strong
 
