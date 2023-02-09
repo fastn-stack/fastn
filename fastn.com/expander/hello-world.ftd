@@ -66,6 +66,8 @@ If you see the Help text of the fastn command, it confirms that FASTN is success
 
 
 
+
+
 -- ds.h1: Install `fastn` on MacOS
 
 We have an installer script for Mac.
@@ -73,20 +75,20 @@ We have an installer script for Mac.
 -- ds.youtube:
 v: cWdivkyoOTA
 
--- ds.h2: **First Step:** Copy the following command:
+-- ds.h3: First Step: Copy the following command:
 
 -- ds.code: Installer Script
 lang: ftd
 
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
--- ds.h2: **Second Step:** Open the Terminal
+-- ds.h3: Second Step: Open the Terminal
 
 You can find Terminal on the Dock or you can search for Terminal using Spotlight
 Search. Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your
 keyboard.
 
-- **Third Step:** Run the Installer Script
+-- ds.h3: Third Step: Run the Installer Script
 
 Paste the command and hit enter. When prompted, enter your System Password that
 you use to open your machine and enter.
@@ -131,25 +133,25 @@ lang: ftd
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- ds.h1: Let's create our Hello World program
 
 Let's create a `fastn` package and start coding Hello World.
 
-
-
-
-
-
-
-
-
-
-
-
-
--- ds.h2: Let's create Hello World!
-
-Let's create a FASTN package and start coding Hello World.
 
 -- cbox.info: What is `fastn` package?
 
@@ -167,9 +169,9 @@ Create a new folder and rename it as expander, anywhere in your machine. Let's
 say in your `Desktop` folder.
 
 
-Open the newly created folder in any text editor. For example, [Sublime
-Text](https://www.sublimetext.com). We recommend Sublime Text or [VS
-Code](https://code.visualstudio.com) for working with FTD.
+Open the newly created folder in any text editor.
+We recommend [Sublime Text](https://www.sublimetext.com) or 
+[VS Code](https://code.visualstudio.com) for working with FTD.
 
 Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create the
 FASTN package.

@@ -31,12 +31,9 @@ It handles three events:
 - on-mouse-enter - Header area is highlighted when mouse hovers over Header area
 - on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
 
-<<<<<<< HEAD
+
 
 And, it also responds to your system's dark mode preference.
-=======
-And, it also responds to your system mode preference.
->>>>>>> 3b56001ffcf35f7a95d7def36556891623d40112
 
 
 
@@ -47,26 +44,16 @@ Start with the [part 1 now](/expander/hello-world/).
 
 -- ds.h3: Resources
 
-<<<<<<< HEAD
-[Get latest release](https://github.com/ftd-lang/fastn/releases)
+- [`fastn` installation instructions](https://fastn.io/install/)
+- Create a new fastn project using this [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
 
-
-[Fastn Template](https://github.com/ftd-lang/fastn-template)
 
 
 -- ds.h3: Get Help
 
-[Raise an issue](https://github.com/ftd-lang/fastn/issues)
-
-[Start a discussion](https://github.com/ftd-lang/fastn/discussions)
-
-Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
-=======
-- [`fastn` installation instructions](https://fastn.io/install/)
-- Create a new fastn project using this [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
 - If you find any issues, please [raise an issue](https://github.com/ftd-lang/fastn/issues)
 - If you any questions, suggestions etc, find us on our official [Github discussion page](https://github.com/ftd-lang/fastn/discussions)
 - Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
->>>>>>> 3b56001ffcf35f7a95d7def36556891623d40112
+
 
 -- end: my-ds.page
