@@ -41,7 +41,7 @@ It takes three events:
 - on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
 
 
-And, it also responds to your system mode preference.
+And, it also responds to your system's dark mode preference.
 
 
 
@@ -54,7 +54,6 @@ Start with the [part 1 now](/expander/hello-world/).
 
 [Get latest release](https://github.com/ftd-lang/fastn/releases)
 
-[Live Expander Project](https://ftd-lang.github.io/ftd/25-expander.html)
 
 [Fastn Template](https://github.com/ftd-lang/fastn-template)
 

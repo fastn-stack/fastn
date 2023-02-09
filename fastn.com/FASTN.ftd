@@ -6,7 +6,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 -- fastn.dependency: fifthtry.github.io/doc-site as ds
 -- fastn.dependency: fifthtry.github.io/product-switcher as ps
 ;; -- fastn.dependency: fifthtry.github.io/bling as bling
--- fastn.dependency: fifthtry.github.io/admonitions as cbox
+-- fastn.dependency: fifthtry.github.io/admonitions 
 ;; -- fastn.dependency: fifthtry.github.io/workshop-page as ws
 -- fastn.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
@@ -21,7 +21,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 -- fastn.auto-import: fastn
 -- fastn.auto-import: ftd.dev/FASTN/config as my-ds
 -- fastn.auto-import: dms
--- fastn.auto-import: cbox
+-- fastn.auto-import: fifthtry.github.io/admonitions as cbox
 
 
 
