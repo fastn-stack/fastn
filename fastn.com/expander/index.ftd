@@ -10,38 +10,33 @@ v: jKx-F5wCAVE
 
 
 
-
-
-
-
 -- ds.markdown:
 
 Welcome to the FTD Crash Course, my name is Ajit Garg.
 
-In this crash course I will help you to create an Expander project from 
-scratch, using FTD language.
+In this crash course I will help you create an FTD project called `expander`
+from scratch. You will FTD language, and how to create / publish packages.
 
-
-
-We will see how to make the following:
+We will see how to make the following UI component:
 
 
 -- expander.box: Test Box, Click Me!
 
+Expander Package is running component box. This is a component element and we
+named it as box.
 
-Expander Package is running component box.
-This is a component element and we named it as box.
-
-It takes three events: 
+It handles three events:
 
 - on-click - Body expands and collapses when click on Header area
-
 - on-mouse-enter - Header area is highlighted when mouse hovers over Header area
-
 - on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
 
+<<<<<<< HEAD
 
 And, it also responds to your system's dark mode preference.
+=======
+And, it also responds to your system mode preference.
+>>>>>>> 3b56001ffcf35f7a95d7def36556891623d40112
 
 
 
@@ -50,8 +45,9 @@ And, it also responds to your system's dark mode preference.
 Start with the [part 1 now](/expander/hello-world/).
 
 
--- ds.h3: Resource Section
+-- ds.h3: Resources
 
+<<<<<<< HEAD
 [Get latest release](https://github.com/ftd-lang/fastn/releases)
 
 
@@ -65,5 +61,12 @@ Start with the [part 1 now](/expander/hello-world/).
 [Start a discussion](https://github.com/ftd-lang/fastn/discussions)
 
 Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
+=======
+- [`fastn` installation instructions](https://fastn.io/install/)
+- Create a new fastn project using this [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
+- If you find any issues, please [raise an issue](https://github.com/ftd-lang/fastn/issues)
+- If you any questions, suggestions etc, find us on our official [Github discussion page](https://github.com/ftd-lang/fastn/discussions)
+- Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
+>>>>>>> 3b56001ffcf35f7a95d7def36556891623d40112
 
 -- end: my-ds.page
