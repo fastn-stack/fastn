@@ -154,6 +154,9 @@ used to specify the colors to be applied to various elements on the web page.
 It is recommended by FTD to utilize this color record and establish the color
 scheme of your website.
 
+
+
+
 -- ds.h1: Understanding inheritance
 
 How does the `color-display` component inherits the colors from it's parent?
@@ -163,8 +166,99 @@ This is achieved through the use of the special keyword `inherited`. The
 component to search for the referred variable starting from its immediate
 parent, and then moving up to its grandparent and so on.
 
-As you can see in above code the container `ftd.column` contains a property
-`color` where we have passed the reference to `ftd.color-scheme` type variable.
+As depicted in the code above, the container `ftd.column` contains a property
+named `color` where we have passed the reference to `ftd.color-scheme` type
+variable. It is then inherited by `color-display` component.
+
+To illustrate the use of `inherited` references, let us construct a basic
+component "my-color":
+
+-- ds.code: `my-color` component
+lang: ftd
+
+\-- component my-color:
+
+\-- ftd.text: Text
+padding.px: 20
+border-width.px: 10
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.step-2
+border-color: $inherited.colors.border-strong
+
+\-- end: my-color
+
+
+-- ds.markdown:
+
+We will then incorporate this component within a container and provide the
+`sunset-cs` color scheme to it:
+
+-- ds.code: Using `my-color` component
+lang: ftd
+
+\-- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
+
+\-- ftd.column:
+colors: $sunset-cs.main
+
+\-- my-color:
+
+\-- end: ftd.column
+
+
+-- ds.markdown:
+
+The output appears as follows:
+
+-- ds.output:
+
+-- ftd.column:
+colors: $sunset-cs.main
+
+-- my-color:
+
+-- end: ftd.column
+
+-- end: ds.output
+
+
+-- ds.markdown:
+
+We can also apply another color scheme, such as `forest-cs`:
+
+
+-- ds.code: Using `my-color` component
+lang: ftd
+
+\-- import: fifthtry.github.io/forest-cs
+
+\-- ftd.column:
+colors: $forest-cs.main
+
+\-- my-color:
+
+\-- end: ftd.column
+
+
+
+-- ds.output:
+
+-- ftd.column:
+colors: $forest-cs.main
+
+-- my-color:
+
+-- end: ftd.column
+
+-- end: ds.output
+
+-- ds.markdown:
+
+As we can observe, inheritance plays a critical role in giving a unique look and
+feel to elements. A minor adjustment in the code can lead to a completely
+altered aspect for the element.
+
+
 
 
 -- end: my-ds.page
@@ -588,18 +682,13 @@ $on-click$: $ftd.enable-system-mode()
 
 
 
-/-- component button:
-ftd.color color:
-caption cta:
+-- component my-color:
 
--- ftd.text: $button.cta
-padding-horizontal.px: 16
-padding-vertical.px: 12
-background.solid: $button.color
-border-radius.px: 2
+-- ftd.text: Text
+padding.px: 20
+border-width.px: 10
 color: $inherited.colors.text-strong
-width.fixed.px: 132
-text-align: center
+background.solid: $inherited.colors.background.step-2
+border-color: $inherited.colors.border-strong
 
-
--- end: button
+-- end: my-color
