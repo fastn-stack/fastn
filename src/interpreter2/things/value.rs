@@ -69,7 +69,7 @@ impl PropertyValue {
         }
     }
 
-    pub(crate) fn line_number(&self) -> usize {
+    pub fn line_number(&self) -> usize {
         match self {
             PropertyValue::Value { line_number, .. }
             | PropertyValue::Reference { line_number, .. }
@@ -80,7 +80,7 @@ impl PropertyValue {
         }
     }
 
-    pub(crate) fn resolve(
+    pub fn resolve(
         self,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
