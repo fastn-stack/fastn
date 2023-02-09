@@ -3,6 +3,7 @@
 -- import: fifthtry.github.io/forest-cs as forest-cs
 -- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
 -- import: fifthtry.github.io/button
+-- import: fastn.dev/assets
 
 -- my-ds.page: Showcase Color Scheme
 
@@ -192,6 +193,8 @@ border-color: $inherited.colors.shadow
 
 -- header:
 
+-- love-color-text:
+
 
 -- ftd.column:
 width: fill-container
@@ -202,7 +205,11 @@ spacing.fixed.px: 30
 
 -- content:
 
--- love-color-text:
+-- ftd.image:
+src: $assets.files.images.show-cs-1.jpg
+width: fill-container
+border-color: $inherited.colors.shadow
+border-width.px: 10
 
 -- secondary-dots:
 
@@ -222,9 +229,11 @@ spacing.fixed.px: 30
 -- component love-color-text:
 
 -- ftd.text: I love colors!
-padding.px: 12
+padding.px: 6
 background.solid: $inherited.colors.shadow
 align-self: center
+text-align: center
+width: fill-container
 color: $inherited.colors.text-strong
 
 -- end: love-color-text
@@ -242,7 +251,10 @@ padding-horizontal.px: 10
 border-bottom-width.px: 4
 border-color: $inherited.colors.border-strong
 
--- ds.h3: Color scheme
+-- ftd.text: Color scheme
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+padding-vertical.px: 20
 
 -- end: ftd.row
 
@@ -259,7 +271,9 @@ border-color: $inherited.colors.border-strong
 
 -- component content:
 
--- ds.markdown:
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
 Color can have a significant impact on the human brain and can evoke various
 emotions and responses.
