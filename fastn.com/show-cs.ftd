@@ -274,6 +274,11 @@ altered aspect for the element.
   can ensure a consistent appearance throughout their website, making it easier
   for users to navigate and interact with the site.
 
+- **Centralized Management**: By centralizing the definition of color schemes,
+  this makes it easy for designers to modify and update the color palette in
+  a single location. This helps save time and reduces the risk of inconsistent
+  color usage throughout the application.
+
 - **Improved accessibility**: With the ability to create color palettes that
   meet accessibility standards, the ftd color scheme framework helps designers
   create websites that are accessible to all users.
