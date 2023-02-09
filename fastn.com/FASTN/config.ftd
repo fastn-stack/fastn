@@ -12,10 +12,9 @@ width: fill-container
 colors: $coal-cs.main
 
 -- ds.page:
-$site-logo: *$assets.files.static.logo-fifthtry.svg
+$site-logo: *$assets.files.images.fastn.svg
 title: $page.title
 body: $page.body
-site-name: Fastn
 wrapper: $page.wrapper
 
 -- end: ftd.column

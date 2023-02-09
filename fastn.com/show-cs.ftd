@@ -12,10 +12,11 @@ greatly impact the look and feel of a website. It is a powerful tool in web
 design, and it can greatly influence the way users perceive and interact with a
 website.
 
-In this showcase, we will present different sections using different color
-schemes to highlight how minimal changes are required to switch from one color
-scheme to another. Hence achieve the impact the colors have on the website's
-design and the emotion they evoke.
+The ftd color-scheme framework provides a simple and powerful way to define
+color schemes and apply them to a website. In this showcase, we will present
+different sections using different color schemes to highlight how minimal
+changes are required to switch from one color scheme to another. Hence achieve
+the impact the colors have on the website's design and the emotion they evoke.
 
 Take a look at the following color scheme cards:
 
@@ -257,6 +258,37 @@ colors: $forest-cs.main
 As we can observe, inheritance plays a critical role in giving a unique look and
 feel to elements. A minor adjustment in the code can lead to a completely
 altered aspect for the element.
+
+
+-- ds.h1: Benefits of using ftd Color Scheme:
+
+- **Easy to use**: The ftd color scheme framework is designed to be simple and
+  straightforward, making it easy for designers to define and apply color
+  schemes to a website.
+
+- **Dynamic and flexible**: With the ability to easily change colors and the use
+  of inheritance, the ftd color scheme framework allows designers to create
+  dynamic and flexible color schemes that can be easily modified as needed.
+
+- **Consistent appearance**: By using the ftd color scheme framework, designers
+  can ensure a consistent appearance throughout their website, making it easier
+  for users to navigate and interact with the site.
+
+- **Improved accessibility**: With the ability to create color palettes that
+  meet accessibility standards, the ftd color scheme framework helps designers
+  create websites that are accessible to all users.
+
+- **Increased brand recognition**: By using a consistent color scheme throughout
+  the website, the ftd framework can help to reinforce a company's brand and
+  increase brand recognition. The use of specific colors can also evoke emotions
+  and feelings associated with the brand, helping to create a stronger
+  connection with users.
+
+- **Faster development**: The ftd color scheme framework allows designers to
+  quickly create color schemes and apply them to a website, reducing the time
+  and effort required to create a professional-looking design. This can also
+  lead to faster development times, helping to get the website up and running
+  more quickly.
 
 
 -- ds.h1: Final Thoughts
