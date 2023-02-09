@@ -1,10 +1,15 @@
 -- import: ds
 -- import: fastn.dev/assets
+-- import: fifthtry.github.io/fastn-cs as coal-cs
 
 -- component page:
 children wrapper:
 optional caption title:
 optional body body:
+
+-- ftd.column:
+width: fill-container
+colors: $coal-cs.main
 
 -- ds.page:
 $site-logo: *$assets.files.static.logo-fifthtry.svg
@@ -12,5 +17,7 @@ title: $page.title
 body: $page.body
 site-name: Fastn
 wrapper: $page.wrapper
+
+-- end: ftd.column
 
 -- end: page

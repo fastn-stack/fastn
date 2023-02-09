@@ -296,8 +296,8 @@ schemes, making it a valuable tool for designers to have in their arsenal.
 
 -- ftd.column:
 width: fill-container
-background.solid: $inherited.colors.background.step-2
-padding.px: 10
+background.solid: $inherited.colors.background.step-1
+padding.px: 40
 spacing.fixed.px: 20
 
 -- dark-mode-switcher:
@@ -312,7 +312,9 @@ wrap: true
 width.fixed.percent: 49
 colors: $winter-cs.main
 
--- ds.h3: Winter
+-- ftd.text: Winter
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
 
 -- color-display:
 
@@ -324,7 +326,9 @@ colors: $winter-cs.main
 width.fixed.percent: 49
 colors: $coal-cs.main
 
--- ds.h3: Coal
+-- ftd.text: Coal
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
 
 -- color-display:
 
@@ -335,8 +339,11 @@ colors: $coal-cs.main
 -- ftd.column:
 width.fixed.percent: 49
 colors: $forest-cs.main
+margin-top.px: 20
 
--- ds.h3: Forest
+-- ftd.text: Forest
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
 
 -- color-display:
 
@@ -348,8 +355,12 @@ colors: $forest-cs.main
 -- ftd.column:
 width.fixed.percent: 49
 colors: $sunset-cs.main
+margin-top.px: 20
 
--- ds.h3: Sunset
+-- ftd.text: Sunset
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+
 
 -- color-display:
 
