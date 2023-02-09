@@ -3,23 +3,18 @@
 
 -- my-ds.page: Part 1: Hello World
 
+In this part we will install `fastn` on your machine and create a hello world
+FTD program.
 
 -- ds.youtube:
 v: HUyyifN1_BE
 
+-- ds.markdown:
 
+The name of package manager for FTD language is [`fastn`](https://fastn.io).
+We will begin by installing `fastn` on your machine.
 
-
-
-
-
-
-
-
-
-
-
--- ds.h3: Install FASTN for Windows
+-- ds.h1: Install `fastn` on a Windows computer
 
 -- ds.youtube:
 v: lw-qVPCJgZs
@@ -69,65 +64,56 @@ If you see the Help text of the fastn command, it confirms that FASTN is success
 
 
 
--- ds.h3: Install FASTN for MacOS
+-- ds.h1: Install `fastn` on MacOS
+
+We have an installer script for Mac.
 
 -- ds.youtube:
 v: cWdivkyoOTA
 
--- ds.markdown:
-
-- **First Step:** Copy the following command:
+-- ds.h2: **First Step:** Copy the following command:
 
 -- ds.code: Installer Script
 lang: ftd
 
 sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
--- ds.markdown:
+-- ds.h2: **Second Step:** Open the Terminal
 
-- **Second Step:** Open the Terminal 
-
-You can find Terminal on the Dock or you can search for Terminal using Spotlight Search.
-Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your keyboard.
-
--- ds.markdown:
+You can find Terminal on the Dock or you can search for Terminal using Spotlight
+Search. Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your
+keyboard.
 
 - **Third Step:** Run the Installer Script
 
-Paste the command and hit enter. When prompted, enter your System Password that you use to open your machine and enter.
+Paste the command and hit enter. When prompted, enter your System Password that
+you use to open your machine and enter.
 
--- ds.markdown:
+Let the `fastn` installation complete.
 
-Let the FASTN installation complete.
+You can verify that installation is complete by running the command, `fastn`,
+in the `Terminal`.
 
-You can verify it by running the command, fastn, in the Terminal.
-
--- ds.markdown: 
-
-If you see the Help text of the fastn command, it confirms that FASTN is successfully installed.
-
+If you see the Help text of the fastn command, it confirms that FASTN is
+successfully installed.
 
 
 
+-- ds.h1: Install `fastn` on Linux
+
+Our installer script works for Linux as well. Run it on terminal:
+
+-- ds.code: Installer Script
+lang: ftd
+
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
 
+-- ds.h1: Let's create our Hello World program
 
+Let's create a `fastn` package and start coding Hello World.
 
-
-
-
-
-
-
-
-
-
-
--- ds.h2: Start Coding Hello World
-
-Let's create a FASTN package and start coding Hello World.
-
--- ds.code: What is FASTN package?
+-- ds.code: What is `fastn` package?
 lang: ftd
 
 FASTN package is a folder that requires atleast two files:
@@ -139,21 +125,19 @@ There can be any number of .ftd file but these two files are essential.
 
 -- ds.markdown:
 
-Create a New Folder and rename it as expander, anywhere in your machine. Let's say, Desktop.
+Create a new folder and rename it as expander, anywhere in your machine. Let's
+say in your `Desktop` folder.
 
-Open the folder in any text editor. For example, Sublime Text.
+Open the newly created folder in any text editor. For example, [Sublime
+Text](https://www.sublimetext.com). We recommend Sublime Text or [VS
+Code](https://code.visualstudio.com) for working with FTD.
 
-If you don't have any editor, you can download the text editor of your liking from internet.
-
-
--- ds.markdown:
-
-Open the folder and add two new files to create the FASTN package which we discussed above.
-
-Save the files with the same name to create the FASTN package. 
+Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create the
+FASTN package.
 
 
--- ds.h3: FASTN.ftd
+
+-- ds.h2: `FASTN.ftd`
 
 It is a special file which keeps package configuration related data like
 
@@ -161,11 +145,9 @@ It is a special file which keeps package configuration related data like
 - package dependencies 
 - sitemap, etc
 
--- ds.markdown:
-
 Import the special library, fastn
 
--- ds.code: Import fastn
+-- ds.code: Import `fastn`
 lang: ftd
 
 \-- import: fastn
@@ -184,16 +166,7 @@ lang: ftd
 
 
 
-
-
-
-
-
-
-
-
-
--- ds.h3: index.ftd
+-- ds.h2: `index.ftd`
 
 To print Hello World, we are using ftd.text section
 
@@ -205,8 +178,8 @@ lang: ftd
 
 -- ds.markdown:
 
-Create a local server and run the URL in the web-browser to see the text displayed.
-
+Create a local server and run the URL in the web-browser to see the text
+displayed.
 
 Make sure that the directory points to the expander folder you created.
 
@@ -220,13 +193,7 @@ fastn serve
 
 Using just one line code, we displayed the Hello World.
 
--- ds.markdown:
-
 You have successfully completed the Part 1. 
-
-
-
--- ds.markdown:
 
 Continue with the [part 2 now](/expander/basic-ui/).
 
