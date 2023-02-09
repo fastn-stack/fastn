@@ -38,7 +38,7 @@ The answer is only one.
 
 
 To understand this, let's examine the code of interest for the above cards. To
-initialize the card, we only need to invoke the `color-display` component:
+initialize the card, all we need to do is invoke the `color-display` component:
 
 -- ds.code: Invoking `color-display` component
 lang: ftd
@@ -75,6 +75,85 @@ their respective containers that contain the `color-display` component.
 
 
 
+-- ds.h1: Color Variable
+
+As shown in the code snippet above, we are passing a reference of the `forest-cs
+.main` variable from the `forest-cs` module to the `colors` property of `ftd
+.column`.
+
+The type of `forest-cs.main` variable is `ftd.color-scheme`.
+
+Let's take a closer look at the structure of `ftd.color-scheme`.
+
+-- ds.code: `ftd` module
+lang: ftd
+
+\-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+\-- record background-colors:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
+
+\-- record cta-colors:
+ftd.color base:
+ftd.color hover:
+ftd.color pressed:
+ftd.color disabled:
+ftd.color focused:
+ftd.color border:
+ftd.color text:
+
+\-- record pst:
+ftd.color primary:
+ftd.color secondary:
+ftd.color tertiary:
+
+\-- record btb:
+ftd.color base:
+ftd.color text:
+ftd.color border:
+
+\-- record custom-colors:
+ftd.color one:
+ftd.color two:
+ftd.color three:
+ftd.color four:
+ftd.color five:
+ftd.color six:
+ftd.color seven:
+ftd.color eight:
+ftd.color nine:
+ftd.color ten:
+
+
+-- ds.markdown:
+
+As seen above, `ftd.color-scheme` is a record of various color fields that are
+used to specify the colors to be applied to various elements on the web page.
+
+It is recommended by FTD to utilize this color record and establish the color
+scheme of your website.
+
 -- ds.h1: Understanding inheritance
 
 How does the `color-display` component inherits the colors from it's parent?
@@ -89,6 +168,21 @@ As you can see in above code the container `ftd.column` contains a property
 
 
 -- end: my-ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -210,6 +304,7 @@ src: $assets.files.images.show-cs-1.jpg
 width: fill-container
 border-color: $inherited.colors.shadow
 border-width.px: 10
+height.fixed.px: 162
 
 -- secondary-dots:
 
