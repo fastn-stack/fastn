@@ -267,6 +267,11 @@ email: arpita@fifthtry.com
   - `camino`: /crate/deps/camino/
   - `infer`: /crate/deps/infer/
 
+
+# Blog: /show-cs/
+
+- Color Scheme: /show-cs/
+
 /-- fastn.toc-item list author-section:
 
 - How to create new fastn project using template `fastn-template`
