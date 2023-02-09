@@ -5,7 +5,7 @@
 
 
 -- ds.youtube:
-v: p7Q9gLRSfHU
+v: HUyyifN1_BE
 
 
 
@@ -161,6 +161,9 @@ It is a special file which keeps package configuration related data like
 - package dependencies 
 - sitemap, etc
 
+-- ds.markdown:
+
+Import the special library, fastn
 
 -- ds.code: Import fastn
 lang: ftd
@@ -200,7 +203,26 @@ lang: ftd
 \-- ftd.text: Hello World
 
 
+-- ds.markdown:
 
+Create a local server and run the URL in the web-browser to see the text displayed.
+
+
+Make sure that the directory points to the expander folder you created.
+
+-- ds.code: Terminal command to create local server
+lang: ftd
+
+fastn serve
+
+
+-- ds.markdown:
+
+Using just one line code, we displayed the Hello World.
+
+-- ds.markdown:
+
+You have successfully completed the Part 1. 
 
 
 
