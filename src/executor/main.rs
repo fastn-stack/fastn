@@ -230,6 +230,8 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     #[tracing::instrument(skip_all)]
+    // TODO: Remove this after: Throw error when dummy is ready
+    #[allow(unused_must_use)]
     fn execute_from_instructions_loop(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,
@@ -246,13 +248,14 @@ impl<'a> ExecuteDoc<'a> {
             let (dummy_reference, container, mut instruction) = instructions.remove(0);
             loop {
                 if let Some(dummy_reference) = dummy_reference {
+                    // TODO: Throw error when dummy is ready
                     ftd::executor::DummyElement::from_instruction(
                         instruction,
                         doc,
                         dummy_reference,
                         container.as_slice(),
                         &mut inherited_variables,
-                    )?;
+                    );
                     break;
                 }
 

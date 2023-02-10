@@ -1,0 +1,54 @@
+
+
+-- record todo-item:
+boolean is-selected:
+string address:
+
+
+-- todo-item list $todo-list:
+
+-- todo-item:
+is-selected: true
+address: Some address
+
+-- todo-item:
+is-selected: true
+address: Some address 1
+
+-- end: $todo-list
+
+
+-- todo-view: $t
+$loop$: $todo-list as $t
+
+
+
+
+
+
+
+
+
+
+-- component todo-view:
+caption todo-item $t:
+
+-- ftd.row:
+spacing.fixed.px: 10
+padding.px: 10
+border-radius.px: 5
+
+-- ftd.boolean: $todo-view.t.is-selected
+
+-- ftd.checkbox:
+checked: *$todo-view.t.is-selected
+$on-click$: $ftd.set-bool($a = $todo-view.t.is-selected, v = $CHECKED)
+
+-- ftd.text: $todo-view.t.address
+role: $inherited.types.copy-regular
+margin-bottom.px: 5
+color: black
+
+-- end: ftd.row
+
+-- end: todo-view
