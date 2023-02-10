@@ -6,8 +6,16 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
-"foo#num": 0,
+"foo#todo-list": [
+{
+"address": "Some address",
+"is-selected": true
+},
+{
+"address": "Some address 1",
+"is-selected": true
+}
+],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -618,7 +626,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Click me</p></div><div data-id="1:main" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-left-radius: 18%; border-top-width: 2px; box-sizing: border-box; height: auto; padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; text-decoration: none; width: auto; z-index: -5" class="ft_md"><p>Hello</p></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="3:main" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-radius: 18%; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 40px; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>World</p></div></div><div data-id="4:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: 100px; justify-content: start; text-decoration: none; width: 400px" ><div data-id="4,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="4,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>World</p></div></div><div data-id="5:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; height: 100px; justify-content: start; text-decoration: none; width: 400px" ><div data-id="5,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="5,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>World</p></div></div><div data-id="6:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: 100%; justify-content: center; text-decoration: none; width: fit-content" ><div data-id="6,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="6,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>World</p></div></div><div data-id="7:main" style="background-color: rgba(255,255,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; max-width: 20px; min-height: 60px; text-decoration: none; width: auto" class="ft_md"><p>Hello World</p></div><div data-id="8:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(255,0,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: 20px" class="ft_md"><p>Data</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-radius: 5px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px; height: auto; justify-content: start; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>true</p></div><input  data-id="0,1:main" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#todo-list.0.is-selected&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"></input><div data-id="0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; margin-bottom: 5px; text-decoration: none; width: auto" class="ft_md"><p>Some address</p></div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-radius: 5px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px; height: auto; justify-content: start; padding: 10px; text-decoration: none; width: auto" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>true</p></div><input  data-id="1,1:main" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#todo-list.1.is-selected&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"></input><div data-id="1,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; margin-bottom: 5px; text-decoration: none; width: auto" class="ft_md"><p>Some address 1</p></div></div></div>
 
 
 <script>
@@ -1389,18 +1397,6 @@ return f;
 
 
 
-function foo__increment___main(a,args,data,id){
-return (a.value += 1);
-}
-
-
-
-function foo__toggle___main(a,args,data,id){
-a.value = !a.value
-}
-
-
-
 function ftd__enable_dark_mode___main(args,data,id){
 return (enable_dark_mode(args,data,id));
 }
@@ -1455,316 +1451,103 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["1:main__border-top-left-radius"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(18))));
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#todo-list.0.is-selected", data);
 }
-else { document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = null }
-}
-window.node_change_main["2:main__padding-left"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["padding-left"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
-}
-else { document.querySelector(`[data-id="2:main"]`).style["padding-left"] = null }
+window.node_change_main["0,2:main__text"] = function(data) {
+document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#todo-list.0.address", data);
 }
 
-window.node_change_main["2:main__padding-right"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
+window.node_change_main["0,2:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else { document.querySelector(`[data-id="2:main"]`).style["padding-right"] = null }
-}
-window.node_change_main["3:main__border-bottom-width"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
-}
-else {document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["3:main__border-left-width"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+window.node_change_main["0,2:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["3:main__border-right-width"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+window.node_change_main["0,2:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["3:main__border-top-width"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+window.node_change_main["0,2:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["3:main__flex-wrap"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSONstringify(false)));
+window.node_change_main["0,2:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSONstringify(true)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
-
-window.node_change_main["3:main__gap"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
-} else {
-null
+window.node_change_main["1,0:main__text"] = function(data) {
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#todo-list.1.is-selected", data);
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(40)))));
-}
-else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
-} else {
-null
-}
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
+window.node_change_main["1,2:main__text"] = function(data) {
+document.querySelector(`[data-id="1,2:main"]`).innerHTML = resolve_reference("foo#todo-list.1.address", data);
 }
 
-window.node_change_main["3:main__justify-content"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
-} else {
-"start"
+window.node_change_main["1,2:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(40)))));
-}
-else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
-} else {
-"start"
-}
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
-}
-window.node_change_main["4:main__align-items"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
-"start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
-"center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
-}
-`.format(JSONstringify("ftd#align.top-left")));
-}
-else {document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
-"start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
-"center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
-}
-`.format(JSONstringify("ftd#align.top-center")));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["4:main__justify-content"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
-"start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
-"center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
+window.node_change_main["1,2:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-`.format(JSONstringify("ftd#align.top-left")));
-}
-else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
-} else {
-"start"
-}
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
-}
-window.node_change_main["5:main__align-items"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
-"start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
-"center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
-}
-`.format(JSONstringify("ftd#align.top-left")));
-}
-else {document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
-"start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
-"center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
-}
-`.format(JSONstringify("ftd#align.top-center")));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["5:main__justify-content"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
-"start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
-"center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
-"end"
-} else {
-null
+window.node_change_main["1,2:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-`.format(JSONstringify("ftd#align.top-left")));
-}
-else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
-} else {
-"start"
-}
-`.format(JSONstringify(`{0}px`.format(JSONstringify(2)))));}
-}
-window.node_change_main["6:main__height"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="6:main"]`).style["height"] = `100%`.format(JSONstringify(`100%`.format(JSONstringify("ftd#resizing.fill-container"))));
-}
-else {document.querySelector(`[data-id="6:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["6:main__width"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="6:main"]`).style["width"] = `fit-content`.format(JSONstringify(`fit-content`.format(JSONstringify("ftd#resizing.hug-content"))));
+window.node_change_main["1,2:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="6:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(400))));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
-window.node_change_main["8:main__width"] = function(data) {
-if(function(){
-return (resolve_reference("foo#num", data)%7==0);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
+
+window.node_change_main["1,2:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else if(function(){
-return (resolve_reference("foo#num", data)%7==1);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));
-}
-else if(function(){
-return (resolve_reference("foo#num", data)%7==2);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`calc({0})`.format(JSONstringify("20"))));
-}
-else if(function(){
-return (resolve_reference("foo#num", data)%7==3);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vh`.format(JSONstringify(20))));
-}
-else if(function(){
-return (resolve_reference("foo#num", data)%7==4);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vw`.format(JSONstringify(20))));
-}
-else if(function(){
-return (resolve_reference("foo#num", data)%7==5);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}em`.format(JSONstringify(20))));
-}
-else if(function(){
-return (resolve_reference("foo#num", data)%7==6);
-}()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}rem`.format(JSONstringify(20))));
-}
-else { document.querySelector(`[data-id="8:main"]`).style["width"] = null }
+else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+window.set_value_main["foo#todo-list"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#flag" + "." + remaining, new_value);
+set_data_value(data, "foo#todo-list" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#flag", new_value);
+set_data_value(data, "foo#todo-list", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__justify-content"]){window.node_change_main["4:main__justify-content"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-width"]){window.node_change_main["3:main__border-left-width"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-left"]){window.node_change_main["2:main__padding-left"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-left-radius"]){window.node_change_main["1:main__border-top-left-radius"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["5:main__justify-content"]){window.node_change_main["5:main__justify-content"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__flex-wrap"]){window.node_change_main["3:main__flex-wrap"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__gap"]){window.node_change_main["3:main__gap"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__justify-content"]){window.node_change_main["3:main__justify-content"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__height"]){window.node_change_main["6:main__height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-right"]){window.node_change_main["2:main__padding-right"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__align-items"]){window.node_change_main["4:main__align-items"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["5:main__align-items"]){window.node_change_main["5:main__align-items"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-width"]){window.node_change_main["3:main__border-bottom-width"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-width"]){window.node_change_main["3:main__border-right-width"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__width"]){window.node_change_main["6:main__width"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-width"]){window.node_change_main["3:main__border-top-width"](data);
-}
-};
-
-window.set_value_main["foo#num"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#num" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#num", new_value);
-}
-
-if(!!window["node_change_main"] && !!window.node_change_main["8:main__width"]){window.node_change_main["8:main__width"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
 };
 
@@ -1775,11 +1558,67 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-color"]){window.node_change_main["8:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__color"]){window.node_change_main["0,2:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__background-color"]){window.node_change_main["4:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__color"]){window.node_change_main["1,2:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-color"]){window.node_change_main["7:main__background-color"](data);
+};
+
+window.set_value_main["ftd#default-types"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#default-types", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+};
+
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#device", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
 }
 };
 
