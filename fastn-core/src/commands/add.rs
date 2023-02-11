@@ -1,4 +1,8 @@
-pub async fn add(config: &fastn_core::Config, file: &str, cr: Option<&str>) -> fastn_core::Result<()> {
+pub async fn add(
+    config: &fastn_core::Config,
+    file: &str,
+    cr: Option<&str>,
+) -> fastn_core::Result<()> {
     if let Some(cr) = cr {
         let cr = cr.parse::<usize>()?;
         cr_add(config, file, cr).await

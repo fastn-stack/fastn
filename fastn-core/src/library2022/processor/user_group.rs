@@ -62,13 +62,11 @@ pub fn get_identities<'a>(
 
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
 
-    let identities =
-        fastn_core::user_group::get_identities(config, doc_id.as_str(), true).map_err(|e| {
-            ftd::p1::Error::ParseError {
-                message: e.to_string(),
-                doc_id,
-                line_number: value.line_number(),
-            }
+    let identities = fastn_core::user_group::get_identities(config, doc_id.as_str(), true)
+        .map_err(|e| ftd::p1::Error::ParseError {
+            message: e.to_string(),
+            doc_id,
+            line_number: value.line_number(),
         })?;
 
     Ok(ftd::interpreter2::Value::List {

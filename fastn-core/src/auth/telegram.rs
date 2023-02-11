@@ -63,7 +63,9 @@ pub async fn token(req: actix_web::HttpRequest) -> fastn_core::Result<actix_web:
                 fastn_core::auth::AuthProviders::TeleGram.as_str(),
                 fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
             )
-            .domain(fastn_core::auth::utils::domain(req.connection_info().host()))
+            .domain(fastn_core::auth::utils::domain(
+                req.connection_info().host(),
+            ))
             .path("/")
             .permanent()
             .secure(true)

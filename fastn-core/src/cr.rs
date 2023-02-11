@@ -229,7 +229,10 @@ pub(crate) fn cr_path(cr_number: usize) -> String {
     format!("-/{}", cr_number)
 }
 
-pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fastn_core::Result<String> {
+pub(crate) fn cr_path_to_file_name(
+    cr_number: usize,
+    cr_file_path: &str,
+) -> fastn_core::Result<String> {
     let cr_path = cr_path(cr_number);
     Ok(cr_file_path
         .trim_matches('/')

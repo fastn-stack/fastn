@@ -112,7 +112,10 @@ pub fn parse_named_params(
                 }
             } else {
                 // b
-                output.push(fastn_core::sitemap::PathParams::value(index, part.to_string()));
+                output.push(fastn_core::sitemap::PathParams::value(
+                    index,
+                    part.to_string(),
+                ));
                 index += 1;
             }
         }
@@ -166,7 +169,11 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                fastn_core::sitemap::PathParams::named(0, "username".to_string(), "string".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    0,
+                    "username".to_string(),
+                    "string".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(1, "foo".to_string()),
                 fastn_core::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
@@ -200,7 +207,11 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                fastn_core::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    0,
+                    "username".to_string(),
+                    "integer".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(1, "foo".to_string()),
                 fastn_core::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
@@ -221,7 +232,11 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/",
             &[
-                fastn_core::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    0,
+                    "username".to_string(),
+                    "integer".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(1, "foo".to_string()),
                 fastn_core::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
@@ -237,7 +252,11 @@ mod tests {
             "/b/a/person/",
             &[
                 fastn_core::sitemap::PathParams::value(0, "b".to_string()),
-                fastn_core::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    1,
+                    "username".to_string(),
+                    "string".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
@@ -263,7 +282,11 @@ mod tests {
             "/b/a/person/",
             &[
                 fastn_core::sitemap::PathParams::value(0, "a".to_string()),
-                fastn_core::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    1,
+                    "username".to_string(),
+                    "string".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
@@ -278,7 +301,11 @@ mod tests {
             "/a/abrark/person/28/",
             &[
                 fastn_core::sitemap::PathParams::value(0, "a".to_string()),
-                fastn_core::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn_core::sitemap::PathParams::named(
+                    1,
+                    "username".to_string(),
+                    "string".to_string(),
+                ),
                 fastn_core::sitemap::PathParams::value(2, "person".to_string()),
                 fastn_core::sitemap::PathParams::named(3, "age".to_string(), "integer".to_string()),
             ],

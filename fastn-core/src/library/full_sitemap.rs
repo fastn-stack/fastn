@@ -17,7 +17,10 @@ pub fn processor(
             .replace(std::path::MAIN_SEPARATOR, "/");
 
         return doc.from_json(
-            &fastn_core::library2022::processor::sitemap::to_sitemap_compat(sitemap, doc_id.as_str()),
+            &fastn_core::library2022::processor::sitemap::to_sitemap_compat(
+                sitemap,
+                doc_id.as_str(),
+            ),
             section,
         );
     }

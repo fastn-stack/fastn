@@ -98,7 +98,7 @@ async fn async_main() -> fastn_core::Result<()> {
             external_css,
             inline_css,
         )
-            .await;
+        .await;
     }
 
     if let Some(clone) = matches.subcommand_matches("clone") {
@@ -117,7 +117,7 @@ async fn async_main() -> fastn_core::Result<()> {
             edit.value_of_("file").unwrap(),
             edit.value_of_("cr").unwrap(),
         )
-            .await;
+        .await;
     }
 
     if let Some(add) = matches.subcommand_matches("add") {
@@ -136,7 +136,7 @@ async fn async_main() -> fastn_core::Result<()> {
             merge.value_of_("dest").unwrap(),
             merge.value_of_("file"), // TODO: support multiple files
         )
-            .await;
+        .await;
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
@@ -163,7 +163,7 @@ async fn async_main() -> fastn_core::Result<()> {
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
         )
-            .await;
+        .await;
     }
 
     if let Some(mark_resolve) = matches.subcommand_matches("mark-resolved") {
@@ -218,7 +218,7 @@ async fn async_main() -> fastn_core::Result<()> {
         return fastn_core::resolve_conflict(
             &config, source, use_ours, use_theirs, print, revive_it, delete_it,
         )
-            .await;
+        .await;
     }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of_("source").unwrap();

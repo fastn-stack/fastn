@@ -64,7 +64,11 @@ async fn check(
     Ok(())
 }
 
-async fn write(target: &str, timestamp: u128, path: &camino::Utf8PathBuf) -> fastn_core::Result<()> {
+async fn write(
+    target: &str,
+    timestamp: u128,
+    path: &camino::Utf8PathBuf,
+) -> fastn_core::Result<()> {
     use tokio::io::AsyncWriteExt;
     let string = if path.exists() {
         let existing_doc = tokio::fs::read_to_string(path).await?;

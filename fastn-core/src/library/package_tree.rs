@@ -145,7 +145,8 @@ async fn insert(
     )
     .await
     {
-        let status = fastn_core::commands::status::get_file_status(&file, snapshots, workspaces).await?;
+        let status =
+            fastn_core::commands::status::get_file_status(&file, snapshots, workspaces).await?;
         node.url = Some(url.to_string());
         node.number = Some(format!("{:?}", status))
     } else {

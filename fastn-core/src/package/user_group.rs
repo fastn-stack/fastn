@@ -196,7 +196,10 @@ impl UserGroup {
     // Maybe Logic: group.identities + (For all group.groups(g.group - g.excluded_group)).identities
     //              - group.excluded_identities
 
-    pub fn get_identities(&self, config: &fastn_core::Config) -> fastn_core::Result<Vec<UserIdentity>> {
+    pub fn get_identities(
+        &self,
+        config: &fastn_core::Config,
+    ) -> fastn_core::Result<Vec<UserIdentity>> {
         let mut identities = vec![];
 
         // A group contains child another groups
@@ -553,7 +556,8 @@ pub async fn access_identities(
     // github-starred: fastn-lang/ftd
     // discord-server: abrark.com
     // github-watches: fastn-lang/ftd
-    match fastn_core::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
+    match fastn_core::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await
+    {
         Ok(ids) => Ok(ids),
         Err(fastn_core::Error::GenericError(_err)) => Ok(vec![]),
         e => e,

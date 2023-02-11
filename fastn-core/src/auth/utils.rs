@@ -7,7 +7,10 @@ pub fn domain(host: &str) -> String {
         None => host.to_string(),
     }
 }
-pub async fn get_api<T: serde::de::DeserializeOwned>(url: &str, token: &str) -> fastn_core::Result<T> {
+pub async fn get_api<T: serde::de::DeserializeOwned>(
+    url: &str,
+    token: &str,
+) -> fastn_core::Result<T> {
     let response = reqwest::Client::new()
         .get(url)
         .header(reqwest::header::AUTHORIZATION, token)

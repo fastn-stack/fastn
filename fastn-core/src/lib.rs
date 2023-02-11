@@ -299,7 +299,10 @@ fn package_info_markdown(
     let path = config.root.join("fastn").join("markdown.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
-    } else if !config.ftd_edition.eq(&fastn_core::config::FTDEdition::FTD2021) {
+    } else if !config
+        .ftd_edition
+        .eq(&fastn_core::config::FTDEdition::FTD2021)
+    {
         if content.trim().is_empty() {
             content.to_string()
         } else {

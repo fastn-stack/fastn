@@ -174,7 +174,9 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn sync(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let config = match fastn_core::Config::read(None, false, Some(&req)).await {
         Ok(config) => config,
         Err(err) => return fastn_core::http::api_error(err.to_string()),

@@ -167,8 +167,12 @@ impl Library {
         {
             // These processors are implemented both in Rust and Python
             "http" => fastn_core::library::http::processor(section, doc, &self.config).await,
-            "package-query" => fastn_core::library::sqlite::processor(section, doc, &self.config).await,
-            "fetch-file" => fastn_core::library::fetch_file::processor(section, doc, &self.config).await,
+            "package-query" => {
+                fastn_core::library::sqlite::processor(section, doc, &self.config).await
+            }
+            "fetch-file" => {
+                fastn_core::library::fetch_file::processor(section, doc, &self.config).await
+            }
             "package-tree" => {
                 fastn_core::library::package_tree::processor(section, doc, &self.config).await
             }
@@ -215,7 +219,9 @@ pub fn process_sync<'a>(
             fastn_core::library::sitemap::document_writers(section, document_id, doc, config)
         }
         "user-groups" => fastn_core::user_group::processor::user_groups(section, doc, config),
-        "user-group-by-id" => fastn_core::user_group::processor::user_group_by_id(section, doc, config),
+        "user-group-by-id" => {
+            fastn_core::user_group::processor::user_group_by_id(section, doc, config)
+        }
         "package-query" => fastn_core::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fastn_core::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fastn_core::library::package_tree::processor_sync(section, doc, config),
@@ -429,13 +435,19 @@ impl Library2 {
         {
             // "toc" => fastn_core::library::toc::processor(section, doc),
             "http" => fastn_core::library::http::processor(section, doc, &self.config).await,
-            "package-query" => fastn_core::library::sqlite::processor(section, doc, &self.config).await,
+            "package-query" => {
+                fastn_core::library::sqlite::processor(section, doc, &self.config).await
+            }
             "toc" => fastn_core::library::toc::processor(section, doc, &self.config),
             "include" => fastn_core::library::include::processor(section, doc, &self.config),
             "get-data" => fastn_core::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fastn_core::library::sitemap::processor(section, doc, &self.config),
-            "full-sitemap" => fastn_core::library::full_sitemap::processor(section, doc, &self.config),
-            "user-groups" => fastn_core::user_group::processor::user_groups(section, doc, &self.config),
+            "full-sitemap" => {
+                fastn_core::library::full_sitemap::processor(section, doc, &self.config)
+            }
+            "user-groups" => {
+                fastn_core::user_group::processor::user_groups(section, doc, &self.config)
+            }
             "document-readers" => fastn_core::library::sitemap::document_readers(
                 section,
                 self.document_id.as_str(),
@@ -465,7 +477,9 @@ impl Library2 {
             "package-tree" => {
                 fastn_core::library::package_tree::processor(section, doc, &self.config).await
             }
-            "fetch-file" => fastn_core::library::fetch_file::processor(section, doc, &self.config).await,
+            "fetch-file" => {
+                fastn_core::library::fetch_file::processor(section, doc, &self.config).await
+            }
             // Note: Not needed right now
             "get-version-data" => {
                 fastn_core::library::get_version_data::processor(

@@ -76,7 +76,9 @@ pub enum Error {
     QueryPayloadError(#[from] actix_web::error::QueryPayloadError),
 
     #[error("TokioMPSCError1: {}", _0)]
-    TokioMPSCError1(#[from] tokio::sync::mpsc::error::SendError<fastn_core::watcher::WatcherSender>),
+    TokioMPSCError1(
+        #[from] tokio::sync::mpsc::error::SendError<fastn_core::watcher::WatcherSender>,
+    ),
 
     #[error("TokioMPSCError2: {}", _0)]
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),

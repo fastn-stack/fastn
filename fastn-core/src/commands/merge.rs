@@ -62,8 +62,10 @@ async fn merge_main_into_cr(
     let mut conflicted_file_status = vec![];
     let deleted_files_path = config.cr_deleted_file_path(dest);
     let deleted_file_str = config.path_without_root(&deleted_files_path)?;
-    let mut new_file_status: std::collections::BTreeMap<String, fastn_core::sync_utils::FileStatus> =
-        Default::default();
+    let mut new_file_status: std::collections::BTreeMap<
+        String,
+        fastn_core::sync_utils::FileStatus,
+    > = Default::default();
 
     // True: if file: Option<&str> has some value and it's processed
     let mut file_processed = false;
@@ -182,7 +184,9 @@ async fn merge_main_into_cr(
                     conflicted_file_status.push(fastn_core::sync_utils::FileStatus::Add {
                         path: filename.to_string(),
                         content: ours_content_bytes.clone(),
-                        status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                        status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(
+                            file_edit.version,
+                        ),
                     });
                 }
                 continue;
@@ -221,7 +225,9 @@ async fn merge_main_into_cr(
                 conflicted_file_status.push(fastn_core::sync_utils::FileStatus::Add {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
-                    status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                    status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(
+                        file_edit.version,
+                    ),
                 });
             }
             continue;
@@ -233,7 +239,9 @@ async fn merge_main_into_cr(
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fastn_core::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
+                    status: fastn_core::sync_utils::Status::CloneEditedRemoteDeleted(
+                        file_edit.version,
+                    ),
                 });
             }
             continue;
@@ -410,8 +418,10 @@ async fn merge_cr_into_main(
         cr_statuses
     };
 
-    let mut new_file_status: std::collections::BTreeMap<String, fastn_core::sync_utils::FileStatus> =
-        Default::default();
+    let mut new_file_status: std::collections::BTreeMap<
+        String,
+        fastn_core::sync_utils::FileStatus,
+    > = Default::default();
     let mut conflicted_file_status = vec![];
     let deleted_files_path = config.cr_deleted_file_path(src);
     let deleted_files = config.path_without_root(&deleted_files_path)?;
@@ -546,7 +556,9 @@ async fn merge_cr_into_main(
                 conflicted_file_status.push(fastn_core::sync_utils::FileStatus::Add {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
-                    status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                    status: fastn_core::sync_utils::Status::CloneAddedRemoteAdded(
+                        file_edit.version,
+                    ),
                 });
             }
             continue;
@@ -558,7 +570,9 @@ async fn merge_cr_into_main(
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fastn_core::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
+                    status: fastn_core::sync_utils::Status::CloneEditedRemoteDeleted(
+                        file_edit.version,
+                    ),
                 });
             }
             continue;

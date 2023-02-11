@@ -141,7 +141,9 @@ pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_w
                         fastn_core::auth::AuthProviders::Twitter.as_str(),
                         fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fastn_core::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn_core::auth::utils::domain(
+                        req.connection_info().host(),
+                    ))
                     .path("/")
                     .permanent()
                     .finish(),
@@ -386,7 +388,11 @@ pub mod apis {
     // API Docs: https://developer.twitter.com/en/docs/authentication/guides/v2-authentication-mapping
 
     //This API will only be used to get access token for discord
-    pub async fn twitter_token(url: &str, redirect_url: &str, code: &str) -> fastn_core::Result<String> {
+    pub async fn twitter_token(
+        url: &str,
+        redirect_url: &str,
+        code: &str,
+    ) -> fastn_core::Result<String> {
         let client_id = match std::env::var("TWITTER_CLIENT_ID") {
             Ok(id) => id,
             Err(_e) => {
@@ -518,7 +524,10 @@ pub mod apis {
             .map(|x| x.id)
             .collect())
     }
-    pub async fn member_followings(token: &str, member_id: &str) -> fastn_core::Result<Vec<String>> {
+    pub async fn member_followings(
+        token: &str,
+        member_id: &str,
+    ) -> fastn_core::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/users/{user-id}/following?max_results=100
         // TODO: Handle paginated response
 
@@ -537,7 +546,10 @@ pub mod apis {
             .map(|x| x.id)
             .collect())
     }
-    pub async fn space_ticket_buyers(token: &str, space_id: &str) -> fastn_core::Result<Vec<String>> {
+    pub async fn space_ticket_buyers(
+        token: &str,
+        space_id: &str,
+    ) -> fastn_core::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/spaces/{space_id}/buyers?max_results=100
         // TODO: Handle paginated response
 

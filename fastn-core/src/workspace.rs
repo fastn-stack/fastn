@@ -51,7 +51,10 @@ impl fastn_core::Config {
         Ok(())
     }
 
-    pub(crate) async fn write_clone_available_cr(&self, reserved_crs: &[i32]) -> fastn_core::Result<()> {
+    pub(crate) async fn write_clone_available_cr(
+        &self,
+        reserved_crs: &[i32],
+    ) -> fastn_core::Result<()> {
         use itertools::Itertools;
 
         fastn_core::utils::update(
@@ -99,7 +102,8 @@ impl fastn_core::Config {
 
     pub(crate) async fn get_workspace_map(
         &self,
-    ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>> {
+    ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>>
+    {
         Ok(self
             .read_workspace()
             .await?
@@ -110,7 +114,8 @@ impl fastn_core::Config {
 
     pub(crate) async fn get_clone_workspace(
         &self,
-    ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>> {
+    ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry>>
+    {
         Ok(self
             .get_workspace_map()
             .await?
@@ -134,7 +139,10 @@ impl fastn_core::Config {
         Ok(CRWorkspace::new(cr_number, workspace))
     }*/
 
-    pub(crate) async fn write_workspace(&self, workspace: &[WorkspaceEntry]) -> fastn_core::Result<()> {
+    pub(crate) async fn write_workspace(
+        &self,
+        workspace: &[WorkspaceEntry],
+    ) -> fastn_core::Result<()> {
         let workspace_path = self.workspace_file();
         fastn_core::utils::update(
             &workspace_path,

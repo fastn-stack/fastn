@@ -15,8 +15,11 @@ pub async fn abort_merge(config: &fastn_core::Config, path: &str) -> fastn_core:
         }
         workspace.set_abort();
     }
-    fastn_core::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
-        .await?;
+    fastn_core::snapshot::create_workspace(
+        config,
+        workspaces.into_values().collect_vec().as_slice(),
+    )
+    .await?;
 
     Ok(())
 }

@@ -1,4 +1,8 @@
-pub async fn rm(config: &fastn_core::Config, file: &str, cr: Option<&str>) -> fastn_core::Result<()> {
+pub async fn rm(
+    config: &fastn_core::Config,
+    file: &str,
+    cr: Option<&str>,
+) -> fastn_core::Result<()> {
     if let Some(cr) = cr {
         let cr = cr.parse::<usize>()?;
         cr_rm(config, file, cr).await

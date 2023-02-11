@@ -5,7 +5,10 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 /// path: /<file-name>/
 ///
 #[tracing::instrument(skip_all)]
-async fn serve_file(config: &mut fastn_core::Config, path: &camino::Utf8Path) -> fastn_core::http::Response {
+async fn serve_file(
+    config: &mut fastn_core::Config,
+    path: &camino::Utf8Path,
+) -> fastn_core::http::Response {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -56,15 +59,23 @@ async fn serve_file(config: &mut fastn_core::Config, path: &camino::Utf8Path) ->
                     msg = "app::can_read-error: can not access app",
                     path = path.as_str()
                 );
-                return fastn_core::server_error!("fastn-Error: can_read error: {}, {:?}", path, err);
+                return fastn_core::server_error!(
+                    "fastn-Error: can_read error: {}, {:?}",
+                    path,
+                    err
+                );
             }
         };
     }
 
     match f {
         fastn_core::File::Ftd(main_document) => {
-            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8),
+            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false)
+                .await
+            {
+                Ok(r) => {
+                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                }
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
@@ -75,9 +86,10 @@ async fn serve_file(config: &mut fastn_core::Config, path: &camino::Utf8Path) ->
                 }
             }
         }
-        fastn_core::File::Image(image) => {
-            fastn_core::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
-        }
+        fastn_core::File::Image(image) => fastn_core::http::ok_with_content_type(
+            image.content,
+            guess_mime_type(image.id.as_str()),
+        ),
         fastn_core::File::Static(s) => fastn_core::http::ok(s.content),
         _ => {
             tracing::error!(msg = "unknown handler", path = path.as_str());
@@ -120,16 +132,19 @@ async fn serve_cr_file(
     config.current_document = Some(f.get_id());
     match f {
         fastn_core::File::Ftd(main_document) => {
-            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false)
+                .await
+            {
                 Ok(r) => fastn_core::http::ok(r),
                 Err(e) => {
                     fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fastn_core::File::Image(image) => {
-            fastn_core::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
-        }
+        fastn_core::File::Image(image) => fastn_core::http::ok_with_content_type(
+            image.content,
+            guess_mime_type(image.id.as_str()),
+        ),
         fastn_core::File::Static(s) => fastn_core::http::ok(s.content),
         _ => {
             fastn_core::server_error!("fastn unknown handler")
@@ -389,7 +404,9 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
-pub async fn clear_cache(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn clear_cache(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     fn is_login(req: &fastn_core::http::Request) -> bool {
         // TODO: Need refactor not happy with this
         req.cookie(fastn_core::auth::AuthProviders::GitHub.as_str())
@@ -448,37 +465,51 @@ async fn sync2(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core:
     fastn_core::apis::sync2(&req, req.json()?).await
 }
 
-pub async fn clone(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn clone(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
     fastn_core::apis::clone(req).await
 }
 
-pub(crate) async fn view_source(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub(crate) async fn view_source(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
     Ok(fastn_core::apis::view_source(&req).await)
 }
 
-pub async fn edit(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn edit(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
     fastn_core::apis::edit(&req, req.json()?).await
 }
 
-pub async fn revert(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn revert(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
     fastn_core::apis::edit::revert(&req, req.json()?).await
 }
 
-pub async fn editor_sync(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn editor_sync(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
     fastn_core::apis::edit::sync(req).await
 }
 
-pub async fn create_cr(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn create_cr(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.write().await;
     fastn_core::apis::cr::create_cr(&req, req.json()?).await
 }
 
-pub async fn create_cr_page(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn create_cr_page(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
     fastn_core::apis::cr::create_cr_page(req).await
 }

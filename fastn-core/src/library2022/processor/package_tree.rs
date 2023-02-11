@@ -14,13 +14,13 @@ pub async fn process<'a>(
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
-    let workspaces = fastn_core::snapshot::get_workspace(config).await.map_err(|_e| {
-        ftd::interpreter2::Error::ParseError {
+    let workspaces = fastn_core::snapshot::get_workspace(config)
+        .await
+        .map_err(|_e| ftd::interpreter2::Error::ParseError {
             message: "fastn-error: error in package-tree processor `get_workspace`".to_string(),
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
-        }
-    })?;
+        })?;
     let all_files = config
         .get_files(&config.package)
         .await

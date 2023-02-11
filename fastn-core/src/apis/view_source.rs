@@ -17,7 +17,10 @@ pub(crate) async fn view_source(req: &fastn_core::http::Request) -> fastn_core::
     }
 }
 
-async fn handle_view_source(req: &fastn_core::http::Request, path: &str) -> fastn_core::Result<Vec<u8>> {
+async fn handle_view_source(
+    req: &fastn_core::http::Request,
+    path: &str,
+) -> fastn_core::Result<Vec<u8>> {
     let mut config = fastn_core::Config::read(None, false, Some(req)).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
@@ -33,9 +36,12 @@ async fn handle_view_source(req: &fastn_core::http::Request, path: &str) -> fast
                 parent_path: config.root.as_str().to_string(),
                 package_name: config.package.name.clone(),
             };
-            fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false).await
+            fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false)
+                .await
         }
-        fastn_core::File::Static(ref file) | fastn_core::File::Image(ref file) => Ok(file.content.to_owned()),
+        fastn_core::File::Static(ref file) | fastn_core::File::Image(ref file) => {
+            Ok(file.content.to_owned())
+        }
     }
 }
 

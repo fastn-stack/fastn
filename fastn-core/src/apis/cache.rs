@@ -61,9 +61,13 @@ pub async fn clear(req: &fastn_core::http::Request) -> fastn_core::http::Respons
     fastn_core::http::ok("Done".into())
 }
 
-pub async fn clear_(query: &QueryParams, req: &fastn_core::http::Request) -> fastn_core::Result<()> {
+pub async fn clear_(
+    query: &QueryParams,
+    req: &fastn_core::http::Request,
+) -> fastn_core::Result<()> {
     let config =
-        fastn_core::time("Config::read()").it(fastn_core::Config::read(None, false, Some(req)).await?);
+        fastn_core::time("Config::read()")
+            .it(fastn_core::Config::read(None, false, Some(req)).await?);
     if config.package.download_base_url.is_none() {
         return Err(fastn_core::Error::APIResponseError(
             "cannot remove anything, package does not have `download_base_url`".to_string(),
@@ -108,7 +112,8 @@ pub async fn clear_(query: &QueryParams, req: &fastn_core::http::Request) -> fas
 
     // Download FASTN.ftd again after removing all the content
     if !config.root.join("FASTN.ftd").exists() {
-        fastn_core::commands::serve::download_init_package(config.package.download_base_url).await?;
+        fastn_core::commands::serve::download_init_package(config.package.download_base_url)
+            .await?;
     }
 
     Ok(())

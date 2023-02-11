@@ -22,7 +22,9 @@ pub async fn clone(source: &str) -> fastn_core::Result<()> {
     Ok(())
 }
 
-async fn call_clone_api(source: &str) -> fastn_core::Result<fastn_core::apis::clone::CloneResponse> {
+async fn call_clone_api(
+    source: &str,
+) -> fastn_core::Result<fastn_core::apis::clone::CloneResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
         message: Option<String>,

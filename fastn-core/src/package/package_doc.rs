@@ -340,8 +340,12 @@ pub(crate) async fn read_ftd(
 ) -> fastn_core::Result<Vec<u8>> {
     tracing::info!(document = main.id);
     match config.ftd_edition {
-        fastn_core::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
-        fastn_core::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url, download_assets).await,
+        fastn_core::FTDEdition::FTD2021 => {
+            read_ftd_2021(config, main, base_url, download_assets).await
+        }
+        fastn_core::FTDEdition::FTD2022 => {
+            read_ftd_2022(config, main, base_url, download_assets).await
+        }
     }
 }
 

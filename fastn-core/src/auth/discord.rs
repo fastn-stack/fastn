@@ -104,7 +104,9 @@ pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_w
                         fastn_core::auth::AuthProviders::Discord.as_str(),
                         fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fastn_core::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn_core::auth::utils::domain(
+                        req.connection_info().host(),
+                    ))
                     .path("/")
                     .permanent()
                     .finish(),
@@ -301,7 +303,11 @@ pub mod apis {
     }
 
     //This API will only be used to get access token for discord
-    pub async fn discord_token(url: &str, redirect_url: &str, code: &str) -> fastn_core::Result<String> {
+    pub async fn discord_token(
+        url: &str,
+        redirect_url: &str,
+        code: &str,
+    ) -> fastn_core::Result<String> {
         let client_id = match std::env::var("DISCORD_CLIENT_ID") {
             Ok(id) => id,
             Err(_e) => {

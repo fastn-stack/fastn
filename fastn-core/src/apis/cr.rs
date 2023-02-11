@@ -36,7 +36,9 @@ async fn create_cr_worker(
     Ok(cr_number as usize)
 }
 
-pub async fn create_cr_page(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn create_cr_page(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     match create_cr_page_worker(req).await {
         Ok(body) => Ok(fastn_core::http::ok(body)),
         Err(err) => fastn_core::http::api_error(err.to_string()),

@@ -238,7 +238,10 @@ impl ToString for TrackStatus {
             TrackStatus::UptoDate => "Up to date".to_string(),
             TrackStatus::NeverMarked => "Never marked".to_string(),
             TrackStatus::OutOfDate { seconds } => {
-                format!("Out of date({})", fastn_core::utils::seconds_to_human(*seconds))
+                format!(
+                    "Out of date({})",
+                    fastn_core::utils::seconds_to_human(*seconds)
+                )
             }
         }
     }

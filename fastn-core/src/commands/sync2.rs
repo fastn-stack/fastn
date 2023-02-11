@@ -35,7 +35,10 @@ pub async fn sync2(
     };
 }*/
 
-async fn simple_sync(config: &fastn_core::Config, files: Option<Vec<String>>) -> fastn_core::Result<()> {
+async fn simple_sync(
+    config: &fastn_core::Config,
+    files: Option<Vec<String>>,
+) -> fastn_core::Result<()> {
     use itertools::Itertools;
 
     let mut workspace = config.get_clone_workspace().await?;

@@ -132,15 +132,15 @@ impl fastn_core::Package {
             // Read FASTN.ftd and get download zip url from `zip` argument
             let download_url = {
                 let lib = fastn_core::FastnLibrary::default();
-                let ftd_document = match fastn_core::doc::parse_ftd("fastn", fastn_string.as_str(), &lib)
-                {
-                    Ok(v) => v,
-                    Err(e) => {
-                        return Err(fastn_core::Error::PackageError {
-                            message: format!("failed to parse FASTN.ftd: {:?}", &e),
-                        });
-                    }
-                };
+                let ftd_document =
+                    match fastn_core::doc::parse_ftd("fastn", fastn_string.as_str(), &lib) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            return Err(fastn_core::Error::PackageError {
+                                message: format!("failed to parse FASTN.ftd: {:?}", &e),
+                            });
+                        }
+                    };
 
                 ftd_document
                     .get::<fastn_core::package::PackageTemp>("fastn#package")?
@@ -204,7 +204,10 @@ impl fastn_core::Package {
                     std::io::copy(&mut c_file, &mut outfile)?;
                 }
             }
-            fastn_core::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
+            fastn_core::utils::print_end(
+                format!("Downloaded {}", self.name.as_str()).as_str(),
+                start,
+            );
         }
         let fastn_ftd_path = if root.join("FASTN.ftd").exists() {
             root.join("FASTN.ftd")
@@ -484,7 +487,8 @@ impl fastn_core::Package {
             }
         };
         let mut package = {
-            let temp_package: fastn_core::package::PackageTemp = ftd_document.get("fastn#package")?;
+            let temp_package: fastn_core::package::PackageTemp =
+                ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };
 
@@ -602,7 +606,8 @@ impl fastn_core::Package {
             }
         };
         let mut package = {
-            let temp_package: fastn_core::package::PackageTemp = ftd_document.get("fastn#package")?;
+            let temp_package: fastn_core::package::PackageTemp =
+                ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };
 
@@ -638,7 +643,10 @@ impl fastn_core::Package {
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fastn_core::copy_dir_all(dep_path, dst.clone()))?;
+                        futures::executor::block_on(fastn_core::copy_dir_all(
+                            dep_path,
+                            dst.clone(),
+                        ))?;
                     }
                     fastn_core::Package::process_fastn2(
                         &dst,

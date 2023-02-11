@@ -26,7 +26,8 @@ async fn mark_upto_date_translation(
     let file_path = fastn_core::utils::track_path(who, config.root.as_str());
     let mut tracks = fastn_core::tracker::get_tracks(config.root.as_str(), &file_path)?;
 
-    let original_snapshot = fastn_core::snapshot::get_latest_snapshots(&config.original_path()?).await?;
+    let original_snapshot =
+        fastn_core::snapshot::get_latest_snapshots(&config.original_path()?).await?;
     let original_timestamp = match original_snapshot.get(who) {
         Some(timestamp) => timestamp,
         _ => {

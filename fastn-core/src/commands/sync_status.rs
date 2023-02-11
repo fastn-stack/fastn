@@ -40,11 +40,18 @@ async fn sync_status(config: &fastn_core::Config, source: Option<&str>) -> fastn
     Ok(())
 }
 
-pub(crate) fn print_status(file_status: &fastn_core::sync_utils::FileStatus, print_untracked: bool) {
+pub(crate) fn print_status(
+    file_status: &fastn_core::sync_utils::FileStatus,
+    print_untracked: bool,
+) {
     let (file_status, path, status) = match file_status {
         fastn_core::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
-        fastn_core::sync_utils::FileStatus::Update { path, status, .. } => ("Updated", path, status),
-        fastn_core::sync_utils::FileStatus::Delete { path, status, .. } => ("Deleted", path, status),
+        fastn_core::sync_utils::FileStatus::Update { path, status, .. } => {
+            ("Updated", path, status)
+        }
+        fastn_core::sync_utils::FileStatus::Delete { path, status, .. } => {
+            ("Deleted", path, status)
+        }
         fastn_core::sync_utils::FileStatus::Uptodate { path, .. } => {
             if print_untracked {
                 println!("Up-to-date: {}", path);

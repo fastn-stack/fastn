@@ -141,8 +141,10 @@ impl DynamicUrls {
                 // request: arpita foo 28
                 // sitemap: [string,integer]
                 // Mapping: arpita -> string, foo -> foo, 28 -> integer
-                let params =
-                    fastn_core::sitemap::utils::url_match(path, sub_section.path_parameters.as_slice())?;
+                let params = fastn_core::sitemap::utils::url_match(
+                    path,
+                    sub_section.path_parameters.as_slice(),
+                )?;
 
                 if params.0 {
                     return Ok((sub_section.document.clone(), params.1));
@@ -169,8 +171,10 @@ impl DynamicUrls {
                 // request: abrark foo 28
                 // sitemap: [string,integer]
                 // params_matches: abrark -> string, foo -> foo, 28 -> integer
-                let params =
-                    fastn_core::sitemap::utils::url_match(path, section.path_parameters.as_slice())?;
+                let params = fastn_core::sitemap::utils::url_match(
+                    path,
+                    section.path_parameters.as_slice(),
+                )?;
 
                 if params.0 {
                     return Ok((section.document.clone(), params.1));

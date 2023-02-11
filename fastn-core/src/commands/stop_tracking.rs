@@ -1,4 +1,8 @@
-async fn stop_tracking(config: &fastn_core::Config, who: &str, whom: Option<&str>) -> fastn_core::Result<()> {
+async fn stop_tracking(
+    config: &fastn_core::Config,
+    who: &str,
+    whom: Option<&str>,
+) -> fastn_core::Result<()> {
     check(who, whom, config.root.as_str()).await?;
 
     Ok(())

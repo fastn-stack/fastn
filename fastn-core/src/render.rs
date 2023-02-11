@@ -1,7 +1,11 @@
 /// `fastn_core::render()` renders a single ftd file that is part of current fastn package.
 /// It returns `fastn_core::Result` of rendered HTML as `String`.
 #[allow(dead_code)]
-pub async fn render(config: &fastn_core::Config, id: &str, base_url: &str) -> fastn_core::Result<String> {
+pub async fn render(
+    config: &fastn_core::Config,
+    id: &str,
+    base_url: &str,
+) -> fastn_core::Result<String> {
     let file = config.get_file_by_id(id, &config.package).await?;
     let asset_documents = config.get_assets().await?;
 

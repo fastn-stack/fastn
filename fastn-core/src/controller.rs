@@ -108,7 +108,10 @@ pub async fn resolve_dependencies(
 ///         "git": "<git url>"
 ///     }
 /// }
-async fn get_package(fastn_instance: &str, fastn_controller: &str) -> fastn_core::Result<PackageResult> {
+async fn get_package(
+    fastn_instance: &str,
+    fastn_controller: &str,
+) -> fastn_core::Result<PackageResult> {
     let controller_api = format!(
         "{}/v1/fastn/get-package?ec2_instance_id={}",
         fastn_controller, fastn_instance

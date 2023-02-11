@@ -464,7 +464,10 @@ impl Package {
     }
 
     #[tracing::instrument(skip_all)]
-    pub(crate) async fn resolve(&mut self, fastn_path: &camino::Utf8PathBuf) -> fastn_core::Result<()> {
+    pub(crate) async fn resolve(
+        &mut self,
+        fastn_path: &camino::Utf8PathBuf,
+    ) -> fastn_core::Result<()> {
         tracing::info!(path = fastn_path.as_str());
         let fastn_document = {
             let doc = tokio::fs::read_to_string(fastn_path).await?;
@@ -704,7 +707,10 @@ impl PackageTemp {
         // TODO: change this method to: `validate(self) -> fastn_core::Result<fastn_core::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.
-        let translation_of = self.translation_of.as_ref().map(|v| fastn_core::Package::new(v));
+        let translation_of = self
+            .translation_of
+            .as_ref()
+            .map(|v| fastn_core::Package::new(v));
         let translations = self
             .translations
             .clone()

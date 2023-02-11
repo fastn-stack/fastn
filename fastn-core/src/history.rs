@@ -79,7 +79,10 @@ impl fastn_core::Config {
     ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::history::FileEdit>> {
         let history_list = self.get_history().await?;
         if with_deleted {
-            fastn_core::history::FileHistory::get_remote_manifest(history_list.as_slice(), with_deleted)
+            fastn_core::history::FileHistory::get_remote_manifest(
+                history_list.as_slice(),
+                with_deleted,
+            )
         } else {
             Ok(fastn_core::history::FileHistory::get_remote_manifest(
                 history_list.as_slice(),
@@ -202,10 +205,11 @@ pub(crate) async fn insert_into_history(
 ) -> fastn_core::Result<()> {
     use itertools::Itertools;
 
-    let mut file_history: std::collections::BTreeMap<String, fastn_core::history::FileHistory> = history
-        .iter_mut()
-        .map(|v| (v.filename.to_string(), v.clone()))
-        .collect();
+    let mut file_history: std::collections::BTreeMap<String, fastn_core::history::FileHistory> =
+        history
+            .iter_mut()
+            .map(|v| (v.filename.to_string(), v.clone()))
+            .collect();
     insert_into_history_(root, file_list, &mut file_history).await?;
     *history = file_history.into_values().collect_vec();
     Ok(())
@@ -220,8 +224,10 @@ pub(crate) async fn insert_into_history_(
 
     let timestamp = fastn_core::timestamp_nanosecond();
     for (file, file_op) in file_list {
-        let version =
-            fastn_core::snapshot::get_new_version(file_history.values().collect_vec().as_slice(), file);
+        let version = fastn_core::snapshot::get_new_version(
+            file_history.values().collect_vec().as_slice(),
+            file,
+        );
         if let Some(file_history) = file_history.get_mut(file) {
             file_history
                 .file_edit

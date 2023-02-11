@@ -29,13 +29,16 @@ impl Version {
                     message: format!("Invalid minor for `{}`: `{:?}`", s, e),
                 })?;
             minor = Some(minor_);
-            major.parse::<u64>().map_err(|e| fastn_core::Error::UsageError {
-                message: format!("Invalid major for `{}`: `{:?}`", s, e),
-            })?
+            major
+                .parse::<u64>()
+                .map_err(|e| fastn_core::Error::UsageError {
+                    message: format!("Invalid major for `{}`: `{:?}`", s, e),
+                })?
         } else {
-            v.parse::<u64>().map_err(|e| fastn_core::Error::UsageError {
-                message: format!("Invalid major for `{}`: `{:?}`", s, e),
-            })?
+            v.parse::<u64>()
+                .map_err(|e| fastn_core::Error::UsageError {
+                    message: format!("Invalid major for `{}`: `{:?}`", s, e),
+                })?
         };
         Ok(fastn_core::Version {
             major,

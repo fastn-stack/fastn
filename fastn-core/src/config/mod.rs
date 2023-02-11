@@ -421,7 +421,8 @@ impl Config {
     pub(crate) async fn get_versions(
         &self,
         package: &fastn_core::Package,
-    ) -> fastn_core::Result<std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>>> {
+    ) -> fastn_core::Result<std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>>>
+    {
         let path = self.get_root_for_package(package);
         let mut hash: std::collections::HashMap<fastn_core::Version, Vec<fastn_core::File>> =
             std::collections::HashMap::new();
@@ -482,7 +483,10 @@ impl Config {
         }
     }
 
-    pub(crate) fn get_root_for_package(&self, package: &fastn_core::Package) -> camino::Utf8PathBuf {
+    pub(crate) fn get_root_for_package(
+        &self,
+        package: &fastn_core::Package,
+    ) -> camino::Utf8PathBuf {
         if let Some(package_fastn_path) = &package.fastn_path {
             // TODO: Unwrap?
             package_fastn_path.parent().unwrap().to_owned()
@@ -500,7 +504,8 @@ impl Config {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_file_paths1(package, true)?;
         // TODO: Unwrap?
-        let mut documents = fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
+        let mut documents =
+            fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id());
 
         Ok(documents)
@@ -673,7 +678,10 @@ impl Config {
         None
     }
 
-    pub async fn update_sitemap(&self, package: &fastn_core::Package) -> fastn_core::Result<fastn_core::Package> {
+    pub async fn update_sitemap(
+        &self,
+        package: &fastn_core::Package,
+    ) -> fastn_core::Result<fastn_core::Package> {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
         if !fastn_path.exists() {
@@ -721,7 +729,10 @@ impl Config {
     // -/kameri-app.herokuapp.com/
     // .packages/kameri-app.heroku.com/index.ftd
     #[tracing::instrument(skip_all)]
-    pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fastn_core::Result<fastn_core::File> {
+    pub async fn get_file_and_package_by_id(
+        &mut self,
+        path: &str,
+    ) -> fastn_core::Result<fastn_core::File> {
         tracing::info!(path = path);
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
@@ -731,7 +742,8 @@ impl Config {
         let package1;
 
         // TODO: The shitty code written by me ever
-        let (path_with_package_name, document, path_params) = if !fastn_core::file::is_static(path)? {
+        let (path_with_package_name, document, path_params) = if !fastn_core::file::is_static(path)?
+        {
             let (path_with_package_name, sanitized_package, sanitized_path) =
                 match self.get_mountpoint_sanitized_path(&self.package, path) {
                     Some((new_path, package, remaining_path, _)) => {
@@ -853,7 +865,10 @@ impl Config {
         Ok(self.get_file_and_resolve(id).await?.0)
     }
 
-    pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fastn_core::Result<(String, Vec<u8>)> {
+    pub(crate) async fn get_file_and_resolve(
+        &self,
+        id: &str,
+    ) -> fastn_core::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
         let package = self.resolve_package(&package).await?;
@@ -1001,12 +1016,13 @@ impl Config {
 
         let id = id.trim_start_matches(package.name.as_str());
 
-        let base = package
-            .download_base_url
-            .clone()
-            .ok_or_else(|| fastn_core::Error::PackageError {
-                message: "package base not found".to_string(),
-            })?;
+        let base =
+            package
+                .download_base_url
+                .clone()
+                .ok_or_else(|| fastn_core::Error::PackageError {
+                    message: "package base not found".to_string(),
+                })?;
 
         if id.eq("/") {
             if let Ok(string) = crate::http::http_get_str(
@@ -1104,7 +1120,10 @@ impl Config {
         })
     }
 
-    pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fastn_core::Result<String> {
+    pub(crate) fn get_file_name(
+        root: &camino::Utf8PathBuf,
+        id: &str,
+    ) -> fastn_core::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -1193,7 +1212,9 @@ impl Config {
         Ok(asset_documents)
     }
 
-    async fn get_root_path(directory: &camino::Utf8PathBuf) -> fastn_core::Result<camino::Utf8PathBuf> {
+    async fn get_root_path(
+        directory: &camino::Utf8PathBuf,
+    ) -> fastn_core::Result<camino::Utf8PathBuf> {
         if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd") {
             return Ok(fastn_ftd_root);
         }

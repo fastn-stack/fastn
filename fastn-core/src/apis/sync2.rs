@@ -128,8 +128,10 @@ pub(crate) async fn do_sync(
     let mut remote_history = config.get_history().await?;
     let remote_manifest =
         fastn_core::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
-    let mut to_be_in_history: std::collections::BTreeMap<String, fastn_core::history::FileEditTemp> =
-        Default::default();
+    let mut to_be_in_history: std::collections::BTreeMap<
+        String,
+        fastn_core::history::FileEditTemp,
+    > = Default::default();
     let mut synced_files = std::collections::HashMap::new();
     for file in files {
         // TODO: get all data like message, author, src-cr from request

@@ -35,13 +35,11 @@ pub async fn process<'a>(
         }
     };
 
-    let (_, mut url, conf) =
-        fastn_core::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
-            ftd::interpreter2::Error::ParseError {
-                message: format!("invalid url: {:?}", e),
-                doc_id: doc.name.to_string(),
-                line_number,
-            }
+    let (_, mut url, conf) = fastn_core::config::utils::get_clean_url(config, url.as_str())
+        .map_err(|e| ftd::interpreter2::Error::ParseError {
+            message: format!("invalid url: {:?}", e),
+            doc_id: doc.name.to_string(),
+            line_number,
         })?;
 
     for header in headers.0 {

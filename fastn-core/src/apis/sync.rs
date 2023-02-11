@@ -181,7 +181,8 @@ pub(crate) async fn sync_worker(
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fastn_core::utils::update1(&config.root, path, data.as_bytes()).await?;
+                                fastn_core::utils::update1(&config.root, path, data.as_bytes())
+                                    .await?;
                                 let snapshot_path = fastn_core::utils::history_path(
                                     path,
                                     config.root.as_str(),

@@ -18,8 +18,11 @@ async fn i18n_data(lib: &fastn_core::Library) -> String {
     };
 
     let current_document_last_modified_on =
-        fastn_core::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str())
-            .await;
+        fastn_core::utils::get_current_document_last_modified_on(
+            &lib.config,
+            lib.document_id.as_str(),
+        )
+        .await;
 
     format!(
         indoc::indoc! {"
@@ -429,9 +432,12 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
         );
     }
 
-    if let Some(last_modified_on) = futures::executor::block_on(
-        fastn_core::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str()),
-    ) {
+    if let Some(last_modified_on) =
+        futures::executor::block_on(fastn_core::utils::get_current_document_last_modified_on(
+            &lib.config,
+            lib.document_id.as_str(),
+        ))
+    {
         fastn_base = format!(
             indoc::indoc! {"
                 {fastn_base}

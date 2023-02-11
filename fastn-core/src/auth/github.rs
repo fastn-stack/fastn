@@ -90,7 +90,9 @@ pub async fn callback(req: actix_web::HttpRequest) -> fastn_core::Result<actix_w
                         fastn_core::auth::AuthProviders::GitHub.as_str(),
                         fastn_core::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fastn_core::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn_core::auth::utils::domain(
+                        req.connection_info().host(),
+                    ))
                     .path("/")
                     .permanent()
                     // TODO: AbrarK is running on http,
@@ -473,7 +475,10 @@ pub mod apis {
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
-    pub async fn repo_contributors(token: &str, repo_name: &str) -> fastn_core::Result<Vec<String>> {
+    pub async fn repo_contributors(
+        token: &str,
+        repo_name: &str,
+    ) -> fastn_core::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
@@ -491,7 +496,10 @@ pub mod apis {
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
     }
-    pub async fn repo_collaborators(token: &str, repo_name: &str) -> fastn_core::Result<Vec<String>> {
+    pub async fn repo_collaborators(
+        token: &str,
+        repo_name: &str,
+    ) -> fastn_core::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/collaborators/collaborators#list-repository-collaborators
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]

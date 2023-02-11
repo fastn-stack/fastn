@@ -41,15 +41,16 @@ pub async fn resolve_conflict(
         }
         fastn_core::utils::update(&config.root.join(path), content).await?;
     } else if use_theirs {
-        let content = conflicted_data
-            .theirs
-            .get_content()
-            .ok_or(fastn_core::Error::UsageError {
-                message: format!(
-                    "Can't find content, Help: Use `fastn resolve-conflict --delete-it {}`",
-                    path
-                ),
-            })?;
+        let content =
+            conflicted_data
+                .theirs
+                .get_content()
+                .ok_or(fastn_core::Error::UsageError {
+                    message: format!(
+                        "Can't find content, Help: Use `fastn resolve-conflict --delete-it {}`",
+                        path
+                    ),
+                })?;
         if conflicted_data.ours.deleted() {
             return fastn_core::usage_error(format!(
                 "`delete-edit-conflict`, Help: Use `fastn resolve-conflict --revive-it {}`",

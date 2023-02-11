@@ -102,11 +102,13 @@ impl FileStatus {
             return None;
         }
         Some(match self {
-            FileStatus::Add { path, content, .. } => fastn_core::apis::sync2::SyncRequestFile::Add {
-                path,
-                content,
-                src_cr,
-            },
+            FileStatus::Add { path, content, .. } => {
+                fastn_core::apis::sync2::SyncRequestFile::Add {
+                    path,
+                    content,
+                    src_cr,
+                }
+            }
             FileStatus::Update {
                 path,
                 content,
@@ -134,8 +136,10 @@ impl fastn_core::Config {
     pub(crate) async fn get_files_status(&self) -> fastn_core::Result<Vec<FileStatus>> {
         use itertools::Itertools;
 
-        let mut workspace: std::collections::BTreeMap<String, fastn_core::workspace::WorkspaceEntry> =
-            self.get_workspace_map().await?;
+        let mut workspace: std::collections::BTreeMap<
+            String,
+            fastn_core::workspace::WorkspaceEntry,
+        > = self.get_workspace_map().await?;
         let changed_files = self.get_files_status_with_workspace(&mut workspace).await?;
         self.write_workspace(workspace.into_values().collect_vec().as_slice())
             .await?;
@@ -200,12 +204,14 @@ impl fastn_core::Config {
             if workspace_entry.deleted.unwrap_or(false) {
                 changed_files.push(FileStatus::Delete {
                     path: workspace_entry.filename.to_string(),
-                    version: workspace_entry.version.ok_or(fastn_core::Error::UsageError {
-                        message: format!(
-                            "{}, which is to be deleted, doesn't define version in workspace",
-                            workspace_entry.filename
-                        ),
-                    })?,
+                    version: workspace_entry
+                        .version
+                        .ok_or(fastn_core::Error::UsageError {
+                            message: format!(
+                                "{}, which is to be deleted, doesn't define version in workspace",
+                                workspace_entry.filename
+                            ),
+                        })?,
                     status: Status::NoConflict,
                 });
                 continue;
@@ -337,7 +343,8 @@ impl fastn_core::Config {
                         .merge(&ancestor_content, &ours_content, &theirs_content)
                     {
                         Ok(data) => {
-                            fastn_core::utils::update(self.root.join(filename), data.as_bytes()).await?;
+                            fastn_core::utils::update(self.root.join(filename), data.as_bytes())
+                                .await?;
                             *content = data.as_bytes().to_vec();
                             *version = server_file_edit.version;
                         }

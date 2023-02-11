@@ -5,7 +5,9 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone(req: fastn_core::http::Request) -> fastn_core::Result<fastn_core::http::Response> {
+pub async fn clone(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     // TODO: implement authentication
     match clone_worker(req).await {
         Ok(data) => fastn_core::http::api_ok(data),

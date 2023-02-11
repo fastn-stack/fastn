@@ -27,7 +27,9 @@ pub struct AppTemp {
 }
 
 impl AppTemp {
-    fn parse_config(config: &[String]) -> fastn_core::Result<std::collections::HashMap<String, String>> {
+    fn parse_config(
+        config: &[String],
+    ) -> fastn_core::Result<std::collections::HashMap<String, String>> {
         let mut hm = std::collections::HashMap::new();
         for key_value in config.iter() {
             // <key>=<value>
@@ -73,7 +75,9 @@ impl AppTemp {
 
     pub async fn into_app(self, config: &fastn_core::Config) -> fastn_core::Result<App> {
         let package = config
-            .resolve_package(&fastn_core::Package::new(self.package.trim().trim_matches('/')))
+            .resolve_package(&fastn_core::Package::new(
+                self.package.trim().trim_matches('/'),
+            ))
             .await?;
 
         Ok(App {

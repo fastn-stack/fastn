@@ -226,7 +226,9 @@ pub async fn get_auth_identities(
     let github_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::GitHub.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("github user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "github user detail not found in the cookies".to_string(),
+            )
         });
     match github_ud_encrypted {
         Ok(encrypt_str) => {
@@ -244,7 +246,9 @@ pub async fn get_auth_identities(
     let telegram_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::TeleGram.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("telegram user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "telegram user detail not found in the cookies".to_string(),
+            )
         });
     match telegram_ud_encrypted {
         Ok(encrypt_str) => {
@@ -262,7 +266,9 @@ pub async fn get_auth_identities(
     let discord_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Discord.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("discord user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "discord user detail not found in the cookies".to_string(),
+            )
         });
     match discord_ud_encrypted {
         Ok(encrypt_str) => {
@@ -280,7 +286,9 @@ pub async fn get_auth_identities(
     let twitter_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Twitter.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("twitter user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "twitter user detail not found in the cookies".to_string(),
+            )
         });
 
     match twitter_ud_encrypted {
@@ -299,7 +307,9 @@ pub async fn get_auth_identities(
     let amazon_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Amazon.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("amazon user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "amazon user detail not found in the cookies".to_string(),
+            )
         });
     match amazon_ud_encrypted {
         Ok(encrypt_str) => {
@@ -316,7 +326,9 @@ pub async fn get_auth_identities(
     let facebook_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Facebook.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("facebook user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "facebook user detail not found in the cookies".to_string(),
+            )
         });
     match facebook_ud_encrypted {
         Ok(encrypt_str) => {
@@ -334,7 +346,9 @@ pub async fn get_auth_identities(
     let gmail_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Gmail.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("gmail user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "gmail user detail not found in the cookies".to_string(),
+            )
         });
     match gmail_ud_encrypted {
         Ok(encrypt_str) => {
@@ -351,7 +365,9 @@ pub async fn get_auth_identities(
     let slack_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Slack.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("slack user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "slack user detail not found in the cookies".to_string(),
+            )
         });
     match slack_ud_encrypted {
         Ok(encrypt_str) => {
@@ -368,7 +384,9 @@ pub async fn get_auth_identities(
     let apple_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Apple.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("apple user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "apple user detail not found in the cookies".to_string(),
+            )
         });
     match apple_ud_encrypted {
         Ok(encrypt_str) => {
@@ -385,7 +403,9 @@ pub async fn get_auth_identities(
     let baidu_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Baidu.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("baidu user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "baidu user detail not found in the cookies".to_string(),
+            )
         });
     match baidu_ud_encrypted {
         Ok(encrypt_str) => {
@@ -402,7 +422,9 @@ pub async fn get_auth_identities(
     let bitbucket_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::BitBucket.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("bitbucket user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "bitbucket user detail not found in the cookies".to_string(),
+            )
         });
     match bitbucket_ud_encrypted {
         Ok(encrypt_str) => {
@@ -469,7 +491,9 @@ pub async fn get_auth_identities(
     let dropbox_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::DropBox.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("DropBox user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "DropBox user detail not found in the cookies".to_string(),
+            )
         });
     match dropbox_ud_encrypted {
         Ok(encrypt_str) => {
@@ -487,7 +511,9 @@ pub async fn get_auth_identities(
     let gitlab_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::GitLab.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("GitLab user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "GitLab user detail not found in the cookies".to_string(),
+            )
         });
     match gitlab_ud_encrypted {
         Ok(encrypt_str) => {
@@ -504,7 +530,9 @@ pub async fn get_auth_identities(
     let instagram_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Instagram.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Instagram user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Instagram user detail not found in the cookies".to_string(),
+            )
         });
     match instagram_ud_encrypted {
         Ok(encrypt_str) => {
@@ -525,7 +553,9 @@ pub async fn get_auth_identities(
     let linkedin_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::LinkedIn.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("LinkedIn user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "LinkedIn user detail not found in the cookies".to_string(),
+            )
         });
     match linkedin_ud_encrypted {
         Ok(encrypt_str) => {
@@ -543,7 +573,9 @@ pub async fn get_auth_identities(
     let microsoft_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Microsoft.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Microsoft user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Microsoft user detail not found in the cookies".to_string(),
+            )
         });
     match microsoft_ud_encrypted {
         Ok(encrypt_str) => {
@@ -580,7 +612,9 @@ pub async fn get_auth_identities(
     let pintrest_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Pintrest.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Pintrest user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Pintrest user detail not found in the cookies".to_string(),
+            )
         });
     match pintrest_ud_encrypted {
         Ok(encrypt_str) => {
@@ -598,7 +632,9 @@ pub async fn get_auth_identities(
     let tiktok_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::TikTok.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("TikTok user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "TikTok user detail not found in the cookies".to_string(),
+            )
         });
     match tiktok_ud_encrypted {
         Ok(encrypt_str) => {
@@ -615,7 +651,9 @@ pub async fn get_auth_identities(
     let twitch_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Twitch.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Twitch user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Twitch user detail not found in the cookies".to_string(),
+            )
         });
     match twitch_ud_encrypted {
         Ok(encrypt_str) => {
@@ -632,7 +670,9 @@ pub async fn get_auth_identities(
     let twitter_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Twitter.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Twitter user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Twitter user detail not found in the cookies".to_string(),
+            )
         });
     match twitter_ud_encrypted {
         Ok(encrypt_str) => {
@@ -650,7 +690,9 @@ pub async fn get_auth_identities(
     let wechat_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::WeChat.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("WeChat user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "WeChat user detail not found in the cookies".to_string(),
+            )
         });
     match wechat_ud_encrypted {
         Ok(encrypt_str) => {
@@ -667,7 +709,9 @@ pub async fn get_auth_identities(
     let yahoo_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Yahoo.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Yahoo user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Yahoo user detail not found in the cookies".to_string(),
+            )
         });
     match yahoo_ud_encrypted {
         Ok(encrypt_str) => {
@@ -700,7 +744,9 @@ pub async fn get_auth_identities(
     let google_ud_encrypted = cookies
         .get(fastn_core::auth::AuthProviders::Google.as_str())
         .ok_or_else(|| {
-            fastn_core::Error::GenericError("Google user detail not found in the cookies".to_string())
+            fastn_core::Error::GenericError(
+                "Google user detail not found in the cookies".to_string(),
+            )
         });
     match google_ud_encrypted {
         Ok(encrypt_str) => {

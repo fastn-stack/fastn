@@ -1,4 +1,7 @@
-pub async fn sync(config: &fastn_core::Config, files: Option<Vec<String>>) -> fastn_core::Result<()> {
+pub async fn sync(
+    config: &fastn_core::Config,
+    files: Option<Vec<String>>,
+) -> fastn_core::Result<()> {
     // Read All the Document
     // Get all the updated, added and deleted files
     // Get Updated Files -> If content differs from latest snapshot
@@ -11,7 +14,8 @@ pub async fn sync(config: &fastn_core::Config, files: Option<Vec<String>>) -> fa
             .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        fastn_core::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
+        fastn_core::paths_to_files(config.package.name.as_str(), files, config.root.as_path())
+            .await?
     } else {
         config.get_files(&config.package).await?
     };
@@ -183,7 +187,8 @@ async fn write(
         }
     }
 
-    let new_file_path = fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
+    let new_file_path =
+        fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
 
     tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
 
@@ -266,7 +271,8 @@ async fn update_history(
     latest_ftd: &str,
 ) -> fastn_core::Result<()> {
     for file in files {
-        fastn_core::utils::update1(&config.history_dir(), file.path.as_str(), &file.content).await?;
+        fastn_core::utils::update1(&config.history_dir(), file.path.as_str(), &file.content)
+            .await?;
     }
     fastn_core::utils::update1(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
     Ok(())
@@ -354,7 +360,8 @@ async fn on_conflict(
                             conflicted: *client_snapshot
                                 .get(path)
                                 .ok_or_else(|| error("File should be available in request file"))?,
-                            workspace: fastn_core::snapshot::WorkspaceType::CloneEditedRemoteDeleted,
+                            workspace:
+                                fastn_core::snapshot::WorkspaceType::CloneEditedRemoteDeleted,
                         },
                     );
                 } else if fastn_core::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
@@ -370,7 +377,8 @@ async fn on_conflict(
                             conflicted: *server_snapshot
                                 .get(path)
                                 .ok_or_else(|| error("File should be available in request file"))?,
-                            workspace: fastn_core::snapshot::WorkspaceType::CloneDeletedRemoteEdited,
+                            workspace:
+                                fastn_core::snapshot::WorkspaceType::CloneDeletedRemoteEdited,
                         },
                     );
                 }
@@ -378,8 +386,11 @@ async fn on_conflict(
         }
     }
 
-    fastn_core::snapshot::create_workspace(config, workspace.into_values().collect_vec().as_slice())
-        .await?;
+    fastn_core::snapshot::create_workspace(
+        config,
+        workspace.into_values().collect_vec().as_slice(),
+    )
+    .await?;
 
     Ok(())
 }
@@ -400,7 +411,10 @@ async fn collect_garbage(config: &fastn_core::Config) -> fastn_core::Result<()> 
         workspaces.remove(&path);
     }
 
-    fastn_core::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
-        .await?;
+    fastn_core::snapshot::create_workspace(
+        config,
+        workspaces.into_values().collect_vec().as_slice(),
+    )
+    .await?;
     Ok(())
 }
