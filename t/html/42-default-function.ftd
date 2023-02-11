@@ -3,7 +3,7 @@ $on-click$: $http-call(url = http://www.fifthtry.com, method = get, name = Arpit
 
 
 -- ftd.text: Copy me ⭐️
-$on-click$: $copy-me-call(text = Copy me ⭐️)
+$on-click$: $ftd.copy-to-clipboard(a = Copy me ⭐️)
 
 
 -- void http-call(url,method,name):

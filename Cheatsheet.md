@@ -1082,6 +1082,27 @@ Alternatively you can do
 $on-click$: $ftd.enable-system-mode()
 ```
 
+
+## `copy_to_clipboard()`
+
+This is FScript as well as a standard ftd function. This function enables copy content in clipboard.
+
+```ftd
+-- ftd.text: Copy
+$on-click$: $copy-me-call(text = Copy me ⭐️)
+
+-- void copy-me-call(text):
+string text:
+
+copy_to_clipboard(text)
+```
+
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set System Mode
+$on-click$: $ftd.copy-to-clipboard(a = Copy me ⭐️)
+```
+
 ## `http(url: string, method: string, ...request-data)`
 
 This function is used to make http request

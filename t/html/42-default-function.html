@@ -616,7 +616,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__http_call___main&quot;,&quot;values&quot;:[[&quot;url&quot;,&quot;http://www.fifthtry.com&quot;],[&quot;method&quot;,&quot;get&quot;],[&quot;name&quot;,&quot;Arpita&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Call http</p></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__copy_me_call___main&quot;,&quot;values&quot;:[[&quot;text&quot;,&quot;Copy me ⭐\u{fe0f}&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Copy me ⭐️</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__http_call___main&quot;,&quot;values&quot;:[[&quot;url&quot;,&quot;http://www.fifthtry.com&quot;],[&quot;method&quot;,&quot;get&quot;],[&quot;name&quot;,&quot;Arpita&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Call http</p></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__copy_to_clipboard___main&quot;,&quot;values&quot;:[[&quot;a&quot;,&quot;Copy me ⭐\u{fe0f}&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Copy me ⭐️</p></div></div>
 
 
 <script>
@@ -1387,14 +1387,14 @@ return f;
 
 
 
-function foo__copy_me_call___main(text,args,data,id){
-return (copy_to_clipboard(text,args,data,id));
+function foo__http_call___main(url,method,name,args,data,id){
+return (http(url,method,(["name",name]),args,data,id));
 }
 
 
 
-function foo__http_call___main(url,method,name,args,data,id){
-return (http(url,method,(["name",name]),args,data,id));
+function ftd__copy_to_clipboard___main(a,args,data,id){
+return (copy_to_clipboard(a,args,data,id));
 }
 
 
