@@ -322,6 +322,9 @@ impl Config {
 
         for font in fonts.iter() {
             if let Some(url) = font.get_url() {
+                if fastn_core::config::utils::is_http_url(&url) {
+                    continue;
+                }
                 let start = std::time::Instant::now();
                 print!("Processing {} ... ", url);
                 let content = self.get_file_and_resolve(url.as_str()).await?.1;
@@ -854,6 +857,7 @@ impl Config {
             }
             id
         };
+
         Ok(format!(
             "{}{}",
             add_packages,
@@ -896,6 +900,7 @@ impl Config {
             }
             id
         };
+
         let (file_name, content) = package.resolve_by_id(id, None).await?;
         Ok((format!("{}{}", add_packages, file_name), content))
     }

@@ -1,0 +1,14 @@
+-- import: amitu/lib
+-- import: fifthtry.github.io/code-block
+
+-- lib.block:
+
+-- code-block.code:
+lang: ftd
+
+\-- ftd.text: hello
+
+\-- ftd.text: hello world!
+
+
+-- end: lib.block

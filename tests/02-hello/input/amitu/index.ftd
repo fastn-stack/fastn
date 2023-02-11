@@ -1,26 +1,34 @@
--- import: fastn
-
 -- ftd.text: hello
 
--- ftd.font-size body-large-size:
-line-height: 25
-size: 16
-
--- ftd.type body-large: sans-serif
-desktop: $body-large-size
-mobile: $body-large-size
-xl: $body-large-size
-weight: 400
-
--- ftd.text: hello_h2
+-- ftd.text: Hello World
 region: h2
-role: $body-large
+role: $rtype
+
 
 -- ftd.text: hello_h1
 region: h1
-role: $fastn.type.copy-relaxed
-color: $fastn.color.main.text
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
 -- ftd.text: hello_h0
-region: h0
-role: $fastn.type.copy-tight
+region: h3
+role: $dtype
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 700
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype

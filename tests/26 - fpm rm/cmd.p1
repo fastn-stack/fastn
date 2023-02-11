@@ -1,7 +1,0 @@
--- fbt:
-cmd: $FBT_CWD/target/debug/fastn --test rm index.ftd && $FBT_CWD/target/debug/fastn --test sync-status
-output: .clone-state
-
--- stdout:
-
-Deleted: index.ftd

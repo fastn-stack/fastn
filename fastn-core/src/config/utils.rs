@@ -115,3 +115,7 @@ pub fn get_clean_url(
     tracing::error!(msg = msg);
     Err(fastn_core::Error::GenericError(msg))
 }
+
+pub(crate) fn is_http_url(url: &str) -> bool {
+    url.starts_with("http")
+}

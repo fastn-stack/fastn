@@ -1,4 +1,0 @@
--- import: fpm
-
--- fpm.package: www.amitu.com
-zip: amitu

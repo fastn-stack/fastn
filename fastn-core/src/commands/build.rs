@@ -37,6 +37,16 @@ pub async fn build(
                         config.root.join(".build").join(doc.id.as_str()),
                     )
                     .await?;
+
+                    fastn_core::utils::print_end(
+                        format!(
+                            "Processed {}/{}",
+                            config.package.name.as_str(),
+                            main.get_id()
+                        )
+                        .as_str(),
+                        start,
+                    );
                     continue;
                 }
                 let resp =
@@ -61,6 +71,7 @@ pub async fn build(
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
                 {
+                    println!("Skipped");
                     continue;
                 }
                 let resp = process_markdown(config, doc, base_url, no_static).await;

@@ -1,6 +1,0 @@
--- import: fpm
-
--- fpm.package: amitu
-download-base-url: amitu
-
--- fpm.dependency: arpita-jaiswal/blog
