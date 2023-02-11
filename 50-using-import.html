@@ -1421,6 +1421,12 @@ return f;
 
 
 
+function ftd__copy_to_clipboard___main(a,args,data,id){
+return (copy_to_clipboard(a,args,data,id));
+}
+
+
+
 function ftd__enable_dark_mode___main(args,data,id){
 return (enable_dark_mode(args,data,id));
 }
@@ -1497,9 +1503,9 @@ set_data_value(data, "49-import#example-product", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__text"]){window.node_change_main["0,3:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }

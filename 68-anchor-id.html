@@ -1387,6 +1387,12 @@ return f;
 
 
 
+function ftd__copy_to_clipboard___main(a,args,data,id){
+return (copy_to_clipboard(a,args,data,id));
+}
+
+
+
 function ftd__enable_dark_mode___main(args,data,id){
 return (enable_dark_mode(args,data,id));
 }
@@ -1455,11 +1461,11 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
 }
 };
 
