@@ -1,9 +1,0 @@
--- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fastn --test build --ignore-failed
-output: amitu/.build
-
--- stdout:
-
-Processing www.amitu.com/FASTN.ftd ... done in <omitted>
-Processing www.amitu.com/fail_doc.ftd ... Failed
-Processing www.amitu.com/index.ftd ... done in <omitted>

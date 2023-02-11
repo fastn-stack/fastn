@@ -1,0 +1,14 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test sync index.ftd nested/document.ftd && $FBT_CWD/../target/debug/fastn --test sync
+output: amitu/.history
+skip: `fastn sync` is not supporting offline mode
+
+-- stdout:
+
+
+Repo for amitu is github, directly syncing with .history.
+index.ftd
+nested/document.ftd
+Repo for amitu is github, directly syncing with .history.
+FPM.ftd
+nested/index.ftd
