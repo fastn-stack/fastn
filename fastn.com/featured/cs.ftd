@@ -63,21 +63,21 @@ github-url: https://github.com/FifthTry/saturated-sunset-cs/
 
 
 -- ft-ui.template: Winter CS
-template-url: https://fifthtry.github.io/ds-set1-cs/
+template-url: https://fifthtry.github.io/winter-cs/
 screenshot: $assets.files.static.winter-cs.png
 licence-url: https://github.com/FifthTry/ds-set1-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/ds-set1-cs/
 
-`fifthtry.github.io/ds-set1-cs` is a winter color scheme.
+`fifthtry.github.io/winter-cs` is a winter color scheme.
 
 
 -- ft-ui.template: Dark Flame CS
-template-url: https://fifthtry.github.io/fastn-cs/
+template-url: https://fifthtry.github.io/dark-flame-cs/
 screenshot: $assets.files.static.dark-flame-cs.png
 licence-url: https://github.com/FifthTry/fastn-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/fastn-cs/
 
-`fifthtry.github.io/fastn-cs` is a dark flame color scheme. Our web site,
+`fifthtry.github.io/dark-flame-cs` is a dark flame color scheme. Our web site,
 [`fastn.io`](https://fastn.io/) is using this color scheme.
 
 -- end: schemes
