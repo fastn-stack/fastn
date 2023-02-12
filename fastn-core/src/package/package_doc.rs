@@ -397,7 +397,6 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
-
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main")?;

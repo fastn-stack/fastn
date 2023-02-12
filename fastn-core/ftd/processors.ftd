@@ -31,8 +31,6 @@ boolean is-active: false
 boolean is-open: false
 toc-item list children:
 
-
-
 -- record sitemap-data:
 toc-item list sections:
 toc-item list subsections:

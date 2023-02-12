@@ -216,6 +216,12 @@ impl Library2022 {
         let line_number = ast.line_number();
         let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
+            "figma-cs-token" => {
+                processor::figma_tokens::process_figma_tokens(value, kind, doc, &self.config)
+            }
+            "figma-cs-token-old" => {
+                processor::figma_tokens::process_figma_tokens_old(value, kind, doc, &self.config)
+            }
             "http" => processor::http::process(value, kind, doc, &self.config).await,
             "toc" => processor::toc::process(value, kind, doc, &self.config),
             "get-data" => processor::get_data::process(value, kind, doc, &self.config),
