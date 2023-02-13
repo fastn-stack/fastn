@@ -26,7 +26,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut document = document;
         let mut dummy_instructions = Default::default();
         let mut element_constructor = Default::default();
-        let mut execute_doc = ExecuteDoc {
+        let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &mut document.data,
@@ -498,7 +498,7 @@ impl<'a> ExecuteDoc<'a> {
 
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
-                let mut text = ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
+                let mut text = ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
@@ -508,9 +508,9 @@ impl<'a> ExecuteDoc<'a> {
                     is_dummy,
                     instruction.line_number,
                     inherited_variables,
-                )?);
+                )?;
                 text.set_auto_id();
-                text
+                ftd::executor::Element::Text(text)
             }
             "ftd#integer" => {
                 ftd::executor::Element::Integer(ftd::executor::element::integer_from_properties(
