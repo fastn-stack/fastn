@@ -23,17 +23,18 @@ into `.html` files that can be ship on popular platforms such as
 [`ftd`](https://ftd.dev) is a revolutionary language designed for creating web 
 pages and documents for publishing on the web. It starts with the simplicity of 
 Markdown, but takes it to the next level by adding features to create full page 
-layouts, reusable "FTD components", and first-class support for data modeling. 
-This makes FTD an replacement for traditional data exchange formats like JSON, 
+layouts, reusable `"ftd components"`, and first-class support for data modeling. 
+This makes `ftd` a replacement for traditional data exchange formats like JSON, 
 CSV etc.
 
-Here are some key [features of `fastn`](https://fastn.io/features/) that make it 
+Here are some key [features of `fastn`](https://fastn.io/features/) that makes it 
 a must-have tool:
 
 
 - Supports [ftd](https://ftd.dev)
-- [FTD package manager](https://fastn.io/package-manager/)
-- [static site generator](https://fastn.io/static/)
+- [`ftd` package manager](https://fastn.io/package-manager/)
+- [Static site generator](https://fastn.io/static/)
+- [`fastn` Server](https://fastn.io/server/)
 - [Customizable color schemes](https://fastn.io/cs/)
 
 
@@ -41,9 +42,9 @@ a must-have tool:
 
 So, how do you get started with Fastn? 
 
-Installing FASTN is easy and can be done on multiple operating systems. Check out 
+Installing `fastn` is easy and can be done on multiple operating systems. Check out 
 the ["How to Install"](https://fastn.io/install/) section for more information. 
-Additionally, an editor is required to use FASTN, and we recommend using 
+Additionally, an editor is required to use `fastn`, and we recommend using 
 [Sublime Text](https://www.sublimetext.com/3).
 
 
