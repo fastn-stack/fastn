@@ -413,6 +413,24 @@ impl ftd::executor::Text {
         );
         n
     }
+
+    pub fn set_auto_id(&mut self) {
+        if self
+            .common
+            .region
+            .value
+            .as_ref()
+            .filter(|r| r.is_heading())
+            .is_some()
+            && self.common.id.value.is_none()
+        {
+            self.common.id = ftd::executor::Value::new(
+                Some(slug::slugify(self.text.value.original.as_str())),
+                Some(self.common.line_number),
+                vec![],
+            )
+        }
+    }
 }
 
 impl ftd::executor::Code {

@@ -498,7 +498,7 @@ impl<'a> ExecuteDoc<'a> {
 
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
-                ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
+                let mut text = ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
@@ -508,7 +508,9 @@ impl<'a> ExecuteDoc<'a> {
                     is_dummy,
                     instruction.line_number,
                     inherited_variables,
-                )?)
+                )?;
+                text.set_auto_id();
+                ftd::executor::Element::Text(text)
             }
             "ftd#integer" => {
                 ftd::executor::Element::Integer(ftd::executor::element::integer_from_properties(
