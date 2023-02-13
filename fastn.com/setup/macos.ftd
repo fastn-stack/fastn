@@ -12,21 +12,25 @@ For MacOS/Linux machine, there are three ways to install `fastn`.
 
 -- cbox.info: Our Recommendation
 
-We recommend you to install `fastn` through `pre-built binary`. 
+We recommend you to install `fastn` through `pre-built binary`.
 
-It is prefered by all non-technical users as you just need to download the binary and 
-install it in your local system.
+This is the preferred method as it only requires downloading the binary and
+installing it on your local system.
 
 -- ds.markdown: 
 
-Developers who prefer to play around with the setup or source to install `fastn`, we have given them
-the option to install it using `cargo` or by building the `source`, so they have the other two options as well.
+`fastn` is written using `rust` language, if you are familiar with it and want
+to use `fastn` for your project or for experimentation, you can do it with
+other two options, i.e, by installing it using `cargo` or by building the
+`source`.
 
-Based on your choice of installation, you can select one of the following options- 
+Based on your choice of installation, you can select one of the following
+options:
 
 -- ds.h1: `fastn` through pre-built binary
 
-For MacOS, we have an installer script. You just need to follow the video or follow the steps given below.
+For MacOS, we have an installer script. You just need to follow the video or
+follow the steps given below.
 
 -- ds.youtube:
 v: cWdivkyoOTA
@@ -78,6 +82,11 @@ successfully installed.
 
 -- ds.h1: `fastn` using `cargo`
 
+If you have cargo installed in your system, you can run the following command to
+install `fastn`.
+
+For more details on `how to install cargo` is given
+[here](https://doc.rust-lang.org/cargo/getting-started/installation.html).
 
 -- ds.code:
 lang: sh
@@ -90,7 +99,7 @@ cargo install fastn
 
 -- ds.h1: `fastn` from `source`
 
-`fastn` is open source project. You can clone the fastn git repo:
+`fastn` is open source project. You can clone the `fastn` github repository:
 
 
 -- ds.code:
@@ -102,7 +111,7 @@ git clone git@github.com:ftd-lang/fastn.git
 -- ds.markdown:
 
 `fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
-version (MSRV) is 1.56.0.
+version (MSRV) is 1.65.0.
 
 
 -- ds.code:

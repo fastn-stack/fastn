@@ -1,32 +1,34 @@
--- import: fastn.dev/assets
+?-- import: fastn.dev/assets
 -- import: fifthtry.github.io/admonitions as cbox
 
 -- ds.page: Install `fastn`
 
+`fastn` is compatible with various operating systems, including Windows, MacOS,
+and Linux.
 
--- ds.markdown: 
+There are three options available for installation on each system:
 
-`fastn` can be downloaded in all types of machines, like Windows, MacOS or Linux.
+1. Using a `pre-built binary`
+2. Installing with `cargo`
+3. Building from `github repo source`
 
-For each machine, there are three ways to install `fastn`. 
-
-1. `fastn` through `pre-built binary`
-2. `fastn` using `cargo`
-3. `fastn` from `source`
 
 -- cbox.info: Our Recommendation
 
-We recommend you to install `fastn` through `pre-built binary`. 
+We recommend you to install `fastn` through `pre-built binary`.
 
-It is prefered by all non-technical users as you just need to download the binary and 
-install it in your local system.
+This is the preferred method as it only requires downloading the binary and
+installing it on your local system.
 
 -- ds.markdown: 
 
-Developers who prefer to play around with the setup or source to install `fastn`, we have given them
-the option to install it using `cargo` or by building the `source`, so they have the other two options as well.
+`fastn` is written using `rust` language, if you are familiar with it and want
+to use `fastn` for your project or for experimentation, you can do it with
+other two options, i.e, by installing it using `cargo` or by building the
+`source`.
 
-Based on your machine and your choice of installation, you can select one of the following options- 
+Based on your machine and your choice of installation, you can select one of the
+following options:
 
 -- ds.h2:  For Windows
 
@@ -37,15 +39,11 @@ Based on your machine and your choice of installation, you can select one of the
 
 
 
-
 -- ds.h2:  For MacOS/Linux
 
 1. [`fastn` through `pre-built binary`](http://127.0.0.1:8000/macos/)
 2. [`fastn` using `cargo`](http://127.0.0.1:8000/macos/)
 3. [`fastn` from `source`](http://127.0.0.1:8000/macos/)
-
-
-
 
 
 
