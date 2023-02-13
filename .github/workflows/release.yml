@@ -136,3 +136,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
           prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
+          body: "Checkout fastn installation step: https://github.com/ftd-lang/fastn/blob/main/README.md#how-to-install-fastn"
