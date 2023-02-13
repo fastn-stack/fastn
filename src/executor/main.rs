@@ -61,18 +61,37 @@ impl<'a> ExecuteDoc<'a> {
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
     }
 
-    fn set_auto_ids(elements: &mut Vec<ftd::executor::Element>) {
+    fn set_auto_ids(elements: &mut [ftd::executor::Element]) {
         for element in elements.iter_mut() {
             match element {
-                ftd::executor::Element::Column(ftd::executor::element::Column { ref mut container, .. })
-                | ftd::executor::Element::Row(ftd::executor::element::Row { ref mut container, .. }) => {
+                ftd::executor::Element::Column(ftd::executor::element::Column {
+                    ref mut container,
+                    ..
+                })
+                | ftd::executor::Element::Row(ftd::executor::element::Row {
+                    ref mut container,
+                    ..
+                }) => {
                     ExecuteDoc::set_auto_ids(&mut container.children);
                 }
-                ftd::executor::Element::Text(ftd::executor::element::Text { text, ref mut common, .. }) => {
-                    if let Some(_) = common.region.value.as_ref().filter(|r| r.is_heading()) {
-                        if common.id.value.is_none() {
-                            common.id = ftd::executor::Value::new(Some(slug::slugify(text.value.original.as_str())), Some(common.line_number), vec![])
-                        }
+                ftd::executor::Element::Text(ftd::executor::element::Text {
+                    text,
+                    ref mut common,
+                    ..
+                }) => {
+                    if common
+                        .region
+                        .value
+                        .as_ref()
+                        .filter(|r| r.is_heading())
+                        .is_some()
+                        && common.id.value.is_none()
+                    {
+                        common.id = ftd::executor::Value::new(
+                            Some(slug::slugify(text.value.original.as_str())),
+                            Some(common.line_number),
+                            vec![],
+                        )
                     }
                 }
                 _ => continue,
