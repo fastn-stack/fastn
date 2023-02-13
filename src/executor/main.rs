@@ -35,7 +35,6 @@ impl<'a> ExecuteDoc<'a> {
             element_constructor: &mut element_constructor,
         }
         .execute()?;
-        ExecuteDoc::set_auto_ids(&mut execute_doc);
         let mut main = ftd::executor::element::default_column();
         main.container.children.extend(execute_doc);
 
@@ -59,44 +58,6 @@ impl<'a> ExecuteDoc<'a> {
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
-    }
-
-    fn set_auto_ids(elements: &mut [ftd::executor::Element]) {
-        for element in elements.iter_mut() {
-            match element {
-                ftd::executor::Element::Column(ftd::executor::element::Column {
-                    ref mut container,
-                    ..
-                })
-                | ftd::executor::Element::Row(ftd::executor::element::Row {
-                    ref mut container,
-                    ..
-                }) => {
-                    ExecuteDoc::set_auto_ids(&mut container.children);
-                }
-                ftd::executor::Element::Text(ftd::executor::element::Text {
-                    text,
-                    ref mut common,
-                    ..
-                }) => {
-                    if common
-                        .region
-                        .value
-                        .as_ref()
-                        .filter(|r| r.is_heading())
-                        .is_some()
-                        && common.id.value.is_none()
-                    {
-                        common.id = ftd::executor::Value::new(
-                            Some(slug::slugify(text.value.original.as_str())),
-                            Some(common.line_number),
-                            vec![],
-                        )
-                    }
-                }
-                _ => continue,
-            }
-        }
     }
 
     #[allow(clippy::type_complexity)]
@@ -537,7 +498,7 @@ impl<'a> ExecuteDoc<'a> {
 
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
-                ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
+                let mut text = ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
@@ -547,7 +508,9 @@ impl<'a> ExecuteDoc<'a> {
                     is_dummy,
                     instruction.line_number,
                     inherited_variables,
-                )?)
+                )?);
+                text.set_auto_id();
+                text
             }
             "ftd#integer" => {
                 ftd::executor::Element::Integer(ftd::executor::element::integer_from_properties(
