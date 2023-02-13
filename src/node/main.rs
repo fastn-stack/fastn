@@ -415,7 +415,8 @@ impl ftd::executor::Text {
     }
 
     pub fn set_auto_id(&mut self) {
-        if self.common
+        if self
+            .common
             .region
             .value
             .as_ref()
