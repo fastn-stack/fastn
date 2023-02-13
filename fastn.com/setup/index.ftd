@@ -1,8 +1,8 @@
--- import: ds as ft
+-- import: ds
 
--- ft.page: installation
+-- ds.page: installation
 
 
-Everything related  to installation in windows.
+Everything related to installation in windows.
 
--- end: ft.page
+-- end: ds.page

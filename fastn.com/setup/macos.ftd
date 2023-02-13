@@ -1,10 +1,10 @@
 -- import: fastn.dev/assets
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: Install `FASTN` on Windows
 
+-- my-ds.page: Install `FASTN` on Mac/Linux
 
-For Windows machine, there are three ways to install `fastn`. 
+For MacOS/Linux machine, there are three ways to install `fastn`. 
 
 1. `fastn` through `pre-built binary`
 2. `fastn` using `cargo`
@@ -24,63 +24,60 @@ to use `fastn` for your project or for experimentation, you can do it with
 other two options, i.e, by installing it using `cargo` or by building the
 `source`.
 
-Based on your machine and your choice of installation, you can select one of the
-following options:
+Based on your choice of installation, you can select one of the following
+options:
 
+-- ds.h1: `fastn` through pre-built binary
 
--- ds.h1: `fastn` through `pre-built binary`
+For MacOS, we have an installer script. You just need to follow the video or
+follow the steps given below.
 
 -- ds.youtube:
-v: lw-qVPCJgZs
+v: cWdivkyoOTA
 
--- ds.markdown:
+-- ds.h3: First Step: Copy the following command:
 
-- Download the executable from the [Releases](https://github.com/ftd-lang/fastn/releases)
-  page.
-
-- Click on latest release
-
-- Get the latest executable file for windows in the releases page, under Assets 
-
-- Create a folder named FASTN in your C drive.
-
-- Go to Settings and search Environment Variable
-
-- In the System Settings box, click Environment Variable
-
-- Double click on Path
-
-- Click on New button
-
-- Set a Path for FASTN in your machine's Environment Variable.
-
--- ds.code: New Path
+-- ds.code: Installer Script
 lang: ftd
 
-C:\FASTN
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
 
--- ds.markdown:
+-- ds.h3: Second Step: Open the Terminal
 
-- Click OK
+You can find Terminal on the Dock or you can search for Terminal using Spotlight
+Search. Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your
+keyboard.
 
--- ds.markdown:
+-- ds.h3: Third Step: Run the Installer Script
 
-FASTN is installed.
-To verify, open the Terminal(cmd) and execute the command, fastn
+Paste the command and hit enter. When prompted, enter your System Password that
+you use to open your machine and enter.
+
 
 -- ds.image:
-src: $assets.files.images.fastn-terminal-windows.png
+src: $assets.files.images.latest-binary-macos.png
+width: fill-container
+
+
+-- ds.markdown:
+
+Let the `fastn` installation complete.
+
+
+You can verify that installation is complete by running the command, `fastn`,
+in the `Terminal`.
+
+
+
+-- ds.image:
+src: $assets.files.images.fastn-terminal-macos.png
 width: fill-container
 
 -- ds.markdown: 
 
+
 If you see the Help text of the fastn command, it confirms that FASTN is
 successfully installed.
-
-
-
-
-
 
 
 -- ds.h1: `fastn` using `cargo`
@@ -124,6 +121,15 @@ cd fastn
 cargo test
 cargo build
 
+-- ds.h2: Linux Dependencies
+
+When building from source you will have to install SSL and SQLite dev packages:
+
+
+-- ds.code:
+lang: sh
+
+sudo apt-get install libsqlite3-dev libssl-dev
 
 -- ds.markdown:
 

@@ -80,12 +80,15 @@ email: arpita@fifthtry.com
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
-## How Tos: /how-to/install/
+## How Tos: /install/
+document: how-to/install.ftd
 
 - Install `fastn`: /install/
   document: how-to/install.ftd
-  - On Windows: /windows/
+  - On Windows: /windows/ 
     document: setup/windows.ftd
+  - On MacOS/Linux: /macos/
+    document: setup/macos.ftd
 - Update `fastn`: /how-to/update/
 - Create new fastn project: /author/create-project/
 - Create new fastn project on github: /author/create-on-github/
