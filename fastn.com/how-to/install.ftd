@@ -1,81 +1,53 @@
+-- import: fastn.dev/assets
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- ds.page: Install `fastn`
 
 
 -- ds.markdown: 
 
-You can download `fastn` in multiple ways. The easiest way being just download the binary and install it in your local system.
+`fastn` can be downloaded in all types of machines, like Windows, MacOS or Linux.
 
--- ds.h1: Pre-built library
+For each machine, there are three ways to install `fastn`. 
 
--- ds.h2: Linux / MacOS Installation
+1. `fastn` through `pre-built binary`
+2. `fastn` using `cargo`
+3. `fastn` from `source`
 
-You can get our pre-compiled binaries in the 
-[Releases](https://github.com/ftd-lang/fastn/releases) section. 
+-- cbox.info: Our Recommendation
 
--- ds.code:
-lang: sh
+We recommend you to install `fastn` through `pre-built binary`. 
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+It is prefered by all non-technical users as you just need to download the binary and 
+install it in your local system.
 
+-- ds.markdown: 
 
--- ds.h2: Windows Installation
+Developers who prefer to play around with the setup or source to install `fastn`, we have given them
+the option to install it using `cargo` or by building the `source`, so they have the other two options as well.
 
--- ds.h3: Download and map the binaries
+Based on your machine and your choice of installation, you can select one of the following options- 
 
-- Download the executable from the [Releases](https://github.com/ftd-lang/fastn/releases) 
-  page.
-- Use the reference to `fastn.exe` in your terminal to invoke ftd.
-
-  [Read more](setup/windows/)
-
-
--- ds.h1: `Cargo install` the latest version
-
--- ds.code:
-lang: sh
-
-cargo install fastn
+-- ds.h2:  For Windows
 
 
--- ds.h1: Building FASTN from Source
-
-`fastn` is open source project. You can clone the fastn git repo:
-
-
--- ds.code:
-lang: sh
-
-git clone git@github.com:ftd-lang/fastn.git
+1. [`fastn` through `pre-built binary`](http://127.0.0.1:8000/windows/)
+2. [`fastn` using `cargo`](http://127.0.0.1:8000/windows/)
+3. [`fastn` from `source`](http://127.0.0.1:8000/windows/)
 
 
--- ds.markdown:
-
-`fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
-version (MSRV) is 1.56.0.
 
 
--- ds.code:
-lang: sh
+-- ds.h2:  For MacOS/Linux
 
-cd fastn
-cargo test
-cargo build
-
-
--- ds.markdown:
-
-We would love to hear from you if you have any suggestions about the code or 
-feature! Happy building.
+1. [`fastn` through `pre-built binary`](http://127.0.0.1:8000/macos/)
+2. [`fastn` using `cargo`](http://127.0.0.1:8000/macos/)
+3. [`fastn` from `source`](http://127.0.0.1:8000/macos/)
 
 
--- ds.h2: Linux Dependencies
-
-When building from source you will have to install SSL and SQLite dev packages:
 
 
--- ds.code:
-lang: sh
 
-sudo apt-get install libsqlite3-dev libssl-dev
+
 
 -- end: ds.page

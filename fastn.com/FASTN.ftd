@@ -74,10 +74,12 @@ email: arpita@fifthtry.com
 
 ## How Tos: /how-to/install/
 
-- Install `fastn`: /install/
-  document: how-to/install.ftd
-  - On Windows: /windows/
+- Install `fastn`: /how-to/install/
+  document1: how-to/install.ftd
+  - On Windows: /windows/ 
     document: setup/windows.ftd
+  - On MacOS/Linux: /macos/
+    document: setup/macos.ftd  
 - Update `fastn`: /how-to/update/
 - Create new fastn project: /author/create-project/
 - Create new fastn project on github: /author/create-on-github/
