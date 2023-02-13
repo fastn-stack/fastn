@@ -7,7 +7,7 @@ optional caption title:
 optional body body:
 
 -- ds.page:
-$site-logo: *$assets.files.images.ftd.png
+site-logo: $assets.files.images.ftd.png
 title: $page.title
 body: $page.body
 site-name: FTD
