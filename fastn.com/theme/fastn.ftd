@@ -1,4 +1,4 @@
--- ds.page: `import: fastn`
+-- my-ds.page: `import: fastn`
 
 This file contain information about what all things are present in `fastn`
 
@@ -129,4 +129,4 @@ boolean skip:
 string list readers:
 string list writers:
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Dark Mode Support
+-- my-ds.page: Dark Mode Support
 
 -- ds.markdown: 
 
@@ -123,4 +123,4 @@ The host functions, "enable-dark-mode" etc, are provided by fastn, and they will
 update the cookie, and change `fastn.dark-mode`, `fastn.follow-system-dark-mode` and
 `fastn.system-dark-mode` FTD variables.
 
--- end: ds.page
+-- end: my-ds.page

@@ -4,7 +4,7 @@
 
 
 
--- ds.page: `FASTN.ftd`
+-- my-ds.page: `FASTN.ftd`
 
 -- ds.markdown: 
 
@@ -367,4 +367,4 @@ app-indexy-item list items:
 \-- fastn.app-ui apps:
 $processor$: fastn-apps
 
--- end: ds.page
+-- end: my-ds.page

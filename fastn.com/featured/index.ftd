@@ -10,7 +10,7 @@
 
 
 
--- ds.page: Featured components
+-- my-ds.page: Featured components
 
 -- ds.markdown:
 
@@ -46,7 +46,7 @@ templates: $font
 more-link-text: How to use fonts
 more-link: /featured/fonts/
 
--- end: ds.page
+-- end: my-ds.page
 
 
 
@@ -386,8 +386,8 @@ screenshot: $assets.files.static.color-doc.png
 licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
 github-url: https://github.com/FifthTry/color-doc/
 
-`fifthtry.github.io/color-doc` is a grey color scheme. Our web sites are using
-this color scheme. For ex. [`fastn.dev`](https://fastn.dev/), [`ftd.dev`](https://ftd.dev/) etc.
+`fifthtry.github.io/color-doc` is a grey color scheme. Our web site,
+[`ftd.dev`](https://ftd.dev/) is using this color scheme.
 
 -- template: Forest CS
 template-url: https://fifthtry.github.io/forest-cs/
@@ -396,6 +396,34 @@ licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/forest-cs/
 
 `fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
+
+-- template: Saturated Sunset CS
+template-url: https://fifthtry.github.io/saturated-sunset-cs/
+screenshot: $assets.files.static.saturated-sunset-cs.png
+licence-url: https://github.com/FifthTry/saturated-sunset-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/saturated-sunset-cs/
+
+`fifthtry.github.io/saturated-sunset-cs` is a saturated sunset color scheme.
+
+
+-- template: Winter CS
+template-url: https://fifthtry.github.io/winter-cs/
+screenshot: $assets.files.static.winter-cs.png
+licence-url: https://github.com/FifthTry/ds-set1-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/ds-set1-cs/
+
+`fifthtry.github.io/winter-cs` is a winter color scheme.
+
+
+-- template: Dark Flame CS
+template-url: https://fifthtry.github.io/dark-flame-cs/
+screenshot: $assets.files.static.dark-flame-cs.png
+licence-url: https://github.com/FifthTry/fastn-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/fastn-cs/
+
+`fifthtry.github.io/dark-flame-cs` is a dark flame color scheme. Our web site,
+[`fastn.io`](https://fastn.io/) is using this color scheme.
+
 
 -- end: schemes
 

@@ -1,8 +1,8 @@
--- ds.page: Using `fastn` Crate
+-- my-ds.page: Using `fastn` Crate
 
 `fastn` is available as a Rust crate.
 
 Important things exposed by this crate are [`fastn::Config`](crate/config/) and
 [`fastn::render()`](crate/render/).
 
--- end: ds.page
+-- end: my-ds.page

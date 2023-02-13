@@ -1,4 +1,4 @@
--- ds.page: `fastn start-project`
+-- my-ds.page: `fastn start-project`
 
 -- ds.markdown:
 
@@ -26,4 +26,4 @@ package name at the specific path if provided.
 
     Path: ./projects/tutorials/hello-world-app/ -> Template files
 
--- end: ds.page
+-- end: my-ds.page

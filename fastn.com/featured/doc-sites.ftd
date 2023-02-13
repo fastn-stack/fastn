@@ -12,7 +12,7 @@
 
 
 
--- ds.page: Documentation site themes
+-- my-ds.page: Documentation site themes
 
 We have designed and developed below documentation site themes. You can use them
 for writing books, blog, technical documentation etc. These themes can be used 
@@ -22,7 +22,7 @@ as personal web sites or organizational static web sites.
 if: {$show-grid}
 templates: $doc-sites
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 ;;-- import: fastn.dev/static
 
--- ds.page: Publishing Static Site On Vercel
+-- my-ds.page: Publishing Static Site On Vercel
 
 Vercel is an incredibly easy to use tool which helps you build and ship your
 websites with an easy to use interface. You can get started with a fresh
@@ -70,4 +70,4 @@ width: fill-container
 Congratulations, your FASTN package is now successfully hosted. You can head over to
 the application dashboard to see your deployment domain(s).
 
--- end: ds.page
+-- end: my-ds.page

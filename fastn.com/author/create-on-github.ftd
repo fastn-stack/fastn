@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: How to create new fastn project using `fastn-template` on GitHub?
+-- my-ds.page: How to create new fastn project using `fastn-template` on GitHub?
 
 Let's understand `fastn` project creation in just 5 minutes by playing! 
 
@@ -116,4 +116,4 @@ these changes will start.
 Once deployment is done goto your website, you will see your website theme
 is changed.
 
--- end: ds.page
+-- end: my-ds.page

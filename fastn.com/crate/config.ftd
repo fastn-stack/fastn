@@ -1,4 +1,4 @@
--- ds.page: `fastn::Config`
+-- my-ds.page: `fastn::Config`
 
 `fastn::Config` struct keeps track of configuration for a FASTN package that is
 shared with the entire program. It is constructed from the content of `FASTN.ftd`
@@ -197,4 +197,4 @@ pub(crate) async fn get_assets(
 
 Key is the package name, and value is FTD source of generated assets module.
 
--- end: ds.page
+-- end: my-ds.page

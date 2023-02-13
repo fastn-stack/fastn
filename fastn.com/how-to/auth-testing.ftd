@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: Auth Testing
+-- my-ds.page: Auth Testing
 
 In this article, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
 package for `remote` and `local` testing.
@@ -222,4 +222,4 @@ access it again it will give unauthorized access.
 
 Yay!!! Such a magic it is. 💫
 
--- end: ds.page
+-- end: my-ds.page

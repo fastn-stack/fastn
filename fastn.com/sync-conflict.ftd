@@ -1,4 +1,4 @@
--- ds.page: Understanding FASTN Sync Conflict
+-- my-ds.page: Understanding FASTN Sync Conflict
 
 Prerequisite: [How Sync Works](dev/sync/)
 
@@ -113,4 +113,4 @@ using the [`fastn resolve-conflict <file-name>`](cli/resolve-conflict/) command.
 This command gives you various endpoints to address conflict according to its
 type.
 
--- end: ds.page
+-- end: my-ds.page

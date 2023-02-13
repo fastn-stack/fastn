@@ -1,4 +1,4 @@
--- ds.page: `fastn status`
+-- my-ds.page: `fastn status`
 
 
 
@@ -19,4 +19,4 @@ modified    a/b.ftd
 added       f.ftd
 removed     g/f.ftd
 
--- end: ds.page
+-- end: my-ds.page

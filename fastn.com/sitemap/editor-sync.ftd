@@ -1,4 +1,4 @@
--- ds.page: `editor-sync` API
+-- my-ds.page: `editor-sync` API
 
 `editor-sync` API is called from `fastn editor` to sync the local content with
 remote server. It worked same as [`fastn sync`](/sitemap/sync/) worked.
@@ -11,4 +11,4 @@ The URL of the API is: `/-/editor-sync/`
 
 Request Method of this API is `GET`
 
--- end: ds.page
+-- end: my-ds.page

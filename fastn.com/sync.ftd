@@ -1,4 +1,4 @@
--- ds.page: `fastn sync`
+-- my-ds.page: `fastn sync`
 
 
 -- ds.markdown: 
@@ -36,4 +36,4 @@ its `directly syncing with .history`.
 
 Then it lists all the files that have been modified and updated.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `user-groups` processor
+-- my-ds.page: `user-groups` processor
 
 `user-groups` processor can be used to find all the [groups](/dev/user-group/)
 which are present in the current FASTN package.
@@ -17,4 +17,4 @@ present in current FASTN package.
 
 Check type [user-group-compat](/theme/fastn/)
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `fastn` Variables
+-- my-ds.page: `fastn` Variables
 
 
 
@@ -199,7 +199,7 @@ readonly: true
 This sets the [theme-color
 meta](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color).
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

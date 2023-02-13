@@ -6,7 +6,7 @@
 
 
 
--- ds.page: `fastn package` File System Organization
+-- my-ds.page: `fastn package` File System Organization
 
 -- ds.h1: Package
 
@@ -100,4 +100,4 @@ timestamp: 1646494343706523000
 \-- fastn.snapshot: foo/index.ftd
 timestamp: 1638625721072234000
 
--- end: ds.page
+-- end: my-ds.page

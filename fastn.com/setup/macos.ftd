@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
 
--- ds.page: Install `FASTN` on Mac/Linux
+-- my-ds.page: Install `FASTN` on Mac/Linux
 
 For MacOS/Linux machine, there are three ways to install `fastn`. 
 
@@ -138,4 +138,4 @@ Once you have installed the `fastn` you can start using FTD.
 Happy building.
 
 
--- end: ds.page
+-- end: my-ds.page

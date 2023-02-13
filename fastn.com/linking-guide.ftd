@@ -1,4 +1,4 @@
--- ds.page: `ftd` linking guide
+-- my-ds.page: `ftd` linking guide
 
 -- ds.markdown:
 
@@ -8,4 +8,4 @@ Example:
 
 Instead of using `[fastn build](/build/)` or `[fastn build](/build)`, use like `[fastn build](build/)`
 
--- end: ds.page
+-- end: my-ds.page

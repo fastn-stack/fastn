@@ -6,7 +6,7 @@
 
 
 
--- ds.page: FASTN Journal
+-- my-ds.page: FASTN Journal
 
 
 
@@ -5616,4 +5616,4 @@ a few elements:
 We are hoping to create a minimal version that can convert ftd files to HTML so
 `fastn` can be considered an alternative to static site generators.
 
--- end: ds.page
+-- end: my-ds.page

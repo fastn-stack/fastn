@@ -1,4 +1,4 @@
--- ds.page: `fastn update`
+-- my-ds.page: `fastn update`
 
 
 -- ds.markdown: 
@@ -8,4 +8,4 @@
 Note: Currently we simply delete `.packages` folder and re-download everything, so
 do not do any modifications in `.packages` or do not run this command.
 
--- end: ds.page
+-- end: my-ds.page

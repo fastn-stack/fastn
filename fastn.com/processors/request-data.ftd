@@ -1,4 +1,4 @@
--- ds.page: `request-data` processor
+-- my-ds.page: `request-data` processor
 
 `request-data` processor can be used to find the data from query string and path
 parameters. In future we will implement this processor to get data from request
@@ -81,4 +81,4 @@ color: $fastn.color.main.text
 \-- ftd.integer: $p.age
 color: $fastn.color.main.text
 
--- end: ds.page
+-- end: my-ds.page

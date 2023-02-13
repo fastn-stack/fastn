@@ -12,7 +12,7 @@
 
 
 
--- ds.page: List of fonts
+-- my-ds.page: List of fonts
 
 We have created some Google Fonts listed below:
 
@@ -20,7 +20,7 @@ We have created some Google Fonts listed below:
 if: {$show-grid}
 templates: $font
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

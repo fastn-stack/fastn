@@ -1,4 +1,4 @@
--- ds.page: `view-src` API
+-- my-ds.page: `view-src` API
 
 `view-src` is called from FASTN Editor to view source code of the `ftd` and
 `markdown` files inside the editor.
@@ -13,4 +13,4 @@ The URL of the API is: `/-/view-src/<file-path>/`
 
 Request Method of this API is `GET`
 
--- end: ds.page
+-- end: my-ds.page

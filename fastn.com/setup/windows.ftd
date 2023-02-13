@@ -1,7 +1,7 @@
 -- import: fastn.dev/assets
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ds.page: Install `FASTN` on Windows
+-- my-ds.page: Install `FASTN` on Windows
 
 
 For Windows machine, there are three ways to install `fastn`. 
@@ -35,7 +35,8 @@ v: lw-qVPCJgZs
 
 -- ds.markdown:
 
-- Download the latest binary from [Releases](https://github.com/ftd-lang/fastn/releases).
+- Download the executable from the [Releases](https://github.com/ftd-lang/fastn/releases)
+  page.
 
 - Click on latest release
 
@@ -131,5 +132,4 @@ Once you have installed the `fastn` you can start using FTD.
 Happy building.
 
 
-
--- end: ds.page
+-- end: my-ds.page

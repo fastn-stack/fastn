@@ -1,4 +1,4 @@
--- ds.page: FASTN Apps
+-- my-ds.page: FASTN Apps
 
 Bhut kuch btane k liye par abhi bas important
 
@@ -49,4 +49,4 @@ app-ui-item item:
 integer len:
 app-indexy-item list items:
 
--- end: ds.page
+-- end: my-ds.page

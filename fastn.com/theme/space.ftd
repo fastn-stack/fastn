@@ -1,4 +1,4 @@
--- ds.page: FASTN Space
+-- my-ds.page: FASTN Space
 
 -- ftd.column:
 ;;id: outer
@@ -384,4 +384,4 @@ color: $inherited.colors.text-strong
 
 -- end: ds.output
 
--- end: ds.page
+-- end: my-ds.page

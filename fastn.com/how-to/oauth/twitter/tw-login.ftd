@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: FASTN Login Flow with Twitter
+-- my-ds.page: FASTN Login Flow with Twitter
 
 -- ds.markdown:
 
@@ -66,4 +66,4 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- end: ds.page
+-- end: my-ds.page

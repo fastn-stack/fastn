@@ -1,4 +1,4 @@
--- ds.page: How To Run Tests
+-- my-ds.page: How To Run Tests
 
 
 Steps:
@@ -54,4 +54,4 @@ lang: py
 
 Next: Read this [How To Update Failing Snapshot Tests](day-to-day/how-to-fix-tests/)
 
--- end: ds.page
+-- end: my-ds.page

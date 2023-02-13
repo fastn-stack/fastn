@@ -1,4 +1,4 @@
--- ds.page: `fastn clone <url>`
+-- my-ds.page: `fastn clone <url>`
 
 Clones a [remote project](glossary/#remote) into a newly created
 directory which then becomes the [clone](glossary/#clone).
@@ -9,4 +9,4 @@ with remote.
 This default configuration is achieved by creating `.client-state` and take all
 remote-manifest as an entry to the clone [workspace](glossary/#workspace).
 
--- end: ds.page
+-- end: my-ds.page

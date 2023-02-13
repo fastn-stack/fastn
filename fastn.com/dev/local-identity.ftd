@@ -1,4 +1,4 @@
--- ds.page: Local Identity for Testing
+-- my-ds.page: Local Identity for Testing
 
 Since identity requires people to sign in, and that may happen via oauth etc,
 local development can become a pain, so we use a local identity feature, only
@@ -35,4 +35,4 @@ be assumed to have this identity.
 If the server started `--identities` and `identities` cookie is found, so we will
 prefer cli `--identities` and ignore the cookie.
 
--- end: ds.page
+-- end: my-ds.page

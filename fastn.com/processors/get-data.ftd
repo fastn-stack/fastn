@@ -1,4 +1,4 @@
--- ds.page: `$processor$: get-data`
+-- my-ds.page: `$processor$: get-data`
 
 `get-data` processor is used to get data from
 ["data"](crate/config/#fastn-config-attach-data-string).
@@ -123,4 +123,4 @@ female
 
 NOTE : It will throw an error if other than .json file is used.
 
--- end: ds.page
+-- end: my-ds.page

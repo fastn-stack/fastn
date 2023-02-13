@@ -1,4 +1,4 @@
--- ds.page: How Versioning Works
+-- my-ds.page: How Versioning Works
 
 FASTN uses fallback based file tracking technique to implement versioning.
 
@@ -102,4 +102,4 @@ All version prefixes, eg `v1`, `v2`, and so on. The link will point to the
 current document's URL in that version. If the current document is not present
 in that version the link is not set.
 
--- end: ds.page
+-- end: my-ds.page

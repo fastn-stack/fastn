@@ -1,4 +1,4 @@
--- ds.page: Glossary
+-- my-ds.page: Glossary
 
 An FASTN Glossary
 
@@ -191,4 +191,4 @@ The workspace contains all the files present in the
 been made but not yet synced. It also includes the new files added to workspace
 using [`fastn add <file-name>`](cli/add).
 
--- end: ds.page
+-- end: my-ds.page

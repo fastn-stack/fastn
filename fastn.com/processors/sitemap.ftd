@@ -1,4 +1,4 @@
--- ds.page: `$processor$: sitemap`
+-- my-ds.page: `$processor$: sitemap`
 
 
 -- ds.code: Sitemap in `FASTN.ftd`
@@ -74,4 +74,4 @@ In sitemap, we can now use `readers` and `writers` for access control. `readers`
 and `writers` are [user groups](/dev/user-group). We can use access controls at `sitemap`,
 `section`, `subsection` and `toc` levels.
 
--- end: ds.page
+-- end: my-ds.page

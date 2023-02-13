@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: How To Create Developer App On Telegram
+-- my-ds.page: How To Create Developer App On Telegram
 
 -- ds.markdown:
 
@@ -30,4 +30,4 @@ src: $assets.files.static.images.auth.telegram.telegram-app-3.png
 Create the application in response it will give you `App Id` and 
 `App Secret` please save it in a secure file.
 
--- end: ds.page
+-- end: my-ds.page

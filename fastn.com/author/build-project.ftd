@@ -1,4 +1,4 @@
--- ds.page: Build fastn project locally
+-- my-ds.page: Build fastn project locally
 
 
 To build the fastn project, Change the current working directory to the
@@ -31,4 +31,4 @@ fastn build <file-name>
 Eg: if we want to build `foo.ftd` only, then run `fastn build foo.ftd` in the
 terminal.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `fastn::StaticFile`
+-- my-ds.page: `fastn::StaticFile`
 
 `fastn::StaticFile` struct keeps track of "static files".
 
@@ -25,4 +25,4 @@ for which we have syntax highlighting support by.
 We detect this by finding the extension of the file and checking in
 `ftd::render::KNOWN_EXTENSIONS.contains(ext)`.
 
--- end: ds.page
+-- end: my-ds.page

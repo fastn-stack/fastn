@@ -1,4 +1,4 @@
--- ds.page: `belongs-to` Processor
+-- my-ds.page: `belongs-to` Processor
 
 TODO:
 
@@ -21,4 +21,4 @@ if: $is-admin
 This heading and para is only visible to admins because we have used `if:
 $is-admin` in the heading.
 
--- end: ds.page
+-- end: my-ds.page

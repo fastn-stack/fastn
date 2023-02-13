@@ -1,4 +1,4 @@
--- ds.page: Available `$processor$`s
+-- my-ds.page: Available `$processor$`s
 
 -- ds.markdown: 
 
@@ -11,4 +11,4 @@ FASTN comes with following built in `ftd` `$processor$`s.
 FASTN also comes with a special document [`fastn`](fastn-vars/) that can be
 imported by any document, which contains helpful variables.
 
--- end: ds.page
+-- end: my-ds.page

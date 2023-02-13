@@ -1,4 +1,4 @@
--- ds.page: `fastn::Error`
+-- my-ds.page: `fastn::Error`
 
 `fastn::Error` is the main Error enum that is returned by most of our functions.
 
@@ -17,4 +17,4 @@ pub enum Error {
     SerdeJsonError(serde_json::Error),
 }
 
--- end: ds.page
+-- end: my-ds.page

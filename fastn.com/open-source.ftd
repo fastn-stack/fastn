@@ -1,4 +1,4 @@
--- ds.page: FASTN Is Open Source (BSD Licensed)
+-- my-ds.page: FASTN Is Open Source (BSD Licensed)
 
 FASTN source is available via Github under BSD 3 Clause License. We would love
 to hear your views on FASTN, join our [Discussion
@@ -8,4 +8,4 @@ server](https://discord.gg/a7eBUeutWD).
 Checkout our [contribution guidelines](/dev/contribute/) if you wish to help us
 improve FASTN.
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ds.page: `fastn`: Version Control for Masses
+-- my-ds.page: `fastn`: Version Control for Masses
 
 -- cbox.warning: `fastn` VCS Is Under Development
 
@@ -16,4 +16,4 @@ The version control feature of fastn can only be used if you are using [fastn
 server](/server/). In the server mode you can [clone a package](/offline/) to
 create a local copy of the package if you have appropriate permission.
 
--- end: ds.page
+-- end: my-ds.page

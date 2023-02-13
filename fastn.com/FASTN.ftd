@@ -15,10 +15,15 @@ implements: fifthtry.github.io/theme
 -- fastn.dependency: fifthtry.github.io/color-doc as cd
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fifthtry.github.io/roboto-mono as mono
+-- fastn.dependency: fifthtry.github.io/winter-cs
+-- fastn.dependency: fifthtry.github.io/dark-flame-cs
+-- fastn.dependency: fifthtry.github.io/forest-cs
+-- fastn.dependency: fifthtry.github.io/saturated-sunset-cs
+-- fastn.dependency: fifthtry.github.io/button
 
 
 -- fastn.auto-import: ds
--- fastn.auto-import: fastn.dev/FASTN/config
+-- fastn.auto-import: fastn.dev/FASTN/config as my-ds
 -- fastn.auto-import: fastn
 
 
@@ -33,6 +38,9 @@ email: arpita@ffithtry.com
 email: abrark@fifthtry.com
 email: amitu@fifthtry.com
 email: arpita@fifthtry.com
+
+
+
 
 
 -- fastn.sitemap:
@@ -80,7 +88,7 @@ document: how-to/install.ftd
   - On Windows: /windows/ 
     document: setup/windows.ftd
   - On MacOS/Linux: /macos/
-    document: setup/macos.ftd  
+    document: setup/macos.ftd
 - Update `fastn`: /how-to/update/
 - Create new fastn project: /author/create-project/
 - Create new fastn project on github: /author/create-on-github/
@@ -92,6 +100,8 @@ document: how-to/install.ftd
 - Create Font Package: /how-to/create-font-package/
 - Auth Testing: /how-to/auth-testing/
 - FASTN & FTD Domain Setup: /how-to/domain-setup/
+- Use color scheme package: /how-to/use-color-package/
+- Modify color scheme package: /how-to/modify-cs/
 
 ## Editor Manual: /editor/manual/
 
@@ -261,6 +271,11 @@ document: how-to/install.ftd
   - `fbt-lib`: /crate/deps/fbt-lib/
   - `camino`: /crate/deps/camino/
   - `infer`: /crate/deps/infer/
+
+
+# Blog: /show-cs/
+
+- Color Scheme: /show-cs/
 
 /-- fastn.toc-item list author-section:
 

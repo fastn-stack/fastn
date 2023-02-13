@@ -1,4 +1,4 @@
--- ds.page: About `fastn`
+-- my-ds.page: About `fastn`
 
 -- ds.markdown: 
 
@@ -69,4 +69,4 @@ FASTN can be used for distributing images, and fonts as packages.
 - Database and Cache
 - Logs(Observer)
 
--- end: ds.page
+-- end: my-ds.page

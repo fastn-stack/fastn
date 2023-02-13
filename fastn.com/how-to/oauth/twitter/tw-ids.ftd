@@ -1,4 +1,4 @@
--- ds.page: How To Use Twitter Identities
+-- my-ds.page: How To Use Twitter Identities
 
 -- ds.markdown:
 
@@ -135,4 +135,4 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- end: ds.page
+-- end: my-ds.page

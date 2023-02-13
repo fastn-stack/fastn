@@ -1,4 +1,4 @@
--- ds.page: FASTN Editor Manual
+-- my-ds.page: FASTN Editor Manual
 
 Welcome to FASTN Editor Manual.
 
@@ -7,4 +7,4 @@ editor](/editor/).
 
 The editor supports [keyboard shortcuts](/editor/shortcuts/).
 
--- end: ds.page
+-- end: my-ds.page

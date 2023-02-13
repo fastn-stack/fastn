@@ -5,7 +5,7 @@
 
 
 
--- ds.page: Resumes
+-- my-ds.page: Resumes
 
 We have designed and developed below resume site themes. You can use them
 for creating online resume site. You can also create your own resume and personal info
@@ -14,7 +14,7 @@ documentation site by using `resumes`.
 -- ft-ui.grid-view:
 templates: $resumes
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

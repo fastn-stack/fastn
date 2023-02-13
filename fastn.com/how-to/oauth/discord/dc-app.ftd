@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: How To Create Developer App On Discord
+-- my-ds.page: How To Create Developer App On Discord
 
 -- ds.markdown:
 
@@ -56,4 +56,4 @@ Click on `Add Bot`
 src: $assets.files.static.images.auth.discord.discord-app-6.png
 ;;align: center
 
--- end: ds.page
+-- end: my-ds.page

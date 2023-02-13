@@ -1,4 +1,4 @@
--- ds.page: Responsive Themes
+-- my-ds.page: Responsive Themes
 
 -- ds.markdown: 
 
@@ -67,4 +67,4 @@ to know this fact that a single component can not be used for both. So we create
 a wrapper component that calls the desktop and mobile versions based on
 `fastn.mobile`.
 
--- end: ds.page
+-- end: my-ds.page

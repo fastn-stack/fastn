@@ -1,4 +1,4 @@
--- ds.page: `user-group-by-id` processor
+-- my-ds.page: `user-group-by-id` processor
 
 `user-group-by-id` processor is used to find [groups](/dev/user-group/) by
 group `id`. Each group have unique `id`.
@@ -18,4 +18,4 @@ current FASTN package by it's `id`.
 
 Check type [user-group-compat](/theme/fastn/#user-group-compat)
 
--- end: ds.page
+-- end: my-ds.page

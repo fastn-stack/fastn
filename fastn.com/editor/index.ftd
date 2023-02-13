@@ -1,6 +1,6 @@
 -- import: fastn.dev/assets
 
--- ds.page: FASTN Online Editor
+-- my-ds.page: FASTN Online Editor
 
 FASTN has a built in, online editor. If you are using [fastn server](/server/), you
 can edit your website directly from your site, without needing to download.
@@ -17,4 +17,4 @@ Fun fact: fastn editor is itself built using
 
 Learn more about the editor in the [editor manual](/editor/manual/).
 
--- end: ds.page
+-- end: my-ds.page

@@ -1,4 +1,4 @@
--- ds.page: `fastn::File`
+-- my-ds.page: `fastn::File`
 
 `fastn::File` enum represents a file found in fastn package.
 
@@ -18,4 +18,4 @@ pub enum fastn::File {
 
 [`fastn::Document`](crate/document/). [`fastn::StaticFile`](crate/static-file/).
 
--- end: ds.page
+-- end: my-ds.page

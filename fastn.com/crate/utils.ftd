@@ -1,4 +1,4 @@
--- ds.page: `fastn::utils`
+-- my-ds.page: `fastn::utils`
 
 `fastn::utils` is a bunch of private helper functions.
 
@@ -166,4 +166,4 @@ fn query() {
     )
 }
 
--- end: ds.page
+-- end: my-ds.page

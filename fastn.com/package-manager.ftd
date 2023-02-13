@@ -1,4 +1,4 @@
--- ds.page: FASTN: Package Manager
+-- my-ds.page: FASTN: Package Manager
 
 `ftd` is a ["programming language for prose"](https://ftd.dev), and `fastn` is the
 package manager for `ftd`.
@@ -65,4 +65,4 @@ distribute our .zip file. If you are not using `Github`, you can store the zip
 file containing entire package in some other location, like S3, or a server you
 control, and `fastn` will work with that.
 
--- end: ds.page
+-- end: my-ds.page
