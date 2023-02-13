@@ -6,12 +6,17 @@
 </div>
 
 <div align="center">
-    <img src="FASTN.svg" width="150" alt="FPM"/>
+    <img src="fastn.svg" width="150" alt="FPM"/>
 </div>
 
 
-# `fpm`: FTD Package Manager
+# `fastn`
 
+FASTN is a command line tool written in Rust that acts as both package manager 
+for [FTD](https://ftd.dev) programs as well as static site generator that converts 
+`.ftd` files to `.html` files you can ship on 
+[Github Pages](https://fastn.io/how-to/github-pages/), 
+[Vercel](https://fastn.io/how-to/vercel/) etc.
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for 
 publishing on the web. It starts with Markdown, but adds features to create full
@@ -19,12 +24,19 @@ page layouts, lets you create reusable "ftd components", and has first class
 support for data modelling, so the `ftd` document can be used as a data exchange
 format as well (as a replacement of JSON/CSV etc.).
 
-`fpm` is "`ftd` package manager", defines a package format for packaging `ftd` 
-files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
-all the dependencies of a package.
+These are the key [features of `fastn`](https://fastn.io/features/):
 
-`fpm` can also convert `ftd` files to static HTML files, so you can publish FTD 
-files on GitHub pages, S3 etc. static site hosting sites.
+- Supports [ftd](https://ftd.dev)
+- [package manager](https://fastn.io/package-manager/)
+- [static site generator](https://fastn.io/static/)
+- [Color Scheme](https://fastn.io/cs/)
+
+
+## How to install `fastn`?
+
+Fastn can be install in multiple operating system and is simple to use. You can
+find details about this in [`how to install`](https://fastn.io/install/). Besides
+this editor is needed and [sublime text](https://www.sublimetext.com/3) is recommended.
 
 
 ## Contributors
