@@ -9,7 +9,7 @@ on:
      - 'Cargo.*'
      - 'rust-toolchain'
      - '.github/workflows/rust.yml'
-     - 'tests/**'
+     - 'fastn-core/tests/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -18,7 +18,7 @@ on:
      - 'Cargo.*'
      - 'rust-toolchain'
      - '.github/workflows/rust.yml'
-     - 'tests/**'
+     - 'fastn-core/tests/**'
 jobs:
   everything:
     name: Rust Checks
