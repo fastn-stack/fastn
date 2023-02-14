@@ -9,52 +9,35 @@ built assets.
 
 -- cbox.warning: You Lose Many Dynamic Features In Static Modes
 
-FASTN comes with a lot of dynamic features, which are only available when you are
-using [fastn server](/server/) for hosting.
+`fastn` comes with a lot of dynamic features, which are only available when you
+are using [fastn server](/server/) for hosting.
 
-The main feature you will miss when using fastn as static site generator is
-authentication, you can not create private fastn sites, or fastn sites with mixed
-mode, some pages public and some accessible to only few people.
 
 -- ds.h1: Using the template repository
 
-You can use our template repository [fastn-blog](https://github.com/fifthtry/fastn-blog/)
-to create your own repo.
+You can use our template repository
+[fastn-template](https://github.com/ftd-lang/fastn-template/) to create your own
+repo.
 
 -- ds.h2: Step 1: Creating your own repo
 
-Open the [fastn-blog](https://github.com/fifthtry/fastn-blog/) repository in your
-browser and click on the `Use this template` button
+Open the [fastn-template](https://github.com/ftd-lang/fastn-template/)
+repository in your browser and click on the `Use this template` button
 
 -- ds.image: Step I: Use the template repository to initialize your repository
-src: $assets.files.how-to.github-use-this-template.png
+src: $assets.files.images.github-use-this-template.png
 width: fill-container
 
--- ds.h2: Step 2: Updating the configs in repository
-
-In order to use the package properly, you'll need to make the following changes
-in your codebase.
-
--- ds.code: FASTN.ftd
-lang: ftd
-
-\-- import: fastn
-
-\-- fastn.package: <username_or_orgname>.github.io/<repo_name>
-zip: github.com/<username_or_orgname>/<repo_name>/archive/refs/heads/main.zip
-
-\-- fastn.dependency: fifthtry.github.io/blog-theme
-
--- ds.h2: Step 3: Activate the `Github Pages` environment on your repo
+-- ds.h2: Step 2: Activate the `Github Pages` environment on your repo
 
 In your repository, go to `Settings > Pages` to access the `Github Pages` admin
 section.
 
-Choose the `build` branch in the dropdown and in the directory dropdown, choose
-`/(root)` and click on Save.
+Choose the `gh-pages` branch in the dropdown and in the directory dropdown,
+choose `/(root)` and click on Save.
 
 -- ds.image:
-src: $assets.files.how-to.github-pages-initialize.png
+src: $assets.files.images.github-pages-initialize.png
 width: fill-container
 
 -- end: my-ds.page
