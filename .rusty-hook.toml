@@ -1,5 +1,5 @@
 [hooks]
-pre-commit = "cargo test"
+pre-commit = "cargo install --path fastn --profile dev && cargo test"
 pre-push = "cargo clippy && cargo fmt -- --check"
 
 [logging]
