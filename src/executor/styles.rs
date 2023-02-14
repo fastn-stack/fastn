@@ -2202,7 +2202,7 @@ impl Region {
     // For now, only components with region h1 and h2 will have auto generated ids
     // if there is no user defined id
     pub fn is_heading(&self) -> bool {
-        matches!(self, Region::H1 | Region::H2)
+        matches!(self, Region::H1 | Region::H2 | Region::H3 | Region::H4)
     }
 
     pub fn to_css_string(&self) -> String {
