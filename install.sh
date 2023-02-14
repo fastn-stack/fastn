@@ -56,10 +56,10 @@ setup() {
     done
 
     if [[ $PRE_RELEASE ]]; then
-        URL="https://api.github.com/repos/ƒastn-stack/fastn/releases"
+        URL="https://api.github.com/repos/fastn-stack/fastn/releases"
         echo "Downloading the latest pre-release binaries"
     else
-        URL="https://api.github.com/repos/ƒastn-stack/fastn/releases/latest"
+        URL="https://api.github.com/repos/fastn-stack/fastn/releases/latest"
         echo "Downloading the latest production ready binaries"
     fi
 
@@ -71,6 +71,7 @@ setup() {
         DESTINATION_PATH="${HOME}/.fastn/bin"
         mkdir -p $DESTINATION_PATH
     fi
+
 
     if [[ $CONTROLLER ]]; then 
         curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
