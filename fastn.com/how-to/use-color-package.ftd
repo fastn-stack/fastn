@@ -31,16 +31,11 @@ children wrapper:
 optional caption title:
 optional body body:
 
-\-- ftd.column:
-width: fill-container
-colors: $forest-cs.main
-
 \-- ds.page:
 title: $page.title
 body: $page.body
 wrapper: $page.wrapper
-
-\-- end: ftd.column
+colors: $forest-cs.main
 
 \-- end: page
 
