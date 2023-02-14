@@ -42,10 +42,10 @@ a must-have tool:
 
 So, how do you get started with Fastn? 
 
-Installing `fastn` is easy and can be done on multiple operating systems. Check out 
-the ["How to Install"](https://fastn.io/install/) section for more information. 
-Additionally, an editor is required to use `fastn`, and we recommend using 
-[Sublime Text](https://www.sublimetext.com/3).
+Installing `fastn` is easy and can be done on multiple operating systems.
+Check out the ["How to Install"](https://fastn.io/install/) section for more 
+information. Additionally, an editor is required to use `fastn`, and we 
+recommend using [Sublime Text](https://www.sublimetext.com/3).
 
 
 Get ready to experience the power of Fastn!

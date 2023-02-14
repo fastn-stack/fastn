@@ -599,6 +599,7 @@ pub async fn resolve_foreign_variable2022(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
+                    print!("Processing {}/{} ... ", package.name.as_str(), light_path);
                     fastn_core::utils::write(
                         &lib.config.build_dir().join("-").join(package.name.as_str()),
                         light_path.as_str(),
@@ -648,6 +649,7 @@ pub async fn resolve_foreign_variable2022(
                         .resolve_by_file_name(dark_path.as_str(), None, false)
                         .await
                     {
+                        print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
                         fastn_core::utils::write(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
                             dark_path.as_str(),
@@ -804,6 +806,7 @@ pub async fn resolve_foreign_variable2(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
+                    print!("Processing {}/{} ... ", package.name.as_str(), light_path);
                     fastn_core::utils::write(
                         &lib.config.build_dir().join("-").join(package.name.as_str()),
                         light_path.as_str(),
@@ -856,6 +859,7 @@ pub async fn resolve_foreign_variable2(
                         .resolve_by_file_name(dark_path.as_str(), None, false)
                         .await
                     {
+                        print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
                         fastn_core::utils::write(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
                             dark_path.as_str(),

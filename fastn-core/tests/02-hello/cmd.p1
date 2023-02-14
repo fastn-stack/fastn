@@ -5,6 +5,9 @@ skip: js generation order mismatch
 
 -- stdout:
 
-Processing www.amitu.com/FASTN.ftd ... done in <omitted>
-Processing www.amitu.com/fail_doc.ftd ... Failed
-Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing amitu/FASTN.ftd ... done in <omitted>
+Processing amitu/index.ftd ... Processing fifthtry.github.io/code-block/static/copy.svg ... done in <omitted>
+Processing fifthtry.github.io/code-block/static/copy-dark.svg ... done in <omitted>
+Processing fifthtry.github.io/code-block/static/tick.svg ... done in <omitted>
+done in <omitted>
+Processing amitu/lib.ftd ... done in <omitted>

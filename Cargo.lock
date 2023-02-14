@@ -979,7 +979,7 @@ dependencies = [
  "env_logger",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=05c556e)",
+ "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=d9f96485)",
  "futures",
  "hyper",
  "ignore",
@@ -1139,27 +1139,6 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/ftd-lang/ftd?rev=05c556e#05c556e9e18bac7b204bf605307e8a3efdb0ec81"
-dependencies = [
- "comrak 0.16.0",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc 2.0.0",
- "itertools",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
- "tracing",
-]
-
-[[package]]
-name = "ftd"
-version = "0.2.0"
 source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
 dependencies = [
  "comrak 0.14.0",
@@ -1175,6 +1154,27 @@ dependencies = [
  "slug",
  "syntect",
  "thiserror",
+]
+
+[[package]]
+name = "ftd"
+version = "0.2.0"
+source = "git+https://github.com/ftd-lang/ftd?rev=d9f96485#d9f9648531a39e33d0fcb655b58f62ce064e93c0"
+dependencies = [
+ "comrak 0.16.0",
+ "css-color-parser",
+ "format_num",
+ "include_dir",
+ "indoc 2.0.0",
+ "itertools",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
+ "tracing",
 ]
 
 [[package]]

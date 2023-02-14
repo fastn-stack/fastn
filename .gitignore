@@ -7,9 +7,9 @@ target
 **/*.rs.bk
 
 # fpm test
-/tests/**/.build
+fastn-core/tests/**/.build
 
-/tests/**/.packages/fifthtry.github.io/package-info/
+fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
 
 /**/.packages
 /**/.remote-state
