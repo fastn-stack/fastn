@@ -62,7 +62,7 @@ pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const FASTN_UI_INTERFACE: &str = "ftd-lang.github.io/fastn-ui";
+pub const FASTN_UI_INTERFACE: &str = "fastn-stack.github.io/fastn-ui";
 pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
