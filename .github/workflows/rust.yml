@@ -39,6 +39,13 @@ jobs:
             ftd/target
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Fastn install
+        id: fastn-install
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: --path fastn --profile dev
       - name: Run cargo fmt
         id: fmt
         continue-on-error: true
