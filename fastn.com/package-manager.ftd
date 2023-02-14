@@ -1,7 +1,7 @@
 -- my-ds.page: FASTN: Package Manager
 
-`ftd` is a ["programming language for prose"](https://ftd.dev), and `fastn` is the
-package manager for `ftd`.
+`ftd` is a ["programming language for prose"](https://ftd.dev), and `fastn` is
+the package manager for `ftd`.
 
 -- ds.h1: FASTN.ftd
 
@@ -13,14 +13,12 @@ lang: ftd
 \-- import: fastn
 
 \-- fastn.package: fastn.dev
-zip: github.com/fifthtry/fastn.dev/archive/refs/heads/main.zip
-base: https://raw.githubusercontent.com/fifthtry/fastn.dev/main
+download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.dev/main
 
 -- ds.markdown:
 
-We have created a package named `fastn.dev`. Packages in FASTN are named after the
-domain where they would be published. {ds.highlight: Every FASTN package is a
-website.}
+We have created a package named `fastn.dev`. Packages in `fastn` are named after
+the domain where they would be published. **Every FASTN package is a website.**
 
 
 
@@ -35,13 +33,14 @@ lang: ftd
 \-- import: fastn
 
 \-- fastn.package: fastn.dev
-zip: github.com/fifthtry/fastn.dev/archive/refs/heads/main.zip
+download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.dev/main
 
 \-- fastn.dependency: fifthtry.github.io/doc-site as ds
 
 -- ds.markdown:
 
-Here `fastn.dev` has a dependency on [`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
+Here `fastn.dev` has a dependency on
+[`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
 
 We have also used "alias" feature to bind the name of this dependency to `ds`,
 so FTD files can write `-- import: ds` instead of having to use the full path,
@@ -52,13 +51,13 @@ e.g. `-- import: fifthtry.github.io/doc-site`.
 -- ds.h1: Distributed Package Manager
 
 Unlike other package managers like pypi, npm and crates, there is no central
-package repository in FASTN. Since every FASTN package is a website, that website
-acts as the package repository.
+package repository in `fastn`. Since every `fastn` package is a website, that
+website acts as the package repository.
 
 What this means is when `fastn` sees `fifthtry.github.io/doc-site` as a
 dependency, it fetches the content of `fifthtry.github.io/doc-site/FASTN.ftd`
 file which acts as the meta data for the package, and the meta data includes the
-URL from where the package ZIP can be downloaded.
+URL from where the package contents can be downloaded.
 
 In our examples we use Github's zip serving feature to let Github generate and
 distribute our .zip file. If you are not using `Github`, you can store the zip
