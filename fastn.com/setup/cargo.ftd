@@ -1,9 +1,0 @@
--- ds.page: Install `fastn` using `cargo`
-
-
--- ds.h1: `Cargo install` the latest version
-
--- ds.code:
-lang: sh
-
-cargo install fastn

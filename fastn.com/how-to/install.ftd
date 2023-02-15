@@ -33,17 +33,17 @@ following options:
 -- ds.h2:  For Windows
 
 
-1. [`fastn` through `pre-built binary`](http://127.0.0.1:8000/windows/)
-2. [`fastn` using `cargo`](http://127.0.0.1:8000/windows/)
-3. [`fastn` from `source`](http://127.0.0.1:8000/windows/)
+1. [`fastn` through `pre-built binary`](https://fastn.io/windows/)
+2. [`fastn` using `cargo`](https://fastn.io/windows/)
+3. [`fastn` from `source`](https://fastn.io/windows/)
 
 
 
 -- ds.h2:  For MacOS/Linux
 
-1. [`fastn` through `pre-built binary`](http://127.0.0.1:8000/macos/)
-2. [`fastn` using `cargo`](http://127.0.0.1:8000/macos/)
-3. [`fastn` from `source`](http://127.0.0.1:8000/macos/)
+1. [`fastn` through `pre-built binary`](https://fastn.io/macos/)
+2. [`fastn` using `cargo`](https://fastn.io/macos/)
+3. [`fastn` from `source`](https://fastn.io/macos/)
 
 
 -- end: my-ds.page
