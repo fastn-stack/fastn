@@ -40,7 +40,7 @@ v: cWdivkyoOTA
 -- ds.code: Installer Script
 lang: ftd
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
 
 -- ds.h3: Second Step: Open the Terminal
 
@@ -105,7 +105,7 @@ cargo install fastn
 -- ds.code:
 lang: sh
 
-git clone git@github.com:ftd-lang/fastn.git
+git clone git@github.com:fastn-stack/fastn.git
 
 
 -- ds.markdown:

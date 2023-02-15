@@ -35,7 +35,7 @@ v: lw-qVPCJgZs
 
 -- ds.markdown:
 
-- Download the executable from the [Releases](https://github.com/ftd-lang/fastn/releases)
+- Download the executable from the [Releases](https://github.com/fastn-stack/fastn/releases)
   page.
 
 - Click on latest release
@@ -108,7 +108,7 @@ cargo install fastn
 -- ds.code:
 lang: sh
 
-git clone git@github.com:ftd-lang/fastn.git
+git clone git@github.com:fastn-stack/fastn.git
 
 
 -- ds.markdown:
