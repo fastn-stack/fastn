@@ -152,3 +152,7 @@ function JSONstringify(f: any) {
         return f;
     }
 }
+
+function len(data: any[]) {
+    return data.length;
+}

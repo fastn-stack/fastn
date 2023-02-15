@@ -219,7 +219,8 @@ impl<'a> VariableDependencyGenerator<'a> {
 
         let mut expressions = vec![];
         for condition in variable.conditional_value {
-            let condition_str = ftd::html1::utils::get_condition_string(&condition.condition);
+            let condition_str =
+                ftd::html1::utils::get_condition_string_(&condition.condition, false);
             if let Some(value_string) =
                 ftd::html1::utils::get_formatted_dep_string_from_property_value(
                     self.id,

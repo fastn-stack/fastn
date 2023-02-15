@@ -762,3 +762,6 @@ function JSONstringify(f) {
         return f;
     }
 }
+function len(data) {
+    return data.length;
+}
