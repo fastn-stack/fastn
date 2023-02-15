@@ -1385,6 +1385,9 @@ else {
 return f;
 }
 }
+function len(data) {
+return data.length;
+}
 
 
 
@@ -1456,7 +1459,7 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__display"] = function(data) {
 if(function(){
-return (ftd.is_empty(resolve_reference("foo#name", data),args,data,id));
+return (ftd.is_empty(resolve_reference("foo#name", data)));
 }()){
 document.querySelector(`[data-id="0:main"]`).style["display"] = "block";
 }
@@ -1472,7 +1475,7 @@ else {document.querySelector(`[data-id="1:main"]`).style["display"] = "none";}
 }
 window.node_change_main["2:main__display"] = function(data) {
 if(function(){
-return (!ftd.is_empty(resolve_reference("foo#name", data),args,data,id));
+return (!ftd.is_empty(resolve_reference("foo#name", data)));
 }()){
 document.querySelector(`[data-id="2:main"]`).style["display"] = "block";
 }
@@ -1502,17 +1505,17 @@ set_data_value(data, "foo#name" + "." + remaining, new_value);
 set_data_value(data, "foo#name", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
