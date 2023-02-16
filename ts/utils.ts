@@ -160,6 +160,54 @@ function get_color_value(cs: Object, category: string, color_name: string): any 
     return color_value;
 }
 
+function styled_body(body: string): string {
+    return `
+<span style="color:#c0c5ce;">${body}</span>`;
+}
+
+function styled_section(line: string): string {
+    var section_type_title = line.replace("-- ", "").replace(":", "");
+
+    var result = `
+<span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">${section_type_title}</span><span style="color:#65737e;">: </span>`
+
+    return result;
+}
+
+function styled_header(line: string): string {
+    var header_splits = line.split(":");
+
+    var result = `
+<span style="color:#b48ead;">${header_splits[0]}</span><span style="color:#65737e;">: </span><span style="color:#d08770;">${header_splits[1].trim()} </span>`
+
+    return result;
+}
+
+
+function apply_style(s: string): String {
+    var result = new String();
+    const lines = s.split(/\r\n|\r|\n/);
+    for (var line of lines) {
+        if (line.trim().length == 0){
+            // Empty line
+            result = result.concat(styled_body(" "));
+        }
+        else if (line.startsWith("--")){
+            // Section top
+            result = result.concat(styled_section(line));
+        }
+        else if (!line.startsWith("--") && line.includes(":")){
+            // Header
+            result = result.concat(styled_header(line));
+        }
+        else {
+            // Body
+            result = result.concat(styled_body(line));
+        }
+    }
+    return result;
+}
+
 function figma_json_to_ftd(json: string, escaped=false): string[] {
     let esc = '\\'
     if (escaped == false) {
@@ -539,6 +587,6 @@ function figma_json_to_ftd(json: string, escaped=false): string[] {
     custom: $custom-
     `;
 
-    console.log(s);
-    return [s,`<pre>${s}</pre>`];
+    let fs = `<pre>${apply_style(s)}</pre>`;
+    return [s,fs];
 }
