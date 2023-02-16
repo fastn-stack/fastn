@@ -1,6 +1,7 @@
 -- import: fastn
 -- import: gargajit.github.io/expander
 -- import: gargajit.github.io/expander/assets
+;; -- import: gargajit.github.io/expander/utils
 
 -- my-ds.page: Expander Crash Course
 
@@ -20,6 +21,9 @@ from scratch. You will FTD language, and how to create / publish packages.
 We will see how to make the following UI component:
 
 
+
+;; -- utils.dark-mode-switcher: 
+
 -- expander.box: Test Box, Click Me!
 
 Expander Package is running component box. This is a component element and we
@@ -37,16 +41,26 @@ And, it also responds to your system's dark mode preference.
 
 
 
+
+
+
 -- ds.markdown:
 
 Start with the [part 1 now](/expander/hello-world/).
+
+
+
+
+
+
+
+
 
 
 -- ds.h3: Resources
 
 - [`fastn` installation instructions](https://fastn.io/install/)
 - Create a new fastn project using this [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
-
 
 
 -- ds.h3: Get Help

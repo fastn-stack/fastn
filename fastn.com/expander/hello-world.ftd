@@ -16,7 +16,7 @@ v: HUyyifN1_BE
 The name of package manager for FTD language is [`fastn`](https://fastn.io).
 We will begin by installing `fastn` on your machine.
 
--- ds.h1: Install `fastn` on a Windows computer
+-- ds.h1: Install `fastn` on Windows machine
 
 -- ds.youtube:
 v: lw-qVPCJgZs
@@ -54,6 +54,10 @@ C:\FASTN
 
 FASTN is installed.
 To verify, open the Terminal(cmd) and execute the command, fastn
+
+-- ds.image:
+src: $assets.files.images.fastn-terminal-windows.png
+width: fill-container
 
 -- ds.markdown: 
 
@@ -108,7 +112,6 @@ You can verify that installation is complete by running the command, `fastn`,
 in the `Terminal`.
 
 
-You can verify it by running the command, fastn, in the Terminal.
 
 -- ds.image:
 src: $assets.files.images.fastn-terminal-macos.png
@@ -130,7 +133,7 @@ Our installer script works for Linux as well. Run it on terminal:
 -- ds.code: Installer Script
 lang: ftd
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
 
 
 
@@ -156,7 +159,7 @@ Let's create a `fastn` package and start coding Hello World.
 -- cbox.info: What is `fastn` package?
 
 
-FASTN package is a folder that requires atleast two files:
+FASTN package is a folder that requires atleast two files
 
 - FASTN.ftd
 - index.ftd
