@@ -1,6 +1,6 @@
 async fn template_contents(project_name: &str, download_base_url: &str) -> (String, String) {
     let ftd = format!(
-        r#"-- import: fastn_core
+        r#"-- import: fastn
 
 -- fastn.package: {}
 download-base-url: {}
