@@ -788,24 +788,17 @@ function apply_style(s) {
     var result = new String();
     const lines = s.split(/\r\n|\r|\n/);
     for (var line of lines) {
-        // console.log(line);
         if (line.trim().length == 0) {
             // Empty line
-            console.log("Empty line");
             result = result.concat(styled_body(" "));
-            console.log(result);
         }
         else if (line.startsWith("--")) {
             // Section top
-            console.log("Section line");
             result = result.concat(styled_section(line));
-            console.log(result);
         }
         else if (!line.startsWith("--") && line.includes(":")) {
             // Header
-            console.log("Header line");
             result = result.concat(styled_header(line));
-            console.log(result);
         }
         else {
             // Body
@@ -1189,8 +1182,6 @@ function figma_json_to_ftd(json, escaped = false) {
     warning: $warning-btb-
     custom: $custom-
     `;
-    // console.log(s);
     let fs = `<pre>${apply_style(s)}</pre>`;
-    console.log(fs);
     return [s, fs];
 }
