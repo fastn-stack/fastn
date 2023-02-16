@@ -9,8 +9,8 @@ authors = [
 edition = "2021"
 description = "fastn: FTD Package Manager"
 license = "MIT"
-repository = "https://github.com/ftd-lang/fastn"
-homepage = "https://fastn.dev"
+repository = "https://github.com/fastn-stack/fastn"
+homepage = "https://fastn.io"
 
 [features]
 default = ["auth"]
@@ -121,7 +121,7 @@ features=["macos_kqueue"]
 # ready for 1.0 right now.
 #
 # Once we are closer to release we will stop using this and adopot semver.
-git = "https://github.com/ftd-lang/ftd"
+git = "https://github.com/fastn-stack/ftd"
 rev = "385f8ab6"
 #
 # If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
