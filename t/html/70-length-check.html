@@ -6,7 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#name": null,
+"foo#names": [],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -617,7 +617,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#name&quot;}],[&quot;b&quot;,&quot;FifthTry&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello Again</p></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#name&quot;}],[&quot;b&quot;,&quot;FifthTry&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: none; height: auto; text-decoration: none; width: auto" class="ft_md"></div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md"></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;SDFSD&quot;],[&quot;num&quot;,2]]},{&quot;name&quot;:&quot;foo__delete___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;num&quot;,3]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: none; flex-direction: row; height: auto; justify-content: start; margin-top: 26px; padding-left: 50px; text-decoration: none; width: 1400px" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>click to add</p></div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;trial&quot;],[&quot;num&quot;,0]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; height: auto; justify-content: start; margin-top: 26px; padding-left: 50px; text-decoration: none; width: 1400px" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>click to add</p></div></div></div>
 
 
 <script>
@@ -1385,434 +1385,17 @@ else {
 return f;
 }
 }
-function get_color_value(cs, category, color_name) {
-let category_data = cs[category];
-let color_data = category_data[color_name];
-let color_value = color_data['value'];
-return color_value;
-}
-function styled_body(body) {
-return `
-<span style="color:#c0c5ce;">${body}</span>`;
-}
-function styled_section(line) {
-var section_type_title = line.replace("-- ", "").replace(":", "");
-var result = `
-<span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">${section_type_title}</span><span style="color:#65737e;">: </span>`;
-return result;
-}
-function styled_header(line) {
-var header_splits = line.split(":");
-var result = `
-<span style="color:#b48ead;">${header_splits[0]}</span><span style="color:#65737e;">: </span><span style="color:#d08770;">${header_splits[1].trim()} </span>`;
-return result;
-}
-function apply_style(s) {
-var result = new String();
-const lines = s.split(/\r\n|\r|\n/);
-for (var line of lines) {
-if (line.trim().length == 0) {
-// Empty line
-result = result.concat(styled_body(" "));
-}
-else if (line.startsWith("--")) {
-// Section top
-result = result.concat(styled_section(line));
-}
-else if (!line.startsWith("--") && line.includes(":")) {
-// Header
-result = result.concat(styled_header(line));
-}
-else {
-// Body
-result = result.concat(styled_body(line));
-}
-}
-return result;
-}
-function figma_json_to_ftd(json, escaped = false) {
-let esc = '\\';
-if (escaped == false) {
-esc = '';
-}
-const cs_data = JSON.parse(json);
-let cs_light = Object.keys(cs_data)
-.filter((key) => key.includes("-light"))
-.reduce((obj, key) => {
-obj = cs_data[key];
-return obj;
-}, {});
-let cs_dark = Object.keys(cs_data)
-.filter((key) => key.includes("-dark"))
-.reduce((obj, key) => {
-obj = cs_data[key];
-return obj;
-}, {});
-let s = `
-${esc}-- ftd.color base-:
-light: ${get_color_value(cs_light, "Background Colors", "base")}
-dark: ${get_color_value(cs_dark, "Background Colors", "base")}
 
-${esc}-- ftd.color step-1-:
-light: ${get_color_value(cs_light, "Background Colors", "step-1")}
-dark: ${get_color_value(cs_dark, "Background Colors", "step-1")}
 
-${esc}-- ftd.color step-2-:
-light: ${get_color_value(cs_light, "Background Colors", "step-2")}
-dark: ${get_color_value(cs_dark, "Background Colors", "step-2")}
 
-${esc}-- ftd.color overlay-:
-light: ${get_color_value(cs_light, "Background Colors", "overlay")}
-dark: ${get_color_value(cs_dark, "Background Colors", "overlay")}
-
-${esc}-- ftd.color code-:
-light: ${get_color_value(cs_light, "Background Colors", "code")}
-dark: ${get_color_value(cs_dark, "Background Colors", "code")}
-
-${esc}-- ftd.background-colors background-:
-base: $base-
-step-1: $step-1-
-step-2: $step-2-
-overlay: $overlay-
-code: $code-
-
-${esc}-- ftd.color border-:
-light: ${get_color_value(cs_light, "Standalone Colors", "border")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "border")}
-
-${esc}-- ftd.color border-strong-:
-light: ${get_color_value(cs_light, "Standalone Colors", "border-strong")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "border-strong")}
-
-${esc}-- ftd.color text-:
-light: ${get_color_value(cs_light, "Standalone Colors", "text")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "text")}
-
-${esc}-- ftd.color text-strong-:
-light: ${get_color_value(cs_light, "Standalone Colors", "text-strong")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "text-strong")}
-
-${esc}-- ftd.color shadow-:
-light: ${get_color_value(cs_light, "Standalone Colors", "shadow")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "shadow")}
-
-${esc}-- ftd.color scrim-:
-light: ${get_color_value(cs_light, "Standalone Colors", "scrim")}
-dark: ${get_color_value(cs_dark, "Standalone Colors", "scrim")}
-
-${esc}-- ftd.color cta-primary-base-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "base")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "base")}
-
-${esc}-- ftd.color cta-primary-hover-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "hover")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "hover")}
-
-${esc}-- ftd.color cta-primary-pressed-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "pressed")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "pressed")}
-
-${esc}-- ftd.color cta-primary-disabled-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "disabled")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "disabled")}
-
-${esc}-- ftd.color cta-primary-focused-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "focused")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "focused")}
-
-${esc}-- ftd.color cta-primary-border-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "border")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "border")}
-
-${esc}-- ftd.color cta-primary-text-:
-light: ${get_color_value(cs_light, "CTA Primary Colors", "text")}
-dark: ${get_color_value(cs_dark, "CTA Primary Colors", "text")}
-
-
-${esc}-- ftd.cta-colors cta-primary-:
-base: $cta-primary-base-
-hover: $cta-primary-hover-
-pressed: $cta-primary-pressed-
-disabled: $cta-primary-disabled-
-focused: $cta-primary-focused-
-border: $cta-primary-border-
-text: $cta-primary-text-
-
-${esc}-- ftd.color cta-secondary-base-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "base")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "base")}
-
-${esc}-- ftd.color cta-secondary-hover-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "hover")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "hover")}
-
-${esc}-- ftd.color cta-secondary-pressed-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "pressed")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "pressed")}
-
-${esc}-- ftd.color cta-secondary-disabled-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "disabled")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "disabled")}
-
-${esc}-- ftd.color cta-secondary-focused-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "focused")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "focused")}
-
-${esc}-- ftd.color cta-secondary-border-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "border")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "border")}
-
-${esc}-- ftd.color cta-secondary-text-:
-light: ${get_color_value(cs_light, "CTA Secondary Colors", "text")}
-dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "text")}
-
-${esc}-- ftd.cta-colors cta-secondary-:
-base: $cta-secondary-base-
-hover: $cta-secondary-hover-
-pressed: $cta-secondary-pressed-
-disabled: $cta-secondary-disabled-
-focused: $cta-secondary-focused-
-border: $cta-secondary-border-
-text: $cta-secondary-text-
-
-${esc}-- ftd.color cta-tertiary-base-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "base")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "base")}
-
-${esc}-- ftd.color cta-tertiary-hover-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "hover")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "hover")}
-
-${esc}-- ftd.color cta-tertiary-pressed-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "pressed")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "pressed")}
-
-${esc}-- ftd.color cta-tertiary-disabled-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "disabled")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "disabled")}
-
-${esc}-- ftd.color cta-tertiary-focused-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "focused")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "focused")}
-
-${esc}-- ftd.color cta-tertiary-border-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "border")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "border")}
-
-${esc}-- ftd.color cta-tertiary-text-:
-light: ${get_color_value(cs_light, "CTA Tertiary Colors", "text")}
-dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "text")}
-
-${esc}-- ftd.cta-colors cta-tertiary-:
-base: $cta-tertiary-base-
-hover: $cta-tertiary-hover-
-pressed: $cta-tertiary-pressed-
-disabled: $cta-tertiary-disabled-
-focused: $cta-tertiary-focused-
-border: $cta-tertiary-border-
-text: $cta-tertiary-text-
-
-${esc}-- ftd.color cta-danger-base-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "base")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "base")}
-
-${esc}-- ftd.color cta-danger-hover-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "hover")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "hover")}
-
-${esc}-- ftd.color cta-danger-pressed-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "pressed")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "pressed")}
-
-${esc}-- ftd.color cta-danger-disabled-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "disabled")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "disabled")}
-
-${esc}-- ftd.color cta-danger-focused-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "focused")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "focused")}
-
-${esc}-- ftd.color cta-danger-border-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "border")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "border")}
-
-${esc}-- ftd.color cta-danger-text-:
-light: ${get_color_value(cs_light, "CTA Danger Colors", "text")}
-dark: ${get_color_value(cs_dark, "CTA Danger Colors", "text")}
-
-${esc}-- ftd.cta-colors cta-danger-:
-base: $cta-danger-base-
-hover: $cta-danger-hover-
-pressed: $cta-danger-pressed-
-disabled: $cta-danger-disabled-
-focused: $cta-danger-focused-
-border: $cta-danger-border-
-text: $cta-danger-text-
-
-${esc}-- ftd.color accent-primary-:
-light: ${get_color_value(cs_light, "Accent Colors", "primary")}
-dark: ${get_color_value(cs_dark, "Accent Colors", "primary")}
-
-${esc}-- ftd.color accent-secondary-:
-light: ${get_color_value(cs_light, "Accent Colors", "secondary")}
-dark: ${get_color_value(cs_dark, "Accent Colors", "secondary")}
-
-${esc}-- ftd.color accent-tertiary-:
-light: ${get_color_value(cs_light, "Accent Colors", "tertiary")}
-dark: ${get_color_value(cs_dark, "Accent Colors", "tertiary")}
-
-${esc}-- ftd.pst accent-:
-primary: $accent-primary-
-secondary: $accent-secondary-
-tertiary: $accent-tertiary-
-
-${esc}-- ftd.color error-base-:
-light: ${get_color_value(cs_light, "Error Colors", "base")}
-dark: ${get_color_value(cs_dark, "Error Colors", "base")}
-
-${esc}-- ftd.color error-text-:
-light: ${get_color_value(cs_light, "Error Colors", "text")}
-dark: ${get_color_value(cs_dark, "Error Colors", "text")}
-
-${esc}-- ftd.color error-border-:
-light: ${get_color_value(cs_light, "Error Colors", "border")}
-dark: ${get_color_value(cs_dark, "Error Colors", "border")}
-
-${esc}-- ftd.btb error-btb-:
-base: $error-base-
-text: $error-text-
-border: $error-border-
-
-${esc}-- ftd.color success-base-:
-light: ${get_color_value(cs_light, "Success Colors", "base")}
-dark: ${get_color_value(cs_dark, "Success Colors", "base")}
-
-${esc}-- ftd.color success-text-:
-light: ${get_color_value(cs_light, "Success Colors", "text")}
-dark: ${get_color_value(cs_dark, "Success Colors", "text")}
-
-${esc}-- ftd.color success-border-:
-light: ${get_color_value(cs_light, "Success Colors", "border")}
-dark: ${get_color_value(cs_dark, "Success Colors", "border")}
-
-${esc}-- ftd.btb success-btb-:
-base: $success-base-
-text: $success-text-
-border: $success-border-
-
-${esc}-- ftd.color info-base-:
-light: ${get_color_value(cs_light, "Info Colors", "base")}
-dark: ${get_color_value(cs_dark, "Info Colors", "base")}
-
-${esc}-- ftd.color info-text-:
-light: ${get_color_value(cs_light, "Info Colors", "text")}
-dark: ${get_color_value(cs_dark, "Info Colors", "text")}
-
-${esc}-- ftd.color info-border-:
-light: ${get_color_value(cs_light, "Info Colors", "border")}
-dark: ${get_color_value(cs_dark, "Info Colors", "border")}
-
-${esc}-- ftd.btb info-btb-:
-base: $info-base-
-text: $info-text-
-border: $info-border-
-
-${esc}-- ftd.color warning-base-:
-light: ${get_color_value(cs_light, "Warning Colors", "base")}
-dark: ${get_color_value(cs_dark, "Warning Colors", "base")}
-
-${esc}-- ftd.color warning-text-:
-light: ${get_color_value(cs_light, "Warning Colors", "text")}
-dark: ${get_color_value(cs_dark, "Warning Colors", "text")}
-
-${esc}-- ftd.color warning-border-:
-light: ${get_color_value(cs_light, "Warning Colors", "border")}
-dark: ${get_color_value(cs_dark, "Warning Colors", "border")}
-
-${esc}-- ftd.btb warning-btb-:
-base: $warning-base-
-text: $warning-text-
-border: $warning-border-
-
-${esc}-- ftd.color custom-one-:
-light: ${get_color_value(cs_light, "Custom Colors", "one")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "one")}
-
-${esc}-- ftd.color custom-two-:
-light: ${get_color_value(cs_light, "Custom Colors", "two")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "two")}
-
-${esc}-- ftd.color custom-three-:
-light: ${get_color_value(cs_light, "Custom Colors", "three")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "three")}
-
-${esc}-- ftd.color custom-four-:
-light: ${get_color_value(cs_light, "Custom Colors", "four")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "four")}
-
-${esc}-- ftd.color custom-five-:
-light: ${get_color_value(cs_light, "Custom Colors", "five")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "five")}
-
-${esc}-- ftd.color custom-six-:
-light: ${get_color_value(cs_light, "Custom Colors", "six")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "six")}
-
-${esc}-- ftd.color custom-seven-:
-light: ${get_color_value(cs_light, "Custom Colors", "seven")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "seven")}
-
-${esc}-- ftd.color custom-eight-:
-light: ${get_color_value(cs_light, "Custom Colors", "eight")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "eight")}
-
-${esc}-- ftd.color custom-nine-:
-light: ${get_color_value(cs_light, "Custom Colors", "nine")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "nine")}
-
-${esc}-- ftd.color custom-ten-:
-light: ${get_color_value(cs_light, "Custom Colors", "ten")}
-dark: ${get_color_value(cs_dark, "Custom Colors", "ten")}
-
-${esc}-- ftd.custom-colors custom-:
-one: $custom-one-
-two: $custom-two-
-three: $custom-three-
-four: $custom-four-
-five: $custom-five-
-six: $custom-six-
-seven: $custom-seven-
-eight: $custom-eight-
-nine: $custom-nine-
-ten: $custom-ten-
-
-${esc}-- ftd.color-scheme main:
-background: $background-
-border: $border-
-border-strong: $border-strong-
-text: $text-
-text-strong: $text-strong-
-shadow: $shadow-
-scrim: $scrim-
-cta-primary: $cta-primary-
-cta-secondary: $cta-secondary-
-cta-tertiary: $cta-tertiary-
-cta-danger: $cta-danger-
-accent: $accent-
-error: $error-btb-
-success: $success-btb-
-info: $info-btb-
-warning: $warning-btb-
-custom: $custom-
-`;
-let fs = `<pre>${apply_style(s)}</pre>`;
-return [s, fs];
+function foo__delete___main(a,num,args,data,id){
+return (ftd.delete_at(a.value,num,args,data,id));
 }
 
 
 
-function foo__append___main(a,b,args,data,id){
-a.value = a.value+" "+b
+function foo__insert___main(a,v,num,args,data,id){
+return (ftd.insert_at(a.value,v,num,args,data,id));
 }
 
 
@@ -1879,68 +1462,83 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__display"] = function(data) {
 if(function(){
-return (ftd.is_empty(resolve_reference("foo#name", data)));
+return (len(resolve_reference("foo#names", data))>2);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["display"] = "block";
+document.querySelector(`[data-id="0:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
 }
 window.node_change_main["1:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#name", data)==null);
+return (len(resolve_reference("foo#names", data))<=2);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["display"] = "block";
+document.querySelector(`[data-id="1:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="1:main"]`).style["display"] = "none";}
 }
-window.node_change_main["2:main__display"] = function(data) {
-if(function(){
-return (!ftd.is_empty(resolve_reference("foo#name", data)));
-}()){
-document.querySelector(`[data-id="2:main"]`).style["display"] = "block";
-}
-else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
-}
-
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#name", data);
-}
-window.node_change_main["3:main__display"] = function(data) {
-if(function(){
-return (resolve_reference("foo#name", data)!=null);
-}()){
-document.querySelector(`[data-id="3:main"]`).style["display"] = "block";
-}
-else {document.querySelector(`[data-id="3:main"]`).style["display"] = "none";}
-}
-
-window.node_change_main["3:main__text"] = function(data) {
-document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#name", data);
-}
 window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#names"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#name" + "." + remaining, new_value);
+set_data_value(data, "foo#names" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#name", new_value);
+set_data_value(data, "foo#names", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
-}
 };
 
+window.dummy_data_main = {};
+
+window.dummy_data_main["foo#names"] = function(all_data, index) {
+function dummy_data(list, all_data, index) {
+let new_data = {
+"foo#obj": list[index],
+"LOOP__COUNTER": index
+};
+let data = {...new_data, ...all_data};
+var args= {};
+args["foo#listCard.idx"] = resolve_reference("LOOP__COUNTER", data);
 
 
+args["foo#listCard.name"] = resolve_reference("foo#obj", data);
+data = {...args, ...all_data};
+if (!!"foo#listCard".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main["foo#listCard"]) {
+data["foo#listCard"] = window.raw_nodes_main["foo#listCard"](data);
+}
+return "{foo#listCard}".replace_format(data);
+}
+
+let list = resolve_reference("foo#names", all_data);
+if (index !== null && index !== undefined) {
+if (index.toString().toUpperCase() === "LAST") {
+index = list.length - 1;
+} else if (index.toString().toUpperCase() === "START") {
+index = 0;
+}
+return [dummy_data(list, all_data, index), "main", 0];
+}
+let htmls = [];
+for (var i = 0; i < list.length; i++) {
+htmls.push(dummy_data(list, all_data, i));
+}
+return [htmls, "main", 0];
+}
+window.raw_nodes_main = {};
+
+window.raw_nodes_main["foo#listCard"] = function(all_data){
+var args= {};
+args["foo#listCard.name"] = null;
+args["foo#listCard.idx"] = null;
+let data = {...args, ...all_data};
+if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
+data[""] = window.raw_nodes_main[""](data);
+}
+let html = "<div data-id=\"main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; margin: 20px; text-decoration: none; width: auto\" class=\"ft_md\"><p>{foo#listCard.name}</p></div>".replace_format(data);
+return html;
+}
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
 

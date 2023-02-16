@@ -83,13 +83,23 @@ impl ExpressionGenerator {
         root: bool,
         arguments: &[(String, bool)],
     ) -> String {
+        self.to_string_(node, root, arguments, true)
+    }
+
+    pub fn to_string_(
+        &self,
+        node: &ftd::evalexpr::ExprNode,
+        root: bool,
+        arguments: &[(String, bool)],
+        extra_args: bool,
+    ) -> String {
         use itertools::Itertools;
 
         if self.is_root(node.operator()) {
             let result = node
                 .children()
                 .iter()
-                .map(|children| self.to_string(children, false, arguments))
+                .map(|children| self.to_string_(children, false, arguments, extra_args))
                 .collect_vec();
             let (is_assignment_or_chain, only_one_child) =
                 node.children().first().map_or((false, true), |first| {
@@ -120,7 +130,8 @@ impl ExpressionGenerator {
             let mut result = vec![];
             for children in node.children() {
                 let val = ftd::html1::utils::trim_brackets(
-                    self.to_string(children, true, arguments).trim(),
+                    self.to_string_(children, true, arguments, extra_args)
+                        .trim(),
                 );
                 if !val.trim().is_empty() {
                     result.push(format!(
@@ -136,7 +147,7 @@ impl ExpressionGenerator {
         if self.is_tuple(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                result.push(self.to_string(children, false, arguments));
+                result.push(self.to_string_(children, false, arguments, extra_args));
             }
             return format!("[{}]", result.join(","));
         }
@@ -145,14 +156,16 @@ impl ExpressionGenerator {
             let mut result = vec![];
             if let Some(child) = node.children().first() {
                 for children in child.children() {
-                    let mut value = self.to_string(children, false, arguments);
+                    let mut value = self.to_string_(children, false, arguments, extra_args);
                     if self.is_tuple(children.operator()) {
                         value = value[1..value.len() - 1].to_string();
                     }
                     result.push(value);
                 }
             }
-            result.extend(["args".to_string(), "data".to_string(), "id".to_string()]);
+            if extra_args {
+                result.extend(["args".to_string(), "data".to_string(), "id".to_string()]);
+            }
             return format!("{}({})", function_name, result.join(","));
         }
 
@@ -167,9 +180,9 @@ impl ExpressionGenerator {
             };
             return vec![
                 prefix.to_string(),
-                self.to_string(first, false, arguments),
+                self.to_string_(first, false, arguments, extra_args),
                 node.operator().to_string(),
-                self.to_string(second, false, arguments),
+                self.to_string_(second, false, arguments, extra_args),
             ]
             .join("");
         }
@@ -180,13 +193,17 @@ impl ExpressionGenerator {
             if matches!(node.operator(), ftd::evalexpr::Operator::Not)
                 || matches!(node.operator(), ftd::evalexpr::Operator::Neg)
             {
-                return vec![operator, self.to_string(first, false, arguments)].join("");
+                return vec![
+                    operator,
+                    self.to_string_(first, false, arguments, extra_args),
+                ]
+                .join("");
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![
-                self.to_string(first, false, arguments),
+                self.to_string_(first, false, arguments, extra_args),
                 operator,
-                self.to_string(second, false, arguments),
+                self.to_string_(second, false, arguments, extra_args),
             ]
             .join("");
         }
@@ -194,7 +211,7 @@ impl ExpressionGenerator {
         if let Some(operator) = self.has_function(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                result.push(self.to_string(children, false, arguments));
+                result.push(self.to_string_(children, false, arguments, extra_args));
             }
             return format!("{}{}", operator.trim(), result.join(" "));
         }

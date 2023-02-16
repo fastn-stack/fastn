@@ -762,6 +762,7 @@ function JSONstringify(f) {
         return f;
     }
 }
+
 function get_color_value(cs, category, color_name) {
     let category_data = cs[category];
     let color_data = category_data[color_name];
@@ -1184,4 +1185,8 @@ function figma_json_to_ftd(json, escaped = false) {
     `;
     let fs = `<pre>${apply_style(s)}</pre>`;
     return [s, fs];
+}
+
+function len(data) {
+    return data.length;
 }

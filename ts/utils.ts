@@ -153,6 +153,7 @@ function JSONstringify(f: any) {
     }
 }
 
+
 function get_color_value(cs: Object, category: string, color_name: string): any {
     let category_data: Object = cs[category as keyof typeof cs];
     let color_data: Object = category_data[color_name as keyof typeof category_data];
@@ -589,4 +590,8 @@ function figma_json_to_ftd(json: string, escaped=false): string[] {
 
     let fs = `<pre>${apply_style(s)}</pre>`;
     return [s,fs];
+}
+
+function len(data: any[]) {
+    return data.length;
 }

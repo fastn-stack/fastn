@@ -94,10 +94,17 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
 }
 
 pub(crate) fn get_condition_string(condition: &ftd::interpreter2::Expression) -> String {
+    get_condition_string_(condition, true)
+}
+
+pub(crate) fn get_condition_string_(
+    condition: &ftd::interpreter2::Expression,
+    extra_args: bool,
+) -> String {
     let node = condition
         .expression
         .update_node_with_variable_reference(&condition.references);
-    let expression = ftd::html1::ExpressionGenerator.to_string(&node, true, &[]);
+    let expression = ftd::html1::ExpressionGenerator.to_string_(&node, true, &[], extra_args);
     format!(
         indoc::indoc! {"
                 function(){{

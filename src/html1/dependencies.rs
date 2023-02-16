@@ -48,7 +48,7 @@ impl<'a> DependencyGenerator<'a> {
                 .node
                 .condition
                 .as_ref()
-                .map(ftd::html1::utils::get_condition_string);
+                .map(|c| ftd::html1::utils::get_condition_string_(c, false));
 
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"]",
@@ -94,7 +94,7 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(ftd::html1::utils::get_condition_string);
+                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
 
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
@@ -164,7 +164,7 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(ftd::html1::utils::get_condition_string);
+                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
 
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
@@ -420,7 +420,7 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(ftd::html1::utils::get_condition_string);
+                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
 
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;

@@ -1,0 +1,65 @@
+-- string list $names:
+
+-- end: $names
+
+-- listCard: $obj
+idx: $LOOP.COUNTER
+$loop$: $names as $obj
+
+
+
+-- contentCard:
+if: { len(names) > 2 }
+$on-click$: $insert($a = $names, v = SDFSD, num = 2)
+$on-click$: $delete($a = $names, num = 3)
+
+-- contentCard:
+if: { len(names) <= 2 }
+$on-click$: $insert($a = $names, v = trial, num = 0)
+
+
+
+-- component contentCard:
+
+-- ftd.row:
+margin-top.px: 26
+padding-left.px: 50
+width.fixed.px: 1400
+
+-- ftd.text: click to add
+
+-- end: ftd.row
+
+-- end: contentCard
+
+
+
+-- component listCard:
+caption name:
+integer idx:
+
+-- ftd.text: $listCard.name
+margin.px: 20
+
+-- end: listCard
+
+
+
+-- void insert(a,v,num):
+string list $a:
+string v:
+integer num:
+
+ftd.insert_at(a, v, num);
+
+-- void delete(a,num):
+string list $a:
+integer num:
+
+ftd.delete_at(a, num);
+
+
+-- integer length(a):
+string list a:
+
+len(a)
