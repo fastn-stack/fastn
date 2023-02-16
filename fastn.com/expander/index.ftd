@@ -21,9 +21,6 @@ from scratch. You will FTD language, and how to create / publish packages.
 We will see how to make the following UI component:
 
 
-
-;; -- utils.dark-mode-switcher: 
-
 -- expander.box: Test Box, Click Me!
 
 Expander Package is running component box. This is a component element and we
@@ -37,9 +34,8 @@ It handles three events:
 
 
 
-And, it also responds to your system's dark mode preference.
-
-
+It also responds to the System modes. You can try it out using the
+`mode-switcher` button on this page at the bottom-right corner.
 
 
 

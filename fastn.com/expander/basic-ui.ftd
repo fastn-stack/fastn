@@ -30,22 +30,21 @@ and leave `index.ftd` file as it is, so that we can continue our learning there.
 As we did earlier, we will add a new file in our project. I have saved the file as `demo.ftd`. Now, I will apply
 some of the `featured components`.
 
-Here is the list of them-
+Here is the list of packages I have used:
 
 -- cbox.text-2: **doc-site**
 
- **\<package-name>** : fifthtry.github.io/doc-site    
+ fifthtry.github.io/doc-site    
 
 
 -- cbox.text-2: **admonitions**
 
-  **\<package-name>** : fifthtry.github.io/admonitions
+  fifthtry.github.io/admonitions
 
 
--- cbox.text-2:  **color-scheme** : winter-cs
+-- cbox.text-2:  **color-scheme**
 
- **\<package-name>** : fifthtry.github.io/winter-cs     
-
+fifthtry.github.io/winter-cs     
 
 
 -- ds.markdown: 
@@ -55,7 +54,7 @@ You can include any such component of your own. For example, I will include the 
 
 -- cbox.text-2: **expander**
 
-**\<package-name>** : gargajit.github.io/expander     
+gargajit.github.io/expander     
 
 
 
@@ -88,7 +87,7 @@ the alias can be a long one, and if you want to use a component of that package,
 you will have to use the long name. Instead, you can give a new and shorter alias
 using `as` command.
 
-For expample-
+For expample:
 
 -- ds.code: New alias for `doc-site`
 lang: ftd
@@ -100,7 +99,7 @@ lang: ftd
 Using the default alias or a new alias, you can use the `components` of the packages you have imported.
 These simple steps need to be done everytime you want to use a new package in your project.
 
-For example-
+For example:
 
 For `doc-site` package, we have used following components:
 
@@ -122,20 +121,36 @@ Let's continue our learning in the `index.ftd` file and build our project step-b
 Following is the list of the `properties` we will apply to `ftd.text` and `container components`
 
 
+-- ds.h2: Properties
 
-
--- ds.code: Properties Used
+-- ds.code: Root ftd.column
 lang: ftd
 
+\-- ftd.column:
 padding.px: 50
-border-width.px: 1
-background.solid: yellow
+background.solid: #eee 
 width: fill-container
 height: fill-container
 align-content: top-center
+
+-- ds.code: Child ftd.column
+lang: ftd
+
+\-- ftd.column:
+border-width.px: 4
 spacing.fixed.px: 10
+width: fill-container
+
+
+-- ds.code: ftd.row for Header
+lang: ftd
+
+\-- ftd.row:
+width: fill-container
 spacing: space-between
 border-bottom-width.px: 1
+padding.px: 10
+
 
 -- ds.h3: UI design of webpage
 
@@ -158,6 +173,8 @@ lang: ftd
 
 \-- ftd.column:
 
+;; content of column goes here
+
 \-- end: ftd.column
 
 -- ds.markdown:
@@ -171,6 +188,8 @@ width: fill-container
 lang: ftd
 
 \-- ftd.row:
+
+;; content of row goes here
 
 \-- end: ftd.row
 
