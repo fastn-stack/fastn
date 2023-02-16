@@ -87,7 +87,7 @@ the alias can be a long one, and if you want to use a component of that package,
 you will have to use the long name. Instead, you can give a new and shorter alias
 using `as` command.
 
-For expample:
+For example:
 
 -- ds.code: New alias for `doc-site`
 lang: ftd
@@ -173,7 +173,7 @@ lang: ftd
 
 \-- ftd.column:
 
-;; content of column goes here
+\;; content of column goes here
 
 \-- end: ftd.column
 
@@ -189,7 +189,7 @@ lang: ftd
 
 \-- ftd.row:
 
-;; content of row goes here
+\;; content of row goes here
 
 \-- end: ftd.row
 
