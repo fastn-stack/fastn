@@ -338,6 +338,53 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
         .await?)
 }
 
+#[tracing::instrument(skip_all)]
+pub(crate) async fn http_post_with_cookie(
+    url: &str,
+    cookie: Option<String>,
+    headers: &std::collections::HashMap<String, String>,
+    body: &str,
+) -> fastn_core::Result<Vec<u8>> {
+    tracing::info!(url = url);
+    let mut req_headers = reqwest::header::HeaderMap::new();
+    req_headers.insert(
+        reqwest::header::USER_AGENT,
+        reqwest::header::HeaderValue::from_static("fastn"),
+    );
+    if let Some(cookie) = cookie {
+        req_headers.insert(
+            reqwest::header::COOKIE,
+            reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
+        );
+    }
+
+    for (key, value) in headers.iter() {
+        req_headers.insert(
+            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+        );
+    }
+
+    let c = reqwest::Client::builder()
+        .default_headers(req_headers)
+        .build()?;
+
+    let res = c.post(url).body(body.to_string()).send().await?;
+
+    if !res.status().eq(&reqwest::StatusCode::OK) {
+        let message = format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url,
+            res.status(),
+            res.text().await
+        );
+        tracing::error!(url = url, msg = message);
+        return Err(fastn_core::Error::APIResponseError(message));
+    }
+    tracing::info!(msg = "returning success", url = url);
+    Ok(res.bytes().await?.into())
+}
+
 pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }

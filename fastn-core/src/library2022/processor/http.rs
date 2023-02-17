@@ -9,19 +9,18 @@ pub async fn process<'a>(
     } else {
         (ftd::ast::HeaderValues::new(vec![]), value.line_number())
     };
-    {
-        let method = headers
-            .get_optional_string_by_key("method", doc.name, line_number)?
-            .unwrap_or_else(|| "GET".to_string())
-            .to_lowercase();
 
-        if method.as_str().ne("get") {
-            return ftd::interpreter2::utils::e2(
-                format!("only GET method is allowed, found: {}", method),
-                doc.name,
-                line_number,
-            );
-        }
+    let method = headers
+        .get_optional_string_by_key("method", doc.name, line_number)?
+        .unwrap_or_else(|| "GET".to_string())
+        .to_lowercase();
+
+    if method.as_str().ne("get") && method.as_str().ne("post") {
+        return ftd::interpreter2::utils::e2(
+            format!("only GET and POST methods are allowed, found: {}", method),
+            doc.name,
+            line_number,
+        );
     }
 
     let url = match headers.get_optional_string_by_key("url", doc.name, line_number)? {
@@ -42,6 +41,7 @@ pub async fn process<'a>(
             line_number,
         })?;
 
+    let mut body = vec![];
     for header in headers.0 {
         if header.key.as_str() == "$processor$"
             || header.key.as_str() == "processor$"
@@ -60,10 +60,18 @@ pub async fn process<'a>(
                 .get_value(header.line_number, value.as_str())?
                 .to_string()
             {
+                if method.as_str().eq("post") {
+                    body.push(format!("\"{}\": {}", header.key, value));
+                    continue;
+                }
                 url.query_pairs_mut()
                     .append_pair(header.key.as_str(), &value);
             }
         } else {
+            if method.as_str().eq("post") {
+                body.push(format!("\"{}\": {}", header.key, value));
+                continue;
+            }
             url.query_pairs_mut()
                 .append_pair(header.key.as_str(), value.as_str());
         }
@@ -71,13 +79,24 @@ pub async fn process<'a>(
 
     println!("calling `http` processor with url: {}", &url);
 
-    let response = match crate::http::http_get_with_cookie(
-        url.as_str(),
-        config.request.as_ref().and_then(|v| v.cookies_string()),
-        &conf,
-    )
-    .await
-    {
+    let response = if method.as_str().eq("post") {
+        fastn_core::http::http_post_with_cookie(
+            url.as_str(),
+            config.request.as_ref().and_then(|v| v.cookies_string()),
+            &conf,
+            dbg!(format!("{{{}}}", body.join(","))).as_str(),
+        )
+        .await
+    } else {
+        fastn_core::http::http_get_with_cookie(
+            url.as_str(),
+            config.request.as_ref().and_then(|v| v.cookies_string()),
+            &conf,
+        )
+        .await
+    };
+
+    let response = match response {
         Ok(v) => v,
         Err(e) => {
             return ftd::interpreter2::utils::e2(
