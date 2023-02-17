@@ -19,6 +19,7 @@ app-indexy-item list items:
 -- record toc-item:
 optional string title:
 optional string url:
+optional string description:
 optional string path:
 optional string number:
 optional ftd.image-src font-icon:

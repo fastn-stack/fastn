@@ -122,7 +122,7 @@ features=["macos_kqueue"]
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/fastn-stack/ftd"
-rev = "385f8ab6"
+rev = "aa49e72"
 #
 # If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
 # same folder and uncomment the next `path` line to use local ftd.

@@ -95,6 +95,7 @@ pub struct TocItemCompat {
     pub number: Option<String>,
     pub title: Option<String>,
     pub path: Option<String>,
+    pub description: Option<String>,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
     // TODO: Font icon mapping to html?
@@ -135,6 +136,7 @@ impl TocItemCompat {
             number: None,
             title,
             path: None,
+            description: None,
             is_heading: false,
             font_icon: icon.map(Into::into),
             bury,
