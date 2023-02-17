@@ -1682,6 +1682,56 @@ impl Value {
         }
     }
 
+    pub fn to_serde_value(&self) -> Option<serde_json::Value> {
+        match self {
+            Value::String { text, .. } => Some(serde_json::Value::String(text.to_string())),
+            Value::Integer { value } => Some(serde_json::json!(value)),
+            Value::Decimal { value } => Some(serde_json::json!(value)),
+            Value::Boolean { value } => Some(serde_json::Value::Bool(value.to_owned())),
+            Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_serde_value()
+                } else {
+                    Some(serde_json::Value::Null)
+                }
+            }
+            Value::Object { values } => {
+                let mut new_values: ftd::Map<serde_json::Value> = Default::default();
+                for (k, v) in values {
+                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
+                        if let Some(v) = value.to_serde_value() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_value(&new_values).ok()
+            }
+            Value::Record { fields, .. } => {
+                let mut new_values: ftd::Map<serde_json::Value> = Default::default();
+                for (k, v) in fields {
+                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
+                        if let Some(v) = value.to_serde_value() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_value(&new_values).ok()
+            }
+            Value::List { data, .. } => {
+                let mut new_values: Vec<serde_json::Value> = Default::default();
+                for v in data {
+                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
+                        if let Some(v) = value.to_serde_value() {
+                            new_values.push(v);
+                        }
+                    }
+                }
+                serde_json::to_value(&new_values).ok()
+            }
+            _ => None,
+        }
+    }
+
     pub fn to_string(&self) -> Option<String> {
         match self {
             Value::String { text } => Some(text.to_string()),
@@ -1695,27 +1745,8 @@ impl Value {
                     Some("".to_string())
                 }
             }
-            Value::Object { values } => {
-                let mut new_values: ftd::Map<String> = Default::default();
-                for (k, v) in values {
-                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_string() {
-                            new_values.insert(k.to_owned(), v);
-                        }
-                    }
-                }
-                serde_json::to_string(&new_values).ok()
-            }
-            Value::Record { fields, .. } => {
-                let mut new_values: ftd::Map<String> = Default::default();
-                for (k, v) in fields {
-                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
-                        if let Some(v) = value.to_string() {
-                            new_values.insert(k.to_owned(), v);
-                        }
-                    }
-                }
-                serde_json::to_string(&new_values).ok()
+            Value::Object { .. } | Value::Record { .. } | Value::List { .. } => {
+                serde_json::to_string(&self.to_serde_value()).ok()
             }
             _ => None,
         }
