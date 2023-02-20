@@ -6,16 +6,16 @@ v: zkyK4blSsKw
 
 -- ds.h1: What's the need of a Component?
 
-Custom Components let's the user to turn their creativity into action. Components help users to build exciting
+`Custom Components` let's the user to turn their creativity into action. `Components` help users to build exciting
 features for their projects including styles, features, color-schemes, templates, typography etc.
 
 
-Components gives scalability, efficiency as well as consistency to the design. Once created can be used and reused 
+`Components` give scalability, efficiency as well as consistency to the design. Once created can be used and reused 
 as many times throughout the project as well as can be used by others when published on GitHub.
 
 
-In our Expander project, we have used the `component` and named the component as `box`.
-We moved our column code block that represents the box which we created in the last part and re-used the component 
+In our `Expander project`, we have used the `component` and named it as `box`.
+We moved our column code block that represents the box which we created in the last part and re-used the `component` 
 three times. 
 
 -- ds.h1: How to create a Component?
@@ -27,9 +27,9 @@ lang: ftd
 
 \-- end: <component-name>
 
--- ds.markdown:
+-- ds.h1: How to call/refer the component?
 
-`Component box` is created outside the root column, that reprents the box. Then inside the root column we refer it.
+`Component box` is created outside the root column, that represents the box. Then, inside the root column we refer it.
 
 
 -- ds.code: Syntax for refering the component
@@ -37,7 +37,7 @@ lang: ftd
 
 \-- <component-name>:
 
--- ds.markdown:
+-- ds.h1: How to give different content to each box?
 
 To make Header and Body content user-dependent, we need to pass two arguments to the **component** we created.
 
@@ -52,7 +52,7 @@ body <body name>: <default value if any>
 
 -- ds.markdown:
 
-Now we can pass he arguments names for caption and body to Header and Body respectively.
+Now we can pass the arguments names for caption and body to Header and Body respectively.
 
 -- ds.code: 
 lang: ftd
