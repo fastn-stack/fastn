@@ -252,7 +252,7 @@ pub(crate) async fn get2022_(lib: &fastn_core::Library) -> String {
 
             {build_info}
 
-            -- string document-id: {document_id}
+            -- string document-name: {document_id}
             -- string package-title: {title}
             -- string package-name: {package_name}
             -- string home-url: {home_url}
