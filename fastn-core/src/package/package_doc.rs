@@ -410,13 +410,11 @@ pub(crate) async fn read_ftd_2022(
 
     let font_style = config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2022(
-        ftd::build(),
+        fastn_core::ftd_html_2022(),
         html_ui,
         ftd::build_js(),
-        config.ftd_external_js.as_slice(),
-        config.ftd_inline_js.as_slice(),
-        config.ftd_external_css.as_slice(),
-        config.ftd_inline_css.as_slice(),
+        config,
+        main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
     );

@@ -517,16 +517,28 @@ pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html1::HtmlUI,
     ftd_js: &str,
-    external_js: &[String],
-    inline_js: &[String],
-    external_css: &[String],
-    inline_css: &[String],
+    config: &mut fastn_core::Config,
+    main_id: &str,
     font_style: &str,
     base_url: &str,
 ) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
             .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace(
+                "__ftd_canonical_url__",
+                config.package.generate_canonical_url(main_id).as_str(),
+            )
+            .replace(
+                "__favicon_html_tag__",
+                resolve_favicon(
+                    config.root.as_str(),
+                    config.package.name.as_str(),
+                    &config.package.favicon,
+                )
+                .unwrap_or_default()
+                .as_str(),
+            )
             .replace("__ftd_external_children__", "{}")
             .replace(
                 "__ftd__",
@@ -538,11 +550,19 @@ pub fn replace_markers_2022(
             )
             .replace(
                 "__extra_js__",
-                get_extra_js(external_js, inline_js).as_str(),
+                get_extra_js(
+                    config.ftd_external_js.as_slice(),
+                    config.ftd_inline_js.as_slice(),
+                )
+                .as_str(),
             )
             .replace(
                 "__extra_css__",
-                get_extra_css(external_css, inline_css).as_str(),
+                get_extra_css(
+                    config.ftd_external_css.as_slice(),
+                    config.ftd_inline_css.as_slice(),
+                )
+                .as_str(),
             )
             .replace(
                 "__ftd_functions__",

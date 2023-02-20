@@ -72,6 +72,10 @@ pub fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }
 
+pub fn ftd_html_2022() -> &'static str {
+    include_str!("../ftd_2022.html")
+}
+
 fn fastn_ftd() -> &'static str {
     include_str!("../ftd/fastn.ftd")
 }
