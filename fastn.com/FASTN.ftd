@@ -105,6 +105,8 @@ document: how-to/install.ftd
 - FASTN & FTD Domain Setup: /how-to/domain-setup/
 - Use color scheme package: /how-to/use-color-package/
 - Modify color scheme package: /how-to/modify-cs/
+- Export fastn color scheme as figma json: /figma-tokens-json/
+- Convert figma json to FTD code: /figma-json-to-ftd/
 
 ## Editor Manual: /editor/manual/
 
@@ -206,6 +208,8 @@ document: how-to/install.ftd
   url: /processors/request-data/
 - `$processor$: fastn-apps`
   url: /apps/
+- `$processor$: figma-cs-token`
+  url: /figma-tokens-json/
 
 
 # Development: /journal/
