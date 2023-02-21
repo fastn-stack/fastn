@@ -37,7 +37,8 @@ async fn traced_main() {
 
 async fn outer_main() {
     if let Err(e) = async_main().await {
-        eprintln!("{:?}", e)
+        eprintln!("{:?}", e);
+        std::process::exit(1);
     }
 }
 
