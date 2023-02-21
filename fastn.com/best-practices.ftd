@@ -34,6 +34,28 @@ height: fill-container
 
 -- end: compare-card
 
+
+-- compare-card: Always use `$inherited.colors` while defining color
+
+`$inherited.colors` are part of FTD color scheme system, if you use custom / hardcoded
+colors then color scheme for dark / light mode won't be applied.
+
+-- ds.code: This is wrong
+lang: ftd
+
+\-- ftd.text: Campaign Summary
+color: #7D8180
+
+-- ds.code: This is correct
+lang: ftd
+
+\-- ftd.text: Campaign Summary
+color: $inherited.colors.text
+
+-- end: compare-card
+
+
+
 -- end: my-ds.page
 
 
@@ -80,15 +102,14 @@ role: $inherited.types.copy-regular
 color: $inherited.colors.text
 width.fixed.percent if { ftd.device == "mobile" }: 80
 
+
 -- end: ftd.row
 
 -- end: ftd.column
 
--- ftd.row:
-if: { ftd.device != "mobile" }
+-- ftd.column:
 width: fill-container
-spacing.fixed.px: 50
-children: $compare-card.compare-wrap
+spacing.fixed.px: 32
 border-width.px: 1
 border-color: $inherited.colors.border
 padding-horizontal.px: 24
@@ -96,6 +117,19 @@ padding-vertical.px: 24
 border-bottom-left-radius.px: 4
 border-bottom-right-radius.px: 4
 border-top-width.px: 0
+
+-- ftd.text: 
+if: { compare-card.body != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+$compare-card.body
+
+-- ftd.row:
+if: { ftd.device != "mobile" }
+width: fill-container
+spacing.fixed.px: 50
+children: $compare-card.compare-wrap
 
 -- end: ftd.row
 
@@ -104,13 +138,8 @@ if: { ftd.device == "mobile" }
 width: fill-container
 spacing.fixed.px: 50
 children: $compare-card.compare-wrap
-border-width.px: 1
-border-color: $inherited.colors.border
-padding-horizontal.px: 24
-padding-vertical.px: 24
-border-bottom-left-radius.px: 4
-border-bottom-right-radius.px: 4
-border-top-width.px: 0
+
+-- end: ftd.column
 
 -- end: ftd.column
 
