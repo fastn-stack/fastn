@@ -43,14 +43,53 @@ colors then color scheme for dark / light mode won't be applied.
 -- ds.code: This is wrong
 lang: ftd
 
+\-- ftd.column:
+background.solid: white
+
+\-- colms:
+$colorVal: #b4ccba
+
 \-- ftd.text: Campaign Summary
 color: #7D8180
 
 -- ds.code: This is correct
 lang: ftd
 
+\-- ftd.column:
+background.solid: $inherited.colors.background.base
+
+\-- colms:
+$colorVal: $inherited.colors.custom.one
+
 \-- ftd.text: Campaign Summary
 color: $inherited.colors.text
+
+-- end: compare-card
+
+
+
+
+-- compare-card: Always keep 1(one) space after `:` colon
+
+-- ds.code: This is wrong
+lang: ftd
+
+\-- end:nextbutton
+
+\-- ftd.row:
+width:fill-container
+
+\-- end:ftd.column
+
+-- ds.code: This is correct
+lang: ftd
+
+\-- end: nextbutton
+
+\-- ftd.row:
+width: fill-container
+
+\-- end: ftd.column
 
 -- end: compare-card
 
