@@ -48,6 +48,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 - `ftd p1` grammar: /p1-grammar/
 - `import`: /import/
 - Comments In `ftd` Files: /comments/
+- Best Practices: best-practices/
 
 ## Data Modelling: /data-modelling/
 
