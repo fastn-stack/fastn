@@ -1439,7 +1439,6 @@ else {
 return f;
 }
 }
-
 function get_color_value(cs, category, color_name) {
 let category_data = cs[category];
 let color_data = category_data[color_name];
@@ -1485,11 +1484,7 @@ result = result.concat(styled_body(line));
 }
 return result;
 }
-function figma_json_to_ftd(json, escaped = false) {
-let esc = '\\';
-if (escaped == false) {
-esc = '';
-}
+function figma_json_to_ftd(json) {
 const cs_data = JSON.parse(json);
 let cs_light = Object.keys(cs_data)
 .filter((key) => key.includes("-light"))
@@ -1504,87 +1499,87 @@ obj = cs_data[key];
 return obj;
 }, {});
 let s = `
-${esc}-- ftd.color base-:
+-- ftd.color base-:
 light: ${get_color_value(cs_light, "Background Colors", "base")}
 dark: ${get_color_value(cs_dark, "Background Colors", "base")}
 
-${esc}-- ftd.color step-1-:
+-- ftd.color step-1-:
 light: ${get_color_value(cs_light, "Background Colors", "step-1")}
 dark: ${get_color_value(cs_dark, "Background Colors", "step-1")}
 
-${esc}-- ftd.color step-2-:
+-- ftd.color step-2-:
 light: ${get_color_value(cs_light, "Background Colors", "step-2")}
 dark: ${get_color_value(cs_dark, "Background Colors", "step-2")}
 
-${esc}-- ftd.color overlay-:
+-- ftd.color overlay-:
 light: ${get_color_value(cs_light, "Background Colors", "overlay")}
 dark: ${get_color_value(cs_dark, "Background Colors", "overlay")}
 
-${esc}-- ftd.color code-:
+-- ftd.color code-:
 light: ${get_color_value(cs_light, "Background Colors", "code")}
 dark: ${get_color_value(cs_dark, "Background Colors", "code")}
 
-${esc}-- ftd.background-colors background-:
+-- ftd.background-colors background-:
 base: $base-
 step-1: $step-1-
 step-2: $step-2-
 overlay: $overlay-
 code: $code-
 
-${esc}-- ftd.color border-:
+-- ftd.color border-:
 light: ${get_color_value(cs_light, "Standalone Colors", "border")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "border")}
 
-${esc}-- ftd.color border-strong-:
+-- ftd.color border-strong-:
 light: ${get_color_value(cs_light, "Standalone Colors", "border-strong")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "border-strong")}
 
-${esc}-- ftd.color text-:
+-- ftd.color text-:
 light: ${get_color_value(cs_light, "Standalone Colors", "text")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "text")}
 
-${esc}-- ftd.color text-strong-:
+-- ftd.color text-strong-:
 light: ${get_color_value(cs_light, "Standalone Colors", "text-strong")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "text-strong")}
 
-${esc}-- ftd.color shadow-:
+-- ftd.color shadow-:
 light: ${get_color_value(cs_light, "Standalone Colors", "shadow")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "shadow")}
 
-${esc}-- ftd.color scrim-:
+-- ftd.color scrim-:
 light: ${get_color_value(cs_light, "Standalone Colors", "scrim")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "scrim")}
 
-${esc}-- ftd.color cta-primary-base-:
+-- ftd.color cta-primary-base-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "base")}
 
-${esc}-- ftd.color cta-primary-hover-:
+-- ftd.color cta-primary-hover-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "hover")}
 
-${esc}-- ftd.color cta-primary-pressed-:
+-- ftd.color cta-primary-pressed-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "pressed")}
 
-${esc}-- ftd.color cta-primary-disabled-:
+-- ftd.color cta-primary-disabled-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "disabled")}
 
-${esc}-- ftd.color cta-primary-focused-:
+-- ftd.color cta-primary-focused-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "focused")}
 
-${esc}-- ftd.color cta-primary-border-:
+-- ftd.color cta-primary-border-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "border")}
 
-${esc}-- ftd.color cta-primary-text-:
+-- ftd.color cta-primary-text-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "text")}
 
 
-${esc}-- ftd.cta-colors cta-primary-:
+-- ftd.cta-colors cta-primary-:
 base: $cta-primary-base-
 hover: $cta-primary-hover-
 pressed: $cta-primary-pressed-
@@ -1593,35 +1588,35 @@ focused: $cta-primary-focused-
 border: $cta-primary-border-
 text: $cta-primary-text-
 
-${esc}-- ftd.color cta-secondary-base-:
+-- ftd.color cta-secondary-base-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "base")}
 
-${esc}-- ftd.color cta-secondary-hover-:
+-- ftd.color cta-secondary-hover-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "hover")}
 
-${esc}-- ftd.color cta-secondary-pressed-:
+-- ftd.color cta-secondary-pressed-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "pressed")}
 
-${esc}-- ftd.color cta-secondary-disabled-:
+-- ftd.color cta-secondary-disabled-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "disabled")}
 
-${esc}-- ftd.color cta-secondary-focused-:
+-- ftd.color cta-secondary-focused-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "focused")}
 
-${esc}-- ftd.color cta-secondary-border-:
+-- ftd.color cta-secondary-border-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "border")}
 
-${esc}-- ftd.color cta-secondary-text-:
+-- ftd.color cta-secondary-text-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-secondary-:
+-- ftd.cta-colors cta-secondary-:
 base: $cta-secondary-base-
 hover: $cta-secondary-hover-
 pressed: $cta-secondary-pressed-
@@ -1630,35 +1625,35 @@ focused: $cta-secondary-focused-
 border: $cta-secondary-border-
 text: $cta-secondary-text-
 
-${esc}-- ftd.color cta-tertiary-base-:
+-- ftd.color cta-tertiary-base-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "base")}
 
-${esc}-- ftd.color cta-tertiary-hover-:
+-- ftd.color cta-tertiary-hover-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "hover")}
 
-${esc}-- ftd.color cta-tertiary-pressed-:
+-- ftd.color cta-tertiary-pressed-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "pressed")}
 
-${esc}-- ftd.color cta-tertiary-disabled-:
+-- ftd.color cta-tertiary-disabled-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "disabled")}
 
-${esc}-- ftd.color cta-tertiary-focused-:
+-- ftd.color cta-tertiary-focused-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "focused")}
 
-${esc}-- ftd.color cta-tertiary-border-:
+-- ftd.color cta-tertiary-border-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "border")}
 
-${esc}-- ftd.color cta-tertiary-text-:
+-- ftd.color cta-tertiary-text-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-tertiary-:
+-- ftd.cta-colors cta-tertiary-:
 base: $cta-tertiary-base-
 hover: $cta-tertiary-hover-
 pressed: $cta-tertiary-pressed-
@@ -1667,35 +1662,35 @@ focused: $cta-tertiary-focused-
 border: $cta-tertiary-border-
 text: $cta-tertiary-text-
 
-${esc}-- ftd.color cta-danger-base-:
+-- ftd.color cta-danger-base-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "base")}
 
-${esc}-- ftd.color cta-danger-hover-:
+-- ftd.color cta-danger-hover-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "hover")}
 
-${esc}-- ftd.color cta-danger-pressed-:
+-- ftd.color cta-danger-pressed-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "pressed")}
 
-${esc}-- ftd.color cta-danger-disabled-:
+-- ftd.color cta-danger-disabled-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "disabled")}
 
-${esc}-- ftd.color cta-danger-focused-:
+-- ftd.color cta-danger-focused-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "focused")}
 
-${esc}-- ftd.color cta-danger-border-:
+-- ftd.color cta-danger-border-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "border")}
 
-${esc}-- ftd.color cta-danger-text-:
+-- ftd.color cta-danger-text-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-danger-:
+-- ftd.cta-colors cta-danger-:
 base: $cta-danger-base-
 hover: $cta-danger-hover-
 pressed: $cta-danger-pressed-
@@ -1704,132 +1699,132 @@ focused: $cta-danger-focused-
 border: $cta-danger-border-
 text: $cta-danger-text-
 
-${esc}-- ftd.color accent-primary-:
+-- ftd.color accent-primary-:
 light: ${get_color_value(cs_light, "Accent Colors", "primary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "primary")}
 
-${esc}-- ftd.color accent-secondary-:
+-- ftd.color accent-secondary-:
 light: ${get_color_value(cs_light, "Accent Colors", "secondary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "secondary")}
 
-${esc}-- ftd.color accent-tertiary-:
+-- ftd.color accent-tertiary-:
 light: ${get_color_value(cs_light, "Accent Colors", "tertiary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "tertiary")}
 
-${esc}-- ftd.pst accent-:
+-- ftd.pst accent-:
 primary: $accent-primary-
 secondary: $accent-secondary-
 tertiary: $accent-tertiary-
 
-${esc}-- ftd.color error-base-:
+-- ftd.color error-base-:
 light: ${get_color_value(cs_light, "Error Colors", "base")}
 dark: ${get_color_value(cs_dark, "Error Colors", "base")}
 
-${esc}-- ftd.color error-text-:
+-- ftd.color error-text-:
 light: ${get_color_value(cs_light, "Error Colors", "text")}
 dark: ${get_color_value(cs_dark, "Error Colors", "text")}
 
-${esc}-- ftd.color error-border-:
+-- ftd.color error-border-:
 light: ${get_color_value(cs_light, "Error Colors", "border")}
 dark: ${get_color_value(cs_dark, "Error Colors", "border")}
 
-${esc}-- ftd.btb error-btb-:
+-- ftd.btb error-btb-:
 base: $error-base-
 text: $error-text-
 border: $error-border-
 
-${esc}-- ftd.color success-base-:
+-- ftd.color success-base-:
 light: ${get_color_value(cs_light, "Success Colors", "base")}
 dark: ${get_color_value(cs_dark, "Success Colors", "base")}
 
-${esc}-- ftd.color success-text-:
+-- ftd.color success-text-:
 light: ${get_color_value(cs_light, "Success Colors", "text")}
 dark: ${get_color_value(cs_dark, "Success Colors", "text")}
 
-${esc}-- ftd.color success-border-:
+-- ftd.color success-border-:
 light: ${get_color_value(cs_light, "Success Colors", "border")}
 dark: ${get_color_value(cs_dark, "Success Colors", "border")}
 
-${esc}-- ftd.btb success-btb-:
+-- ftd.btb success-btb-:
 base: $success-base-
 text: $success-text-
 border: $success-border-
 
-${esc}-- ftd.color info-base-:
+-- ftd.color info-base-:
 light: ${get_color_value(cs_light, "Info Colors", "base")}
 dark: ${get_color_value(cs_dark, "Info Colors", "base")}
 
-${esc}-- ftd.color info-text-:
+-- ftd.color info-text-:
 light: ${get_color_value(cs_light, "Info Colors", "text")}
 dark: ${get_color_value(cs_dark, "Info Colors", "text")}
 
-${esc}-- ftd.color info-border-:
+-- ftd.color info-border-:
 light: ${get_color_value(cs_light, "Info Colors", "border")}
 dark: ${get_color_value(cs_dark, "Info Colors", "border")}
 
-${esc}-- ftd.btb info-btb-:
+-- ftd.btb info-btb-:
 base: $info-base-
 text: $info-text-
 border: $info-border-
 
-${esc}-- ftd.color warning-base-:
+-- ftd.color warning-base-:
 light: ${get_color_value(cs_light, "Warning Colors", "base")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "base")}
 
-${esc}-- ftd.color warning-text-:
+-- ftd.color warning-text-:
 light: ${get_color_value(cs_light, "Warning Colors", "text")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "text")}
 
-${esc}-- ftd.color warning-border-:
+-- ftd.color warning-border-:
 light: ${get_color_value(cs_light, "Warning Colors", "border")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "border")}
 
-${esc}-- ftd.btb warning-btb-:
+-- ftd.btb warning-btb-:
 base: $warning-base-
 text: $warning-text-
 border: $warning-border-
 
-${esc}-- ftd.color custom-one-:
+-- ftd.color custom-one-:
 light: ${get_color_value(cs_light, "Custom Colors", "one")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "one")}
 
-${esc}-- ftd.color custom-two-:
+-- ftd.color custom-two-:
 light: ${get_color_value(cs_light, "Custom Colors", "two")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "two")}
 
-${esc}-- ftd.color custom-three-:
+-- ftd.color custom-three-:
 light: ${get_color_value(cs_light, "Custom Colors", "three")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "three")}
 
-${esc}-- ftd.color custom-four-:
+-- ftd.color custom-four-:
 light: ${get_color_value(cs_light, "Custom Colors", "four")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "four")}
 
-${esc}-- ftd.color custom-five-:
+-- ftd.color custom-five-:
 light: ${get_color_value(cs_light, "Custom Colors", "five")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "five")}
 
-${esc}-- ftd.color custom-six-:
+-- ftd.color custom-six-:
 light: ${get_color_value(cs_light, "Custom Colors", "six")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "six")}
 
-${esc}-- ftd.color custom-seven-:
+-- ftd.color custom-seven-:
 light: ${get_color_value(cs_light, "Custom Colors", "seven")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "seven")}
 
-${esc}-- ftd.color custom-eight-:
+-- ftd.color custom-eight-:
 light: ${get_color_value(cs_light, "Custom Colors", "eight")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "eight")}
 
-${esc}-- ftd.color custom-nine-:
+-- ftd.color custom-nine-:
 light: ${get_color_value(cs_light, "Custom Colors", "nine")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "nine")}
 
-${esc}-- ftd.color custom-ten-:
+-- ftd.color custom-ten-:
 light: ${get_color_value(cs_light, "Custom Colors", "ten")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "ten")}
 
-${esc}-- ftd.custom-colors custom-:
+-- ftd.custom-colors custom-:
 one: $custom-one-
 two: $custom-two-
 three: $custom-three-
@@ -1841,7 +1836,7 @@ eight: $custom-eight-
 nine: $custom-nine-
 ten: $custom-ten-
 
-${esc}-- ftd.color-scheme main:
+-- ftd.color-scheme main:
 background: $background-
 border: $border-
 border-strong: $border-strong-
@@ -1863,7 +1858,6 @@ custom: $custom-
 let fs = `<pre>${apply_style(s)}</pre>`;
 return [s, fs];
 }
-
 function len(data) {
 return data.length;
 }
