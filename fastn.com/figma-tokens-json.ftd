@@ -12,6 +12,7 @@ $processor$: pr.figma-cs-token-old
 variable: $my-cs.colors
 name: my-cs
 
+
 -- my-ds.page: Exporting fastn color-scheme as figma tokens json
 
 In `ftd`, we have two processors to export `ftd.color-scheme` variable
