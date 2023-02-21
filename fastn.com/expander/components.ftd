@@ -25,6 +25,8 @@ lang: ftd
 
 \-- component <component-name>:
 
+\;; content of component goes here
+
 \-- end: <component-name>
 
 -- ds.h1: How to call/refer the component?

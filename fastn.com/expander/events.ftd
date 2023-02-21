@@ -1,14 +1,14 @@
 -- my-ds.page: Part 4: Event Handing
 
 -- ds.youtube:
-v: ECRMeL9pIoc
+v: Hf7XZDP-64M
 
 
--- ds.h3: How to create on-click event handling
+-- ds.h3: How to create on-click event handling?
 
 -- ds.markdown:
 
-1. Create a boolean variable inside the component
+- Create a mutable `boolean variable` inside the component.
 
 -- ds.code: Boolean variable
 lang: ftd
@@ -17,7 +17,7 @@ boolean $<boolean-variable>: true
 
 -- ds.markdown:
 
-2. Give if condition to the Body part
+- Give `if condition` to the Body part.
 
 -- ds.code: if-condition
 lang: ftd
@@ -26,7 +26,7 @@ if: { box.<boolean-variable> }
 
 -- ds.markdown:
 
-3. Inside the Header row, we create the event for on-click.
+- Inside the Header row, we create the event for `on-click`.
 
 -- ds.code: on-click event
 lang: ftd
@@ -36,7 +36,7 @@ lang: ftd
 
 -- ds.markdown:
 
-4. Define the **toggle function** after component
+- Define the `toggle function` after component.
 
 -- ds.code: on-click event
 lang: ftd
@@ -49,7 +49,7 @@ boolean $function-argument:
 
 -- ds.markdown:
 
-Hurray!!! We have made the Expander Project from scratch.
+Here We Go!!! We have made the Expander Project from scratch.
 
 -- ds.markdown:
 
