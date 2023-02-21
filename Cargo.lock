@@ -979,7 +979,7 @@ dependencies = [
  "env_logger",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/fastn-stack/ftd?rev=3c8cb190)",
+ "ftd 0.2.0 (git+https://github.com/fastn-stack/ftd?rev=a283f67)",
  "futures",
  "hyper",
  "ignore",
@@ -1139,7 +1139,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/fastn-stack/ftd?rev=3c8cb190#3c8cb190f0a2db07330cce98fdbf635fc7ea74c6"
+source = "git+https://github.com/fastn-stack/ftd?rev=a283f67#a283f67b36d4577c05f8134b2ddd998b7771919c"
 dependencies = [
  "comrak 0.16.0",
  "css-color-parser",
