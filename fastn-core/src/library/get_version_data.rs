@@ -75,6 +75,7 @@ pub async fn processor<'a>(
         }
         version_toc.push(fastn_core::library::toc::TocItem {
             id: None,
+            description: None,
             title: Some(key.original.to_string()),
             url: Some(format!("{}{}", key.original, url)),
             path: None,

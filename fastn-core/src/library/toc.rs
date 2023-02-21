@@ -25,6 +25,7 @@ pub struct TocItemCompat {
     pub number: Option<String>,
     pub title: Option<String>,
     pub path: Option<String>,
+    pub description: Option<String>,
     pub bury: bool,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
@@ -47,6 +48,7 @@ pub struct TocItemCompat {
 pub struct TocItem {
     pub id: Option<String>,
     pub title: Option<String>,
+    pub description: Option<String>,
     pub url: Option<String>,
     pub path: Option<String>,
     pub bury: bool,
@@ -67,6 +69,7 @@ impl TocItem {
             number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
             title: self.title.clone(),
             path: self.path.clone(),
+            description: self.description.clone(),
             bury: self.bury,
             is_heading: self.is_heading,
             children: self
@@ -384,6 +387,15 @@ impl TocParser {
                             d,
                         ));
                     }
+                    Some(("description", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                description: Some(v.trim().to_string()),
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
                     attr => {
                         dbg!(&attr);
                         todo!()
@@ -472,6 +484,7 @@ mod test {
                         title: Some("Hello World!".to_string()),
                         id: None,
                         url: None,
+                        description: None,
                         number: vec![],
                         bury: false,
                         is_disabled: false,
@@ -485,6 +498,7 @@ mod test {
                     super::TocItem {
                         title: Some("Test Page".to_string()),
                         id: None,
+                        description: None,
                         url: Some("/test-page/".to_string()),
                         number: vec![1],
                         bury: false,
@@ -499,6 +513,7 @@ mod test {
                     super::TocItem {
                         title: Some("Title One".to_string()),
                         id: None,
+                        description: None,
                         url: None,
                         number: vec![],
                         bury: false,
@@ -513,6 +528,7 @@ mod test {
                     super::TocItem {
                         title: Some("Home Page".to_string()),
                         id: None,
+                        description: None,
                         url: Some("/home/".to_string()),
                         number: vec![1],
                         bury: false,
@@ -527,6 +543,7 @@ mod test {
                                 title: Some("Nested Title".to_string()),
                                 id: None,
                                 url: None,
+                                description: None,
                                 number: vec![],
                                 bury: false,
                                 is_heading: true,
@@ -539,6 +556,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
+                                description: None,
                                 title: Some("Nested Link".to_string()),
                                 url: Some("/home/nested-link/".to_string(),),
                                 number: vec![1, 1],
@@ -554,6 +572,7 @@ mod test {
                             super::TocItem {
                                 title: Some("Nested Title 2".to_string()),
                                 id: None,
+                                description: None,
                                 url: None,
                                 number: vec![],
                                 bury: false,
@@ -567,6 +586,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
+                                description: None,
                                 title: Some("Nested Link Two".to_string()),
                                 url: Some("/home/nested-link-two/".to_string()),
                                 number: vec![1, 1],
@@ -579,6 +599,7 @@ mod test {
                                 document: None,
                                 children: vec![super::TocItem {
                                     id: None,
+                                    description: None,
                                     title: Some("Further Nesting".to_string()),
                                     url: Some("/home/nested-link-two/further-nested/".to_string()),
                                     number: vec![1, 1, 1],
@@ -594,6 +615,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
+                                description: None,
                                 title: Some("`ftd::p1` grammar".to_string()),
                                 url: Some("/p1-grammar/".to_string()),
                                 number: vec![1, 2],
@@ -626,6 +648,7 @@ mod test {
                     title: Some("Home Page".to_string()),
                     id: None,
                     url: None,
+                    description: None,
                     number: vec![],
                     bury: false,
                     is_disabled: false,
@@ -653,6 +676,7 @@ mod test {
                 items: vec![
                     super::TocItem {
                         title: Some("Home Page".to_string()),
+                        description: None,
                         is_heading: false,
                         id: None,
                         url: Some("/home-page/".to_string()),
@@ -668,6 +692,7 @@ mod test {
                     super::TocItem {
                         title: Some("Hindi".to_string()),
                         is_heading: false,
+                        description: None,
                         id: None,
                         url: Some("https://test.website.com".to_string()),
                         number: vec![2],
