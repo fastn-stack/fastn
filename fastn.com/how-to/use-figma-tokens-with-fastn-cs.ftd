@@ -1,6 +1,6 @@
 -- import: fastn/processors as pr
--- import: fifthtry.github.io/forest-cs/colors as forest-cs
--- import: fifthtry.github.io/saturated-sunset-cs/colors as sunset-cs
+-- import: fifthtry.github.io/forest-cs as forest-cs
+-- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
 -- import: fastn.dev/assets as assets
 
 -- string forest-figma:

@@ -23,7 +23,7 @@ Here's what your `my-ds.ftd` module would look like:
 -- ds.code: `my-ds.ftd`
 lang: ftd
 
-\-- import: fifthtry.github.io/forest-cs/colors as forest-cs
+\-- import: fifthtry.github.io/forest-cs as forest-cs
 \-- import: fifthtry.github.io/doc-site as ds
 
 \-- component page:
