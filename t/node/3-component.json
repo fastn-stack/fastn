@@ -768,5 +768,7 @@
     "inherited": "inherited"
   },
   "dummy_nodes": {},
-  "raw_nodes": {}
+  "raw_nodes": {},
+  "js": [],
+  "css": []
 }

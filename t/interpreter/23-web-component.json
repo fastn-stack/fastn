@@ -69,6 +69,7 @@
             "line_number": 5
           }
         ],
+        "js": "ftd/t/web_component.js",
         "line_number": 1
       }
     }
@@ -87,7 +88,7 @@
                 }
               },
               "is_mutable": true,
-              "line_number": 10
+              "line_number": 11
             }
           },
           "source": {
@@ -97,7 +98,7 @@
             }
           },
           "condition": null,
-          "line_number": 10
+          "line_number": 11
         },
         {
           "value": {
@@ -108,19 +109,19 @@
                 }
               },
               "is_mutable": false,
-              "line_number": 12
+              "line_number": 13
             }
           },
           "source": "Body",
           "condition": null,
-          "line_number": 12
+          "line_number": 13
         }
       ],
       "iteration": null,
       "condition": null,
       "events": [],
       "children": [],
-      "line_number": 9
+      "line_number": 10
     }
   ],
   "aliases": {

@@ -118,7 +118,7 @@
         },
         "null": false,
         "data_id": "",
-        "line_number": 9,
+        "line_number": 10,
         "raw_data": null,
         "web_component": {
           "properties": {
@@ -132,7 +132,7 @@
                 },
                 "source": "Global",
                 "is_mutable": false,
-                "line_number": 9
+                "line_number": 10
               }
             },
             "count": {
@@ -145,7 +145,7 @@
                 },
                 "source": "Global",
                 "is_mutable": true,
-                "line_number": 9
+                "line_number": 10
               }
             },
             "separator": {
@@ -158,7 +158,7 @@
                 },
                 "source": "Global",
                 "is_mutable": false,
-                "line_number": 9
+                "line_number": 10
               }
             },
             "start": {
@@ -171,7 +171,7 @@
                 },
                 "source": "Global",
                 "is_mutable": false,
-                "line_number": 9
+                "line_number": 10
               }
             }
           }
@@ -260,6 +260,7 @@
             "line_number": 5
           }
         ],
+        "js": "ftd/t/web_component.js",
         "line_number": 1
       }
     },
@@ -280,11 +281,11 @@
               }
             },
             "is_mutable": false,
-            "line_number": 12
+            "line_number": 13
           }
         },
         "conditional_value": [],
-        "line_number": 9,
+        "line_number": 10,
         "is_static": true
       }
     },
@@ -305,11 +306,11 @@
               }
             },
             "is_mutable": true,
-            "line_number": 10
+            "line_number": 11
           }
         },
         "conditional_value": [],
-        "line_number": 9,
+        "line_number": 10,
         "is_static": false
       }
     },
@@ -334,7 +335,7 @@
           }
         },
         "conditional_value": [],
-        "line_number": 9,
+        "line_number": 10,
         "is_static": true
       }
     },
@@ -359,7 +360,7 @@
           }
         },
         "conditional_value": [],
-        "line_number": 9,
+        "line_number": 10,
         "is_static": true
       }
     }
@@ -369,5 +370,9 @@
     "inherited": "inherited"
   },
   "dummy_nodes": {},
-  "raw_nodes": {}
+  "raw_nodes": {},
+  "js": [
+    "ftd/t/web_component.js:defer"
+  ],
+  "css": []
 }

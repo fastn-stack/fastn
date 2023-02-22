@@ -84,9 +84,6 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let html_ui =
         ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
     let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
-    let test_css = std::fs::read_to_string("t/test.css").expect("build.js not found");
-    let web_component =
-        std::fs::read_to_string("t/web_component.js").expect("web_component.js not found");
     let html_str = ftd::html1::utils::trim_all_lines(
         std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")

@@ -54,7 +54,7 @@
           "line_number": 5
         }
       ],
-      "js": "web-component.js",
+      "js": "ftd/t/web_component.js",
       "line_number": 1
     }
   },
