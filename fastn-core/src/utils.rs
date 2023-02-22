@@ -420,6 +420,7 @@ pub fn replace_markers_2021(
             get_extra_js(
                 config.ftd_external_js.as_slice(),
                 config.ftd_inline_js.as_slice(),
+                "",
             )
             .as_str(),
         )
@@ -428,6 +429,7 @@ pub fn replace_markers_2021(
             get_extra_css(
                 config.ftd_external_css.as_slice(),
                 config.ftd_inline_css.as_slice(),
+                "",
             )
             .as_str(),
         )
