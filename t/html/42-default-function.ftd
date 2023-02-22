@@ -11,10 +11,10 @@ string url:
 string method:
 string name:
 
-http(url, method, ("name", name))
+ftd.http(url, method, ("name", name))
 
 
 -- void copy-me-call(text):
 string text:
 
-copy_to_clipboard(text)
+ftd.copy_to_clipboard(text)

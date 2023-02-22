@@ -1,5 +1,11 @@
 # FTD Change Log
 
+## 23 February 2023
+
+- [Added web-component](https://github.com/ftd-lang/ftd/commit/f7c47c197f347bd2b48f0995b82aeaaf760ce44a)
+- copy_to_clipboard -> ftd.copy_to_clipboard
+- http -> ftd.http
+
 ## 2 February 2023
 - [Added enabled property in ftd.checkbox and ftd.text-input](https://github.com/ftd-lang/ftd/commit/12425b68b56c2f475f3630ddb0484de70479aad0)
 

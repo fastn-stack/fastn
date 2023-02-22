@@ -337,7 +337,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter2::things::function::Expression {
-                        expression: "copy_to_clipboard(a)".to_string(),
+                        expression: "ftd.copy_to_clipboard(a)".to_string(),
                         line_number: 0,
                     }
                 ],

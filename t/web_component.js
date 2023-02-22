@@ -4,6 +4,8 @@ class WordCount extends HTMLElement {
         // Always call super first in constructor
         super();
 
+        let data = window.ftd.component_data(this);
+
         // Create a shadow root
         const shadow = this.attachShadow({mode: 'open'});
 
@@ -19,17 +21,17 @@ class WordCount extends HTMLElement {
         info.setAttribute('class', 'info');
 
         // Take attribute content and put it inside the info span
-        const text = eval(this.getAttribute('body'));
+        const text = data.body;
         info.textContent = text.get();
 
         const count = document.createElement('span');
         info.setAttribute('class', 'info');
 
-        const seperator = eval(this.getAttribute('separator'));
+        const seperator = data.separator;
         let value = text.get().split(seperator.get()).length;
         count.textContent = value;
 
-        const text_count = eval(this.getAttribute('count'));
+        const text_count = data.count;
         text_count.set(value);
 
         text_count.on_change = function () {

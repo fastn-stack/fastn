@@ -1083,7 +1083,7 @@ $on-click$: $ftd.enable-system-mode()
 ```
 
 
-## `copy_to_clipboard()`
+## `ftd.copy_to_clipboard()`
 
 This is FScript as well as a standard ftd function. This function enables copy content in clipboard.
 
@@ -1094,7 +1094,7 @@ $on-click$: $copy-me-call(text = Copy me ⭐️)
 -- void copy-me-call(text):
 string text:
 
-copy_to_clipboard(text)
+ftd.copy_to_clipboard(text)
 ```
 
 Alternatively you can do
@@ -1103,7 +1103,7 @@ Alternatively you can do
 $on-click$: $ftd.copy-to-clipboard(a = Copy me ⭐️)
 ```
 
-## `http(url: string, method: string, ...request-data)`
+## `ftd.http(url: string, method: string, ...request-data)`
 
 This function is used to make http request
 
@@ -1116,7 +1116,7 @@ This function is used to make http request
 
 - For `named` data, the values need to be passed as `(key,value)` tuples.
 
-  For example `http("www.fifthtry.com", "post", ("name": "John"), ("age": 25))`
+  For example `ftd.http("www.fifthtry.com", "post", ("name": "John"),("age": 25))`
 
   request-data = `{ "name": "John", "age": 25 }`
 
@@ -1131,7 +1131,7 @@ string name:
 integer age: 
 
 ;; Named request-data
-http(url, method, ("name": name),("age": age))
+ftd.http(url, method, ("name": name),("age": age))
 ```
 
 - For `unnamed` data, i.e when keys are not passed with data values, then the keys will be indexed 

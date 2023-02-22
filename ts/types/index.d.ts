@@ -26,6 +26,9 @@ declare global {
         clear(array: any[], args: any, data: any, id: string): any[];
         insert_at(array: any[], value: any, idx: number, args: any, data: any, id: string): any[];
         delete_at(array: any[], idx: number, args: any, data: any, id: string): any[];
+        copy_to_clipboard(text: string): void;
+        http(url: string, method: string, ...request_data: any): void;
+        component_data(component: HTMLElement): any;
     }
 
     interface String {
