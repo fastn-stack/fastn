@@ -1,3 +1,4 @@
+mod commands;
 pub fn main() {
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
@@ -42,11 +43,33 @@ async fn outer_main() {
     }
 }
 
-async fn async_main() -> fastn_core::Result<()> {
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
+    #[error("FastnCoreError: {}", _0)]
+    FastnCoreError(#[from] fastn_core::Error),
+    #[error("FastnCloudError: {}", _0)]
+    FastnCloudError(#[from] commands::Error),
+}
+
+async fn async_main() -> Result<(), Error> {
+    let matches = app(version()).get_matches();
+    if cloud_commands(&matches).await? {
+        return Ok(());
+    }
+    fastn_core_commands(&matches).await?;
+    Ok(())
+}
+
+async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::Error> {
+    match matches.subcommand() {
+        Some((commands::PUBLISH_STATIC, matches)) => commands::handle(matches).await,
+        _ => Ok(false),
+    }
+}
+
+async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use colored::Colorize;
     use fastn_core::utils::ValueOf;
-
-    let matches = app(version()).get_matches();
 
     match matches.subcommand() {
         Some((fastn_core::commands::stop_tracking::COMMAND, matches)) => {
@@ -429,12 +452,15 @@ mod sub_command {
         }
     }
     pub fn publish_static() -> clap::Command {
-        let publish_static = clap::Command::new("publish-static")
-            .about("publish fastn packages to fastn-cloud")
-            .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"));
-        publish_static
+        clap::Command::new("publish-static")
+            .about("Publish fastn package statically")
+            .subcommands([
+                clap::Command::new("create")
+                    .about("Create fastn package to fastn-cloud and give back domain"),
+                clap::Command::new("update").about("Update existing fastn package to fastn-cloud"),
+            ])
+            .after_help("Publish fastn packages to fastn-cloud as static")
     }
-
 }
 
 pub fn version() -> &'static str {

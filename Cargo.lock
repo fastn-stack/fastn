@@ -958,6 +958,7 @@ dependencies = [
  "colored",
  "fastn-cloud",
  "fastn-core",
+ "thiserror",
  "tokio",
  "tracing",
  "tracing-forest",
@@ -967,6 +968,9 @@ dependencies = [
 [[package]]
 name = "fastn-cloud"
 version = "0.1.0"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "fastn-core"
