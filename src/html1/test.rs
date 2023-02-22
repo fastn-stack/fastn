@@ -85,6 +85,8 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
         ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
     let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
     let test_css = std::fs::read_to_string("t/test.css").expect("build.js not found");
+    let web_component =
+        std::fs::read_to_string("t/web_component.js").expect("web_component.js not found");
     let html_str = ftd::html1::utils::trim_all_lines(
         std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
@@ -93,7 +95,10 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())
-            .replace("__extra_js__", "")
+            .replace(
+                "__extra_js__",
+                format!("<script type=\"module\">{}</script>", web_component).as_str(),
+            )
             .replace("__base_url__", "/")
             .replace(
                 "__extra_css__",
@@ -102,12 +107,14 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
             .replace(
                 "__ftd_functions__",
                 format!(
-                    "{}\n{}\n{}\n{}\n{}",
+                    "{}\n{}\n{}\n{}\n{}\n{}\n{}",
                     html_ui.functions.as_str(),
                     html_ui.dependencies.as_str(),
                     html_ui.variable_dependencies.as_str(),
                     html_ui.dummy_html.as_str(),
-                    html_ui.raw_html.as_str()
+                    html_ui.raw_html.as_str(),
+                    html_ui.mutable_variable,
+                    html_ui.immutable_variable
                 )
                 .as_str(),
             )

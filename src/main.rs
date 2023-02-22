@@ -285,12 +285,14 @@ fn ftd_v2_write(id: &str, s: &str) {
             .replace(
                 "__ftd_functions__",
                 format!(
-                    "{}\n{}\n{}\n{}\n{}",
+                    "{}\n{}\n{}\n{}\n{}\n{}\n{}",
                     html_ui.functions.as_str(),
                     html_ui.dependencies.as_str(),
                     html_ui.variable_dependencies.as_str(),
                     html_ui.dummy_html.as_str(),
-                    html_ui.raw_html.as_str()
+                    html_ui.raw_html.as_str(),
+                    html_ui.mutable_variable,
+                    html_ui.immutable_variable
                 )
                 .as_str(),
             )

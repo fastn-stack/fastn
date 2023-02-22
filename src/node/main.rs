@@ -13,12 +13,18 @@ pub struct Node {
     pub data_id: String,
     pub line_number: usize,
     pub raw_data: Option<RawNodeData>,
+    pub web_component: Option<WebComponentData>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct RawNodeData {
     pub properties: Vec<(String, ftd::interpreter2::Property)>,
     pub iteration: Option<ftd::interpreter2::Loop>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct WebComponentData {
+    pub properties: ftd::Map<ftd::interpreter2::PropertyValue>,
 }
 
 pub type Event = ftd::executor::Event;
@@ -45,6 +51,7 @@ impl Node {
             data_id: common.data_id.clone(),
             line_number: common.line_number,
             raw_data: None,
+            web_component: None,
         }
     }
 
@@ -86,6 +93,7 @@ impl Node {
             line_number: common.line_number,
             display: s(display),
             raw_data: None,
+            web_component: None,
         }
     }
 
@@ -122,10 +130,11 @@ impl ftd::executor::Element {
                 data_id: "".to_string(),
                 line_number: 0,
                 raw_data: None,
+                web_component: None,
             },
             ftd::executor::Element::RawElement(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::WebComponent(_) => todo!(),
+            ftd::executor::Element::WebComponent(w) => w.to_node(),
         }
     }
 }
@@ -137,6 +146,28 @@ impl ftd::executor::IterativeElement {
             raw_data.iteration = Some(self.iteration.clone());
         }
         node
+    }
+}
+
+impl ftd::executor::WebComponent {
+    pub fn to_node(&self) -> Node {
+        let name = if let Some((_, name)) = self.name.split_once('#') {
+            name.to_string()
+        } else {
+            self.name.to_string()
+        };
+
+        Node {
+            node: name,
+            display: s("unset"),
+            null: false,
+            line_number: self.line_number,
+            raw_data: None,
+            web_component: Some(WebComponentData {
+                properties: self.properties.to_owned(),
+            }),
+            ..Default::default()
+        }
     }
 }
 
@@ -163,6 +194,7 @@ impl ftd::executor::RawElement {
                 properties: self.properties.clone(),
                 iteration: None,
             }),
+            web_component: None,
         }
     }
 }

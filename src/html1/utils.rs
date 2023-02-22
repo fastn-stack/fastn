@@ -639,3 +639,52 @@ where
     }
     map
 }
+
+pub(crate) fn mutable_value(mutable_variables: &[String], id: &str) -> String {
+    let mut values = vec![];
+    if mutable_variables.is_empty() {
+        return "".to_string();
+    }
+    for var in mutable_variables {
+        values.push(format!(
+            indoc::indoc! {"
+                     window.ftd.mutable_value_{id}[\"{key}\"] = {{
+                            \"get\": function() {{ return window.ftd.get_value(\"{id}\", \"{key}\");}},
+                            \"set\": function(value) {{ window.ftd.set_value_by_id(\"{id}\", \"{key}\", value) }},
+                            \"on_change\": function(){{}}
+                     }};
+                "},
+            id = id,
+            key = ftd::html1::utils::js_reference_name(var.as_str())
+        ));
+    }
+    format!(
+        "window.ftd.mutable_value_{} = {{}}; \n{}",
+        id,
+        values.join("\n")
+    )
+}
+
+pub(crate) fn immutable_value(immutable_variables: &[String], id: &str) -> String {
+    let mut values = vec![];
+    if immutable_variables.is_empty() {
+        return "".to_string();
+    }
+    for var in immutable_variables {
+        values.push(format!(
+            indoc::indoc! {"
+                     window.ftd.immutable_value_{id}[\"{key}\"] = {{
+                            \"get\": function() {{ return window.ftd.get_value(\"{id}\", \"{key}\");}},
+                            \"on_change\": function(){{}}
+                     }};
+                "},
+            id = id,
+            key = ftd::html1::utils::js_reference_name(var.as_str())
+        ));
+    }
+    format!(
+        "window.ftd.immutable_value_{} = {{}}; \n{}",
+        id,
+        values.join("\n")
+    )
+}

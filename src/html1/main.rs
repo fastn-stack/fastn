@@ -7,6 +7,8 @@ pub struct HtmlUI {
     pub outer_events: String,
     pub dummy_html: String,
     pub raw_html: String,
+    pub mutable_variable: String,
+    pub immutable_variable: String,
 }
 
 impl HtmlUI {
@@ -25,7 +27,7 @@ impl HtmlUI {
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
-        let (html, outer_events) =
+        let (html, outer_events, mutable_variable, immutable_variable) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
         let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
             .as_string_from_dummy_nodes(&node_data.dummy_nodes);
@@ -48,6 +50,8 @@ impl HtmlUI {
             outer_events,
             dummy_html,
             raw_html,
+            mutable_variable,
+            immutable_variable,
         })
     }
 }
@@ -81,6 +85,8 @@ impl RawHtmlGenerator {
 pub(crate) struct HtmlGenerator<'a> {
     pub id: String,
     pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub mutable_variable: Vec<String>,
+    pub immutable_variable: Vec<String>,
 }
 
 impl<'a> HtmlGenerator<'a> {
@@ -88,11 +94,13 @@ impl<'a> HtmlGenerator<'a> {
         HtmlGenerator {
             id: id.to_string(),
             doc,
+            mutable_variable: vec![],
+            immutable_variable: vec![],
         }
     }
 
     pub fn to_dummy_html(
-        &self,
+        &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
     ) -> ftd::html1::Result<()> {
@@ -121,16 +129,29 @@ impl<'a> HtmlGenerator<'a> {
     }
 
     pub fn to_html_and_outer_events(
-        &self,
+        &mut self,
         node: ftd::node::Node,
-    ) -> ftd::html1::Result<(String, String)> {
+    ) -> ftd::html1::Result<(String, String, String, String)> {
         let (html, events) = self.to_html_(node)?;
-        Ok((html, ftd::html1::utils::events_to_string(events)))
+
+        let mutable_value =
+            ftd::html1::utils::mutable_value(self.mutable_variable.as_slice(), self.id.as_str());
+        let immutable_value = ftd::html1::utils::immutable_value(
+            self.immutable_variable.as_slice(),
+            self.id.as_str(),
+        );
+
+        Ok((
+            html,
+            ftd::html1::utils::events_to_string(events),
+            mutable_value,
+            immutable_value,
+        ))
     }
 
     #[allow(clippy::type_complexity)]
     pub fn to_dummy_html_(
-        &self,
+        &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
     ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
@@ -235,7 +256,7 @@ impl<'a> HtmlGenerator<'a> {
 
     #[allow(clippy::type_complexity)]
     pub fn to_html_(
-        &self,
+        &mut self,
         node: ftd::node::Node,
     ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
         if node.is_null() {
@@ -336,8 +357,9 @@ impl<'a> HtmlGenerator<'a> {
         )
     }
 
-    fn attrs_to_html(&self, node: &ftd::node::Node) -> String {
-        node.attrs
+    fn attrs_to_html(&mut self, node: &ftd::node::Node) -> String {
+        let mut attrs = node
+            .attrs
             .iter()
             .filter_map(|(k, v)| {
                 if k.eq("class") {
@@ -358,8 +380,27 @@ impl<'a> HtmlGenerator<'a> {
                     format!("{}={}", *k, quote(v.as_str()))
                 })
             }) // TODO: escape needed?
-            .collect::<Vec<String>>()
-            .join(" ")
+            .collect::<Vec<String>>();
+
+        if let Some(ref web_component) = node.web_component {
+            for (key, val) in &web_component.properties {
+                if let Some(reference) = val.reference_name() {
+                    let function = if val.is_mutable() {
+                        self.mutable_variable.push(reference.to_string());
+                        "mutable_value"
+                    } else {
+                        self.immutable_variable.push(reference.to_string());
+                        "immutable_value"
+                    };
+                    attrs.push(format!(
+                        "{}=\"window.ftd.{}_{}['{}']\"",
+                        key, function, self.id, reference
+                    ));
+                }
+            }
+        }
+
+        attrs.join(" ")
     }
 }
 
