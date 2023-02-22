@@ -1,6 +1,6 @@
 -- import: fastn/processors as pr
--- import: fifthtry.github.io/forest-cs as forest-cs
--- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
+-- import: fifthtry.github.io/forest-cs/colors as forest-cs
+-- import: fifthtry.github.io/saturated-sunset-cs/colors as sunset-cs
 -- import: fastn.dev/assets as assets
 
 -- string forest-figma:
@@ -63,6 +63,7 @@ Click on the below copy button inside forest-cs code-block
 
 -- ds.code: forest-cs
 lang: json
+max-height: 300
 
 $forest-figma
 
@@ -183,8 +184,9 @@ height.fixed.px: 300
 Let's use `sunset-cs` now. Save the following json to a new json file
 named `sunset-cs.json`.
 
--- ds.code: Sunset-cs
+-- ds.code: sunset-cs
 lang: json
+max-height: 300
 
 $sunset-figma
 

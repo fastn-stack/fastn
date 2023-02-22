@@ -1,6 +1,6 @@
 -- import: ds
 -- import: fastn.dev/assets
--- import: fifthtry.github.io/dark-flame-cs as dark-flame-cs
+-- import: fifthtry.github.io/dark-flame-cs/colors as dark-flame-cs
 
 -- component page:
 children wrapper:
