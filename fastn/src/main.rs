@@ -395,6 +395,7 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(fastn_core::commands::stop_tracking::command())
         .subcommand(sub_command::serve())
+        .subcommand(sub_command::publish_static())
 }
 
 mod sub_command {
@@ -403,7 +404,7 @@ mod sub_command {
             .about("Serve package content over HTTP")
             .after_help("fastn packages can have dynamic features. If your package uses any \
             dynamic feature, then you want to use `fastn serve` instead of `fastn build`.\n\n\
-            Read more about it on https://fastn.dev/serve/")
+            Read more about it on https://fastn.io/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
             .arg(clap::arg!(--"cached-parse" "Use cached parser"))
@@ -427,6 +428,13 @@ mod sub_command {
                 )
         }
     }
+    pub fn publish_static() -> clap::Command {
+        let publish_static = clap::Command::new("publish-static")
+            .about("publish fastn packages to fastn-cloud")
+            .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"));
+        publish_static
+    }
+
 }
 
 pub fn version() -> &'static str {

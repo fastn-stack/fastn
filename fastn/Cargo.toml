@@ -15,6 +15,7 @@ homepage = "https://fastn.dev"
 
 [dependencies]
 fastn-core = { version = "0.1.0", path = "../fastn-core" }
+fastn-cloud = {path = "../fastn-cloud"}
 clap = "4"
 tracing = "0.1"
 tracing-subscriber = "0.3"
