@@ -1,14 +1,15 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+#[derive(thiserror::Error, Debug)]
+pub enum CreateError {}
+
+#[derive(thiserror::Error, Debug)]
+pub enum UpdateError {}
+
+pub async fn create() -> Result<(), CreateError> {
+    println!("publish-static create called");
+    Ok(())
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub async fn update() -> Result<(), UpdateError> {
+    println!("publish-static update called");
+    Ok(())
 }

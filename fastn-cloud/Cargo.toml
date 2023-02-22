@@ -6,4 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+fastn-core = { version = "0.1.0", path = "../fastn-core" }
 thiserror = "1.0.38"

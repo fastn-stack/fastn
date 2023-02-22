@@ -969,6 +969,7 @@ dependencies = [
 name = "fastn-cloud"
 version = "0.1.0"
 dependencies = [
+ "fastn-core",
  "thiserror",
 ]
 

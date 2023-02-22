@@ -8,7 +8,12 @@ pub enum Error {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum PublishStaticError {}
+pub enum PublishStaticError {
+    #[error("PublishStaticCreateError: {}", _0)]
+    PublishStaticCreateError(#[from] fastn_cloud::CreateError),
+    #[error("PublishStaticUpdateError: {}", _0)]
+    PublishStaticUpdateError(#[from] fastn_cloud::UpdateError),
+}
 
 pub(crate) async fn handle(matches: &clap::ArgMatches) -> Result<bool, Error> {
     // TODO: Handle Dynamic Commands
@@ -19,8 +24,14 @@ pub(crate) async fn handle_publish_static(
     matches: &clap::ArgMatches,
 ) -> Result<bool, PublishStaticError> {
     match matches.subcommand() {
-        Some(("create", _matches)) => Ok(true),
-        Some(("update", _matches)) => Ok(true),
+        Some(("create", _matches)) => {
+            fastn_cloud::create().await?;
+            Ok(true)
+        }
+        Some(("update", _matches)) => {
+            fastn_cloud::update().await?;
+            Ok(true)
+        }
         _ => Ok(false),
     }
 }
