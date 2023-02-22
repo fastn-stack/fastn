@@ -1959,13 +1959,13 @@ window.ftd.mutable_value_main["foo#flag"].on_change();
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
 window.ftd.immutable_value_main["foo#flag"].on_change();
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
@@ -2020,9 +2020,9 @@ window.ftd.mutable_value_main["foo#foo:resize:1"].on_change();
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:resize:1"]) {
 window.ftd.immutable_value_main["foo#foo:resize:1"].on_change();
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
 };
 
@@ -2036,15 +2036,6 @@ set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
 else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
 
 }
-window.resolve_value_main["foo#foo:px:1"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-set_data_value(data, "foo#foo:px:1", 30);
-}
-else {set_data_value(data, "foo#foo:px:1", 40);}
-
-}
 window.resolve_value_main["foo#foo:resize:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -2052,6 +2043,15 @@ return resolve_reference("foo#flag", data);
 set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
 }
 else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
+
+}
+window.resolve_value_main["foo#foo:px:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:px:1", 30);
+}
+else {set_data_value(data, "foo#foo:px:1", 40);}
 
 }
 
