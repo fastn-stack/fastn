@@ -1282,7 +1282,8 @@
                                   "kind": {
                                     "UI": {
                                       "name": null,
-                                      "subsection_source": true
+                                      "subsection_source": true,
+                                      "is_web_component": false
                                     }
                                   },
                                   "caption": false,
@@ -1333,7 +1334,8 @@
                                   "kind": {
                                     "UI": {
                                       "name": null,
-                                      "subsection_source": true
+                                      "subsection_source": true,
+                                      "is_web_component": false
                                     }
                                   },
                                   "caption": false,
@@ -1415,7 +1417,8 @@
                         "kind": {
                           "UI": {
                             "name": null,
-                            "subsection_source": true
+                            "subsection_source": true,
+                            "is_web_component": false
                           }
                         },
                         "caption": false,

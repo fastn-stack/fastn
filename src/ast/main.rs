@@ -8,6 +8,7 @@ pub enum AST {
     ComponentDefinition(ftd::ast::ComponentDefinition),
     ComponentInvocation(ftd::ast::Component),
     FunctionDefinition(ftd::ast::Function),
+    WebComponentDefinition(ftd::ast::WebComponentDefinition),
 }
 
 impl AST {
@@ -32,6 +33,7 @@ impl AST {
             AST::ComponentInvocation(c) => c.name.clone(),
             AST::FunctionDefinition(f) => f.name.clone(),
             AST::OrType(o) => o.name.clone(),
+            AST::WebComponentDefinition(w) => w.name.clone(),
         }
     }
 
@@ -50,6 +52,8 @@ impl AST {
             AST::VariableInvocation(ftd::ast::VariableInvocation::from_p1(section, doc_id)?)
         } else if ftd::ast::ComponentDefinition::is_component_definition(section) {
             AST::ComponentDefinition(ftd::ast::ComponentDefinition::from_p1(section, doc_id)?)
+        } else if ftd::ast::WebComponentDefinition::is_web_component_definition(section) {
+            AST::WebComponentDefinition(ftd::ast::WebComponentDefinition::from_p1(section, doc_id)?)
         } else if ftd::ast::Component::is_component(section) {
             AST::ComponentInvocation(ftd::ast::Component::from_p1(section, doc_id)?)
         } else {
@@ -71,6 +75,7 @@ impl AST {
             AST::ComponentInvocation(c) => c.line_number(),
             AST::FunctionDefinition(f) => f.line_number(),
             AST::OrType(o) => o.line_number(),
+            AST::WebComponentDefinition(w) => w.line_number,
         }
     }
 
@@ -149,6 +154,20 @@ impl AST {
         )
     }
 
+    pub fn get_web_component_definition(
+        self,
+        doc_id: &str,
+    ) -> ftd::ast::Result<ftd::ast::WebComponentDefinition> {
+        if let ftd::ast::AST::WebComponentDefinition(v) = self {
+            return Ok(v);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a web-component definition", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
     pub fn get_component_invocation(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Component> {
         if let ftd::ast::AST::ComponentInvocation(v) = self {
             return Ok(v);
@@ -186,6 +205,10 @@ impl AST {
 
     pub fn is_component_definition(&self) -> bool {
         matches!(self, AST::ComponentDefinition(_))
+    }
+
+    pub fn is_web_component_definition(&self) -> bool {
+        matches!(self, AST::WebComponentDefinition(_))
     }
 
     pub fn is_component(&self) -> bool {

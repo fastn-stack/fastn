@@ -16,5 +16,6 @@ pub use ftd::interpreter2::things::{
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},
     variable::{ConditionalValue, Variable},
+    web_component::WebComponentDefinition,
     Thing,
 };

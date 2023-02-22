@@ -579,7 +579,7 @@ impl Property {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
         let mut properties = vec![];
-        let component_arguments = try_ok_state!(Argument::for_component(
+        let component_arguments = try_ok_state!(Argument::for_component_or_web_component(
             component_name,
             &definition_name_with_arguments,
             doc,

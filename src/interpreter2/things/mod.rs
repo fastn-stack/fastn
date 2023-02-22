@@ -7,6 +7,7 @@ pub(crate) mod or_type;
 pub(crate) mod record;
 pub(crate) mod value;
 pub(crate) mod variable;
+pub(crate) mod web_component;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
@@ -18,6 +19,7 @@ pub enum Thing {
     },
     Variable(ftd::interpreter2::Variable),
     Component(ftd::interpreter2::ComponentDefinition),
+    WebComponent(ftd::interpreter2::WebComponentDefinition),
     Function(ftd::interpreter2::Function),
 }
 
@@ -30,6 +32,7 @@ impl Thing {
             ftd::interpreter2::Thing::Variable(v) => v.name.to_string(),
             ftd::interpreter2::Thing::Component(c) => c.name.to_string(),
             ftd::interpreter2::Thing::Function(f) => f.name.to_string(),
+            ftd::interpreter2::Thing::WebComponent(w) => w.name.to_string(),
         }
     }
     pub fn line_number(&self) -> usize {
@@ -40,6 +43,7 @@ impl Thing {
             Thing::Function(f) => f.line_number,
             Thing::OrType(o) => o.line_number,
             Thing::OrTypeWithVariant { variant, .. } => variant.line_number(),
+            Thing::WebComponent(w) => w.line_number,
         }
     }
 

@@ -580,6 +580,12 @@ impl<'a> TDoc<'a> {
                             .caption_or_body(),
                         false,
                     ),
+                    ftd::interpreter2::Thing::WebComponent(c) => (
+                        ftd::interpreter2::Kind::web_ui_with_name(c.name.as_str())
+                            .into_kind_data()
+                            .caption_or_body(),
+                        false,
+                    ),
                     ftd::interpreter2::Thing::Function(_) => todo!(),
                 };
 
@@ -712,6 +718,32 @@ impl<'a> TDoc<'a> {
                 format!("Expected Component, found: `{:?}`", t).as_str(),
                 name,
                 "search_component",
+                line_number,
+            ),
+        }
+    }
+
+    pub fn search_web_component(
+        &mut self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<ftd::interpreter2::WebComponentDefinition>,
+    > {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
+            }
+            ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::WebComponent(c)) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(c))
+            }
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected WebComponent, found: `{:?}`", t).as_str(),
+                name,
+                "search_web_component",
                 line_number,
             ),
         }

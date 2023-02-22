@@ -248,6 +248,34 @@ impl Field {
         self.kind.body
     }
 
+    pub(crate) fn for_component_or_web_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        doc: &mut ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        match Self::for_component(
+            component_name,
+            definition_name_with_arguments,
+            doc,
+            line_number,
+        ) {
+            Ok(swt) => Ok(swt),
+            Err(e1) => match Self::for_web_component(
+                component_name,
+                definition_name_with_arguments,
+                doc,
+                line_number,
+            ) {
+                Ok(swt) => Ok(swt),
+                Err(e2) => ftd::interpreter2::utils::e2(
+                    format!("{:?} {:?}", e1, e2),
+                    doc.name,
+                    line_number,
+                ),
+            },
+        }
+    }
     pub(crate) fn for_component(
         component_name: &str,
         definition_name_with_arguments: &Option<(&str, &[Field])>,
@@ -258,6 +286,22 @@ impl Field {
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
                 _ => try_ok_state!(doc.search_component(component_name, line_number)?).arguments,
+            },
+        ))
+    }
+
+    pub(crate) fn for_web_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        doc: &mut ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            match definition_name_with_arguments {
+                Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
+                _ => {
+                    try_ok_state!(doc.search_web_component(component_name, line_number)?).arguments
+                }
             },
         ))
     }

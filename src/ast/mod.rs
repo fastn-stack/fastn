@@ -12,6 +12,7 @@ mod or_type;
 mod record;
 pub(crate) mod utils;
 mod variable;
+mod web_component;
 
 pub use component::{
     Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
@@ -23,6 +24,7 @@ pub use main::AST;
 pub use or_type::{OrType, OrTypeVariant};
 pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableFlags, VariableInvocation};
+pub use web_component::WebComponentDefinition;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

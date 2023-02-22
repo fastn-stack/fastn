@@ -266,6 +266,26 @@ impl InterpreterState {
                         }
                     }
                 }
+            } else if ast.is_web_component_definition() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&1) {
+                        ftd::interpreter2::WebComponentDefinition::scan_ast(ast, &mut doc)?;
+                        continue;
+                    } else {
+                        match ftd::interpreter2::WebComponentDefinition::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(web_component) => {
+                                self.bag.insert(
+                                    web_component.name.to_string(),
+                                    ftd::interpreter2::Thing::WebComponent(web_component),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => continue,
+                        }
+                    }
+                }
             } else if ast.is_component() {
                 if number_of_scan.eq(&1) {
                     ftd::interpreter2::Component::scan_ast(ast, &mut doc)?;

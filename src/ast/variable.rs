@@ -36,7 +36,8 @@ impl VariableDefinition {
             || ftd::ast::OrType::is_or_type(section)
             || ftd::ast::ComponentDefinition::is_component_definition(section)
             || section.kind.is_none()
-            || ftd::ast::Function::is_function(section))
+            || ftd::ast::Function::is_function(section)
+            || ftd::ast::WebComponentDefinition::is_web_component_definition(section))
     }
 
     pub(crate) fn from_p1(

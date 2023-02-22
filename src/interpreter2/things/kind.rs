@@ -22,6 +22,7 @@ pub enum Kind {
     UI {
         name: Option<String>,
         subsection_source: bool,
+        is_web_component: bool,
     },
     Constant {
         kind: Box<Kind>,
@@ -65,6 +66,7 @@ impl Kind {
         Kind::UI {
             name: None,
             subsection_source: false,
+            is_web_component: false,
         }
     }
 
@@ -72,6 +74,15 @@ impl Kind {
         Kind::UI {
             name: Some(name.to_string()),
             subsection_source: false,
+            is_web_component: false,
+        }
+    }
+
+    pub fn web_ui_with_name(name: &str) -> Kind {
+        Kind::UI {
+            name: Some(name.to_string()),
+            subsection_source: false,
+            is_web_component: true,
         }
     }
 
@@ -79,6 +90,7 @@ impl Kind {
         Kind::UI {
             name: None,
             subsection_source: true,
+            is_web_component: false,
         }
     }
 
