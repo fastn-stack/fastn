@@ -1,0 +1,130 @@
+{
+  "data": {
+    "foo#word-count": {
+      "WebComponent": {
+        "name": "foo#word-count",
+        "arguments": [
+          {
+            "name": "body",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": true
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "start",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "Integer": {
+                    "value": 0
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 3
+              }
+            },
+            "line_number": 3
+          },
+          {
+            "name": "count",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 4
+          },
+          {
+            "name": "separator",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "String": {
+                    "text": ","
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 5
+              }
+            },
+            "line_number": 5
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "tree": [
+    {
+      "name": "foo#word-count",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "Integer": {
+                  "value": 0
+                }
+              },
+              "is_mutable": true,
+              "line_number": 10
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "count",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 10
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "This is the body."
+                }
+              },
+              "is_mutable": false,
+              "line_number": 12
+            }
+          },
+          "source": "Body",
+          "condition": null,
+          "line_number": 12
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 9
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd",
+    "inherited": "inherited"
+  }
+}

@@ -1,0 +1,99 @@
+[
+  {
+    "WebComponentDefinition": {
+      "name": "word-count",
+      "arguments": [
+        {
+          "name": "body",
+          "kind": {
+            "modifier": null,
+            "kind": "body"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 2
+        },
+        {
+          "name": "start",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
+          "value": {
+            "String": {
+              "value": "0",
+              "line_number": 3
+            }
+          },
+          "line_number": 3
+        },
+        {
+          "name": "count",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": true,
+          "value": null,
+          "line_number": 4
+        },
+        {
+          "name": "separator",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "String": {
+              "value": ",",
+              "line_number": 5
+            }
+          },
+          "line_number": 5
+        }
+      ],
+      "line_number": 1
+    }
+  },
+  {
+    "ComponentInvocation": {
+      "name": "word-count",
+      "properties": [
+        {
+          "value": {
+            "String": {
+              "value": "0",
+              "line_number": 10
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "count",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 10
+        },
+        {
+          "value": {
+            "String": {
+              "value": "This is the body.",
+              "line_number": 12
+            }
+          },
+          "source": "Body",
+          "condition": null,
+          "line_number": 12
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 9
+    }
+  }
+]
