@@ -166,7 +166,7 @@ pub fn code_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -261,7 +261,7 @@ pub fn iframe_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -467,7 +467,7 @@ pub fn text_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     is_dummy: bool,
     line_number: usize,
@@ -529,7 +529,7 @@ pub fn integer_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -588,7 +588,7 @@ pub fn decimal_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -647,7 +647,7 @@ pub fn boolean_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -692,7 +692,7 @@ pub fn image_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -732,7 +732,7 @@ pub fn row_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
@@ -765,7 +765,7 @@ pub fn column_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
@@ -798,7 +798,7 @@ pub fn common_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -808,6 +808,42 @@ pub fn common_from_properties(
     } else {
         true
     };
+
+    doc.js.extend(
+        ftd::executor::value::string_list(
+            "js-list",
+            properties,
+            arguments,
+            doc,
+            line_number,
+            inherited_variables,
+        )?
+        .value,
+    );
+
+    if let Some(js) =
+        ftd::executor::value::optional_string("js", properties, arguments, doc, line_number)?.value
+    {
+        doc.js.insert(js);
+    }
+
+    doc.css.extend(
+        ftd::executor::value::string_list(
+            "css-list",
+            properties,
+            arguments,
+            doc,
+            line_number,
+            inherited_variables,
+        )?
+        .value,
+    );
+
+    if let Some(css) =
+        ftd::executor::value::optional_string("css", properties, arguments, doc, line_number)?.value
+    {
+        doc.css.insert(css);
+    }
 
     Ok(Common {
         id: ftd::executor::value::optional_string("id", properties, arguments, doc, line_number)?,
@@ -1357,7 +1393,7 @@ pub fn text_input_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -1474,7 +1510,7 @@ pub fn checkbox_from_properties(
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     condition: &Option<ftd::interpreter2::Expression>,
-    doc: &ftd::executor::TDoc,
+    doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,

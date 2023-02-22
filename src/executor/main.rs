@@ -8,6 +8,8 @@ pub struct ExecuteDoc<'a> {
     pub instructions: &'a [ftd::interpreter2::Component],
     pub dummy_instructions: &'a mut ftd::Map<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
+    pub js: &'a mut std::collections::HashSet<String>,
+    pub css: &'a mut std::collections::HashSet<String>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -18,6 +20,8 @@ pub struct RT {
     pub main: ftd::executor::Column,
     pub dummy_instructions: ftd::Map<ftd::executor::DummyElement>,
     pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
+    pub js: std::collections::HashSet<String>,
+    pub css: std::collections::HashSet<String>,
 }
 
 impl<'a> ExecuteDoc<'a> {
@@ -26,6 +30,8 @@ impl<'a> ExecuteDoc<'a> {
         let mut document = document;
         let mut dummy_instructions = Default::default();
         let mut element_constructor = Default::default();
+        let mut js: std::collections::HashSet<String> = Default::default();
+        let mut css: std::collections::HashSet<String> = Default::default();
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
@@ -33,6 +39,8 @@ impl<'a> ExecuteDoc<'a> {
             instructions: &document.tree,
             dummy_instructions: &mut dummy_instructions,
             element_constructor: &mut element_constructor,
+            js: &mut js,
+            css: &mut css,
         }
         .execute()?;
         let mut main = ftd::executor::element::default_column();
@@ -45,6 +53,8 @@ impl<'a> ExecuteDoc<'a> {
             main,
             dummy_instructions,
             element_constructor,
+            js,
+            css,
         })
     }
     #[tracing::instrument(skip_all)]
@@ -55,6 +65,8 @@ impl<'a> ExecuteDoc<'a> {
             bag: self.bag,
             dummy_instructions: self.dummy_instructions,
             element_constructor: self.element_constructor,
+            js: self.js,
+            css: self.css,
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
@@ -322,6 +334,8 @@ impl<'a> ExecuteDoc<'a> {
                     .itdoc()
                     .get_web_component(instruction.name.as_str(), instruction.line_number)
                 {
+                    doc.js
+                        .insert(format!("{}:defer", web_component_definition.js));
                     ExecuteDoc::insert_element(
                         &mut elements,
                         container.as_slice(),

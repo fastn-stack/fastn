@@ -2,6 +2,7 @@
 pub struct WebComponentDefinition {
     pub name: String,
     pub arguments: Vec<ftd::interpreter2::Argument>,
+    pub js: String,
     pub line_number: usize,
 }
 
@@ -9,11 +10,13 @@ impl WebComponentDefinition {
     pub(crate) fn new(
         name: &str,
         arguments: Vec<ftd::interpreter2::Argument>,
+        js: String,
         line_number: usize,
     ) -> WebComponentDefinition {
         WebComponentDefinition {
             name: name.to_string(),
             arguments,
+            js,
             line_number,
         }
     }
@@ -49,6 +52,7 @@ impl WebComponentDefinition {
             WebComponentDefinition::new(
                 name.as_str(),
                 arguments,
+                web_component_definition.js,
                 web_component_definition.line_number,
             ),
         ))

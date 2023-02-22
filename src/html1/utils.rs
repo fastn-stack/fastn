@@ -688,3 +688,23 @@ pub(crate) fn immutable_value(immutable_variables: &[String], id: &str) -> Strin
         values.join("\n")
     )
 }
+
+pub fn get_js_html(external_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in external_js {
+        if let Some((js, tags)) = js.split_once(":") {
+            result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
+        } else {
+            result = format!("{}<script src=\"{}\"></script>", result, js);
+        }
+    }
+    result
+}
+
+pub fn get_css_html(external_css: &[String]) -> String {
+    let mut result = "".to_string();
+    for css in external_css {
+        result = format!("{}<link rel=\"stylesheet\" href=\"{}\">", result, css);
+    }
+    result
+}

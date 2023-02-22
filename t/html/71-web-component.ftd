@@ -13,6 +13,7 @@ This, is, the, body.
 body body:
 integer $count:
 string separator: ,
+js: ftd/t/web_component.js
 
 -- end: word-count
 

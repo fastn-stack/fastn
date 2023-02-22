@@ -8,6 +8,8 @@ pub struct NodeData {
     pub aliases: ftd::Map<String>,
     pub dummy_nodes: ftd::Map<ftd::node::DummyNode>,
     pub raw_nodes: ftd::Map<ftd::node::RawNode>,
+    pub js: std::collections::HashSet<String>,
+    pub css: std::collections::HashSet<String>,
 }
 
 impl NodeData {
@@ -26,6 +28,8 @@ impl NodeData {
             aliases: rt.aliases,
             dummy_nodes: dummy_node,
             raw_nodes: raw_node,
+            js: rt.js,
+            css: rt.css,
         }
     }
 }

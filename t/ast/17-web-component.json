@@ -54,6 +54,7 @@
           "line_number": 5
         }
       ],
+      "js": "web-component.js",
       "line_number": 1
     }
   },
@@ -65,7 +66,7 @@
           "value": {
             "String": {
               "value": "0",
-              "line_number": 10
+              "line_number": 11
             }
           },
           "source": {
@@ -75,25 +76,25 @@
             }
           },
           "condition": null,
-          "line_number": 10
+          "line_number": 11
         },
         {
           "value": {
             "String": {
               "value": "This is the body.",
-              "line_number": 12
+              "line_number": 13
             }
           },
           "source": "Body",
           "condition": null,
-          "line_number": 12
+          "line_number": 13
         }
       ],
       "iteration": null,
       "condition": null,
       "events": [],
       "children": [],
-      "line_number": 9
+      "line_number": 10
     }
   }
 ]

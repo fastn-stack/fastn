@@ -9,11 +9,15 @@ pub struct HtmlUI {
     pub raw_html: String,
     pub mutable_variable: String,
     pub immutable_variable: String,
+    pub js: String,
+    pub css: String,
 }
 
 impl HtmlUI {
     #[tracing::instrument(skip_all)]
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
+        use itertools::Itertools;
+
         let tdoc = ftd::interpreter2::TDoc::new(
             node_data.name.as_str(),
             &node_data.aliases,
@@ -52,6 +56,10 @@ impl HtmlUI {
             raw_html,
             mutable_variable,
             immutable_variable,
+            js: ftd::html1::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
+            css: ftd::html1::utils::get_css_html(
+                node_data.css.into_iter().collect_vec().as_slice(),
+            ),
         })
     }
 }

@@ -7839,6 +7839,30 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "js-list",
+            ftd::interpreter2::Kind::string()
+                .into_list()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "js",
+            ftd::interpreter2::Kind::string()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "css-list",
+            ftd::interpreter2::Kind::string()
+                .into_list()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "css",
+            ftd::interpreter2::Kind::string()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "open-in-new-tab",
             ftd::interpreter2::Kind::boolean()
                 .into_optional()
