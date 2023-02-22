@@ -26,6 +26,7 @@
 pub struct InterpreterState {
     pub id: String,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
+    pub js: std::collections::HashSet<String>,
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
@@ -198,6 +199,9 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter2::StateWithThing::Thing(function) => {
+                                if let Some(ref js) = function.js {
+                                    self.js.insert(js.to_string());
+                                }
                                 self.bag.insert(
                                     function.name.to_string(),
                                     ftd::interpreter2::Thing::Function(function),
@@ -316,6 +320,7 @@ impl InterpreterState {
                     .clone(),
                 tree: self.instructions,
                 name: self.id,
+                js: self.js,
             };
 
             Ok(Interpreter::Done { document })
@@ -1013,6 +1018,7 @@ pub struct Document {
     pub name: String,
     pub tree: Vec<ftd::interpreter2::Component>,
     pub aliases: ftd::Map<String>,
+    pub js: std::collections::HashSet<String>,
 }
 
 #[derive(Debug)]

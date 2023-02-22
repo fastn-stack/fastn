@@ -43,12 +43,16 @@ impl WebComponentDefinition {
         }
 
         let (js, arguments) =
-            get_fields_from_headers(&section.headers, doc_id, section.line_number)?;
+            ftd::ast::utils::get_js_and_fields_from_headers(&section.headers, doc_id)?;
 
         Ok(WebComponentDefinition::new(
             section.name.as_str(),
             arguments,
-            js,
+            js.ok_or(ftd::ast::Error::Parse {
+                message: "js statement not found".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: section.line_number,
+            })?,
             section.line_number,
         ))
     }
@@ -56,32 +60,4 @@ impl WebComponentDefinition {
     pub fn line_number(&self) -> usize {
         self.line_number
     }
-}
-
-pub(crate) fn get_fields_from_headers(
-    headers: &ftd::p11::Headers,
-    doc_id: &str,
-    line_number: usize,
-) -> ftd::ast::Result<(String, Vec<ftd::ast::Argument>)> {
-    let mut fields: Vec<ftd::ast::Argument> = Default::default();
-    let mut js = None;
-    for header in headers.0.iter() {
-        if header.get_kind().is_none() && header.get_key().eq(ftd::ast::constants::JS) {
-            js = Some(header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
-                message: "js statement is blank".to_string(),
-                doc_id: doc_id.to_string(),
-                line_number: header.get_line_number(),
-            })?);
-            continue;
-        }
-        fields.push(ftd::ast::Argument::from_header(header, doc_id)?);
-    }
-    Ok((
-        js.ok_or(ftd::ast::Error::Parse {
-            message: "js statement not found".to_string(),
-            doc_id: doc_id.to_string(),
-            line_number,
-        })?,
-        fields,
-    ))
 }

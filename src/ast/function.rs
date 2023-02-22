@@ -5,6 +5,7 @@ pub struct Function {
     pub arguments: Vec<ftd::ast::Argument>,
     pub line_number: usize,
     pub definition: FunctionDefinition,
+    pub js: Option<String>,
 }
 
 pub type FunctionDefinition = ftd::p11::Body;
@@ -16,6 +17,7 @@ impl Function {
         arguments: Vec<ftd::ast::Argument>,
         line_number: usize,
         definition: FunctionDefinition,
+        js: Option<String>,
     ) -> Function {
         Function {
             name: name.to_string(),
@@ -23,6 +25,7 @@ impl Function {
             arguments,
             line_number,
             definition,
+            js,
         }
     }
 
@@ -57,7 +60,8 @@ impl Function {
             doc_id,
             section.line_number,
         )?;
-        let fields = ftd::ast::record::get_fields_from_headers(&section.headers, doc_id)?;
+        let (js, fields) =
+            ftd::ast::utils::get_js_and_fields_from_headers(&section.headers, doc_id)?;
         let definition = section.body.clone().ok_or(ftd::ast::Error::Parse {
             message: format!(
                 "Function definition not found for function {}",
@@ -72,6 +76,7 @@ impl Function {
             fields,
             section.line_number,
             definition,
+            js,
         ))
     }
 

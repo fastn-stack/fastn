@@ -32,6 +32,26 @@ pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
     value.eq(IF) && kind.is_none()
 }
 
+pub(crate) fn get_js_and_fields_from_headers(
+    headers: &ftd::p11::Headers,
+    doc_id: &str,
+) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
+    let mut fields: Vec<ftd::ast::Argument> = Default::default();
+    let mut js = None;
+    for header in headers.0.iter() {
+        if header.get_kind().is_none() && header.get_key().eq(ftd::ast::constants::JS) {
+            js = Some(header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+                message: "js statement is blank".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: header.get_line_number(),
+            })?);
+            continue;
+        }
+        fields.push(ftd::ast::Argument::from_header(header, doc_id)?);
+    }
+    Ok((js, fields))
+}
+
 pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";

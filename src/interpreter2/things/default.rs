@@ -177,6 +177,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -208,6 +209,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -250,6 +252,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -270,6 +273,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -290,6 +294,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -310,6 +315,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -341,6 +347,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -383,6 +390,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -425,6 +433,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),
@@ -467,6 +476,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     }
                 ],
+                js: None,
                 line_number: 0,
             })
         ),

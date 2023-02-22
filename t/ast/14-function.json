@@ -32,7 +32,8 @@
       "definition": {
         "line_number": 5,
         "value": "a + b"
-      }
+      },
+      "js": null
     }
   }
 ]

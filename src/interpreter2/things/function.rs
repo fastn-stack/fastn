@@ -4,6 +4,7 @@ pub struct Function {
     pub return_kind: ftd::interpreter2::KindData,
     pub arguments: Vec<ftd::interpreter2::Argument>,
     pub expression: Vec<Expression>,
+    pub js: Option<String>,
     pub line_number: usize,
 }
 
@@ -13,6 +14,7 @@ impl Function {
         return_kind: ftd::interpreter2::KindData,
         arguments: Vec<ftd::interpreter2::Argument>,
         expression: Vec<Expression>,
+        js: Option<String>,
         line_number: usize,
     ) -> Function {
         Function {
@@ -20,6 +22,7 @@ impl Function {
             return_kind,
             arguments,
             expression,
+            js,
             line_number,
         }
     }
@@ -71,6 +74,7 @@ impl Function {
             kind,
             arguments,
             expression,
+            function.js,
             function.line_number,
         )))
     }

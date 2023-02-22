@@ -38,6 +38,7 @@
             "line_number": 6
           }
         ],
+        "js": null,
         "line_number": 1
       }
     }
@@ -103,5 +104,6 @@
   "aliases": {
     "ftd": "ftd",
     "inherited": "inherited"
-  }
+  },
+  "js": []
 }

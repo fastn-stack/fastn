@@ -30,7 +30,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut document = document;
         let mut dummy_instructions = Default::default();
         let mut element_constructor = Default::default();
-        let mut js: std::collections::HashSet<String> = Default::default();
+        let mut js: std::collections::HashSet<String> = document.js;
         let mut css: std::collections::HashSet<String> = Default::default();
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
