@@ -14,7 +14,7 @@ $processor$: pr.figma-cs-token
 variable: $sunset-cs.main
 name: sunset-cs
 
--- ds.page: How to use Figma Tokens with fastn color schemes
+-- my-ds.page: How to use Figma Tokens with fastn color schemes
 
 -- ds.h1: Install `Token Studio for figma` (Figma Tokens)
 
@@ -221,4 +221,4 @@ height.fixed.px: 300
 Congratulations you have successfully completed this tutorial.
 
 
--- end: ds.page
+-- end: my-ds.page
