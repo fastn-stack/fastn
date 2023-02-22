@@ -496,19 +496,21 @@ pub fn get_inline_css_html(inline_js: &[String]) -> String {
     result
 }
 
-fn get_extra_js(external_js: &[String], inline_js: &[String]) -> String {
+fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str) -> String {
     format!(
-        "{}{}",
+        "{}{}{}",
         get_external_js_html(external_js),
-        get_inline_js_html(inline_js)
+        get_inline_js_html(inline_js),
+        js
     )
 }
 
-fn get_extra_css(external_css: &[String], inline_css: &[String]) -> String {
+fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> String {
     format!(
-        "{}{}",
+        "{}{}{}",
         get_external_css_html(external_css),
-        get_inline_css_html(inline_css)
+        get_inline_css_html(inline_css),
+        css
     )
 }
 
@@ -553,6 +555,7 @@ pub fn replace_markers_2022(
                 get_extra_js(
                     config.ftd_external_js.as_slice(),
                     config.ftd_inline_js.as_slice(),
+                    html_ui.js.as_str(),
                 )
                 .as_str(),
             )
@@ -561,18 +564,21 @@ pub fn replace_markers_2022(
                 get_extra_css(
                     config.ftd_external_css.as_slice(),
                     config.ftd_inline_css.as_slice(),
+                    html_ui.css.as_str(),
                 )
                 .as_str(),
             )
             .replace(
                 "__ftd_functions__",
                 format!(
-                    "{}\n{}\n{}\n{}\n{}",
+                    "{}\n{}\n{}\n{}\n{}\n{}\n{}",
                     html_ui.functions.as_str(),
                     html_ui.dependencies.as_str(),
                     html_ui.variable_dependencies.as_str(),
                     html_ui.dummy_html.as_str(),
-                    html_ui.raw_html.as_str()
+                    html_ui.raw_html.as_str(),
+                    html_ui.mutable_variable,
+                    html_ui.immutable_variable
                 )
                 .as_str(),
             )
