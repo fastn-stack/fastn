@@ -163,6 +163,8 @@ document: how-to/install.ftd
 - Dark Mode: /theme/dark-mode/
 - Components: /theme/header/
 - FASTN Typography: /theme/type/
+- How to use Figma Tokens with fastn color schemes: /figma/
+  document: /how-to/use-figma-tokens-with-fastn-cs/
 ;; - FASTN Color: /theme/color/ -- TODO need fix of color-doc package
 ;; - FASTN Space: /theme/space/ -- TODO removed from FTD 0.3 upgrade
 
