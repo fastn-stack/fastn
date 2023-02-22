@@ -1,0 +1,7 @@
+-- ftd.text: Hello
+$on-click$: $external-fun()
+
+-- void external-fun():
+js: ftd/t/test.js
+
+show("Hello World!");
