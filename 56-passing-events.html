@@ -1961,9 +1961,15 @@ set_data_value(data, "foo#b-color" + "." + remaining, new_value);
 set_data_value(data, "foo#b-color", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#b-color"]) {
+window.ftd.mutable_value_main["foo#b-color"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#b-color"]) {
+window.ftd.immutable_value_main["foo#b-color"].on_change();
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
 };
 
@@ -1974,6 +1980,12 @@ set_data_value(data, "foo#button:cta:0,0,0" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:0,0,0", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:0,0,0"]) {
+window.ftd.mutable_value_main["foo#button:cta:0,0,0"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:0,0,0"]) {
+window.ftd.immutable_value_main["foo#button:cta:0,0,0"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__text"]){window.node_change_main["0,0,0:main__text"](data);
 }
 };
@@ -1985,6 +1997,12 @@ set_data_value(data, "foo#button:cta:0,0,1" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:0,0,1", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:0,0,1"]) {
+window.ftd.mutable_value_main["foo#button:cta:0,0,1"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:0,0,1"]) {
+window.ftd.immutable_value_main["foo#button:cta:0,0,1"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__text"]){window.node_change_main["0,0,1:main__text"](data);
 }
 };
@@ -1996,6 +2014,12 @@ set_data_value(data, "foo#button:cta:0,0,2" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:0,0,2", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:0,0,2"]) {
+window.ftd.mutable_value_main["foo#button:cta:0,0,2"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:0,0,2"]) {
+window.ftd.immutable_value_main["foo#button:cta:0,0,2"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
 }
 };
@@ -2007,6 +2031,12 @@ set_data_value(data, "foo#tom-and-jerry" + "." + remaining, new_value);
 set_data_value(data, "foo#tom-and-jerry", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#tom-and-jerry"]) {
+window.ftd.mutable_value_main["foo#tom-and-jerry"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#tom-and-jerry"]) {
+window.ftd.immutable_value_main["foo#tom-and-jerry"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__src"]){window.node_change_main["0,1,0:main__src"](data);
 }
 };
@@ -2018,27 +2048,35 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__background-color"]){window.node_change_main["0,0,2:main__background-color"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
+window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
+window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__src"]){window.node_change_main["0,1,0:main__src"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__background-color"]){window.node_change_main["0,0,1:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__color"]){window.node_change_main["0,0,2:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__color"]){window.node_change_main["0,0,1:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__background-color"]){window.node_change_main["0,0,0:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__color"]){window.node_change_main["0,0,2:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__background-color"]){window.node_change_main["0,0,2:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__background-color"]){window.node_change_main["0,0,1:main__background-color"](data);
+}
 };
+
+
 
 
 

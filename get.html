@@ -1892,6 +1892,12 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:my-
 let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:my-color:0", value);
 }
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
+window.ftd.mutable_value_main["foo#flag"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
+window.ftd.immutable_value_main["foo#flag"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1903,6 +1909,12 @@ set_data_value(data, "foo#foo:my-color:0" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:my-color:0", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:my-color:0"]) {
+window.ftd.mutable_value_main["foo#foo:my-color:0"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:my-color:0"]) {
+window.ftd.immutable_value_main["foo#foo:my-color:0"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1914,6 +1926,12 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
+window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
+window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1928,6 +1946,8 @@ set_data_value(data, "foo#foo:my-color:0", {"dark": "green", "light": "green"});
 else {set_data_value(data, "foo#foo:my-color:0", {"dark": "yellow", "light": "yellow"});}
 
 }
+
+
 
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");

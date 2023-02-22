@@ -1930,11 +1930,17 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-nam
 let value = resolve_reference("foo#name", data, null);
 set_data_value(data, "foo#new-name", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#name"]) {
+window.ftd.mutable_value_main["foo#name"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#name"]) {
+window.ftd.immutable_value_main["foo#name"].on_change();
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 };
 
@@ -1945,9 +1951,15 @@ set_data_value(data, "foo#new-name" + "." + remaining, new_value);
 set_data_value(data, "foo#new-name", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#new-name"]) {
+window.ftd.mutable_value_main["foo#new-name"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#new-name"]) {
+window.ftd.immutable_value_main["foo#new-name"].on_change();
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
@@ -1958,11 +1970,19 @@ set_data_value(data, "foo#number" + "." + remaining, new_value);
 set_data_value(data, "foo#number", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#number"]) {
+window.ftd.mutable_value_main["foo#number"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#number"]) {
+window.ftd.immutable_value_main["foo#number"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
+
+
 
 
 

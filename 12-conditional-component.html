@@ -1919,9 +1919,15 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
+window.ftd.mutable_value_main["foo#flag"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
+window.ftd.immutable_value_main["foo#flag"].on_change();
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }
 };
 
@@ -1932,11 +1938,19 @@ set_data_value(data, "foo#num" + "." + remaining, new_value);
 set_data_value(data, "foo#num", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#num"]) {
+window.ftd.mutable_value_main["foo#num"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#num"]) {
+window.ftd.immutable_value_main["foo#num"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
 };
+
+
 
 
 

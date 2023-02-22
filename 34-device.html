@@ -1909,6 +1909,12 @@ set_data_value(data, "foo#green" + "." + remaining, new_value);
 set_data_value(data, "foo#green", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#green"]) {
+window.ftd.mutable_value_main["foo#green"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#green"]) {
+window.ftd.immutable_value_main["foo#green"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1920,6 +1926,12 @@ set_data_value(data, "foo#red" + "." + remaining, new_value);
 set_data_value(data, "foo#red", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#red"]) {
+window.ftd.mutable_value_main["foo#red"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#red"]) {
+window.ftd.immutable_value_main["foo#red"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1931,6 +1943,12 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
+window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
+window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
@@ -1942,11 +1960,19 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#device"]) {
+window.ftd.mutable_value_main["ftd#device"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#device"]) {
+window.ftd.immutable_value_main["ftd#device"].on_change();
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
 };
+
+
 
 
 

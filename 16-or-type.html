@@ -1906,6 +1906,12 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
+window.ftd.mutable_value_main["foo#flag"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
+window.ftd.immutable_value_main["foo#flag"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
 }
 };
@@ -1917,6 +1923,12 @@ set_data_value(data, "foo#len" + "." + remaining, new_value);
 set_data_value(data, "foo#len", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#len"]) {
+window.ftd.mutable_value_main["foo#len"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#len"]) {
+window.ftd.immutable_value_main["foo#len"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
@@ -1930,9 +1942,17 @@ set_data_value(data, "foo#value" + "." + remaining, new_value);
 set_data_value(data, "foo#value", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#value"]) {
+window.ftd.mutable_value_main["foo#value"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#value"]) {
+window.ftd.immutable_value_main["foo#value"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
+
+
 
 
 

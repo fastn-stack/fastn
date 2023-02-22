@@ -1908,6 +1908,12 @@ set_data_value(data, "foo#foo:foo-value:2" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:foo-value:2", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:foo-value:2"]) {
+window.ftd.mutable_value_main["foo#foo:foo-value:2"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:foo-value:2"]) {
+window.ftd.immutable_value_main["foo#foo:foo-value:2"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
@@ -1919,6 +1925,12 @@ set_data_value(data, "foo#name" + "." + remaining, new_value);
 set_data_value(data, "foo#name", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#name"]) {
+window.ftd.mutable_value_main["foo#name"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#name"]) {
+window.ftd.immutable_value_main["foo#name"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
 }
 };
@@ -1930,13 +1942,21 @@ set_data_value(data, "foo#value" + "." + remaining, new_value);
 set_data_value(data, "foo#value", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#value"]) {
+window.ftd.mutable_value_main["foo#value"].on_change();
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#value"]) {
+window.ftd.immutable_value_main["foo#value"].on_change();
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__padding"]){window.node_change_main["4:main__padding"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
 };
+
+
 
 
 
