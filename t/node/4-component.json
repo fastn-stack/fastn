@@ -314,7 +314,8 @@
             "null": false,
             "data_id": "0,0",
             "line_number": 6,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           }
         ],
         "text": {
@@ -326,7 +327,8 @@
         "null": false,
         "data_id": "0",
         "line_number": 4,
-        "raw_data": null
+        "raw_data": null,
+        "web_component": null
       },
       {
         "classes": [],
@@ -541,7 +543,8 @@
             "null": false,
             "data_id": "1,0",
             "line_number": 6,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           }
         ],
         "text": {
@@ -553,7 +556,8 @@
         "null": false,
         "data_id": "1",
         "line_number": 4,
-        "raw_data": null
+        "raw_data": null,
+        "web_component": null
       }
     ],
     "text": {
@@ -565,7 +569,8 @@
     "null": false,
     "data_id": "",
     "line_number": 0,
-    "raw_data": null
+    "raw_data": null,
+    "web_component": null
   },
   "bag": {
     "foo#print": {

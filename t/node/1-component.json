@@ -404,7 +404,8 @@
             "null": false,
             "data_id": "0,0",
             "line_number": 4,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           },
           {
             "classes": [
@@ -561,7 +562,8 @@
             "null": false,
             "data_id": "0,1",
             "line_number": 7,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           }
         ],
         "text": {
@@ -573,7 +575,8 @@
         "null": false,
         "data_id": "0",
         "line_number": 1,
-        "raw_data": null
+        "raw_data": null,
+        "web_component": null
       },
       {
         "classes": [],
@@ -878,7 +881,8 @@
             "null": false,
             "data_id": "1,0",
             "line_number": 16,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           },
           {
             "classes": [
@@ -1035,7 +1039,8 @@
             "null": false,
             "data_id": "1,1",
             "line_number": 19,
-            "raw_data": null
+            "raw_data": null,
+            "web_component": null
           }
         ],
         "text": {
@@ -1047,7 +1052,8 @@
         "null": false,
         "data_id": "1",
         "line_number": 13,
-        "raw_data": null
+        "raw_data": null,
+        "web_component": null
       },
       {
         "classes": [
@@ -1204,7 +1210,8 @@
         "null": false,
         "data_id": "2",
         "line_number": 25,
-        "raw_data": null
+        "raw_data": null,
+        "web_component": null
       }
     ],
     "text": {
@@ -1216,7 +1223,8 @@
     "null": false,
     "data_id": "",
     "line_number": 0,
-    "raw_data": null
+    "raw_data": null,
+    "web_component": null
   },
   "bag": {},
   "aliases": {

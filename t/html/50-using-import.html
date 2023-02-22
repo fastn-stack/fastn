@@ -685,101 +685,6 @@ console.error('Fallback: Oops, unable to copy', err);
 document.body.removeChild(textArea);
 }
 // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
-function copy_to_clipboard(text) {
-if (!navigator.clipboard) {
-fallbackCopyTextToClipboard(text);
-return;
-}
-navigator.clipboard.writeText(text).then(function () {
-console.log('Async: Copying to clipboard was successful!');
-}, function (err) {
-console.error('Async: Could not copy text: ', err);
-});
-}
-function http(url, method, ...request_data) {
-let method_name = method.trim().toUpperCase();
-if (method_name == "GET") {
-let query_parameters = new URLSearchParams();
-// @ts-ignore
-for (let [header, value] of Object.entries(request_data)) {
-if (header != "url" && header != "function" && header != "method") {
-let [key, val] = value.length == 2 ? value : [header, value];
-query_parameters.set(key, val);
-}
-}
-let query_string = query_parameters.toString();
-if (query_string) {
-let get_url = url + "?" + query_parameters.toString();
-window.location.href = get_url;
-}
-else {
-window.location.href = url;
-}
-return;
-}
-let json = request_data[0];
-if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
-let new_json = {};
-// @ts-ignore
-for (let [header, value] of Object.entries(request_data)) {
-let [key, val] = value.length == 2 ? value : [header, value];
-new_json[key] = val;
-}
-json = new_json;
-}
-let xhr = new XMLHttpRequest();
-xhr.open(method_name, url);
-xhr.setRequestHeader("Accept", "application/json");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.onreadystatechange = function () {
-if (xhr.readyState !== 4) {
-// this means request is still underway
-// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
-return;
-}
-if (xhr.status > 500) {
-console.log("Error in calling url: ", request_data.url, xhr.responseText);
-return;
-}
-let response = JSON.parse(xhr.response);
-if (!!response && !!response.redirect) {
-// Warning: we don't handle header location redirect
-window.location.href = response.redirect;
-}
-else if (!!response && !!response.reload) {
-window.location.reload();
-}
-else {
-let data = {};
-if (!!response.errors) {
-for (let key of Object.keys(response.errors)) {
-let value = response.errors[key];
-if (Array.isArray(value)) {
-// django returns a list of strings
-value = value.join(" ");
-// also django does not append `-error`
-key = key + "-error";
-}
-// @ts-ignore
-data[key] = value;
-}
-}
-if (!!response.data) {
-if (!!data) {
-console_log("both .errrors and .data are present in response, ignoring .data");
-}
-else {
-data = response.data;
-}
-}
-for (let ftd_variable of Object.keys(data)) {
-// @ts-ignore
-window.ftd.set_value(ftd_variable, data[ftd_variable]);
-}
-}
-};
-xhr.send(JSON.stringify(json));
-}
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
@@ -997,6 +902,110 @@ let main = document.querySelector(`[data-id="${data_id}"]`);
 main.removeChild(main.children[start_index + idx]);
 }
 return array;
+};
+exports.http = function (url, method, ...request_data) {
+let method_name = method.trim().toUpperCase();
+if (method_name == "GET") {
+let query_parameters = new URLSearchParams();
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+if (header != "url" && header != "function" && header != "method") {
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
+}
+}
+let query_string = query_parameters.toString();
+if (query_string) {
+let get_url = url + "?" + query_parameters.toString();
+window.location.href = get_url;
+}
+else {
+window.location.href = url;
+}
+return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
+}
+let xhr = new XMLHttpRequest();
+xhr.open(method_name, url);
+xhr.setRequestHeader("Accept", "application/json");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.onreadystatechange = function () {
+if (xhr.readyState !== 4) {
+// this means request is still underway
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+return;
+}
+if (xhr.status > 500) {
+console.log("Error in calling url: ", request_data.url, xhr.responseText);
+return;
+}
+let response = JSON.parse(xhr.response);
+if (!!response && !!response.redirect) {
+// Warning: we don't handle header location redirect
+window.location.href = response.redirect;
+}
+else if (!!response && !!response.reload) {
+window.location.reload();
+}
+else {
+let data = {};
+if (!!response.errors) {
+for (let key of Object.keys(response.errors)) {
+let value = response.errors[key];
+if (Array.isArray(value)) {
+// django returns a list of strings
+value = value.join(" ");
+// also django does not append `-error`
+key = key + "-error";
+}
+// @ts-ignore
+data[key] = value;
+}
+}
+if (!!response.data) {
+if (!!data) {
+console_log("both .errrors and .data are present in response, ignoring .data");
+}
+else {
+data = response.data;
+}
+}
+for (let ftd_variable of Object.keys(data)) {
+// @ts-ignore
+window.ftd.set_value(ftd_variable, data[ftd_variable]);
+}
+}
+};
+xhr.send(JSON.stringify(json));
+};
+exports.copy_to_clipboard = function (text) {
+if (!navigator.clipboard) {
+fallbackCopyTextToClipboard(text);
+return;
+}
+navigator.clipboard.writeText(text).then(function () {
+console.log('Async: Copying to clipboard was successful!');
+}, function (err) {
+console.error('Async: Could not copy text: ', err);
+});
+};
+exports.component_data = function (component) {
+let data = {};
+for (let idx in component.getAttributeNames()) {
+let argument = component.getAttributeNames()[idx];
+// @ts-ignore
+data[argument] = eval(component.getAttribute(argument));
+}
+return data;
 };
 return exports;
 })();
@@ -1844,7 +1853,7 @@ return data.length;
 
 
 function ftd__copy_to_clipboard___main(a,args,data,id){
-return (copy_to_clipboard(a,args,data,id));
+return (ftd.copy_to_clipboard(a,args,data,id));
 }
 
 
@@ -1923,6 +1932,12 @@ set_data_value(data, "49-import#example-product" + "." + remaining, new_value);
 set_data_value(data, "49-import#example-product", new_value);
 }
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["49-import#example-product"]) {
+window.ftd.mutable_value_main["49-import#example-product"].on_change();
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["49-import#example-product"]) {
+window.ftd.immutable_value_main["49-import#example-product"].on_change();
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
@@ -1935,8 +1950,114 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__text"]){
 
 
 
+
+
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
+<script type="module">// Create a class for the element
+class WordCount extends HTMLElement {
+constructor() {
+// Always call super first in constructor
+super();
 
+let data = window.ftd.component_data(this);
+
+// Create a shadow root
+const shadow = this.attachShadow({mode: 'open'});
+
+// Create spans
+const wrapper = document.createElement('span');
+wrapper.setAttribute('class', 'wrapper');
+
+const icon = document.createElement('span');
+icon.setAttribute('class', 'icon');
+icon.setAttribute('tabindex', 0);
+
+const info = document.createElement('span');
+info.setAttribute('class', 'info');
+
+// Take attribute content and put it inside the info span
+const text = data.body;
+info.textContent = text.get();
+
+const count = document.createElement('span');
+info.setAttribute('class', 'info');
+
+const seperator = data.separator;
+let value = text.get().split(seperator.get()).length;
+count.textContent = value;
+
+const text_count = data.count;
+text_count.set(value);
+
+text_count.on_change = function () {
+const text = this.get();
+count.textContent = text;
+console.log("Changed");
+}
+
+
+// Insert icon
+let imgUrl;
+if(this.hasAttribute('img')) {
+imgUrl = this.getAttribute('img');
+const img = document.createElement('img');
+img.src = imgUrl;
+icon.appendChild(img);
+} else {
+const img = document.createElement('div');
+img.innerText = "ℹ️";
+icon.appendChild(img);
+}
+
+
+
+// Create some CSS to apply to the shadow dom
+const style = document.createElement('style');
+console.log(style.isConnected);
+
+style.textContent = `
+.wrapper {
+position: relative;
+}
+
+.info {
+font-size: 0.8rem;
+width: 200px;
+display: inline-block;
+border: 1px solid black;
+padding: 10px;
+background: white;
+border-radius: 10px;
+opacity: 0;
+transition: 0.6s all;
+position: absolute;
+bottom: 20px;
+left: 10px;
+z-index: 3;
+}
+
+img {
+width: 1.2rem;
+}
+
+.icon:hover + .info, .icon:focus + .info {
+opacity: 1;
+}
+`;
+
+// Attach the created elements to the shadow dom
+shadow.appendChild(style);
+console.log(style.isConnected);
+shadow.appendChild(wrapper);
+wrapper.appendChild(icon);
+wrapper.appendChild(info);
+wrapper.appendChild(count);
+}
+}
+
+// Define the new element
+customElements.define('word-count', WordCount);
+</script>
 </body>
 </html>
