@@ -13,6 +13,7 @@ pub enum Element {
     RawElement(RawElement),
     IterativeElement(IterativeElement),
     CheckBox(CheckBox),
+    WebComponent(WebComponent),
     Null,
 }
 
@@ -32,6 +33,7 @@ impl Element {
             Element::CheckBox(c) => Some(&c.common),
             Element::Null => None,
             Element::RawElement(_) => None,
+            Element::WebComponent(_) => None,
             Element::IterativeElement(i) => i.element.get_common(),
         }
     }
@@ -60,6 +62,13 @@ pub struct RawElement {
 pub struct IterativeElement {
     pub element: Box<ftd::executor::Element>,
     pub iteration: ftd::interpreter2::Loop,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct WebComponent {
+    pub name: String,
+    pub properties: ftd::Map<ftd::interpreter2::PropertyValue>,
+    pub line_number: usize,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]

@@ -16,7 +16,7 @@ mod youtube_id;
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
     CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement,
-    RawElement, Row, Text, TextInput,
+    RawElement, Row, Text, TextInput, WebComponent,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{

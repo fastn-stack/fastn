@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+use std::option::Option::Some;
 
 #[derive(Debug, PartialEq)]
 pub struct ExecuteDoc<'a> {
@@ -106,6 +106,54 @@ impl<'a> ExecuteDoc<'a> {
             local_container.push(start_index);
             Ok(vec![(None, local_container, instruction.to_owned())])
         }
+    }
+
+    fn execute_web_component(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        local_container: &[usize],
+        web_component_definition: ftd::interpreter2::WebComponentDefinition,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::executor::Result<ftd::executor::Element> {
+        let local_variable_map = doc.insert_local_variables(
+            web_component_definition.name.as_str(),
+            instruction.properties.as_slice(),
+            web_component_definition.arguments.as_slice(),
+            local_container,
+            instruction.line_number,
+            inherited_variables,
+            true,
+        )?;
+
+        let mut properties: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+
+        for argument in web_component_definition.arguments.as_slice() {
+            let property_value = if let Some(local_variable) = local_variable_map
+                .get(format!("{}.{}", instruction.name, argument.name.as_str()).as_str())
+            {
+                ftd::interpreter2::PropertyValue::Reference {
+                    name: local_variable.to_string(),
+                    kind: argument.kind.to_owned(),
+                    source: ftd::interpreter2::PropertyValueSource::Global,
+                    is_mutable: argument.mutable,
+                    line_number: instruction.line_number,
+                }
+            } else if let Some(ref value) = argument.value {
+                value.to_owned()
+            } else {
+                unreachable!()
+            };
+
+            properties.insert(argument.name.to_string(), property_value);
+        }
+
+        let web_component = ftd::executor::WebComponent {
+            name: instruction.name.to_string(),
+            properties,
+            line_number: instruction.line_number,
+        };
+
+        Ok(ftd::executor::Element::WebComponent(web_component))
     }
 
     fn get_simple_instruction(
@@ -268,6 +316,24 @@ impl<'a> ExecuteDoc<'a> {
                         );
                         break;
                     }
+                }
+
+                if let Ok(web_component_definition) = doc
+                    .itdoc()
+                    .get_web_component(instruction.name.as_str(), instruction.line_number)
+                {
+                    ExecuteDoc::insert_element(
+                        &mut elements,
+                        container.as_slice(),
+                        ExecuteDoc::execute_web_component(
+                            &instruction,
+                            doc,
+                            container.as_slice(),
+                            web_component_definition,
+                            &mut inherited_variables,
+                        )?,
+                    );
+                    break;
                 }
 
                 let component_definition = {

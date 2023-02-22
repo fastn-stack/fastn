@@ -697,6 +697,22 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn get_web_component(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::WebComponentDefinition> {
+        match self.get_thing(name, line_number)? {
+            ftd::interpreter2::Thing::WebComponent(c) => Ok(c),
+            t => self.err(
+                format!("Expected web-component, found: `{:?}`", t).as_str(),
+                name,
+                "get_web_component",
+                line_number,
+            ),
+        }
+    }
+
     pub fn search_component(
         &mut self,
         name: &str,

@@ -1,0 +1,569 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd",
+    "inherited": "inherited"
+  },
+  "bag": {
+    "foo#word-count": {
+      "WebComponent": {
+        "name": "foo#word-count",
+        "arguments": [
+          {
+            "name": "body",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": true
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "start",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "Integer": {
+                    "value": 0
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 3
+              }
+            },
+            "line_number": 3
+          },
+          {
+            "name": "count",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 4
+          },
+          {
+            "name": "separator",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "String": {
+                    "text": ","
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 5
+              }
+            },
+            "line_number": 5
+          }
+        ],
+        "line_number": 1
+      }
+    },
+    "foo#word-count:body:0": {
+      "Variable": {
+        "name": "foo#word-count:body:0",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": true
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "This is the body."
+              }
+            },
+            "is_mutable": false,
+            "line_number": 12
+          }
+        },
+        "conditional_value": [],
+        "line_number": 9,
+        "is_static": true
+      }
+    },
+    "foo#word-count:count:0": {
+      "Variable": {
+        "name": "foo#word-count:count:0",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 0
+              }
+            },
+            "is_mutable": true,
+            "line_number": 10
+          }
+        },
+        "conditional_value": [],
+        "line_number": 9,
+        "is_static": false
+      }
+    },
+    "foo#word-count:separator:0": {
+      "Variable": {
+        "name": "foo#word-count:separator:0",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": ","
+              }
+            },
+            "is_mutable": false,
+            "line_number": 5
+          }
+        },
+        "conditional_value": [],
+        "line_number": 9,
+        "is_static": true
+      }
+    },
+    "foo#word-count:start:0": {
+      "Variable": {
+        "name": "foo#word-count:start:0",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 0
+              }
+            },
+            "is_mutable": false,
+            "line_number": 3
+          }
+        },
+        "conditional_value": [],
+        "line_number": 9,
+        "is_static": true
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "wrap": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_content": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
+      "spacing": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "children": [
+        {
+          "WebComponent": {
+            "name": "foo#word-count",
+            "properties": {
+              "body": {
+                "Reference": {
+                  "name": "foo#word-count:body:0",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": true
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 9
+                }
+              },
+              "count": {
+                "Reference": {
+                  "name": "foo#word-count:count:0",
+                  "kind": {
+                    "kind": "Integer",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": true,
+                  "line_number": 9
+                }
+              },
+              "separator": {
+                "Reference": {
+                  "name": "foo#word-count:separator:0",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 9
+                }
+              },
+              "start": {
+                "Reference": {
+                  "name": "foo#word-count:start:0",
+                  "kind": {
+                    "kind": "Integer",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 9
+                }
+              }
+            },
+            "line_number": 9
+          }
+        }
+      ]
+    },
+    "common": {
+      "id": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "is_not_visible": false,
+      "event": [],
+      "is_dummy": false,
+      "z_index": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "anchor": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "role": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "region": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "cursor": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "classes": {
+        "value": [],
+        "line_number": null,
+        "properties": []
+      },
+      "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_vertical": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_vertical": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_width": {
+        "value": {
+          "Px": 0
+        },
+        "line_number": null,
+        "properties": []
+      },
+      "border_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_left_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_left_color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_right_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_right_color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_left_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_right_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_left_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_right_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "width": {
+        "value": "FillContainer",
+        "line_number": null,
+        "properties": []
+      },
+      "height": {
+        "value": "FillContainer",
+        "line_number": null,
+        "properties": []
+      },
+      "min_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "max_width": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "min_height": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "max_height": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "link": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "open_in_new_tab": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "background": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_self": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "data_id": "",
+      "line_number": 0,
+      "condition": null,
+      "overflow": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "overflow_x": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "overflow_y": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "resize": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "white_space": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "text_transform": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "sticky": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      }
+    }
+  },
+  "dummy_instructions": {},
+  "element_constructor": {}
+}

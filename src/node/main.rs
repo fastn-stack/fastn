@@ -125,6 +125,7 @@ impl ftd::executor::Element {
             },
             ftd::executor::Element::RawElement(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::WebComponent(_) => todo!(),
         }
     }
 }
