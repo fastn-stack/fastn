@@ -1374,14 +1374,16 @@ pub struct TextInput {
 impl TextInput {
     pub fn enabled_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
-                    \"set-property-to-false\"
-                } else {
-                    \"\"
-                }
-            "}
-            .to_string(),
+            format!(
+                indoc::indoc! {"
+                    if ({{0}}) {{
+                        \"{remove_key}\"
+                    }} else {{
+                        \"\"
+                    }}
+                "},
+                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+            ),
             true,
         )
     }
@@ -1477,28 +1479,32 @@ pub struct CheckBox {
 impl CheckBox {
     pub fn checked_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
-                    \"\"
-                } else {
-                    \"set-property-to-false\"
-                }
-            "}
-            .to_string(),
+            format!(
+                indoc::indoc! {"
+                    if ({{0}}) {{
+                        \"\"
+                    }} else {{
+                        \"{remove_key}\"
+                    }}
+                "},
+                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+            ),
             true,
         )
     }
 
     pub fn enabled_pattern() -> (String, bool) {
         (
-            indoc::indoc! {"
-                if ({0}) {
-                    \"set-property-to-false\"
-                } else {
-                    \"\"
-                }
-            "}
-            .to_string(),
+            format!(
+                indoc::indoc! {"
+                    if ({{0}}) {{
+                        \"{remove_key}\"
+                    }} else {{
+                        \"\"
+                    }}
+                "},
+                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+            ),
             true,
         )
     }
