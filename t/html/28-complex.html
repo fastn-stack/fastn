@@ -1872,6 +1872,10 @@ document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).innerHTML = resolve_refer
 
 window.node_change_main["0,0,0,1,0,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).setAttribute("href", resolve_reference("foo#toc.link", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,0:main__color"] = function(data) {
@@ -1886,6 +1890,10 @@ document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.0.link", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,1,0:main__color"] = function(data) {
@@ -1900,6 +1908,10 @@ document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,2,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.link", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,2,0:main__color"] = function(data) {
@@ -1914,6 +1926,10 @@ document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).innerHTML = resolve_r
 
 window.node_change_main["0,0,0,1,0,2,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.children.0.link", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,2,1,0:main__color"] = function(data) {

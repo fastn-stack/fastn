@@ -1822,6 +1822,10 @@ return (resolve_reference("foo#hello:check:0", data)%3==2);
 document.querySelector(`[data-id="0:main"]`).setAttribute("id", "hello-world-text2");
 }
 else { document.querySelector(`[data-id="0:main"]`).removeAttribute("id"); }
+
+if (document.querySelector(`[data-id="0:main"]`).getAttribute("id") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0:main"]`).removeAttribute("id");
+}
 }
 window.set_value_main = {};
 window.set_value_main["foo#hello:check:0"] = function (data, new_value, remaining) {
