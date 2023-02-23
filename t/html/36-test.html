@@ -1902,6 +1902,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
 }
 else {document.querySelector(`[data-id="1,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
+
+
+if (document.querySelector(`[data-id="1,0,0,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,0,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["1,0,0,1,0,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,0,0:main"]`).innerHTML = resolve_reference("foo#item.0.name", data);
@@ -1909,6 +1914,10 @@ document.querySelector(`[data-id="1,0,0,1,0,0,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["1,0,0,1,0,0,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,0,0:main"]`).setAttribute("href", resolve_reference("foo#item.0.url", data));
+
+if (document.querySelector(`[data-id="1,0,0,1,0,0,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,0,1,0,0,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,0,1,0,0,0:main__color"] = function(data) {
@@ -1923,6 +1932,10 @@ document.querySelector(`[data-id="1,0,0,1,0,1,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["1,0,0,1,0,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#item.1.url", data));
+
+if (document.querySelector(`[data-id="1,0,0,1,0,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,0,1,0,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,0,1,0,1,0:main__color"] = function(data) {
@@ -1937,6 +1950,10 @@ document.querySelector(`[data-id="1,0,0,1,0,2,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["1,0,0,1,0,2,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#item.2.url", data));
+
+if (document.querySelector(`[data-id="1,0,0,1,0,2,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,0,1,0,2,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,0,1,0,2,0:main__color"] = function(data) {
@@ -1951,6 +1968,10 @@ document.querySelector(`[data-id="1,0,0,1,0,3,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["1,0,0,1,0,3,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,3,0:main"]`).setAttribute("href", resolve_reference("foo#item.3.url", data));
+
+if (document.querySelector(`[data-id="1,0,0,1,0,3,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,0,1,0,3,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,0,1,0,3,0:main__color"] = function(data) {
@@ -2014,6 +2035,10 @@ document.querySelector(`[data-id="1,0,1,1,0,1,0,0,0:main"]`).innerHTML = resolve
 
 window.node_change_main["1,0,1,1,0,1,0,0,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,1,1,0,1,0,0,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.0.url", data));
+
+if (document.querySelector(`[data-id="1,0,1,1,0,1,0,0,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,1,1,0,1,0,0,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,1,1,0,1,0,0,0:main__color"] = function(data) {
@@ -2028,6 +2053,10 @@ document.querySelector(`[data-id="1,0,1,1,0,1,0,1,0:main"]`).innerHTML = resolve
 
 window.node_change_main["1,0,1,1,0,1,0,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,1,1,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.1.url", data));
+
+if (document.querySelector(`[data-id="1,0,1,1,0,1,0,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,1,1,0,1,0,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,1,1,0,1,0,1,0:main__color"] = function(data) {
@@ -2042,6 +2071,10 @@ document.querySelector(`[data-id="1,0,1,1,0,1,0,2,0:main"]`).innerHTML = resolve
 
 window.node_change_main["1,0,1,1,0,1,0,2,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,1,1,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.2.url", data));
+
+if (document.querySelector(`[data-id="1,0,1,1,0,1,0,2,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,1,1,0,1,0,2,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,1,1,0,1,0,2,0:main__color"] = function(data) {
@@ -2056,6 +2089,10 @@ document.querySelector(`[data-id="1,0,1,1,0,1,0,3,0:main"]`).innerHTML = resolve
 
 window.node_change_main["1,0,1,1,0,1,0,3,0:main__href"] = function(data) {
 document.querySelector(`[data-id="1,0,1,1,0,1,0,3,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.3.url", data));
+
+if (document.querySelector(`[data-id="1,0,1,1,0,1,0,3,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="1,0,1,1,0,1,0,3,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["1,0,1,1,0,1,0,3,0:main__color"] = function(data) {

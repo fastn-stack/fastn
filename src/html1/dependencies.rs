@@ -373,7 +373,7 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let value = ftd::html1::utils::js_expression_from_list(
+            let mut value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key),
                 attribute
@@ -393,6 +393,22 @@ impl<'a> DependencyGenerator<'a> {
                     })
                     .as_str(),
             );
+
+            let remove_case_condition = format!(
+                indoc::indoc! {"
+                if (document.querySelector(`[data-id=\"{}\"]`).getAttribute(\"{}\") == \"{}\"){{
+                    document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");
+                }}
+            "},
+                node_data_id,
+                key,
+                ftd::interpreter2::FTD_REMOVE_KEY,
+                node_data_id,
+                key
+            );
+
+            value = format!("{}\n{}", value, remove_case_condition);
+
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"

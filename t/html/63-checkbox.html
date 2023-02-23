@@ -549,7 +549,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>true</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>Checkbox not selected</p></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>Checkbox is selected now</p></div><div data-id="3:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px; height: auto; justify-content: start; padding-left: 20px; padding-right: 20px; text-decoration: none; width: auto" ><div data-id="3,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#a&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>This is a checkbox</p></div><input  data-id="3,1:main" disabled="IGNORE-KEY" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"></input></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>true</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>Checkbox not selected</p></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"><p>Checkbox is selected now</p></div><div data-id="3:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 10px; height: auto; justify-content: start; padding-left: 20px; padding-right: 20px; text-decoration: none; width: auto" ><div data-id="3,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#a&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>This is a checkbox</p></div><input checked data-id="3,1:main"  type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"></input></div></div>
 
 
 <script>
@@ -1834,9 +1834,13 @@ window.node_change_main["3,1:main__checked"] = function(data) {
 document.querySelector(`[data-id="3,1:main"]`).setAttribute("checked", eval(`if ({0}) {
 ""
 } else {
-"set-property-to-false"
+"REMOVE-KEY"
 }
 `.format(JSONstringify(resolve_reference("foo#flag", data)))));
+
+if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("checked") == "REMOVE-KEY"){
+document.querySelector(`[data-id="3,1:main"]`).removeAttribute("checked");
+}
 }
 
 window.node_change_main["3,1:main__disabled"] = function(data) {
@@ -1844,18 +1848,22 @@ if(function(){
 return resolve_reference("foo#a", data);
 }()){
 document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if ({0}) {
-"set-property-to-false"
+"REMOVE-KEY"
 } else {
 ""
 }
 `.format(JSONstringify(false))));
 }
 else {document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if ({0}) {
-"set-property-to-false"
+"REMOVE-KEY"
 } else {
 ""
 }
 `.format(JSONstringify(true))));}
+
+if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("disabled") == "REMOVE-KEY"){
+document.querySelector(`[data-id="3,1:main"]`).removeAttribute("disabled");
+}
 }
 window.set_value_main = {};
 window.set_value_main["foo#a"] = function (data, new_value, remaining) {

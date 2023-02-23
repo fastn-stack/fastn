@@ -1943,6 +1943,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
 }
 else {document.querySelector(`[data-id="0,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,0,0,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,0,0,1,0,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,0,0:main"]`).innerHTML = resolve_reference("foo#item.0.name", data);
@@ -1950,6 +1955,10 @@ document.querySelector(`[data-id="0,0,0,1,0,0,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,0,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,0,0:main"]`).setAttribute("href", resolve_reference("foo#item.0.url", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,0,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,0,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,0,0:main__color"] = function(data) {
@@ -1964,6 +1973,10 @@ document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#item.1.url", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,1,0:main__color"] = function(data) {
@@ -1978,6 +1991,10 @@ document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,2,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#item.2.url", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,2,0:main__color"] = function(data) {
@@ -1992,6 +2009,10 @@ document.querySelector(`[data-id="0,0,0,1,0,3,0:main"]`).innerHTML = resolve_ref
 
 window.node_change_main["0,0,0,1,0,3,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1,0,3,0:main"]`).setAttribute("href", resolve_reference("foo#item.3.url", data));
+
+if (document.querySelector(`[data-id="0,0,0,1,0,3,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,0,1,0,3,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,0,1,0,3,0:main__color"] = function(data) {
@@ -2055,6 +2076,10 @@ document.querySelector(`[data-id="0,0,1,1,0,1,0,0,0:main"]`).innerHTML = resolve
 
 window.node_change_main["0,0,1,1,0,1,0,0,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,1,1,0,1,0,0,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.0.url", data));
+
+if (document.querySelector(`[data-id="0,0,1,1,0,1,0,0,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,1,1,0,1,0,0,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,1,1,0,1,0,0,0:main__color"] = function(data) {
@@ -2069,6 +2094,10 @@ document.querySelector(`[data-id="0,0,1,1,0,1,0,1,0:main"]`).innerHTML = resolve
 
 window.node_change_main["0,0,1,1,0,1,0,1,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,1,1,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.1.url", data));
+
+if (document.querySelector(`[data-id="0,0,1,1,0,1,0,1,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,1,1,0,1,0,1,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,1,1,0,1,0,1,0:main__color"] = function(data) {
@@ -2083,6 +2112,10 @@ document.querySelector(`[data-id="0,0,1,1,0,1,0,2,0:main"]`).innerHTML = resolve
 
 window.node_change_main["0,0,1,1,0,1,0,2,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,1,1,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.2.url", data));
+
+if (document.querySelector(`[data-id="0,0,1,1,0,1,0,2,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,1,1,0,1,0,2,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,1,1,0,1,0,2,0:main__color"] = function(data) {
@@ -2097,6 +2130,10 @@ document.querySelector(`[data-id="0,0,1,1,0,1,0,3,0:main"]`).innerHTML = resolve
 
 window.node_change_main["0,0,1,1,0,1,0,3,0:main__href"] = function(data) {
 document.querySelector(`[data-id="0,0,1,1,0,1,0,3,0:main"]`).setAttribute("href", resolve_reference("foo#sub-item.3.url", data));
+
+if (document.querySelector(`[data-id="0,0,1,1,0,1,0,3,0:main"]`).getAttribute("href") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,0,1,1,0,1,0,3,0:main"]`).removeAttribute("href");
+}
 }
 
 window.node_change_main["0,0,1,1,0,1,0,3,0:main__color"] = function(data) {
@@ -2223,6 +2260,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,0", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,0", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,0,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,0,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,0,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,0,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,0", data);
@@ -2265,6 +2307,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,1,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,1", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,1,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,1", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,1,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,1,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,1,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,1,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,1", data);
@@ -2307,6 +2354,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,2,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,2", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,2,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,2", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,2,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,2,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,2,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,2,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,2", data);
@@ -2349,6 +2401,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,3,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,3", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,3,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,3", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,3,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,3,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,3,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,3,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,3", data);
@@ -2391,6 +2448,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,4,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,4", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,4,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,4", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,4,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,4,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,4,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,4,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,4", data);
@@ -2433,6 +2495,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,1,2,5,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,5", data).light);
 }
 else {document.querySelector(`[data-id="0,1,1,2,5,0,0:main"]`).setAttribute("src", resolve_reference("foo#image:src:0,1,1,2,5", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,1,2,5,0,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,1,2,5,0,0:main"]`).removeAttribute("src");
+}
 }
 window.node_change_main["0,1,1,2,5,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,2,5,1:main"]`).innerHTML = resolve_reference("foo#image:title:0,1,1,2,5", data);

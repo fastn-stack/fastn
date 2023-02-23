@@ -1892,6 +1892,11 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,0:main"]`).setAttribute("src", resolve_reference("foo#tom-and-jerry", data).light);
 }
 else {document.querySelector(`[data-id="0,1,0:main"]`).setAttribute("src", resolve_reference("foo#tom-and-jerry", data).dark);}
+
+
+if (document.querySelector(`[data-id="0,1,0:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0,1,0:main"]`).removeAttribute("src");
+}
 }
 window.set_value_main = {};
 window.set_value_main["foo#b-color"] = function (data, new_value, remaining) {
