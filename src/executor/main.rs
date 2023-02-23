@@ -339,7 +339,7 @@ impl<'a> ExecuteDoc<'a> {
                         .clone()
                         .resolve(&doc.itdoc(), web_component_definition.line_number)?
                         .string(doc.name, web_component_definition.line_number)?;
-                    doc.js.insert(format!("{}:defer", js));
+                    doc.js.insert(format!("{}:type=\"module\"", js));
                     ExecuteDoc::insert_element(
                         &mut elements,
                         container.as_slice(),

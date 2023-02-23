@@ -32,6 +32,7 @@
           "children": [],
           "line_number": 33
         },
+        "css": null,
         "line_number": 31
       }
     },
@@ -229,6 +230,7 @@
           "children": [],
           "line_number": 15
         },
+        "css": null,
         "line_number": 11
       }
     }
@@ -380,5 +382,6 @@
     "ftd": "ftd",
     "inherited": "inherited"
   },
-  "js": []
+  "js": [],
+  "css": []
 }

@@ -382,7 +382,7 @@
   "dummy_nodes": {},
   "raw_nodes": {},
   "js": [
-    "ftd/t/web_component.js:defer"
+    "ftd/t/web_component.js:type=\"module\""
   ],
   "css": []
 }

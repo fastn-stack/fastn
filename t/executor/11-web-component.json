@@ -578,7 +578,7 @@
   "dummy_instructions": {},
   "element_constructor": {},
   "js": [
-    "ftd/t/web_component.js:defer"
+    "ftd/t/web_component.js:type=\"module\""
   ],
   "css": []
 }
