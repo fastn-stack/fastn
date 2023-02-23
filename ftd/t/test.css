@@ -1,0 +1,69 @@
+.red-block {
+    background-color: tomato;
+    color: white;
+    border: 2px solid black;
+    margin: 20px;
+    padding: 20px;
+}
+
+.blue-block {
+    background-color: #476fff;
+    color: rgba(22, 37, 65, 0.6);
+    border: 2px solid rgba(18, 23, 36, 0.97);
+    margin: 20px;
+    padding: 20px;
+}
+
+.green-block {
+    background-color: #69ff47;
+    color: rgba(30, 65, 22, 0.6);
+    border: 2px solid rgba(24, 36, 18, 0.97);
+    margin: 20px;
+    padding: 20px;
+}
+
+.animated-div {
+    width:70px;
+    height:47px;
+    background: #92B901;
+    color: #ffffff;
+    position: relative;
+    font-weight:bold;
+    font-size:20px;
+    padding:10px;
+    animation:animated_div 5s 1;
+    -moz-animation:animated_div 5s 1;
+    -webkit-animation:animated_div 5s 1;
+    -o-animation:animated_div 5s 1;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+}
+
+@keyframes animated_div
+{
+    0% {transform: rotate(0deg);left:0px;}
+    25% {transform: rotate(20deg);left:0px;}
+    50% {transform: rotate(0deg);left:500px;}
+    55% {transform: rotate(0deg);left:500px;}
+    70% {transform: rotate(0deg);left:500px;background:#1ec7e6;}
+    100% {transform: rotate(-360deg);left:0px;}
+}
+
+.animated-div-1 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation-name: animated-div-1;
+    animation-duration: 4s;
+    animation-iteration-count: 2;
+    animation-direction: alternate;
+}
+
+@keyframes animated-div-1 {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+}

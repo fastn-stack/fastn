@@ -6,16 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
-"foo#new-src": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
-"foo#src": {
-"dark": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
-"light": "https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"
-},
-"foo#tom-and-jerry": {
-"dark": "https://wallpapers.com/images/file/tom-and-jerry-in-the-dog-house-myfg3ooaklw9fk9q.jpg",
-"light": "https://wallpaperaccess.com/full/215445.jpg"
-},
+"foo#css-location": "ftd/t/test.css",
+"foo#open": true,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -552,12 +544,12 @@ box-sizing: inherit;
 }
 
 
-</style>
+</style><link rel="stylesheet" href="ftd/t/test.css">
 
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>false</p></div><img data-id="1:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle_dark_mode___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;ftd#dark-mode&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: 100px" ></img><img data-id="2:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 100px" ></img><img data-id="3:main" src="https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 100px" ></img><img data-id="4:main" src="https://wallpaperaccess.com/full/215445.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: 100px" ></img></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#open&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: 100px; justify-content: start; text-decoration: none; width: 100px" class="animated-div-1 blue-block"><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello World</p></div></div></div>
 
 
 <script>
@@ -1759,7 +1751,7 @@ return data.length;
 
 
 
-function foo__toggle_dark_mode___main(a,args,data,id){
+function foo__toggle___main(a,args,data,id){
 a.value = !a.value
 }
 
@@ -1825,106 +1817,29 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("ftd#dark-mode", data);
-}
-window.node_change_main["1:main__src"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
-}
-else {document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
-}
-window.node_change_main["4:main__src"] = function(data) {
+window.node_change_main["0:main__class"] = function(data) {
 if(function(){
-return resolve_reference("foo#flag", data);
+return resolve_reference("foo#open", data);
 }()){
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="4:main"]`).setAttribute("src", resolve_reference("foo#tom-and-jerry", data).light);
+document.querySelector(`[data-id="0:main"]`).setAttribute("class", "animated-div-1 blue-block");
 }
-else {document.querySelector(`[data-id="4:main"]`).setAttribute("src", resolve_reference("foo#tom-and-jerry", data).dark);}
-}
-else {if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="4:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
-}
-else {document.querySelector(`[data-id="4:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
-}
+else {document.querySelector(`[data-id="0:main"]`).setAttribute("class", "red-block animated-div");}
 }
 window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+window.set_value_main["foo#open"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#flag" + "." + remaining, new_value);
+set_data_value(data, "foo#open" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#flag", new_value);
+set_data_value(data, "foo#open", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
-window.ftd.mutable_value_main["foo#flag"].on_change();
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#open"]) {
+window.ftd.mutable_value_main["foo#open"].on_change();
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
-window.ftd.immutable_value_main["foo#flag"].on_change();
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#open"]) {
+window.ftd.immutable_value_main["foo#open"].on_change();
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
-}
-};
-
-window.set_value_main["foo#src"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#src" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#src", new_value);
-}
-
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#src"]) {
-window.ftd.mutable_value_main["foo#src"].on_change();
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#src"]) {
-window.ftd.immutable_value_main["foo#src"].on_change();
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__src"]){window.node_change_main["1:main__src"](data);
-}
-};
-
-window.set_value_main["foo#tom-and-jerry"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#tom-and-jerry" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#tom-and-jerry", new_value);
-}
-
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#tom-and-jerry"]) {
-window.ftd.mutable_value_main["foo#tom-and-jerry"].on_change();
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#tom-and-jerry"]) {
-window.ftd.immutable_value_main["foo#tom-and-jerry"].on_change();
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
-}
-};
-
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#dark-mode", new_value);
-}
-
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__src"]){window.node_change_main["1:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__src"]){window.node_change_main["3:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__src"]){window.node_change_main["2:main__src"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__class"]){window.node_change_main["0:main__class"](data);
 }
 };
 
