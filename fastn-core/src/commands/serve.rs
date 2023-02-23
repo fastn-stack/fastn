@@ -91,7 +91,10 @@ async fn serve_file(
             guess_mime_type(image.id.as_str()),
         ),
         fastn_core::File::Static(s) => fastn_core::http::ok(s.content),
-        fastn_core::File::Code(s) => fastn_core::http::ok(s.content.into_bytes()),
+        fastn_core::File::Code(s) => fastn_core::http::ok_with_content_type(
+            s.content.into_bytes(),
+            guess_mime_type(s.id.as_str()),
+        ),
         _ => {
             tracing::error!(msg = "unknown handler", path = path.as_str());
             fastn_core::server_error!("unknown handler")
