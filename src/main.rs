@@ -176,6 +176,11 @@ padding-bottom: 20
         }
     }
     write("index.ftd", write_doc);
+    std::fs::create_dir_all("./docs/ftd/t/").expect("failed to create docs folder");
+    std::fs::copy("t/test.css", "./docs/ftd/t/test.css").expect("failed to copy test.css");
+    std::fs::copy("t/test.js", "./docs/ftd/t/test.js").expect("failed to copy test.js");
+    std::fs::copy("t/web_component.js", "./docs/ftd/t/web_component.js")
+        .expect("failed to copy web_component.js");
 }
 
 pub fn ftd_v2_interpret_helper(
