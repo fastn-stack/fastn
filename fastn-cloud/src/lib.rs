@@ -1,3 +1,5 @@
+pub use crate as fastn_cloud;
+mod http;
 #[derive(thiserror::Error, Debug)]
 pub enum CreateError {
     #[error("BuildDirNotFound: {}", _0)]

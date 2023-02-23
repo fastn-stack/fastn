@@ -971,10 +971,14 @@ version = "0.1.0"
 dependencies = [
  "camino",
  "fastn-core",
+ "futures",
  "mime_guess",
  "reqwest",
+ "serde",
+ "serde_json",
  "tejar",
  "thiserror",
+ "tokio",
  "walkdir",
 ]
 
