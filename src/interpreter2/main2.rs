@@ -27,6 +27,7 @@ pub struct InterpreterState {
     pub id: String,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub js: std::collections::HashSet<String>,
+    pub css: std::collections::HashSet<String>,
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
@@ -265,6 +266,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter2::StateWithThing::Thing(component) => {
+                                if let Some(ref css) = component.css {
+                                    let css = css
+                                        .to_owned()
+                                        .resolve(&doc, component.line_number)?
+                                        .string(doc.name, component.line_number)?;
+                                    self.css.insert(css);
+                                }
                                 self.bag.insert(
                                     component.name.to_string(),
                                     ftd::interpreter2::Thing::Component(component),
@@ -325,6 +333,7 @@ impl InterpreterState {
                 tree: self.instructions,
                 name: self.id,
                 js: self.js,
+                css: self.css,
             };
 
             Ok(Interpreter::Done { document })
@@ -1023,6 +1032,7 @@ pub struct Document {
     pub tree: Vec<ftd::interpreter2::Component>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
+    pub css: std::collections::HashSet<String>,
 }
 
 #[derive(Debug)]

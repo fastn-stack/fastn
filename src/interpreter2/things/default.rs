@@ -7373,6 +7373,7 @@ pub fn image_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7420,6 +7421,7 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7448,6 +7450,7 @@ pub fn checkbox_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7501,6 +7504,7 @@ pub fn text_input_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7548,6 +7552,7 @@ pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7589,6 +7594,7 @@ pub fn decimal_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7610,6 +7616,7 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7622,6 +7629,7 @@ pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
             .into_iter()
             .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7657,6 +7665,7 @@ pub fn code_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7699,6 +7708,7 @@ pub fn iframe_function() -> ftd::interpreter2::ComponentDefinition {
         .into_iter()
         .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }
@@ -7711,6 +7721,7 @@ pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
             .into_iter()
             .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
         line_number: 0,
     }
 }

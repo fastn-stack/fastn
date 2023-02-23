@@ -5,6 +5,7 @@ pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
     pub definition: Component,
+    pub css: Option<String>,
     pub line_number: usize,
 }
 
@@ -15,12 +16,14 @@ impl ComponentDefinition {
         name: &str,
         arguments: Vec<Argument>,
         definition: Component,
+        css: Option<String>,
         line_number: usize,
     ) -> ComponentDefinition {
         ComponentDefinition {
             name: name.to_string(),
             arguments,
             definition,
+            css,
             line_number,
         }
     }
@@ -55,7 +58,8 @@ impl ComponentDefinition {
             );
         }
 
-        let arguments = ftd::ast::record::get_fields_from_headers(&section.headers, doc_id)?;
+        let (css, arguments) =
+            ftd::ast::utils::get_css_and_fields_from_headers(&section.headers, doc_id)?;
 
         let definition = Component::from_p1(section.sub_sections.first().unwrap(), doc_id)?;
 
@@ -63,6 +67,7 @@ impl ComponentDefinition {
             section.name.as_str(),
             arguments,
             definition,
+            css,
             section.line_number,
         ))
     }

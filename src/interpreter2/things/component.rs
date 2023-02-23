@@ -3,6 +3,7 @@ pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
     pub definition: Component,
+    pub css: Option<ftd::interpreter2::PropertyValue>,
     pub line_number: usize,
 }
 
@@ -11,12 +12,14 @@ impl ComponentDefinition {
         name: &str,
         arguments: Vec<Argument>,
         definition: Component,
+        css: Option<ftd::interpreter2::PropertyValue>,
         line_number: usize,
     ) -> ComponentDefinition {
         ComponentDefinition {
             name: name.to_string(),
             arguments,
             definition,
+            css,
             line_number,
         }
     }
@@ -54,6 +57,23 @@ impl ComponentDefinition {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
+
+        let css = if let Some(ref css) = component_definition.css {
+            Some(try_ok_state!(
+                ftd::interpreter2::PropertyValue::from_ast_value(
+                    ftd::ast::VariableValue::String {
+                        value: css.to_string(),
+                        line_number: component_definition.line_number(),
+                    },
+                    doc,
+                    false,
+                    Some(&ftd::interpreter2::Kind::string().into_kind_data()),
+                )?
+            ))
+        } else {
+            None
+        };
+
         let arguments = try_ok_state!(Argument::from_ast_fields(
             component_definition.arguments,
             doc,
@@ -80,6 +100,7 @@ impl ComponentDefinition {
                 name.as_str(),
                 arguments,
                 definition,
+                css,
                 component_definition.line_number,
             ),
         ))

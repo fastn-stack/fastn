@@ -1,0 +1,43 @@
+-- boolean $open: true
+
+-- string css-location: ftd/t/test.css
+
+-- show:
+
+-- component show:
+css: $css-location
+
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 100
+$on-click$: $toggle($a = $open)
+
+-- ftd.column.classes:
+
+-- string: red-block
+-- string: animated-div
+
+-- end: ftd.column.classes
+
+
+-- ftd.column.classes:
+if: { open }
+
+-- string: animated-div-1
+-- string: blue-block
+
+-- end: ftd.column.classes
+
+-- ftd.text: Hello World
+
+-- end: ftd.column
+
+
+-- end: show
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a
