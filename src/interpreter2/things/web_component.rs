@@ -2,7 +2,7 @@
 pub struct WebComponentDefinition {
     pub name: String,
     pub arguments: Vec<ftd::interpreter2::Argument>,
-    pub js: String,
+    pub js: ftd::interpreter2::PropertyValue,
     pub line_number: usize,
 }
 
@@ -10,7 +10,7 @@ impl WebComponentDefinition {
     pub(crate) fn new(
         name: &str,
         arguments: Vec<ftd::interpreter2::Argument>,
-        js: String,
+        js: ftd::interpreter2::PropertyValue,
         line_number: usize,
     ) -> WebComponentDefinition {
         WebComponentDefinition {
@@ -42,6 +42,17 @@ impl WebComponentDefinition {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<WebComponentDefinition>> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
         let name = doc.resolve_name(web_component_definition.name.as_str());
+
+        let js = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
+            ftd::ast::VariableValue::String {
+                line_number: web_component_definition.line_number(),
+                value: web_component_definition.js,
+            },
+            doc,
+            false,
+            Some(&ftd::interpreter2::Kind::string().into_kind_data()),
+        )?);
+
         let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
             web_component_definition.arguments,
             doc,
@@ -52,7 +63,7 @@ impl WebComponentDefinition {
             WebComponentDefinition::new(
                 name.as_str(),
                 arguments,
-                web_component_definition.js,
+                js,
                 web_component_definition.line_number,
             ),
         ))

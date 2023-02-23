@@ -74,7 +74,17 @@
             "line_number": 5
           }
         ],
-        "js": "ftd/t/web_component.js",
+        "js": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "ftd/t/web_component.js"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 1
+          }
+        },
         "line_number": 1
       }
     },

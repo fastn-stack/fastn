@@ -200,7 +200,11 @@ impl InterpreterState {
                             }
                             ftd::interpreter2::StateWithThing::Thing(function) => {
                                 if let Some(ref js) = function.js {
-                                    self.js.insert(js.to_string());
+                                    let js = js
+                                        .to_owned()
+                                        .resolve(&doc, function.line_number)?
+                                        .string(doc.name, function.line_number)?;
+                                    self.js.insert(js);
                                 }
                                 self.bag.insert(
                                     function.name.to_string(),

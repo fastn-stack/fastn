@@ -4,7 +4,7 @@ pub struct Function {
     pub return_kind: ftd::interpreter2::KindData,
     pub arguments: Vec<ftd::interpreter2::Argument>,
     pub expression: Vec<Expression>,
-    pub js: Option<String>,
+    pub js: Option<ftd::interpreter2::PropertyValue>,
     pub line_number: usize,
 }
 
@@ -14,7 +14,7 @@ impl Function {
         return_kind: ftd::interpreter2::KindData,
         arguments: Vec<ftd::interpreter2::Argument>,
         expression: Vec<Expression>,
-        js: Option<String>,
+        js: Option<ftd::interpreter2::PropertyValue>,
         line_number: usize,
     ) -> Function {
         Function {
@@ -51,6 +51,23 @@ impl Function {
     {
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
+
+        let js = if let Some(ref js) = function.js {
+            Some(try_ok_state!(
+                ftd::interpreter2::PropertyValue::from_ast_value(
+                    ftd::ast::VariableValue::String {
+                        value: js.to_string(),
+                        line_number: function.line_number(),
+                    },
+                    doc,
+                    false,
+                    Some(&ftd::interpreter2::Kind::string().into_kind_data()),
+                )?
+            ))
+        } else {
+            None
+        };
+
         let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
             function.arguments,
             doc,
@@ -74,7 +91,7 @@ impl Function {
             kind,
             arguments,
             expression,
-            function.js,
+            js,
             function.line_number,
         )))
     }

@@ -334,8 +334,12 @@ impl<'a> ExecuteDoc<'a> {
                     .itdoc()
                     .get_web_component(instruction.name.as_str(), instruction.line_number)
                 {
-                    doc.js
-                        .insert(format!("{}:defer", web_component_definition.js));
+                    let js = web_component_definition
+                        .js
+                        .clone()
+                        .resolve(&doc.itdoc(), web_component_definition.line_number)?
+                        .string(doc.name, web_component_definition.line_number)?;
+                    doc.js.insert(format!("{}:defer", js));
                     ExecuteDoc::insert_element(
                         &mut elements,
                         container.as_slice(),
