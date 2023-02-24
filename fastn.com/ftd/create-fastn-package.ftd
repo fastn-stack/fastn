@@ -1,0 +1,61 @@
+-- my-ds.page: Create a `fastn` package
+
+`fastn` is also a `ftd` package manager. A package contains all the files you
+need for a module. `fastn` manages the packages and modules for `ftd` and
+consists of command line tool `fastn`.
+
+To get started, you need to install `fastn`. Checkout [install `fastn`](install/)
+page to know how to install `fastn`.
+
+After that create a folder, lets say `hello-fastn`. Open this folder in the
+text editor ([SublimeText](https://www.sublimetext.com/3)). In this
+folder, we need to add two files `index.ftd` and `FASTN.ftd`. Lets understand
+what are these files and the content it should contain in detail.
+
+
+-- ds.h2: `FASTN.ftd`
+
+`FASTN.ftd` is a configurational file where we set configuration for the
+package.
+
+In `FASTN.ftd`, add following code:
+
+-- ds.code: `FASTN.ftd`
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: hello-fastn
+
+-- ds.markdown:
+
+In above code, we have set the package name as `hello-fastn`.
+
+;; TODO: Give link to about `FASTN.ftd`
+
+-- ds.h2: `index.ftd`
+
+`index.ftd` is the index page of your package. You can think of the index page
+as being the home or default page of your package.
+
+In `index.ftd`, add following code:
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- ftd.text: Hello World
+
+-- ds.markdown:
+
+In above code, we have added a kernel component `ftd.text` and pass `Hello
+World` as the value for `text` property.
+
+-- ds.h1: Serving the package
+
+Once this package is created as mentioned above, now we can start the HTTP
+server. Follow the following steps:
+
+- [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
+
+
+-- end: my-ds.page

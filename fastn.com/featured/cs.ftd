@@ -1,5 +1,4 @@
--- import: fastn.dev/assets
--- import: fastn.dev/featured as ft-ui
+-- import: fastn.io/featured as ft-ui
 
 
 
@@ -28,7 +27,7 @@ templates: $schemes
 
 -- ft-ui.template: Color Doc
 template-url: https://fifthtry.github.io/color-doc/
-screenshot: $assets.files.static.color-doc.png
+screenshot: $fastn-assets.files.images.featured.color-doc.png
 licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
 github-url: https://github.com/FifthTry/color-doc/
 
@@ -37,25 +36,16 @@ github-url: https://github.com/FifthTry/color-doc/
 
 -- ft-ui.template: Forest CS
 template-url: https://fifthtry.github.io/forest-cs/
-screenshot: $assets.files.static.forest-cs.png
+screenshot: $fastn-assets.files.images.featured.forest-cs.png
 licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/forest-cs/
 
 `fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
 
-/-- ft-ui.template: Night Moon
-template-url: https://fifthtry.github.io/night-moon-cs/
-screenshot: $assets.files.static.night-moon.png
-licence-url: https://github.com/FifthTry/night-moon-cs/blob/main/LICENSE
-github-url: https://github.com/FifthTry/night-moon-cs/
-is-last: true
-
-`fifthtry.github.io/night-moon-cs` is a blue(night moon) color scheme. See its 
-documentation to use it. [Night Moon](https://fifthtry.github.io/night-moon-cs/)
 
 -- ft-ui.template: Saturated Sunset CS
 template-url: https://fifthtry.github.io/saturated-sunset-cs/
-screenshot: $assets.files.static.saturated-sunset-cs.png
+screenshot: $fastn-assets.files.images.featured.saturated-sunset-cs.png
 licence-url: https://github.com/FifthTry/saturated-sunset-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/saturated-sunset-cs/
 
@@ -64,7 +54,7 @@ github-url: https://github.com/FifthTry/saturated-sunset-cs/
 
 -- ft-ui.template: Winter CS
 template-url: https://fifthtry.github.io/winter-cs/
-screenshot: $assets.files.static.winter-cs.png
+screenshot: $fastn-assets.files.images.featured.winter-cs.png
 licence-url: https://github.com/FifthTry/ds-set1-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/ds-set1-cs/
 
@@ -73,7 +63,7 @@ github-url: https://github.com/FifthTry/ds-set1-cs/
 
 -- ft-ui.template: Dark Flame CS
 template-url: https://fifthtry.github.io/dark-flame-cs/
-screenshot: $assets.files.static.dark-flame-cs.png
+screenshot: $fastn-assets.files.images.featured.dark-flame-cs.png
 licence-url: https://github.com/FifthTry/fastn-cs/blob/main/LICENSE
 github-url: https://github.com/FifthTry/fastn-cs/
 

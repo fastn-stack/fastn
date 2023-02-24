@@ -1,5 +1,4 @@
--- import: fastn.dev/assets
--- import: fastn.dev/featured as ft-ui
+-- import: fastn.io/featured as ft-ui
 
 
 
@@ -19,7 +18,7 @@ for writing books, blog, technical documentation etc. These themes can be used
 as personal web sites or organizational static web sites.
 
 -- ft-ui.grid-view:
-if: {$show-grid}
+if: { show-grid }
 templates: $doc-sites
 
 -- end: my-ds.page
@@ -37,17 +36,17 @@ templates: $doc-sites
 
 -- ft-ui.template: Doc-site
 template-url: http://fifthtry.github.io/doc-site/
-screenshot: $assets.files.static.doc-site.png
+screenshot: $fastn-assets.files.images.featured.doc-site.png
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
 github-url: https://github.com/FifthTry/doc-site/
 
 `fifthtry.github.io/doc-site/` is a grey color theme. Most of our websites are
-using `doc-site` as base theme. Click on image OR package name to view it's working 
-demo. 
+using `doc-site` as base theme. Click on image OR package name to view it's working
+demo.
 
--- ft-ui.template: Blue Sapphire
+/-- ft-ui.template: Blue Sapphire
 template-url: https://fifthtry.github.io/Blue-Sapphire-Template/
-screenshot: $assets.files.static.blue-sapphire.png
+screenshot: $fastn-assets.files.static.blue-sapphire.png
 licence-url: https://github.com/FifthTry/Blue-Sapphire-Template/blob/main/LICENSE
 github-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 
@@ -55,9 +54,9 @@ github-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 ready to use template for your web packages. Click on image OR package name to see
 it's working demo and usage.
 
--- ft-ui.template: Forest 
+/-- ft-ui.template: Forest
 template-url: https://fifthtry.github.io/Forest-Template/
-screenshot: $assets.files.static.forest.png
+screenshot: $fastn-assets.files.static.forest.png
 licence-url: https://github.com/FifthTry/Forest-Template/blob/master/LICENSE
 github-url: https://github.com/FifthTry/Forest-Template/
 is-last: true

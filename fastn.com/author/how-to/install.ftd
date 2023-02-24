@@ -1,0 +1,50 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- my-ds.page: Install `fastn`
+
+`fastn` is compatible with various operating systems, including Windows, MacOS,
+and Linux.
+
+There are three options available for installation on each system:
+
+1. Using a `pre-built binary`
+2. Installing with `cargo`
+3. Building from `github repo source`
+
+
+-- cbox.info: Our Recommendation
+
+We recommend you to install `fastn` through `pre-built binary`.
+
+This is the preferred method as it only requires downloading the binary and
+installing it on your local system.
+
+-- ds.markdown: 
+
+`fastn` is written using `rust` language, if you are familiar with it and want
+to use `fastn` for your project or for experimentation, you can do it with
+other two options, i.e, by installing it using `cargo` or by building the
+`source`.
+
+Based on your machine and your choice of installation, you can select one of the
+following options:
+
+-- ds.h2:  For Windows
+
+
+1. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
+ (Recommended)
+2. [`fastn` using `cargo`](windows/#fastn-using-cargo)
+3. [`fastn` from `source`](windows/#fastn-from-source)
+
+
+
+-- ds.h2:  For MacOS/Linux
+
+1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
+ (Recommended)
+2. [`fastn` using `cargo`](macos/#fastn-using-cargo)
+3. [`fastn` from `source`](macos/#fastn-from-source)
+
+
+-- end: my-ds.page

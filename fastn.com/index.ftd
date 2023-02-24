@@ -1,35 +1,41 @@
 -- import: fifthtry.github.io/admonitions as cbox
--- my-ds.page: fastn: FTD Package Manager & Static Site Generator
 
 
-`fastn` is a powerful command line tool written in Rust that offers a seamless
-experience for [`ftd`](https://ftd.dev) package management and static site
-generation. With Fastn, you can easily convert your `.ftd` files into `.html`
-files that can be ship on popular platforms such as
-[Github Pages](/how-to/github-pages/), [Vercel](/how-to/vercel/) etc.
+-- my-ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
 
-[`ftd`](https://ftd.dev) is a revolutionary language designed for creating web
-pages and documents for publishing on the web. It starts with the simplicity of
-Markdown, but takes it to the next level by adding features to create full page
-layouts, reusable `"ftd components"`, and first-class support for data
-modeling. This makes `ftd` a replacement for traditional data exchange format
-like JSON, CSV etc.
+`fastn` is a comprehensive new-age web development platform. It has been built
+specifically to make workflows across design, development & deployment simple
+and consistent.
 
-Here are some key [features of `fastn`](/features/) that makes it a must-have
+`fastn` is powered by three important elements - an indigenous design system, a
+curated list of UI components / templates and a powerful tailor-made programming
+language - [`ftd`](/ftd/).
+
+[`ftd`](/ftd/) is a language designed for creating web pages and documents for
+publishing on the web. It starts with the simplicity of Markdown, but takes it
+to the next level by adding features to create full page layouts, reusable `"ftd
+components"`, and first-class support for data modeling. This makes `ftd` a
+replacement for traditional data exchange format like JSON, CSV etc.
+
+Here are some key [features of `fastn`](/features/) that makes it a good-to-have
 tool:
 
-- Supports [ftd](https://ftd.dev)
+- [Supports ftd](/ftd/)
 - [`ftd` package manager](/package-manager/)
 - [Static site generator](/static/)
 - [`fastn` Server](/server/)
 - [Customizable color schemes](/cs/)
+- [Sitemap](/sitemap/)
+- `fastn` for Distributing Static Assets
+
+
 
 -- cbox.warning: `fastn` Performance
 
-Currently, `fastn` takes about `~ 1000ms` to generate a typical page, and the
-generated HTML is about `~ 1MB` in size. We are working on these.
+Currently, `fastn` generates pages of size `~1MB`. We are working on
+improving this.
 
-;; Learn about other [known issues here](/known-issues/).
+
 
 -- ds.h1: How to install `fastn`?
 
@@ -38,7 +44,11 @@ Check out the ["How to Install"](/install/) section for more
 information. Additionally, an editor is required to use `fastn`, and we
 recommend using [Sublime Text](https://www.sublimetext.com/3).
 
--- ds.h1: Learning Resource
+
+
+
+
+/-- ds.h1: Learning Resource
 
 We are writing three manuals to help you learn `fastn`:
 
@@ -46,6 +56,8 @@ We are writing three manuals to help you learn `fastn`:
   your next blog, book, portfolio site, product landing page etc.
 - [Builder Manual](/themes/), if you want to create `fastn packages` that other
   people can use.
+
+
 
 
 -- ds.h1: Development
@@ -66,5 +78,7 @@ License: BSD
 
 We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
+
+
 
 -- end: my-ds.page

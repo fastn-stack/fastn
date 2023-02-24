@@ -1,5 +1,4 @@
--- import: fastn.dev/assets
--- import: fastn.dev/featured as ft-ui
+-- import: fastn.io/featured as ft-ui
 
 
 
@@ -28,16 +27,16 @@ templates: $bling
 
 -- ft-ui.template: Bling
 template-url: https://fifthtry.github.io/bling/
-screenshot: $assets.files.static.bling-components.png
+screenshot: $fastn-assets.files.images.featured.bling-components.png
 licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
 github-url: https://github.com/FifthTry/bling/
 
 `fifthtry.github.io/bling` is develoed and designed with various components which 
 can be used inside `FTD` web packages.
 
--- ft-ui.template: Image Gallery
+/-- ft-ui.template: Image Gallery
 template-url: https://fifthtry.github.io/imago-gallery-ig/
-screenshot: $assets.files.static.slideshow-demo.png
+screenshot: $fastn-assets.files.static.slideshow-demo.png
 licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
 github-url: https://github.com/FifthTry/imago-gallery-ig/
 
@@ -46,7 +45,7 @@ inside `FTD` web packages.
 
 -- ft-ui.template: Images
 template-url: https://fifthtry.github.io/images/
-screenshot: $assets.files.static.image-component.png
+screenshot: $fastn-assets.files.static.image-component.png
 licence-url: https://github.com/FifthTry/images/blob/main/LICENSE
 github-url: https://github.com/FifthTry/images/
 is-last: true

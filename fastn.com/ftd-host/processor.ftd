@@ -1,0 +1,14 @@
+-- my-ds.page: Understanding `processor`
+
+`ftd` gives a way for its platform, `fastn`, to define some functions known as
+`processors` or `foreign functions`. These functions, then, can be used in the
+`ftd` code whose computation is handled by the platform. This gives `fastn`
+power over `ftd` to define its own functions.
+
+At present, `fastn` contains the following processors:
+
+- [`$processor$: http`](http/)
+;; - [`$processor$: toc`](toc/)
+;; - [`$processor$: package-query`](package-query/)
+
+-- end: my-ds.page

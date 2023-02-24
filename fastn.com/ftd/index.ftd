@@ -1,0 +1,446 @@
+-- import: fifthtry.github.io/admonitions as cbox
+-- import: fifthtry.github.io/bling/chat
+-- import: fifthtry.github.io/bling/quote
+-- import: fifthtry.github.io/bling/assets
+
+
+-- component amitu:
+caption or body message:
+
+-- chat.message-left: $amitu.message
+
+-- end: chat.message-left
+
+-- end: amitu
+
+
+-- my-ds.page: `ftd` Programming Language
+
+`ftd` is designed for everyone, not just programmers.
+
+-- ds.h1: `ftd` for authoring prose
+
+`ftd` is a DSL for authoring long for text, and have access to
+rich collection of ready made components.
+
+
+-- ds.code: writing single or multi line text is easy
+lang: ftd
+
+\-- amitu: Hello World! 😀
+
+\-- ds.markdown:
+
+some markdown text!
+
+\-- amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+
+
+
+-- amitu: Hello World! 😀
+
+-- ds.markdown:
+
+some markdown text!
+
+-- amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+-- ds.markdown:
+
+Note: These are not built in components of ftd, but are using [open source
+component libraries](/featured/), eg
+[fifthtry.github.io/bling/quote](https://fifthtry.github.io/bling/chat/). Learn
+how to [build your own](https://ftd.dev/expander/).
+
+-- ds.code: using little more complex components
+lang: ftd
+
+
+\-- import: fifthtry.github.io/bling/quote
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $assets.files.static.amitu.jpg
+logo: $assets.files.static.fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+
+-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $assets.files.static.amitu.jpg
+logo: $assets.files.static.fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+-- ds.markdown:
+
+There are [many components to chose
+from](https://fifthtry.github.io/bling/quote/), and you can create your own
+with ease.
+
+-- ds.h1: A language for building UI
+
+`ftd` comes with basic building blocks like text, images and containers using
+with other UI can be constructed.
+
+-- ds.code: Creating a custom component
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
+
+\-- end: toggle-text
+
+\-- toggle-text: `ftd` is cool!
+
+-- ds.output:
+
+-- toggle-text: click me to toggle colors
+
+-- end: ds.output
+
+
+
+-- ds.markdown:
+
+
+With `ftd`, you can express your ideas and bring them to a compilation with
+ease.
+
+Take a look at this simple `ftd` document:
+
+-- ds.code: `ftd` Hello World!
+lang: ftd
+
+\-- ftd.text: Hello World!
+
+-- ds.markdown:
+
+The above code would show `Hello World` as output.
+
+With just a few lines of code, you can create a visually appealing and impactful
+document. It is a language that is easy to read and understand. It is not
+verbose like HTML, and not simplistic like Markdown.
+
+`ftd` can be compared with Markdown, but with `ftd`, you can define variables,
+perform event handling, abstract out logic into custom components etc.
+
+-- ds.h2: How to use `ftd`?
+
+`ftd` can be used using [`fastn`](/) which provides interface for `ftd`.
+You need to install fastn to get started.
+
+Here are some of the important `fastn` related links.
+
+- [Introducing `fastn`](/)
+- [Install `fastn`](/install/)
+
+
+-- ds.h2: Declaring Variable
+
+In `ftd`, you can create variables with specific types. `ftd` is a
+strongly-typed language, so the type of each variable must be declared.
+
+Here's an example of how you can define a boolean type variable:
+
+-- ds.code: Defining Variable
+lang: ftd
+
+\-- boolean flag: true
+
+-- ds.markdown:
+
+In this code, we're creating a variable named `flag` of `boolean` type. The
+variable is defined as immutable, meaning its value cannot be altered. If you
+want to define a mutable variable, simply add a `$` symbol before the variable
+name.
+
+Consider this example which has a mutable variable declaration `flag`.
+
+-- ds.code: Defining Variable
+lang: ftd
+
+\-- boolean $flag: true
+
+-- ds.markdown:
+
+To know more about variables checkout [variables](/variables/).
+
+
+-- ds.h2: Event handling
+
+`ftd` makes it easy to add events to your element. Let's take a look at the
+following example:
+
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 50
+
+-- ds.code: `ftd.text` kernel component
+lang: ftd
+
+\-- boolean $current: true
+
+\-- ftd.text: Hello World!
+align-self: center
+text-align: center
+padding.px: 20
+color if { current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $current)
+
+-- toggle-text: Hello World!
+
+-- end: ftd.row
+
+
+-- ds.markdown:
+
+Since the target audience for `ftd` is human beings, it includes many "default
+functions" that are commonly used, like the `toggle` function which can be used
+to create simple event handling.
+
+-- ds.h2: Creating a custom component
+
+In `ftd`, you can create custom components to abstract out logic and improve
+code organization. For example:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 50
+
+-- ds.code: Creating a custom component
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+
+\-- end: toggle-text
+
+\-- toggle-text: `ftd` is cool!
+
+
+-- toggle-text: `ftd` is cool!
+
+-- end: ftd.row
+
+
+-- ds.markdown:
+
+Here we have created a new component called `toggle-text`, and then instantiated
+it instead. This way you can create custom component library and use them in our
+writing without "polluting" the prose with noise.
+
+-- ds.h2: Import
+
+`ftd` allows you to separate component and variable definitions into different
+modules, and then use them in any module by using the `import` keyword. This
+helps to logically organize your code and avoid complexity, leading to cleaner
+and easier to understand code.
+
+Consider the below example:
+
+-- ds.code: `ftd` Hello World!
+lang: ftd
+
+\-- import: lib
+
+\-- lib.h1: Hello World
+
+-- ds.markdown:
+
+The code above shows a `ftd` document that imports a library named "`lib`" and
+has a level 1 heading of "Hello World".
+
+
+-- ds.h2: Data Modelling
+
+`ftd` is also a good first class data language. You can define and use records:
+
+-- ds.code: Data Modelling in `ftd`
+lang: ftd
+
+\-- record person:
+caption name:
+string location:
+optional body bio:
+
+-- ds.markdown:
+
+Each field has a type. `caption` is an alias for `string`, and tells ftd that
+the value can come in the "caption" position, after the `:` of the "section line",
+eg: lines that start with `--`. If a field is optional, it must be marked as
+such.
+
+-- ds.code: Creating a variable
+lang: ftd
+
+\-- person amitu: Amit Upadhyay
+location: Bangalore, India
+
+Amit is the founder and CEO of FifthTry.
+
+He loves to code, and is pursuing his childhood goal of
+becoming a professional starer of the trees.
+
+-- ds.markdown:
+
+Here we have defined a variable `amitu`. You can also define a list:
+
+-- ds.code: Creating a list
+lang: ftd
+
+\-- person list employees:
+
+\-- person: Sourabh Garg
+location: Ranchi, India
+
+\-- person: Arpita Jaiswal
+location: Lucknow, India
+
+Arpita is the primary author of `ftd` language.
+
+\-- end: employees
+
+-- ds.markdown:
+
+`ftd` provides a way to create a component that can render records and loop
+through lists to display all members of the list:
+
+-- ds.code: Looping over a list
+lang: ftd
+
+\-- render-person:
+person: $p
+$loop$: $employees as $p
+
+-- ds.markdown:
+
+This way we can have clean separation of data from presentation. The data
+defined in `ftd` documents can be easily read from say Rust:
+
+-- ds.code: Reading Data from `ftd` files
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Employee {
+    name: String,
+    location: String,
+    bio: Option<String>
+}
+
+let doc = ftd::p2::Document::from("some/id", source, lib)?;
+let amitu: Employee = doc.get("amitu")?;
+let employees: Vec<Employee> = doc.get("employees")?;
+
+
+-- ds.markdown:
+
+As mentioned earlier, `ftd` is a first-class data language that provides a
+better alternative to sharing data through CSV or JSON files. Unlike CSV/JSON,
+in `ftd`, data is type-checked, and it offers a proper presentation of the data
+with the option to define components that can render the data, which can be
+viewed in a browser.
+
+Furthermore, `ftd` can also serve as a language for configuration purposes.
+
+
+-- ds.h1: Getting Involved
+
+We are trying to create the language for human beings and we do not believe it
+would be possible without your support. We would love to hear from you.
+
+Github: https://github.com/FifthTry/ftd
+
+Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
+
+License: BSD
+
+;; Checkout the [Journal](journal/) and [Roadmap](roadmap/).
+
+
+/-- ds.h1: Videos
+
+We have recorded some videos explaining `ftd` in detail for our internal team.
+You may benefit from them as well.
+
+
+/-- ds.youtube:
+v: ZoCGwt_nLbk
+
+
+/-- ds.youtube:
+v: h0uLW9hucLw
+
+
+/-- ds.youtube:
+v: n341w3GwdrQ
+
+
+/-- ds.youtube:
+v: qyP8bBBAu98
+
+
+-- end: my-ds.page
+
+
+
+
+
+
+
+
+
+
+
+-- component toggle-text:
+boolean $current: false
+caption title:
+
+-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center 
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+padding.px: 20
+white-space: nowrap
+border-radius.px: 5
+
+-- end: toggle-text

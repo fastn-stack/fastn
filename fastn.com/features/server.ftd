@@ -1,0 +1,13 @@
+-- my-ds.page: `fastn` Server
+
+`fastn` can act as an HTTP server as well. Using `fastn` server is an
+alterantive to using [`fastn` static site generator](/static/).
+
+If a `fastn` package is using `fastn` server, then it has access to more dynamic
+features.
+
+- [`http` etc processor](/http/) is executed on page load time
+- [`get-data`](/processors/get-data/) has access to request parameters
+  ([planned](https://github.com/FifthTry/fastn/discussions/386))
+
+-- end: my-ds.page
