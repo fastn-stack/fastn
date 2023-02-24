@@ -43,7 +43,7 @@ github-url: https://github.com/FifthTry/imago-gallery-ig/
 `fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
 inside `FTD` web packages.
 
--- ft-ui.template: Images
+/-- ft-ui.template: Images
 template-url: https://fifthtry.github.io/images/
 screenshot: $fastn-assets.files.static.image-component.png
 licence-url: https://github.com/FifthTry/images/blob/main/LICENSE

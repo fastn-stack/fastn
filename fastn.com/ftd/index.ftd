@@ -71,8 +71,8 @@ lang: ftd
 
 \-- quote.charcoal: Amit Upadhyay
 label: Creator of FTD
-avatar: $assets.files.static.amitu.jpg
-logo: $assets.files.static.fifthtry.svg
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
 
 The web has lost some of the exuberance from the
 early 2000s, and it makes me a little sad.
@@ -80,8 +80,8 @@ early 2000s, and it makes me a little sad.
 
 -- quote.charcoal: Amit Upadhyay
 label: Creator of FTD
-avatar: $assets.files.static.amitu.jpg
-logo: $assets.files.static.fifthtry.svg
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
 
 The web has lost some of the exuberance from the
 early 2000s, and it makes me a little sad.
