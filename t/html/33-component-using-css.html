@@ -1829,6 +1829,10 @@ return resolve_reference("foo#open", data);
 document.querySelector(`[data-id="0:main"]`).setAttribute("class", "animated-div-1 blue-block");
 }
 else {document.querySelector(`[data-id="0:main"]`).setAttribute("class", "red-block animated-div");}
+
+if (document.querySelector(`[data-id="0:main"]`).getAttribute("class") == "REMOVE-KEY"){
+document.querySelector(`[data-id="0:main"]`).removeAttribute("class");
+}
 }
 window.set_value_main = {};
 window.set_value_main["foo#open"] = function (data, new_value, remaining) {
