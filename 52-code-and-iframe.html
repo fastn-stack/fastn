@@ -560,36 +560,6 @@ box-sizing: inherit;
 
 <script>
 "use strict";
-function enable_dark_mode() {
-window.enable_system_mode();
-}
-function enable_light_mode() {
-window.enable_system_mode();
-}
-function enable_system_mode() {
-window.enable_system_mode();
-}
-function fallbackCopyTextToClipboard(text) {
-var textArea = document.createElement("textarea");
-textArea.value = text;
-// Avoid scrolling to bottom
-textArea.style.top = "0";
-textArea.style.left = "0";
-textArea.style.position = "fixed";
-document.body.appendChild(textArea);
-textArea.focus();
-textArea.select();
-try {
-var successful = document.execCommand('copy');
-var msg = successful ? 'successful' : 'unsuccessful';
-console.log('Fallback: Copying text command was ' + msg);
-}
-catch (err) {
-console.error('Fallback: Oops, unable to copy', err);
-}
-document.body.removeChild(textArea);
-}
-// source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
@@ -695,17 +665,21 @@ window.ftd.set_value_by_id("main", variable, value);
 };
 exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
-let [var_name, remaining] = get_name_and_remaining(variable);
+let [var_name, remaining] = data[variable] === undefined
+? get_name_and_remaining(variable)
+: [variable, null];
 if (data[var_name] === undefined && data[variable] === undefined) {
 console_log(variable, "is not in data, ignoring");
 return;
 }
+window.ftd.delete_list(var_name, id);
 if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
 window["set_value_" + id][var_name](data, value, remaining);
 }
 else {
 set_data_value(data, variable, value);
 }
+window.ftd.create_list(var_name, id);
 };
 exports.is_empty = function (str) {
 return (!str || str.length === 0);
@@ -715,20 +689,22 @@ args["CHANGE_VALUE"] = false;
 window.ftd.clear(array, args, data, id);
 args[0].value = value;
 change_value(args, data, id);
-if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-// @ts-ignore
-let list = resolve_reference(args[0].reference, data);
-let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+window.ftd.create_list(args[0].reference, id);
+return array;
+};
+exports.create_list = function (array_name, id) {
+if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+let data = ftd_data[id];
+let [htmls, data_id, start_index] = window.dummy_data_main[array_name](data);
 for (let i in htmls) {
 let nodes = stringToHTML(htmls[i]);
 let main = document.querySelector(`[data-id="${data_id}"]`);
-for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-// @ts-ignore
-main.insertBefore(nodes.children[j], main.children[start_index + i]);
+main === null || main === void 0 ? void 0 : main.insertBefore(nodes.children[0], main.children[start_index + parseInt(i)]);
+/*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
+}*/
 }
 }
-}
-return array;
 };
 exports.append = function (array, value, args, data, id) {
 array.push(value);
@@ -773,18 +749,21 @@ return array;
 exports.clear = function (array, args, data, id) {
 args["CHANGE_VALUE"] = false;
 // @ts-ignore
-let length = resolve_reference(args[0].reference, data).length;
+window.ftd.delete_list(args[0].reference, id);
 args[0].value = [];
 change_value(args, data, id);
-if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+return array;
+};
+exports.delete_list = function (array_name, id) {
+if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+let data = ftd_data[id];
+let length = resolve_reference(array_name, data, null, null).length;
+let [_, data_id, start_index] = window.dummy_data_main[array_name](data);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var i = length - 1 + start_index; i >= start_index; i--) {
-// @ts-ignore
-main.removeChild(main.children[i]);
+main === null || main === void 0 ? void 0 : main.removeChild(main.children[i]);
 }
 }
-return array;
 };
 exports.delete_at = function (array, idx, args, data, id) {
 // @ts-ignore
@@ -892,6 +871,7 @@ window.ftd.set_value(ftd_variable, data[ftd_variable]);
 };
 xhr.send(JSON.stringify(json));
 };
+// source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
 exports.copy_to_clipboard = function (text) {
 if (!navigator.clipboard) {
 fallbackCopyTextToClipboard(text);
@@ -1274,11 +1254,16 @@ var formatted = this;
 if (arguments.length > 0) {
 // @ts-ignore
 for (let [header, value] of Object.entries(arguments[0])) {
-var regexp = new RegExp('\\{' + header + '(\\..*)?\\}', 'gi');
+var regexp = new RegExp('\\{(' + header + '(\\..*?)?)\\}', 'gi');
 let matching = formatted.match(regexp);
 for (let i in matching) {
+try {
 // @ts-ignore
 formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length - 1), arguments[0]));
+}
+catch (e) {
+continue;
+}
 }
 }
 }
@@ -1754,6 +1739,26 @@ return [s, fs];
 function len(data) {
 return data.length;
 }
+function fallbackCopyTextToClipboard(text) {
+var textArea = document.createElement("textarea");
+textArea.value = text;
+// Avoid scrolling to bottom
+textArea.style.top = "0";
+textArea.style.left = "0";
+textArea.style.position = "fixed";
+document.body.appendChild(textArea);
+textArea.focus();
+textArea.select();
+try {
+var successful = document.execCommand('copy');
+var msg = successful ? 'successful' : 'unsuccessful';
+console.log('Fallback: Copying text command was ' + msg);
+}
+catch (err) {
+console.error('Fallback: Oops, unable to copy', err);
+}
+document.body.removeChild(textArea);
+}
 
 
 
@@ -1843,9 +1848,9 @@ window.ftd.mutable_value_main["foo#foo:name:4"].on_change();
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:name:4"]) {
 window.ftd.immutable_value_main["foo#foo:name:4"].on_change();
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__display"]){window.node_change_main["4,0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
 }
 };
 
