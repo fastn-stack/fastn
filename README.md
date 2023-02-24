@@ -14,7 +14,6 @@
 
 
 Homepage: [fastn.io/ftd/](https://fastn.io/ftd/)  
-Example: https://ftd-lang.github.io/ftd/
 
 > FTD is an open source programming language for writing prose.
 
@@ -32,8 +31,3 @@ License: BSD
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Fftd.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Fftd?ref=badge_large)
