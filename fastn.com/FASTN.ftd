@@ -40,7 +40,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: features/sitemap.ftd
 
 
-## Featured: /featured/
+## Featured Components: /featured/
 
 - Featured Components: /featured/
 - Documentation Sites: /featured/doc-sites/
@@ -48,9 +48,21 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
+# FTD: /ftd/
 
-# Learn: /install/
-document: author/how-to/install.ftd
+# Learn: /docs/
+
+## Docs: /docs/
+
+- Docs Home: /docs/
+
+
+- Getting Started: /setup/
+  document: ftd/setup.ftd
+- Best Practices: /best-practices/
+- Create `fastn` package: /create-fastn-package/
+  document: ftd/create-fastn-package.ftd
+
 
 ## How Tos: /install/
 document: author/how-to/install.ftd
@@ -87,14 +99,6 @@ document: author/how-to/install.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
 
-## FTD: /ftd/
-
-- Intro: /ftd/
-- Setup: /setup/
-  document: ftd/setup.ftd
-- Best Practices: /best-practices/
-- Create `fastn` package: /create-fastn-package/
-  document: ftd/create-fastn-package.ftd
 
 # Blog: /colors/
 document: blog/show-cs.ftd

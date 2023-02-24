@@ -18,6 +18,10 @@ caption or body message:
 
 `ftd` is designed for everyone, not just programmers.
 
+[Getting Started](/setup/) | [Watch Course](https://ftd.dev/expander/)
+
+[Star us on Github](https://github.com/fastn-stack/ftd)
+
 -- ds.h1: `ftd` for authoring prose
 
 `ftd` is a DSL for authoring long for text, and have access to

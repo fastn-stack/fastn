@@ -1,4 +1,4 @@
--- my-ds.page: Setup
+-- my-ds.page: Getting Started
 
 To get started with `ftd`, you need to have two applications installed on your
 machine:
@@ -13,3 +13,5 @@ editor to write your code. We recommend using
 
 Once you've finished installing these applications, you can create a new `fastn`
 package and start using `ftd`.
+
+Checkout the [video course to learn ftd and fastn](https://ftd.dev/expander/).
