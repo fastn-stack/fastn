@@ -88,11 +88,16 @@ String.prototype.replace_format = function() {
     if (arguments.length > 0){
         // @ts-ignore
         for (let [header, value] of Object.entries(arguments[0])) {
-            var regexp = new RegExp('\\{'+header+'(\\..*)?\\}', 'gi');
+            var regexp = new RegExp('\\{('+header+'(\\..*?)?)\\}', 'gi');
             let matching = formatted.match(regexp);
             for(let i in matching) {
-                // @ts-ignore
-                formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length -1), arguments[0]));
+                try {
+                    // @ts-ignore
+                    formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length -1), arguments[0]));
+                } catch (e) {
+                    continue
+                }
+
             }
         }
     }

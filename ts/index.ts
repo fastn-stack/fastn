@@ -122,18 +122,23 @@ window.ftd = (function() {
     exports.set_value_by_id = function (id, variable, value) {
         let data = ftd_data[id];
 
-        let [var_name, remaining] = get_name_and_remaining(variable);
+        let [var_name, remaining] = data[variable] === undefined
+            ? get_name_and_remaining(variable)
+            : [variable, null];
 
         if (data[var_name] === undefined && data[variable] === undefined) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
+
+        window.ftd.delete_list(var_name, id);
         if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
             window["set_value_" + id][var_name](data, value, remaining);
         }
         else {
             set_data_value(data, variable, value);
         }
+        window.ftd.create_list(var_name, id);
     };
 
     exports.is_empty = function(str: any) {
@@ -145,20 +150,23 @@ window.ftd = (function() {
         window.ftd.clear(array, args, data, id);
         args[0].value = value;
         change_value(args, data, id);
-        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-            // @ts-ignore
-            let list = resolve_reference(args[0].reference, data);
-            let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
-            for(let i in htmls){
+        window.ftd.create_list(args[0].reference, id);
+        return array;
+    }
+
+    exports.create_list = function (array_name: string, id: string) {
+        if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+            let data = ftd_data[id];
+            let [htmls, data_id, start_index] = window.dummy_data_main[array_name](data);
+            for (let i in htmls) {
                 let nodes = stringToHTML(htmls[i]);
-                let main = document.querySelector(`[data-id="${data_id}"]`);
-                for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-                    // @ts-ignore
-                    main.insertBefore(nodes.children[j], main.children[start_index + i]);
-                }
+                let main: HTMLElement | null = document.querySelector(`[data-id="${data_id}"]`);
+                main?.insertBefore(nodes.children[0], main.children[start_index + parseInt(i)]);
+                /*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+                    main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
+                }*/
             }
         }
-        return array;
     }
 
     exports.append = function(array: any[], value: any, args: any, data: any, id: string) {
@@ -205,18 +213,22 @@ window.ftd = (function() {
     exports.clear = function(array: any[], args: any, data: any, id: string) {
         args["CHANGE_VALUE"]= false;
         // @ts-ignore
-        let length = resolve_reference(args[0].reference, data).length;
+        window.ftd.delete_list(args[0].reference, id);
         args[0].value = [];
         change_value(args, data, id);
-        if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-            let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
-            let main = document.querySelector(`[data-id="${data_id}"]`);
-            for(var i = length - 1 + start_index; i >= start_index; i--) {
-                // @ts-ignore
-                main.removeChild(main.children[i]);
+        return array;
+    }
+
+    exports.delete_list = function (array_name: string, id: string) {
+        if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+            let data = ftd_data[id];
+            let length = resolve_reference(array_name, data, null, null).length;
+            let [_, data_id, start_index] = window.dummy_data_main[array_name](data);
+            let main: HTMLElement | null = document.querySelector(`[data-id="${data_id}"]`);
+            for (var i = length - 1 + start_index; i >= start_index; i--) {
+                main?.removeChild(main.children[i]);
             }
         }
-        return array;
     }
 
     exports.delete_at = function(array: any[], idx: number, args: any, data: any, id: string) {

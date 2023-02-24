@@ -1,0 +1,29 @@
+-- ftd-todo-display:
+item: $obj
+$loop$: $todo_list as $obj
+
+
+
+
+
+
+
+
+
+-- record todo-item:
+caption name:
+boolean done:
+optional body description:
+
+
+-- todo-item list $todo_list:
+-- end: $todo_list
+
+
+
+-- component ftd-todo-display:
+todo-item item:
+
+-- ftd.text: $ftd-todo-display.item.name
+
+-- end: ftd-todo-display

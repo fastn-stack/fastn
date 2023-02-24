@@ -6,6 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#todo_list": [],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -547,7 +548,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; height: 60px; justify-content: start; margin-left: 60px; margin-right: 60px; text-decoration: none; width: 60px" ></div><div data-id="0,1:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; height: 60px; justify-content: start; margin-top: 40px; text-decoration: none; width: 60px" ></div><div data-id="0,2:main" style="align-items: start; background-color: rgba(0,128,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; height: 60px; justify-content: start; margin: 100px; text-decoration: none; width: 60px" ></div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ></div>
 
 
 <script>
@@ -1815,8 +1816,53 @@ a.value = !a.value
 
 
 
+window.dummy_data_main = {};
 
+window.dummy_data_main["foo#todo_list"] = function(all_data, index) {
+function dummy_data(list, all_data, index) {
+let new_data = {
+"foo#obj": list[index],
+"LOOP__COUNTER": index
+};
+let data = {...new_data, ...all_data};
+var args={};
+args["foo#ftd-todo-display"]={};
+args["foo#ftd-todo-display"]["item"] = resolve_reference("foo#obj", data);
+data = {...args, ...all_data};
+if (!!"foo#ftd-todo-display".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main["foo#ftd-todo-display"]) {
+data["foo#ftd-todo-display"] = window.raw_nodes_main["foo#ftd-todo-display"](data);
+}
+return "{foo#ftd-todo-display}".replace_format(data);
+}
 
+let list = resolve_reference("foo#todo_list", all_data);
+if (index !== null && index !== undefined) {
+if (index.toString().toUpperCase() === "LAST") {
+index = list.length - 1;
+} else if (index.toString().toUpperCase() === "START") {
+index = 0;
+}
+return [dummy_data(list, all_data, index), "main", 0];
+}
+let htmls = [];
+for (var i = 0; i < list.length; i++) {
+htmls.push(dummy_data(list, all_data, i));
+}
+return [htmls, "main", 0];
+}
+window.raw_nodes_main = {};
+
+window.raw_nodes_main["foo#ftd-todo-display"] = function(all_data){
+var args={};
+args["foo#ftd-todo-display"]={};
+args["foo#ftd-todo-display"]["item"] = null;
+let data = {...args, ...all_data};
+if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
+data[""] = window.raw_nodes_main[""](data);
+}
+let html = "<div data-id=\"main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\"><p>{foo#ftd-todo-display.item.name}</p></div>".replace_format(data);
+return html;
+}
 
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");

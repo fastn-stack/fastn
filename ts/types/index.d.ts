@@ -29,6 +29,8 @@ declare global {
         copy_to_clipboard(text: string): void;
         http(url: string, method: string, ...request_data: any): void;
         component_data(component: HTMLElement): any;
+        create_list(array_name: string, id: string): void;
+        delete_list(array_name: string, id: string): void;
     }
 
     interface String {

@@ -584,7 +584,7 @@ pub(crate) fn to_properties_string(
                     false,
                 )
             {
-                let value = format!("args[\"{}.{}\"] = {};", node, key, value_string);
+                let value = format!("args[\"{}\"][\"{}\"] = {};", node, key, value_string);
                 expressions.push((condition, value));
             }
         }
@@ -595,7 +595,11 @@ pub(crate) fn to_properties_string(
     if properties_string.is_empty() {
         None
     } else {
-        Some(format!("var args= {{}};\n{}", properties_string.trim()))
+        Some(format!(
+            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            node,
+            properties_string.trim(),
+        ))
     }
 }
 
@@ -618,14 +622,18 @@ pub(crate) fn to_argument_string(
             }
         }
         properties_string = format!(
-            "{}\nargs[\"{}.{}\"] = {};",
+            "{}\nargs[\"{}\"][\"{}\"] = {};",
             properties_string, node, argument.name, result_value
         );
     }
     if properties_string.is_empty() {
         None
     } else {
-        Some(format!("var args= {{}};\n{}", properties_string.trim()))
+        Some(format!(
+            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            node,
+            properties_string.trim()
+        ))
     }
 }
 
