@@ -13,7 +13,7 @@
 # FTD: Programming Language For Prose
 
 
-Homepage: [ftd.dev](https://ftd.dev/)  
+Homepage: [fastn.io/ftd/](https://fastn.io/ftd/)  
 Example: https://ftd-lang.github.io/ftd/
 
 > FTD is an open source programming language for writing prose.
