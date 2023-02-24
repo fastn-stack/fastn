@@ -8,7 +8,46 @@ pub async fn create_package(root: &camino::Utf8Path) -> Result<(), fastn_cloud::
         r#"{"name": "Abrar Khan"}"#.to_string(),
     )
     .await?;
+    let (missing_hashes_list, missing_hashes_content) = get_missing_checksums(
+        list_content.as_str(),
+        create_api_resp.missing_hashes.as_slice(),
+        data_file.as_path(),
+    )
+    .await
+    .unwrap();
     Ok(())
+}
+
+async fn get_missing_checksums(
+    list_content: &str,
+    missing_hashes: &[String],
+    data_file: &camino::Utf8Path,
+) -> Result<(String, Vec<u8>), ()> {
+    let list = tejar::read::reader(list_content).unwrap().list;
+    let mut data = vec![];
+    let mut new_list = String::new();
+    let mut offset = 0;
+    for checksum in missing_hashes {
+        let record = list.iter().find(|r| r.checksum.eq(checksum)).unwrap();
+        let mut file_data =
+            read_with_offset(data_file, record.offset as u64, record.file_size as usize)
+                .await
+                .unwrap();
+        let list_record = tejar::create::ListRecord {
+            data_file_name: record.data_file_name.to_string(),
+            file_name: record.file_name.to_string(),
+            content_type: record.content_type.to_string(),
+            compression: "todo!".to_string(), // TODO:
+            start: offset,
+            size: record.file_size,
+            timestamp: record.timestamp,
+            checksum: record.checksum.to_string(),
+        };
+        offset += record.file_size;
+        data.append(&mut file_data);
+        new_list.push_str(list_record.to_string().as_str());
+    }
+    Ok((new_list, data))
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -63,4 +102,18 @@ pub async fn create_tejar(
 pub async fn read_to_string(path: &camino::Utf8Path) -> Result<String, tokio::io::Error> {
     // Let's keep this utility different for reading files
     tokio::fs::read_to_string(path).await
+}
+
+pub async fn read_with_offset(
+    path: &camino::Utf8Path,
+    offset: u64,
+    size: usize,
+) -> Result<Vec<u8>, tokio::io::Error> {
+    use tokio::io::AsyncReadExt;
+    use tokio::io::AsyncSeekExt;
+    let mut file = tokio::fs::File::open(path).await?;
+    file.seek(tokio::io::SeekFrom::Start(offset)).await?;
+    let mut buffer = vec![0u8; size];
+    file.read_exact(&mut buffer).await?;
+    Ok(buffer)
 }
