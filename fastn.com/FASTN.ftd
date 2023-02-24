@@ -92,6 +92,7 @@ document: author/how-to/install.ftd
 - Intro: /ftd/
 - Setup: /setup/
   document: ftd/setup.ftd
+- Best Practices: /best-practices/
 - Create `fastn` package: /create-fastn-package/
   document: ftd/create-fastn-package.ftd
 
