@@ -581,7 +581,9 @@ pub async fn resolve_foreign_variable2022(
                     package.name,
                     file.replace('.', "/"),
                     ext
-                );
+                )
+                .trim_start_matches('/')
+                .to_string();
 
                 let light_path = format!("{}.{}", file.replace('.', "/"), ext);
                 if download_assets
@@ -622,7 +624,9 @@ pub async fn resolve_foreign_variable2022(
                 }
 
                 if light {
-                    return Ok(ftd::interpreter2::Value::String { text: light_mode });
+                    return Ok(ftd::interpreter2::Value::String {
+                        text: light_mode.trim_start_matches('/').to_string(),
+                    });
                 }
 
                 let mut dark_mode = if file.ends_with("-dark") {
@@ -634,6 +638,8 @@ pub async fn resolve_foreign_variable2022(
                         file.replace('.', "/"),
                         ext
                     )
+                    .trim_start_matches('/')
+                    .to_string()
                 };
 
                 let dark_path = format!("{}-dark.{}", file.replace('.', "/"), ext);
@@ -675,7 +681,9 @@ pub async fn resolve_foreign_variable2022(
                 }
 
                 if dark {
-                    return Ok(ftd::interpreter2::Value::String { text: dark_mode });
+                    return Ok(ftd::interpreter2::Value::String {
+                        text: dark_mode.trim_start_matches('/').to_string(),
+                    });
                 }
                 #[allow(deprecated)]
                 Ok(ftd::interpreter2::Value::Record {
@@ -702,10 +710,10 @@ pub async fn resolve_foreign_variable2022(
                 })
             }
             Some((file, ext)) => Ok(ftd::interpreter2::Value::String {
-                text: format!("/-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
+                text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
             }),
             None => Ok(ftd::interpreter2::Value::String {
-                text: format!("/-/{}/{}", package.name, files),
+                text: format!("-/{}/{}", package.name, files),
             }),
         }
     }
@@ -731,7 +739,7 @@ pub async fn resolve_foreign_variable2(
             if let Ok(value) =
                 get_assets_value(&package, files, lib, base_url, download_assets).await
             {
-                return Ok(value);
+                return Ok(dbg!(value));
             }
         }
         for (alias, package) in package.aliases() {
@@ -739,7 +747,7 @@ pub async fn resolve_foreign_variable2(
                 if let Ok(value) =
                     get_assets_value(package, files, lib, base_url, download_assets).await
                 {
-                    return Ok(value);
+                    return Ok(dbg!(value));
                 }
             }
         }
@@ -788,7 +796,9 @@ pub async fn resolve_foreign_variable2(
                     package.name,
                     file.replace('.', "/"),
                     ext
-                );
+                )
+                .trim_start_matches('/')
+                .to_string();
 
                 let light_path = format!("{}.{}", file.replace('.', "/"), ext);
                 if download_assets
@@ -844,6 +854,8 @@ pub async fn resolve_foreign_variable2(
                         file.replace('.', "/"),
                         ext
                     )
+                    .trim_start_matches('/')
+                    .to_string()
                 };
 
                 let dark_path = format!("{}-dark.{}", file.replace('.', "/"), ext);
@@ -917,11 +929,11 @@ pub async fn resolve_foreign_variable2(
                 })
             }
             Some((file, ext)) => Ok(ftd::Value::String {
-                text: format!("/-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
+                text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
                 source: ftd::TextSource::Header,
             }),
             None => Ok(ftd::Value::String {
-                text: format!("/-/{}/{}", package.name, files),
+                text: format!("-/{}/{}", package.name, files),
                 source: ftd::TextSource::Header,
             }),
         }
@@ -1000,7 +1012,9 @@ fn resolve_foreign_variable(
                     package.name,
                     file.replace('.', "/"),
                     ext
-                );
+                )
+                .trim_start_matches('/')
+                .to_string();
                 if light {
                     return Ok(ftd::Value::String {
                         text: light_mode,
@@ -1017,6 +1031,8 @@ fn resolve_foreign_variable(
                         file.replace('.', "/"),
                         ext
                     )
+                    .trim_start_matches('/')
+                    .to_string()
                 } else {
                     light_mode.clone()
                 };
@@ -1035,7 +1051,7 @@ fn resolve_foreign_variable(
                             "light".to_string(),
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: light_mode,
+                                    text: light_mode.trim_start_matches('/').to_string(),
                                     source: ftd::TextSource::Header,
                                 },
                             },
@@ -1044,7 +1060,7 @@ fn resolve_foreign_variable(
                             "dark".to_string(),
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: dark_mode,
+                                    text: dark_mode.trim_start_matches('/').to_string(),
                                     source: ftd::TextSource::Header,
                                 },
                             },
@@ -1059,12 +1075,12 @@ fn resolve_foreign_variable(
                     .exists() =>
             {
                 Ok(ftd::Value::String {
-                    text: format!("/-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
+                    text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
                     source: ftd::TextSource::Header,
                 })
             }
             None if path.join(&files).exists() => Ok(ftd::Value::String {
-                text: format!("/-/{}/{}", package.name, files),
+                text: format!("-/{}/{}", package.name, files),
                 source: ftd::TextSource::Header,
             }),
             _ => ftd::p2::utils::e2(format!("{} not found 2", files).as_str(), doc_name, 0),
