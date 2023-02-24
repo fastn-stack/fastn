@@ -8,6 +8,7 @@ pub async fn create_package(root: &camino::Utf8Path) -> Result<(), fastn_cloud::
         r#"{"name": "Abrar Khan"}"#.to_string(),
     )
     .await?;
+    println!("Missing hashes: {:?}", create_api_resp.missing_hashes);
     let (missing_hashes_list, missing_hashes_content) = get_missing_checksums(
         list_content.as_str(),
         create_api_resp.missing_hashes.as_slice(),
@@ -15,6 +16,15 @@ pub async fn create_package(root: &camino::Utf8Path) -> Result<(), fastn_cloud::
     )
     .await
     .unwrap();
+    println!("Missing hashes list: {:?}", missing_hashes_list);
+    let resp = upload_new_package(
+        create_api_resp.key.as_str(),
+        config.package.name.as_str(),
+        missing_hashes_list.as_str(),
+        missing_hashes_content,
+    )
+    .await?;
+    println!("Upload Response: {:?}", resp);
     Ok(())
 }
 
@@ -81,7 +91,43 @@ pub async fn create_api(
         .collect::<Vec<u8>>();
     let response: CreateAPIResponse =
         fastn_cloud::http::post("/api/create/", body, &headers, &query).await?;
-    println!("resp: {:?}", response);
+    Ok(response)
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub struct UploadAPIResponse {
+    pub key: String,
+    pub domain: String,
+}
+
+pub async fn upload_new_package(
+    key: &str,
+    package_name: &str,
+    list_content: &str,
+    data: Vec<u8>,
+) -> Result<UploadAPIResponse, fastn_cloud::http::PostError> {
+    let list_bytes = list_content.to_string().into_bytes();
+    let query: std::collections::HashMap<_, _> = [
+        ("package-name", package_name.to_string()),
+        ("list-size", list_bytes.len().to_string()),
+        ("data-size", data.len().to_string()),
+    ]
+    .into_iter()
+    .map(|(k, v)| (k.to_string(), v))
+    .collect();
+    let headers = [
+        ("Content-Type", "application/octet-stream"),
+        ("package-key", key),
+    ]
+    .into_iter()
+    .map(|(k, v)| (k.to_string(), v.to_string()))
+    .collect();
+    let body = list_bytes
+        .into_iter()
+        .chain(data.into_iter())
+        .collect::<Vec<u8>>();
+    let response: UploadAPIResponse =
+        fastn_cloud::http::put("/api/upload-new-package/", body, &headers, &query).await?;
     Ok(response)
 }
 
