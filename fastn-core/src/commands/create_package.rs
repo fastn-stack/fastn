@@ -1,11 +1,17 @@
-async fn template_contents(project_name: &str, download_base_url: &str) -> (String, String) {
+async fn template_contents(
+    project_name: &str,
+    download_base_url: Option<&str>,
+) -> (String, String) {
     let ftd = format!(
         r#"-- import: fastn
 
 -- fastn.package: {}
-download-base-url: {}
+{}
 "#,
-        project_name, download_base_url
+        project_name,
+        download_base_url
+            .map(|v| format!("download-base-url: {}", v))
+            .unwrap_or_default()
     );
     let index = "-- ftd.text: Hello world".to_string();
 
@@ -47,7 +53,7 @@ pub async fn create_package(
     // Create all directories if not present
     tokio::fs::create_dir_all(final_dir.as_str()).await?;
 
-    let tmp_contents = template_contents(name, download_base_url.unwrap_or(name)).await;
+    let tmp_contents = template_contents(name, download_base_url).await;
     let tmp_fastn = tmp_contents.0;
     let tmp_index = tmp_contents.1;
 
