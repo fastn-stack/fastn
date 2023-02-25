@@ -659,7 +659,8 @@ pub(crate) fn mutable_value(mutable_variables: &[String], id: &str) -> String {
                      window.ftd.mutable_value_{id}[\"{key}\"] = {{
                             \"get\": function() {{ return window.ftd.get_value(\"{id}\", \"{key}\");}},
                             \"set\": function(value) {{ window.ftd.set_value_by_id(\"{id}\", \"{key}\", value) }},
-                            \"on_change\": function(){{}}
+                            \"changes\": [],
+                            \"on_change\": function(fun) {{ this.changes.push(fun); }}
                      }};
                 "},
             id = id,
@@ -683,7 +684,8 @@ pub(crate) fn immutable_value(immutable_variables: &[String], id: &str) -> Strin
             indoc::indoc! {"
                      window.ftd.immutable_value_{id}[\"{key}\"] = {{
                             \"get\": function() {{ return window.ftd.get_value(\"{id}\", \"{key}\");}},
-                            \"on_change\": function(){{}}
+                            \"changes\": [],
+                            \"on_change\": function(fun) {{ this.changes.push(fun); }}
                      }};
                 "},
             id = id,

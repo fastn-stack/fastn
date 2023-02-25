@@ -198,10 +198,12 @@ impl<'a> VariableDependencyGenerator<'a> {
                             }}
                             {dependencies}
                             if (!!window.ftd.mutable_value_{id} && !!window.ftd.mutable_value_{id}[\"{key}\"]) {{
-                                window.ftd.mutable_value_{id}[\"{key}\"].on_change();
+                                let changes = window.ftd.mutable_value_{id}[\"{key}\"].changes;
+                                for(let i in changes) {{ changes[i](); }}
                             }}
                             if (!!window.ftd.immutable_value_{id} && !!window.ftd.immutable_value_{id}[\"{key}\"]) {{
-                                window.ftd.immutable_value_{id}[\"{key}\"].on_change();
+                                let changes = window.ftd.immutable_value_{id}[\"{key}\"].changes;
+                                for(let i in changes) {{ changes[i](); }}
                             }}
                             {node_changes_calls}
                      }};
