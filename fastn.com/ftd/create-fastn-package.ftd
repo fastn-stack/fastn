@@ -1,4 +1,4 @@
--- my-ds.page: Create a `fastn` package
+-- my-ds.page: Create and Serve a `fastn` package
 
 `fastn` is also a `ftd` package manager. A package contains all the files you
 need for a module. `fastn` manages the packages and modules for `ftd` and
@@ -7,7 +7,61 @@ consists of command line tool `fastn`.
 To get started, you need to install `fastn`. Checkout [install `fastn`](install/)
 page to know how to install `fastn`.
 
-After that create a folder, lets say `hello-fastn`. Open this folder in the
+There are two ways to create a fastn package:
+
+- [Using Command (Recommended)](create-fastn-package/#using-command)
+- [Manual](create-fastn-package/#manual)
+
+-- ds.h1: Using Command
+
+This is the simplest way to get started with fastn package. Lets say you want to
+create `hello-fastn` package. You need to follow the following steps:
+
+- [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
+- Run the `fastn create-package <package-name>` command
+
+-- ds.code: create-package
+lang: sh
+
+fastn create-package hello-fastn
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-create-package.png
+width: fill-container
+
+-- ds.markdown:
+
+The above command will create a package/folder named `hello-fastn`. This package
+would have two files `FASTN.ftd` and `index.ftd`. You can preview the content of
+this folder in the text editor ([SublimeText](https://www.sublimetext.com/3)).
+
+- Go to your package location in terminal using `cd <path-to-package>` command.
+
+-- ds.code: go to the package location
+lang: sh
+
+cd hello-fastn
+
+-- ds.markdown:
+
+- Then serve the package using the following command
+
+-- ds.code: serve
+lang: sh
+
+fastn serve
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-serve.png
+width: fill-container
+
+
+
+
+
+-- ds.h1: Manual
+
+Start with creating a folder, lets say `hello-fastn`. Open this folder in the
 text editor ([SublimeText](https://www.sublimetext.com/3)). In this
 folder, we need to add two files `index.ftd` and `FASTN.ftd`. Lets understand
 what are these files and the content it should contain in detail.
@@ -56,6 +110,24 @@ Once this package is created as mentioned above, now we can start the HTTP
 server. Follow the following steps:
 
 - [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
+- Go to your package location in terminal using `cd <path-to-package>` command.
 
+-- ds.code: go to the package location
+lang: sh
+
+cd hello-fastn
+
+-- ds.markdown:
+
+- Then serve the package using the following command.
+
+-- ds.code: serve
+lang: sh
+
+fastn serve
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-serve.png
+width: fill-container
 
 -- end: my-ds.page
