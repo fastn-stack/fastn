@@ -1840,10 +1840,12 @@ set_data_value(data, "foo#num", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#num"]) {
-window.ftd.mutable_value_main["foo#num"].on_change();
+let changes = window.ftd.mutable_value_main["foo#num"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#num"]) {
-window.ftd.immutable_value_main["foo#num"].on_change();
+let changes = window.ftd.immutable_value_main["foo#num"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__padding"]){window.node_change_main["2,0:main__padding"](data);
 }

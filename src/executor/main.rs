@@ -6,29 +6,44 @@ pub struct ExecuteDoc<'a> {
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
     pub instructions: &'a [ftd::interpreter2::Component],
-    pub dummy_instructions: &'a mut ftd::Map<ftd::executor::DummyElement>,
+    pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
     pub css: &'a mut std::collections::HashSet<String>,
 }
 
-#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct RT {
     pub name: String,
     pub aliases: ftd::Map<String>,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub main: ftd::executor::Column,
-    pub dummy_instructions: ftd::Map<ftd::executor::DummyElement>,
+    pub dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
+}
+
+impl Default for RT {
+    fn default() -> RT {
+        RT {
+            name: "".to_string(),
+            aliases: Default::default(),
+            bag: Default::default(),
+            main: Default::default(),
+            dummy_instructions: ftd::VecMap::new(),
+            element_constructor: Default::default(),
+            js: Default::default(),
+            css: Default::default(),
+        }
+    }
 }
 
 impl<'a> ExecuteDoc<'a> {
     #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
-        let mut dummy_instructions = Default::default();
+        let mut dummy_instructions = ftd::VecMap::new();
         let mut element_constructor = Default::default();
         let mut js: std::collections::HashSet<String> = document.js;
         let mut css: std::collections::HashSet<String> = document.css;

@@ -1872,10 +1872,12 @@ set_data_value(data, "foo#flag", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
-window.ftd.mutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.mutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
-window.ftd.immutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.immutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
 }
@@ -1889,10 +1891,12 @@ set_data_value(data, "foo#src", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#src"]) {
-window.ftd.mutable_value_main["foo#src"].on_change();
+let changes = window.ftd.mutable_value_main["foo#src"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#src"]) {
-window.ftd.immutable_value_main["foo#src"].on_change();
+let changes = window.ftd.immutable_value_main["foo#src"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__src"]){window.node_change_main["1:main__src"](data);
 }
@@ -1908,10 +1912,12 @@ set_data_value(data, "foo#tom-and-jerry", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#tom-and-jerry"]) {
-window.ftd.mutable_value_main["foo#tom-and-jerry"].on_change();
+let changes = window.ftd.mutable_value_main["foo#tom-and-jerry"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#tom-and-jerry"]) {
-window.ftd.immutable_value_main["foo#tom-and-jerry"].on_change();
+let changes = window.ftd.immutable_value_main["foo#tom-and-jerry"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__src"]){window.node_change_main["4:main__src"](data);
 }
@@ -1925,10 +1931,12 @@ set_data_value(data, "ftd#dark-mode", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }

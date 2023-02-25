@@ -1890,10 +1890,12 @@ let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:resize:1", value);
 }
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
-window.ftd.mutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.mutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
-window.ftd.immutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.immutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
@@ -1913,10 +1915,12 @@ set_data_value(data, "foo#foo:align:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:align:1"]) {
-window.ftd.mutable_value_main["foo#foo:align:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#foo:align:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:align:1"]) {
-window.ftd.immutable_value_main["foo#foo:align:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#foo:align:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
@@ -1932,10 +1936,12 @@ set_data_value(data, "foo#foo:px:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:px:1"]) {
-window.ftd.mutable_value_main["foo#foo:px:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#foo:px:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:px:1"]) {
-window.ftd.immutable_value_main["foo#foo:px:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#foo:px:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
@@ -1951,10 +1957,12 @@ set_data_value(data, "foo#foo:resize:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:resize:1"]) {
-window.ftd.mutable_value_main["foo#foo:resize:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#foo:resize:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:resize:1"]) {
-window.ftd.immutable_value_main["foo#foo:resize:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#foo:resize:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }

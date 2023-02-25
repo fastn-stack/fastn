@@ -1852,10 +1852,12 @@ set_data_value(data, "foo#flag", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#flag"]) {
-window.ftd.mutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.mutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#flag"]) {
-window.ftd.immutable_value_main["foo#flag"].on_change();
+let changes = window.ftd.immutable_value_main["foo#flag"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
 }
@@ -1869,10 +1871,12 @@ set_data_value(data, "foo#len", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#len"]) {
-window.ftd.mutable_value_main["foo#len"].on_change();
+let changes = window.ftd.mutable_value_main["foo#len"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#len"]) {
-window.ftd.immutable_value_main["foo#len"].on_change();
+let changes = window.ftd.immutable_value_main["foo#len"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
@@ -1888,10 +1892,12 @@ set_data_value(data, "foo#value", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#value"]) {
-window.ftd.mutable_value_main["foo#value"].on_change();
+let changes = window.ftd.mutable_value_main["foo#value"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#value"]) {
-window.ftd.immutable_value_main["foo#value"].on_change();
+let changes = window.ftd.immutable_value_main["foo#value"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }

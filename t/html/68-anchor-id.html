@@ -1829,10 +1829,12 @@ set_data_value(data, "ftd#dark-mode", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
 }
@@ -1850,10 +1852,12 @@ set_data_value(data, "ftd#default-colors", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-colors"]) {
-window.ftd.mutable_value_main["ftd#default-colors"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#default-colors"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-colors"]) {
-window.ftd.immutable_value_main["ftd#default-colors"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#default-colors"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
 }

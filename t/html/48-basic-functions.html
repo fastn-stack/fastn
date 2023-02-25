@@ -1838,10 +1838,12 @@ set_data_value(data, "foo#b", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#b"]) {
-window.ftd.mutable_value_main["foo#b"].on_change();
+let changes = window.ftd.mutable_value_main["foo#b"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#b"]) {
-window.ftd.immutable_value_main["foo#b"].on_change();
+let changes = window.ftd.immutable_value_main["foo#b"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
@@ -1857,10 +1859,12 @@ set_data_value(data, "foo#s", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#s"]) {
-window.ftd.mutable_value_main["foo#s"].on_change();
+let changes = window.ftd.mutable_value_main["foo#s"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#s"]) {
-window.ftd.immutable_value_main["foo#s"].on_change();
+let changes = window.ftd.immutable_value_main["foo#s"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
@@ -1874,10 +1878,12 @@ set_data_value(data, "foo#x", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#x"]) {
-window.ftd.mutable_value_main["foo#x"].on_change();
+let changes = window.ftd.mutable_value_main["foo#x"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#x"]) {
-window.ftd.immutable_value_main["foo#x"].on_change();
+let changes = window.ftd.immutable_value_main["foo#x"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }

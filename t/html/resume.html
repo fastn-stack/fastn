@@ -1877,10 +1877,12 @@ set_data_value(data, "foo#john-doe", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#john-doe"]) {
-window.ftd.mutable_value_main["foo#john-doe"].on_change();
+let changes = window.ftd.mutable_value_main["foo#john-doe"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#john-doe"]) {
-window.ftd.immutable_value_main["foo#john-doe"].on_change();
+let changes = window.ftd.immutable_value_main["foo#john-doe"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }

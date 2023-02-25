@@ -6,7 +6,7 @@ pub struct NodeData {
     pub node: ftd::node::Node,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub aliases: ftd::Map<String>,
-    pub dummy_nodes: ftd::Map<ftd::node::DummyNode>,
+    pub dummy_nodes: ftd::VecMap<ftd::node::DummyNode>,
     pub raw_nodes: ftd::Map<ftd::node::RawNode>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,

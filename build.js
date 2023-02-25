@@ -134,14 +134,17 @@ window.ftd = (function () {
     exports.create_list = function (array_name, id) {
         if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
             let data = ftd_data[id];
-            let [htmls, data_id, start_index] = window.dummy_data_main[array_name](data);
-            for (let i in htmls) {
-                let nodes = stringToHTML(htmls[i]);
-                let main = document.querySelector(`[data-id="${data_id}"]`);
-                main === null || main === void 0 ? void 0 : main.insertBefore(nodes.children[0], main.children[start_index + parseInt(i)]);
-                /*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-                    main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
-                }*/
+            let dummys = window.dummy_data_main[array_name](data);
+            for (let i in dummys) {
+                let [htmls, data_id, start_index] = dummys[i];
+                for (let i in htmls) {
+                    let nodes = stringToHTML(htmls[i]);
+                    let main = document.querySelector(`[data-id="${data_id}"]`);
+                    main === null || main === void 0 ? void 0 : main.insertBefore(nodes.children[0], main.children[start_index + parseInt(i)]);
+                    /*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+                        main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
+                    }*/
+                }
             }
         }
     };
@@ -153,12 +156,15 @@ window.ftd = (function () {
         if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
             // @ts-ignore
             let list = resolve_reference(args[0].reference, data);
-            let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
-            let nodes = stringToHTML(html);
-            let main = document.querySelector(`[data-id="${data_id}"]`);
-            for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-                // @ts-ignore
-                main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
+            let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+            for (let i in dummys) {
+                let [html, data_id, start_index] = dummys[i];
+                let nodes = stringToHTML(html);
+                let main = document.querySelector(`[data-id="${data_id}"]`);
+                for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+                    // @ts-ignore
+                    main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
+                }
             }
         }
         return array;
@@ -171,17 +177,20 @@ window.ftd = (function () {
         if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
             // @ts-ignore
             let list = resolve_reference(args[0].reference, data);
-            let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
-            let nodes = stringToHTML(html);
-            let main = document.querySelector(`[data-id="${data_id}"]`);
-            if (idx >= list.length) {
-                idx = list.length - 1;
+            let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+            for (let i in dummys) {
+                let [html, data_id, start_index] = dummys[i];
+                let nodes = stringToHTML(html);
+                let main = document.querySelector(`[data-id="${data_id}"]`);
+                if (idx >= list.length) {
+                    idx = list.length - 1;
+                }
+                else if (idx < 0) {
+                    idx = 0;
+                }
+                // @ts-ignore
+                main.insertBefore(nodes.children[0], main.children[start_index + idx]);
             }
-            else if (idx < 0) {
-                idx = 0;
-            }
-            // @ts-ignore
-            main.insertBefore(nodes.children[0], main.children[start_index + idx]);
         }
         return array;
     };
@@ -197,10 +206,13 @@ window.ftd = (function () {
         if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
             let data = ftd_data[id];
             let length = resolve_reference(array_name, data, null, null).length;
-            let [_, data_id, start_index] = window.dummy_data_main[array_name](data);
-            let main = document.querySelector(`[data-id="${data_id}"]`);
-            for (var i = length - 1 + start_index; i >= start_index; i--) {
-                main === null || main === void 0 ? void 0 : main.removeChild(main.children[i]);
+            let dummys = window.dummy_data_main[array_name](data);
+            for (let j in dummys) {
+                let [_, data_id, start_index] = dummys[j];
+                let main = document.querySelector(`[data-id="${data_id}"]`);
+                for (var i = length - 1 + start_index; i >= start_index; i--) {
+                    main === null || main === void 0 ? void 0 : main.removeChild(main.children[i]);
+                }
             }
         }
     };
@@ -218,11 +230,12 @@ window.ftd = (function () {
         args[0].value = array;
         change_value(args, data, id);
         if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-            // @ts-ignore
-            let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
-            let main = document.querySelector(`[data-id="${data_id}"]`);
-            // @ts-ignore
-            main.removeChild(main.children[start_index + idx]);
+            let dummys = window.dummy_data_main[args[0].reference](data);
+            for (let i in dummys) {
+                let [_, data_id, start_index] = dummys[i];
+                let main = document.querySelector(`[data-id="${data_id}"]`);
+                main === null || main === void 0 ? void 0 : main.removeChild(main.children[start_index + idx]);
+            }
         }
         return array;
     };

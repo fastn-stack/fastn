@@ -55,23 +55,31 @@ impl DummyNode {
     }
 
     pub(crate) fn from_dummy_instruction(
-        dummy_element: ftd::executor::DummyElement,
+        dummy_elements: Vec<ftd::executor::DummyElement>,
         doc_id: &str,
-    ) -> DummyNode {
-        DummyNode::new(
-            dummy_element.parent_container.to_owned(),
-            dummy_element.start_index,
-            dummy_element.element.to_node(doc_id, &mut vec![]),
-        )
+    ) -> Vec<DummyNode> {
+        dummy_elements
+            .iter()
+            .map(|dummy_element| {
+                DummyNode::new(
+                    dummy_element.parent_container.to_owned(),
+                    dummy_element.start_index,
+                    dummy_element.element.to_node(doc_id, &mut vec![]),
+                )
+            })
+            .collect()
     }
 
     pub(crate) fn from_dummy_instructions(
-        dummy_instructions: ftd::Map<ftd::executor::DummyElement>,
+        dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
         doc_id: &str,
-    ) -> ftd::Map<DummyNode> {
-        dummy_instructions
+    ) -> ftd::VecMap<DummyNode> {
+        let mut value = ftd::VecMap::new();
+        value.value = dummy_instructions
+            .value
             .into_iter()
             .map(|(k, v)| (k, DummyNode::from_dummy_instruction(v, doc_id)))
-            .collect()
+            .collect::<ftd::Map<Vec<DummyNode>>>();
+        value
     }
 }

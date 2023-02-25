@@ -1841,10 +1841,12 @@ set_data_value(data, "foo#hello:check:0", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#hello:check:0"]) {
-window.ftd.mutable_value_main["foo#hello:check:0"].on_change();
+let changes = window.ftd.mutable_value_main["foo#hello:check:0"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#hello:check:0"]) {
-window.ftd.immutable_value_main["foo#hello:check:0"].on_change();
+let changes = window.ftd.immutable_value_main["foo#hello:check:0"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__id"]){window.node_change_main["0:main__id"](data);
 }

@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub(crate) struct DummyHtmlGenerator<'a> {
     pub id: String,
     pub doc: &'a ftd::interpreter2::TDoc<'a>,
@@ -13,10 +15,10 @@ impl<'a> DummyHtmlGenerator<'a> {
 
     pub fn as_string_from_dummy_nodes(
         &self,
-        dummy_nodes: &ftd::Map<ftd::node::DummyNode>,
+        dummy_nodes: &ftd::VecMap<ftd::node::DummyNode>,
     ) -> String {
         let mut dummy_dependency = "".to_string();
-        for (dependency, dummy_node) in dummy_nodes {
+        for (dependency, dummy_node) in dummy_nodes.value.iter() {
             dummy_dependency = format!(
                 "{}\n{}",
                 dummy_dependency,
@@ -35,19 +37,28 @@ impl<'a> DummyHtmlGenerator<'a> {
 
     pub fn as_string_from_dummy_node(
         &self,
-        dummy_node: &ftd::node::DummyNode,
+        dummy_node: &[ftd::node::DummyNode],
         dependency: &str,
     ) -> String {
-        let dummy_html = ftd::html1::RawHtmlGenerator::from_node(
-            self.id.as_str(),
-            self.doc,
-            dummy_node.main.to_owned(),
-        );
+        let mut functions: ftd::Map<String> = Default::default();
+        for dummy_node in dummy_node {
+            let dummy_html = ftd::html1::RawHtmlGenerator::from_node(
+                self.id.as_str(),
+                self.doc,
+                dummy_node.main.to_owned(),
+            );
 
-        if let Some(iteration) = dummy_html.iteration {
-            format!(
-                indoc::indoc! {"
-                    window.dummy_data_{id}[\"{dependency}\"] = function(all_data, index) {{
+            let parent_container = ftd::html1::utils::full_data_id(
+                self.id.as_str(),
+                ftd::executor::utils::get_string_container(dummy_node.parent_container.as_slice())
+                    .as_str(),
+            );
+
+            functions.insert(parent_container.clone(),if let Some(iteration) = dummy_html
+                .iteration {
+                format!(
+                    indoc::indoc! {"
+                    window.dummy_data_{id}[\"{dependency}\"][\"{data_id}\"] = function(all_data, index) {{
                         function dummy_data(list, all_data, index) {{
                             let new_data = {{
                                 \"{alias}\": list[index],
@@ -77,26 +88,20 @@ impl<'a> DummyHtmlGenerator<'a> {
                          }}
                          return [htmls, \"{data_id}\", {start_index}];
                     }}"
-                },
-                dependency = dependency,
-                alias = iteration.alias,
-                arguments = dummy_html.properties_string.unwrap_or_default(),
-                node = dummy_html.name,
-                html = dummy_html.html,
-                id = self.id,
-                data_id = ftd::html1::utils::full_data_id(
-                    self.id.as_str(),
-                    ftd::executor::utils::get_string_container(
-                        dummy_node.parent_container.as_slice()
-                    )
-                    .as_str()
-                ),
-                start_index = dummy_node.start_index
-            )
-        } else {
-            format!(
-                indoc::indoc! {"
-                    window.dummy_data_{id}[\"{dependency}\"] = function(all_data){{
+                    },
+                    dependency = dependency,
+                    alias = iteration.alias,
+                    arguments = dummy_html.properties_string.unwrap_or_default(),
+                    node = dummy_html.name,
+                    html = dummy_html.html,
+                    id = self.id,
+                    data_id = parent_container,
+                    start_index = dummy_node.start_index
+                )
+            } else {
+                format!(
+                    indoc::indoc! {"
+                    window.dummy_data_{id}[\"{dependency}\"][\"{data_id}\"] = function(all_data){{
                         {arguments}
                         let data = {{...args, ...all_data}};
                         if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
@@ -105,22 +110,41 @@ impl<'a> DummyHtmlGenerator<'a> {
                         let html = \"{html}\".replace_format(data);
                         return [html, \"{data_id}\", {start_index}]
                     }}"
-                },
-                dependency = dependency,
-                arguments = dummy_html.properties_string.unwrap_or_default(),
-                node = dummy_html.name,
-                html = dummy_html.html,
-                id = self.id,
-                data_id = ftd::html1::utils::full_data_id(
-                    self.id.as_str(),
-                    ftd::executor::utils::get_string_container(
-                        dummy_node.parent_container.as_slice()
-                    )
-                    .as_str()
-                ),
-                start_index = dummy_node.start_index
-            )
+                    },
+                    dependency = dependency,
+                    arguments = dummy_html.properties_string.unwrap_or_default(),
+                    node = dummy_html.name,
+                    html = dummy_html.html,
+                    id = self.id,
+                    data_id = parent_container,
+                    start_index = dummy_node.start_index
+                )
+            });
         }
+
+        let dummys = functions
+            .keys()
+            .map(|key| {
+                format!(
+                    "window.dummy_data_{}[\"{}\"][\"{}\"](all_data, index)",
+                    self.id, dependency, key
+                )
+            })
+            .join(",");
+
+        format!(
+            indoc::indoc! {"
+                    window.dummy_data_{id}[\"{dependency}\"] = function(all_data, index) {{
+                        return [{dummys}];
+                    }}
+                    {all_functions}
+                    "
+            },
+            dependency = dependency,
+            id = self.id,
+            dummys = dummys,
+            all_functions = functions.values().join("\n")
+        )
     }
 }
 

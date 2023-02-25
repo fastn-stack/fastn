@@ -2115,10 +2115,12 @@ set_data_value(data, "foo#head:current:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#head:current:1"]) {
-window.ftd.mutable_value_main["foo#head:current:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#head:current:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#head:current:1"]) {
-window.ftd.immutable_value_main["foo#head:current:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#head:current:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,1,0,1,2:main__text"]){window.node_change_main["1,0,1,0,1,2:main__text"](data);
 }
@@ -2132,10 +2134,12 @@ set_data_value(data, "foo#head:navtitle:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#head:navtitle:1"]) {
-window.ftd.mutable_value_main["foo#head:navtitle:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#head:navtitle:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#head:navtitle:1"]) {
-window.ftd.immutable_value_main["foo#head:navtitle:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#head:navtitle:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,1,0,0:main__text"]){window.node_change_main["1,0,1,0,0:main__text"](data);
 }
@@ -2149,10 +2153,12 @@ set_data_value(data, "foo#head:subtitle:1", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#head:subtitle:1"]) {
-window.ftd.mutable_value_main["foo#head:subtitle:1"].on_change();
+let changes = window.ftd.mutable_value_main["foo#head:subtitle:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#head:subtitle:1"]) {
-window.ftd.immutable_value_main["foo#head:subtitle:1"].on_change();
+let changes = window.ftd.immutable_value_main["foo#head:subtitle:1"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,1,0,1,0:main__text"]){window.node_change_main["1,0,1,0,1,0:main__text"](data);
 }
@@ -2166,10 +2172,12 @@ set_data_value(data, "foo#item", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#item"]) {
-window.ftd.mutable_value_main["foo#item"].on_change();
+let changes = window.ftd.mutable_value_main["foo#item"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#item"]) {
-window.ftd.immutable_value_main["foo#item"].on_change();
+let changes = window.ftd.immutable_value_main["foo#item"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,0,1,0,0,0:main__href"]){window.node_change_main["1,0,0,1,0,0,0:main__href"](data);
 }
@@ -2197,10 +2205,12 @@ set_data_value(data, "foo#src", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#src"]) {
-window.ftd.mutable_value_main["foo#src"].on_change();
+let changes = window.ftd.mutable_value_main["foo#src"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#src"]) {
-window.ftd.immutable_value_main["foo#src"].on_change();
+let changes = window.ftd.immutable_value_main["foo#src"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,0,0,0:main__src"]){window.node_change_main["1,0,0,0,0:main__src"](data);
 }
@@ -2214,10 +2224,12 @@ set_data_value(data, "foo#sub-item", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#sub-item"]) {
-window.ftd.mutable_value_main["foo#sub-item"].on_change();
+let changes = window.ftd.mutable_value_main["foo#sub-item"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#sub-item"]) {
-window.ftd.immutable_value_main["foo#sub-item"].on_change();
+let changes = window.ftd.immutable_value_main["foo#sub-item"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,1,1,0,1,0,0,0:main__href"]){window.node_change_main["1,0,1,1,0,1,0,0,0:main__href"](data);
 }
@@ -2245,10 +2257,12 @@ set_data_value(data, "foo#text-strong", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#text-strong"]) {
-window.ftd.mutable_value_main["foo#text-strong"].on_change();
+let changes = window.ftd.mutable_value_main["foo#text-strong"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#text-strong"]) {
-window.ftd.immutable_value_main["foo#text-strong"].on_change();
+let changes = window.ftd.immutable_value_main["foo#text-strong"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0,0,1,0,0,0:main__color"]){window.node_change_main["1,0,0,1,0,0,0:main__color"](data);
 }
@@ -2286,10 +2300,12 @@ set_data_value(data, "ftd#dark-mode", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
@@ -2335,10 +2351,12 @@ set_data_value(data, "ftd#device", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#device"]) {
-window.ftd.mutable_value_main["ftd#device"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#device"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#device"]) {
-window.ftd.immutable_value_main["ftd#device"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#device"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }

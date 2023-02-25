@@ -1938,10 +1938,12 @@ set_data_value(data, "foo#toast", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#toast"]) {
-window.ftd.mutable_value_main["foo#toast"].on_change();
+let changes = window.ftd.mutable_value_main["foo#toast"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#toast"]) {
-window.ftd.immutable_value_main["foo#toast"].on_change();
+let changes = window.ftd.immutable_value_main["foo#toast"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
@@ -1961,10 +1963,12 @@ set_data_value(data, "ftd#dark-mode", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-window.ftd.mutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-window.ftd.immutable_value_main["ftd#dark-mode"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
@@ -1982,10 +1986,12 @@ set_data_value(data, "ftd#default-types", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-types"]) {
-window.ftd.mutable_value_main["ftd#default-types"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#default-types"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-types"]) {
-window.ftd.immutable_value_main["ftd#default-types"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#default-types"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
@@ -2017,10 +2023,12 @@ set_data_value(data, "ftd#device", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#device"]) {
-window.ftd.mutable_value_main["ftd#device"].on_change();
+let changes = window.ftd.mutable_value_main["ftd#device"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#device"]) {
-window.ftd.immutable_value_main["ftd#device"].on_change();
+let changes = window.ftd.immutable_value_main["ftd#device"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }

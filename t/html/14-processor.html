@@ -1827,10 +1827,12 @@ set_data_value(data, "foo#value-from-processor", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#value-from-processor"]) {
-window.ftd.mutable_value_main["foo#value-from-processor"].on_change();
+let changes = window.ftd.mutable_value_main["foo#value-from-processor"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#value-from-processor"]) {
-window.ftd.immutable_value_main["foo#value-from-processor"].on_change();
+let changes = window.ftd.immutable_value_main["foo#value-from-processor"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
