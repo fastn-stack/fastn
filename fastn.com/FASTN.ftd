@@ -50,18 +50,26 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 # FTD: /ftd/
 
+- Overview: /ftd/
+- `ftd p1` grammar: /ftd/p1-grammar/
+- Data Modelling: /ftd/data-modelling/
+- Variables: /ftd/variables/
+- Built-in Types: /ftd/built-in-types/
+- `record`: /ftd/record/
+- `or-type`: /ftd/or-type/
+- `list`: /ftd/list/
+
+
 # Learn: /docs/
 
 ## Docs: /docs/
 
 - Docs Home: /docs/
-
-
 - Getting Started: /setup/
   document: ftd/setup.ftd
-- Best Practices: /best-practices/
 - Create `fastn` package: /create-fastn-package/
   document: ftd/create-fastn-package.ftd
+- Best Practices: /best-practices/
 
 
 ## How Tos: /install/

@@ -50,8 +50,7 @@ cd hello-fastn
 
 -- ds.markdown:
 
-- After creating the package as described above, you can start the HTTP server
-by running the following command:
+- After this, you can start the HTTP server by running the following command:
 
 -- ds.code: serve
 lang: sh
