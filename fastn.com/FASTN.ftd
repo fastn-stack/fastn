@@ -12,7 +12,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fifthtry.github.io/bling
 -- fastn.dependency: fifthtry.github.io/button
 -- fastn.dependency: fifthtry.github.io/admonitions
-
+-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/config as my-ds
@@ -100,8 +100,8 @@ document: author/how-to/install.ftd
   document: ftd-host/assets.ftd
 
 
-# Blog: /colors/
-document: blog/show-cs.ftd
+# Blog: /blog/web-components/
 
+- Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
