@@ -1,11 +1,11 @@
 -- my-ds.page: Create and Serve a `fastn` package
 
-`fastn` is also a `ftd` package manager. A package contains all the files you
-need for a module. `fastn` manages the packages and modules for `ftd` and
+`fastn` is also a `ftd` package manager. A package contains all related and
+necessary files. `fastn` manages the packages and modules for `ftd` and
 consists of command line tool `fastn`.
 
-To get started, you need to install `fastn`. Checkout [install `fastn`](install/)
-page to know how to install `fastn`.
+To get started, you need to install `fastn`. Refer to the [install
+`fastn`](install/) page to learn how to install `fastn`.
 
 There are two ways to create a fastn package:
 
@@ -14,8 +14,9 @@ There are two ways to create a fastn package:
 
 -- ds.h1: Using Command
 
-This is the simplest way to get started with fastn package. Lets say you want to
-create `hello-fastn` package. You need to follow the following steps:
+The simplest way to create a `fastn` package is to use the command line tool.
+Suppose you want to create a package named `hello-fastn`, you need to follow
+these steps:
 
 - [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
 - Run the `fastn create-package <package-name>` command
@@ -31,11 +32,16 @@ width: fill-container
 
 -- ds.markdown:
 
-The above command will create a package/folder named `hello-fastn`. This package
-would have two files `FASTN.ftd` and `index.ftd`. You can preview the content of
-this folder in the text editor ([SublimeText](https://www.sublimetext.com/3)).
+;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
 
-- Go to your package location in terminal using `cd <path-to-package>` command.
+The above command will create a folder named `hello-fastn` containing two files:
+[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and
+[`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of
+this folder in a text editor such as
+([SublimeText](https://www.sublimetext.com/3)).
+
+- Now, use the `cd <path-to-package>` command to navigate to the package
+location in the terminal.
 
 -- ds.code: go to the package location
 lang: sh
@@ -44,7 +50,8 @@ cd hello-fastn
 
 -- ds.markdown:
 
-- Then serve the package using the following command
+- After creating the package as described above, you can start the HTTP server
+by running the following command:
 
 -- ds.code: serve
 lang: sh
@@ -61,18 +68,17 @@ width: fill-container
 
 -- ds.h1: Manual
 
-Start with creating a folder, lets say `hello-fastn`. Open this folder in the
-text editor ([SublimeText](https://www.sublimetext.com/3)). In this
-folder, we need to add two files `index.ftd` and `FASTN.ftd`. Lets understand
-what are these files and the content it should contain in detail.
+Start by creating a folder named, let say `hello-fastn`. Open this folder in a
+text editor, such as ([SublimeText](https://www.sublimetext.com/3)). In this
+folder, add two files: `index.ftd` and `FASTN.ftd`. Let's understand what these
+files are and the content they should contain in detail.
 
 
--- ds.h2: `FASTN.ftd`
+-- ds.h3: `FASTN.ftd`
 
-`FASTN.ftd` is a configurational file where we set configuration for the
-package.
+`FASTN.ftd` is a configuration file where we set configuration for the package.
 
-In `FASTN.ftd`, add following code:
+In `FASTN.ftd`, the code should look like this:
 
 -- ds.code: `FASTN.ftd`
 lang: ftd
@@ -83,16 +89,16 @@ lang: ftd
 
 -- ds.markdown:
 
-In above code, we have set the package name as `hello-fastn`.
+In the code above, we set the package name as`hello-fastn`.
 
 ;; TODO: Give link to about `FASTN.ftd`
 
--- ds.h2: `index.ftd`
+-- ds.h3: `index.ftd`
 
 `index.ftd` is the index page of your package. You can think of the index page
 as being the home or default page of your package.
 
-In `index.ftd`, add following code:
+In `index.ftd`, the code should look like this:
 
 -- ds.code: `index.ftd`
 lang: ftd
@@ -101,16 +107,17 @@ lang: ftd
 
 -- ds.markdown:
 
-In above code, we have added a kernel component `ftd.text` and pass `Hello
+In the code above, we added a kernel component `ftd.text` and passed `Hello
 World` as the value for `text` property.
 
--- ds.h1: Serving the package
+-- ds.h2: Serving the package
 
-Once this package is created as mentioned above, now we can start the HTTP
-server. Follow the following steps:
+After creating the package as described above, you can start the HTTP server.
+Follow these steps:
 
 - [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
-- Go to your package location in terminal using `cd <path-to-package>` command.
+- Navigate to the package location in the terminal using the `cd
+<path-to-package>` command.
 
 -- ds.code: go to the package location
 lang: sh
@@ -119,7 +126,7 @@ cd hello-fastn
 
 -- ds.markdown:
 
-- Then serve the package using the following command.
+- Serve the package by running the following command.
 
 -- ds.code: serve
 lang: sh
