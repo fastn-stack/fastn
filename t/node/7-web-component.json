@@ -379,7 +379,9 @@
     "ftd": "ftd",
     "inherited": "inherited"
   },
-  "dummy_nodes": {},
+  "dummy_nodes": {
+    "value": {}
+  },
   "raw_nodes": {},
   "js": [
     "ftd/t/web_component.js:type=\"module\""

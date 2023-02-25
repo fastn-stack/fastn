@@ -675,7 +675,9 @@
       }
     }
   },
-  "dummy_instructions": {},
+  "dummy_instructions": {
+    "value": {}
+  },
   "element_constructor": {},
   "js": [],
   "css": []

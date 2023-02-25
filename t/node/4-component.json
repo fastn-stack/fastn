@@ -738,7 +738,9 @@
     "ftd": "ftd",
     "inherited": "inherited"
   },
-  "dummy_nodes": {},
+  "dummy_nodes": {
+    "value": {}
+  },
   "raw_nodes": {},
   "js": [],
   "css": []
