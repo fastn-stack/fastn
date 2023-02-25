@@ -1,0 +1,5 @@
+# We do not want to list generated html files in statistics that Github shows
+# on our repo page.
+# Refer: https://github.com/github/linguist/blob/master/docs/overrides.md
+
+*.html linguist-generated
