@@ -709,14 +709,72 @@ pub async fn resolve_foreign_variable2022(
                     .collect(),
                 })
             }
-            Some((file, ext)) => Ok(ftd::interpreter2::Value::String {
-                text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
-            }),
-            None => Ok(ftd::interpreter2::Value::String {
-                text: format!("-/{}/{}", package.name, files),
-            }),
+            Some((file, ext)) => {
+                download(
+                    lib,
+                    download_assets,
+                    package,
+                    format!("{}.{}", file.replace('.', "/"), ext).as_str(),
+                )
+                .await?;
+                Ok(ftd::interpreter2::Value::String {
+                    text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
+                })
+            }
+            None => {
+                download(lib, download_assets, package, files.as_str()).await?;
+                Ok(ftd::interpreter2::Value::String {
+                    text: format!("-/{}/{}", package.name, files),
+                })
+            }
         }
     }
+}
+
+async fn download(
+    lib: &mut fastn_core::Library2022,
+    download_assets: bool,
+    package: &fastn_core::Package,
+    path: &str,
+) -> ftd::p1::Result<()> {
+    if download_assets
+        && !lib
+            .config
+            .downloaded_assets
+            .contains_key(&format!("{}/{}", package.name, path))
+    {
+        let start = std::time::Instant::now();
+        let data = package
+            .resolve_by_file_name(path, None, false)
+            .await
+            .map_err(|e| ftd::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id: lib.document_id.to_string(),
+                line_number: 0,
+            })?;
+        print!("Processing {}/{} ... ", package.name, path);
+        fastn_core::utils::write(
+            &lib.config.build_dir().join("-").join(package.name.as_str()),
+            path,
+            data.as_slice(),
+        )
+        .await
+        .map_err(|e| ftd::p1::Error::ParseError {
+            message: e.to_string(),
+            doc_id: lib.document_id.to_string(),
+            line_number: 0,
+        })?;
+        lib.config.downloaded_assets.insert(
+            format!("{}/{}", package.name, path),
+            format!("-/{}/{}", package.name, path),
+        );
+        fastn_core::utils::print_end(
+            format!("Processed {}/{}", package.name, path).as_str(),
+            start,
+        );
+    }
+
+    Ok(())
 }
 
 pub async fn resolve_foreign_variable2(
@@ -739,7 +797,7 @@ pub async fn resolve_foreign_variable2(
             if let Ok(value) =
                 get_assets_value(&package, files, lib, base_url, download_assets).await
             {
-                return Ok(dbg!(value));
+                return Ok(value);
             }
         }
         for (alias, package) in package.aliases() {
@@ -747,7 +805,7 @@ pub async fn resolve_foreign_variable2(
                 if let Ok(value) =
                     get_assets_value(package, files, lib, base_url, download_assets).await
                 {
-                    return Ok(dbg!(value));
+                    return Ok(value);
                 }
             }
         }
@@ -986,6 +1044,7 @@ fn resolve_foreign_variable(
                 false
             }
         };
+
         let dark = {
             if light {
                 false
