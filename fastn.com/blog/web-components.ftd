@@ -151,8 +151,9 @@ class Todo extends HTMLElement {
 
 Now you have access to component data, and you can now use `data.<var>.get()`,
 `.set()` functions to manage data from the JS world. You can listen for changes
-in data on FTD side by using `.on_change = function(){}`. Checkout the full
-[source code of our demo](https://github.com/fastn-stack/ftd-web-component-example/blob/main/todo.js)
+in data on FTD side by using `.on_change(function(){ \* some code here *\ })`.
+Checkout the full [source code of our
+demo](https://github.com/fastn-stack/ftd-web-component-example/blob/main/todo.js)
 for more detailed usage.
 
 Go ahead and give it a shot, and come over to [Discord](https://discord.gg/a7eBUeutWD)
