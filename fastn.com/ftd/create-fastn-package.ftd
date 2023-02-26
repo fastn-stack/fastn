@@ -1,3 +1,5 @@
+-- import: fastn.io/utils
+
 -- my-ds.page: Create and Serve a `fastn` package
 
 `fastn` is also a `ftd` package manager. A package contains all related and
@@ -9,8 +11,59 @@ To get started, you need to install `fastn`. Refer to the [install
 
 There are two ways to create a fastn package:
 
-- [Using Command (Recommended)](create-fastn-package/#using-command)
-- [Manual](create-fastn-package/#manual)
+-- switcher:
+s: $create
+
+-- ds.markdown:
+
+- After this, you can start the HTTP server by running the following command:
+
+-- ds.code: serve
+lang: sh
+
+fastn serve
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-serve.png
+width: fill-container
+
+-- ds.markdown:
+
+- Now, got to any web browser and type `http://127.0.0.1:8000` url
+
+-- end: my-ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- switches list create:
+
+
+
+
+-- switches: Using Command (Recommended)
+
+-- switches.elements:
 
 -- ds.h1: Using Command
 
@@ -21,16 +74,30 @@ these steps:
 - [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
 - Run the `fastn create-package <package-name>` command
 
+-- end: ds.h1
+
 -- ds.code: create-package
 lang: sh
 
 fastn create-package hello-fastn
 
+-- end: ds.code
+
 -- ds.image:
 src: $fastn-assets.files.images.setup.fastn-create-package.png
 width: fill-container
 
--- ds.markdown:
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text.classes:
+
+-- string: markdown
+
+-- end: ftd.text.classes
+
+-- ftd.text.text:
 
 ;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
 
@@ -48,22 +115,19 @@ lang: sh
 
 cd hello-fastn
 
--- ds.markdown:
 
-- After this, you can start the HTTP server by running the following command:
-
--- ds.code: serve
-lang: sh
-
-fastn serve
-
--- ds.image:
-src: $fastn-assets.files.images.setup.fastn-serve.png
-width: fill-container
+-- end: switches.elements
 
 
 
 
+
+
+
+-- switches: Manual
+
+
+-- switches.elements:
 
 -- ds.h1: Manual
 
@@ -71,7 +135,6 @@ Start by creating a folder named, let say `hello-fastn`. Open this folder in a
 text editor, such as ([SublimeText](https://www.sublimetext.com/3)). In this
 folder, add two files: `index.ftd` and `FASTN.ftd`. Let's understand what these
 files are and the content they should contain in detail.
-
 
 -- ds.h3: `FASTN.ftd`
 
@@ -86,25 +149,17 @@ lang: ftd
 
 \-- fastn.package: hello-fastn
 
--- ds.markdown:
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
-In the code above, we set the package name as`hello-fastn`.
+-- ftd.text.classes:
 
-;; TODO: Give link to about `FASTN.ftd`
+-- string: markdown
 
--- ds.h3: `index.ftd`
+-- end: ftd.text.classes
 
-`index.ftd` is the index page of your package. You can think of the index page
-as being the home or default page of your package.
-
-In `index.ftd`, the code should look like this:
-
--- ds.code: `index.ftd`
-lang: ftd
-
-\-- ftd.text: Hello World
-
--- ds.markdown:
+-- ftd.text.text:
 
 In the code above, we added a kernel component `ftd.text` and passed `Hello
 World` as the value for `text` property.
@@ -123,17 +178,106 @@ lang: sh
 
 cd hello-fastn
 
--- ds.markdown:
 
-- Serve the package by running the following command.
+-- end: switches.elements
 
--- ds.code: serve
-lang: sh
 
-fastn serve
 
--- ds.image:
-src: $fastn-assets.files.images.setup.fastn-serve.png
+-- end: create
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- record switches:
+caption name:
+ftd.ui list elements:
+
+
+
+-- component switcher:
+switches list s:
+integer $is-active: 0
+
+-- ftd.column:
+spacing.fixed.px: 32
 width: fill-container
 
--- end: my-ds.page
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+-- switches-title: $obj.name
+index: $LOOP.COUNTER
+$is-active: $switcher.is-active
+$loop$: $switcher.s as $obj
+
+-- end: ftd.column
+
+-- box:
+if: { switcher.is-active == $LOOP.COUNTER }
+child: $obj.elements
+$loop$: $switcher.s as $obj
+
+-- end: ftd.column
+
+-- end: switcher
+
+
+
+-- component switches-title:
+caption title:
+integer index:
+integer $is-active:
+
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 10
+$on-click$: $ftd.set-integer($a = $switches-title.is-active, v = $switches-title.index)
+
+-- ds.image:
+width.fixed.px: 24
+src: $fastn-assets.files.images.box.svg
+src if { switches-title.is-active == switches-title.index }: $fastn-assets.files.images.tick.svg
+
+-- ftd.text: $switches-title.title
+color if { switches-title.is-active == switches-title.index }: $inherited.colors.cta-primary.base
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+-- end: ftd.row
+
+-- end: switches-title
+
+
+
+
+
+
+
+
+-- component box:
+ftd.ui list child:
+
+-- ftd.column:
+children: $box.child
+
+-- end: box
