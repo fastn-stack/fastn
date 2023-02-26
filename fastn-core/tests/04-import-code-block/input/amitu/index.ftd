@@ -1,14 +1,11 @@
 -- import: amitu/lib
--- import: fifthtry.github.io/code-block
+-- import: fifthtry.github.io/package-doc/typography as pd
 
 -- lib.block:
 
--- code-block.code:
-lang: ftd
+-- pd.h1: Heading 1
 
-\-- ftd.text: hello
-
-\-- ftd.text: hello world!
+Heading 1 content
 
 
 -- end: lib.block

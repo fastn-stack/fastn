@@ -56,5 +56,5 @@ async fn create_cr_page_worker(req: fastn_core::http::Request) -> fastn_core::Re
         package_name: config.package.name.clone(),
     };
 
-    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false).await
+    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false, false).await
 }

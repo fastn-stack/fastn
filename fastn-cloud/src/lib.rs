@@ -30,7 +30,7 @@ pub async fn create() -> Result<(), fastn_cloud::CreateError> {
             "Run `fastn build` to create a .build directory before running this".to_string(),
         ));
     }
-    let resp = fastn_cloud::create::create_package(root.as_path())
+    let _resp = fastn_cloud::create::create_package(root.as_path())
         .await
         .unwrap();
     println!("{}", root);

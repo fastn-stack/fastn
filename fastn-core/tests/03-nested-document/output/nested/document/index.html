@@ -28,7 +28,7 @@
 "background": {
 "base": {
 "dark": "#18181b",
-"light": "#18181b"
+"light": "#e7e7e4"
 },
 "code": {
 "dark": "#2B303B",
@@ -40,11 +40,11 @@
 },
 "step-1": {
 "dark": "#141414",
-"light": "#141414"
+"light": "#f3f3f3"
 },
 "step-2": {
 "dark": "#585656",
-"light": "#585656"
+"light": "#c9cece"
 }
 },
 "border": {
@@ -142,7 +142,7 @@
 },
 "text": {
 "dark": "#ffffff",
-"light": "#ffffff"
+"light": "#584b42"
 }
 },
 "cta-tertiary": {
@@ -219,7 +219,7 @@
 },
 "error": {
 "base": {
-"dark": "#f5bdbb",
+"dark": "#530c0ab0",
 "light": "#f5bdbb"
 },
 "border": {
@@ -233,7 +233,7 @@
 },
 "info": {
 "base": {
-"dark": "#c4edfd",
+"dark": "#052a38de",
 "light": "#c4edfd"
 },
 "border": {
@@ -241,7 +241,7 @@
 "light": "#205694"
 },
 "text": {
-"dark": "#205694",
+"dark": "#0a60c2",
 "light": "#205694"
 }
 },
@@ -255,7 +255,7 @@
 },
 "success": {
 "base": {
-"dark": "#e3f0c4",
+"dark": "#405508ad",
 "light": "#e3f0c4"
 },
 "border": {
@@ -263,21 +263,21 @@
 "light": "#3d741f"
 },
 "text": {
-"dark": "#467b28",
+"dark": "#479f16",
 "light": "#467b28"
 }
 },
 "text": {
 "dark": "#a8a29e",
-"light": "#a8a29e"
+"light": "#584b42"
 },
 "text-strong": {
 "dark": "#ffffff",
-"light": "#ffffff"
+"light": "#141414"
 },
 "warning": {
 "base": {
-"dark": "#fbefba",
+"dark": "#544607a3",
 "light": "#fbefba"
 },
 "border": {
@@ -285,7 +285,7 @@
 "light": "#966220"
 },
 "text": {
-"dark": "#966220",
+"dark": "#d07f19",
 "light": "#966220"
 }
 }
@@ -703,131 +703,6 @@ margin-block-end: 1em;
 
 <script>
 "use strict";
-function enable_dark_mode() {
-window.enable_system_mode();
-}
-function enable_light_mode() {
-window.enable_system_mode();
-}
-function enable_system_mode() {
-window.enable_system_mode();
-}
-function fallbackCopyTextToClipboard(text) {
-var textArea = document.createElement("textarea");
-textArea.value = text;
-// Avoid scrolling to bottom
-textArea.style.top = "0";
-textArea.style.left = "0";
-textArea.style.position = "fixed";
-document.body.appendChild(textArea);
-textArea.focus();
-textArea.select();
-try {
-var successful = document.execCommand('copy');
-var msg = successful ? 'successful' : 'unsuccessful';
-console.log('Fallback: Copying text command was ' + msg);
-}
-catch (err) {
-console.error('Fallback: Oops, unable to copy', err);
-}
-document.body.removeChild(textArea);
-}
-// source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
-function copy_to_clipboard(text) {
-if (!navigator.clipboard) {
-fallbackCopyTextToClipboard(text);
-return;
-}
-navigator.clipboard.writeText(text).then(function () {
-console.log('Async: Copying to clipboard was successful!');
-}, function (err) {
-console.error('Async: Could not copy text: ', err);
-});
-}
-function http(url, method, ...request_data) {
-let method_name = method.trim().toUpperCase();
-if (method_name == "GET") {
-let query_parameters = new URLSearchParams();
-// @ts-ignore
-for (let [header, value] of Object.entries(request_data)) {
-if (header != "url" && header != "function" && header != "method") {
-let [key, val] = value.length == 2 ? value : [header, value];
-query_parameters.set(key, val);
-}
-}
-let query_string = query_parameters.toString();
-if (query_string) {
-let get_url = url + "?" + query_parameters.toString();
-window.location.href = get_url;
-}
-else {
-window.location.href = url;
-}
-return;
-}
-let json = request_data[0];
-if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
-let new_json = {};
-// @ts-ignore
-for (let [header, value] of Object.entries(request_data)) {
-let [key, val] = value.length == 2 ? value : [header, value];
-new_json[key] = val;
-}
-json = new_json;
-}
-let xhr = new XMLHttpRequest();
-xhr.open(method_name, url);
-xhr.setRequestHeader("Accept", "application/json");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.onreadystatechange = function () {
-if (xhr.readyState !== 4) {
-// this means request is still underway
-// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
-return;
-}
-if (xhr.status > 500) {
-console.log("Error in calling url: ", request_data.url, xhr.responseText);
-return;
-}
-let response = JSON.parse(xhr.response);
-if (!!response && !!response.redirect) {
-// Warning: we don't handle header location redirect
-window.location.href = response.redirect;
-}
-else if (!!response && !!response.reload) {
-window.location.reload();
-}
-else {
-let data = {};
-if (!!response.errors) {
-for (let key of Object.keys(response.errors)) {
-let value = response.errors[key];
-if (Array.isArray(value)) {
-// django returns a list of strings
-value = value.join(" ");
-// also django does not append `-error`
-key = key + "-error";
-}
-// @ts-ignore
-data[key] = value;
-}
-}
-if (!!response.data) {
-if (!!data) {
-console_log("both .errrors and .data are present in response, ignoring .data");
-}
-else {
-data = response.data;
-}
-}
-for (let ftd_variable of Object.keys(data)) {
-// @ts-ignore
-window.ftd.set_value(ftd_variable, data[ftd_variable]);
-}
-}
-};
-xhr.send(JSON.stringify(json));
-}
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
@@ -933,17 +808,21 @@ window.ftd.set_value_by_id("main", variable, value);
 };
 exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
-let [var_name, remaining] = get_name_and_remaining(variable);
+let [var_name, remaining] = data[variable] === undefined
+? get_name_and_remaining(variable)
+: [variable, null];
 if (data[var_name] === undefined && data[variable] === undefined) {
 console_log(variable, "is not in data, ignoring");
 return;
 }
+window.ftd.delete_list(var_name, id);
 if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
 window["set_value_" + id][var_name](data, value, remaining);
 }
 else {
 set_data_value(data, variable, value);
 }
+window.ftd.create_list(var_name, id);
 };
 exports.is_empty = function (str) {
 return (!str || str.length === 0);
@@ -953,20 +832,25 @@ args["CHANGE_VALUE"] = false;
 window.ftd.clear(array, args, data, id);
 args[0].value = value;
 change_value(args, data, id);
-if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-// @ts-ignore
-let list = resolve_reference(args[0].reference, data);
-let [htmls, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+window.ftd.create_list(args[0].reference, id);
+return array;
+};
+exports.create_list = function (array_name, id) {
+if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+let data = ftd_data[id];
+let dummys = window.dummy_data_main[array_name](data);
+for (let i in dummys) {
+let [htmls, data_id, start_index] = dummys[i];
 for (let i in htmls) {
 let nodes = stringToHTML(htmls[i]);
 let main = document.querySelector(`[data-id="${data_id}"]`);
-for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
-// @ts-ignore
-main.insertBefore(nodes.children[j], main.children[start_index + i]);
+main === null || main === void 0 ? void 0 : main.insertBefore(nodes.children[0], main.children[start_index + parseInt(i)]);
+/*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
+main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
+}*/
 }
 }
 }
-return array;
 };
 exports.append = function (array, value, args, data, id) {
 array.push(value);
@@ -976,12 +860,15 @@ change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
 // @ts-ignore
 let list = resolve_reference(args[0].reference, data);
-let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+for (let i in dummys) {
+let [html, data_id, start_index] = dummys[i];
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
 // @ts-ignore
 main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
+}
 }
 }
 return array;
@@ -994,7 +881,9 @@ change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
 // @ts-ignore
 let list = resolve_reference(args[0].reference, data);
-let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+for (let i in dummys) {
+let [html, data_id, start_index] = dummys[i];
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 if (idx >= list.length) {
@@ -1006,23 +895,30 @@ idx = 0;
 // @ts-ignore
 main.insertBefore(nodes.children[0], main.children[start_index + idx]);
 }
+}
 return array;
 };
 exports.clear = function (array, args, data, id) {
 args["CHANGE_VALUE"] = false;
 // @ts-ignore
-let length = resolve_reference(args[0].reference, data).length;
+window.ftd.delete_list(args[0].reference, id);
 args[0].value = [];
 change_value(args, data, id);
-if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+return array;
+};
+exports.delete_list = function (array_name, id) {
+if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
+let data = ftd_data[id];
+let length = resolve_reference(array_name, data, null, null).length;
+let dummys = window.dummy_data_main[array_name](data);
+for (let j in dummys) {
+let [_, data_id, start_index] = dummys[j];
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var i = length - 1 + start_index; i >= start_index; i--) {
-// @ts-ignore
-main.removeChild(main.children[i]);
+main === null || main === void 0 ? void 0 : main.removeChild(main.children[i]);
 }
 }
-return array;
+}
 };
 exports.delete_at = function (array, idx, args, data, id) {
 // @ts-ignore
@@ -1038,13 +934,119 @@ args["CHANGE_VALUE"] = false;
 args[0].value = array;
 change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-// @ts-ignore
-let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+let dummys = window.dummy_data_main[args[0].reference](data);
+for (let i in dummys) {
+let [_, data_id, start_index] = dummys[i];
 let main = document.querySelector(`[data-id="${data_id}"]`);
-// @ts-ignore
-main.removeChild(main.children[start_index + idx]);
+main === null || main === void 0 ? void 0 : main.removeChild(main.children[start_index + idx]);
+}
 }
 return array;
+};
+exports.http = function (url, method, ...request_data) {
+let method_name = method.trim().toUpperCase();
+if (method_name == "GET") {
+let query_parameters = new URLSearchParams();
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+if (header != "url" && header != "function" && header != "method") {
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
+}
+}
+let query_string = query_parameters.toString();
+if (query_string) {
+let get_url = url + "?" + query_parameters.toString();
+window.location.href = get_url;
+}
+else {
+window.location.href = url;
+}
+return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
+}
+let xhr = new XMLHttpRequest();
+xhr.open(method_name, url);
+xhr.setRequestHeader("Accept", "application/json");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.onreadystatechange = function () {
+if (xhr.readyState !== 4) {
+// this means request is still underway
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+return;
+}
+if (xhr.status > 500) {
+console.log("Error in calling url: ", request_data.url, xhr.responseText);
+return;
+}
+let response = JSON.parse(xhr.response);
+if (!!response && !!response.redirect) {
+// Warning: we don't handle header location redirect
+window.location.href = response.redirect;
+}
+else if (!!response && !!response.reload) {
+window.location.reload();
+}
+else {
+let data = {};
+if (!!response.errors) {
+for (let key of Object.keys(response.errors)) {
+let value = response.errors[key];
+if (Array.isArray(value)) {
+// django returns a list of strings
+value = value.join(" ");
+// also django does not append `-error`
+key = key + "-error";
+}
+// @ts-ignore
+data[key] = value;
+}
+}
+if (!!response.data) {
+if (!!data) {
+console_log("both .errrors and .data are present in response, ignoring .data");
+}
+else {
+data = response.data;
+}
+}
+for (let ftd_variable of Object.keys(data)) {
+// @ts-ignore
+window.ftd.set_value(ftd_variable, data[ftd_variable]);
+}
+}
+};
+xhr.send(JSON.stringify(json));
+};
+// source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
+exports.copy_to_clipboard = function (text) {
+if (!navigator.clipboard) {
+fallbackCopyTextToClipboard(text);
+return;
+}
+navigator.clipboard.writeText(text).then(function () {
+console.log('Async: Copying to clipboard was successful!');
+}, function (err) {
+console.error('Async: Could not copy text: ', err);
+});
+};
+exports.component_data = function (component) {
+let data = {};
+for (let idx in component.getAttributeNames()) {
+let argument = component.getAttributeNames()[idx];
+// @ts-ignore
+data[argument] = eval(component.getAttribute(argument));
+}
+return data;
 };
 return exports;
 })();
@@ -1408,11 +1410,16 @@ var formatted = this;
 if (arguments.length > 0) {
 // @ts-ignore
 for (let [header, value] of Object.entries(arguments[0])) {
-var regexp = new RegExp('\\{' + header + '(\\..*)?\\}', 'gi');
+var regexp = new RegExp('\\{(' + header + '(\\..*?)?)\\}', 'gi');
 let matching = formatted.match(regexp);
 for (let i in matching) {
+try {
 // @ts-ignore
 formatted = formatted.replace(matching[i], resolve_reference(matching[i].substring(1, matching[i].length - 1), arguments[0]));
+}
+catch (e) {
+continue;
+}
 }
 }
 }
@@ -1466,7 +1473,6 @@ else {
 return f;
 }
 }
-
 function get_color_value(cs, category, color_name) {
 let category_data = cs[category];
 let color_data = category_data[color_name];
@@ -1512,11 +1518,7 @@ result = result.concat(styled_body(line));
 }
 return result;
 }
-function figma_json_to_ftd(json, escaped = false) {
-let esc = '\\';
-if (escaped == false) {
-esc = '';
-}
+function figma_json_to_ftd(json) {
 const cs_data = JSON.parse(json);
 let cs_light = Object.keys(cs_data)
 .filter((key) => key.includes("-light"))
@@ -1531,87 +1533,87 @@ obj = cs_data[key];
 return obj;
 }, {});
 let s = `
-${esc}-- ftd.color base-:
+-- ftd.color base-:
 light: ${get_color_value(cs_light, "Background Colors", "base")}
 dark: ${get_color_value(cs_dark, "Background Colors", "base")}
 
-${esc}-- ftd.color step-1-:
+-- ftd.color step-1-:
 light: ${get_color_value(cs_light, "Background Colors", "step-1")}
 dark: ${get_color_value(cs_dark, "Background Colors", "step-1")}
 
-${esc}-- ftd.color step-2-:
+-- ftd.color step-2-:
 light: ${get_color_value(cs_light, "Background Colors", "step-2")}
 dark: ${get_color_value(cs_dark, "Background Colors", "step-2")}
 
-${esc}-- ftd.color overlay-:
+-- ftd.color overlay-:
 light: ${get_color_value(cs_light, "Background Colors", "overlay")}
 dark: ${get_color_value(cs_dark, "Background Colors", "overlay")}
 
-${esc}-- ftd.color code-:
+-- ftd.color code-:
 light: ${get_color_value(cs_light, "Background Colors", "code")}
 dark: ${get_color_value(cs_dark, "Background Colors", "code")}
 
-${esc}-- ftd.background-colors background-:
+-- ftd.background-colors background-:
 base: $base-
 step-1: $step-1-
 step-2: $step-2-
 overlay: $overlay-
 code: $code-
 
-${esc}-- ftd.color border-:
+-- ftd.color border-:
 light: ${get_color_value(cs_light, "Standalone Colors", "border")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "border")}
 
-${esc}-- ftd.color border-strong-:
+-- ftd.color border-strong-:
 light: ${get_color_value(cs_light, "Standalone Colors", "border-strong")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "border-strong")}
 
-${esc}-- ftd.color text-:
+-- ftd.color text-:
 light: ${get_color_value(cs_light, "Standalone Colors", "text")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "text")}
 
-${esc}-- ftd.color text-strong-:
+-- ftd.color text-strong-:
 light: ${get_color_value(cs_light, "Standalone Colors", "text-strong")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "text-strong")}
 
-${esc}-- ftd.color shadow-:
+-- ftd.color shadow-:
 light: ${get_color_value(cs_light, "Standalone Colors", "shadow")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "shadow")}
 
-${esc}-- ftd.color scrim-:
+-- ftd.color scrim-:
 light: ${get_color_value(cs_light, "Standalone Colors", "scrim")}
 dark: ${get_color_value(cs_dark, "Standalone Colors", "scrim")}
 
-${esc}-- ftd.color cta-primary-base-:
+-- ftd.color cta-primary-base-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "base")}
 
-${esc}-- ftd.color cta-primary-hover-:
+-- ftd.color cta-primary-hover-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "hover")}
 
-${esc}-- ftd.color cta-primary-pressed-:
+-- ftd.color cta-primary-pressed-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "pressed")}
 
-${esc}-- ftd.color cta-primary-disabled-:
+-- ftd.color cta-primary-disabled-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "disabled")}
 
-${esc}-- ftd.color cta-primary-focused-:
+-- ftd.color cta-primary-focused-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "focused")}
 
-${esc}-- ftd.color cta-primary-border-:
+-- ftd.color cta-primary-border-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "border")}
 
-${esc}-- ftd.color cta-primary-text-:
+-- ftd.color cta-primary-text-:
 light: ${get_color_value(cs_light, "CTA Primary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Primary Colors", "text")}
 
 
-${esc}-- ftd.cta-colors cta-primary-:
+-- ftd.cta-colors cta-primary-:
 base: $cta-primary-base-
 hover: $cta-primary-hover-
 pressed: $cta-primary-pressed-
@@ -1620,35 +1622,35 @@ focused: $cta-primary-focused-
 border: $cta-primary-border-
 text: $cta-primary-text-
 
-${esc}-- ftd.color cta-secondary-base-:
+-- ftd.color cta-secondary-base-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "base")}
 
-${esc}-- ftd.color cta-secondary-hover-:
+-- ftd.color cta-secondary-hover-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "hover")}
 
-${esc}-- ftd.color cta-secondary-pressed-:
+-- ftd.color cta-secondary-pressed-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "pressed")}
 
-${esc}-- ftd.color cta-secondary-disabled-:
+-- ftd.color cta-secondary-disabled-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "disabled")}
 
-${esc}-- ftd.color cta-secondary-focused-:
+-- ftd.color cta-secondary-focused-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "focused")}
 
-${esc}-- ftd.color cta-secondary-border-:
+-- ftd.color cta-secondary-border-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "border")}
 
-${esc}-- ftd.color cta-secondary-text-:
+-- ftd.color cta-secondary-text-:
 light: ${get_color_value(cs_light, "CTA Secondary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Secondary Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-secondary-:
+-- ftd.cta-colors cta-secondary-:
 base: $cta-secondary-base-
 hover: $cta-secondary-hover-
 pressed: $cta-secondary-pressed-
@@ -1657,35 +1659,35 @@ focused: $cta-secondary-focused-
 border: $cta-secondary-border-
 text: $cta-secondary-text-
 
-${esc}-- ftd.color cta-tertiary-base-:
+-- ftd.color cta-tertiary-base-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "base")}
 
-${esc}-- ftd.color cta-tertiary-hover-:
+-- ftd.color cta-tertiary-hover-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "hover")}
 
-${esc}-- ftd.color cta-tertiary-pressed-:
+-- ftd.color cta-tertiary-pressed-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "pressed")}
 
-${esc}-- ftd.color cta-tertiary-disabled-:
+-- ftd.color cta-tertiary-disabled-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "disabled")}
 
-${esc}-- ftd.color cta-tertiary-focused-:
+-- ftd.color cta-tertiary-focused-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "focused")}
 
-${esc}-- ftd.color cta-tertiary-border-:
+-- ftd.color cta-tertiary-border-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "border")}
 
-${esc}-- ftd.color cta-tertiary-text-:
+-- ftd.color cta-tertiary-text-:
 light: ${get_color_value(cs_light, "CTA Tertiary Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Tertiary Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-tertiary-:
+-- ftd.cta-colors cta-tertiary-:
 base: $cta-tertiary-base-
 hover: $cta-tertiary-hover-
 pressed: $cta-tertiary-pressed-
@@ -1694,35 +1696,35 @@ focused: $cta-tertiary-focused-
 border: $cta-tertiary-border-
 text: $cta-tertiary-text-
 
-${esc}-- ftd.color cta-danger-base-:
+-- ftd.color cta-danger-base-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "base")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "base")}
 
-${esc}-- ftd.color cta-danger-hover-:
+-- ftd.color cta-danger-hover-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "hover")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "hover")}
 
-${esc}-- ftd.color cta-danger-pressed-:
+-- ftd.color cta-danger-pressed-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "pressed")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "pressed")}
 
-${esc}-- ftd.color cta-danger-disabled-:
+-- ftd.color cta-danger-disabled-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "disabled")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "disabled")}
 
-${esc}-- ftd.color cta-danger-focused-:
+-- ftd.color cta-danger-focused-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "focused")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "focused")}
 
-${esc}-- ftd.color cta-danger-border-:
+-- ftd.color cta-danger-border-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "border")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "border")}
 
-${esc}-- ftd.color cta-danger-text-:
+-- ftd.color cta-danger-text-:
 light: ${get_color_value(cs_light, "CTA Danger Colors", "text")}
 dark: ${get_color_value(cs_dark, "CTA Danger Colors", "text")}
 
-${esc}-- ftd.cta-colors cta-danger-:
+-- ftd.cta-colors cta-danger-:
 base: $cta-danger-base-
 hover: $cta-danger-hover-
 pressed: $cta-danger-pressed-
@@ -1731,132 +1733,132 @@ focused: $cta-danger-focused-
 border: $cta-danger-border-
 text: $cta-danger-text-
 
-${esc}-- ftd.color accent-primary-:
+-- ftd.color accent-primary-:
 light: ${get_color_value(cs_light, "Accent Colors", "primary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "primary")}
 
-${esc}-- ftd.color accent-secondary-:
+-- ftd.color accent-secondary-:
 light: ${get_color_value(cs_light, "Accent Colors", "secondary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "secondary")}
 
-${esc}-- ftd.color accent-tertiary-:
+-- ftd.color accent-tertiary-:
 light: ${get_color_value(cs_light, "Accent Colors", "tertiary")}
 dark: ${get_color_value(cs_dark, "Accent Colors", "tertiary")}
 
-${esc}-- ftd.pst accent-:
+-- ftd.pst accent-:
 primary: $accent-primary-
 secondary: $accent-secondary-
 tertiary: $accent-tertiary-
 
-${esc}-- ftd.color error-base-:
+-- ftd.color error-base-:
 light: ${get_color_value(cs_light, "Error Colors", "base")}
 dark: ${get_color_value(cs_dark, "Error Colors", "base")}
 
-${esc}-- ftd.color error-text-:
+-- ftd.color error-text-:
 light: ${get_color_value(cs_light, "Error Colors", "text")}
 dark: ${get_color_value(cs_dark, "Error Colors", "text")}
 
-${esc}-- ftd.color error-border-:
+-- ftd.color error-border-:
 light: ${get_color_value(cs_light, "Error Colors", "border")}
 dark: ${get_color_value(cs_dark, "Error Colors", "border")}
 
-${esc}-- ftd.btb error-btb-:
+-- ftd.btb error-btb-:
 base: $error-base-
 text: $error-text-
 border: $error-border-
 
-${esc}-- ftd.color success-base-:
+-- ftd.color success-base-:
 light: ${get_color_value(cs_light, "Success Colors", "base")}
 dark: ${get_color_value(cs_dark, "Success Colors", "base")}
 
-${esc}-- ftd.color success-text-:
+-- ftd.color success-text-:
 light: ${get_color_value(cs_light, "Success Colors", "text")}
 dark: ${get_color_value(cs_dark, "Success Colors", "text")}
 
-${esc}-- ftd.color success-border-:
+-- ftd.color success-border-:
 light: ${get_color_value(cs_light, "Success Colors", "border")}
 dark: ${get_color_value(cs_dark, "Success Colors", "border")}
 
-${esc}-- ftd.btb success-btb-:
+-- ftd.btb success-btb-:
 base: $success-base-
 text: $success-text-
 border: $success-border-
 
-${esc}-- ftd.color info-base-:
+-- ftd.color info-base-:
 light: ${get_color_value(cs_light, "Info Colors", "base")}
 dark: ${get_color_value(cs_dark, "Info Colors", "base")}
 
-${esc}-- ftd.color info-text-:
+-- ftd.color info-text-:
 light: ${get_color_value(cs_light, "Info Colors", "text")}
 dark: ${get_color_value(cs_dark, "Info Colors", "text")}
 
-${esc}-- ftd.color info-border-:
+-- ftd.color info-border-:
 light: ${get_color_value(cs_light, "Info Colors", "border")}
 dark: ${get_color_value(cs_dark, "Info Colors", "border")}
 
-${esc}-- ftd.btb info-btb-:
+-- ftd.btb info-btb-:
 base: $info-base-
 text: $info-text-
 border: $info-border-
 
-${esc}-- ftd.color warning-base-:
+-- ftd.color warning-base-:
 light: ${get_color_value(cs_light, "Warning Colors", "base")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "base")}
 
-${esc}-- ftd.color warning-text-:
+-- ftd.color warning-text-:
 light: ${get_color_value(cs_light, "Warning Colors", "text")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "text")}
 
-${esc}-- ftd.color warning-border-:
+-- ftd.color warning-border-:
 light: ${get_color_value(cs_light, "Warning Colors", "border")}
 dark: ${get_color_value(cs_dark, "Warning Colors", "border")}
 
-${esc}-- ftd.btb warning-btb-:
+-- ftd.btb warning-btb-:
 base: $warning-base-
 text: $warning-text-
 border: $warning-border-
 
-${esc}-- ftd.color custom-one-:
+-- ftd.color custom-one-:
 light: ${get_color_value(cs_light, "Custom Colors", "one")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "one")}
 
-${esc}-- ftd.color custom-two-:
+-- ftd.color custom-two-:
 light: ${get_color_value(cs_light, "Custom Colors", "two")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "two")}
 
-${esc}-- ftd.color custom-three-:
+-- ftd.color custom-three-:
 light: ${get_color_value(cs_light, "Custom Colors", "three")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "three")}
 
-${esc}-- ftd.color custom-four-:
+-- ftd.color custom-four-:
 light: ${get_color_value(cs_light, "Custom Colors", "four")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "four")}
 
-${esc}-- ftd.color custom-five-:
+-- ftd.color custom-five-:
 light: ${get_color_value(cs_light, "Custom Colors", "five")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "five")}
 
-${esc}-- ftd.color custom-six-:
+-- ftd.color custom-six-:
 light: ${get_color_value(cs_light, "Custom Colors", "six")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "six")}
 
-${esc}-- ftd.color custom-seven-:
+-- ftd.color custom-seven-:
 light: ${get_color_value(cs_light, "Custom Colors", "seven")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "seven")}
 
-${esc}-- ftd.color custom-eight-:
+-- ftd.color custom-eight-:
 light: ${get_color_value(cs_light, "Custom Colors", "eight")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "eight")}
 
-${esc}-- ftd.color custom-nine-:
+-- ftd.color custom-nine-:
 light: ${get_color_value(cs_light, "Custom Colors", "nine")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "nine")}
 
-${esc}-- ftd.color custom-ten-:
+-- ftd.color custom-ten-:
 light: ${get_color_value(cs_light, "Custom Colors", "ten")}
 dark: ${get_color_value(cs_dark, "Custom Colors", "ten")}
 
-${esc}-- ftd.custom-colors custom-:
+-- ftd.custom-colors custom-:
 one: $custom-one-
 two: $custom-two-
 three: $custom-three-
@@ -1868,7 +1870,7 @@ eight: $custom-eight-
 nine: $custom-nine-
 ten: $custom-ten-
 
-${esc}-- ftd.color-scheme main:
+-- ftd.color-scheme main:
 background: $background-
 border: $border-
 border-strong: $border-strong-
@@ -1890,15 +1892,34 @@ custom: $custom-
 let fs = `<pre>${apply_style(s)}</pre>`;
 return [s, fs];
 }
-
 function len(data) {
 return data.length;
+}
+function fallbackCopyTextToClipboard(text) {
+var textArea = document.createElement("textarea");
+textArea.value = text;
+// Avoid scrolling to bottom
+textArea.style.top = "0";
+textArea.style.left = "0";
+textArea.style.position = "fixed";
+document.body.appendChild(textArea);
+textArea.focus();
+textArea.select();
+try {
+var successful = document.execCommand('copy');
+var msg = successful ? 'successful' : 'unsuccessful';
+console.log('Fallback: Copying text command was ' + msg);
+}
+catch (err) {
+console.error('Fallback: Oops, unable to copy', err);
+}
+document.body.removeChild(textArea);
 }
 FASTN_JS
 
 
 function ftd__copy_to_clipboard___main(a,args,data,id){
-return (copy_to_clipboard(a,args,data,id));
+return (ftd.copy_to_clipboard(a,args,data,id));
 }
 
 
@@ -1954,6 +1975,8 @@ a.value = v
 function ftd__toggle___main(a,args,data,id){
 a.value = !a.value
 }
+
+
 
 
 

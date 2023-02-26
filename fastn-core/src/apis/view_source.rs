@@ -36,8 +36,14 @@ async fn handle_view_source(
                 parent_path: config.root.as_str().to_string(),
                 package_name: config.package.name.clone(),
             };
-            fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false)
-                .await
+            fastn_core::package::package_doc::read_ftd(
+                &mut config,
+                &main_document,
+                "/",
+                false,
+                false,
+            )
+            .await
         }
         fastn_core::File::Static(ref file) | fastn_core::File::Image(ref file) => {
             Ok(file.content.to_owned())

@@ -12,6 +12,7 @@ Commands:
   build           Build static site from this fastn package
   update          Reinstall all the dependency packages
   serve           Serve package content over HTTP
+  publish-static  Publish fastn package statically
   help            Print this message or the help of the given subcommand(s)
 
 Options:

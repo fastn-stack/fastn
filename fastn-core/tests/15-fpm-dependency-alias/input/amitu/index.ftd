@@ -1,6 +1,5 @@
--- import: cb
+-- import: fifthtry.github.io/package-doc/typography as pd
 
--- cb.code:
-lang: ftd
+-- pd.h1: Heading 1
 
-\-- ftd.text: hello world
+Heading 1 content

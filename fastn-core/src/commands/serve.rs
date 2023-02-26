@@ -70,8 +70,14 @@ async fn serve_file(
 
     match f {
         fastn_core::File::Ftd(main_document) => {
-            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false)
-                .await
+            match fastn_core::package::package_doc::read_ftd(
+                config,
+                &main_document,
+                "/",
+                false,
+                false,
+            )
+            .await
             {
                 Ok(r) => {
                     fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
@@ -136,8 +142,14 @@ async fn serve_cr_file(
     config.current_document = Some(f.get_id());
     match f {
         fastn_core::File::Ftd(main_document) => {
-            match fastn_core::package::package_doc::read_ftd(config, &main_document, "/", false)
-                .await
+            match fastn_core::package::package_doc::read_ftd(
+                config,
+                &main_document,
+                "/",
+                false,
+                false,
+            )
+            .await
             {
                 Ok(r) => fastn_core::http::ok(r),
                 Err(e) => {

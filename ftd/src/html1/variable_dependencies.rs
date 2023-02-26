@@ -115,8 +115,9 @@ impl<'a> VariableDependencyGenerator<'a> {
     pub(crate) fn get_set_functions(
         &self,
         var_dependencies: &ftd::VecMap<String>,
+        test: bool,
     ) -> ftd::html1::Result<String> {
-        let (set_function, mut dep) = self.js_set_functions(var_dependencies);
+        let (set_function, mut dep) = self.js_set_functions(var_dependencies, test);
         let mut js_resolve_functions = vec![];
         if !set_function.trim().is_empty() {
             js_resolve_functions.push(format!("window.set_value_{} = {{}};", self.id));
@@ -124,7 +125,7 @@ impl<'a> VariableDependencyGenerator<'a> {
         }
         let mut js_resolve_functions_available = false;
 
-        if cfg!(test) {
+        if cfg!(test) || test {
             dep.sort();
         }
 
@@ -141,7 +142,11 @@ impl<'a> VariableDependencyGenerator<'a> {
         Ok(js_resolve_functions.join("\n"))
     }
 
-    fn js_set_functions(&self, var_dependencies: &ftd::VecMap<String>) -> (String, Vec<String>) {
+    fn js_set_functions(
+        &self,
+        var_dependencies: &ftd::VecMap<String>,
+        test: bool,
+    ) -> (String, Vec<String>) {
         let order = self.get_variable_order_dependencies();
         let mut result_1 = vec![];
         let mut result_2 = std::collections::HashSet::new();
@@ -182,7 +187,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                 node_changes_calls
             };
 
-            if cfg!(test) {
+            if cfg!(test) || test {
                 node_changes_calls.sort();
             }
 

@@ -3,6 +3,7 @@ pub async fn build(
     file: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
+    test: bool
 ) -> fastn_core::Result<()> {
     fastn_core::utils::enable_parse_caching(true);
 
@@ -50,7 +51,8 @@ pub async fn build(
                     continue;
                 }
                 let resp =
-                    fastn_core::package::package_doc::process_ftd(config, doc, base_url, no_static)
+                    fastn_core::package::package_doc::process_ftd(config, doc, base_url,
+                                                                  no_static, test)
                         .await;
                 match (resp, ignore_failed) {
                     (Ok(_), _) => (),
@@ -74,7 +76,7 @@ pub async fn build(
                     println!("Skipped");
                     continue;
                 }
-                let resp = process_markdown(config, doc, base_url, no_static).await;
+                let resp = process_markdown(config, doc, base_url, no_static, test).await;
                 match (resp, ignore_failed) {
                     (Ok(r), _) => r,
                     (_, true) => {
@@ -92,7 +94,7 @@ pub async fn build(
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
                 {
-                    let resp = process_image(config, main_doc, base_url, no_static).await;
+                    let resp = process_image(config, main_doc, base_url, no_static, test).await;
                     match (resp, ignore_failed) {
                         (Ok(r), _) => r,
                         (_, true) => {
@@ -120,7 +122,7 @@ pub async fn build(
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
                 {
-                    let resp = process_code(config, doc, base_url, no_static).await;
+                    let resp = process_code(config, doc, base_url, no_static, test).await;
                     match (resp, ignore_failed) {
                         (Ok(r), _) => r,
                         (_, true) => {
@@ -239,10 +241,11 @@ async fn process_image(
     main: &fastn_core::Static,
     base_url: &str,
     no_static: bool,
+    test: bool
 ) -> fastn_core::Result<()> {
     let main = convert_to_ftd(config, main)?;
 
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static).await?;
+    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
     return Ok(());
 
     fn convert_to_ftd(
@@ -267,6 +270,7 @@ async fn process_code(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
+    test: bool
 ) -> fastn_core::Result<()> {
     let main = if let Some(main) = convert_to_ftd(config, main)? {
         main
@@ -274,7 +278,7 @@ async fn process_code(
         return Ok(());
     };
 
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static).await?;
+    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
     return Ok(());
 
     fn convert_to_ftd(
@@ -306,13 +310,14 @@ async fn process_markdown(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
+    test: bool
 ) -> fastn_core::Result<()> {
     let main = if let Some(main) = convert_md_to_ftd(config, main)? {
         main
     } else {
         return Ok(());
     };
-    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static).await?;
+    fastn_core::package::package_doc::process_ftd(config, &main, base_url, no_static, test).await?;
     return Ok(());
 
     fn convert_md_to_ftd(

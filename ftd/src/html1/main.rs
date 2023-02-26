@@ -15,7 +15,11 @@ pub struct HtmlUI {
 
 impl HtmlUI {
     #[tracing::instrument(skip_all)]
-    pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
+    pub fn from_node_data(
+        node_data: ftd::node::NodeData,
+        id: &str,
+        test: bool
+    ) ->  ftd::html1::Result<HtmlUI> {
         use itertools::Itertools;
 
         let tdoc = ftd::interpreter2::TDoc::new(
@@ -29,7 +33,7 @@ impl HtmlUI {
             ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
                 .get_dependencies()?;
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
-            .get_set_functions(&var_dependencies)?;
+            .get_set_functions(&var_dependencies, test)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
         let (html, outer_events, mutable_variable, immutable_variable) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;

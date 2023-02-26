@@ -3,4 +3,4 @@
 -- fastn.package: fifthtry.github.io/amitu
 download-base-url: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
--- fastn.dependency: fifthtry.github.io/code-block as cb
+-- fastn.dependency: fifthtry.github.io/package-doc

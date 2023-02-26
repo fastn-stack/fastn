@@ -337,6 +337,7 @@ pub(crate) async fn read_ftd(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
+    test: bool
 ) -> fastn_core::Result<Vec<u8>> {
     tracing::info!(document = main.id);
     match config.ftd_edition {
@@ -344,7 +345,7 @@ pub(crate) async fn read_ftd(
             read_ftd_2021(config, main, base_url, download_assets).await
         }
         fastn_core::FTDEdition::FTD2022 => {
-            read_ftd_2022(config, main, base_url, download_assets).await
+            read_ftd_2022(config, main, base_url, download_assets, test).await
         }
     }
 }
@@ -356,6 +357,7 @@ pub(crate) async fn read_ftd_2022(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
+    test: bool
 ) -> fastn_core::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
@@ -399,7 +401,7 @@ pub(crate) async fn read_ftd_2022(
     };
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main")?;
+    let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main", test)?;
 
     all_packages.extend(lib.config.all_packages.into_inner());
     drop(all_packages);
@@ -497,6 +499,7 @@ pub(crate) async fn process_ftd(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
+    test: bool
 ) -> fastn_core::Result<Vec<u8>> {
     if main.id.eq("FASTN.ftd") {
         tokio::fs::copy(
@@ -532,7 +535,7 @@ pub(crate) async fn process_ftd(
         )
     };
 
-    let response = read_ftd(config, &main, base_url, !no_static).await?;
+    let response = read_ftd(config, &main, base_url, !no_static, test).await?;
     fastn_core::utils::write(
         &config.build_dir(),
         file_rel_path.as_str(),
