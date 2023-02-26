@@ -29,7 +29,7 @@
 "background": {
 "base": {
 "dark": "#18181b",
-"light": "#18181b"
+"light": "#e7e7e4"
 },
 "code": {
 "dark": "#2B303B",
@@ -41,11 +41,11 @@
 },
 "step-1": {
 "dark": "#141414",
-"light": "#141414"
+"light": "#f3f3f3"
 },
 "step-2": {
 "dark": "#585656",
-"light": "#585656"
+"light": "#c9cece"
 }
 },
 "border": {
@@ -143,7 +143,7 @@
 },
 "text": {
 "dark": "#ffffff",
-"light": "#ffffff"
+"light": "#584b42"
 }
 },
 "cta-tertiary": {
@@ -220,7 +220,7 @@
 },
 "error": {
 "base": {
-"dark": "#f5bdbb",
+"dark": "#530c0ab0",
 "light": "#f5bdbb"
 },
 "border": {
@@ -234,7 +234,7 @@
 },
 "info": {
 "base": {
-"dark": "#c4edfd",
+"dark": "#052a38de",
 "light": "#c4edfd"
 },
 "border": {
@@ -242,7 +242,7 @@
 "light": "#205694"
 },
 "text": {
-"dark": "#205694",
+"dark": "#0a60c2",
 "light": "#205694"
 }
 },
@@ -256,7 +256,7 @@
 },
 "success": {
 "base": {
-"dark": "#e3f0c4",
+"dark": "#405508ad",
 "light": "#e3f0c4"
 },
 "border": {
@@ -264,21 +264,21 @@
 "light": "#3d741f"
 },
 "text": {
-"dark": "#467b28",
+"dark": "#479f16",
 "light": "#467b28"
 }
 },
 "text": {
 "dark": "#a8a29e",
-"light": "#a8a29e"
+"light": "#584b42"
 },
 "text-strong": {
 "dark": "#ffffff",
-"light": "#ffffff"
+"light": "#141414"
 },
 "warning": {
 "base": {
-"dark": "#fbefba",
+"dark": "#544607a3",
 "light": "#fbefba"
 },
 "border": {
@@ -286,7 +286,7 @@
 "light": "#966220"
 },
 "text": {
-"dark": "#966220",
+"dark": "#d07f19",
 "light": "#966220"
 }
 }
@@ -688,7 +688,9 @@ return array;
 exports.create_list = function (array_name, id) {
 if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
 let data = ftd_data[id];
-let [htmls, data_id, start_index] = window.dummy_data_main[array_name](data);
+let dummys = window.dummy_data_main[array_name](data);
+for (let i in dummys) {
+let [htmls, data_id, start_index] = dummys[i];
 for (let i in htmls) {
 let nodes = stringToHTML(htmls[i]);
 let main = document.querySelector(`[data-id="${data_id}"]`);
@@ -696,6 +698,7 @@ main === null || main === void 0 ? void 0 : main.insertBefore(nodes.children[0],
 /*for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
 main?.insertBefore(nodes.children[j], main.children[start_index + parseInt(i)]);
 }*/
+}
 }
 }
 };
@@ -707,12 +710,15 @@ change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
 // @ts-ignore
 let list = resolve_reference(args[0].reference, data);
-let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+for (let i in dummys) {
+let [html, data_id, start_index] = dummys[i];
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var j = 0, len = nodes.childElementCount; j < len; ++j) {
 // @ts-ignore
 main.insertBefore(nodes.children[j], main.children[start_index + list.length - 1]);
+}
 }
 }
 return array;
@@ -725,7 +731,9 @@ change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
 // @ts-ignore
 let list = resolve_reference(args[0].reference, data);
-let [html, data_id, start_index] = window.dummy_data_main[args[0].reference](data, "LAST");
+let dummys = window.dummy_data_main[args[0].reference](data, "LAST");
+for (let i in dummys) {
+let [html, data_id, start_index] = dummys[i];
 let nodes = stringToHTML(html);
 let main = document.querySelector(`[data-id="${data_id}"]`);
 if (idx >= list.length) {
@@ -736,6 +744,7 @@ idx = 0;
 }
 // @ts-ignore
 main.insertBefore(nodes.children[0], main.children[start_index + idx]);
+}
 }
 return array;
 };
@@ -751,10 +760,13 @@ exports.delete_list = function (array_name, id) {
 if (!!window.dummy_data_main && !!window.dummy_data_main[array_name]) {
 let data = ftd_data[id];
 let length = resolve_reference(array_name, data, null, null).length;
-let [_, data_id, start_index] = window.dummy_data_main[array_name](data);
+let dummys = window.dummy_data_main[array_name](data);
+for (let j in dummys) {
+let [_, data_id, start_index] = dummys[j];
 let main = document.querySelector(`[data-id="${data_id}"]`);
 for (var i = length - 1 + start_index; i >= start_index; i--) {
 main === null || main === void 0 ? void 0 : main.removeChild(main.children[i]);
+}
 }
 }
 };
@@ -772,11 +784,12 @@ args["CHANGE_VALUE"] = false;
 args[0].value = array;
 change_value(args, data, id);
 if (!!window.dummy_data_main && !!window.dummy_data_main[args[0].reference]) {
-// @ts-ignore
-let [_, data_id, start_index] = window.dummy_data_main[args[0].reference](data);
+let dummys = window.dummy_data_main[args[0].reference](data);
+for (let i in dummys) {
+let [_, data_id, start_index] = dummys[i];
 let main = document.querySelector(`[data-id="${data_id}"]`);
-// @ts-ignore
-main.removeChild(main.children[start_index + idx]);
+main === null || main === void 0 ? void 0 : main.removeChild(main.children[start_index + idx]);
+}
 }
 return array;
 };
@@ -1836,18 +1849,20 @@ set_data_value(data, "foo#sample-text", new_value);
 }
 
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#sample-text"]) {
-window.ftd.mutable_value_main["foo#sample-text"].on_change();
+let changes = window.ftd.mutable_value_main["foo#sample-text"].changes;
+for(let i in changes) { changes[i](); }
 }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#sample-text"]) {
-window.ftd.immutable_value_main["foo#sample-text"].on_change();
+let changes = window.ftd.immutable_value_main["foo#sample-text"].changes;
+for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
