@@ -18,8 +18,8 @@ impl HtmlUI {
     pub fn from_node_data(
         node_data: ftd::node::NodeData,
         id: &str,
-        test: bool
-    ) ->  ftd::html1::Result<HtmlUI> {
+        test: bool,
+    ) -> ftd::html1::Result<HtmlUI> {
         use itertools::Itertools;
 
         let tdoc = ftd::interpreter2::TDoc::new(

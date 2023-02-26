@@ -3,7 +3,7 @@ pub async fn build(
     file: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<()> {
     fastn_core::utils::enable_parse_caching(true);
 
@@ -50,10 +50,10 @@ pub async fn build(
                     );
                     continue;
                 }
-                let resp =
-                    fastn_core::package::package_doc::process_ftd(config, doc, base_url,
-                                                                  no_static, test)
-                        .await;
+                let resp = fastn_core::package::package_doc::process_ftd(
+                    config, doc, base_url, no_static, test,
+                )
+                .await;
                 match (resp, ignore_failed) {
                     (Ok(_), _) => (),
                     (_, true) => {
@@ -241,7 +241,7 @@ async fn process_image(
     main: &fastn_core::Static,
     base_url: &str,
     no_static: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<()> {
     let main = convert_to_ftd(config, main)?;
 
@@ -270,7 +270,7 @@ async fn process_code(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<()> {
     let main = if let Some(main) = convert_to_ftd(config, main)? {
         main
@@ -310,7 +310,7 @@ async fn process_markdown(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<()> {
     let main = if let Some(main) = convert_md_to_ftd(config, main)? {
         main

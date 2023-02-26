@@ -337,7 +337,7 @@ pub(crate) async fn read_ftd(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<Vec<u8>> {
     tracing::info!(document = main.id);
     match config.ftd_edition {
@@ -357,7 +357,7 @@ pub(crate) async fn read_ftd_2022(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
@@ -499,7 +499,7 @@ pub(crate) async fn process_ftd(
     main: &fastn_core::Document,
     base_url: &str,
     no_static: bool,
-    test: bool
+    test: bool,
 ) -> fastn_core::Result<Vec<u8>> {
     if main.id.eq("FASTN.ftd") {
         tokio::fs::copy(

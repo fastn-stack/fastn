@@ -186,7 +186,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore-failed"),
-            build.get_flag("test")
+            build.get_flag("test"),
         )
         .await;
     }
