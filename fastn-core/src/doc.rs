@@ -548,7 +548,7 @@ pub async fn resolve_foreign_variable2022(
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::p1::Result<ftd::interpreter2::Value> {
         lib.push_package_under_process(module, package).await?;
-        let base_url = base_url.trim_end_matches('/');
+        let _base_url = base_url.trim_end_matches('/');
         let mut files = files.to_string();
         let light = {
             if let Some(f) = files.strip_suffix(".light") {
