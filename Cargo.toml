@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "ftd",
     "fastn",
     "fastn-core",
     "fastn-cloud"

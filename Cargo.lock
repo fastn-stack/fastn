@@ -998,7 +998,7 @@ dependencies = [
  "env_logger",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/fastn-stack/ftd?rev=d5376799)",
+ "ftd 0.2.0",
  "futures",
  "hyper",
  "ignore",
@@ -1158,6 +1158,31 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
+dependencies = [
+ "comrak 0.16.0",
+ "css-color-parser",
+ "diffy",
+ "format_num",
+ "include_dir",
+ "indoc 2.0.0",
+ "itertools",
+ "once_cell",
+ "pretty_assertions",
+ "rand",
+ "rand_pcg",
+ "regex",
+ "ron",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "ftd"
+version = "0.2.0"
 source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
 dependencies = [
  "comrak 0.14.0",
@@ -1173,27 +1198,6 @@ dependencies = [
  "slug",
  "syntect",
  "thiserror",
-]
-
-[[package]]
-name = "ftd"
-version = "0.2.0"
-source = "git+https://github.com/fastn-stack/ftd?rev=d5376799#d5376799bfc5f50da48ff9229944263a27b011e6"
-dependencies = [
- "comrak 0.16.0",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc 2.0.0",
- "itertools",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
@@ -2287,6 +2291,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rand_pcg"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59cad018caf63deb318e5a4586d99a24424a364f40f1e5778c29aca23f4fc73e"
+dependencies = [
+ "rand_core",
+]
+
+[[package]]
 name = "realm-lang"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2400,6 +2413,17 @@ dependencies = [
  "untrusted",
  "web-sys",
  "winapi",
+]
+
+[[package]]
+name = "ron"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "300a51053b1cb55c80b7a9fde4120726ddf25ca241a1cbb926626f62fb136bff"
+dependencies = [
+ "base64 0.13.1",
+ "bitflags",
+ "serde",
 ]
 
 [[package]]

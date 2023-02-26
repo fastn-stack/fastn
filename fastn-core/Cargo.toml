@@ -121,8 +121,6 @@ features=["macos_kqueue"]
 # ready for 1.0 right now.
 #
 # Once we are closer to release we will stop using this and adopot semver.
-git = "https://github.com/fastn-stack/ftd"
-rev = "d5376799"
 #
 # If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
 # same folder and uncomment the next `path` line to use local ftd.
@@ -130,7 +128,7 @@ rev = "d5376799"
 # Note: you do not have to comment out the git/rev above, Cargo uses `path` with
 # higher priority over them if `path` is provided.
 #
-# path = "../../ftd"
+path = "../ftd"
 
 [dependencies.reqwest]
 # We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`
