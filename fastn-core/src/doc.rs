@@ -576,14 +576,9 @@ pub async fn resolve_foreign_variable2022(
                     .to_string()
                     .starts_with("image/") =>
             {
-                let light_mode = format!(
-                    "{base_url}/-/{}/{}.{}",
-                    package.name,
-                    file.replace('.', "/"),
-                    ext
-                )
-                .trim_start_matches('/')
-                .to_string();
+                let light_mode = format!("/-/{}/{}.{}", package.name, file.replace('.', "/"), ext)
+                    .trim_start_matches('/')
+                    .to_string();
 
                 let light_path = format!("{}.{}", file.replace('.', "/"), ext);
                 if download_assets
@@ -633,7 +628,7 @@ pub async fn resolve_foreign_variable2022(
                     light_mode.clone()
                 } else {
                     format!(
-                        "{base_url}/-/{}/{}-dark.{}",
+                        "/-/{}/{}-dark.{}",
                         package.name,
                         file.replace('.', "/"),
                         ext
