@@ -1000,7 +1000,7 @@ impl ColorValue {
                 r: ((iv & 0xff000000) >> 24) as u8,
                 g: ((iv & 0xff0000) >> 16) as u8,
                 b: ((iv & 0xff00) >> 8) as u8,
-                alpha: round_1p((iv & 0xff) as f32 / 255_f32) as f32,
+                alpha: round_1p((iv & 0xff) as f32 / 255_f32),
             })
         } else {
             match css_color_parser::Color::from_str(v.as_str()) {

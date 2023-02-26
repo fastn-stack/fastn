@@ -17,7 +17,7 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
 ) -> Result<T, PostError> {
     let url = format!("{}{}", FASTN_CW_HOST, url);
     let headers: Result<reqwest::header::HeaderMap, String> = headers
-        .into_iter()
+        .iter()
         .map(
             |(k, v)| -> Result<(reqwest::header::HeaderName, reqwest::header::HeaderValue), String> {
                 let name = TryFrom::try_from(k).map_err(|e: reqwest::header::InvalidHeaderName| e.to_string())?;
@@ -26,7 +26,7 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
             },
         )
         .collect();
-    let headers = headers.map_err(|e| PostError::HeadersError(e))?;
+    let headers = headers.map_err(PostError::HeadersError)?;
     // TODO: Handle The errors and different statuses
     Ok(reqwest::Client::new()
         .post(url)
@@ -49,7 +49,7 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
 ) -> Result<T, PostError> {
     let url = format!("{}{}", FASTN_CW_HOST, url);
     let headers: Result<reqwest::header::HeaderMap, String> = headers
-        .into_iter()
+        .iter()
         .map(
             |(k, v)| -> Result<(reqwest::header::HeaderName, reqwest::header::HeaderValue), String> {
                 let name = TryFrom::try_from(k).map_err(|e: reqwest::header::InvalidHeaderName| e.to_string())?;
@@ -58,7 +58,7 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
             },
         )
         .collect();
-    let headers = headers.map_err(|e| PostError::HeadersError(e))?;
+    let headers = headers.map_err(PostError::HeadersError)?;
     // TODO: Handle The errors and different statuses
     Ok(reqwest::Client::new()
         .put(url)

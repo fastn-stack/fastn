@@ -811,7 +811,7 @@ impl Element {
                         d.push(json);
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
-                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
+                        dependencies.insert(id, serde_json::to_value(vec![json]).unwrap());
                     }
                 }
             }
@@ -968,7 +968,7 @@ impl Element {
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
                         dependencies
-                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                            .insert(id.to_string(), serde_json::to_value(vec![json]).unwrap());
                     }
                 }
             }
@@ -1044,7 +1044,7 @@ impl Element {
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
                         dependencies
-                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                            .insert(id.to_string(), serde_json::to_value(vec![json]).unwrap());
                     }
                 }
             }
@@ -1112,7 +1112,7 @@ impl Element {
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
                         dependencies
-                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                            .insert(id.to_string(), serde_json::to_value(vec![json]).unwrap());
                     }
                 }
             }
@@ -1230,7 +1230,7 @@ impl Element {
                         d.push(json);
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
-                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
+                        dependencies.insert(id, serde_json::to_value(vec![json]).unwrap());
                     }
                 } else {
                     panic!("{} should be declared 2", condition.variable)

@@ -702,7 +702,7 @@ pub(crate) fn immutable_value(immutable_variables: &[String], id: &str) -> Strin
 pub fn get_js_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
     for js in external_js {
-        if let Some((js, tags)) = js.split_once(":") {
+        if let Some((js, tags)) = js.split_once(':') {
             result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
         } else {
             result = format!("{}<script src=\"{}\"></script>", result, js);

@@ -137,12 +137,12 @@ pub async fn create_tejar(
     let files: _ = fastn_cloud::utils::walkdir_util(root)
         .into_iter()
         .map(|file| tejar::create::InputFile {
-            path: file.path.strip_prefix(&root).unwrap().to_path_buf(),
+            path: file.path.strip_prefix(root).unwrap().to_path_buf(),
             content_type: file.content_type,
             gzip: file.gzip,
         })
         .collect::<Vec<_>>();
-    tejar::create::create(&root, files.as_slice())
+    tejar::create::create(root, files.as_slice())
 }
 
 pub async fn read_to_string(path: &camino::Utf8Path) -> Result<String, tokio::io::Error> {

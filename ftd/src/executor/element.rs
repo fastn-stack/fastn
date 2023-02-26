@@ -604,9 +604,9 @@ pub fn decimal_from_properties(
     )?
     .value
     {
-        Some(f) => value.map(|v| {
-            ftd::executor::element::markup_inline(num.format(f.as_str(), v as f64).as_str())
-        }),
+        Some(f) => {
+            value.map(|v| ftd::executor::element::markup_inline(num.format(f.as_str(), v).as_str()))
+        }
         None => value.map(|v| ftd::executor::element::markup_inline(v.to_string().as_str())),
     };
     let common = common_from_properties(

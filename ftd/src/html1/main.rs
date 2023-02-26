@@ -36,7 +36,7 @@ impl HtmlUI {
             .get_set_functions(&var_dependencies, test)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
         let (html, outer_events, mutable_variable, immutable_variable) =
-            HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
+            HtmlGenerator::new(id, &tdoc).as_html_and_outer_events(node_data.node)?;
         let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
             .as_string_from_dummy_nodes(&node_data.dummy_nodes);
 
@@ -88,7 +88,7 @@ impl RawHtmlGenerator {
         let mut dummy_html = Default::default();
         //TODO: Remove result
         HtmlGenerator::new(id, doc)
-            .to_dummy_html(node, &mut dummy_html)
+            .as_dummy_html(node, &mut dummy_html)
             .unwrap();
         dummy_html
     }
@@ -111,7 +111,7 @@ impl<'a> HtmlGenerator<'a> {
         }
     }
 
-    pub fn to_dummy_html(
+    pub fn as_dummy_html(
         &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
@@ -129,22 +129,22 @@ impl<'a> HtmlGenerator<'a> {
             dummy_html.name = node.node.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html)?;
+                self.as_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
         } else {
-            let data = self.to_dummy_html_(node, dummy_html)?;
+            let data = self.as_dummy_html_(node, dummy_html)?;
             dummy_html.html = data.0;
         }
 
         Ok(())
     }
 
-    pub fn to_html_and_outer_events(
+    pub fn as_html_and_outer_events(
         &mut self,
         node: ftd::node::Node,
     ) -> ftd::html1::Result<(String, String, String, String)> {
-        let (html, events) = self.to_html_(node)?;
+        let (html, events) = self.as_html_(node)?;
 
         let mutable_value =
             ftd::html1::utils::mutable_value(self.mutable_variable.as_slice(), self.id.as_str());
@@ -162,7 +162,7 @@ impl<'a> HtmlGenerator<'a> {
     }
 
     #[allow(clippy::type_complexity)]
-    pub fn to_dummy_html_(
+    pub fn as_dummy_html_(
         &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
@@ -197,7 +197,7 @@ impl<'a> HtmlGenerator<'a> {
             helper_dummy_html.name = node_name.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
-                self.to_dummy_html(child, &mut child_dummy_html)?;
+                self.as_dummy_html(child, &mut child_dummy_html)?;
                 dummy_html.children.push(child_dummy_html);
             }
             return Ok((node_name.to_string(), vec![]));
@@ -242,7 +242,7 @@ impl<'a> HtmlGenerator<'a> {
             None => node
                 .children
                 .into_iter()
-                .map(|v| match self.to_html_(v) {
+                .map(|v| match self.as_html_(v) {
                     Ok((html, events)) => {
                         outer_events.extend(events);
                         Ok(html)
@@ -267,7 +267,7 @@ impl<'a> HtmlGenerator<'a> {
     }
 
     #[allow(clippy::type_complexity)]
-    pub fn to_html_(
+    pub fn as_html_(
         &mut self,
         node: ftd::node::Node,
     ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
@@ -314,7 +314,7 @@ impl<'a> HtmlGenerator<'a> {
             None => node
                 .children
                 .into_iter()
-                .map(|v| match self.to_html_(v) {
+                .map(|v| match self.as_html_(v) {
                     Ok((html, events)) => {
                         outer_events.extend(events);
                         Ok(html)

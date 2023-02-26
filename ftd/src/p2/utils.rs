@@ -68,7 +68,7 @@ pub fn parse_import(
     Ok((v.to_string(), v.to_string()))
 }
 
-pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str, doc_id: &str) -> ftd::p1::Result<&'b str> {
+pub fn get_name<'b>(prefix: &str, s: &'b str, doc_id: &str) -> ftd::p1::Result<&'b str> {
     match s.split_once(' ') {
         Some((p1, p2)) => {
             if p1 != prefix {
