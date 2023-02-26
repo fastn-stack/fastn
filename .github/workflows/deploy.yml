@@ -22,7 +22,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: run
-          args: --release --all-features
+          args: --bin ftd
       - uses: actions/upload-artifact@master
         with:
           name: TLD_BUILD
