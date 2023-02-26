@@ -1,7 +1,7 @@
-pub fn process_readers<'a>(
+pub fn process_readers(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
     document_id: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
@@ -32,10 +32,10 @@ pub fn process_readers<'a>(
     doc.from_json(dbg!(&readers), &kind, value.line_number())
 }
 
-pub fn process_writers<'a>(
+pub fn process_writers(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
     document_id: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
@@ -65,10 +65,10 @@ pub fn process_writers<'a>(
     doc.from_json(&writers, &kind, value.line_number())
 }
 
-pub fn document_id<'a>(
+pub fn document_id(
     _value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
@@ -94,10 +94,10 @@ pub fn document_id<'a>(
     })
 }
 
-pub fn document_full_id<'a>(
+pub fn document_full_id(
     _value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     Ok(ftd::interpreter2::Value::String {
@@ -105,10 +105,10 @@ pub fn document_full_id<'a>(
     })
 }
 
-pub fn document_suffix<'a>(
+pub fn document_suffix(
     _value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {

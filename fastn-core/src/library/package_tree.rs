@@ -14,9 +14,9 @@ pub async fn processor<'a>(
         })
 }
 
-pub fn processor_sync<'a>(
+pub fn processor_sync(
     section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc<'a>,
+    doc: &ftd::p2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     futures::executor::block_on(processor_(section, doc, config)).map_err(|e| {

@@ -223,7 +223,7 @@ async fn process_static(
 
         std::fs::create_dir_all(&build_path)?;
         if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
-            std::fs::create_dir_all(&build_path.join(dir))?;
+            std::fs::create_dir_all(build_path.join(dir))?;
         }
         std::fs::copy(
             sa.base_path.join(sa.id.as_str()),

@@ -212,7 +212,7 @@ impl fastn_core::Package {
         let fastn_ftd_path = if root.join("FASTN.ftd").exists() {
             root.join("FASTN.ftd")
         } else {
-            let doc = std::fs::read_to_string(&root.join("fastn.manifest.ftd"));
+            let doc = std::fs::read_to_string(root.join("fastn.manifest.ftd"));
             let lib = fastn_core::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => {
@@ -332,7 +332,7 @@ impl fastn_core::Package {
         let fastn_ftd_path = if root.join("FASTN.ftd").exists() {
             root.join("FASTN.ftd")
         } else {
-            let doc = std::fs::read_to_string(&root.join("fastn.manifest.ftd"));
+            let doc = std::fs::read_to_string(root.join("fastn.manifest.ftd"));
             let lib = fastn_core::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => {

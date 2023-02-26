@@ -43,9 +43,9 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
     format!("/{}/", document_id)
 }
 
-pub fn document_full_id<'a>(
+pub fn document_full_id(
     config: &fastn_core::Config,
-    doc: &ftd::p2::TDoc<'a>,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
         doc.name
@@ -62,9 +62,9 @@ pub fn document_full_id<'a>(
 
 pub mod processor {
 
-    pub fn document_id<'a>(
+    pub fn document_id(
         _section: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc<'a>,
+        doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
@@ -84,9 +84,9 @@ pub mod processor {
             source: ftd::TextSource::Default,
         })
     }
-    pub fn document_full_id<'a>(
+    pub fn document_full_id(
         _section: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc<'a>,
+        doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         Ok(ftd::Value::String {
@@ -122,9 +122,9 @@ pub mod processor {
         })
     }
 
-    pub fn document_suffix<'a>(
+    pub fn document_suffix(
         _section: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc<'a>,
+        doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {

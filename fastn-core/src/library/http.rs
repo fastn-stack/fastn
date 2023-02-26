@@ -117,9 +117,9 @@ pub async fn processor<'a>(
 
 // Need to pass the request object also
 // From request get the url, get query parameters, get the data from body(form data, post data)
-pub fn request_data_processor<'a>(
+pub fn request_data_processor(
     section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc<'a>,
+    doc: &ftd::p2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     // TODO: URL params not yet handled

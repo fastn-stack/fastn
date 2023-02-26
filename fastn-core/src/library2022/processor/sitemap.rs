@@ -1,7 +1,7 @@
-pub fn process<'a>(
+pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     if let Some(ref sitemap) = config.package.sitemap {
@@ -28,10 +28,10 @@ pub fn process<'a>(
     )
 }
 
-pub fn full_sitemap_process<'a>(
+pub fn full_sitemap_process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     if let Some(ref sitemap) = config.package.sitemap {

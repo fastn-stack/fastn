@@ -575,8 +575,8 @@ pub mod processor {
         let g = config
             .package
             .groups
-            .iter()
-            .map(|(_, g)| g.to_group_compat())
+            .values()
+            .map(|g| g.to_group_compat())
             .collect_vec();
         doc.from_json(&g, section)
     }
@@ -600,9 +600,9 @@ pub mod processor {
         doc.from_json(&g, section)
     }
 
-    pub fn get_identities<'a>(
+    pub fn get_identities(
         section: &ftd::p1::Section,
-        doc: &'a ftd::p2::TDoc<'_>,
+        doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(config, doc)?;

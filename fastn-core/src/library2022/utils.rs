@@ -1,6 +1,6 @@
-pub fn document_full_id<'a>(
+pub fn document_full_id(
     config: &fastn_core::Config,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
 ) -> ftd::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
         doc.name

@@ -1,24 +1,24 @@
-pub fn process<'a>(
+pub fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;
     let g = config
         .package
         .groups
-        .iter()
-        .map(|(_, g)| g.to_group_compat())
+        .values()
+        .map(|g| g.to_group_compat())
         .collect_vec();
     doc.from_json(&g, &kind, value.line_number())
 }
 
 /// processor: user-group-by-id
-pub fn process_by_id<'a>(
+pub fn process_by_id(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let headers = match value.get_record(doc.name) {
@@ -52,10 +52,10 @@ pub fn process_by_id<'a>(
 
 /// processor: get-identities
 /// This is used to get all the identities of the current document
-pub fn get_identities<'a>(
+pub fn get_identities(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;

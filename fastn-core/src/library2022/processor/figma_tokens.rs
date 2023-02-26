@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-pub fn process_figma_tokens<'a>(
+pub fn process_figma_tokens(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &mut ftd::interpreter2::TDoc<'a>,
+    doc: &mut ftd::interpreter2::TDoc,
     _config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let line_number = value.line_number();
@@ -43,10 +43,10 @@ pub fn process_figma_tokens<'a>(
     doc.from_json(&response_json, &kind, line_number)
 }
 
-pub fn process_figma_tokens_old<'a>(
+pub fn process_figma_tokens_old(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
-    doc: &mut ftd::interpreter2::TDoc<'a>,
+    doc: &mut ftd::interpreter2::TDoc,
     _config: &fastn_core::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let line_number = value.line_number();
@@ -257,9 +257,9 @@ pub fn capitalize_word(s: &str) -> String {
     }
 }
 
-fn extract_light_dark_colors<'a>(
+fn extract_light_dark_colors(
     value: ftd::ast::VariableValue,
-    doc: &mut ftd::interpreter2::TDoc<'a>,
+    doc: &mut ftd::interpreter2::TDoc,
     variable_name: &mut Option<String>,
     light_colors: &mut ftd::Map<ftd::Map<VT>>,
     dark_colors: &mut ftd::Map<ftd::Map<VT>>,
@@ -405,10 +405,10 @@ fn format_color_title(title: &str) -> String {
     res.trim().to_string()
 }
 
-fn extract_colors<'a>(
+fn extract_colors(
     color_name: String,
     color_value: &ftd::interpreter2::Value,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    doc: &ftd::interpreter2::TDoc,
     extracted_light_colors: &mut ftd::Map<VT>,
     extracted_dark_colors: &mut ftd::Map<VT>,
 ) -> ftd::interpreter2::Result<()> {
