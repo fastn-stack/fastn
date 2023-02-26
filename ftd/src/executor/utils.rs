@@ -106,6 +106,7 @@ pub(crate) fn update_instruction_for_loop_element(
     reference_name: &str,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc_name: &str,
 ) -> ftd::executor::Result<ftd::interpreter2::Component> {
     let mut instruction = instruction.clone();
     let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
@@ -115,7 +116,7 @@ pub(crate) fn update_instruction_for_loop_element(
         std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
     let replace_property_value = std::iter::IntoIterator::into_iter([(
         doc.itdoc()
-            .resolve_name(ftd::interpreter2::FTD_LOOP_COUNTER),
+            .resolve_name(format!("{}#{}", doc_name, ftd::interpreter2::FTD_LOOP_COUNTER).as_str()),
         ftd::interpreter2::Value::Integer {
             value: index_in_loop as i64,
         }
@@ -131,6 +132,7 @@ pub(crate) fn update_instruction_for_loop_element(
         local_container,
         doc,
     );
+
     Ok(instruction)
 }
 

@@ -251,6 +251,13 @@ impl<'a> ExecuteDoc<'a> {
             );
         };
 
+        let doc_name = ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+            iteration.alias.as_str(),
+            doc.name,
+            instruction.line_number,
+        )
+        .0;
+
         let children_length = iteration.children(&doc.itdoc())?.0.len();
         let reference_name =
             iteration
@@ -279,6 +286,7 @@ impl<'a> ExecuteDoc<'a> {
                 reference_name,
                 inherited_variables,
                 local_container.as_slice(),
+                &doc_name,
             )?;
             elements.push((None, local_container, new_instruction));
         }
