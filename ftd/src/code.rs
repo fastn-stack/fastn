@@ -1,4 +1,4 @@
-static SYNTAX_DIR: include_dir::Dir<'_> = include_dir::include_dir!("./ftd/syntax");
+static SYNTAX_DIR: include_dir::Dir<'_> = include_dir::include_dir!("$CARGO_MANIFEST_DIR/syntax");
 pub const DEFAULT_THEME: &str = "base16-ocean.dark";
 
 pub static SS: once_cell::sync::Lazy<syntect::parsing::SyntaxSet> =
