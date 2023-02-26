@@ -5186,7 +5186,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#18181b".to_string(),
+                                                                    text: "#e7e7e4".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -5218,7 +5218,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#141414".to_string(),
+                                                                    text: "#f3f3f3".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -5250,7 +5250,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#585656".to_string(),
+                                                                    text: "#a7a9a9".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -5419,7 +5419,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ftd::interpreter2::PropertyValue::Value {
                                                 value:
                                                 ftd::interpreter2::Value::String {
-                                                    text: "#a8a29e".to_string(),
+                                                    text: "#584b42".to_string(),
                                                 },
                                                 is_mutable: false,
                                                 line_number: 0,
@@ -5451,7 +5451,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ftd::interpreter2::PropertyValue::Value {
                                                 value:
                                                 ftd::interpreter2::Value::String {
-                                                    text: "#ffffff".to_string(),
+                                                    text: "#141414".to_string(),
                                                 },
                                                 is_mutable: false,
                                                 line_number: 0,
@@ -5941,7 +5941,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             "light".to_string(),
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value: ftd::interpreter2::Value::String {
-                                                                    text: "#ffffff".to_string()
+                                                                    text: "#584b42".to_string()
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -6529,7 +6529,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#f5bdbb".to_string()
+                                                                        text: "#530c0ab0".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6634,7 +6634,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#e3f0c4".to_string()
+                                                                        text: "#405508ad".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6665,7 +6665,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#467b28".to_string()
+                                                                        text: "#479f16".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6739,7 +6739,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#c4edfd".to_string()
+                                                                        text: "#052a38de".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6770,7 +6770,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#205694".to_string()
+                                                                        text: "#0a60c2".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6844,7 +6844,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#fbefba".to_string()
+                                                                        text: "#544607a3".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6875,7 +6875,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#966220".to_string()
+                                                                        text: "#d07f19".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
