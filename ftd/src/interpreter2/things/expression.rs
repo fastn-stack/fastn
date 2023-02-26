@@ -211,7 +211,17 @@ impl ftd::evalexpr::ExprNode {
     ) -> ftd::evalexpr::ExprNode {
         let mut operator = self.operator().clone();
         if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
-            if let Some(ftd::interpreter2::PropertyValue::Reference { name, .. }) =
+            if format!("${}", ftd::interpreter2::FTD_LOOP_COUNTER).eq(identifier) {
+                if let Some(ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Integer { value },
+                    ..
+                }) = references.get(identifier)
+                {
+                    operator = ftd::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: value.to_string(),
+                    }
+                }
+            } else if let Some(ftd::interpreter2::PropertyValue::Reference { name, .. }) =
                 references.get(identifier)
             {
                 operator = ftd::evalexpr::Operator::VariableIdentifierRead {
