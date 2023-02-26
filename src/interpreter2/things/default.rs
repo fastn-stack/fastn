@@ -5250,7 +5250,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#a7a9a9".to_string(),
+                                                                    text: "#c9cece".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
