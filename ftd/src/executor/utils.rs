@@ -98,6 +98,7 @@ pub(crate) fn create_dummy_instruction_for_loop_element(
     Ok(instruction)
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn update_instruction_for_loop_element(
     instruction: &ftd::interpreter2::Component,
     doc: &mut ftd::executor::TDoc,
