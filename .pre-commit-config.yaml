@@ -1,0 +1,26 @@
+repos:
+-   repo: https://github.com/ambv/black
+    rev: 21.7b0
+    hooks:
+    - id: black
+      language_version: python
+
+-   repo: local
+    hooks:
+    -   id: rustfmt
+        name: Rust format
+        entry: cargo
+        language: system
+        args:
+        - fmt
+        - --
+        files: \.rs$
+    -   id: clippy
+        name: Clippy
+        entry: cargo-clippy 
+        language: system
+        args:
+        - --all
+        - --tests
+        files: \.rss$
+        pass_filenames: false

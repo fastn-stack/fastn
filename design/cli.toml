@@ -1,0 +1,36 @@
+[REQ-cli]
+partof = 'REQ-purpose'
+text = '''
+FPM is shipped as a CLI tool.
+
+It contains the following main comments:
+
+- [[REQ-cli-version]]
+- [[REQ-cli-serve]]
+- [[REQ-cli-build]]'''
+
+[REQ-cli-build]
+partof = 'REQ-ssg'
+text = '''
+FPM is a [[REQ-ssg]] and `fpm build` is the main command to build a static site.
+
+`fpm build` implements [[REQ-cli-build-download_on_demand]] feature.
+
+`fpm build` also supports [[REQ-cli-build-base]] feature.
+
+[[REQ-cli-build-ignore_failed]] `fpm build` can also be instructed to ignore failed files and continue building or to stop at first error.'''
+
+[REQ-cli-serve]
+partof = [
+    'REQ-dynamic',
+    'REQ-server',
+]
+text = '''
+`fpm serve` runs a local HTTP server.
+
+You can configure the port on which fpm cli listens using [[REQ-cli-serve-port]].
+
+You can configure the IP on which the server binds: [[REQ-cli-serve-bind]].'''
+
+[REQ-cli-version]
+text = '`fpm` CLI can print its version number. '

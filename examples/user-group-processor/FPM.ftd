@@ -1,0 +1,22 @@
+-- import: fastn
+
+-- fastn.package: user-group-processor
+download-base-url: https://www.github.com/
+
+
+-- fastn.user-group: fifthtry-people
+title: FifthTry People
+github-team: FifthTry/everyone
+discord-channel: discord-server-id
+
+-- fastn.user-group: foo-people
+title: Foo People
+github-team: FifthTry/foo
+
+
+-- fastn.sitemap:
+
+# Home: /
+readers: fifthtry-people
+readers: foo-people
+confidential: false

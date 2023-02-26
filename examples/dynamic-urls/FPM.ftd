@@ -1,0 +1,51 @@
+
+-- import: fastn
+
+-- fastn.package: dynamic-urls
+download-base-url: https://www.github.com/
+
+
+-- fastn.sitemap:
+
+# Page 1: /foo/a/
+document: /bar/b/
+
+
+-- fastn.dynamic-urls:
+
+# TOC00
+url: /a/ <  integer  :   age  >  /person/
+document: index.ftd
+
+## TOC01
+url: /a/ <  string  :   username  >  /person/
+document: index1.ftd
+
+- TOC1
+url: /b/<integer:age>/person/
+document: index.ftd
+
+- TOC1
+url: /b/<string:username>/person/
+document: index1.ftd
+
+- TOC1
+url: /b/<string:username>/person/foo/
+document: index.ftd
+
+
+- TOC3
+url: /d/<string:username>/<integer:age>/
+document: index.ftd
+
+- TOC3
+url: /<string:username>/<integer:age>/
+document: index1.ftd
+
+- TOC3
+url: /<string:username>/<string:class>/
+document: index.ftd
+
+- TOC 4
+url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+document: index.ftd

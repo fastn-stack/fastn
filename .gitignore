@@ -1,0 +1,15 @@
+# editor and OS junk
+.idea
+**/.DS_Store
+
+# Rust stuff
+target
+**/*.rs.bk
+
+# fpm test
+fastn-core/tests/**/.build
+
+fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
+
+/**/.packages
+/**/.remote-state

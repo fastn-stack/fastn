@@ -1,0 +1,10 @@
+-- import: fpm
+
+-- fpm.client-workspace: FPM.ftd
+version: 1
+deleted: false
+
+
+-- fpm.client-workspace: index.ftd
+version: 1
+deleted: true

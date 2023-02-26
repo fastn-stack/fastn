@@ -1,0 +1,26 @@
+-- import: fastn
+
+-- fastn.package: doc-reader-writer-processor
+download-base-url: https://www.github.com/
+
+-- fastn.user-group: fifthtry-people
+title: FifthTry People
+github-team: FifthTry/everyone
+discord-channel: discord-server-id
+
+-- fastn.user-group: foo-people
+title: Foo People
+github-team: FifthTry/foo
+
+
+-- fastn.sitemap:
+
+# Home: /
+writers: foo-people
+readers: fifthtry-people
+confidential: false
+
+## Subsection: /inheritance/
+writers: foo-people
+readers: fifthtry-people
+confidential: false

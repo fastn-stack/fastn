@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "fastn",
+    "fastn-core",
+    "fastn-cloud"
+]

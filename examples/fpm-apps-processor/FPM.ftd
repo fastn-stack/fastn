@@ -1,0 +1,17 @@
+-- import: fastn
+
+-- fastn.package: fastn-apps-processor
+download-base-url: https://www.github.com/
+
+
+-- fastn.app: Todos for Family
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+readers: abrark-fans
+end-point: https://kameri-service.herokuapp.com
+
+-- fastn.app: Todos for Me
+mount-point: /me-todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans

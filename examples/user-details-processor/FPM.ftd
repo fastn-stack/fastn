@@ -1,0 +1,4 @@
+-- import: fastn
+
+-- fastn.package: user-details-processor
+download-base-url: https://www.github.com/

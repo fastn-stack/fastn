@@ -1,0 +1,4 @@
+-- import: fastn
+
+-- fastn.package: package-tree-processor
+download-base-url: https://www.github.com/

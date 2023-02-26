@@ -1,0 +1,7 @@
+[REQ-dynamic]
+partof = [
+    'REQ-purpose',
+    'REQ-server',
+    'REQ-ssg',
+]
+text = 'FPM normally serves the content of files in the package. But they can also serve dynamic pages. '

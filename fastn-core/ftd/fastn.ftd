@@ -1,0 +1,458 @@
+-- record backend-header:
+string header-key:
+string header-value:
+
+-- record package-data:
+caption name:
+boolean versioned: false
+optional ftd.image-src icon:
+optional body about:
+optional string zip:
+optional string download-base-url:
+optional string favicon:
+optional string language:
+optional string translation-of:
+string list translation:
+optional string canonical-url:
+boolean inherit-auto-imports-from-original: true
+optional string endpoint:
+boolean backend: false
+backend-header list backend-headers:
+
+
+-- record dependency-data:
+caption name:
+optional string version:
+optional body notes:
+string list implements:
+optional string endpoint:
+optional string mount-point:
+
+
+-- dependency-data list dependency:
+
+
+
+-- string list auto-import:
+
+
+-- record sitemap-rec:
+string list readers:
+string list writers:
+body sitemap-body:
+
+
+-- optional sitemap-rec sitemap:
+
+
+
+;; Example: Dynamic Urls
+;; -- fastn.dynamic-urls:
+;; - /person/<string:name>/
+;;  document: person.ftd
+;;  readers: readers/person
+;;  writers: writers/person
+;; - /person1/<string:name>/
+;;  document: person.ftd
+;;  readers: readers/person
+;;  writers: writers/person
+
+-- record dynamic-urls-rec:
+body dynamic-urls-body:
+
+-- optional dynamic-urls-rec dynamic-urls:
+
+
+
+-- record font-data:
+caption name:
+optional string woff:
+optional string woff2:
+optional string truetype:
+optional string opentype:
+optional string embedded-opentype:
+optional string svg:
+optional string unicode-range:
+optional string display:
+optional string style:
+optional string weight:
+optional string stretch:
+
+
+
+-- font-data list font:
+
+
+
+-- record snapshot-data:
+caption filename:
+integer timestamp:
+
+
+
+-- snapshot-data list snapshot:
+
+
+-- record workspace-data:
+caption filename:
+integer base:
+integer conflicted:
+string workspace:
+
+
+-- workspace-data list workspace:
+
+
+
+-- record track-data:
+caption filename:
+optional string package:
+optional string version:
+optional integer other-timestamp:
+integer self-timestamp:
+optional integer last-merged-version:
+
+
+
+-- track-data list track:
+
+
+
+-- string list ignore:
+
+
+
+-- record translation-status-summary-data:
+optional integer never-marked:
+optional integer missing:
+optional integer out-dated:
+optional integer upto-date:
+optional string last-modified-on:
+
+
+
+-- optional translation-status-summary-data translation-status-summary:
+
+
+-- record i18n-data:
+string last-modified-on:
+string never-synced:
+string show-translation-status:
+string other-available-languages:
+string current-language:
+string translation-not-available:
+string unapproved-heading:
+string show-unapproved-version:
+string show-latest-version:
+string show-outdated-version:
+string out-dated-heading:
+string out-dated-body:
+string language-detail-page:
+string language-detail-page-body:
+string total-number-of-documents:
+string document:
+string status:
+string missing:
+string never-marked:
+string out-dated:
+string upto-date:
+string welcome-fastn-page:
+string welcome-fastn-page-subtitle:
+string language:
+
+
+
+-- optional string theme-color:
+$always-include$: true
+
+
+
+
+
+-- boolean is-translation-package: false
+-- boolean has-translations: false
+-- boolean is-fallback: false
+-- boolean translation-diff-open: false
+\-- string document-id: 
+-- optional string diff:
+-- optional string translation-status:
+-- optional string last-marked-on:
+-- optional string original-latest:
+-- optional string translated-latest:
+-- optional string last-marked-on-rfc3339:
+-- optional string original-latest-rfc3339:
+-- optional string translated-latest-rfc3339:
+-- optional string language:
+-- optional string number-of-documents:
+-- optional string last-modified-on:
+-- optional string current-document-last-modified-on:
+\-- string translation-status-url:
+\-- string title:
+\-- string package-name:
+-- optional string package-zip:
+\-- string home-url:
+
+
+
+-- record toc-item:
+optional string title:
+optional string url:
+optional string path:
+optional string number:
+optional ftd.image-src font-icon:
+optional string img-src:
+boolean bury: false
+optional string document:
+boolean is-heading:
+boolean is-disabled:
+boolean is-active: false
+boolean is-open: false
+toc-item list children:
+
+
+
+/-- toc-item list versions:
+
+
+
+/-- toc-item list language-toc:
+
+
+-- record build-info:
+string cli-version:
+string cli-git-commit-hash:
+string cli-created-on:
+string build-created-on:
+string ftd-version:
+
+
+/-- toc-item list missing-files:
+/-- toc-item list never-marked-files:
+/-- toc-item list outdated-files:
+/-- toc-item list upto-date-files:
+
+
+;; Translation status for the original language package
+
+-- record all-language-status-data:
+string language:
+string url:
+integer never-marked:
+integer missing:
+integer out-dated:
+integer upto-date:
+optional string last-modified-on:
+
+-- all-language-status-data list all-language-translation-status:
+
+
+-- optional string section-title:
+-- optional string subsection-title:
+-- optional string toc-title:
+
+
+-- record sitemap-data:
+toc-item list sections:
+toc-item list subsections:
+toc-item list toc:
+optional toc-item current-section:
+optional toc-item current-subsection:
+optional toc-item current-page:
+
+
+
+-- record file-edit-data:
+optional body message:
+integer timestamp:
+integer version:
+optional string author:
+option integer src-cr:
+string operation:
+
+
+-- record file-history:
+caption filename:
+file-edit-data list file-edit:
+
+
+-- file-history list history:
+
+
+-- record workspace-entry:
+caption filename:
+optional boolean deleted:
+optional integer version:
+optional integer cr:
+
+
+-- workspace-entry list client-workspace:
+
+
+-- record key-value-data:
+string key:
+string value:
+
+
+-- record toc-compat-data:
+string id:
+optional string title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+toc-compat-data list children:
+boolean skip:
+string list readers:
+string list writers:
+
+
+
+-- record subsection-compat-data:
+optional string id:
+optional string title:
+boolean visible:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+toc-compat-data list toc:
+boolean skip:
+string list readers:
+string list writers:
+
+
+
+-- record section-compat-data:
+string id:
+optional string title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+subsection-compat-data list subsections:
+string list readers:
+string list writers:
+
+
+-- record sitemap-compat-data:
+section-compat-data list sections:
+string list readers:
+string list writers:
+
+
+-- record user-group-compat:
+caption id:
+optional string title:
+optional string description:
+string list groups:
+key-value-data list group-members:
+
+; Need to think of a type like object
+-- record user-group-data:
+caption id:
+optional caption title:
+optional body description:
+string list group:
+string list -group:
+string list email:
+string list -email:
+string list telegram-admin:
+string list -telegram-admin:
+string list telegram-group:
+string list -telegram-group:
+string list telegram-channel:
+string list -telegram-channel:
+string list github:
+string list -github:
+string list github-starred:
+string list -github-starred:
+string list github-team:
+string list -github-team:
+string list github-contributor:
+string list -github-contributor:
+string list github-collaborator:
+string list -github-collaborator:
+string list github-watches:
+string list -github-watches:
+string list github-follows:
+string list -github-follows:
+string list github-sponsor:
+string list -github-sponsor:
+string list discord-server:
+string list -discord-server:
+string list discord-channel:
+string list -discord-channel:
+string list discord-thread:
+string list -discord-thread:
+string list discord-permission:
+string list -discord-permission:
+string list discord-event:
+string list -discord-event:
+string list discord-role:
+string list -discord-role:
+string list twitter-liking:
+string list -twitter-liking:
+string list twitter-followers:
+string list -twitter-followers:
+string list twitter-follows:
+string list -twitter-follows:
+string list twitter-space:
+string list -twitter-space:
+string list twitter-retweet:
+string list -twitter-retweet:
+
+-- user-group-data list user-group:
+
+
+
+-- record cr-meta-data:
+caption title:
+optional boolean open:
+
+
+-- optional cr-meta-data cr-meta:
+
+
+-- record cr-deleted-data:
+caption filename:
+integer version:
+
+-- cr-deleted-data list cr-deleted:
+
+
+-- record tracking-info:
+caption filename:
+integer version:
+option integer self-version:
+
+
+-- tracking-info list tracks:
+
+
+;; fastn Apps Installation
+;; for fastn.ftd
+-- record app-data:
+caption name:
+string package:
+string mount-point:
+optional string end-point:
+optional string user-id:
+string list config:
+string list readers:
+string list writers:
+
+
+-- app-data list app:
+
+;; Send this data from processor
+;; for fastn-apps processor
+-- record app-ui-item:
+caption name:
+string package:
+string url:
+optional ftd.image-src icon:
+
+-- record app-indexy-item:
+integer index:
+app-ui-item item:
+
+-- record app-ui:
+integer len:
+app-indexy-item list items:

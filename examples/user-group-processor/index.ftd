@@ -1,0 +1,100 @@
+-- import: fastn
+-- import: fastn/processors
+
+
+-- component print-user-group:
+fastn.user-group-compat group:
+
+
+-- ftd.column:
+margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
+
+
+-- ftd.text: Group Title
+
+-- ftd.text: $print-user-group.group.title
+
+
+-- ftd.text: Group ID
+margin-top.px: 10
+
+-- ftd.text: $print-user-group.group.id
+
+-- ftd.text: Identities
+margin-top.px: 10
+
+-- ftd.text: $member.key
+$loop$: $print-user-group.group.group-members as $member
+
+-- end: ftd.column
+
+-- end: print-user-group
+
+
+
+
+
+;; User Groups
+-- ftd.text: User Groups
+
+-- fastn.user-group-compat list groups:
+$processor$: processors.user-groups
+
+
+-- print-user-group:
+$loop$: $groups as $group
+group: $group
+
+
+-- end: print-user-group
+
+
+
+
+
+;; User Group By Id
+-- ftd.text: User Group By Id
+
+-- fastn.user-group-compat user-group:
+$processor$: processors.user-group-by-id
+id: fifthtry-people
+
+-- print-user-group:
+group: $user-group
+
+-- end: print-user-group
+
+
+
+
+
+;; Get Identities
+-- ftd.text: All The Identities Of The Current document
+
+-- string list identities:
+$processor$: processors.get-identities
+
+
+-- print-identity:
+$loop$: $identities as $name
+name: $name
+
+
+-- component print-identity:
+string name:
+
+-- ftd.column:
+margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
+
+-- ftd.text: $print-identity.name
+
+-- end: ftd.column
+
+-- end: print-identity
+

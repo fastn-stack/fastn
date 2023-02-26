@@ -1,0 +1,8 @@
+-- import: fastn
+-- import: fastn-lib
+
+-- ftd.column:
+width: fill
+/background-color: #f3f3f3
+
+-- fastn-lib.message:

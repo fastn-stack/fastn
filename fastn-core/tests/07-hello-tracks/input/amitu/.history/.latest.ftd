@@ -1,0 +1,13 @@
+-- import: fpm
+
+-- fpm.snapshot: FPM.ftd
+timestamp: 1639765778133988000
+
+-- fpm.snapshot: hello.txt
+timestamp: 1639765778133988000
+
+-- fpm.snapshot: index-track.ftd
+timestamp: 1639765778133988000
+
+-- fpm.snapshot: index.ftd
+timestamp: 1639765778133988000

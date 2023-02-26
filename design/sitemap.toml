@@ -1,0 +1,3 @@
+[REQ-sitemap]
+partof = 'REQ-purpose'
+text = 'FPM packages can contain a sitemap. Sitemap is used to organise your website.'

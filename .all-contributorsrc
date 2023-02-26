@@ -1,0 +1,126 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Arpita-Jaiswal",
+      "name": "Arpita Jaiswal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26044181?v=4",
+      "profile": "https://github.com/Arpita-Jaiswal",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "eventOrganizing",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "tool",
+        "test",
+        "tutorial",
+        "video"
+      ]
+    },
+    {
+      "login": "AbrarNitk",
+      "name": "Abrar Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
+      "profile": "https://github.com/AbrarNitk",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "sharmashobhit",
+      "name": "Shobhit Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
+      "profile": "https://github.com/sharmashobhit",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "amitu",
+      "name": "Amit Upadhyay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58662?v=4",
+      "profile": "https://www.fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "eventOrganizing",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "tool",
+        "test",
+        "tutorial",
+        "video"
+      ]
+    },
+    {
+      "login": "Heulitig",
+      "name": "Rithik Seth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106665190?v=4",
+      "profile": "https://github.com/Heulitig",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
+      ]
+    },
+    {
+      "login": "AviralVerma13",
+      "name": "Aviral Verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
+      "profile": "http://fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
+      ]
+    },
+    {
+      "login": "gsalunke",
+      "name": "Ganesh Salunke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68585007?v=4",
+      "profile": "https://github.com/gsalunke",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas",
+        "mentoring",
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "fpm",
+  "projectOwner": "ftd-lang"
+}

@@ -1,0 +1,12 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/../target/debug/fastn --test build
+output: amitu/.build
+skip: translation is yet not supported
+
+-- stdout:
+
+Downloading fifthtry.github.io/package-info ... done in <omitted>
+Processing amitu/FPM.ftd ... done in <omitted>
+Processing amitu/index.ftd ... done in <omitted>
+Processing amitu/lib.ftd ... done in <omitted>
+Processing translation-status.ftd ... done in <omitted>

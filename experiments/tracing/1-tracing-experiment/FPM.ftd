@@ -1,0 +1,10 @@
+-- import: fpm
+
+-- fpm.package: tracing-expr-docs
+download-base-url: https://raw.githubusercontent.com/AbrarNitk/abrark/main/
+
+-- fpm.dependency: fifthtry.github.io/doc-site as ds
+
+-- fpm.auto-import: abrark.com/assets
+-- fpm.auto-import: ds
+-- fpm.auto-import: fifthtry.github.io/roboto-mono as mono

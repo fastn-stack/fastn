@@ -1,0 +1,21 @@
+-- import: fastn
+
+-- fastn.package: sitemap-processor
+download-base-url: https://www.github.com/
+
+
+-- fastn.sitemap:
+
+# Section2: /
+
+## Sub Section 1: /
+
+- TOC 1: /
+- TOC 2: /doc1/
+
+
+## Sub Section 2: /doc2/
+
+- TOC 1: /doc3/
+- TOC 2: /doc4/
+

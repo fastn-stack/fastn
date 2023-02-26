@@ -1,0 +1,26 @@
+;; single component
+;; 100 component calling iteratively
+;; 1000 component calling
+
+-- component check-performance1:
+
+-- ftd.text: Hello World
+
+-- end: check-performance1
+
+
+-- component check-performance:
+
+-- ftd.column:
+
+-- ftd.text: Hello World
+
+-- check-performance1:
+
+-- end: ftd.column
+
+-- end: check-performance
+
+
+
+-- check-performance:

@@ -1,0 +1,5 @@
+-- import: fastn
+
+-- fastn.package: www.amitu.com
+download-base-url: amitu
+canonical-url: https://some-other-site.com/

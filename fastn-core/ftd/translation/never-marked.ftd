@@ -1,0 +1,88 @@
+-- import: fastn
+-- import: fastn-lib
+
+-- ftd.image-src i1: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
+dark: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
+
+
+-- boolean show-main: true
+
+-- ftd.column:
+width: fill
+/background-color: #f3f3f3
+id: outer-container
+
+
+-- ftd.column:
+width: fill
+padding-top: 14
+padding-horizontal: 35
+
+-- ftd.column:
+/gradient-direction: left to right
+/gradient-colors: #E87F85 , #FFADB2
+width: fill
+padding-vertical: 10
+id: main-container
+/background-color: #dddcdc
+border-radius: 10
+/background-color: #fef9f8
+border-width: 1
+/border-color: #e77d84
+
+-- ftd.row:
+spacing: 15
+position: top
+
+--- ftd.image:
+src: $i1
+width: 16
+height: auto
+
+--- ftd.text: $fastn.i18n.unapproved-heading
+/color: white
+/style: semi-bold
+/font: apple-system
+padding-right: 20
+
+--- ftd.text: $fastn.i18n.show-unapproved-version
+if: $show-main
+$on-click$: toggle $show-main
+$on-click$: message-host show_fallback
+/color: #E87F85
+/background-color: white
+border-radius: 4
+padding-horizontal: 15
+padding-vertical: 4
+shadow-offset-x: 0
+shadow-offset-y: 0
+shadow-size: 0
+shadow-blur: 6
+/shadow-color: rgba (0, 0, 0, 0.05)
+/font: apple-system
+/size: 13
+/background-color: #d27355
+/color: white
+
+--- ftd.text: $fastn.i18n.show-latest-version
+if: not $show-main
+$on-click$: toggle $show-main
+$on-click$: message-host show_main
+/color: #E87F85
+/background-color: white
+border-radius: 4
+padding-horizontal: 15
+padding-vertical: 4
+shadow-offset-x: 0
+shadow-offset-y: 0
+shadow-size: 0
+shadow-blur: 6
+/shadow-color: rgba (0, 0, 0, 0.05)
+/font: apple-system
+/size: 13
+/background-color: #d27355
+/color: white
+
+-- container: outer-container
+
+-- fastn-lib.message:

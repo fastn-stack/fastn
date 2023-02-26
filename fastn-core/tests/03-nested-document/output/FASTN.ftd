@@ -1,0 +1,4 @@
+-- import: fastn
+
+-- fastn.package: amitu
+download-base-url: amitu

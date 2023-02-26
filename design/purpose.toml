@@ -1,0 +1,9 @@
+[REQ-purpose]
+text = '''
+FPM is a [[REQ-cli]] that serves as:
+
+- [[REQ-ssg]]: static site generator
+- [[REQ-package_manager]]: FTD package manager
+- [[REQ-server]]: HTTP Server, for local or prod
+
+'''

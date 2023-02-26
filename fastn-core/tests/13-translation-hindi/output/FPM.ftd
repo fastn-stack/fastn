@@ -1,0 +1,16 @@
+-- import: fpm
+
+-- fpm.package: amitu
+zip: amitu
+language: hi
+translation-of: arpita-jaiswal/blog
+
+
+-- fpm.translation-status-summary:
+never-marked: 1
+missing: 1
+out-dated: 1
+upto-date: 0
+last-modified-on: 2021-12-22T17:05:44.709173+00:00
+
+

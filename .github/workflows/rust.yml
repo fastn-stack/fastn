@@ -1,0 +1,77 @@
+name: Rust Checks
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+     - '**.rs'
+     - 'ftd/**.ftd'
+     - 'Cargo.*'
+     - 'rust-toolchain'
+     - '.github/workflows/rust.yml'
+     - 'fastn-core/tests/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+     - '**.rs'
+     - 'ftd/**.ftd'
+     - 'Cargo.*'
+     - 'rust-toolchain'
+     - '.github/workflows/rust.yml'
+     - 'fastn-core/tests/**'
+jobs:
+  everything:
+    name: Rust Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
+      - uses: actions/cache@v2  # there is also https://github.com/Swatinem/rust-cache
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Fastn install
+        id: fastn-install
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: --path fastn --profile dev
+      - name: Run cargo fmt
+        id: fmt
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: Run cargo clippy
+        id: clippy
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+      - name: Run cargo test
+        id: test
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: Check if code is properly formatted
+        if: steps.fmt.outcome != 'success'
+        run: exit 1
+      - name: Check if clippy is happy
+        if: steps.clippy.outcome != 'success'
+        run: exit 1
+      - name: Check if test succeeded
+        if: steps.test.outcome != 'success'
+        run: exit 1

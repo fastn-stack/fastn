@@ -1,0 +1,62 @@
+[package]
+name = "fastn"
+version = "0.2.0"
+authors = [
+    "Abrar Khan <abrark@fifthtry.com>",
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Arpita Jaiswal <arpita@fifthtry.com>",
+    "Shobhit Sharma <shobhit@fifthtry.com>",
+]
+edition = "2021"
+description = "fastn: FTD Package Manager"
+license = "MIT"
+repository = "https://github.com/ftd-lang/fastn"
+homepage = "https://fastn.dev"
+
+[dependencies]
+fastn-core = { version = "0.1.0", path = "../fastn-core" }
+fastn-cloud = {path = "../fastn-cloud"}
+clap = "4"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+colored = "2"
+thiserror = "1.0"
+
+
+
+[dependencies.tokio]
+version = "1"
+features = [
+    "sync",
+    "macros", # tokio::select! macro
+
+    # We are currently using the "heavier" schedule.
+    #
+    # > rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
+    # > rt-multi-thread: Enables the heavier, multi-threaded, work-stealing scheduler.
+    #
+    # Is it justified?
+    "rt-multi-thread",
+
+    # https://docs.rs/tokio/1.20.1/tokio/fs/#usage says:
+    #
+    # > Warning: These adapters may create a large number of temporary tasks, especially when reading
+    # > large files. When performing a lot of operations in one batch, it may be significantly faster
+    # > to use spawn_blocking directly.
+    #
+    # We may be suffering from this problem, we do a lot of reads, each read becomes a task.
+    "fs",
+]
+
+[dependencies.tracing-forest]
+version = "0.1"
+features = [
+    "ansi", # This is for printing the ColorLevel in the events
+    "smallvec",
+    "serde",
+    "tokio",
+
+    # "uuid",  # This is for printing uuid for every request
+    # "chrono", # This is for printing the time of the event
+    # "env-filter",
+]

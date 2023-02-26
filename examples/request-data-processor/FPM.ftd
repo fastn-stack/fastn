@@ -1,0 +1,13 @@
+-- import: fastn
+
+-- fastn.package: request-data-processor
+download-base-url: https://www.github.com/
+
+
+-- fastn.dynamic-urls:
+
+# Home
+
+- TOC:
+url: /<string:name>/<string:age>/
+document: named-params.ftd

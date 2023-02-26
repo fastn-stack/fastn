@@ -1,0 +1,157 @@
+-- import: fastn
+
+-- ftd.row message:
+width: fill
+spacing: space-between
+padding: 10
+/background-color: #dddcdc
+/background-color: #f3f3f3
+
+
+--- ftd.column:
+spacing: 5
+
+--- key-value: $fastn.i18n.last-modified-on
+value: $fastn.current-document-last-modified-on
+default: $fastn.i18n.never-synced
+
+--- ftd.text: $fastn.i18n.show-translation-status
+link: $fastn.translation-status-url
+/background-color: #d27355
+border-radius: 13
+/color: white
+/border-color: #26644f
+padding: 8
+
+--- container: ftd.main
+
+--- available-language:
+
+
+
+
+-- ftd.row key-value:
+caption key:
+optional string value:
+string default:
+margin-bottom: 10
+spacing: 2
+position: center
+
+--- ftd.text: $key
+position: center
+
+--- ftd.text: $value
+if: $value is not null
+position: center
+
+--- ftd.text: $default
+if: $value is null
+position: center
+
+
+
+-- ftd.row key-value-without-default:
+caption key:
+optional string value:
+margin-bottom: 5
+spacing: 2
+if: $value is not null
+
+--- ftd.text: $key
+position: center
+
+--- ftd.text: $value
+if: $value is not null
+position: center
+
+
+
+
+-- ftd.row available-language:
+position: center
+boolean show-menu: false
+
+--- ftd.text: $fastn.i18n.other-available-languages
+if: $fastn.language is null
+
+--- ftd.row:
+width: fill
+if: $fastn.language is not null
+
+--- ftd.text: $fastn.i18n.current-language
+width: 120
+align: center
+
+--- ftd.text: $fastn.language
+border-width: 1
+/border-color: #adaeb3
+margin-top: 5
+margin-bottom: 5
+margin-left: 5
+margin-right: 5
+$on-click$: toggle $show-menu
+padding-left: 5
+padding-right: 50
+/background-color: white
+
+--- container: ftd.main
+
+--- ftd.column:
+position: right
+width: fill
+
+--- ftd.column:
+if: $show-menu
+anchor: parent
+/background-color: #f1f1f1
+min-width: 160
+shadow-offset-x: 0
+shadow-offset-y: 8
+shadow-blur: 16
+position: inner top-right
+width: fill
+margin-top: 26
+$on-click$: toggle $show-menu
+
+--- ftd.text: $obj.title
+$loop$: $fastn.language-toc as $obj
+link: $obj.url
+padding: 10
+width: fill
+border-bottom: 1
+/border-color: #e3e1e1
+
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+padding-horizontal: 90
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+/size: 40
+/color: black
+/style: bold
+padding-bottom: 24
+
+--- container: ftd.main
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+
+-- ftd.text markdown:
+body body:
+text: $body
+/size: 19
+/line-height: 30
+/color: #4d4d4d
+padding-bottom: 34
+padding-top: 50

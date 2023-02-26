@@ -1,0 +1,8 @@
+[package]
+name = "host"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wasmtime = "2"
+anyhow = "1"
