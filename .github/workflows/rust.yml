@@ -2,7 +2,8 @@ name: Rust Checks
 
 on:
   push:
-    branches: [ main, check ]
+    branches:
+      - '**'
     paths:
      - '**.rs'
      - 'ftd/**.ftd'
