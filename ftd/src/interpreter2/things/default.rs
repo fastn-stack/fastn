@@ -6529,7 +6529,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#530c0ab0".to_string()
+                                                                        text: "#311b1f".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6739,7 +6739,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#052a38de".to_string()
+                                                                        text: "#15223a".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
@@ -6770,7 +6770,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 "dark".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::String {
-                                                                        text: "#0a60c2".to_string()
+                                                                        text: "#1f6feb".to_string()
                                                                     },
                                                                     is_mutable: false,
                                                                     line_number: 0
