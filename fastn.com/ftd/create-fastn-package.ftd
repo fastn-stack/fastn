@@ -87,25 +87,52 @@ fastn create-package hello-fastn
 src: $fastn-assets.files.images.setup.fastn-create-package.png
 width: fill-container
 
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
--- ftd.text.classes:
-
--- string: markdown
-
--- end: ftd.text.classes
-
--- ftd.text.text:
+-- ds.markdown:
 
 ;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
 
 The above command will create a folder named `hello-fastn` containing two files:
-[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and
-[`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of
-this folder in a text editor such as
-([SublimeText](https://www.sublimetext.com/3)).
+`FASTN.ftd` and `index.ftd`. You can view the contents of this folder in a text
+editor such as ([SublimeText](https://www.sublimetext.com/3)).
+
+
+
+-- ds.h3: `FASTN.ftd`
+
+`FASTN.ftd` is a configuration file where we set configuration for the package.
+
+In `FASTN.ftd`, the code should look like this:
+
+-- ds.code: `FASTN.ftd`
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: hello-fastn
+
+-- ds.markdown:
+
+In the code above, we set the package name as`hello-fastn`.
+
+;; TODO: Give link to about `FASTN.ftd`
+
+-- ds.h3: `index.ftd`
+
+`index.ftd` is the index page of your package. You can think of the index page
+as being the home or default page of your package.
+
+In `index.ftd`, the code should look like this:
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- ftd.text: Hello World
+
+-- ds.markdown:
+
+In the code above, we added a kernel component `ftd.text` and passed `Hello
+World` as the value for `text` property.
+
 
 - Now, use the `cd <path-to-package>` command to navigate to the package
 location in the terminal.
@@ -149,17 +176,25 @@ lang: ftd
 
 \-- fastn.package: hello-fastn
 
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
+-- ds.markdown:
 
--- ftd.text.classes:
+In the code above, we set the package name as`hello-fastn`.
 
--- string: markdown
+;; TODO: Give link to about `FASTN.ftd`
 
--- end: ftd.text.classes
+-- ds.h3: `index.ftd`
 
--- ftd.text.text:
+`index.ftd` is the index page of your package. You can think of the index page
+as being the home or default page of your package.
+
+In `index.ftd`, the code should look like this:
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- ftd.text: Hello World
+
+-- ds.markdown:
 
 In the code above, we added a kernel component `ftd.text` and passed `Hello
 World` as the value for `text` property.
@@ -281,3 +316,14 @@ ftd.ui list child:
 children: $box.child
 
 -- end: box
+
+
+
+
+-- component markdown:
+caption or body body:
+
+-- ftd.text: $markdown.body
+
+
+-- end: markdown
