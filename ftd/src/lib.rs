@@ -279,7 +279,7 @@ impl ExampleLibrary {
     }
 
     pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
-        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+        std::fs::read_to_string(format!("./ftd/examples/{}.ftd", name)).ok()
     }
 
     /// checks if the current processor is a lazy processor

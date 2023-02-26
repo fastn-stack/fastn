@@ -70,8 +70,8 @@ pub fn main() {
             .expect("failed to write to .log file");
         return;
     }
-    let dir = std::path::Path::new("./examples/");
-    let new_ftd_dir = std::path::Path::new("./t/html/");
+    let dir = std::path::Path::new("./ftd/examples/");
+    let new_ftd_dir = std::path::Path::new("./ftd/t/html/");
 
     let mut write_doc = indoc::indoc!(
         "
@@ -177,9 +177,9 @@ padding-bottom: 20
     }
     write("index.ftd", write_doc);
     std::fs::create_dir_all("./docs/ftd/t/").expect("failed to create docs folder");
-    std::fs::copy("t/test.css", "./docs/ftd/t/test.css").expect("failed to copy test.css");
-    std::fs::copy("t/test.js", "./docs/ftd/t/test.js").expect("failed to copy test.js");
-    std::fs::copy("t/web_component.js", "./docs/ftd/t/web_component.js")
+    std::fs::copy("./ftd/t/test.css", "./docs/ftd/t/test.css").expect("failed to copy test.css");
+    std::fs::copy("./ftd/t/test.js", "./docs/ftd/t/test.js").expect("failed to copy test.js");
+    std::fs::copy("./ftd/t/web_component.js", "./docs/ftd/t/web_component.js")
         .expect("failed to copy web_component.js");
 }
 
@@ -205,7 +205,7 @@ pub fn ftd_v2_interpret_helper(
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                if let Ok(value) = std::fs::read_to_string(format!("./t/html/{}.ftd", module)) {
+                if let Ok(value) = std::fs::read_to_string(format!("./ftd/t/html/{}.ftd", module)) {
                     source = value;
                 }
                 let document = ftd::interpreter2::ParsedDocument::parse_with_line_number(
@@ -271,9 +271,9 @@ fn ftd_v2_write(id: &str, s: &str) {
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui =
         ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
-    let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
+    let ftd_js = std::fs::read_to_string("./ftd/build.js").expect("build.js not found");
     let html_str = ftd::html1::utils::trim_all_lines(
-        std::fs::read_to_string("build.html")
+        std::fs::read_to_string("./ftd/build.html")
             .expect("cant read ftd.html")
             .replace("__ftd_doc_title__", "")
             .replace("__ftd_data__", html_ui.variables.as_str())
@@ -330,8 +330,8 @@ fn write(id: &str, doc: String) {
 
     let doc = b.to_rt("main", id);
 
-    let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
-    let test_css = std::fs::read_to_string("t/test.css").expect("t/test.css not found");
+    let ftd_js = std::fs::read_to_string("./ftd/ftd.js").expect("ftd.js not found");
+    let test_css = std::fs::read_to_string("./ftd/t/test.css").expect("t/test.css not found");
 
     let doc_title = match &b.title() {
         Some(x) => x.original.clone(),
@@ -339,7 +339,7 @@ fn write(id: &str, doc: String) {
     };
 
     f.write_all(
-        std::fs::read_to_string("ftd.html")
+        std::fs::read_to_string("./ftd/ftd.html")
             .expect("cant read ftd.html")
             .replace("__ftd_doc_title__", doc_title.as_str())
             .replace(
