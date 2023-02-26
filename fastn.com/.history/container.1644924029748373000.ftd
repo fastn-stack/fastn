@@ -1,0 +1,10 @@
+-- ft.doc-page:
+toc: $ft.toc
+
+    
+-- ft.h0: Container Attributes
+
+- `spacing`
+- `align` 
+- `wrap`
+- `open`
