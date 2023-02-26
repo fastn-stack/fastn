@@ -6,9 +6,17 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#name": "Arpita",
-"foo#new-name": "Arpita FifthTry",
-"foo#number": 10,
+"foo#c": [
+{
+"elements": [],
+"name": "me"
+},
+{
+"elements": [],
+"name": "me22"
+}
+],
+"foo#switcher:is-active:0": 0,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -550,7 +558,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 5px; text-decoration: none; width: auto" class="ft_md"><p>hello world</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 14px; text-decoration: none; width: auto" class="ft_md"><p>Arpita Jaiswal</p></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 15px; text-decoration: none; width: auto" class="ft_md"><p>Arpita FifthTry</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#switcher:is-active:0&quot;}],[&quot;v&quot;,0]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>me</p></div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#switcher:is-active:0&quot;}],[&quot;v&quot;,1]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(88,75,66,1); cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md"><p>me22</p></div><div data-id="0,2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Me component</p></div><div data-id="0,2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Me component 2</p></div></div><div data-id="0,3:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Me component22</p></div><div data-id="0,3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Me component22 2</p></div></div></div></div>
 
 
 <script>
@@ -1770,31 +1778,6 @@ document.body.removeChild(textArea);
 
 
 
-function foo__append___main(a,b,args,data,id){
-return (a+" "+b);
-}
-
-
-
-function foo__compare___main(a,b,c,d,args,data,id){
-let e = a+c;
-return (if((e>b),c,d,args,data,id));
-}
-
-
-
-function foo__length___main(a,args,data,id){
-return (len(a,args,data,id));
-}
-
-
-
-function foo__sum___main(a,b,args,data,id){
-return (a+b);
-}
-
-
-
 function ftd__copy_to_clipboard___main(a,args,data,id){
 return (ftd.copy_to_clipboard(a,args,data,id));
 }
@@ -1855,94 +1838,140 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a","hello"],["b","world"]]}', this);
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#c.0.name", data);
 }
 
-window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)))));
+window.node_change_main["0,0:main__color"] = function(data) {
+if(function(){
+return (resolve_reference("foo#switcher:is-active:0", data)==0);
+}()){
+document.querySelector(`[data-id="0,0:main"]`).style["color"] = "red";
 }
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a",{"mutable":false,"reference":"foo#name"}],["b","Jaiswal"]]}', this);
+else {if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
+}
+}
+window.node_change_main["0,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#c.1.name", data);
 }
 
-window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)))));
+window.node_change_main["0,1:main__color"] = function(data) {
+if(function(){
+return (resolve_reference("foo#switcher:is-active:0", data)==1);
+}()){
+document.querySelector(`[data-id="0,1:main"]`).style["color"] = "red";
 }
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
+else {if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
 }
-
-window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)))));
+else {document.querySelector(`[data-id="0,1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
+}
+}
+window.node_change_main["0,2:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#switcher:is-active:0", data)==0);
+}()){
+document.querySelector(`[data-id="0,2:main"]`).style["display"] = "flex";
+}
+else {document.querySelector(`[data-id="0,2:main"]`).style["display"] = "none";}
+}
+window.node_change_main["0,3:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#switcher:is-active:0", data)==1);
+}()){
+document.querySelector(`[data-id="0,3:main"]`).style["display"] = "flex";
+}
+else {document.querySelector(`[data-id="0,3:main"]`).style["display"] = "none";}
 }
 window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#c"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#name" + "." + remaining, new_value);
+set_data_value(data, "foo#c" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#name", new_value);
+set_data_value(data, "foo#c", new_value);
 }
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
-} else {
-let value = resolve_reference("foo#name", data, null);
-set_data_value(data, "foo#new-name", value);
-}
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#name"]) {
-let changes = window.ftd.mutable_value_main["foo#name"].changes;
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#c"]) {
+let changes = window.ftd.mutable_value_main["foo#c"].changes;
 for(let i in changes) { changes[i](); }
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#name"]) {
-let changes = window.ftd.immutable_value_main["foo#name"].changes;
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#c"]) {
+let changes = window.ftd.immutable_value_main["foo#c"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 };
 
-window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#switcher:is-active:0"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#new-name" + "." + remaining, new_value);
+set_data_value(data, "foo#switcher:is-active:0" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#new-name", new_value);
+set_data_value(data, "foo#switcher:is-active:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#new-name"]) {
-let changes = window.ftd.mutable_value_main["foo#new-name"].changes;
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#switcher:is-active:0"]) {
+let changes = window.ftd.mutable_value_main["foo#switcher:is-active:0"].changes;
 for(let i in changes) { changes[i](); }
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#new-name"]) {
-let changes = window.ftd.immutable_value_main["foo#new-name"].changes;
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#switcher:is-active:0"]) {
+let changes = window.ftd.immutable_value_main["foo#switcher:is-active:0"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__display"]){window.node_change_main["0,3:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__display"]){window.node_change_main["0,2:main__display"](data);
 }
 };
 
-window.set_value_main["foo#number"] = function (data, new_value, remaining) {
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#number" + "." + remaining, new_value);
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#number", new_value);
+set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#number"]) {
-let changes = window.ftd.mutable_value_main["foo#number"].changes;
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#number"]) {
-let changes = window.ftd.immutable_value_main["foo#number"].changes;
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
+}
+};
+
+window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#default-colors" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#default-colors", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-colors"]) {
+let changes = window.ftd.mutable_value_main["ftd#default-colors"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-colors"]) {
+let changes = window.ftd.immutable_value_main["ftd#default-colors"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
 }
 };
 

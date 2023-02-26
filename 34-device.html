@@ -227,7 +227,7 @@
 },
 "error": {
 "base": {
-"dark": "#530c0ab0",
+"dark": "#311b1f",
 "light": "#f5bdbb"
 },
 "border": {
@@ -241,7 +241,7 @@
 },
 "info": {
 "base": {
-"dark": "#052a38de",
+"dark": "#15223a",
 "light": "#c4edfd"
 },
 "border": {
@@ -249,7 +249,7 @@
 "light": "#205694"
 },
 "text": {
-"dark": "#0a60c2",
+"dark": "#1f6feb",
 "light": "#205694"
 }
 },
@@ -1932,9 +1932,9 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#device"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }
 };
 
