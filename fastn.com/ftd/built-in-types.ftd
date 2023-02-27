@@ -354,13 +354,15 @@ gets `<some-extra>/fastn-dark.svg`, since
 
 
 
--- ds.h2: Supported Color Formats
+-- ds.h2: Supported image formats
 
-The value of `light` and `dark` can be any string supported by [CSS3 Color
-spec](https://www.w3.org/TR/css-color-3/).
+The HTML standard doesn't list what image formats to support, so
+[user agents](https://developer.mozilla.org/en-US/docs/Glossary/User_agent) may
+support different formats.
 
-Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
-[CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
+To get the comprehensive information about image formats and their web browser
+support, check the [Image file type and format
+guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 
 
