@@ -118,3 +118,75 @@ ftd.ui list child:
 children: $box.child
 
 -- end: box
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component compact-text:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+padding-top.px: 14
+padding-bottom.px: 16
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.text: $compact-text.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+padding-bottom.px: 16
+padding-top.px: 8
+region: h4
+
+-- ftd.column:
+width: fill-container
+;; margin-bottom.px if { compact-text.body != NULL }: -26
+
+-- ftd.text:
+if: { compact-text.body != NULL }
+text: $compact-text.body
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.text.classes:
+
+-- string: markdown
+
+-- end: ftd.text.classes
+
+-- ftd.column:
+children: $compact-text.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: compact-text

@@ -2,6 +2,7 @@
 
 -- my-ds.page: Built-in Types
 
+
 -- ds.markdown: 
 
 `ftd` comes with some built-in types. These types can be used to construct more
@@ -288,6 +289,34 @@ weight: 700
 font-family: cursive
 line-height.px: 65
 letter-spacing.px: 5
+
+
+
+
+
+-- ds.h1: `ftd.loading`
+
+`ftd.loading` is a or-type. This is the type for `loading` property of
+`ftd.iframe`. It is a strategy to identify whether resources are blocking and
+load these immediately or non-blocking (non-critical) and load these only when
+needed.
+
+It has following variants
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /-- ds.h1: `ftd.type`

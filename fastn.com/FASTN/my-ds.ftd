@@ -1,10 +1,12 @@
 -- import: ds
 -- import: fifthtry.github.io/dark-flame-cs
+-- import: fastn.io/utils
 
 -- component page:
 children wrapper:
 optional caption title:
 optional body body:
+boolean sidebar: true
 
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
@@ -12,5 +14,41 @@ title: $page.title
 body: $page.body
 wrapper: $page.wrapper
 colors: $dark-flame-cs.main
+$sidebar: *$page.sidebar
+
+-- ds.page.extra-headers:
+
+
+-- utils.compact-text: Support Fastn!
+
+Enjoying our Fastn? Please consider giving us a star ⭐️
+on [GitHub](https://github.com/fastn-stack/fastn) to show your support!
+
+-- utils.compact-text: Getting help
+
+Have a question or need help? Visit our [GitHub Q&A
+discussion](https://github.com/fastn-stack/fastn/discussions/categories/q-a) to
+get answers and subscribe to it to stay tuned. Connect with our community!
+
+-- utils.compact-text: Found an issue
+
+Found an issue. Visit our [GitHub
+issues](https://github.com/fastn-stack/fastn/issues) to register the issue.
+
+-- utils.compact-text: Quick links:
+
+- [Install `fastn`](install/)
+- [Create & Serve `fastn` package](create-fastn-package/)
+
+-- utils.compact-text: Join us
+
+We welcome you to join our [Discord](https://discord.gg/a7eBUeutWD) community
+today.
+
+We are trying to create the language for human beings and we do not believe it
+would be possible without your support. We would love to hear from you.
+
+
+-- end: ds.page.extra-headers
 
 -- end: page

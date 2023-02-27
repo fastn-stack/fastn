@@ -15,7 +15,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
 
 -- fastn.auto-import: ds
--- fastn.auto-import: fastn.io/FASTN/config as my-ds
+-- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
 -- fastn.auto-import: fastn.io/assets as fastn-assets
 
 
@@ -67,7 +67,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Docs Home: /docs/
 - Getting Started: /setup/
   document: ftd/setup.ftd
-- Create `fastn` package: /create-fastn-package/
+- Create & Serve `fastn` package: /create-fastn-package/
   document: ftd/create-fastn-package.ftd
 - Best Practices: /best-practices/
 

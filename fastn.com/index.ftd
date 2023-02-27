@@ -2,6 +2,7 @@
 
 
 -- my-ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
+sidebar: false
 
 `fastn` is a comprehensive new-age web development platform. It has been built
 specifically to make workflows across design, development & deployment simple
