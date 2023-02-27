@@ -262,7 +262,25 @@ Like `$processor$`, the platform provides foreign variables against a module.
 The FTD stuck itself to fetch value of foreign value, which is, then, provided
 by platform.
 
-The most common foreign variable is `assets`
+The most common foreign variable is `assets`.
+
+-- ds.code:
+lang: ftd
+
+
+\-- import: module/assets
+
+\-- ftd.text: Check bar content
+link: $assets.files.some-folder.bar.ftd
+
+
+-- ds.markdown:
+
+The `files` field in `assets` variable gives url to files present in package.
+So, `$assets.files.some-folder.bar.ftd` returns url of
+`<path-to-package>/some-folder/bar.ftd` as value.
+
+It's not so for image file.
 
 -- ds.code:
 lang: ftd
@@ -271,9 +289,17 @@ lang: ftd
 \-- import: module/assets
 
 \-- ftd.image:
-src: $assets.files.images.image1
+src: $assets.files.images.my-image.png
 
+-- ds.markdown:
 
+`$assets.files.images.my-image.png` gives url of
+`<path-to-package>/images/my-image.png` as value (for `light` field).
+But, if there exists a file with `-dark` append after image file name i.e.
+`<path-to-package>/images/my-image-dark.png`, then `dark` field get the url of
+this file.
+
+Checkout [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) for more details.
 
 -- end: my-ds.page
 

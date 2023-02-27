@@ -167,7 +167,7 @@ string dark: $color.light
 
 -- ds.markdown:
 
-It shows color in light field in light mode and color in dark field in dark
+It shows color in `light` field in light mode and color in `dark` field in dark
 mode. If value is not provided for `dark` field, it will take `light` field's
 value as default.
 
@@ -198,7 +198,7 @@ light: red
 
 This would return `red` color in both light mode and dark mode.
 
-Lets look at example of using ftd.color type variable.
+Lets look at example of using `ftd.color` type variable.
 
 -- ds.code: Two colors
 lang: ftd
@@ -232,6 +232,140 @@ spec](https://www.w3.org/TR/css-color-3/).
 
 Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
 [CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
+
+
+
+
+
+
+
+-- ds.h1: `ftd.image-src`
+
+`ftd.image-src` is a record. The 'src' property of `ftd.image` component
+accepts this type. It stores image URL for both light and dark mode.
+
+-- ds.code: `ftd.image-src` record (ftd.ftd)
+lang: ftd
+
+\-- record image-src:
+caption light:
+string dark: $image-src.light
+
+
+-- ds.markdown:
+
+It shows image in `light` field in light mode and image in `dark` field in dark
+mode. If value is not provided for `dark` field, it will take `light` field's
+value as default.
+
+Consider the following example:
+
+-- ds.code: Two images
+lang: ftd
+
+\-- ftd.image-src my-images:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg
+
+-- ds.markdown:
+
+This would return `https://fastn.io/-/fastn.io/images/fastn.svg` in light mode
+and `https://fastn.io/-/fastn.io/images/fastn-dark.svg` in dark
+mode.
+
+-- ds.code: One image
+lang: ftd
+
+\-- ftd.color just-light:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+
+\;; or
+
+\-- ftd.color just-light: https://fastn.io/-/fastn.io/images/fastn.svg
+
+-- ds.markdown:
+
+This would return `https://fastn.io/-/fastn.io/images/fastn.svg` in both light
+mode and dark mode.
+
+Lets look at example of using `ftd.image-src` type variable.
+
+-- ds.code: Two colors
+lang: ftd
+
+\-- ftd.image-src my-images:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg
+
+\-- ftd.image:
+src: $my-images
+
+
+-- ds.markdown:
+
+The output will look like this. Switch your color mode (light/dark) to see the
+wonder!
+
+-- ds.output:
+
+-- ftd.image:
+src: $fastn-assets.files.images.fastn.svg
+
+-- end: ds.output
+
+-- ds.markdown:
+
+Instead of passing the image URL, you can use package `assets` foreign variable.
+Check [foreign variable in Variable page](ftd/variables/#foreign-variables) to
+know more.
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.io/assets as fastn-assets
+
+\-- ftd.image:
+src: $fastn-assets.files.images.fastn.svg
+
+
+-- ds.markdown:
+
+The output will look same as above.
+
+-- ds.output:
+
+-- ftd.image:
+src: $fastn-assets.files.images.fastn.svg
+
+-- end: ds.output
+
+-- ds.markdown:
+
+`files` in `assets` variable gives url to files present in package. So,
+`$fastn-assets.files.images.fastn.svg` gives url of
+`<path-to-package>/images/fastn.svg` as value (for `light` field).
+
+Now, you must be wondering how does it get two different value of image for
+light mode and dark mode. The `assets` variable append the `-dark` at the end of
+image name, if any image with such name exists, for `dark` field. So, for above
+reference, the `light` field gets `<some-extra>/fastn.svg`, but `dark` field
+gets `<some-extra>/fastn-dark.svg`, since
+`<path-to-package>/images/fastn-dark.svg` exists in the package.
+
+
+
+-- ds.h2: Supported Color Formats
+
+The value of `light` and `dark` can be any string supported by [CSS3 Color
+spec](https://www.w3.org/TR/css-color-3/).
+
+Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
+[CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
+
+
+
+
+
 
 
 
@@ -297,9 +431,9 @@ letter-spacing.px: 5
 -- ds.h1: `ftd.loading`
 
 `ftd.loading` is a or-type. This is the type for `loading` property of
-`ftd.iframe`. It is a strategy to identify whether resources are blocking and
-load these immediately or non-blocking (non-critical) and load these only when
-needed.
+`ftd.iframe` component. It is a strategy to identify whether resources are
+blocking and load these immediately or non-blocking (non-critical) and load
+these only when needed.
 
 -- ds.code: `ftd.loading`
 lang: ftd
@@ -322,6 +456,43 @@ It has two variants `lazy` and `eager`.
 
 
 
+
+
+-- ds.h1: `ftd.text-input-type`
+
+`ftd.text-input-type` is an `or-type`. The 'type' property of `ftd.text-input`
+component accepts the `optional` of this type. It has various variant which
+defines information field type.
+
+-- ds.code: `ftd.text-input-type`
+lang: ftd
+
+\-- or-type text-input-type:
+
+\-- constant string text: text
+\-- constant string email: email
+\-- constant string password: password
+\-- constant string url: url
+
+\-- end: text-input-type
+
+-- ds.markdown:
+
+As you can see above the `ftd.text-input-type` has following variants:
+
+- **text**: The default value. A single-line text field. Line-breaks are
+automatically removed from the input value.
+
+- **email**: A field for editing an email address. Looks like a `text` input,
+but has validation parameters and relevant keyboard in supporting browsers and
+devices with dynamic keyboards.
+
+- **password**: A single-line text field whose value is obscured. Will alert
+user if site is not secure.
+
+- **url**: A field for entering a URL. Looks like a `text` input, but has
+validation parameters and relevant keyboard in supporting browsers and devices
+with dynamic keyboards.
 
 
 
