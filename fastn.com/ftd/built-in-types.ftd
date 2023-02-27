@@ -154,6 +154,10 @@ location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
 
+
+
+
+
 -- ds.h1: `ftd.color`
 
 It is record type with the following fields.
@@ -167,9 +171,12 @@ string dark: $color.light
 
 -- ds.markdown:
 
-It shows color in `light` field in light mode and color in `dark` field in dark
-mode. If value is not provided for `dark` field, it will take `light` field's
-value as default.
+The `light` field of `ftd.image-src` stores the color to be displayed in
+light mode, while the `dark` field stores the color to be displayed in dark
+mode. If the `dark` field is not provided, the `light` field's value is used as
+a default.
+
+-- ds.h2: Example Usage
 
 Consider the following example:
 
@@ -183,6 +190,8 @@ dark: orange
 -- ds.markdown:
 
 This would return `red` color in light mode and `orange` color in dark mode.
+
+It is also possible to use `ftd.color` with only one field. For example:
 
 -- ds.code: One color
 lang: ftd
@@ -198,6 +207,8 @@ light: red
 
 This would return `red` color in both light mode and dark mode.
 
+-- ds.h2: Using `ftd.color` in component property
+
 Lets look at example of using `ftd.color` type variable.
 
 -- ds.code: Two colors
@@ -212,6 +223,9 @@ color: $red-orange
 
 
 -- ds.markdown:
+
+In this example, the `ftd.text` component will display color of text specified
+in `red-orange` variable, based on the current color mode.
 
 The output will look like this. Switch your color mode (light/dark) to see the
 wonder!
@@ -241,8 +255,11 @@ Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
 
 -- ds.h1: `ftd.image-src`
 
-`ftd.image-src` is a record. The 'src' property of `ftd.image` component
-accepts this type. It stores image URL for both light and dark mode.
+`ftd.image-src` is a record type used to store image URLs for both light and
+dark mode. This record is a type for the 'src' property of `ftd.image`
+component.
+
+The record structure of `ftd.image-src` is as follows:
 
 -- ds.code: `ftd.image-src` record (ftd.ftd)
 lang: ftd
@@ -254,9 +271,12 @@ string dark: $image-src.light
 
 -- ds.markdown:
 
-It shows image in `light` field in light mode and image in `dark` field in dark
-mode. If value is not provided for `dark` field, it will take `light` field's
-value as default.
+The `light` field of `ftd.image-src` stores the image URL to be displayed in
+light mode, while the `dark` field stores the image URL to be displayed in dark
+mode. If the `dark` field is not provided, the `light` field's value is used as
+a default.
+
+-- ds.h2: Example Usage
 
 Consider the following example:
 
@@ -269,9 +289,11 @@ dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg
 
 -- ds.markdown:
 
-This would return `https://fastn.io/-/fastn.io/images/fastn.svg` in light mode
-and `https://fastn.io/-/fastn.io/images/fastn-dark.svg` in dark
-mode.
+In this example, the image URL `https://fastn.io/-/fastn.io/images/fastn.svg` is
+returned in light mode, while `https://fastn.io/-/fastn.io/images/fastn-dark.svg`
+is returned in dark mode.
+
+It is also possible to use `ftd.image-src` with only one field. For example:
 
 -- ds.code: One image
 lang: ftd
@@ -285,12 +307,16 @@ light: https://fastn.io/-/fastn.io/images/fastn.svg
 
 -- ds.markdown:
 
-This would return `https://fastn.io/-/fastn.io/images/fastn.svg` in both light
-mode and dark mode.
+In this case, the same image URL `https://fastn.io/-/fastn.io/images/fastn.svg`
+is returned in both light and dark modes.
+
+-- ds.h2: Using `ftd.image-src` with `ftd.image` Component
 
 Lets look at example of using `ftd.image-src` type variable.
+The `ftd.image-src` record is a type used for the 'src' property of `ftd.image`
+component, as shown below:
 
--- ds.code: Two colors
+-- ds.code: Two images
 lang: ftd
 
 \-- ftd.image-src my-images:
@@ -303,6 +329,9 @@ src: $my-images
 
 -- ds.markdown:
 
+In this example, the `ftd.image` component will display the image URL specified
+in `my-images` variable, based on the current color mode.
+
 The output will look like this. Switch your color mode (light/dark) to see the
 wonder!
 
@@ -313,11 +342,24 @@ src: $fastn-assets.files.images.fastn.svg
 
 -- end: ds.output
 
--- ds.markdown:
+-- ds.h2: Using assets Foreign Variable
 
-Instead of passing the image URL, you can use package `assets` foreign variable.
+Instead of passing the image URL directly, it is possible to use the `assets`
+foreign variable to access files present in a package.
 Check [foreign variable in Variable page](ftd/variables/#foreign-variables) to
 know more.
+
+To use the `assets` variable, import the package as shown below:
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.io/assets as fastn-assets
+
+-- ds.markdown:
+
+Then, use the `files` field of `assets` variable to access files present in the
+package. For example:
 
 -- ds.code: Image using assets
 lang: ftd
@@ -341,16 +383,15 @@ src: $fastn-assets.files.images.fastn.svg
 
 -- ds.markdown:
 
-`files` in `assets` variable gives url to files present in package. So,
-`$fastn-assets.files.images.fastn.svg` gives url of
-`<path-to-package>/images/fastn.svg` as value (for `light` field).
+In this example, the `src` field of `ftd.image` component will be set to the URL
+of `fastn.svg` file present in the `images` folder of the `fastn.io` package.
 
 Now, you must be wondering how does it get two different value of image for
-light mode and dark mode. The `assets` variable append the `-dark` at the end of
-image name, if any image with such name exists, for `dark` field. So, for above
-reference, the `light` field gets `<some-extra>/fastn.svg`, but `dark` field
-gets `<some-extra>/fastn-dark.svg`, since
-`<path-to-package>/images/fastn-dark.svg` exists in the package.
+light mode and dark mode. When using `assets` variable, if an image with the
+same name but with `-dark` suffix exists in the package, it will be used for the
+`dark` field. For example, if `fastn-dark.svg` file exists in the `images`
+folder, it will be used for the `dark` field, while `fastn.svg` will be used for
+the light field.
 
 
 
@@ -366,6 +407,112 @@ guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 
 
+
+
+
+
+-- ds.h1: `ftd.length`
+
+The `ftd.length` type is used for passing UI dimensions and is an `or-type`,
+meaning it can take on different variants.
+
+
+-- ds.code: `ftd.length`
+lang: ftd
+
+\-- or-type length:
+
+\-- integer px:
+\-- decimal percent:
+\-- string calc:
+\-- integer vh:
+\-- integer vw:
+\-- decimal em:
+\-- decimal rem:
+\-- ftd.responsive-length responsive:
+
+\-- end: length
+
+\-- record responsive-length:
+ftd.length desktop:
+ftd.length mobile: $responsive-length.desktop
+
+-- ds.markdown:
+
+As shown above, the `ftd.length` has following variants:
+
+- `px`: This variant gives an integer value followed by the px unit of space.
+For example, padding.px: 100 sets the padding to be 100 pixels.
+
+- `percent`: This variant gives an integer value followed by the % unit of space.
+For example, width.fixed.percent: 50 sets the width to be 50% of the parent
+element's width.
+
+- `calc`: This variant takes a single expression as its parameter, and its
+result is used as the value. For example, `padding.calc: 100% - 80px` sets the
+padding to be the result of the expression `100% - 80px`.
+
+- `vh`: This variant sets the value relative to 1% of the height of the viewport.
+For example, `height.fixed.vh: 50` sets the height to be 50% of the viewport's
+height.
+
+- `vw`: This variant sets the value relative to 1% of the width of the viewport.
+For example, `width.fixed.vw: 25` sets the width to be 25% of the viewport's
+width.
+
+- `em`: This variant sets the value relative to the size of the parent
+element, in the case of typographical properties like `font-size`, and the font
+size of the element itself, in the case of other properties like width.
+
+- `rem`: This variant sets the value relative to the size of the root
+element.
+
+
+Besides these, there is a special variant named `responsive`.This variant is of
+record type named `ftd.responsive-length`. It helps to give different length for
+different devices (mobile/desktop). It has two fields, `desktop` and `mobile`,
+which are `ftd.length` types. The `desktop` field specifies the value of the
+length on desktop devices, while the `mobile` field specifies the value on
+mobile devices.
+
+
+For example,
+
+-- ds.code: `responsive`
+lang: ftd
+
+\-- ftd.responsive-length p:
+desktop.px: 20
+mobile.percent: 10
+
+\-- ftd.text: Hello
+padding.responsive: $p
+
+
+-- ds.markdown:
+
+The above code sets the padding to be 20 pixels on desktop devices and 10
+percent on mobile devices.
+
+Note that the `calc` variant can be used with any of the other variants to
+perform calculations on the values.
+
+-- ds.h2: Example Usage of `ftd.length`
+
+-- ds.code: Example Usage of `ftd.length`
+lang: ftd
+
+\-- ftd.text: Hello
+width.fixed.percent: 50
+height.fixed.px: 300
+margin.px: 2rem
+padding.calc: 100% - 80px
+
+-- ds.markdown:
+
+In the above example, the `ftd.text` component has a width of 50% of its parent
+element's width, a fixed height of 300 pixels, a margin of 2 times the font size
+of the root element, and a padding calculated using the expression 100% - 80px.
 
 
 
