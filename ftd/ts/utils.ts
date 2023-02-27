@@ -158,6 +158,14 @@ function JSONstringify(f: any) {
     }
 }
 
+function download_text(filename: string, text: string){
+    const blob = new Blob([text], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+}
+
 
 function get_color_value(cs: Object, category: string, color_name: string): any {
     let category_data: Object = cs[category as keyof typeof cs];
