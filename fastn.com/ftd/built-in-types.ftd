@@ -301,7 +301,23 @@ letter-spacing.px: 5
 load these immediately or non-blocking (non-critical) and load these only when
 needed.
 
-It has following variants
+-- ds.code: `ftd.loading`
+lang: ftd
+
+\-- or-type loading:
+
+\-- constant string lazy: lazy
+\-- constant string eager: eager
+
+\-- end: loading
+
+
+-- ds.markdown:
+
+It has two variants `lazy` and `eager`.
+
+- `eager`: Loads an element immediately
+- `lazy`: Defer loading of element until some conditions are met
 
 
 
