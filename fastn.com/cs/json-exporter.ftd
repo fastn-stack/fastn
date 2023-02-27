@@ -1,0 +1,175 @@
+-- string $result: None
+
+-- string $formatted-string: None
+
+-- string $current-json: None
+
+-- void json-to-ftd(json,store_at,formatted_string):
+string json:
+string $store_at:
+string $formatted_string:
+
+value = figma_json_to_ftd(json);
+store_at = value[0];
+formatted_string = value[1];
+
+-- component json-exporter:
+
+-- ftd.column:
+background.solid: black
+width: fill-container
+height: fill-container
+spacing.fixed.px: 20
+padding.px: 20
+
+-- ftd.row:
+spacing.fixed.px: 15
+align-content: center
+
+-- ftd.text-input:
+placeholder: Enter figma json data
+multiline: true
+padding-right.px: 10
+width.fixed.px: 500
+height.fixed.px: 200
+$on-input$: $ftd.set-string($a = $current-json, v = $VALUE)
+
+-- ftd.text: Change to FTD
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+width.fixed.px: 200
+$on-click$: $json-to-ftd(json = $current-json, $store_at = $result, $formatted_string = $formatted-string, escaped = false)
+
+-- end: ftd.row
+
+-- code: FTD code
+if: { result != "None" }
+lang: ftd
+body: $formatted-string
+text: $result
+
+-- end: ftd.column
+
+-- end: json-exporter
+
+-- json-exporter:
+
+-- ftd.color code-bg-light:
+light: #2b303b
+dark: #18181b
+
+-- ftd.color code-bg-dark:
+light: #18181b
+dark: #2b303b
+
+-- component code:
+optional caption caption:
+body body:
+optional string text:
+string lang:
+boolean clip: true
+string $copy-text: null
+
+-- ftd.column:
+padding-bottom.px: 12
+padding-top.px: 12
+width.fixed.px: 500
+height.fixed.px: 500
+
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-top.px: 10
+padding-bottom.px: 10
+padding-left.px: 20
+padding-right.px: 20
+border-top-left-radius.px: 4
+border-top-right-radius.px: 4
+;;align-content: center
+
+-- ftd.text: $code.caption
+if: { $code.caption != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+width: fill-container
+
+-- ftd.row:
+if: { code.clip }
+spacing.fixed.px: 10
+align-content: right
+width: fill-container
+$on-click-outside$: $ftd.set-string($a = $code.copy-text, v = null)
+
+-- ftd.text: Copy
+if: { code.copy-text == "null" }
+role: $inherited.types.copy-regular
+color: $inherited.colors.border
+$on-click$: $ftd.copy-to-clipboard(a = $code.text)
+$on-click$: $ftd.set-string($a = $code.copy-text, v = Copied!)
+
+/-- ftd.image:
+if: { code.copy-text == "null" }
+src: $assets.files.static.copy.svg
+$on-click$: $ftd.copy-to-clipboard(a = $code.body)
+$on-click$: $ftd.set-string($a = $code.copy-text, v = Copied!)
+width.fixed.px: 18
+
+/-- ftd.image:
+if: {code.copy-text != "null"}
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+
+-- ftd.text: $code.copy-text
+if: { code.copy-text != "null" }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.code:
+if: { ftd.dark-mode }
+text: $code.body
+lang: $code.lang
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+padding-top.px: 10
+padding-left.px: 20
+padding-bottom.px: 10
+padding-right.px: 20
+background.solid: $code-bg-dark
+border-top-left-radius.px if {$code.caption == NULL}: 4
+border-top-right-radius.px if {$code.caption == NULL}: 4
+border-bottom-left-radius.px: 4
+border-bottom-right-radius.px: 4
+;; border-width.px: 1
+;; border-color: $code-bg-dark
+overflow-x: auto
+
+-- ftd.code:
+if: { !ftd.dark-mode}
+text: $code.body
+lang: $code.lang
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+padding-top.px: 10
+padding-left.px: 20
+padding-bottom.px: 10
+padding-right.px: 20
+background.solid: #eff1f5
+border-top-left-radius.px if {$code.caption == NULL}: 4
+border-top-right-radius.px if {$code.caption == NULL}: 4
+border-bottom-left-radius.px if {$code.caption == NULL}: 4
+border-bottom-right-radius.px if {$code.caption == NULL}: 4
+border-color: $inherited.colors.background.step-1
+border-width.px: 0
+overflow-x: auto
+theme: base16-ocean.light
+
+-- end: ftd.column
+
+-- end: code

@@ -91,6 +91,10 @@ document: author/how-to/install.ftd
   document: cs/use-color-package.ftd
 - Modify color scheme package: /modify-cs/
   document: cs/modify-cs.ftd
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: /cs/ftd-to-figma/
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: /cs/figma-to-ftd/
 - Create `font` package: /create-font-package/
   document: author/how-to/create-font-package.ftd
 
