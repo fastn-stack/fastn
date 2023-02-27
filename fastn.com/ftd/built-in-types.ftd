@@ -387,7 +387,10 @@ In this example, the `src` field of `ftd.image` component will be set to the URL
 of `fastn.svg` file present in the `images` folder of the `fastn.io` package.
 
 Now, you must be wondering how does it get two different value of image for
-light mode and dark mode. When using `assets` variable, if an image with the
+light mode and dark mode.
+
+
+When using `assets` variable, if an image with the
 same name but with `-dark` suffix exists in the package, it will be used for the
 `dark` field. For example, if `fastn-dark.svg` file exists in the `images`
 folder, it will be used for the `dark` field, while `fastn.svg` will be used for
