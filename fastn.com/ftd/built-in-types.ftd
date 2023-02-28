@@ -968,17 +968,81 @@ lang: ftd
 
 As shown above, the `ftd.cursor` has following variants:
 
-- `normal`: Sequences of whitespace will collapse into a single whitespace. Text
-  will wrap when necessary. This is default
+- `normal`: This value is the default behavior. Sequences of whitespace will
+collapse into a single whitespace. Text will wrap when necessary, and on line
+breaks.
+
 - `nowrap`: Sequences of whitespace will collapse into a single whitespace. Text
-  will never wrap to the next line. The text continues on the same line until a
-  break or new line is encountered
-- `pre`: Whitespace is preserved by the browser. Text will only wrap on line
-  breaks.
+will never wrap to the next line. The text continues on the same line until a
+line break or new line is encountered.
+
+- `pre`: This value preserves whitespace characters. Text will only wrap on line
+breaks.
+
 - `pre-line`: Sequences of whitespace will collapse into a single whitespace.
-  Text will wrap when necessary, and on line breaks
-- `pre-wrap`: Whitespace is preserved by the browser. Text will wrap when
-  necessary, and on line breaks
+Text will wrap when necessary, and on line breaks.
+
+- `pre-wrap`: This value preserves whitespace characters. Text will wrap when
+necessary, and on line breaks.
+
+
+By using these values, you can control how white-space characters are treated
+inside an element, allowing for more precise control over the layout and
+formatting of text content. For example, using `pre` or `pre-wrap` can be useful
+when displaying code snippets or other text that requires precise formatting,
+while `normal` or `pre-line` may be more appropriate for regular paragraphs or
+text blocks.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.text-transform`
+
+
+`ftd.text-transform` is an `or-type` that represents the different values for
+the `text-transform` property, which is a common property for components. This
+property specifies how to transform the capitalization of an element's text. It
+can be used to make text appear in all-uppercase or all-lowercase, or with each
+word capitalized.
+
+
+-- ds.code: `ftd.text-transform`
+lang: ftd
+
+\-- or-type text-transform:
+
+\-- constant string none: none
+\-- constant string capitalize: capitalize
+\-- constant string uppercase: uppercase
+\-- constant string lowercase: lowercase
+\-- constant string initial: initial
+\-- constant string inherit: inherit
+
+\-- end: text-transform
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.text-transform` has following variants:
+
+
+- `none`: No capitalization. The text renders as it is. This is default
+- `capitalize`: Transforms the first character of each word to uppercase
+- `uppercase`: Transforms all characters to uppercase
+- `lowercase`: Transforms all characters to lowercase
+- `initial`: Sets this property to its default value.
+- `inherit`: Inherits this property from its parent element.
+
+
+
+
+
+
+
+
 
 
 
