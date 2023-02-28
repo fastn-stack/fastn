@@ -19,8 +19,9 @@ link: Zoom/link/should/appear/here
 
 
 
--- ds.page:
-$widthfill: true
+-- my-ds.page:
+widthfill: true
+sidebar: false
 
 -- event.event: FTD Remote Meet-up #2 
 banner-src: $assets.files.images.events.event-banner.svg
@@ -102,7 +103,7 @@ icon: $assets.files.images.linkedin.svg
 
 -- end: event.row-container
 
--- end: ds.page
+-- end: my-ds.page
 
 
 

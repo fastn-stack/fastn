@@ -7,6 +7,7 @@ children wrapper:
 optional caption title:
 optional body body:
 boolean sidebar: true
+optional boolean widthfill: false
 
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
@@ -15,6 +16,7 @@ body: $page.body
 wrapper: $page.wrapper
 colors: $dark-flame-cs.main
 $sidebar: *$page.sidebar
+$widthfill: *$page.widthfill
 
 -- ds.page.extra-headers:
 
