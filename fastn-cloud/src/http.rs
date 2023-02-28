@@ -7,6 +7,10 @@ pub enum PostError {
     ReqwestError(#[from] reqwest::Error),
     #[error("HeadersError")]
     HeadersError(String),
+    #[error("ResponseParseError: {0}")]
+    ResponseParseError(#[from] serde_json::Error),
+    #[error("ResponseError : {msg}")]
+    ResponseError { msg: String },
 }
 
 pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
@@ -27,8 +31,17 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
         )
         .collect();
     let headers = headers.map_err(PostError::HeadersError)?;
-    // TODO: Handle The errors and different statuses
-    Ok(reqwest::Client::new()
+
+    #[derive(serde::Deserialize)]
+    struct ApiResponse {
+        success: bool,
+        #[serde(default)]
+        data: serde_json::Value,
+        #[serde(default)]
+        msg: serde_json::Value,
+    }
+
+    let resp: ApiResponse = reqwest::Client::new()
         .post(url)
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .header(reqwest::header::USER_AGENT, "fastn")
@@ -38,7 +51,16 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
         .send()
         .await?
         .json()
-        .await?)
+        .await?;
+
+    return if resp.success {
+        Ok(serde_json::from_value(resp.data)?)
+    } else {
+        println!("Response Error: {}", &resp.msg);
+        Err(PostError::ResponseError {
+            msg: resp.msg.to_string(),
+        })
+    };
 }
 
 pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(

@@ -1,6 +1,6 @@
 pub async fn create_package(root: &camino::Utf8Path) -> Result<(), fastn_cloud::CreateError> {
     let config = fastn_core::Config::read(Some(root.to_string()), false, None).await?;
-    let (list_file, data_file) = create_tejar(root).await?;
+    let (list_file, data_file) = tejar_create(root).await?;
     let list_content = read_to_string(list_file.as_path()).await?;
     let create_api_resp = create_api(
         config.package.name.as_str(),
@@ -131,7 +131,7 @@ pub async fn upload_new_package(
     Ok(response)
 }
 
-pub async fn create_tejar(
+pub async fn tejar_create(
     root: &camino::Utf8Path,
 ) -> Result<(camino::Utf8PathBuf, camino::Utf8PathBuf), tejar::error::CreateError> {
     let files: _ = fastn_cloud::utils::walkdir_util(root)
