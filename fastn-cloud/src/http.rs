@@ -12,6 +12,14 @@ pub enum PostError {
     #[error("ResponseError : {msg}")]
     ResponseError { msg: String },
 }
+#[derive(serde::Deserialize, Debug)]
+struct ApiResponse {
+    success: bool,
+    #[serde(default)]
+    data: serde_json::Value,
+    #[serde(default)]
+    msg: serde_json::Value,
+}
 
 pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
     url: &str,
@@ -31,15 +39,6 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
         )
         .collect();
     let headers = headers.map_err(PostError::HeadersError)?;
-
-    #[derive(serde::Deserialize)]
-    struct ApiResponse {
-        success: bool,
-        #[serde(default)]
-        data: serde_json::Value,
-        #[serde(default)]
-        msg: serde_json::Value,
-    }
 
     let resp: ApiResponse = reqwest::Client::new()
         .post(url)
@@ -81,8 +80,8 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
         )
         .collect();
     let headers = headers.map_err(PostError::HeadersError)?;
-    // TODO: Handle The errors and different statuses
-    Ok(reqwest::Client::new()
+
+    let resp: ApiResponse = reqwest::Client::new()
         .put(url)
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .header(reqwest::header::USER_AGENT, "fastn")
@@ -92,5 +91,28 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
         .send()
         .await?
         .json()
-        .await?)
+        .await?;
+
+    println!("{:?}", resp);
+    return if resp.success {
+        Ok(serde_json::from_value(resp.data)?)
+    } else {
+        println!("Response Error: {}", &resp.msg);
+        Err(PostError::ResponseError {
+            msg: resp.msg.to_string(),
+        })
+    };
+
+    // TODO: Handle The errors and different statuses
+    // Ok(reqwest::Client::new()
+    //     .put(url)
+    //     .header(reqwest::header::CONTENT_TYPE, "application/json")
+    //     .header(reqwest::header::USER_AGENT, "fastn")
+    //     .headers(headers)
+    //     .query(query)
+    //     .body(body)
+    //     .send()
+    //     .await?
+    //     .json()
+    //     .await?)
 }
