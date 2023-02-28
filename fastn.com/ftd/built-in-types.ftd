@@ -747,6 +747,7 @@ As shown above, the `ftd.responsive-type` has following fields:
 
 -- ds.h3: Example Usage
 
+Lets understand this with an example.
 
 -- ds.code:
 lang: ftd
@@ -931,6 +932,49 @@ As shown above, the `ftd.spacing` has following variants:
 
 - `space-evenly`: The space is distributed evenly between and around each item,
   including the space between the first and last items and the container edges.
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.anchor`
+
+`ftd.anchor` is an `or-type`. It is a type for `anchor` property, a
+common property for component. It specifies the positioning of the element
+relative to its parent, ancestor, or the window.
+
+
+-- ds.code: `ftd.anchor`
+lang: ftd
+
+\-- or-type anchor:
+
+\-- constant string parent: absolute
+\-- constant string window: fixed
+\-- string id:
+
+\-- end: anchor
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.anchor` has following variants:
+
+- `parent`: This specifies that the element is positioned relative to its
+  parent container.
+- `window`: This specifies that the element is positioned relative to the
+  browser window, and will not move even if the page is scrolled.
+- `id`: This specifies that the element is positioned relative to another
+ ancestor element with the given id.
+
+
+When using `anchor` property, component should also include an `offset`
+properties, like `top` or `bottom` and `left` or `right` which specifies the
+offset of the element from the anchor element. If not given, it takes the
+default offset as `top.px: 0` and `left.px: 0`
 
 
 
