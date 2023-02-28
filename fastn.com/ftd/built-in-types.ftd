@@ -519,17 +519,6 @@ still surrounding its contents.
 
 
 
-;; Todo: -- ds.h2: `ftd.align-self`
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -609,6 +598,21 @@ mobile.percent: 10
 
 \-- ftd.text: Hello
 padding.responsive: $p
+background.solid: $inherited.colors.background.step-1
+color: $inherited.colors.text
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- ds.output:
+
+-- ftd.text: Hello
+padding.responsive: $p
+background.solid: $inherited.colors.background.step-1
+color: $inherited.colors.text
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- end: ds.output
 
 
 -- ds.markdown:
@@ -699,9 +703,90 @@ letter-spacing.px: 5
 
 
 
+
+
+
+
+
+
+
+-- ds.h2: `ftd.align-self`
+
+`ftd.align-self` is an `or-type`. It is a type for `align-self` property, a
+common property for component. It specifies the alignment of an element within
+its container in the block direction, i.e., the direction perpendicular to the
+main axis.
+
+-- ds.code: `ftd.align-self`
+lang: ftd
+
+\-- or-type align-self:
+
+\-- constant string start: start
+\-- constant string center: center
+\-- constant string end: end
+
+\-- end: align-self
+
+-- ds.markdown:
+
+As shown above, the `ftd.align-self` has following variants:
+
+- `start`: The element is positioned at the beginning of the container
+- `center`: The element is positioned at the center of the container
+- `end`: The element is positioned at the end of the container
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.overflow`
+
+`ftd.overflow` is an `or-type`. It is a type for `overflow` property, a
+common property for component. It specifies whether to clip the content or to
+add scrollbars when the content of an element is too big to fit in the specified
+area.
+
+
+```ftd
+-- or-type overflow:
+
+-- constant string scroll: scroll
+-- constant string visible: visible
+-- constant string hidden: hidden
+-- constant string auto: auto
+
+-- end: overflow
+```
+
+As shown above, the `ftd.overflow` has following variants:
+
+- `visible` - Default. The overflow is not clipped. The content renders
+  outside the element's box
+- `hidden` - The overflow is clipped, and the rest of the content will be
+  invisible
+- `scroll` - The overflow is clipped, and a scrollbar is added to see the rest
+  of the content
+- `auto` - Similar to scroll, but it adds scrollbars only when necessary
+
+
+
+
+
+
+
+
+
+
+
+
 -- ds.h2: `ftd.loading`
 
-`ftd.loading` is a or-type. This is the type for `loading` property of
+`ftd.loading` is an or-type. This is the type for `loading` property of
 `ftd.iframe` component. It is a strategy to identify whether resources are
 blocking and load these immediately or non-blocking (non-critical) and load
 these only when needed.
@@ -864,3 +949,7 @@ style: italic
 -- ftd.color red-orange:
 light: red
 dark: orange
+
+-- ftd.responsive-length p:
+desktop.px: 20
+mobile.percent: 10
