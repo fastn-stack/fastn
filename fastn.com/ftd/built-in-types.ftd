@@ -14,6 +14,39 @@ These types can be categorized into two main groups: **Primitive** and
   other derived types. e.g. `ftd.color`, `ftd.image-src` etc.
 
 
+-- ds.h1: Contents
+
+- [Primitive Types](ftd/built-in-types/#primitive-types)
+  - [`boolean`](ftd/built-in-types/#boolean)
+  - [`integer`](ftd/built-in-types/#integer)
+  - [`decimal`](ftd/built-in-types/#decimal)
+  - [`string`](ftd/built-in-types/#string)
+  - [`caption`](ftd/built-in-types/#caption)
+  - [`body`](ftd/built-in-types/#body)
+  - [`caption or body`](ftd/built-in-types/#caption-or-body)
+- [Derived Types]((ftd/built-in-types/#derived-types))
+  - [`ftd.color`](ftd/built-in-types/#ftd-color)
+  - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
+  - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
+  - [`ftd.length`](ftd/built-in-types/#ftd-length)
+  - [`ftd.type`](ftd/built-in-types/#ftd-type)
+  - [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
+  - [`ftd.align-self`](ftd/built-in-types/#ftd-align-self)
+  - [`ftd.align`](ftd/built-in-types/#ftd-align)
+  - [`ftd.text-align`](ftd/built-in-types/#ftd-text-align)
+  - [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
+  - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
+  - [`ftd.resize`](ftd/built-in-types/#ftd-resize)
+  - [`ftd.overflow`](ftd/built-in-types/#ftd-overflow)
+  - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
+  - [`ftd.region`](ftd/built-in-types/#ftd-region)
+  - [`ftd.white-space`](ftd/built-in-types/#ftd-white-space)
+  - [`ftd.text-transform`](ftd/built-in-types/#ftd-text-transform)
+  - [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
+  - [`ftd.loading`](ftd/built-in-types/#ftd-loading)
+  - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
+  - [`ftd.type`](ftd/built-in-types/#ftd-type)
+
 
 
 
