@@ -26,9 +26,16 @@ on [GitHub](https://github.com/fastn-stack/fastn) to show your support!
 
 -- utils.compact-text: Getting help
 
-Have a question or need help? Visit our [GitHub Q&A
-discussion](https://github.com/fastn-stack/fastn/discussions/categories/q-a) to
-get answers and subscribe to it to stay tuned. Connect with our community!
+Have a question or need help?
+
+Visit our [GitHub Q&A discussion](https://github.com/fastn-stack/fastn/discussions/categories/q-a)
+to get answers and subscribe to it to stay tuned.
+
+Join our [Discord](https://discord.gg/a7eBUeutWD) channel and share your
+thoughts, suggestion, question etc.
+
+Connect with our community!
+
 
 -- utils.compact-text: Found an issue
 
@@ -38,7 +45,8 @@ issues](https://github.com/fastn-stack/fastn/issues) to register the issue.
 -- utils.compact-text: Quick links:
 
 - [Install `fastn`](install/)
-- [Create & Serve `fastn` package](create-fastn-package/)
+- [Create `fastn` package](create-fastn-package/)
+- [Expander Crash Course](expander/)
 
 -- utils.compact-text: Join us
 

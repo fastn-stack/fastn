@@ -13,6 +13,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fifthtry.github.io/button
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+-- fastn.dependency: gargajit.github.io/expander
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -70,7 +71,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Docs Home: /docs/
 - Getting Started: /setup/
   document: ftd/setup.ftd
-- Create & Serve `fastn` package: /create-fastn-package/
+- Create `fastn` package: /create-fastn-package/
   document: ftd/create-fastn-package.ftd
 - Best Practices: /best-practices/
 
@@ -113,6 +114,17 @@ document: author/how-to/install.ftd
   document: ftd-host/foreign-variable.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
+
+## Crash Course: /expander/
+
+- Overview: /expander/
+- Part 1. Hello World: /expander/hello-world/
+- Part 2. Basic UI: /expander/basic-ui/
+- Part 3. Components: /expander/components/
+- Part 4. Event Handling: /expander/events/
+- Part 5. Publish a package: /expander/publish/
+- Part 6. Polishing UI: /expander/polish/
+
 
 
 # Blog: /blog/web-components/
