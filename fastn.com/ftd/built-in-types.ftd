@@ -897,6 +897,59 @@ and left (south/west)
 
 
 
+-- ds.h2: `ftd.region`
+
+`ftd.region` is an `or-type`. It is a type for `region` property, a property for
+text component. This property is used to specify the level of section headings
+in a document. It also generate slug and set it as the id for text component.
+
+
+-- ds.code: `ftd.region`
+lang: ftd
+
+\-- or-type region:
+
+\-- constant string h1: h1
+\-- constant string h2: h2
+\-- constant string h3: h3
+\-- constant string h4: h4
+\-- constant string h5: h5
+\-- constant string h6: h6
+
+\-- end: region
+
+-- ds.markdown:
+
+As shown above, the `ftd.region` type includes six possible constant string
+values: `h1`, `h2`, `h3`, `h4`, `h5`, and `h6`. Each of these values represents
+a different level of section heading, with `h1` being the highest level and `h6`
+being the lowest.
+
+By using appropriate `ftd.region` variant, structured and semantically
+meaningful documents or webpages can be created. The generated slugs ensure that
+each section heading has an ID that can be used for linking or navigating
+within the document or webpage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- ds.h2: `ftd.loading`
 
