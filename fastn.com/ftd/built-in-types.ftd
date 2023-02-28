@@ -1,15 +1,31 @@
-\-- ft-core.concept:
-
-
 -- my-ds.page: Built-in Types
 
 
--- ds.markdown: 
+`ftd` comes with some built-in types. These can be used to define properties of
+components or fields of [`record`](ftd/record/) and [`or-type`](ftd/or-type/).
+These types can be categorized into two main groups: **Primitive** and
+**Derived**.
 
-`ftd` comes with some built-in types. These types can be used to construct more
-complex types like [`record`](ftd/record/) and [`or-type`](ftd/or-type/).
 
--- ds.h1: `boolean`
+- **Primitive**: The primitive types are the building blocks for creating more
+ complex types. e.g. `string`, `boolean`, `integer` etc
+
+- **Derived**: Derived types can be constructed using primitive types or other
+  derived types. e.g. `ftd.color`, `ftd.image-src` etc.
+
+
+
+
+
+-- ds.h1: Primitive Types
+
+Primitive types are basic building blocks that can be used to construct more
+complex types like [`record`](ftd/record/) and [`or-type`](ftd/or-type/). These
+types include:
+
+
+
+-- ds.h2: `boolean`
 
 This type is used to represent boolean values `true` and `false`.
 
@@ -18,7 +34,7 @@ lang: ftd
 
 \-- boolean is-monday: true
 
--- ds.h1: `integer`
+-- ds.h2: `integer`
 
 This is integer type, can be positive or negative.
 
@@ -28,7 +44,7 @@ lang: ftd
 \-- integer number-of-days-in-a-week: 7
 
 
--- ds.h1: `decimal`
+-- ds.h2: `decimal`
 
 This type is used to represent decimal numbers.
 
@@ -38,7 +54,7 @@ lang: ftd
 \-- decimal pi: 3.14159
 
 
--- ds.h1: `string`
+-- ds.h2: `string`
 
 This is unicode string.
 
@@ -59,7 +75,7 @@ can have any number of lines.
 or long paragraph, if you have a long paragraph to write. it can
 contain unicode characters in any भाषा, or emojis, 💁👌🎍😍.
 
--- ds.h1: `caption`
+-- ds.h2: `caption`
 
 `caption` is a special type, it is an alias for `string`, but can not be used
 when declaring a [variable](ftd/variables/).
@@ -88,7 +104,7 @@ If something is specified as `caption`, it can come in the "caption" location, e
 in case of `amitu` var, or it can come as an explicit key, as in the declaration
 of `shobhit` variable.
 
--- ds.h1: `body`
+-- ds.h2: `body`
 
 `body` is a special type, it is an alias for `string`, but can not be used when
 declaring a variable.
@@ -122,7 +138,7 @@ If something is specified as `body`, it can come in the "body" location, eg in
 case of `amitu` var, or it can come as an explicit key, as in the declaration of
 `shobhit` variable.
 
--- ds.h1: `caption or body`
+-- ds.h2: `caption or body`
 
 `caption or body` is a special type, it is an alias for `string`, but can not be
 used when declaring a variable.
@@ -160,10 +176,12 @@ the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 -- ds.h1: Derived Types
 
 
+Derived types are more complex and are built using primitive types or other
+derived types. Derived types comes in two types: [`record`](ftd/record/) and
+[`or-type`](ftd/or-type/).
 
 
-
--- ds.h1: `ftd.color`
+-- ds.h2: `ftd.color`
 
 It is record type with the following fields.
 
@@ -181,7 +199,7 @@ light mode, while the `dark` field stores the color to be displayed in dark
 mode. If the `dark` field is not provided, the `light` field's value is used as
 a default.
 
--- ds.h2: Example Usage
+-- ds.h3: Example Usage
 
 Consider the following example:
 
@@ -212,7 +230,7 @@ light: red
 
 This would return `red` color in both light mode and dark mode.
 
--- ds.h2: Using `ftd.color` in component property
+-- ds.h3: Using `ftd.color` in component property
 
 Lets look at example of using `ftd.color` type variable.
 
@@ -244,7 +262,7 @@ color: $red-orange
 
 
 
--- ds.h2: Supported Color Formats
+-- ds.h3: Supported Color Formats
 
 The value of `light` and `dark` can be any string supported by [CSS3 Color
 spec](https://www.w3.org/TR/css-color-3/).
@@ -258,7 +276,7 @@ Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
 
 
 
--- ds.h1: `ftd.image-src`
+-- ds.h2: `ftd.image-src`
 
 `ftd.image-src` is a record type used to store image URLs for both light and
 dark mode. This record is a type for the 'src' property of `ftd.image`
@@ -281,7 +299,7 @@ light mode, while the `dark` field stores the image URL to be displayed in dark
 mode. If the `dark` field is not provided, the `light` field's value is used as
 a default.
 
--- ds.h2: Example Usage
+-- ds.h3: Example Usage
 
 Consider the following example:
 
@@ -315,7 +333,7 @@ light: https://fastn.io/-/fastn.io/images/fastn.svg
 In this case, the same image URL `https://fastn.io/-/fastn.io/images/fastn.svg`
 is returned in both light and dark modes.
 
--- ds.h2: Using `ftd.image-src` with `ftd.image` Component
+-- ds.h3: Using `ftd.image-src` with `ftd.image` Component
 
 Lets look at example of using `ftd.image-src` type variable.
 The `ftd.image-src` record is a type used for the 'src' property of `ftd.image`
@@ -347,7 +365,7 @@ src: $fastn-assets.files.images.fastn.svg
 
 -- end: ds.output
 
--- ds.h2: Using assets Foreign Variable
+-- ds.h3: Using assets Foreign Variable
 
 Instead of passing the image URL directly, it is possible to use the `assets`
 foreign variable to access files present in a package.
@@ -404,7 +422,7 @@ the light field.
 
 
 
--- ds.h2: Supported image formats
+-- ds.h3: Supported image formats
 
 The HTML standard doesn't list what image formats to support, so
 [user agents](https://developer.mozilla.org/en-US/docs/Glossary/User_agent) may
@@ -427,7 +445,7 @@ guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 
 
--- ds.h1: `ftd.resizing`
+-- ds.h2: `ftd.resizing`
 
 The `ftd.resizing` property is used to control the dimensions of an element. It
 is an `or-type`. The `ftd.resizing` property is commonly used for component
@@ -449,9 +467,6 @@ lang: ftd
 -- ds.markdown:
 
 As shown above, the `ftd.resizing` has following variants:
-
-- `fixed`: It gives fixed [length](built-in-types/#ftd-length) to element. For
-  example, `width.fixed.px: 100` sets the width to be 100 pixels.
 
 - `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed
   [length](built-in-types/#ftd-length) to an element. For example,
@@ -475,6 +490,25 @@ As shown above, the `ftd.resizing` has following variants:
   factors.
 
 
+-- ds.h3: Example Usage of `ftd.resizing`
+
+-- ds.code: Example Usage of `ftd.resizing`
+lang: ftd
+
+\-- ftd.text: Hello
+width: fill-container
+height: auto
+max-width.fixed.px: 300
+min-width: hug-content
+
+
+-- ds.markdown:
+
+In the above example, the `ftd.text` component has a `width` stretches to the
+width of its parent container, a `height` calculated and set by browser
+automatically based on its contents or other factors, `max-width` sets to be 300
+pixels and `min-width` dynamically resizes to be as small as possible while 
+still surrounding its contents.
 
 
 
@@ -484,7 +518,8 @@ As shown above, the `ftd.resizing` has following variants:
 
 
 
-;; Todo: -- ds.h1: `ftd.align-self`
+
+;; Todo: -- ds.h2: `ftd.align-self`
 
 
 
@@ -498,7 +533,7 @@ As shown above, the `ftd.resizing` has following variants:
 
 
 
--- ds.h1: `ftd.length`
+-- ds.h2: `ftd.length`
 
 The `ftd.length` type is used for passing UI dimensions and is an `or-type`,
 meaning it can take on different variants.
@@ -584,7 +619,7 @@ percent on mobile devices.
 Note that the `calc` variant can be used with any of the other variants to
 perform calculations on the values.
 
--- ds.h2: Example Usage of `ftd.length`
+-- ds.h3: Example Usage of `ftd.length`
 
 -- ds.code: Example Usage of `ftd.length`
 lang: ftd
@@ -605,7 +640,7 @@ of the root element, and a padding calculated using the expression 100% - 80px.
 
 
 
--- ds.h1: `ftd.type`
+-- ds.h2: `ftd.type`
 
 It defines the typography of the font. It is record with the following fields.
 
@@ -623,26 +658,26 @@ optional string font-family:
 
 It defines the line-height, size, weight, font-family and letter-spacing.
 
--- ds.h2: `line-height`
+-- ds.h3: `line-height`
 
 The `line-height` field sets the height of a line box. It's commonly
 used to set the distance between lines of text.
 
--- ds.h2: `size`
+-- ds.h3: `size`
 
 The `size` field sets the size of the font.
 
--- ds.h2: `weight`
+-- ds.h3: `weight`
 
 The `weight` property sets the weight (or boldness) of the font. The
 weights available depend on the `font-family` that is currently set.
 
--- ds.h2: `font-family`
+-- ds.h3: `font-family`
 
 The `font-family` property specifies a font family name and/or generic family
 name for the selected element.
 
--- ds.h2: `letter-spacing`
+-- ds.h3: `letter-spacing`
 
 The `letter-spacing` sets the horizontal spacing behavior between text
 characters. This value is added to the natural spacing between characters
@@ -664,7 +699,7 @@ letter-spacing.px: 5
 
 
 
--- ds.h1: `ftd.loading`
+-- ds.h2: `ftd.loading`
 
 `ftd.loading` is a or-type. This is the type for `loading` property of
 `ftd.iframe` component. It is a strategy to identify whether resources are
@@ -694,7 +729,7 @@ It has two variants `lazy` and `eager`.
 
 
 
--- ds.h1: `ftd.text-input-type`
+-- ds.h2: `ftd.text-input-type`
 
 `ftd.text-input-type` is an `or-type`. The 'type' property of `ftd.text-input`
 component accepts the `optional` of this type. It has various variant which
@@ -742,7 +777,7 @@ with dynamic keyboards.
 
 
 
-/-- ds.h1: `ftd.type`
+/-- ds.h2: `ftd.type`
 
 It defines the typography of the font.
 
@@ -802,7 +837,7 @@ weight: 400
 style: italic
 
 
-/-- ds.h1: `length`
+/-- ds.h2: `length`
 
 `length` is a type that is used for passing UI dimensions. It has one of the
 
