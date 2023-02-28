@@ -134,7 +134,7 @@ color: $inherited.colors.text
 -- ftd.column:
 children: $event-desktop.wrap
 width: fill-container
-spacing.fixed.px: 48
+spacing.fixed.px: 0
 padding-bottom.px: 48
 
 -- end: ftd.column
@@ -166,6 +166,7 @@ title: $event-desktop.host.title
 email: $event-desktop.host.email
 website: $event-desktop.host.website
 avatar: $event-desktop.host.avatar
+is-venue: true
 
 -- end: ftd.row
 
@@ -433,7 +434,9 @@ color: $inherited.colors.text
 
 -- title-name: to
 
+
 -- ftd.row:
+if: { event-mobile.end-day != NULL}
 
 -- title-name: $event-mobile.end-day
 
@@ -444,12 +447,16 @@ color: $inherited.colors.text
 -- end: ftd.row
 
 -- title-name: $event-mobile.end-month
+if: { event-mobile.end-day != NULL}
 
 -- title-name: $event-mobile.end-date
+if: { event-mobile.end-day != NULL}
 
 -- title-name: at
+if: { event-mobile.end-day != NULL}
 
 -- title-name: $event-mobile.end-time
+if: { event-mobile.end-time != NULL }
 
 -- end: ftd.row
 
@@ -685,12 +692,13 @@ optional string location:
 ftd.image-src avatar: $assets.files.images.events.avatar.svg
 optional body bio:
 boolean is-venue: false
+boolean show-location: true
 
 -- ftd.row:
 width: fill-container
 
 -- ftd.image:
-if: { !body-wrap.is-venue}
+if: { body-wrap.avatar != NULL && !body-wrap.is-venue}
 src: $body-wrap.avatar
 height.fixed.px: 32
 width.fixed.px: 32
