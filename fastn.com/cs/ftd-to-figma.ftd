@@ -63,25 +63,21 @@ width: fill-container
 
 -- ds.h1: Save the forest theme json
 
-Click on the below copy button inside forest-cs code-block
+Download and save the below json code by clicking at the download
+icon in the code-block below.
 
 -- ds.code: forest-cs
 lang: json
 max-height: 300
+download: forest-cs.json
 
 $forest-figma
-
--- ds.markdown:
-
-Create a new json file named `forest-cs.json` using your favourite
-text editor (for eg. Sublime Text) and paste the content you just copied
-and save it.
 
 -- ds.h1: Load `forest-cs.json` inside figma plugin
 
 To load `forest-cs.json` which we just created,
 
-Step 1: Click on the Load button
+Step 1: Under `Tools` -> Click on `Load from file/folder or Preset`
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b1.select-load-button.png
@@ -90,7 +86,7 @@ width: fill-container
 
 -- ds.markdown:
 
-Step 2: Go under File Tab
+Step 2: Go under `File` Tab
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b1.select-file.png
@@ -99,7 +95,7 @@ width: fill-container
 
 -- ds.markdown:
 
-Step 3: Click on Choose File button
+Step 3: Click on `Choose File` button
 
 -- ftd.image:
 src: $fastn-assets.files.images.figma.b1.select-choose-file.png
@@ -197,12 +193,13 @@ width: fill-container
 
 -- ds.h1: Lets try another color scheme
 
-Let's use `sunset-cs` now. Save the following json to a new json file
-named `sunset-cs.json`.
+Let's use `sunset-cs` now. Download this below json code as a new json file
+named `sunset-cs.json` by clicking at the download button.
 
 -- ds.code: Sunset-cs
 lang: json
 max-height: 300
+download: sunset-cs.json
 
 $sunset-figma
 
