@@ -795,6 +795,88 @@ As shown above, the `ftd.align` has following variants:
 
 
 
+-- ds.h2: `ftd.spacing`
+
+`ftd.spacing` is an `or-type` that is used for the `spacing` property, a common
+property for container components. It determines the distribution of space
+between and around the container's items when they don't use all available space
+on the main-axis.
+
+
+-- ds.code: `ftd.spacing`
+lang: ftd
+
+\-- or-type spacing:
+
+\-- ftd.length fixed:
+\-- constant string space-between: space-between
+\-- constant string space-around: space-around
+\-- constant string space-evenly: space-evenly
+
+\-- end: spacing
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.spacing` has following variants:
+
+
+- `fixed`: A fixed distance between each item, specified in a specific unit of
+  measurement, as given by [`ftd.length`](ftd/built-in-types/#ftd-length) such
+  as pixels, ems etc.
+
+- `space-between`: The space between items is evenly distributed. The first item
+  is at the start of the container and the last item is at the end of the
+  container, with any remaining space distributed equally between the items.
+
+- `space-around`: The space is distributed evenly around each item, with half
+  the space on either side of the item. This means that the space between the
+  first and last items and the container edges is half the space between the
+  items.
+
+- `space-evenly`: The space is distributed evenly between and around each item,
+  including the space between the first and last items and the container edges.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- ds.h2: `ftd.overflow`
 
