@@ -412,10 +412,69 @@ guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 
 
+
+
+
+
+
+
+
+
+
 -- ds.h1: `ftd.resizing`
 
-The `ftd.resizing` is an `or-type`. It is used to to control the dimensions of
-the elements.
+The `ftd.resizing` property is used to control the dimensions of an element. It
+is an `or-type`. The `ftd.resizing` property is commonly used for component
+properties such as `width`, `height`, `min-width`, `max-width`, `min-height` and
+`max-height`.
+
+-- ds.code: `ftd.resizing`
+lang: ftd
+
+\-- or-type resizing:
+
+\-- constant string fill-container: fill-container
+\-- constant string hug-content: hug-content
+\-- constant string auto: auto
+\-- ftd.length fixed:
+
+\-- end: resizing
+
+-- ds.markdown:
+
+As shown above, the `ftd.resizing` has following variants:
+
+- `fixed`: It gives fixed [length](built-in-types/#ftd-length) to element. For
+  example, `width.fixed.px: 100` sets the width to be 100 pixels.
+
+- `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed length
+  to an element. For example, `width.fixed.px: 100` sets the width of an element
+  to be 100 pixels. This variant is useful when a specific size is required for
+  an element, regardless of the size of its parent or contents.
+
+- `hug-content`:  The `hug-content` variant of `ftd.resizing` is used to
+  dynamically resize the container element to be as small as possible while
+  still surrounding its contents. This variant is useful when you want the size
+  of the container element to match the size of its contents.
+
+- `fill-container`: The `fill-container` variant of `ftd.resizing` is used to
+  stretch the element to the width and/or height of its parent element. This
+  variant is useful when you want an element to fill the entire space of its
+  parent container.
+
+- `auto`:  The `auto` variant of `ftd.resizing` allows the browser to calculate
+  and select a width for the specified element. This variant is useful when you
+  want the element to size itself automatically based on its contents or other
+  factors.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -452,10 +511,10 @@ ftd.length mobile: $responsive-length.desktop
 As shown above, the `ftd.length` has following variants:
 
 - `px`: This variant gives an integer value followed by the px unit of space.
-For example, padding.px: 100 sets the padding to be 100 pixels.
+For example, `padding.px: 100` sets the padding to be 100 pixels.
 
 - `percent`: This variant gives an integer value followed by the % unit of space.
-For example, width.fixed.percent: 50 sets the width to be 50% of the parent
+For example, `width.fixed.percent: 50` sets the width to be 50% of the parent
 element's width.
 
 - `calc`: This variant takes a single expression as its parameter, and its
