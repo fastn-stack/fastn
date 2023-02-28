@@ -164,6 +164,7 @@ portfolio websites, project and marketing websites etc. It is cheap, fast, and
 requires little maintenance.
 
 -- ds.image:
+width: fill-container
 src: $fastn-assets.files.images.github-pages.png
 
 
@@ -218,6 +219,7 @@ We are working on `wasm` support so developers can extend `ftd's` standard
 libraries and offer access to more backend functionalities.
 
 -- ds.image:
+width: fill-container
 src: $fastn-assets.files.images.wasm.png
 
 -- ds.h1: Hosting Dynamic Sites
