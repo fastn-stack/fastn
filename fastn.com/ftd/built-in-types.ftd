@@ -942,6 +942,43 @@ within the document or webpage.
 
 
 
+-- ds.h2: `ftd.white-space`
+
+`ftd.white-space` is an `or-type`. It is a type for `white-space` property, a
+common property for component. It specifies how white-space inside an element
+is handled.
+
+
+-- ds.code: `ftd.white-space`
+lang: ftd
+
+\-- or-type white-space:
+
+\-- constant string normal: normal
+\-- constant string nowrap: nowrap
+\-- constant string pre: pre
+\-- constant string pre-wrap: pre-wrap
+\-- constant string pre-line: pre-line
+\-- constant string break-spaces: break-spaces
+
+\-- end: white-space
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.cursor` has following variants:
+
+- `normal`: Sequences of whitespace will collapse into a single whitespace. Text
+  will wrap when necessary. This is default
+- `nowrap`: Sequences of whitespace will collapse into a single whitespace. Text
+  will never wrap to the next line. The text continues on the same line until a
+  break or new line is encountered
+- `pre`: Whitespace is preserved by the browser. Text will only wrap on line
+  breaks.
+- `pre-line`: Sequences of whitespace will collapse into a single whitespace.
+  Text will wrap when necessary, and on line breaks
+- `pre-wrap`: Whitespace is preserved by the browser. Text will wrap when
+  necessary, and on line breaks
 
 
 
