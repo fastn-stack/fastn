@@ -45,15 +45,15 @@ width: fill-container
 In this tutorial, I will be using the same figma file which I used in this
 [tutorial guide](https://fastn.io/figma)
 
--- ds.h1: Create forest-cs.json file
+-- ds.h1: Download forest-cs.json file
 
-Copy the below json and create a new file named "forest-cs.json"
-using any of your favourite text editor (for eg. Sublime Text)
-and save it.
+Download the below json code as a new json file named `forest-cs.json`
+by clicking on the download icon in the code-block below.
 
 -- ds.code: forest-cs
 lang: json
 max-height: 350
+download: forest-cs.json
 
 $forest-figma
 
@@ -217,10 +217,11 @@ And paste this merged json in the text-box below.
 You will see the generated FTD code. Copy this FTD code by clicking
 on the copy icon at the top of the code-block above.
 
--- ds.h1: Go to the github repo of `sailing-shark-cs`
+-- ds.h1: Go to the `sailing-shark-cs` github repository
 
 This repo is a template repo for fastn color-schemes, we will create
-our own color-scheme repo using this.
+our own color-scheme repo using this. To visit this repo,
+[click here](https://github.com/FifthTry/sailing-shark-cs)
 
 To do that, click on the `Use this template` button then `Create a new repository`
 as shown below
