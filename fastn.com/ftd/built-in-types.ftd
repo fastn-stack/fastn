@@ -644,6 +644,13 @@ of the root element, and a padding calculated using the expression 100% - 80px.
 
 
 
+
+
+
+
+
+
+
 -- ds.h2: `ftd.type`
 
 `ftd.type` is a `record`. It is not a direct type for any component property, but
@@ -704,6 +711,91 @@ letter-spacing.px: 5
 
 
 
+
+
+
+
+
+
+-- ds.h2: `ftd.responsive-type`
+
+`ftd.responsive-type` is a record. It is a type for `role` property, a common
+property for component. It specifies the responsive typography of an element
+using fields for `desktop` and `mobile`, which are of type
+[`ftd.type`](ftd/built-in-types/#ftd-type).
+
+
+-- ds.code: `ftd.responsive-type`
+lang: ftd
+
+\-- record responsive-type:
+caption ftd.type desktop:
+ftd.type mobile: $responsive-type.desktop
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.responsive-type` has following fields:
+
+- `desktop`: An optional `ftd.type` field that specifies the typography of the
+  element on desktop screens.
+- `mobile`: An optional `ftd.type` field that specifies the typography of the
+  element on mobile screens. If this field is not specified, the `desktop` value
+  will be used as the default for mobile screens.
+
+
+
+-- ds.h3: Example Usage
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.type desktop-type:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+\-- ftd.type mobile-type:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+\-- ftd.responsive-type responsive-typography:
+desktop: $desktop-type
+mobile: $mobile-type
+
+\-- ftd.text: Hello World
+role: $responsive-typography
+
+
+
+-- ds.markdown:
+
+In this example, we define two `ftd.type` type variables, `desktop-type` and
+`mobile-type`, which specify the typography for desktop and mobile screens
+respectively. We then define an `ftd.responsive-type` type variable
+`responsive-typography`, which specifies the responsive typography for the
+element. Finally, we set the `role` property of an `ftd.text` component to
+`responsive-typography`.
+
+When the device is switched between desktop and mobile views, the font size,
+font weight, font family, line height, and letter spacing of the text changes
+based on the specified values for the current device.
+
+Check the below output in different devices.
+
+-- ds.output:
+
+-- ftd.text: Hello World
+role: $rtype
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
 
@@ -1440,3 +1532,22 @@ dark: orange
 -- ftd.responsive-length p:
 desktop.px: 20
 mobile.percent: 10
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
