@@ -1,6 +1,6 @@
 -- import: fastn.io/utils
 
--- my-ds.page: Create and Serve a `fastn` package
+-- my-ds.page: Create a `fastn` package
 
 `fastn` is also a `ftd` package manager. A package contains all related and
 necessary files. `fastn` manages the packages and modules for `ftd` and
@@ -8,6 +8,11 @@ consists of command line tool `fastn`.
 
 To get started, you need to install `fastn`. Refer to the [install
 `fastn`](install/) page to learn how to install `fastn`.
+
+
+-- ds.image:
+src: $fastn-assets.files.images.create-serve-fastn.gif
+width: fill-container
 
 
 -- ds.h1: Create a package
@@ -58,10 +63,6 @@ src: $fastn-assets.files.images.hello-world-page.png
 width: fill-container
 
 
--- ds.image:
-src: $fastn-assets.files.images.create-serve-fastn.gif
-width: fill-container
-
 
 -- package-file-info:
 
@@ -107,17 +108,13 @@ Suppose you want to create a package named `hello-fastn`, you need to follow
 these steps:
 
 - [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
-- Run the `fastn create-package <package-name>` command
+- Run the following command in terminal
 
 -- ds.code: create-package
 lang: sh
 
 fastn create-package hello-fastn
 
-
--- ds.image:
-src: $fastn-assets.files.images.setup.fastn-create-package.png
-width: fill-container
 
 -- ds.markdown:
 
