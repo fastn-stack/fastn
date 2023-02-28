@@ -28,7 +28,8 @@ pub async fn create_package(root: &camino::Utf8Path) -> Result<(), fastn_cloud::
     Ok(())
 }
 
-async fn get_missing_checksums(
+// TODO: Define Error
+pub async fn get_missing_checksums(
     list_content: &str,
     missing_hashes: &[String],
     data_file: &camino::Utf8Path,

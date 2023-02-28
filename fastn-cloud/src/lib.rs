@@ -42,6 +42,8 @@ pub enum UploadError {
     HTTPPostError(#[from] fastn_cloud::http::PostError),
     #[error("StdIOError: {}", _0)]
     StdIOError(#[from] io::Error),
+    #[error("SidParseError: {}", _0)]
+    SidParseError(#[from] serde_json::Error),
 }
 
 pub async fn create() -> Result<(), fastn_cloud::CreateError> {
@@ -97,6 +99,6 @@ pub async fn upload() -> Result<(), UploadError> {
         .map_err(|_e| UploadError::SidReadError)?;
 
     fastn_cloud::upload::upload(build_dir.as_path(), sid.trim(), cw_id.trim()).await?;
-    println!("publish-static upload called");
+    println!("publish-static upload done");
     Ok(())
 }
