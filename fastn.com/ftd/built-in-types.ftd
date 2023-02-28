@@ -744,6 +744,58 @@ As shown above, the `ftd.align-self` has following variants:
 
 
 
+
+-- ds.h2: `ftd.align`
+
+`ftd.align` is an `or-type`. It is a type for the `align-content` property, a
+property for container-type components. It specifies the alignment of items in
+the container component along both the horizontal and vertical axes.
+
+
+-- ds.code: `ftd.align`
+lang: ftd
+
+\-- or-type align:
+
+\-- constant string top-left: top-left
+\-- constant string top-center: top-center
+\-- constant string top-right: top-right
+\-- constant string right: right
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom-left: bottom-left
+\-- constant string bottom-center: bottom-center
+\-- constant string bottom-right: bottom-right
+
+\-- end: align
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.align` has following variants:
+
+- `top-left`: Aligns items to the top-left corner of the container.
+- `top-center`: Aligns items to the top-center of the container.
+- `top-right`: Aligns items to the top-right corner of the container.
+- `right`: Aligns items to the right side of the container.
+- `left`: Aligns items to the left side of the container.
+- `center`: Centers items both horizontally and vertically within the container.
+- `bottom-left`: Aligns items to the bottom-left corner of the container.
+- `bottom-center`: Aligns items to the bottom-center of the container.
+- `bottom-right`: Aligns items to the bottom-right corner of the container.
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- ds.h2: `ftd.overflow`
 
 `ftd.overflow` is an `or-type`. It is a type for `overflow` property, a
