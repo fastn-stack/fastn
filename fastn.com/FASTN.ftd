@@ -24,7 +24,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 # Home: /
 
-## Intro: /
+## Home: /
+
+- Home: /
+- Overview: /overview/
 
 ## Features: /features/
 

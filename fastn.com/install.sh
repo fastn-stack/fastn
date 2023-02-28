@@ -2,9 +2,9 @@
 
 # TODO: //
 # This script should be run via curl:
-# sh -c "$(curl -fsSL https://fpm.dev/install.sh)"
+# sh -c "$(curl -fsSL https://fastn.io/install.sh)"
 # or via wget
-# sh -c "$(wget -qO- https://fastn.dev/install.sh)"
+# sh -c "$(wget -qO- https://fastn.io/install.sh)"
 
 # The [ -t 1 ] check only works when the function is not called from
 # a subshell (like in `$(...)` or `(...)`, so this hack redefines the
