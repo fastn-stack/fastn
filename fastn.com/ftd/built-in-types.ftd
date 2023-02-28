@@ -8,10 +8,10 @@ These types can be categorized into two main groups: **Primitive** and
 
 
 - **Primitive**: The primitive types are the building blocks for creating more
- complex types. e.g. `string`, `boolean`, `integer` etc
+  complex types. e.g. `string`, `boolean`, `integer` etc
 
-- **Derived**: Derived types can be constructed using primitive types or other
-  derived types. e.g. `ftd.color`, `ftd.image-src` etc.
+- **Derived**: The derived types can be constructed using primitive types or
+  other derived types. e.g. `ftd.color`, `ftd.image-src` etc.
 
 
 
