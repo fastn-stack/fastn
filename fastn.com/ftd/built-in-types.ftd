@@ -646,7 +646,10 @@ of the root element, and a padding calculated using the expression 100% - 80px.
 
 -- ds.h2: `ftd.type`
 
-It defines the typography of the font. It is record with the following fields.
+`ftd.type` is a `record`. It is not a direct type for any component property, but
+it has a derived type [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
+which is a type `role`, a common property for component. It specifies the
+typography of the element.
 
 -- ds.code: `type` record (ftd.ftd)
 lang: ftd
@@ -877,18 +880,6 @@ As shown above, the `ftd.resize` has following variants:
 - `both`: The element can be resized both horizontally and vertically.
 - `horizontal`: The element can only be resized horizontally.
 - `vertical`: The element can only be resized vertically.
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
