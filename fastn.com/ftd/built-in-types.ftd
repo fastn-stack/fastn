@@ -966,7 +966,7 @@ lang: ftd
 
 -- ds.markdown:
 
-As shown above, the `ftd.cursor` has following variants:
+As shown above, the `ftd.white-space` has following variants:
 
 - `normal`: This value is the default behavior. Sequences of whitespace will
 collapse into a single whitespace. Text will wrap when necessary, and on line
@@ -992,6 +992,11 @@ formatting of text content. For example, using `pre` or `pre-wrap` can be useful
 when displaying code snippets or other text that requires precise formatting,
 while `normal` or `pre-line` may be more appropriate for regular paragraphs or
 text blocks.
+
+
+
+
+
 
 
 
@@ -1038,6 +1043,66 @@ As shown above, the `ftd.text-transform` has following variants:
 
 
 
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.border-style`
+
+`ftd.border-style` is an `or-type` that defines the style of an element's four
+borders. It is a type for the `border-style` property, which is a common
+property used to set the style of an component's border.
+
+
+
+-- ds.code: `ftd.border-style`
+lang: ftd
+
+\-- or-type border-style:
+
+\-- constant string dotted: dotted
+\-- constant string dashed: dashed
+\-- constant string solid: solid
+\-- constant string double: double
+\-- constant string groove: groove
+\-- constant string ridge: ridge
+\-- constant string inset: inset
+\-- constant string outset: outset
+
+\-- end: border-style
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.border-style` has following variants:
+
+- `dotted`: Specifies a dotted border. The border is a series of dots.
+
+- `dashed`: Specifies a dashed border. The border is made up of a series of dashes.
+
+- `solid`: Specifies a solid border. This is the default value.
+
+- `double`: Specifies a double border. The border is a double line, consisting
+  of two parallel lines.
+
+- `groove`: Specifies a 3D grooved border. The effect depends on the
+  border-color value. The border looks like it is carved into the page, with a
+  3D effect.
+
+- `ridge`: Specifies a 3D ridged border. The effect depends on the border-color
+  value. The border looks like it is popping out of the page, with a 3D effect.
+
+- `inset`: Specifies a 3D inset border. The effect depends on the border-color
+  value. The border looks like it is embedded in the page, with a 3D effect.
+
+- `outset`: Specifies a 3D outset border. The effect depends on the border-color
+  value. The border looks like it is coming out of the page, with a 3D effect.
 
 
 
