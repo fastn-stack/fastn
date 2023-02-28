@@ -70,7 +70,6 @@ We have also built a full-stack framework on top of it: https://github.com/fastn
 
 Join us to learn more!
 
-
 -- end: event.event
 
 -- event.speakers: Speaker
@@ -104,4 +103,7 @@ icon: $assets.files.images.linkedin.svg
 -- end: event.row-container
 
 -- end: ds.page
+
+
+
 

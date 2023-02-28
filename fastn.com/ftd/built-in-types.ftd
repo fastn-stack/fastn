@@ -752,16 +752,17 @@ add scrollbars when the content of an element is too big to fit in the specified
 area.
 
 
-```ftd
--- or-type overflow:
+-- ds.code:
+lang: ftd
 
--- constant string scroll: scroll
--- constant string visible: visible
--- constant string hidden: hidden
--- constant string auto: auto
+\-- or-type overflow:
 
--- end: overflow
-```
+\-- constant string scroll: scroll
+\-- constant string visible: visible
+\-- constant string hidden: hidden
+\-- constant string auto: auto
+
+\-- end: overflow
 
 As shown above, the `ftd.overflow` has following variants:
 
