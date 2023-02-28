@@ -851,6 +851,35 @@ As shown above, the `ftd.spacing` has following variants:
 
 
 
+-- ds.h2: `ftd.resize`
+
+`ftd.resize` is an `or-type`. It is a type for `resize` property, a
+common property for component. It specifies whether an element is resizable and
+in which directions.
+
+
+-- ds.code: `ftd.resize`
+lang: ftd
+
+\-- or-type resize:
+
+\-- constant string both: both
+\-- constant string horizontal: horizontal
+\-- constant string vertical: vertical
+
+\-- end: resize
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.resize` has following variants:
+
+- `both`: The element can be resized both horizontally and vertically.
+- `horizontal`: The element can only be resized horizontally.
+- `vertical`: The element can only be resized vertically.
+
+
+
 
 
 
