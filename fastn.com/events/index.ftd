@@ -328,7 +328,7 @@ common.venue venue:
 
 -- ftd.column:
 width: fill-container
-spacing.fixed.px: 40
+spacing.fixed.px: 30
 
 -- ftd.text: $event-mobile.title
 if: { event-mobile.title != NULL }
@@ -514,8 +514,7 @@ color: $inherited.colors.text
 -- ftd.column:
 children: $event-mobile.wrap
 width: fill-container
-spacing.fixed.px: 40
-padding-bottom.px: 40
+spacing.fixed.px: 24
 
 -- end: ftd.column
 
