@@ -412,6 +412,13 @@ guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
 
 
 
+-- ds.h1: `ftd.resizing`
+
+The `ftd.resizing` is an `or-type`. It is used to to control the dimensions of
+the elements.
+
+
+
 
 
 -- ds.h1: `ftd.length`

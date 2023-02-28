@@ -58,6 +58,11 @@ src: $fastn-assets.files.images.hello-world-page.png
 width: fill-container
 
 
+-- ds.image:
+src: $fastn-assets.files.images.create-serve-fastn.gif
+width: fill-container
+
+
 -- package-file-info:
 
 
