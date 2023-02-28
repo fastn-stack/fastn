@@ -1,6 +1,7 @@
 \-- ft-core.concept:
 
 ;; Built-in Types
+;; `boolean`
 
 -- my-ds.page: Built-in Types
 
