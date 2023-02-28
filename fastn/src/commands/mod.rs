@@ -13,6 +13,8 @@ pub enum PublishStaticError {
     PublishStaticCreateError(#[from] fastn_cloud::CreateError),
     #[error("PublishStaticUpdateError: {}", _0)]
     PublishStaticUpdateError(#[from] fastn_cloud::UpdateError),
+    #[error("PublishStaticUploadError: {}", _0)]
+    PublishStaticUploadError(#[from] fastn_cloud::UploadError),
 }
 
 pub(crate) async fn handle(matches: &clap::ArgMatches) -> Result<bool, Error> {
@@ -30,6 +32,10 @@ pub(crate) async fn handle_publish_static(
         }
         Some(("update", _matches)) => {
             fastn_cloud::update().await?;
+            Ok(true)
+        }
+        Some(("upload", _matches)) => {
+            fastn_cloud::upload().await?;
             Ok(true)
         }
         _ => Ok(false),

@@ -454,12 +454,14 @@ mod sub_command {
         }
     }
     pub fn publish_static() -> clap::Command {
+        // TODO: GIVE commands const name
         clap::Command::new("publish-static")
             .about("Publish fastn package statically")
             .subcommands([
                 clap::Command::new("create")
                     .about("Create fastn package to fastn-cloud and give back domain"),
                 clap::Command::new("update").about("Update existing fastn package to fastn-cloud"),
+                clap::Command::new("upload").about("Upload fastn package to fastn-cloud"),
             ])
             .after_help("Publish fastn packages to fastn-cloud as static")
     }
