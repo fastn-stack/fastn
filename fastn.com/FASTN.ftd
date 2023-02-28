@@ -14,10 +14,12 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
 -- fastn.dependency: gargajit.github.io/expander
+-- fastn.dependency: fifthtry.github.io/common
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
 -- fastn.auto-import: fastn.io/assets as fastn-assets
+-- fastn.auto-import: fifthtry.github.io/common as common
 
 
 
@@ -126,6 +128,7 @@ document: author/how-to/install.ftd
 - Part 6. Polishing UI: /expander/polish/
 
 
+## Events: events/01/
 
 # Blog: /blog/web-components/
 
