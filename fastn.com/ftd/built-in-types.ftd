@@ -891,6 +891,53 @@ As shown above, the `ftd.align` has following variants:
 
 
 
+
+
+
+-- ds.h2: `ftd.text-align`
+
+`ftd.text-align` is an `or-type`. It is a type for `text-align` property, a
+common property for component. It specifies the horizontal alignment of text
+within an element.
+
+
+-- ds.code: `ftd.text-align`
+lang: ftd
+
+\-- or-type text-align:
+
+\-- constant string start: start
+\-- constant string center: center
+\-- constant string end: end
+\-- constant string justify: justify
+
+\-- end: text-align
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.text-align` has following variants:
+
+- `start`: aligns text to the left edge of the element, which is the default
+  value.
+- `center`: centers text horizontally within the element.
+- `end`: aligns text to the right edge of the element.
+- `justify`: aligns text to both the left and right edges of the element,
+  creating additional space between words as necessary to fill the available
+  width.
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- ds.h2: `ftd.spacing`
 
 `ftd.spacing` is an `or-type` that is used for the `spacing` property, a common
