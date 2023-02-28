@@ -156,6 +156,10 @@ the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
 
 
+-- ds.h1: Derived Types
+
+
+
 
 
 -- ds.h1: `ftd.color`
@@ -383,15 +387,16 @@ src: $fastn-assets.files.images.fastn.svg
 
 -- ds.markdown:
 
-In this example, the `src` field of `ftd.image` component will be set to the URL
-of `fastn.svg` file present in the `images` folder of the `fastn.io` package.
+In this example, the `src` property of `ftd.image` component will be set to the
+URL of `fastn.svg` file present in the `images` folder of the `fastn.io`
+package. i.e. URL of `<path-to-package>/images/fastn.svg`.
 
 Now, you must be wondering how does it get two different value of image for
 light mode and dark mode.
 
 
-When using `assets` variable, if an image with the
-same name but with `-dark` suffix exists in the package, it will be used for the
+When using an `assets` variable, if an image with the same name but with
+`-dark` suffix exists in the package, it will be used for the
 `dark` field. For example, if `fastn-dark.svg` file exists in the `images`
 folder, it will be used for the `dark` field, while `fastn.svg` will be used for
 the light field.
@@ -447,10 +452,11 @@ As shown above, the `ftd.resizing` has following variants:
 - `fixed`: It gives fixed [length](built-in-types/#ftd-length) to element. For
   example, `width.fixed.px: 100` sets the width to be 100 pixels.
 
-- `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed length
-  to an element. For example, `width.fixed.px: 100` sets the width of an element
-  to be 100 pixels. This variant is useful when a specific size is required for
-  an element, regardless of the size of its parent or contents.
+- `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed
+  [length](built-in-types/#ftd-length) to an element. For example,
+  `width.fixed.px: 100` sets the width of an element to be 100 pixels. This
+  variant is useful when a specific size is required for an element, regardless
+  of the size of its parent or contents.
 
 - `hug-content`:  The `hug-content` variant of `ftd.resizing` is used to
   dynamically resize the container element to be as small as possible while
@@ -467,6 +473,17 @@ As shown above, the `ftd.resizing` has following variants:
   want the element to size itself automatically based on its contents or other
   factors.
 
+
+
+
+
+
+
+
+
+
+
+;; -- ds.h1: `ftd.align-self`
 
 
 

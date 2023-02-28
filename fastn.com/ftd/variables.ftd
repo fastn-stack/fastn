@@ -295,13 +295,23 @@ src: $assets.files.images.my-image.png
 
 `$assets.files.images.my-image.png` gives url of
 `<path-to-package>/images/my-image.png` as value (for `light` field).
-But, if there exists a file with `-dark` append after image file name i.e.
-`<path-to-package>/images/my-image-dark.png`, then `dark` field get the url of
-this file.
+
+If an image with the same name but with `-dark` suffix exists in the package,
+i.e. `<path-to-package>/images/my-image-dark.png`, then `dark` field gets the
+url of this file.
 
 Checkout [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) for more details.
 
+
 -- end: my-ds.page
+
+
+
+
+
+
+
+
 
 
 -- integer $x: 10
