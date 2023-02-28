@@ -19,12 +19,12 @@ $sidebar: *$page.sidebar
 -- ds.page.extra-headers:
 
 
--- utils.compact-text: Support Fastn!
+-- utils.compact-text: Support `fastn`!
 
-Enjoying our Fastn? Please consider giving us a star ⭐️
-on [GitHub](https://github.com/fastn-stack/fastn) to show your support!
+Enjoying `fastn`? Please consider giving us a star ⭐️ on
+[GitHub](https://github.com/fastn-stack/fastn) to show your support!
 
--- utils.compact-text: Getting help
+-- utils.compact-text: Getting Help
 
 Have a question or need help?
 
@@ -37,10 +37,10 @@ thoughts, suggestion, question etc.
 Connect with our community!
 
 
--- utils.compact-text: Found an issue
+-- utils.compact-text: Found an issue?
 
-Found an issue. Visit our [GitHub
-issues](https://github.com/fastn-stack/fastn/issues) to register the issue.
+If you find some issue, please visit our [GitHub
+issues](https://github.com/fastn-stack/fastn/issues) to tell us about it.
 
 -- utils.compact-text: Quick links:
 

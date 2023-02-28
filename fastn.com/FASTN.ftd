@@ -54,7 +54,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
-# FTD: /ftd/
+# `ftd`: /ftd/
 
 - Overview: /ftd/
 - `ftd p1` grammar: /ftd/p1-grammar/
