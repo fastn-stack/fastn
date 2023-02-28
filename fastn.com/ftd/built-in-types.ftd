@@ -752,16 +752,18 @@ add scrollbars when the content of an element is too big to fit in the specified
 area.
 
 
-```ftd
--- or-type overflow:
+-- ds.code: `ftd.overflow`
+lang: ftd
 
--- constant string scroll: scroll
--- constant string visible: visible
--- constant string hidden: hidden
--- constant string auto: auto
+\-- or-type overflow:
 
--- end: overflow
-```
+\-- constant string scroll: scroll
+\-- constant string visible: visible
+\-- constant string hidden: hidden
+\-- constant string auto: auto
+
+\-- end: overflow
+
 
 As shown above, the `ftd.overflow` has following variants:
 
@@ -775,6 +777,17 @@ As shown above, the `ftd.overflow` has following variants:
 
 
 
+
+
+
+
+
+
+-- ds.h2: `ftd.cursor`
+
+`ftd.cursor` is an `or-type`. It is a type for `cursor` property, a
+common property for component. It specifies the mouse cursor to be displayed
+when pointing over an element.
 
 
 
