@@ -765,6 +765,9 @@ lang: ftd
 \-- end: overflow
 
 
+-- ds.markdown:
+
+
 As shown above, the `ftd.overflow` has following variants:
 
 - `visible` - Default. The overflow is not clipped. The content renders
@@ -788,6 +791,104 @@ As shown above, the `ftd.overflow` has following variants:
 `ftd.cursor` is an `or-type`. It is a type for `cursor` property, a
 common property for component. It specifies the mouse cursor to be displayed
 when pointing over an element.
+
+-- ds.code: `ftd.cursor`
+lang: ftd
+
+\-- or-type cursor:
+
+\-- constant string default: default
+\-- constant string none: none
+\-- constant string context-menu: context-menu
+\-- constant string help: help
+\-- constant string pointer: pointer
+\-- constant string progress: progress
+\-- constant string wait: wait
+\-- constant string cell: cell
+\-- constant string crosshair: crosshair
+\-- constant string text: text
+\-- constant string vertical-text: vertical-text
+\-- constant string alias: alias
+\-- constant string copy: copy
+\-- constant string move: move
+\-- constant string no-drop: no-drop
+\-- constant string not-allowed: not-allowed
+\-- constant string grab: grab
+\-- constant string grabbing: grabbing
+\-- constant string e-resize: e-resize
+\-- constant string n-resize: n-resize
+\-- constant string ne-resize: ne-resize
+\-- constant string nw-resize: nw-resize
+\-- constant string s-resize: s-resize
+\-- constant string se-resize: se-resize
+\-- constant string sw-resize: sw-resize
+\-- constant string w-resize: w-resize
+\-- constant string ew-resize: ew-resize
+\-- constant string ns-resize: ns-resize
+\-- constant string nesw-resize: nesw-resize
+\-- constant string nwse-resize: nwse-resize
+\-- constant string col-resize: col-resize
+\-- constant string row-resize: row-resize
+\-- constant string all-scroll: all-scroll
+\-- constant string zoom-in: zoom-in
+\-- constant string zoom-out: zoom-out
+
+\-- end: cursor
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.cursor` has following variants:
+
+- `alias`: The cursor indicates an alias of something is to be created
+- `all-scroll`:The cursor indicates that something can be scrolled in any
+direction
+- `auto`: Default. The browser sets a cursor
+- `cell`: The cursor indicates that a cell (or set of cells) may be selected
+- `col-resize`: The cursor indicates that the column can be resized horizontally
+- `context-menu`: The cursor indicates that a context-menu is available
+- `copy`: The cursor indicates something is to be copied
+- `crosshair`: The cursor render as a crosshair
+- `default`: The default cursor
+- `e-resize`: The cursor indicates that an edge of a box is to be moved right
+(east)
+- `ew-resize`: Indicates a bidirectional resize cursor
+- `grab`: The cursor indicates that something can be grabbed
+- `grabbing`: The cursor indicates that something can be grabbed
+- `help`: The cursor indicates that help is available
+- `move`: The cursor indicates something is to be moved
+- `n-resize`: The cursor indicates that an edge of a box is to be moved up
+(north)
+- `ne-resize`: The cursor indicates that an edge of a box is to be moved up and
+right (north/east)
+- `nesw-resize`: Indicates a bidirectional resize cursor
+- `ns-resize`: Indicates a bidirectional resize cursor
+- `nw-resize`: The cursor indicates that an edge of a box is to be moved up and
+left (north/west)
+- `nwse-resize`: Indicates a bidirectional resize cursor
+- `no-drop`: The cursor indicates that the dragged item cannot be dropped here
+- `none`: No cursor is rendered for the element
+- `not-allowed`: The cursor indicates that the requested action will not be
+executed
+- `pointer`: The cursor is a pointer and indicates a link
+- `progress`: The cursor indicates that the program is busy (in progress)
+- `row-resize`: The cursor indicates that the row can be resized vertically
+- `s-resize`: The cursor indicates that an edge of a box is to be moved down
+(south)
+- `se-resize`: The cursor indicates that an edge of a box is to be moved down
+and right (south/east)
+- `sw-resize`: The cursor indicates that an edge of a box is to be moved down
+and left (south/west)
+- `text`: The cursor indicates text that may be selected
+- `vertical-text`: The cursor indicates vertical-text that may be selected
+- `w-resize`: The cursor indicates that an edge of a box is to be moved left
+(west)
+- `wait`: The cursor indicates that the program is busy
+- `zoom-in`: The cursor indicates that something can be zoomed in
+- `zoom-out`: The cursor indicates that something can be zoomed out
+
+
+
 
 
 
