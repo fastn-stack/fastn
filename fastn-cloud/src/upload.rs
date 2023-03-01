@@ -9,6 +9,7 @@ pub struct Sid {
 }
 
 pub async fn missing_files_api(
+    sid: &str,
     cw_id: &str,
     list_content: &str,
     meta_content: String,
@@ -23,7 +24,7 @@ pub async fn missing_files_api(
     .into_iter()
     .map(|(k, v)| (k.to_string(), v))
     .collect();
-    let headers = [("Content-Type", "application/octet-stream")]
+    let headers = [("Content-Type", "application/octet-stream"), ("sid", sid)]
         .into_iter()
         .map(|(k, v)| (k.to_string(), v.to_string()))
         .collect();
@@ -47,6 +48,7 @@ pub async fn upload(
     // TODO: missing files handle sid
     println!("Getting Missing Files");
     let missing_files_api_resp = missing_files_api(
+        sid.sid.as_str(),
         cw_id,
         list_content.as_str(),
         r#"{"name": "meta content todo"}"#.to_string(),
@@ -145,6 +147,8 @@ pub async fn tejar_create(
 ) -> Result<(camino::Utf8PathBuf, camino::Utf8PathBuf), tejar::error::CreateError> {
     let files: _ = fastn_cloud::utils::walkdir_util(root)
         .into_iter()
+        .filter(|f| !f.path.to_string().ends_with(".tejar-list"))
+        .filter(|f| !f.path.to_string().ends_with(".tejar-data"))
         .map(|file| tejar::create::InputFile {
             path: file.path.strip_prefix(root).unwrap().to_path_buf(),
             content_type: file.content_type,
