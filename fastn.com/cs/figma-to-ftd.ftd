@@ -12,7 +12,9 @@ name: forest-cs
 -- my-ds.page: How to create your own `Fastn Color Scheme` from Figma json
 
 -- ds.youtube:
-y: znH1AEf6SMk
+v: znH1AEf6SMk
+
+-- ds.markdown:
 
 It happens quite often that we get a hold of some nice color-scheme
 package which we believe would look good on our pages
