@@ -1,17 +1,17 @@
 const FASTN_CW_HOST: &str = "http://127.0.0.1:3001";
-// fastn-cw host
 
 #[derive(thiserror::Error, Debug)]
 pub enum PostError {
     #[error("ReqwestError: {}", _0)]
-    ReqwestError(#[from] reqwest::Error),
-    #[error("HeadersError")]
-    HeadersError(String),
+    Reqwest(#[from] reqwest::Error),
+    #[error("HeadersError: {}", _0)]
+    Headers(String),
     #[error("ResponseParseError: {0}")]
-    ResponseParseError(#[from] serde_json::Error),
+    ResponseParse(#[from] serde_json::Error),
     #[error("ResponseError : {msg}")]
-    ResponseError { msg: String },
+    HttpResponse { msg: String },
 }
+
 #[derive(serde::Deserialize, Debug)]
 struct ApiResponse {
     success: bool,
@@ -38,7 +38,7 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
             },
         )
         .collect();
-    let headers = headers.map_err(PostError::HeadersError)?;
+    let headers = headers.map_err(PostError::Headers)?;
 
     let resp: ApiResponse = reqwest::Client::new()
         .post(url)
@@ -56,7 +56,7 @@ pub(crate) async fn post<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>
         Ok(serde_json::from_value(resp.data)?)
     } else {
         println!("Response Error: {}", &resp.msg);
-        Err(PostError::ResponseError {
+        Err(PostError::HttpResponse {
             msg: resp.msg.to_string(),
         })
     };
@@ -79,7 +79,7 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
             },
         )
         .collect();
-    let headers = headers.map_err(PostError::HeadersError)?;
+    let headers = headers.map_err(PostError::Headers)?;
 
     let resp: ApiResponse = reqwest::Client::new()
         .put(url)
@@ -98,7 +98,7 @@ pub(crate) async fn put<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
         Ok(serde_json::from_value(resp.data)?)
     } else {
         println!("Response Error: {}", &resp.msg);
-        Err(PostError::ResponseError {
+        Err(PostError::HttpResponse {
             msg: resp.msg.to_string(),
         })
     };
