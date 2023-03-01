@@ -10,11 +10,11 @@ pub enum Error {
 #[derive(thiserror::Error, Debug)]
 pub enum PublishStaticError {
     #[error("PublishStaticCreateError: {}", _0)]
-    PublishStaticCreateError(#[from] fastn_cloud::CreateError),
+    Create(#[from] fastn_cloud::CreateError),
     #[error("PublishStaticUpdateError: {}", _0)]
-    PublishStaticUpdateError(#[from] fastn_cloud::UpdateError),
+    Update(#[from] fastn_cloud::UpdateError),
     #[error("PublishStaticUploadError: {}", _0)]
-    PublishStaticUploadError(#[from] fastn_cloud::UploadError),
+    Upload(#[from] fastn_cloud::UploadError),
 }
 
 pub(crate) async fn handle(matches: &clap::ArgMatches) -> Result<bool, Error> {
