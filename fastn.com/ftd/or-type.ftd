@@ -221,6 +221,34 @@ In this example, we declared a variable `today` of type `weekday` with `monday`
 as variant.
 
 
+-- ds.h1: Conclusion
+
+
+In conclusion, `or-type` is a way to create an enumeration of variants in FTD
+programming. It allows you to define a list of possible variants, each with its
+own set of fields, and then use those variants in your code. `or-type` variants
+can be of three types: Anonymous Record, Regular, and Constant.
+
+You can use `or-type` in situations where you need to choose a value from a set
+of predefined variants. For example, when working with data that has multiple
+possible formats or when you need to define a set of constants for your
+application.
+
+-- ds.h2: Benefits
+
+Some benefits of using `or-type` include:
+
+- **Clear and concise code**: `or-type` allows you to define a set of variants
+  in a single place, making your code more organized and easier to read.
+
+- **Type safety**: By defining the possible variants upfront, you can ensure
+  that your code only accepts values of the correct type, reducing the risk of
+  runtime errors.
+
+- **Flexibility**: `or-type` variants can have their own set of fields, which
+  allows you to define complex data structures with ease.
+
+
 -- end: my-ds.page
 
 
