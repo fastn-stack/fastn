@@ -31,6 +31,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 - Home: /
 - Overview: /overview/
+;; - `fastn` for Website Builders: /cms/
 
 ## Features: /features/
 

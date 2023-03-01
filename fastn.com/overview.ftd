@@ -15,8 +15,8 @@ development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
 to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
 FifthTry.
 
-`ftd` and `fastn` are open source, and FifthTry makes money by offering hosting
-for `ftd` powered websites.
+;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
+;; Language](/first/).
 
 -- ds.h1: `ftd`: Programming Language For The Next Billion Programmers
 

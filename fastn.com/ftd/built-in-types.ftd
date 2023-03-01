@@ -24,7 +24,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`caption`](ftd/built-in-types/#caption)
   - [`body`](ftd/built-in-types/#body)
   - [`caption or body`](ftd/built-in-types/#caption-or-body)
-- [Derived Types]((ftd/built-in-types/#derived-types))
+- [Derived Types](ftd/built-in-types/#derived-types)
   - [`ftd.color`](ftd/built-in-types/#ftd-color)
   - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
   - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
