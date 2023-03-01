@@ -1,87 +1,164 @@
--- import: fifthtry.github.io/admonitions as cbox
+-- import: fifthtry.github.io/fastn-ui/lib as ft
+-- import: fifthtry.github.io/fastn-ui/assets as ft-assets
+-- import: fifthtry.github.io/fastn-ui/events as event
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
 
 
--- my-ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
+
+
+-- my-ds.page:
 sidebar: false
+widthfill: true
 
-`fastn` is a comprehensive new-age web development platform. It has been built
-specifically to make workflows across design, development & deployment simple
-and consistent.
+-- ftd.column:
+types: $typo.types
+width: fill-container
+margin-top.px: 100
 
-Note: we are revamping this site, [the old version is 
-here](https://fpm-45o5tfuxc-fifthtry.vercel.app/).
+-- ft.hero-section: Fastn: Web-framework and CMS for ftd
+image: $ft-assets.files.static.hero-image.svg
+cta-left-text: Explore More
+cta-left-url: overview
+cta-right-text: Get Started
+cta-right-url: setup
 
-`fastn` is powered by three important elements - an indigenous design system, a
-curated list of UI components / templates and a powerful tailor-made programming
-language - [`ftd`](/ftd/).
+-- ft.hero-section.info:
 
-[`ftd`](/ftd/) is a language designed for creating web pages and documents for
-publishing on the web. It starts with the simplicity of Markdown, but takes it
-to the next level by adding features to create full page layouts, reusable `"ftd
-components"`, and first-class support for data modeling. This makes `ftd` a
-replacement for traditional data exchange format like JSON, CSV etc.
+Create stunning websites with ease, powered by fastn and the user-friendly ftd language
 
-Here are some key [features of `fastn`](/features/) that makes it a good-to-have
-tool:
+-- end: ft.hero-section
 
-- [Supports ftd](/ftd/)
-- [`ftd` package manager](/package-manager/)
-- [Static site generator](/static/)
-- [`fastn` Server](/server/)
-- [Customizable color schemes](/cs/)
-- [Sitemap](/sitemap/)
-- `fastn` for Distributing Static Assets
+-- end: ftd.column
 
 
+-- event.event-list-title: `ftd` Programming Language For Prose
 
--- cbox.warning: `fastn` Performance
-
-Currently, `fastn` generates pages of size `~1MB`. We are working on
-improving this.
-
-
-
--- ds.h1: How to install `fastn`?
-
-Installing `fastn` is easy and can be done on multiple operating systems.
-Check out the ["How to Install"](/install/) section for more
-information. Additionally, an editor is required to use `fastn`, and we
-recommend using [Sublime Text](https://www.sublimetext.com/3).
+A beginner-friendly language for crafting custom web experiences with minimal hassle.
 
 
 
 
+-- ft.row-container:
+spacing: 24
+spacing if {ftd.device == "mobile"}: 32
+switch-to-column if {ftd.device == "mobile"}: true
 
-/-- ds.h1: Learning Resource
+-- ft.stages-vertical: Get Started with Fastn in Seconds
+rect: $ft-assets.files.static.hosting.rect-num.svg
+stage: 01
+cta-text: Explore more
+cta-link: install/
+right: true
 
-We are writing three manuals to help you learn `fastn`:
+Install Fastn with a Single Command
 
-- [Author Manual](/author/), if you want to use `fastn` as a end user, to power
-  your next blog, book, portfolio site, product landing page etc.
-- [Builder Manual](/themes/), if you want to create `fastn packages` that other
-  people can use.
+-- ft.code-block-system:
+lang: sh
+width: 412
+show-double: false
+
+curl -sSL https://fastn.io/install.sh | sh
+
+-- end: ft.row-container
+
+
+
+-- ft.card-with-icons-bottom: Components & Fastn Library
+cta-text: Browse Components
+cta-link: featured
+
+
+-- ft.card-with-icons-bottom.info:
+
+Easily create dynamic and visually stunning websites with our reusable
+components. Save time and effort by utilizing our pre-built packages,
+customizable to fit your unique needs.
+
+
+-- ft.image-card-with-title: Atom
+src: $ft-assets.files.static.vertical-bar.svg
+
+-- ft.image-card-with-title:
+src: $ft-assets.files.static.icons.plus-sign-circled.svg
+
+-- ft.image-card-with-title: Molecule
+src: $ft-assets.files.static.polygon-top.svg
+
+-- ft.image-card-with-title:
+src: $ft-assets.files.static.icons.plus-sign-circled.svg
+
+-- ft.image-card-with-title: Organism
+src: $ft-assets.files.static.circle-shape.svg
+
+-- ft.image-card-with-title:
+src: $ft-assets.files.static.icons.eqals-sign-circled.svg
+
+-- ft.image-card-with-title: Template
+src: $ft-assets.files.static.mixed-chart-icons.svg
+
+
+-- end: ft.card-with-icons-bottom
 
 
 
 
--- ds.h1: Development
 
-Checkout what we are planning and what we are working on in
-[github discussions](https://github.com/ftd-lang/fastn/discussions).
 
-You can also check `ftd` related discussion
-[here](https://github.com/ftd-lang/ftd/discussions).
 
-Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)
+-- ft.benefits-card: Benefits of Fastn
 
-Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
+-- ft.benefits-info-card: Easy to learn
+icon: $ft-assets.files.static.benefits.benefits-icon-1.svg
 
-Q&A: [Questions and Answer](https://github.com/ftd-lang/ftd/discussions/categories/q-a)
 
-License: BSD
+-- ft.benefits-info-card.info:
 
-We are trying to create the language for human beings and we do not believe it
-would be possible without your support. We would love to hear from you.
+The ftd programming language used by fastn is designed to be easy to learn, even
+for non-programmers.
+
+
+-- end: ft.benefits-info-card
+
+-- ft.benefits-info-card: User-friendly
+icon: $ft-assets.files.static.benefits.benefits-icon-2.svg
+
+
+-- ft.benefits-info-card.info:
+
+fastn is a user-friendly web framework and content management system, making it
+easy to build robust websites and user interfaces.
+
+
+-- end: ft.benefits-info-card
+
+-- ft.benefits-info-card: Streamline Your Web Development with fastn
+icon: $ft-assets.files.static.benefits.benefits-icon-3.svg
+
+
+-- ft.benefits-info-card.info:
+
+Build stunning websites with ease using fastn's integrated package management,
+web server, design system, dark mode, and responsive features. Spend less time
+on setup and more time creating your product.
+
+
+-- end: ft.benefits-info-card
+
+
+
+-- ft.benefits-info-card: Easy Deployment
+icon: $ft-assets.files.static.benefits.benefits-icon-4.svg
+
+
+-- ft.benefits-info-card.info:
+
+Convert your fastn packages to static sites and deploy to your favorite service.
+
+
+-- end: ft.benefits-info-card
+
+-- end: ft.benefits-card
 
 
 
