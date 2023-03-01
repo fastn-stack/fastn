@@ -1,8 +1,232 @@
-/-- ft-core.concept:
+-- import: fifthtry.github.io/admonitions as cbox
+
 
 -- my-ds.page: `or-type`
 
-Coming Soon...
+In `ftd` programming, when we need to choose a value from a list of possible
+variants, we can use enumeration data types known as `or-type`. This type is
+loosely equivalent to Rust's enum and is also known as an ["algebraic data
+type"](https://en.wikipedia.org/wiki/Algebraic_data_type).
+
+
+
+-- cbox.warning: Work in Progress
+
+Currently, it is not possible to declare a custom `or-type` and use it in a
+component other than the [built-in](ftd/built-in-types/) `or-type`s. However, we
+are working on building `match` statements that will enable us to use this type
+in the future. Checkout [our github
+discussion](https://github.com/fastn-stack/fastn/discussions/470) to know more.
+
+
+
+-- ds.h1: Declaring an `or-type`
+
+An `or-type` type is declared using the `or-type` keyword followed by the name
+of the type.  The syntax for the `or-type` declaration is as follows:
+
+-- ds.code: `or-type`
+lang: ftd
+
+\-- or-type worker:
+
+\;; Anonymous Record
+\-- record individual:
+caption name:
+string designation:
+
+\;; Regular
+\-- string ceo-name:
+
+\;; Constant
+\-- constant string bot: BOT
+
+\-- end: worker
+
+-- ds.h1: Illustration: Using an `or-type`
+
+To understand the `or-type`, let's consider an example of a sales business that
+wants to get "leads". A lead can either be an individual or a company, where
+individuals have fields like their name and phone number, and companies have
+fields like company name, name of contact, and fax number.
+
+To create an `or-type`, we can use the following syntax:
+
+-- ds.code:
+lang: ftd
+
+\-- or-type lead:
+
+\-- record individual:
+caption name:
+string phone:
+
+\-- record company:
+caption name:
+string contact:
+string fax:
+
+\-- end: lead
+
+
+-- ds.markdown:
+
+Here, we used [ftd::p1's "sub-section"](ftd/p1-grammar/#sub-section) to
+represent each possibility.
+
+The declarations `individual` or `company` are called `or-type` variants, and
+they use similar syntax as [`record` declarations](record/). These type of
+variant is called `Anonymous Record`.
+
+
+-- ds.h1: Types of Variant
+
+
+The `or-type` variants are of three types:
+
+- Anonymous Record
+- Regular
+- Constant
+
+
+-- ds.h2: Anonymous Record
+
+An `Anonymous Record` variant declares a record with fields, similar to a record
+declaration. However, the fields are defined directly within the `or-type`
+declaration. It is called `anonymous` because there is no pre-defined `record`
+type that exists for this variant.
+
+For example, the `individual` variant in the `lead` `or-type` declaration is an
+Anonymous Record variant:
+
+-- ds.code:
+lang: ftd
+
+\-- record individual:
+caption name:
+string phone:
+
+-- ds.markdown:
+
+The `individual` variant has no predefined type, but a record is created on the
+spot, which becomes the type for the `individual` variant.
+
+We can use this type to declare variables like this:
+
+
+-- ds.code: Variable initialization
+lang: ftd
+
+
+\-- lead.individual john: John Doe
+phone: 9999999999
+
+\-- lead.company my-company: My Company
+contact: 9999999999
+fax: 7368632
+
+-- ds.markdown:
+
+In this example, we have declared two variables of type `lead`, where `john` is
+of variant `individual` and `my-company` is of variant `company`. We then
+provide values for their respective fields.
+
+
+
+-- ds.h2: Regular
+
+A `Regular` variant declares any defined type and expects the value provided of
+that type. It uses a similar syntax to a variable declaration, where we specify
+the name of the variant and the expected data type.
+
+Consider the following example of a `length` type declaration:
+
+-- ds.code: Regular
+lang: ftd
+
+\-- or-type length:
+
+\-- integer px:
+\-- decimal percent:
+
+\-- end: length
+
+-- ds.markdown:
+
+Here, both variants, `px` and `percent`, are of regular type. i.e. They expect
+values of the provided type when declaring a variable, field, or component
+property.
+
+We can use this type to declare variables like this:
+
+-- ds.code: Regular
+lang: ftd
+
+\-- length.px pixel-length: 100
+
+\-- length.percent percent-length: 10
+
+-- ds.markdown:
+
+In this example, we declared two variables of type `length`, where
+`pixel-length` is of variant `px` that accepts an `integer` type value, and
+`percent-length` is of variant `percent` that accepts a `decimal` type value.
+
+
+
+
+
+
+
+-- ds.h2: Constant
+
+A `Constant` variant is similar to a `Regular` variant, but it expects a
+constant value rather than a variable value. We use the `constant` keyword to
+define this variant.
+
+Consider the following example of type declaration:
+
+-- ds.code: Constant
+lang: ftd
+
+\-- or-type weekdays:
+
+\-- constant string sunday: Sunday
+\-- constant string monday: Monday
+\-- constant string tuesday: Tuesday
+\-- constant string wednesday: Wednesday
+\-- constant string thursday: Thursday
+\-- constant string friday: Friday
+\-- constant string saturday: Saturday
+
+\-- end: weekdays
+
+
+-- ds.markdown:
+
+In this example, we declare an `or-type` called weekdays with seven variants.
+Each variant is a `Constant` of type `string`, with a fixed value.
+
+We can use this type to declare variables like this:
+
+-- ds.code: Constant
+lang: ftd
+
+\-- weekday today: monday
+
+
+-- ds.markdown:
+
+In this example, we declared a variable `today` of type `weekday` with `monday`
+as variant.
+
+
+-- end: my-ds.page
+
+
+
+
+
 
 ;; Todo:
 /-- my-ds.page: `or-type`
