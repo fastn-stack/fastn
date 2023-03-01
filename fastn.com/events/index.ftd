@@ -270,7 +270,7 @@ spacing.fixed.px: 8
 
 -- title-name: $event-desktop.event-type
 
--- title-name: $event-desktop.event-link
+-- title-name: Join now
 url: $event-desktop.event-link
 
 -- end: ftd.column
