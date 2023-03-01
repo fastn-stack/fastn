@@ -48,7 +48,7 @@ pub enum Error {
     #[error("FastnCoreError: {}", _0)]
     FastnCoreError(#[from] fastn_core::Error),
     #[error("FastnCloudError: {}", _0)]
-    FastnCloudError(#[from] commands::Error),
+    FastnCloudError(#[from] commands::cloud::Error),
 }
 
 async fn async_main() -> Result<(), Error> {
@@ -60,9 +60,9 @@ async fn async_main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::Error> {
+async fn cloud_commands(matches: &clap::ArgMatches) -> Result<bool, commands::cloud::Error> {
     match matches.subcommand() {
-        Some((commands::PUBLISH_STATIC, matches)) => commands::handle(matches).await,
+        Some((commands::cloud::PUBLISH_STATIC, _matches)) => commands::cloud::handle().await,
         _ => Ok(false),
     }
 }
@@ -455,14 +455,8 @@ mod sub_command {
     }
     pub fn publish_static() -> clap::Command {
         // TODO: GIVE commands const name
-        clap::Command::new("publish-static")
+        clap::Command::new(crate::commands::cloud::PUBLISH_STATIC)
             .about("Publish fastn package statically")
-            .subcommands([
-                clap::Command::new("create")
-                    .about("Create fastn package to fastn-cloud and give back domain"),
-                clap::Command::new("update").about("Update existing fastn package to fastn-cloud"),
-                clap::Command::new("upload").about("Upload fastn package to fastn-cloud"),
-            ])
             .after_help("Publish fastn packages to fastn-cloud as static")
     }
 }

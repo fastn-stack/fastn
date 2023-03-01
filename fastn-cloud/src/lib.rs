@@ -1,28 +1,8 @@
 extern crate self as fastn_cloud;
 
-use std::io;
-
-mod create;
 mod http;
 mod upload;
 mod utils;
-
-#[derive(thiserror::Error, Debug)]
-pub enum CreateError {
-    #[error("BuildDirNotFound: {}", _0)]
-    BuildDirNotFound(String),
-    #[error("TejarCreateError: {}", _0)]
-    TejarCreateError(#[from] tejar::error::CreateError),
-    #[error("StdIOError: {}", _0)]
-    StdIOError(#[from] io::Error),
-    #[error("FastnCoreError: {}", _0)]
-    FastnCoreError(#[from] fastn_core::Error),
-    #[error("HttpPOSTCreateError: {}", _0)]
-    HttpPOSTCreateError(#[from] fastn_cloud::http::PostError),
-}
-
-#[derive(thiserror::Error, Debug)]
-pub enum UpdateError {}
 
 #[derive(thiserror::Error, Debug)]
 pub enum UploadError {
@@ -41,36 +21,11 @@ pub enum UploadError {
     #[error("HTTPPostError: {}", _0)]
     HTTPPostError(#[from] fastn_cloud::http::PostError),
     #[error("StdIOError: {}", _0)]
-    StdIOError(#[from] io::Error),
+    StdIOError(#[from] std::io::Error),
     #[error("SidParseError: {}", _0)]
     SidParseError(#[from] serde_json::Error),
-}
-
-pub async fn create() -> Result<(), fastn_cloud::CreateError> {
-    let build_dir = fastn_cloud::utils::build_dir();
-    if !build_dir.exists() {
-        return Err(CreateError::BuildDirNotFound(
-            "Run `fastn build` to create a .build directory before running this".to_string(),
-        ));
-    }
-    fastn_cloud::create::create_package(build_dir.as_path())
-        .await
-        .unwrap();
-    println!("{}", build_dir);
-    // call fastn build
-    // read the content of the .build folder
-    // pass this content to tejar and create two files LIST and DATA
-    // call /api/create/ by passing the content of the LIST and META
-    // call /api/upload-new-package by passing the missing entries and DATA
-    // save package key and at home folder
-    // show the subdomain to user or open browser directly
-    println!("publish-static create called");
-    Ok(())
-}
-
-pub async fn update() -> Result<(), UpdateError> {
-    println!("publish-static update called");
-    Ok(())
+    #[error("TejarReadError: {}", _0)]
+    TejarRead(#[from] tejar::error::ReadError),
 }
 
 pub async fn upload() -> Result<(), UploadError> {
