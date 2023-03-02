@@ -54,6 +54,9 @@ In this tutorial, I will be using the same figma file which I used in this
 Download the below json code as a new json file named `forest-cs.json`
 by clicking on the download icon in the code-block below.
 
+`Note:` You can also get this json from its
+[color documentation](https://fifthtry.github.io/forest-cs/)
+
 -- ds.code: forest-cs
 lang: json
 max-height: 350

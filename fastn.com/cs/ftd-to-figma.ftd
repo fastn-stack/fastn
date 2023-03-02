@@ -65,6 +65,9 @@ width: fill-container
 Download and save the below json code by clicking at the download
 icon in the code-block below.
 
+`Note:` You can also get this json from its
+[color documentation](https://fifthtry.github.io/forest-cs/)
+
 -- ds.code: forest-cs
 lang: json
 max-height: 300
@@ -182,6 +185,9 @@ width: fill-container
 
 Let's use `sunset-cs` now. Download this below json code as a new json file
 named `sunset-cs.json` by clicking at the download button.
+
+`Note:` You can also get this json from its
+[color documentation](https://fifthtry.github.io/saturated-sunset-cs/)
 
 -- ds.code: Sunset-cs
 lang: json
