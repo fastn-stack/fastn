@@ -362,10 +362,22 @@ impl PropertyValue {
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
         let line_number = value.line_number();
+
+        if key.eq("ftd.ui") {
+            return ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                value,
+                doc,
+                false,
+                Some(&ftd::interpreter2::Kind::ui().into_kind_data()),
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            );
+        }
         let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
         let component = try_ok_state!(ftd::interpreter2::Component::from_ast_component(
             ast_component,
@@ -779,6 +791,7 @@ impl PropertyValue {
                                 value,
                                 doc,
                                 definition_name_with_arguments,
+                                loop_object_name_and_kind
                             )?)
                         } else {
                             try_ok_state!(PropertyValue::from_ast_value(
@@ -1602,6 +1615,21 @@ impl Value {
             ftd::interpreter2::Value::String { text } => Ok(text.to_string()),
             t => ftd::interpreter2::utils::e2(
                 format!("Expected String, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn ui(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Component> {
+        match self {
+            ftd::interpreter2::Value::UI { component, .. } => Ok(component.to_owned()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected UI, found: `{:?}`", t),
                 doc_id,
                 line_number,
             ),
