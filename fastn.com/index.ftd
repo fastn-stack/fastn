@@ -1,8 +1,7 @@
 -- import: fifthtry.github.io/fastn-ui/lib as ft
--- import: fifthtry.github.io/fastn-ui/events as event
 -- import: fifthtry.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-typography as typo
-
+-- import: fifthtry.github.io/fastn-ui/assets as ft-assets
 
 
 
@@ -15,7 +14,7 @@ types: $typo.types
 width: fill-container
 margin-top.px: 100
 
--- ft.hero-section: Fastn: Web-framework and CMS for ftd
+-- ft.hero-section: fastn: Web-framework and CMS for ftd
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hero-image.svg
 cta-left-text: Explore More
 cta-left-url: overview
@@ -31,10 +30,21 @@ Create stunning websites with ease, powered by fastn and the user-friendly ftd l
 -- end: ftd.column
 
 
--- event.event-list-title: `ftd` Programming Language For Prose
+-- ftd.column:
+background.solid: $inherited.colors.background.step-1
+width: fill-container
 
-A beginner-friendly language for crafting custom web experiences with minimal hassle.
+-- ft.hero-section: `ftd` Programming Language For Prose
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+center: true
+cta-left-text: Explore More
+cta-left-url: ftd
+height: 485
+width: 1160
 
+-- ft.hero-section.info: A beginner-friendly language for crafting custom web experiences with minimal hassle.
+
+-- end: ftd.column
 
 
 
@@ -43,27 +53,27 @@ spacing: 24
 spacing if {ftd.device == "mobile"}: 32
 switch-to-column if {ftd.device == "mobile"}: true
 
--- ft.stages-vertical: Get Started with Fastn in Seconds
+-- ft.stages-vertical: Get Started with fastn in Seconds
 rect: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hosting/rect-num.svg
 stage: 01
 cta-text: Explore more
 cta-link: install/
 right: true
 
-Install Fastn with a Single Command
+Install fastn with a Single Command
 
 -- ft.code-block-system:
 lang: sh
 width: 412
 show-double: false
 
-curl -sSL https://fastn.io/install.sh | sh
+curl -sSL https://fastn.io/-/fastn.io/install.sh | sh
 
 -- end: ft.row-container
 
 
 
--- ft.card-with-icons-bottom: Components & Fastn Library
+-- ft.card-with-icons-bottom: Components & fastn Library
 cta-text: Browse Components
 cta-link: featured
 
@@ -85,7 +95,7 @@ src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/ic
 src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/polygon-top.svg
 
 -- ft.image-card-with-title:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static.icons/plus-sign-circled.svg
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/plus-sign-circled.svg
 
 -- ft.image-card-with-title: Organism
 src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/circle-shape.svg
@@ -105,7 +115,7 @@ src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/mi
 
 
 
--- ft.benefits-card: Benefits of Fastn
+-- ft.benefits-card: Benefits of fastn
 
 -- ft.benefits-info-card: Easy to learn
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
@@ -131,7 +141,7 @@ easy to build robust websites and user interfaces.
 
 -- end: ft.benefits-info-card
 
--- ft.benefits-info-card: Streamline Your Web Development with fastn
+-- ft.benefits-info-card: Streamline Your Web Development
 icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 
 
