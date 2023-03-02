@@ -2,7 +2,7 @@
 -- import: fifthtry.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-typography as typo
 -- import: fifthtry.github.io/fastn-ui/assets as ft-assets
-
+-- import: fastn/processors as pr
 
 
 -- my-ds.page:
@@ -170,5 +170,21 @@ Convert your fastn packages to static sites and deploy to your favorite service.
 -- end: ft.benefits-card
 
 
+-- ds.footer:
+footer-toc: $footer-toc
+
+
 
 -- end: my-ds.page
+
+
+-- pr.toc-item list footer-toc:
+$processor$: pr.toc
+
+- Overview: /overview/
+- Get Started: /setup/
+  - Install fastn: /install/
+  - Create fastn package: /create-fastn-package/
+- Get Help: /community/
+  - GitHub Q&A discussion: https://github.com/fastn-stack/fastn/discussions/categories/q-a
+  - Discord: https://discord.gg/a7eBUeutWD
