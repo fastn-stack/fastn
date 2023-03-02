@@ -3,6 +3,7 @@
 -- fastn.package: fastn.io
 download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
+-- fastn.dependency: fifthtry.github.io/fastn-js
 -- fastn.dependency: fifthtry.github.io/doc-site as ds
 -- fastn.dependency: fifthtry.github.io/winter-cs
 -- fastn.dependency: fifthtry.github.io/dark-flame-cs

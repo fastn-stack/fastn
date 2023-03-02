@@ -1,4 +1,4 @@
--- import: fastn.io/cs/json-exporter as j
+-- import: fifthtry.github.io/fastn-js/json-exporter as j
 -- import: fifthtry.github.io/forest-cs as forest-cs
 -- import: heulitig.github.io/figma-tokens-tutorial/assets as assets
 -- import: fastn/processors as pr
