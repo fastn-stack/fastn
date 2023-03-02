@@ -18,7 +18,7 @@ caption or body message:
 
 `ftd` is designed for everyone, not just programmers.
 
-[Getting Started](/setup/) | [Watch Course](https://ftd.dev/expander/)
+[Getting Started](/setup/) | [Watch Course](/expander/)
 
 [Star us on Github](https://github.com/fastn-stack/ftd)
 
@@ -65,7 +65,7 @@ no quotes. and **markdown** is *supported*.
 Note: These are not built in components of ftd, but are using [open source
 component libraries](/featured/), eg
 [fifthtry.github.io/bling/quote](https://fifthtry.github.io/bling/chat/). Learn
-how to [build your own](https://ftd.dev/expander/).
+how to [build your own](/expander/).
 
 -- ds.code: using little more complex components
 lang: ftd

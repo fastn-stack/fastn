@@ -6,10 +6,20 @@ Everything you need to know about `fastn` and `ftd`.
 
 Are you new to `fastn`, `ftd` or to programming? This is the place to start!
 
-- **From Scratch**: Overview | [Get Started](/setup/)
-- **Tutorial**: Part 1 - Using And Creating Components | Part 2 - Functions and
-  Event Handling | Part 3 - Data Modelling | Part 4 - Work With HTTP APIs |
-  Part 5 - Style Guide | Part 6 - Deploying
+- **From Scratch**: [Overview](/overview/) | [Get Started](/setup/)
+- **Tutorial**: Part 1 - Using And Creating Components
+  | Part 2 - Functions and Event Handling
+  | Part 3 - Data Modelling
+  | Part 4 - Work With HTTP APIs
+  | Part 5 - Style Guide
+  | Part 6 - Deploying
+- **Course**: [Overview Of The Course](/expander/)
+  | [Part 1 - Hello World](/expander/hello-world/)
+  | [Part 2 - Basic UI](/expander/basic-ui/)
+  | [Part 3 - Components](/expander/components/)
+  | [Part 4 - Event Handling](/expander/events/)
+  | [Part 5 - Publishing A Package](/expander/publish/)
+  | [Part 6 - Polishing UI](/expander/polish/)
 
 -- ds.h1: Getting Help
 
