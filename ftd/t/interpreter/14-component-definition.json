@@ -309,6 +309,7 @@
                                   "condition": null,
                                   "events": [],
                                   "children": [],
+                                  "source": "Declaration",
                                   "line_number": 9
                                 }
                               }
@@ -344,6 +345,7 @@
           "condition": null,
           "events": [],
           "children": [],
+          "source": "Declaration",
           "line_number": 7
         },
         "css": null,
@@ -553,6 +555,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 23
     }
   ],

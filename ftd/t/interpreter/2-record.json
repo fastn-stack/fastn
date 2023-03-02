@@ -122,6 +122,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 16
     }
   ],

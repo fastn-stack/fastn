@@ -75,6 +75,7 @@
                                   "condition": null,
                                   "events": [],
                                   "children": [],
+                                  "source": "Declaration",
                                   "line_number": 6
                                 }
                               }
@@ -142,6 +143,7 @@
                                   "condition": null,
                                   "events": [],
                                   "children": [],
+                                  "source": "Declaration",
                                   "line_number": 8
                                 }
                               }
@@ -177,6 +179,7 @@
           "condition": null,
           "events": [],
           "children": [],
+          "source": "Declaration",
           "line_number": 4
         },
         "css": null,
@@ -235,6 +238,7 @@
                               "condition": null,
                               "events": [],
                               "children": [],
+                              "source": "Declaration",
                               "line_number": 21
                             }
                           }
@@ -270,6 +274,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 19
     }
   ],

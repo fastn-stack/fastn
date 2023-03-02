@@ -232,6 +232,33 @@ impl<'a> ExecuteDoc<'a> {
         Ok(component_definition.definition)
     }
 
+    fn get_instruction_from_variable(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+    ) -> ftd::executor::Result<ftd::interpreter2::Component> {
+        let mut component = doc
+            .itdoc()
+            .get_variable(instruction.name.as_str(), instruction.line_number)?
+            .value
+            .resolve(&doc.itdoc(), instruction.line_number)?
+            .ui(doc.name, instruction.line_number)?;
+        if let Some(condition) = instruction.condition.as_ref() {
+            ftd::executor::utils::update_condition_in_component(
+                &mut component,
+                condition.to_owned(),
+            );
+        }
+
+        ftd::executor::utils::update_events_in_component(
+            &mut component,
+            instruction.events.to_owned(),
+        );
+
+        component.source = ftd::interpreter2::ComponentSource::Declaration;
+
+        Ok(component)
+    }
+
     #[allow(clippy::type_complexity)]
     fn get_loop_instructions(
         instruction: &ftd::interpreter2::Component,
@@ -375,6 +402,10 @@ impl<'a> ExecuteDoc<'a> {
                         )?,
                     );
                     break;
+                }
+
+                if instruction.is_variable() {
+                    instruction = ExecuteDoc::get_instruction_from_variable(&instruction, doc)?;
                 }
 
                 let component_definition = {

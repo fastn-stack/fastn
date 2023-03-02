@@ -208,6 +208,29 @@ pub(crate) fn update_local_variable_references_in_component(
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
+    if component.is_variable() {
+        let mut component_name = ftd::interpreter2::PropertyValue::Reference {
+            name: component.name.to_string(),
+            kind: ftd::interpreter2::Kind::ui().into_kind_data(),
+            source: ftd::interpreter2::PropertyValueSource::Global,
+            is_mutable: false,
+            line_number: 0,
+        };
+        update_local_variable_reference_in_property_value(
+            &mut component_name,
+            local_variable_map,
+            inherited_variables,
+            replace_property_value,
+            local_container,
+            doc,
+        );
+
+        component.name = component_name
+            .reference_name()
+            .map(ToString::to_string)
+            .unwrap_or(component.name.to_string());
+    }
+
     for property in component.properties.iter_mut() {
         update_local_variable_reference_in_property(
             property,

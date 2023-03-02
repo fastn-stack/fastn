@@ -155,6 +155,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 1
     },
     {
@@ -217,6 +218,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 7
     },
     {
@@ -272,6 +274,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 14
     },
     {
@@ -396,6 +399,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 21
     }
   ],

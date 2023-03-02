@@ -69,6 +69,7 @@
           "condition": null,
           "events": [],
           "children": [],
+          "source": "Declaration",
           "line_number": 6
         },
         "css": null,
@@ -109,6 +110,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 10
     },
     {
@@ -142,6 +144,7 @@
       "condition": null,
       "events": [],
       "children": [],
+      "source": "Declaration",
       "line_number": 13
     }
   ],

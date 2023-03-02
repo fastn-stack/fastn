@@ -125,7 +125,20 @@ pub struct Component {
     pub condition: Box<Option<ftd::interpreter2::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
+    pub source: ComponentSource,
     pub line_number: usize,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum ComponentSource {
+    Declaration,
+    Variable,
+}
+
+impl Default for ComponentSource {
+    fn default() -> ComponentSource {
+        ComponentSource::Declaration
+    }
 }
 
 impl Component {
@@ -137,6 +150,7 @@ impl Component {
             condition: Box::new(None),
             events: vec![],
             children: vec![],
+            source: Default::default(),
             line_number: 0,
         }
     }
@@ -177,6 +191,11 @@ impl Component {
 
     pub(crate) fn is_loop(&self) -> bool {
         self.iteration.is_some()
+    }
+
+    pub(crate) fn is_variable(&self) -> bool {
+        self.source
+            .eq(&ftd::interpreter2::ComponentSource::Variable)
     }
 
     pub(crate) fn scan_ast(
@@ -278,6 +297,46 @@ impl Component {
             doc,
         )?);
 
+        if definition_name_with_arguments.is_none()
+            || doc
+                .resolve_name(definition_name_with_arguments.unwrap().0)
+                .ne(&name)
+        {
+            let mut var_name = if let Some(value) =
+                ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
+                    name.as_str(),
+                    doc,
+                    definition_name_with_arguments,
+                    &loop_object_name_and_kind,
+                    ast_component.line_number,
+                )? {
+                Some(value.2.get_reference_name(name.as_str(), doc))
+            } else {
+                None
+            };
+
+            if var_name.is_none() {
+                if let Ok(variable) = doc.search_variable(name.as_str(), ast_component.line_number)
+                {
+                    try_ok_state!(variable);
+                    var_name = Some(name.to_string());
+                }
+            }
+
+            if let Some(name) = var_name {
+                return Ok(ftd::interpreter2::StateWithThing::new_thing(Component {
+                    name,
+                    properties: vec![],
+                    iteration: Box::new(iteration),
+                    condition: Box::new(condition),
+                    events,
+                    children: vec![],
+                    source: ftd::interpreter2::ComponentSource::Variable,
+                    line_number: ast_component.line_number,
+                }));
+            }
+        }
+
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -295,6 +354,7 @@ impl Component {
             condition: Box::new(condition),
             events,
             children: vec![],
+            source: Default::default(),
             line_number: ast_component.line_number,
         }))
     }

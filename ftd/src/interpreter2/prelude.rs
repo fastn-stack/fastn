@@ -6,7 +6,8 @@ pub use ftd::interpreter2::main2::{
 
 pub use ftd::interpreter2::things::{
     component::{
-        Argument, Component, ComponentDefinition, Event, EventName, Loop, Property, PropertySource,
+        Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop,
+        Property, PropertySource,
     },
     default,
     expression::Expression,

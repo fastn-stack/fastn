@@ -1,3 +1,5 @@
+-- uis.0:
+
 -- ftd.ui list uis:
 
 -- ftd.text: Hello
@@ -5,6 +7,10 @@
 -- ftd.column:
 -- ftd.text: Column Hello
 -- end: ftd.column
+
+-- ftd.text: Hello 2
+
+-- ftd.text: Hello 3
 
 -- end: uis
 
@@ -15,4 +21,11 @@
 -- ftd.ui: $uis.1
 
 -- end: ftd.column.children
+-- end: ftd.column
+
+
+-- ftd.column:
+
+-- uis.2:
+
 -- end: ftd.column

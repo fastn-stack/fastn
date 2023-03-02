@@ -1326,6 +1326,7 @@
                                   "condition": null,
                                   "events": [],
                                   "children": [],
+                                  "source": "Declaration",
                                   "line_number": 34
                                 }
                               }
@@ -1413,6 +1414,7 @@
                                   "condition": null,
                                   "events": [],
                                   "children": [],
+                                  "source": "Declaration",
                                   "line_number": 36
                                 }
                               }
@@ -1448,6 +1450,7 @@
           "condition": null,
           "events": [],
           "children": [],
+          "source": "Declaration",
           "line_number": 31
         },
         "css": null,
