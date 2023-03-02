@@ -1322,6 +1322,13 @@ else {
 return f;
 }
 }
+function download_text(filename, text) {
+const blob = new Blob([text], { type: 'text/plain' });
+const link = document.createElement('a');
+link.href = window.URL.createObjectURL(blob);
+link.download = filename;
+link.click();
+}
 function get_color_value(cs, category, color_name) {
 let category_data = cs[category];
 let color_data = category_data[color_name];
@@ -1849,11 +1856,11 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0:main__color"]){window.node_change_main["0,0,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
 };
 

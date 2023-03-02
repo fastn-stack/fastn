@@ -1332,6 +1332,13 @@ else {
 return f;
 }
 }
+function download_text(filename, text) {
+const blob = new Blob([text], { type: 'text/plain' });
+const link = document.createElement('a');
+link.href = window.URL.createObjectURL(blob);
+link.download = filename;
+link.click();
+}
 function get_color_value(cs, category, color_name) {
 let category_data = cs[category];
 let color_data = category_data[color_name];
@@ -1947,11 +1954,11 @@ for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
 };
 
@@ -1991,25 +1998,25 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#default-types"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
 }
 };
 
@@ -2030,23 +2037,23 @@ for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
 }
 };
 
