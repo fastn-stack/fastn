@@ -29,3 +29,26 @@
 -- uis.2:
 
 -- end: ftd.column
+
+
+-- s:
+$loop$: $uis as $s
+
+
+-- foo:
+foo-uis: $uis
+
+
+-- component foo:
+ftd.ui list foo-uis:
+
+-- ftd.column:
+
+-- s:
+$loop$: $foo.foo-uis as $s
+
+-- foo.foo-uis.0:
+
+-- end: ftd.column
+
+-- end: foo
