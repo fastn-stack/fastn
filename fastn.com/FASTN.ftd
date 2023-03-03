@@ -28,14 +28,14 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 -- fastn.sitemap:
 
-# Home: /home/
 
-## Home: /home/
 
-- Home: /home/
+
+# Learn: /overview/
+
+## Learn: /overview/
+
 - Overview: /overview/
-- `ftd` Overview: /ftd/
-;; - `fastn` for Website Builders: /cms/
 
 ## Features: /features/
 
@@ -51,16 +51,6 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Sitemap: /sitemap/
   document: features/sitemap.ftd
 
-
-## Featured Components: /featured/
-
-- Featured Components: /featured/
-- Documentation Sites: /featured/doc-sites/
-- Color Schemes: /featured/cs/
-- Component Libraries: /featured/components-library/
-- Fonts: /featured/fonts/
-
-# Learn: /expander/
 
 ## Crash Course: /expander/
 
@@ -78,6 +68,15 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 # Design: /figma/
   document: /cs/ftd-to-figma/
+
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: /cs/ftd-to-figma/
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: /cs/figma-to-ftd/
+- Modify color scheme package: /modify-cs/
+  document: cs/modify-cs.ftd
+- Create `font` package: /create-font-package/
+  document: author/how-to/create-font-package.ftd
 
 # Develop: /docs/
 
@@ -110,22 +109,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
     document: author/setup/windows.ftd
   - On MacOS/Linux: /macos/
     document: author/setup/macos.ftd
-- Publishing On Github pages: /github-pages/
-  document: author/how-to/github-pages.ftd
-- Publishing On Vercel: /vercel/
-  document: author/how-to/vercel.ftd
 - Open terminal: /open-terminal/
   document: author/how-to/open-terminal.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
-- Modify color scheme package: /modify-cs/
-  document: cs/modify-cs.ftd
-- Use Figma Tokens with fastn color schemes: /figma/
-  document: /cs/ftd-to-figma/
-- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
-  document: /cs/figma-to-ftd/
-- Create `font` package: /create-font-package/
-  document: author/how-to/create-font-package.ftd
 
 ## FTD Host Features: /ftd-host/
 
@@ -144,9 +131,37 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 # Build: /install/-/build/
   document: author/how-to/install.ftd
 
+## Build: /install/-/build/
+  document: author/how-to/install.ftd
+
+- Install: /install/-/build/
+  document: author/how-to/install.ftd
+
+## Featured Components: /featured/
+
+- Featured Components: /featured/
+- Documentation Sites: /featured/doc-sites/
+- Color Schemes: /featured/cs/
+- Component Libraries: /featured/components-library/
+- Fonts: /featured/fonts/
+
+
+# Deploy: /github-pages/
+  document: author/how-to/github-pages.ftd
+
+- Publishing On Github pages: /github-pages/
+  document: author/how-to/github-pages.ftd
+- Publishing On Vercel: /vercel/
+  document: author/how-to/vercel.ftd
+
 # Blog: /blog/web-components/
 
 - Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
 
+# Planning: /planning/
+skip: true
+
+- Overview: /planning/
+- Developer Course: /planning/developer-course/
