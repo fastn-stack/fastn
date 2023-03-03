@@ -6,6 +6,7 @@ are going to discuss how to open terminal in different os.
 
 - [Open the Terminal (Linux)](open-terminal/#open-the-terminal-linux)
 - [Open the Terminal (MacOS)](open-terminal/#open-the-terminal-macos)
+- [Open Command prompt (Windows)](open-terminal/#open-the-command-prompt)
 
 -- ds.h1: Open the Terminal (Linux)
 
@@ -99,5 +100,77 @@ src: $fastn-assets.files.images.setup.open-terminal-macos-5.png
 -- ds.markdown:
 
 Double-click the `Terminal.app` icon and the Terminal will open.
+
+
+-- ds.h1: Open the Command Prompt
+
+The `**Command Prompt**`, officially called the `Windows Command Processor` and 
+often abbreviated to `CMD`, is the `command line interface` for Windows operating 
+systems. A command line interface is a way of interacting with a computer directly 
+using text commands.
+
+-- ds.h2: How to open Command Prompt from the Windows Start Menu
+
+First, click the Start Menu button in the lower-left corner to open the start 
+menu.
+
+Scroll down to “Windows System” and click that to open a dropdown of different 
+Windows programs. Then click “Command Prompt”:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.cmd-prompt-start-menu.png
+
+
+-- ds.h2: How to open Command Prompt with the search bar
+
+One of the fastest ways to open Command Prompt is by using the search bar in the 
+Windows Taskbar.
+
+Just type “cmd” into the search bar and click on “Command Prompt”:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.search-cmd-prompt-1.png
+
+
+-- ds.h2: How to open Command Prompt from the Run program
+
+Windows 10 has another program called Run that lets you, well, run other programs. 
+You can also do things like open folders and files, but that’s outside the scope 
+of this tutorial.
+
+To open Run, you can open the Start Menu and find it under “Windows System”. 
+You could also type “run” in the search box and find it that way.
+
+But the fastest way to open Run is with the shortcut **Windows Key + R**.
+
+Then, once the Run window is open, just type in “cmd” and press “OK” to open 
+Command Prompt:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.run-cmd.png
+
+
+-- ds.h2: How to Open Command Prompt in a Folder
+
+In many cases, you wish not to write the folder directory in command prompt rather 
+open the command prompt in a folder with the path of a particular project or 
+repository.
+
+First, open the folder.
+
+Click on the address bar
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.folder-address-bar.png
+
+-- ds.markdown:
+
+Make sure, it's highlighted, then write `**cmd**` and hit enter on keyboard.
+
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.cmd-with-folderpath.png
+
+
 
 -- end: my-ds.page
