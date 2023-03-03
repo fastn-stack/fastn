@@ -34,6 +34,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 - Home: /home/
 - Overview: /overview/
+- `ftd` Overview: /ftd/
 ;; - `fastn` for Website Builders: /cms/
 
 ## Features: /features/
@@ -59,21 +60,26 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
-# `ftd`: /ftd/
+# Learn: /expander/
 
-- Overview: /ftd/
-- Data Modelling: /ftd/data-modelling/
-- Variables: /ftd/variables/
-- Built-in Types: /ftd/built-in-types/
-- `record`: /ftd/record/
-- `or-type`: /ftd/or-type/
-- 🚧 `list`: /ftd/list/
-- `ftd p1` grammar: /ftd/p1-grammar/
-- 🚧 Responsive Site:
+## Crash Course: /expander/
+
+- Overview: /expander/
+- Part 1. Hello World: /expander/hello-world/
+- Part 2. Basic UI: /expander/basic-ui/
+- Part 3. Components: /expander/components/
+- Part 4. Event Handling: /expander/events/
+- Part 5. Publish a package: /expander/publish/
+- Part 6. Polishing UI: /expander/polish/
 
 
+## Events: events/01/
 
-# Learn: /docs/
+
+# Design: /figma/
+  document: /cs/ftd-to-figma/
+
+# Develop: /docs/
 
 ## Docs: /docs/
 
@@ -83,10 +89,20 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Create `fastn` package: /create-fastn-package/
   document: author/how-to/create-fastn-package.ftd
 - Best Practices: /best-practices/
+- `ftd p1` grammar: /ftd/p1-grammar/
+
+## Data Modelling: /ftd/data-modelling/
+
+- Data Modelling: /ftd/data-modelling/
+- Variables: /ftd/variables/
+- Built-in Types: /ftd/built-in-types/
+- `record`: /ftd/record/
+- `or-type`: /ftd/or-type/
+- 🚧 `list`: /ftd/list/
 
 
 ## How Tos: /install/
-document: author/how-to/install.ftd
+  document: author/how-to/install.ftd
 
 - Install `fastn`: /install/
   document: author/how-to/install.ftd
@@ -124,21 +140,13 @@ document: author/how-to/install.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
 
-## Crash Course: /expander/
 
-- Overview: /expander/
-- Part 1. Hello World: /expander/hello-world/
-- Part 2. Basic UI: /expander/basic-ui/
-- Part 3. Components: /expander/components/
-- Part 4. Event Handling: /expander/events/
-- Part 5. Publish a package: /expander/publish/
-- Part 6. Polishing UI: /expander/polish/
-
-
-## Events: events/01/
+# Build: /install/-/build/
+  document: author/how-to/install.ftd
 
 # Blog: /blog/web-components/
 
 - Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
+
