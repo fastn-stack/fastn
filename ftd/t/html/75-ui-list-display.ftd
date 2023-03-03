@@ -1,54 +1,67 @@
--- uis.0:
-
 -- ftd.ui list uis:
 
--- ftd.text: Hello
+-- ftd.text: Hello 0
 
--- ftd.column:
--- ftd.text: Column Hello
--- end: ftd.column
+-- ftd.text: Hello 1
 
 -- ftd.text: Hello 2
-
--- ftd.text: Hello 3
 
 -- end: uis
 
 
+-- display-uis:
+uis: $uis
+
+
+-- display-uis:
+
+-- ftd.text: Hello 10
+-- ftd.text: Hello 11
+-- ftd.text: Hello 12
+
+-- end: display-uis
+
+
+
+-- display-uis:
+
+-- display-uis.uis:
+
+-- ftd.text: Hello 20
+-- ftd.text: Hello 21
+-- ftd.text: Hello 22
+
+-- end: display-uis.uis
+
+-- end: display-uis
+
+
+
+-- component display-uis:
+children uis:
+
 -- ftd.column:
--- ftd.column.children:
-
--- ftd.ui: $uis.1
-
--- end: ftd.column.children
--- end: ftd.column
-
-
--- ftd.column:
-
--- uis.2:
-
--- end: ftd.column
-
+border-width.px: 1
+margin.px: 40
+padding.px: 5
 
 -- s:
-$loop$: $uis as $s
+$loop$: $display-uis.uis as $s
 
+-- ftd.text: <--------------------------------------->
 
--- foo:
-foo-uis: $uis
+-- display-uis.uis.1:
+-- display-uis.uis.0:
+-- display-uis.uis.2:
 
-
--- component foo:
-ftd.ui list foo-uis:
+-- ftd.text: <--------------------------------------->
 
 -- ftd.column:
-
--- s:
-$loop$: $foo.foo-uis as $s
-
--- foo.foo-uis.0:
+children: $display-uis.uis
 
 -- end: ftd.column
 
--- end: foo
+-- end: ftd.column
+
+
+-- end: display-uis
