@@ -52,17 +52,6 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: features/sitemap.ftd
 
 
-## Crash Course: /expander/
-
-- Overview: /expander/
-- Part 1. Hello World: /expander/hello-world/
-- Part 2. Basic UI: /expander/basic-ui/
-- Part 3. Components: /expander/components/
-- Part 4. Event Handling: /expander/events/
-- Part 5. Publish a package: /expander/publish/
-- Part 6. Polishing UI: /expander/polish/
-
-
 ## Events: events/01/
 
 
@@ -127,6 +116,21 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - `assets`: /assets/
   document: ftd-host/assets.ftd
 
+## Crash Course: /expander/
+
+- Overview: /expander/
+- Part 1. Hello World: /expander/hello-world/
+  - Install `fastn`: /install/-/expander/
+    document: author/how-to/install.ftd
+    - On Windows: /windows/-/expander/
+      document: author/setup/windows.ftd
+    - On MacOS/Linux: /macos/-/expander/
+      document: author/setup/macos.ftd
+- Part 2. Basic UI: /expander/basic-ui/
+- Part 3. Components: /expander/components/
+- Part 4. Event Handling: /expander/events/
+- Part 5. Publish a package: /expander/publish/
+- Part 6. Polishing UI: /expander/polish/
 
 # Build: /install/-/build/
   document: author/how-to/install.ftd
