@@ -77,7 +77,6 @@ curl -sSL https://fastn.io/-/fastn.io/install.sh | sh
 cta-text: Browse Components
 cta-link: featured
 
-
 -- ft.card-with-icons-bottom.info:
 
 Easily create dynamic and visually stunning websites with our reusable
@@ -153,6 +152,8 @@ on setup and more time creating your product.
 
 
 -- end: ft.benefits-info-card
+
+
 
 
 

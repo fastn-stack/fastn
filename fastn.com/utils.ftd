@@ -90,7 +90,7 @@ width: fill-container
 spacing.fixed.px: 10
 $on-click$: $ftd.set-integer($a = $switches-title.is-active, v = $switches-title.index)
 
--- ds.image:
+-- ftd.image:
 width.fixed.px: 24
 src: $fastn-assets.files.images.box.svg
 src if { switches-title.is-active == switches-title.index }: $fastn-assets.files.images.tick.svg
