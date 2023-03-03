@@ -1,13 +1,20 @@
 -- import: fifthtry.github.io/admonitions as cbox
+-- import: fastn/processors as pr
 
--- my-ds.page: Part 2: Basic UI
+-- my-ds.page: Basic UI
 
 In this video, I will first show you how to utilize the `fastn packages` that are there for use. 
 Then, we will continue our learning and understand what are `Properties` and how to use them. 
 Later, we will use `container components`and start creating the layout of our Expander project.
 
 -- ds.youtube:
+if: { source == "default" }
 v: zFkxqHUsYLQ
+
+
+-- ds.youtube:
+if: { source == "build" }
+v: XNsTZ1s5KL8
 
 
 
@@ -114,6 +121,7 @@ With just two steps, just like we did earlier, we can use any `fastn package` in
 
 
 -- ds.h1: Let's keep learning
+if: { source == "default" }
 
 Let's continue our learning in the `index.ftd` file and build our project step-by-step.
 
@@ -121,8 +129,10 @@ Following is the list of the `properties` we will apply to `ftd.text` and `conta
 
 
 -- ds.h2: Properties
+if: { source == "default" }
 
 -- ds.code: Root ftd.column
+if: { source == "default" }
 lang: ftd
 
 \-- ftd.column:
@@ -133,6 +143,7 @@ height: fill-container
 align-content: top-center
 
 -- ds.code: Child ftd.column
+if: { source == "default" }
 lang: ftd
 
 \-- ftd.column:
@@ -142,6 +153,7 @@ width: fill-container
 
 
 -- ds.code: ftd.row for Header
+if: { source == "default" }
 lang: ftd
 
 \-- ftd.row:
@@ -152,23 +164,28 @@ padding.px: 10
 
 
 -- ds.h3: UI design of webpage
+if: { source == "default" }
 
 -- ds.image:
+if: { source == "default" }
 src: $fastn-assets.files.images.expander.box-ui-design.png
 width: fill-container
 
 
 
 -- ds.h3: Container Components
+if: { source == "default" }
 
 Column (top to bottom): 
 
 -- ds.image:
+if: { source == "default" }
 src: $fastn-assets.files.images.expander.column.png
 width: fill-container
 
 
 -- ds.code: Column Syntax
+if: { source == "default" }
 lang: ftd
 
 \-- ftd.column:
@@ -178,14 +195,17 @@ lang: ftd
 \-- end: ftd.column
 
 -- ds.markdown:
+if: { source == "default" }
 
 Row (left to right): 
 
 -- ds.image:
+if: { source == "default" }
 src: $fastn-assets.files.images.expander.row.png
 width: fill-container
 
 -- ds.code: Row Syntax
+if: { source == "default" }
 lang: ftd
 
 \-- ftd.row:
@@ -197,7 +217,21 @@ lang: ftd
 
 
 -- ds.markdown:
+if: { source == "default" }
 
 Continue with the [part 3 now](/expander/components/).
 
+
+-- ds.markdown:
+if: { source == "build" }
+
+Continue with the [part 3 now](/expander/publish/-/build/).
+
+
 -- end: my-ds.page
+
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source

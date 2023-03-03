@@ -2,7 +2,7 @@
 -- $ds.site-name: FTD
 
 
--- my-ds.page: Part 1: Hello World
+-- my-ds.page: Hello World
 
 In this part we will install `fastn` on your machine and create a hello world
 FTD program.

@@ -10,6 +10,9 @@ For MacOS/Linux machine, there are three ways to install `fastn`.
 2. [`fastn` using `cargo`](macos/#fastn-using-cargo)
 3. [`fastn` from `source`](macos/#fastn-from-source)
 
+-- ds.image:
+src: $fastn-assets.files.images.setup.macos-fastn-installation.gif
+
 -- cbox.info: Our Recommendation
 
 We recommend you to install `fastn` through `pre-built binary`.

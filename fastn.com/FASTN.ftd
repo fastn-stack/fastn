@@ -134,7 +134,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 # Build: /install/-/build/
   document: author/how-to/install.ftd
-
+  source: build
+  
 ## Build: /install/-/build/
   document: author/how-to/install.ftd
 
@@ -149,6 +150,17 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
+## Crash Course: /expander/hello-world/-/build/
+
+- Part 1. Hello World: /expander/hello-world/-/build/
+  - Install `fastn`: /build-install/-/expander/
+    document: author/how-to/install.ftd
+    - On Windows: /build-windows/-/expander/
+      document: author/setup/windows.ftd
+    - On MacOS/Linux: /build-macos/-/expander/
+      document: author/setup/macos.ftd
+- Part 2. Basic UI: /expander/basic-ui/-/build/
+- Part 3. Publish a package: /expander/publish/-/build/
 
 # Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
