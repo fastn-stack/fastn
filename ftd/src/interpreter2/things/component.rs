@@ -297,44 +297,17 @@ impl Component {
             doc,
         )?);
 
-        if definition_name_with_arguments.is_none()
-            || doc
-                .resolve_name(definition_name_with_arguments.unwrap().0)
-                .ne(&name)
-        {
-            let mut var_name = if let Some(value) =
-                ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
-                    name.as_str(),
-                    doc,
-                    definition_name_with_arguments,
-                    &loop_object_name_and_kind,
-                    ast_component.line_number,
-                )? {
-                Some(value.2.get_reference_name(name.as_str(), doc))
-            } else {
-                None
-            };
-
-            if var_name.is_none() {
-                if let Ok(variable) = doc.search_variable(name.as_str(), ast_component.line_number)
-                {
-                    try_ok_state!(variable);
-                    var_name = Some(name.to_string());
-                }
-            }
-
-            if let Some(name) = var_name {
-                return Ok(ftd::interpreter2::StateWithThing::new_thing(Component {
-                    name,
-                    properties: vec![],
-                    iteration: Box::new(iteration),
-                    condition: Box::new(condition),
-                    events,
-                    children: vec![],
-                    source: ftd::interpreter2::ComponentSource::Variable,
-                    line_number: ast_component.line_number,
-                }));
-            }
+        if let Some(component) = try_ok_state!(Component::variable_component_from_ast(
+            ast_component.name.as_str(),
+            definition_name_with_arguments,
+            doc,
+            &iteration,
+            &condition,
+            &loop_object_name_and_kind,
+            events.as_slice(),
+            ast_component.line_number
+        )?) {
+            return Ok(ftd::interpreter2::StateWithThing::new_thing(component));
         }
 
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
@@ -357,6 +330,66 @@ impl Component {
             source: Default::default(),
             line_number: ast_component.line_number,
         }))
+    }
+
+    /// Component which is a variable
+    /// -- s:
+    /// where `s` is a variable of `ftd.ui` type
+    #[allow(clippy::too_many_arguments)]
+    fn variable_component_from_ast(
+        name: &str,
+        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        doc: &mut ftd::interpreter2::TDoc,
+        iteration: &Option<Loop>,
+        condition: &Option<ftd::interpreter2::Expression>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        events: &[Event],
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Component>>> {
+        let name = doc.resolve_name(name);
+
+        if definition_name_with_arguments.is_none()
+            || doc
+                .resolve_name(definition_name_with_arguments.unwrap().0)
+                .ne(&name)
+        {
+            let mut var_name = if let Some(value) =
+                ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
+                    name.as_str(),
+                    doc,
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                    line_number,
+                )? {
+                Some(value.2.get_reference_name(name.as_str(), doc))
+            } else {
+                None
+            };
+
+            if var_name.is_none() {
+                if let Ok(variable) = doc.search_variable(name.as_str(), line_number) {
+                    try_ok_state!(variable);
+                    var_name = Some(name.to_string());
+                }
+            }
+
+            if let Some(name) = var_name {
+                return Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+                    Component {
+                        name,
+                        properties: vec![],
+                        iteration: Box::new(iteration.to_owned()),
+                        condition: Box::new(condition.to_owned()),
+                        events: events.to_vec(),
+                        children: vec![],
+                        source: ftd::interpreter2::ComponentSource::Variable,
+                        line_number,
+                    },
+                )));
+            }
+        }
+
+        Ok(ftd::interpreter2::StateWithThing::new_thing(None))
     }
 }
 
