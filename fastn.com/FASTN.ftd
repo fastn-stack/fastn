@@ -116,6 +116,14 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - `assets`: /assets/
   document: ftd-host/assets.ftd
 
+## Book 🚧: /book/
+skip: true
+
+- The Book Of `fastn` and `ftd`: /book/
+- Foreword 🚧: /book/foreword/
+- Preface: /book/preface/
+- Introduction: /book/intro/
+
 ## Crash Course: /expander/
 
 - Overview: /expander/

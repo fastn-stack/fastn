@@ -1,0 +1,20 @@
+-- my-ds.page: The Book Of `fastn` and `ftd`
+
+*By Amit Upadhya, with contributions from `fastn` community*
+
+This version of the text assumes you are using the lastest version of `fastn`.
+See the [installation section](/install/) to install or update `fastn`.
+
+The online version of the book is available at
+[`fastn.io/book`](https://fastn.io/book/). You can get the book offline by
+cloning [`github.com/fastn-stack/fastn.io`](https://github.com/fastn-stack/fastn.io)
+and, running `fastn serve` and visiting `http://127.0.0.1:8000/book/`.
+
+The book is not yet complete, and translations of the book are also planned.
+Your contribution is most welcome to help us write and translate it. Please
+reach us out on [`fastn-contributors` -> `#book-and-docs` channel of `fastn-stack`
+server on Discord](https://discord.gg/BMtam65dbK). If you find any mistakes in
+the book you can report it as a [#issues in our Github
+Repository](https://github.com/fastn-stack/fastn.io/issues).
+
+Prefer 📺 video medium of learning? Checkout our [video course](/expander/).

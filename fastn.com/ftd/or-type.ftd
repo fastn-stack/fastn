@@ -3,18 +3,42 @@
 
 -- my-ds.page: `or-type`
 
-In `ftd` programming, when we need to choose a value from a list of possible
-variants, we can use enumeration data types known as `or-type`. This type is
-loosely equivalent to Rust's enum and is also known as an ["algebraic data
-type"](https://en.wikipedia.org/wiki/Algebraic_data_type).
+In `ftd` there is a concept of `or-type` can be used when give you a way of
+saying a value is one of a possible set of values. Consider we are defining
+shapes, and a shape can be either a rectangle, a circle or a triangle.
+
+-- ds.code:
+lang: ftd
+
+\-- or-type shape:
+
+\-- record rectangle:
+decimal width:
+decimal height:
+
+\-- record triangle:
+decimal ab:
+decimal bc:
+decimal ca:
+
+\-- record circle:
+decimal radius:
+
+\-- end: or-type
+
+
+This type is loosely equivalent to Rust's enum and is also known as an
+[algebraic data type](https://en.wikipedia.org/wiki/Algebraic_data_type).
 
 
 
 -- cbox.warning: Work in Progress
 
-Currently, it is not possible to declare a custom `or-type` and use it in a
-component other than the [built-in](ftd/built-in-types/) `or-type`s. However, we
-are working on building `match` statements that will enable us to use this type
+Currently we can declare a new `or-type` but can not use our custom or types.
+Only the builtin `or-types` defined in [built-in](ftd/built-in-types/) can be
+used by the kernel components.
+
+We are working on a `match` statements that will enable you to use this type
 in the future. Checkout [our github
 discussion](https://github.com/fastn-stack/fastn/discussions/470) to know more.
 
@@ -35,8 +59,8 @@ lang: ftd
 caption name:
 string designation:
 
-\;; Regular
-\-- string ceo-name:
+\;; Regular variant, defined using existing type, here we have used `string`
+\-- string ceo:
 
 \;; Constant
 \-- constant string bot: BOT
@@ -189,7 +213,7 @@ Consider the following example of type declaration:
 -- ds.code: Constant
 lang: ftd
 
-\-- or-type weekdays:
+\-- or-type weekday:
 
 \-- constant string sunday: Sunday
 \-- constant string monday: Monday
@@ -199,7 +223,7 @@ lang: ftd
 \-- constant string friday: Friday
 \-- constant string saturday: Saturday
 
-\-- end: weekdays
+\-- end: weekday
 
 
 -- ds.markdown:
