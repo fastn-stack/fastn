@@ -1,3 +1,60 @@
+-- import: fastn.io/assets
+
 -- ds.page: Introduction
+
+Welcome to *The Book Of `fastn` and `ftd`*, an introductory book about `fastn`
+and `ftd`. `fastn` is software stack that helps you create web-applications and
+build websites with ease.
+
+Learning a programming language from scratch, and building full stack web
+applications or websites, deploying them is not an easy task. Programming is
+almost exclusively done by people who are pursuing a career in programming or
+aspiring to. Within tech companies and tech teams you will find most non
+developers can not program at all.
+
+Programming is considered hard, and is hard if you are using current state of
+art technologies. The programming languages are not designed for ease of
+learning. They are not even designed for building UI or web applications. To
+build a full stack application, that is easy to maintain, is months or years of
+learning.
+
+`fastn` and `ftd` aim to make it easy. They are designed so a person with zero
+prior programming experience can create and deploy their first website or
+web-application within a few hours of learning, and yet remain maintainable for
+a large web project.
+
+`fastn` and `ftd` for the next billion programmers. We believe ability to
+program, to build an application that helps you improve your life, should not be
+limited to software professionals, and software companies, but for people at
+large.
+
+Consider spreadsheet applications, they are used by the masses. The formula
+language in spreadhseet applications are easy to learn, you improve your life
+by learning just how to sum things.
+
+-- ds.image:
+src: $assets.files.images.spreadhseet.png
+
+In just a min, you can learn this, and your life is improved. Once you learn
+the formula language, you can keep learning incrementally to keep improving
+your life.
+
+`fastn` and `ftd` let's you do the same, learn a very little, and start getting
+small benefits, and learn more to get larger benefits. Compare that with the
+experience with Python, one of the fastest growing languages, which is considered
+easy today. The hello world program in Python is easy but unfortunately does not
+let you benefit your life must. Or rather, you can benefit a little bit, but as
+soon as you want to move to a little bit more, say want to show a UI, you have
+to suddenly learn a lot more. The learning from `print("hello world")` to
+`import django` and "just use React or jQuery" is not an easy journey and most
+people fail to cross it unless thay have decided to devote serious efforts in
+programming.
+
+-- ds.h1: Who `fastn` and `ftd` are for?
+
+
+-- ds.h1: Who This Book Is For?
+
+
 
 -- end: ds.page
