@@ -1480,13 +1480,13 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#foo:fv:0"].changes;
 for(let i in changes) { changes[i](); }
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
 }
 };
 
@@ -1516,6 +1516,15 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]
 };
 
 window.resolve_value_main = {};
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
+
+}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -1528,15 +1537,6 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
-
-}
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 
