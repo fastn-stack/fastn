@@ -91,8 +91,9 @@ created two `person` objects and inserted them the `people` list.
 
 -- ds.h1: `ftd.ui` type as a list
 
-You can use `ftd.ui list` type or [`children`](ftd/built-in-types/#children)
-type to pass a UI component in a list.
+You can use [`ftd.ui list`](ftd/built-in-types/#ftd-ui) type or
+[`children`](ftd/built-in-types/#children) type to pass a UI component in a
+list.
 
 -- ds.code: Using `ftd.ui list` type
 lang: ftd
