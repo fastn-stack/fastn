@@ -75,6 +75,7 @@ impl ComponentDefinition {
         };
 
         let arguments = try_ok_state!(Argument::from_ast_fields(
+            component_definition.name.as_str(),
             component_definition.arguments,
             doc,
             &Default::default(),

@@ -69,6 +69,7 @@ impl Function {
         };
 
         let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
+            function.name.as_str(),
             function.arguments,
             doc,
             &Default::default(),

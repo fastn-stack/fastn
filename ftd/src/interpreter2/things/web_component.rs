@@ -54,6 +54,7 @@ impl WebComponentDefinition {
         )?);
 
         let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
+            web_component_definition.name.as_str(),
             web_component_definition.arguments,
             doc,
             &Default::default(),

@@ -57,7 +57,12 @@ impl Record {
             },
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
-        let fields = try_ok_state!(Field::from_ast_fields(record.fields, doc, &known_kinds)?);
+        let fields = try_ok_state!(Field::from_ast_fields(
+            record.name.as_str(),
+            record.fields,
+            doc,
+            &known_kinds
+        )?);
         validate_record_fields(name.as_str(), &fields, doc.name)?;
         Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
             name.as_str(),
@@ -171,16 +176,44 @@ impl Field {
     }
 
     pub(crate) fn from_ast_fields(
+        name: &str,
         fields: Vec<ftd::ast::Field>,
         doc: &mut ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
-        let mut result = vec![];
+        use itertools::Itertools;
+        let mut field_kind = vec![];
         for field in fields {
-            let field = try_ok_state!(Field::from_ast_field(field, doc, known_kinds)?);
-            result.push(field);
+            field_kind.push(try_ok_state!(Field::from_ast_field_kind(
+                field,
+                doc,
+                known_kinds
+            )?));
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(result))
+
+        let binding = field_kind.iter().map(|v| v.0.clone()).collect_vec();
+        let definition_name_with_arguments = (name, binding.as_slice());
+        for (field, value) in field_kind.iter_mut() {
+            let value = if let Some(value) = value {
+                Some(try_ok_state!(
+                    ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                        value.to_owned(),
+                        doc,
+                        field.mutable,
+                        Some(&field.kind),
+                        Some(definition_name_with_arguments),
+                        &None
+                    )?
+                ))
+            } else {
+                None
+            };
+
+            field.value = value;
+        }
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            field_kind.into_iter().map(|v| v.0).collect_vec(),
+        ))
     }
 
     pub(crate) fn scan_ast_field(
@@ -234,6 +267,32 @@ impl Field {
             value,
             line_number: field.line_number,
         }))
+    }
+
+    pub(crate) fn from_ast_field_kind(
+        field: ftd::ast::Field,
+        doc: &mut ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<(Field, Option<ftd::ast::VariableValue>)>,
+    > {
+        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+            field.kind,
+            known_kinds,
+            doc,
+            field.line_number,
+        )?);
+
+        Ok(ftd::interpreter2::StateWithThing::new_thing((
+            Field {
+                name: field.name.to_string(),
+                kind,
+                mutable: field.mutable,
+                value: None,
+                line_number: field.line_number,
+            },
+            field.value,
+        )))
     }
 
     pub fn is_caption(&self) -> bool {

@@ -79,7 +79,7 @@ impl<'a> TDoc<'a> {
             },
         );
 
-        let (default, is_default_source, is_default_null) = if let Some(default) = default {
+        let (mut default, is_default_source, is_default_null) = if let Some(default) = default {
             (default.0, default.1, false)
         } else {
             (
@@ -98,6 +98,15 @@ impl<'a> TDoc<'a> {
 
         if is_default_null && !insert_null && conditions.is_empty() {
             return Ok(None);
+        }
+
+        if let Some(name) = default.get_reference_or_clone().cloned() {
+            if let Some(name) = name.strip_prefix(format!("{}.", component_name).as_str()) {
+                let name = self.itdoc().resolve_name(
+                    format!("{}:{}:{}", component_name, name, string_container).as_str(),
+                );
+                default.set_reference_or_clone(name.as_str())
+            }
         }
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
