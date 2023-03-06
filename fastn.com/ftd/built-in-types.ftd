@@ -15,9 +15,7 @@ These types can be categorized into two main groups: **Primitive** and
 
 
 -- ds.h1: Contents
-if: { false }
 
-;; Commenting this out because intra page links are not working.
 
 - [Primitive Types](ftd/built-in-types/#primitive-types)
   - [`boolean`](ftd/built-in-types/#boolean)
