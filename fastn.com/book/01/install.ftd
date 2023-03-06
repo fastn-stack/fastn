@@ -25,11 +25,47 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/m
 -- ds.markdown:
 
 Copy the command above by clicking on the copy icon, and paste it in the
-terminal.
+terminal. It will ask you to enter your super user password so it can do the
+installtion.
 
 NOTE: A note on caution, when using terminal, it is generally not a good idea to
 trust random sites and run the commands they ask you to run. We have done this
 as a convenience, and it is recommended you follow other methods described in
 our [installation manual](/install/).
+
+This is how a successful installation looks like:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.latest-binary-macos.png
+
+NOTE: [People have reported that the above step does not work on some
+networks](https://github.com/fastn-stack/fastn/issues/619), please consider
+switching your network to rectify this problem.
+
+-- ds.h1: Installing on Windows
+
+We have not yet made installing `fastn` on Windows very easy, instead we have a
+[guide for Windows users](/windows/-/book/). Please follow it and come back
+here.
+
+-- ds.h1: Verifying Your Installation
+
+Once you have installed `fastn`, you should be able to use the `fastn` command
+from your terminal. Open a terminal and type `fastn` command, you should see
+something like this as the output.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-macos.png
+
+If you see something like this, congratulations, you are ready to rock! If not,
+please head over to our [Questions & Answers
+forum](https://github.com/fastn-stack/fastn/discussions/categories/q-a) or on
+our [Discord](https://discord.gg/a7eBUeutWD) server.
+
+
+-- ds.h1: Next Step
+
+Now that you have `fastn` installed, let's install a [programming
+editor](/book/editor/).
 
 -- end: my-ds.page

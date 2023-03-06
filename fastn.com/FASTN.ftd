@@ -135,6 +135,9 @@ skip: true
       skip: true
   - Install `fastn`: /book/install/
     document: book/01/install.ftd
+    - Intall On Windows: /windows/-/book/
+      document: author/setup/windows.ftd
+      skip: true
 
 ## Crash Course: /expander/
 

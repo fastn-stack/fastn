@@ -51,10 +51,10 @@ Familiarise yourself with them, and come back to them on need basis.
 
 Go on, issue the command `ls` or `dir` depending on which platform you are on.
 
--- ds.h1: Moving On
+-- ds.h1: Next Step
 
 Now that you have seen what terminals are, let's move on to the next step and
-[install `fastn`](/book/install/)
+[install `fastn`](/book/install/).
 
 
 -- end: my-ds.page
