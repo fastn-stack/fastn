@@ -1,3 +1,35 @@
 -- my-ds.page: Install `fastn`
 
+To write programs using `ftd` language you will have to use `fastn`, a command
+line program, like `ls` we mentioned in previous section. `fastn` is a
+"compiler" or "interpreter" of `ftd`, it converts your `ftd` programs to `html`,
+`css`, `js` that browsers understand. `fastn` is also a "package manager", when
+you are writing programs, you often depend on code written by others, shared by
+them to make life easy by everyone. Code you depend on others is called
+dependencies or libraries. We call them `fastn package`. And `fastn` manages
+these packages. This will all make sense more sense as we progress in the book,
+what you need to know is that `fastn` acts as your package manager as well. And
+finally `fastn` is a "web server", when you write a web application or a website,
+you are trying to create something that works in web browsers like Chrome,
+Firefox, Safari, etc, and these browsers talk to "web servers".
+
+So `fastn` is all that for you, and more. So let's install it now. If you are
+using `OSX` or `Linux`, installing it can be as easy as running the following
+in the terminal:
+
+-- ds.code:
+lang: ftd
+
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
+
+-- ds.markdown:
+
+Copy the command above by clicking on the copy icon, and paste it in the
+terminal.
+
+NOTE: A note on caution, when using terminal, it is generally not a good idea to
+trust random sites and run the commands they ask you to run. We have done this
+as a convenience, and it is recommended you follow other methods described in
+our [installation manual](/install/).
+
 -- end: my-ds.page
