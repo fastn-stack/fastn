@@ -103,7 +103,7 @@ main() {
     setup_colors
 
     if ! command_exists curl; then
-        echo "${FMT_RED}curl command not found. Please install the curl utility and execute the script once again${FMT_RESET}"
+        echo "${FMT_RED}curl not found. Please install curl and execute the script once again${FMT_RESET}"
         exit 1
     fi
     setup "$@"
