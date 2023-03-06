@@ -147,6 +147,15 @@ lang: ftd
 \-- ftd.text: $obj
 $loop$: $weekdays as $obj
 
+
+-- ds.output:
+
+-- ftd.text: $obj
+$loop$: $weekdays as $obj
+color: $inherited.colors.text
+
+-- end: ds.output
+
 -- ds.markdown:
 
 This code will output each element of the `weekdays` list on a separate line.
@@ -157,6 +166,13 @@ lang: ftd
 
 \-- obj:
 $loop$: $uis as $obj
+
+-- ds.output:
+
+-- obj:
+$loop$: $uis as $obj
+
+-- end: ds.output
 
 
 -- ds.h2: Using index
@@ -174,6 +190,12 @@ lang: ftd
 
 \-- ftd.text: $weekdays.0
 
+-- ds.output:
+
+-- ftd.text: $weekdays.0
+
+-- end: ds.output
+
 -- ds.markdown:
 
 Similarly, To access the first component in the `uis` list, you would use the
@@ -183,6 +205,12 @@ following syntax:
 lang: ftd
 
 \-- uis.0:
+
+-- ds.output:
+
+-- uis.0:
+
+-- end: ds.output
 
 
 -- ds.h1: `$processor$`
@@ -334,3 +362,26 @@ guide.
 
 
 -- end: my-ds.page
+
+
+
+-- string list weekdays:
+
+-- string: Sunday
+-- string: Monday
+-- string: Tuesday
+-- string: Wednesday
+-- string: Thursday
+-- string: Friday
+-- string: Saturday
+
+-- end: weekdays
+
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello World!
+-- ftd.text: I love `ftd`.
+
+-- end: uis
