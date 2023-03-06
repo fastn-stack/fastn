@@ -86,7 +86,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Built-in Types: /ftd/built-in-types/
 - `record`: /ftd/record/
 - `or-type`: /ftd/or-type/
-- 🚧 `list`: /ftd/list/
+- `list`: /ftd/list/
 
 
 ## How Tos: /install/
