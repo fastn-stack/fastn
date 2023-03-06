@@ -153,6 +153,9 @@ internet, installing software, editing files etc.
 One of the inspiration for this book is my niece, as 12 year old, she wants to
 learn what I do.
 
+To follow along with this book you will need access to a Windows, Mac or a Linux
+machine. You can either use a Desktop or a Laptop.
+
 -- ds.h1: How To Use This Book
 
 In general, this book assumes that you’re reading it in sequence from front to
@@ -166,7 +169,7 @@ and even programming in general. In project chapters, we’ll build small progra
 together, applying what you’ve learned so far.
 
 Chapter 1 explains how to install `fastn`, how to write a "hello world" program,
-how to publish them on the web. Chapter 2 is a hands-on introduction to writing
+how to publish it on the web. Chapter 2 is a hands-on introduction to writing
 a program in `fastn`, having you build a UI that responds to some events. Here
 we cover concepts at a high level, and later chapters will provide additional
 detail. If you want to get your hands dirty right away, Chapter 2 is the place

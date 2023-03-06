@@ -124,7 +124,17 @@ skip: true
 - Preface: /book/preface/
 - Introduction: /book/intro/
 - **1.** Getting Started 🚧: /book/getting-started/
-  document: book/01-getting-started.ftd
+  document: book/01/getting-started.ftd
+  - Terminal: /book/terminal/
+    document: book/01/terminal.ftd
+    - Open Terminal: /open-terminal/-/book/
+      document: author/how-to/open-terminal.ftd
+      skip: true
+    - Common Commands: /cmds/
+      document: book/01/common-commands.ftd
+      skip: true
+  - Install `fastn`: /book/install/
+    document: book/01/install.ftd
 
 ## Crash Course: /expander/
 
