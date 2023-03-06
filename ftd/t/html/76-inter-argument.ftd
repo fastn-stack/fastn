@@ -6,11 +6,12 @@ description: Description here
 -- boolean $flag: true
 
 -- code: Hi there 2!
-description if { flag }: Description here
+description if { !flag }: Description here
 $on-click$: $ftd.toggle($a = $flag)
 
 -- component code:
-string description: $code.title
+string description: $code.name
+string name: $code.title
 caption title:
 
 -- ftd.row:
@@ -18,6 +19,7 @@ spacing.fixed.px: 20
 padding.px: 20
 
 -- ftd.text: $code.title
+-- ftd.text: $code.name
 -- ftd.text: $code.description
 
 -- end: ftd.row

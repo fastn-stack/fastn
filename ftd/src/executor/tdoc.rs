@@ -25,9 +25,9 @@ impl<'a> TDoc<'a> {
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
     ) -> ftd::executor::Result<ftd::Map<String>> {
-        let mut map: ftd::Map<String> = Default::default();
+        let mut map: ftd::Map<(String, Option<String>)> = Default::default();
         for argument in arguments {
-            if let Some((k, v)) = self.insert_local_variable(
+            if let Some((k, v, has_self_reference)) = self.insert_local_variable(
                 component_name,
                 properties,
                 argument,
@@ -36,10 +36,42 @@ impl<'a> TDoc<'a> {
                 inherited_variables,
                 insert_null,
             )? {
-                map.insert(k, v);
+                map.insert(k, (v, has_self_reference));
             }
         }
-        Ok(map)
+
+        let mut result: ftd::Map<String> = Default::default();
+
+        for (k, (name, has_self_reference)) in map.iter() {
+            let mut name = name.clone();
+            loop {
+                if name.starts_with(format!("{}.", component_name).as_str()) {
+                    name = map.get(name.as_str()).cloned().unwrap().0;
+                } else {
+                    break;
+                }
+            }
+
+            if let Some(has_self_reference) = has_self_reference {
+                let variable = match self.bag.get_mut(name.as_str()).unwrap() {
+                    ftd::interpreter2::Thing::Variable(v) => v,
+                    _ => unreachable!(),
+                };
+                let mut value = has_self_reference.clone();
+                loop {
+                    if value.starts_with(format!("{}.", component_name).as_str()) {
+                        value = map.get(value.as_str()).unwrap().0.clone();
+                    } else {
+                        break;
+                    }
+                }
+                variable.value.set_reference_or_clone(value.as_str());
+            }
+
+            result.insert(k.to_string(), name);
+        }
+
+        Ok(result)
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -52,7 +84,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
-    ) -> ftd::executor::Result<Option<(String, String)>> {
+    ) -> ftd::executor::Result<Option<(String, String, Option<String>)>> {
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
         let properties = ftd::executor::value::find_properties_by_source(
@@ -79,7 +111,7 @@ impl<'a> TDoc<'a> {
             },
         );
 
-        let (mut default, is_default_source, is_default_null) = if let Some(default) = default {
+        let (default, is_default_source, is_default_null) = if let Some(default) = default {
             (default.0, default.1, false)
         } else {
             (
@@ -100,14 +132,15 @@ impl<'a> TDoc<'a> {
             return Ok(None);
         }
 
-        if let Some(name) = default.get_reference_or_clone().cloned() {
-            if let Some(name) = name.strip_prefix(format!("{}.", component_name).as_str()) {
-                let name = self.itdoc().resolve_name(
-                    format!("{}:{}:{}", component_name, name, string_container).as_str(),
-                );
-                default.set_reference_or_clone(name.as_str())
+        let self_reference = {
+            let mut self_reference = None;
+            if let Some(name) = default.get_reference_or_clone().cloned() {
+                if name.starts_with(format!("{}.", component_name).as_str()) {
+                    self_reference = Some(name);
+                }
             }
-        }
+            self_reference
+        };
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         match default.reference_name() {
@@ -126,7 +159,7 @@ impl<'a> TDoc<'a> {
                     );
                 }
 
-                return Ok(Some((name_in_component_definition, name.to_string())));
+                return Ok(Some((name_in_component_definition, name.to_string(), None)));
             }
             _ => {}
         }
@@ -168,6 +201,10 @@ impl<'a> TDoc<'a> {
             ftd::interpreter2::Thing::Variable(variable),
         );
 
-        Ok(Some((name_in_component_definition, variable_name)))
+        Ok(Some((
+            name_in_component_definition,
+            variable_name,
+            self_reference,
+        )))
     }
 }
