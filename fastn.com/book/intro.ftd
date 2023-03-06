@@ -1,6 +1,6 @@
 -- import: fastn.io/assets
 
--- ds.page: Introduction
+-- my-ds.page: Introduction
 
 Welcome to *The Book Of `fastn` and `ftd`*, an introductory book about `fastn`
 and `ftd`. `fastn` is software stack that helps you create web-applications and
@@ -178,4 +178,12 @@ designs. It introduces our style system, and takes you through various
 customisations you want to do. It also tells you how to use existing design
 resources to kick start your project.
 
--- end: ds.page
+Chapter 6 teaches you how to integrate with HTTP APIs. How you can load during
+page load, or based on user events. It takes you through form handling, error
+handling etc use cases.
+
+There is no wrong way to read this book: if you want to skip ahead, go for it!
+You might have to jump back to earlier chapters if you experience any
+confusion. But do whatever works for you.
+
+-- end: my-ds.page

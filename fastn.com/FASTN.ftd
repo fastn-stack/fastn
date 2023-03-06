@@ -123,6 +123,8 @@ skip: true
 - Foreword 🚧: /book/foreword/
 - Preface: /book/preface/
 - Introduction: /book/intro/
+- **1.** Getting Started 🚧: /book/getting-started/
+  document: book/01-getting-started.ftd
 
 ## Crash Course: /expander/
 
