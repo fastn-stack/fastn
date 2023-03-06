@@ -25,6 +25,8 @@ These types can be categorized into two main groups: **Primitive** and
   - [`caption`](ftd/built-in-types/#caption)
   - [`body`](ftd/built-in-types/#body)
   - [`caption or body`](ftd/built-in-types/#caption-or-body)
+  - [`ftd.ui`](ftd/built-in-types/#ftd-ui)
+  - [`children`](ftd/built-in-types/#children)
 - [Derived Types](ftd/built-in-types/#derived-types)
   - [`ftd.color`](ftd/built-in-types/#ftd-color)
   - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
@@ -205,6 +207,85 @@ location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
 
+
+-- ds.h2: `ftd.ui`
+
+`ftd.ui` is a data type in the ftd language that represents a user interface
+component.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.ui list uis:
+\-- ftd.text: Hello
+\-- end: uis
+
+\-- uis.0:
+
+-- ds.markdown:
+
+In this example, we create a list of UI components called `uis`, which contains
+a single component of type `ftd.text` with text property value as `Hello`.
+
+`-- uis.0:` will display the first item in the `uis` list,
+
+-- ds.output:
+-- uis.0:
+-- end: ds.output
+
+
+-- ds.h2: `children`
+
+`children` is a special type, it is an alias for `ftd.ui list`, but can not be
+used when declaring a variable.
+
+This type is used for `record`, `or-type` and `component` arguments.
+
+If a `record` or `or-type` field, or `component` argument is defined as
+`children`, it can be passed in "subsection" location in `ftd::p1` "section".
+
+
+-- ds.code:
+lang: ftd
+
+\;; First `foo` invocation
+\-- foo:
+\-- ftd.text: I love `ftd`!
+\-- end: foo
+
+
+\;; Second `foo` invocation
+\-- foo:
+
+\-- foo.foo-uis:
+\-- ftd.text: I love `ftd`!
+\-- end: foo.foo-uis
+
+\-- end: foo
+
+\;; Third `foo` invocation
+\-- foo:
+foo-uis: $uis
+
+
+\;; `foo` declaration
+\-- component foo:
+children foo-uis:
+
+\-- ftd.column:
+background.solid: yellow
+children: $foo.foo-uis
+
+\-- end: ftd.column
+
+\-- end: foo
+
+
+-- ds.markdown:
+
+If argument is specified as `children`, it can come in the “subsection”
+location, eg in case of first `foo` component invocation, or it can come as an
+explicit key, as in the second and third `foo` component invocation.
 
 
 -- ds.h1: Derived Types
@@ -1676,3 +1757,19 @@ letter-spacing.px: 3
 -- ftd.responsive-type rtype:
 desktop: $dtype
 mobile: $mtype
+
+
+-- ftd.ui list uis:
+-- ftd.text: Hello
+-- end: uis
+
+
+-- component foo:
+children uis:
+
+-- ftd.column:
+background.solid: yellow
+children: $foo.uis
+-- end: ftd.column
+
+-- end: foo
