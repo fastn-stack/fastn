@@ -112,7 +112,8 @@ pub enum VariableValue {
 pub enum ValueSource {
     Caption,
     Body,
-    Undefined,
+    Header { name: String, mutable: bool },
+    Default,
 }
 
 impl ValueSource {
@@ -120,7 +121,11 @@ impl ValueSource {
         match self {
             ftd::ast::ValueSource::Caption => ftd::ast::PropertySource::Caption,
             ftd::ast::ValueSource::Body => ftd::ast::PropertySource::Body,
-            ftd::ast::ValueSource::Undefined => ftd::ast::PropertySource::Caption,
+            ftd::ast::ValueSource::Header { name, mutable } => ftd::ast::PropertySource::Header {
+                name: name.to_owned(),
+                mutable: mutable.to_owned(),
+            },
+            ftd::ast::ValueSource::Default => ftd::ast::PropertySource::Caption,
         }
     }
 }
@@ -478,7 +483,7 @@ impl VariableValue {
         match header {
             ftd::p11::Header::KV(ftd::p11::header::KV {
                 value, line_number, ..
-            }) => VariableValue::from_value(value, ftd::ast::ValueSource::Undefined, *line_number),
+            }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
             ftd::p11::Header::Section(ftd::p11::header::Section {
                 section,
                 line_number,

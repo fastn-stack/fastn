@@ -24,7 +24,7 @@
             "String": {
               "value": "12",
               "line_number": 3,
-              "source": "Undefined"
+              "source": "Default"
             }
           },
           "line_number": 3
@@ -58,7 +58,7 @@
                         "String": {
                           "value": "Arpita",
                           "line_number": 8,
-                          "source": "Undefined"
+                          "source": "Default"
                         }
                       },
                       "line_number": 8,
@@ -72,7 +72,7 @@
                         "String": {
                           "value": "10",
                           "line_number": 9,
-                          "source": "Undefined"
+                          "source": "Default"
                         }
                       },
                       "line_number": 9,

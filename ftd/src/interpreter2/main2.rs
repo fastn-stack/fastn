@@ -876,6 +876,7 @@ impl ParsedDocument {
             ftd::p11::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
+        dbg!(&ast);
         let doc_aliases = {
             let mut doc_aliases = ftd::interpreter2::default::default_aliases();
             for ast in ast.iter().filter(|v| v.is_import()) {

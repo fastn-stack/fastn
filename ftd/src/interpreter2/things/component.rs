@@ -64,7 +64,7 @@ impl ComponentDefinition {
                     ftd::ast::VariableValue::String {
                         value: css.to_string(),
                         line_number: component_definition.line_number(),
-                        source: ftd::ast::ValueSource::Undefined
+                        source: ftd::ast::ValueSource::Default
                     },
                     doc,
                     false,

@@ -14,7 +14,7 @@
             "String": {
               "value": "true",
               "line_number": 3,
-              "source": "Undefined"
+              "source": "Default"
             }
           },
           "line_number": 3
@@ -30,7 +30,7 @@
             "String": {
               "value": "This is description of display component",
               "line_number": 8,
-              "source": "Undefined"
+              "source": "Default"
             }
           },
           "line_number": 8
@@ -51,7 +51,7 @@
                     "String": {
                       "value": "Varanasi",
                       "line_number": 11,
-                      "source": "Undefined"
+                      "source": "Default"
                     }
                   }
                 ],
@@ -61,7 +61,7 @@
                     "String": {
                       "value": "Prayagraj",
                       "line_number": 12,
-                      "source": "Undefined"
+                      "source": "Default"
                     }
                   }
                 ],
@@ -71,7 +71,7 @@
                     "String": {
                       "value": "Bengaluru",
                       "line_number": 13,
-                      "source": "Undefined"
+                      "source": "Default"
                     }
                   }
                 ]
@@ -97,7 +97,7 @@
                   "String": {
                     "value": "$obj",
                     "line_number": 19,
-                    "source": "Undefined"
+                    "source": "Default"
                   }
                 },
                 "source": "Caption",
@@ -123,7 +123,7 @@
                   "String": {
                     "value": "red",
                     "line_number": 24,
-                    "source": "Undefined"
+                    "source": "Default"
                   }
                 },
                 "source": {
@@ -140,7 +140,7 @@
                   "String": {
                     "value": "$description",
                     "line_number": 22,
-                    "source": "Undefined"
+                    "source": "Default"
                   }
                 },
                 "source": "Caption",

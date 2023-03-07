@@ -47,7 +47,7 @@ impl WebComponentDefinition {
             ftd::ast::VariableValue::String {
                 line_number: web_component_definition.line_number(),
                 value: web_component_definition.js,
-                source: ftd::ast::ValueSource::Undefined
+                source: ftd::ast::ValueSource::Default
             },
             doc,
             false,
