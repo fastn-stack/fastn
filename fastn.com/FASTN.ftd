@@ -108,7 +108,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: author/how-to/open-terminal.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
-- Syntax Highligthing For SublimeText: /sublime/
+- Syntax Highligthing For SublimeText 🚧: /sublime/
 
 ## FTD Host Features: /ftd-host/
 
@@ -151,7 +151,7 @@ skip: true
       skip: true
   - A Programming Editor: /book/editor/
     document: book/01/editor.ftd
-    - SublimeText Syntax Highlighting: /sublime/-/book/
+    - SublimeText Syntax Highlighting 🚧: /sublime/-/book/
       document: author/how-to/sublime.ftd
       skip: true
 
