@@ -47,9 +47,13 @@ only, and not as GUI software you may be been used to so far.
 
 We have written a mini [guide on command commands: `fastn.io/cmds/`](/cmds/)
 you would want to use on a day to day basis which going through this book.
-Familiarise yourself with them, and come back to them on need basis.
+Familiarise yourself with them, and come back to them on need basis. But do not
+bother too much about not knowing these commands or memorising them, they are
+best learnt incrementally, on a need to know basis, and we will be gradually
+learning about the commands you need while you are reading this book.
 
 Go on, issue the command `ls` or `dir` depending on which platform you are on.
+You will have to write the words `ls` or `dir` in the terminal or command prompt
 
 -- ds.h1: Next Step
 

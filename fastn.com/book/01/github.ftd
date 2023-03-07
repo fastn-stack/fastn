@@ -1,4 +1,42 @@
--- my-ds.page: Hello, Github!
+-- my-ds.page: Hello, Github! 🚧
+
+Github is an online collaboration platform, where developers come together and
+write software. Github is not the only one, there is Gitlab, BitBucket and a
+few others. Or you can even run your own code collaboration platform, after all
+that's what software developers do, they are not bound by other companies to
+provide the solutions for their need, but can build our own. Among these, Github
+is kind of the most popular one, and there is no harm in learning, so even if you
+did not end up using Github, the same basic ideas will apply.
+
+So Github, Github uses something called `git` underneath. `git` is the real
+brain, and Github is kind of on top of it. In fact the others I mentioned,
+Gitlab, BitBucket too support `git`, so as you see if you learn `git`, you can
+use any of these.
+
+So you have to learn both `git` and Github if you want to do programming. And
+we will, very gradually, over the course of this book.
+
+-- ds.h1: Why Don't People Write Code In Google Docs/Dropbox etc?
+
+A lot of early programmers ask this question. After all Google Docs, and Apple
+Notes, etc are great at collaboration. Of course Google Docs does not store
+program files, which are plain text files, but they have, a proprietory "rich
+text format", same with Apple Notes etc.
+
+But how about Dropbox, Google Cloud, iCloud etc? They let you store files,
+including plain text files, and sync them across different machines. Even
+support sharing folders with multiple users, so any number of people can work
+on the same set of files.
+
+Why do we need these more complex `git` and Github at all?
+
+It is all about conflicts. See if you share some files among people. Or even if
+you are the only one editing those files, but if you are editing those files
+from different devices, say you have a laptop and a desktop. Or since you are
+going to develop software, which is going to "get deployed on SERVER", you are
+going to have more than one device or more than user editing those files. This
+is kind of unavoidable. And if there are going to be more than one devices or
+users, there is going to be conflicts.
 
 
 

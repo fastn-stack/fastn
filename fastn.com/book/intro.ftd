@@ -151,12 +151,18 @@ assumes you are comfortable with computers in general, downloading things from
 internet, installing software, editing files etc.
 
 One of the inspiration for this book is my niece, as 12 year old, she wants to
-learn what I do.
-
-To follow along with this book you will need access to a Windows, Mac or a Linux
-machine. You can either use a Desktop or a Laptop.
+learn what I do. To follow along with this book you will need access to a
+Windows, Mac or a Linux machine. You can either use a Desktop or a Laptop.
 
 -- ds.h1: How To Use This Book
+
+One advice that I got early in my life and has stuck with me is to not learn
+things alone. Find a friend, maybe your better half, maybe a kid or parent, and
+learn together, having someone you can discuss things with, who is at your level
+and figuring things out togther has really helped me, and may be it will you
+too. If you do not know of someone in real life, maybe find someone on [our
+Discord channel: #book-club](https://discord.gg/5CDm3jPhAR) where others are
+learning `fastn` and `ftd` and following along this very book.
 
 In general, this book assumes that you’re reading it in sequence from front to
 back. Later chapters build on concepts in earlier chapters, and earlier chapters

@@ -124,11 +124,11 @@ skip: true
 - Foreword 🚧: /book/foreword/
 - Preface: /book/preface/
 - Introduction: /book/intro/
-- **1.** Getting Started 🚧: /book/getting-started/
+- **1.** Getting Started: /book/getting-started/
   document: book/01/getting-started.ftd
-  - Hello, Github!: /book/github/
+  - Hello, Github! 🚧: /book/github/
     document: book/01/github.ftd
-  - Hello, World!: /book/hello-world/
+  - Hello, World! 🚧: /book/hello-world/
     document: book/01/hello-world.ftd
   - Terminal: /book/terminal/
     document: book/01/terminal.ftd
