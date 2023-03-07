@@ -132,7 +132,7 @@ skip: true
 - Introduction: /book/intro/
 - **1.** Getting Started: /book/getting-started/
   document: book/01/getting-started.ftd
-  - Hello, Github! 🚧: /book/github/
+  - Hello, Github!: /book/github/
     document: book/01/github.ftd
   - Hello, World! 🚧: /book/hello-world/
     document: book/01/hello-world.ftd
