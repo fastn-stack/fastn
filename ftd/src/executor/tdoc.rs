@@ -34,7 +34,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         component_name: &str,
         map: &ftd::Map<(String, Option<String>)>,
-    ) -> ftd::Map<String> {
+    ) -> ftd::executor::Result<ftd::Map<String>> {
         let mut resolved_map: ftd::Map<String> = Default::default();
 
         for (k, (name, has_self_reference)) in map.iter() {
@@ -43,7 +43,7 @@ impl<'a> TDoc<'a> {
             if let Some(has_self_reference) = has_self_reference {
                 let variable = match self.bag.get_mut(name.as_str()).unwrap() {
                     ftd::interpreter2::Thing::Variable(v) => v,
-                    _ => unreachable!(),
+                    _ => unreachable!("Reference {} is not a valid variable", name.as_str()),
                 };
                 let value = TDoc::resolve_all_self_references(
                     has_self_reference.clone(),
@@ -55,7 +55,7 @@ impl<'a> TDoc<'a> {
 
             resolved_map.insert(k.to_string(), name);
         }
-        resolved_map
+        Ok(resolved_map)
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -84,7 +84,7 @@ impl<'a> TDoc<'a> {
             }
         }
 
-        let resolved_map = self.resolve_self_referenced_values(component_name, &map);
+        let resolved_map = self.resolve_self_referenced_values(component_name, &map)?;
         Ok(resolved_map)
     }
 
