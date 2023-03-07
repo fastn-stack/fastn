@@ -104,7 +104,25 @@ pub enum VariableValue {
     String {
         value: String,
         line_number: usize,
+        source: ValueSource,
     },
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum ValueSource {
+    Caption,
+    Body,
+    Undefined,
+}
+
+impl ValueSource {
+    pub(crate) fn to_property_source(&self) -> ftd::ast::PropertySource {
+        match self {
+            ftd::ast::ValueSource::Caption => ftd::ast::PropertySource::Caption,
+            ftd::ast::ValueSource::Body => ftd::ast::PropertySource::Body,
+            ftd::ast::ValueSource::Undefined => ftd::ast::PropertySource::Caption,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -427,6 +445,7 @@ impl VariableValue {
                 VariableValue::String {
                     value: body.value,
                     line_number: body.line_number,
+                    source: ftd::ast::ValueSource::Body,
                 }
             } else {
                 VariableValue::Optional {
@@ -459,7 +478,7 @@ impl VariableValue {
         match header {
             ftd::p11::Header::KV(ftd::p11::header::KV {
                 value, line_number, ..
-            }) => VariableValue::from_value(value, *line_number),
+            }) => VariableValue::from_value(value, ftd::ast::ValueSource::Undefined, *line_number),
             ftd::p11::Header::Section(ftd::p11::header::Section {
                 section,
                 line_number,
@@ -474,11 +493,16 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_value(value: &Option<String>, line_number: usize) -> VariableValue {
+    pub(crate) fn from_value(
+        value: &Option<String>,
+        source: ftd::ast::ValueSource,
+        line_number: usize,
+    ) -> VariableValue {
         match value {
             Some(value) if value.ne(NULL) => VariableValue::String {
                 value: value.to_string(),
                 line_number,
+                source,
             },
             _ => VariableValue::Optional {
                 value: Box::new(None),

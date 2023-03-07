@@ -289,11 +289,15 @@ impl Component {
                     line_number,
                 })
             }
-            ftd::ast::VariableValue::String { value, line_number } => Ok(ftd::ast::Component {
+            ftd::ast::VariableValue::String {
+                value,
+                line_number,
+                source: value_source,
+            } => Ok(ftd::ast::Component {
                 name: key.to_string(),
                 properties: vec![Property::from_value(
                     Some(value),
-                    PropertySource::Caption,
+                    value_source.to_property_source(),
                     line_number,
                 )],
                 iteration: None,
@@ -366,7 +370,8 @@ impl Property {
     }
 
     fn from_value(value: Option<String>, source: PropertySource, line_number: usize) -> Property {
-        let value = ftd::ast::VariableValue::from_value(&value, line_number);
+        let value =
+            ftd::ast::VariableValue::from_value(&value, source.to_value_source(), line_number);
         Property::new(value, source, None, line_number)
     }
 }
@@ -391,6 +396,14 @@ impl PropertySource {
             PropertySource::Header { name, .. } => matches!(other, PropertySource::Header {
                     name: other_name, ..
                } if other_name.eq(name)),
+        }
+    }
+
+    pub fn to_value_source(&self) -> ftd::ast::ValueSource {
+        match self {
+            ftd::ast::PropertySource::Caption => ftd::ast::ValueSource::Caption,
+            ftd::ast::PropertySource::Body => ftd::ast::ValueSource::Body,
+            ftd::ast::PropertySource::Header { .. } => ftd::ast::ValueSource::Undefined,
         }
     }
 }
