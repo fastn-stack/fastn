@@ -13,6 +13,8 @@ pub(crate) mod utils;
 mod value;
 mod youtube_id;
 
+pub type FieldWithValue = (ftd::interpreter2::Field, Option<ftd::ast::VariableValue>);
+
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
     CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement,

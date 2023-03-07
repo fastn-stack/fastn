@@ -21,8 +21,8 @@ impl<'a> TDoc<'a> {
     ) -> String {
         let mut resolved_value = name;
         loop {
-            if name.starts_with(format!("{}.", component_name).as_str()) {
-                resolved_value = map.get(name.as_str()).cloned().unwrap().0;
+            if resolved_value.starts_with(format!("{}.", component_name).as_str()) {
+                resolved_value = map.get(resolved_value.as_str()).cloned().unwrap().0;
             } else {
                 break;
             }
@@ -38,14 +38,18 @@ impl<'a> TDoc<'a> {
         let mut resolved_map: ftd::Map<String> = Default::default();
 
         for (k, (name, has_self_reference)) in map.iter() {
-            let mut name = TDoc::resolve_all_self_references(name.clone(), component_name, map);
+            let name = TDoc::resolve_all_self_references(name.clone(), component_name, map);
 
             if let Some(has_self_reference) = has_self_reference {
                 let variable = match self.bag.get_mut(name.as_str()).unwrap() {
                     ftd::interpreter2::Thing::Variable(v) => v,
                     _ => unreachable!(),
                 };
-                let mut value = TDoc::resolve_all_self_references(has_self_reference.clone(), component_name, map);
+                let value = TDoc::resolve_all_self_references(
+                    has_self_reference.clone(),
+                    component_name,
+                    map,
+                );
                 variable.value.set_reference_or_clone(value.as_str());
             }
 

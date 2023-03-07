@@ -179,7 +179,9 @@ impl Field {
         ast_fields: Vec<ftd::ast::Field>,
         doc: &mut ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<Vec<(Field, Option<ftd::ast::VariableValue>)>> {
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
+    > {
         let mut fields_with_resolved_kinds = vec![];
         for field in ast_fields {
             fields_with_resolved_kinds.push(try_ok_state!(Field::from_ast_field_kind(
@@ -188,14 +190,16 @@ impl Field {
                 known_kinds
             )?));
         }
-        Ok(fields_with_resolved_kinds)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            fields_with_resolved_kinds,
+        ))
     }
 
     pub fn resolve_values_from_ast_fields(
         definition_name: &str,
         mut fields_with_resolved_kinds: Vec<(Field, Option<ftd::ast::VariableValue>)>,
         doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<Vec<Field>> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         use itertools::Itertools;
 
         let fields = fields_with_resolved_kinds
@@ -226,7 +230,9 @@ impl Field {
             .map(|v| v.0)
             .collect_vec();
 
-        Ok(resolved_fields)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            resolved_fields,
+        ))
     }
 
     pub(crate) fn from_ast_fields(
@@ -236,14 +242,17 @@ impl Field {
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         // First resolve all kinds from ast fields
-        let mut fields_with_resolved_kinds = Field::resolve_kinds_from_ast_fields(fields, doc, known_kinds)?;
+        let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
+            fields,
+            doc,
+            known_kinds
+        )?);
 
         // Once ast kinds are resolved, then try resolving ast values
-        let resolved_fields = Field::resolve_values_from_ast_fields(name, fields_with_resolved_kinds, doc)?;
+        let resolved_fields =
+            Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
-            resolved_fields,
-        ))
+        Ok(resolved_fields)
     }
 
     pub(crate) fn scan_ast_field(
