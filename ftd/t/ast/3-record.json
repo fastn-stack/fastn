@@ -23,7 +23,8 @@
           "value": {
             "String": {
               "value": "40",
-              "line_number": 3
+              "line_number": 3,
+              "source": "Undefined"
             }
           },
           "line_number": 3

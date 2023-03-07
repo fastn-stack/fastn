@@ -21,7 +21,8 @@
             "value": {
               "String": {
                 "value": "$name",
-                "line_number": 7
+                "line_number": 7,
+                "source": "Body"
               }
             },
             "source": "Body",
