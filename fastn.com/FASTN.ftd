@@ -109,6 +109,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - Syntax Highligthing For SublimeText 🚧: /sublime/
+  document: author/how-to/sublime.ftd
 
 ## FTD Host Features: /ftd-host/
 
