@@ -193,6 +193,7 @@ impl PropertyValue {
         let value = ftd::ast::VariableValue::String {
             value: value.to_string(),
             line_number,
+            source: ftd::ast::ValueSource::Undefined,
         };
 
         ftd::interpreter2::PropertyValue::scan_ast_value_with_argument(
@@ -217,6 +218,7 @@ impl PropertyValue {
         let value = ftd::ast::VariableValue::String {
             value: value.to_string(),
             line_number,
+            source: ftd::ast::ValueSource::Undefined,
         };
 
         ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
@@ -455,6 +457,7 @@ impl PropertyValue {
                     ftd::ast::VariableValue::String {
                         value: body.value.to_string(),
                         line_number: body.line_number,
+                        source: ftd::ast::ValueSource::Body
                     },
                     doc,
                     field.mutable || is_mutable,

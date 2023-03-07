@@ -486,6 +486,7 @@ fn update_inherited_reference_in_property_value(
                         // TODO: ftd#default-colors, ftd#default-types
                         value: format!("${}", reference_name),
                         line_number: 0,
+                        source: ftd::ast::ValueSource::Undefined,
                     },
                     &mut doc.itdoc(),
                     property_value.is_mutable(),
@@ -539,6 +540,7 @@ fn update_inherited_reference_in_property_value(
                         )
                     },
                     line_number: 0,
+                    source: ftd::ast::ValueSource::Undefined,
                 },
                 &mut doc.itdoc(),
                 property_value.is_mutable(),

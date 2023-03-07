@@ -19,7 +19,9 @@ pub use component::{
 };
 pub use function::Function;
 pub use import::Import;
-pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue, NULL};
+pub use kind::{
+    Condition, HeaderValues, ValueSource, VariableKind, VariableModifier, VariableValue, NULL,
+};
 pub use main::AST;
 pub use or_type::{OrType, OrTypeVariant};
 pub use record::{Field, Record};
