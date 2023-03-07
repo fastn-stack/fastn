@@ -57,8 +57,6 @@ Paste the command and hit enter. When prompted, enter your System Password that
 you use to open your machine and enter.
 
 
-
-
 -- ds.image:
 src: $fastn-assets.files.images.setup.latest-binary-macos.png
 width: fill-container
