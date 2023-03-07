@@ -92,6 +92,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 - UI: /ftd/ui/
 - `component`: /ftd/component/
+- Kernel Components: /ftd/kernel/
 
 
 ## How Tos: /install/
