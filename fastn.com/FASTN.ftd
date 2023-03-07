@@ -88,6 +88,11 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - `or-type`: /ftd/or-type/
 - `list`: /ftd/list/
 
+## UI: /ftd/ui/
+
+- UI: /ftd/ui/
+- `component`: /ftd/component/
+
 
 ## How Tos: /install/
   document: author/how-to/install.ftd
