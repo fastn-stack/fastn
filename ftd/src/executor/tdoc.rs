@@ -14,6 +14,50 @@ impl<'a> TDoc<'a> {
         ftd::interpreter2::TDoc::new(self.name, self.aliases, self.bag)
     }
 
+    pub fn resolve_all_self_references(
+        name: String,
+        component_name: &str,
+        map: &ftd::Map<(String, Option<String>)>,
+    ) -> String {
+        let mut resolved_value = name;
+        loop {
+            if resolved_value.starts_with(format!("{}.", component_name).as_str()) {
+                resolved_value = map.get(resolved_value.as_str()).cloned().unwrap().0;
+            } else {
+                break;
+            }
+        }
+        resolved_value
+    }
+
+    pub(crate) fn resolve_self_referenced_values(
+        &mut self,
+        component_name: &str,
+        map: &ftd::Map<(String, Option<String>)>,
+    ) -> ftd::executor::Result<ftd::Map<String>> {
+        let mut resolved_map: ftd::Map<String> = Default::default();
+
+        for (k, (name, has_self_reference)) in map.iter() {
+            let name = TDoc::resolve_all_self_references(name.clone(), component_name, map);
+
+            if let Some(has_self_reference) = has_self_reference {
+                let variable = match self.bag.get_mut(name.as_str()).unwrap() {
+                    ftd::interpreter2::Thing::Variable(v) => v,
+                    _ => unreachable!("Reference {} is not a valid variable", name.as_str()),
+                };
+                let value = TDoc::resolve_all_self_references(
+                    has_self_reference.clone(),
+                    component_name,
+                    map,
+                );
+                variable.value.set_reference_or_clone(value.as_str());
+            }
+
+            resolved_map.insert(k.to_string(), name);
+        }
+        Ok(resolved_map)
+    }
+
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn insert_local_variables(
         &mut self,
@@ -40,38 +84,8 @@ impl<'a> TDoc<'a> {
             }
         }
 
-        let mut result: ftd::Map<String> = Default::default();
-
-        for (k, (name, has_self_reference)) in map.iter() {
-            let mut name = name.clone();
-            loop {
-                if name.starts_with(format!("{}.", component_name).as_str()) {
-                    name = map.get(name.as_str()).cloned().unwrap().0;
-                } else {
-                    break;
-                }
-            }
-
-            if let Some(has_self_reference) = has_self_reference {
-                let variable = match self.bag.get_mut(name.as_str()).unwrap() {
-                    ftd::interpreter2::Thing::Variable(v) => v,
-                    _ => unreachable!(),
-                };
-                let mut value = has_self_reference.clone();
-                loop {
-                    if value.starts_with(format!("{}.", component_name).as_str()) {
-                        value = map.get(value.as_str()).unwrap().0.clone();
-                    } else {
-                        break;
-                    }
-                }
-                variable.value.set_reference_or_clone(value.as_str());
-            }
-
-            result.insert(k.to_string(), name);
-        }
-
-        Ok(result)
+        let resolved_map = self.resolve_self_referenced_values(component_name, &map)?;
+        Ok(resolved_map)
     }
 
     #[allow(clippy::too_many_arguments)]

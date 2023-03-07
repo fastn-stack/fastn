@@ -175,25 +175,39 @@ impl Field {
         Ok(())
     }
 
-    pub(crate) fn from_ast_fields(
-        name: &str,
-        fields: Vec<ftd::ast::Field>,
+    pub fn resolve_kinds_from_ast_fields(
+        ast_fields: Vec<ftd::ast::Field>,
         doc: &mut ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
-        use itertools::Itertools;
-        let mut field_kind = vec![];
-        for field in fields {
-            field_kind.push(try_ok_state!(Field::from_ast_field_kind(
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
+    > {
+        let mut fields_with_resolved_kinds = vec![];
+        for field in ast_fields {
+            fields_with_resolved_kinds.push(try_ok_state!(Field::from_ast_field_kind(
                 field,
                 doc,
                 known_kinds
             )?));
         }
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            fields_with_resolved_kinds,
+        ))
+    }
 
-        let binding = field_kind.iter().map(|v| v.0.clone()).collect_vec();
-        let definition_name_with_arguments = (name, binding.as_slice());
-        for (field, value) in field_kind.iter_mut() {
+    pub fn resolve_values_from_ast_fields(
+        definition_name: &str,
+        mut fields_with_resolved_kinds: Vec<(Field, Option<ftd::ast::VariableValue>)>,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        use itertools::Itertools;
+
+        let fields = fields_with_resolved_kinds
+            .iter()
+            .map(|v| v.0.clone())
+            .collect_vec();
+        let definition_name_with_arguments = (definition_name, fields.as_slice());
+        for (field, value) in fields_with_resolved_kinds.iter_mut() {
             let value = if let Some(value) = value {
                 Some(try_ok_state!(
                     ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
@@ -211,9 +225,34 @@ impl Field {
 
             field.value = value;
         }
+        let resolved_fields = fields_with_resolved_kinds
+            .into_iter()
+            .map(|v| v.0)
+            .collect_vec();
+
         Ok(ftd::interpreter2::StateWithThing::new_thing(
-            field_kind.into_iter().map(|v| v.0).collect_vec(),
+            resolved_fields,
         ))
+    }
+
+    pub(crate) fn from_ast_fields(
+        name: &str,
+        fields: Vec<ftd::ast::Field>,
+        doc: &mut ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        // First resolve all kinds from ast fields
+        let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
+            fields,
+            doc,
+            known_kinds
+        )?);
+
+        // Once ast kinds are resolved, then try resolving ast values
+        let resolved_fields =
+            Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
+
+        Ok(resolved_fields)
     }
 
     pub(crate) fn scan_ast_field(
