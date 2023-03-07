@@ -403,7 +403,10 @@ impl PropertySource {
         match self {
             ftd::ast::PropertySource::Caption => ftd::ast::ValueSource::Caption,
             ftd::ast::PropertySource::Body => ftd::ast::ValueSource::Body,
-            ftd::ast::PropertySource::Header { .. } => ftd::ast::ValueSource::Undefined,
+            ftd::ast::PropertySource::Header { name, mutable } => ftd::ast::ValueSource::Header {
+                name: name.to_owned(),
+                mutable: mutable.to_owned(),
+            },
         }
     }
 }

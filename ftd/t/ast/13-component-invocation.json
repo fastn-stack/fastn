@@ -16,7 +16,7 @@
                 "String": {
                   "value": "Varanasi",
                   "line_number": 3,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               }
             ],
@@ -26,7 +26,7 @@
                 "String": {
                   "value": "Prayagraj",
                   "line_number": 4,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               }
             ],
@@ -36,7 +36,7 @@
                 "String": {
                   "value": "Bengaluru",
                   "line_number": 5,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               }
             ]
@@ -63,7 +63,7 @@
         "String": {
           "value": "true",
           "line_number": 9,
-          "source": "Undefined"
+          "source": "Default"
         }
       },
       "processor": null,
@@ -89,7 +89,7 @@
                 "String": {
                   "value": "$obj",
                   "line_number": 13,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               },
               "source": "Caption",
@@ -115,7 +115,7 @@
                 "String": {
                   "value": "$description",
                   "line_number": 16,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               },
               "source": "Caption",
@@ -140,7 +140,7 @@
                 "String": {
                   "value": "Click Here",
                   "line_number": 19,
-                  "source": "Undefined"
+                  "source": "Default"
                 }
               },
               "source": "Caption",
