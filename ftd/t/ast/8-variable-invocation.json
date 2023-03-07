@@ -10,7 +10,8 @@
       "value": {
         "String": {
           "value": "true",
-          "line_number": 1
+          "line_number": 1,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -26,7 +27,8 @@
       "value": {
         "String": {
           "value": "40",
-          "line_number": 3
+          "line_number": 3,
+          "source": "Undefined"
         }
       },
       "condition": null,
@@ -43,7 +45,8 @@
           "caption": {
             "String": {
               "value": "50",
-              "line_number": 5
+              "line_number": 5,
+              "source": "Undefined"
             }
           },
           "headers": [
@@ -53,7 +56,8 @@
               "value": {
                 "String": {
                   "value": "not $flag",
-                  "line_number": 6
+                  "line_number": 6,
+                  "source": "Undefined"
                 }
               },
               "line_number": 6,

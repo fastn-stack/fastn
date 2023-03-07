@@ -53,7 +53,8 @@
               "value": {
                 "String": {
                   "value": "pr.sitemap",
-                  "line_number": 9
+                  "line_number": 9,
+                  "source": "Undefined"
                 }
               },
               "line_number": 9,
@@ -84,7 +85,8 @@
       "value": {
         "String": {
           "value": "false",
-          "line_number": 13
+          "line_number": 13,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -105,7 +107,8 @@
       "value": {
         "String": {
           "value": "false",
-          "line_number": 16
+          "line_number": 16,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -134,7 +137,8 @@
               "value": {
                 "String": {
                   "value": "sitemap",
-                  "line_number": 19
+                  "line_number": 19,
+                  "source": "Undefined"
                 }
               },
               "line_number": 19,
@@ -196,7 +200,8 @@
                   "value": {
                     "String": {
                       "value": "$assets.files.images.site-icon.svg.dark",
-                      "line_number": 24
+                      "line_number": 24,
+                      "source": "Undefined"
                     }
                   },
                   "line_number": 24,
@@ -209,7 +214,8 @@
                   "value": {
                     "String": {
                       "value": "$assets.files.images.site-icon.svg.light",
-                      "line_number": 25
+                      "line_number": 25,
+                      "source": "Undefined"
                     }
                   },
                   "line_number": 25,
@@ -243,7 +249,8 @@
       "value": {
         "String": {
           "value": "/",
-          "line_number": 27
+          "line_number": 27,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -264,7 +271,8 @@
       "value": {
         "String": {
           "value": "false",
-          "line_number": 33
+          "line_number": 33,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -288,7 +296,8 @@
           "caption": {
             "String": {
               "value": "Understood",
-              "line_number": 40
+              "line_number": 40,
+              "source": "Undefined"
             }
           },
           "headers": [
@@ -298,7 +307,8 @@
               "value": {
                 "String": {
                   "value": "$what-are-lesson-understood = true",
-                  "line_number": 41
+                  "line_number": 41,
+                  "source": "Undefined"
                 }
               },
               "line_number": 41,
@@ -311,7 +321,8 @@
               "value": {
                 "String": {
                   "value": "$what-are-lesson-understood",
-                  "line_number": 43
+                  "line_number": 43,
+                  "source": "Undefined"
                 }
               },
               "line_number": 43,
@@ -342,7 +353,8 @@
       "value": {
         "String": {
           "value": "false",
-          "line_number": 50
+          "line_number": 50,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -370,7 +382,8 @@
                 "value": {
                   "String": {
                     "value": "$what-are-chapter-completed",
-                    "line_number": 70
+                    "line_number": 70,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -386,7 +399,8 @@
                 "value": {
                   "String": {
                     "value": "Done",
-                    "line_number": 67
+                    "line_number": 67,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -424,7 +438,8 @@
       "value": {
         "String": {
           "value": "$what-are-chapter-completed",
-          "line_number": 81
+          "line_number": 81,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -445,7 +460,8 @@
       "value": {
         "String": {
           "value": "false",
-          "line_number": 87
+          "line_number": 87,
+          "source": "Undefined"
         }
       },
       "processor": null,
@@ -473,7 +489,8 @@
                 "value": {
                   "String": {
                     "value": "$what-are-task-completed",
-                    "line_number": 101
+                    "line_number": 101,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -489,7 +506,8 @@
                 "value": {
                   "String": {
                     "value": "Done",
-                    "line_number": 98
+                    "line_number": 98,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -524,7 +542,8 @@
           "value": {
             "String": {
               "value": "true",
-              "line_number": 113
+              "line_number": 113,
+              "source": "Undefined"
             }
           },
           "source": {
@@ -540,7 +559,8 @@
           "value": {
             "String": {
               "value": "$what-are-chapter-completed",
-              "line_number": 114
+              "line_number": 114,
+              "source": "Undefined"
             }
           },
           "source": {
@@ -556,7 +576,8 @@
           "value": {
             "String": {
               "value": "Using",
-              "line_number": 112
+              "line_number": 112,
+              "source": "Undefined"
             }
           },
           "source": "Caption",
@@ -567,7 +588,8 @@
           "value": {
             "String": {
               "value": "How to use?\n\nAdd below depedencies into your `pr.ftd` file",
-              "line_number": 119
+              "line_number": 119,
+              "source": "Body"
             }
           },
           "source": "Body",
@@ -590,7 +612,8 @@
           "value": {
             "String": {
               "value": "-44",
-              "line_number": 121
+              "line_number": 121,
+              "source": "Undefined"
             }
           },
           "source": {
@@ -644,7 +667,8 @@
           "value": {
             "String": {
               "value": "$sitemap.toc",
-              "line_number": 135
+              "line_number": 135,
+              "source": "Undefined"
             }
           },
           "line_number": 135
@@ -659,7 +683,8 @@
           "value": {
             "String": {
               "value": "$sitemap.sections",
-              "line_number": 136
+              "line_number": 136,
+              "source": "Undefined"
             }
           },
           "line_number": 136
@@ -674,7 +699,8 @@
           "value": {
             "String": {
               "value": "$sitemap.subsections",
-              "line_number": 137
+              "line_number": 137,
+              "source": "Undefined"
             }
           },
           "line_number": 137
@@ -689,7 +715,8 @@
           "value": {
             "String": {
               "value": "$sitemap.current-section",
-              "line_number": 138
+              "line_number": 138,
+              "source": "Undefined"
             }
           },
           "line_number": 138
@@ -704,7 +731,8 @@
           "value": {
             "String": {
               "value": "$sitemap.current-subsection",
-              "line_number": 139
+              "line_number": 139,
+              "source": "Undefined"
             }
           },
           "line_number": 139
@@ -719,7 +747,8 @@
           "value": {
             "String": {
               "value": "$sitemap.current-page",
-              "line_number": 140
+              "line_number": 140,
+              "source": "Undefined"
             }
           },
           "line_number": 140
@@ -734,7 +763,8 @@
           "value": {
             "String": {
               "value": "true",
-              "line_number": 141
+              "line_number": 141,
+              "source": "Undefined"
             }
           },
           "line_number": 141
@@ -759,7 +789,8 @@
           "value": {
             "String": {
               "value": "false",
-              "line_number": 143
+              "line_number": 143,
+              "source": "Undefined"
             }
           },
           "line_number": 143
@@ -807,7 +838,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 153
+                "line_number": 153,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -823,7 +855,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.base",
-                "line_number": 155
+                "line_number": 155,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -847,7 +880,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.button",
-                    "line_number": 162
+                    "line_number": 162,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -863,7 +897,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.body",
-                    "line_number": 163
+                    "line_number": 163,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -879,7 +914,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.status",
-                    "line_number": 164
+                    "line_number": 164,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -895,7 +931,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.toc",
-                    "line_number": 165
+                    "line_number": 165,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -911,7 +948,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.sections",
-                    "line_number": 166
+                    "line_number": 166,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -927,7 +965,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.current-section",
-                    "line_number": 167
+                    "line_number": 167,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -943,7 +982,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.current-subsection",
-                    "line_number": 168
+                    "line_number": 168,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -959,7 +999,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.current-page",
-                    "line_number": 169
+                    "line_number": 169,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -975,7 +1016,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.sub-sections",
-                    "line_number": 170
+                    "line_number": 170,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -991,7 +1033,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.sidebar",
-                    "line_number": 171
+                    "line_number": 171,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -1007,7 +1050,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.show-chapter-button",
-                    "line_number": 172
+                    "line_number": 172,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -1023,7 +1067,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.container",
-                    "line_number": 173
+                    "line_number": 173,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -1039,7 +1084,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter.title",
-                    "line_number": 160
+                    "line_number": 160,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -1207,7 +1253,8 @@
           "value": {
             "String": {
               "value": "false",
-              "line_number": 196
+              "line_number": 196,
+              "source": "Undefined"
             }
           },
           "line_number": 196
@@ -1230,7 +1277,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 200
+                "line_number": 200,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -1254,7 +1302,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 204
+                    "line_number": 204,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -1270,7 +1319,8 @@
                 "value": {
                   "String": {
                     "value": "48",
-                    "line_number": 205
+                    "line_number": 205,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -1294,7 +1344,8 @@
                     "value": {
                       "String": {
                         "value": "$chapter-desktop.toc",
-                        "line_number": 219
+                        "line_number": 219,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1310,7 +1361,8 @@
                     "value": {
                       "String": {
                         "value": "$chapter-desktop.status",
-                        "line_number": 220
+                        "line_number": 220,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1339,7 +1391,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 223
+                        "line_number": 223,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1355,7 +1408,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 225
+                        "line_number": 225,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1371,7 +1425,8 @@
                     "value": {
                       "String": {
                         "value": "400",
-                        "line_number": 226
+                        "line_number": 226,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1387,7 +1442,8 @@
                     "value": {
                       "String": {
                         "value": "100",
-                        "line_number": 227
+                        "line_number": 227,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1411,7 +1467,8 @@
                         "value": {
                           "String": {
                             "value": "fill-container",
-                            "line_number": 231
+                            "line_number": 231,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -1427,7 +1484,8 @@
                         "value": {
                           "String": {
                             "value": "16",
-                            "line_number": 232
+                            "line_number": 232,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -1451,7 +1509,8 @@
                             "value": {
                               "String": {
                                 "value": "$chapter-desktop.title",
-                                "line_number": 234
+                                "line_number": 234,
+                                "source": "Undefined"
                               }
                             },
                             "source": "Caption",
@@ -1462,7 +1521,8 @@
                             "value": {
                               "String": {
                                 "value": "$chapter-desktop.body",
-                                "line_number": 238
+                                "line_number": 238,
+                                "source": "Body"
                               }
                             },
                             "source": "Body",
@@ -1486,7 +1546,8 @@
                             "value": {
                               "String": {
                                 "value": "parent",
-                                "line_number": 241
+                                "line_number": 241,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1502,7 +1563,8 @@
                             "value": {
                               "String": {
                                 "value": "0",
-                                "line_number": 242
+                                "line_number": 242,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1518,7 +1580,8 @@
                             "value": {
                               "String": {
                                 "value": "24",
-                                "line_number": 243
+                                "line_number": 243,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1534,7 +1597,8 @@
                             "value": {
                               "String": {
                                 "value": "$inherited.colors.background.step-2",
-                                "line_number": 244
+                                "line_number": 244,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1561,7 +1625,8 @@
                                 "value": {
                                   "String": {
                                     "value": "white",
-                                    "line_number": 247
+                                    "line_number": 247,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -1577,7 +1642,8 @@
                                 "value": {
                                   "String": {
                                     "value": "todo",
-                                    "line_number": 246
+                                    "line_number": 246,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": "Caption",
@@ -1598,7 +1664,8 @@
                                 "value": {
                                   "String": {
                                     "value": "$chapter-desktop.button",
-                                    "line_number": 250
+                                    "line_number": 250,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -1627,7 +1694,8 @@
                             "value": {
                               "String": {
                                 "value": "parent",
-                                "line_number": 259
+                                "line_number": 259,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1643,7 +1711,8 @@
                             "value": {
                               "String": {
                                 "value": "0",
-                                "line_number": 260
+                                "line_number": 260,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1659,7 +1728,8 @@
                             "value": {
                               "String": {
                                 "value": "100",
-                                "line_number": 261
+                                "line_number": 261,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1675,7 +1745,8 @@
                             "value": {
                               "String": {
                                 "value": "fill-container",
-                                "line_number": 263
+                                "line_number": 263,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1691,7 +1762,8 @@
                             "value": {
                               "String": {
                                 "value": "24",
-                                "line_number": 264
+                                "line_number": 264,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1707,7 +1779,8 @@
                             "value": {
                               "String": {
                                 "value": "24",
-                                "line_number": 265
+                                "line_number": 265,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1723,7 +1796,8 @@
                             "value": {
                               "String": {
                                 "value": "8",
-                                "line_number": 266
+                                "line_number": 266,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -1750,7 +1824,8 @@
                                 "value": {
                                   "String": {
                                     "value": "center",
-                                    "line_number": 270
+                                    "line_number": 270,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -1766,7 +1841,8 @@
                                 "value": {
                                   "String": {
                                     "value": "200",
-                                    "line_number": 271
+                                    "line_number": 271,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -1782,7 +1858,8 @@
                                 "value": {
                                   "String": {
                                     "value": "200",
-                                    "line_number": 272
+                                    "line_number": 272,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -1806,7 +1883,8 @@
                                     "value": {
                                       "String": {
                                         "value": "$inherited.types.copy-large",
-                                        "line_number": 275
+                                        "line_number": 275,
+                                        "source": "Undefined"
                                       }
                                     },
                                     "source": {
@@ -1822,7 +1900,8 @@
                                     "value": {
                                       "String": {
                                         "value": "$inherited.colors.text-strong",
-                                        "line_number": 276
+                                        "line_number": 276,
+                                        "source": "Undefined"
                                       }
                                     },
                                     "source": {
@@ -1838,7 +1917,8 @@
                                     "value": {
                                       "String": {
                                         "value": "center",
-                                        "line_number": 277
+                                        "line_number": 277,
+                                        "source": "Undefined"
                                       }
                                     },
                                     "source": {
@@ -1854,7 +1934,8 @@
                                     "value": {
                                       "String": {
                                         "value": "Congratulations! you have completed this chapter.",
-                                        "line_number": 274
+                                        "line_number": 274,
+                                        "source": "Undefined"
                                       }
                                     },
                                     "source": "Caption",
@@ -1887,7 +1968,8 @@
                     "value": {
                       "String": {
                         "value": "450",
-                        "line_number": 287
+                        "line_number": 287,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1903,7 +1985,8 @@
                     "value": {
                       "String": {
                         "value": "0",
-                        "line_number": 290
+                        "line_number": 290,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1919,7 +2002,8 @@
                     "value": {
                       "String": {
                         "value": "48",
-                        "line_number": 291
+                        "line_number": 291,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1935,7 +2019,8 @@
                     "value": {
                       "String": {
                         "value": "100vh - 0px",
-                        "line_number": 292
+                        "line_number": 292,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1951,7 +2036,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.background.overlay",
-                        "line_number": 293
+                        "line_number": 293,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1967,7 +2053,8 @@
                     "value": {
                       "String": {
                         "value": "auto",
-                        "line_number": 294
+                        "line_number": 294,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1983,7 +2070,8 @@
                     "value": {
                       "String": {
                         "value": "top-right",
-                        "line_number": 295
+                        "line_number": 295,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -1999,7 +2087,8 @@
                     "value": {
                       "String": {
                         "value": "48",
-                        "line_number": 296
+                        "line_number": 296,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2015,7 +2104,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 297
+                        "line_number": 297,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2031,7 +2121,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 298
+                        "line_number": 298,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2047,7 +2138,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 299
+                        "line_number": 299,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2063,7 +2155,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 300
+                        "line_number": 300,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2079,7 +2172,8 @@
                     "value": {
                       "String": {
                         "value": "25",
-                        "line_number": 301
+                        "line_number": 301,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2095,7 +2189,8 @@
                     "value": {
                       "String": {
                         "value": "25",
-                        "line_number": 302
+                        "line_number": 302,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2111,7 +2206,8 @@
                     "value": {
                       "String": {
                         "value": "8",
-                        "line_number": 303
+                        "line_number": 303,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2127,7 +2223,8 @@
                     "value": {
                       "String": {
                         "value": "15",
-                        "line_number": 304
+                        "line_number": 304,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2143,7 +2240,8 @@
                     "value": {
                       "String": {
                         "value": "15",
-                        "line_number": 305
+                        "line_number": 305,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2329,7 +2427,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 337
+                "line_number": 337,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -2353,7 +2452,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.sections",
-                    "line_number": 340
+                    "line_number": 340,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2369,7 +2469,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.sub-sections",
-                    "line_number": 341
+                    "line_number": 341,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2385,7 +2486,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.current-section",
-                    "line_number": 342
+                    "line_number": 342,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2401,7 +2503,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.current-subsection",
-                    "line_number": 343
+                    "line_number": 343,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2417,7 +2520,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.current-page",
-                    "line_number": 344
+                    "line_number": 344,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2433,7 +2537,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.site-logo",
-                    "line_number": 345
+                    "line_number": 345,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2449,7 +2554,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.site-url",
-                    "line_number": 346
+                    "line_number": 346,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2465,7 +2571,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.toc",
-                    "line_number": 347
+                    "line_number": 347,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2481,7 +2588,8 @@
                 "value": {
                   "String": {
                     "value": "$chapter-mobile.site-name",
-                    "line_number": 348
+                    "line_number": 348,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2507,7 +2615,8 @@
                 "value": {
                   "String": {
                     "value": "parent",
-                    "line_number": 352
+                    "line_number": 352,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2523,7 +2632,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 353
+                    "line_number": 353,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2539,7 +2649,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 354
+                    "line_number": 354,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2568,7 +2679,8 @@
                 "value": {
                   "String": {
                     "value": "page-wrap",
-                    "line_number": 361
+                    "line_number": 361,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2584,7 +2696,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 362
+                    "line_number": 362,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2600,7 +2713,8 @@
                 "value": {
                   "String": {
                     "value": "top",
-                    "line_number": 363
+                    "line_number": 363,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2616,7 +2730,8 @@
                 "value": {
                   "String": {
                     "value": "100vh",
-                    "line_number": 364
+                    "line_number": 364,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2632,7 +2747,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 365
+                    "line_number": 365,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2648,7 +2764,8 @@
                 "value": {
                   "String": {
                     "value": "20",
-                    "line_number": 366
+                    "line_number": 366,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2664,7 +2781,8 @@
                 "value": {
                   "String": {
                     "value": "20",
-                    "line_number": 367
+                    "line_number": 367,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2680,7 +2798,8 @@
                 "value": {
                   "String": {
                     "value": "84",
-                    "line_number": 368
+                    "line_number": 368,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2704,7 +2823,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 371
+                        "line_number": 371,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -2728,7 +2848,8 @@
                         "value": {
                           "String": {
                             "value": "$chapter-mobile.title",
-                            "line_number": 374
+                            "line_number": 374,
+                            "source": "Undefined"
                           }
                         },
                         "source": "Caption",
@@ -2752,7 +2873,8 @@
                         "value": {
                           "String": {
                             "value": "center",
-                            "line_number": 379
+                            "line_number": 379,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -2768,7 +2890,8 @@
                         "value": {
                           "String": {
                             "value": "8",
-                            "line_number": 380
+                            "line_number": 380,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -2795,7 +2918,8 @@
                             "value": {
                               "String": {
                                 "value": "$assets.files.images.info-icon.svg",
-                                "line_number": 383
+                                "line_number": 383,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -2811,7 +2935,8 @@
                             "value": {
                               "String": {
                                 "value": "36",
-                                "line_number": 384
+                                "line_number": 384,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -2849,7 +2974,8 @@
                     "value": {
                       "String": {
                         "value": "$chapter-mobile.body",
-                        "line_number": 396
+                        "line_number": 396,
+                        "source": "Body"
                       }
                     },
                     "source": "Body",
@@ -2876,7 +3002,8 @@
                 "value": {
                   "String": {
                     "value": "parent",
-                    "line_number": 401
+                    "line_number": 401,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2892,7 +3019,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 402
+                    "line_number": 402,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2908,7 +3036,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 403
+                    "line_number": 403,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2924,7 +3053,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 404
+                    "line_number": 404,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2940,7 +3070,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 405
+                    "line_number": 405,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2956,7 +3087,8 @@
                 "value": {
                   "String": {
                     "value": "$inherited.colors.background.overlay",
-                    "line_number": 406
+                    "line_number": 406,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2972,7 +3104,8 @@
                 "value": {
                   "String": {
                     "value": "1",
-                    "line_number": 407
+                    "line_number": 407,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -2988,7 +3121,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 408
+                    "line_number": 408,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3021,7 +3155,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 412
+                        "line_number": 412,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3045,7 +3180,8 @@
                         "value": {
                           "String": {
                             "value": "$assets.files.images.cross.svg",
-                            "line_number": 415
+                            "line_number": 415,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -3061,7 +3197,8 @@
                         "value": {
                           "String": {
                             "value": "16",
-                            "line_number": 416
+                            "line_number": 416,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -3077,7 +3214,8 @@
                         "value": {
                           "String": {
                             "value": "auto",
-                            "line_number": 417
+                            "line_number": 417,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -3093,7 +3231,8 @@
                         "value": {
                           "String": {
                             "value": "30",
-                            "line_number": 418
+                            "line_number": 418,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -3109,7 +3248,8 @@
                         "value": {
                           "String": {
                             "value": "16",
-                            "line_number": 419
+                            "line_number": 419,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -3147,7 +3287,8 @@
                 "value": {
                   "String": {
                     "value": "100% - 48px",
-                    "line_number": 428
+                    "line_number": 428,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3163,7 +3304,8 @@
                 "value": {
                   "String": {
                     "value": "100vh - 0px",
-                    "line_number": 429
+                    "line_number": 429,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3179,7 +3321,8 @@
                 "value": {
                   "String": {
                     "value": "auto",
-                    "line_number": 430
+                    "line_number": 430,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3195,7 +3338,8 @@
                 "value": {
                   "String": {
                     "value": "top-right",
-                    "line_number": 431
+                    "line_number": 431,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3211,7 +3355,8 @@
                 "value": {
                   "String": {
                     "value": "$pr.space.space-5",
-                    "line_number": 432
+                    "line_number": 432,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3227,7 +3372,8 @@
                 "value": {
                   "String": {
                     "value": "parent",
-                    "line_number": 433
+                    "line_number": 433,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3243,7 +3389,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 434
+                    "line_number": 434,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3259,7 +3406,8 @@
                 "value": {
                   "String": {
                     "value": "0",
-                    "line_number": 435
+                    "line_number": 435,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3275,7 +3423,8 @@
                 "value": {
                   "String": {
                     "value": "$inherited.colors.background.step-1",
-                    "line_number": 436
+                    "line_number": 436,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3302,7 +3451,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 441
+                        "line_number": 441,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3318,7 +3468,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 442
+                        "line_number": 442,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3334,7 +3485,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 443
+                        "line_number": 443,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3400,7 +3552,8 @@
             "value": {
               "String": {
                 "value": "0",
-                "line_number": 462
+                "line_number": 462,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3416,7 +3569,8 @@
             "value": {
               "String": {
                 "value": "24",
-                "line_number": 463
+                "line_number": 463,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3432,7 +3586,8 @@
             "value": {
               "String": {
                 "value": "100vh - 0px",
-                "line_number": 464
+                "line_number": 464,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3448,7 +3603,8 @@
             "value": {
               "String": {
                 "value": "auto",
-                "line_number": 465
+                "line_number": 465,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3464,7 +3620,8 @@
             "value": {
               "String": {
                 "value": "650",
-                "line_number": 466
+                "line_number": 466,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3480,7 +3637,8 @@
             "value": {
               "String": {
                 "value": "top-left",
-                "line_number": 467
+                "line_number": 467,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3496,7 +3654,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.overlay",
-                "line_number": 468
+                "line_number": 468,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3512,7 +3671,8 @@
             "value": {
               "String": {
                 "value": "8",
-                "line_number": 469
+                "line_number": 469,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3528,7 +3688,8 @@
             "value": {
               "String": {
                 "value": "24",
-                "line_number": 470
+                "line_number": 470,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3544,7 +3705,8 @@
             "value": {
               "String": {
                 "value": "16",
-                "line_number": 471
+                "line_number": 471,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3560,7 +3722,8 @@
             "value": {
               "String": {
                 "value": "16",
-                "line_number": 472
+                "line_number": 472,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3576,7 +3739,8 @@
             "value": {
               "String": {
                 "value": "32",
-                "line_number": 473
+                "line_number": 473,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3592,7 +3756,8 @@
             "value": {
               "String": {
                 "value": "25",
-                "line_number": 474
+                "line_number": 474,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3608,7 +3773,8 @@
             "value": {
               "String": {
                 "value": "25",
-                "line_number": 475
+                "line_number": 475,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -3632,7 +3798,8 @@
                 "value": {
                   "String": {
                     "value": "$obj",
-                    "line_number": 479
+                    "line_number": 479,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3648,7 +3815,8 @@
                 "value": {
                   "String": {
                     "value": "$render-toc.status",
-                    "line_number": 480
+                    "line_number": 480,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3717,7 +3885,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 503
+                    "line_number": 503,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3733,7 +3902,8 @@
                 "value": {
                   "String": {
                     "value": "8",
-                    "line_number": 504
+                    "line_number": 504,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3760,7 +3930,8 @@
                     "value": {
                       "String": {
                         "value": "$toc-instance.toc.font-icon",
-                        "line_number": 508
+                        "line_number": 508,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3776,7 +3947,8 @@
                     "value": {
                       "String": {
                         "value": "14",
-                        "line_number": 509
+                        "line_number": 509,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3792,7 +3964,8 @@
                     "value": {
                       "String": {
                         "value": "auto",
-                        "line_number": 510
+                        "line_number": 510,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3821,7 +3994,8 @@
                     "value": {
                       "String": {
                         "value": "$toc-instance.toc.url",
-                        "line_number": 513
+                        "line_number": 513,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3837,7 +4011,8 @@
                     "value": {
                       "String": {
                         "value": "$toc-instance.toc.title",
-                        "line_number": 514
+                        "line_number": 514,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3853,7 +4028,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.types.label-small",
-                        "line_number": 515
+                        "line_number": 515,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3869,7 +4045,8 @@
                     "value": {
                       "String": {
                         "value": "hug-content",
-                        "line_number": 516
+                        "line_number": 516,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3885,7 +4062,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 517
+                        "line_number": 517,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3901,7 +4079,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 518
+                        "line_number": 518,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3917,7 +4096,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.cta-primary.base",
-                        "line_number": 519
+                        "line_number": 519,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -3946,7 +4126,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 525
+                    "line_number": 525,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3962,7 +4143,8 @@
                 "value": {
                   "String": {
                     "value": "8",
-                    "line_number": 526
+                    "line_number": 526,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -3989,7 +4171,8 @@
                     "value": {
                       "String": {
                         "value": "$toc-instance.toc.font-icon",
-                        "line_number": 530
+                        "line_number": 530,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4005,7 +4188,8 @@
                     "value": {
                       "String": {
                         "value": "14",
-                        "line_number": 531
+                        "line_number": 531,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4021,7 +4205,8 @@
                     "value": {
                       "String": {
                         "value": "auto",
-                        "line_number": 532
+                        "line_number": 532,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4050,7 +4235,8 @@
                     "value": {
                       "String": {
                         "value": "$toc-instance.toc.title",
-                        "line_number": 535
+                        "line_number": 535,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4066,7 +4252,8 @@
                     "value": {
                       "String": {
                         "value": "hug-content",
-                        "line_number": 537
+                        "line_number": 537,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4082,7 +4269,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 538
+                        "line_number": 538,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4098,7 +4286,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 539
+                        "line_number": 539,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4114,7 +4303,8 @@
                     "value": {
                       "String": {
                         "value": "12",
-                        "line_number": 540
+                        "line_number": 540,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4130,7 +4320,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.cta-primary.base",
-                        "line_number": 541
+                        "line_number": 541,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4159,7 +4350,8 @@
                 "value": {
                   "String": {
                     "value": "12",
-                    "line_number": 546
+                    "line_number": 546,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4183,7 +4375,8 @@
                     "value": {
                       "String": {
                         "value": "$obj",
-                        "line_number": 551
+                        "line_number": 551,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4248,7 +4441,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 575
+                    "line_number": 575,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4264,7 +4458,8 @@
                 "value": {
                   "String": {
                     "value": "8",
-                    "line_number": 576
+                    "line_number": 576,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4291,7 +4486,8 @@
                     "value": {
                       "String": {
                         "value": "$childrens.toc.font-icon",
-                        "line_number": 580
+                        "line_number": 580,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4307,7 +4503,8 @@
                     "value": {
                       "String": {
                         "value": "14",
-                        "line_number": 581
+                        "line_number": 581,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4323,7 +4520,8 @@
                     "value": {
                       "String": {
                         "value": "auto",
-                        "line_number": 582
+                        "line_number": 582,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4352,7 +4550,8 @@
                     "value": {
                       "String": {
                         "value": "$childrens.toc.url",
-                        "line_number": 585
+                        "line_number": 585,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4368,7 +4567,8 @@
                     "value": {
                       "String": {
                         "value": "$childrens.toc.title",
-                        "line_number": 586
+                        "line_number": 586,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4384,7 +4584,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.types.label-small",
-                        "line_number": 587
+                        "line_number": 587,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4400,7 +4601,8 @@
                     "value": {
                       "String": {
                         "value": "hug-content",
-                        "line_number": 588
+                        "line_number": 588,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4416,7 +4618,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 589
+                        "line_number": 589,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4432,7 +4635,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 590
+                        "line_number": 590,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4448,7 +4652,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.cta-primary.base",
-                        "line_number": 591
+                        "line_number": 591,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4477,7 +4682,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 597
+                    "line_number": 597,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4493,7 +4699,8 @@
                 "value": {
                   "String": {
                     "value": "8",
-                    "line_number": 598
+                    "line_number": 598,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4520,7 +4727,8 @@
                     "value": {
                       "String": {
                         "value": "$childrens.toc.font-icon",
-                        "line_number": 602
+                        "line_number": 602,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4536,7 +4744,8 @@
                     "value": {
                       "String": {
                         "value": "14",
-                        "line_number": 603
+                        "line_number": 603,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4552,7 +4761,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 604
+                        "line_number": 604,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4581,7 +4791,8 @@
                     "value": {
                       "String": {
                         "value": "$childrens.toc.title",
-                        "line_number": 607
+                        "line_number": 607,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4597,7 +4808,8 @@
                     "value": {
                       "String": {
                         "value": "hug-content",
-                        "line_number": 609
+                        "line_number": 609,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4613,7 +4825,8 @@
                     "value": {
                       "String": {
                         "value": "16",
-                        "line_number": 610
+                        "line_number": 610,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4629,7 +4842,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 611
+                        "line_number": 611,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4645,7 +4859,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.cta-primary.base",
-                        "line_number": 612
+                        "line_number": 612,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -4674,7 +4889,8 @@
                 "value": {
                   "String": {
                     "value": "$obj",
-                    "line_number": 619
+                    "line_number": 619,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4741,7 +4957,8 @@
           "value": {
             "String": {
               "value": "what-are-task-button:",
-              "line_number": 635
+              "line_number": 635,
+              "source": "Undefined"
             }
           },
           "line_number": 635
@@ -4756,7 +4973,8 @@
           "value": {
             "String": {
               "value": "false",
-              "line_number": 636
+              "line_number": 636,
+              "source": "Undefined"
             }
           },
           "line_number": 636
@@ -4779,7 +4997,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 640
+                "line_number": 640,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4795,7 +5014,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 641
+                "line_number": 641,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4811,7 +5031,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 642
+                "line_number": 642,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4827,7 +5048,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 643
+                "line_number": 643,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4843,7 +5065,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 644
+                "line_number": 644,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4859,7 +5082,8 @@
             "value": {
               "String": {
                 "value": "76",
-                "line_number": 645
+                "line_number": 645,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4875,7 +5099,8 @@
             "value": {
               "String": {
                 "value": "6",
-                "line_number": 646
+                "line_number": 646,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4891,7 +5116,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.step-1",
-                "line_number": 647
+                "line_number": 647,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4907,7 +5133,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.cta-tertiary.base",
-                "line_number": 648
+                "line_number": 648,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -4931,7 +5158,8 @@
                 "value": {
                   "String": {
                     "value": "parent",
-                    "line_number": 651
+                    "line_number": 651,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4947,7 +5175,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 652
+                    "line_number": 652,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4963,7 +5192,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 653
+                    "line_number": 653,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -4999,7 +5229,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 661
+                    "line_number": 661,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5015,7 +5246,8 @@
                 "value": {
                   "String": {
                     "value": "$task.task-wrap",
-                    "line_number": 662
+                    "line_number": 662,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5039,7 +5271,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 665
+                        "line_number": 665,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5055,7 +5288,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text-strong",
-                        "line_number": 667
+                        "line_number": 667,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5082,7 +5316,8 @@
                         "value": {
                           "String": {
                             "value": "$assets.files.images.task-icon.svg",
-                            "line_number": 670
+                            "line_number": 670,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5098,7 +5333,8 @@
                         "value": {
                           "String": {
                             "value": "32",
-                            "line_number": 671
+                            "line_number": 671,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5114,7 +5350,8 @@
                         "value": {
                           "String": {
                             "value": "auto",
-                            "line_number": 672
+                            "line_number": 672,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5130,7 +5367,8 @@
                         "value": {
                           "String": {
                             "value": "center",
-                            "line_number": 673
+                            "line_number": 673,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5146,7 +5384,8 @@
                         "value": {
                           "String": {
                             "value": "16",
-                            "line_number": 674
+                            "line_number": 674,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5172,7 +5411,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.types.heading-large",
-                            "line_number": 677
+                            "line_number": 677,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5188,7 +5428,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.custom.three",
-                            "line_number": 678
+                            "line_number": 678,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5204,7 +5445,8 @@
                         "value": {
                           "String": {
                             "value": "$title",
-                            "line_number": 676
+                            "line_number": 676,
+                            "source": "Undefined"
                           }
                         },
                         "source": "Caption",
@@ -5228,7 +5470,8 @@
                     "value": {
                       "String": {
                         "value": "$task.body",
-                        "line_number": 683
+                        "line_number": 683,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5244,7 +5487,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.types.copy-relaxed",
-                        "line_number": 684
+                        "line_number": 684,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5260,7 +5504,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 685
+                        "line_number": 685,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5276,7 +5521,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 686
+                        "line_number": 686,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5292,7 +5538,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 687
+                        "line_number": 687,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5355,7 +5602,8 @@
           "value": {
             "String": {
               "value": "what-are-lesson-button:",
-              "line_number": 707
+              "line_number": 707,
+              "source": "Undefined"
             }
           },
           "line_number": 707
@@ -5370,7 +5618,8 @@
           "value": {
             "String": {
               "value": "false",
-              "line_number": 708
+              "line_number": 708,
+              "source": "Undefined"
             }
           },
           "line_number": 708
@@ -5393,7 +5642,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 712
+                "line_number": 712,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5409,7 +5659,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 713
+                "line_number": 713,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5425,7 +5676,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 714
+                "line_number": 714,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5441,7 +5693,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 715
+                "line_number": 715,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5457,7 +5710,8 @@
             "value": {
               "String": {
                 "value": "$pr.space.space-6",
-                "line_number": 716
+                "line_number": 716,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5473,7 +5727,8 @@
             "value": {
               "String": {
                 "value": "76",
-                "line_number": 717
+                "line_number": 717,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5489,7 +5744,8 @@
             "value": {
               "String": {
                 "value": "6",
-                "line_number": 718
+                "line_number": 718,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5505,7 +5761,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.step-1",
-                "line_number": 719
+                "line_number": 719,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5521,7 +5778,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.cta-tertiary.base",
-                "line_number": 720
+                "line_number": 720,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -5545,7 +5803,8 @@
                 "value": {
                   "String": {
                     "value": "parent",
-                    "line_number": 723
+                    "line_number": 723,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5561,7 +5820,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 724
+                    "line_number": 724,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5577,7 +5837,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 725
+                    "line_number": 725,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5613,7 +5874,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 733
+                    "line_number": 733,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5629,7 +5891,8 @@
                 "value": {
                   "String": {
                     "value": "lesson-wrap",
-                    "line_number": 734
+                    "line_number": 734,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -5653,7 +5916,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 737
+                        "line_number": 737,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5669,7 +5933,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text-strong",
-                        "line_number": 739
+                        "line_number": 739,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5696,7 +5961,8 @@
                         "value": {
                           "String": {
                             "value": "$assets.files.images.task-icon.svg",
-                            "line_number": 742
+                            "line_number": 742,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5712,7 +5978,8 @@
                         "value": {
                           "String": {
                             "value": "32",
-                            "line_number": 743
+                            "line_number": 743,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5728,7 +5995,8 @@
                         "value": {
                           "String": {
                             "value": "auto",
-                            "line_number": 744
+                            "line_number": 744,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5744,7 +6012,8 @@
                         "value": {
                           "String": {
                             "value": "center",
-                            "line_number": 745
+                            "line_number": 745,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5760,7 +6029,8 @@
                         "value": {
                           "String": {
                             "value": "16",
-                            "line_number": 746
+                            "line_number": 746,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5786,7 +6056,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.types.heading-large",
-                            "line_number": 749
+                            "line_number": 749,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5802,7 +6073,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.custom.three",
-                            "line_number": 750
+                            "line_number": 750,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -5818,7 +6090,8 @@
                         "value": {
                           "String": {
                             "value": "$lesson.title",
-                            "line_number": 748
+                            "line_number": 748,
+                            "source": "Undefined"
                           }
                         },
                         "source": "Caption",
@@ -5842,7 +6115,8 @@
                     "value": {
                       "String": {
                         "value": "$lesson.body",
-                        "line_number": 755
+                        "line_number": 755,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5858,7 +6132,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.types.copy-relaxed",
-                        "line_number": 756
+                        "line_number": 756,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5874,7 +6149,8 @@
                     "value": {
                       "String": {
                         "value": "$inherited.colors.text",
-                        "line_number": 757
+                        "line_number": 757,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5890,7 +6166,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 758
+                        "line_number": 758,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5906,7 +6183,8 @@
                     "value": {
                       "String": {
                         "value": "24",
-                        "line_number": 759
+                        "line_number": 759,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -5987,7 +6265,8 @@
             "value": {
               "String": {
                 "value": "8",
-                "line_number": 788
+                "line_number": 788,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6003,7 +6282,8 @@
             "value": {
               "String": {
                 "value": "16",
-                "line_number": 789
+                "line_number": 789,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6019,7 +6299,8 @@
             "value": {
               "String": {
                 "value": "5",
-                "line_number": 790
+                "line_number": 790,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6035,7 +6316,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.cta-primary.hover",
-                "line_number": 791
+                "line_number": 791,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6051,7 +6333,8 @@
             "value": {
               "String": {
                 "value": "$inherited.types.copy-large",
-                "line_number": 793
+                "line_number": 793,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6067,7 +6350,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.text-strong",
-                "line_number": 794
+                "line_number": 794,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6083,7 +6367,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.step-2",
-                "line_number": 795
+                "line_number": 795,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6099,7 +6384,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.step-2",
-                "line_number": 796
+                "line_number": 796,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6115,7 +6401,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.step-2",
-                "line_number": 797
+                "line_number": 797,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6131,7 +6418,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.text",
-                "line_number": 798
+                "line_number": 798,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6147,7 +6435,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.text",
-                "line_number": 799
+                "line_number": 799,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6163,7 +6452,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.text",
-                "line_number": 800
+                "line_number": 800,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6179,7 +6469,8 @@
             "value": {
               "String": {
                 "value": "$understood.title",
-                "line_number": 787
+                "line_number": 787,
+                "source": "Undefined"
               }
             },
             "source": "Caption",
@@ -6241,7 +6532,8 @@
                 "value": {
                   "String": {
                     "value": "$obj",
-                    "line_number": 818
+                    "line_number": 818,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6257,7 +6549,8 @@
                 "value": {
                   "String": {
                     "value": "$render-toc-mobile.status",
-                    "line_number": 819
+                    "line_number": 819,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6298,7 +6591,8 @@
             "value": {
               "String": {
                 "value": "window",
-                "line_number": 839
+                "line_number": 839,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6314,7 +6608,8 @@
             "value": {
               "String": {
                 "value": "0",
-                "line_number": 840
+                "line_number": 840,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6330,7 +6625,8 @@
             "value": {
               "String": {
                 "value": "0",
-                "line_number": 841
+                "line_number": 841,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6346,7 +6642,8 @@
             "value": {
               "String": {
                 "value": "0",
-                "line_number": 842
+                "line_number": 842,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6362,7 +6659,8 @@
             "value": {
               "String": {
                 "value": "0",
-                "line_number": 843
+                "line_number": 843,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6378,7 +6676,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 844
+                "line_number": 844,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6394,7 +6693,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 845
+                "line_number": 845,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6410,7 +6710,8 @@
             "value": {
               "String": {
                 "value": "$inherited.colors.background.overlay",
-                "line_number": 846
+                "line_number": 846,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -6434,7 +6735,8 @@
                 "value": {
                   "String": {
                     "value": "$assets.files.images.cross.svg",
-                    "line_number": 850
+                    "line_number": 850,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6450,7 +6752,8 @@
                 "value": {
                   "String": {
                     "value": "24",
-                    "line_number": 851
+                    "line_number": 851,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6466,7 +6769,8 @@
                 "value": {
                   "String": {
                     "value": "auto",
-                    "line_number": 852
+                    "line_number": 852,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6482,7 +6786,8 @@
                 "value": {
                   "String": {
                     "value": "window",
-                    "line_number": 853
+                    "line_number": 853,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6498,7 +6803,8 @@
                 "value": {
                   "String": {
                     "value": "16",
-                    "line_number": 854
+                    "line_number": 854,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6514,7 +6820,8 @@
                 "value": {
                   "String": {
                     "value": "20",
-                    "line_number": 855
+                    "line_number": 855,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6530,7 +6837,8 @@
                 "value": {
                   "String": {
                     "value": "$pop-up-status=false",
-                    "line_number": 857
+                    "line_number": 857,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6562,7 +6870,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 861
+                    "line_number": 861,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6578,7 +6887,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 862
+                    "line_number": 862,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6605,7 +6915,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 865
+                        "line_number": 865,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -6621,7 +6932,8 @@
                     "value": {
                       "String": {
                         "value": "center",
-                        "line_number": 866
+                        "line_number": 866,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -6645,7 +6957,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.background.base",
-                            "line_number": 869
+                            "line_number": 869,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6661,7 +6974,8 @@
                         "value": {
                           "String": {
                             "value": "614",
-                            "line_number": 870
+                            "line_number": 870,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6677,7 +6991,8 @@
                         "value": {
                           "String": {
                             "value": "1",
-                            "line_number": 871
+                            "line_number": 871,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6693,7 +7008,8 @@
                         "value": {
                           "String": {
                             "value": "35",
-                            "line_number": 872
+                            "line_number": 872,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6709,7 +7025,8 @@
                         "value": {
                           "String": {
                             "value": "32",
-                            "line_number": 873
+                            "line_number": 873,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6725,7 +7042,8 @@
                         "value": {
                           "String": {
                             "value": "3",
-                            "line_number": 878
+                            "line_number": 878,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6741,7 +7059,8 @@
                         "value": {
                           "String": {
                             "value": "8",
-                            "line_number": 879
+                            "line_number": 879,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6757,7 +7076,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.warning.text",
-                            "line_number": 880
+                            "line_number": 880,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6773,7 +7093,8 @@
                         "value": {
                           "String": {
                             "value": "center",
-                            "line_number": 881
+                            "line_number": 881,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -6797,7 +7118,8 @@
                             "value": {
                               "String": {
                                 "value": "center",
-                                "line_number": 884
+                                "line_number": 884,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -6813,7 +7135,8 @@
                             "value": {
                               "String": {
                                 "value": "$inherited.types.heading-medium",
-                                "line_number": 885
+                                "line_number": 885,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -6829,7 +7152,8 @@
                             "value": {
                               "String": {
                                 "value": "$inherited.colors.text-strong",
-                                "line_number": 886
+                                "line_number": 886,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -6845,7 +7169,8 @@
                             "value": {
                               "String": {
                                 "value": "fill-container",
-                                "line_number": 887
+                                "line_number": 887,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -6861,7 +7186,8 @@
                             "value": {
                               "String": {
                                 "value": "90",
-                                "line_number": 888
+                                "line_number": 888,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -6877,7 +7203,8 @@
                             "value": {
                               "String": {
                                 "value": "CONGRATULATIONS",
-                                "line_number": 883
+                                "line_number": 883,
+                                "source": "Undefined"
                               }
                             },
                             "source": "Caption",
@@ -6907,7 +7234,8 @@
                 "value": {
                   "String": {
                     "value": "fill-container",
-                    "line_number": 899
+                    "line_number": 899,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6923,7 +7251,8 @@
                 "value": {
                   "String": {
                     "value": "fill",
-                    "line_number": 900
+                    "line_number": 900,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -6950,7 +7279,8 @@
                     "value": {
                       "String": {
                         "value": "fill-container",
-                        "line_number": 903
+                        "line_number": 903,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -6966,7 +7296,8 @@
                     "value": {
                       "String": {
                         "value": "center",
-                        "line_number": 904
+                        "line_number": 904,
+                        "source": "Undefined"
                       }
                     },
                     "source": {
@@ -6990,7 +7321,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.background.base",
-                            "line_number": 907
+                            "line_number": 907,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7006,7 +7338,8 @@
                         "value": {
                           "String": {
                             "value": "200",
-                            "line_number": 908
+                            "line_number": 908,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7022,7 +7355,8 @@
                         "value": {
                           "String": {
                             "value": "1",
-                            "line_number": 909
+                            "line_number": 909,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7038,7 +7372,8 @@
                         "value": {
                           "String": {
                             "value": "35",
-                            "line_number": 910
+                            "line_number": 910,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7054,7 +7389,8 @@
                         "value": {
                           "String": {
                             "value": "32",
-                            "line_number": 911
+                            "line_number": 911,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7070,7 +7406,8 @@
                         "value": {
                           "String": {
                             "value": "3",
-                            "line_number": 916
+                            "line_number": 916,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7086,7 +7423,8 @@
                         "value": {
                           "String": {
                             "value": "8",
-                            "line_number": 917
+                            "line_number": 917,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7102,7 +7440,8 @@
                         "value": {
                           "String": {
                             "value": "$inherited.colors.warning.text",
-                            "line_number": 918
+                            "line_number": 918,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7118,7 +7457,8 @@
                         "value": {
                           "String": {
                             "value": "center",
-                            "line_number": 919
+                            "line_number": 919,
+                            "source": "Undefined"
                           }
                         },
                         "source": {
@@ -7142,7 +7482,8 @@
                             "value": {
                               "String": {
                                 "value": "center",
-                                "line_number": 922
+                                "line_number": 922,
+                                "source": "Undefined"
                               }
                             },
                             "source": {
@@ -7166,7 +7507,8 @@
                                 "value": {
                                   "String": {
                                     "value": "center",
-                                    "line_number": 925
+                                    "line_number": 925,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -7182,7 +7524,8 @@
                                 "value": {
                                   "String": {
                                     "value": "$inherited.types.fine-print",
-                                    "line_number": 926
+                                    "line_number": 926,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -7198,7 +7541,8 @@
                                 "value": {
                                   "String": {
                                     "value": "$inherited.colors.text-strong",
-                                    "line_number": 927
+                                    "line_number": 927,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -7214,7 +7558,8 @@
                                 "value": {
                                   "String": {
                                     "value": "fill-container",
-                                    "line_number": 928
+                                    "line_number": 928,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -7230,7 +7575,8 @@
                                 "value": {
                                   "String": {
                                     "value": "90",
-                                    "line_number": 929
+                                    "line_number": 929,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": {
@@ -7246,7 +7592,8 @@
                                 "value": {
                                   "String": {
                                     "value": "CONGRATULATIONS",
-                                    "line_number": 924
+                                    "line_number": 924,
+                                    "source": "Undefined"
                                   }
                                 },
                                 "source": "Caption",
@@ -7290,7 +7637,8 @@
             "value": {
               "String": {
                 "value": "fill-container",
-                "line_number": 948
+                "line_number": 948,
+                "source": "Undefined"
               }
             },
             "source": {
@@ -7314,7 +7662,8 @@
                 "value": {
                   "String": {
                     "value": "Need Help?",
-                    "line_number": 951
+                    "line_number": 951,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -7325,7 +7674,8 @@
                 "value": {
                   "String": {
                     "value": "Please join our [Discord to ask any questions](https://discord.gg/d2MgKBybEQ)\nrelated to this workshop!\n\nOr just meet the others who are learning FTD like you :-)",
-                    "line_number": 958
+                    "line_number": 958,
+                    "source": "Body"
                   }
                 },
                 "source": "Body",
@@ -7346,7 +7696,8 @@
                 "value": {
                   "String": {
                     "value": "Github Repo",
-                    "line_number": 959
+                    "line_number": 959,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -7357,7 +7708,8 @@
                 "value": {
                   "String": {
                     "value": "The code for this workshop can be found on Github:\n[ftd-lang/ftd-workshop](https://github.com/ftd-lang/ftd-workshop).",
-                    "line_number": 964
+                    "line_number": 964,
+                    "source": "Body"
                   }
                 },
                 "source": "Body",
@@ -7378,7 +7730,8 @@
                 "value": {
                   "String": {
                     "value": "Join The Next Session",
-                    "line_number": 965
+                    "line_number": 965,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -7389,7 +7742,8 @@
                 "value": {
                   "String": {
                     "value": "The next remote workshop would be happening on **4th Nov 2022**. [Learn more\nhere](https://fifthtry.com/events/).",
-                    "line_number": 970
+                    "line_number": 970,
+                    "source": "Body"
                   }
                 },
                 "source": "Body",

@@ -1,0 +1,16 @@
+-- ftd.ui list elements:
+
+-- display-text:
+
+This is body
+
+-- end: elements
+
+-- component display-text:
+body body:
+
+-- ftd.text: $display-text.body
+
+-- end: display-text
+
+-- elements.0:

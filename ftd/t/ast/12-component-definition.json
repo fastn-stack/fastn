@@ -13,7 +13,8 @@
           "value": {
             "String": {
               "value": "true",
-              "line_number": 3
+              "line_number": 3,
+              "source": "Undefined"
             }
           },
           "line_number": 3
@@ -28,7 +29,8 @@
           "value": {
             "String": {
               "value": "This is description of display component",
-              "line_number": 8
+              "line_number": 8,
+              "source": "Undefined"
             }
           },
           "line_number": 8
@@ -48,7 +50,8 @@
                   {
                     "String": {
                       "value": "Varanasi",
-                      "line_number": 11
+                      "line_number": 11,
+                      "source": "Undefined"
                     }
                   }
                 ],
@@ -57,7 +60,8 @@
                   {
                     "String": {
                       "value": "Prayagraj",
-                      "line_number": 12
+                      "line_number": 12,
+                      "source": "Undefined"
                     }
                   }
                 ],
@@ -66,7 +70,8 @@
                   {
                     "String": {
                       "value": "Bengaluru",
-                      "line_number": 13
+                      "line_number": 13,
+                      "source": "Undefined"
                     }
                   }
                 ]
@@ -91,7 +96,8 @@
                 "value": {
                   "String": {
                     "value": "$obj",
-                    "line_number": 19
+                    "line_number": 19,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
@@ -116,7 +122,8 @@
                 "value": {
                   "String": {
                     "value": "red",
-                    "line_number": 24
+                    "line_number": 24,
+                    "source": "Undefined"
                   }
                 },
                 "source": {
@@ -132,7 +139,8 @@
                 "value": {
                   "String": {
                     "value": "$description",
-                    "line_number": 22
+                    "line_number": 22,
+                    "source": "Undefined"
                   }
                 },
                 "source": "Caption",
