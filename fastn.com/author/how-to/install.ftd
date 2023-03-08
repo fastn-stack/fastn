@@ -14,10 +14,18 @@ There are three options available for installation on each system:
 
 -- cbox.info: Our Recommendation
 
+
 We recommend you to install `fastn` through `pre-built binary`.
 
 This is the preferred method as it only requires downloading the binary and
 installing it on your local system.
+
+
+-- ds.code: Installer Script
+lang: ftd
+
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
+
 
 -- ds.markdown: 
 
