@@ -342,7 +342,7 @@ light: rgba(0, 0, 0, 0.8)
 dark: rgba(0, 0, 0, 0.8)
 
 -- ftd.color code-:
-light: #2B303B
+light: #eff1f5
 dark: #2B303B
 
 -- ftd.background-colors background-:
