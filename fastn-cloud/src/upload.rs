@@ -13,7 +13,7 @@ pub async fn missing_files_api(
     cw_id: &str,
     list_content: &str,
     meta_content: String,
-) -> Result<MissingApiResponse, fastn_cloud::http::PostError> {
+) -> Result<MissingApiResponse, fastn_cloud::http::Error> {
     let list_bytes = list_content.to_string().into_bytes();
     let meta_bytes = meta_content.into_bytes();
     let query: std::collections::HashMap<_, _> = [
@@ -32,8 +32,14 @@ pub async fn missing_files_api(
         .into_iter()
         .chain(meta_bytes.into_iter())
         .collect::<Vec<u8>>();
-    let response: MissingApiResponse =
-        fastn_cloud::http::post("/api/missing-files/", body, &headers, &query).await?;
+    let response: MissingApiResponse = fastn_cloud::http::request(
+        reqwest::Method::POST,
+        "/api/missing-files/",
+        body,
+        &headers,
+        &query,
+    )
+    .await?;
     Ok(response)
 }
 
@@ -87,7 +93,7 @@ pub async fn upload_api(
     cw_id: &str,
     list_content: &str,
     data: Vec<u8>,
-) -> Result<UploadAPIResponse, fastn_cloud::http::PostError> {
+) -> Result<UploadAPIResponse, fastn_cloud::http::Error> {
     let list_bytes = list_content.to_string().into_bytes();
     let query: std::collections::HashMap<_, _> = [
         ("cw-id", cw_id.to_string()),
@@ -106,7 +112,8 @@ pub async fn upload_api(
         .chain(data.into_iter())
         .collect::<Vec<u8>>();
     let response: UploadAPIResponse =
-        fastn_cloud::http::put("/api/upload/", body, &headers, &query).await?;
+        fastn_cloud::http::request(reqwest::Method::PUT, "/api/upload/", body, &headers, &query)
+            .await?;
     Ok(response)
 }
 
