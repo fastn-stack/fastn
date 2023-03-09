@@ -19,7 +19,7 @@ pub enum UploadError {
     #[error("TejarCreateError: {}", _0)]
     TejarCreateError(#[from] tejar::error::CreateError),
     #[error("HTTPPostError: {}", _0)]
-    HTTPPostError(#[from] fastn_cloud::http::PostError),
+    HTTPPostError(#[from] fastn_cloud::http::Error),
     #[error("StdIOError: {}", _0)]
     StdIOError(#[from] std::io::Error),
     #[error("SidParseError: {}", _0)]
