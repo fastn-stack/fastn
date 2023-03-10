@@ -1,4 +1,0 @@
--- import: fastn
-
--- fastn.package: http-processor
-download-base-url: http-processor

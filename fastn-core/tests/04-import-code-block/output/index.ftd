@@ -1,0 +1,11 @@
+-- import: amitu/lib
+-- import: fifthtry.github.io/package-doc/typography as pd
+
+-- lib.block:
+
+-- pd.h1: Heading 1
+
+Heading 1 content
+
+
+-- end: lib.block
