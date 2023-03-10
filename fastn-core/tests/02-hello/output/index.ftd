@@ -1,0 +1,34 @@
+-- ftd.text: hello
+
+-- ftd.text: Hello World
+region: h2
+role: $rtype
+
+
+-- ftd.text: hello_h1
+region: h1
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: hello_h0
+region: h3
+role: $dtype
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 700
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype

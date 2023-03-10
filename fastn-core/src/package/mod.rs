@@ -719,14 +719,14 @@ impl PackageTemp {
             .collect::<Vec<Package>>();
 
         Package {
-            name: self.name,
+            name: self.name.clone(),
             versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
             language: self.language,
             about: self.about,
             zip: self.zip,
-            download_base_url: self.download_base_url,
+            download_base_url: self.download_base_url.or(Some(self.name)),
             translation_status_summary: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],

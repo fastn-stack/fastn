@@ -31,24 +31,26 @@ pub async fn build(
                 if !config
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
-                    && doc.id.eq("FASTN.ftd")
                 {
-                    tokio::fs::copy(
+                    fastn_core::utils::copy(
                         config.root.join(doc.id.as_str()),
                         config.root.join(".build").join(doc.id.as_str()),
                     )
-                    .await?;
+                    .await
+                    .ok();
 
-                    fastn_core::utils::print_end(
-                        format!(
-                            "Processed {}/{}",
-                            config.package.name.as_str(),
-                            main.get_id()
-                        )
-                        .as_str(),
-                        start,
-                    );
-                    continue;
+                    if doc.id.eq("FASTN.ftd") {
+                        fastn_core::utils::print_end(
+                            format!(
+                                "Processed {}/{}",
+                                config.package.name.as_str(),
+                                main.get_id()
+                            )
+                            .as_str(),
+                            start,
+                        );
+                        continue;
+                    }
                 }
                 let resp = fastn_core::package::package_doc::process_ftd(
                     config, doc, base_url, no_static, test,

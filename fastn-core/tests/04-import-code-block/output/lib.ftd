@@ -1,0 +1,10 @@
+-- component block:
+children wrapper:
+
+-- ftd.row:
+background.solid: #000000
+children: $block.wrapper
+
+-- end: ftd.row
+
+-- end: block
