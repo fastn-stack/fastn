@@ -704,3 +704,55 @@ pub fn optional_or_type(
         ),
     }
 }
+
+pub fn optional_or_type_list(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    rec_name: &str,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+) -> ftd::executor::Result<
+    ftd::executor::Value<Option<Vec<(String, ftd::interpreter2::PropertyValue)>>>,
+> {
+    let value = get_value_from_properties_using_key_and_arguments_dummy(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+        false,
+        inherited_variables,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::List { data, kind }) if kind.is_or_type() => {
+            let mut values = vec![];
+            for d in data {
+                let resolved_value = d.resolve(&doc.itdoc(), line_number)?;
+                if let ftd::interpreter2::Value::OrType { variant, value, .. } = resolved_value {
+                    values.push((variant.clone(), *value));
+                }
+            }
+            Ok(ftd::executor::Value::new(
+                Some(values),
+                value.line_number,
+                value.properties,
+            ))
+        }
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!(
+                "Expected value of type or-type `{}`, found: {:?}",
+                rec_name, t
+            ),
+            doc.name,
+            line_number,
+        ),
+    }
+}

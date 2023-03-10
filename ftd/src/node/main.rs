@@ -1,3 +1,5 @@
+use ftd::executor::BorderStyle;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -1469,7 +1471,7 @@ impl ftd::executor::Common {
             d.check_and_insert(
                 "border-style",
                 ftd::node::Value::from_executor_value(
-                    Some(br_style.to_css_string()),
+                    Some(BorderStyle::css_string_from_vec(br_style)),
                     self.border_style.to_owned(),
                     None,
                     doc_id,

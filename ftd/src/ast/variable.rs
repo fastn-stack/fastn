@@ -61,8 +61,7 @@ impl VariableDefinition {
             section.line_number,
         )?;
 
-        let value =
-            ftd::ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind.modifier)?;
+        let value = ftd::ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind)?;
 
         let processor = Processor::from_headers(&section.headers, doc_id)?;
 

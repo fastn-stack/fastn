@@ -31,6 +31,23 @@ pub enum Kind {
 }
 
 impl Kind {
+    pub fn get_name(&self) -> String {
+        match self {
+            Kind::String { .. } => "string".to_string(),
+            Kind::Integer { .. } => "integer".to_string(),
+            Kind::Boolean { .. } => "boolean".to_string(),
+            Kind::Decimal { .. } => "decimal".to_string(),
+            Kind::Constant { .. } => "constant".to_string(),
+            Kind::List { .. } => "list".to_string(),
+            Kind::Object { .. } => "object".to_string(),
+            Kind::OrType { name, .. } => name.clone(),
+            Kind::Optional { .. } => "optional".to_string(),
+            Kind::Void { .. } => "void".to_string(),
+            Kind::UI { name, .. } => name.clone().unwrap_or("record".to_string()),
+            Kind::Record { name } => name.clone(),
+        }
+    }
+
     pub fn into_kind_data(self) -> KindData {
         KindData::new(self)
     }

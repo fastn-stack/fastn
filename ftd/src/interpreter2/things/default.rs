@@ -7784,6 +7784,7 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "border-style",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_list()
                 .into_optional()
                 .into_kind_data(),
         ),

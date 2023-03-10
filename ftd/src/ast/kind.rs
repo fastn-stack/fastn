@@ -247,6 +247,54 @@ impl VariableValue {
         }
     }
 
+    pub fn is_shorthand_list(&self) -> bool {
+        match self {
+            VariableValue::String { value, .. } => {
+                if (value.starts_with('[') && value.ends_with(']')) || value.contains(',') {
+                    return true;
+                }
+                false
+            }
+            _ => false,
+        }
+    }
+
+    pub fn from_string_bracket_list(
+        value: &str,
+        kind_name: String,
+        source: ftd::ast::ValueSource,
+        line_number: usize,
+    ) -> ftd::ast::VariableValue {
+        use itertools::Itertools;
+
+        // Bracket list from string
+        let bracket_removed_value = value
+            .trim_start_matches('[')
+            .trim_end_matches(']')
+            .to_string();
+        let raw_values = bracket_removed_value
+            .split(',')
+            .filter(|v| !v.is_empty())
+            .map(|v| v.trim())
+            .collect_vec();
+        VariableValue::List {
+            value: raw_values
+                .iter()
+                .map(|v| {
+                    (
+                        kind_name.clone(),
+                        VariableValue::from_value(
+                            &Some(v.to_string()),
+                            source.clone(),
+                            line_number,
+                        ),
+                    )
+                })
+                .collect_vec(),
+            line_number,
+        }
+    }
+
     pub fn caption(&self) -> Option<String> {
         match self {
             VariableValue::String { value, .. } => Some(value.to_string()),
@@ -287,8 +335,30 @@ impl VariableValue {
     pub(crate) fn into_list(
         self,
         doc_name: &str,
+        kind: &ftd::interpreter2::Kind,
     ) -> ftd::ast::Result<Vec<(String, VariableValue)>> {
         match self {
+            VariableValue::String {
+                value,
+                line_number,
+                source,
+            } => {
+                // Bracket list from string
+                let bracket_list = VariableValue::from_string_bracket_list(
+                    &value,
+                    kind.get_name(),
+                    source,
+                    line_number,
+                );
+                match bracket_list {
+                    VariableValue::List { value, .. } => Ok(value),
+                    t => ftd::ast::parse_error(
+                        format!("Invalid bracket list, found: `{:?}`", t),
+                        doc_name,
+                        t.line_number(),
+                    ),
+                }
+            }
             VariableValue::List { value, .. } => Ok(value),
             t => ftd::ast::parse_error(
                 format!("Expected list, found: `{:?}`", t),
@@ -348,28 +418,28 @@ impl VariableValue {
     pub(crate) fn from_p1_with_modifier(
         section: &ftd::p11::Section,
         doc_id: &str,
-        modifier: &Option<VariableModifier>,
+        kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
         let value = VariableValue::from_p1(section, doc_id);
-        value.into_modifier(doc_id, section.line_number, modifier)
+        value.into_modifier(doc_id, section.line_number, kind)
     }
 
     pub(crate) fn from_header_with_modifier(
         header: &ftd::p11::Header,
         doc_id: &str,
-        modifier: &Option<VariableModifier>,
+        kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
         let value = VariableValue::from_p1_header(header, doc_id);
-        value.into_modifier(doc_id, header.get_line_number(), modifier)
+        value.into_modifier(doc_id, header.get_line_number(), kind)
     }
 
     pub(crate) fn into_modifier(
         self,
         doc_id: &str,
         line_number: usize,
-        modifier: &Option<VariableModifier>,
+        kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
-        match modifier {
+        match &kind.modifier {
             Some(modifier) if modifier.is_list() => {
                 if self.is_null() {
                     Ok(VariableValue::List {
@@ -383,11 +453,12 @@ impl VariableValue {
                     if value.starts_with('$') {
                         Ok(self)
                     } else {
-                        ftd::ast::parse_error(
-                            format!("Expected List found: `{:?}`", self),
-                            doc_id,
+                        Ok(VariableValue::from_string_bracket_list(
+                            value,
+                            kind.kind.clone(),
+                            ftd::ast::ValueSource::Default,
                             line_number,
-                        )
+                        ))
                     }
                 } else {
                     ftd::ast::parse_error(
@@ -442,6 +513,8 @@ impl VariableValue {
             .body
             .as_ref()
             .map(|v| BodyValue::new(v.get_value().as_str(), v.line_number));
+
+        // dbg!(&values, &caption, &headers, &body);
 
         if values.is_empty() && headers.is_empty() && !(caption.is_some() && body.is_some()) {
             return if let Some(caption) = caption {
