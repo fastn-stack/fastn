@@ -712,7 +712,6 @@ impl PropertyValue {
         ) -> ftd::interpreter2::Result<
             ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
         > {
-            // dbg!(&value, &expected_kind);
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter2::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();

@@ -325,7 +325,7 @@ impl ftd::interpreter2::Value {
                             value.line_number(),
                             None,
                             id,
-                            string_needs_no_quotes,
+                            true,
                         )? {
                         v
                     } else {
@@ -335,7 +335,7 @@ impl ftd::interpreter2::Value {
                 }
                 Some(format!(
                     "{:?}",
-                    values.join(if string_needs_no_quotes { " " } else { ", " })
+                    values.join(" " )
                 ))
             }
             ftd::interpreter2::Value::Record { fields, .. }

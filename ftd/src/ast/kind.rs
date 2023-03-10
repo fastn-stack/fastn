@@ -514,7 +514,6 @@ impl VariableValue {
             .as_ref()
             .map(|v| BodyValue::new(v.get_value().as_str(), v.line_number));
 
-        // dbg!(&values, &caption, &headers, &body);
 
         if values.is_empty() && headers.is_empty() && !(caption.is_some() && body.is_some()) {
             return if let Some(caption) = caption {
