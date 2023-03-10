@@ -236,7 +236,7 @@ async fn process_static(
 
         {
             // TODO: need to remove this once download_base_url is removed
-            std::fs::create_dir_all(&base_path
+            std::fs::create_dir_all(base_path
                 .join(".build"))?;
             if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
                 std::fs::create_dir_all(base_path
