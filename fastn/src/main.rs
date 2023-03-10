@@ -91,7 +91,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
-        let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
+        let port = serve.value_of_("port").map(|p| match p.parse() {
             Ok(v) => v,
             Err(_) => {
                 eprintln!("Provided port {} is not a valid port.", p.to_string().red());
@@ -121,6 +121,20 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             inline_js,
             external_css,
             inline_css,
+        )
+        .await;
+    }
+
+    if matches.subcommand().is_none() {
+        return fastn_core::listen(
+            "127.0.0.1",
+            None,
+            None,
+            None,
+            vec![],
+            vec![],
+            vec![],
+            vec![],
         )
         .await;
     }
@@ -262,7 +276,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 fn app(version: &'static str) -> clap::Command {
     clap::Command::new("fastn: FTD Package Manager")
         .version(version)
-        .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
