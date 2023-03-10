@@ -6,6 +6,18 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#ages": [
+1,
+2,
+3,
+4
+],
+"foo#check-border-style:counter:7": 0,
+"foo#persons": [
+"Rithik",
+"Amitu",
+"Arpita"
+],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -547,7 +559,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted inset; border-top-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello World</p></div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Rithik</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Amitu</p></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Arpita</p></div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>1</p></div><div data-id="4:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>2</p></div><div data-id="5:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>3</p></div><div data-id="6:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>4</p></div><div data-id="7:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#check-border-style:counter:7&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="7,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Hello World</p></div></div></div>
 
 
 <script>
@@ -1414,7 +1426,118 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#persons.0", data);
+}
+window.node_change_main["1:main__text"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#persons.1", data);
+}
+window.node_change_main["2:main__text"] = function(data) {
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#persons.2", data);
+}
+window.node_change_main["3:main__text"] = function(data) {
+document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#ages.0", data);
+}
+window.node_change_main["4:main__text"] = function(data) {
+document.querySelector(`[data-id="4:main"]`).innerHTML = resolve_reference("foo#ages.1", data);
+}
+window.node_change_main["5:main__text"] = function(data) {
+document.querySelector(`[data-id="5:main"]`).innerHTML = resolve_reference("foo#ages.2", data);
+}
+window.node_change_main["6:main__text"] = function(data) {
+document.querySelector(`[data-id="6:main"]`).innerHTML = resolve_reference("foo#ages.3", data);
+}
+window.node_change_main["7:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#check-border-style:counter:7", data)%4==0);
+}()){
+document.querySelector(`[data-id="7:main"]`).style["border-style"] = "dotted";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:counter:7", data)%4==1);
+}()){
+document.querySelector(`[data-id="7:main"]`).style["border-style"] = "dotted dashed";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:counter:7", data)%4==2);
+}()){
+document.querySelector(`[data-id="7:main"]`).style["border-style"] = "dotted inset";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:counter:7", data)%4==3);
+}()){
+document.querySelector(`[data-id="7:main"]`).style["border-style"] = "dotted inset outset";
+}
+else { document.querySelector(`[data-id="7:main"]`).style["border-style"] = null }
+}
+window.set_value_main = {};
+window.set_value_main["foo#ages"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#ages" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#ages", new_value);
+}
 
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#ages"]) {
+let changes = window.ftd.mutable_value_main["foo#ages"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#ages"]) {
+let changes = window.ftd.immutable_value_main["foo#ages"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__text"]){window.node_change_main["4:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__text"]){window.node_change_main["5:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__text"]){window.node_change_main["6:main__text"](data);
+}
+};
+
+window.set_value_main["foo#check-border-style:counter:7"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#check-border-style:counter:7" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#check-border-style:counter:7", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#check-border-style:counter:7"]) {
+let changes = window.ftd.mutable_value_main["foo#check-border-style:counter:7"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#check-border-style:counter:7"]) {
+let changes = window.ftd.immutable_value_main["foo#check-border-style:counter:7"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["7:main__border-style"]){window.node_change_main["7:main__border-style"](data);
+}
+};
+
+window.set_value_main["foo#persons"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#persons" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#persons", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#persons"]) {
+let changes = window.ftd.mutable_value_main["foo#persons"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#persons"]) {
+let changes = window.ftd.immutable_value_main["foo#persons"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+}
+};
 
 
 
