@@ -234,6 +234,21 @@ async fn process_static(
             build_path.join(sa.id.as_str()),
         )?;
 
+        {
+            // TODO: need to remove this once download_base_url is removed
+            std::fs::create_dir_all(&base_path
+                .join(".build"))?;
+            if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
+                std::fs::create_dir_all(base_path
+                    .join(".build").join(dir))?;
+            }
+
+            std::fs::copy(
+                sa.base_path.join(sa.id.as_str()),
+                base_path
+                    .join(".build").join(sa.id.as_str()),
+            )?;
+        }
         Ok(())
     }
 }
