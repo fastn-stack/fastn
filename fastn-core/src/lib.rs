@@ -82,13 +82,6 @@ fn design_ftd() -> &'static str {
     include_str!("../ftd/design.ftd")
 }
 
-fn fastn_js() -> &'static str {
-    if fastn_core::utils::is_test() {
-        return "FASTN_JS";
-    }
-    include_str!("../fastn.js")
-}
-
 fn fastn_2022_js() -> &'static str {
     if fastn_core::utils::is_test() {
         return "FASTN_JS";
