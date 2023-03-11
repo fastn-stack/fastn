@@ -188,10 +188,9 @@ impl IncludeCode {
             doc.path
                 .replace('/', std::path::MAIN_SEPARATOR.to_string().as_str()),
         );
-        let file_content = std::fs::read_to_string(file_path)?
-            .lines()
-            .into_iter()
-            .fold(String::new(), |accumulator, instance| {
+        let file_content = std::fs::read_to_string(file_path)?.lines().fold(
+            String::new(),
+            |accumulator, instance| {
                 let should_escape = instance.starts_with('$') || instance.starts_with('/');
                 format!(
                     "{}{}{}\n",
@@ -199,7 +198,8 @@ impl IncludeCode {
                     if should_escape { "\\" } else { "" },
                     instance
                 )
-            });
+            },
+        );
         let output = match (file_content, doc.roa) {
             (fc, RangeOrAnchor::Anchor(anchor_name)) => take_anchored_lines(&fc, &anchor_name),
             (fc, RangeOrAnchor::Range(LineRange::RangeFull)) => fc,

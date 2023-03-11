@@ -1,7 +1,7 @@
 pub fn trim_all_lines(s: &str) -> String {
     use itertools::Itertools;
 
-    s.split('\n').into_iter().map(|v| v.trim()).join("\n")
+    s.split('\n').map(|v| v.trim()).join("\n")
 }
 
 pub fn trim_start_once(s: &str, matches: &str) -> String {

@@ -297,8 +297,9 @@ impl ResponsiveLength {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Alignment {
+    #[default]
     TopLeft,
     TopCenter,
     TopRight,
@@ -308,12 +309,6 @@ pub enum Alignment {
     BottomLeft,
     BottomCenter,
     BottomRight,
-}
-
-impl Default for Alignment {
-    fn default() -> Alignment {
-        Alignment::TopLeft
-    }
 }
 
 impl Alignment {
@@ -566,18 +561,13 @@ impl Alignment {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Resizing {
     HugContent,
     FillContainer,
+    #[default]
     Auto,
     Fixed(ftd::executor::Length),
-}
-
-impl Default for Resizing {
-    fn default() -> Resizing {
-        Resizing::Auto
-    }
 }
 
 impl Resizing {
@@ -2464,17 +2454,12 @@ impl BorderStyle {
 }
 
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Loading {
+    #[default]
     Lazy,
     Eager,
-}
-
-impl Default for Loading {
-    fn default() -> Self {
-        Loading::Lazy
-    }
 }
 
 impl Loading {

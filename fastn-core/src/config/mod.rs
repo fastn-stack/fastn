@@ -3,16 +3,11 @@
 
 pub(crate) mod utils;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum FTDEdition {
     FTD2021,
+    #[default]
     FTD2022,
-}
-
-impl Default for FTDEdition {
-    fn default() -> Self {
-        FTDEdition::FTD2022
-    }
 }
 
 impl FTDEdition {
@@ -550,7 +545,6 @@ impl Config {
         )?);
         Ok(ignore_paths
             .build()
-            .into_iter()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
             .collect::<Vec<camino::Utf8PathBuf>>())
@@ -567,7 +561,6 @@ impl Config {
         ignore_paths_build.overrides(fastn_core::file::ignore_path(package, &path, ignore_paths)?);
         Ok(ignore_paths_build
             .build()
-            .into_iter()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
             .collect::<Vec<camino::Utf8PathBuf>>())

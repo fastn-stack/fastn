@@ -445,7 +445,6 @@ fn get_messages(
 
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, val)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
@@ -458,7 +457,6 @@ pub fn get_env_ftd_file() -> String {
 
 pub fn debug_env_vars() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, _)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()

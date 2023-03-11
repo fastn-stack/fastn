@@ -169,7 +169,6 @@ pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<S
         .await
         .unwrap_or_default()
         .values()
-        .into_iter()
         .max()
         .map(nanos_to_rfc3339)
 }
