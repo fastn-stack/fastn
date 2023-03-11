@@ -75,6 +75,7 @@ pub async fn build(
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
                 {
+                    // TODO: bring this feature back
                     println!("Skipped");
                     continue;
                 }

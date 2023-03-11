@@ -1,18 +1,8 @@
-mod cr_meta;
 pub(crate) mod document;
 pub(crate) mod fastn_dot_ftd;
-mod fetch_file;
-pub(crate) mod full_sitemap;
-mod get_data;
-mod get_version_data;
-pub(crate) mod http;
-mod include;
 pub(crate) mod package_tree;
-mod sitemap;
-mod sqlite;
-pub(crate) mod toc;
-
 pub use document::convert_to_document_id;
+pub(crate) mod toc;
 pub use fastn_core::Library2022;
 
 #[derive(Debug)]
@@ -154,94 +144,6 @@ impl Library {
             }
             None
         }
-    }
-
-    pub async fn process<'a>(
-        &'a self,
-        section: &ftd::p1::Section,
-        doc: &'a ftd::p2::TDoc<'a>,
-    ) -> ftd::p1::Result<ftd::Value> {
-        match section
-            .header
-            .str(doc.name, section.line_number, "$processor$")?
-        {
-            // These processors are implemented both in Rust and Python
-            "http" => fastn_core::library::http::processor(section, doc, &self.config).await,
-            "package-query" => {
-                fastn_core::library::sqlite::processor(section, doc, &self.config).await
-            }
-            "fetch-file" => {
-                fastn_core::library::fetch_file::processor(section, doc, &self.config).await
-            }
-            "package-tree" => {
-                fastn_core::library::package_tree::processor(section, doc, &self.config).await
-            }
-            "get-version-data" => {
-                fastn_core::library::get_version_data::processor(
-                    section,
-                    doc,
-                    &self.config,
-                    self.document_id.as_str(),
-                    self.base_url.as_str(),
-                )
-                .await
-            }
-            "document-name" => document::processor::document_name(section, doc, &self.config).await,
-            "is-reader" => {
-                fastn_core::user_group::processor::is_reader(section, doc, &self.config).await
-            }
-            _ => process_sync(&self.config, section, self.document_id.as_str(), doc),
-        }
-    }
-}
-
-/// process_sync implements a bunch of processors that are called from Python. We want sync
-/// API to expose to outside world and async functions do not work so well with them.
-pub fn process_sync<'a>(
-    config: &fastn_core::Config,
-    section: &ftd::p1::Section,
-    document_id: &str,
-    doc: &'a ftd::p2::TDoc<'a>,
-) -> ftd::p1::Result<ftd::Value> {
-    match section
-        .header
-        .str(doc.name, section.line_number, "$processor$")?
-    {
-        "toc" => fastn_core::library::toc::processor(section, doc, config),
-        "include" => fastn_core::library::include::processor(section, doc, config),
-        "get-data" => fastn_core::library::get_data::processor(section, doc, config),
-        "sitemap" => fastn_core::library::sitemap::processor(section, doc, config),
-        "full-sitemap" => fastn_core::library::full_sitemap::processor(section, doc, config),
-        "document-readers" => {
-            fastn_core::library::sitemap::document_readers(section, document_id, doc, config)
-        }
-        "document-writers" => {
-            fastn_core::library::sitemap::document_writers(section, document_id, doc, config)
-        }
-        "user-groups" => fastn_core::user_group::processor::user_groups(section, doc, config),
-        "user-group-by-id" => {
-            fastn_core::user_group::processor::user_group_by_id(section, doc, config)
-        }
-        "package-query" => fastn_core::library::sqlite::processor_(section, doc, config),
-        "fetch-file" => fastn_core::library::fetch_file::processor_sync(section, doc, config),
-        "package-tree" => fastn_core::library::package_tree::processor_sync(section, doc, config),
-        "document-id" => document::processor::document_id(section, doc, config),
-        "document-full-id" => document::processor::document_full_id(section, doc, config),
-        "document-suffix" => document::processor::document_suffix(section, doc, config),
-        "package-id" => Ok(ftd::Value::String {
-            text: config.package.name.clone(),
-            source: ftd::TextSource::Default,
-        }),
-        "get-identities" => fastn_core::user_group::processor::get_identities(section, doc, config),
-        "request-data" => fastn_core::library::http::request_data_processor(section, doc, config),
-        // TODO: auth feature flag
-        "user-details" => fastn_core::auth::processor::user_details(section, doc, config),
-        "fastn-apps" => fastn_core::package::app::processor(section, doc, config),
-        t => Err(ftd::p1::Error::NotFound {
-            doc_id: document_id.to_string(),
-            line_number: section.line_number,
-            key: format!("fastn-Error: No such processor: {}", t),
-        }),
     }
 }
 
@@ -426,88 +328,10 @@ impl Library2 {
 
     pub async fn process<'a>(
         &'a self,
-        section: &ftd::p1::Section,
-        doc: &'a ftd::p2::TDoc<'a>,
+        _section: &ftd::p1::Section,
+        _doc: &'a ftd::p2::TDoc<'a>,
     ) -> ftd::p1::Result<ftd::Value> {
-        match section
-            .header
-            .str(doc.name, section.line_number, "$processor$")?
-        {
-            // "toc" => fastn_core::library::toc::processor(section, doc),
-            "http" => fastn_core::library::http::processor(section, doc, &self.config).await,
-            "package-query" => {
-                fastn_core::library::sqlite::processor(section, doc, &self.config).await
-            }
-            "toc" => fastn_core::library::toc::processor(section, doc, &self.config),
-            "include" => fastn_core::library::include::processor(section, doc, &self.config),
-            "get-data" => fastn_core::library::get_data::processor(section, doc, &self.config),
-            "sitemap" => fastn_core::library::sitemap::processor(section, doc, &self.config),
-            "full-sitemap" => {
-                fastn_core::library::full_sitemap::processor(section, doc, &self.config)
-            }
-            "user-groups" => {
-                fastn_core::user_group::processor::user_groups(section, doc, &self.config)
-            }
-            "document-readers" => fastn_core::library::sitemap::document_readers(
-                section,
-                self.document_id.as_str(),
-                doc,
-                &self.config,
-            ),
-            "document-writers" => fastn_core::library::sitemap::document_writers(
-                section,
-                self.document_id.as_str(),
-                doc,
-                &self.config,
-            ),
-            "user-group-by-id" => {
-                fastn_core::user_group::processor::user_group_by_id(section, doc, &self.config)
-            }
-            "get-identities" => {
-                fastn_core::user_group::processor::get_identities(section, doc, &self.config)
-            }
-            "document-id" => document::processor::document_id(section, doc, &self.config),
-            "document-full-id" => document::processor::document_full_id(section, doc, &self.config),
-            "document-name" => document::processor::document_name(section, doc, &self.config).await,
-            "document-suffix" => document::processor::document_suffix(section, doc, &self.config),
-            "package-id" => Ok(ftd::Value::String {
-                text: self.config.package.name.clone(),
-                source: ftd::TextSource::Default,
-            }),
-            "package-tree" => {
-                fastn_core::library::package_tree::processor(section, doc, &self.config).await
-            }
-            "fetch-file" => {
-                fastn_core::library::fetch_file::processor(section, doc, &self.config).await
-            }
-            // Note: Not needed right now
-            "get-version-data" => {
-                fastn_core::library::get_version_data::processor(
-                    section,
-                    doc,
-                    &self.config,
-                    self.document_id.as_str(),
-                    self.base_url.as_str(),
-                )
-                .await
-            }
-            // Note: Not needed right now
-            "cr-meta" => fastn_core::library::cr_meta::processor(section, doc, &self.config).await,
-            "request-data" => {
-                fastn_core::library::http::request_data_processor(section, doc, &self.config)
-            }
-            // TODO: auth feature flag
-            "user-details" => fastn_core::auth::processor::user_details(section, doc, &self.config),
-            "fastn-apps" => fastn_core::package::app::processor(section, doc, &self.config),
-            "is-reader" => {
-                fastn_core::user_group::processor::is_reader(section, doc, &self.config).await
-            }
-            t => Err(ftd::p1::Error::NotFound {
-                doc_id: self.document_id.to_string(),
-                line_number: section.line_number,
-                key: format!("fastn-Error: No such processor: {}", t),
-            }),
-        }
+        unimplemented!("we are removing support for 0.2, migrate to 0.3 please")
     }
 }
 
