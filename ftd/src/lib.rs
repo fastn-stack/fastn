@@ -54,13 +54,14 @@ pub use ui::{
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
-pub fn js() -> String {
-    include_str!("../ftd.js").replace("if (true) { // false", "if (false) { // false")
-}
-
 pub fn css() -> &'static str {
+    // if fastn_core::utils::is_test() {
+    //     return "FTD_CSS";
+    // }
+
     include_str!("../ftd.css")
 }
+
 pub fn html() -> &'static str {
     include_str!("../ftd.html")
 }

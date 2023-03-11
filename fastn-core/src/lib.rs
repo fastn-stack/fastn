@@ -67,10 +67,6 @@ pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
 pub fn ftd_html() -> &'static str {
-    include_str!("../ftd.html")
-}
-
-pub fn ftd_html_2022() -> &'static str {
     include_str!("../ftd_2022.html")
 }
 
@@ -98,20 +94,6 @@ fn fastn_2022_js() -> &'static str {
         return "FASTN_JS";
     }
     include_str!("../fastn2022.js")
-}
-
-fn ftd_js() -> String {
-    if fastn_core::utils::is_test() {
-        return "FTD_JS".to_string();
-    }
-    ftd::js()
-}
-
-fn ftd_css() -> &'static str {
-    if fastn_core::utils::is_test() {
-        return "FTD_CSS";
-    }
-    ftd::css()
 }
 
 fn fastn_lib_ftd() -> &'static str {
