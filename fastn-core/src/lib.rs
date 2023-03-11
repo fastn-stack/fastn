@@ -100,23 +100,6 @@ fn fastn_lib_ftd() -> &'static str {
     include_str!("../ftd/fastn-lib.ftd")
 }
 
-#[allow(dead_code)]
-fn with_message() -> &'static str {
-    include_str!("../with-message.html")
-}
-
-#[allow(dead_code)]
-fn available_languages(config: &fastn_core::Config) -> fastn_core::Result<String> {
-    let path = config
-        .root
-        .join("fastn/translation/available-languages.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        include_str!("../ftd/translation/available-languages.ftd").to_string()
-    })
-}
-
 fn package_info_image(
     config: &fastn_core::Config,
     doc: &fastn_core::Static,

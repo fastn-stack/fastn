@@ -713,9 +713,7 @@ pub fn optional_or_type_list(
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<
-    ftd::executor::Value<Option<Vec<(String, ftd::interpreter2::PropertyValue)>>>,
-> {
+) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, ftd::interpreter2::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
@@ -736,13 +734,13 @@ pub fn optional_or_type_list(
                 }
             }
             Ok(ftd::executor::Value::new(
-                Some(values),
+                values,
                 value.line_number,
                 value.properties,
             ))
         }
         None => Ok(ftd::executor::Value::new(
-            None,
+            vec![],
             value.line_number,
             value.properties,
         )),

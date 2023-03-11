@@ -2381,15 +2381,11 @@ pub enum BorderStyle {
 
 impl BorderStyle {
     fn from_optional_values(
-        or_type_value: Option<Vec<(String, ftd::interpreter2::PropertyValue)>>,
+        or_type_value: Vec<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Vec<Self>>> {
-        if let Some(value) = or_type_value {
-            Ok(Some(BorderStyle::from_values(value, doc, line_number)?))
-        } else {
-            Ok(None)
-        }
+    ) -> ftd::executor::Result<Vec<Self>> {
+        BorderStyle::from_values(or_type_value, doc, line_number)
     }
 
     fn from_values(
@@ -2426,7 +2422,7 @@ impl BorderStyle {
         line_number: usize,
         key: &str,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<Vec<BorderStyle>>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Vec<BorderStyle>>> {
         let or_type_value = ftd::executor::value::optional_or_type_list(
             key,
             properties,
