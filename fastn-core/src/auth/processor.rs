@@ -1,4 +1,5 @@
 // Return the login information of the user
+#[allow(dead_code)]
 pub fn user_details(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,

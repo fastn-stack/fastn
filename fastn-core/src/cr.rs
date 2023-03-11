@@ -202,7 +202,6 @@ impl fastn_core::Config {
     ) -> fastn_core::Result<Vec<fastn_core::track::TrackingInfo>> {
         let cr_track_paths = ignore::WalkBuilder::new(self.cr_track_dir(cr_number))
             .build()
-            .into_iter()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap())
             .filter(|x| x.is_file() && x.extension().map(|v| v.eq("track")).unwrap_or(false))

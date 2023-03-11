@@ -343,7 +343,6 @@ async fn clone_history_files(
 
     let history = ignore::WalkBuilder::new(config.history_dir())
         .build()
-        .into_iter()
         .flatten()
         .map(|x| {
             x.into_path()

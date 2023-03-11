@@ -131,16 +131,11 @@ pub struct Component {
     pub line_number: usize,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, Default, serde::Deserialize, serde::Serialize)]
 pub enum ComponentSource {
+    #[default]
     Declaration,
     Variable,
-}
-
-impl Default for ComponentSource {
-    fn default() -> ComponentSource {
-        ComponentSource::Declaration
-    }
 }
 
 impl Component {
@@ -395,11 +390,15 @@ impl Component {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, Default, serde::Deserialize, serde::Serialize)]
 pub enum PropertySource {
+    #[default]
     Caption,
     Body,
-    Header { name: String, mutable: bool },
+    Header {
+        name: String,
+        mutable: bool,
+    },
     Subsection,
     Default,
 }
@@ -438,12 +437,6 @@ impl From<ftd::ast::PropertySource> for PropertySource {
                 PropertySource::Header { name, mutable }
             }
         }
-    }
-}
-
-impl Default for PropertySource {
-    fn default() -> PropertySource {
-        PropertySource::Caption
     }
 }
 

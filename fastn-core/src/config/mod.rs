@@ -3,27 +3,20 @@
 
 pub(crate) mod utils;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum FTDEdition {
     FTD2021,
+    #[default]
     FTD2022,
-}
-
-impl Default for FTDEdition {
-    fn default() -> Self {
-        FTDEdition::FTD2022
-    }
 }
 
 impl FTDEdition {
     pub(crate) fn from_string(s: &str) -> fastn_core::Result<FTDEdition> {
         match s {
-            "2021" => Ok(FTDEdition::FTD2021),
             "2022" => Ok(FTDEdition::FTD2022),
-            t => fastn_core::usage_error(format!(
-                "Unknown edition `{}`. Help use `2021` or `2022` instead",
-                t
-            )),
+            t => {
+                fastn_core::usage_error(format!("Unknown edition `{}`. Help use `2022` instead", t))
+            }
         }
     }
 }
@@ -550,7 +543,6 @@ impl Config {
         )?);
         Ok(ignore_paths
             .build()
-            .into_iter()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
             .collect::<Vec<camino::Utf8PathBuf>>())
@@ -567,7 +559,6 @@ impl Config {
         ignore_paths_build.overrides(fastn_core::file::ignore_path(package, &path, ignore_paths)?);
         Ok(ignore_paths_build
             .build()
-            .into_iter()
             .flatten()
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
             .collect::<Vec<camino::Utf8PathBuf>>())
@@ -1175,46 +1166,6 @@ impl Config {
         Err(fastn_core::Error::UsageError {
             message: "File not found".to_string(),
         })
-    }
-
-    pub(crate) async fn get_assets(
-        &self,
-    ) -> fastn_core::Result<std::collections::HashMap<String, String>> {
-        use itertools::Itertools;
-
-        let mut asset_documents = std::collections::HashMap::new();
-        asset_documents.insert(
-            self.package.name.clone(),
-            self.package.get_assets_doc().await?,
-        );
-
-        let dependencies = if let Some(package) = self.package.translation_of.as_ref() {
-            let mut deps = package
-                .get_flattened_dependencies()
-                .into_iter()
-                .unique_by(|dep| dep.package.name.clone())
-                .collect_vec();
-            deps.extend(
-                self.package
-                    .get_flattened_dependencies()
-                    .into_iter()
-                    .unique_by(|dep| dep.package.name.clone()),
-            );
-            deps
-        } else {
-            self.package
-                .get_flattened_dependencies()
-                .into_iter()
-                .unique_by(|dep| dep.package.name.clone())
-                .collect_vec()
-        };
-        for dep in &dependencies {
-            asset_documents.insert(
-                dep.package.name.clone(),
-                dep.package.get_assets_doc().await?,
-            );
-        }
-        Ok(asset_documents)
     }
 
     async fn get_root_path(

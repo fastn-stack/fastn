@@ -23,7 +23,6 @@ mod error;
 mod i18n;
 pub mod library;
 mod proxy;
-mod render;
 pub mod sitemap;
 mod snapshot;
 mod sync_utils;
@@ -54,7 +53,6 @@ pub use library2022::Library2022;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;
 pub(crate) use package::Package;
-pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
@@ -445,7 +443,6 @@ fn get_messages(
 
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, val)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
@@ -458,7 +455,6 @@ pub fn get_env_ftd_file() -> String {
 
 pub fn debug_env_vars() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, _)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
