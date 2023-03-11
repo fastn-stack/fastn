@@ -1,6 +1,5 @@
 -- import: fastn
 
 -- fastn.package: amitu
-download-base-url: amitu
 
 -- fastn.dependency: fifthtry.github.io/package-doc

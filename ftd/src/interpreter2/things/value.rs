@@ -771,9 +771,9 @@ impl PropertyValue {
                         line_number: value.line_number(),
                     })
                 }
-                ftd::interpreter2::Kind::List { kind } if value.is_list() => {
+                ftd::interpreter2::Kind::List { kind } => {
                     let line_number = value.line_number();
-                    let value_list = value.into_list(doc.name)?;
+                    let value_list = value.into_list(doc.name, kind)?;
                     let mut values = vec![];
                     for (key, value) in value_list {
                         if !try_ok_state!(ftd::interpreter2::utils::kind_eq(

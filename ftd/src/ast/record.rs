@@ -73,8 +73,7 @@ impl Field {
         )?;
 
         let value =
-            ftd::ast::VariableValue::from_header_with_modifier(header, doc_id, &kind.modifier)?
-                .inner();
+            ftd::ast::VariableValue::from_header_with_modifier(header, doc_id, &kind)?.inner();
 
         let name = header.get_key();
 
