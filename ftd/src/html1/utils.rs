@@ -319,24 +319,18 @@ impl ftd::interpreter2::Value {
             ftd::interpreter2::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
-                    let v = if let Some(v) =
-                        value.clone().resolve(doc, line_number)?.to_html_string(
-                            doc,
-                            value.line_number(),
-                            None,
-                            id,
-                            true,
-                        )? {
+                    let v = if let Some(v) = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_html_string(doc, value.line_number(), None, id, true)?
+                    {
                         v
                     } else {
                         continue;
                     };
                     values.push(v);
                 }
-                Some(format!(
-                    "{:?}",
-                    values.join(" " )
-                ))
+                Some(format!("{:?}", values.join(" ")))
             }
             ftd::interpreter2::Value::Record { fields, .. }
                 if field
