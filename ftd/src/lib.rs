@@ -62,14 +62,6 @@ pub fn css() -> &'static str {
     include_str!("../ftd.css")
 }
 
-pub fn html() -> &'static str {
-    include_str!("../ftd.html")
-}
-
-pub fn build() -> &'static str {
-    include_str!("../build.html")
-}
-
 pub fn build_js() -> &'static str {
     include_str!("../build.js")
 }
