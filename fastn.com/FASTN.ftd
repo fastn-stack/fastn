@@ -128,29 +128,36 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 skip: true
 
 - The Book Of `fastn` and `ftd`: /book/
-- Foreword 🚧: /book/foreword/
-- Preface: /book/preface/
-- Introduction: /book/intro/
-- **1.** Getting Started: /book/getting-started/
-  document: book/01/getting-started.ftd
-  - Hello, Github!: /book/github/
-    document: book/01/github.ftd
-  - Hello, World! 🚧: /book/hello-world/
-    document: book/01/hello-world.ftd
-  - Terminal: /book/terminal/
+- `i` Foreword 🚧: /book/foreword/
+  document: book/1-foreword.ftd
+- `ii` Preface: /book/preface/
+  document: book/2-preface.ftd
+- `iii` Introduction: /book/intro/
+  document: book/3-intro.ftd
+- **1** Getting Started: /book/getting-started/
+  document: book/01/01-getting-started.ftd
+  - **1.1** Hello, Github!: /book/github/
+    document: book/01/02-github.ftd
+  - **1.2** Hello, World! 🚧: /book/hello-world/
+    document: book/01/03-hello-world.ftd
+- Appendix: /book/appendix/
+  - **a** HTTP 🚧: /book/http/
+    document: book/appendix/a-http.ftd
+  - **b** URL 🚧: /book/url/
+    document: book/appendix/b-url.ftd
+  - **c** Common Commands 🚧: /cmds/
+    document: book/appendix/c-common-commands.ftd
+  - **d** Terminal: /book/terminal/
     document: book/01/terminal.ftd
     - Open Terminal: /open-terminal/-/book/
       document: author/how-to/open-terminal.ftd
       skip: true
-    - Common Commands: /cmds/
-      document: book/01/common-commands.ftd
-      skip: true
-  - Install `fastn`: /book/install/
+  - **e** Install `fastn`: /book/install/
     document: book/01/install.ftd
     - Intall On Windows: /windows/-/book/
       document: author/setup/windows.ftd
       skip: true
-  - A Programming Editor: /book/editor/
+  - **f** A Programming Editor: /book/editor/
     document: book/01/editor.ftd
     - SublimeText Syntax Highlighting 🚧: /sublime/-/book/
       document: author/how-to/sublime.ftd
@@ -215,6 +222,11 @@ skip: true
 - Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
+
+# D: /d/
+
+- Overview: /d/
+- Maintainence: /d/m/
 
 # Planning: /planning/
 skip: true

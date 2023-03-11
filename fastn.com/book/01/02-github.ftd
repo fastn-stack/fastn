@@ -320,7 +320,10 @@ width.fixed.px: 500
 
 And create your account. While you are creating an account on Github you have
 to pick a username, *do pick your username with care as you would be sharing it
-a lot with others*, companies you work in future etc.
+a lot with others*, companies you work in future etc. It should not be any more
+difficult to create an account on Github than most places you have created an
+account, Facebook, Gmail etc. When they ask you select "Continue with free",
+free is good enough most personal usage and the purpose of this book.
 
 If you are done with creating your account on Github you can move on to the next
 step and [create your first website](/book/hello-world/)!
