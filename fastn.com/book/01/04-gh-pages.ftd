@@ -1,3 +1,6 @@
+-- import: fifthtry.github.io/bling/quote
+-- import: fastn.io/assets
+
 -- my-ds.page: Publish Your Site 🚧
 
 Let's recap your progress so far. You have created your Github account, and you
@@ -6,5 +9,127 @@ website, but you have not yet see how it looks like when "rendered". And you
 do not yet have the URL of your website.
 
 In this section we will use Github Pages to host your website.
+
+
+-- ds.h1: What Is Hosting?
+
+A website or a web-application is a software application, which runs on some
+hardware. Like you install an app on your iPhone or Android, or you install
+software on your Laptop or Desktop. When you visit `fastn.io/book/`, your
+browser is contacting a software running somewhere. In general during the course
+of the book we will evaluate different options for hosting. For now to get
+started we are going to talk about a special kind of hosting, called static
+hosting.
+
+-- ds.h2: What Is Static Hosting?
+
+You can kind of classify most websites as static or dynamic. Static sites are
+static, means they do not change.
+
+-- quote.marengo: Definition of `static`
+
+lacking in movement, action, or change, especially in an undesirable or
+uninteresting way. "demand has grown in what was a fairly static market"
+
+-- ds.markdown:
+
+Static does not mean never changing, but "slow changing". Say you are creating
+a blog, or maybe a portfolio or resume site, or maybe you have a hair saloon and
+you want to put out information about your offerings and rates etc, these
+information do not change often.
+
+But if you are expecting visitors of your site to take actions, like post
+comments, create their own articles, or upload images, etc, then you are not
+slow changing, and are dynamic.
+
+Deciding static vs dynamic is not always easy. Thank fully `fastn` does not
+force you to chose if you are static or dynamic, you can change your mind after
+the fact, and just switch your hosting from static to dynamic hosting provider.
+
+-- ds.h2: Why Bother With Static Vs Dynamic?
+
+If a site is static it is much simpler to manage, the hosting is much cheaper,
+often free. Static sites are harder to hack. Requires lower maintenance. It is
+a trade-off.
+
+Dynamic sites are more "feature-ful" but also more work, more money etc. Dynamic
+sites need to serve static media like images, but they also have to run a
+"application", written in some language like Java, Python, PHP, JavaScript etc.
+Further dynamic sites need access to some form of database, and one has to chose
+one, and then manage them. Managing a database is quite some work. Dynamic sites
+also have to worry about the load, serving static content requires lot less CPU,
+RAM etc, so if your site gets a lot of traffic static content fares much better
+than the dynamic stuff, your web application and database will have to be able
+to handle the load. Further sites on internet are almost constantly under attack,
+due to simplicity static sites, they are harder to attack than dynamic sites.
+
+For the purpose of this chapter we are going to go ahead with a static website,
+you will learn about how to move from static hosting provider to dynamic hosting
+provider in later parts of this book.
+
+;; TODO: update reference to dynamic hosting parts.
+
+-- ds.h2: What Exactly Is Static Hosting?
+
+In technical terms, static hosting means HTML/CSS/JS/images. If you can code up
+your site using only these three technologies, then the hosting provider only
+has to manage HTML/CSS/JS/image files. When you are using `fastn` for your site,
+`fastn` can generate a folder containing these HTML/CSS/JS/image files, that you
+can upload to one of static hosting providers.
+
+You see, the web browser you are using only understand these technologies:
+HTML/CSS/JS/images. The dynamic websites generate these HTML etc, and the
+generated files could be different for each user, or different for same user
+at different times. This is the dynamic part. But if your site is static, the
+HTML etc that you are serving to everyone is not changing till you update your
+site, you have to generate these basic files, HTML/CSS etc and just upload it.
+
+-- ds.h2: Which Static Hosting Provider?
+
+You can do your own hosting. You can get an IP address from your internet
+provider, and assign it to the laptop or desktop, or even your mobile phone, and
+run a static web server on it, and let your visitors access it. Of course this
+would be more work, you will have to ensure power and internet does not go, as
+else your site will be down and your visitors will have a bad time.
+
+A lot of people hosting their own servers, and there are internet communities
+for that. People do that for learning, doing everything yourself is a great
+learning experience, and this book will cover enough that you can do this as
+well, but that will not be the focus of the book. Some people also host their
+own servers for cost reason, after all this is the cheapest solution out there,
+if you go beyond some load thresholds. It is more work, but cheaper.
+
+If you are not interested in self hosting, then you have a few options. We are
+going to take a look at Github Pages, a static hosting solution we recommend.
+But there are many out there. Google Cloud, Amazon Web Services, Microsoft Azure,
+all provide a solution for hosting your static websites.
+
+-- ds.h2: Why Are We Recommending Github Pages?
+
+We are not affiliated with Github or Microsoft in anyway. We are promoting them
+because it is the best experience we personally had. They are creating an
+integrated whole. As you saw in previous section we are using Github for hosting
+our website's `git` repository. Github's `git` hosting works very well will
+Github Pages as you will see. Further Github comes with integrated editor, which
+we will take a close look in next section.
+
+So all in all, for learning purpose they are a great starting point. But in no
+way your learning going to be limited to Github offerings. During the course of
+the book you will learn more and will be able to make decisions most suitable
+for your use case.
+
+-- ds.h1: Using Github Pages For Your Repo
+
+Let's come back to your repository. This is how it may have looked like at the
+end of previous section:
+
+-- ds.image:
+src: $assets.files.images.your-new-repo.png
+
+If you have a keen eye.
+
+
+
+
 
 -- end: my-ds.page
