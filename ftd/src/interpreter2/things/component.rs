@@ -313,6 +313,8 @@ impl Component {
             &condition,
             &loop_object_name_and_kind,
             events.as_slice(),
+            &ast_component.properties,
+            &ast_component.children,
             ast_component.line_number
         )?) {
             return Ok(ftd::interpreter2::StateWithThing::new_thing(component));
@@ -352,6 +354,8 @@ impl Component {
         condition: &Option<ftd::interpreter2::Expression>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         events: &[Event],
+        ast_properties: &Vec<ftd::ast::Property>,
+        ast_children: &Vec<ftd::ast::Component>,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Component>>> {
         let name = doc.resolve_name(name);
@@ -369,7 +373,10 @@ impl Component {
                     loop_object_name_and_kind,
                     line_number,
                 )? {
-                Some(value.2.get_reference_name(name.as_str(), doc))
+                Some((
+                    value.2.get_reference_name(name.as_str(), doc),
+                    Some(value.0),
+                ))
             } else {
                 None
             };
@@ -377,15 +384,56 @@ impl Component {
             if var_name.is_none() {
                 if let Ok(variable) = doc.search_variable(name.as_str(), line_number) {
                     try_ok_state!(variable);
-                    var_name = Some(name.to_string());
+                    var_name = Some((name.to_string(), None));
                 }
             }
 
-            if let Some(name) = var_name {
+            if let Some((name, arg)) = var_name {
+                let mut properties = vec![];
+                if arg.is_some() && arg.as_ref().unwrap().kind.is_module() {
+                    let arg = arg.unwrap();
+                    let component_name = {
+                        let (m_name, _) = match arg
+                            .value
+                            .as_ref()
+                            .unwrap()
+                            .clone()
+                            .resolve(doc, line_number)?
+                        {
+                            ftd::interpreter2::Value::Module { name, things } => (name, things),
+                            t => {
+                                return ftd::interpreter2::utils::e2(
+                                    format!("Expected module, found: {:?}", t),
+                                    doc.name,
+                                    line_number,
+                                )
+                            }
+                        };
+                        let component_name = definition_name_with_arguments.as_ref().unwrap().0;
+                        format!(
+                            "{}#{}",
+                            m_name,
+                            name.trim_start_matches(
+                                format!("{}#{}.{}.", doc.name, component_name, arg.name).as_str()
+                            )
+                        )
+                    };
+
+                    properties = try_ok_state!(Property::from_ast_properties_and_children(
+                        ast_properties.to_owned(),
+                        ast_children.to_owned(),
+                        component_name.as_str(),
+                        definition_name_with_arguments,
+                        &loop_object_name_and_kind,
+                        doc,
+                        line_number,
+                    )?);
+                }
+
                 return Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     Component {
                         name,
-                        properties: vec![],
+                        properties,
                         iteration: Box::new(iteration.to_owned()),
                         condition: Box::new(condition.to_owned()),
                         events: events.to_vec(),
