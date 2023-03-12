@@ -300,7 +300,7 @@ impl FunctionCall {
         value: &str,
         doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::FunctionCall>>

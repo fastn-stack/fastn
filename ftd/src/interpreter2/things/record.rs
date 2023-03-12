@@ -202,11 +202,10 @@ impl Field {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         use itertools::Itertools;
 
-        let fields = fields_with_resolved_kinds
+        let mut fields = fields_with_resolved_kinds
             .iter()
             .map(|v| v.0.clone())
             .collect_vec();
-        let definition_name_with_arguments = (definition_name, fields.as_slice());
         for (field, value) in fields_with_resolved_kinds.iter_mut() {
             let value = if let Some(value) = value {
                 Some(try_ok_state!(
@@ -215,7 +214,7 @@ impl Field {
                         doc,
                         field.mutable,
                         Some(&field.kind),
-                        Some(definition_name_with_arguments),
+                        &mut Some((definition_name, fields.as_mut_slice())),
                         &None
                     )?
                 ))
@@ -348,7 +347,7 @@ impl Field {
 
     pub(crate) fn for_component_or_web_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
@@ -376,7 +375,7 @@ impl Field {
     }
     pub(crate) fn for_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
@@ -390,7 +389,7 @@ impl Field {
 
     pub(crate) fn for_web_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {

@@ -1,0 +1,50 @@
+-- string dummy: dummy_string
+
+-- string list persons: $dummy
+
+-- integer list ages: 1, 2, 3, 4
+
+-- integer list age-copy: $ages
+
+/-- ftd.text: $obj
+$loop$: $persons as $obj
+
+/-- ftd.integer: $obj
+$loop$: $age-copy as $obj
+
+/-- show-lists:
+venues: Bangalore, Mumbai, Kolkata, Chennai
+days: 12, 34, 23, 10
+
+-- check-border-style:
+
+-- component show-lists:
+string list venues:
+integer list days:
+
+-- ftd.column:
+
+-- ftd.text: $obj
+$loop$: $show-lists.venues as $obj
+
+-- ftd.integer: $obj
+$loop$: $show-lists.days as $obj
+
+-- end: ftd.column
+
+-- end: show-lists
+
+-- component check-border-style:
+
+-- ftd.column:
+border-style: dotted, inset
+border-width.px: 2
+padding.px: 10
+margin.px: 10
+
+
+-- ftd.text: Hello World
+
+-- end: ftd.column
+
+-- end: check-border-style
