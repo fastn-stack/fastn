@@ -598,3 +598,38 @@ pub(crate) fn find_inherited_variables(
 
     None
 }
+
+pub(crate) fn insert_module_thing(
+    kind: &ftd::interpreter2::KindData,
+    reference: &str,
+    reference_full_name: &str,
+    definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
+    line_number: usize,
+    doc_name: &str,
+) -> ftd::interpreter2::Result<()> {
+    let arg = get_mut_argument_for_reference(
+        reference,
+        doc_name,
+        definition_name_with_arguments,
+        line_number,
+    )?
+    .ok_or(ftd::interpreter2::Error::ValueNotFound {
+        doc_id: doc_name.to_string(),
+        line_number,
+        message: format!("{} not found in component arguments.", reference,),
+    })?;
+    if let ftd::interpreter2::Value::Module { things, .. } = arg
+        .value
+        .as_mut()
+        .ok_or(ftd::interpreter2::Error::ValueNotFound {
+            doc_id: doc_name.to_string(),
+            line_number,
+            message: format!("{} not found in component arguments.", reference),
+        })?
+        .value_mut(doc_name, line_number)?
+    {
+        things.insert(reference_full_name.to_string(), kind.clone());
+    }
+
+    Ok(())
+}

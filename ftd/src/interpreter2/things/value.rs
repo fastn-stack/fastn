@@ -970,11 +970,11 @@ impl PropertyValue {
                         )
                     }
                 }
-                ftd::interpreter2::Kind::Module { things } => {
+                ftd::interpreter2::Kind::Module => {
                     ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
                         value: Value::Module {
                             name: value.string(doc.name)?,
-                            things: things.to_owned(),
+                            things: Default::default(),
                         },
                         is_mutable,
                         line_number: value.line_number(),
@@ -1112,6 +1112,7 @@ impl PropertyValue {
                 )?);
 
                 match expected_kind {
+                    _ if found_kind.is_module() => {}
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
                             && (ekind.kind.ref_inner().is_record()
@@ -1220,43 +1221,22 @@ impl PropertyValue {
                 }
 
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+                let kind = get_kind(expected_kind, &found_kind);
+                dbg!(&expected_kind, &kind);
 
-                if found_kind.is_module() {
-                    let arg = ftd::interpreter2::utils::get_mut_argument_for_reference(
-                        reference.as_str(),
-                        doc.name,
-                        definition_name_with_arguments,
-                        value.line_number(),
-                    )?
-                    .ok_or(ftd::interpreter2::Error::ValueNotFound {
-                        doc_id: doc.name.to_string(),
-                        line_number: value.line_number(),
-                        message: format!(
-                            "{} not found in component arguments.",
-                            reference.as_str(),
-                        ),
-                    })?;
-                    if let ftd::interpreter2::Value::Module { things, .. } = arg
-                        .value
-                        .as_mut()
-                        .ok_or(ftd::interpreter2::Error::ValueNotFound {
-                            doc_id: doc.name.to_string(),
-                            line_number: value.line_number(),
-                            message: format!(
-                                "{} not found in component arguments.",
-                                reference.as_str(),
-                            ),
-                        })?
-                        .value_mut(doc.name, value.line_number())?
-                    {
-                        things.push(reference_full_name.to_string());
-                    }
-                }
+                ftd::interpreter2::utils::insert_module_thing(
+                    &kind,
+                    reference.as_str(),
+                    reference_full_name.as_str(),
+                    definition_name_with_arguments,
+                    value.line_number(),
+                    doc.name,
+                )?;
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Reference {
                         name: reference_full_name,
-                        kind: get_kind(expected_kind, &found_kind),
+                        kind,
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1360,7 +1340,7 @@ pub enum Value {
     },
     Module {
         name: String,
-        things: Vec<String>,
+        things: ftd::Map<ftd::interpreter2::KindData>,
     },
 }
 
@@ -1863,7 +1843,9 @@ fn get_kind(
             expected_kind.clone()
         } else {
             let mut expected_kind = expected_kind.clone();
-            expected_kind.kind = found_kind.kind.clone();
+            if !found_kind.is_module() {
+                expected_kind.kind = found_kind.kind.clone();
+            }
             expected_kind
         }
     } else {

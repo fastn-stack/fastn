@@ -28,9 +28,7 @@ pub enum Kind {
         kind: Box<Kind>,
     },
     Void,
-    Module {
-        things: Vec<String>,
-    },
+    Module,
 }
 
 impl Kind {
@@ -46,7 +44,7 @@ impl Kind {
             Kind::OrType { name, .. } => name.clone(),
             Kind::Optional { .. } => "optional".to_string(),
             Kind::Void { .. } => "void".to_string(),
-            Kind::Module { .. } => "module".to_string(),
+            Kind::Module => "module".to_string(),
             Kind::UI { name, .. } => name.clone().unwrap_or("record".to_string()),
             Kind::Record { name } => name.clone(),
         }
@@ -84,7 +82,7 @@ impl Kind {
     }
 
     pub fn module() -> Kind {
-        Kind::Module { things: vec![] }
+        Kind::Module
     }
 
     pub fn ui() -> Kind {
@@ -255,7 +253,7 @@ impl Kind {
     }
 
     pub fn is_module(&self) -> bool {
-        matches!(self, Kind::Module { .. })
+        matches!(self, Kind::Module)
     }
 
     pub fn is_integer(&self) -> bool {
