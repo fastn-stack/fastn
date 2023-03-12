@@ -662,7 +662,7 @@ pub(crate) fn validate_properties_and_set_default(
 ) -> ftd::interpreter2::Result<()> {
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
-    for property in properties.iter() {
+    for property in properties.iter_mut() {
         let found_kind = property.value.kind();
         if !found_kind.is_same_as(expected_kind) {
             return ftd::interpreter2::utils::e2(
@@ -687,6 +687,32 @@ pub(crate) fn validate_properties_and_set_default(
         }
         if property.condition.is_none() {
             found_default = Some(property.line_number);
+        }
+
+        if argument.kind.is_module() {
+            let arg_things = match argument
+                .value
+                .as_ref()
+                .unwrap()
+                .value(doc_id, line_number)?
+            {
+                ftd::interpreter2::Value::Module { things, .. } => things,
+                t => {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Expected module, found: {:?}", t),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            };
+
+            if let ftd::interpreter2::PropertyValue::Value {
+                value: ftd::interpreter2::Value::Module { things, .. },
+                ..
+            } = &mut property.value
+            {
+                things.extend(arg_things.clone());
+            }
         }
     }
     if found_default.is_none() {

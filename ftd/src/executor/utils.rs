@@ -331,7 +331,18 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                ftd::interpreter2::Value::UI { component, .. } => {
+                ftd::interpreter2::Value::UI {
+                    component, name, ..
+                } => {
+                    if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
+                        if name.starts_with(format!("{}.", k).as_str()) || k.eq(name) {
+                            Some(name.replace(k, v))
+                        } else {
+                            None
+                        }
+                    }) {
+                        *name = local_variable;
+                    }
                     update_local_variable_references_in_component(
                         component,
                         local_variable,

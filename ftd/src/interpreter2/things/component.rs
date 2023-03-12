@@ -904,6 +904,7 @@ fn search_things_for_module(
             .first()
             .unwrap()
             .resolve(doc, &Default::default())?
+            // TODO: Remove unwrap()
             .unwrap()
         {
             ftd::interpreter2::Value::Module { name, things } => (name, things),

@@ -201,6 +201,8 @@ impl<'a> ExecuteDoc<'a> {
             true,
         )?;
 
+        dbg!(&local_variable_map);
+
         ftd::executor::utils::update_local_variable_references_in_component(
             &mut component_definition.definition,
             &local_variable_map,
@@ -229,7 +231,7 @@ impl<'a> ExecuteDoc<'a> {
             local_container,
         );
 
-        Ok(component_definition.definition)
+        Ok(dbg!(component_definition.definition))
     }
 
     fn get_instruction_from_variable(
