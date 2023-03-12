@@ -126,7 +126,11 @@ end of previous section:
 -- ds.image:
 src: $assets.files.images.your-new-repo.png
 
-If you have a keen eye.
+Actually the repo changes a bit after you create, so if you have given it some
+time it should look more like this:
+
+-- ds.image:
+src: $assets.files.images.repo-is-ready.png
 
 
 
