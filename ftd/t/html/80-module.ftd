@@ -3,11 +3,13 @@ m: 25-expander
 
 -- component bar:
 module m: 25-expander
+caption title: default header again
 
 -- ftd.column:
 width: fill-container
 
 -- bar.m.box:
+title: $bar.title
 
 -- ftd.text: $bar.m.name
 
