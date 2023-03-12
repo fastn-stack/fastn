@@ -1,14 +1,14 @@
--- foo:
+-- bar:
 
--- component foo:
+-- component bar:
 module m: 25-expander
 
 -- ftd.column:
 
--- foo.m.box:
+-- bar.m.box:
 
--- ftd.text: $foo.m.names
+-- ftd.text: $bar.m.name
 
 -- end: ftd.column
 
--- end: foo
+-- end: bar

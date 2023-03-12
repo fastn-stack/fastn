@@ -274,7 +274,6 @@ impl InterpreterState {
                                     self.css.insert(css);
                                 }
 
-                                dbg!(&component);
                                 self.bag.insert(
                                     component.name.to_string(),
                                     ftd::interpreter2::Thing::Component(component),
@@ -1055,6 +1054,10 @@ impl<T> StateWithThing<T> {
 
     pub fn is_continue(&self) -> bool {
         matches!(self, ftd::interpreter2::StateWithThing::Continue)
+    }
+
+    pub fn is_thing(&self) -> bool {
+        matches!(self, ftd::interpreter2::StateWithThing::Thing(_))
     }
 
     pub fn new_continue() -> StateWithThing<T> {

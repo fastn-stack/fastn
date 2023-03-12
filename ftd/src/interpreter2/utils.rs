@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> String {
     let name = name
         .trim_start_matches(ftd::interpreter2::utils::CLONE)
@@ -193,6 +191,8 @@ pub fn is_argument_in_component_or_loop<'a>(
     component_definition_name_with_arguments: Option<(&'a str, &'a [String])>,
     loop_object_name_and_kind: &'a Option<String>,
 ) -> bool {
+    use itertools::Itertools;
+
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
@@ -631,5 +631,82 @@ pub(crate) fn insert_module_thing(
         things.insert(reference_full_name.to_string(), kind.clone());
     }
 
+    Ok(())
+}
+
+pub(crate) fn find_properties_by_source(
+    source: &[ftd::interpreter2::PropertySource],
+    properties: &[ftd::interpreter2::Property],
+    doc_name: &str,
+    argument: &ftd::interpreter2::Argument,
+    line_number: usize,
+) -> ftd::interpreter2::Result<Vec<ftd::interpreter2::Property>> {
+    use itertools::Itertools;
+
+    let mut properties = properties
+        .iter()
+        .filter(|v| source.iter().any(|s| v.source.is_equal(s)))
+        .map(ToOwned::to_owned)
+        .collect_vec();
+
+    validate_properties_and_set_default(&mut properties, argument, doc_name, line_number)?;
+
+    Ok(properties)
+}
+
+pub(crate) fn validate_properties_and_set_default(
+    properties: &mut Vec<ftd::interpreter2::Property>,
+    argument: &ftd::interpreter2::Argument,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<()> {
+    let mut found_default = None;
+    let expected_kind = &argument.kind.kind;
+    for property in properties.iter() {
+        let found_kind = property.value.kind();
+        if !found_kind.is_same_as(expected_kind) {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Expected kind is `{:?}`, found: `{:?}`",
+                    expected_kind, found_kind,
+                ),
+                doc_id,
+                property.line_number,
+            );
+        }
+
+        if found_default.is_some() && property.condition.is_none() {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Already found default property in line number {:?}",
+                    found_default
+                ),
+                doc_id,
+                property.line_number,
+            );
+        }
+        if property.condition.is_none() {
+            found_default = Some(property.line_number);
+        }
+    }
+    if found_default.is_none() {
+        if let Some(ref default_value) = argument.value {
+            properties.push(ftd::interpreter2::Property {
+                value: default_value.to_owned(),
+                source: ftd::interpreter2::PropertySource::Default,
+                condition: None,
+                line_number: argument.line_number,
+            });
+        } else if !expected_kind.is_optional() && !expected_kind.is_list() {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Need value of kind: `{:?}` for `{}`",
+                    expected_kind, argument.name
+                ),
+                doc_id,
+                line_number,
+            );
+        }
+    }
     Ok(())
 }

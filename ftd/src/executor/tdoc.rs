@@ -101,10 +101,10 @@ impl<'a> TDoc<'a> {
     ) -> ftd::executor::Result<Option<(String, String, Option<String>)>> {
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
-        let properties = ftd::executor::value::find_properties_by_source(
+        let properties = ftd::interpreter2::utils::find_properties_by_source(
             source.as_slice(),
             properties,
-            self,
+            self.name,
             argument,
             line_number,
         )?;
