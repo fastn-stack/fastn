@@ -1,6 +1,9 @@
 -- bar:
 m: 25-expander
 
+-- bar:
+m: get
+
 -- component bar:
 module m: 25-expander
 caption title: default header again
