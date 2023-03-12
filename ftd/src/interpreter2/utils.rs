@@ -218,10 +218,39 @@ pub fn is_argument_in_component_or_loop<'a>(
     false
 }
 
+pub fn get_mut_argument_for_reference<'a>(
+    name: &str,
+    doc_name: &str,
+    component_definition_name_with_arguments: &'a mut Option<(
+        &str,
+        &mut [ftd::interpreter2::Argument],
+    )>,
+    line_number: usize,
+) -> ftd::interpreter2::Result<Option<&'a mut ftd::interpreter2::Argument>> {
+    if let Some((component_name, arguments)) = component_definition_name_with_arguments {
+        if let Some(referenced_argument) = name
+            .strip_prefix(format!("{}.", component_name).as_str())
+            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_name, component_name).as_str()))
+        {
+            let (p1, _) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
+                Ok(Some(argument))
+            } else {
+                ftd::interpreter2::utils::e2(
+                    format!("{} is not the argument in {}", p1, component_name),
+                    doc_name,
+                    line_number,
+                )
+            };
+        }
+    }
+    Ok(None)
+}
+
 pub fn get_argument_for_reference_and_remaining(
     name: &str,
     doc: &ftd::interpreter2::TDoc,
-    component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+    component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter2::Argument])>,
     loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     line_number: usize,
 ) -> ftd::interpreter2::Result<

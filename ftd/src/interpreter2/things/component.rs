@@ -75,7 +75,7 @@ impl ComponentDefinition {
             None
         };
 
-        let arguments = try_ok_state!(Argument::from_ast_fields(
+        let mut arguments = try_ok_state!(Argument::from_ast_fields(
             component_definition.name.as_str(),
             component_definition.arguments,
             doc,
@@ -83,10 +83,10 @@ impl ComponentDefinition {
         )?);
 
         let definition_name_with_arguments =
-            (component_definition.name.as_str(), arguments.as_slice());
+            (component_definition.name.as_str(), arguments.as_mut_slice());
         let definition = try_ok_state!(Component::from_ast_component(
             component_definition.definition,
-            Some(definition_name_with_arguments),
+            &mut Some(definition_name_with_arguments),
             doc,
         )?);
         if let Some(iteration) = definition.iteration.as_ref() {
@@ -251,12 +251,12 @@ impl Component {
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
-        Component::from_ast_component(component_invocation, None, doc)
+        Component::from_ast_component(component_invocation, &mut None, doc)
     }
 
     pub(crate) fn from_ast_component(
         ast_component: ftd::ast::Component,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
         let name = doc.resolve_name(ast_component.name.as_str());
@@ -335,7 +335,7 @@ impl Component {
     #[allow(clippy::too_many_arguments)]
     fn variable_component_from_ast(
         name: &str,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
         iteration: &Option<Loop>,
         condition: &Option<ftd::interpreter2::Expression>,
@@ -347,7 +347,7 @@ impl Component {
 
         if definition_name_with_arguments.is_none()
             || doc
-                .resolve_name(definition_name_with_arguments.unwrap().0)
+                .resolve_name(definition_name_with_arguments.as_ref().unwrap().0)
                 .ne(&name)
         {
             let mut var_name = if let Some(value) =
@@ -468,7 +468,7 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
@@ -556,7 +556,7 @@ impl Property {
     fn from_ast_children(
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Property>>> {
         if ast_children.is_empty() {
@@ -682,7 +682,7 @@ impl Property {
     fn from_ast_properties(
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
@@ -711,7 +711,7 @@ impl Property {
         ast_property: ftd::ast::Property,
         component_name: &str,
         component_arguments: &[Argument],
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Property>> {
@@ -912,7 +912,7 @@ impl Loop {
 
     fn from_ast_loop(
         ast_loop: ftd::ast::Loop,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Loop>> {
         let mut on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
@@ -980,7 +980,7 @@ pub struct Event {
 impl Event {
     fn from_ast_event(
         ast_event: ftd::ast::Event,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Event>> {
@@ -1008,7 +1008,7 @@ impl Event {
 
     fn from_ast_events(
         ast_events: Vec<ftd::ast::Event>,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Event>>> {

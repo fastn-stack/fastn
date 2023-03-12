@@ -273,6 +273,8 @@ impl InterpreterState {
                                         .string(doc.name, component.line_number)?;
                                     self.css.insert(css);
                                 }
+
+                                dbg!(&component);
                                 self.bag.insert(
                                     component.name.to_string(),
                                     ftd::interpreter2::Thing::Component(component),

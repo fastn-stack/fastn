@@ -519,7 +519,10 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-        component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        component_definition_name_with_arguments: &Option<(
+            &str,
+            &mut [ftd::interpreter2::Argument],
+        )>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<(
@@ -598,16 +601,18 @@ impl<'a> TDoc<'a> {
             };
 
         if let Some(remaining) = remaining {
-            return Ok(ftd::interpreter2::StateWithThing::new_thing((
-                source,
-                try_ok_state!(get_kind_(
-                    initial_kind.kind,
-                    remaining.as_str(),
-                    self,
-                    line_number
-                )?),
-                mutable,
-            )));
+            if !initial_kind.is_module() {
+                return Ok(ftd::interpreter2::StateWithThing::new_thing((
+                    source,
+                    try_ok_state!(get_kind_(
+                        initial_kind.kind,
+                        remaining.as_str(),
+                        self,
+                        line_number
+                    )?),
+                    mutable,
+                )));
+            }
         }
 
         return Ok(ftd::interpreter2::StateWithThing::new_thing((
@@ -668,7 +673,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::KindData>>
     {
-        match self.get_kind_with_argument(name, line_number, None, &None)? {
+        match self.get_kind_with_argument(name, line_number, &None, &None)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
             }
