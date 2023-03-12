@@ -1140,11 +1140,23 @@ impl PropertyValue {
                 }
 
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+                let kind = get_kind(expected_kind, &found_kind);
+
+                if found_kind.is_module() {
+                    ftd::interpreter2::utils::insert_module_thing(
+                        &kind,
+                        reference.as_str(),
+                        reference_full_name.as_str(),
+                        definition_name_with_arguments,
+                        value.line_number(),
+                        doc.name,
+                    )?;
+                }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Clone {
                         name: reference_full_name,
-                        kind: get_kind(expected_kind, &found_kind),
+                        kind,
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1223,14 +1235,16 @@ impl PropertyValue {
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
                 let kind = get_kind(expected_kind, &found_kind);
 
-                ftd::interpreter2::utils::insert_module_thing(
-                    &kind,
-                    reference.as_str(),
-                    reference_full_name.as_str(),
-                    definition_name_with_arguments,
-                    value.line_number(),
-                    doc.name,
-                )?;
+                if found_kind.is_module() {
+                    ftd::interpreter2::utils::insert_module_thing(
+                        &kind,
+                        reference.as_str(),
+                        reference_full_name.as_str(),
+                        definition_name_with_arguments,
+                        value.line_number(),
+                        doc.name,
+                    )?;
+                }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Reference {
