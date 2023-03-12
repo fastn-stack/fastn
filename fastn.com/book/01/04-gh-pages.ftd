@@ -132,6 +132,31 @@ time it should look more like this:
 -- ds.image:
 src: $assets.files.images.repo-is-ready.png
 
+You will notice a few key differences between the two states. You will see that
+instead of "initial commit" it says "✅ Ready to clone and code", next to each
+file listed. This message is called a "commit" message, and Github shows the
+latest commit message next to each file or folder where it was modified, along
+with when was it last modified. You will notice that two files, `.gitignore`
+and `doc-site-example.png` are still saying "initial commit", where as rest of
+them are showing the "✅ Ready to clone and code" message. All the files in the
+repo were created by by the "initial commit", and in the first screenshot you
+will notice that is shows only one commit, but in the next screenshot you will
+notice that there are two commits.
+
+This is a lot happening, so let's process it. When you created your repo from
+our template repo, `fastn-template`, a bunch of files were copied over, and
+added to your repository. In `git`, any change happens through what is called a
+commit, each commit can modify one or more files, add files, delete files etc,
+and each commit has a message. The way `git` works is you make a bunch of
+changes, in one or more files in your repo, and when you are satisfied, you
+"commit" these changes, and while committing `git` asks for a "commit message"
+so you can describe what changes you have done. Commit messages are quite useful
+as you may be working with a team and others in a team may want to know what
+were you thinking when you made those changes. Or may be you are working alone,
+even then good commit messages are quite useful as you may come back to your
+repository after weeks and months and you may have forgotten what was going on.
+
+
 
 
 
