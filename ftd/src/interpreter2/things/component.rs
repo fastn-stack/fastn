@@ -261,6 +261,17 @@ impl Component {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
         let name = doc.resolve_name(ast_component.name.as_str());
 
+        // If the component is from `module` type argument
+        ftd::interpreter2::utils::insert_module_thing(
+            &ftd::interpreter2::Kind::ui().into_kind_data(),
+            ast_component.name.as_str(),
+            name.as_str(),
+            definition_name_with_arguments,
+            ast_component.line_number(),
+            doc.name,
+        )
+        .ok();
+
         let mut loop_object_name_and_kind = None;
         let iteration = if let Some(v) = ast_component.iteration {
             let iteration =
