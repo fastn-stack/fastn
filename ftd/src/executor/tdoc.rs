@@ -109,6 +109,19 @@ impl<'a> TDoc<'a> {
             line_number,
         )?;
 
+        let name_in_component_definition = format!("{}.{}", component_name, argument.name);
+        if argument.kind.is_module() {
+            if let ftd::interpreter2::Value::Module { name, .. } = properties
+                .first()
+                .unwrap()
+                .resolve(&self.itdoc(), &Default::default())?
+                // TODO: Remove unwrap()
+                .unwrap()
+            {
+                return Ok(Some((name_in_component_definition, name.to_string(), None)));
+            }
+        }
+
         let (default, conditions) = properties.into_iter().fold(
             (None, vec![]),
             |(mut default, mut conditions), property| {
@@ -156,7 +169,6 @@ impl<'a> TDoc<'a> {
             self_reference
         };
 
-        let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         match default.reference_name() {
             Some(name) if conditions.is_empty() => {
                 if !is_default_source

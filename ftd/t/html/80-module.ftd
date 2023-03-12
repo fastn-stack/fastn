@@ -1,7 +1,9 @@
 -- bar:
+m: 25-expander
 
 -- component bar:
 module m: 25-expander
+caption bb: GGGG
 
 -- ftd.column:
 
