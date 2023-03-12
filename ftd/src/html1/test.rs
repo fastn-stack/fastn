@@ -78,7 +78,6 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    dbg!(&doc.tree, &doc.data);
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let node = ftd::node::NodeData::from_rt(executor);

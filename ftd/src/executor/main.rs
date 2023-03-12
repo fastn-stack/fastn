@@ -201,8 +201,6 @@ impl<'a> ExecuteDoc<'a> {
             true,
         )?;
 
-        dbg!(&local_variable_map);
-
         ftd::executor::utils::update_local_variable_references_in_component(
             &mut component_definition.definition,
             &local_variable_map,
@@ -231,13 +229,22 @@ impl<'a> ExecuteDoc<'a> {
             local_container,
         );
 
-        Ok(dbg!(component_definition.definition))
+        Ok(component_definition.definition)
     }
 
     fn get_instruction_from_variable(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<ftd::interpreter2::Component> {
+        if doc
+            .itdoc()
+            .get_component(instruction.name.as_str(), instruction.line_number)
+            .is_ok()
+        {
+            let mut component = instruction.to_owned();
+            component.source = ftd::interpreter2::ComponentSource::Declaration;
+            return Ok(component);
+        }
         let mut component = doc
             .itdoc()
             .get_variable(instruction.name.as_str(), instruction.line_number)?

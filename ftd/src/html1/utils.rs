@@ -30,6 +30,10 @@ pub(crate) fn name_with_id(s: &str, id: &str) -> String {
 }
 
 pub(crate) fn function_name_to_js_function(s: &str) -> String {
+    let mut s = s.to_string();
+    if s.as_bytes()[0].is_ascii_digit() {
+        s = format!("_{}", s);
+    }
     s.replace('#', "__")
         .replace('-', "_")
         .replace(':', "___")
