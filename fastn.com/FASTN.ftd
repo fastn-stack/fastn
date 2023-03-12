@@ -138,30 +138,34 @@ skip: true
   document: book/01/01-getting-started.ftd
   - **1.1** Hello, Github!: /book/github/
     document: book/01/02-github.ftd
-  - **1.2** Hello, World! 🚧: /book/hello-world/
-    document: book/01/03-hello-world.ftd
+  - **1.2** Let's Create A Repo: /book/repo/
+    document: book/01/03-repo.ftd
+  - **1.3** Publish Your Site 🚧: /book/gh-pages/
+    document: book/01/04-gh-pages.ftd
 - Appendix: /book/appendix/
   - **a** HTTP 🚧: /book/http/
     document: book/appendix/a-http.ftd
   - **b** URL 🚧: /book/url/
     document: book/appendix/b-url.ftd
-  - **c** Common Commands 🚧: /cmds/
-    document: book/appendix/c-common-commands.ftd
-  - **d** Terminal: /book/terminal/
-    document: book/01/terminal.ftd
+  - **c** Terminal: /book/terminal/
+    document: book/appendix/c-terminal.ftd
     - Open Terminal: /open-terminal/-/book/
       document: author/how-to/open-terminal.ftd
       skip: true
+  - **d** Common Commands 🚧: /cmds/
+    document: book/appendix/d-common-commands.ftd
   - **e** Install `fastn`: /book/install/
-    document: book/01/install.ftd
+    document: book/appendix/e-install.ftd
     - Intall On Windows: /windows/-/book/
       document: author/setup/windows.ftd
       skip: true
   - **f** A Programming Editor: /book/editor/
-    document: book/01/editor.ftd
+    document: book/appendix/f-editor.ftd
     - SublimeText Syntax Highlighting 🚧: /sublime/-/book/
       document: author/how-to/sublime.ftd
       skip: true
+  - **g** Hosting 🚧: /book/hosting/
+    document: book/appendix/g-hosting.ftd
 
 ## Crash Course: /expander/
 
