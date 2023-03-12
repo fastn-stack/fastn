@@ -6,7 +6,7 @@ pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
     }
 }
 
-pub(crate) fn get_import_alias(input: &str) -> (String, String) {
+pub fn get_import_alias(input: &str) -> (String, String) {
     let (module, alias) = ftd::ast::utils::split_at(input, AS);
     if let Some(alias) = alias {
         return (module, alias);

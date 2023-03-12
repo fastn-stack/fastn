@@ -715,6 +715,15 @@ impl Property {
                 doc,
             )?));
         }
+
+        try_ok_state!(search_things_for_module(
+            component_name,
+            properties.as_slice(),
+            doc,
+            component_arguments.as_slice(),
+            line_number,
+        )?);
+
         Ok(ftd::interpreter2::StateWithThing::new_thing(properties))
     }
 
@@ -858,6 +867,107 @@ impl Property {
             }
         }
     }
+}
+
+fn search_things_for_module(
+    component_name: &str,
+    properties: &[ftd::interpreter2::Property],
+    doc: &mut ftd::interpreter2::TDoc,
+    arguments: &[ftd::interpreter2::Argument],
+    line_number: usize,
+) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
+    for argument in arguments.iter() {
+        if !argument.kind.is_module() {
+            continue;
+        }
+        let sources = argument.to_sources();
+        let property = ftd::interpreter2::utils::find_properties_by_source(
+            sources.as_slice(),
+            properties,
+            doc.name,
+            argument,
+            argument.line_number,
+        )?;
+        if property.len() != 1 {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Expected one value for `module` type argument `{}`, found `{}` values",
+                    argument.name,
+                    property.len()
+                ),
+                doc.name,
+                line_number,
+            );
+        }
+
+        let (m_name, things) = match property
+            .first()
+            .unwrap()
+            .resolve(doc, &Default::default())?
+            .unwrap()
+        {
+            ftd::interpreter2::Value::Module { name, things } => (name, things),
+            t => {
+                return ftd::interpreter2::utils::e2(
+                    format!("Expected module, found: {:?}", t),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+
+        let aliases;
+        let m_alias;
+        {
+            let current_parsed_document = if let Some(state) = {
+                match &mut doc.bag {
+                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                }
+            } {
+                state.parsed_libs.get_mut(state.id.as_str()).unwrap()
+            } else {
+                return doc.err("not found", m_name, "search_thing", line_number);
+            };
+            let (module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
+            current_parsed_document
+                .doc_aliases
+                .insert(alias.to_string(), module.to_string());
+            m_alias = alias;
+            aliases = current_parsed_document.doc_aliases.clone();
+        }
+
+        let mut unresolved_thing = None;
+
+        for (thing, _expected_kind) in things {
+            let thing_ = format!(
+                "{}.{}",
+                m_alias,
+                thing.trim_start_matches(
+                    doc.resolve_name(format!("{}.{}.", component_name, argument.name).as_str())
+                        .as_str(),
+                )
+            );
+            let thing_real_name =
+                ftd::interpreter2::utils::resolve_name(thing_.as_str(), doc.name, &aliases);
+            if unresolved_thing.is_some() {
+                doc.scan_thing(&thing_real_name, line_number)?;
+            } else {
+                let result = doc.search_thing(&thing_real_name, line_number)?;
+                if !result.is_thing() {
+                    unresolved_thing = Some(result);
+                } else {
+                    //Todo: check with kind, if kind matches with expected_kind
+                    try_ok_state!(result);
+                }
+            }
+        }
+
+        if let Some(unresolved_thing) = unresolved_thing {
+            try_ok_state!(unresolved_thing);
+        }
+    }
+    Ok(ftd::interpreter2::StateWithThing::new_thing(()))
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]

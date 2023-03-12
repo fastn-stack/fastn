@@ -1222,7 +1222,6 @@ impl PropertyValue {
 
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
                 let kind = get_kind(expected_kind, &found_kind);
-                dbg!(&expected_kind, &kind);
 
                 ftd::interpreter2::utils::insert_module_thing(
                     &kind,
