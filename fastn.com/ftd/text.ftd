@@ -14,9 +14,9 @@ lang: ftd
 \-- ftd.text: hello world
 
 -- ds.output:
-lang: ftd
 
 -- ftd.text: hello world
+color: $inherited.colors.text
 
 -- end: ds.output
 
