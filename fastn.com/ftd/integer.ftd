@@ -21,7 +21,7 @@ color: $inherited.colors.text
 -- ds.h1: Attributes
 
 `ftd.integer` accepts the below attributes along with the
-[common attributes](common/).
+[common attributes](ftd/common/).
 
 
 -- ds.h2: `value: integer`
@@ -63,7 +63,7 @@ color: $inherited.colors.text-strong
 
 -- ds.h2: `text-align: optional ftd.text-align`
 
-This property is used to align the integer within `ftd.integer`. It accepts the
+This attribute is used to align the integer within `ftd.integer`. It accepts the
 [`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
 optional.
 

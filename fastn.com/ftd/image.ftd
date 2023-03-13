@@ -28,8 +28,8 @@ attributes](ftd/common/).
 
 -- ds.h2: `src: ftd.image-src`
 
-The `src` property specifies the path to the image to display. This is the only
-required property. It accepts the
+The `src` attribute specifies the path to the image to display. This is the only
+required attribute. It accepts the
 [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type value. This type
 stores image URLs for both light and dark mode.
 
@@ -146,7 +146,7 @@ height.fixed.px: 115
 
 -- ds.markdown:
 
-In this example, the `src` property of `ftd.image` component will be set to the
+In this example, the `src` attribute of `ftd.image` component will be set to the
 URL of `show-cs-1.jpg` file present in the `images/cs` folder of the `fastn.io`
 package. i.e. URL of `<path-to-package>/images/cs/show-cs-1.jpg`.
 

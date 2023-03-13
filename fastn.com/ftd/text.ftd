@@ -27,8 +27,8 @@ attributes](ftd/common/).
 
 -- ds.h2: `text: string`
 
-This property is used to pass text to `ftd.text`. You can pass any string
-value. It is a required property.
+This attribute is used to pass text to `ftd.text`. You can pass any string
+value. It is a required attribute.
 
 You have three ways to pass text value to the `ftd.text` component.
 
@@ -88,7 +88,7 @@ This can span multiple lines.
 
 -- ds.h2: `text-align: optional ftd.text-align`
 
-This property is used to align the text within `ftd.text`. It accepts the
+This attribute is used to align the text within `ftd.text`. It accepts the
 [`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
 optional.
 
@@ -148,7 +148,7 @@ text-align: center
 
 -- ds.h2: `line-clamp: optional integer`
 
-The `line-clamp` property truncates text at a specific number of lines. It
+The `line-clamp` attribute truncates text at a specific number of lines. It
 accepts an integer value and is optional.
 
 -- ds.code: `line-clamp`

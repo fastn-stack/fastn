@@ -62,7 +62,7 @@ color: $inherited.colors.text-strong
 
 -- ds.h2: `text-align: optional ftd.text-align`
 
-This property is used to align the decimal within `ftd.decimal`. It accepts the
+This attribute is used to align the decimal within `ftd.decimal`. It accepts the
 [`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
 optional.
 

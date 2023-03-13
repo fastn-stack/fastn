@@ -27,7 +27,7 @@ print("hello world")
 -- ds.h1: Attributes
 
 The `ftd.code` component accepts the below attributes along with the
-[common attributes](common/).
+[common attributes](ftd/common/).
 
 
 -- ds.h2: `text: string`
