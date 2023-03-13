@@ -566,6 +566,12 @@ box-sizing: inherit;
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
+// Setting up default value on <input>
+const inputElements = document.querySelectorAll('input[data-dv]');
+for (let input_ele of inputElements) {
+// @ts-ignore
+input_ele.defaultValue = input_ele.dataset.dv;
+}
 exports.init = function (id, data) {
 let element = document.getElementById(data);
 if (!!element) {

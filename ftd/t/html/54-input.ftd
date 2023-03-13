@@ -7,6 +7,14 @@
 
 -- ftd.text-input:
 placeholder: Type any text ...
+default-value: Hello default-value
+
+-- ftd.text-input:
+placeholder: Type any text ...
+value: Hello value
+
+-- ftd.text-input:
+placeholder: Type any text ...
 type: text
 width.fixed.px: 400
 border-width.px: 2
@@ -39,4 +47,3 @@ type: url
 width.fixed.px: 400
 border-width.px: 2
 $on-input$: $ftd.set-string($a = $url, v = $VALUE)
-
