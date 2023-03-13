@@ -8,14 +8,14 @@
 
 -- end: persons
 
--- string list new-persons: [Rithik, $s, Amitu]
+-- string list new-persons: Rithik, $s, Amitu
 
 -- integer list ages:
 
 1, 2, 3, 4
 
 /-- ftd.text: $obj
-$loop$: $persons as $obj
+$loop$: $new-persons as $obj
 
 /-- ftd.integer: $obj
 $loop$: $ages as $obj
@@ -24,7 +24,7 @@ $loop$: $ages as $obj
 venues: Bangalore, Mumbai, Kolkata, Chennai
 days: 12, 34, 23, 10
 
-/-- check-border-style:
+-- check-border-style:
 
 -- component show-lists:
 string list venues:

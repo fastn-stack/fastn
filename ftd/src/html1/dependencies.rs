@@ -674,7 +674,7 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                         self.doc,
                     );
-                     let value = format!("{} = {};", key, value_string);
+                    let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
                 }
             }

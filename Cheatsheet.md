@@ -301,6 +301,27 @@ FTD comes with following kernel components:
 This is a body text.
 ```
 
+### `style`: `optional ftd.text-style list`
+
+```ftd
+-- or-type text-style:
+ 
+-- constant string underline: underline
+-- constant string italic: italic
+-- constant string strike: strike
+-- constant string heavy: heavy
+-- constant string extra-bold: extra-bold
+-- constant string semi-bold: semi-bold
+-- constant string bold: bold
+-- constant string medium: medium
+-- constant string regular: regular
+-- constant string light: light
+-- constant string extra-light: extra-light
+-- constant string hairline: hairline
+
+-- end: text-style
+```
+
 ### `text-align`: `ftd.text-align`
 ### `line-clamp`: `optional integer`
 
@@ -712,7 +733,7 @@ string dark: $color.light
 - `classes`: string list (classes are created in css)
 
 
-- `border-style`: `optional ftd.border-style`
+- `border-style`: `optional ftd.border-style list`
 
 **`ftd.border-style`**
 
