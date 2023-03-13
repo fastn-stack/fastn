@@ -345,11 +345,9 @@ impl<'a> HtmlGenerator<'a> {
             .into_iter()
             .filter_map(|(k, v)| {
                 v.value
-                    .map(|v| {
-                        match v.as_str() {
-                            ftd::interpreter2::FTD_NO_VALUE => (k, "".to_string()),
-                            _ => (k, v)
-                        }
+                    .map(|v| match v.as_str() {
+                        ftd::interpreter2::FTD_NO_VALUE => (k, "".to_string()),
+                        _ => (k, v),
                     })
                     .filter(|s| !s.1.eq(ftd::interpreter2::FTD_IGNORE_KEY))
             })

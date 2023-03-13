@@ -2363,7 +2363,7 @@ impl TextStyle {
         let mut booleans: ftd::Map<i32> = Default::default();
         let mut weights: ftd::Map<i32> = Default::default();
 
-        if or_type_values.is_empty(){
+        if or_type_values.is_empty() {
             return Ok(None);
         }
 
