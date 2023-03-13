@@ -425,7 +425,7 @@ impl Component {
                             ast_children.to_owned(),
                             component_name.as_str(),
                             definition_name_with_arguments,
-                            &loop_object_name_and_kind,
+                            loop_object_name_and_kind,
                             doc,
                             line_number,
                         )?);
