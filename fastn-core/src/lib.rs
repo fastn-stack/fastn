@@ -23,7 +23,6 @@ mod error;
 mod i18n;
 pub mod library;
 mod proxy;
-mod render;
 pub mod sitemap;
 mod snapshot;
 mod sync_utils;
@@ -54,7 +53,6 @@ pub use library2022::Library2022;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;
 pub(crate) use package::Package;
-pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
@@ -69,10 +67,6 @@ pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
 pub fn ftd_html() -> &'static str {
-    include_str!("../ftd.html")
-}
-
-pub fn ftd_html_2022() -> &'static str {
     include_str!("../ftd_2022.html")
 }
 
@@ -88,13 +82,6 @@ fn design_ftd() -> &'static str {
     include_str!("../ftd/design.ftd")
 }
 
-fn fastn_js() -> &'static str {
-    if fastn_core::utils::is_test() {
-        return "FASTN_JS";
-    }
-    include_str!("../fastn.js")
-}
-
 fn fastn_2022_js() -> &'static str {
     if fastn_core::utils::is_test() {
         return "FASTN_JS";
@@ -102,39 +89,8 @@ fn fastn_2022_js() -> &'static str {
     include_str!("../fastn2022.js")
 }
 
-fn ftd_js() -> String {
-    if fastn_core::utils::is_test() {
-        return "FTD_JS".to_string();
-    }
-    ftd::js()
-}
-
-fn ftd_css() -> &'static str {
-    if fastn_core::utils::is_test() {
-        return "FTD_CSS";
-    }
-    ftd::css()
-}
-
 fn fastn_lib_ftd() -> &'static str {
     include_str!("../ftd/fastn-lib.ftd")
-}
-
-#[allow(dead_code)]
-fn with_message() -> &'static str {
-    include_str!("../with-message.html")
-}
-
-#[allow(dead_code)]
-fn available_languages(config: &fastn_core::Config) -> fastn_core::Result<String> {
-    let path = config
-        .root
-        .join("fastn/translation/available-languages.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        include_str!("../ftd/translation/available-languages.ftd").to_string()
-    })
 }
 
 fn package_info_image(
@@ -445,7 +401,6 @@ fn get_messages(
 
 pub fn get_env_ftd_file() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, val)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
@@ -458,7 +413,6 @@ pub fn get_env_ftd_file() -> String {
 
 pub fn debug_env_vars() -> String {
     std::env::vars()
-        .into_iter()
         .filter(|(key, _)| {
             vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()

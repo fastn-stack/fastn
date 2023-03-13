@@ -100,10 +100,10 @@ impl DummyElement {
             for argument in component_definition.arguments.iter() {
                 let sources = argument.to_sources();
                 properties.extend(
-                    ftd::executor::value::find_properties_by_source(
+                    ftd::interpreter2::utils::find_properties_by_source(
                         sources.as_slice(),
                         instruction.properties.as_slice(),
-                        doc,
+                        doc.name,
                         argument,
                         argument.line_number,
                     )?

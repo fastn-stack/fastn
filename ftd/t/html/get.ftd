@@ -13,3 +13,21 @@ ftd.color my-color:
 color: $foo.my-color
 
 -- end: foo
+
+
+-- component box:
+caption title: default header
+body body: default body
+
+-- ftd.column:
+background.solid: red
+
+-- ftd.text: $box.title
+-- ftd.text: $box.body
+
+-- end: ftd.column
+
+-- end: box
+
+
+-- string name: ME

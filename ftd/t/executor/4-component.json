@@ -546,7 +546,7 @@
                         "properties": []
                       },
                       "border_style": {
-                        "value": null,
+                        "value": [],
                         "line_number": null,
                         "properties": []
                       }
@@ -860,7 +860,7 @@
                 "properties": []
               },
               "border_style": {
-                "value": null,
+                "value": [],
                 "line_number": null,
                 "properties": []
               }
@@ -1227,7 +1227,7 @@
                         "properties": []
                       },
                       "border_style": {
-                        "value": null,
+                        "value": [],
                         "line_number": null,
                         "properties": []
                       }
@@ -1541,7 +1541,7 @@
                 "properties": []
               },
               "border_style": {
-                "value": null,
+                "value": [],
                 "line_number": null,
                 "properties": []
               }
@@ -1850,7 +1850,7 @@
         "properties": []
       },
       "border_style": {
-        "value": null,
+        "value": [],
         "line_number": null,
         "properties": []
       }

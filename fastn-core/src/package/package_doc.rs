@@ -342,7 +342,7 @@ pub(crate) async fn read_ftd(
     tracing::info!(document = main.id);
     match config.ftd_edition {
         fastn_core::FTDEdition::FTD2021 => {
-            read_ftd_2021(config, main, base_url, download_assets).await
+            unimplemented!()
         }
         fastn_core::FTDEdition::FTD2022 => {
             read_ftd_2022(config, main, base_url, download_assets, test).await
@@ -412,83 +412,13 @@ pub(crate) async fn read_ftd_2022(
 
     let font_style = config.get_font_style();
     let file_content = fastn_core::utils::replace_markers_2022(
-        fastn_core::ftd_html_2022(),
+        fastn_core::ftd_html(),
         html_ui,
         ftd::build_js(),
         config,
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
-    );
-
-    Ok(file_content.into())
-}
-
-#[allow(clippy::await_holding_refcell_ref)]
-pub(crate) async fn read_ftd_2021(
-    config: &mut fastn_core::Config,
-    main: &fastn_core::Document,
-    base_url: &str,
-    download_assets: bool,
-) -> fastn_core::Result<Vec<u8>> {
-    let lib_config = config.clone();
-    let mut all_packages = config.all_packages.borrow_mut();
-    let current_package = all_packages
-        .get(main.package_name.as_str())
-        .unwrap_or(&config.package);
-
-    let mut lib = fastn_core::Library2 {
-        config: lib_config,
-        markdown: None,
-        document_id: main.id.clone(),
-        translated_data: Default::default(),
-        base_url: base_url.to_string(),
-        packages_under_process: vec![current_package.name.to_string()],
-    };
-
-    // Get Prefix Body => [AutoImports + Actual Doc content]
-    let mut doc_content =
-        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
-    // Fix aliased imports to full path (if any)
-    doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
-
-    let main_ftd_doc = match fastn_core::time("parser2").it(fastn_core::doc::parse2(
-        main.id_with_package().as_str(),
-        doc_content.as_str(),
-        &mut lib,
-        base_url,
-        download_assets,
-    )
-    .await)
-    {
-        Ok(v) => v,
-        Err(e) => {
-            return Err(fastn_core::Error::PackageError {
-                message: format!("failed to parse {:?}", &e),
-            });
-        }
-    };
-
-    all_packages.extend(lib.config.all_packages.into_inner());
-    drop(all_packages);
-
-    config
-        .downloaded_assets
-        .extend(lib.config.downloaded_assets);
-
-    let doc_title = match &main_ftd_doc.title() {
-        Some(x) => x.original.clone(),
-        _ => main.id.as_str().to_string(),
-    };
-    let ftd_doc = fastn_core::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
-
-    let file_content = fastn_core::utils::replace_markers_2021(
-        fastn_core::ftd_html(),
-        config,
-        main.id_to_path().as_str(),
-        doc_title.as_str(),
-        base_url,
-        &ftd_doc,
     );
 
     Ok(file_content.into())

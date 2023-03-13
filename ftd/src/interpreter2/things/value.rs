@@ -153,6 +153,21 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn value_mut(
+        &mut self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<&mut ftd::interpreter2::Value> {
+        match self {
+            ftd::interpreter2::PropertyValue::Value { value, .. } => Ok(value),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected value found `{:?}`", t).as_str(),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub(crate) fn reference_name(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } => Some(name),
@@ -210,7 +225,7 @@ impl PropertyValue {
         expected_kind: Option<&ftd::interpreter2::KindData>,
         mutable: bool,
         line_number: usize,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -325,7 +340,14 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
-        PropertyValue::from_ast_value_with_argument(value, doc, mutable, expected_kind, None, &None)
+        PropertyValue::from_ast_value_with_argument(
+            value,
+            doc,
+            mutable,
+            expected_kind,
+            &mut None,
+            &None,
+        )
     }
 
     pub(crate) fn from_ast_value_with_argument(
@@ -333,7 +355,7 @@ impl PropertyValue {
         doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -363,7 +385,7 @@ impl PropertyValue {
         key: &str,
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -406,7 +428,7 @@ impl PropertyValue {
         doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         _expected_kind: &ftd::interpreter2::KindData,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -683,7 +705,7 @@ impl PropertyValue {
         doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -707,7 +729,7 @@ impl PropertyValue {
             doc: &mut ftd::interpreter2::TDoc,
             is_mutable: bool,
             expected_kind: &ftd::interpreter2::KindData,
-            definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+            definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
             loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         ) -> ftd::interpreter2::Result<
             ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -948,6 +970,16 @@ impl PropertyValue {
                         )
                     }
                 }
+                ftd::interpreter2::Kind::Module => {
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: Value::Module {
+                            name: value.string(doc.name)?,
+                            things: Default::default(),
+                        },
+                        is_mutable,
+                        line_number: value.line_number(),
+                    })
+                }
                 t => {
                     unimplemented!("t::{:?}  {:?}", t, value)
                 }
@@ -960,7 +992,7 @@ impl PropertyValue {
         doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<Option<ftd::interpreter2::PropertyValue>>,
@@ -1080,6 +1112,7 @@ impl PropertyValue {
                 )?);
 
                 match expected_kind {
+                    _ if found_kind.is_module() => {}
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
                             && (ekind.kind.ref_inner().is_record()
@@ -1107,11 +1140,23 @@ impl PropertyValue {
                 }
 
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+                let kind = get_kind(expected_kind, &found_kind);
+
+                if found_kind.is_module() {
+                    ftd::interpreter2::utils::insert_module_thing(
+                        &kind,
+                        reference.as_str(),
+                        reference_full_name.as_str(),
+                        definition_name_with_arguments,
+                        value.line_number(),
+                        doc.name,
+                    )?;
+                }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Clone {
                         name: reference_full_name,
-                        kind: get_kind(expected_kind, &found_kind),
+                        kind,
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1131,6 +1176,7 @@ impl PropertyValue {
                 )?);
 
                 match expected_kind {
+                    _ if found_kind.is_module() => {}
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
                             && (ekind.kind.ref_inner().is_record()
@@ -1157,7 +1203,7 @@ impl PropertyValue {
                     _ => {}
                 }
 
-                if mutable {
+                if mutable && !found_kind.is_module() {
                     let is_variable_mutable = if source.is_global() {
                         try_ok_state!(doc.search_variable(reference.as_str(), value.line_number())?)
                             .mutable
@@ -1187,11 +1233,23 @@ impl PropertyValue {
                 }
 
                 let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+                let kind = get_kind(expected_kind, &found_kind);
+
+                if found_kind.is_module() {
+                    ftd::interpreter2::utils::insert_module_thing(
+                        &kind,
+                        reference.as_str(),
+                        reference_full_name.as_str(),
+                        definition_name_with_arguments,
+                        value.line_number(),
+                        doc.name,
+                    )?;
+                }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Reference {
                         name: reference_full_name,
-                        kind: get_kind(expected_kind, &found_kind),
+                        kind,
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1292,6 +1350,10 @@ pub enum Value {
         name: String,
         kind: ftd::interpreter2::KindData,
         component: ftd::interpreter2::Component,
+    },
+    Module {
+        name: String,
+        things: ftd::Map<ftd::interpreter2::KindData>,
     },
 }
 
@@ -1464,6 +1526,7 @@ impl Value {
                 full_variant,
                 ..
             } => ftd::interpreter2::Kind::or_type_with_variant(name, variant, full_variant),
+            Value::Module { .. } => ftd::interpreter2::Kind::module(),
         }
     }
 
@@ -1793,7 +1856,9 @@ fn get_kind(
             expected_kind.clone()
         } else {
             let mut expected_kind = expected_kind.clone();
-            expected_kind.kind = found_kind.kind.clone();
+            if !found_kind.is_module() {
+                expected_kind.kind = found_kind.kind.clone();
+            }
             expected_kind
         }
     } else {

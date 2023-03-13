@@ -9,63 +9,6 @@ where
     })
 }
 
-pub(crate) fn validate_properties_and_set_default(
-    properties: &mut Vec<ftd::interpreter2::Property>,
-    argument: &ftd::interpreter2::Argument,
-    doc_id: &str,
-    line_number: usize,
-) -> ftd::executor::Result<()> {
-    let mut found_default = None;
-    let expected_kind = &argument.kind.kind;
-    for property in properties.iter() {
-        let found_kind = property.value.kind();
-        if !found_kind.is_same_as(expected_kind) {
-            return ftd::executor::utils::parse_error(
-                format!(
-                    "Expected kind is `{:?}`, found: `{:?}`",
-                    expected_kind, found_kind,
-                ),
-                doc_id,
-                property.line_number,
-            );
-        }
-
-        if found_default.is_some() && property.condition.is_none() {
-            return ftd::executor::utils::parse_error(
-                format!(
-                    "Already found default property in line number {:?}",
-                    found_default
-                ),
-                doc_id,
-                property.line_number,
-            );
-        }
-        if property.condition.is_none() {
-            found_default = Some(property.line_number);
-        }
-    }
-    if found_default.is_none() {
-        if let Some(ref default_value) = argument.value {
-            properties.push(ftd::interpreter2::Property {
-                value: default_value.to_owned(),
-                source: ftd::interpreter2::PropertySource::Default,
-                condition: None,
-                line_number: argument.line_number,
-            });
-        } else if !expected_kind.is_optional() && !expected_kind.is_list() {
-            return ftd::executor::utils::parse_error(
-                format!(
-                    "Need value of kind: `{:?}` for `{}`",
-                    expected_kind, argument.name
-                ),
-                doc_id,
-                line_number,
-            );
-        }
-    }
-    Ok(())
-}
-
 pub(crate) fn get_string_container(local_container: &[usize]) -> String {
     local_container
         .iter()
@@ -388,7 +331,18 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                ftd::interpreter2::Value::UI { component, .. } => {
+                ftd::interpreter2::Value::UI {
+                    component, name, ..
+                } => {
+                    if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
+                        if name.starts_with(format!("{}.", k).as_str()) || k.eq(name) {
+                            Some(name.replace(k, v))
+                        } else {
+                            None
+                        }
+                    }) {
+                        *name = local_variable;
+                    }
                     update_local_variable_references_in_component(
                         component,
                         local_variable,

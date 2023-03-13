@@ -1,24 +1,3 @@
-pub fn processor(
-    section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc,
-    _config: &fastn_core::Config,
-) -> ftd::p1::Result<ftd::Value> {
-    let toc_items = ToC::parse(
-        section.body(section.line_number, doc.name)?.as_str(),
-        doc.name,
-    )
-    .map_err(|e| ftd::p1::Error::ParseError {
-        message: format!("Cannot parse body: {:?}", e),
-        doc_id: doc.name.to_string(),
-        line_number: section.line_number,
-    })?
-    .items
-    .iter()
-    .map(|item| item.to_toc_item_compat())
-    .collect::<Vec<TocItemCompat>>();
-    doc.from_json(&toc_items, section)
-}
-
 #[derive(Debug, serde::Serialize)]
 pub struct TocItemCompat {
     pub url: Option<String>,

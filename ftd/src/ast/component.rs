@@ -376,17 +376,15 @@ impl Property {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum PropertySource {
+    #[default]
     Caption,
     Body,
-    Header { name: String, mutable: bool },
-}
-
-impl Default for PropertySource {
-    fn default() -> PropertySource {
-        PropertySource::Caption
-    }
+    Header {
+        name: String,
+        mutable: bool,
+    },
 }
 
 impl PropertySource {

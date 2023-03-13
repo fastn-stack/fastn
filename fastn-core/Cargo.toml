@@ -63,7 +63,7 @@ ignore = "0.4"
 indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.10"
-oauth2 = { version = "4.3.0", optional = true }
+oauth2 = { version = "4", optional = true }
 once_cell = "1"
 mime_guess = "2"
 realm-lang = "0.1"
@@ -77,7 +77,8 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 url = "2"
 zip = "0.6"
-env_logger = "0.10.0"
+env_logger = "0.10"
+ftd = { path = "../ftd" }
 
 
 #wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
@@ -98,7 +99,7 @@ features = [
 ]
 
 [dependencies.magic-crypt]
-version = "3.1.12"
+version = "3"
 default-features = false
 
 [dependencies.hyper]
@@ -109,26 +110,10 @@ features = ["http1", "server"]
 [dependencies.notify]
 # Read the following why we disable the default feature:
 # https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
-version = "5.0.0"
+version = "5"
 default-features = false
 features=["macos_kqueue"]
 
-[dependencies.ftd]
-# We are currently using the git version of ftd as we are not publishing every change
-# to ftd for now. We are currently in active development, and we are not using proper
-# semantic versioning (https://semver.org), which will force us to increment version
-# numbers based on breaking change, and will force as to go to 1.0, when we are not
-# ready for 1.0 right now.
-#
-# Once we are closer to release we will stop using this and adopot semver.
-#
-# If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
-# same folder and uncomment the next `path` line to use local ftd.
-#
-# Note: you do not have to comment out the git/rev above, Cargo uses `path` with
-# higher priority over them if `path` is provided.
-#
-path = "../ftd"
 
 [dependencies.reqwest]
 # We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`

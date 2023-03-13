@@ -2376,17 +2376,12 @@ impl Container {
 }
 
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Loading {
+    #[default]
     Lazy,
     Eager,
-}
-
-impl Default for Loading {
-    fn default() -> Self {
-        Loading::Lazy
-    }
 }
 
 impl Loading {
@@ -2455,19 +2450,14 @@ pub struct Column {
     pub common: Common,
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum TextAlign {
+    #[default]
     Left,
     Right,
     Center,
     Justify,
-}
-
-impl Default for TextAlign {
-    fn default() -> Self {
-        ftd::TextAlign::Left
-    }
 }
 
 impl TextAlign {
@@ -2492,16 +2482,12 @@ impl TextAlign {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum FontDisplay {
     Swap,
+    #[default]
     Block,
-}
-impl Default for ftd::FontDisplay {
-    fn default() -> Self {
-        ftd::FontDisplay::Block
-    }
 }
 
 impl FontDisplay {
@@ -2819,19 +2805,16 @@ impl Style {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum TextFormat {
     // FTD, // TODO
+    #[default]
     Markdown,
-    Code { lang: String },
+    Code {
+        lang: String,
+    },
     Text,
-}
-
-impl Default for ftd::TextFormat {
-    fn default() -> ftd::TextFormat {
-        ftd::TextFormat::Markdown
-    }
 }
 
 impl TextFormat {

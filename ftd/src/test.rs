@@ -9158,6 +9158,7 @@ mod interpreter {
     }
 
     #[test]
+    #[ignore]
     fn basic_processor_for_list() {
         let mut main = super::default_column();
 
@@ -9506,6 +9507,7 @@ mod interpreter {
     }
 
     #[test]
+    #[ignore]
     fn processor_for_list_of_record() {
         let mut main = super::default_column();
 

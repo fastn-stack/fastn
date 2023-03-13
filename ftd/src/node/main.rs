@@ -1504,11 +1504,11 @@ impl ftd::executor::Common {
             ),
         );
 
-        if let Some(ref br_style) = self.border_style.value {
+        if !self.border_style.value.is_empty() {
             d.check_and_insert(
                 "border-style",
                 ftd::node::Value::from_executor_value(
-                    Some(ftd::executor::BorderStyle::css_string_from_vec(br_style)),
+                    Some(ftd::executor::BorderStyle::css_string_from_vec(&self.border_style.value)),
                     self.border_style.to_owned(),
                     None,
                     doc_id,

@@ -60,8 +60,8 @@ pub fn document_full_id(
     Ok(format!("/{}/", full_document_id.trim_matches('/')))
 }
 
+#[allow(dead_code)]
 pub mod processor {
-
     pub fn document_id(
         _section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,

@@ -96,31 +96,6 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     Ok(ftd::executor::Value::new(value, v_line_number, properties))
 }
 
-pub(crate) fn find_properties_by_source(
-    source: &[ftd::interpreter2::PropertySource],
-    properties: &[ftd::interpreter2::Property],
-    doc: &ftd::executor::TDoc,
-    argument: &ftd::interpreter2::Argument,
-    line_number: usize,
-) -> ftd::executor::Result<Vec<ftd::interpreter2::Property>> {
-    use itertools::Itertools;
-
-    let mut properties = properties
-        .iter()
-        .filter(|v| source.iter().any(|s| v.source.is_equal(s)))
-        .map(ToOwned::to_owned)
-        .collect_vec();
-
-    ftd::executor::utils::validate_properties_and_set_default(
-        &mut properties,
-        argument,
-        doc.name,
-        line_number,
-    )?;
-
-    Ok(properties)
-}
-
 pub(crate) fn find_value_by_argument(
     source: &[ftd::interpreter2::PropertySource],
     properties: &[ftd::interpreter2::Property],
@@ -130,10 +105,10 @@ pub(crate) fn find_value_by_argument(
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
-    let properties = ftd::executor::value::find_properties_by_source(
+    let properties = ftd::interpreter2::utils::find_properties_by_source(
         source,
         properties,
-        doc,
+        doc.name,
         argument,
         line_number,
     )?;
@@ -713,9 +688,7 @@ pub fn optional_or_type_list(
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<
-    ftd::executor::Value<Option<Vec<(String, ftd::interpreter2::PropertyValue)>>>,
-> {
+) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, ftd::interpreter2::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
@@ -736,13 +709,13 @@ pub fn optional_or_type_list(
                 }
             }
             Ok(ftd::executor::Value::new(
-                Some(values),
+                values,
                 value.line_number,
                 value.properties,
             ))
         }
         None => Ok(ftd::executor::Value::new(
-            None,
+            vec![],
             value.line_number,
             value.properties,
         )),

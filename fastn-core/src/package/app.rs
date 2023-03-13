@@ -93,37 +93,6 @@ impl AppTemp {
     }
 }
 
-pub fn processor(
-    section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc,
-    config: &fastn_core::Config,
-) -> ftd::p1::Result<ftd::Value> {
-    use itertools::Itertools;
-    #[derive(Debug, serde::Serialize)]
-    struct UiApp {
-        name: String,
-        package: String,
-        #[serde(rename = "url")]
-        url: String,
-        icon: Option<ftd::ImageSrc>,
-    }
-
-    let apps = config
-        .package
-        .apps
-        .iter()
-        .map(|a| UiApp {
-            name: a.name.clone(),
-            package: a.package.name.clone(),
-            url: a.mount_point.to_string(),
-            icon: a.package.icon.clone(),
-        })
-        .collect_vec();
-
-    let indexy_apps = fastn_core::ds::LengthList::from_owned(apps);
-    doc.from_json(&indexy_apps, section)
-}
-
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
 pub async fn can_read(config: &fastn_core::Config, path: &str) -> fastn_core::Result<bool> {
     use itertools::Itertools;

@@ -28,6 +28,7 @@ pub enum Kind {
         kind: Box<Kind>,
     },
     Void,
+    Module,
 }
 
 impl Kind {
@@ -43,6 +44,7 @@ impl Kind {
             Kind::OrType { name, .. } => name.clone(),
             Kind::Optional { .. } => "optional".to_string(),
             Kind::Void { .. } => "void".to_string(),
+            Kind::Module => "module".to_string(),
             Kind::UI { name, .. } => name.clone().unwrap_or("record".to_string()),
             Kind::Record { name } => name.clone(),
         }
@@ -77,6 +79,10 @@ impl Kind {
 
     pub fn boolean() -> Kind {
         Kind::Boolean
+    }
+
+    pub fn module() -> Kind {
+        Kind::Module
     }
 
     pub fn ui() -> Kind {
@@ -246,6 +252,10 @@ impl Kind {
         matches!(self, Kind::String { .. })
     }
 
+    pub fn is_module(&self) -> bool {
+        matches!(self, Kind::Module)
+    }
+
     pub fn is_integer(&self) -> bool {
         matches!(self, Kind::Integer { .. })
     }
@@ -390,6 +400,7 @@ impl KindData {
             "boolean" => Kind::boolean(),
             "void" => Kind::void(),
             "ftd.ui" => Kind::ui(),
+            "module" => Kind::module(),
             "children" => {
                 if let Some(modifier) = var_kind.modifier {
                     return ftd::interpreter2::utils::e2(
@@ -479,6 +490,10 @@ impl KindData {
 
     pub fn is_string(&self) -> bool {
         self.kind.is_string()
+    }
+
+    pub fn is_module(&self) -> bool {
+        self.kind.is_module()
     }
 
     pub fn is_integer(&self) -> bool {

@@ -297,8 +297,9 @@ impl ResponsiveLength {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Alignment {
+    #[default]
     TopLeft,
     TopCenter,
     TopRight,
@@ -308,12 +309,6 @@ pub enum Alignment {
     BottomLeft,
     BottomCenter,
     BottomRight,
-}
-
-impl Default for Alignment {
-    fn default() -> Alignment {
-        Alignment::TopLeft
-    }
 }
 
 impl Alignment {
@@ -566,18 +561,13 @@ impl Alignment {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Resizing {
     HugContent,
     FillContainer,
+    #[default]
     Auto,
     Fixed(ftd::executor::Length),
-}
-
-impl Default for Resizing {
-    fn default() -> Resizing {
-        Resizing::Auto
-    }
 }
 
 impl Resizing {
@@ -2350,7 +2340,7 @@ impl TextStyle {
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(TextStyle::from_values(value, doc, line_number)?))
+            Ok(TextStyle::from_values(value, doc, line_number)?)
         } else {
             Ok(None)
         }
@@ -2360,7 +2350,7 @@ impl TextStyle {
         or_type_values: Vec<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<Option<Self>> {
         fn add_in_map(style: &str, map: &mut ftd::Map<i32>) {
             if !map.contains_key(style) {
                 map.insert(style.to_string(), 1);
@@ -2372,6 +2362,10 @@ impl TextStyle {
         let mut text_style = Self::default();
         let mut booleans: ftd::Map<i32> = Default::default();
         let mut weights: ftd::Map<i32> = Default::default();
+
+        if or_type_values.is_empty(){
+            return Ok(None);
+        }
 
         for value in or_type_values {
             match value.0.as_str() {
@@ -2482,7 +2476,7 @@ impl TextStyle {
             }
         }
 
-        Ok(text_style)
+        Ok(Some(text_style))
     }
 
     pub(crate) fn optional_text_style(
@@ -2504,7 +2498,7 @@ impl TextStyle {
         )?;
 
         Ok(ftd::executor::Value::new(
-            TextStyle::from_optional_values(or_type_value.value, doc, line_number)?,
+            TextStyle::from_optional_values(Some(or_type_value.value), doc, line_number)?,
             or_type_value.line_number,
             or_type_value.properties,
         ))
@@ -2651,15 +2645,11 @@ pub enum BorderStyle {
 
 impl BorderStyle {
     fn from_optional_values(
-        or_type_value: Option<Vec<(String, ftd::interpreter2::PropertyValue)>>,
+        or_type_value: Vec<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Vec<Self>>> {
-        if let Some(value) = or_type_value {
-            Ok(Some(BorderStyle::from_values(value, doc, line_number)?))
-        } else {
-            Ok(None)
-        }
+    ) -> ftd::executor::Result<Vec<Self>> {
+        BorderStyle::from_values(or_type_value, doc, line_number)
     }
 
     fn from_values(
@@ -2696,7 +2686,7 @@ impl BorderStyle {
         line_number: usize,
         key: &str,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<Vec<BorderStyle>>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Vec<BorderStyle>>> {
         let or_type_value = ftd::executor::value::optional_or_type_list(
             key,
             properties,
@@ -2738,17 +2728,12 @@ impl BorderStyle {
 }
 
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Loading {
+    #[default]
     Lazy,
     Eager,
-}
-
-impl Default for Loading {
-    fn default() -> Self {
-        Loading::Lazy
-    }
 }
 
 impl Loading {

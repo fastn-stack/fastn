@@ -101,13 +101,26 @@ impl<'a> TDoc<'a> {
     ) -> ftd::executor::Result<Option<(String, String, Option<String>)>> {
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
-        let properties = ftd::executor::value::find_properties_by_source(
+        let properties = ftd::interpreter2::utils::find_properties_by_source(
             source.as_slice(),
             properties,
-            self,
+            self.name,
             argument,
             line_number,
         )?;
+
+        let name_in_component_definition = format!("{}.{}", component_name, argument.name);
+        if argument.kind.is_module() {
+            if let ftd::interpreter2::Value::Module { name, .. } = properties
+                .first()
+                .unwrap()
+                .resolve(&self.itdoc(), &Default::default())?
+                // TODO: Remove unwrap()
+                .unwrap()
+            {
+                return Ok(Some((name_in_component_definition, name, None)));
+            }
+        }
 
         let (default, conditions) = properties.into_iter().fold(
             (None, vec![]),
@@ -156,7 +169,6 @@ impl<'a> TDoc<'a> {
             self_reference
         };
 
-        let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         match default.reference_name() {
             Some(name) if conditions.is_empty() => {
                 if !is_default_source
