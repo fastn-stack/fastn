@@ -37,7 +37,7 @@ $loop$: $show-lists.days as $obj
 -- component check-border-style:
 
 -- ftd.column:
-border-style: dotted, inset
+border-style: dotted
 border-width.px: 2
 padding.px: 10
 margin.px: 10

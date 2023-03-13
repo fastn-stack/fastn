@@ -1,5 +1,3 @@
-use ftd::executor::BorderStyle;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -1467,27 +1465,95 @@ impl ftd::executor::Common {
             ),
         );
 
-        if !self.border_style.value.is_empty() {
-            d.check_and_insert(
-                "border-style",
-                ftd::node::Value::from_executor_value(
-                    Some(BorderStyle::css_string_from_vec(&self.border_style.value)),
-                    self.border_style.to_owned(),
-                    None,
-                    doc_id,
-                ),
-            );
-        } else {
-            d.check_and_insert(
-                "border-style",
-                ftd::node::Value::from_executor_value(
-                    Some(s("solid")),
-                    ftd::executor::Value::new(None::<String>, None, vec![]),
-                    None,
-                    doc_id,
-                ),
-            );
-        }
+        d.check_and_insert(
+            "border-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-left-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_horizontal.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-left-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_left.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_left.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-right-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_right.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_right.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-right-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_horizontal.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-top-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_top.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_top.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-top-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_vertical.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-bottom-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_bottom.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_bottom.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-bottom-style",
+            ftd::node::Value::from_executor_value(
+                Some(self.border_style_vertical.value.as_ref().map_or(ftd::interpreter2::FTD_IGNORE_KEY.to_string(),|v| v.to_css_string())),
+                self.border_style_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "border-bottom-width",

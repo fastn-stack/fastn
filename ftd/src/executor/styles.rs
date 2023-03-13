@@ -2381,38 +2381,37 @@ pub enum BorderStyle {
 
 impl BorderStyle {
     fn from_optional_values(
-        or_type_value: Vec<(String, ftd::interpreter2::PropertyValue)>,
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Vec<Self>> {
-        BorderStyle::from_values(or_type_value, doc, line_number)
+    ) -> ftd::executor::Result<Option<Self>> {
+
+        if let Some(value) = or_type_value {
+            return Ok(Some(BorderStyle::from_values(value, doc, line_number)?));
+        }
+        Ok(None)
     }
 
     fn from_values(
-        or_type_values: Vec<(String, ftd::interpreter2::PropertyValue)>,
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Vec<Self>> {
-        let mut styles = vec![];
-        for value in or_type_values {
-            let border_style = match value.0.as_str() {
-                ftd::interpreter2::FTD_BORDER_STYLE_DOTTED => Ok(BorderStyle::DOTTED),
-                ftd::interpreter2::FTD_BORDER_STYLE_DASHED => Ok(BorderStyle::DASHED),
-                ftd::interpreter2::FTD_BORDER_STYLE_SOLID => Ok(BorderStyle::SOLID),
-                ftd::interpreter2::FTD_BORDER_STYLE_GROOVE => Ok(BorderStyle::GROOVE),
-                ftd::interpreter2::FTD_BORDER_STYLE_RIDGE => Ok(BorderStyle::RIDGE),
-                ftd::interpreter2::FTD_BORDER_STYLE_OUTSET => Ok(BorderStyle::OUTSET),
-                ftd::interpreter2::FTD_BORDER_STYLE_INSET => Ok(BorderStyle::INSET),
-                ftd::interpreter2::FTD_BORDER_STYLE_DOUBLE => Ok(BorderStyle::DOUBLE),
-                t => ftd::executor::utils::parse_error(
-                    format!("Unknown variant `{}` for or-type `ftd.border-style`", t),
-                    doc.name,
-                    line_number,
-                ),
-            }?;
-            styles.push(border_style);
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_BORDER_STYLE_DOTTED => Ok(BorderStyle::DOTTED),
+            ftd::interpreter2::FTD_BORDER_STYLE_DASHED => Ok(BorderStyle::DASHED),
+            ftd::interpreter2::FTD_BORDER_STYLE_SOLID => Ok(BorderStyle::SOLID),
+            ftd::interpreter2::FTD_BORDER_STYLE_GROOVE => Ok(BorderStyle::GROOVE),
+            ftd::interpreter2::FTD_BORDER_STYLE_RIDGE => Ok(BorderStyle::RIDGE),
+            ftd::interpreter2::FTD_BORDER_STYLE_OUTSET => Ok(BorderStyle::OUTSET),
+            ftd::interpreter2::FTD_BORDER_STYLE_INSET => Ok(BorderStyle::INSET),
+            ftd::interpreter2::FTD_BORDER_STYLE_DOUBLE => Ok(BorderStyle::DOUBLE),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.border-style`", t),
+                doc.name,
+                line_number,
+            ),
         }
-        Ok(styles)
     }
 
     pub(crate) fn optional_border_style(
@@ -2422,8 +2421,8 @@ impl BorderStyle {
         line_number: usize,
         key: &str,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::Value<Vec<BorderStyle>>> {
-        let or_type_value = ftd::executor::value::optional_or_type_list(
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<BorderStyle>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
             key,
             properties,
             arguments,
@@ -2451,15 +2450,6 @@ impl BorderStyle {
             BorderStyle::INSET => "inset".to_string(),
             BorderStyle::OUTSET => "outset".to_string(),
         }
-    }
-
-    pub fn css_string_from_vec(values: &Vec<Self>) -> String {
-        let mut css_string = String::new();
-        for value in values {
-            css_string.push_str(value.to_css_string().as_str());
-            css_string.push(' ');
-        }
-        css_string.trim_end().to_string()
     }
 }
 

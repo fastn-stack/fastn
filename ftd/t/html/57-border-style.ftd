@@ -1,60 +1,63 @@
 
--- component check-border-style:
+-- component show-border:
 ftd.border-style style:
 integer $which:
+string text:
 
 -- ftd.column:
-border-style if { $check-border-style.which % 8 == 0 } : dotted
-border-style if { $check-border-style.which % 8 == 1 } : dashed
-border-style if { $check-border-style.which % 8 == 2 } : solid
-border-style if { $check-border-style.which % 8 == 3 } : inset
-border-style if { $check-border-style.which % 8 == 4 } : groove
-border-style if { $check-border-style.which % 8 == 5 } : ridge
-border-style if { $check-border-style.which % 8 == 6 } : outset
-border-style if { $check-border-style.which % 8 == 7 } : double
+border-style if { $show-border.which % 7 == 0 }: $show-border.style
+border-style-left if { $show-border.which % 7 == 1 }: $show-border.style
+border-style-top if { $show-border.which % 7 == 2 }: $show-border.style
+border-style-right if { $show-border.which % 7 == 3 }: $show-border.style
+border-style-bottom if { $show-border.which % 7 == 4 }: $show-border.style
+border-style-vertical if { $show-border.which % 7 == 5 }: $show-border.style
+border-style-horizontal if { $show-border.which % 7 == 6 }: $show-border.style
 border-width.px: 2
 padding.px: 10
 margin.px: 10
-$on-click$: $ftd.increment($a=$check-border-style.which)
+$on-click$: $ftd.increment($a=$show-border.which)
 
+-- ftd.integer: $show-border.which
 
--- ftd.text: Hello World
+-- ftd.text: $show-border.text
 
 -- end: ftd.column
 
--- end: check-border-style
+-- end: show-border
 
 
--- check-border-style:
+-- show-border:
 style: dotted
 $which: 0
+text: Dotted border
 
-
-/-- check-border-style:
+-- show-border:
 style: dashed
+$which: 0
+text: Dashed border
 
-
-/-- check-border-style:
-style: solid
-
-
-/-- check-border-style:
+-- show-border:
 style: double
+$which: 0
+text: Double border
 
-
-/-- check-border-style:
+-- show-border:
 style: groove
+$which: 0
+text: Groove border
 
-
-/-- check-border-style:
+-- show-border:
 style: ridge
+$which: 0
+text: Ridge border
 
-
-/-- check-border-style:
+-- show-border:
 style: inset
+$which: 0
+text: Inset border
 
-
-/-- check-border-style:
+-- show-border:
 style: outset
-
+$which: 0
+text: Outset border
 
