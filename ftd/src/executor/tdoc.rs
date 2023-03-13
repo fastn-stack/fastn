@@ -118,7 +118,7 @@ impl<'a> TDoc<'a> {
                 // TODO: Remove unwrap()
                 .unwrap()
             {
-                return Ok(Some((name_in_component_definition, name.to_string(), None)));
+                return Ok(Some((name_in_component_definition, name, None)));
             }
         }
 
