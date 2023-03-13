@@ -2451,6 +2451,23 @@ impl BorderStyle {
             BorderStyle::OUTSET => "outset".to_string(),
         }
     }
+
+    pub fn no_value_pattern() -> (String, bool) {
+        (
+            format!(
+                indoc::indoc! {"
+                    if ({{0}} == \"{no_value}\") {{
+                        \"{remove_key}\"
+                    }} else {{
+                        \"{{0}}\"
+                    }}
+                "},
+                no_value = ftd::interpreter2::FTD_IGNORE_KEY,
+                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+            ),
+            true,
+        )
+    }
 }
 
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
