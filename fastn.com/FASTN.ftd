@@ -95,6 +95,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Kernel Components: /ftd/kernel/
   - `ftd.row`: /ftd/row/
   - `ftd.column`: /ftd/column/
+  - `ftd.text`: /ftd/text/
 
 ## How Tos: /install/
   document: author/how-to/install.ftd

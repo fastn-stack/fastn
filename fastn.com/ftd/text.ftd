@@ -1,0 +1,180 @@
+-- my-ds.page: `ftd.text`
+
+`ftd.text` is a component used to render text in an FTD document.
+
+
+-- ds.h2: Usage
+
+To use `ftd.text`, simply add it to your FTD document with your desired text to
+display.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: hello world
+
+-- ds.h2: Attributes
+
+`ftd.text` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+-- ds.h3: `text: String`
+
+This attribute is used to pass text to `ftd.text`. You can pass any string
+value.
+
+You have three ways to pass text value to the `ftd.text` component.
+
+There are three ways to pass text to `ftd.text`: as `caption`, as a `text`
+`header`, or as multi-line text in the `body`.
+
+-- ds.code: As a `caption`
+lang: ftd
+
+\-- ftd.text: FTD example
+
+-- ds.output: Output: As a `caption`
+
+-- ftd.text: FTD example
+color: $inherited.colors.text-strong
+
+-- end: ds.output
+
+
+-- ds.code: As a `text` header
+lang: ftd
+
+\-- ftd.text:
+text: This is an example of how to use ftd.text.
+
+
+-- ds.output: Output: As a `text` header
+
+-- ftd.text:
+text: This is an example of how to use ftd.text.
+color: $inherited.colors.text-strong
+
+-- end: ds.output
+
+-- ds.code: As a `body`
+lang: ftd
+
+\-- ftd.text:
+
+This is a bigger text.
+
+This can span multiple lines.
+
+
+-- ds.output: Output: As a `body`
+
+-- ftd.text:
+color: $inherited.colors.text-strong
+
+
+This is a bigger text.
+
+This can span multiple lines.
+
+-- end: ds.output
+
+
+-- ds.h3: `text-align: optional ftd.text-align`
+
+This property is used to align the text within `ftd.text`. It accepts the
+[`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
+optional.
+
+
+-- ftd.row:
+spacing.fixed.px: 10
+
+-- ftd.text:
+text-align: center
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+this is **text-align: center** text. a bit longer text so you can see what's going on.
+
+
+-- ftd.text:
+text-align: start
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+this is **text-align: start** text. typing dummy text for examples is so boring.
+
+
+-- ftd.text:
+text-align: end
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+this is **text-align: end** aligned text. but then you got to do what you go to
+do.
+
+
+-- ftd.text:
+text-align: justify
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+this is **text-align: justify** text. or not. whatever works. I mean maybe it
+matters.
+
+-- end: ftd.row
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: this is some center aligned text
+text-align: center
+
+
+-- ds.h3: `line-clamp: optional integer`
+
+The `line-clamp` property truncates text at a specific number of lines. It
+accepts an integer value and is optional.
+
+-- ds.code: `line-clamp`
+lang: ftd
+
+\-- ftd.text:
+border-width.px: 1
+padding.px: 5
+width.fixed.px: 100
+line-clamp: 4
+
+Writing long text can often feel like a tedious and daunting task, especially
+when faced with a blank page and a blinking cursor. It can be easy to feel
+overwhelmed by the thought of having to fill page after page with coherent
+thoughts and ideas. However, there are many reasons why writing long text can be
+a valuable and rewarding experience.
+
+
+-- ds.output:
+
+-- ftd.text:
+border-width.px: 1
+padding.px: 5
+line-clamp: 4
+color: $inherited.colors.text-strong
+
+Writing long text can often feel like a tedious and daunting task, especially
+when faced with a blank page and a blinking cursor. It can be easy to feel
+overwhelmed by the thought of having to fill page after page with coherent
+thoughts and ideas. However, there are many reasons why writing long text can be
+a valuable and rewarding experience.
+
+-- end: ds.output
+
+
+-- end: my-ds.page
