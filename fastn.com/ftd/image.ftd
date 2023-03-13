@@ -16,6 +16,7 @@ src: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
 
 -- ftd.image:
 src: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+width: fill-container
 
 -- end: ds.output
 
@@ -28,7 +29,7 @@ attributes](ftd/common/).
 -- ds.h2: `src: ftd.image-src`
 
 The `src` property specifies the path to the image to display. This is the only
-required element. It accepts the
+required property. It accepts the
 [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type value. This type
 stores image URLs for both light and dark mode.
 
@@ -155,23 +156,10 @@ light mode and dark mode.
 
 When using an `assets` variable, if an image with the same name but with
 `-dark` suffix exists in the package, it will be used for the
-`dark` field. For example, if `show-cs-1-dark.svg` file exists in the `images`
+`dark` field. For example, if `show-cs-1-dark.svg` file exists in the `images/cs`
 folder, it will be used for the `dark` field, while `show-cs-1.svg` will be used
 for the light field.
 
-
--- ds.h1: `description: Optional String`
-
-Content of `description` is added as `alt` text in HTML.
-
--- ds.h1: `loading: Optional String`
-
-The value of `loading` can be either `lazy` (default) or `eager`. This field
-[controls lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
-
--- ds.h1: `crop: Boolean, default: False`
-
-If this is specified the image is cropped to fit the container.
 
 -- end: my-ds.page
 
