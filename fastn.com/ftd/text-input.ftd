@@ -209,9 +209,9 @@ value: Hello
 
 -- ds.h2: `type: optional ftd.text-input-type`
 
-This attribute is used to align the text within `ftd.text-input`. It accepts the
-[`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type) type value and
-is optional. It has default value as `text`.
+This attribute is used to give input type within `ftd.text-input`. It accepts
+the [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type) type value
+and is optional. It has default value as `text`.
 
 
 -- ds.code: `type: text`

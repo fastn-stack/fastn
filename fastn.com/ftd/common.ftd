@@ -17,7 +17,7 @@ id: fifthtry
 
 
 
--- ds.output: Output: specifying color
+-- ds.output: Output: specifying id
 
 -- ftd.text: FifthTry
 color: $inherited.colors.text
@@ -31,6 +31,190 @@ id: fifthtry
 In the above example we have an `ftd.text` element that points to the id name
 "fifthtry". This element can be accessed with `#fifthtry` appended after the
 current document url: http://fastn.io/ftd/common/#fifthtry
+
+
+-- ds.h1: `padding: optional ftd.length`
+
+The `padding` attribute is used to create space around an element's content,
+inside of any defined borders. It accepts the
+[`ftd.length`](ftd/built-in-types/#ftd-length) type value and is optional.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding.px: 60
+border-width.px: 2
+
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `padding-vertical: optional ftd.length`
+
+This gives top and bottom padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-vertical.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-vertical.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `padding-horizontal: optional ftd.length`
+
+This gives left and right padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-horizontal.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-horizontal.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `padding-left: optional ftd.length`
+
+This gives left padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-left.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-left.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `padding-right: optional ftd.length`
+
+This gives right padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-right.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-right.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `padding-top: optional ftd.length`
+
+This gives top padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-top.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-top.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `padding-bottom: optional ftd.length`
+
+This gives bottom padding.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-bottom.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+padding-bottom.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
 -- ds.h1: `color: optional ftd.color`
@@ -403,190 +587,8 @@ border-bottom-right-radius.px: 50
 -- end: ds.output
 
 
--- ds.h1: `padding.px: Integer`
 
-Padding is used to create space around an element's content, inside of any defined borders.
 
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding.px: 60
-border-width.px: 2
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `padding-vertical.px: Integer`
-
-This gives top and bottom padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-vertical.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-vertical.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
-
--- ds.h1: `padding-horizontal.px: Integer`
-
-This gives left and right padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-horizontal.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-horizontal.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `padding-left.px: Integer`
-
-This gives left padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-left.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-left.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
--- ds.h1: `padding-right.px: Integer`
-
-This gives right padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-right.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-right.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
-
--- ds.h1: `padding-top.px: Integer`
-
-This gives top padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-top.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-top.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
-
-
-
--- ds.h1: `padding-bottom.px: Integer`
-
-This gives bottom padding.
-
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-padding-bottom.px: 60
-
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
-
--- ftd.text: FifthTry
-padding-bottom.px: 60
-color: $inherited.colors.text
-border-width.px: 2
-
--- end: ds.output
 
 
 -- ds.h1: `width.fixed.px: Integer`
