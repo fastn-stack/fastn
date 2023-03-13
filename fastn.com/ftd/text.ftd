@@ -3,7 +3,7 @@
 `ftd.text` is a component used to render text in an FTD document.
 
 
--- ds.h2: Usage
+-- ds.h1: Usage
 
 To use `ftd.text`, simply add it to your FTD document with your desired text to
 display.
@@ -13,12 +13,12 @@ lang: ftd
 
 \-- ftd.text: hello world
 
--- ds.h2: Attributes
+-- ds.h1: Attributes
 
 `ftd.text` accepts the below attributes as well all the [common
 attributes](ftd/common/).
 
--- ds.h3: `text: String`
+-- ds.h2: `text: String`
 
 This attribute is used to pass text to `ftd.text`. You can pass any string
 value.
@@ -79,7 +79,7 @@ This can span multiple lines.
 -- end: ds.output
 
 
--- ds.h3: `text-align: optional ftd.text-align`
+-- ds.h2: `text-align: optional ftd.text-align`
 
 This property is used to align the text within `ftd.text`. It accepts the
 [`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
@@ -139,7 +139,7 @@ lang: ftd
 text-align: center
 
 
--- ds.h3: `line-clamp: optional integer`
+-- ds.h2: `line-clamp: optional integer`
 
 The `line-clamp` property truncates text at a specific number of lines. It
 accepts an integer value and is optional.

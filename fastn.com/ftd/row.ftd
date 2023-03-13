@@ -10,7 +10,7 @@ Make sure to close your row container using the `end` syntax. This is mandatory.
 
 `-- end: <container-name>`
 
--- ds.h3: Usage
+-- ds.h1: Usage
 
 -- ds.code:
 lang: ftd
@@ -21,12 +21,12 @@ lang: ftd
 
 \-- end: ftd.row
 
--- ds.h3: Attributes
+-- ds.h1: Attributes
 
 Row accepts the [container attributes](ftd/container/) as well all the [common
 attributes ](ftd/common/).
 
--- ds.h3: Example
+-- ds.h1: Example
 
 -- ds.code:
 lang: ftd

@@ -11,7 +11,7 @@ mandatory.
 
 `-- end: <container-name>`
 
--- ds.h3: Usage
+-- ds.h1: Usage
 
 -- ds.code:
 lang: ftd
@@ -22,11 +22,11 @@ lang: ftd
 
 \-- end: ftd.column
 
--- ds.h3: Attributes
+-- ds.h1: Attributes
 
 Column accepts the [container attributes ](container/) as well all the [common attributes ](common/).
 
--- ds.h3: Example
+-- ds.h1: Example
 
 -- ds.code:
 lang: ftd
