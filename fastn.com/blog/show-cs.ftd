@@ -348,7 +348,7 @@ wrap: true
 
 
 -- ftd.column:
-width.fixed.percent: 49
+width.fixed.percent: 47
 colors: $winter-cs.main
 
 -- ftd.text: Winter
@@ -362,7 +362,7 @@ color: $inherited.colors.text-strong
 
 
 -- ftd.column:
-width.fixed.percent: 49
+width.fixed.percent: 47
 colors: $dark-flame-cs.main
 
 -- ftd.text: Dark flame
@@ -376,7 +376,7 @@ color: $inherited.colors.text-strong
 
 
 -- ftd.column:
-width.fixed.percent: 49
+width.fixed.percent: 47
 colors: $forest-cs.main
 margin-top.px: 20
 
@@ -392,7 +392,7 @@ color: $inherited.colors.text-strong
 
 
 -- ftd.column:
-width.fixed.percent: 49
+width.fixed.percent: 47
 colors: $sunset-cs.main
 margin-top.px: 20
 

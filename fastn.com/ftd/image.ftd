@@ -1,0 +1,184 @@
+-- import: fastn.io/assets as fastn-assets
+
+-- my-ds.page: `ftd.image`
+
+`ftd.image` is the kernel element used to render images in `ftd`.
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+
+-- ds.output:
+
+-- ftd.image:
+src: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+
+-- end: ds.output
+
+
+-- ds.h1: Attributes
+
+`ftd.image` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+-- ds.h2: `src: ftd.image-src`
+
+The `src` property specifies the path to the image to display. This is the only
+required element. It accepts the
+[`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type value. This type
+stores image URLs for both light and dark mode.
+
+-- ds.h3: Example Using `ftd.image-src` Variable
+
+Consider the following example:
+
+-- ds.code: Two images using `ftd.image-src` type variable
+lang: ftd
+
+\-- ftd.image-src my-images:
+light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+dark: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+
+\-- ftd.image:
+src: $my-images
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- ds.output: Output: Two images using `ftd.image-src` type variable
+
+-- ftd.image:
+src: $my-images
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- end: ds.output
+
+-- ds.markdown:
+
+Switch your color mode (light/dark) and checkout the above output to see the
+wonder!
+
+In this example, the image URL
+https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg is returned in light mode,
+while https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg is returned in
+dark mode.
+
+It is also possible to use `ftd.image-src` with only one field. For example:
+
+-- ds.code: One image using `ftd.image-src` type variable
+lang: ftd
+
+\-- ftd.image-src just-light:
+light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+
+\;; or
+
+\-- ftd.image-src just-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+
+\-- ftd.image:
+src: $just-light
+width.fixed.px: 200
+height.fixed.px: 115
+
+
+-- ds.output: Output: One image using `ftd.image-src` type variable
+
+-- ftd.image:
+src: $just-light
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- end: ds.output
+
+-- ds.markdown:
+
+In this case, the same image URL
+https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg is returned in both light
+and dark modes.
+
+-- ds.h3: Example Using assets Foreign Variable
+
+Instead of passing the image URL directly, it is possible to use the `assets`
+foreign variable to access files present in a package.
+
+Check [foreign variable in Variable page](ftd/variables/#foreign-variables) to
+know more.
+
+To use the `assets` variable, import the package as shown below:
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.io/assets as fastn-assets
+
+-- ds.markdown:
+
+Then, use the `files` field of `assets` variable to access files present in the
+package. For example:
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.io/assets as fastn-assets
+
+\-- ftd.image:
+src: $fastn-assets.files.images.cs.show-cs-1.jpg
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- ds.markdown:
+
+The output will look same as above.
+
+-- ds.output: Output: Image using assets
+
+-- ftd.image:
+src: $fastn-assets.files.images.cs.show-cs-1.jpg
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- end: ds.output
+
+-- ds.markdown:
+
+In this example, the `src` property of `ftd.image` component will be set to the
+URL of `show-cs-1.jpg` file present in the `images/cs` folder of the `fastn.io`
+package. i.e. URL of `<path-to-package>/images/cs/show-cs-1.jpg`.
+
+Now, you must be wondering how does it get two different value of image for
+light mode and dark mode.
+
+
+When using an `assets` variable, if an image with the same name but with
+`-dark` suffix exists in the package, it will be used for the
+`dark` field. For example, if `show-cs-1-dark.svg` file exists in the `images`
+folder, it will be used for the `dark` field, while `show-cs-1.svg` will be used
+for the light field.
+
+
+-- ds.h1: `description: Optional String`
+
+Content of `description` is added as `alt` text in HTML.
+
+-- ds.h1: `loading: Optional String`
+
+The value of `loading` can be either `lazy` (default) or `eager`. This field
+[controls lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
+
+-- ds.h1: `crop: Boolean, default: False`
+
+If this is specified the image is cropped to fit the container.
+
+-- end: my-ds.page
+
+
+-- ftd.image-src my-images:
+light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+dark: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+
+
+-- ftd.image-src just-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
