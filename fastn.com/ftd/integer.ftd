@@ -1,0 +1,153 @@
+-- my-ds.page: `ftd.integer`
+
+`ftd.integer` is a component used to render an integer value in an `ftd`
+document.
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: 10
+
+-- ds.output:
+
+-- ftd.integer: 10
+color: $inherited.colors.text
+
+-- end: ds.output
+
+
+-- ds.h1: Attributes
+
+Integer accepts the below attributes along with the
+[common attributes](common/).
+
+
+-- ds.h1: `value`
+
+This is the value to show. It is a required field.
+
+There are three ways to pass integer to `ftd.integer`: as `caption`, as a
+`value` `header`, or as `body`.
+
+-- ds.code: As a `caption`
+lang: ftd
+
+\-- ftd.integer: 10000
+
+
+-- ds.code: As a `value` header
+lang: ftd
+
+\-- ftd.integer:
+value: 10000
+
+
+-- ds.code: As a `body`
+lang: ftd
+
+\-- ftd.integer:
+
+10000
+
+
+-- ds.output:
+
+-- ftd.integer:
+color: $inherited.colors.text-strong
+
+10000
+
+-- end: ds.output
+
+-- ds.h2: `text-align: optional ftd.text-align`
+
+This property is used to align the integer within `ftd.integer`. It accepts the
+[`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
+optional.
+
+
+-- ftd.row:
+spacing.fixed.px: 10
+
+-- ftd.integer: 100000000000000000
+width.fixed.px: 70
+text-align: center
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+
+
+-- ftd.integer: 100000000000000000
+width.fixed.px: 70
+text-align: start
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+
+
+-- ftd.integer: 100000000000000000
+width.fixed.px: 70
+text-align: end
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+
+
+-- ftd.integer: 100000000000000000
+width.fixed.px: 70
+text-align: justify
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
+
+
+-- end: ftd.row
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: 100000000000000000
+width.fixed.px: 70
+text-align: center
+
+
+-- ds.h1: `format: optional string`
+
+This is a format string.
+
+Consider the following example. It is shown as (hex):
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer:
+value: 48879
+format: #X
+
+
+-- ds.output:
+
+-- ftd.integer:
+value: 48879
+format: #X
+color: $inherited.colors.text-strong
+
+-- end: ds.output
+
+-- ds.markdown:
+
+You can find documentation of formatting strings 
+[here](https://docs.rs/format_num/0.1.0/format_num/).
+
+
+-- end: my-ds.page

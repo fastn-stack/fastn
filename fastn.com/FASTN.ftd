@@ -96,7 +96,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.row`: /ftd/row/
   - `ftd.column`: /ftd/column/
   - `ftd.text`: /ftd/text/
-  - `ftd.image` 🚧: /ftd/image/
+  - `ftd.image`: /ftd/image/
+  - `ftd.integer`: /ftd/integer/
 
 ## How Tos: /install/
   document: author/how-to/install.ftd

@@ -1,17 +1,24 @@
 -- my-ds.page: `ftd.text`
 
-`ftd.text` is a component used to render text in an FTD document.
+`ftd.text` is a component used to render text in an `ftd` document.
 
 
 -- ds.h1: Usage
 
-To use `ftd.text`, simply add it to your FTD document with your desired text to
-display.
+To use `ftd.text`, simply add it to your `ftd` document with your desired text
+to display.
 
 -- ds.code:
 lang: ftd
 
 \-- ftd.text: hello world
+
+-- ds.output:
+lang: ftd
+
+-- ftd.text: hello world
+
+-- end: ds.output
 
 -- ds.h1: Attributes
 
@@ -20,8 +27,8 @@ attributes](ftd/common/).
 
 -- ds.h2: `text: String`
 
-This attribute is used to pass text to `ftd.text`. You can pass any string
-value.
+This property is used to pass text to `ftd.text`. You can pass any string
+value. It is a required property.
 
 You have three ways to pass text value to the `ftd.text` component.
 

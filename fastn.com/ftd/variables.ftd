@@ -300,7 +300,8 @@ If an image with the same name but with `-dark` suffix exists in the package,
 i.e. `<path-to-package>/images/my-image-dark.png`, then `dark` field gets the
 url of this file.
 
-Checkout [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) for more details.
+Checkout [`src`](ftd/image/#src-ftd-image-src) property and
+[`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type for more details.
 
 
 -- end: my-ds.page
