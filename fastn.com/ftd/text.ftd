@@ -25,7 +25,7 @@ color: $inherited.colors.text
 `ftd.text` accepts the below attributes as well all the [common
 attributes](ftd/common/).
 
--- ds.h2: `text: String`
+-- ds.h2: `text: string`
 
 This property is used to pass text to `ftd.text`. You can pass any string
 value. It is a required property.

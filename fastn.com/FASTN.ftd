@@ -100,6 +100,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.integer`: /ftd/integer/
   - `ftd.decimal`: /ftd/decimal/
   - `ftd.boolean`: /ftd/boolean/
+  - `ftd.code`: /ftd/code/
 
 ## How Tos: /install/
   document: author/how-to/install.ftd

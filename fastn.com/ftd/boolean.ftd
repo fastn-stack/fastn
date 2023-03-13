@@ -3,7 +3,7 @@
 `ftd.boolean` is a component used to render a boolean value in an `ftd`
 document.
 
--- ds.h3: Usage
+-- ds.h1: Usage
 
 -- ds.code:
 lang: ftd
