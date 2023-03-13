@@ -1,6 +1,6 @@
--- my-ds.page: `ftd.integer`
+-- my-ds.page: `ftd.decimal`
 
-`ftd.integer` is a component used to render an integer value in an `ftd`
+`ftd.decimal` is a component used to render a decimal value in an `ftd`
 document.
 
 -- ds.h1: Usage
@@ -8,62 +8,61 @@ document.
 -- ds.code:
 lang: ftd
 
-\-- ftd.integer: 10
+\-- ftd.decimal: 10.01
 
 -- ds.output:
 
--- ftd.integer: 10
+-- ftd.decimal: 10.01
 color: $inherited.colors.text
 
 -- end: ds.output
 
-
 -- ds.h1: Attributes
 
-`ftd.integer` accepts the below attributes along with the
-[common attributes](common/).
+`ftd.decimal` accepts the below attributes as well all the [common
+attributes](ftd/common/).
 
 
 -- ds.h2: `value`
 
 This is the value to show. It is a required field.
 
-There are three ways to pass integer to `ftd.integer`: as `caption`, as a
+There are three ways to pass integer to `ftd.decimal`: as `caption`, as a
 `value` `header`, or as `body`.
 
 -- ds.code: As a `caption`
 lang: ftd
 
-\-- ftd.integer: 10000
+\-- ftd.decimal: 10000.9999
 
 
 -- ds.code: As a `value` header
 lang: ftd
 
-\-- ftd.integer:
-value: 10000
+\-- ftd.decimal:
+value: 10000.9999
 
 
 -- ds.code: As a `body`
 lang: ftd
 
-\-- ftd.integer:
+\-- ftd.decimal:
 
-10000
+10000.9999
 
 
 -- ds.output:
 
--- ftd.integer:
+-- ftd.decimal:
 color: $inherited.colors.text-strong
 
-10000
+10000.9999
 
 -- end: ds.output
 
 -- ds.h2: `text-align: optional ftd.text-align`
 
-This property is used to align the integer within `ftd.integer`. It accepts the
+This property is used to align the decimal within `ftd.decimal`. It accepts the
 [`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
 optional.
 
@@ -71,7 +70,7 @@ optional.
 -- ftd.row:
 spacing.fixed.px: 10
 
--- ftd.integer: 100000000000000000
+-- ftd.decimal: 1000000.999999999
 width.fixed.px: 70
 text-align: center
 border-width.px: 1
@@ -81,7 +80,7 @@ color: $inherited.colors.text-strong
 
 
 
--- ftd.integer: 100000000000000000
+-- ftd.decimal: 1000000.999999999
 width.fixed.px: 70
 text-align: start
 border-width.px: 1
@@ -91,7 +90,7 @@ color: $inherited.colors.text-strong
 
 
 
--- ftd.integer: 100000000000000000
+-- ftd.decimal: 1000000.999999999
 width.fixed.px: 70
 text-align: end
 border-width.px: 1
@@ -101,7 +100,7 @@ color: $inherited.colors.text-strong
 
 
 
--- ftd.integer: 100000000000000000
+-- ftd.decimal: 1000000.999999999
 width.fixed.px: 70
 text-align: justify
 border-width.px: 1
@@ -115,7 +114,7 @@ color: $inherited.colors.text-strong
 -- ds.code:
 lang: ftd
 
-\-- ftd.integer: 100000000000000000
+\-- ftd.decimal: 1000000.999999999
 width.fixed.px: 70
 text-align: center
 
@@ -124,29 +123,29 @@ text-align: center
 
 This is a format string.
 
-Consider the following example. It is shown as (hex):
+Consider the following example. It is shown as (percent):
 
 
 -- ds.code:
 lang: ftd
 
-\-- ftd.integer:
-value: 48879
-format: #X
+\-- ftd.decimal:
+value: 0.94623
+format: .0%
 
 
 -- ds.output:
 
--- ftd.integer:
-value: 48879
-format: #X
+-- ftd.decimal:
+value: 0.94623
+format: .0%
 color: $inherited.colors.text-strong
 
 -- end: ds.output
 
 -- ds.markdown:
 
-You can find documentation of formatting strings 
+You can find documentation of formatting strings
 [here](https://docs.rs/format_num/0.1.0/format_num/).
 
 
