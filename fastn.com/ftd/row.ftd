@@ -6,8 +6,7 @@ A row is a container component that stacks a list of children horizontally.
 
 -- cbox.info: row
 
-`Note`: Make sure to close your row container using the `end`
-syntax. This is mandatory.
+Make sure to close your row container using the `end` syntax. This is mandatory.
 
 `-- end: <container-name>`
 
