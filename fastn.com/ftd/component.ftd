@@ -175,12 +175,12 @@ lang: ftd
 caption name:
 body value:
 
-\-- ftd.row
-spacing.px: 5
+\-- ftd.row:
+spacing.fixed.px: 5
 
-\--- ftd.text: $label.name
+\-- ftd.text: $label.name
 
-\--- ftd.text: $label.value
+\-- ftd.text: $label.value
 
 \-- end: ftd.row
 
