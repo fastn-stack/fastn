@@ -23,7 +23,7 @@ color: $inherited.colors.text
 attributes](ftd/common/).
 
 
--- ds.h2: `value`
+-- ds.h2: `value: decimal`
 
 This is the value to show. It is a required field.
 

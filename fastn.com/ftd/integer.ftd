@@ -24,7 +24,7 @@ color: $inherited.colors.text
 [common attributes](common/).
 
 
--- ds.h2: `value`
+-- ds.h2: `value: integer`
 
 This is the value to show. It is a required field.
 

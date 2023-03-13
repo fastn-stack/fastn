@@ -1,0 +1,63 @@
+-- my-ds.page: `ftd.boolean`
+
+`ftd.boolean` is a component used to render a boolean value in an `ftd`
+document.
+
+-- ds.h3: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.boolean: true
+
+-- ds.output:
+
+-- ftd.boolean: true
+color: $inherited.colors.text
+
+-- end: ds.output
+
+-- ds.h1: Attributes
+
+`ftd.boolean` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+
+-- ds.h2: `value: boolean`
+
+This is the value to show. It is a required field.
+
+There are three ways to pass integer to `ftd.boolean`: as `caption`, as a
+`value` `header`, or as `body`.
+
+-- ds.code: As a `caption`
+lang: ftd
+
+\-- ftd.boolean: false
+
+
+-- ds.code: As a `value` header
+lang: ftd
+
+\-- ftd.boolean:
+value: false
+
+
+-- ds.code: As a `body`
+lang: ftd
+
+\-- ftd.boolean:
+
+false
+
+
+-- ds.output:
+
+-- ftd.boolean:
+color: $inherited.colors.text-strong
+
+false
+
+-- end: ds.output
+
+-- end: my-ds.page
