@@ -379,7 +379,7 @@ color: $inherited.colors.text
 \-- ftd.text: $heading-with-detail.title
 role: $inherited.types.heading-small
 
-\-- ftd.text: $heading-with-detail.title
+\-- ftd.text: $heading-with-detail.detail
 role: $inherited.types.label-small
 
 \-- end: ftd.column
@@ -975,7 +975,7 @@ color: $inherited.colors.text
 -- ftd.text: $heading-with-detail.title
 role: $inherited.types.heading-small
 
--- ftd.text: $heading-with-detail.title
+-- ftd.text: $heading-with-detail.detail
 role: $inherited.types.label-small
 
 -- end: ftd.column
