@@ -575,6 +575,183 @@ copy: true
 -- end: ds.rendered.output
 
 
+-- ds.h1: Mutable Component Arguments
+
+In `ftd`, we can define a component argument as mutable by using the `$` prefix
+before its name. A mutable argument can be modified within the component and can
+take mutable variables as input, which can be modified outside the component's
+scope too. Any changes made to a mutable argument will be reflected in the
+component's output.
+
+Consider the following code snippet:
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+\-- ftd.column:
+
+\-- ftd.text: $toggle-ui.title
+
+\-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+\-- end: ftd.column
+
+\-- end: toggle-ui
+
+-- ds.markdown:
+
+In the above example, the `$open` argument is mutable, which means it can be
+modified both within and outside the `toggle-ui` component. Any changes made to
+the `$open` argument will be immediately reflected in the component's output.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: My Title
+$open: false
+
+My Description
+
+-- ds.rendered.output:
+
+-- toggle-ui-: My Title
+$open: false
+
+My Description
+
+-- end: ds.rendered.output
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: My Title
+
+My Description
+
+-- ds.rendered.output:
+
+-- toggle-ui-: My Title
+
+My Description
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+-- ds.h2: Passing Mutable Variable to Mutable Argument
+
+Consider the following code snippet:
+
+-- ds.code:
+lang: ftd
+
+\-- boolean $global-open: true
+
+\-- ftd.text: I change global-open
+$on-click$: $ftd.toggle($a = $global-open)
+
+\-- toggle-ui: My Title
+$open: $global-open
+
+My Description
+
+
+-- ds.markdown:
+
+We have added an `$on-click$` [event](ftd/event/) here and used `ftd` built-in
+function `ftd.toggle`. The function toggles the boolean value whenever event
+occurs.
+
+We have passed mutable reference of `global-open` to `open` attribute. So the
+change in `global-open` value changes the `open` attribute too.
+
+
+
+-- ds.output: Click on the `I change global-open` and see the effect.
+
+-- ftd.text: I change global-open
+$on-click$: $ftd.toggle($a = $global-open)
+
+-- toggle-ui-: My Title
+$open: $global-open
+
+My Description
+
+
+-- end: ds.output
+
+
+
+
+
+
+
+-- ds.h1: Events in Component
+
+We have created `toggle-ui` component, now lets add event to this.
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+\-- ftd.column:
+$on-click$: $ftd.toggle($a = $toggle-ui.open)
+
+\-- ftd.text: $toggle-ui.title
+
+\-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+\-- end: ftd.column
+
+\-- end: toggle-ui
+
+
+-- ds.markdown:
+
+We have added an `$on-click$` event and `ftd.toggle` action in `ftd.column`
+component and pass `toggle-ui.open` argument.
+
+
+-- ds.rendered: Click on the rendered component below and see the effect.
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: Click me!
+
+My Description
+
+-- ds.rendered.output:
+
+-- toggle-ui: Click me!
+
+My Description
+
+-- end: ds.rendered.output
+
+
+
+
+
 -- end: my-ds.page
 
 
@@ -1009,3 +1186,45 @@ border-color: $inherited.colors.border
 -- end: ftd.column
 
 -- end: show-ui
+
+
+
+-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+-- ftd.column:
+color: $inherited.colors.text
+$on-click$: $ftd.toggle($a = $toggle-ui.open)
+
+-- ftd.text: $toggle-ui.title
+
+-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+-- end: ftd.column
+
+-- end: toggle-ui
+
+
+
+-- boolean $global-open: true
+
+
+-- component toggle-ui-:
+caption title:
+body description:
+boolean $open: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: $toggle-ui-.title
+
+-- ftd.text: $toggle-ui-.description
+if: { toggle-ui-.open }
+
+-- end: ftd.column
+
+-- end: toggle-ui-
