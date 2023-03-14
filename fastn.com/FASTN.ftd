@@ -236,13 +236,14 @@ skip: true
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
 
-# D: /d/
+# dev: /d/
+  skip: true
 
 - Overview: /d/
 - Maintainence: /d/m/
 
-# Planning: /planning/
-skip: true
+# Content Planning: /planning/
+  skip: true
 
 - Overview: /planning/
 - Developer Course: /planning/developer-course/
