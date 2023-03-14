@@ -192,6 +192,10 @@ Since I am long description, it's better to pass it here. Isn't it?
 By default `caption` or `body` is alias for `string` but if you want to pass
 types other than `string` you can do the following:
 
+-- ftd.column:
+padding-vertical.px: 20
+width: fill-container
+
 -- ds.rendered:
 copy: true
 
@@ -211,6 +215,8 @@ caption integer number:
 -- show-number: 45
 
 -- end: ds.rendered.output
+
+-- end: ftd.column
 
 -- end: cbox.info
 

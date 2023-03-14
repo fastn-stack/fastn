@@ -1,3 +1,5 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- my-ds.page: Built-in Types
 
 
@@ -140,6 +142,20 @@ If something is specified as `caption`, it can come in the "caption" location, e
 in case of `amitu` var, or it can come as an explicit key, as in the declaration
 of `shobhit` variable.
 
+-- cbox.info: Passing other types in `caption` area
+
+By default `caption` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+-- ds.code: record with caption as integer
+lang: ftd
+
+\-- record marks:
+caption integer number:
+
+-- end: cbox.info
+
+
 -- ds.h2: `body`
 
 `body` is a special type, it is an alias for `string`, but can not be used when
@@ -174,6 +190,21 @@ If something is specified as `body`, it can come in the "body" location, eg in
 case of `amitu` var, or it can come as an explicit key, as in the declaration of
 `shobhit` variable.
 
+
+
+-- cbox.info: Passing other types in `body` area
+
+By default `body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+-- ds.code: record with body as integer
+lang: ftd
+
+\-- record marks:
+body integer number:
+
+-- end: cbox.info
+
 -- ds.h2: `caption or body`
 
 `caption or body` is a special type, it is an alias for `string`, but can not be
@@ -206,6 +237,19 @@ If something is specified as `caption or body`, it can come in the "caption"
 location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
+
+-- cbox.info: Passing other types in `caption or body` area
+
+By default `caption or body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+-- ds.code: record with body as integer
+lang: ftd
+
+\-- record marks:
+caption or body integer number:
+
+-- end: cbox.info
 
 
 -- ds.h2: `ftd.ui`
