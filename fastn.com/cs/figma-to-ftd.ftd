@@ -59,7 +59,7 @@ by clicking on the download icon in the code-block below.
 
 -- ds.code: forest-cs
 lang: json
-max-height: 350
+max-height.fixed.px: 350
 download: forest-cs.json
 
 $forest-figma

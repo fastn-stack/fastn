@@ -70,7 +70,7 @@ icon in the code-block below.
 
 -- ds.code: forest-cs
 lang: json
-max-height: 300
+max-height.fixed.px: 300
 download: forest-cs.json
 
 $forest-figma
@@ -191,7 +191,7 @@ named `sunset-cs.json` by clicking at the download button.
 
 -- ds.code: Sunset-cs
 lang: json
-max-height: 300
+max-height.fixed.px: 300
 download: sunset-cs.json
 
 $sunset-figma
