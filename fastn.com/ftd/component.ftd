@@ -64,6 +64,52 @@ Currently, `My Heading` is fixed text displayed by `heading` component. We can
 make it customisable by using attributes.
 
 
+-- ds.h2: Rendering a Component Conditionally
+
+We can render a component conditionally. This can be achieved using an `if`
+keyword.
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+if: { num <= 10 }
+
+-- ds.rendered.output:
+
+-- heading: My Heading
+
+-- end: ds.rendered.output
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+if: { num > 10 }
+
+\-- ftd.text: Heading not shown!!
+
+-- ds.rendered.output:
+
+-- heading: My Heading
+if: { false }
+
+-- ftd.text: Heading not shown!!
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+
 
 -- ds.h1: Component Arguments
 
@@ -248,9 +294,8 @@ If no argument is provided, the component instance adopts the default value of
 `text-color` defined by the `heading`. On the other hand, if an argument is
 provided, it supersedes the default value.
 
-#### `heading` with default `text-color`
 
--- ds.rendered:
+-- ds.rendered: `heading` with default `text-color`
 copy: true
 
 -- ds.rendered.input:
@@ -263,11 +308,8 @@ copy: true
 
 -- end: ds.rendered.output
 
--- ds.markdown:
 
-#### `heading` with `text-color` value as `green`
-
--- ds.rendered:
+-- ds.rendered: `heading` with `text-color` value as `green`
 copy: true
 
 -- ds.rendered.input:
@@ -360,7 +402,47 @@ copy: true
 
 
 
+-- ds.h2: Conditional Attributes
 
+Sometimes we want to set an attribute based on a condition.
+
+-- ds.rendered: True Condition Expression
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+title if { num <= 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- ds.rendered.output:
+
+-- heading:
+title if { num <= 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- end: ds.rendered.output
+
+
+
+-- ds.rendered: False Condition Expression
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+title if { num > 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- ds.rendered.output:
+
+-- heading:
+title if { num > 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- end: ds.rendered.output
 
 
 
@@ -770,3 +852,7 @@ role: $inherited.types.label-small
 -- end: ftd.column
 
 -- end: heading-with-detail
+
+
+
+-- integer num: 10
