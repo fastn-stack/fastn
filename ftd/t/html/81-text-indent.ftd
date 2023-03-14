@@ -1,0 +1,12 @@
+
+-- show-indent:
+indent.px: 20
+
+-- component show-indent:
+ftd.length indent:
+
+-- ftd.text: Hello World
+margin.px: 10
+text-indent: $show-indent.indent
+
+-- end: show-indent

@@ -8213,6 +8213,12 @@ fn text_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data()
                 .into_optional(),
         ),
+        ftd::interpreter2::Argument::default(
+            "text-indent",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_kind_data()
+                .into_optional(),
+        ),
     ]
 }
 
