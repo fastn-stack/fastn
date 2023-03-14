@@ -445,6 +445,135 @@ title: Default Title
 -- end: ds.rendered.output
 
 
+-- ds.h1: Creating Container Component
+
+`ftd` provides some container type kernel component like
+[`ftd.row`](ftd/row/) and [`ftd.column`](ftd/column/). The container component
+accepts the components as an attribute.
+
+
+-- ds.h2: Using `ftd.ui list` type
+
+We can define such arguments using [`ftd.ui list`](ftd/built-in-types/#ftd-ui)
+type.
+
+-- ds.code:
+lang: ftd
+
+\-- component show-ui:
+caption title:
+ftd.ui list uis:
+
+\-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+\-- ftd.text: $show-ui.title
+
+\-- ftd.column:
+children: $show-ui.uis
+border-width.px: 1
+padding.px: 10
+border-color: $inherited.colors.border
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: show-ui
+
+
+-- ds.markdown:
+
+Here, we have defined an argument `uis` of type `ftd.ui list`. We have also pass
+this to [`children`](ftd/container/#children) attribute of `ftd.column`.
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- show-ui: My UIs
+
+\-- show-ui.uis:
+
+\-- ftd.text: My First UI
+\-- heading: Using Heading Too
+
+\-- end: show-ui.uis
+
+-- ds.rendered.output:
+
+-- show-ui: My UIs
+
+-- show-ui.uis:
+
+-- ftd.text: My First UI
+-- heading: Using Heading Too
+
+-- end: show-ui.uis
+
+-- end: ds.rendered.output
+
+
+-- ds.h2: Using `children` type
+
+The [`children`](ftd/built-in-types/#children) type allows us to pass components
+in subsection location.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component show-ui:
+caption title:
+children uis:
+
+\-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+\-- ftd.text: $show-ui.title
+
+\-- ftd.column:
+children: $show-ui.uis
+border-width.px: 1
+padding.px: 10
+border-color: $inherited.colors.border
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: show-ui
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- show-ui: My UIs
+
+\-- ftd.text: My First UI
+\-- heading: Using Heading Too
+
+\-- end: show-ui
+
+-- ds.rendered.output:
+
+-- show-ui: My UIs
+
+-- show-ui.uis:
+
+-- ftd.text: My First UI
+-- heading: Using Heading Too
+
+-- end: show-ui.uis
+
+-- end: ds.rendered.output
+
 
 -- end: my-ds.page
 
@@ -856,3 +985,27 @@ role: $inherited.types.label-small
 
 
 -- integer num: 10
+
+
+
+-- component show-ui:
+caption title:
+children uis:
+
+-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+-- ftd.text: $show-ui.title
+
+-- ftd.column:
+children: $show-ui.uis
+border-width.px: 1
+padding.px: 10
+border-color: $inherited.colors.border
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: show-ui

@@ -286,7 +286,8 @@ used when declaring a variable.
 This type is used for `record`, `or-type` and `component` arguments.
 
 If a `record` or `or-type` field, or `component` argument is defined as
-`children`, it can be passed in "subsection" location in `ftd::p1` "section".
+`children`, it can be passed in "subsection" location in [`ftd::p1`
+"section"](ftd/p1-grammar/#sub-section).
 
 
 -- ds.code:
