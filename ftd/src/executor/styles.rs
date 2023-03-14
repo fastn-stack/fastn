@@ -2385,7 +2385,6 @@ impl BorderStyle {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
-
         if let Some(value) = or_type_value {
             return Ok(Some(BorderStyle::from_values(value, doc, line_number)?));
         }

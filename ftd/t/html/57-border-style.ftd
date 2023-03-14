@@ -33,31 +33,31 @@ text: Dotted border
 
 -- show-border:
 style: dashed
-$which: 0
+$which: 1
 text: Dashed border
 
 -- show-border:
 style: double
-$which: 0
+$which: 2
 text: Double border
 
 -- show-border:
 style: groove
-$which: 0
+$which: 3
 text: Groove border
 
 -- show-border:
 style: ridge
-$which: 0
+$which: 4
 text: Ridge border
 
 -- show-border:
 style: inset
-$which: 0
+$which: 5
 text: Inset border
 
 -- show-border:
 style: outset
-$which: 0
+$which: 6
 text: Outset border
 
