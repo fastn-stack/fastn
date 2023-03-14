@@ -122,63 +122,42 @@ way your learning going to be limited to Github offerings. During the course of
 the book you will learn more and will be able to make decisions most suitable
 for your use case.
 
--- ds.h1: Let's Talk About Commits
+-- ds.h1: Github Actions
 
-Let's come back to your repository. This is how it may have looked like at the
-end of previous section:
+In the previous section we created a repo and observed that we had two commits,
+and the second commit was made by `github-actions[bot]`.
 
--- ds.image: Right after creating the repo
-src: $assets.files.images.your-new-repo.png
-
-Actually the repo changes a bit after you create, so if you have given it some
-time it should look more like this:
-
--- ds.image: After a minute or two
-src: $assets.files.images.repo-is-ready.png
-
-You will notice a few key differences between the two states. You will see that
-instead of "initial commit" it says "✅ Ready to clone and code", next to each
-file listed. This message is called a "commit" message, and Github shows the
-latest commit message next to each file or folder where it was modified, along
-with when was it last modified. You will notice that two files, `.gitignore`
-and `doc-site-example.png` are still saying "initial commit", where as rest of
-them are showing the "✅ Ready to clone and code" message.
-
-All the files in the repo were created by by the "initial commit", and in the
-first screenshot you will notice that is shows only one commit, but in the next
-screenshot you will notice that there are two commits.
-
--- ds.image: How to find commit count?
-src: $assets.files.images.commit-count.png
-
-This is a lot happening, so let's break it down a bit.
-
-When you created your repo from our template repo, `fastn-template`, a bunch of
-files were copied over, and added to your repository. In `git`, any change
-happens through what is called a commit, each commit can modify one or more
-files, add files, delete files etc, and each commit has a message.
-
-The way `git` works is you make changes, in one or more files in your repo, and
-when you are satisfied, you "commit" these changes, and while committing `git`
-asks for a "commit message" so you can describe what changes you have done.
-
-Commit messages are quite useful as you may be working with a team and others in
-a team may want to know what were you thinking when you made those changes. Or
-may be you are working alone, even then good commit messages are quite useful
-as you may come back to your repository after weeks and months and you may have
-forgotten what was going on.
-
-Let's take a look at the commits in our repo so far. You can click on the commit
-count and it takes you to the following page:
-
-;; Note to editor, the caption is a joke
-;; https://www.reddit.com/r/startrek/comments/9hzrqp/
-
--- ds.image: There... are... ~four~ two commits!
+-- ds.image: Your repo with two commits
 src: $assets.files.images.commits.png
 
-You can see the two commits, one made by me, the person who created the
-repository (acutally Github made the commit when we created the repo from
-`fastn-template`). The second commit was made by `github-actions[bot]`, 
+Github has a feature called "Github Actions". You will see a tab in the middle
+of the navigation section. If you go to the action screen you will see something
+like this:
+
+-- ds.image: Github Actions
+src: $assets.files.images.rename-action.png
+
+You will see one action has run so far (it is labelled "1 workflow run"). So
+we have repo, and repo has commits, and now we have actions. We have also seen
+that one action has run so far. Why did it run? What did it do? Since we are
+investigating why `github-actions[bot]` made the commit, and there is a feature
+called Github Actions, I guess we can connect the dots, and speculate may be
+the action run, and created the commit. And that is exactly what happened.
+
+You see Github Actions are piece of code that runs everytime something
+interesting happens. The code that runs are called "workflows". On the left you
+will see a bunch of Workflows, "Deploy Site" is the most interesting one.
+
+"Deploy Site" has already run, and it created the second commit. We have
+configured "Deploy Site" to run every time any commit is created, and since a
+commit is created when you make a change, this means "Deploy Site" workflow is
+executed every time you make any changes. You make any changes, and Deploy Site
+runs, and it deployes your website.
+
+Where have we done all this you ask? The workflow and the configuration sit in
+your repository, checkout the `.github` folder in your repo:
+
+-- ds.image: `.github` folder contains action stuff
+src: $assets.files.book.images.github-folder.png
 
 -- end: my-ds.page
