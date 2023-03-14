@@ -685,6 +685,7 @@ change in `global-open` value changes the `open` attribute too.
 
 -- ftd.text: I change global-open
 $on-click$: $ftd.toggle($a = $global-open)
+color: $inherited.colors.text-strong
 
 -- toggle-ui-: My Title
 $open: $global-open
