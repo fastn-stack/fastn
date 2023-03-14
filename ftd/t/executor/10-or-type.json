@@ -150,6 +150,11 @@
               "line_number": null,
               "properties": []
             },
+            "text_indent": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
             "line_clamp": {
               "value": null,
               "line_number": null,
@@ -527,6 +532,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -914,6 +924,11 @@
               "line_number": null,
               "properties": []
             },
+            "text_indent": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
             "line_clamp": {
               "value": null,
               "line_number": null,
@@ -1291,6 +1306,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []

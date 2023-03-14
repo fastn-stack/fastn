@@ -1,12 +1,14 @@
 
 -- show-indent:
-indent.px: 20
+$count: 0
 
 -- component show-indent:
-ftd.length indent:
+integer $count:
 
 -- ftd.text: Hello World
 margin.px: 10
-text-indent: $show-indent.indent
+text-indent.px if { show-indent.count % 2 == 0 }: 10
+text-indent.px if { show-indent.count % 2 == 1 }: 20
+$on-click$: $ftd.increment($a = $show-indent.count)
 
 -- end: show-indent
