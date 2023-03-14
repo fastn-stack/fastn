@@ -1,8 +1,226 @@
--- import: ftd.dev/assets
--- import: fastn
-
+-- import: fifthtry.github.io/admonitions as cbox
 
 -- my-ds.page: `component`
+
+A `component` in `ftd` is similar to "react component". Components are
+independent and reusable bits of code. `component`s have  "arguments", these are
+the data that must be passed to them, and using `component`s we construct the
+user interface.
+
+-- ds.h1: Create Your First Component
+
+New components are defined using the `component` keyword followed by component
+name:
+
+-- ds.code: Creating a component named `heading`
+lang: ftd
+
+\-- component heading:
+
+\-- ftd.text: My Heading
+color: red
+
+\-- end: heading
+
+-- ds.markdown:
+
+Here, we have defined a new component `heading`. This component is using
+[`ftd.text`](ftd/text/), a kernel component, as a definition. We have created a
+custom-component which shows given text in `red` color.
+
+-- ds.h2: Kernel Components
+
+So, how is `ftd.text` implemented? `ftd` comes with some "kernel components",
+these are the lowest level components that every other component uses directly
+or indirectly.
+
+Read about our [kernel components guide](ftd/kernel/) to learn about
+these components.
+
+
+-- ds.h1: Rendering a Component
+
+Till now, we have created a component called `heading`. Now to invoke or render
+this component in your `ftd` application, we can do the following:
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+-- ds.rendered.output:
+
+-- heading: My Heading
+
+-- end: ds.rendered.output
+
+
+-- ds.markdown:
+
+Currently, `My Heading` is fixed text displayed by `heading` component. We can
+make it customisable by using attributes.
+
+
+
+-- ds.h1: Component Arguments
+
+Component "arguments" refer to the inputs that are passed into a component when
+it is called or invoked. These arguments provide the component with the
+necessary data that is helpful to configure or customize the component's
+behavior or appearance.
+
+
+-- ds.h2: Defining Component Arguments
+
+Component arguments starts with argument type follow by argument name, in our
+component we have one such argument, `title`.
+
+The type of our `title` argument is [`string`](ftd/built-in-types/#string).
+
+The arguments in `ftd` components creates variables for each component
+invocation. These variables have local scope. This means that these variables
+can be accessed only inside the component definition in which they are declared.
+
+-- ds.code: Using the `title` argument in the component
+lang: ftd
+
+\-- component heading:
+string title:
+
+\-- ftd.text: $heading.title
+color: red
+
+\-- end: heading
+
+
+-- ds.h2: Adding Attributes to Component
+
+When the component is used in another component or in the main application, the
+`title` can be passed in as an attribute of the component:
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+title: I love `ftd`!
+
+-- ds.rendered.output:
+
+-- heading:
+title: I love `ftd`!
+
+-- end: ds.rendered.output
+
+
+-- ds.h2: Using Special Type Arguments
+
+We can use special types like [`caption`](ftd/built-in-types/#caption),
+[`body`](ftd/built-in-types/#body) or [`caption or
+body`](ftd/built-in-types/#caption-or-body) that give us flexibility to pass
+attributes in different location of [`ftd::p1`
+"section"](ftd/p1-grammar/#section-caption).
+
+Let's use `caption or body` type using which we can pass attributes in either
+`caption` or `body` area.
+
+
+-- ds.code: `caption or body` type for `title` argument
+lang: ftd
+
+\-- component heading:
+caption or body title:
+
+\-- ftd.text: $heading.title
+color: red
+
+\-- end: heading
+
+
+-- ds.h3: Passing Attribute in Caption
+
+Passing attribute in caption area makes the component more concise and readable.
+It also make it clear what the component represents and what its purpose is.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading: I am in caption area.
+
+-- ds.rendered.output:
+
+-- heading: I am in caption area.
+
+-- end: ds.rendered.output
+
+
+-- ds.h3: Passing Attribute in Body
+
+Passing attributes in the body area can help make it more readable by providing
+a way to break up complex or lengthy inputs into more manageable chunks of text.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+I am in body area.
+
+Since I am long description, it's better to pass it here. Isn't it?
+
+-- ds.rendered.output:
+
+-- heading:
+
+I am in body area.
+
+Since I am long description, it's better to pass it here. Isn't it?
+
+-- end: ds.rendered.output
+
+
+-- cbox.info: Special types
+
+By default `caption` or `body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- component show-number:
+caption integer number:
+
+\-- ftd.integer: $show-number.number
+
+\-- end: show-number
+
+\-- show-number: 45
+
+-- ds.rendered.output:
+
+-- show-number: 45
+
+-- end: ds.rendered.output
+
+-- end: cbox.info
+
+
+
+-- end: my-ds.page
+
+
+
+/-- my-ds.page: `component`
 
 A `component` in `ftd` is similar to "react component". Components are
 independent and reusable bits of code. `component`s have  "arguments", these are
@@ -19,7 +237,7 @@ New components are defined using the `component` keyword:
 lang: ftd
 
 \-- component heading:
-caption title:
+string title:
 
 \-- ftd.text: $heading.title
 color: red
@@ -34,14 +252,6 @@ Here, we have defined a new component `heading`. This component is using
 custom-component which shows given text in `red` color.
 
 
--- ds.h2: Kernel Components
-
-So, how is `ftd.text` implemented? `ftd` comes with some "kernel components",
-these are the lowest level components that every other component uses directly
-or indirectly.
-
-Read about our [kernel components guide](ftd/kernel/) to learn about
-these components.
 
 
 -- ds.h2: Component Arguments
@@ -49,8 +259,7 @@ these components.
 Component "arguments" starts with argument type follow by argument name, in our
 component we have one such argument, `title`.
 
-The type of our `title` argument is `caption`. You can read more about `caption`
-in the [`ftd` types guide](ftd/built-in-types/).
+The type of our `title` argument is [`string`](ftd/built-in-types/#string).
 
 The arguments in `ftd` components creates variables for each component
 invocation. These variables have local scope. This means that these variables
@@ -318,7 +527,7 @@ Read more about it in [conditional components guide](ftd/if/).
 
 
 -- component heading:
-caption title:
+caption or body title:
 
 -- ftd.text:
 text: $heading.title
@@ -384,3 +593,12 @@ $on-click$: $ftd.toggle($a = $foo-with-event.open)
 color: $inherited.colors.text
 
 -- end: foo-with-event
+
+
+
+-- component show-number:
+caption integer number:
+
+-- ftd.integer: $show-number.number
+
+-- end: show-number

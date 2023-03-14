@@ -183,7 +183,7 @@ This type is used for `record`, `or-type` and `component` arguments.
 
 If a `record` or `or-type` field, or `component` argument is defined as `caption
 or body`, it can be passed in either the "caption" or "body" location in
-`ftd::p1` "section".
+[`ftd::p1` "section"](ftd/p1-grammar/#section-caption).
 
 -- ds.code: record with caption or body
 lang: ftd
