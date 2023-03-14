@@ -102,7 +102,7 @@ theme: Solarized (dark)
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.output: Solarized (dark)
 
 -- ftd.code:
 lang: py
@@ -113,7 +113,73 @@ print(value)
 
 -- end: ds.output
 
+-- ds.output: base16-ocean.dark
 
+-- ftd.code:
+lang: py
+theme: base16-ocean.dark
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
+
+-- ds.output: base16-eighties.dark
+
+-- ftd.code:
+lang: py
+theme: base16-eighties.dark
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
+
+
+-- ds.output: base16-mocha.dark
+
+-- ftd.code:
+lang: py
+theme: base16-mocha.dark
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
+
+-- ds.output: base16-ocean.light
+
+-- ftd.code:
+lang: py
+theme: base16-ocean.light
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
+
+
+-- ds.output: InspiredGitHub
+
+-- ftd.code:
+lang: py
+theme: InspiredGitHub
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
+
+-- ds.output: Solarized (light)
+
+-- ftd.code:
+lang: py
+theme: Solarized (light)
+
+value = "hello world"
+print(value)
+
+-- end: ds.output
 
 -- ds.h2: `text-align: optional ftd.text-align`
 

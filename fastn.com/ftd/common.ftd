@@ -217,6 +217,191 @@ border-width.px: 2
 -- end: ds.output
 
 
+
+-- ds.h1: `margin: optional ftd.length`
+
+The `margin` attribute is used to create space around an element's content,
+outside of any defined borders. It accepts the
+[`ftd.length`](ftd/built-in-types/#ftd-length) type value and is optional.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin.px: 60
+border-width.px: 2
+
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `margin-vertical: optional ftd.length`
+
+This gives top and bottom margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-vertical.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-vertical.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `margin-horizontal: optional ftd.length`
+
+This gives left and right margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-horizontal.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-horizontal.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `margin-left: optional ftd.length`
+
+This gives left margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-left.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-left.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+-- ds.h1: `margin-right: optional ftd.length`
+
+This gives right margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-right.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-right.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `margin-top: optional ftd.length`
+
+This gives top margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-top.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-top.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
+
+-- ds.h1: `margin-bottom: optional ftd.length`
+
+This gives bottom margin.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+margin-bottom.px: 60
+
+
+-- ds.markdown:
+
+This will render like this:
+
+-- ds.output:
+
+-- ftd.text: FifthTry
+margin-bottom.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
+
 -- ds.h1: `color: optional ftd.color`
 
 The color property sets the color of an element. It takes
