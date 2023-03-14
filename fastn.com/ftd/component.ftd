@@ -72,17 +72,20 @@ it is called or invoked. These arguments provide the component with the
 necessary data that is helpful to configure or customize the component's
 behavior or appearance.
 
-
--- ds.h2: Defining Component Arguments
-
-Component arguments starts with argument type follow by argument name, in our
-component we have one such argument, `title`.
-
-The type of our `title` argument is [`string`](ftd/built-in-types/#string).
+Component "arguments" are like function arguments, and you send them into the
+component as attributes.
 
 The arguments in `ftd` components creates variables for each component
 invocation. These variables have local scope. This means that these variables
 can be accessed only inside the component definition in which they are declared.
+
+
+-- ds.h2: Defining Component Arguments
+
+Component arguments starts with argument type follow by argument name, in our
+component we can define one such argument, `title`.
+
+The type of our `title` argument is [`string`](ftd/built-in-types/#string).
 
 -- ds.code: Using the `title` argument in the component
 lang: ftd
@@ -219,6 +222,145 @@ caption integer number:
 -- end: ftd.column
 
 -- end: cbox.info
+
+
+-- ds.h2: Arguments with Default Values
+
+An argument can be defined with a default value:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component heading:
+caption or body title:
+ftd.color text-color: red
+
+\-- ftd.text: $heading.title
+color: $heading.text-color
+
+\-- end: heading
+
+
+-- ds.markdown:
+
+If no argument is provided, the component instance adopts the default value of
+`text-color` defined by the `heading`. On the other hand, if an argument is
+provided, it supersedes the default value.
+
+#### `heading` with default `text-color`
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\--  heading: hello
+
+-- ds.rendered.output:
+
+--  heading: hello
+
+-- end: ds.rendered.output
+
+-- ds.markdown:
+
+#### `heading` with `text-color` value as `green`
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading: this is nice
+text-color: green
+
+-- ds.rendered.output:
+
+-- heading: this is nice
+text-color: green
+
+-- end: ds.rendered.output
+
+
+-- ds.h3: Global Variable Reference As Default Value
+
+We can pass global variable reference as a default value:
+
+
+-- ds.code: Passing global variable reference `ftd-title`
+lang: ftd
+
+\-- string ftd-title: I love `ftd`!
+
+\-- component heading:
+caption or body title: $ftd-title
+ftd.color text-color: red
+
+\-- ftd.text: $heading.title
+color: $heading.text-color
+
+\-- end: heading
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+-- ds.rendered.output:
+
+-- heading:
+
+-- end: ds.rendered.output
+
+
+
+-- ds.h3: Other Argument Reference As Default Value
+
+We can pass other argument reference as a default value:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component heading-with-detail:
+caption title:
+body detail: $heading-with-detail.title
+
+\-- ftd.column:
+spacing.fixed.px: 20
+color: $inherited.colors.text
+
+\-- ftd.text: $heading-with-detail.title
+role: $inherited.types.heading-small
+
+\-- ftd.text: $heading-with-detail.title
+role: $inherited.types.label-small
+
+\-- end: ftd.column
+
+\-- end: heading-with-detail
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading-with-detail: Title same as detail
+
+-- ds.rendered.output:
+
+-- heading-with-detail: Title same as detail
+
+-- end: ds.rendered.output
+
+
+
+
 
 
 
@@ -527,17 +669,17 @@ Read more about it in [conditional components guide](ftd/if/).
 
 
 
-
+-- string ftd-title: I love `ftd`!
 
 
 
 
 -- component heading:
-caption or body title:
+caption or body title: $ftd-title
+ftd.color text-color: red
 
--- ftd.text:
-text: $heading.title
-color: red
+-- ftd.text: $heading.title
+color: $heading.text-color
 
 -- end: heading
 
@@ -608,3 +750,23 @@ caption integer number:
 -- ftd.integer: $show-number.number
 
 -- end: show-number
+
+
+
+-- component heading-with-detail:
+caption title:
+body detail: $heading-with-detail.title
+
+-- ftd.column:
+spacing.fixed.px: 20
+color: $inherited.colors.text
+
+-- ftd.text: $heading-with-detail.title
+role: $inherited.types.heading-small
+
+-- ftd.text: $heading-with-detail.title
+role: $inherited.types.label-small
+
+-- end: ftd.column
+
+-- end: heading-with-detail
