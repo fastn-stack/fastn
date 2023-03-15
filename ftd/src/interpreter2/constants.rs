@@ -192,9 +192,7 @@ pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
 
-pub const FTD_TEXT_DEFAULT_STYLE: &str = "normal";
-pub const FTD_TEXT_DEFAULT_WEIGHT: &str = "300";
-pub const FTD_TEXT_DEFAULT_DECORATION: &str = "none";
+pub const FTD_VALUE_UNCHANGED: &str = "unchanged";
 pub const FTD_TEXT_STYLE: &str = "ftd#text-style";
 pub const FTD_TEXT_STYLE_ITALIC: &str = "ftd#text-style.italic";
 pub const FTD_TEXT_STYLE_UNDERLINE: &str = "ftd#text-style.underline";

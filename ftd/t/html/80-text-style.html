@@ -1427,11 +1427,6 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#
 }
 window.node_change_main["2:main__font-style"] = function(data) {
 if(function(){
-return (resolve_reference("foo#count", data)%4==0);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "normal";
-}
-else if(function(){
 return (resolve_reference("foo#count", data)%4==1);
 }()){
 document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
@@ -1440,11 +1435,6 @@ else if(function(){
 return (resolve_reference("foo#count", data)%4==2);
 }()){
 document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
-}
-else if(function(){
-return (resolve_reference("foo#count", data)%4==3);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "normal";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["font-style"] = null }
 }
@@ -1465,26 +1455,11 @@ return (resolve_reference("foo#count", data)%4==2);
 }()){
 document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
 }
-else if(function(){
-return (resolve_reference("foo#count", data)%4==3);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
-}
 else { document.querySelector(`[data-id="2:main"]`).style["font-weight"] = null }
 }
 
 window.node_change_main["2:main__text-decoration"] = function(data) {
 if(function(){
-return (resolve_reference("foo#count", data)%4==0);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "none";
-}
-else if(function(){
-return (resolve_reference("foo#count", data)%4==1);
-}()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "none";
-}
-else if(function(){
 return (resolve_reference("foo#count", data)%4==2);
 }()){
 document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";

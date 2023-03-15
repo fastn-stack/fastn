@@ -2596,7 +2596,7 @@ impl TextStyle {
 
         let filtered = result.trim_end();
         let res = match filtered.is_empty() {
-            true => ftd::interpreter2::FTD_TEXT_DEFAULT_STYLE.to_string(),
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
         format!("\"{}\"", res)
@@ -2619,7 +2619,7 @@ impl TextStyle {
 
         let filtered = result.trim_end();
         let res = match filtered.is_empty() {
-            true => ftd::interpreter2::FTD_TEXT_DEFAULT_DECORATION.to_string(),
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
         format!("\"{}\"", res)
@@ -2642,7 +2642,7 @@ impl TextStyle {
 
         let filtered = result.trim_end();
         let res = match filtered.is_empty() {
-            true => ftd::interpreter2::FTD_TEXT_DEFAULT_WEIGHT.to_string(),
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
         format!("\"{}\"", res)
