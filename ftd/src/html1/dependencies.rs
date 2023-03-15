@@ -407,7 +407,9 @@ impl<'a> DependencyGenerator<'a> {
                 key
             );
 
-            value = format!("{}\n{}", value, remove_case_condition);
+            if !value.trim().is_empty() {
+                value = format!("{}\n{}", value, remove_case_condition);
+            }
 
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
@@ -427,6 +429,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            let style_key = key.clone();
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
@@ -674,12 +677,13 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                         self.doc,
                     );
+                    // let t = self.filter_style_data(&style_key, &value_string);
                     let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
                 }
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(
+            let mut value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
                 format!(
@@ -692,6 +696,24 @@ impl<'a> DependencyGenerator<'a> {
                 )
                 .as_str(),
             );
+
+            let remove_case_condition = format!(
+                indoc::indoc! {"
+                if (document.querySelector(`[data-id=\"{}\"]`).style.getPropertyValue(\"{}\") == \"{}\"){{
+                    document.querySelector(`[data-id=\"{}\"]`).style.removeProperty(\"{}\");
+                }}
+            "},
+                node_data_id,
+                style_key,
+                ftd::interpreter2::FTD_REMOVE_KEY,
+                node_data_id,
+                style_key
+            );
+
+            if !value.trim().is_empty() {
+                value = format!("{}\n{}", value, remove_case_condition);
+            }
+
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -715,6 +737,15 @@ impl<'a> DependencyGenerator<'a> {
         }
         Ok(result.join("\n"))
     }
+
+    // fn filter_style_data(&self, key: &String, value: String) -> String {
+    //     match key.as_str() {
+    //         "font-style" => ftd::executor::TextStyle::filter_for_style(value),
+    //         "font-decoration" => {},
+    //         "font-weight" => {},
+    //         _ => value
+    //     }
+    // }
 }
 
 fn dependency_map_from_condition(

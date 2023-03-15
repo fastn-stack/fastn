@@ -378,7 +378,7 @@ impl ftd::executor::Text {
                     .map(|v| v.map(|v| v.font_style_string()))
                     .value,
                 self.style.to_owned(),
-                Some(ftd::executor::TextStyle::no_value_pattern()),
+                None,
                 doc_id,
             ),
         );
@@ -391,7 +391,7 @@ impl ftd::executor::Text {
                     .map(|v| v.map(|v| v.font_decoration_string()))
                     .value,
                 self.style.to_owned(),
-                Some(ftd::executor::TextStyle::no_value_pattern()),
+                None,
                 doc_id,
             ),
         );
@@ -404,7 +404,7 @@ impl ftd::executor::Text {
                     .map(|v| v.map(|v| v.font_weight_string()))
                     .value,
                 self.style.to_owned(),
-                Some(ftd::executor::TextStyle::no_value_pattern()),
+                None,
                 doc_id,
             ),
         );

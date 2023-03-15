@@ -2497,6 +2497,9 @@ impl TextStyle {
             inherited_variables,
         )?;
 
+        //dbg!(&or_type_value.value);
+        dbg!(&or_type_value.properties);
+
         Ok(ftd::executor::Value::new(
             TextStyle::from_optional_values(Some(or_type_value.value), doc, line_number)?,
             or_type_value.line_number,
@@ -2508,7 +2511,7 @@ impl TextStyle {
         if self.italic {
             return "italic".to_string();
         }
-        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+        ftd::interpreter2::FTD_NONE.to_string()
     }
 
     pub fn font_decoration_string(&self) -> String {
@@ -2521,7 +2524,7 @@ impl TextStyle {
         }
 
         if css_string.is_empty() {
-            return ftd::interpreter2::FTD_IGNORE_KEY.to_string();
+            return ftd::interpreter2::FTD_NONE.to_string();
         }
         css_string.join(" ")
     }
@@ -2530,20 +2533,58 @@ impl TextStyle {
         if let Some(weight) = self.weight.as_ref() {
             return weight.to_weight_string();
         }
-        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+        ftd::interpreter2::FTD_NONE.to_string()
     }
+
+    // pub fn filter_for_style(values: String) -> String {
+    //     let mut result = String::new();
+    //     for v in values.split(' ') {
+    //         match v {
+    //             "italic" => result.push_str(v + ' '),
+    //             _ => {}
+    //         }
+    //     }
+    //
+    //     result.trim_end().to_string()
+    // }
+    //
+    // pub fn filter_for_decoration(values: String) -> String {
+    //     let mut result = String::new();
+    //     for v in values.split(' ') {
+    //         match v {
+    //             "underline" => result.push_str(v + ' '),
+    //             "strike" => result.push_str("line-through" + ' '),
+    //             _ => {}
+    //         }
+    //     }
+    //
+    //     result.trim_end().to_string()
+    // }
+    //
+    // pub fn filter_for_weight(values: String) -> String {
+    //     let mut result = String::new();
+    //     for v in values.split(' ') {
+    //         match v {
+    //             "underline" => result.push_str(v + ' '),
+    //             "strike" => result.push_str("line-through" + ' '),
+    //             _ => {}
+    //         }
+    //     }
+    //
+    //     result.trim_end().to_string()
+    // }
 
     pub fn no_value_pattern() -> (String, bool) {
         (
             format!(
                 indoc::indoc! {"
-                    if ({{0}} == \"{no_value}\") {{
+                    if (\"{{0}}\" == \"{none_value}\") {{
                         \"{remove_key}\"
                     }} else {{
                         \"{{0}}\"
                     }}
                 "},
-                no_value = ftd::interpreter2::FTD_IGNORE_KEY,
+                none_value = ftd::interpreter2::FTD_NONE,
                 remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
             ),
             true,

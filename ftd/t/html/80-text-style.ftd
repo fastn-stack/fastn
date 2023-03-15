@@ -1,13 +1,12 @@
+-- integer $count: 0
+
+-- ftd.integer: $count
+
 -- ftd.text: Normal string
 
 -- ftd.text: Stylized string
-style: italic, underline
-
--- ftd.text: Stylized string 2
-style: bold, italic
-
--- ftd.text: Stylized string 3
-style: extra-bold, underline, italic
-
--- ftd.text: Stylized string 4
-style: bold
+style if { count % 4 == 0 }: italic, underline, strike
+style if { count % 4 == 1 }: bold, italic
+style if { count % 4 == 2 }: extra-bold, underline, italic
+style if { count % 4 == 3 }: bold
+$on-click$: $ftd.increment($a = $count)

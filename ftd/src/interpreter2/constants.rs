@@ -177,6 +177,7 @@ pub const FTD_INHERITED: &str = "inherited";
 pub const FTD_LOOP_COUNTER: &str = "LOOP.COUNTER";
 pub const FTD_DEFAULT_TYPES: &str = "default-types";
 pub const FTD_DEFAULT_COLORS: &str = "default-colors";
+pub const FTD_NONE: &str = "none";
 pub const FTD_NO_VALUE: &str = "NO-VALUE";
 pub const FTD_IGNORE_KEY: &str = "IGNORE-KEY";
 pub const FTD_REMOVE_KEY: &str = "REMOVE-KEY";
