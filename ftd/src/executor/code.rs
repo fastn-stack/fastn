@@ -28,19 +28,28 @@ once_cell::sync::Lazy::new(|| {
 pub static TS: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
     once_cell::sync::Lazy::new(syntect::highlighting::ThemeSet::load_defaults);
 
+pub static TS1: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
+    once_cell::sync::Lazy::new(|| {
+        syntect::highlighting::ThemeSet::load_from_folder(
+            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("theme"),
+        )
+        .unwrap()
+    });
+
 pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
-    if !TS.themes.contains_key(theme) {
+
+    let theme = if let Some(theme) = TS.themes.get(theme).or(TS1.themes.get(theme)) {
+        theme
+    } else {
         return Err(ftd::executor::Error::ParseError {
             message: format!("'{}' is not a valid theme", theme),
             doc_id: doc_id.to_string(),
             line_number: 0,
         });
-    }
-
-    let theme = &TS.themes[theme];
+    };
 
     let code = code
         .lines()
