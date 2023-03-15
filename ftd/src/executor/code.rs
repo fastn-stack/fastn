@@ -60,7 +60,8 @@ pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
 
-    let theme = if let Some(theme) = TS.themes.get(theme).or(ts1().themes.get(theme)) {
+    let ts1 = ts1();
+    let theme = if let Some(theme) = TS.themes.get(theme).or(ts1.themes.get(theme)) {
         theme
     } else {
         return Err(ftd::executor::Error::ParseError {
