@@ -190,3 +190,17 @@ pub const FTD_BORDER_STYLE_GROOVE: &str = "ftd#border-style.groove";
 pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
+
+pub const FTD_TEXT_STYLE: &str = "ftd#text-style";
+pub const FTD_TEXT_STYLE_ITALIC: &str = "ftd#text-style.italic";
+pub const FTD_TEXT_STYLE_UNDERLINE: &str = "ftd#text-style.underline";
+pub const FTD_TEXT_STYLE_STRIKE: &str = "ftd#text-style.strike";
+pub const FTD_TEXT_STYLE_WEIGHT_HEAVY: &str = "ftd#text-style.heavy";
+pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD: &str = "ftd#text-style.extra-bold";
+pub const FTD_TEXT_STYLE_WEIGHT_BOLD: &str = "ftd#text-style.bold";
+pub const FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD: &str = "ftd#text-style.semi-bold";
+pub const FTD_TEXT_STYLE_WEIGHT_MEDIUM: &str = "ftd#text-style.medium";
+pub const FTD_TEXT_STYLE_WEIGHT_REGULAR: &str = "ftd#text-style.regular";
+pub const FTD_TEXT_STYLE_WEIGHT_LIGHT: &str = "ftd#text-style.light";
+pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT: &str = "ftd#text-style.extra-light";
+pub const FTD_TEXT_STYLE_WEIGHT_HAIRLINE: &str = "ftd#text-style.hairline";

@@ -1,5 +1,3 @@
-use ftd::executor::BorderStyle;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -371,6 +369,45 @@ impl ftd::executor::Text {
                 ftd::node::Value::from_string(slug::slugify(&self.text.value.original)),
             );
         }
+
+        n.style.check_and_insert(
+            "font-style",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_style_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "text-decoration",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_decoration_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "font-weight",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_weight_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
+                doc_id,
+            ),
+        );
 
         n.style.check_and_insert(
             "text-align",
@@ -1471,7 +1508,9 @@ impl ftd::executor::Common {
             d.check_and_insert(
                 "border-style",
                 ftd::node::Value::from_executor_value(
-                    Some(BorderStyle::css_string_from_vec(&self.border_style.value)),
+                    Some(ftd::executor::BorderStyle::css_string_from_vec(
+                        &self.border_style.value,
+                    )),
                     self.border_style.to_owned(),
                     None,
                     doc_id,

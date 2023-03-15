@@ -1,0 +1,13 @@
+-- ftd.text: Normal string
+
+-- ftd.text: Stylized string
+style: italic, underline
+
+-- ftd.text: Stylized string 2
+style: bold, italic
+
+-- ftd.text: Stylized string 3
+style: extra-bold, underline, italic
+
+-- ftd.text: Stylized string 4
+style: bold
