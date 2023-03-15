@@ -548,7 +548,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>0</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Normal string</p></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; font-style: normal; font-weight: 700; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Stylized string</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>0</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Normal string</p></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 700; height: auto; width: auto" class="ft_md"><p>Stylized string</p></div></div>
 
 
 <script>
@@ -1447,10 +1447,6 @@ return (resolve_reference("foo#count", data)%4==3);
 document.querySelector(`[data-id="2:main"]`).style["font-style"] = "normal";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["font-style"] = null }
-
-if (document.querySelector(`[data-id="2:main"]`).style.getPropertyValue("font-style") == "REMOVE-KEY"){
-document.querySelector(`[data-id="2:main"]`).style.removeProperty("font-style");
-}
 }
 
 window.node_change_main["2:main__font-weight"] = function(data) {
@@ -1475,10 +1471,6 @@ return (resolve_reference("foo#count", data)%4==3);
 document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["font-weight"] = null }
-
-if (document.querySelector(`[data-id="2:main"]`).style.getPropertyValue("font-weight") == "REMOVE-KEY"){
-document.querySelector(`[data-id="2:main"]`).style.removeProperty("font-weight");
-}
 }
 
 window.node_change_main["2:main__text-decoration"] = function(data) {
@@ -1503,10 +1495,6 @@ return (resolve_reference("foo#count", data)%4==3);
 document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = null }
-
-if (document.querySelector(`[data-id="2:main"]`).style.getPropertyValue("text-decoration") == "REMOVE-KEY"){
-document.querySelector(`[data-id="2:main"]`).style.removeProperty("text-decoration");
-}
 }
 window.set_value_main = {};
 window.set_value_main["foo#count"] = function (data, new_value, remaining) {

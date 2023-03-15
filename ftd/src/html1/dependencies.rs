@@ -407,9 +407,7 @@ impl<'a> DependencyGenerator<'a> {
                 key
             );
 
-            if !value.trim().is_empty() {
-                value = format!("{}\n{}", value, remove_case_condition);
-            }
+            value = format!("{}\n{}", value, remove_case_condition);
 
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
@@ -683,7 +681,7 @@ impl<'a> DependencyGenerator<'a> {
                 }
             }
 
-            let mut value = ftd::html1::utils::js_expression_from_list(
+            let value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
                 format!(
