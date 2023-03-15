@@ -9,6 +9,7 @@
 "foo#code": "-- component toggle-ui:\ncaption title:\nbody description:\n.boolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",
 "foo#foo:name:7": "SDFSD",
 "foo#name": "ftd",
+"foo#value:clean:0": "-- component toggle-ui:\ncaption title:\nbody description:\nboolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -550,10 +551,10 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__copy_to_clipboard___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#code&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__copy_to_clipboard___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value:clean:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">caption title</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">body description</span><span style="color:#a7adba;">:
-</span><span style="color:#b41b98;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">true
+</span><span style="background-color:#ffffd7;color:#b41b98;">boolean $open</span><span style="background-color:#ffffd7;color:#a7adba;">: </span><span style="background-color:#ffffd7;color:#142eab;">true</span><span style="color:#4f5b66;">
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.column</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">$on-click$</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">$ftd.toggle($a = $toggle-ui.open)
@@ -572,7 +573,7 @@ box-sizing: inherit;
 </div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">caption title</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">body description</span><span style="color:#a7adba;">:
-</span><span style="background-color:#ffffaf;color:#b41b98;">boolean $open</span><span style="background-color:#ffffaf;color:#a7adba;">: </span><span style="background-color:#ffffaf;color:#142eab;">true</span><span style="color:#4f5b66;">
+</span><span style="background-color:#ffffd7;color:#b41b98;">boolean $open</span><span style="background-color:#ffffd7;color:#a7adba;">: </span><span style="background-color:#ffffd7;color:#142eab;">true</span><span style="color:#4f5b66;">
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.column</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">$on-click$</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">$ftd.toggle($a = $toggle-ui.open)
@@ -610,7 +611,7 @@ box-sizing: inherit;
 </div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">caption title</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">body description</span><span style="color:#65737e;">:
-</span><span style="background-color:#030388;color:#b48ead;">boolean $open</span><span style="background-color:#030388;color:#65737e;">: </span><span style="background-color:#030388;color:#d08770;">true</span><span style="color:#c0c5ce;">
+</span><span style="background-color:#1a1a5c;color:#b48ead;">boolean $open</span><span style="background-color:#1a1a5c;color:#65737e;">: </span><span style="background-color:#1a1a5c;color:#d08770;">true</span><span style="color:#c0c5ce;">
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">$on-click$</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$ftd.toggle($a = $toggle-ui.open)
@@ -1532,7 +1533,7 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"ftd__clean_code___main","values":[["a",{"mutable":false,"reference":"foo#code"}],["lang","ftd"]]}', this);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#code", data);
 }
 window.node_change_main["1,0:main__text"] = function(data) {
 document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1705,7 +1706,11 @@ set_data_value(data, "foo#code" + "." + remaining, new_value);
 } else {
 set_data_value(data, "foo#code", new_value);
 }
-
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#value:clean:0"]){window["resolve_value_main"]["foo#value:clean:0"](data);
+} else {
+let value = resolve_reference("foo#code", data, null);
+set_data_value(data, "foo#value:clean:0", value);
+}
 if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#code"]) {
 let changes = window.ftd.mutable_value_main["foo#code"].changes;
 for(let i in changes) { changes[i](); }

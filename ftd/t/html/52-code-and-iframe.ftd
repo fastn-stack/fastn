@@ -2,14 +2,15 @@
 
 -- component value:
 caption code:
+string clean: $ftd.clean-code(a = $value.code, lang = ftd)
 
 -- ftd.column:
-$on-click$: $ftd.copy-to-clipboard(a = $value.code)
+$on-click$: $ftd.copy-to-clipboard(a = $value.clean)
 
 -- ftd.code:
 lang: ftd
 theme: fastn-theme.light
-text: $ftd.clean-code(a = $value.code, lang = ftd)
+text: $value.code
 
 -- end: ftd.column
 
