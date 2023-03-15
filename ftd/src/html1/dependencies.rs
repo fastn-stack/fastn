@@ -738,8 +738,8 @@ impl<'a> DependencyGenerator<'a> {
         Ok(result.join("\n"))
     }
 
-    fn filter_style_data(&self, key: &String, value: String) -> String {
-        match key.as_str() {
+    fn filter_style_data(&self, key: &str, value: String) -> String {
+        match key {
             "font-style" => ftd::executor::TextStyle::filter_for_style(value),
             "text-decoration" => ftd::executor::TextStyle::filter_for_decoration(value),
             "font-weight" => ftd::executor::TextStyle::filter_for_weight(value),
