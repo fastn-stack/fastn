@@ -28,14 +28,14 @@ once_cell::sync::Lazy::new(|| {
 pub static TS: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
     once_cell::sync::Lazy::new(syntect::highlighting::ThemeSet::load_defaults);
 
-pub static TS1: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
-    once_cell::sync::Lazy::new(|| {
-        syntect::highlighting::ThemeSet::load_from_folder(
-            std::path::PathBuf::from(option_env!("OUT_DIR").unwrap_or(env!("CARGO_MANIFEST_DIR")))
-                .join("theme"),
+pub static TS1: syntect::highlighting::ThemeSet =
+    syntect::highlighting::ThemeSet::load_from_folder(
+        std::path::PathBuf::from(
+            option_env!("OUT_DIR").unwrap_or(option_env!("CARGO_MANIFEST_DIR").unwrap_or(".")),
         )
-        .unwrap()
-    });
+        .join("theme"),
+    )
+    .unwrap();
 
 /*fn ts1() -> syntect::highlighting::ThemeSet {
     let mut theme_set = syntect::highlighting::ThemeSet::new();
