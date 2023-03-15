@@ -2633,7 +2633,9 @@ impl TextStyle {
             .split(' ')
         {
             match v {
-                valid if TextWeight::is_valid_text_weight(valid) => result.push_str(TextWeight::from_type_to_weight(valid).as_str()),
+                valid if TextWeight::is_valid_text_weight(valid) => {
+                    result.push_str(TextWeight::from_type_to_weight(valid).as_str())
+                }
                 _ => continue,
             }
         }
