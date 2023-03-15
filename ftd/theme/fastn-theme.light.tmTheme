@@ -5,9 +5,9 @@
 	<key>author</key>
 	<string>Chris Kempson (http://chriskempson.com)</string>
 	<key>name</key>
-	<string>MyTheme Light</string>
+	<string>fastn Theme Light</string>
 	<key>semanticClass</key>
-	<string>mytheme.light</string>
+	<string>fastn-theme.light</string>
 	<key>colorSpaceName</key>
 	<string>sRGB</string>
 	<key>source</key>

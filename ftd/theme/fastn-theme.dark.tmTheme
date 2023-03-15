@@ -5,11 +5,13 @@
 		<key>author</key>
 		<string>Chris Kempson (http://chriskempson.com)</string>
 		<key>name</key>
-		<string>Base16 Ocean Dark</string>
+		<string>fastn Theme Dark</string>
 		<key>semanticClass</key>
-		<string>base16.ocean.dark</string>
+		<string>fastn-theme.dark</string>
 		<key>colorSpaceName</key>
 		<string>sRGB</string>
+		<key>source</key>
+		<string>https://github.com/SublimeText/Spacegray/blob/2703e93f559e212ef3895edd10d861a4383ce93d/base16-ocean.dark.tmTheme</string>
 		<key>gutterSettings</key>
 		<dict>
 			<key>background</key>

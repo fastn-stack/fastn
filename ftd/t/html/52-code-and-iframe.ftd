@@ -5,7 +5,7 @@ padding.px: 20
 
 -- ftd.code:
 lang: ftd
-theme: base16-ocean-light
+theme: fastn-theme.light
 role: $inherited.types.copy-regular
 padding-vertical.px: 10
 padding-horizontal.px: 20
@@ -37,7 +37,7 @@ padding.px: 20
 
 -- ftd.code:
 lang: ftd
-theme: base16-ocean-dark
+theme: fastn-theme.dark
 role: $inherited.types.copy-regular
 padding-vertical.px: 10
 padding-horizontal.px: 20
