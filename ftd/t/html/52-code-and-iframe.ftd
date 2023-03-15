@@ -1,73 +1,65 @@
+-- ftd.row:
+spacing: space-between
+width: fill-container
+padding.px: 20
+
 -- ftd.code:
 lang: ftd
-theme: my-theme-light
-width: fill-container
+theme: base16-ocean-light
 role: $inherited.types.copy-regular
-color: $inherited.colors.text
-padding-top.px: 10
-padding-left.px: 20
-padding-bottom.px: 10
-padding-right.px: 20
-background.solid: $inherited.colors.background.code
-border-top-left-radius.px: 4
-border-top-right-radius.px: 4
-border-bottom-left-radius.px: 4
-border-bottom-right-radius.px: 4
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: #fff
+border-radius.px: 4
+border-width.px: 1
 
-\-- component toggle-ui:
-caption title:
-body description:
-boolean $open: true
-
-\-- ftd.column:
-$on-click$: $ftd.toggle($a = $toggle-ui.open)
-
-\-- ftd.text:
-
-My text
-
-\-- ftd.text: $toggle-ui.description
-if: { toggle-ui.open }
-
-\-- end: ftd.column
-
-\-- end: toggle-ui
-
+$code
 
 -- ftd.code:
 lang: ftd
 theme: base16-ocean.light
-width: fill-container
 role: $inherited.types.copy-regular
-color: $inherited.colors.text
-padding-top.px: 10
-padding-left.px: 20
-padding-bottom.px: 10
-padding-right.px: 20
-background.solid: $inherited.colors.background.code
-border-top-left-radius.px: 4
-border-top-right-radius.px: 4
-border-bottom-left-radius.px: 4
-border-bottom-right-radius.px: 4
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: #fff
+border-radius.px: 4
+border-width.px: 1
 
-\-- component toggle-ui:
-caption title:
-body description:
-boolean $open: true
+$code
 
-\-- ftd.column:
-$on-click$: $ftd.toggle($a = $toggle-ui.open)
+-- end: ftd.row
 
-\-- ftd.text:
 
-My text
+-- ftd.row:
+spacing: space-between
+width: fill-container
+padding.px: 20
 
-\-- ftd.text: $toggle-ui.description
-if: { toggle-ui.open }
+-- ftd.code:
+lang: ftd
+theme: base16-ocean-dark
+role: $inherited.types.copy-regular
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: #000
+border-radius.px: 4
+border-width.px: 1
 
-\-- end: ftd.column
+$code
 
-\-- end: toggle-ui
+-- ftd.code:
+lang: ftd
+theme: base16-ocean.dark
+role: $inherited.types.copy-regular
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: #000
+border-radius.px: 4
+border-width.px: 1
+
+$code
+
+-- end: ftd.row
 
 
 -- ftd.code:
@@ -116,3 +108,28 @@ if: {foo.name != NULL}
 -- end: ftd.column
 
 -- end: foo
+
+
+
+
+-- string code:
+
+
+\-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+\-- ftd.column:
+$on-click$: $ftd.toggle($a = $toggle-ui.open)
+
+\-- ftd.text:
+
+My text
+
+\-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+\-- end: ftd.column
+
+\-- end: toggle-ui

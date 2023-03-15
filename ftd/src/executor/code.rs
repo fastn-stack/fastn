@@ -1,5 +1,5 @@
 static SYNTAX_DIR: include_dir::Dir<'_> = include_dir::include_dir!("$CARGO_MANIFEST_DIR/syntax");
-pub const DEFAULT_THEME: &str = "base16-ocean.dark";
+pub const DEFAULT_THEME: &str = "base16-ocean-dark";
 
 pub static SS: once_cell::sync::Lazy<syntect::parsing::SyntaxSet> =
     once_cell::sync::Lazy::new(|| {
@@ -61,8 +61,46 @@ pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::
         + "\n";
 
     // TODO: handle various params
-    Ok(
-        syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)?
-            .replacen('\n', "", 1),
-    )
+    Ok(highlighted_html_for_string(code.as_str(), &SS, syntax, theme)?.replacen('\n', "", 1))
+}
+
+fn highlighted_html_for_string(
+    s: &str,
+    ss: &syntect::parsing::SyntaxSet,
+    syntax: &syntect::parsing::SyntaxReference,
+    theme: &syntect::highlighting::Theme,
+) -> Result<String, syntect::Error> {
+    let mut highlighter = syntect::easy::HighlightLines::new(syntax, theme);
+    let mut output = start_highlighted_html_snippet(theme);
+
+    for line in syntect::util::LinesWithEndings::from(s) {
+        let regions = highlighter.highlight_line(line, ss)?;
+        syntect::html::append_highlighted_html_for_styled_line(
+            &regions[..],
+            syntect::html::IncludeBackground::No,
+            &mut output,
+        )?;
+    }
+    output.push_str("</pre>\n");
+    Ok(output)
+}
+
+fn start_highlighted_html_snippet(t: &syntect::highlighting::Theme) -> String {
+    let c = t
+        .settings
+        .background
+        .map(|c| {
+            let a = if c.a != 255 {
+                format!("{:02x}", c.a)
+            } else {
+                Default::default()
+            };
+            format!(
+                " style=\"background-color:#{:02x}{:02x}{:02x}{};\"",
+                c.r, c.g, c.b, a
+            )
+        })
+        .unwrap_or_default();
+
+    format!("<pre{}>\n", c)
 }

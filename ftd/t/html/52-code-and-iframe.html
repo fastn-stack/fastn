@@ -6,6 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#code": "-- component toggle-ui:\ncaption title:\nbody description:\nboolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",
 "foo#foo:name:6": "SDFSD",
 "foo#name": "ftd",
 "ftd#breakpoint-width": {
@@ -549,26 +550,26 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="background-color: rgba(239,241,245,1); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-left-radius: 4px; border-top-right-radius: 4px; border-top-width: 0px; box-sizing: border-box; color: rgba(88,75,66,1); font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: 100%" class="ft_md"><pre style="background-color:#eff1f5;"><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">caption title</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">body description</span><span style="color:#a7adba;">:
-</span><span style="color:#b41b98;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#c5441c;">true
+</span><span style="color:#b41b98;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">true
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.column</span><span style="color:#a7adba;">:
-</span><span style="color:#b41b98;">$on-click$</span><span style="color:#a7adba;">: </span><span style="color:#c5441c;">$ftd.toggle($a = $toggle-ui.open)
+</span><span style="color:#b41b98;">$on-click$</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">$ftd.toggle($a = $toggle-ui.open)
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.text</span><span style="color:#a7adba;">:
 </span><span style="color:#4f5b66;">
 </span><span style="color:#4f5b66;">My text
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.text</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">$toggle-ui.description
-</span><span style="color:#b41b98;">if</span><span style="color:#a7adba;">: </span><span style="color:#c5441c;">{ toggle-ui.open }
+</span><span style="color:#b41b98;">if</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">{ toggle-ui.open }
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">end</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">ftd.column
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">end</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">toggle-ui
 </span></pre>
-</div><div data-id="1:main" style="background-color: rgba(239,241,245,1); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-left-radius: 4px; border-top-right-radius: 4px; border-top-width: 0px; box-sizing: border-box; color: rgba(88,75,66,1); font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: 100%" class="ft_md"><pre style="background-color:#eff1f5;"><span style="color:#a7adba;">-- </span><span style="color:#d08770;">component toggle-ui</span><span style="color:#a7adba;">:
+</div><div data-id="0,1:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre style="background-color:#eff1f5;"><span style="color:#a7adba;">-- </span><span style="color:#d08770;">component toggle-ui</span><span style="color:#a7adba;">:
 </span><span style="color:#b48ead;">caption title</span><span style="color:#a7adba;">:
 </span><span style="color:#b48ead;">body description</span><span style="color:#a7adba;">:
 </span><span style="color:#b48ead;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#d08770;">true
@@ -587,7 +588,45 @@ box-sizing: inherit;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#d08770;">end</span><span style="color:#a7adba;">: </span><span style="color:#a3be8c;">toggle-ui
 </span></pre>
-</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre style="background-color:#eff1f5;"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">hello_world</span><span style="color:#4f5b66;">() {
+</div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption title</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">body description</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">$on-click$</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$ftd.toggle($a = $toggle-ui.open)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">:
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">My text
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$toggle-ui.description
+</span><span style="color:#b48ead;">if</span><span style="color:#65737e;">: </span><span style="color:#d08770;">{ toggle-ui.open }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">ftd.column
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">toggle-ui
+</span></pre>
+</div><div data-id="1,1:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-decoration: none; width: auto" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption title</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">body description</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">$on-click$</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$ftd.toggle($a = $toggle-ui.open)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">:
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">My text
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$toggle-ui.description
+</span><span style="color:#b48ead;">if</span><span style="color:#65737e;">: </span><span style="color:#d08770;">{ toggle-ui.open }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">ftd.column
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">toggle-ui
+</span></pre>
+</div></div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre style="background-color:#eff1f5;"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">hello_world</span><span style="color:#4f5b66;">() {
 </span><span style="color:#4f5b66;">    println!(&quot;</span><span style="color:#a3be8c;">Hello World</span><span style="color:#4f5b66;">&quot;);
 </span><span style="color:#4f5b66;">}
 </span></pre>
@@ -1467,101 +1506,157 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__background-color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("ftd#default-colors.background.code", data).light;
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("ftd#default-colors.background.code", data).dark;}
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#code", data);
 }
 
-window.node_change_main["0:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
-}
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
-}
-
-window.node_change_main["0:main__font-family"] = function(data) {
+window.node_change_main["0,0:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["0:main__font-size"] = function(data) {
+window.node_change_main["0,0:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["0:main__font-weight"] = function(data) {
+window.node_change_main["0,0:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["0:main__letter-spacing"] = function(data) {
+window.node_change_main["0,0:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["0:main__line-height"] = function(data) {
+window.node_change_main["0,0:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
-window.node_change_main["1:main__background-color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("ftd#default-colors.background.code", data).light;
-}
-else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("ftd#default-colors.background.code", data).dark;}
+window.node_change_main["0,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#code", data);
 }
 
-window.node_change_main["1:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
-}
-else {document.querySelector(`[data-id="1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
-}
-
-window.node_change_main["1:main__font-family"] = function(data) {
+window.node_change_main["0,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
-}
-
-window.node_change_main["1:main__font-size"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
-}
-else {document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["1:main__font-weight"] = function(data) {
+window.node_change_main["0,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["1:main__letter-spacing"] = function(data) {
+window.node_change_main["0,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
-window.node_change_main["1:main__line-height"] = function(data) {
+window.node_change_main["0,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["0,1:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+window.node_change_main["1,0:main__text"] = function(data) {
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#code", data);
+}
+
+window.node_change_main["1,0:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,0:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,0:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,0:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,0:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+window.node_change_main["1,1:main__text"] = function(data) {
+document.querySelector(`[data-id="1,1:main"]`).innerHTML = resolve_reference("foo#code", data);
+}
+
+window.node_change_main["1,1:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,1:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,1:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,1:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,1:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["6,0:main__display"] = function(data) {
 if(function(){
@@ -1576,6 +1671,31 @@ window.node_change_main["6,0:main__text"] = function(data) {
 document.querySelector(`[data-id="6,0:main"]`).innerHTML = resolve_reference("foo#foo:name:6", data);
 }
 window.set_value_main = {};
+window.set_value_main["foo#code"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#code" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#code", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#code"]) {
+let changes = window.ftd.mutable_value_main["foo#code"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#code"]) {
+let changes = window.ftd.immutable_value_main["foo#code"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
+}
+};
+
 window.set_value_main["foo#foo:name:6"] = function (data, new_value, remaining) {
 if (!!remaining) {
 set_data_value(data, "foo#foo:name:6" + "." + remaining, new_value);
@@ -1612,34 +1732,13 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__background-color"]){window.node_change_main["0,1:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
-}
-};
-
-window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#default-colors" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#default-colors", new_value);
-}
-
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-colors"]) {
-let changes = window.ftd.mutable_value_main["ftd#default-colors"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-colors"]) {
-let changes = window.ftd.immutable_value_main["ftd#default-colors"].changes;
-for(let i in changes) { changes[i](); }
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
 };
 
@@ -1658,25 +1757,45 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#default-types"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-weight"]){window.node_change_main["1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__letter-spacing"]){window.node_change_main["1:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__line-height"]){window.node_change_main["1:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
 };
 
@@ -1695,25 +1814,45 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#device"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-weight"]){window.node_change_main["1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__letter-spacing"]){window.node_change_main["1:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__line-height"]){window.node_change_main["1:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
 };
 
