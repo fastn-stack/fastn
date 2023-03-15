@@ -676,8 +676,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.doc,
                     );
                     value_string = self.filter_style_data(&style_key, value_string.to_string());
-                    if !value_string.eq(ftd::interpreter2::FTD_VALUE_UNCHANGED)
-                    {
+                    if !value_string.eq(ftd::interpreter2::FTD_VALUE_UNCHANGED) {
                         let value = format!("{} = {};", key, value_string);
                         expressions.push((condition, value));
                     }
