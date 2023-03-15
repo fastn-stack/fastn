@@ -697,23 +697,6 @@ impl<'a> DependencyGenerator<'a> {
                 .as_str(),
             );
 
-            let remove_case_condition = format!(
-                indoc::indoc! {"
-                if (document.querySelector(`[data-id=\"{}\"]`).style.getPropertyValue(\"{}\") == \"{}\"){{
-                    document.querySelector(`[data-id=\"{}\"]`).style.removeProperty(\"{}\");
-                }}
-            "},
-                node_data_id,
-                style_key,
-                ftd::interpreter2::FTD_REMOVE_KEY,
-                node_data_id,
-                style_key
-            );
-
-            if !value.trim().is_empty() {
-                value = format!("{}\n{}", value, remove_case_condition);
-            }
-
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"

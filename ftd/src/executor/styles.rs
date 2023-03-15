@@ -2555,7 +2555,7 @@ impl TextStyle {
         if self.italic {
             return "italic".to_string();
         }
-        ftd::interpreter2::FTD_TEXT_DEFAULT_STYLE.to_string()
+        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
     }
 
     pub fn font_decoration_string(&self) -> String {
@@ -2568,7 +2568,7 @@ impl TextStyle {
         }
 
         if css_string.is_empty() {
-            return ftd::interpreter2::FTD_TEXT_DEFAULT_DECORATION.to_string();
+            return ftd::interpreter2::FTD_IGNORE_KEY.to_string();
         }
         css_string.join(" ")
     }
@@ -2577,7 +2577,7 @@ impl TextStyle {
         if let Some(weight) = self.weight.as_ref() {
             return weight.to_weight_string();
         }
-        ftd::interpreter2::FTD_TEXT_DEFAULT_WEIGHT.to_string()
+        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
     }
 
     pub fn filter_for_style(values: String) -> String {
@@ -2646,23 +2646,6 @@ impl TextStyle {
             false => filtered.to_string(),
         };
         format!("\"{}\"", res)
-    }
-
-    pub fn no_value_pattern() -> (String, bool) {
-        (
-            format!(
-                indoc::indoc! {"
-                    if (\"{{0}}\" == \"{none_value}\") {{
-                        \"{remove_key}\"
-                    }} else {{
-                        \"{{0}}\"
-                    }}
-                "},
-                none_value = ftd::interpreter2::FTD_NONE,
-                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
-            ),
-            true,
-        )
     }
 }
 
