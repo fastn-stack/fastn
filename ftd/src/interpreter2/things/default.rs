@@ -35,6 +35,43 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
 
     std::iter::IntoIterator::into_iter([
         (
+            "ftd.clean_code".to_string(),
+            Function::new(|argument| {
+                if argument.as_empty().is_ok() {
+                    Ok(Value::String("".to_string()))
+                } else if let Ok(mut s) = argument.as_string() {
+                    s = s.replace("\n.", "\n");
+                    Ok(Value::String(
+                        s.clone().strip_prefix('.').map_or(s, ToString::to_string),
+                    ))
+                } else if let Ok(tuple) = argument.as_tuple() {
+                    if tuple.len().ne(&2) {
+                        Err(
+                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
+                                expected: 2,
+                                actual: tuple.len(),
+                            },
+                        )
+                    } else {
+                        let mut s = tuple.first().unwrap().as_string()?;
+                        let lang = tuple.last().unwrap().as_string()?;
+                        if lang.eq("ftd") {
+                            s = s.replace("\n.", "\n");
+                            Ok(Value::String(
+                                s.clone().strip_prefix('.').map_or(s, ToString::to_string),
+                            ))
+                        } else {
+                            Ok(Value::String(s))
+                        }
+                    }
+                } else {
+                    Err(ftd::evalexpr::error::EvalexprError::ExpectedString {
+                        actual: argument.clone(),
+                    })
+                }
+            }),
+        ),
+        (
             "ftd.is_empty".to_string(),
             Function::new(|argument| {
                 if argument.as_empty().is_ok() {
@@ -54,7 +91,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                 if let Ok(s) = argument.as_tuple() {
                     if s.len() != 2 {
                         Err(
-                            ftd::evalexpr::error::EvalexprError::WrongOperatorArgumentAmount {
+                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
                                 expected: 2,
                                 actual: s.len(),
                             },
@@ -312,6 +349,49 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 expression: vec![
                     ftd::interpreter2::things::function::Expression {
                         expression: "enable_system_mode()".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#clean-code".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#clean-code".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::Kind::string(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "lang".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "ftd.clean_code(a, lang)".to_string(),
                         line_number: 0,
                     }
                 ],

@@ -61,11 +61,12 @@ pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::
         + "\n";
 
     // TODO: handle various params
-    Ok(highlighted_html_for_string(code.as_str(), &SS, syntax, theme)?.replacen('\n', "", 1))
+    Ok(highlighted_html_for_string(code.as_str(), ext, &SS, syntax, theme)?.replacen('\n', "", 1))
 }
 
 fn highlighted_html_for_string(
     s: &str,
+    ext: &str,
     ss: &syntect::parsing::SyntaxSet,
     syntax: &syntect::parsing::SyntaxReference,
     theme: &syntect::highlighting::Theme,
@@ -74,10 +75,13 @@ fn highlighted_html_for_string(
     let mut output = start_highlighted_html_snippet(theme);
 
     for line in syntect::util::LinesWithEndings::from(s) {
-        let regions = highlighter.highlight_line(line, ss)?;
+        let mut regions = highlighter.highlight_line(line, ss)?;
+        if ext.eq("ftd") && line.starts_with('.') {
+            regions.remove(0);
+        }
         syntect::html::append_highlighted_html_for_styled_line(
             &regions[..],
-            syntect::html::IncludeBackground::No,
+            syntect::html::IncludeBackground::IfDifferent(syntect::highlighting::Color::WHITE),
             &mut output,
         )?;
     }

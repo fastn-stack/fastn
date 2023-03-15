@@ -9,9 +9,9 @@ contexts:
     - match: ^--\s+
       push: section_line
       scope: comment
-    - match: ^---\s+
-      push: section_line
-      scope: comment
+    - match: ^\.( *)
+      push: highlight
+      scope: keyword.declaration
     - match: "^(.*?)(:)( *)(.*$)"
       captures:
         1: storage.type.function
@@ -25,3 +25,15 @@ contexts:
       captures:
         1: entity.name.class
         4: string
+  highlight:
+    - meta_scope: keyword.declaration
+    - match: $
+      pop: true
+    - match: --\s+
+      push: section_line
+      scope: comment
+    - match: "(.*?)(:)( *)(.*$)"
+      captures:
+        1: storage.type.function
+        2: comment
+        4: constant.character

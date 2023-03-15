@@ -1,3 +1,21 @@
+-- value: $code
+
+-- component value:
+caption code:
+
+-- ftd.column:
+$on-click$: $ftd.copy-to-clipboard(a = $value.code)
+
+-- ftd.code:
+lang: ftd
+theme: fastn-theme.light
+text: $ftd.clean-code(a = $value.code, lang = ftd)
+
+-- end: ftd.column
+
+-- end: value
+
+
 -- ftd.row:
 spacing: space-between
 width: fill-container
@@ -118,7 +136,7 @@ if: {foo.name != NULL}
 \-- component toggle-ui:
 caption title:
 body description:
-boolean $open: true
+.boolean $open: true
 
 \-- ftd.column:
 $on-click$: $ftd.toggle($a = $toggle-ui.open)

@@ -107,6 +107,19 @@
 			</dict>
 			<dict>
 				<key>name</key>
+				<string>Operators</string>
+				<key>scope</key>
+				<string>keyword.declaration</string>
+				<key>settings</key>
+				<dict>
+					<key>foreground</key>
+					<string>#000000</string>
+					<key>background</key>
+					<string>#030388</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>name</key>
 				<string>Keywords</string>
 				<key>scope</key>
 				<string>keyword</string>
