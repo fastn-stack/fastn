@@ -33,7 +33,7 @@
 },
 "code": {
 "dark": "#2B303B",
-"light": "#2B303B"
+"light": "#EFF1F5"
 },
 "overlay": {
 "dark": "rgba(0, 0, 0, 0.8)",
@@ -548,7 +548,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>0</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Normal string</p></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; font-style: italic; font-weight: none; height: auto; text-decoration: underline line-through; width: auto" class="ft_md"><p>Stylized string</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>0</p></div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Normal string</p></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; font-style: normal; font-weight: 700; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Stylized string</p></div></div>
 
 
 <script>
@@ -556,6 +556,12 @@ box-sizing: inherit;
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
+// Setting up default value on <input>
+const inputElements = document.querySelectorAll('input[data-dv]');
+for (let input_ele of inputElements) {
+// @ts-ignore
+input_ele.defaultValue = input_ele.dataset.dv;
+}
 exports.init = function (id, data) {
 let element = document.getElementById(data);
 if (!!element) {
@@ -1423,22 +1429,22 @@ window.node_change_main["2:main__font-style"] = function(data) {
 if(function(){
 return (resolve_reference("foo#count", data)%4==0);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic underline strike";
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "normal";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==1);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "bold italic";
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==2);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "extra-bold underline italic";
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==3);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-style"] = "bold";
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "normal";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["font-style"] = null }
 
@@ -1451,22 +1457,22 @@ window.node_change_main["2:main__font-weight"] = function(data) {
 if(function(){
 return (resolve_reference("foo#count", data)%4==0);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "italic underline strike";
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "700";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==1);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "bold italic";
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "900";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==2);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "extra-bold underline italic";
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==3);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "bold";
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["font-weight"] = null }
 
@@ -1479,22 +1485,22 @@ window.node_change_main["2:main__text-decoration"] = function(data) {
 if(function(){
 return (resolve_reference("foo#count", data)%4==0);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "italic underline strike";
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "none";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==1);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "bold italic";
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "none";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==2);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "extra-bold underline italic";
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";
 }
 else if(function(){
 return (resolve_reference("foo#count", data)%4==3);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "bold";
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";
 }
 else { document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = null }
 

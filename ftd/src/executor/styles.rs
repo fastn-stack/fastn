@@ -2314,6 +2314,53 @@ impl TextWeight {
             TextWeight::HAIRLINE => "100".to_string(),
         }
     }
+
+    pub fn from_type_to_weight(weight_type: &str) -> String {
+        match weight_type {
+            "heavy" => "900".to_string(),
+            "extra-bold" => "800".to_string(),
+            "bold" => "700".to_string(),
+            "semi-bold" => "600".to_string(),
+            "medium" => "500".to_string(),
+            "regular" => "400".to_string(),
+            "light" => "300".to_string(),
+            "extra-light" => "200".to_string(),
+            "hairline" => "100".to_string(),
+            _ => "none".to_string(),
+        }
+    }
+
+    pub fn is_valid_weight_type(value: &str) -> bool {
+        matches!(
+            value,
+            "hairline"
+                | "extra-bold"
+                | "extra-light"
+                | "bold"
+                | "semi-bold"
+                | "light"
+                | "medium"
+                | "regular"
+                | "heavy"
+        )
+    }
+
+    pub fn is_valid_text_weight(value: &str) -> bool {
+        fn is_numeric_value(s: String) -> bool {
+            for c in s.chars() {
+                if !c.is_numeric() {
+                    return false;
+                }
+            }
+            true
+        }
+
+        match value {
+            c1 if TextWeight::is_valid_weight_type(c1) => true,
+            c2 if is_numeric_value(c2.to_string()) => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -2497,9 +2544,6 @@ impl TextStyle {
             inherited_variables,
         )?;
 
-        //dbg!(&or_type_value.value);
-        dbg!(&or_type_value.properties);
-
         Ok(ftd::executor::Value::new(
             TextStyle::from_optional_values(Some(or_type_value.value), doc, line_number)?,
             or_type_value.line_number,
@@ -2511,7 +2555,7 @@ impl TextStyle {
         if self.italic {
             return "italic".to_string();
         }
-        ftd::interpreter2::FTD_NONE.to_string()
+        ftd::interpreter2::FTD_TEXT_DEFAULT_STYLE.to_string()
     }
 
     pub fn font_decoration_string(&self) -> String {
@@ -2524,7 +2568,7 @@ impl TextStyle {
         }
 
         if css_string.is_empty() {
-            return ftd::interpreter2::FTD_NONE.to_string();
+            return ftd::interpreter2::FTD_TEXT_DEFAULT_DECORATION.to_string();
         }
         css_string.join(" ")
     }
@@ -2533,46 +2577,74 @@ impl TextStyle {
         if let Some(weight) = self.weight.as_ref() {
             return weight.to_weight_string();
         }
-        ftd::interpreter2::FTD_NONE.to_string()
+        ftd::interpreter2::FTD_TEXT_DEFAULT_WEIGHT.to_string()
     }
 
-    // pub fn filter_for_style(values: String) -> String {
-    //     let mut result = String::new();
-    //     for v in values.split(' ') {
-    //         match v {
-    //             "italic" => result.push_str(v + ' '),
-    //             _ => {}
-    //         }
-    //     }
-    //
-    //     result.trim_end().to_string()
-    // }
-    //
-    // pub fn filter_for_decoration(values: String) -> String {
-    //     let mut result = String::new();
-    //     for v in values.split(' ') {
-    //         match v {
-    //             "underline" => result.push_str(v + ' '),
-    //             "strike" => result.push_str("line-through" + ' '),
-    //             _ => {}
-    //         }
-    //     }
-    //
-    //     result.trim_end().to_string()
-    // }
-    //
-    // pub fn filter_for_weight(values: String) -> String {
-    //     let mut result = String::new();
-    //     for v in values.split(' ') {
-    //         match v {
-    //             "underline" => result.push_str(v + ' '),
-    //             "strike" => result.push_str("line-through" + ' '),
-    //             _ => {}
-    //         }
-    //     }
-    //
-    //     result.trim_end().to_string()
-    // }
+    pub fn filter_for_style(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                "italic" => result.push_str(v),
+                _ => continue,
+            }
+            result.push(' ');
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => ftd::interpreter2::FTD_TEXT_DEFAULT_STYLE.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
+    }
+
+    pub fn filter_for_decoration(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                "underline" => result.push_str(v),
+                "strike" => result.push_str("line-through"),
+                _ => continue,
+            }
+            result.push(' ');
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => ftd::interpreter2::FTD_TEXT_DEFAULT_DECORATION.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
+    }
+
+    pub fn filter_for_weight(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                valid if TextWeight::is_valid_text_weight(valid) => result.push_str(TextWeight::from_type_to_weight(valid).as_str()),
+                _ => continue,
+            }
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => ftd::interpreter2::FTD_TEXT_DEFAULT_WEIGHT.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
+    }
 
     pub fn no_value_pattern() -> (String, bool) {
         (

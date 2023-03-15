@@ -655,7 +655,7 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if let Some(value_string) =
+                if let Some(mut value_string) =
                     ftd::html1::utils::get_formatted_dep_string_from_property_value(
                         self.id,
                         self.doc,
@@ -677,7 +677,7 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                         self.doc,
                     );
-                    // let t = self.filter_style_data(&style_key, &value_string);
+                    value_string = self.filter_style_data(&style_key, value_string.to_string());
                     let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
                 }
@@ -738,14 +738,14 @@ impl<'a> DependencyGenerator<'a> {
         Ok(result.join("\n"))
     }
 
-    // fn filter_style_data(&self, key: &String, value: String) -> String {
-    //     match key.as_str() {
-    //         "font-style" => ftd::executor::TextStyle::filter_for_style(value),
-    //         "font-decoration" => {},
-    //         "font-weight" => {},
-    //         _ => value
-    //     }
-    // }
+    fn filter_style_data(&self, key: &String, value: String) -> String {
+        match key.as_str() {
+            "font-style" => ftd::executor::TextStyle::filter_for_style(value),
+            "text-decoration" => ftd::executor::TextStyle::filter_for_decoration(value),
+            "font-weight" => ftd::executor::TextStyle::filter_for_weight(value),
+            _ => value,
+        }
+    }
 }
 
 fn dependency_map_from_condition(
