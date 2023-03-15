@@ -31,10 +31,28 @@ pub static TS: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
 pub static TS1: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
     once_cell::sync::Lazy::new(|| {
         syntect::highlighting::ThemeSet::load_from_folder(
-            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("theme"),
+            std::path::PathBuf::from(option_env!("OUT_DIR").unwrap_or(env!("CARGO_MANIFEST_DIR")))
+                .join("theme"),
         )
         .unwrap()
     });
+
+/*fn ts1() -> syntect::highlighting::ThemeSet {
+    let mut theme_set = syntect::highlighting::ThemeSet::new();
+
+    let mut dark_theme = include_str!("../../theme/fastn-theme.dark.tmTheme").as_bytes();
+    theme_set.themes.insert(
+        "fastn-theme.dark".to_owned(),
+        syntect::highlighting::ThemeSet::load_from_reader(&mut dark_theme).unwrap(),
+    );
+
+    let mut light_theme = include_str!("../../theme/fastn-theme.light.tmTheme").as_bytes();
+    theme_set.themes.insert(
+        "fastn-theme.light".to_owned(),
+        syntect::highlighting::ThemeSet::load_from_reader(&mut light_theme).unwrap(),
+    );
+    theme_set
+}*/
 
 pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::Result<String> {
     let syntax = SS
