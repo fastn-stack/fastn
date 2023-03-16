@@ -925,7 +925,7 @@ impl ftd::executor::Common {
             d.check_and_insert("position", ftd::node::Value::from_string("absolute"));
         }
 
-        if !self.event.is_empty() {
+        if ftd::node::utils::has_click_event(self.event.as_slice()) {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
 
