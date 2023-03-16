@@ -144,7 +144,7 @@ skip: true
   document: book/2-preface.ftd
 - `iii` Introduction: /book/intro/
   document: book/3-intro.ftd
-- **1.** Getting Started: /book/getting-started/
+- **1.** Getting Started 🚧: /book/getting-started/
   document: book/01/00-getting-started.ftd
   - `1.1` Hello, Github!: /book/github/
     document: book/01/01-github.ftd
