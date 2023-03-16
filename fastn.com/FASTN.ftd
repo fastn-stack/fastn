@@ -150,8 +150,10 @@ skip: true
     document: book/01/02-github.ftd
   - **1.2** Let's Create A Repo: /book/repo/
     document: book/01/03-repo.ftd
-  - **1.3** Publish Your Site 🚧: /book/gh-pages/
+  - **1.3** Publish Your Site: /book/gh-pages/
     document: book/01/04-gh-pages.ftd
+  - **1.4** Edit Your Site 🚧: /book/first-edit/
+    document: book/01/04-first-edit.ftd
 - Appendix: /book/appendix/
   - **a** HTTP 🚧: /book/http/
     document: book/appendix/a-http.ftd
