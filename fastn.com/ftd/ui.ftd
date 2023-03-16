@@ -5,7 +5,7 @@ internally for rendering on the web, but its planning to support more backends l
 terminal/curses, and mobile device native frameworks for iOS and Android, and 
 possibly also a low-level implementation for embedded devices.
 
-One of the key concepts in `ftd` is the idea of a [`component`](ftd/component/).
+One of the key concepts in `ftd` is the idea of a [`component`](/components/).
 By understanding the component model, you can create reusable pieces of UI that
 can be combined in flexible and powerful ways.
 
