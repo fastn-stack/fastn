@@ -137,7 +137,7 @@ The type of our `title` argument is [`string`](ftd/built-in-types/#string).
 lang: ftd
 
 \-- component heading:
-string title:
+.string title:
 
 \-- ftd.text: $heading.title
 color: red
@@ -462,7 +462,7 @@ lang: ftd
 
 \-- component show-ui:
 caption title:
-ftd.ui list uis:
+.ftd.ui list uis:
 
 \-- ftd.column:
 spacing.fixed.px: 10
@@ -471,7 +471,7 @@ color: $inherited.colors.text
 \-- ftd.text: $show-ui.title
 
 \-- ftd.column:
-children: $show-ui.uis
+.children: $show-ui.uis
 border-width.px: 1
 padding.px: 10
 border-color: $inherited.colors.border
