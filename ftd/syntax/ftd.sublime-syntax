@@ -9,31 +9,32 @@ contexts:
     - match: ^--\s+
       push: section_line
       scope: comment
-    - match: ^((;;)( *)(<hl>))( *)
-      push: highlight
-      scope: keyword.declaration
-    - match: "^(.*?)(:)( *)(.*$)"
+    - match: "^(.*?)(:)( *)(.*)((;;)( *)(<hl>))( *)$"
       captures:
         1: storage.type.function
         2: comment
         4: constant.character
+        0: keyword.declaration
+    - match: "^(.*?)(:)( *)(.*)$"
+      captures:
+        1: storage.type.function
+        2: comment
+        4: constant.character
+    - match: "^(.*)((;;)( *)(<hl>))( *)$"
+      captures:
+        1: comment
+        0: keyword.declaration
   section_line:
     - meta_scope: comment
     - match: $
       pop: true
+    - match: "(.*?)(:)( *)(.*)((;;)( *)(<hl>))( *)$"
+      captures:
+        1: entity.name.class
+        2: comment
+        4: string
+        0: keyword.declaration
     - match: "(.*?)(:)( *)(.*)$"
       captures:
         1: entity.name.class
         4: string
-  highlight:
-    - meta_scope: keyword.declaration
-    - match: $
-      pop: true
-    - match: --\s+
-      push: section_line
-      scope: comment
-    - match: "(.*?)(:)( *)(.*$)"
-      captures:
-        1: storage.type.function
-        2: comment
-        4: constant.character

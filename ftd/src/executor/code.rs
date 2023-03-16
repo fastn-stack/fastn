@@ -106,14 +106,21 @@ fn highlighted_html_for_string(
 
     for line in syntect::util::LinesWithEndings::from(s) {
         let mut regions = highlighter.highlight_line(line, ss)?;
-        if ext.eq("ftd") && ftd::interpreter2::FTD_HIGHLIGHTER.is_match(line) {
-            regions.remove(0);
+        let highlighted = ftd::interpreter2::FTD_HIGHLIGHTER.is_match(line);
+        if ext.eq("ftd") && highlighted {
+            let style = regions.remove(regions.len() - 2).0;
+            let c = color_to_hex(&style.background);
+            output
+                .push_str(format!("<div style=\"background-color:{}; width: 100%\">", c).as_str());
         }
         syntect::html::append_highlighted_html_for_styled_line(
             &regions[..],
             syntect::html::IncludeBackground::IfDifferent(syntect::highlighting::Color::WHITE),
             &mut output,
         )?;
+        if ext.eq("ftd") && highlighted {
+            output.push_str("</div>");
+        }
     }
     output.push_str("</pre>\n");
     Ok(output)
@@ -123,18 +130,17 @@ fn start_highlighted_html_snippet(t: &syntect::highlighting::Theme) -> String {
     let c = t
         .settings
         .background
-        .map(|c| {
-            let a = if c.a != 255 {
-                format!("{:02x}", c.a)
-            } else {
-                Default::default()
-            };
-            format!(
-                " style=\"background-color:#{:02x}{:02x}{:02x}{};\"",
-                c.r, c.g, c.b, a
-            )
-        })
+        .map(|c| format!(" style=\"background-color:{};\"", color_to_hex(&c)))
         .unwrap_or_default();
 
     format!("<pre{}>\n", c)
+}
+
+fn color_to_hex(c: &syntect::highlighting::Color) -> String {
+    let a = if c.a != 255 {
+        format!("{:02x}", c.a)
+    } else {
+        Default::default()
+    };
+    format!("#{:02x}{:02x}{:02x}{}", c.r, c.g, c.b, a)
 }

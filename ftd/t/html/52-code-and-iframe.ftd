@@ -137,14 +137,16 @@ if: {foo.name != NULL}
 \-- component toggle-ui:
 caption title:
 body description:
-\;; <hl> boolean $open: true
+boolean $open: true  ;; <hl>
 
-\-- ftd.column:
+\-- ftd.column:  ;; <hl>
 $on-click$: $ftd.toggle($a = $toggle-ui.open)
 
 \-- ftd.text:
 
 My text
+
+This is highlighted  ;; <hl>
 
 \-- ftd.text: $toggle-ui.description
 if: { toggle-ui.open }
