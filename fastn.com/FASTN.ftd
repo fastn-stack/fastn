@@ -144,15 +144,15 @@ skip: true
   document: book/2-preface.ftd
 - `iii` Introduction: /book/intro/
   document: book/3-intro.ftd
-- **1** Getting Started: /book/getting-started/
-  document: book/01/01-getting-started.ftd
-  - **1.1** Hello, Github!: /book/github/
-    document: book/01/02-github.ftd
-  - **1.2** Let's Create A Repo: /book/repo/
-    document: book/01/03-repo.ftd
-  - **1.3** Publish Your Site: /book/gh-pages/
-    document: book/01/04-gh-pages.ftd
-  - **1.4** Edit Your Site 🚧: /book/first-edit/
+- **1.** Getting Started: /book/getting-started/
+  document: book/01/00-getting-started.ftd
+  - `1.1` Hello, Github!: /book/github/
+    document: book/01/01-github.ftd
+  - `1.2` Let's Create A Repo: /book/repo/
+    document: book/01/02-repo.ftd
+  - `1.3` Publish Your Site: /book/gh-pages/
+    document: book/01/03-gh-pages.ftd
+  - `1.4` Edit Your Site 🚧: /book/first-edit/
     document: book/01/04-first-edit.ftd
 - Appendix: /book/appendix/
   - **a** HTTP 🚧: /book/http/
