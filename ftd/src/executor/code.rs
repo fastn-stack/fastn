@@ -106,7 +106,7 @@ fn highlighted_html_for_string(
 
     for line in syntect::util::LinesWithEndings::from(s) {
         let mut regions = highlighter.highlight_line(line, ss)?;
-        if ext.eq("ftd") && line.starts_with('.') {
+        if ext.eq("ftd") && ftd::interpreter2::FTD_HIGHLIGHTER.is_match(line) {
             regions.remove(0);
         }
         syntect::html::append_highlighted_html_for_styled_line(

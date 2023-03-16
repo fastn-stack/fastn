@@ -6,7 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#code": "-- component toggle-ui:\ncaption title:\nbody description:\n.boolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",
+"foo#code": "-- component toggle-ui:\ncaption title:\nbody description:\n;; <hl> boolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",
 "foo#foo:name:7": "SDFSD",
 "foo#name": "ftd",
 "foo#value:clean:0": "-- component toggle-ui:\ncaption title:\nbody description:\nboolean $open: true\n\n-- ftd.column:\n$on-click$: $ftd.toggle($a = $toggle-ui.open)\n\n-- ftd.text:\n\nMy text\n\n-- ftd.text: $toggle-ui.description\nif: { toggle-ui.open }\n\n-- end: ftd.column\n\n-- end: toggle-ui",

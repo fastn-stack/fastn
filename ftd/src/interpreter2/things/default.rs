@@ -39,11 +39,14 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
             Function::new(|argument| {
                 if argument.as_empty().is_ok() {
                     Ok(Value::String("".to_string()))
-                } else if let Ok(mut s) = argument.as_string() {
-                    s = s.replace("\n.", "\n");
-                    Ok(Value::String(
-                        s.clone().strip_prefix('.').map_or(s, ToString::to_string),
-                    ))
+                } else if let Ok(s) = argument.as_string() {
+                    let mut new_string = vec![];
+                    for line in s.split('\n') {
+                        new_string.push(
+                            ftd::interpreter2::FTD_HIGHLIGHTER.replace(line, regex::NoExpand("")),
+                        );
+                    }
+                    Ok(Value::String(new_string.join("\n")))
                 } else if let Ok(tuple) = argument.as_tuple() {
                     if tuple.len().ne(&2) {
                         Err(
@@ -53,13 +56,17 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                             },
                         )
                     } else {
-                        let mut s = tuple.first().unwrap().as_string()?;
+                        let s = tuple.first().unwrap().as_string()?;
                         let lang = tuple.last().unwrap().as_string()?;
                         if lang.eq("ftd") {
-                            s = s.replace("\n.", "\n");
-                            Ok(Value::String(
-                                s.clone().strip_prefix('.').map_or(s, ToString::to_string),
-                            ))
+                            let mut new_string = vec![];
+                            for line in s.split('\n') {
+                                new_string.push(
+                                    ftd::interpreter2::FTD_HIGHLIGHTER
+                                        .replace(line, regex::NoExpand("")),
+                                );
+                            }
+                            Ok(Value::String(new_string.join("\n")))
                         } else {
                             Ok(Value::String(s))
                         }

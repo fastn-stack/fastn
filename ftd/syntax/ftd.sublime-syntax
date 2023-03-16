@@ -9,7 +9,7 @@ contexts:
     - match: ^--\s+
       push: section_line
       scope: comment
-    - match: ^\.( *)
+    - match: ^((;;)( *)(<hl>))( *)
       push: highlight
       scope: keyword.declaration
     - match: "^(.*?)(:)( *)(.*$)"

@@ -137,7 +137,7 @@ if: {foo.name != NULL}
 \-- component toggle-ui:
 caption title:
 body description:
-.boolean $open: true
+\;; <hl> boolean $open: true
 
 \-- ftd.column:
 $on-click$: $ftd.toggle($a = $toggle-ui.open)
