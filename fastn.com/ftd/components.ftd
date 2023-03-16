@@ -528,7 +528,7 @@ lang: ftd
 
 \-- component show-ui:
 caption title:
-children uis:
+children uis: ;; <hl>
 
 \-- ftd.column:
 spacing.fixed.px: 10
