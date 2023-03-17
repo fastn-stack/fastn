@@ -719,7 +719,7 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-ui
 </span></pre>
-</div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
+</div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: auto; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">caption title</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">body description</span><span style="color:#696b70;">:
 </span><span style="background-color:#e4eaf6; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4387ff inset"><span style="color:#a846b9;">boolean $open</span><span style="color:#696b70;">: </span><span style="color:#36464e;">true
@@ -740,7 +740,28 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-ui
 </span></pre>
-</div><div data-id="1,1:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">component toggle-ui</span><span style="background-color:#eff1f5;color:#a7adba;">:
+</div><div data-id="1,1:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
+</span><span style="color:#b41b98;">caption title</span><span style="color:#a7adba;">:
+</span><span style="color:#b41b98;">body description</span><span style="color:#a7adba;">:
+</span><span style="background-color:#ffffd7; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #c25f40 inset"><span style="color:#b41b98;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">true
+</span></span><span style="color:#4f5b66;">
+</span><span style="background-color:#ffffd7; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #c25f40 inset"><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.column</span><span style="color:#a7adba;">:
+</span></span><span style="color:#b41b98;">$on-click$</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">$ftd.toggle($a = $toggle-ui.open)
+</span><span style="color:#4f5b66;">
+</span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.text</span><span style="color:#a7adba;">:
+</span><span style="color:#4f5b66;">
+</span><span style="color:#4f5b66;">My text
+</span><span style="color:#4f5b66;">
+</span><span style="background-color:#ffffd7; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #c25f40 inset"><span style="color:#a7adba;">This is highlighted
+</span></span><span style="color:#4f5b66;">
+</span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">ftd.text</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">$toggle-ui.description
+</span><span style="color:#b41b98;">if</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">{ toggle-ui.open }
+</span><span style="color:#4f5b66;">
+</span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">end</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">ftd.column
+</span><span style="color:#4f5b66;">
+</span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">end</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">toggle-ui
+</span></pre>
+</div><div data-id="1,2:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">component toggle-ui</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5;color:#b48ead;">caption title</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5;color:#b48ead;">body description</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #b48ead inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#d08770;">true
@@ -761,7 +782,7 @@ margin-block-end: 1em;
 </span><span style="background-color:#eff1f5;color:#4f5b66;">
 </span><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">end</span><span style="background-color:#eff1f5;color:#a7adba;">: </span><span style="background-color:#eff1f5;color:#a3be8c;">toggle-ui
 </span></pre>
-</div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 20px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
+</div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: auto; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">caption title</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">body description</span><span style="color:#cecfd2;">:
 </span><span style="background-color:#222b42; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #2a77ff inset"><span style="color:#c973d9;">boolean $open</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">true
@@ -782,7 +803,28 @@ margin-block-end: 1em;
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">end</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">toggle-ui
 </span></pre>
-</div><div data-id="2,1:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#2b303b;"><span style="background-color:#2b303b;color:#65737e;">-- </span><span style="background-color:#2b303b;color:#ebcb8b;">component toggle-ui</span><span style="background-color:#2b303b;color:#65737e;">:
+</div><div data-id="2,1:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption title</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">body description</span><span style="color:#65737e;">:
+</span><span style="background-color:#1a1a5c; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4040d2 inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
+</span></span><span style="color:#c0c5ce;">
+</span><span style="background-color:#1a1a5c; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4040d2 inset"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
+</span></span><span style="color:#b48ead;">$on-click$</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$ftd.toggle($a = $toggle-ui.open)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">:
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">My text
+</span><span style="color:#c0c5ce;">
+</span><span style="background-color:#1a1a5c; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4040d2 inset"><span style="color:#65737e;">This is highlighted
+</span></span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$toggle-ui.description
+</span><span style="color:#b48ead;">if</span><span style="color:#65737e;">: </span><span style="color:#d08770;">{ toggle-ui.open }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">ftd.column
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">toggle-ui
+</span></pre>
+</div><div data-id="2,2:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#2b303b;"><span style="background-color:#2b303b;color:#65737e;">-- </span><span style="background-color:#2b303b;color:#ebcb8b;">component toggle-ui</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b;color:#b48ead;">caption title</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b;color:#b48ead;">body description</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #b48ead inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
@@ -1768,6 +1810,44 @@ document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0}
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
+window.node_change_main["1,2:main__text"] = function(data) {
+document.querySelector(`[data-id="1,2:main"]`).innerHTML = resolve_reference("foo#code", data);
+}
+
+window.node_change_main["1,2:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,2:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,2:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,2:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["1,2:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
 window.node_change_main["2,0:main__text"] = function(data) {
 document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("foo#code", data);
 }
@@ -1844,6 +1924,44 @@ document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0}
 }
 else {document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
+window.node_change_main["2,2:main__text"] = function(data) {
+document.querySelector(`[data-id="2,2:main"]`).innerHTML = resolve_reference("foo#code", data);
+}
+
+window.node_change_main["2,2:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["2,2:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["2,2:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["2,2:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
+
+window.node_change_main["2,2:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+}
 window.node_change_main["7,0:main__display"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:name:7", data)!=null);
@@ -1882,9 +2000,13 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
 }
 };
 
@@ -1928,9 +2050,13 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__backgrou
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-color"]){window.node_change_main["2,0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
 }
 };
 
@@ -1969,6 +2095,16 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-s
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
@@ -1988,6 +2124,16 @@ if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-wei
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
 }
 };
 
@@ -2026,6 +2172,16 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-s
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
@@ -2045,6 +2201,16 @@ if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-wei
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
 }
 };
 
