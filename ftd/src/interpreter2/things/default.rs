@@ -5520,7 +5520,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#EFF1F5".to_string(),
+                                                                    text: "#F5F5F5".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -5530,7 +5530,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#2B303B".to_string(),
+                                                                    text: "#21222C".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
