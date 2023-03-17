@@ -75,15 +75,15 @@ setup() {
 
     if [[ $CONTROLLER ]]; then 
         curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
-        mv fastn_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
-        mv fastn_controller_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
+        sudo mv fastn_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
+        sudo mv fastn_controller_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
         curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
-        mv fastn_macos_x86_64 "${DESTINATION_PATH}/fastn"
+        sudo mv fastn_macos_x86_64 "${DESTINATION_PATH}/fastn"
     else
         curl -s $URL | grep ".*\/releases\/download\/.*\/fastn_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
-        mv fastn_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
-        mv fastn_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
+        sudo mv fastn_linux_musl_x86_64 "${DESTINATION_PATH}/fastn"
+        sudo mv fastn_linux_musl_x86_64.d "${DESTINATION_PATH}/fastn.d"
     fi
     chmod +x "${DESTINATION_PATH}/fastn"*
     

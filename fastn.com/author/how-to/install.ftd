@@ -22,9 +22,9 @@ installing it on your local system.
 
 
 -- ds.code: Installer Script
-lang: ftd
+lang: sh
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/fastn-stack/fastn/main/install.sh)"
+curl -fsSL https://fastn.io/install.sh | bash
 
 
 -- ds.markdown: 

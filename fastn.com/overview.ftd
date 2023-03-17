@@ -120,7 +120,7 @@ We ship pre built binaries for Linux, Mac and Windows.
 lang: sh
 copy: false
 
-curl -sSL https://fastn.io/install.sh | sh
+curl -fsSL https://fastn.io/install.sh | bash
 
 -- ds.image:
 width: fill-container
