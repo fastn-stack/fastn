@@ -18,6 +18,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fifthtry.github.io/common
 -- fastn.dependency: fifthtry.github.io/fastn-ui
 -- fastn.dependency: fifthtry.github.io/fastn-typography
+-- fastn.dependency: fifthtry.github.io/fastn-io-typography
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds

@@ -1,5 +1,6 @@
 -- import: ds
 -- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.io/utils
 
 -- component page:
@@ -17,6 +18,7 @@ wrapper: $page.wrapper
 colors: $dark-flame-cs.main
 $sidebar: *$page.sidebar
 $widthfill: *$page.widthfill
+types: $typo.types
 
 -- ds.page.extra-headers:
 
