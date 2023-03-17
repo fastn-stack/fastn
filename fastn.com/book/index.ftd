@@ -1,6 +1,8 @@
+-- boolean $author-mode: false
+
 -- my-ds.page: The Book Of `fastn` and `ftd`
 
-*By Amit Upadhya, with contributions from `fastn` community*
+*By Amit Upadhyay, with contributions from `fastn` community.*
 
 This version of the text assumes you are using the lastest version of `fastn`.
 See the [installation section](/install/) to install or update `fastn`.
@@ -24,3 +26,17 @@ any mistakes in the book you can report it as a [#issues in our Github
 Repository](https://github.com/fastn-stack/fastn.io/issues).
 
 Prefer 📺 video medium of learning? Checkout our [video course](/expander/).
+
+
+-- ds.h1: Notes To Editors
+if: { author-mode }
+$on-global-key[e]$: $ftd.toggle($a=$author-mode)
+$on-click$: $ftd.toggle($a=$author-mode)
+
+- the "star us on github" should be a properly designed UI, not just text.
+- infact entire sidebar can be like that.
+
+-- end: my-ds.page
+
+
+

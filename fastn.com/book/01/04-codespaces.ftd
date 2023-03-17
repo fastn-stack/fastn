@@ -1,0 +1,99 @@
+-- import: fastn.io/assets
+
+-- my-ds.page: Github's Online Editor 🚧
+
+Now that we have a template website ready, we want to edit it. To edit things we
+have to do three things: get the code stored in our repository, install `fastn`
+and build our site using `fastn`.
+
+First question we have to ask is where do we do all this?
+
+-- ds.h1: Online Editor vs Local Development
+
+When working with programming languages, which `ftd` is after all, or to do web
+development in general, most people install programming language toolchain, and
+some editor on their laptops. We can also do it completely online, without
+installing anything on your machine/laptop etc. We at `fastn` support both, and
+recommend you learn both as there are advantages to both working on your laptop
+and working in online editor.
+
+-- ds.image:
+src: $assets.files.book.images.codespaces.png
+
+Online editors are relatively new. We are going to use the one by Github, called
+[Github Codespaces](https://github.com/features/codespaces). The product is
+free for first 60hrs of usage per month, which is good enough for learning
+purpose. In case you start reaching these limits we highly recommend you start
+considering the local development, which is completely free, and further if you
+are using it so much that means you are ready to move to the next level.
+
+If you are not interested in using Github Codespaces, or if you want to jump
+ahead, you can refer [appendix c - how to use terminal on your
+machine](/book/terminal/), [appendix e - how to install `fastn` on your
+machine](/book/install/) and [appendix f - setting up a basic code
+editor](/book/editor/).
+
+One significant advantage of using Github Codespaces is uniformity. Codespaces
+gives you a Linux machine to do development, you may be using Windows, or Mac,
+or even a different flavour of Linux. The Linux you get from Codespaces is a
+common base. Codespaces also gives you a known editor, on your machine you have
+so many choices of editor, but here you have one. The benefit of this is it is
+lot easier to seek out help, or collaborate with people, as everyone would be
+familiar with this environment, the command line snippets we give in this book
+for example, screenshots in this book would all be based on Codespaces.
+
+
+-- ds.h1: "Launching" Codespaces
+
+If you are ready we can start by launching our codespace. You should see a green
+button, "Code", if you click on it this pane opens.
+
+-- ds.image: Codespaces Launcher
+src: $assets.files.book.images.launching-codespaces.png
+
+In the pane you will see two tabs, "Local" and "Codespaces", make
+sure "Codespaces" is selected, and then click on the big green "Create
+codespace on main" button.
+
+-- ds.h1: What Is Codespace Really?
+
+Before we begin let's try to develop some mental model or intuition for a
+codespace. Codespace is a linux machine. It is actually a virtual machine, but
+you can ignore this detail. Imagine when you hit that button Github has
+allocated one machine from their pool of machines to you. This is why this
+feature is paid feature. They are giving you a machine with RAM, CPU and
+harddisc.
+
+When the machine starts up, Github installs an operating system for you. The
+operating system contains a programming editor, a version of
+[`vscode`](https://code.visualstudio.com) if you are curious. They also install
+`git`, since your code is stored in a "git repository", and we will be using
+`git` a lot in this book. And they finally "clone" your git repository to that
+machine. In the context of `git`, `clone` is a fancy word for download.
+
+Once this machine is ready you can start interacting with it in the browser,
+which we will see later. The important thing is if you close your browser, the
+machine will keep running for a short while, and then go in a "standby" mode.
+In this mode all changes you do are kept, and you can restart your codespace
+from the standby mode, and start using again. Remember, one codespace is equal
+to one machine. You can create as many codespaces as you want. Even for the
+same repository. If you create more than one codespace for the same repository
+you will have to remember on which codespace, or machine you did what change.
+
+In general it is not a great idea to keep stuff in codespaces. The way to work
+with them is to start a codespace, get your code there, modify the code to your
+satisfaction, and then "push" or store your code back in the repository. All
+your changes should move to your repository, which should be your source of
+truth about all changes. Even changes that you are not fully satisfied with,
+changes that are work in progress can be stored in the repository in what is
+called "branches" which we will read about later, but your goal should be to
+not keep stuff in codespaces and keep "pushing" things to your repo, and then
+you can delete the codespace if you want.
+
+Why delete? So it does not accumulate cruft. If you keep everything important
+in the repository you can start again within seconds, but if you keep stuff on
+some machine it will get 
+
+
+-- end: my-ds.page
+

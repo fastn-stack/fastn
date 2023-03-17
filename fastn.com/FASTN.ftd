@@ -152,8 +152,10 @@ skip: true
     document: book/01/02-repo.ftd
   - `1.3` Publish Your Site: /book/gh-pages/
     document: book/01/03-gh-pages.ftd
-  - `1.4` Edit Your Site 🚧: /book/first-edit/
-    document: book/01/04-first-edit.ftd
+  - `1.4` Online Editor 🚧: /book/codespaces/
+    document: book/01/04-codespaces.ftd
+  - `1.5` Edit Your Site 🚧: /book/first-edit/
+    document: book/01/05-first-edit.ftd
 - Appendix: /book/appendix/
   - **a** HTTP 🚧: /book/http/
     document: book/appendix/a-http.ftd
