@@ -28,6 +28,7 @@ Here, we have defined a new component `heading`. This component is using
 [`ftd.text`](ftd/text/), a kernel component, as a definition. We have created a
 custom-component which shows given text in `red` color.
 
+
 -- ds.h2: Kernel Components
 
 So, how is `ftd.text` implemented? `ftd` comes with some "kernel components",
@@ -118,7 +119,7 @@ it is called or invoked. These arguments provide the component with the
 necessary data that is helpful to configure or customize the component's
 behavior or appearance.
 
-Component "arguments" are like function arguments, and you send them into the
+Component arguments are like function arguments, and you send them into the
 component as attributes.
 
 The arguments in `ftd` components creates variables for each component
@@ -166,7 +167,7 @@ title: I love `ftd`!
 -- end: ds.rendered.output
 
 
--- ds.h2: Using Special Type Arguments
+-- ds.h2: Using Specially Typed Arguments
 
 We can use special types like [`caption`](ftd/built-in-types/#caption),
 [`body`](ftd/built-in-types/#body) or [`caption or
