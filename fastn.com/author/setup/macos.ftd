@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
 
--- my-ds.page: Install `FASTN` on Mac/Linux
+-- my-ds.page: Install `fastn` on Mac/Linux
 
 For MacOS/Linux machine, there are three ways to install `fastn`. 
 
@@ -10,8 +10,6 @@ For MacOS/Linux machine, there are three ways to install `fastn`.
 2. [`fastn` using `cargo`](macos/#fastn-using-cargo)
 3. [`fastn` from `source`](macos/#fastn-from-source)
 
--- ds.image:
-src: $fastn-assets.files.images.setup.macos-fastn-installation.gif
 
 -- cbox.info: Our Recommendation
 
@@ -19,6 +17,10 @@ We recommend you to install `fastn` through `pre-built binary`.
 
 This is the preferred method as it only requires downloading the binary and
 installing it on your local system.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.macos-fastn-installation.gif
+
 
 -- ds.markdown: 
 
@@ -38,7 +40,9 @@ follow the steps given below.
 -- ds.youtube:
 v: cWdivkyoOTA
 
--- ds.h3: First Step: Copy the following command:
+-- ds.h3: First Step: Copy the Installer Script
+
+Copy the following command:
 
 -- ds.code: Installer Script
 lang: ftd
@@ -64,11 +68,10 @@ width: fill-container
 
 -- ds.markdown:
 
-Let the `fastn` installation complete.
+Once the script runs 100%, installation of `fastn` is complete.
 
 
-You can verify that installation is complete by running the command, `fastn`,
-in the `Terminal`.
+To verify, open terminal and execute the command, `fastn`.
 
 
 
@@ -81,6 +84,15 @@ width: fill-container
 
 If you see the Help text of the fastn command, it confirms that FASTN is
 successfully installed.
+
+
+-- cbox.tip: Tip
+
+New to the concept of `terminal` and want to read about it?
+
+Checkout the [Terminal documentation](https://fastn.io/open-terminal/).
+
+-- end: cbox.tip
 
 
 -- ds.h1: `fastn` using `cargo`

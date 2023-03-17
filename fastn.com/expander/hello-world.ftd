@@ -8,7 +8,7 @@ In this part we will install `fastn` on your machine and create a hello world
 FTD program.
 
 -- ds.youtube:
-v: HUyyifN1_BE
+v: _NsLKtGrzdU
 
 -- ds.markdown:
 
@@ -28,7 +28,7 @@ Let's create a `fastn` package and start coding Hello World.
 -- cbox.info: What is `fastn` package?
 
 
-FASTN package is a folder that requires atleast two files
+`fastn` package is a folder that requires atleast two files
 
 - FASTN.ftd
 - index.ftd
@@ -45,8 +45,7 @@ Open the newly created folder in any text editor.
 We recommend [Sublime Text](https://www.sublimetext.com) or 
 [VS Code](https://code.visualstudio.com) for working with FTD.
 
-Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create the
-FASTN package.
+Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create the `fastn` package.
 
 
 
@@ -105,7 +104,7 @@ fastn serve
 
 -- ds.markdown:
 
-Using just one line code, we displayed the Hello World.
+Using just one line code, we displayed the `Hello World`s.
 
 You have successfully completed the Part 1. 
 
