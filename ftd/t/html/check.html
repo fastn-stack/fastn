@@ -1624,7 +1624,7 @@ let data = {...args, ...all_data};
 if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
 data[""] = window.raw_nodes_main[""](data);
 }
-let html = "<div data-id=\"main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\"><p>{foo#ftd-todo-display.item.name}</p></div>".replace_format(data);
+let html = "<div data-id=\"main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#ftd-todo-display.item.name}</div>".replace_format(data);
 return html;
 }
 

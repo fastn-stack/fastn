@@ -505,7 +505,7 @@
                     "text": {
                       "value": {
                         "original": "TOC title 1",
-                        "rendered": "<p>TOC title 1</p>"
+                        "rendered": "TOC title 1"
                       },
                       "line_number": 36,
                       "properties": [
@@ -877,7 +877,7 @@
                             "text": {
                               "value": {
                                 "original": "TOC title 2",
-                                "rendered": "<p>TOC title 2</p>"
+                                "rendered": "TOC title 2"
                               },
                               "line_number": 36,
                               "properties": [
@@ -1558,7 +1558,7 @@
                             "text": {
                               "value": {
                                 "original": "TOC title 3",
-                                "rendered": "<p>TOC title 3</p>"
+                                "rendered": "TOC title 3"
                               },
                               "line_number": 36,
                               "properties": [
@@ -1930,7 +1930,7 @@
                                     "text": {
                                       "value": {
                                         "original": "TOC title 4",
-                                        "rendered": "<p>TOC title 4</p>"
+                                        "rendered": "TOC title 4"
                                       },
                                       "line_number": 36,
                                       "properties": [

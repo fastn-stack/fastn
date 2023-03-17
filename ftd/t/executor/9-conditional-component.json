@@ -304,7 +304,7 @@
             "text": {
               "value": {
                 "original": "Hello World",
-                "rendered": "<p>Hello World</p>"
+                "rendered": "Hello World"
               },
               "line_number": 7,
               "properties": [
