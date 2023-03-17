@@ -533,7 +533,7 @@ pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -
     if !s.contains(old_word) {
         return s.to_string();
     }
-    if let Some(idx) = s.rsplitn(2, old_word).next() {
+    if let Some(idx) = s.rsplit(old_word).next() {
         let idx = s.len() - idx.len() - old_word.len();
         return format!("{}{}{}", &s[..idx], new_word, &s[idx + old_word.len()..]);
     }
