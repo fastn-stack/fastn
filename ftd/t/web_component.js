@@ -34,11 +34,11 @@ class WordCount extends HTMLElement {
         const text_count = data.count;
         text_count.set(value);
 
-        text_count.on_change = function () {
-            const text = this.get();
+        text_count.on_change(function () {
+            const text = text_count.get();
             count.textContent = text;
             console.log("Changed");
-        }
+        });
 
 
         // Insert icon

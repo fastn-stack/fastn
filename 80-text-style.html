@@ -6,8 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#display-text:body:0": "This is body",
-"foo#elements": [],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -696,7 +694,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">This is body</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Normal string</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; height: auto; text-decoration: underline; width: auto" class="ft_md">Stylized string</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; font-weight: 700; height: auto; width: auto" class="ft_md">Stylized string 2</div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; font-weight: 800; height: auto; text-decoration: underline; width: auto" class="ft_md">Stylized string 3</div><div data-id="4:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-weight: 700; height: auto; width: auto" class="ft_md">Stylized string 4</div></div>
 
 
 <script>
@@ -1575,29 +1573,7 @@ a.value = !a.value
 }
 
 
-window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#display-text:body:0", data);
-}
-window.set_value_main = {};
-window.set_value_main["foo#display-text:body:0"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#display-text:body:0" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#display-text:body:0", new_value);
-}
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#display-text:body:0"]) {
-let changes = window.ftd.mutable_value_main["foo#display-text:body:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#display-text:body:0"]) {
-let changes = window.ftd.immutable_value_main["foo#display-text:body:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
-};
 
 
 

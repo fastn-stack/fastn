@@ -40,8 +40,8 @@
 "light": "#e7e7e4"
 },
 "code": {
-"dark": "#2B303B",
-"light": "#2B303B"
+"dark": "#21222C",
+"light": "#F5F5F5"
 },
 "overlay": {
 "dark": "rgba(0, 0, 0, 0.8)",
@@ -538,16 +538,163 @@
 
 </script>
 <style>
-* {
+*, :after, :before {
+box-sizing: inherit;
+}
+
+*, pre, div {
 padding: 0;
 margin: 0;
-gap: 0px;
+gap: 0;
+}
+
+
+body, ol ol, ol ul, ul ol, ul ul {
+margin:0
+}
+pre, table{
+overflow:auto
+}
+html {
+height: 100%;
+width: 100%;
+}
+
+body {
+height: 100%;
+width: 100%;
+word-wrap: break-word;
+}
+input, code {
+vertical-align: middle;
 }
 pre {
 white-space: break-spaces;
 }
-*, :after, :before {
-box-sizing: inherit;
+html {
+-webkit-font-smoothing: antialiased;
+text-rendering: optimizelegibility;
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+}
+iframe {
+border: 0;
+color-scheme: auto;
+}
+
+pre code {
+overflow-x: auto;
+display: block;
+padding: 10px !important;
+}
+
+.ft_md ul,
+.ft_md ol{
+margin: 10px 0;
+}
+
+.ft_md ul ul,
+.ft_md ul ol,
+.ft_md ol ul,
+.ft_md ol ol {
+margin: 0;
+}
+
+.ft_md ul li,
+.ft_md ol li,
+.ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
+position: relative;
+padding-left: 32px;
+margin: 4px 0;
+}
+
+.ft_md ul {
+list-style: none;
+padding-left: 0;
+}
+
+.ft_md ol {
+list-style: none;
+padding-left: 0;
+counter-reset: item;
+}
+
+.ft_md ol li:before,
+.ft_md ol ol li:before,
+.ft_md ul ol li:before {
+content: counter(item);
+counter-increment: item;
+font-size: 11px;
+line-height: 10px;
+text-align: center;
+padding: 4px 0;
+height: 10px;
+width: 18px;
+border-radius: 10px;
+position: absolute;
+left: 0;
+top: 5px;
+}
+
+.ft_md ul li::before,
+.ft_md ul ul li::before,
+.ft_md ol ul li::before {
+content: "";
+position: absolute;
+width: 6px;
+height: 6px;
+left: 8px;
+top: 10px;
+border-radius: 50%;
+background: #c1c8ce;
+}
+
+.ft_md a {
+text-decoration: none;
+color: #6262ee;
+}
+
+.ft_md a:visited {
+text-decoration: none;
+color: #ad71e4;
+}
+
+
+
+.ft_md a:hover {
+text-decoration: none;
+}
+
+.ft_md code {
+padding: 0.1rem 0.25rem;
+border-radius: 4px;
+background-color: #0000000d;
+}
+
+.ft_md blockquote {
+padding: 0.25rem 1rem;
+margin: 1rem 0;
+border-radius: 3px;
+}
+
+.ft_md blockquote > blockquote {
+margin: 0;
+}
+
+body.fpm-dark .ft_md a {
+text-decoration: none;
+}
+
+
+body.fpm-dark .ft_md code {
+padding: 0.1rem 0.25rem;
+border-radius: 4px;
+background-color: #ffffff1f;
+}
+
+
+.markdown p {
+margin-block-end: 1em;
 }
 
 
@@ -556,7 +703,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: center; background-color: rgba(238,238,238,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; gap: 50px; height: 100%; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,0,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>What is FTD?</p></div><div data-id="0,0,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>O</p></div><div data-id="0,0,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md"><p>X</p></div></div><div data-id="0,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md"><p>FTD is an open source programming language for writing prose.</p></div></div><div data-id="0,1:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,1,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>We are adding text of header using title</p></div><div data-id="0,1,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>O</p></div><div data-id="0,1,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md"><p>X</p></div></div><div data-id="0,1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md"><p>Here is a FTD document that is importing a library, lib, and has a heading of level 1, “Hello World”. FTD language is designed for human beings, not just programmers, we have taken precautions like not requiring quoting for strings, not relying on indentation nor on braces that most programming languages require.</p> <p>It is not verbose like HTML, and not simplistic like Markdown. We can define variables in FTD. FTD is strongly typed. We can do event handling. Since we are targeting “human beings” we have created a lot of “actions” that we believe one will be invoking on a day to day basis, like toggle, which can be used to create simple event handling.</p></div></div><div data-id="0,2:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,2,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>default header</p></div><div data-id="0,2,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>O</p></div><div data-id="0,2,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md"><p>X</p></div></div><div data-id="0,2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md"><p>default body</p></div></div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: center; background-color: rgba(238,238,238,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; gap: 50px; height: 100%; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="0,0:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,0,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">What is FTD?</div><div data-id="0,0,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">O</div><div data-id="0,0,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md">X</div></div><div data-id="0,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md">FTD is an open source programming language for writing prose.</div></div><div data-id="0,1:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,1,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">We are adding text of header using title</div><div data-id="0,1,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">O</div><div data-id="0,1,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md">X</div></div><div data-id="0,1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md"><p>Here is a FTD document that is importing a library, lib, and has a heading of level 1, “Hello World”. FTD language is designed for human beings, not just programmers, we have taken precautions like not requiring quoting for strings, not relying on indentation nor on braces that most programming languages require.</p> It is not verbose like HTML, and not simplistic like Markdown. We can define variables in FTD. FTD is strongly typed. We can do event handling. Since we are targeting “human beings” we have created a lot of “actions” that we believe one will be invoking on a day to day basis, like toggle, which can be used to create simple event handling.</div></div><div data-id="0,2:main" style="align-items: start; border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: 60%" ><div data-id="0,2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;value&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#box:open:0,2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; padding: 10px; text-decoration: none; width: 100%" ><div data-id="0,2,0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">default header</div><div data-id="0,2,0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">O</div><div data-id="0,2,0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: auto; text-decoration: none; width: auto" class="ft_md">X</div></div><div data-id="0,2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: none; height: fit-content; padding: 10px; text-decoration: none; width: auto" class="ft_md">default body</div></div></div></div>
 
 
 <script>
@@ -564,6 +711,12 @@ box-sizing: inherit;
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
+// Setting up default value on <input>
+const inputElements = document.querySelectorAll('input[data-dv]');
+for (let input_ele of inputElements) {
+// @ts-ignore
+input_ele.defaultValue = input_ele.dataset.dv;
+}
 exports.init = function (id, data) {
 let element = document.getElementById(data);
 if (!!element) {
@@ -1370,6 +1523,12 @@ value.value = !value.value;
 
 
 
+function ftd__clean_code___main(a,lang,args,data,id){
+return (ftd.clean_code(a,lang,args,data,id));
+}
+
+
+
 function ftd__copy_to_clipboard___main(a,args,data,id){
 return (ftd.copy_to_clipboard(a,args,data,id));
 }
@@ -1596,11 +1755,11 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#box:open:0,0"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__display"]){window.node_change_main["0,0,0,1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,2:main__display"]){window.node_change_main["0,0,0,2:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__display"]){window.node_change_main["0,0,1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,2:main__display"]){window.node_change_main["0,0,0,2:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__display"]){window.node_change_main["0,0,0,1:main__display"](data);
 }
 };
 
@@ -1619,11 +1778,11 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#box:open:0,1"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__display"]){window.node_change_main["0,1,1:main__display"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,1:main__display"]){window.node_change_main["0,1,0,1:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2:main__display"]){window.node_change_main["0,1,0,2:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__display"]){window.node_change_main["0,1,1:main__display"](data);
 }
 };
 
