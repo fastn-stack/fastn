@@ -38,5 +38,13 @@ $on-click$: $ftd.toggle($a=$author-mode)
 
 -- end: my-ds.page
 
+-- component stuck:
+
+-- ds.markdown:
+
+If you get stuck, please come to our [Discord channel: `Web Developers` ->
+`#book-club`](https://discord.gg/5CDm3jPhAR) to get help from us.
+
+-- end: stuck
 
 

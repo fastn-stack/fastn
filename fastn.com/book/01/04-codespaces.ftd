@@ -1,6 +1,7 @@
 -- import: fastn.io/assets
+-- import: fastn.io/book
 
--- my-ds.page: Github's Online Editor 🚧
+-- my-ds.page: Github's Online Editor
 
 Now that we have a template website ready, we want to edit it. To edit things we
 have to do three things: get the code stored in our repository, install `fastn`
@@ -80,18 +81,18 @@ to one machine. You can create as many codespaces as you want. Even for the
 same repository. If you create more than one codespace for the same repository
 you will have to remember on which codespace, or machine you did what change.
 
-One important bit to note about codespaces is that only the person who started
-the codespace has access to it.
+One important bit to note about codespaces is that *only the person who started
+the codespace has access to it*.
 
-In general it is not a great idea to keep stuff in codespaces. The way to work
-with them is to start a codespace, get your code there, modify the code to your
-satisfaction, and then "push" or store your code back in the repository. All
-your changes should move to your repository, which should be your source of
-truth about all changes. Even changes that you are not fully satisfied with,
-changes that are work in progress can be stored in the repository in what is
-called "branches" which we will read about later, but your goal should be to
-not keep stuff in codespaces and keep "pushing" things to your repo, and then
-you can delete the codespace if you want.
+In general it is not a great idea to keep stuff in codespaces for long periods
+of time. The way to work with codespaces is to start a codespace, get your code
+there, modify the code to your satisfaction, and then "push" or store your code
+back in the repository. All your changes should move to your repository, which
+should be your source of truth about all changes. Even changes that you are not
+fully satisfied with, changes that are work in progress can be stored in the
+repository in what is called "branches" which we will read about later, but
+your goal should be to not keep stuff in codespaces and keep "pushing" things
+to your repo, and then you can delete the codespace if you want.
 
 Why delete? So it does not accumulate cruft. If you keep everything important in
 the repository you can start again within seconds, but if you keep stuff on
@@ -101,9 +102,122 @@ codespace that only I have access to". What if you have more than one code
 spaces? What if you also sometimes download and edit content on your laptop?
 Where is the latest version of the file? Imagine you are working with 5 people,
 everyone has their codespace and latops, it starts to become a mess very soon.
-Keeping repository as the single shared source of truth is a very good
-practice.
+Keeping repository as the single shared source of truth is a good practice that
+this book advocates.
 
+-- ds.h2: Back to Launching Your Codespace
+
+If you clicked on the big green "Create codespace on main" button in the
+previous step, you should see something like this:
+
+-- ds.image: Your New Codespace
+src: $assets.files.book.images.new-codespace.png
+
+Wonderful! What you see is a programming editor, [`vscode`](https://code.visualstudio.com)
+running in your browser. You can see the files in your repository on the left
+sidebar, labelled "EXPLORER", There is also a linux machine running for you,
+and you see a "TERMINAL" connected to it.
+
+-- book.stuck:
+
+-- ds.markdown:
+
+You can click on the files in the EXPLORER to browse the content of those
+files.
+
+-- ds.image:
+src: $assets.files.book.images.index-in-codespace.png
+
+-- ds.h1: Install `fastn` in Codespace
+
+Note: We have intentionally not configured codespace to auto install `fastn` for
+you so you manually carry out the installation step, and gain confidence that
+installing `fastn` is quite easy and you can do it on other machines.
+
+To install `fastn` you have to run the following command:
+
+-- ds.code:
+lang: ftd
+
+curl -fsSL https://fastn.io/install.sh | bash
+
+-- ds.markdown:
+
+Copy the content of the previous box, there is a tiny copy icon that shows up
+when you mouse over the box, click on it, and it copies the command to clipboard,
+or you can type out the command.
+
+You have to paste or type the command in the TERMINAL, and press ENTER or
+`return` key as shown below:
+
+-- ds.image: installing `fastn`
+src: $assets.files.book.images.install-in-codespace.png
+
+There you go! `fastn` is installed and ready to use. You can verify this by
+running `fastn` in TERMINAL.
+
+
+-- ds.image: Verifying `fastn`
+src: $assets.files.book.images.verifying-fastn.png
+
+And `fastn` is running ready in your codespace.
+
+-- ds.h1: Running `fastn`
+
+Now that `fastn` is installed, we have to run it. We are going to run the `fastn
+serve` command to run your website inside codespace.
+
+-- ds.image:
+src: $assets.files.book.images.fastn-serve.png
+
+Now your website is running on your codespace.
+
+-- ds.h1: Viewing Your Site
+
+To open it in browser you can click on the green "Open in browser" button. Since
+the pop goes away you can also do this manually. Switch to the PORTS tab next
+to TERMINAL, right click on the single row displayed there, and select "Open in
+browser".
+
+-- ds.image:
+src: $assets.files.book.images.open-in-browser.png
+
+This will open your site in another tab in your browser.
+
+
+-- ds.image:
+src: $assets.files.book.images.your-site-on-codespace.png
+
+This site only you can view! And is there only for previewing your website while
+you are working on it. How to actually save it publish it so others can see is
+covered in the next section.
+
+Before you go there is another way to preview your website, some people prefer
+doing it this way. If from the PORTS -> Right Click On The Row if you select
+"Preview in editor" option:
+
+-- ds.image:
+src: $assets.files.book.images.preview-in-editor-action.png
+
+You will see something like following:
+
+
+-- ds.image:
+src: $assets.files.book.images.preview-in-editor.png
+
+This allows you to view your site and the source code of your site in a
+side-by-side manner, and sometimes it is useful. You are going to need both
+ways to preview your site so get comfortable with it.
+
+-- ds.h1: Summary
+
+What you did in this section is quite a bit. You used a feature by Github to
+launch a machine in cloud for you. You connected with this machine and saw your
+repository content is already there. You then installed `fastn`, and run a
+website on that cloud machine. And finally you previewed the website in the
+browser. Congratulations, you are making good progress.
+
+You are going to [edit your website next ->](/book/first-edit/).
 
 -- end: my-ds.page
 
