@@ -80,6 +80,9 @@ to one machine. You can create as many codespaces as you want. Even for the
 same repository. If you create more than one codespace for the same repository
 you will have to remember on which codespace, or machine you did what change.
 
+One important bit to note about codespaces is that only the person who started
+the codespace has access to it.
+
 In general it is not a great idea to keep stuff in codespaces. The way to work
 with them is to start a codespace, get your code there, modify the code to your
 satisfaction, and then "push" or store your code back in the repository. All
@@ -90,9 +93,16 @@ called "branches" which we will read about later, but your goal should be to
 not keep stuff in codespaces and keep "pushing" things to your repo, and then
 you can delete the codespace if you want.
 
-Why delete? So it does not accumulate cruft. If you keep everything important
-in the repository you can start again within seconds, but if you keep stuff on
-some machine it will get 
+Why delete? So it does not accumulate cruft. If you keep everything important in
+the repository you can start again within seconds, but if you keep stuff on
+some machine it will start to become "source of truth" for somethings, "oh this
+file in repo, this is not the latest version, the latest version is in that
+codespace that only I have access to". What if you have more than one code
+spaces? What if you also sometimes download and edit content on your laptop?
+Where is the latest version of the file? Imagine you are working with 5 people,
+everyone has their codespace and latops, it starts to become a mess very soon.
+Keeping repository as the single shared source of truth is a very good
+practice.
 
 
 -- end: my-ds.page
