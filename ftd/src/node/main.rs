@@ -1641,6 +1641,7 @@ impl ftd::executor::Common {
             ),
         );
 
+        // Default border-style
         if self.no_border_style() {
             d.check_and_insert(
                 "border-style",
