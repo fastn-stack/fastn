@@ -2,14 +2,24 @@
 
 -- bar.inner:
 
-/-- uis.0:
+-- uis.0:
 
--- wrap:
+-- uis.1:
+
+/-- wrap:
 ui: $uis.0
 
 -- end: bar.inner
 
 -- end: bar
+
+-- foo:
+
+-- ftd.text: Hello there
+
+-- uis.1:
+
+-- end: foo
 
 
 
@@ -18,6 +28,8 @@ ui: $uis.0
 -- ftd.ui list uis:
 
 -- ftd.text: Hello
+
+-- ftd.text: World
 
 -- end: uis
 
@@ -36,6 +48,15 @@ ftd.ui ui:
 
 
 
+-- component foo:
+children inner:
+
+-- ftd.column:
+children: $foo.inner
+
+-- end: ftd.column
+
+-- end: foo
 
 
 -- component bar:

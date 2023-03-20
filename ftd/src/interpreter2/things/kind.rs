@@ -56,7 +56,7 @@ impl Kind {
 
     pub fn is_same_as(&self, other: &Self) -> bool {
         match (self, other) {
-            (Self::UI { name: n1, .. }, Self::UI { name: n2, .. }) => n1.eq(n2),
+            (Self::UI { .. }, Self::UI { .. }) => true,
             (Self::OrType { name: n1, .. }, Self::OrType { name: n2, .. }) => n1.eq(n2),
             (Self::Optional { kind, .. }, _) => kind.is_same_as(other),
             (_, Self::Optional { kind: other, .. }) => self.is_same_as(other),
@@ -425,6 +425,7 @@ impl KindData {
                         variant.name().as_str(),
                     )
                 }
+                ftd::interpreter2::Thing::Variable(v) => v.kind.kind,
                 t => {
                     return ftd::interpreter2::utils::e2(
                         format!("Can't get find for `{:?}`", t),
