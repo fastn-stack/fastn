@@ -1,0 +1,49 @@
+-- bar:
+
+-- bar.inner:
+
+/-- uis.0:
+
+-- wrap:
+ui: $uis.0
+
+-- end: bar.inner
+
+-- end: bar
+
+
+
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello
+
+-- end: uis
+
+
+
+
+-- component wrap:
+ftd.ui ui:
+
+-- ftd.column:
+-- wrap.ui:
+-- end: ftd.column
+
+
+-- end: wrap
+
+
+
+
+
+-- component bar:
+ftd.ui list inner:
+
+-- ftd.column:
+children: $bar.inner
+
+-- end: ftd.column
+
+-- end: bar
