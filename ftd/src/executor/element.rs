@@ -87,6 +87,7 @@ pub struct Column {
 pub struct Text {
     pub text: ftd::executor::Value<Rendered>,
     pub text_align: ftd::executor::Value<Option<ftd::executor::TextAlign>>,
+    pub text_indent: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub line_clamp: ftd::executor::Value<Option<i64>>,
     pub common: Common,
     pub style: ftd::executor::Value<Option<ftd::executor::TextStyle>>,
@@ -504,6 +505,14 @@ pub fn text_from_properties(
     )?;
     Ok(Text {
         text,
+        text_indent: ftd::executor::Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-indent",
+            inherited_variables,
+        )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
             arguments,
@@ -572,6 +581,14 @@ pub fn integer_from_properties(
     Ok(Text {
         text,
         common,
+        text_indent: ftd::executor::Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-indent",
+            inherited_variables,
+        )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
             arguments,
@@ -639,6 +656,14 @@ pub fn decimal_from_properties(
     Ok(Text {
         text,
         common,
+        text_indent: ftd::executor::Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-indent",
+            inherited_variables,
+        )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
             arguments,
@@ -692,6 +717,14 @@ pub fn boolean_from_properties(
     Ok(Text {
         text,
         common,
+        text_indent: ftd::executor::Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-indent",
+            inherited_variables,
+        )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
             arguments,

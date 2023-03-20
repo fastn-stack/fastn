@@ -371,6 +371,19 @@ impl ftd::executor::Text {
         }
 
         n.style.check_and_insert(
+            "text-indent",
+            ftd::node::Value::from_executor_value(
+                self.text_indent
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.text_indent.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
             "font-style",
             ftd::node::Value::from_executor_value(
                 self.style
