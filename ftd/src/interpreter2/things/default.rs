@@ -7988,7 +7988,42 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "border-style",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
-                .into_list()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-left",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-right",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-top",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-bottom",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-vertical",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style-horizontal",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),

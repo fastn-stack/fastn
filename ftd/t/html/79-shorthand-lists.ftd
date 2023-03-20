@@ -14,17 +14,15 @@
 
 1, 2, 3, 4
 
-/-- ftd.text: $obj
+-- ftd.text: $obj
 $loop$: $new-persons as $obj
 
-/-- ftd.integer: $obj
+-- ftd.integer: $obj
 $loop$: $ages as $obj
 
 /-- show-lists:
 venues: Bangalore, Mumbai, Kolkata, Chennai
 days: 12, 34, 23, 10
-
--- check-border-style:
 
 -- component show-lists:
 string list venues:
@@ -41,23 +39,3 @@ $loop$: $show-lists.days as $obj
 -- end: ftd.column
 
 -- end: show-lists
-
--- component check-border-style:
-integer $counter: 0
-
--- ftd.column:
-border-style if { $check-border-style.counter % 4 == 0 } : dotted
-border-style if { $check-border-style.counter % 4 == 1 } : dotted, dashed
-border-style if { $check-border-style.counter % 4 == 2 } : dotted, inset
-border-style if { $check-border-style.counter % 4 == 3 } : dotted, inset, outset
-border-width.px: 2
-padding.px: 10
-margin.px: 10
-$on-click$: $ftd.increment($a=$check-border-style.counter)
-
-
--- ftd.text: Hello World
-
--- end: ftd.column
-
--- end: check-border-style

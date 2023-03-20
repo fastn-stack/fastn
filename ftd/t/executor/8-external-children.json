@@ -667,7 +667,37 @@
                         "properties": []
                       },
                       "border_style": {
-                        "value": [],
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_bottom": {
+                        "value": null,
                         "line_number": null,
                         "properties": []
                       }
@@ -1040,7 +1070,37 @@
                                 "properties": []
                               },
                               "border_style": {
-                                "value": [],
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_vertical": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_horizontal": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_left": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_right": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_top": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_style_bottom": {
+                                "value": null,
                                 "line_number": null,
                                 "properties": []
                               }
@@ -1354,7 +1414,37 @@
                         "properties": []
                       },
                       "border_style": {
-                        "value": [],
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style_bottom": {
+                        "value": null,
                         "line_number": null,
                         "properties": []
                       }
@@ -1663,7 +1753,37 @@
                 "properties": []
               },
               "border_style": {
-                "value": [],
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_style_bottom": {
+                "value": null,
                 "line_number": null,
                 "properties": []
               }
@@ -1972,7 +2092,37 @@
         "properties": []
       },
       "border_style": {
-        "value": [],
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_vertical": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style_bottom": {
+        "value": null,
         "line_number": null,
         "properties": []
       }

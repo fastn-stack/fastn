@@ -6,8 +6,27 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#check-border-style:style:0": "dotted",
-"foo#check-border-style:which:0": 0,
+"foo#show-border:style:0": "dotted",
+"foo#show-border:style:1": "dashed",
+"foo#show-border:style:2": "double",
+"foo#show-border:style:3": "groove",
+"foo#show-border:style:4": "ridge",
+"foo#show-border:style:5": "inset",
+"foo#show-border:style:6": "outset",
+"foo#show-border:text:0": "Dotted border",
+"foo#show-border:text:1": "Dashed border",
+"foo#show-border:text:2": "Double border",
+"foo#show-border:text:3": "Groove border",
+"foo#show-border:text:4": "Ridge border",
+"foo#show-border:text:5": "Inset border",
+"foo#show-border:text:6": "Outset border",
+"foo#show-border:which:0": 0,
+"foo#show-border:which:1": 1,
+"foo#show-border:which:2": 2,
+"foo#show-border:which:3": 3,
+"foo#show-border:which:4": 4,
+"foo#show-border:which:5": 5,
+"foo#show-border:which:6": 6,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -696,7 +715,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#check-border-style:which:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Hello World</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Dotted border</div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: dashed; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">1</div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Dashed border</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-style: double; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">2</div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Double border</div></div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:3&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-style: groove; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">3</div><div data-id="3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Groove border</div></div><div data-id="4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:4&quot;}]]}]', this)" style="align-items: start; border-bottom-style: ridge; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="4,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">4</div><div data-id="4,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Ridge border</div></div><div data-id="5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:5&quot;}]]}]', this)" style="align-items: start; border-bottom-style: inset; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-style: inset; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="5,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">5</div><div data-id="5,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Inset border</div></div><div data-id="6:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:6&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: outset; border-left-width: 2px; border-right-style: outset; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="6,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">6</div><div data-id="6,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Outset border</div></div></div>
 
 
 <script>
@@ -1576,66 +1595,1026 @@ a.value = !a.value
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==4);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==5);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else { document.querySelector(`[data-id="0:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["0:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==6);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==1);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else { document.querySelector(`[data-id="0:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["0:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==3);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==6);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else { document.querySelector(`[data-id="0:main"]`).style["border-right-style"] = null }
+}
+
 window.node_change_main["0:main__border-style"] = function(data) {
 if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==0);
+return (resolve_reference("foo#show-border:which:0", data)%7==0);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "dotted";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==1);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "dashed";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==2);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "solid";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==3);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "inset";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==4);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "groove";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==5);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "ridge";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==6);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "outset";
-}
-else if(function(){
-return (resolve_reference("foo#check-border-style:which:0", data)%8==7);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["border-style"] = "double";
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:0", data);
 }
 else { document.querySelector(`[data-id="0:main"]`).style["border-style"] = null }
 }
-window.set_value_main = {};
-window.set_value_main["foo#check-border-style:which:0"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#check-border-style:which:0" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#check-border-style:which:0", new_value);
+
+window.node_change_main["0:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==2);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:0", data)%7==5);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:0", data);
+}
+else { document.querySelector(`[data-id="0:main"]`).style["border-top-style"] = null }
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#check-border-style:which:0"]) {
-let changes = window.ftd.mutable_value_main["foo#check-border-style:which:0"].changes;
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:0", data);
+}
+window.node_change_main["0,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:0", data);
+}
+window.node_change_main["1:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==4);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==5);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["1:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==6);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["1:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==6);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["1:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==0);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["1:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==5);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["1,0:main__text"] = function(data) {
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:1", data);
+}
+window.node_change_main["1,1:main__text"] = function(data) {
+document.querySelector(`[data-id="1,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:1", data);
+}
+window.node_change_main["2:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==4);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==5);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["2:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==6);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==1);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["2:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==3);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==6);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["2:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==0);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["2:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==5);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["2,0:main__text"] = function(data) {
+document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:2", data);
+}
+window.node_change_main["2,1:main__text"] = function(data) {
+document.querySelector(`[data-id="2,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:2", data);
+}
+window.node_change_main["3:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==4);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==5);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["3:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==6);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==1);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["3:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==3);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==6);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["3:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==0);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["3:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==2);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==5);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["3,0:main__text"] = function(data) {
+document.querySelector(`[data-id="3,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:3", data);
+}
+window.node_change_main["3,1:main__text"] = function(data) {
+document.querySelector(`[data-id="3,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:3", data);
+}
+window.node_change_main["4:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==4);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==5);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["4:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==6);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==1);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["4:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==3);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==6);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["4:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==0);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["4:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==2);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==5);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["4,0:main__text"] = function(data) {
+document.querySelector(`[data-id="4,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:4", data);
+}
+window.node_change_main["4,1:main__text"] = function(data) {
+document.querySelector(`[data-id="4,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:4", data);
+}
+window.node_change_main["5:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==4);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==5);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["5:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==6);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==1);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["5:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==3);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==6);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["5:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==0);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["5:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==2);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==5);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["5,0:main__text"] = function(data) {
+document.querySelector(`[data-id="5,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:5", data);
+}
+window.node_change_main["5,1:main__text"] = function(data) {
+document.querySelector(`[data-id="5,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:5", data);
+}
+window.node_change_main["6:main__border-bottom-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==4);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==5);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-bottom-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-bottom-style"] = null }
+}
+
+window.node_change_main["6:main__border-left-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==6);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==1);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-left-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-left-style"] = null }
+}
+
+window.node_change_main["6:main__border-right-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==3);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==6);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["6:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==0);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-style"] = null }
+}
+
+window.node_change_main["6:main__border-top-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==2);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==5);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-top-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-top-style"] = null }
+}
+
+window.node_change_main["6,0:main__text"] = function(data) {
+document.querySelector(`[data-id="6,0:main"]`).innerHTML = resolve_reference("foo#show-border:which:6", data);
+}
+window.node_change_main["6,1:main__text"] = function(data) {
+document.querySelector(`[data-id="6,1:main"]`).innerHTML = resolve_reference("foo#show-border:text:6", data);
+}
+window.set_value_main = {};
+window.set_value_main["foo#show-border:style:0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:0", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:0"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:0"].changes;
 for(let i in changes) { changes[i](); }
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#check-border-style:which:0"]) {
-let changes = window.ftd.immutable_value_main["foo#check-border-style:which:0"].changes;
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:0"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:0"].changes;
 for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-left-style"]){window.node_change_main["0:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-right-style"]){window.node_change_main["0:main__border-right-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:1", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:1"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:1"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-left-style"]){window.node_change_main["1:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:2"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:2" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:2", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:2"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:2"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:3"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:3" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:3", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:3"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:3"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-style"]){window.node_change_main["3:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-style"]){window.node_change_main["3:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:4"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:4" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:4", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:4"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:4"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:5"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:5" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:5", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:5"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:5"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:style:6"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:style:6" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:style:6", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:6"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:style:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:6"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:style:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:0", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:0"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:0"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:0"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:0"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:1", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:1"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:1"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:2"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:2" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:2", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:2"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:2"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:3"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:3" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:3", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:3"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:3"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3,1:main__text"]){window.node_change_main["3,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:4"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:4" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:4", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:4"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:4"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4,1:main__text"]){window.node_change_main["4,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:5"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:5" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:5", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:5"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:5"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5,1:main__text"]){window.node_change_main["5,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:text:6"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:text:6" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:text:6", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:6"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:text:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:6"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:text:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6,1:main__text"]){window.node_change_main["6,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:0", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:0"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:0"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:0"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:0"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-left-style"]){window.node_change_main["0:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-right-style"]){window.node_change_main["0:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:1", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:1"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:1"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:1"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-left-style"]){window.node_change_main["1:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:2"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:2" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:2", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:2"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:2"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:2"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:3"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:3" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:3", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:3"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:3"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:3"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__text"]){window.node_change_main["3,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-style"]){window.node_change_main["3:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-style"]){window.node_change_main["3:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:4"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:4" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:4", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:4"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:4"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:4"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:5"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:5" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:5", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:5"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:5"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:5"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5,0:main__text"]){window.node_change_main["5,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
+}
+};
+
+window.set_value_main["foo#show-border:which:6"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#show-border:which:6" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#show-border:which:6", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:6"]) {
+let changes = window.ftd.mutable_value_main["foo#show-border:which:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:6"]) {
+let changes = window.ftd.immutable_value_main["foo#show-border:which:6"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6,0:main__text"]){window.node_change_main["6,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
 }
 };
 
