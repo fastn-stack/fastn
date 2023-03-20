@@ -18,7 +18,7 @@ In our `Expander project`, we have used the `component` and named it as `box`.
 We moved our column code block that represents the box which we created in the last part and re-used the `component` 
 three times. 
 
-Documentation: [read more](https://fastn.io/ftd/component/)
+Documentation: [read more](https://fastn.io/components/)
 
 -- ds.h1: How to create a Component?
 
