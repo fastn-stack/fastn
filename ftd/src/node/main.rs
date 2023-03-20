@@ -1,5 +1,3 @@
-use ftd::executor::BorderStyle;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -381,6 +379,45 @@ impl ftd::executor::Text {
                     .value,
                 self.text_indent.to_owned(),
                 None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "font-style",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_style_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "text-decoration",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_decoration_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "font-weight",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_weight_string()))
+                    .value,
+                self.style.to_owned(),
+                Some(ftd::executor::TextStyle::no_value_pattern()),
                 doc_id,
             ),
         );
@@ -901,7 +938,7 @@ impl ftd::executor::Common {
             d.check_and_insert("position", ftd::node::Value::from_string("absolute"));
         }
 
-        if !self.event.is_empty() {
+        if ftd::node::utils::has_click_event(self.event.as_slice()) {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
 
@@ -1484,7 +1521,9 @@ impl ftd::executor::Common {
             d.check_and_insert(
                 "border-style",
                 ftd::node::Value::from_executor_value(
-                    Some(BorderStyle::css_string_from_vec(&self.border_style.value)),
+                    Some(ftd::executor::BorderStyle::css_string_from_vec(
+                        &self.border_style.value,
+                    )),
                     self.border_style.to_owned(),
                     None,
                     doc_id,

@@ -31,8 +31,8 @@
 "light": "#e7e7e4"
 },
 "code": {
-"dark": "#2B303B",
-"light": "#2B303B"
+"dark": "#21222C",
+"light": "#F5F5F5"
 },
 "overlay": {
 "dark": "rgba(0, 0, 0, 0.8)",
@@ -544,6 +544,13 @@ box-sizing: inherit;
 box-sizing: inherit;
 }
 
+*, pre, div {
+padding: 0;
+margin: 0;
+gap: 0;
+}
+
+
 body, ol ol, ol ul, ul ol, ul ul {
 margin:0
 }
@@ -698,7 +705,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>This file exists, so README.md should be rendered as README/index.html</p></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">This file exists, so README.md should be rendered as README/index.html</div></div>
 
 
 <script>
@@ -1510,6 +1517,12 @@ console.error('Fallback: Oops, unable to copy', err);
 document.body.removeChild(textArea);
 }
 FASTN_JS
+
+
+function ftd__clean_code___main(a,lang,args,data,id){
+return (ftd.clean_code(a,lang,args,data,id));
+}
+
 
 
 function ftd__copy_to_clipboard___main(a,args,data,id){

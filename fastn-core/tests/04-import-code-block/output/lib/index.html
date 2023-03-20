@@ -31,8 +31,8 @@
 "light": "#e7e7e4"
 },
 "code": {
-"dark": "#2B303B",
-"light": "#2B303B"
+"dark": "#21222C",
+"light": "#F5F5F5"
 },
 "overlay": {
 "dark": "rgba(0, 0, 0, 0.8)",
@@ -543,6 +543,13 @@ box-sizing: inherit;
 *, :after, :before {
 box-sizing: inherit;
 }
+
+*, pre, div {
+padding: 0;
+margin: 0;
+gap: 0;
+}
+
 
 body, ol ol, ol ul, ul ol, ul ul {
 margin:0
@@ -1510,6 +1517,12 @@ console.error('Fallback: Oops, unable to copy', err);
 document.body.removeChild(textArea);
 }
 FASTN_JS
+
+
+function ftd__clean_code___main(a,lang,args,data,id){
+return (ftd.clean_code(a,lang,args,data,id));
+}
+
 
 
 function ftd__copy_to_clipboard___main(a,args,data,id){

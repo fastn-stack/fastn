@@ -19,8 +19,12 @@ pub fn markup(i: &str) -> String {
 }
 
 pub fn markup_inline(i: &str) -> String {
-    let o = markup(i);
     let (space_before, space_after) = spaces(i);
+    let o = {
+        let mut g = ftd::executor::utils::replace_last_occurrence(markup(i).as_str(), "<p>", "");
+        g = ftd::executor::utils::replace_last_occurrence(g.as_str(), "</p>", "");
+        g
+    };
 
     // if output is wrapped in `<p>`, we are trying to remove it, because this is a single text
     // which may go in button etc.

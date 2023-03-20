@@ -123,7 +123,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 1,
               "properties": [
@@ -501,6 +501,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -509,7 +514,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 7,
               "properties": [
@@ -889,6 +894,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -897,7 +907,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 14,
               "properties": [
@@ -1270,6 +1280,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -1278,7 +1293,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 22,
               "properties": [
@@ -1720,6 +1735,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         }

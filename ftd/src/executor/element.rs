@@ -90,6 +90,7 @@ pub struct Text {
     pub text_indent: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub line_clamp: ftd::executor::Value<Option<i64>>,
     pub common: Common,
+    pub style: ftd::executor::Value<Option<ftd::executor::TextStyle>>,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -529,6 +530,14 @@ pub fn text_from_properties(
             inherited_variables,
         )?,
         common,
+        style: ftd::executor::TextStyle::optional_text_style(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "style",
+            inherited_variables,
+        )?,
     })
 }
 
@@ -594,6 +603,14 @@ pub fn integer_from_properties(
             arguments,
             doc,
             line_number,
+            inherited_variables,
+        )?,
+        style: ftd::executor::TextStyle::optional_text_style(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "style",
             inherited_variables,
         )?,
     })
@@ -663,6 +680,14 @@ pub fn decimal_from_properties(
             line_number,
             inherited_variables,
         )?,
+        style: ftd::executor::TextStyle::optional_text_style(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "style",
+            inherited_variables,
+        )?,
     })
 }
 
@@ -714,6 +739,14 @@ pub fn boolean_from_properties(
             arguments,
             doc,
             line_number,
+            inherited_variables,
+        )?,
+        style: ftd::executor::TextStyle::optional_text_style(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "style",
             inherited_variables,
         )?,
     })

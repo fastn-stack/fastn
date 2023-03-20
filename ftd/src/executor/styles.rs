@@ -2288,6 +2288,270 @@ impl WhiteSpace {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum TextWeight {
+    EXTRABOLD,
+    BOLD,
+    SEMIBOLD,
+    HEAVY,
+    MEDIUM,
+    REGULAR,
+    LIGHT,
+    EXTRALIGHT,
+    HAIRLINE,
+}
+
+impl TextWeight {
+    pub fn to_weight_string(&self) -> String {
+        match self {
+            TextWeight::HEAVY => "900".to_string(),
+            TextWeight::EXTRABOLD => "800".to_string(),
+            TextWeight::BOLD => "700".to_string(),
+            TextWeight::SEMIBOLD => "600".to_string(),
+            TextWeight::MEDIUM => "500".to_string(),
+            TextWeight::REGULAR => "400".to_string(),
+            TextWeight::LIGHT => "300".to_string(),
+            TextWeight::EXTRALIGHT => "200".to_string(),
+            TextWeight::HAIRLINE => "100".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct TextStyle {
+    pub underline: bool,
+    pub italic: bool,
+    pub strike: bool,
+    pub weight: Option<TextWeight>,
+}
+
+impl TextStyle {
+    fn default() -> Self {
+        TextStyle {
+            underline: false,
+            italic: false,
+            strike: false,
+            weight: None,
+        }
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<Vec<(String, ftd::interpreter2::PropertyValue)>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(TextStyle::from_values(value, doc, line_number)?)
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_values: Vec<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        fn add_in_map(style: &str, map: &mut ftd::Map<i32>) {
+            if !map.contains_key(style) {
+                map.insert(style.to_string(), 1);
+                return;
+            }
+            map.insert(style.to_string(), map[style] + 1);
+        }
+
+        let mut text_style = Self::default();
+        let mut booleans: ftd::Map<i32> = Default::default();
+        let mut weights: ftd::Map<i32> = Default::default();
+
+        if or_type_values.is_empty() {
+            return Ok(None);
+        }
+
+        for value in or_type_values {
+            match value.0.as_str() {
+                ftd::interpreter2::FTD_TEXT_STYLE_ITALIC => {
+                    text_style.italic = true;
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_ITALIC, &mut booleans);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_STRIKE => {
+                    text_style.strike = true;
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_STRIKE, &mut booleans);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_UNDERLINE => {
+                    text_style.underline = true;
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_UNDERLINE, &mut booleans);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_BOLD => {
+                    text_style.weight = Some(TextWeight::BOLD);
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_BOLD, &mut weights);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD => {
+                    text_style.weight = Some(TextWeight::EXTRABOLD);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD,
+                        &mut weights,
+                    );
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD => {
+                    text_style.weight = Some(TextWeight::SEMIBOLD);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD,
+                        &mut weights,
+                    );
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_HEAVY => {
+                    text_style.weight = Some(TextWeight::HEAVY);
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_HEAVY, &mut weights);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT => {
+                    text_style.weight = Some(TextWeight::EXTRALIGHT);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT,
+                        &mut weights,
+                    );
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_LIGHT => {
+                    text_style.weight = Some(TextWeight::LIGHT);
+                    add_in_map(ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_LIGHT, &mut weights);
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_MEDIUM => {
+                    text_style.weight = Some(TextWeight::MEDIUM);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_MEDIUM,
+                        &mut weights,
+                    );
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_REGULAR => {
+                    text_style.weight = Some(TextWeight::REGULAR);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_REGULAR,
+                        &mut weights,
+                    );
+                }
+                ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_HAIRLINE => {
+                    text_style.weight = Some(TextWeight::HAIRLINE);
+                    add_in_map(
+                        ftd::interpreter2::FTD_TEXT_STYLE_WEIGHT_HAIRLINE,
+                        &mut weights,
+                    );
+                }
+                t => {
+                    return ftd::executor::utils::parse_error(
+                        format!("Unknown variant `{}` for or-type `ftd.text-style`", t),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+        }
+
+        // Check for repetition in values (underline, italic, strike)
+        for (style, count) in booleans.iter() {
+            if *count > 1 {
+                return ftd::executor::utils::parse_error(
+                    format!("\'{}\' repeated {} times", style, count),
+                    doc.name,
+                    line_number,
+                );
+            }
+        }
+
+        // Multiple font weight check
+        if weights.len() > 1 {
+            return ftd::executor::utils::parse_error(
+                format!("Conflicting weights {:?}", weights.keys()),
+                doc.name,
+                line_number,
+            );
+        }
+
+        // Font weight repetition check
+        for (weight, count) in weights.iter() {
+            if *count > 1 {
+                return ftd::executor::utils::parse_error(
+                    format!("\'{}\' repeated {} times ", weight, count),
+                    doc.name,
+                    line_number,
+                );
+            }
+        }
+
+        Ok(Some(text_style))
+    }
+
+    pub(crate) fn optional_text_style(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<TextStyle>>> {
+        let or_type_value = ftd::executor::value::optional_or_type_list(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_TEXT_STYLE,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            TextStyle::from_optional_values(Some(or_type_value.value), doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn font_style_string(&self) -> String {
+        if self.italic {
+            return "italic".to_string();
+        }
+        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+    }
+
+    pub fn font_decoration_string(&self) -> String {
+        let mut css_string: Vec<String> = vec![];
+        if self.underline {
+            css_string.push("underline".to_string());
+        }
+        if self.strike {
+            css_string.push("line-through".to_string());
+        }
+
+        if css_string.is_empty() {
+            return ftd::interpreter2::FTD_IGNORE_KEY.to_string();
+        }
+        css_string.join(" ")
+    }
+
+    pub fn font_weight_string(&self) -> String {
+        if let Some(weight) = self.weight.as_ref() {
+            return weight.to_weight_string();
+        }
+        ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+    }
+
+    pub fn no_value_pattern() -> (String, bool) {
+        (
+            format!(
+                indoc::indoc! {"
+                    if ({{0}} == \"{no_value}\") {{
+                        \"{remove_key}\"
+                    }} else {{
+                        \"{{0}}\"
+                    }}
+                "},
+                no_value = ftd::interpreter2::FTD_IGNORE_KEY,
+                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+            ),
+            true,
+        )
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum TextTransform {
     NONE,
     CAPITALIZE,
