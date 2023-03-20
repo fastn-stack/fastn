@@ -6,6 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#count": 0,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -694,7 +695,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Normal string</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; height: auto; text-decoration: underline; width: auto" class="ft_md">Stylized string</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; font-weight: 700; height: auto; width: auto" class="ft_md">Stylized string 2</div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-style: italic; font-weight: 800; height: auto; text-decoration: underline; width: auto" class="ft_md">Stylized string 3</div><div data-id="4:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-weight: 700; height: auto; width: auto" class="ft_md">Stylized string 4</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Normal string</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 700; height: auto; width: auto" class="ft_md">Stylized string</div></div>
 
 
 <script>
@@ -1573,7 +1574,81 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#count", data);
+}
+window.node_change_main["2:main__font-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#count", data)%4==1);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
+}
+else if(function(){
+return (resolve_reference("foo#count", data)%4==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["font-style"] = "italic";
+}
+else { document.querySelector(`[data-id="2:main"]`).style["font-style"] = null }
+}
 
+window.node_change_main["2:main__font-weight"] = function(data) {
+if(function(){
+return (resolve_reference("foo#count", data)%4==0);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "700";
+}
+else if(function(){
+return (resolve_reference("foo#count", data)%4==1);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "900";
+}
+else if(function(){
+return (resolve_reference("foo#count", data)%4==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = "300";
+}
+else { document.querySelector(`[data-id="2:main"]`).style["font-weight"] = null }
+}
+
+window.node_change_main["2:main__text-decoration"] = function(data) {
+if(function(){
+return (resolve_reference("foo#count", data)%4==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";
+}
+else if(function(){
+return (resolve_reference("foo#count", data)%4==3);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = "underline";
+}
+else { document.querySelector(`[data-id="2:main"]`).style["text-decoration"] = null }
+}
+window.set_value_main = {};
+window.set_value_main["foo#count"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#count" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#count", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#count"]) {
+let changes = window.ftd.mutable_value_main["foo#count"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#count"]) {
+let changes = window.ftd.immutable_value_main["foo#count"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-style"]){window.node_change_main["2:main__font-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-weight"]){window.node_change_main["2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text-decoration"]){window.node_change_main["2:main__text-decoration"](data);
+}
+};
 
 
 

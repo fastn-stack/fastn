@@ -180,6 +180,7 @@ pub const FTD_INHERITED: &str = "inherited";
 pub const FTD_LOOP_COUNTER: &str = "LOOP.COUNTER";
 pub const FTD_DEFAULT_TYPES: &str = "default-types";
 pub const FTD_DEFAULT_COLORS: &str = "default-colors";
+pub const FTD_NONE: &str = "none";
 pub const FTD_NO_VALUE: &str = "NO-VALUE";
 pub const FTD_IGNORE_KEY: &str = "IGNORE-KEY";
 pub const FTD_REMOVE_KEY: &str = "REMOVE-KEY";
@@ -194,6 +195,7 @@ pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
 
+pub const FTD_VALUE_UNCHANGED: &str = "unchanged";
 pub const FTD_TEXT_STYLE: &str = "ftd#text-style";
 pub const FTD_TEXT_STYLE_ITALIC: &str = "ftd#text-style.italic";
 pub const FTD_TEXT_STYLE_UNDERLINE: &str = "ftd#text-style.underline";

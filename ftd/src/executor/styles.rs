@@ -2314,6 +2314,53 @@ impl TextWeight {
             TextWeight::HAIRLINE => "100".to_string(),
         }
     }
+
+    pub fn from_type_to_weight(weight_type: &str) -> String {
+        match weight_type {
+            "heavy" => "900".to_string(),
+            "extra-bold" => "800".to_string(),
+            "bold" => "700".to_string(),
+            "semi-bold" => "600".to_string(),
+            "medium" => "500".to_string(),
+            "regular" => "400".to_string(),
+            "light" => "300".to_string(),
+            "extra-light" => "200".to_string(),
+            "hairline" => "100".to_string(),
+            _ => "none".to_string(),
+        }
+    }
+
+    pub fn is_valid_weight_type(value: &str) -> bool {
+        matches!(
+            value,
+            "hairline"
+                | "extra-bold"
+                | "extra-light"
+                | "bold"
+                | "semi-bold"
+                | "light"
+                | "medium"
+                | "regular"
+                | "heavy"
+        )
+    }
+
+    pub fn is_valid_text_weight(value: &str) -> bool {
+        fn is_numeric_value(s: String) -> bool {
+            for c in s.chars() {
+                if !c.is_numeric() {
+                    return false;
+                }
+            }
+            true
+        }
+
+        match value {
+            c1 if TextWeight::is_valid_weight_type(c1) => true,
+            c2 if is_numeric_value(c2.to_string()) => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -2533,21 +2580,72 @@ impl TextStyle {
         ftd::interpreter2::FTD_IGNORE_KEY.to_string()
     }
 
-    pub fn no_value_pattern() -> (String, bool) {
-        (
-            format!(
-                indoc::indoc! {"
-                    if ({{0}} == \"{no_value}\") {{
-                        \"{remove_key}\"
-                    }} else {{
-                        \"{{0}}\"
-                    }}
-                "},
-                no_value = ftd::interpreter2::FTD_IGNORE_KEY,
-                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
-            ),
-            true,
-        )
+    pub fn filter_for_style(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                "italic" => result.push_str(v),
+                _ => continue,
+            }
+            result.push(' ');
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
+    }
+
+    pub fn filter_for_decoration(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                "underline" => result.push_str(v),
+                "strike" => result.push_str("line-through"),
+                _ => continue,
+            }
+            result.push(' ');
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
+    }
+
+    pub fn filter_for_weight(values: String) -> String {
+        let mut result = String::new();
+        for v in values
+            .trim_start_matches('\"')
+            .trim_end_matches('\"')
+            .split(' ')
+        {
+            match v {
+                valid if TextWeight::is_valid_text_weight(valid) => {
+                    result.push_str(TextWeight::from_type_to_weight(valid).as_str())
+                }
+                _ => continue,
+            }
+        }
+
+        let filtered = result.trim_end();
+        let res = match filtered.is_empty() {
+            true => return ftd::interpreter2::FTD_VALUE_UNCHANGED.to_string(),
+            false => filtered.to_string(),
+        };
+        format!("\"{}\"", res)
     }
 }
 
