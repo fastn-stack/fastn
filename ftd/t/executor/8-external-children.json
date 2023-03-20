@@ -330,7 +330,7 @@
                     "text": {
                       "value": {
                         "original": "Hello",
-                        "rendered": "<p>Hello</p>"
+                        "rendered": "Hello"
                       },
                       "line_number": 6,
                       "properties": [
@@ -698,7 +698,7 @@
                             "text": {
                               "value": {
                                 "original": "Hello",
-                                "rendered": "<p>Hello</p>"
+                                "rendered": "Hello"
                               },
                               "line_number": 21,
                               "properties": [

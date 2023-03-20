@@ -20,6 +20,7 @@ $on-click$: $ftd.toggle($a = $flag)
 lang: rs
 line-clamp if { flag_2 }: 1
 line-clamp: 3
+background.solid: #21222c
 $on-click$: $ftd.toggle($a = $flag_2)
 
 pub fn foo() {

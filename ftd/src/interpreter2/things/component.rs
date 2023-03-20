@@ -1287,4 +1287,8 @@ impl EventName {
             ),
         }
     }
+
+    pub(crate) fn is_click(&self) -> bool {
+        self.eq(&EventName::Click)
+    }
 }

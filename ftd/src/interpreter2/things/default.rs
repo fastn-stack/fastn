@@ -35,6 +35,50 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
 
     std::iter::IntoIterator::into_iter([
         (
+            "ftd.clean_code".to_string(),
+            Function::new(|argument| {
+                if argument.as_empty().is_ok() {
+                    Ok(Value::String("".to_string()))
+                } else if let Ok(s) = argument.as_string() {
+                    let mut new_string = vec![];
+                    for line in s.split('\n') {
+                        new_string.push(
+                            ftd::interpreter2::FTD_HIGHLIGHTER.replace(line, regex::NoExpand("")),
+                        );
+                    }
+                    Ok(Value::String(new_string.join("\n")))
+                } else if let Ok(tuple) = argument.as_tuple() {
+                    if tuple.len().ne(&2) {
+                        Err(
+                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
+                                expected: 2,
+                                actual: tuple.len(),
+                            },
+                        )
+                    } else {
+                        let s = tuple.first().unwrap().as_string()?;
+                        let lang = tuple.last().unwrap().as_string()?;
+                        if lang.eq("ftd") {
+                            let mut new_string = vec![];
+                            for line in s.split('\n') {
+                                new_string.push(
+                                    ftd::interpreter2::FTD_HIGHLIGHTER
+                                        .replace(line, regex::NoExpand("")),
+                                );
+                            }
+                            Ok(Value::String(new_string.join("\n")))
+                        } else {
+                            Ok(Value::String(s))
+                        }
+                    }
+                } else {
+                    Err(ftd::evalexpr::error::EvalexprError::ExpectedString {
+                        actual: argument.clone(),
+                    })
+                }
+            }),
+        ),
+        (
             "ftd.is_empty".to_string(),
             Function::new(|argument| {
                 if argument.as_empty().is_ok() {
@@ -54,7 +98,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                 if let Ok(s) = argument.as_tuple() {
                     if s.len() != 2 {
                         Err(
-                            ftd::evalexpr::error::EvalexprError::WrongOperatorArgumentAmount {
+                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
                                 expected: 2,
                                 actual: s.len(),
                             },
@@ -312,6 +356,49 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 expression: vec![
                     ftd::interpreter2::things::function::Expression {
                         expression: "enable_system_mode()".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#clean-code".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#clean-code".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::Kind::string(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "lang".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "ftd.clean_code(a, lang)".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -5433,7 +5520,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#EFF1F5".to_string(),
+                                                                    text: "#F5F5F5".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -5443,7 +5530,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             ftd::interpreter2::PropertyValue::Value {
                                                                 value:
                                                                 ftd::interpreter2::Value::String {
-                                                                    text: "#2B303B".to_string(),
+                                                                    text: "#21222C".to_string(),
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -8088,6 +8175,30 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "height",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "shadow-offset-x",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "shadow-offset-y",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "shadow-size",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "shadow-blur",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),

@@ -283,7 +283,7 @@
         },
         "children": [],
         "text": {
-          "value": "<p>hello world</p>",
+          "value": "hello world",
           "properties": [
             {
               "property": {
@@ -501,7 +501,7 @@
         },
         "children": [],
         "text": {
-          "value": "<p>Arpita Jaiswal</p>",
+          "value": "Arpita Jaiswal",
           "properties": [
             {
               "property": {
@@ -709,7 +709,7 @@
         },
         "children": [],
         "text": {
-          "value": "<p>Arpita FifthTry</p>",
+          "value": "Arpita FifthTry",
           "properties": [
             {
               "property": {

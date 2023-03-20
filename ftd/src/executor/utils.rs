@@ -528,3 +528,14 @@ pub fn found_parent_containers(containers: &[&(String, Vec<usize>)], container: 
     }
     false
 }
+
+pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -> String {
+    if !s.contains(old_word) {
+        return s.to_string();
+    }
+    if let Some(idx) = s.rsplit(old_word).next() {
+        let idx = s.len() - idx.len() - old_word.len();
+        return format!("{}{}{}", &s[..idx], new_word, &s[idx + old_word.len()..]);
+    }
+    s.to_string()
+}
