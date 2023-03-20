@@ -136,7 +136,6 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: ftd-host/assets.ftd
 
 ## Book 🚧: /book/
-skip: true
 
 - The Book Of `fastn` and `ftd`: /book/
 - `i` Foreword 🚧: /book/foreword/
