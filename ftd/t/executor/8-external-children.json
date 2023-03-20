@@ -330,7 +330,7 @@
                     "text": {
                       "value": {
                         "original": "Hello",
-                        "rendered": "<p>Hello</p>"
+                        "rendered": "Hello"
                       },
                       "line_number": 6,
                       "properties": [
@@ -353,6 +353,11 @@
                       ]
                     },
                     "text_align": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
+                    },
+                    "text_indent": {
                       "value": null,
                       "line_number": null,
                       "properties": []
@@ -696,6 +701,11 @@
                         "line_number": null,
                         "properties": []
                       }
+                    },
+                    "style": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
                     }
                   }
                 },
@@ -723,7 +733,7 @@
                             "text": {
                               "value": {
                                 "original": "Hello",
-                                "rendered": "<p>Hello</p>"
+                                "rendered": "Hello"
                               },
                               "line_number": 21,
                               "properties": [
@@ -746,6 +756,11 @@
                               ]
                             },
                             "text_align": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
+                            },
+                            "text_indent": {
                               "value": null,
                               "line_number": null,
                               "properties": []
@@ -1089,6 +1104,11 @@
                                 "line_number": null,
                                 "properties": []
                               }
+                            },
+                            "style": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
                             }
                           }
                         }

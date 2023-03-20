@@ -427,6 +427,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            let style_key = key.clone();
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
@@ -652,7 +653,7 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if let Some(value_string) =
+                if let Some(mut value_string) =
                     ftd::html1::utils::get_formatted_dep_string_from_property_value(
                         self.id,
                         self.doc,
@@ -674,8 +675,11 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                         self.doc,
                     );
-                    let value = format!("{} = {};", key, value_string);
-                    expressions.push((condition, value));
+                    value_string = self.filter_style_data(&style_key, value_string.to_string());
+                    if !value_string.eq(ftd::interpreter2::FTD_VALUE_UNCHANGED) {
+                        let value = format!("{} = {};", key, value_string);
+                        expressions.push((condition, value));
+                    }
                 }
             }
 
@@ -692,6 +696,7 @@ impl<'a> DependencyGenerator<'a> {
                 )
                 .as_str(),
             );
+
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -714,6 +719,15 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
         Ok(result.join("\n"))
+    }
+
+    fn filter_style_data(&self, key: &str, value: String) -> String {
+        match key {
+            "font-style" => ftd::executor::TextStyle::filter_for_style(value),
+            "text-decoration" => ftd::executor::TextStyle::filter_for_decoration(value),
+            "font-weight" => ftd::executor::TextStyle::filter_for_weight(value),
+            _ => value,
+        }
     }
 }
 

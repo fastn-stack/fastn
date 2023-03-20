@@ -123,7 +123,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 1,
               "properties": [
@@ -146,6 +146,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -526,6 +531,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -534,7 +544,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 7,
               "properties": [
@@ -557,6 +567,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -939,6 +954,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -947,7 +967,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 14,
               "properties": [
@@ -970,6 +990,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -1345,6 +1370,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -1353,7 +1383,7 @@
             "text": {
               "value": {
                 "original": "Hello from FTD",
-                "rendered": "<p>Hello from FTD</p>"
+                "rendered": "Hello from FTD"
               },
               "line_number": 22,
               "properties": [
@@ -1381,6 +1411,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -1820,6 +1855,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         }

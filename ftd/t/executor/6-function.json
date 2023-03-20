@@ -71,7 +71,7 @@
             "text": {
               "value": {
                 "original": "hello world",
-                "rendered": "<p>hello world</p>"
+                "rendered": "hello world"
               },
               "line_number": 7,
               "properties": [
@@ -123,6 +123,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -466,6 +471,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         }

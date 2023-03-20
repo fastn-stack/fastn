@@ -1,22 +1,28 @@
--- string dummy: dummy_string
+-- string s: Middle man
 
--- string list persons: $dummy
+-- string list persons:
 
--- integer list ages: 1, 2, 3, 4
+-- string: Rithik
+-- string: Amitu
+-- string: Arpita
 
--- integer list age-copy: $ages
+-- end: persons
 
-/-- ftd.text: $obj
-$loop$: $persons as $obj
+-- string list new-persons: Rithik, $s, Amitu
 
-/-- ftd.integer: $obj
-$loop$: $age-copy as $obj
+-- integer list ages:
+
+1, 2, 3, 4
+
+-- ftd.text: $obj
+$loop$: $new-persons as $obj
+
+-- ftd.integer: $obj
+$loop$: $ages as $obj
 
 /-- show-lists:
 venues: Bangalore, Mumbai, Kolkata, Chennai
 days: 12, 34, 23, 10
-
--- check-border-style:
 
 -- component show-lists:
 string list venues:
@@ -33,18 +39,3 @@ $loop$: $show-lists.days as $obj
 -- end: ftd.column
 
 -- end: show-lists
-
--- component check-border-style:
-
--- ftd.column:
-border-style: dotted
-border-width.px: 2
-padding.px: 10
-margin.px: 10
-
-
--- ftd.text: Hello World
-
--- end: ftd.column
-
--- end: check-border-style

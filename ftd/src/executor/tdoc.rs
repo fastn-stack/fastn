@@ -17,12 +17,33 @@ impl<'a> TDoc<'a> {
     pub fn resolve_all_self_references(
         name: String,
         component_name: &str,
-        map: &ftd::Map<(String, Option<String>)>,
+        map: &ftd::Map<(String, Vec<String>)>,
     ) -> String {
         let mut resolved_value = name;
         loop {
             if resolved_value.starts_with(format!("{}.", component_name).as_str()) {
-                resolved_value = map.get(resolved_value.as_str()).cloned().unwrap().0;
+                let (name, remaining) = {
+                    let mut name = resolved_value
+                        .strip_prefix(format!("{}.", component_name).as_str())
+                        .unwrap()
+                        .to_string();
+                    let mut remaining = None;
+                    if let Some((var_name, var_remaining)) = name.as_str().split_once('.') {
+                        remaining = Some(var_remaining.to_string());
+                        name = var_name.to_string();
+                    }
+                    (format!("{}.{}", component_name, name), remaining)
+                };
+
+                resolved_value = format!(
+                    "{}{}",
+                    map.get(name.as_str()).cloned().unwrap().0,
+                    if let Some(rem) = remaining {
+                        format!(".{}", rem)
+                    } else {
+                        Default::default()
+                    }
+                );
             } else {
                 break;
             }
@@ -33,24 +54,29 @@ impl<'a> TDoc<'a> {
     pub(crate) fn resolve_self_referenced_values(
         &mut self,
         component_name: &str,
-        map: &ftd::Map<(String, Option<String>)>,
+        map: &ftd::Map<(String, Vec<String>)>,
     ) -> ftd::executor::Result<ftd::Map<String>> {
         let mut resolved_map: ftd::Map<String> = Default::default();
 
         for (k, (name, has_self_reference)) in map.iter() {
             let name = TDoc::resolve_all_self_references(name.clone(), component_name, map);
 
-            if let Some(has_self_reference) = has_self_reference {
+            if !has_self_reference.is_empty() {
+                let values: ftd::Map<String> = has_self_reference
+                    .iter()
+                    .map(|v| {
+                        (
+                            v.to_string(),
+                            TDoc::resolve_all_self_references(v.to_string(), component_name, map),
+                        )
+                    })
+                    .collect();
                 let variable = match self.bag.get_mut(name.as_str()).unwrap() {
                     ftd::interpreter2::Thing::Variable(v) => v,
                     _ => unreachable!("Reference {} is not a valid variable", name.as_str()),
                 };
-                let value = TDoc::resolve_all_self_references(
-                    has_self_reference.clone(),
-                    component_name,
-                    map,
-                );
-                variable.value.set_reference_or_clone(value.as_str());
+
+                set_reference_name(&mut variable.value, &values);
             }
 
             resolved_map.insert(k.to_string(), name);
@@ -69,7 +95,7 @@ impl<'a> TDoc<'a> {
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
     ) -> ftd::executor::Result<ftd::Map<String>> {
-        let mut map: ftd::Map<(String, Option<String>)> = Default::default();
+        let mut map: ftd::Map<(String, Vec<String>)> = Default::default();
         for argument in arguments {
             if let Some((k, v, has_self_reference)) = self.insert_local_variable(
                 component_name,
@@ -98,7 +124,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
-    ) -> ftd::executor::Result<Option<(String, String, Option<String>)>> {
+    ) -> ftd::executor::Result<Option<(String, String, Vec<String>)>> {
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
         let properties = ftd::interpreter2::utils::find_properties_by_source(
@@ -118,7 +144,7 @@ impl<'a> TDoc<'a> {
                 // TODO: Remove unwrap()
                 .unwrap()
             {
-                return Ok(Some((name_in_component_definition, name, None)));
+                return Ok(Some((name_in_component_definition, name, vec![])));
             }
         }
 
@@ -159,15 +185,7 @@ impl<'a> TDoc<'a> {
             return Ok(None);
         }
 
-        let self_reference = {
-            let mut self_reference = None;
-            if let Some(name) = default.get_reference_or_clone().cloned() {
-                if name.starts_with(format!("{}.", component_name).as_str()) {
-                    self_reference = Some(name);
-                }
-            }
-            self_reference
-        };
+        let self_reference = get_self_reference(&default, component_name);
 
         match default.reference_name() {
             Some(name) if conditions.is_empty() => {
@@ -185,7 +203,11 @@ impl<'a> TDoc<'a> {
                     );
                 }
 
-                return Ok(Some((name_in_component_definition, name.to_string(), None)));
+                return Ok(Some((
+                    name_in_component_definition,
+                    name.to_string(),
+                    vec![],
+                )));
             }
             _ => {}
         }
@@ -232,5 +254,42 @@ impl<'a> TDoc<'a> {
             variable_name,
             self_reference,
         )))
+    }
+}
+
+fn get_self_reference(
+    default: &ftd::interpreter2::PropertyValue,
+    component_name: &str,
+) -> Vec<String> {
+    match default {
+        ftd::interpreter2::PropertyValue::Reference { name, .. }
+        | ftd::interpreter2::PropertyValue::Clone { name, .. }
+            if name.starts_with(format!("{}.", component_name).as_str()) =>
+        {
+            vec![name.to_string()]
+        }
+        ftd::interpreter2::PropertyValue::FunctionCall(f) => {
+            let mut self_reference = vec![];
+            for arguments in f.values.values() {
+                self_reference.extend(get_self_reference(arguments, component_name));
+            }
+            self_reference
+        }
+        _ => vec![],
+    }
+}
+
+fn set_reference_name(default: &mut ftd::interpreter2::PropertyValue, values: &ftd::Map<String>) {
+    match default {
+        ftd::interpreter2::PropertyValue::Reference { name, .. }
+        | ftd::interpreter2::PropertyValue::Clone { name, .. } => {
+            *name = values.get(name).unwrap().to_string();
+        }
+        ftd::interpreter2::PropertyValue::FunctionCall(f) => {
+            for arguments in f.values.values_mut() {
+                set_reference_name(arguments, values);
+            }
+        }
+        _ => {}
     }
 }

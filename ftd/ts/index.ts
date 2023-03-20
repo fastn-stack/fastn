@@ -3,6 +3,13 @@ window.ftd = (function() {
     let ftd_data: any = {};
     let exports: Partial<Export> = {};
 
+    // Setting up default value on <input>
+    const inputElements = document.querySelectorAll('input[data-dv]');
+    for (let input_ele of inputElements) {
+        // @ts-ignore
+        (<HTMLInputElement> input_ele).defaultValue = input_ele.dataset.dv;
+    }
+
     exports.init = function (id: string, data: string) {
         let element = document.getElementById(data);
         if (!!element) {

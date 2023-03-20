@@ -72,3 +72,7 @@ pub(crate) fn count_children_with_absolute_parent(children: &[ftd::executor::Ele
         })
         .count()
 }
+
+pub(crate) fn has_click_event(events: &[ftd::executor::Event]) -> bool {
+    events.iter().any(|f| f.name.is_click())
+}

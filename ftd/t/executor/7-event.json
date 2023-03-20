@@ -85,7 +85,7 @@
             "text": {
               "value": {
                 "original": "Click here",
-                "rendered": "<p>Click here</p>"
+                "rendered": "Click here"
               },
               "line_number": 9,
               "properties": [
@@ -108,6 +108,11 @@
               ]
             },
             "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "text_indent": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -484,6 +489,11 @@
                 "line_number": null,
                 "properties": []
               }
+            },
+            "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         }

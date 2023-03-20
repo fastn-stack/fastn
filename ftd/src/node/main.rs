@@ -371,6 +371,58 @@ impl ftd::executor::Text {
         }
 
         n.style.check_and_insert(
+            "text-indent",
+            ftd::node::Value::from_executor_value(
+                self.text_indent
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.text_indent.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "font-style",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_style_string()))
+                    .value,
+                self.style.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "text-decoration",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_decoration_string()))
+                    .value,
+                self.style.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "font-weight",
+            ftd::node::Value::from_executor_value(
+                self.style
+                    .to_owned()
+                    .map(|v| v.map(|v| v.font_weight_string()))
+                    .value,
+                self.style.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
             "text-align",
             ftd::node::Value::from_executor_value(
                 self.text_align
@@ -806,6 +858,16 @@ impl ftd::executor::Image {
 }
 
 impl ftd::executor::Common {
+    fn no_border_style(&self) -> bool {
+        self.border_style.value.is_none()
+            && self.border_style_horizontal.value.is_none()
+            && self.border_style_vertical.value.is_none()
+            && self.border_style_top.value.is_none()
+            && self.border_style_bottom.value.is_none()
+            && self.border_style_left.value.is_none()
+            && self.border_style_right.value.is_none()
+    }
+
     fn classes(&self) -> Vec<String> {
         self.classes.to_owned().value
     }
@@ -886,7 +948,7 @@ impl ftd::executor::Common {
             d.check_and_insert("position", ftd::node::Value::from_string("absolute"));
         }
 
-        if !self.event.is_empty() {
+        if ftd::node::utils::has_click_event(self.event.as_slice()) {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
 
@@ -1465,27 +1527,15 @@ impl ftd::executor::Common {
             ),
         );
 
-        if self.border_style.value.is_some() {
-            d.check_and_insert(
-                "border-style",
-                ftd::node::Value::from_executor_value(
-                    self.border_style.value.as_ref().map(|v| v.to_css_string()),
-                    self.border_style.to_owned(),
-                    None,
-                    doc_id,
-                ),
-            );
-        } else {
-            d.check_and_insert(
-                "border-style",
-                ftd::node::Value::from_executor_value(
-                    Some(s("solid")),
-                    ftd::executor::Value::new(None::<String>, None, vec![]),
-                    None,
-                    doc_id,
-                ),
-            );
-        }
+        d.check_and_insert(
+            "border-style",
+            ftd::node::Value::from_executor_value(
+                self.border_style.value.as_ref().map(|v| v.to_css_string()),
+                self.border_style.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "border-left-style",
@@ -1590,6 +1640,18 @@ impl ftd::executor::Common {
                 doc_id,
             ),
         );
+
+        if self.no_border_style() {
+            d.check_and_insert(
+                "border-style",
+                ftd::node::Value::from_executor_value(
+                    Some(s("solid")),
+                    ftd::executor::Value::new(None::<String>, None, vec![]),
+                    None,
+                    doc_id,
+                ),
+            );
+        }
 
         d.check_and_insert(
             "border-bottom-width",

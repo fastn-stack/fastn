@@ -110,7 +110,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
                 .as_str(),
             )
             .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-            .replace("__ftd_css__", "")
+            .replace("__ftd_css__", ftd::css())
             .replace("__ftd_element_css__", "")
             .as_str(),
     );

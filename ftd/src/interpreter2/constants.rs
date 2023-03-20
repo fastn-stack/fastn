@@ -1,3 +1,6 @@
+pub static FTD_HIGHLIGHTER: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new(r"((;;)( *)(<hl>))( *)(\n?)$").unwrap());
+
 pub const FTD_BREAKPOINT_WIDTH: &str = "ftd#breakpoint-width";
 pub const FTD_BREAKPOINT_WIDTH_DATA: &str = "ftd#breakpoint-width-data";
 
@@ -177,6 +180,7 @@ pub const FTD_INHERITED: &str = "inherited";
 pub const FTD_LOOP_COUNTER: &str = "LOOP.COUNTER";
 pub const FTD_DEFAULT_TYPES: &str = "default-types";
 pub const FTD_DEFAULT_COLORS: &str = "default-colors";
+pub const FTD_NONE: &str = "none";
 pub const FTD_NO_VALUE: &str = "NO-VALUE";
 pub const FTD_IGNORE_KEY: &str = "IGNORE-KEY";
 pub const FTD_REMOVE_KEY: &str = "REMOVE-KEY";
@@ -190,3 +194,18 @@ pub const FTD_BORDER_STYLE_GROOVE: &str = "ftd#border-style.groove";
 pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
+
+pub const FTD_VALUE_UNCHANGED: &str = "unchanged";
+pub const FTD_TEXT_STYLE: &str = "ftd#text-style";
+pub const FTD_TEXT_STYLE_ITALIC: &str = "ftd#text-style.italic";
+pub const FTD_TEXT_STYLE_UNDERLINE: &str = "ftd#text-style.underline";
+pub const FTD_TEXT_STYLE_STRIKE: &str = "ftd#text-style.strike";
+pub const FTD_TEXT_STYLE_WEIGHT_HEAVY: &str = "ftd#text-style.heavy";
+pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD: &str = "ftd#text-style.extra-bold";
+pub const FTD_TEXT_STYLE_WEIGHT_BOLD: &str = "ftd#text-style.bold";
+pub const FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD: &str = "ftd#text-style.semi-bold";
+pub const FTD_TEXT_STYLE_WEIGHT_MEDIUM: &str = "ftd#text-style.medium";
+pub const FTD_TEXT_STYLE_WEIGHT_REGULAR: &str = "ftd#text-style.regular";
+pub const FTD_TEXT_STYLE_WEIGHT_LIGHT: &str = "ftd#text-style.light";
+pub const FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT: &str = "ftd#text-style.extra-light";
+pub const FTD_TEXT_STYLE_WEIGHT_HAIRLINE: &str = "ftd#text-style.hairline";

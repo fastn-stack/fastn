@@ -52,8 +52,8 @@
 "light": "#e7e7e4"
 },
 "code": {
-"dark": "#2B303B",
-"light": "#2B303B"
+"dark": "#21222C",
+"light": "#F5F5F5"
 },
 "overlay": {
 "dark": "rgba(0, 0, 0, 0.8)",
@@ -550,16 +550,163 @@
 
 </script>
 <style>
-* {
+*, :after, :before {
+box-sizing: inherit;
+}
+
+*, pre, div {
 padding: 0;
 margin: 0;
-gap: 0px;
+gap: 0;
+}
+
+
+body, ol ol, ol ul, ul ol, ul ul {
+margin:0
+}
+pre, table{
+overflow:auto
+}
+html {
+height: 100%;
+width: 100%;
+}
+
+body {
+height: 100%;
+width: 100%;
+word-wrap: break-word;
+}
+input, code {
+vertical-align: middle;
 }
 pre {
 white-space: break-spaces;
 }
-*, :after, :before {
-box-sizing: inherit;
+html {
+-webkit-font-smoothing: antialiased;
+text-rendering: optimizelegibility;
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+}
+iframe {
+border: 0;
+color-scheme: auto;
+}
+
+pre code {
+overflow-x: auto;
+display: block;
+padding: 10px !important;
+}
+
+.ft_md ul,
+.ft_md ol{
+margin: 10px 0;
+}
+
+.ft_md ul ul,
+.ft_md ul ol,
+.ft_md ol ul,
+.ft_md ol ol {
+margin: 0;
+}
+
+.ft_md ul li,
+.ft_md ol li,
+.ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
+position: relative;
+padding-left: 32px;
+margin: 4px 0;
+}
+
+.ft_md ul {
+list-style: none;
+padding-left: 0;
+}
+
+.ft_md ol {
+list-style: none;
+padding-left: 0;
+counter-reset: item;
+}
+
+.ft_md ol li:before,
+.ft_md ol ol li:before,
+.ft_md ul ol li:before {
+content: counter(item);
+counter-increment: item;
+font-size: 11px;
+line-height: 10px;
+text-align: center;
+padding: 4px 0;
+height: 10px;
+width: 18px;
+border-radius: 10px;
+position: absolute;
+left: 0;
+top: 5px;
+}
+
+.ft_md ul li::before,
+.ft_md ul ul li::before,
+.ft_md ol ul li::before {
+content: "";
+position: absolute;
+width: 6px;
+height: 6px;
+left: 8px;
+top: 10px;
+border-radius: 50%;
+background: #c1c8ce;
+}
+
+.ft_md a {
+text-decoration: none;
+color: #6262ee;
+}
+
+.ft_md a:visited {
+text-decoration: none;
+color: #ad71e4;
+}
+
+
+
+.ft_md a:hover {
+text-decoration: none;
+}
+
+.ft_md code {
+padding: 0.1rem 0.25rem;
+border-radius: 4px;
+background-color: #0000000d;
+}
+
+.ft_md blockquote {
+padding: 0.25rem 1rem;
+margin: 1rem 0;
+border-radius: 3px;
+}
+
+.ft_md blockquote > blockquote {
+margin: 0;
+}
+
+body.fpm-dark .ft_md a {
+text-decoration: none;
+}
+
+
+body.fpm-dark .ft_md code {
+padding: 0.1rem 0.25rem;
+border-radius: 4px;
+background-color: #ffffff1f;
+}
+
+
+.markdown p {
+margin-block-end: 1em;
 }
 
 
@@ -568,7 +715,7 @@ box-sizing: inherit;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>0</p></div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Dotted border</p></div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: dashed; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>1</p></div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Dashed border</p></div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-style: double; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>2</p></div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Double border</p></div></div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:3&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-style: groove; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>3</p></div><div data-id="3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Groove border</p></div></div><div data-id="4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:4&quot;}]]}]', this)" style="align-items: start; border-bottom-style: ridge; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="4,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>4</p></div><div data-id="4,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Ridge border</p></div></div><div data-id="5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:5&quot;}]]}]', this)" style="align-items: start; border-bottom-style: inset; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-style: inset; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="5,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>5</p></div><div data-id="5,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Inset border</p></div></div><div data-id="6:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:6&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: outset; border-left-width: 2px; border-right-style: outset; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="6,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>6</p></div><div data-id="6,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><p>Outset border</p></div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Dotted border</div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:1&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: dashed; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">1</div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Dashed border</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:2&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-style: double; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">2</div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Double border</div></div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:3&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-style: groove; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">3</div><div data-id="3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Groove border</div></div><div data-id="4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:4&quot;}]]}]', this)" style="align-items: start; border-bottom-style: ridge; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="4,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">4</div><div data-id="4,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Ridge border</div></div><div data-id="5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:5&quot;}]]}]', this)" style="align-items: start; border-bottom-style: inset; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-style: inset; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="5,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">5</div><div data-id="5,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Inset border</div></div><div data-id="6:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-border:which:6&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-style: outset; border-left-width: 2px; border-right-style: outset; border-right-width: 2px; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="6,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">6</div><div data-id="6,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Outset border</div></div></div>
 
 
 <script>
@@ -576,6 +723,12 @@ box-sizing: inherit;
 window.ftd = (function () {
 let ftd_data = {};
 let exports = {};
+// Setting up default value on <input>
+const inputElements = document.querySelectorAll('input[data-dv]');
+for (let input_ele of inputElements) {
+// @ts-ignore
+input_ele.defaultValue = input_ele.dataset.dv;
+}
 exports.init = function (id, data) {
 let element = document.getElementById(data);
 if (!!element) {
@@ -1376,6 +1529,12 @@ document.body.removeChild(textArea);
 
 
 
+function ftd__clean_code___main(a,lang,args,data,id){
+return (ftd.clean_code(a,lang,args,data,id));
+}
+
+
+
 function ftd__copy_to_clipboard___main(a,args,data,id){
 return (ftd.copy_to_clipboard(a,args,data,id));
 }
@@ -1549,6 +1708,15 @@ document.querySelector(`[data-id="1:main"]`).style["border-right-style"] = resol
 else { document.querySelector(`[data-id="1:main"]`).style["border-right-style"] = null }
 }
 
+window.node_change_main["1:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:1", data)%7==0);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:1", data);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-style"] = null }
+}
+
 window.node_change_main["1:main__border-top-style"] = function(data) {
 if(function(){
 return (resolve_reference("foo#show-border:which:1", data)%7==2);
@@ -1609,6 +1777,15 @@ return (resolve_reference("foo#show-border:which:2", data)%7==6);
 document.querySelector(`[data-id="2:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:2", data);
 }
 else { document.querySelector(`[data-id="2:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["2:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:2", data)%7==0);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:2", data);
+}
+else { document.querySelector(`[data-id="2:main"]`).style["border-style"] = null }
 }
 
 window.node_change_main["2:main__border-top-style"] = function(data) {
@@ -1673,6 +1850,15 @@ document.querySelector(`[data-id="3:main"]`).style["border-right-style"] = resol
 else { document.querySelector(`[data-id="3:main"]`).style["border-right-style"] = null }
 }
 
+window.node_change_main["3:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:3", data)%7==0);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:3", data);
+}
+else { document.querySelector(`[data-id="3:main"]`).style["border-style"] = null }
+}
+
 window.node_change_main["3:main__border-top-style"] = function(data) {
 if(function(){
 return (resolve_reference("foo#show-border:which:3", data)%7==2);
@@ -1733,6 +1919,15 @@ return (resolve_reference("foo#show-border:which:4", data)%7==6);
 document.querySelector(`[data-id="4:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:4", data);
 }
 else { document.querySelector(`[data-id="4:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["4:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:4", data)%7==0);
+}()){
+document.querySelector(`[data-id="4:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:4", data);
+}
+else { document.querySelector(`[data-id="4:main"]`).style["border-style"] = null }
 }
 
 window.node_change_main["4:main__border-top-style"] = function(data) {
@@ -1797,6 +1992,15 @@ document.querySelector(`[data-id="5:main"]`).style["border-right-style"] = resol
 else { document.querySelector(`[data-id="5:main"]`).style["border-right-style"] = null }
 }
 
+window.node_change_main["5:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:5", data)%7==0);
+}()){
+document.querySelector(`[data-id="5:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:5", data);
+}
+else { document.querySelector(`[data-id="5:main"]`).style["border-style"] = null }
+}
+
 window.node_change_main["5:main__border-top-style"] = function(data) {
 if(function(){
 return (resolve_reference("foo#show-border:which:5", data)%7==2);
@@ -1857,6 +2061,15 @@ return (resolve_reference("foo#show-border:which:6", data)%7==6);
 document.querySelector(`[data-id="6:main"]`).style["border-right-style"] = resolve_reference("foo#show-border:style:6", data);
 }
 else { document.querySelector(`[data-id="6:main"]`).style["border-right-style"] = null }
+}
+
+window.node_change_main["6:main__border-style"] = function(data) {
+if(function(){
+return (resolve_reference("foo#show-border:which:6", data)%7==0);
+}()){
+document.querySelector(`[data-id="6:main"]`).style["border-style"] = resolve_reference("foo#show-border:style:6", data);
+}
+else { document.querySelector(`[data-id="6:main"]`).style["border-style"] = null }
 }
 
 window.node_change_main["6:main__border-top-style"] = function(data) {
@@ -1928,6 +2141,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
 }
 };
@@ -1952,6 +2167,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
 }
@@ -1978,6 +2195,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-style"]){window.node_change_main["3:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
 }
 };
@@ -2002,6 +2221,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
 }
@@ -2028,6 +2249,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
 }
 };
@@ -2052,6 +2275,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
 }
@@ -2242,6 +2467,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
 }
 };
@@ -2268,6 +2495,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
 }
@@ -2296,6 +2525,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-style"]){window.node_change_main["3:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
 }
 };
@@ -2322,6 +2553,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
 }
@@ -2350,6 +2583,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-lef
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
 }
 };
@@ -2376,6 +2611,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bot
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
 }

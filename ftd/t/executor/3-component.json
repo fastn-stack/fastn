@@ -73,7 +73,7 @@
                     "text": {
                       "value": {
                         "original": "Hello World",
-                        "rendered": "<p>Hello World</p>"
+                        "rendered": "Hello World"
                       },
                       "line_number": 5,
                       "properties": [
@@ -96,6 +96,11 @@
                       ]
                     },
                     "text_align": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
+                    },
+                    "text_indent": {
                       "value": null,
                       "line_number": null,
                       "properties": []
@@ -540,6 +545,11 @@
                         "line_number": null,
                         "properties": []
                       }
+                    },
+                    "style": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
                     }
                   }
                 },
@@ -567,7 +577,7 @@
                             "text": {
                               "value": {
                                 "original": "Hello",
-                                "rendered": "<p>Hello</p>"
+                                "rendered": "Hello"
                               },
                               "line_number": 11,
                               "properties": [
@@ -590,6 +600,11 @@
                               ]
                             },
                             "text_align": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
+                            },
+                            "text_indent": {
                               "value": null,
                               "line_number": null,
                               "properties": []
@@ -933,6 +948,11 @@
                                 "line_number": null,
                                 "properties": []
                               }
+                            },
+                            "style": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
                             }
                           }
                         },
@@ -941,7 +961,7 @@
                             "text": {
                               "value": {
                                 "original": "Again",
-                                "rendered": "<p>Again</p>"
+                                "rendered": "Again"
                               },
                               "line_number": 13,
                               "properties": [
@@ -964,6 +984,11 @@
                               ]
                             },
                             "text_align": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
+                            },
+                            "text_indent": {
                               "value": null,
                               "line_number": null,
                               "properties": []
@@ -1307,6 +1332,11 @@
                                 "line_number": null,
                                 "properties": []
                               }
+                            },
+                            "style": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
                             }
                           }
                         }
