@@ -22,7 +22,28 @@ impl<'a> TDoc<'a> {
         let mut resolved_value = name;
         loop {
             if resolved_value.starts_with(format!("{}.", component_name).as_str()) {
-                resolved_value = map.get(resolved_value.as_str()).cloned().unwrap().0;
+                let (name, remaining) = {
+                    let mut name = resolved_value
+                        .strip_prefix(format!("{}.", component_name).as_str())
+                        .unwrap()
+                        .to_string();
+                    let mut remaining = None;
+                    if let Some((var_name, var_remaining)) = name.as_str().split_once('.') {
+                        remaining = Some(var_remaining.to_string());
+                        name = var_name.to_string();
+                    }
+                    (format!("{}.{}", component_name, name), remaining)
+                };
+
+                resolved_value = format!(
+                    "{}{}",
+                    map.get(name.as_str()).cloned().unwrap().0,
+                    if let Some(rem) = remaining {
+                        format!(".{}", rem)
+                    } else {
+                        Default::default()
+                    }
+                );
             } else {
                 break;
             }

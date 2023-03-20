@@ -27,11 +27,12 @@ name: TOC title 4
 
 -- component print-toc-item:
 toc-item item:
+string name: *$print-toc-item.item.name
 
 -- ftd.column:
 padding.px: 30
 
--- ftd.text: $print-toc-item.item.name
+-- ftd.text: $print-toc-item.name
 
 -- print-toc-item:
 item: $obj

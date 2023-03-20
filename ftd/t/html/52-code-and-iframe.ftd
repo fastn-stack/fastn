@@ -37,7 +37,7 @@ $code
 lang: ftd
 theme: fastn-theme-1.light
 role: $inherited.types.copy-regular
-background.solid: #f5f5f5
+background.solid: #ffffff
 border-radius.px: 4
 border-width.px: 1
 
@@ -76,7 +76,7 @@ $code
 lang: ftd
 theme: fastn-theme-1.dark
 role: $inherited.types.copy-regular
-background.solid: #21222c
+background.solid: #313338
 border-radius.px: 4
 border-width.px: 1
 
