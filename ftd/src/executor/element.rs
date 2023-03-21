@@ -523,6 +523,7 @@ pub struct Common {
     pub border_style_right: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
     pub border_style_top: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
     pub border_style_bottom: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
+    pub shadow: ftd::executor::Value<Option<ftd::executor::Shadow>>,
 }
 
 pub fn default_column() -> Column {
@@ -1536,6 +1537,14 @@ pub fn common_from_properties(
             doc,
             line_number,
             "white-space",
+            inherited_variables,
+        )?,
+        shadow: ftd::executor::Shadow::optional_shadow(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "shadow",
             inherited_variables,
         )?,
     })

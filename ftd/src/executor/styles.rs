@@ -843,6 +843,178 @@ impl Background {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Shadow {
+    pub x_offset: ftd::executor::Value<Length>,
+    pub y_offset: ftd::executor::Value<Length>,
+    pub blur: ftd::executor::Value<Length>,
+    pub spread: ftd::executor::Value<Length>,
+    pub inset: ftd::executor::Value<bool>,
+    pub color: ftd::executor::Value<Color>,
+}
+
+impl Shadow {
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Shadow> {
+        let x_offset = {
+            let value = values
+                .get("x-offset")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`x-offset` field in ftd.shadow not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Length::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("x-offset"))],
+            )
+        };
+
+        let y_offset = {
+            let value = values
+                .get("y-offset")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`y-offset` field in ftd.shadow not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Length::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("y-offset"))],
+            )
+        };
+
+        let blur = {
+            let value = values.get("blur").ok_or(ftd::executor::Error::ParseError {
+                message: "`blur` field in ftd.shadow not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                Length::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("blur"))],
+            )
+        };
+
+        let spread = {
+            let value = values
+                .get("spread")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`spread` field in ftd.shadow not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Length::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("spread"))],
+            )
+        };
+
+        let color = {
+            let value = values
+                .get("color")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`color` field in ftd.shadow not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Color::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+            )
+        };
+
+        let inset = {
+            let value = values
+                .get("inset")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`inset` field in ftd.shadow not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .bool(doc.name, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+            )
+        };
+
+        Ok(Shadow {
+            x_offset,
+            y_offset,
+            blur,
+            spread,
+            color,
+            inset,
+        })
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Shadow::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    pub(crate) fn optional_shadow(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Shadow>>> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_SHADOW,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Shadow::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        let x_offset = self.x_offset.value.to_css_string();
+        let y_offset = self.y_offset.value.to_css_string();
+        let blur = self.blur.value.to_css_string();
+        let spread = self.spread.value.to_css_string();
+        let inset = match self.inset.value {
+            true => "inset".to_string(),
+            false => "".to_string(),
+        };
+        let color = self.color.value.to_css_string();
+
+        format!(
+            "{} {} {} {} {} {}",
+            inset, color, x_offset, y_offset, blur, spread
+        )
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Color {
     pub light: ftd::executor::Value<ColorValue>,
     pub dark: ftd::executor::Value<ColorValue>,
