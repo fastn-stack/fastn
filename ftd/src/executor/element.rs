@@ -152,6 +152,33 @@ pub struct ImageSrc {
 }
 
 impl ImageSrc {
+    pub(crate) fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ImageSrc> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+                if name.eq(ftd::interpreter2::FTD_IMAGE_SRC) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_IMAGE_SRC,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        ImageSrc::from_values(fields, doc, line_number)
+    }
+
     fn from_values(
         values: ftd::Map<ftd::interpreter2::PropertyValue>,
         doc: &ftd::executor::TDoc,

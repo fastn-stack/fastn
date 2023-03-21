@@ -1703,6 +1703,13 @@ document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
 }
 
+window.node_change_main["0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#base", data).light));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#base", data).dark));}
+}
+
 window.node_change_main["0,0,0,0,0:main__src"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
@@ -1791,6 +1798,13 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,1:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
 }
 else {document.querySelector(`[data-id="0,0,1:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+}
+
+window.node_change_main["0,0,1:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0,1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).light));
+}
+else {document.querySelector(`[data-id="0,0,1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).dark));}
 }
 
 window.node_change_main["0,0,1,0,0:main__text"] = function(data) {
@@ -1912,6 +1926,13 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
 }
 else {document.querySelector(`[data-id="0,1,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+}
+
+window.node_change_main["0,1,0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,1,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).light));
+}
+else {document.querySelector(`[data-id="0,1,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).dark));}
 }
 
 window.node_change_main["0,1,0,0,0,0,0:main__text"] = function(data) {
@@ -2956,6 +2977,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,1,0,1,0,3,0:
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__background-color"]){window.node_change_main["0,0,1:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__background-image"]){window.node_change_main["0,0,1:main__background-image"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0,0,0:main__color"]){window.node_change_main["0,1,0,0,0,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0,1,0,0,0:main__color"]){window.node_change_main["0,1,0,0,0,1,0,0,0:main__color"](data);
@@ -2969,6 +2992,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,2,0,0:main
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,3,0,0:main__color"]){window.node_change_main["0,1,0,0,3,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__background-color"]){window.node_change_main["0,1,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__background-image"]){window.node_change_main["0,1,0:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,1,0:main__color"]){window.node_change_main["0,1,1,0:main__color"](data);
 }
@@ -2999,6 +3024,8 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,1,1,2,5,0,0:main
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,1,2,5,1:main__color"]){window.node_change_main["0,1,1,2,5,1:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
 };
 

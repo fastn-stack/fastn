@@ -753,6 +753,7 @@ impl Resizing {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(Color),
+    Image(ftd::executor::ImageSrc),
 }
 
 impl Background {
@@ -779,6 +780,9 @@ impl Background {
                 doc,
                 line_number,
             )?)),
+            ftd::interpreter2::FTD_BACKGROUND_IMAGE => Ok(Background::Image(
+                ftd::executor::ImageSrc::from_value(or_type_value.1, doc, line_number)?,
+            )),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.length`", t),
                 doc.name,
@@ -812,10 +816,29 @@ impl Background {
         ))
     }
 
+    pub fn to_solid_css_string(&self) -> String {
+        match self {
+            Background::Solid(c) => c.light.value.to_css_string(),
+            Background::Image(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+        }
+    }
+
+    pub fn to_image_css_string(&self) -> String {
+        match self {
+            Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+            Background::Image(i) => format!("url({})", i.light.value),
+        }
+    }
+
     pub fn to_css_string(&self) -> String {
         match self {
             Background::Solid(c) => c.light.value.to_css_string(),
+            Background::Image(i) => i.light.value.to_string(),
         }
+    }
+
+    pub fn background_image_pattern() -> (String, bool) {
+        ("url({0})".to_string(), false)
     }
 }
 

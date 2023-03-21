@@ -1159,12 +1159,26 @@ impl ftd::executor::Common {
             ),
         );
 
+        // todo: need to fix conditionals working with background
+        d.check_and_insert(
+            "background-image",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_css_string()))
+                    .value,
+                self.background.to_owned(),
+                Some(ftd::executor::Background::background_image_pattern()),
+                doc_id,
+            ),
+        );
+
         d.check_and_insert(
             "background-color",
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_solid_css_string()))
                     .value,
                 self.background.to_owned(),
                 None,
