@@ -456,6 +456,10 @@ pub fn replace_markers_2022(
 ) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace(
+            "__ftd_meta_data__",
+            ftd::html1::utils::get_meta_data(&html_ui.html_data).as_str(),
+        )
+        .replace(
             "__ftd_doc_title__",
             html_ui.html_data.title.unwrap_or_default().as_str(),
         )

@@ -14,8 +14,8 @@ mod variable_dependencies;
 pub(crate) use dummy_html::{DummyHtmlGenerator, HelperHtmlGenerator};
 pub use events::Action;
 pub use functions::{ExpressionGenerator, FunctionGenerator};
-pub use main::HtmlUI;
 pub(crate) use main::RawHtmlGenerator;
+pub use main::{HTMLData, HtmlUI};
 pub use variable_dependencies::VariableDependencyGenerator;
 
 #[derive(thiserror::Error, Debug)]
