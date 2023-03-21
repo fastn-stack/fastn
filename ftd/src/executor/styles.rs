@@ -1,5 +1,3 @@
-use ftd::executor::ImageSrc;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -755,7 +753,7 @@ impl Resizing {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(Color),
-    Image(ImageSrc),
+    Image(ftd::executor::ImageSrc),
 }
 
 impl Background {
@@ -782,11 +780,9 @@ impl Background {
                 doc,
                 line_number,
             )?)),
-            ftd::interpreter2::FTD_BACKGROUND_IMAGE => Ok(Background::Image(ImageSrc::from_value(
-                or_type_value.1,
-                doc,
-                line_number,
-            )?)),
+            ftd::interpreter2::FTD_BACKGROUND_IMAGE => Ok(Background::Image(
+                ftd::executor::ImageSrc::from_value(or_type_value.1, doc, line_number)?,
+            )),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.length`", t),
                 doc.name,

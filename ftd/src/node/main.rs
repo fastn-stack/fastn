@@ -1140,6 +1140,7 @@ impl ftd::executor::Common {
             ),
         );
 
+        // todo: need to fix conditionals working with background
         d.check_and_insert(
             "background-image",
             ftd::node::Value::from_executor_value(
