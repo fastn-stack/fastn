@@ -33,7 +33,7 @@ impl Element {
             Element::TextInput(i) => Some(&i.common),
             Element::CheckBox(c) => Some(&c.common),
             Element::Document(_) => None,
-            Element::Null => None,
+            Element::Null { .. } => None,
             Element::RawElement(_) => None,
             Element::WebComponent(_) => None,
             Element::IterativeElement(i) => i.element.get_common(),
@@ -68,10 +68,10 @@ impl Element {
             Element::Iframe(i) => i.common.line_number,
             Element::TextInput(t) => t.common.line_number,
             Element::RawElement(r) => r.line_number,
-            Element::IterativeElement(i) => i.line_number,
+            Element::IterativeElement(i) => i.iteration.line_number,
             Element::CheckBox(c) => c.common.line_number,
             Element::WebComponent(w) => w.line_number,
-            Element::Null { line_number } => line_number,
+            Element::Null { line_number } => *line_number,
         }
     }
 }
@@ -90,7 +90,6 @@ pub struct RawElement {
 pub struct IterativeElement {
     pub element: Box<ftd::executor::Element>,
     pub iteration: ftd::interpreter2::Loop,
-    pub line_number: usize,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -115,12 +114,6 @@ pub struct Column {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
-}
-
-impl HTMLData {
-    pub(crate) fn new() -> HTMLData {
-        HTMLData::default()
-    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]

@@ -18,6 +18,7 @@ pub struct RT {
     pub aliases: ftd::Map<String>,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub main: ftd::executor::Column,
+    pub html_data: ftd::executor::HTMLData,
     pub dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
     pub js: std::collections::HashSet<String>,
@@ -31,6 +32,7 @@ impl Default for RT {
             aliases: Default::default(),
             bag: Default::default(),
             main: Default::default(),
+            html_data: Default::default(),
             dummy_instructions: ftd::VecMap::new(),
             element_constructor: Default::default(),
             js: Default::default(),
@@ -59,7 +61,7 @@ impl<'a> ExecuteDoc<'a> {
         }
         .execute()?;
 
-        let (document, children) =  match execute_doc.first_mut() {
+        let (html_data, children) = match execute_doc.first() {
             Some(first) if first.is_document() => {
                 if execute_doc.len().ne(&1) {
                     return ftd::executor::utils::parse_error(
@@ -70,25 +72,24 @@ impl<'a> ExecuteDoc<'a> {
                 }
 
                 match first {
-                    ftd::executor::Element::Document(d) => (d.data.clone(), d.children.clone()),
-                    _ => unreachable!()
+                    ftd::executor::Element::Document(d) => {
+                        (d.data.to_owned(), d.children.to_owned())
+                    }
+                    _ => unreachable!(),
                 }
             }
-            _ => (ftd::executor::HTMLData::default())
-        }
-
-        if let Some(first) = execute_doc.first() {
-
-        }
+            _ => (ftd::executor::HTMLData::default(), execute_doc),
+        };
 
         let mut main = ftd::executor::element::default_column();
-        main.container.children.extend(execute_doc);
+        main.container.children.extend(children);
 
         Ok(RT {
             name: document.name.to_string(),
             aliases: document.aliases,
             bag: document.data,
             main,
+            html_data,
             dummy_instructions,
             element_constructor,
             js,
@@ -406,7 +407,9 @@ impl<'a> ExecuteDoc<'a> {
                         ExecuteDoc::insert_element(
                             &mut elements,
                             container.as_slice(),
-                            ftd::executor::Element::Null {line_number: instruction.line_number},
+                            ftd::executor::Element::Null {
+                                line_number: instruction.line_number,
+                            },
                         );
                         break;
                     }
@@ -504,6 +507,7 @@ impl<'a> ExecuteDoc<'a> {
                 current = match &mut current[*i] {
                     ftd::executor::Element::Row(r) => &mut r.container.children,
                     ftd::executor::Element::Column(r) => &mut r.container.children,
+                    ftd::executor::Element::Document(r) => &mut r.children,
                     t => unreachable!("{:?}", t),
                 };
             }
@@ -822,6 +826,7 @@ impl<'a> ExecuteDoc<'a> {
                     component_definition.arguments.as_slice(),
                     doc,
                     instruction.line_number,
+                    vec![],
                 )?)
             }
             "ftd#image" => {

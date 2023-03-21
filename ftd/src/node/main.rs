@@ -116,7 +116,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::CheckBox(c) => c.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Null => Node {
+            ftd::executor::Element::Null { line_number } => Node {
                 classes: vec![],
                 events: vec![],
                 node: "".to_string(),
@@ -128,13 +128,14 @@ impl ftd::executor::Element {
                 text: Default::default(),
                 null: true,
                 data_id: "".to_string(),
-                line_number: 0,
+                line_number: *line_number,
                 raw_data: None,
                 web_component: None,
             },
             ftd::executor::Element::RawElement(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::WebComponent(w) => w.to_node(),
+            ftd::executor::Element::Document(_) => unreachable!(),
         }
     }
 }
