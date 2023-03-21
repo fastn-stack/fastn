@@ -1,4 +1,4 @@
-use ftd::executor::ImageSrc as ImageSrc;
+use ftd::executor::ImageSrc;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
@@ -755,7 +755,7 @@ impl Resizing {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(Color),
-    Image(ImageSrc)
+    Image(ImageSrc),
 }
 
 impl Background {
@@ -839,6 +839,10 @@ impl Background {
             Background::Solid(c) => c.light.value.to_css_string(),
             Background::Image(i) => i.light.value.to_string(),
         }
+    }
+
+    pub fn background_image_pattern() -> (String, bool) {
+        ("url({0})".to_string(), false)
     }
 }
 

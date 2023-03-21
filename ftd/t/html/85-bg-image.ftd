@@ -18,5 +18,57 @@ width.fixed.px: 150
 height.fixed.px: 150
 
 -- ftd.text: Hello Image
+color: white
 
 -- end: ftd.column
+
+-- dark-mode-switcher:
+
+
+-- component dark-mode-switcher:
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- button: Dark Mode
+color: #2dd4bf
+$on-click$: $ftd.enable-dark-mode()
+
+
+-- button: Light Mode
+color: #4fb2df
+$on-click$: $ftd.enable-light-mode()
+
+
+-- button: System Mode
+color: #df894f
+$on-click$: $ftd.enable-system-mode()
+
+
+-- end: ftd.row
+
+-- end: dark-mode-switcher
+
+
+
+
+
+
+
+
+-- component button:
+ftd.color color:
+caption cta:
+
+-- ftd.text: $button.cta
+padding-horizontal.px: 16
+padding-vertical.px: 12
+background.solid: $button.color
+border-radius.px: 2
+color: white
+width.fixed.px: 132
+text-align: center
+
+
+-- end: button
