@@ -9,8 +9,21 @@ pub struct HtmlUI {
     pub raw_html: String,
     pub mutable_variable: String,
     pub immutable_variable: String,
+    pub html_data: HTMLData,
     pub js: String,
     pub css: String,
+}
+
+pub struct HTMLData {
+    pub title: Option<String>,
+}
+
+impl ftd::node::HTMLData {
+    fn to_html_data(&self) -> HTMLData {
+        HTMLData {
+            title: self.title.value.to_owned(),
+        }
+    }
 }
 
 impl HtmlUI {
@@ -29,9 +42,13 @@ impl HtmlUI {
         );
 
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
-        let (dependencies, var_dependencies) =
-            ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
-                .get_dependencies()?;
+        let (dependencies, var_dependencies) = ftd::html1::dependencies::DependencyGenerator::new(
+            id,
+            &node_data.node,
+            &node_data.html_data,
+            &tdoc,
+        )
+        .get_dependencies()?;
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies, test)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
@@ -60,6 +77,7 @@ impl HtmlUI {
             raw_html,
             mutable_variable,
             immutable_variable,
+            html_data: node_data.html_data.to_html_data(),
             js: ftd::html1::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
             css: ftd::html1::utils::get_css_html(
                 node_data.css.into_iter().collect_vec().as_slice(),

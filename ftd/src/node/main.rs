@@ -17,6 +17,24 @@ pub struct Node {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct HTMLData {
+    pub title: ftd::node::Value,
+}
+
+impl ftd::executor::HTMLData {
+    pub(crate) fn from_html_data(&self) -> HTMLData {
+        HTMLData {
+            title: ftd::node::Value::from_executor_value(
+                self.title.value.to_owned(),
+                self.title.to_owned(),
+                None,
+                doc_id,
+            ),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct RawNodeData {
     pub properties: Vec<(String, ftd::interpreter2::Property)>,
     pub iteration: Option<ftd::interpreter2::Loop>,
