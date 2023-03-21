@@ -68,6 +68,7 @@ impl DummyElement {
                         found_elements,
                     )?),
                     iteration,
+                    line_number,
                 },
             ));
         }

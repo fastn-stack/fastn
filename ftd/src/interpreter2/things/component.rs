@@ -1146,7 +1146,7 @@ impl Loop {
 pub struct Event {
     pub name: ftd::interpreter2::EventName,
     pub action: ftd::interpreter2::FunctionCall,
-    line_number: usize,
+    pub line_number: usize,
 }
 
 impl Event {

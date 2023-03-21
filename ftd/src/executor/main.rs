@@ -58,6 +58,29 @@ impl<'a> ExecuteDoc<'a> {
             css: &mut css,
         }
         .execute()?;
+
+        let (document, children) =  match execute_doc.first_mut() {
+            Some(first) if first.is_document() => {
+                if execute_doc.len().ne(&1) {
+                    return ftd::executor::utils::parse_error(
+                        "ftd.document can't have siblings.",
+                        document.name.as_str(),
+                        first.line_number(),
+                    );
+                }
+
+                match first {
+                    ftd::executor::Element::Document(d) => (d.data.clone(), d.children.clone()),
+                    _ => unreachable!()
+                }
+            }
+            _ => (ftd::executor::HTMLData::default())
+        }
+
+        if let Some(first) = execute_doc.first() {
+
+        }
+
         let mut main = ftd::executor::element::default_column();
         main.container.children.extend(execute_doc);
 
@@ -383,7 +406,7 @@ impl<'a> ExecuteDoc<'a> {
                         ExecuteDoc::insert_element(
                             &mut elements,
                             container.as_slice(),
-                            ftd::executor::Element::Null,
+                            ftd::executor::Element::Null {line_number: instruction.line_number},
                         );
                         break;
                     }
@@ -751,6 +774,54 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                     vec![],
                     inherited_variables,
+                )?)
+            }
+            "ftd#document" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+
+                if !instruction.events.is_empty() {
+                    return ftd::executor::utils::parse_error(
+                        "Events are not expected for ftd.document type",
+                        doc.name,
+                        instruction.events.first().unwrap().line_number,
+                    );
+                }
+
+                if instruction.condition.is_some() {
+                    return ftd::executor::utils::parse_error(
+                        "Condition is not expected for ftd.document type",
+                        doc.name,
+                        instruction.condition.clone().unwrap().line_number,
+                    );
+                }
+
+                if local_container.len().ne(&1) || local_container.first().unwrap().ne(&0) {
+                    return ftd::executor::utils::parse_error(
+                        "ftd.document can occur only once and must be the root",
+                        doc.name,
+                        instruction.line_number,
+                    );
+                }
+
+                ftd::executor::Element::Document(ftd::executor::element::document_from_properties(
+                    instruction.properties.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    instruction.line_number,
                 )?)
             }
             "ftd#image" => {

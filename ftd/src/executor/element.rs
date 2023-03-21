@@ -2,6 +2,7 @@
 pub enum Element {
     Row(Row),
     Column(Column),
+    Document(Document),
     Text(Text),
     Integer(Text),
     Boolean(Text),
@@ -14,7 +15,7 @@ pub enum Element {
     IterativeElement(IterativeElement),
     CheckBox(CheckBox),
     WebComponent(WebComponent),
-    Null,
+    Null { line_number: usize },
 }
 
 impl Element {
@@ -31,6 +32,7 @@ impl Element {
             Element::Iframe(i) => Some(&i.common),
             Element::TextInput(i) => Some(&i.common),
             Element::CheckBox(c) => Some(&c.common),
+            Element::Document(_) => None,
             Element::Null => None,
             Element::RawElement(_) => None,
             Element::WebComponent(_) => None,
@@ -42,8 +44,34 @@ impl Element {
         match self {
             Element::Row(r) => Some(&mut r.container.children),
             Element::Column(c) => Some(&mut c.container.children),
+            Element::Document(d) => Some(&mut d.children),
             Element::RawElement(r) => Some(&mut r.children),
             _ => None,
+        }
+    }
+
+    pub(crate) fn is_document(&self) -> bool {
+        matches!(self, Element::Document(_))
+    }
+
+    pub(crate) fn line_number(&self) -> usize {
+        match self {
+            Element::Row(r) => r.common.line_number,
+            Element::Column(c) => c.common.line_number,
+            Element::Document(d) => d.line_number,
+            Element::Text(t) => t.common.line_number,
+            Element::Integer(i) => i.common.line_number,
+            Element::Boolean(b) => b.common.line_number,
+            Element::Decimal(d) => d.common.line_number,
+            Element::Image(i) => i.common.line_number,
+            Element::Code(c) => c.common.line_number,
+            Element::Iframe(i) => i.common.line_number,
+            Element::TextInput(t) => t.common.line_number,
+            Element::RawElement(r) => r.line_number,
+            Element::IterativeElement(i) => i.line_number,
+            Element::CheckBox(c) => c.common.line_number,
+            Element::WebComponent(w) => w.line_number,
+            Element::Null { line_number } => line_number,
         }
     }
 }
@@ -62,6 +90,7 @@ pub struct RawElement {
 pub struct IterativeElement {
     pub element: Box<ftd::executor::Element>,
     pub iteration: ftd::interpreter2::Loop,
+    pub line_number: usize,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -81,6 +110,24 @@ pub struct Row {
 pub struct Column {
     pub container: Container,
     pub common: Common,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct HTMLData {
+    pub title: ftd::executor::Value<Option<String>>,
+}
+
+impl HTMLData {
+    pub(crate) fn new() -> HTMLData {
+        HTMLData::default()
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Document {
+    pub data: HTMLData,
+    pub children: Vec<Element>,
+    pub line_number: usize,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
@@ -862,6 +909,38 @@ pub fn column_from_properties(
         inherited_variables,
     )?;
     Ok(Column { container, common })
+}
+
+pub fn document_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &mut ftd::executor::TDoc,
+    line_number: usize,
+    children: Vec<Element>,
+) -> ftd::executor::Result<Document> {
+    Ok(Document {
+        data: html_data_from_properties(properties, arguments, doc, line_number)?,
+        children,
+        line_number,
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn html_data_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &mut ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<HTMLData> {
+    Ok(HTMLData {
+        title: ftd::executor::value::optional_string(
+            "title",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+    })
 }
 
 #[allow(clippy::too_many_arguments)]
