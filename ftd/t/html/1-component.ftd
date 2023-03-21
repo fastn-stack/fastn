@@ -22,5 +22,9 @@ padding.px: 2
 -- end: ftd.row
 
 
--- ftd.text: Hello from text
+-- ftd.text:
 padding.px: 40
+
+Hello from text
+
+Text Again
