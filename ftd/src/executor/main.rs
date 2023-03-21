@@ -63,7 +63,7 @@ impl<'a> ExecuteDoc<'a> {
 
         let (html_data, children) = match execute_doc.first() {
             Some(first) if first.is_document() => {
-                if execute_doc.len().ne(&1) {
+                if execute_doc.len() != 1 {
                     return ftd::executor::utils::parse_error(
                         "ftd.document can't have siblings.",
                         document.name.as_str(),
@@ -71,11 +71,10 @@ impl<'a> ExecuteDoc<'a> {
                     );
                 }
 
-                match first {
-                    ftd::executor::Element::Document(d) => {
-                        (d.data.to_owned(), d.children.to_owned())
-                    }
-                    _ => unreachable!(),
+                if let ftd::executor::Element::Document(d) = first {
+                    (d.data.to_owned(), d.children.to_vec())
+                } else {
+                    unreachable!()
                 }
             }
             _ => (ftd::executor::HTMLData::default(), execute_doc),
