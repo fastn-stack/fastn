@@ -1150,7 +1150,7 @@ impl ftd::executor::Common {
                             .map(|v| v.map(|v| format!("url({})", v.to_image_css_string())))
                             .value,
                         self.background.to_owned(),
-                        None,
+                        Some(ftd::executor::Background::background_image_pattern()),
                         doc_id,
                     ),
                 );
