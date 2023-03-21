@@ -166,6 +166,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(column_function()),
         ),
         (
+            "ftd#document".to_string(),
+            ftd::interpreter2::Thing::Component(document_function()),
+        ),
+        (
             "ftd#text".to_string(),
             ftd::interpreter2::Thing::Component(markup_function()),
         ),
@@ -7933,6 +7937,45 @@ pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
             .concat()
             .into_iter()
             .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn document_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#document".to_string(),
+        arguments: [vec![
+            ftd::interpreter2::Argument::default(
+                "title",
+                ftd::interpreter2::Kind::string()
+                    .into_optional()
+                    .into_kind_data()
+                    .caption_or_body(),
+            ),
+            ftd::interpreter2::Argument::default(
+                "children",
+                ftd::interpreter2::Kind::subsection_ui()
+                    .into_list()
+                    .into_kind_data(),
+            ),
+            ftd::interpreter2::Argument::default(
+                "colors",
+                ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR_SCHEME)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
+            ftd::interpreter2::Argument::default(
+                "types",
+                ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE_DATA)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
+        ]]
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,

@@ -455,68 +455,71 @@ pub fn replace_markers_2022(
     base_url: &str,
 ) -> String {
     ftd::html1::utils::trim_all_lines(
-        s.replace("__ftd_doc_title__", "")
-            .replace("__ftd_data__", html_ui.variables.as_str())
-            .replace(
-                "__ftd_canonical_url__",
-                config.package.generate_canonical_url(main_id).as_str(),
+        s.replace(
+            "__ftd_doc_title__",
+            html_ui.html_data.title.unwrap_or_default().as_str(),
+        )
+        .replace("__ftd_data__", html_ui.variables.as_str())
+        .replace(
+            "__ftd_canonical_url__",
+            config.package.generate_canonical_url(main_id).as_str(),
+        )
+        .replace(
+            "__favicon_html_tag__",
+            resolve_favicon(
+                config.root.as_str(),
+                config.package.name.as_str(),
+                &config.package.favicon,
             )
-            .replace(
-                "__favicon_html_tag__",
-                resolve_favicon(
-                    config.root.as_str(),
-                    config.package.name.as_str(),
-                    &config.package.favicon,
-                )
-                .unwrap_or_default()
-                .as_str(),
-            )
-            .replace("__ftd_external_children__", "{}")
-            .replace(
-                "__ftd__",
-                format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
-            )
-            .replace(
-                "__ftd_js__",
-                format!("{}{}", ftd_js, fastn_2022_js()).as_str(),
-            )
-            .replace(
-                "__extra_js__",
-                get_extra_js(
-                    config.ftd_external_js.as_slice(),
-                    config.ftd_inline_js.as_slice(),
-                    html_ui.js.as_str(),
-                )
-                .as_str(),
-            )
-            .replace(
-                "__extra_css__",
-                get_extra_css(
-                    config.ftd_external_css.as_slice(),
-                    config.ftd_inline_css.as_slice(),
-                    html_ui.css.as_str(),
-                )
-                .as_str(),
-            )
-            .replace(
-                "__ftd_functions__",
-                format!(
-                    "{}\n{}\n{}\n{}\n{}\n{}\n{}",
-                    html_ui.functions.as_str(),
-                    html_ui.dependencies.as_str(),
-                    html_ui.variable_dependencies.as_str(),
-                    html_ui.dummy_html.as_str(),
-                    html_ui.raw_html.as_str(),
-                    html_ui.mutable_variable,
-                    html_ui.immutable_variable
-                )
-                .as_str(),
-            )
-            .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-            .replace("__ftd_css__", ftd::css())
-            .replace("__ftd_element_css__", "")
-            .replace("__base_url__", base_url)
+            .unwrap_or_default()
             .as_str(),
+        )
+        .replace("__ftd_external_children__", "{}")
+        .replace(
+            "__ftd__",
+            format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
+        )
+        .replace(
+            "__ftd_js__",
+            format!("{}{}", ftd_js, fastn_2022_js()).as_str(),
+        )
+        .replace(
+            "__extra_js__",
+            get_extra_js(
+                config.ftd_external_js.as_slice(),
+                config.ftd_inline_js.as_slice(),
+                html_ui.js.as_str(),
+            )
+            .as_str(),
+        )
+        .replace(
+            "__extra_css__",
+            get_extra_css(
+                config.ftd_external_css.as_slice(),
+                config.ftd_inline_css.as_slice(),
+                html_ui.css.as_str(),
+            )
+            .as_str(),
+        )
+        .replace(
+            "__ftd_functions__",
+            format!(
+                "{}\n{}\n{}\n{}\n{}\n{}\n{}",
+                html_ui.functions.as_str(),
+                html_ui.dependencies.as_str(),
+                html_ui.variable_dependencies.as_str(),
+                html_ui.dummy_html.as_str(),
+                html_ui.raw_html.as_str(),
+                html_ui.mutable_variable,
+                html_ui.immutable_variable
+            )
+            .as_str(),
+        )
+        .replace("__ftd_body_events__", html_ui.outer_events.as_str())
+        .replace("__ftd_css__", ftd::css())
+        .replace("__ftd_element_css__", "")
+        .replace("__base_url__", base_url)
+        .as_str(),
     )
 }
 

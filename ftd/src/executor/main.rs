@@ -18,6 +18,7 @@ pub struct RT {
     pub aliases: ftd::Map<String>,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub main: ftd::executor::Column,
+    pub html_data: ftd::executor::HTMLData,
     pub dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
     pub js: std::collections::HashSet<String>,
@@ -31,6 +32,7 @@ impl Default for RT {
             aliases: Default::default(),
             bag: Default::default(),
             main: Default::default(),
+            html_data: Default::default(),
             dummy_instructions: ftd::VecMap::new(),
             element_constructor: Default::default(),
             js: Default::default(),
@@ -58,14 +60,36 @@ impl<'a> ExecuteDoc<'a> {
             css: &mut css,
         }
         .execute()?;
+
+        let (html_data, children) = match execute_doc.first() {
+            Some(first) if first.is_document() => {
+                if execute_doc.len().ne(&1) {
+                    return ftd::executor::utils::parse_error(
+                        "ftd.document can't have siblings.",
+                        document.name.as_str(),
+                        first.line_number(),
+                    );
+                }
+
+                match first {
+                    ftd::executor::Element::Document(d) => {
+                        (d.data.to_owned(), d.children.to_owned())
+                    }
+                    _ => unreachable!(),
+                }
+            }
+            _ => (ftd::executor::HTMLData::default(), execute_doc),
+        };
+
         let mut main = ftd::executor::element::default_column();
-        main.container.children.extend(execute_doc);
+        main.container.children.extend(children);
 
         Ok(RT {
             name: document.name.to_string(),
             aliases: document.aliases,
             bag: document.data,
             main,
+            html_data,
             dummy_instructions,
             element_constructor,
             js,
@@ -383,7 +407,9 @@ impl<'a> ExecuteDoc<'a> {
                         ExecuteDoc::insert_element(
                             &mut elements,
                             container.as_slice(),
-                            ftd::executor::Element::Null,
+                            ftd::executor::Element::Null {
+                                line_number: instruction.line_number,
+                            },
                         );
                         break;
                     }
@@ -481,6 +507,7 @@ impl<'a> ExecuteDoc<'a> {
                 current = match &mut current[*i] {
                     ftd::executor::Element::Row(r) => &mut r.container.children,
                     ftd::executor::Element::Column(r) => &mut r.container.children,
+                    ftd::executor::Element::Document(r) => &mut r.children,
                     t => unreachable!("{:?}", t),
                 };
             }
@@ -751,6 +778,55 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                     vec![],
                     inherited_variables,
+                )?)
+            }
+            "ftd#document" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+
+                if !instruction.events.is_empty() {
+                    return ftd::executor::utils::parse_error(
+                        "Events are not expected for ftd.document type",
+                        doc.name,
+                        instruction.events.first().unwrap().line_number,
+                    );
+                }
+
+                if instruction.condition.is_some() {
+                    return ftd::executor::utils::parse_error(
+                        "Condition is not expected for ftd.document type",
+                        doc.name,
+                        instruction.condition.clone().unwrap().line_number,
+                    );
+                }
+
+                if local_container.len().ne(&1) || local_container.first().unwrap().ne(&0) {
+                    return ftd::executor::utils::parse_error(
+                        "ftd.document can occur only once and must be the root",
+                        doc.name,
+                        instruction.line_number,
+                    );
+                }
+
+                ftd::executor::Element::Document(ftd::executor::element::document_from_properties(
+                    instruction.properties.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    instruction.line_number,
+                    vec![],
                 )?)
             }
             "ftd#image" => {

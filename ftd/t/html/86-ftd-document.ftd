@@ -1,0 +1,7 @@
+-- ftd.document:
+title: My title
+
+-- ftd.text: Text One
+-- ftd.text: Text Two
+
+-- end: ftd.document

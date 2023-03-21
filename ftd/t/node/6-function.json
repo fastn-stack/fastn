@@ -755,6 +755,14 @@
     "raw_data": null,
     "web_component": null
   },
+  "html_data": {
+    "title": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    }
+  },
   "bag": {
     "foo#append": {
       "Function": {

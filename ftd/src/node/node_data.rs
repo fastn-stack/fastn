@@ -4,6 +4,7 @@
 pub struct NodeData {
     pub name: String,
     pub node: ftd::node::Node,
+    pub html_data: ftd::node::HTMLData,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub aliases: ftd::Map<String>,
     pub dummy_nodes: ftd::VecMap<ftd::node::DummyNode>,
@@ -15,7 +16,8 @@ pub struct NodeData {
 impl NodeData {
     #[tracing::instrument(skip_all)]
     pub fn from_rt(rt: ftd::executor::RT) -> NodeData {
-        let node = rt.main.to_node("foo", &mut vec![]);
+        let node = rt.main.to_node(rt.name.as_str(), &mut vec![]);
+        let html_data = rt.html_data.to_html_data(rt.name.as_str());
         let raw_node =
             ftd::node::RawNode::from_element_constructors(rt.element_constructor, rt.name.as_str());
         let dummy_node =
@@ -24,6 +26,7 @@ impl NodeData {
         NodeData {
             name: rt.name.to_string(),
             node,
+            html_data,
             bag: rt.bag,
             aliases: rt.aliases,
             dummy_nodes: dummy_node,

@@ -1,6 +1,7 @@
 pub struct DependencyGenerator<'a> {
     pub id: &'a str,
     pub node: &'a ftd::node::Node,
+    pub html_data: &'a ftd::node::HTMLData,
     pub doc: &'a ftd::interpreter2::TDoc<'a>,
 }
 
@@ -8,9 +9,15 @@ impl<'a> DependencyGenerator<'a> {
     pub(crate) fn new(
         id: &'a str,
         node: &'a ftd::node::Node,
+        html_data: &'a ftd::node::HTMLData,
         doc: &'a ftd::interpreter2::TDoc,
     ) -> DependencyGenerator<'a> {
-        DependencyGenerator { id, node, doc }
+        DependencyGenerator {
+            id,
+            node,
+            html_data,
+            doc,
+        }
     }
 
     pub(crate) fn get_dependencies(&self) -> ftd::html1::Result<(String, ftd::VecMap<String>)> {
@@ -130,6 +137,77 @@ impl<'a> DependencyGenerator<'a> {
             let value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
+                format!(
+                    "{} = {}",
+                    key,
+                    self.node
+                        .text
+                        .default
+                        .clone()
+                        .unwrap_or_else(|| "null".to_string())
+                )
+                .as_str(),
+            );
+            if !value.trim().is_empty() && !is_static {
+                result.push(format!(
+                    indoc::indoc! {"
+                         window.node_change_{id}[\"{key}\"] = function(data) {{
+                                {value}
+                         }}
+                    "},
+                    id = self.id,
+                    key = node_change_id,
+                    value = value.trim(),
+                ));
+            }
+        }
+
+        {
+            let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "title");
+            let mut expressions = vec![];
+            let mut is_static = true;
+            let key = "document.title";
+            for property_with_pattern in self.html_data.title.properties.iter() {
+                let property = &property_with_pattern.property;
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+
+                if !is_static_expression(&property.value, &condition, self.doc) {
+                    is_static = false;
+                }
+
+                if let Some(value_string) =
+                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        self.id,
+                        self.doc,
+                        &property.value,
+                        &property_with_pattern.pattern_with_eval,
+                        None,
+                        false,
+                    )?
+                {
+                    dependency_map_from_condition(
+                        var_dependencies,
+                        &property.condition,
+                        node_change_id.as_str(),
+                        self.doc,
+                    );
+                    dependency_map_from_property_value(
+                        var_dependencies,
+                        &property.value,
+                        node_change_id.as_str(),
+                        self.doc,
+                    );
+
+                    let value = format!("{} = {};", key, value_string);
+                    expressions.push((condition, value));
+                }
+            }
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key),
                 format!(
                     "{} = {}",
                     key,
@@ -712,7 +790,7 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         for children in self.node.children.iter() {
-            let value = DependencyGenerator::new(self.id, children, self.doc)
+            let value = DependencyGenerator::new(self.id, children, &Default::default(), self.doc)
                 .get_dependencies_(var_dependencies)?;
             if !value.trim().is_empty() {
                 result.push(value.trim().to_string());
