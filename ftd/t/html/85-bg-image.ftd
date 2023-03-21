@@ -1,0 +1,22 @@
+-- ftd.color c:
+light: red
+dark: green
+
+-- ftd.image-src img:
+light: https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg
+dark: https://images.unsplash.com/photo-1616020453784-a24fa9845b05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXBsZXxlbnwwfHwwfHw%3D&w=1000&q=80
+
+-- ftd.text: Hello Color
+background.solid: $c
+
+/-- ftd.image:
+src: $img
+
+-- ftd.column:
+background.image: $img
+width.fixed.px: 150
+height.fixed.px: 150
+
+-- ftd.text: Hello Image
+
+-- end: ftd.column

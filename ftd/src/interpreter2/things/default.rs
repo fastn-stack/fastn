@@ -635,7 +635,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::FTD_BACKGROUND.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_BACKGROUND.to_string(),
-                variants: vec![ftd::interpreter2::OrTypeVariant::Regular(
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Regular(
                     ftd::interpreter2::Field::new(
                         ftd::interpreter2::FTD_BACKGROUND_SOLID,
                         ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
@@ -643,8 +644,16 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         false,
                         None,
                         0,
-                    ),
-                )],
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_IMAGE,
+                        ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_IMAGE_SRC)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
                 line_number: 0,
             }),
         ),
