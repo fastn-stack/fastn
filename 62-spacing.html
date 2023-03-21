@@ -1589,6 +1589,13 @@ document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#green", data).dark;}
 }
 
+window.node_change_main["1:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#green", data).light));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#green", data).dark));}
+}
+
 window.node_change_main["1:main__gap"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)%4==1);
@@ -1682,11 +1689,11 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#num"].changes;
 for(let i in changes) { changes[i](); }
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__gap"]){window.node_change_main["1:main__gap"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 };
 
@@ -1704,6 +1711,8 @@ for(let i in changes) { changes[i](); }
 if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
 let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-image"]){window.node_change_main["1:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
 }

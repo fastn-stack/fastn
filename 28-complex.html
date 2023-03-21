@@ -1621,6 +1621,13 @@ document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#step-2", data).dark;}
 }
 
+window.node_change_main["0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-2", data).light));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-2", data).dark));}
+}
+
 window.node_change_main["0,0,0,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0,0,0,0:main"]`).innerHTML = resolve_reference("foo#header:site-name:0,0,0", data);
 }
@@ -1710,6 +1717,13 @@ document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] =
 else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
 }
 
+window.node_change_main["0,1,0,0,0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).light));
+}
+else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).dark));}
+}
+
 window.node_change_main["0,1,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
@@ -1781,6 +1795,8 @@ for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0:main__background-color"]){window.node_change_main["0,1,0,0,0:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0:main__background-image"]){window.node_change_main["0,1,0,0,0:main__background-image"](data);
+}
 };
 
 window.set_value_main["foo#step-2"] = function (data, new_value, remaining) {
@@ -1800,6 +1816,8 @@ for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
+}
 };
 
 window.set_value_main["foo#text"] = function (data, new_value, remaining) {
@@ -1817,9 +1835,9 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#text"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2,0:main__color"]){window.node_change_main["0,1,0,2,0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0,0:main__color"]){window.node_change_main["0,1,0,0,0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2,0:main__color"]){window.node_change_main["0,1,0,2,0:main__color"](data);
 }
 };
 
@@ -1838,15 +1856,15 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#text-strong"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,1,0:main__color"]){window.node_change_main["0,0,0,1,0,2,1,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,0:main__color"]){window.node_change_main["0,0,0,1,0,2,0:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__color"]){window.node_change_main["0,0,0,1,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0:main__color"]){window.node_change_main["0,0,0,0,0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__color"]){window.node_change_main["0,0,0,1,0,0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,1,0:main__color"]){window.node_change_main["0,0,0,1,0,1,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,0:main__color"]){window.node_change_main["0,0,0,1,0,2,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,1,0:main__color"]){window.node_change_main["0,0,0,1,0,2,1,0:main__color"](data);
 }
 };
 
@@ -1865,7 +1883,7 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#toc"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__href"]){window.node_change_main["0,0,0,1,0,0:main__href"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,1,0:main__text"]){window.node_change_main["0,0,0,1,0,1,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__text"]){window.node_change_main["0,0,0,1,0,0:main__text"](data);
 }
@@ -1873,7 +1891,7 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,0:main
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,1,0:main__href"]){window.node_change_main["0,0,0,1,0,1,0:main__href"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,1,0:main__text"]){window.node_change_main["0,0,0,1,0,1,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__href"]){window.node_change_main["0,0,0,1,0,0:main__href"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,1,0:main__href"]){window.node_change_main["0,0,0,1,0,2,1,0:main__href"](data);
 }
@@ -1898,23 +1916,27 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#
 let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,0:main__color"]){window.node_change_main["0,0,0,1,0,2,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0:main__color"]){window.node_change_main["0,0,0,0,0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,1,0:main__color"]){window.node_change_main["0,0,0,1,0,2,1,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0:main__background-color"]){window.node_change_main["0,1,0,0,0:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__color"]){window.node_change_main["0,0,0,1,0,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0,0:main__color"]){window.node_change_main["0,1,0,0,0,0:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,1,0:main__color"]){window.node_change_main["0,0,0,1,0,1,0:main__color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,1,0:main__color"]){window.node_change_main["0,0,0,1,0,2,1,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0,0:main__color"]){window.node_change_main["0,1,0,0,0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,0:main__color"]){window.node_change_main["0,0,0,1,0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0:main__background-color"]){window.node_change_main["0,1,0,0,0:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,2,0:main__color"]){window.node_change_main["0,1,0,2,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1,0,2,0:main__color"]){window.node_change_main["0,0,0,1,0,2,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1,0,0,0:main__background-image"]){window.node_change_main["0,1,0,0,0:main__background-image"](data);
 }
 };
 
