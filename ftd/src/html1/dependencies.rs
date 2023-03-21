@@ -163,7 +163,7 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         {
-            let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "title");
+            let node_change_id = "document__title".to_string();
             let mut expressions = vec![];
             let mut is_static = true;
             let key = "document.title";
