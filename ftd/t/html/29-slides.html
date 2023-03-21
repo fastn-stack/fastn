@@ -1597,6 +1597,13 @@ document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
 }
 
+window.node_change_main["0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#base", data).light));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#base", data).dark));}
+}
+
 window.node_change_main["0,0:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#presentation:show:0", data);
@@ -1611,6 +1618,13 @@ if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
 }
 else {document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+}
+
+window.node_change_main["0,0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).light));
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#step-1", data).dark));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#presentation:show:0"] = function (data, new_value, remaining) {
@@ -1649,7 +1663,11 @@ for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-image"]){window.node_change_main["0,0:main__background-image"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
 };
 

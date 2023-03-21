@@ -1599,6 +1599,13 @@ document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#toast.0.cta-bg", data).dark;}
 }
 
+window.node_change_main["0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#toast.0.cta-bg", data).light));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#toast.0.cta-bg", data).dark));}
+}
+
 window.node_change_main["0:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0:main"]`).style["border-color"] = resolve_reference("foo#toast.0.border", data).light;
@@ -1731,6 +1738,8 @@ let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
 for(let i in changes) { changes[i](); }
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
