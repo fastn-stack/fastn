@@ -1683,6 +1683,13 @@ document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("ftd#default-colors.background.base", data).dark;}
 }
 
+window.node_change_main["1:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("ftd#default-colors.background.base", data).light));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("ftd#default-colors.background.base", data).dark));}
+}
+
 window.node_change_main["1:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text-strong", data).light;
@@ -1737,6 +1744,8 @@ for(let i in changes) { changes[i](); }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-image"]){window.node_change_main["1:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
 }

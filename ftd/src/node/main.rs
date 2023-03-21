@@ -1140,37 +1140,31 @@ impl ftd::executor::Common {
             ),
         );
 
-        match self.background.value.as_ref() {
-            Some(ftd::executor::Background::Image(_)) => {
-                d.check_and_insert(
-                    "background-image",
-                    ftd::node::Value::from_executor_value(
-                        self.background
-                            .to_owned()
-                            .map(|v| v.map(|v| format!("url({})", v.to_image_css_string())))
-                            .value,
-                        self.background.to_owned(),
-                        Some(ftd::executor::Background::background_image_pattern()),
-                        doc_id,
-                    ),
-                );
-            }
-            Some(ftd::executor::Background::Solid(_)) => {
-                d.check_and_insert(
-                    "background-color",
-                    ftd::node::Value::from_executor_value(
-                        self.background
-                            .to_owned()
-                            .map(|v| v.map(|v| v.to_solid_css_string()))
-                            .value,
-                        self.background.to_owned(),
-                        None,
-                        doc_id,
-                    ),
-                );
-            }
-            None => {}
-        }
+        d.check_and_insert(
+            "background-image",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_css_string()))
+                    .value,
+                self.background.to_owned(),
+                Some(ftd::executor::Background::background_image_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "background-color",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_solid_css_string()))
+                    .value,
+                self.background.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "color",

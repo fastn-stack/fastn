@@ -830,7 +830,7 @@ impl Background {
     pub fn to_image_css_string(&self) -> String {
         match self {
             Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
-            Background::Image(i) => i.light.value.to_string(),
+            Background::Image(i) => format!("url({})", i.light.value),
         }
     }
 

@@ -521,8 +521,6 @@ impl<'a> DependencyGenerator<'a> {
                 if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
-                    dbg!(&property.value);
-                    // println!("dark mode dependent property");
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(
                             self.id,
@@ -533,8 +531,6 @@ impl<'a> DependencyGenerator<'a> {
                             false,
                         )?
                     {
-                        // println!("light value");
-                        // dbg!(&value_string);
                         light_value_string = value_string;
                     }
                     let mut dark_value_string = "".to_string();
@@ -548,8 +544,6 @@ impl<'a> DependencyGenerator<'a> {
                             false,
                         )?
                     {
-                        // println!("dark value");
-                        // dbg!(&value_string);
                         dark_value_string = value_string;
                     }
 
@@ -575,10 +569,8 @@ impl<'a> DependencyGenerator<'a> {
                             )
                             .as_str(),
                         );
-                        dbg!(&value);
                         expressions.push((condition, value));
                     } else {
-                        dbg!(&key, &light_value_string);
                         expressions.push((condition, format!("{} = {};", key, light_value_string)));
                     }
 
