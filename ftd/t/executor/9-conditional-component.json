@@ -1269,6 +1269,13 @@
       }
     }
   },
+  "html_data": {
+    "title": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    }
+  },
   "dummy_instructions": {
     "value": {}
   },
