@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/package-doc/typography as pd
+-- import: package-doc as pd
 
 -- pd.h1: Heading 1
 
