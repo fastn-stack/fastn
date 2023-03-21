@@ -790,7 +790,7 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         for children in self.node.children.iter() {
-            let value = DependencyGenerator::new(self.id, children, self.doc)
+            let value = DependencyGenerator::new(self.id, children, &Default::default(), self.doc)
                 .get_dependencies_(var_dependencies)?;
             if !value.trim().is_empty() {
                 result.push(value.trim().to_string());

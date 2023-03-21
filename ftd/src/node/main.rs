@@ -22,7 +22,7 @@ pub struct HTMLData {
 }
 
 impl ftd::executor::HTMLData {
-    pub(crate) fn from_html_data(&self) -> HTMLData {
+    pub(crate) fn from_html_data(&self, doc_id: &str) -> HTMLData {
         HTMLData {
             title: ftd::node::Value::from_executor_value(
                 self.title.value.to_owned(),

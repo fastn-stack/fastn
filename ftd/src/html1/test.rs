@@ -87,7 +87,10 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let html_str = ftd::html1::utils::trim_all_lines(
         std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
-            .replace("__ftd_doc_title__", "")
+            .replace(
+                "__ftd_doc_title__",
+                html_ui.html_data.title.unwrap_or_default().as_str(),
+            )
             .replace("__ftd_data__", html_ui.variables.as_str())
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())

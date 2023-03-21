@@ -16,8 +16,8 @@ pub struct NodeData {
 impl NodeData {
     #[tracing::instrument(skip_all)]
     pub fn from_rt(rt: ftd::executor::RT) -> NodeData {
-        let node = rt.main.to_node("foo", &mut vec![]);
-        let html_data = rt.html_data.from_html_data();
+        let node = rt.main.to_node(rt.name.as_str(), &mut vec![]);
+        let html_data = rt.html_data.from_html_data(rt.name.as_str());
         let raw_node =
             ftd::node::RawNode::from_element_constructors(rt.element_constructor, rt.name.as_str());
         let dummy_node =
