@@ -23,8 +23,8 @@ pub use element::{
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BorderStyle, Color, ColorValue, Cursor, FontSize,
-    Length, LineClamp, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Spacing,
-    TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
+    Length, LineClamp, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Shadow,
+    Spacing, TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;

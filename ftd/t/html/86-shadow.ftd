@@ -1,0 +1,24 @@
+-- show-shadow:
+
+-- ftd.color c:
+light: green
+dark: red
+
+-- ftd.shadow some-shadow:
+y-offset.px: -5
+x-offset.px: 10
+spread.px: 3
+blur.px: 1
+color: $c
+
+-- component show-shadow:
+
+-- ftd.column:
+margin.px: 50
+shadow: $some-shadow
+
+-- ftd.text: Testing shadow
+
+-- end: ftd.column
+
+-- end: show-shadow

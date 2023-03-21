@@ -1010,6 +1010,16 @@ impl ftd::executor::Common {
         }
 
         d.check_and_insert(
+            "box-shadow",
+            ftd::node::Value::from_executor_value(
+                self.shadow.value.as_ref().map(|v| v.to_css_string()),
+                self.shadow.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "top",
             ftd::node::Value::from_executor_value(
                 self.top.value.as_ref().map(|v| v.to_css_string()),
