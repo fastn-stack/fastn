@@ -602,6 +602,11 @@
         "value": null,
         "line_number": null,
         "properties": []
+      },
+      "shadow": {
+        "value": null,
+        "line_number": null,
+        "properties": []
       }
     }
   },

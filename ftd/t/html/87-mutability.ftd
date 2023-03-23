@@ -1,0 +1,14 @@
+-- record task-data:
+string task:
+
+
+-- task-data $data:
+task: sfsdf
+
+
+-- ftd.text: $data.task
+background.solid: #B6CDE1
+padding-vertical.px: 6
+padding-horizontal.px: 10
+border-radius.px: 5
+$on-click$: $ftd.set-string($a = $data.task, v = FifthTry)

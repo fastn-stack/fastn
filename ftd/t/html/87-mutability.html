@@ -6,20 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#c": {
-"dark": "red",
-"light": "green"
-},
-"foo#some-shadow": {
-"blur": "1px",
-"color": {
-"dark": "red",
-"light": "green"
-},
-"inset": false,
-"spread": "3px",
-"x-offset": "10px",
-"y-offset": "-5px"
+"foo#data": {
+"task": "sfsdf"
 },
 "ftd#breakpoint-width": {
 "mobile": 768
@@ -709,7 +697,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-shadow:  rgba(0,128,0,1) 10px -5px 1px 3px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 50px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Testing shadow</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#data.task&quot;}],[&quot;v&quot;,&quot;FifthTry&quot;]]}]', this)" style="background-color: rgba(182,205,225,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 5px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; padding-bottom: 6px; padding-left: 10px; padding-right: 10px; padding-top: 6px; text-decoration: none; width: auto" class="ft_md">sfsdf</div></div>
 
 
 <script>
@@ -1589,26 +1577,47 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__box-shadow"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["box-shadow"] = resolve_reference("foo#some-shadow", data);
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#data.task", data);
 }
 window.set_value_main = {};
-window.set_value_main["foo#some-shadow"] = function (data, new_value, remaining) {
+window.set_value_main["foo#data"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#some-shadow" + "." + remaining, new_value);
+set_data_value(data, "foo#data" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#some-shadow", new_value);
+set_data_value(data, "foo#data", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#some-shadow"]) {
-let changes = window.ftd.mutable_value_main["foo#some-shadow"].changes;
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#data"]) {
+let changes = window.ftd.mutable_value_main["foo#data"].changes;
 for(let i in changes) { changes[i](); }
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#some-shadow"]) {
-let changes = window.ftd.immutable_value_main["foo#some-shadow"].changes;
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#data"]) {
+let changes = window.ftd.immutable_value_main["foo#data"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
+let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
+}
+if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
+let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
+for(let i in changes) { changes[i](); }
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
 };
 

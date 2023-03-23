@@ -1258,7 +1258,7 @@ impl<'a> TDoc<'a> {
                                 caption: false,
                                 body: false,
                             },
-                            mutable: false,
+                            mutable,
                             value: ftd::interpreter2::PropertyValue::Value {
                                 value: val.to_owned(),
                                 line_number: *line_number,
