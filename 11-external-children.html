@@ -1607,9 +1607,9 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#count"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,3,2,1:main__text"]){window.node_change_main["0,3,2,1:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,3,1,1:main__text"]){window.node_change_main["0,3,1,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,3,2,1:main__text"]){window.node_change_main["0,3,2,1:main__text"](data);
 }
 };
 
