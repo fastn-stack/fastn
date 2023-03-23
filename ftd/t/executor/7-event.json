@@ -406,6 +406,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "background_repeat": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "color": {
                 "value": null,
                 "line_number": null,
@@ -746,6 +751,11 @@
         "properties": []
       },
       "background": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "background_repeat": {
         "value": null,
         "line_number": null,
         "properties": []

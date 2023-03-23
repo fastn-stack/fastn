@@ -859,7 +859,11 @@ impl BackgroundRepeat {
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(BackgroundRepeat::from_values(value, doc, line_number)?))
+            Ok(Some(BackgroundRepeat::from_values(
+                value,
+                doc,
+                line_number,
+            )?))
         } else {
             Ok(None)
         }
@@ -878,7 +882,10 @@ impl BackgroundRepeat {
             ftd::interpreter2::FTD_BACKGROUND_REPEAT_SPACE => Ok(BackgroundRepeat::Space),
             ftd::interpreter2::FTD_BACKGROUND_REPEAT_ROUND => Ok(BackgroundRepeat::Round),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.background-repeat`", t),
+                format!(
+                    "Unknown variant `{}` for or-type `ftd.background-repeat`",
+                    t
+                ),
                 doc.name,
                 line_number,
             ),
