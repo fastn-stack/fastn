@@ -1197,6 +1197,19 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "background-size",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_size_css_string()))
+                    .value,
+                self.background.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "background-color",
             ftd::node::Value::from_executor_value(
                 self.background

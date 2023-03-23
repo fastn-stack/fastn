@@ -1475,7 +1475,7 @@ pub fn common_from_properties(
         condition: condition.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
-        background: ftd::executor::Background::optional_fill(
+        background: ftd::executor::Background::optional_background(
             properties,
             arguments,
             doc,

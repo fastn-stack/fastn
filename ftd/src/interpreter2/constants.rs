@@ -46,6 +46,10 @@ pub const FTD_BACKGROUND: &str = "ftd#background";
 pub const FTD_BACKGROUND_SOLID: &str = "ftd#background.solid";
 pub const FTD_BACKGROUND_IMAGE: &str = "ftd#background.image";
 
+pub const FTD_LENGTH_PAIR: &str = "ftd#length-pair";
+pub const FTD_LENGTH_PAIR_X: &str = "ftd#length-pair.x";
+pub const FTD_LENGTH_PAIR_Y: &str = "ftd#length-pair.y";
+
 pub const FTD_BG_IMAGE: &str = "ftd#background-image";
 pub const FTD_BG_IMAGE_SRC: &str = "ftd#background-image.src";
 pub const FTD_BG_IMAGE_REPEAT: &str = "ftd#background-image.repeat";
@@ -57,6 +61,12 @@ pub const FTD_BACKGROUND_REPEAT_Y_REPEAT: &str = "ftd#background-repeat.repeat-y
 pub const FTD_BACKGROUND_REPEAT_NO_REPEAT: &str = "ftd#background-repeat.no-repeat";
 pub const FTD_BACKGROUND_REPEAT_SPACE: &str = "ftd#background-repeat.space";
 pub const FTD_BACKGROUND_REPEAT_ROUND: &str = "ftd#background-repeat.round";
+
+pub const FTD_BACKGROUND_SIZE: &str = "ftd#background-size";
+pub const FTD_BACKGROUND_SIZE_AUTO: &str = "ftd#background-size.auto";
+pub const FTD_BACKGROUND_SIZE_COVER: &str = "ftd#background-size.cover";
+pub const FTD_BACKGROUND_SIZE_CONTAIN: &str = "ftd#background-size.contain";
+pub const FTD_BACKGROUND_SIZE_LENGTH: &str = "ftd#background-size.length";
 
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";

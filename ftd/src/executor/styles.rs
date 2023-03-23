@@ -236,6 +236,72 @@ impl Length {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct LengthPair {
+    pub x: Length,
+    pub y: Length,
+}
+
+impl LengthPair {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LengthPair> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+                if name.eq(ftd::interpreter2::FTD_LENGTH_PAIR)
+                    || name.eq(ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_LENGTH_PAIR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        LengthPair::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LengthPair> {
+        let x = {
+            let value = values.get("x").ok_or(ftd::executor::Error::ParseError {
+                message: "`x` field in ftd.length-pair not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            Length::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        let y = {
+            let value = values.get("y").ok_or(ftd::executor::Error::ParseError {
+                message: "`y` field in ftd.length-pair not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            Length::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        Ok(LengthPair { x, y })
+    }
+
+    pub fn to_css_string(&self) -> String {
+        format!("{} {}", self.x.to_css_string(), self.y.to_css_string())
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct ResponsiveLength {
     pub desktop: Length,
     pub mobile: Length,
@@ -752,7 +818,8 @@ impl Resizing {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct BackgroundImage {
     pub src: ftd::executor::Value<ftd::executor::ImageSrc>,
-    pub background_repeat: ftd::executor::Value<Option<ftd::executor::BackgroundRepeat>>,
+    pub repeat: ftd::executor::Value<Option<ftd::executor::BackgroundRepeat>>,
+    pub size: ftd::executor::Value<Option<ftd::executor::BackgroundSize>>,
 }
 
 impl BackgroundImage {
@@ -764,10 +831,10 @@ impl BackgroundImage {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(ftd::interpreter2::Value::Record { name, fields })
-            if name.eq(ftd::interpreter2::FTD_BG_IMAGE) =>
-                {
-                    fields
-                }
+                if name.eq(ftd::interpreter2::FTD_BG_IMAGE) =>
+            {
+                fields
+            }
             t => {
                 return ftd::executor::utils::parse_error(
                     format!(
@@ -788,19 +855,16 @@ impl BackgroundImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<BackgroundImage> {
-
-        let image_src = {
-            let value = values
-                .get("src")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`src` field in ftd.background-image not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
+        let src = {
+            let value = values.get("src").ok_or(ftd::executor::Error::ParseError {
+                message: "`src` field in ftd.background-image not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
             ftd::executor::Value::new(
                 ftd::executor::ImageSrc::from_value(value.clone(), doc, line_number)?,
                 Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("src"))],
             )
         };
 
@@ -813,16 +877,34 @@ impl BackgroundImage {
                     line_number,
                 })?;
             ftd::executor::Value::new(
-                Some(ftd::executor::BackgroundRepeat::from_value(value.clone(), doc, line_number)?),
+                Some(ftd::executor::BackgroundRepeat::from_value(
+                    value.clone(),
+                    doc,
+                    line_number,
+                )?),
                 Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("repeat"))],
             )
         };
 
-        Ok(BackgroundImage {
-            src: image_src,
-            background_repeat: repeat
-        })
+        let size = {
+            let value = values.get("size").ok_or(ftd::executor::Error::ParseError {
+                message: "`size` field in ftd.background-image not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                Some(ftd::executor::BackgroundSize::from_value(
+                    value.clone(),
+                    doc,
+                    line_number,
+                )?),
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("size"))],
+            )
+        };
+
+        Ok(BackgroundImage { src, repeat, size })
     }
 
     pub fn to_image_src_css_string(&self) -> String {
@@ -830,9 +912,16 @@ impl BackgroundImage {
     }
 
     pub fn to_repeat_css_string(&self) -> String {
-        match self.background_repeat.value.as_ref() {
+        match self.repeat.value.as_ref() {
             Some(s) => s.to_css_string(),
-            None => ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+            None => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+        }
+    }
+
+    pub fn to_size_css_string(&self) -> String {
+        match self.size.value.as_ref() {
+            Some(s) => s.to_css_string(),
+            None => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
         }
     }
 }
@@ -878,7 +967,7 @@ impl Background {
         }
     }
 
-    pub(crate) fn optional_fill(
+    pub(crate) fn optional_background(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],
         doc: &ftd::executor::TDoc,
@@ -921,6 +1010,13 @@ impl Background {
         match self {
             Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
             Background::Image(i) => i.to_repeat_css_string(),
+        }
+    }
+
+    pub fn to_image_size_css_string(&self) -> String {
+        match self {
+            Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+            Background::Image(i) => i.to_size_css_string(),
         }
     }
 
@@ -989,6 +1085,56 @@ impl BackgroundRepeat {
             BackgroundRepeat::NoRepeat => "no-repeat".to_string(),
             BackgroundRepeat::Space => "space".to_string(),
             BackgroundRepeat::Round => "round".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum BackgroundSize {
+    Auto,
+    Cover,
+    Contain,
+    Length(LengthPair),
+}
+
+impl BackgroundSize {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<BackgroundSize> {
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        BackgroundSize::from_values(value, doc, line_number)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_AUTO => Ok(BackgroundSize::Auto),
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_COVER => Ok(BackgroundSize::Cover),
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_CONTAIN => Ok(BackgroundSize::Contain),
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH => Ok(BackgroundSize::Length(
+                LengthPair::from_value(or_type_value.1, doc, line_number)?,
+            )),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.background-size`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            BackgroundSize::Auto => "auto".to_string(),
+            BackgroundSize::Cover => "cover".to_string(),
+            BackgroundSize::Contain => "contain".to_string(),
+            BackgroundSize::Length(l) => l.to_css_string(),
         }
     }
 }
@@ -1096,7 +1242,7 @@ impl Shadow {
                     .resolve(&doc.itdoc(), line_number)?
                     .bool(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("inset"))],
             )
         };
 

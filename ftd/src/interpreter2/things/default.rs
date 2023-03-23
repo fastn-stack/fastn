@@ -785,6 +785,31 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_LENGTH_PAIR.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_LENGTH_PAIR.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "x".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "y".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_BG_IMAGE.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
                 name: ftd::interpreter2::FTD_BG_IMAGE.to_string(),
@@ -800,6 +825,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     ftd::interpreter2::Field {
                         name: "repeat".to_string(),
                         kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND_REPEAT)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "size".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND_SIZE)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -900,6 +933,67 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                             .into_property_value(false, 0)),
                         0,
                     )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_BACKGROUND_SIZE.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_BACKGROUND_SIZE.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_SIZE_AUTO,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("auto")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_SIZE_COVER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("cover")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_SIZE_CONTAIN,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("contain")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::AnonymousRecord(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            ftd::interpreter2::Field {
+                                name: "x".to_string(),
+                                kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                line_number: 0,
+                            },
+                            ftd::interpreter2::Field {
+                                name: "y".to_string(),
+                                kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                line_number: 0,
+                            },
+                        ]).collect(),
+                        line_number: 0,
+                    }),
                 ],
                 line_number: 0,
             }),
