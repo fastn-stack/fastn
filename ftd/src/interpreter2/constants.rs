@@ -75,6 +75,9 @@ pub const FTD_TEXT_ALIGN_CENTER: &str = "ftd#text-align.center";
 pub const FTD_TEXT_ALIGN_END: &str = "ftd#text-align.end";
 pub const FTD_TEXT_ALIGN_JUSTIFY: &str = "ftd#text-align.justify";
 
+pub const FTD_SHADOW: &str = "ftd#shadow";
+pub const FTD_SHADOW_COLOR: &str = "ftd#shadow.color";
+
 // FTD overflow(todo docs link)
 pub const FTD_OVERFLOW: &str = "ftd#overflow";
 pub const FTD_OVERFLOW_SCROLL: &str = "ftd#overflow.scroll";

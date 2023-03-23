@@ -636,6 +636,155 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_SHADOW.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_SHADOW.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "x-offset".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::OrType {
+                                name: ftd::interpreter2::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter2::PropertyValue::Value {
+                                        value: ftd::interpreter2::Value::Integer {
+                                            value: 0
+                                        },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "y-offset".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::OrType {
+                                name: ftd::interpreter2::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter2::PropertyValue::Value {
+                                        value: ftd::interpreter2::Value::Integer {
+                                            value: 0
+                                        },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "blur".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::OrType {
+                                name: ftd::interpreter2::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter2::PropertyValue::Value {
+                                        value: ftd::interpreter2::Value::Integer {
+                                            value: 0
+                                        },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "spread".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::OrType {
+                                name: ftd::interpreter2::FTD_LENGTH.to_string(),
+                                variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                full_variant: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter2::PropertyValue::Value {
+                                        value: ftd::interpreter2::Value::Integer {
+                                            value: 0
+                                        },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "color".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::Record {
+                                name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                fields: std::iter::IntoIterator::into_iter([
+                                    (
+                                        "light".to_string(),
+                                        ftd::interpreter2::PropertyValue::Value {
+                                            value: ftd::interpreter2::Value::String { text: "black".to_string() },
+                                            is_mutable: false,
+                                            line_number: 0,
+                                        }
+                                    ),
+                                    (
+                                        "dark".to_string(),
+                                        ftd::interpreter2::PropertyValue::Value {
+                                            value: ftd::interpreter2::Value::String { text: "white".to_string() },
+                                            is_mutable: false,
+                                            line_number: 0,
+                                        }
+                                    ),
+                                ]).collect()
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "inset".to_string(),
+                        kind: ftd::interpreter2::Kind::boolean()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Value {
+                            value: ftd::interpreter2::Value::Boolean { value: false },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_BACKGROUND.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_BACKGROUND.to_string(),
@@ -8094,6 +8243,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "shadow",
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_SHADOW)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "sticky",
             ftd::interpreter2::Kind::boolean()

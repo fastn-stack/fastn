@@ -1746,6 +1746,17 @@ impl Value {
         }
     }
 
+    pub fn bool(&self, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<bool> {
+        match self {
+            ftd::interpreter2::Value::Boolean { value } => Ok(*value),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Boolean, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn optional_integer(
         &self,
         doc_id: &str,
