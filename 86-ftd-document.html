@@ -1609,9 +1609,9 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#flag"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
 };
 
