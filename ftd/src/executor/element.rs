@@ -504,7 +504,6 @@ pub struct Common {
     pub link: ftd::executor::Value<Option<String>>,
     pub open_in_new_tab: ftd::executor::Value<Option<bool>>,
     pub background: ftd::executor::Value<Option<ftd::executor::Background>>,
-    pub background_repeat: ftd::executor::Value<Option<ftd::executor::BackgroundRepeat>>,
     pub color: ftd::executor::Value<Option<ftd::executor::Color>>,
     pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
     pub data_id: String,
@@ -1482,14 +1481,6 @@ pub fn common_from_properties(
             doc,
             line_number,
             "background",
-            inherited_variables,
-        )?,
-        background_repeat: ftd::executor::BackgroundRepeat::optional_background_repeat(
-            properties,
-            arguments,
-            doc,
-            line_number,
-            "background-repeat",
             inherited_variables,
         )?,
         color: ftd::executor::Color::optional_color(

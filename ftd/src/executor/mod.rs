@@ -22,7 +22,7 @@ pub use element::{
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
-    AlignSelf, Alignment, Anchor, Background, BackgroundRepeat, BorderStyle, Color, ColorValue,
+    AlignSelf, Alignment, Anchor, Background, BackgroundRepeat, BackgroundImage, BorderStyle, Color, ColorValue,
     Cursor, FontSize, Length, LineClamp, Loading, Overflow, Region, Resize, Resizing,
     ResponsiveType, Shadow, Spacing, TextAlign, TextInputType, TextStyle, TextTransform, TextWeight,
     WhiteSpace,

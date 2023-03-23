@@ -749,11 +749,98 @@ impl Resizing {
         }
     }
 }
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct BackgroundImage {
+    pub src: ftd::executor::Value<ftd::executor::ImageSrc>,
+    pub background_repeat: ftd::executor::Value<Option<ftd::executor::BackgroundRepeat>>,
+}
+
+impl BackgroundImage {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<BackgroundImage> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+            if name.eq(ftd::interpreter2::FTD_BG_IMAGE) =>
+                {
+                    fields
+                }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_BG_IMAGE,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        BackgroundImage::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<BackgroundImage> {
+
+        let image_src = {
+            let value = values
+                .get("src")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`src` field in ftd.background-image not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                ftd::executor::ImageSrc::from_value(value.clone(), doc, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+            )
+        };
+
+        let repeat = {
+            let value = values
+                .get("repeat")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`repeat` field in ftd.background-image not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Some(ftd::executor::BackgroundRepeat::from_value(value.clone(), doc, line_number)?),
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
+            )
+        };
+
+        Ok(BackgroundImage {
+            src: image_src,
+            background_repeat: repeat
+        })
+    }
+
+    pub fn to_image_src_css_string(&self) -> String {
+        format!("url({})", self.src.value.light.value.to_string())
+    }
+
+    pub fn to_repeat_css_string(&self) -> String {
+        match self.background_repeat.value.as_ref() {
+            Some(s) => s.to_css_string(),
+            None => ftd::interpreter2::FTD_IGNORE_KEY.to_string()
+        }
+    }
+}
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(Color),
-    Image(ftd::executor::ImageSrc),
+    Image(BackgroundImage),
 }
 
 impl Background {
@@ -781,7 +868,7 @@ impl Background {
                 line_number,
             )?)),
             ftd::interpreter2::FTD_BACKGROUND_IMAGE => Ok(Background::Image(
-                ftd::executor::ImageSrc::from_value(or_type_value.1, doc, line_number)?,
+                BackgroundImage::from_value(or_type_value.1, doc, line_number)?,
             )),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.length`", t),
@@ -823,17 +910,24 @@ impl Background {
         }
     }
 
-    pub fn to_image_css_string(&self) -> String {
+    pub fn to_image_src_css_string(&self) -> String {
         match self {
             Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
-            Background::Image(i) => format!("url({})", i.light.value),
+            Background::Image(i) => i.to_image_src_css_string(),
+        }
+    }
+
+    pub fn to_image_repeat_css_string(&self) -> String {
+        match self {
+            Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+            Background::Image(i) => i.to_repeat_css_string(),
         }
     }
 
     pub fn to_css_string(&self) -> String {
         match self {
             Background::Solid(c) => c.light.value.to_css_string(),
-            Background::Image(i) => i.light.value.to_string(),
+            Background::Image(i) => i.to_image_src_css_string(),
         }
     }
 
@@ -853,20 +947,15 @@ pub enum BackgroundRepeat {
 }
 
 impl BackgroundRepeat {
-    fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
-        if let Some(value) = or_type_value {
-            Ok(Some(BackgroundRepeat::from_values(
-                value,
-                doc,
-                line_number,
-            )?))
-        } else {
-            Ok(None)
-        }
+    ) -> ftd::executor::Result<BackgroundRepeat> {
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        BackgroundRepeat::from_values(value, doc, line_number)
     }
 
     fn from_values(
@@ -890,31 +979,6 @@ impl BackgroundRepeat {
                 line_number,
             ),
         }
-    }
-
-    pub(crate) fn optional_background_repeat(
-        properties: &[ftd::interpreter2::Property],
-        arguments: &[ftd::interpreter2::Argument],
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-        key: &str,
-        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<BackgroundRepeat>>> {
-        let or_type_value = ftd::executor::value::optional_or_type(
-            key,
-            properties,
-            arguments,
-            doc,
-            line_number,
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT,
-            inherited_variables,
-        )?;
-
-        Ok(ftd::executor::Value::new(
-            BackgroundRepeat::from_optional_values(or_type_value.value, doc, line_number)?,
-            or_type_value.line_number,
-            or_type_value.properties,
-        ))
     }
 
     pub fn to_css_string(&self) -> String {

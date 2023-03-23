@@ -785,6 +785,31 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_BG_IMAGE.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_BG_IMAGE.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "src".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_IMAGE_SRC)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "repeat".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND_REPEAT)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_BACKGROUND.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_BACKGROUND.to_string(),
@@ -800,7 +825,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     )),
                     ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
                         ftd::interpreter2::FTD_BACKGROUND_IMAGE,
-                        ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_IMAGE_SRC)
+                        ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_BG_IMAGE)
                             .into_kind_data(),
                         false,
                         None,
@@ -8438,12 +8463,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "background",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "background-repeat",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND_REPEAT)
                 .into_optional()
                 .into_kind_data(),
         ),

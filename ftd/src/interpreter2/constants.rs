@@ -46,6 +46,10 @@ pub const FTD_BACKGROUND: &str = "ftd#background";
 pub const FTD_BACKGROUND_SOLID: &str = "ftd#background.solid";
 pub const FTD_BACKGROUND_IMAGE: &str = "ftd#background.image";
 
+pub const FTD_BG_IMAGE: &str = "ftd#background-image";
+pub const FTD_BG_IMAGE_SRC: &str = "ftd#background-image.src";
+pub const FTD_BG_IMAGE_REPEAT: &str = "ftd#background-image.repeat";
+
 pub const FTD_BACKGROUND_REPEAT: &str = "ftd#background-repeat";
 pub const FTD_BACKGROUND_REPEAT_BOTH_REPEAT: &str = "ftd#background-repeat.repeat";
 pub const FTD_BACKGROUND_REPEAT_X_REPEAT: &str = "ftd#background-repeat.repeat-x";

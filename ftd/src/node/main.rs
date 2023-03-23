@@ -1175,7 +1175,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_css_string()))
+                    .map(|v| v.map(|v| v.to_image_src_css_string()))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_image_pattern()),
@@ -1186,11 +1186,11 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "background-repeat",
             ftd::node::Value::from_executor_value(
-                self.background_repeat
+                self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_image_repeat_css_string()))
                     .value,
-                self.background_repeat.to_owned(),
+                self.background.to_owned(),
                 None,
                 doc_id,
             ),
