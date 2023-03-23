@@ -842,6 +842,86 @@ impl Background {
     }
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum BackgroundRepeat {
+    Repeat,
+    RepeatX,
+    RepeatY,
+    NoRepeat,
+    Space,
+    Round,
+}
+
+impl BackgroundRepeat {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(BackgroundRepeat::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_BOTH_REPEAT => Ok(BackgroundRepeat::Repeat),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_X_REPEAT => Ok(BackgroundRepeat::RepeatX),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_Y_REPEAT => Ok(BackgroundRepeat::RepeatY),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_NO_REPEAT => Ok(BackgroundRepeat::NoRepeat),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_SPACE => Ok(BackgroundRepeat::Space),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_ROUND => Ok(BackgroundRepeat::Round),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.background-repeat`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_background_repeat(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<BackgroundRepeat>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            BackgroundRepeat::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            BackgroundRepeat::Repeat => "repeat".to_string(),
+            BackgroundRepeat::RepeatX => "repeat-x".to_string(),
+            BackgroundRepeat::RepeatY => "repeat-y".to_string(),
+            BackgroundRepeat::NoRepeat => "no-repeat".to_string(),
+            BackgroundRepeat::Space => "space".to_string(),
+            BackgroundRepeat::Round => "round".to_string(),
+        }
+    }
+}
+
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Color {
     pub light: ftd::executor::Value<ColorValue>,

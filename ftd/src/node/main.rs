@@ -1174,6 +1174,19 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "background-repeat",
+            ftd::node::Value::from_executor_value(
+                self.background_repeat
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.background_repeat.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "background-color",
             ftd::node::Value::from_executor_value(
                 self.background
