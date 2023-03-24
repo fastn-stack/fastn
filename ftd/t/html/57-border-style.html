@@ -1071,6 +1071,48 @@ data[argument] = eval(component.getAttribute(argument));
 }
 return data;
 };
+exports.call_mutable_value_changes = function (key, id) {
+if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.mutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.immutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -2100,14 +2142,8 @@ set_data_value(data, "foo#show-border:style:0" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:0"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:0"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:0", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-left-style"]){window.node_change_main["0:main__border-left-style"](data);
@@ -2127,14 +2163,8 @@ set_data_value(data, "foo#show-border:style:1" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:1"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:1"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:1", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-left-style"]){window.node_change_main["1:main__border-left-style"](data);
@@ -2154,14 +2184,8 @@ set_data_value(data, "foo#show-border:style:2" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:2"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:2"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:2", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
@@ -2181,14 +2205,8 @@ set_data_value(data, "foo#show-border:style:3" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:3", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:3"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:3"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:3"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:3"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:3", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:3", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-style"]){window.node_change_main["3:main__border-left-style"](data);
@@ -2208,14 +2226,8 @@ set_data_value(data, "foo#show-border:style:4" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:4", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:4"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:4"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:4"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:4"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:4", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:4", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
@@ -2235,14 +2247,8 @@ set_data_value(data, "foo#show-border:style:5" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:5", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:5"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:5"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:5"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:5"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:5", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:5", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
@@ -2262,14 +2268,8 @@ set_data_value(data, "foo#show-border:style:6" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:style:6", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:style:6"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:style:6"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:style:6"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:style:6"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:style:6", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:style:6", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
@@ -2289,14 +2289,8 @@ set_data_value(data, "foo#show-border:text:0" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:0"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:0"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:0", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
 };
@@ -2308,14 +2302,8 @@ set_data_value(data, "foo#show-border:text:1" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:1"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:1"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:1", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
 }
 };
@@ -2327,14 +2315,8 @@ set_data_value(data, "foo#show-border:text:2" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:2"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:2"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:2", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
 }
 };
@@ -2346,14 +2328,8 @@ set_data_value(data, "foo#show-border:text:3" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:3", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:3"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:3"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:3"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:3"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:3", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:3", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["3,1:main__text"]){window.node_change_main["3,1:main__text"](data);
 }
 };
@@ -2365,14 +2341,8 @@ set_data_value(data, "foo#show-border:text:4" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:4", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:4"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:4"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:4"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:4"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:4", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:4", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["4,1:main__text"]){window.node_change_main["4,1:main__text"](data);
 }
 };
@@ -2384,14 +2354,8 @@ set_data_value(data, "foo#show-border:text:5" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:5", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:5"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:5"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:5"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:5"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:5", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:5", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["5,1:main__text"]){window.node_change_main["5,1:main__text"](data);
 }
 };
@@ -2403,14 +2367,8 @@ set_data_value(data, "foo#show-border:text:6" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:text:6", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:text:6"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:text:6"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:text:6"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:text:6"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:text:6", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:text:6", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6,1:main__text"]){window.node_change_main["6,1:main__text"](data);
 }
 };
@@ -2422,14 +2380,8 @@ set_data_value(data, "foo#show-border:which:0" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:0"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:0"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:0", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
@@ -2451,14 +2403,8 @@ set_data_value(data, "foo#show-border:which:1" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:1"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:1"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:1", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
@@ -2480,14 +2426,8 @@ set_data_value(data, "foo#show-border:which:2" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:2"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:2"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:2", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
@@ -2509,14 +2449,8 @@ set_data_value(data, "foo#show-border:which:3" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:3", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:3"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:3"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:3"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:3"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:3", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:3", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__text"]){window.node_change_main["3,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
@@ -2538,14 +2472,8 @@ set_data_value(data, "foo#show-border:which:4" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:4", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:4"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:4"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:4"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:4"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:4", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:4", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
@@ -2567,14 +2495,8 @@ set_data_value(data, "foo#show-border:which:5" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:5", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:5"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:5"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:5"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:5"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:5", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:5", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["5,0:main__text"]){window.node_change_main["5,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
@@ -2596,14 +2518,8 @@ set_data_value(data, "foo#show-border:which:6" + "." + remaining, new_value);
 set_data_value(data, "foo#show-border:which:6", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#show-border:which:6"]) {
-let changes = window.ftd.mutable_value_main["foo#show-border:which:6"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#show-border:which:6"]) {
-let changes = window.ftd.immutable_value_main["foo#show-border:which:6"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#show-border:which:6", "main");
+window.ftd.call_immutable_value_changes("foo#show-border:which:6", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6,0:main__text"]){window.node_change_main["6,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);

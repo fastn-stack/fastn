@@ -391,5 +391,41 @@ window.ftd = (function() {
         return data;
     }
 
+    exports.call_mutable_value_changes = function(key: string, id: string) {
+        if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+            let changes = window.ftd[`mutable_value_${id}`][key].changes;
+            for(let i in changes) { changes[i](); }
+        }
+        const pattern = new RegExp(`^${key}\\..+`);
+        const result = Object.keys(window.ftd.mutable_value_main)
+            .filter(key => pattern.test(key))
+            .reduce((acc: Record<string, any>, key) => {
+                acc[key] = window.ftd[`mutable_value_${id}`][key];
+                return acc;
+            }, {});
+        for(let i in result) {
+            let changes = result[i].changes;
+            for(let i in changes) { changes[i](); }
+        }
+    }
+
+    exports.call_immutable_value_changes = function(key: string, id: string) {
+        if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+            let changes = window.ftd[`immutable_value_${id}`][key].changes;
+            for(let i in changes) { changes[i](); }
+        }
+        const pattern = new RegExp(`^${key}\\..+`);
+        const result = Object.keys(window.ftd.immutable_value_main)
+            .filter(key => pattern.test(key))
+            .reduce((acc: Record<string, any>, key) => {
+                acc[key] = window.ftd[`immutable_value_${id}`][key];
+                return acc;
+            }, {});
+        for(let i in result) {
+            let changes = result[i].changes;
+            for(let i in changes) { changes[i](); }
+        }
+    }
+
     return exports;
 })();

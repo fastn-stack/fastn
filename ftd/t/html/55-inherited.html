@@ -1069,6 +1069,48 @@ data[argument] = eval(component.getAttribute(argument));
 }
 return data;
 };
+exports.call_mutable_value_changes = function (key, id) {
+if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.mutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.immutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1643,14 +1685,8 @@ set_data_value(data, "foo#foo:name:0" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:name:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:name:0"]) {
-let changes = window.ftd.mutable_value_main["foo#foo:name:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:name:0"]) {
-let changes = window.ftd.immutable_value_main["foo#foo:name:0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#foo:name:0", "main");
+window.ftd.call_immutable_value_changes("foo#foo:name:0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,1:main__text"]){window.node_change_main["0,1,1:main__text"](data);
@@ -1668,14 +1704,8 @@ set_data_value(data, "foo#foo:name:0,1,2" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:name:0,1,2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#foo:name:0,1,2"]) {
-let changes = window.ftd.mutable_value_main["foo#foo:name:0,1,2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#foo:name:0,1,2"]) {
-let changes = window.ftd.immutable_value_main["foo#foo:name:0,1,2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#foo:name:0,1,2", "main");
+window.ftd.call_immutable_value_changes("foo#foo:name:0,1,2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,2,0:main__text"]){window.node_change_main["0,1,2,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,2,1,0:main__text"]){window.node_change_main["0,1,2,1,0:main__text"](data);
@@ -1691,14 +1721,8 @@ set_data_value(data, "foo#green-block:title-color:3" + "." + remaining, new_valu
 set_data_value(data, "foo#green-block:title-color:3", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#green-block:title-color:3"]) {
-let changes = window.ftd.mutable_value_main["foo#green-block:title-color:3"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#green-block:title-color:3"]) {
-let changes = window.ftd.immutable_value_main["foo#green-block:title-color:3"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#green-block:title-color:3", "main");
+window.ftd.call_immutable_value_changes("foo#green-block:title-color:3", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__color"]){window.node_change_main["3,0:main__color"](data);
 }
 };
@@ -1710,14 +1734,8 @@ set_data_value(data, "foo#inherited-name" + "." + remaining, new_value);
 set_data_value(data, "foo#inherited-name", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#inherited-name"]) {
-let changes = window.ftd.mutable_value_main["foo#inherited-name"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#inherited-name"]) {
-let changes = window.ftd.immutable_value_main["foo#inherited-name"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#inherited-name", "main");
+window.ftd.call_immutable_value_changes("foo#inherited-name", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__text"]){window.node_change_main["0,1,0:main__text"](data);
 }
 };
@@ -1729,14 +1747,8 @@ set_data_value(data, "foo#orange-block:title-color:2" + "." + remaining, new_val
 set_data_value(data, "foo#orange-block:title-color:2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#orange-block:title-color:2"]) {
-let changes = window.ftd.mutable_value_main["foo#orange-block:title-color:2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#orange-block:title-color:2"]) {
-let changes = window.ftd.immutable_value_main["foo#orange-block:title-color:2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#orange-block:title-color:2", "main");
+window.ftd.call_immutable_value_changes("foo#orange-block:title-color:2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__color"]){window.node_change_main["2,0:main__color"](data);
 }
 };
@@ -1748,14 +1760,8 @@ set_data_value(data, "foo#pink-block:title-color:1" + "." + remaining, new_value
 set_data_value(data, "foo#pink-block:title-color:1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#pink-block:title-color:1"]) {
-let changes = window.ftd.mutable_value_main["foo#pink-block:title-color:1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#pink-block:title-color:1"]) {
-let changes = window.ftd.immutable_value_main["foo#pink-block:title-color:1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#pink-block:title-color:1", "main");
+window.ftd.call_immutable_value_changes("foo#pink-block:title-color:1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
 }
 };
@@ -1767,14 +1773,8 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
@@ -1806,14 +1806,8 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#inherit
 let value = resolve_reference("inherited.name", data, null);
 set_data_value(data, "foo#inherited-name", value);
 }
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["inherited.name"]) {
-let changes = window.ftd.mutable_value_main["inherited.name"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["inherited.name"]) {
-let changes = window.ftd.immutable_value_main["inherited.name"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("inherited.name", "main");
+window.ftd.call_immutable_value_changes("inherited.name", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__text"]){window.node_change_main["0,1,0:main__text"](data);
 }
 };

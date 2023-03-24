@@ -1,14 +1,45 @@
 -- record task-data:
-string task:
+integer task:
 
 
 -- task-data $data:
-task: sfsdf
+task: 10
 
 
--- ftd.text: $data.task
+-- ftd.integer: $data.task
 background.solid: #B6CDE1
 padding-vertical.px: 6
 padding-horizontal.px: 10
 border-radius.px: 5
-$on-click$: $ftd.set-string($a = $data.task, v = FifthTry)
+$on-click$: $ftd.increment($a = $data.task)
+
+
+-- word-count:
+$count: $data.task
+
+This, is, the, body.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- web-component word-count:
+body body:
+integer $count:
+string separator: ,
+js: ftd/ftd/t/web_component.js
+
+-- end: word-count
