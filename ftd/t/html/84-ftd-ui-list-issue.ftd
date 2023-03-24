@@ -6,20 +6,9 @@
 
 -- uis.1:
 
-/-- wrap:
-ui: $uis.0
-
 -- end: bar.inner
 
 -- end: bar
-
--- foo:
-
--- ftd.text: Hello there
-
--- uis.1:
-
--- end: foo
 
 
 
