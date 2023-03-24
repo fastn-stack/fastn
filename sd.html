@@ -1068,6 +1068,48 @@ data[argument] = eval(component.getAttribute(argument));
 }
 return data;
 };
+exports.call_mutable_value_changes = function (key, id) {
+if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.mutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd.immutable_value_main)
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1704,21 +1746,15 @@ set_data_value(data, "foo#toast" + "." + remaining, new_value);
 set_data_value(data, "foo#toast", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#toast"]) {
-let changes = window.ftd.mutable_value_main["foo#toast"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#toast"]) {
-let changes = window.ftd.immutable_value_main["foo#toast"].changes;
-for(let i in changes) { changes[i](); }
+window.ftd.call_mutable_value_changes("foo#toast", "main");
+window.ftd.call_immutable_value_changes("foo#toast", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
 };
 
@@ -1729,21 +1765,15 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-image"]){window.node_change_main["0:main__background-image"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-color"]){window.node_change_main["0:main__border-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }
 };
 
@@ -1754,29 +1784,23 @@ set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
 set_data_value(data, "ftd#default-types", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-types"]) {
-let changes = window.ftd.mutable_value_main["ftd#default-types"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-types"]) {
-let changes = window.ftd.immutable_value_main["ftd#default-types"].changes;
-for(let i in changes) { changes[i](); }
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
-}
+window.ftd.call_mutable_value_changes("ftd#default-types", "main");
+window.ftd.call_immutable_value_changes("ftd#default-types", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
 }
@@ -1791,33 +1815,27 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#device"]) {
-let changes = window.ftd.mutable_value_main["ftd#device"].changes;
-for(let i in changes) { changes[i](); }
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
 }
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#device"]) {
-let changes = window.ftd.immutable_value_main["ftd#device"].changes;
-for(let i in changes) { changes[i](); }
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__letter-spacing"]){window.node_change_main["0,0:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__letter-spacing"]){window.node_change_main["0,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-weight"]){window.node_change_main["0,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__line-height"]){window.node_change_main["0,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__line-height"]){window.node_change_main["0,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-size"]){window.node_change_main["0,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-family"]){window.node_change_main["0,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-weight"]){window.node_change_main["0,1:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__font-size"]){window.node_change_main["0,0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__font-family"]){window.node_change_main["0,1:main__font-family"](data);
 }
 };
 
