@@ -16,7 +16,7 @@ dark: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBIVEhESFRIYGRI
 
 -- ftd.background-size.length bs-len:
 x.px: 40
-y.px: 80
+y.px: 40
 
 -- ftd.background-position.length bp-len:
 x.percent: 20
@@ -32,7 +32,7 @@ position: center-top
 src: $img2-src
 repeat: no-repeat
 size: contain
-position: center-top
+position: center-bottom
 
 -- ftd.background-image bgi-2:
 src: $img2-src

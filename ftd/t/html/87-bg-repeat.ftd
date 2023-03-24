@@ -6,17 +6,16 @@
 light: https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg
 dark: https://images.unsplash.com/photo-1616020453784-a24fa9845b05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXBsZXxlbnwwfHwwfHw%3D&w=1000&q=80
 
+-- ftd.background-image bg:
+src: $img
+repeat: no-repeat
+size: contain
+position: center-top
 
 -- ftd.column:
-background.image : $img
-width.fixed.px: 300
-height.fixed.px: 300
-background-repeat if { flag % 6 == 0 } : repeat
-background-repeat if { flag % 6 == 1 } : repeat-x
-background-repeat if { flag % 6 == 2 } : repeat-y
-background-repeat if { flag % 6 == 3 } : no-repeat
-background-repeat if { flag % 6 == 4 } : space
-background-repeat if { flag % 6 == 5 } : round
+background.image: $bg
+width.fixed.px: 150
+height.fixed.px: 150
 $on-click$: $ftd.increment($a = $flag)
 
 -- ftd.text: Hello Image

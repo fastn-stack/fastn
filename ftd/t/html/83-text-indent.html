@@ -695,7 +695,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-indent:count:0&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; margin: 10px; text-decoration: none; width: auto" class="ft_md">Hello World</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#show-indent:count:0&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; margin: 10px; text-decoration: none; width: auto" class="ft_md">Hello World</div></div></div>
 
 
 <script>
@@ -1575,18 +1575,21 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text-indent"] = function(data) {
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#show-indent:count:0", data);
+}
+window.node_change_main["0,1:main__text-indent"] = function(data) {
 if(function(){
 return (resolve_reference("foo#show-indent:count:0", data)%3==1);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["text-indent"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
+document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20).replace(""","")));
 }
 else if(function(){
 return (resolve_reference("foo#show-indent:count:0", data)%3==2);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["text-indent"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(30))));
+document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(30).replace(""","")));
 }
-else { document.querySelector(`[data-id="0:main"]`).style["text-indent"] = null }
+else { document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = null }
 }
 window.set_value_main = {};
 window.set_value_main["foo#show-indent:count:0"] = function (data, new_value, remaining) {
@@ -1604,7 +1607,9 @@ if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#
 let changes = window.ftd.immutable_value_main["foo#show-indent:count:0"].changes;
 for(let i in changes) { changes[i](); }
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text-indent"]){window.node_change_main["0:main__text-indent"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text-indent"]){window.node_change_main["0,1:main__text-indent"](data);
 }
 };
 

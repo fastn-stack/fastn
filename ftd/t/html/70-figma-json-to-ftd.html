@@ -1603,37 +1603,37 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
 }
 
 window.node_change_main["0,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
 }
 
 window.node_change_main["0,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
 }
 
 window.node_change_main["0,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
 }
 
 window.node_change_main["0,1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
+document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
+else {document.querySelector(`[data-id="0,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.heading-small", data).mobile)));}
 }
 window.node_change_main["1:main__display"] = function(data) {
 if(function(){
@@ -1653,9 +1653,120 @@ else {document.querySelector(`[data-id="1,0:main"]`).style["background-color"] =
 
 window.node_change_main["1,0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("ftd#default-colors.background.step-1", data).light));
+document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("ftd#default-colors.background.step-1", data).dark));}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).light)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).dark)));}
+}
+
+window.node_change_main["1,0:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).light)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).dark)));}
+}
+
+window.node_change_main["1,0:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).light)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).dark)));}
+}
+
+window.node_change_main["1,0:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).light)));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).dark)));}
 }
 
 window.node_change_main["1,0,0:main__display"] = function(data) {
@@ -1680,37 +1791,37 @@ else {document.querySelector(`[data-id="1,0,0:main"]`).style["color"] = resolve_
 
 window.node_change_main["1,0,0:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,0:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,0:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,0:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,0:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,0,1:main__display"] = function(data) {
 if(function(){
@@ -1739,37 +1850,37 @@ else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["color"] = resolv
 
 window.node_change_main["1,0,1,0:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,0:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,0:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,0:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,0:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,0,1,1:main__display"] = function(data) {
 if(function(){
@@ -1793,37 +1904,37 @@ else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["color"] = resolv
 
 window.node_change_main["1,0,1,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0,1,1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0,1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0,1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0,1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,1:main__display"] = function(data) {
 if(function(){
@@ -1847,16 +1958,127 @@ else {document.querySelector(`[data-id="1,1:main"]`).style["background-color"] =
 
 window.node_change_main["1,1:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#code-bg-dark", data).light));
+document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#code-bg-dark", data).dark));}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).light)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).dark)));}
+}
+
+window.node_change_main["1,1:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).light)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).dark)));}
+}
+
+window.node_change_main["1,1:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).light)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).dark)));}
+}
+
+window.node_change_main["1,1:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).light)));
+}
+else {document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+"IGNORE-KEY"
+}
+`.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).dark)));}
 }
 
 window.node_change_main["1,1:main__border-top-left-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = null }
 }
@@ -1865,7 +2087,7 @@ window.node_change_main["1,1:main__border-top-right-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = null }
 }
@@ -1879,37 +2101,37 @@ else {document.querySelector(`[data-id="1,1:main"]`).style["color"] = resolve_re
 
 window.node_change_main["1,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,2:main__display"] = function(data) {
 if(function(){
@@ -1928,7 +2150,7 @@ window.node_change_main["1,2:main__border-bottom-left-radius"] = function(data) 
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = null }
 }
@@ -1937,7 +2159,7 @@ window.node_change_main["1,2:main__border-bottom-right-radius"] = function(data)
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = null }
 }
@@ -1953,7 +2175,7 @@ window.node_change_main["1,2:main__border-top-left-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = null }
 }
@@ -1962,7 +2184,7 @@ window.node_change_main["1,2:main__border-top-right-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = null }
 }
@@ -1976,37 +2198,37 @@ else {document.querySelector(`[data-id="1,2:main"]`).style["color"] = resolve_re
 
 window.node_change_main["1,2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#code:caption:1"] = function (data, new_value, remaining) {
@@ -2151,9 +2373,21 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__backgrou
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-size"]){window.node_change_main["1,1:main__background-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__color"]){window.node_change_main["1,1:main__color"](data);
 }
@@ -2162,6 +2396,12 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__display"
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-position"]){window.node_change_main["1,2:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-repeat"]){window.node_change_main["1,2:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__border-color"]){window.node_change_main["1,2:main__border-color"](data);
 }

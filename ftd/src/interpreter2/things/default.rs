@@ -8117,12 +8117,6 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter2::Argument::default(
-                    "text-indent",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
                     "text-align",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
@@ -8248,12 +8242,6 @@ pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter2::Argument::default(
-                    "text-indent",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
                     "text-align",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
@@ -8291,12 +8279,6 @@ pub fn decimal_function() -> ftd::interpreter2::ComponentDefinition {
                 ),
                 ftd::interpreter2::Argument::default(
                     "format",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "text-indent",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
                         .into_kind_data(),

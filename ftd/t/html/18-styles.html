@@ -1592,7 +1592,7 @@ window.node_change_main["1:main__border-top-left-radius"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(18))));
+document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(18))));
 }
 else { document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = null }
 }
@@ -1600,7 +1600,7 @@ window.node_change_main["2:main__padding-left"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-left"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
+document.querySelector(`[data-id="2:main"]`).style["padding-left"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(10))));
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-left"] = null }
 }
@@ -1609,7 +1609,7 @@ window.node_change_main["2:main__padding-right"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
+document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(10))));
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-right"] = null }
 }
@@ -1617,45 +1617,45 @@ window.node_change_main["3:main__border-bottom-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));}
 }
 
 window.node_change_main["3:main__border-left-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));}
 }
 
 window.node_change_main["3:main__border-right-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));}
 }
 
 window.node_change_main["3:main__border-top-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
+document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));}
 }
 
 window.node_change_main["3:main__flex-wrap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSONstringify(false)));
+document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSON.stringify(false)));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSONstringify(true)));}
+else {document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(JSON.stringify(true)));}
 }
 
 window.node_change_main["3:main__gap"] = function(data) {
@@ -1667,14 +1667,14 @@ document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "
 } else {
 null
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(40)))));
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
 else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
 "{0}"
 } else {
 null
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20)))));}
 }
 
 window.node_change_main["3:main__justify-content"] = function(data) {
@@ -1686,165 +1686,165 @@ document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if
 } else {
 "start"
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(40)))));
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
 else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
 "{0}"
 } else {
 "start"
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20)))));}
 }
 window.node_change_main["4:main__align-items"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
+document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.top-center" || {0} == "ftd#align.top-right") {
 "start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
+} else if ({0} == "ftd#align.left" || {0} == "ftd#align.center" || {0} == "ftd#align.right") {
 "center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.bottom-left" || {0} == "ftd#align.bottom-center" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-left")));
+`.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
+else {document.querySelector(`[data-id="4:main"]`).style["align-items"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.top-center" || {0} == "ftd#align.top-right") {
 "start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
+} else if ({0} == "ftd#align.left" || {0} == "ftd#align.center" || {0} == "ftd#align.right") {
 "center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.bottom-left" || {0} == "ftd#align.bottom-center" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-center")));}
+`.format(JSON.stringify("ftd#align.top-center")));}
 }
 
 window.node_change_main["4:main__justify-content"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
+document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.left" || {0} == "ftd#align.bottom-left") {
 "start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
+} else if ({0} == "ftd#align.top-center" || {0} == "ftd#align.center" || {0} == "ftd#align.bottom-center") {
 "center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.top-right" || {0} == "ftd#align.right" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-left")));
+`.format(JSON.stringify("ftd#align.top-left")));
 }
 else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
 "{0}"
 } else {
 "start"
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(20)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20)))));}
 }
 window.node_change_main["5:main__align-items"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
+document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.left" || {0} == "ftd#align.bottom-left") {
 "start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
+} else if ({0} == "ftd#align.top-center" || {0} == "ftd#align.center" || {0} == "ftd#align.bottom-center") {
 "center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.top-right" || {0} == "ftd#align.right" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-left")));
+`.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
+else {document.querySelector(`[data-id="5:main"]`).style["align-items"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.left" || {0} == "ftd#align.bottom-left") {
 "start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
+} else if ({0} == "ftd#align.top-center" || {0} == "ftd#align.center" || {0} == "ftd#align.bottom-center") {
 "center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.top-right" || {0} == "ftd#align.right" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-center")));}
+`.format(JSON.stringify("ftd#align.top-center")));}
 }
 
 window.node_change_main["5:main__justify-content"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
+document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.top-center" || {0} == "ftd#align.top-right") {
 "start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
+} else if ({0} == "ftd#align.left" || {0} == "ftd#align.center" || {0} == "ftd#align.right") {
 "center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.bottom-left" || {0} == "ftd#align.bottom-center" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify("ftd#align.top-left")));
+`.format(JSON.stringify("ftd#align.top-left")));
 }
 else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
 "{0}"
 } else {
 "start"
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(2)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2)))));}
 }
 window.node_change_main["6:main__height"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="6:main"]`).style["height"] = `100%`.format(JSONstringify(`100%`.format(JSONstringify("ftd#resizing.fill-container"))));
+document.querySelector(`[data-id="6:main"]`).style["height"] = `100%`.format(JSON.stringify(`100%`.format(JSON.stringify("ftd#resizing.fill-container"))));
 }
-else {document.querySelector(`[data-id="6:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));}
+else {document.querySelector(`[data-id="6:main"]`).style["height"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(20))));}
 }
 
 window.node_change_main["6:main__width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="6:main"]`).style["width"] = `fit-content`.format(JSONstringify(`fit-content`.format(JSONstringify("ftd#resizing.hug-content"))));
+document.querySelector(`[data-id="6:main"]`).style["width"] = `fit-content`.format(JSON.stringify(`fit-content`.format(JSON.stringify("ftd#resizing.hug-content"))));
 }
-else {document.querySelector(`[data-id="6:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(400))));}
+else {document.querySelector(`[data-id="6:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(400))));}
 }
 window.node_change_main["8:main__width"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)%7==0);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==1);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==2);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`calc({0})`.format(JSONstringify("20"))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`calc({0})`.format(JSON.stringify("20"))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==3);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vh`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}vh`.format(JSON.stringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==4);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vw`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}vw`.format(JSON.stringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==5);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}em`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}em`.format(JSON.stringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==6);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}rem`.format(JSONstringify(20))));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}rem`.format(JSON.stringify(20))));
 }
 else { document.querySelector(`[data-id="8:main"]`).style["width"] = null }
 }
@@ -1936,13 +1936,31 @@ if(!!window["node_change_main"] && !!window.node_change_main["4:main__background
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__background-image"]){window.node_change_main["4:main__background-image"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__background-position"]){window.node_change_main["4:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__background-repeat"]){window.node_change_main["4:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__background-size"]){window.node_change_main["4:main__background-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-color"]){window.node_change_main["7:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-image"]){window.node_change_main["7:main__background-image"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-position"]){window.node_change_main["7:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-repeat"]){window.node_change_main["7:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["7:main__background-size"]){window.node_change_main["7:main__background-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-color"]){window.node_change_main["8:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-image"]){window.node_change_main["8:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-position"]){window.node_change_main["8:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-repeat"]){window.node_change_main["8:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["8:main__background-size"]){window.node_change_main["8:main__background-size"](data);
 }
 };
 

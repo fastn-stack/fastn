@@ -1602,9 +1602,9 @@ window.node_change_main["0:main__padding"] = function(data) {
 if(function(){
 return (resolve_reference("ftd#device", data)=="mobile");
 }()){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(40))));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(40))));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));}
+else {document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(10))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#green"] = function (data, new_value, remaining) {

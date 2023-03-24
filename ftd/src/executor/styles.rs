@@ -1566,6 +1566,57 @@ impl Shadow {
             inset, color, x_offset, y_offset, blur, spread
         )
     }
+
+    pub fn box_shadow_pattern() -> (String, bool) {
+        (
+            indoc::indoc! {"
+                let shadow = {0};
+                if (typeof shadow === 'object') {
+                var inset, blur, spread, x_off, y_off, color;
+                inset = \"\";
+                blur = spread = x_off = y_off = \"0px\";
+                color = \"black\";
+
+                if (\"inset\" in shadow) {
+                    if (shadow.inset) {
+                        inset = \"inset\";
+                    }
+                }
+
+                if (\"blur\" in shadow) {
+                    blur = shadow.blur;
+                }
+                if (\"spread\" in shadow) {
+                    spread = shadow.spread;
+                }
+                if (\"x-offset\" in shadow) {
+                    x_off = shadow[\"x-offset\"];
+                }
+                if (\"y-offset\" in shadow) {
+                    y_off = shadow[\"y-offset\"];
+                }
+
+                if (\"color\" in shadow) {
+                    if (data[\"ftd#dark-mode\"]){
+                        color = shadow.color.dark;
+                    }
+                    else {
+                        color = shadow.color.light;
+                    }
+                }
+
+                // inset, color, x_offset, y_offset, blur, spread
+                let res = inset + \" \" + color + \" \" + x_off + \" \" + y_off + \" \" + blur + \" \" + spread;
+                res = res.trim();
+                res
+            }
+            else {
+                null
+            }
+            "}.to_string(),
+            true,
+        )
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]

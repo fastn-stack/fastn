@@ -1584,7 +1584,7 @@ document.querySelector(`[data-id="2:main"]`).setAttribute("disabled", eval(`if (
 } else {
 ""
 }
-`.format(JSONstringify(resolve_reference("foo#flag", data)))));
+`.format(JSON.stringify(resolve_reference("foo#flag", data)))));
 
 if (document.querySelector(`[data-id="2:main"]`).getAttribute("disabled") == "REMOVE-KEY"){
 document.querySelector(`[data-id="2:main"]`).removeAttribute("disabled");
