@@ -10,6 +10,14 @@ dark: red
 light: blue
 dark: yellow
 
+;; Shadow properties
+;; x-offset: ftd.length
+;; y-offset: ftd.length
+;; spread: ftd.length
+;; blur: ftd.length
+;; inset: boolean
+;; color: ftd.color
+
 -- ftd.shadow some-other-shadow:
 y-offset.px: -10
 x-offset.px: 5

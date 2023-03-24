@@ -40,6 +40,12 @@ repeat: repeat
 size: $bs-len
 position: $bp-len
 
+;; Background image properties
+;; src: ftd-image-src
+;; repeat: repeat, repeat-x, repeat-y, no-repeat, space, round, length
+;; size: auto, cover, contain, length
+;; position: left, center, right, left-top, .. right-bottom, length
+
 -- ftd.column:
 background.image: $bgi
 background.image if { flag % 3 == 1 }: $bgi-im-change
