@@ -581,6 +581,10 @@ impl<'a> DependencyGenerator<'a> {
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
             );
+            if key == "background-image" {
+                var_dependencies
+                    .insert("ftd#dark-mode".to_string(), node_change_id.clone());
+            }
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property

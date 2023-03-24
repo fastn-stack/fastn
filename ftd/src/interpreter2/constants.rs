@@ -68,6 +68,21 @@ pub const FTD_BACKGROUND_SIZE_COVER: &str = "ftd#background-size.cover";
 pub const FTD_BACKGROUND_SIZE_CONTAIN: &str = "ftd#background-size.contain";
 pub const FTD_BACKGROUND_SIZE_LENGTH: &str = "ftd#background-size.length";
 
+pub const FTD_BACKGROUND_POSITION: &str = "ftd#background-position";
+pub const FTD_BACKGROUND_POSITION_LEFT: &str = "ftd#background-position.left";
+pub const FTD_BACKGROUND_POSITION_CENTER: &str = "ftd#background-position.center";
+pub const FTD_BACKGROUND_POSITION_RIGHT: &str = "ftd#background-position.right";
+pub const FTD_BACKGROUND_POSITION_LEFT_TOP: &str = "ftd#background-position.left-top";
+pub const FTD_BACKGROUND_POSITION_LEFT_CENTER: &str = "ftd#background-position.left-center";
+pub const FTD_BACKGROUND_POSITION_LEFT_BOTTOM: &str = "ftd#background-position.left-bottom";
+pub const FTD_BACKGROUND_POSITION_CENTER_TOP: &str = "ftd#background-position.center-top";
+pub const FTD_BACKGROUND_POSITION_CENTER_CENTER: &str = "ftd#background-position.center-center";
+pub const FTD_BACKGROUND_POSITION_CENTER_BOTTOM: &str = "ftd#background-position.center-bottom";
+pub const FTD_BACKGROUND_POSITION_RIGHT_TOP: &str = "ftd#background-position.right-top";
+pub const FTD_BACKGROUND_POSITION_RIGHT_CENTER: &str = "ftd#background-position.right-center";
+pub const FTD_BACKGROUND_POSITION_RIGHT_BOTTOM: &str = "ftd#background-position.right-bottom";
+pub const FTD_BACKGROUND_POSITION_LENGTH: &str = "ftd#background-position.length";
+
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";
 pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";

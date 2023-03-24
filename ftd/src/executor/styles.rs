@@ -251,7 +251,8 @@ impl LengthPair {
         let fields = match value.inner() {
             Some(ftd::interpreter2::Value::Record { name, fields })
                 if name.eq(ftd::interpreter2::FTD_LENGTH_PAIR)
-                    || name.eq(ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH) =>
+                    || name.eq(ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH)
+                    || name.eq(ftd::interpreter2::FTD_BACKGROUND_POSITION_LENGTH) =>
             {
                 fields
             }
@@ -820,6 +821,7 @@ pub struct BackgroundImage {
     pub src: ftd::executor::Value<ftd::executor::ImageSrc>,
     pub repeat: ftd::executor::Value<Option<ftd::executor::BackgroundRepeat>>,
     pub size: ftd::executor::Value<Option<ftd::executor::BackgroundSize>>,
+    pub position: ftd::executor::Value<Option<ftd::executor::BackgroundPosition>>,
 }
 
 impl BackgroundImage {
@@ -904,11 +906,35 @@ impl BackgroundImage {
             )
         };
 
-        Ok(BackgroundImage { src, repeat, size })
+        let position = {
+            let value = values
+                .get("position")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`position` field in ftd.background-image not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                Some(ftd::executor::BackgroundPosition::from_value(
+                    value.clone(),
+                    doc,
+                    line_number,
+                )?),
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("position"))],
+            )
+        };
+
+        Ok(BackgroundImage {
+            src,
+            repeat,
+            size,
+            position,
+        })
     }
 
     pub fn to_image_src_css_string(&self) -> String {
-        format!("url({})", self.src.value.light.value.to_string())
+        format!("url({})", self.src.value.light.value)
     }
 
     pub fn to_repeat_css_string(&self) -> String {
@@ -920,6 +946,13 @@ impl BackgroundImage {
 
     pub fn to_size_css_string(&self) -> String {
         match self.size.value.as_ref() {
+            Some(s) => s.to_css_string(),
+            None => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+        }
+    }
+
+    pub fn to_position_css_string(&self) -> String {
+        match self.position.value.as_ref() {
             Some(s) => s.to_css_string(),
             None => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
         }
@@ -1020,6 +1053,13 @@ impl Background {
         }
     }
 
+    pub fn to_image_position_css_string(&self) -> String {
+        match self {
+            Background::Solid(_) => ftd::interpreter2::FTD_IGNORE_KEY.to_string(),
+            Background::Image(i) => i.to_position_css_string(),
+        }
+    }
+
     pub fn to_css_string(&self) -> String {
         match self {
             Background::Solid(c) => c.light.value.to_css_string(),
@@ -1028,7 +1068,92 @@ impl Background {
     }
 
     pub fn background_image_pattern() -> (String, bool) {
-        ("url({0})".to_string(), false)
+        (
+            format!(
+                indoc::indoc! {"
+                let bg = {{0}};
+                if (typeof bg === 'object' && \"src\" in bg) {{
+                    let img_src = bg.src;
+                    if(!data[\"ftd#dark-mode\"] && typeof img_src === 'object' && \"light\" in img_src) {{
+                        \"url(\" + img_src.light + \")\"
+                    }}
+                    else if(data[\"ftd#dark-mode\"] && typeof img_src === 'object' && \"dark\" in img_src){{
+                        \"url(\" + img_src.dark + \")\"
+                    }}
+                    else {{
+                        \"{ignore_key}\"
+                    }}
+                }} else {{
+                    \"{ignore_key}\"
+                }}
+            "},
+                ignore_key = ftd::interpreter2::FTD_IGNORE_KEY
+            ),
+            true,
+        )
+    }
+
+    pub fn background_repeat_pattern() -> (String, bool) {
+        (
+            format!(
+                indoc::indoc! {"
+                let bg = {{0}};
+                if (typeof bg === 'object' && \"repeat\" in bg) {{
+                    bg.repeat
+                }} else {{
+                    \"{ignore_key}\"
+                }}
+            "},
+                ignore_key = ftd::interpreter2::FTD_IGNORE_KEY
+            ),
+            true,
+        )
+    }
+
+    pub fn background_size_pattern() -> (String, bool) {
+        (
+            format!(
+                indoc::indoc! {"
+                let bg = {{0}};
+                if (typeof bg === 'object' && \"size\" in bg) {{
+                    let sz = bg.size;
+                    if (typeof sz === 'object' && \"x\" in sz && \"y\" in sz) {{
+                        sz.x + \" \" + sz.y
+                    }}
+                    else {{
+                        sz
+                    }}
+                }} else {{
+                    \"{ignore_key}\"
+                }}
+            "},
+                ignore_key = ftd::interpreter2::FTD_IGNORE_KEY
+            ),
+            true,
+        )
+    }
+
+    pub fn background_position_pattern() -> (String, bool) {
+        (
+            format!(
+                indoc::indoc! {"
+                let bg = {{0}};
+                if (typeof bg === 'object' && \"position\" in bg) {{
+                    let pos = bg.position;
+                    if (typeof pos === 'object' && \"x\" in pos && \"y\" in pos) {{
+                        pos.x + \" \" + pos.y
+                    }}
+                    else {{
+                        pos.replace(\"-\", \" \")
+                    }}
+                }} else {{
+                    \"{ignore_key}\"
+                }}
+            "},
+                ignore_key = ftd::interpreter2::FTD_IGNORE_KEY
+            ),
+            true,
+        )
     }
 }
 
@@ -1135,6 +1260,102 @@ impl BackgroundSize {
             BackgroundSize::Cover => "cover".to_string(),
             BackgroundSize::Contain => "contain".to_string(),
             BackgroundSize::Length(l) => l.to_css_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum BackgroundPosition {
+    Left,
+    Center,
+    Right,
+    LeftTop,
+    LeftCenter,
+    LeftBottom,
+    CenterTop,
+    CenterCenter,
+    CenterBottom,
+    RightTop,
+    RightCenter,
+    RightBottom,
+    Length(LengthPair),
+}
+
+impl BackgroundPosition {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<BackgroundPosition> {
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        BackgroundPosition::from_values(value, doc, line_number)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT => Ok(BackgroundPosition::Left),
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER => Ok(BackgroundPosition::Center),
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT => Ok(BackgroundPosition::Right),
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_TOP => Ok(BackgroundPosition::LeftTop),
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_CENTER => {
+                Ok(BackgroundPosition::LeftCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_BOTTOM => {
+                Ok(BackgroundPosition::LeftBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_TOP => {
+                Ok(BackgroundPosition::CenterTop)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_CENTER => {
+                Ok(BackgroundPosition::CenterCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_BOTTOM => {
+                Ok(BackgroundPosition::CenterBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_TOP => {
+                Ok(BackgroundPosition::RightTop)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_CENTER => {
+                Ok(BackgroundPosition::RightCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM => {
+                Ok(BackgroundPosition::RightBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LENGTH => Ok(BackgroundPosition::Length(
+                LengthPair::from_value(or_type_value.1, doc, line_number)?,
+            )),
+            t => ftd::executor::utils::parse_error(
+                format!(
+                    "Unknown variant `{}` for or-type `ftd.background-position`",
+                    t
+                ),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            BackgroundPosition::Left => "left".to_string(),
+            BackgroundPosition::Center => "center".to_string(),
+            BackgroundPosition::Right => "right".to_string(),
+            BackgroundPosition::LeftTop => "left top".to_string(),
+            BackgroundPosition::LeftCenter => "left center".to_string(),
+            BackgroundPosition::LeftBottom => "left bottom".to_string(),
+            BackgroundPosition::CenterTop => "center top".to_string(),
+            BackgroundPosition::CenterCenter => "center center".to_string(),
+            BackgroundPosition::CenterBottom => "center bottom".to_string(),
+            BackgroundPosition::RightTop => "right top".to_string(),
+            BackgroundPosition::RightCenter => "right center".to_string(),
+            BackgroundPosition::RightBottom => "right bottom".to_string(),
+            BackgroundPosition::Length(l) => l.to_css_string(),
         }
     }
 }

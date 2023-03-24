@@ -838,6 +838,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         value: None,
                         line_number: 0,
                     },
+                    ftd::interpreter2::Field {
+                        name: "position".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND_POSITION)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
                 ]).collect(),
                 line_number: 0,
             }),
@@ -974,6 +982,157 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     )),
                     ftd::interpreter2::OrTypeVariant::AnonymousRecord(ftd::interpreter2::Record {
                         name: ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            ftd::interpreter2::Field {
+                                name: "x".to_string(),
+                                kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                line_number: 0,
+                            },
+                            ftd::interpreter2::Field {
+                                name: "y".to_string(),
+                                kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                                    .into_kind_data(),
+                                mutable: false,
+                                value: None,
+                                line_number: 0,
+                            },
+                        ]).collect(),
+                        line_number: 0,
+                    }),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_BACKGROUND_POSITION.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_BACKGROUND_POSITION.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("left")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("right")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_TOP,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("left-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_CENTER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("left-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_BOTTOM,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("left-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_TOP,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("center-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_CENTER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("center-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_BOTTOM,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("center-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_TOP,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("right-top")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_CENTER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("right-center")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("right-bottom")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::AnonymousRecord(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_BACKGROUND_POSITION_LENGTH.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             ftd::interpreter2::Field {
                                 name: "x".to_string(),
