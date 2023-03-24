@@ -64,7 +64,7 @@ The syntax for declaring a mutable variable is as shown below −
 -- ds.code:
 lang: ftd
 
-\-- integer x: 10
+\-- integer $x: 10
 
 \-- ftd.integer: $x
 $on-click$: $ftd.increment($a = $x)
