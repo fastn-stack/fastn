@@ -580,7 +580,6 @@ impl<'a> DependencyGenerator<'a> {
             if key == "background-image" {
                 var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
             }
-            dbg!(&key);
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
@@ -672,10 +671,10 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if dbg!(ftd::html1::utils::is_dark_mode_dependent(
+                if ftd::html1::utils::is_dark_mode_dependent(
                     &property.value,
                     self.doc
-                )?) {
+                )? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =

@@ -403,6 +403,7 @@ impl ftd::interpreter2::Value {
 
                 Some(format!("{{{}}}", values.join(", ")))
             }
+            ftd::interpreter2::Value::Optional { data, ..} if data.is_none() => None,
             t => unimplemented!("{:?}", t),
         })
     }
