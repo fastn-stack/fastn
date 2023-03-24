@@ -817,7 +817,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     ftd::interpreter2::Field {
                         name: "src".to_string(),
                         kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_IMAGE_SRC)
-                            .into_kind_data(),
+                            .into_kind_data().caption(),
                         mutable: false,
                         value: None,
                         line_number: 0,

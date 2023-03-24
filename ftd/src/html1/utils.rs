@@ -87,7 +87,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
 
     Ok(Some(match pattern_with_eval {
         Some((p, eval)) => {
-            let mut pattern = format!("`{}`.format(JSONstringify({}))", p, value_string);
+            let mut pattern = format!("`{}`.format(JSON.stringify({}))", p, value_string);
             if *eval {
                 pattern = format!("eval({})", pattern)
             }
@@ -364,7 +364,7 @@ impl ftd::interpreter2::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSONstringify({}))", pattern, value))
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
                         } else {
                             Some(value)
                         }
@@ -379,7 +379,7 @@ impl ftd::interpreter2::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSONstringify({}))", pattern, value))
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
                         } else {
                             Some(value)
                         }

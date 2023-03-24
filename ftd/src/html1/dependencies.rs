@@ -577,14 +577,15 @@ impl<'a> DependencyGenerator<'a> {
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
             let style_key = key.clone();
+            if key == "background-image" {
+                var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
+            }
+            dbg!(&key);
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
             );
-            if key == "background-image" {
-                var_dependencies
-                    .insert("ftd#dark-mode".to_string(), node_change_id.clone());
-            }
+
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -671,7 +672,10 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
+                if dbg!(ftd::html1::utils::is_dark_mode_dependent(
+                    &property.value,
+                    self.doc
+                )?) {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =

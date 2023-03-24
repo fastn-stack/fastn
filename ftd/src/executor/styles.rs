@@ -520,11 +520,11 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                        if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{bottom_left}\") {{
+                        if ({{0}} == \"{top_left}\" || {{0}} == \"{left}\" || {{0}} == \"{bottom_left}\") {{
                             \"start\"
-                        }} else if (\"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{bottom_center}\") {{
+                        }} else if ({{0}} == \"{top_center}\" || {{0}} == \"{center}\" || {{0}} == \"{bottom_center}\") {{
                             \"center\"
-                        }} else if (\"{{0}}\" == \"{top_right}\" || \"{{0}}\" == \"{right}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                        }} else if ({{0}} == \"{top_right}\" || {{0}} == \"{right}\" || {{0}} == \"{bottom_right}\") {{
                             \"end\"
                         }} else {{
                             null
@@ -546,11 +546,11 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{top_right}\") {{
+                if ({{0}} == \"{top_left}\" || {{0}} == \"{top_center}\" || {{0}} == \"{top_right}\") {{
                     \"start\"
-                }} else if (\"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{right}\") {{
+                }} else if ({{0}} == \"{left}\" || {{0}} == \"{center}\" || {{0}} == \"{right}\") {{
                     \"center\"
-                }} else if (\"{{0}}\" == \"{bottom_left}\" || \"{{0}}\" == \"{bottom_center}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                }} else if ({{0}} == \"{bottom_left}\" || {{0}} == \"{bottom_center}\" || {{0}} == \"{bottom_right}\") {{
                     \"end\"
                 }} else {{
                     null
@@ -576,11 +576,11 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-               if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{top_right}\") {{
+               if ({{0}} == \"{top_left}\" || {{0}} == \"{top_center}\" || {{0}} == \"{top_right}\") {{
                     \"start\"
-                }} else if (\"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{right}\") {{
+                }} else if ({{0}} == \"{left}\" || {{0}} == \"{center}\" || {{0}} == \"{right}\") {{
                     \"center\"
-                }} else if (\"{{0}}\" == \"{bottom_left}\" || \"{{0}}\" == \"{bottom_center}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                }} else if ({{0}} == \"{bottom_left}\" || {{0}} == \"{bottom_center}\" || {{0}} == \"{bottom_right}\") {{
                     \"end\"
                 }} else {{
                     null
@@ -602,11 +602,11 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                        if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{bottom_left}\") {{
+                        if ({{0}} == \"{top_left}\" || {{0}} == \"{left}\" || {{0}} == \"{bottom_left}\") {{
                             \"start\"
-                        }} else if (\"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{bottom_center}\") {{
+                        }} else if ({{0}} == \"{top_center}\" || {{0}} == \"{center}\" || {{0}} == \"{bottom_center}\") {{
                             \"center\"
-                        }} else if (\"{{0}}\" == \"{top_right}\" || \"{{0}}\" == \"{right}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                        }} else if ({{0}} == \"{top_right}\" || {{0}} == \"{right}\" || {{0}} == \"{bottom_right}\") {{
                             \"end\"
                         }} else {{
                             null
@@ -1069,8 +1069,7 @@ impl Background {
 
     pub fn background_image_pattern() -> (String, bool) {
         (
-            format!(
-                indoc::indoc! {"
+            format!(indoc::indoc! {"
                 let bg = {{0}};
                 if (typeof bg === 'object' && \"src\" in bg) {{
                     let img_src = bg.src;
@@ -1081,14 +1080,12 @@ impl Background {
                         \"url(\" + img_src.dark + \")\"
                     }}
                     else {{
-                        \"{ignore_key}\"
+                        null
                     }}
                 }} else {{
-                    \"{ignore_key}\"
+                    null
                 }}
-            "},
-                ignore_key = ftd::interpreter2::FTD_IGNORE_KEY
-            ),
+            "},),
             true,
         )
     }
