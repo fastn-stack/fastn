@@ -133,6 +133,7 @@ impl Length {
         ))
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn length_with_default(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],
@@ -351,6 +352,7 @@ impl Alignment {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn alignment_with_default(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],
@@ -644,6 +646,7 @@ impl Resizing {
         ))
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn resizing_with_default(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],

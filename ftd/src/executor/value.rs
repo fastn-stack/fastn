@@ -47,6 +47,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     key: &str,
     component_name: &str,
@@ -101,6 +102,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     Ok(ftd::executor::Value::new(value, v_line_number, properties))
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn find_value_by_argument(
     component_name: &str,
     source: &[ftd::interpreter2::PropertySource],
@@ -529,6 +531,7 @@ pub fn optional_string(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn dummy_optional_string(
     key: &str,
     component_name: &str,
@@ -645,6 +648,7 @@ pub fn optional_f64(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn optional_record_inherited(
     key: &str,
     component_name: &str,
@@ -687,6 +691,7 @@ pub fn optional_record_inherited(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn optional_or_type(
     key: &str,
     component_name: &str,
@@ -736,6 +741,7 @@ pub fn optional_or_type(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn optional_or_type_list(
     key: &str,
     component_name: &str,
