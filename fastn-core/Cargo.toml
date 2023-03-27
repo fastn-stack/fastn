@@ -152,7 +152,7 @@ features = [
 ]
 
 [dependencies.rusqlite]
-version = "0.28"
+version = "0.29"
 features = [
     # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
     # dependency. By default, if we do not bundle, our binary will link against system
