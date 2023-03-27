@@ -90,7 +90,10 @@ impl ftd::interpreter2::Kind {
     fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
         match self {
             ftd::interpreter2::Kind::OrType { name, .. }
-                if name.eq(ftd::interpreter2::FTD_LENGTH) => None,
+                if name.eq(ftd::interpreter2::FTD_LENGTH) =>
+            {
+                None
+            }
             ftd::interpreter2::Kind::OrType {
                 name,
                 variant: Some(variant),
