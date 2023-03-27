@@ -635,7 +635,7 @@ pub(crate) fn insert_module_thing(
 }
 
 pub(crate) fn find_properties_by_source(
-    source: &[ftd::interpreter2::PropertySource],
+    sources: &[ftd::interpreter2::PropertySource],
     properties: &[ftd::interpreter2::Property],
     doc_name: &str,
     argument: &ftd::interpreter2::Argument,
@@ -645,7 +645,7 @@ pub(crate) fn find_properties_by_source(
 
     let mut properties = properties
         .iter()
-        .filter(|v| source.iter().any(|s| v.source.is_equal(s)))
+        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
         .map(ToOwned::to_owned)
         .collect_vec();
 

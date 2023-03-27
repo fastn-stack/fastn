@@ -917,6 +917,16 @@ impl Property {
             }
         }
     }
+
+    pub(crate) fn get_local_argument(&self, component_name: &str) -> Option<String> {
+        if let Some(reference) = self.value.get_reference_or_clone() {
+            if let Some(reference) = reference.strip_prefix(format!("{}.", component_name).as_str())
+            {
+                return Some(reference.to_string());
+            }
+        }
+        return None;
+    }
 }
 
 fn search_things_for_module(

@@ -539,3 +539,54 @@ pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -
     }
     s.to_string()
 }
+
+pub(crate) fn get_evaluated_property(
+    target_property: &ftd::interpreter2::Property,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    component_name: &str,
+    doc_name: &str,
+    line_number: usize,
+) -> ftd::executor::Result<Option<ftd::interpreter2::Property>> {
+    let key = if let Some(key) = target_property.get_local_argument(component_name) {
+        key
+    } else {
+        return Ok(Some(target_property.to_owned()));
+    };
+
+    let argument = arguments.iter().find(|v| v.name.eq(key.as_str())).ok_or(
+        ftd::executor::Error::ParseError {
+            message: format!("Cannot find `{}` argument", key),
+            doc_id: doc_name.to_string(),
+            line_number,
+        },
+    )?;
+    let sources = argument.to_sources();
+    if let Some(property) = ftd::interpreter2::utils::find_properties_by_source(
+        sources.as_slice(),
+        properties,
+        doc_name,
+        argument,
+        line_number,
+    )?
+    .into_iter()
+    .find(|v| v.condition.is_none())
+    {
+        get_evaluated_property(
+            &property,
+            properties,
+            arguments,
+            component_name,
+            doc_name,
+            line_number,
+        )
+    } else if argument.kind.is_optional() || argument.kind.is_list() {
+        Ok(None)
+    } else {
+        ftd::executor::utils::parse_error(
+            format!("Expected Value for `{}`", key).as_str(),
+            doc_name,
+            line_number,
+        )
+    }
+}

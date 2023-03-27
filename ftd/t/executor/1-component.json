@@ -760,6 +760,11 @@
       "value": null,
       "line_number": null,
       "properties": []
+    },
+    "og_title": {
+      "value": null,
+      "line_number": null,
+      "properties": []
     }
   },
   "dummy_instructions": {
