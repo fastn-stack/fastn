@@ -91,12 +91,9 @@ impl ftd::interpreter2::Kind {
         match self {
             ftd::interpreter2::Kind::OrType {
                 name,
-                variant: Some(variant),
                 ..
             } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
-                ftd::executor::Length::get_pattern_from_variant_str(variant.as_str(), doc_id, 0)
-                    .ok()
-                    .map(|v| (v.to_string(), false))
+                None
             }
             ftd::interpreter2::Kind::OrType {
                 name,

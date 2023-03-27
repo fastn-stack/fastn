@@ -364,7 +364,7 @@ impl ftd::interpreter2::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSON.stringify({}).replace(\"\"\",\"\")", pattern, value))
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
                         } else {
                             Some(value)
                         }
@@ -379,7 +379,7 @@ impl ftd::interpreter2::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSON.stringify({})).replace(\"\"\",\"\")", pattern, value))
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
                         } else {
                             Some(value)
                         }
