@@ -1069,7 +1069,7 @@ impl Background {
 
     pub fn background_image_pattern() -> (String, bool) {
         (
-            format!(indoc::indoc! {"
+            indoc::indoc! {"
                 let bg = {{0}};
                 if (typeof bg === 'object' && \"src\" in bg) {{
                     let img_src = bg.src;
@@ -1085,7 +1085,7 @@ impl Background {
                 }} else {{
                     null
                 }}
-            "},),
+            "}.to_string(),
             true,
         )
     }
@@ -1165,16 +1165,14 @@ pub enum BackgroundRepeat {
 }
 
 impl BackgroundRepeat {
-
     fn from_optional_value(
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<BackgroundRepeat>>
-    {
+    ) -> ftd::executor::Result<Option<BackgroundRepeat>> {
         match value.value(doc.name, line_number)? {
-            ftd::interpreter2::Value::Optional{ data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(BackgroundRepeat::from_value(value, doc, line_number)?))
+            ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
+            _ => Ok(Some(BackgroundRepeat::from_value(value, doc, line_number)?)),
         }
     }
 
@@ -1233,16 +1231,14 @@ pub enum BackgroundSize {
 }
 
 impl BackgroundSize {
-
     fn from_optional_value(
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<BackgroundSize>>
-    {
+    ) -> ftd::executor::Result<Option<BackgroundSize>> {
         match value.value(doc.name, line_number)? {
-            ftd::interpreter2::Value::Optional{ data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(BackgroundSize::from_value(value, doc, line_number)?))
+            ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
+            _ => Ok(Some(BackgroundSize::from_value(value, doc, line_number)?)),
         }
     }
 
@@ -1305,16 +1301,18 @@ pub enum BackgroundPosition {
 }
 
 impl BackgroundPosition {
-
     fn from_optional_value(
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<BackgroundPosition>>
-    {
+    ) -> ftd::executor::Result<Option<BackgroundPosition>> {
         match value.value(doc.name, line_number)? {
-            ftd::interpreter2::Value::Optional{ data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(BackgroundPosition::from_value(value, doc, line_number)?))
+            ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
+            _ => Ok(Some(BackgroundPosition::from_value(
+                value,
+                doc,
+                line_number,
+            )?)),
         }
     }
 

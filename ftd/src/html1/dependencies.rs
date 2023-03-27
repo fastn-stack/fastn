@@ -671,10 +671,7 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if ftd::html1::utils::is_dark_mode_dependent(
-                    &property.value,
-                    self.doc
-                )? {
+                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =

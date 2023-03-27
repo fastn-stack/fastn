@@ -1582,12 +1582,12 @@ window.node_change_main["0,1:main__text-indent"] = function(data) {
 if(function(){
 return (resolve_reference("foo#show-indent:count:0", data)%3==1);
 }()){
-document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20).replace(""","")));
+document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}px`.format(JSON.stringify(20));
 }
 else if(function(){
 return (resolve_reference("foo#show-indent:count:0", data)%3==2);
 }()){
-document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(30).replace(""","")));
+document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = `{0}px`.format(JSON.stringify(30));
 }
 else { document.querySelector(`[data-id="0,1:main"]`).style["text-indent"] = null }
 }
