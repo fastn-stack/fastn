@@ -1594,20 +1594,20 @@ window.node_change_main["1:main__padding"] = function(data) {
 if(function(){
 return (resolve_reference("foo#g", data)%2==0);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(4));
 }
 else if(function(){
 return (resolve_reference("foo#g", data)>10);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(20));
 }
 else if(function(){
 let f = resolve_reference("foo#g", data)+1;
 return (f>4);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":[["a",{"mutable":false,"reference":"foo#g"}]]}', this)))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":[["a",{"mutable":false,"reference":"foo#g"}]]}', this)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));}
+else {document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(2));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#g"] = function (data, new_value, remaining) {

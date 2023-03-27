@@ -1590,18 +1590,18 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(resolve_reference("foo#value", data)))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(resolve_reference("foo#value", data)));
 }
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSON.stringify(resolve_reference("foo#len", data)));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#len", data);
 }
 window.node_change_main["3:main__padding"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(20))));
+document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}%`.format(JSON.stringify(20));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}`.format(JSON.stringify(resolve_reference("foo#len", data)));}
+else {document.querySelector(`[data-id="3:main"]`).style["padding"] = resolve_reference("foo#len", data);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {

@@ -1653,38 +1653,38 @@ else {document.querySelector(`[data-id="1,0:main"]`).style["background-color"] =
 
 window.node_change_main["1,0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).light)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("ftd#default-colors.background.step-1", data).dark)));}
 }
 
@@ -1958,38 +1958,38 @@ else {document.querySelector(`[data-id="1,1:main"]`).style["background-color"] =
 
 window.node_change_main["1,1:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).light)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#code-bg-dark", data).dark)));}
 }
 
@@ -2078,7 +2078,7 @@ window.node_change_main["1,1:main__border-top-left-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,1:main"]`).style["border-top-left-radius"] = null }
 }
@@ -2087,7 +2087,7 @@ window.node_change_main["1,1:main__border-top-right-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,1:main"]`).style["border-top-right-radius"] = null }
 }
@@ -2150,7 +2150,7 @@ window.node_change_main["1,2:main__border-bottom-left-radius"] = function(data) 
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-left-radius"] = null }
 }
@@ -2159,7 +2159,7 @@ window.node_change_main["1,2:main__border-bottom-right-radius"] = function(data)
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-bottom-right-radius"] = null }
 }
@@ -2175,7 +2175,7 @@ window.node_change_main["1,2:main__border-top-left-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-top-left-radius"] = null }
 }
@@ -2184,7 +2184,7 @@ window.node_change_main["1,2:main__border-top-right-radius"] = function(data) {
 if(function(){
 return (resolve_reference("foo#code:caption:1", data)==null);
 }()){
-document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(4))));
+document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = `{0}px`.format(JSON.stringify(4));
 }
 else { document.querySelector(`[data-id="1,2:main"]`).style["border-top-right-radius"] = null }
 }

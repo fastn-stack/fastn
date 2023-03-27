@@ -1623,38 +1623,38 @@ else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = r
 
 window.node_change_main["0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#step-2", data).light)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#step-2", data).dark)));}
 }
 
@@ -1830,38 +1830,38 @@ else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-col
 
 window.node_change_main["0,1,0,0,0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#step-1", data).light)));
 }
-else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = eval(`let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-image"] = eval(`let bg = {{0}};
+if (typeof bg === 'object' && "src" in bg) {{
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
 "url(" + img_src.light + ")"
-}
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+}}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
 "url(" + img_src.dark + ")"
-}
-else {
+}}
+else {{
 null
-}
-} else {
+}}
+}} else {{
 null
-}
+}}
 `.format(JSON.stringify(resolve_reference("foo#step-1", data).dark)));}
 }
 

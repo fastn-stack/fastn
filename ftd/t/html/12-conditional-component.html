@@ -1601,7 +1601,7 @@ window.node_change_main["0:main__padding"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(50))));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(50));
 }
 else { document.querySelector(`[data-id="0:main"]`).style["padding"] = null }
 }
