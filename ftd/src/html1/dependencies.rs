@@ -577,7 +577,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
             let style_key = key.clone();
-            if key == "background-image" || key == "box-shadow" {
+            if matches!(key.as_str(), "background-image" | "box-shadow") {
                 var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
             }
             let key = format!(
