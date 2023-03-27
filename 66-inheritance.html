@@ -2485,14 +2485,17 @@ data[argument] = eval(component.getAttribute(argument));
 return data;
 };
 exports.call_mutable_value_changes = function (key, id) {
-if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+if (!window.ftd[`mutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`mutable_value_${id}`][key]) {
 let changes = window.ftd[`mutable_value_${id}`][key].changes;
 for (let i in changes) {
 changes[i]();
 }
 }
 const pattern = new RegExp(`^${key}\\..+`);
-const result = Object.keys(window.ftd.mutable_value_main)
+const result = Object.keys(window.ftd[`mutable_value_${id}`])
 .filter(key => pattern.test(key))
 .reduce((acc, key) => {
 acc[key] = window.ftd[`mutable_value_${id}`][key];
@@ -2506,14 +2509,17 @@ changes[i]();
 }
 };
 exports.call_immutable_value_changes = function (key, id) {
-if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+if (!window.ftd[`immutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`immutable_value_${id}`][key]) {
 let changes = window.ftd[`immutable_value_${id}`][key].changes;
 for (let i in changes) {
 changes[i]();
 }
 }
 const pattern = new RegExp(`^${key}\\..+`);
-const result = Object.keys(window.ftd.immutable_value_main)
+const result = Object.keys(window.ftd[`immutable_value_${id}`])
 .filter(key => pattern.test(key))
 .reduce((acc, key) => {
 acc[key] = window.ftd[`immutable_value_${id}`][key];
@@ -3195,11 +3201,11 @@ set_data_value(data, "foo#green", new_value);
 
 window.ftd.call_mutable_value_changes("foo#green", "main");
 window.ftd.call_immutable_value_changes("foo#green", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__color"]){window.node_change_main["1,1:main__color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__border-color"]){window.node_change_main["0,0:main__border-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__color"]){window.node_change_main["1,1:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
 }
@@ -3231,41 +3237,41 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__background-color"]){window.node_change_main["0,1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__color"]){window.node_change_main["1,1:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__background-color"]){window.node_change_main["2:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-image"]){window.node_change_main["0,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__background-image"]){window.node_change_main["0,1:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-color"]){window.node_change_main["2:main__border-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__background-image"]){window.node_change_main["2:main__background-image"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__border-color"]){window.node_change_main["0,0:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__background-image"]){window.node_change_main["0,1:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__background-color"]){window.node_change_main["0,1:main__background-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-image"]){window.node_change_main["0,0:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__border-color"]){window.node_change_main["0,0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__background-color"]){window.node_change_main["2:main__background-color"](data);
 }
 };
 

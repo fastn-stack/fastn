@@ -1062,14 +1062,17 @@ data[argument] = eval(component.getAttribute(argument));
 return data;
 };
 exports.call_mutable_value_changes = function (key, id) {
-if (!!window.ftd[`mutable_value_${id}`] && !!window.ftd[`mutable_value_${id}`][key]) {
+if (!window.ftd[`mutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`mutable_value_${id}`][key]) {
 let changes = window.ftd[`mutable_value_${id}`][key].changes;
 for (let i in changes) {
 changes[i]();
 }
 }
 const pattern = new RegExp(`^${key}\\..+`);
-const result = Object.keys(window.ftd.mutable_value_main)
+const result = Object.keys(window.ftd[`mutable_value_${id}`])
 .filter(key => pattern.test(key))
 .reduce((acc, key) => {
 acc[key] = window.ftd[`mutable_value_${id}`][key];
@@ -1083,14 +1086,17 @@ changes[i]();
 }
 };
 exports.call_immutable_value_changes = function (key, id) {
-if (!!window.ftd[`immutable_value_${id}`] && !!window.ftd[`immutable_value_${id}`][key]) {
+if (!window.ftd[`immutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`immutable_value_${id}`][key]) {
 let changes = window.ftd[`immutable_value_${id}`][key].changes;
 for (let i in changes) {
 changes[i]();
 }
 }
 const pattern = new RegExp(`^${key}\\..+`);
-const result = Object.keys(window.ftd.immutable_value_main)
+const result = Object.keys(window.ftd[`immutable_value_${id}`])
 .filter(key => pattern.test(key))
 .reduce((acc, key) => {
 acc[key] = window.ftd[`immutable_value_${id}`][key];
@@ -1660,11 +1666,11 @@ window.ftd.call_mutable_value_changes("foo#ages", "main");
 window.ftd.call_immutable_value_changes("foo#ages", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__text"]){window.node_change_main["6:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__text"]){window.node_change_main["4:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__text"]){window.node_change_main["5:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__text"]){window.node_change_main["4:main__text"](data);
 }
 };
 
@@ -1677,11 +1683,11 @@ set_data_value(data, "foo#new-persons", new_value);
 
 window.ftd.call_mutable_value_changes("foo#new-persons", "main");
 window.ftd.call_immutable_value_changes("foo#new-persons", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
