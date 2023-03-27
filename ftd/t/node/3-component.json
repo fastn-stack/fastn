@@ -226,10 +226,7 @@
                   "condition": null,
                   "line_number": 4
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 4,
@@ -382,10 +379,7 @@
                       },
                       "line_number": 7
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   },
                   {
                     "property": {
@@ -422,10 +416,7 @@
                       "condition": null,
                       "line_number": 8
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 7,
@@ -615,10 +606,7 @@
                       },
                       "line_number": 11
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   },
                   {
                     "property": {
@@ -655,10 +643,7 @@
                       "condition": null,
                       "line_number": 12
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 12,

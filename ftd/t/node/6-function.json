@@ -259,10 +259,7 @@
                   "condition": null,
                   "line_number": 39
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 39,
@@ -477,10 +474,7 @@
                   "condition": null,
                   "line_number": 42
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 42,
@@ -685,10 +679,7 @@
                   "condition": null,
                   "line_number": 45
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 45,
