@@ -925,7 +925,7 @@ impl Property {
                 return Some(reference.to_string());
             }
         }
-        return None;
+        None
     }
 }
 
