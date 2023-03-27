@@ -1,5 +1,3 @@
-use ftd::p1::to_string;
-
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -1074,21 +1072,21 @@ impl Background {
     pub fn background_image_pattern() -> (String, bool) {
         (
             r#"
-                let bg = {{0}};
-                if (typeof bg === 'object' && "src" in bg) {{
+                let bg = {0};
+                if (typeof bg === 'object' && "src" in bg) {
                     let img_src = bg.src;
-                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {{
+                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
                         "url(" + img_src.light + ")"
-                    }}
-                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){{
+                    }
+                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
                         "url(" + img_src.dark + ")"
-                    }}
-                    else {{
+                    }
+                    else {
                         null
-                    }}
-                }} else {{
+                    }
+                } else {
                     null
-                }}
+                }
             "#.to_string(),
             true,
         )
@@ -1097,13 +1095,14 @@ impl Background {
     pub fn background_repeat_pattern() -> (String, bool) {
         (
             r#"
-                let bg = {{0}};
-                if (typeof bg === 'object' && "repeat" in bg) {{
+                let bg = {0};
+                if (typeof bg === 'object' && "repeat" in bg) {
                     bg.repeat
-                }} else {{
+                } else {
                     null
-                }}
-            "#.to_string(),
+                }
+            "#
+            .to_string(),
             true,
         )
     }
@@ -1111,19 +1110,20 @@ impl Background {
     pub fn background_size_pattern() -> (String, bool) {
         (
             r#"
-                let bg = {{0}};
-                if (typeof bg === 'object' && "size" in bg) {{
+                let bg = {0};
+                if (typeof bg === 'object' && "size" in bg) {
                     let sz = bg.size;
-                    if (typeof sz === 'object' && "x" in sz && "y" in sz) {{
+                    if (typeof sz === 'object' && "x" in sz && "y" in sz) {
                         sz.x + " " + sz.y
-                    }}
-                    else {{
+                    }
+                    else {
                         sz
-                    }}
-                }} else {{
+                    }
+                } else {
                     null
-                }}
-            "#.to_string(),
+                }
+            "#
+            .to_string(),
             true,
         )
     }
@@ -1131,19 +1131,20 @@ impl Background {
     pub fn background_position_pattern() -> (String, bool) {
         (
             r#"
-                let bg = {{0}};
-                if (typeof bg === 'object' && "position" in bg) {{
+                let bg = {0};
+                if (typeof bg === 'object' && "position" in bg) {
                     let pos = bg.position;
-                    if (typeof pos === 'object' && "x" in pos && "y" in pos) {{
+                    if (typeof pos === 'object' && "x" in pos && "y" in pos) {
                         pos.x + " " + pos.y
-                    }}
-                    else {{
+                    }
+                    else {
                         pos.replace("-", " ")
-                    }}
-                }} else {{
+                    }
+                } else {
                     null
-                }}
-            "#.to_string(),
+                }
+            "#
+            .to_string(),
             true,
         )
     }
@@ -1492,11 +1493,7 @@ impl Shadow {
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(Self::from_values(
-                value,
-                doc,
-                line_number,
-            )?))
+            Ok(Some(Self::from_values(value, doc, line_number)?))
         } else {
             Ok(None)
         }
