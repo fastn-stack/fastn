@@ -19,6 +19,7 @@ pub struct Node {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct HTMLData {
     pub title: ftd::node::Value,
+    pub og_title: ftd::node::Value,
 }
 
 impl ftd::executor::HTMLData {
@@ -27,6 +28,12 @@ impl ftd::executor::HTMLData {
             title: ftd::node::Value::from_executor_value(
                 self.title.value.to_owned(),
                 self.title.to_owned(),
+                None,
+                doc_id,
+            ),
+            og_title: ftd::node::Value::from_executor_value(
+                self.og_title.value.to_owned(),
+                self.og_title.to_owned(),
                 None,
                 doc_id,
             ),

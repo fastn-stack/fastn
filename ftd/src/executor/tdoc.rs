@@ -109,7 +109,6 @@ impl<'a> TDoc<'a> {
                 map.insert(k, (v, has_self_reference));
             }
         }
-
         let resolved_map = self.resolve_self_referenced_values(component_name, &map)?;
         Ok(resolved_map)
     }

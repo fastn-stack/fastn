@@ -29,6 +29,7 @@ impl<T> Value<T> {
 
 pub(crate) fn get_value_from_properties_using_key_and_arguments(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -36,6 +37,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
     get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -47,6 +49,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 
 pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -63,17 +66,19 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
                 doc_id: doc.name.to_string(),
                 line_number,
             })?;
-
     let sources = argument.to_sources();
+
     let ftd::executor::Value {
         line_number: v_line_number,
         properties,
         value,
     } = find_value_by_argument(
+        component_name,
         sources.as_slice(),
         properties,
         doc,
         argument,
+        arguments,
         line_number,
         is_dummy,
         inherited_variables,
@@ -97,21 +102,42 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
 }
 
 pub(crate) fn find_value_by_argument(
+    component_name: &str,
     source: &[ftd::interpreter2::PropertySource],
     properties: &[ftd::interpreter2::Property],
     doc: &ftd::executor::TDoc,
-    argument: &ftd::interpreter2::Argument,
+    target_argument: &ftd::interpreter2::Argument,
+    arguments: &[ftd::interpreter2::Argument],
     line_number: usize,
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
-    let properties = ftd::interpreter2::utils::find_properties_by_source(
-        source,
-        properties,
-        doc.name,
-        argument,
-        line_number,
-    )?;
+    let properties = {
+        let new_properties = ftd::interpreter2::utils::find_properties_by_source(
+            source,
+            properties,
+            doc.name,
+            target_argument,
+            line_number,
+        )?;
+
+        let mut evaluated_property = vec![];
+
+        for p in new_properties.iter() {
+            if let Some(property) = ftd::executor::utils::get_evaluated_property(
+                p,
+                properties,
+                arguments,
+                component_name,
+                doc.name,
+                p.line_number,
+            )? {
+                evaluated_property.push(property);
+            }
+        }
+
+        evaluated_property
+    };
 
     let mut value = None;
     let mut line_number = None;
@@ -149,6 +175,7 @@ pub(crate) fn find_value_by_argument(
 
 pub fn string_list(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -157,6 +184,7 @@ pub fn string_list(
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<String>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -196,6 +224,7 @@ pub fn string_list(
 #[allow(dead_code)]
 pub fn string(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -203,6 +232,7 @@ pub fn string(
 ) -> ftd::executor::Result<ftd::executor::Value<String>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -225,6 +255,7 @@ pub fn string(
 
 pub fn record(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -233,6 +264,7 @@ pub fn record(
 ) -> ftd::executor::Result<ftd::executor::Value<ftd::Map<ftd::interpreter2::PropertyValue>>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -256,6 +288,7 @@ pub fn record(
 
 pub fn i64(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -263,6 +296,7 @@ pub fn i64(
 ) -> ftd::executor::Result<ftd::executor::Value<i64>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -285,6 +319,7 @@ pub fn i64(
 
 pub fn f64(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -292,6 +327,7 @@ pub fn f64(
 ) -> ftd::executor::Result<ftd::executor::Value<f64>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -314,6 +350,7 @@ pub fn f64(
 
 pub fn bool(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -321,6 +358,7 @@ pub fn bool(
 ) -> ftd::executor::Result<ftd::executor::Value<bool>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -343,6 +381,7 @@ pub fn bool(
 
 pub fn bool_with_default(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     default: bool,
@@ -351,6 +390,7 @@ pub fn bool_with_default(
 ) -> ftd::executor::Result<ftd::executor::Value<bool>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -379,6 +419,7 @@ pub fn bool_with_default(
 #[allow(dead_code)]
 pub fn optional_i64(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -387,6 +428,7 @@ pub fn optional_i64(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<i64>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -416,6 +458,7 @@ pub fn optional_i64(
 
 pub fn string_with_default(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     default: &str,
@@ -424,6 +467,7 @@ pub fn string_with_default(
 ) -> ftd::executor::Result<ftd::executor::Value<String>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -451,6 +495,7 @@ pub fn string_with_default(
 
 pub fn optional_string(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -458,6 +503,7 @@ pub fn optional_string(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -485,6 +531,7 @@ pub fn optional_string(
 
 pub fn dummy_optional_string(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -494,6 +541,7 @@ pub fn dummy_optional_string(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -523,6 +571,7 @@ pub fn dummy_optional_string(
 
 pub fn optional_bool(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -531,6 +580,7 @@ pub fn optional_bool(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<bool>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -561,6 +611,7 @@ pub fn optional_bool(
 #[allow(dead_code)]
 pub fn optional_f64(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -568,6 +619,7 @@ pub fn optional_f64(
 ) -> ftd::executor::Result<ftd::executor::Value<Option<f64>>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -595,6 +647,7 @@ pub fn optional_f64(
 
 pub fn optional_record_inherited(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -605,6 +658,7 @@ pub fn optional_record_inherited(
 {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -635,6 +689,7 @@ pub fn optional_record_inherited(
 
 pub fn optional_or_type(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -645,6 +700,7 @@ pub fn optional_or_type(
 {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,
@@ -682,6 +738,7 @@ pub fn optional_or_type(
 
 pub fn optional_or_type_list(
     key: &str,
+    component_name: &str,
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
@@ -691,6 +748,7 @@ pub fn optional_or_type_list(
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, ftd::interpreter2::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
+        component_name,
         properties,
         arguments,
         doc,

@@ -1636,7 +1636,7 @@ window.node_change_main["og_document__title"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
-document.head.querySelector('meta[property="og:title"]').content = "MY TITLE";
+document.head.querySelector('meta[property="og:title"]').content = "MY OG TITLE";
 }
 else {document.head.querySelector('meta[property="og:title"]').content = "My title";}
 }
