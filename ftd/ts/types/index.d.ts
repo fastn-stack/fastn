@@ -31,6 +31,8 @@ declare global {
         component_data(component: HTMLElement): any;
         create_list(array_name: string, id: string): void;
         delete_list(array_name: string, id: string): void;
+        call_mutable_value_changes(key: string, id: string): void;
+        call_immutable_value_changes(key: string, id: string): void;
     }
 
     interface String {

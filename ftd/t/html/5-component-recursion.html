@@ -1072,6 +1072,54 @@ data[argument] = eval(component.getAttribute(argument));
 }
 return data;
 };
+exports.call_mutable_value_changes = function (key, id) {
+if (!window.ftd[`mutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`mutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!window.ftd[`immutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`immutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1616,14 +1664,8 @@ set_data_value(data, "foo#print-toc-item:name:0" + "." + remaining, new_value);
 set_data_value(data, "foo#print-toc-item:name:0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#print-toc-item:name:0"]) {
-let changes = window.ftd.mutable_value_main["foo#print-toc-item:name:0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#print-toc-item:name:0"]) {
-let changes = window.ftd.immutable_value_main["foo#print-toc-item:name:0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#print-toc-item:name:0", "main");
+window.ftd.call_immutable_value_changes("foo#print-toc-item:name:0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 };
@@ -1635,14 +1677,8 @@ set_data_value(data, "foo#print-toc-item:name:0,1" + "." + remaining, new_value)
 set_data_value(data, "foo#print-toc-item:name:0,1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#print-toc-item:name:0,1"]) {
-let changes = window.ftd.mutable_value_main["foo#print-toc-item:name:0,1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#print-toc-item:name:0,1"]) {
-let changes = window.ftd.immutable_value_main["foo#print-toc-item:name:0,1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#print-toc-item:name:0,1", "main");
+window.ftd.call_immutable_value_changes("foo#print-toc-item:name:0,1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,1,0:main__text"]){window.node_change_main["0,1,0:main__text"](data);
 }
 };
@@ -1654,14 +1690,8 @@ set_data_value(data, "foo#print-toc-item:name:0,2" + "." + remaining, new_value)
 set_data_value(data, "foo#print-toc-item:name:0,2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#print-toc-item:name:0,2"]) {
-let changes = window.ftd.mutable_value_main["foo#print-toc-item:name:0,2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#print-toc-item:name:0,2"]) {
-let changes = window.ftd.immutable_value_main["foo#print-toc-item:name:0,2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#print-toc-item:name:0,2", "main");
+window.ftd.call_immutable_value_changes("foo#print-toc-item:name:0,2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,2,0:main__text"]){window.node_change_main["0,2,0:main__text"](data);
 }
 };
@@ -1673,14 +1703,8 @@ set_data_value(data, "foo#print-toc-item:name:0,2,1" + "." + remaining, new_valu
 set_data_value(data, "foo#print-toc-item:name:0,2,1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#print-toc-item:name:0,2,1"]) {
-let changes = window.ftd.mutable_value_main["foo#print-toc-item:name:0,2,1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#print-toc-item:name:0,2,1"]) {
-let changes = window.ftd.immutable_value_main["foo#print-toc-item:name:0,2,1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#print-toc-item:name:0,2,1", "main");
+window.ftd.call_immutable_value_changes("foo#print-toc-item:name:0,2,1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,2,1,0:main__text"]){window.node_change_main["0,2,1,0:main__text"](data);
 }
 };

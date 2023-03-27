@@ -1250,7 +1250,7 @@ impl<'a> TDoc<'a> {
                         Some(ftd::interpreter2::PropertyValue::Value {
                             value: val,
                             line_number,
-                            is_mutable,
+                            ..
                         }) => ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                             name,
                             kind: ftd::interpreter2::KindData {
@@ -1258,11 +1258,11 @@ impl<'a> TDoc<'a> {
                                 caption: false,
                                 body: false,
                             },
-                            mutable: false,
+                            mutable,
                             value: ftd::interpreter2::PropertyValue::Value {
                                 value: val.to_owned(),
                                 line_number: *line_number,
-                                is_mutable: *is_mutable,
+                                is_mutable: mutable,
                             },
                             conditional_value: vec![],
                             line_number: *line_number,
