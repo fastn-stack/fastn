@@ -2154,14 +2154,8 @@ set_data_value(data, "foo#button:cta:1,0" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:1,0", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:1,0"]) {
-let changes = window.ftd.mutable_value_main["foo#button:cta:1,0"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:1,0"]) {
-let changes = window.ftd.immutable_value_main["foo#button:cta:1,0"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#button:cta:1,0", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:1,0", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
 };
@@ -2173,14 +2167,8 @@ set_data_value(data, "foo#button:cta:1,1" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:1,1", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:1,1"]) {
-let changes = window.ftd.mutable_value_main["foo#button:cta:1,1"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:1,1"]) {
-let changes = window.ftd.immutable_value_main["foo#button:cta:1,1"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#button:cta:1,1", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:1,1", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
 }
 };
@@ -2192,14 +2180,8 @@ set_data_value(data, "foo#button:cta:1,2" + "." + remaining, new_value);
 set_data_value(data, "foo#button:cta:1,2", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#button:cta:1,2"]) {
-let changes = window.ftd.mutable_value_main["foo#button:cta:1,2"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#button:cta:1,2"]) {
-let changes = window.ftd.immutable_value_main["foo#button:cta:1,2"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#button:cta:1,2", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:1,2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
 }
 };
@@ -2211,14 +2193,8 @@ set_data_value(data, "foo#mouse-entered" + "." + remaining, new_value);
 set_data_value(data, "foo#mouse-entered", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#mouse-entered"]) {
-let changes = window.ftd.mutable_value_main["foo#mouse-entered"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#mouse-entered"]) {
-let changes = window.ftd.immutable_value_main["foo#mouse-entered"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#mouse-entered", "main");
+window.ftd.call_immutable_value_changes("foo#mouse-entered", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
 }
 };
@@ -2230,14 +2206,8 @@ set_data_value(data, "foo#some-other-shadow" + "." + remaining, new_value);
 set_data_value(data, "foo#some-other-shadow", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["foo#some-other-shadow"]) {
-let changes = window.ftd.mutable_value_main["foo#some-other-shadow"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["foo#some-other-shadow"]) {
-let changes = window.ftd.immutable_value_main["foo#some-other-shadow"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("foo#some-other-shadow", "main");
+window.ftd.call_immutable_value_changes("foo#some-other-shadow", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
 }
 };
@@ -2251,6 +2221,19 @@ set_data_value(data, "foo#some-shadow", new_value);
 
 window.ftd.call_mutable_value_changes("foo#some-shadow", "main");
 window.ftd.call_immutable_value_changes("foo#some-shadow", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
