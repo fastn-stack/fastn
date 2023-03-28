@@ -1040,7 +1040,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.shadow.value.as_ref().map(|v| v.to_css_string()),
                 self.shadow.to_owned(),
-                None,
+                Some(ftd::executor::Shadow::box_shadow_pattern()),
                 doc_id,
             ),
         );
@@ -1182,10 +1182,49 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_css_string()))
+                    .map(|v| v.map(|v| v.to_image_src_css_string()))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_image_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "background-repeat",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_repeat_css_string()))
+                    .value,
+                self.background.to_owned(),
+                Some(ftd::executor::Background::background_repeat_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "background-size",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_size_css_string()))
+                    .value,
+                self.background.to_owned(),
+                Some(ftd::executor::Background::background_size_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "background-position",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_image_position_css_string()))
+                    .value,
+                self.background.to_owned(),
+                Some(ftd::executor::Background::background_position_pattern()),
                 doc_id,
             ),
         );

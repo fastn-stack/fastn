@@ -1,24 +1,98 @@
+-- boolean $mouse-entered: false
+
 -- show-shadow:
 
--- ftd.color c:
+-- ftd.color c1:
 light: green
 dark: red
+
+-- ftd.color c2:
+light: blue
+dark: yellow
+
+;; Shadow properties
+;; x-offset: ftd.length
+;; y-offset: ftd.length
+;; spread: ftd.length
+;; blur: ftd.length
+;; inset: boolean
+;; color: ftd.color
+
+-- ftd.shadow some-other-shadow:
+y-offset.px: -10
+x-offset.px: 5
+spread.px: 1
+color: $c1
 
 -- ftd.shadow some-shadow:
 y-offset.px: -5
 x-offset.px: 10
 spread.px: 3
 blur.px: 1
-color: $c
+color: $c2
 
 -- component show-shadow:
 
 -- ftd.column:
 margin.px: 50
 shadow: $some-shadow
+shadow if { mouse-entered }: $some-other-shadow
+$on-mouse-enter$: $ftd.set-bool($a = $mouse-entered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $mouse-entered, v = false)
 
 -- ftd.text: Testing shadow
 
 -- end: ftd.column
 
 -- end: show-shadow
+
+-- dark-mode-switcher:
+
+
+-- component dark-mode-switcher:
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- button: Dark Mode
+color: #2dd4bf
+$on-click$: $ftd.enable-dark-mode()
+
+
+-- button: Light Mode
+color: #4fb2df
+$on-click$: $ftd.enable-light-mode()
+
+
+-- button: System Mode
+color: #df894f
+$on-click$: $ftd.enable-system-mode()
+
+
+-- end: ftd.row
+
+-- end: dark-mode-switcher
+
+
+
+
+
+
+
+
+-- component button:
+ftd.color color:
+caption cta:
+
+-- ftd.text: $button.cta
+padding-horizontal.px: 16
+padding-vertical.px: 12
+background.solid: $button.color
+border-radius.px: 2
+color: white
+width.fixed.px: 132
+text-align: center
+
+
+-- end: button

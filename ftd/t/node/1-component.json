@@ -226,10 +226,7 @@
                   "condition": null,
                   "line_number": 2
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 2,
@@ -352,10 +349,7 @@
                       "condition": null,
                       "line_number": 5
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 5,
@@ -510,10 +504,7 @@
                       "condition": null,
                       "line_number": 8
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 8,
@@ -703,10 +694,7 @@
                   "condition": null,
                   "line_number": 14
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 14,
@@ -829,10 +817,7 @@
                       "condition": null,
                       "line_number": 17
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 17,
@@ -987,10 +972,7 @@
                       "condition": null,
                       "line_number": 20
                     },
-                    "pattern_with_eval": [
-                      "{0}",
-                      false
-                    ]
+                    "pattern_with_eval": null
                   }
                 ],
                 "line_number": 20,
@@ -1158,10 +1140,7 @@
                   "condition": null,
                   "line_number": 26
                 },
-                "pattern_with_eval": [
-                  "{0}",
-                  false
-                ]
+                "pattern_with_eval": null
               }
             ],
             "line_number": 26,

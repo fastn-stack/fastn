@@ -1633,29 +1633,29 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__align-items"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
+document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.left" || {0} == "ftd#align.bottom-left") {
 "start"
-} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
+} else if ({0} == "ftd#align.top-center" || {0} == "ftd#align.center" || {0} == "ftd#align.bottom-center") {
 "center"
-} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.top-right" || {0} == "ftd#align.right" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
+`.format(JSON.stringify(resolve_reference("foo#foo:align:1", data))));
 }
 
 window.node_change_main["1:main__justify-content"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.top-center" || {0} == "ftd#align.top-right") {
 "start"
-} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
+} else if ({0} == "ftd#align.left" || {0} == "ftd#align.center" || {0} == "ftd#align.right") {
 "center"
-} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
+} else if ({0} == "ftd#align.bottom-left" || {0} == "ftd#align.bottom-center" || {0} == "ftd#align.bottom-right") {
 "end"
 } else {
 null
 }
-`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
+`.format(JSON.stringify(resolve_reference("foo#foo:align:1", data))));
 }
 
 window.node_change_main["1:main__width"] = function(data) {
@@ -1664,14 +1664,14 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["width"] = resolve_reference("foo#foo:resize:1", data);
 }
-else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(resolve_reference("foo#foo:px:1", data)))));}
 }
 
 window.node_change_main["1,0:main__height"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(resolve_reference("foo#foo:px:1", data)))));
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = resolve_reference("foo#foo:resize:1", data);}
 }
@@ -1777,9 +1777,9 @@ window.resolve_value_main["foo#foo:resize:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
 }
-else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
 
 }
 

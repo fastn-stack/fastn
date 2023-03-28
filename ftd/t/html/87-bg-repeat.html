@@ -6,6 +6,35 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#bg": {
+"position": "center-top",
+"repeat": "no-repeat",
+"size": "contain",
+"src": {
+"dark": "https://images.unsplash.com/photo-1616020453784-a24fa9845b05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXBsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+"light": "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+}
+},
+"foo#button:color:2,0": {
+"dark": "#2dd4bf",
+"light": "#2dd4bf"
+},
+"foo#button:color:2,1": {
+"dark": "#4fb2df",
+"light": "#4fb2df"
+},
+"foo#button:color:2,2": {
+"dark": "#df894f",
+"light": "#df894f"
+},
+"foo#button:cta:2,0": "Dark Mode",
+"foo#button:cta:2,1": "Light Mode",
+"foo#button:cta:2,2": "System Mode",
+"foo#flag": 0,
+"foo#img": {
+"dark": "https://images.unsplash.com/photo-1616020453784-a24fa9845b05?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHNhbXBsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+"light": "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -529,17 +558,6 @@
 
 </script>
 <style>
-* {
-padding: 0;
-margin: 0;
-gap: 0px;
-}
-pre {
-white-space: break-spaces;
-}
-*, :after, :before {
-box-sizing: inherit;
-}
 *, :after, :before {
 box-sizing: inherit;
 }
@@ -705,7 +723,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">This file exists, so README.md should be rendered as README/index.html</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="align-items: start; background-image: url(https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg); background-position: center top; background-repeat: no-repeat; background-size: contain; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: 150px; justify-content: start; text-decoration: none; width: 150px" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); height: auto; text-decoration: none; width: auto" class="ft_md">Hello Image</div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; text-decoration: none; width: 100%" ><div data-id="2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_dark_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(45,212,191,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">Dark Mode</div><div data-id="2,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_light_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(79,178,223,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">Light Mode</div><div data-id="2,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_system_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(223,137,79,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">System Mode</div></div></div>
 
 
 <script>
@@ -1060,6 +1078,54 @@ let argument = component.getAttributeNames()[idx];
 data[argument] = eval(component.getAttribute(argument));
 }
 return data;
+};
+exports.call_mutable_value_changes = function (key, id) {
+if (!window.ftd[`mutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`mutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!window.ftd[`immutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`immutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
 };
 return exports;
 })();
@@ -1516,7 +1582,7 @@ console.error('Fallback: Oops, unable to copy', err);
 }
 document.body.removeChild(textArea);
 }
-FASTN_JS
+
 
 
 function ftd__clean_code___main(a,lang,args,data,id){
@@ -1584,7 +1650,521 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#flag", data);
+}
+window.node_change_main["2,0:main__text"] = function(data) {
+document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("foo#button:cta:2,0", data);
+}
 
+window.node_change_main["2,0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,0:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,0", data).light;
+}
+else {document.querySelector(`[data-id="2,0:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,0", data).dark;}
+}
+
+window.node_change_main["2,0:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,0:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).light)));
+}
+else {document.querySelector(`[data-id="2,0:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).dark)));}
+}
+
+window.node_change_main["2,0:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,0:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).light)));
+}
+else {document.querySelector(`[data-id="2,0:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).dark)));}
+}
+
+window.node_change_main["2,0:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,0:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).light)));
+}
+else {document.querySelector(`[data-id="2,0:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).dark)));}
+}
+
+window.node_change_main["2,0:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,0:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).light)));
+}
+else {document.querySelector(`[data-id="2,0:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,0", data).dark)));}
+}
+window.node_change_main["2,1:main__text"] = function(data) {
+document.querySelector(`[data-id="2,1:main"]`).innerHTML = resolve_reference("foo#button:cta:2,1", data);
+}
+
+window.node_change_main["2,1:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,1:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,1", data).light;
+}
+else {document.querySelector(`[data-id="2,1:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,1", data).dark;}
+}
+
+window.node_change_main["2,1:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,1:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).light)));
+}
+else {document.querySelector(`[data-id="2,1:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).dark)));}
+}
+
+window.node_change_main["2,1:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,1:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).light)));
+}
+else {document.querySelector(`[data-id="2,1:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).dark)));}
+}
+
+window.node_change_main["2,1:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,1:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).light)));
+}
+else {document.querySelector(`[data-id="2,1:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).dark)));}
+}
+
+window.node_change_main["2,1:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,1:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).light)));
+}
+else {document.querySelector(`[data-id="2,1:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,1", data).dark)));}
+}
+window.node_change_main["2,2:main__text"] = function(data) {
+document.querySelector(`[data-id="2,2:main"]`).innerHTML = resolve_reference("foo#button:cta:2,2", data);
+}
+
+window.node_change_main["2,2:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,2:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,2", data).light;
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["background-color"] = resolve_reference("foo#button:color:2,2", data).dark;}
+}
+
+window.node_change_main["2,2:main__background-image"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,2:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).light)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).dark)));}
+}
+
+window.node_change_main["2,2:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,2:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).light)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).dark)));}
+}
+
+window.node_change_main["2,2:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,2:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).light)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).dark)));}
+}
+
+window.node_change_main["2,2:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2,2:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).light)));
+}
+else {document.querySelector(`[data-id="2,2:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#button:color:2,2", data).dark)));}
+}
+window.set_value_main = {};
+window.set_value_main["foo#button:cta:2,0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#button:cta:2,0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#button:cta:2,0", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#button:cta:2,0", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:2,0", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+}
+};
+
+window.set_value_main["foo#button:cta:2,1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#button:cta:2,1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#button:cta:2,1", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#button:cta:2,1", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:2,1", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+}
+};
+
+window.set_value_main["foo#button:cta:2,2"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#button:cta:2,2" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#button:cta:2,2", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#button:cta:2,2", "main");
+window.ftd.call_immutable_value_changes("foo#button:cta:2,2", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
+}
+};
+
+window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#flag" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#flag", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#flag", "main");
+window.ftd.call_immutable_value_changes("foo#flag", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-image"]){window.node_change_main["1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-color"]){window.node_change_main["2,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-image"]){window.node_change_main["2,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-position"]){window.node_change_main["2,0:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-repeat"]){window.node_change_main["2,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-size"]){window.node_change_main["2,0:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__color"]){window.node_change_main["2,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-image"]){window.node_change_main["2,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-position"]){window.node_change_main["2,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-repeat"]){window.node_change_main["2,1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-size"]){window.node_change_main["2,1:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__color"]){window.node_change_main["2,1:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-image"]){window.node_change_main["2,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-position"]){window.node_change_main["2,2:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-repeat"]){window.node_change_main["2,2:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-size"]){window.node_change_main["2,2:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__color"]){window.node_change_main["2,2:main__color"](data);
+}
+};
 
 
 

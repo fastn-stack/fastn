@@ -1655,7 +1655,7 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"mutable":false,"reference":"foo#value"}],["b",2]]}', this)))));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"mutable":false,"reference":"foo#value"}],["b",2]]}', this)));
 }
 
 window.node_change_main["0,3:main__text"] = function(data) {

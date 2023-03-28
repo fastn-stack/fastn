@@ -5,10 +5,16 @@ $count: 0
 -- component show-indent:
 integer $count:
 
+-- ftd.column:
+
+-- ftd.integer: $show-indent.count
+
 -- ftd.text: Hello World
 margin.px: 10
 text-indent.px if { show-indent.count % 3 == 1 }: 20
 text-indent.px if { show-indent.count % 3 == 2 }: 30
 $on-click$: $ftd.increment($a = $show-indent.count)
+
+-- end: ftd.column
 
 -- end: show-indent

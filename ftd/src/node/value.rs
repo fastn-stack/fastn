@@ -89,14 +89,10 @@ impl Value {
 impl ftd::interpreter2::Kind {
     fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
         match self {
-            ftd::interpreter2::Kind::OrType {
-                name,
-                variant: Some(variant),
-                ..
-            } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
-                ftd::executor::Length::get_pattern_from_variant_str(variant.as_str(), doc_id, 0)
-                    .ok()
-                    .map(|v| (v.to_string(), false))
+            ftd::interpreter2::Kind::OrType { name, .. }
+                if name.eq(ftd::interpreter2::FTD_LENGTH) =>
+            {
+                None
             }
             ftd::interpreter2::Kind::OrType {
                 name,
