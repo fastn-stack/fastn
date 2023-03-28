@@ -829,7 +829,7 @@ impl BackgroundImage {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<BackgroundImage> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(ftd::interpreter2::Value::Record { name, fields })
@@ -849,83 +849,69 @@ impl BackgroundImage {
                 )
             }
         };
-        BackgroundImage::from_values(fields, doc, line_number)
+        ftd::executor::BackgroundImage::from_values(fields, doc, line_number)
     }
 
     fn from_values(
         values: ftd::Map<ftd::interpreter2::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<BackgroundImage> {
-        let src = {
-            let value = values.get("src").ok_or(ftd::executor::Error::ParseError {
-                message: "`src` field in ftd.background-image not found".to_string(),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
-            ftd::executor::Value::new(
-                ftd::executor::ImageSrc::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("src"))],
-            )
-        };
-
-        let repeat = {
-            let value = values
-                .get("repeat")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`repeat` field in ftd.background-image not found".to_string(),
+    ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!("`{}` field in ftd.background-image not found", field_name),
                     doc_id: doc.name.to_string(),
                     line_number,
-                })?;
-            ftd::executor::Value::new(
-                ftd::executor::BackgroundRepeat::from_optional_value(
-                    value.clone(),
-                    doc,
-                    line_number,
-                )?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("repeat"))],
-            )
+                })
         };
 
-        let size = {
-            let value = values.get("size").ok_or(ftd::executor::Error::ParseError {
-                message: "`size` field in ftd.background-image not found".to_string(),
-                doc_id: doc.name.to_string(),
+        let src = ftd::executor::Value::new(
+            ftd::executor::ImageSrc::from_value(
+                get_property_value("src")?.clone(),
+                doc,
                 line_number,
-            })?;
-            ftd::executor::Value::new(
-                ftd::executor::BackgroundSize::from_optional_value(
-                    value.clone(),
-                    doc,
-                    line_number,
-                )?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("size"))],
-            )
-        };
+            )?,
+            Some(line_number),
+            vec![get_property_value("src")?
+                .into_property(ftd::interpreter2::PropertySource::header("src"))],
+        );
 
-        let position = {
-            let value = values
-                .get("position")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`position` field in ftd.background-image not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            ftd::executor::Value::new(
-                ftd::executor::BackgroundPosition::from_optional_value(
-                    value.clone(),
-                    doc,
-                    line_number,
-                )?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("position"))],
-            )
-        };
+        let repeat = ftd::executor::Value::new(
+            ftd::executor::BackgroundRepeat::from_optional_value(
+                get_property_value("repeat")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("repeat")?
+                .into_property(ftd::interpreter2::PropertySource::header("repeat"))],
+        );
 
-        Ok(BackgroundImage {
+        let size = ftd::executor::Value::new(
+            ftd::executor::BackgroundSize::from_optional_value(
+                get_property_value("size")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("size")?
+                .into_property(ftd::interpreter2::PropertySource::header("size"))],
+        );
+
+        let position = ftd::executor::Value::new(
+            ftd::executor::BackgroundPosition::from_optional_value(
+                get_property_value("position")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("position")?
+                .into_property(ftd::interpreter2::PropertySource::header("position"))],
+        );
+
+        Ok(ftd::executor::BackgroundImage {
             src,
             repeat,
             size,
@@ -1165,10 +1151,14 @@ impl BackgroundRepeat {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
         match value.value(doc.name, line_number)? {
             ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(Self::from_value(value, doc, line_number)?)),
+            _ => Ok(Some(ftd::executor::BackgroundRepeat::from_value(
+                value,
+                doc,
+                line_number,
+            )?)),
         }
     }
 
@@ -1176,25 +1166,37 @@ impl BackgroundRepeat {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        Self::from_values(value, doc, line_number)
+        ftd::executor::BackgroundRepeat::from_values(value, doc, line_number)
     }
 
     fn from_values(
         or_type_value: (String, ftd::interpreter2::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_BOTH_REPEAT => Ok(Self::Repeat),
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_X_REPEAT => Ok(Self::RepeatX),
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_Y_REPEAT => Ok(Self::RepeatY),
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_NO_REPEAT => Ok(Self::NoRepeat),
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_SPACE => Ok(Self::Space),
-            ftd::interpreter2::FTD_BACKGROUND_REPEAT_ROUND => Ok(Self::Round),
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_BOTH_REPEAT => {
+                Ok(ftd::executor::BackgroundRepeat::Repeat)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_X_REPEAT => {
+                Ok(ftd::executor::BackgroundRepeat::RepeatX)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_Y_REPEAT => {
+                Ok(ftd::executor::BackgroundRepeat::RepeatY)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_NO_REPEAT => {
+                Ok(ftd::executor::BackgroundRepeat::NoRepeat)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_SPACE => {
+                Ok(ftd::executor::BackgroundRepeat::Space)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_REPEAT_ROUND => {
+                Ok(ftd::executor::BackgroundRepeat::Round)
+            }
             t => ftd::executor::utils::parse_error(
                 format!(
                     "Unknown variant `{}` for or-type `ftd.background-repeat`",
@@ -1208,12 +1210,12 @@ impl BackgroundRepeat {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            Self::Repeat => "repeat".to_string(),
-            Self::RepeatX => "repeat-x".to_string(),
-            Self::RepeatY => "repeat-y".to_string(),
-            Self::NoRepeat => "no-repeat".to_string(),
-            Self::Space => "space".to_string(),
-            Self::Round => "round".to_string(),
+            ftd::executor::BackgroundRepeat::Repeat => "repeat".to_string(),
+            ftd::executor::BackgroundRepeat::RepeatX => "repeat-x".to_string(),
+            ftd::executor::BackgroundRepeat::RepeatY => "repeat-y".to_string(),
+            ftd::executor::BackgroundRepeat::NoRepeat => "no-repeat".to_string(),
+            ftd::executor::BackgroundRepeat::Space => "space".to_string(),
+            ftd::executor::BackgroundRepeat::Round => "round".to_string(),
         }
     }
 }
@@ -1231,10 +1233,14 @@ impl BackgroundSize {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
         match value.value(doc.name, line_number)? {
             ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(Self::from_value(value, doc, line_number)?)),
+            _ => Ok(Some(ftd::executor::BackgroundSize::from_value(
+                value,
+                doc,
+                line_number,
+            )?)),
         }
     }
 
@@ -1242,25 +1248,31 @@ impl BackgroundSize {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        Self::from_values(value, doc, line_number)
+        ftd::executor::BackgroundSize::from_values(value, doc, line_number)
     }
 
     fn from_values(
         or_type_value: (String, ftd::interpreter2::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_BACKGROUND_SIZE_AUTO => Ok(Self::Auto),
-            ftd::interpreter2::FTD_BACKGROUND_SIZE_COVER => Ok(Self::Cover),
-            ftd::interpreter2::FTD_BACKGROUND_SIZE_CONTAIN => Ok(Self::Contain),
-            ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH => Ok(Self::Length(
-                LengthPair::from_value(or_type_value.1, doc, line_number)?,
-            )),
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_AUTO => Ok(ftd::executor::BackgroundSize::Auto),
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_COVER => {
+                Ok(ftd::executor::BackgroundSize::Cover)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_CONTAIN => {
+                Ok(ftd::executor::BackgroundSize::Contain)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_SIZE_LENGTH => {
+                Ok(ftd::executor::BackgroundSize::Length(
+                    LengthPair::from_value(or_type_value.1, doc, line_number)?,
+                ))
+            }
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.background-size`", t),
                 doc.name,
@@ -1271,10 +1283,10 @@ impl BackgroundSize {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            Self::Auto => "auto".to_string(),
-            Self::Cover => "cover".to_string(),
-            Self::Contain => "contain".to_string(),
-            Self::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundSize::Auto => "auto".to_string(),
+            ftd::executor::BackgroundSize::Cover => "cover".to_string(),
+            ftd::executor::BackgroundSize::Contain => "contain".to_string(),
+            ftd::executor::BackgroundSize::Length(l) => l.to_css_string(),
         }
     }
 }
@@ -1301,10 +1313,14 @@ impl BackgroundPosition {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
         match value.value(doc.name, line_number)? {
             ftd::interpreter2::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(Self::from_value(value, doc, line_number)?)),
+            _ => Ok(Some(ftd::executor::BackgroundPosition::from_value(
+                value,
+                doc,
+                line_number,
+            )?)),
         }
     }
 
@@ -1312,34 +1328,60 @@ impl BackgroundPosition {
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        Self::from_values(value, doc, line_number)
+        ftd::executor::BackgroundPosition::from_values(value, doc, line_number)
     }
 
     fn from_values(
         or_type_value: (String, ftd::interpreter2::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT => Ok(Self::Left),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER => Ok(Self::Center),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT => Ok(Self::Right),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_TOP => Ok(Self::LeftTop),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_CENTER => Ok(Self::LeftCenter),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_BOTTOM => Ok(Self::LeftBottom),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_TOP => Ok(Self::CenterTop),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_CENTER => Ok(Self::CenterCenter),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_BOTTOM => Ok(Self::CenterBottom),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_TOP => Ok(Self::RightTop),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_CENTER => Ok(Self::RightCenter),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM => Ok(Self::RightBottom),
-            ftd::interpreter2::FTD_BACKGROUND_POSITION_LENGTH => Ok(Self::Length(
-                LengthPair::from_value(or_type_value.1, doc, line_number)?,
-            )),
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT => {
+                Ok(ftd::executor::BackgroundPosition::Left)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER => {
+                Ok(ftd::executor::BackgroundPosition::Center)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT => {
+                Ok(ftd::executor::BackgroundPosition::Right)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_TOP => {
+                Ok(ftd::executor::BackgroundPosition::LeftTop)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_CENTER => {
+                Ok(ftd::executor::BackgroundPosition::LeftCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LEFT_BOTTOM => {
+                Ok(ftd::executor::BackgroundPosition::LeftBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_TOP => {
+                Ok(ftd::executor::BackgroundPosition::CenterTop)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_CENTER => {
+                Ok(ftd::executor::BackgroundPosition::CenterCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_CENTER_BOTTOM => {
+                Ok(ftd::executor::BackgroundPosition::CenterBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_TOP => {
+                Ok(ftd::executor::BackgroundPosition::RightTop)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_CENTER => {
+                Ok(ftd::executor::BackgroundPosition::RightCenter)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM => {
+                Ok(ftd::executor::BackgroundPosition::RightBottom)
+            }
+            ftd::interpreter2::FTD_BACKGROUND_POSITION_LENGTH => {
+                Ok(ftd::executor::BackgroundPosition::Length(
+                    LengthPair::from_value(or_type_value.1, doc, line_number)?,
+                ))
+            }
             t => ftd::executor::utils::parse_error(
                 format!(
                     "Unknown variant `{}` for or-type `ftd.background-position`",
@@ -1353,19 +1395,19 @@ impl BackgroundPosition {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            Self::Left => "left".to_string(),
-            Self::Center => "center".to_string(),
-            Self::Right => "right".to_string(),
-            Self::LeftTop => "left top".to_string(),
-            Self::LeftCenter => "left center".to_string(),
-            Self::LeftBottom => "left bottom".to_string(),
-            Self::CenterTop => "center top".to_string(),
-            Self::CenterCenter => "center center".to_string(),
-            Self::CenterBottom => "center bottom".to_string(),
-            Self::RightTop => "right top".to_string(),
-            Self::RightCenter => "right center".to_string(),
-            Self::RightBottom => "right bottom".to_string(),
-            Self::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundPosition::Left => "left".to_string(),
+            ftd::executor::BackgroundPosition::Center => "center".to_string(),
+            ftd::executor::BackgroundPosition::Right => "right".to_string(),
+            ftd::executor::BackgroundPosition::LeftTop => "left top".to_string(),
+            ftd::executor::BackgroundPosition::LeftCenter => "left center".to_string(),
+            ftd::executor::BackgroundPosition::LeftBottom => "left bottom".to_string(),
+            ftd::executor::BackgroundPosition::CenterTop => "center top".to_string(),
+            ftd::executor::BackgroundPosition::CenterCenter => "center center".to_string(),
+            ftd::executor::BackgroundPosition::CenterBottom => "center bottom".to_string(),
+            ftd::executor::BackgroundPosition::RightTop => "right top".to_string(),
+            ftd::executor::BackgroundPosition::RightCenter => "right center".to_string(),
+            ftd::executor::BackgroundPosition::RightBottom => "right bottom".to_string(),
+            ftd::executor::BackgroundPosition::Length(l) => l.to_css_string(),
         }
     }
 }
@@ -1385,99 +1427,63 @@ impl Shadow {
         values: ftd::Map<ftd::interpreter2::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
-        let x_offset = {
-            let value = values
-                .get("x-offset")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`x-offset` field in ftd.shadow not found".to_string(),
+    ) -> ftd::executor::Result<ftd::executor::Shadow> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!("`{}` field in ftd.shadow not found", field_name),
                     doc_id: doc.name.to_string(),
                     line_number,
-                })?;
-            ftd::executor::Value::new(
-                Length::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("x-offset"))],
-            )
+                })
         };
 
-        let y_offset = {
-            let value = values
-                .get("y-offset")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`y-offset` field in ftd.shadow not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            ftd::executor::Value::new(
-                Length::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("y-offset"))],
-            )
-        };
+        let x_offset = ftd::executor::Value::new(
+            Length::from_value(get_property_value("x-offset")?.clone(), doc, line_number)?,
+            Some(line_number),
+            vec![get_property_value("x-offset")?
+                .into_property(ftd::interpreter2::PropertySource::header("x-offset"))],
+        );
 
-        let blur = {
-            let value = values.get("blur").ok_or(ftd::executor::Error::ParseError {
-                message: "`blur` field in ftd.shadow not found".to_string(),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
-            ftd::executor::Value::new(
-                Length::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("blur"))],
-            )
-        };
+        let y_offset = ftd::executor::Value::new(
+            Length::from_value(get_property_value("y-offset")?.clone(), doc, line_number)?,
+            Some(line_number),
+            vec![get_property_value("y-offset")?
+                .into_property(ftd::interpreter2::PropertySource::header("y-offset"))],
+        );
 
-        let spread = {
-            let value = values
-                .get("spread")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`spread` field in ftd.shadow not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            ftd::executor::Value::new(
-                Length::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("spread"))],
-            )
-        };
+        let blur = ftd::executor::Value::new(
+            Length::from_value(get_property_value("blur")?.clone(), doc, line_number)?,
+            Some(line_number),
+            vec![get_property_value("blur")?
+                .into_property(ftd::interpreter2::PropertySource::header("blur"))],
+        );
 
-        let color = {
-            let value = values
-                .get("color")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`color` field in ftd.shadow not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            ftd::executor::Value::new(
-                Color::from_value(value.clone(), doc, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("color"))],
-            )
-        };
+        let spread = ftd::executor::Value::new(
+            Length::from_value(get_property_value("spread")?.clone(), doc, line_number)?,
+            Some(line_number),
+            vec![get_property_value("spread")?
+                .into_property(ftd::interpreter2::PropertySource::header("spread"))],
+        );
 
-        let inset = {
-            let value = values
-                .get("inset")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`inset` field in ftd.shadow not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            ftd::executor::Value::new(
-                value
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .bool(doc.name, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("inset"))],
-            )
-        };
+        let color = ftd::executor::Value::new(
+            Color::from_value(get_property_value("color")?.clone(), doc, line_number)?,
+            Some(line_number),
+            vec![get_property_value("color")?
+                .into_property(ftd::interpreter2::PropertySource::header("color"))],
+        );
 
-        Ok(Self {
+        let inset = ftd::executor::Value::new(
+            get_property_value("inset")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .bool(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("inset")?
+                .into_property(ftd::interpreter2::PropertySource::header("inset"))],
+        );
+
+        Ok(ftd::executor::Shadow {
             x_offset,
             y_offset,
             blur,
@@ -1491,9 +1497,13 @@ impl Shadow {
         or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<ftd::executor::Shadow>> {
         if let Some(value) = or_type_value {
-            Ok(Some(Self::from_values(value, doc, line_number)?))
+            Ok(Some(ftd::executor::Shadow::from_values(
+                value,
+                doc,
+                line_number,
+            )?))
         } else {
             Ok(None)
         }
@@ -1506,7 +1516,7 @@ impl Shadow {
         line_number: usize,
         key: &str,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<Self>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::executor::Shadow>>> {
         let record_values = ftd::executor::value::optional_record_inherited(
             key,
             properties,
@@ -1518,7 +1528,7 @@ impl Shadow {
         )?;
 
         Ok(ftd::executor::Value::new(
-            Self::from_optional_values(record_values.value, doc, line_number)?,
+            ftd::executor::Shadow::from_optional_values(record_values.value, doc, line_number)?,
             record_values.line_number,
             record_values.properties,
         ))
