@@ -1649,7 +1649,7 @@ document.querySelector(`[data-id="3,1:main"]`).setAttribute("checked", eval(`if 
 } else {
 "REMOVE-KEY"
 }
-`.format(JSONstringify(resolve_reference("foo#flag", data)))));
+`.format(JSON.stringify(resolve_reference("foo#flag", data)))));
 
 if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("checked") == "REMOVE-KEY"){
 document.querySelector(`[data-id="3,1:main"]`).removeAttribute("checked");
@@ -1665,14 +1665,14 @@ document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if
 } else {
 ""
 }
-`.format(JSONstringify(false))));
+`.format(JSON.stringify(false))));
 }
 else {document.querySelector(`[data-id="3,1:main"]`).setAttribute("disabled", eval(`if ({0}) {
 "REMOVE-KEY"
 } else {
 ""
 }
-`.format(JSONstringify(true))));}
+`.format(JSON.stringify(true))));}
 
 if (document.querySelector(`[data-id="3,1:main"]`).getAttribute("disabled") == "REMOVE-KEY"){
 document.querySelector(`[data-id="3,1:main"]`).removeAttribute("disabled");
@@ -1703,11 +1703,11 @@ window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3,1:main__checked"]){window.node_change_main["3,1:main__checked"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
 }
 };
 

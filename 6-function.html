@@ -1655,21 +1655,21 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_funct
 }
 
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)))));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)));
 }
 window.node_change_main["1:main__text"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a",{"mutable":false,"reference":"foo#name"}],["b","Jaiswal"]]}', this);
 }
 
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)));
 }
 window.node_change_main["2:main__text"] = function(data) {
 document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
 }
 
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)))));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)));
 }
 window.set_value_main = {};
 window.set_value_main["foo#name"] = function (data, new_value, remaining) {
@@ -1687,9 +1687,9 @@ window.ftd.call_mutable_value_changes("foo#name", "main");
 window.ftd.call_immutable_value_changes("foo#name", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 };
 
@@ -1702,9 +1702,9 @@ set_data_value(data, "foo#new-name", new_value);
 
 window.ftd.call_mutable_value_changes("foo#new-name", "main");
 window.ftd.call_immutable_value_changes("foo#new-name", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 };
 
@@ -1717,9 +1717,9 @@ set_data_value(data, "foo#number", new_value);
 
 window.ftd.call_mutable_value_changes("foo#number", "main");
 window.ftd.call_immutable_value_changes("foo#number", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 

@@ -1639,9 +1639,128 @@ else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = r
 
 window.node_change_main["1:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#green", data).light));
+document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
 }
-else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = `url({0})`.format(JSONstringify(resolve_reference("foo#green", data).dark));}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "src" in bg) {
+let img_src = bg.src;
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+"url(" + img_src.light + ")"
+}
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+"url(" + img_src.dark + ")"
+}
+else {
+null
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).dark)));}
+}
+
+window.node_change_main["1:main__background-position"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "position" in bg) {
+let pos = bg.position;
+if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+pos.x + " " + pos.y
+}
+else {
+pos.replace("-", " ")
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).dark)));}
+}
+
+window.node_change_main["1:main__background-repeat"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "repeat" in bg) {
+bg.repeat
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).dark)));}
+}
+
+window.node_change_main["1:main__background-size"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`
+let bg = {0};
+if (typeof bg === 'object' && "size" in bg) {
+let sz = bg.size;
+if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+sz.x + " " + sz.y
+}
+else {
+sz
+}
+} else {
+null
+}
+`.format(JSON.stringify(resolve_reference("foo#green", data).dark)));}
 }
 
 window.node_change_main["1:main__gap"] = function(data) {
@@ -1653,7 +1772,7 @@ document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "
 } else {
 null
 }
-`.format(JSONstringify("space-between")));
+`.format(JSON.stringify("space-between")));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%4==2);
@@ -1663,7 +1782,7 @@ document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "
 } else {
 null
 }
-`.format(JSONstringify("space-around")));
+`.format(JSON.stringify("space-around")));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%4==3);
@@ -1673,14 +1792,14 @@ document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "
 } else {
 null
 }
-`.format(JSONstringify("space-evenly")));
+`.format(JSON.stringify("space-evenly")));
 }
 else {document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
 "{0}"
 } else {
 null
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(50)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(50)))));}
 }
 
 window.node_change_main["1:main__justify-content"] = function(data) {
@@ -1692,7 +1811,7 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 } else {
 "start"
 }
-`.format(JSONstringify("space-between")));
+`.format(JSON.stringify("space-between")));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%4==2);
@@ -1702,7 +1821,7 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 } else {
 "start"
 }
-`.format(JSONstringify("space-around")));
+`.format(JSON.stringify("space-around")));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%4==3);
@@ -1712,14 +1831,14 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 } else {
 "start"
 }
-`.format(JSONstringify("space-evenly")));
+`.format(JSON.stringify("space-evenly")));
 }
 else {document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
 "{0}"
 } else {
 "start"
 }
-`.format(JSONstringify(`{0}px`.format(JSONstringify(50)))));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(50)))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#num"] = function (data, new_value, remaining) {
@@ -1731,11 +1850,11 @@ set_data_value(data, "foo#num", new_value);
 
 window.ftd.call_mutable_value_changes("foo#num", "main");
 window.ftd.call_immutable_value_changes("foo#num", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__gap"]){window.node_change_main["1:main__gap"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__gap"]){window.node_change_main["1:main__gap"](data);
 }
 };
 
@@ -1748,9 +1867,15 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-image"]){window.node_change_main["1:main__background-image"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-position"]){window.node_change_main["1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-repeat"]){window.node_change_main["1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-size"]){window.node_change_main["1:main__background-size"](data);
 }
 };
 

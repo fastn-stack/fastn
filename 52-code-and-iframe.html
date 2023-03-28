@@ -1788,37 +1788,37 @@ document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["1,0:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,0:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,1:main__text"] = function(data) {
 document.querySelector(`[data-id="1,1:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1826,37 +1826,37 @@ document.querySelector(`[data-id="1,1:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["1,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["1,2:main__text"] = function(data) {
 document.querySelector(`[data-id="1,2:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1864,37 +1864,37 @@ document.querySelector(`[data-id="1,2:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["1,2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["1,2:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="1,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["2,0:main__text"] = function(data) {
 document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1902,37 +1902,37 @@ document.querySelector(`[data-id="2,0:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["2,0:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,0:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,0:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,0:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,0:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["2,1:main__text"] = function(data) {
 document.querySelector(`[data-id="2,1:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1940,37 +1940,37 @@ document.querySelector(`[data-id="2,1:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["2,1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["2,2:main__text"] = function(data) {
 document.querySelector(`[data-id="2,2:main"]`).innerHTML = resolve_reference("foo#code", data);
@@ -1978,37 +1978,37 @@ document.querySelector(`[data-id="2,2:main"]`).innerHTML = resolve_reference("fo
 
 window.node_change_main["2,2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,2:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,2:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,2:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2,2:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.node_change_main["7,0:main__display"] = function(data) {
 if(function(){
@@ -2036,19 +2036,19 @@ set_data_value(data, "foo#value:clean:0", value);
 }
 window.ftd.call_mutable_value_changes("foo#code", "main");
 window.ftd.call_immutable_value_changes("foo#code", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
 };
 
@@ -2061,9 +2061,9 @@ set_data_value(data, "foo#foo:name:7", new_value);
 
 window.ftd.call_mutable_value_changes("foo#foo:name:7", "main");
 window.ftd.call_immutable_value_changes("foo#foo:name:7", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["7,0:main__text"]){window.node_change_main["7,0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["7,0:main__display"]){window.node_change_main["7,0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["7,0:main__text"]){window.node_change_main["7,0:main__text"](data);
 }
 };
 
@@ -2076,29 +2076,65 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-image"]){window.node_change_main["2,1:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-repeat"]){window.node_change_main["1,2:main__background-repeat"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-image"]){window.node_change_main["2,0:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-size"]){window.node_change_main["2,1:main__background-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-color"]){window.node_change_main["2,0:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-image"]){window.node_change_main["2,2:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-size"]){window.node_change_main["2,2:main__background-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-position"]){window.node_change_main["1,2:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-size"]){window.node_change_main["1,1:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-image"]){window.node_change_main["2,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-image"]){window.node_change_main["2,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-image"]){window.node_change_main["2,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-repeat"]){window.node_change_main["2,1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-color"]){window.node_change_main["2,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-position"]){window.node_change_main["2,0:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-repeat"]){window.node_change_main["2,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-size"]){window.node_change_main["2,0:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-position"]){window.node_change_main["2,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-repeat"]){window.node_change_main["2,2:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-position"]){window.node_change_main["2,2:main__background-position"](data);
 }
 };
 
@@ -2111,65 +2147,65 @@ set_data_value(data, "ftd#default-types", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#default-types", "main");
 window.ftd.call_immutable_value_changes("ftd#default-types", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
 }
 };
 
@@ -2182,65 +2218,65 @@ set_data_value(data, "ftd#device", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
 }
 };
 

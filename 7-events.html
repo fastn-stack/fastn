@@ -1651,7 +1651,7 @@ window.node_change_main["3:main__text"] = function(data) {
 document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#name", data);
 }
 window.node_change_main["4:main__padding"] = function(data) {
-document.querySelector(`[data-id="4:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#value", data)))));
+document.querySelector(`[data-id="4:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(resolve_reference("foo#value", data)));
 }
 window.set_value_main = {};
 window.set_value_main["foo#foo:foo-value:2"] = function (data, new_value, remaining) {
@@ -1689,9 +1689,9 @@ set_data_value(data, "foo#value", new_value);
 
 window.ftd.call_mutable_value_changes("foo#value", "main");
 window.ftd.call_immutable_value_changes("foo#value", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__padding"]){window.node_change_main["4:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
