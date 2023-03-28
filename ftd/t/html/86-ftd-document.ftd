@@ -1,8 +1,8 @@
 -- boolean $flag: true
 
--- ftd.document:
-title: My title
+-- ftd.document: My title
 title if { !flag }: MY TITLE
+og-title if { !flag }: MY OG TITLE
 
 -- ftd.text: Click me and document title changes
 $on-click$: $ftd.toggle($a = $flag)

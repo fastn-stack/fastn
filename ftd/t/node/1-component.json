@@ -1211,6 +1211,12 @@
       "properties": [],
       "line_number": null,
       "default": null
+    },
+    "og_title": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
     }
   },
   "bag": {},

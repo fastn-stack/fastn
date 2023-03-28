@@ -720,7 +720,7 @@ pub fn get_css_html(external_css: &[String]) -> String {
 
 pub fn get_meta_data(html_data: &ftd::html1::HTMLData) -> String {
     let mut result = vec![];
-    if let Some(ref title) = html_data.title {
+    if let Some(ref title) = html_data.og_title {
         result.push(format!(
             "<meta property=\"og:title\" content=\"{}\">",
             title

@@ -16,12 +16,14 @@ pub struct HtmlUI {
 
 pub struct HTMLData {
     pub title: Option<String>,
+    pub og_title: Option<String>,
 }
 
 impl ftd::node::HTMLData {
     fn to_html_data(&self) -> HTMLData {
         HTMLData {
             title: self.title.value.to_owned(),
+            og_title: self.og_title.value.to_owned(),
         }
     }
 }

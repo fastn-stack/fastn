@@ -238,7 +238,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let key = "document.head.querySelector('meta[property=\"og:title\"]').content";
-            for property_with_pattern in self.html_data.title.properties.iter() {
+            for property_with_pattern in self.html_data.og_title.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
                     .condition

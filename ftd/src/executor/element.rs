@@ -114,6 +114,7 @@ pub struct Column {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
+    pub og_title: ftd::executor::Value<Option<String>>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -242,8 +243,14 @@ pub fn code_from_properties(
 ) -> ftd::executor::Result<Code> {
     // TODO: `text`, `lang` and `theme` cannot have condition
 
-    let text =
-        ftd::executor::value::optional_string("text", properties, arguments, doc, line_number)?;
+    let text = ftd::executor::value::optional_string(
+        "text",
+        "ftd#code",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
     if text.value.is_none() && condition.is_none() {
         // TODO: Check condition if `value is not null` is there
         return ftd::executor::utils::parse_error(
@@ -255,6 +262,7 @@ pub fn code_from_properties(
 
     let lang = ftd::executor::value::string_with_default(
         "lang",
+        "ftd#code",
         properties,
         arguments,
         "txt",
@@ -264,6 +272,7 @@ pub fn code_from_properties(
 
     let theme = ftd::executor::value::string_with_default(
         "theme",
+        "ftd#code",
         properties,
         arguments,
         ftd::executor::code::DEFAULT_THEME,
@@ -291,6 +300,7 @@ pub fn code_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#code",
     )?;
 
     Ok(Code {
@@ -302,10 +312,12 @@ pub fn code_from_properties(
             line_number,
             "text-align",
             inherited_variables,
+            "ftd#code",
         )?,
         common,
         line_clamp: ftd::executor::value::optional_i64(
             "line-clamp",
+            "ftd#code",
             properties,
             arguments,
             doc,
@@ -336,15 +348,28 @@ pub fn iframe_from_properties(
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Iframe> {
     // TODO: `youtube` should not be conditional
-    let srcdoc =
-        ftd::executor::value::optional_string("srcdoc", properties, arguments, doc, line_number)?;
+    let srcdoc = ftd::executor::value::optional_string(
+        "srcdoc",
+        "ftd#iframe",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
 
     let src = {
-        let src =
-            ftd::executor::value::optional_string("src", properties, arguments, doc, line_number)?;
+        let src = ftd::executor::value::optional_string(
+            "src",
+            "ftd#iframe",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?;
 
         let youtube = ftd::executor::value::optional_string(
             "youtube",
+            "ftd#iframe",
             properties,
             arguments,
             doc,
@@ -393,6 +418,7 @@ pub fn iframe_from_properties(
         line_number,
         "loading",
         inherited_variables,
+        "ftd#iframe",
     )?;
 
     let common = common_from_properties(
@@ -404,6 +430,7 @@ pub fn iframe_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#iframe",
     )?;
 
     Ok(Iframe {
@@ -551,6 +578,7 @@ pub fn text_from_properties(
 ) -> ftd::executor::Result<Text> {
     let text = ftd::executor::value::dummy_optional_string(
         "text",
+        "ftd#text",
         properties,
         arguments,
         doc,
@@ -576,6 +604,7 @@ pub fn text_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#text",
     )?;
     Ok(Text {
         text,
@@ -586,6 +615,7 @@ pub fn text_from_properties(
             line_number,
             "text-indent",
             inherited_variables,
+            "ftd#text",
         )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
@@ -594,9 +624,11 @@ pub fn text_from_properties(
             line_number,
             "text-align",
             inherited_variables,
+            "ftd#text",
         )?,
         line_clamp: ftd::executor::value::optional_i64(
             "line-clamp",
+            "ftd#text",
             properties,
             arguments,
             doc,
@@ -611,6 +643,7 @@ pub fn text_from_properties(
             line_number,
             "style",
             inherited_variables,
+            "ftd#text",
         )?,
     })
 }
@@ -626,10 +659,18 @@ pub fn integer_from_properties(
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
-    let value = ftd::executor::value::i64("value", properties, arguments, doc, line_number)?;
+    let value = ftd::executor::value::i64(
+        "value",
+        "ftd#integer",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::executor::value::optional_string(
         "format",
+        "ftd#integer",
         properties,
         arguments,
         doc,
@@ -651,6 +692,7 @@ pub fn integer_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#integer",
     )?;
     Ok(Text {
         text,
@@ -662,6 +704,7 @@ pub fn integer_from_properties(
             line_number,
             "text-indent",
             inherited_variables,
+            "ftd#integer",
         )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
@@ -670,9 +713,11 @@ pub fn integer_from_properties(
             line_number,
             "text-align",
             inherited_variables,
+            "ftd#integer",
         )?,
         line_clamp: ftd::executor::value::optional_i64(
             "line-clamp",
+            "ftd#integer",
             properties,
             arguments,
             doc,
@@ -686,6 +731,7 @@ pub fn integer_from_properties(
             line_number,
             "style",
             inherited_variables,
+            "ftd#integer",
         )?,
     })
 }
@@ -701,10 +747,18 @@ pub fn decimal_from_properties(
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
-    let value = ftd::executor::value::f64("value", properties, arguments, doc, line_number)?;
+    let value = ftd::executor::value::f64(
+        "value",
+        "ftd#decimal",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::executor::value::optional_string(
         "format",
+        "ftd#decimal",
         properties,
         arguments,
         doc,
@@ -726,6 +780,7 @@ pub fn decimal_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#decimal",
     )?;
     Ok(Text {
         text,
@@ -737,6 +792,7 @@ pub fn decimal_from_properties(
             line_number,
             "text-indent",
             inherited_variables,
+            "ftd#decimal",
         )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
@@ -745,9 +801,11 @@ pub fn decimal_from_properties(
             line_number,
             "text-align",
             inherited_variables,
+            "ftd#decimal",
         )?,
         line_clamp: ftd::executor::value::optional_i64(
             "line-clamp",
+            "ftd#decimal",
             properties,
             arguments,
             doc,
@@ -761,6 +819,7 @@ pub fn decimal_from_properties(
             line_number,
             "style",
             inherited_variables,
+            "ftd#decimal",
         )?,
     })
 }
@@ -776,7 +835,14 @@ pub fn boolean_from_properties(
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Text> {
-    let value = ftd::executor::value::bool("value", properties, arguments, doc, line_number)?;
+    let value = ftd::executor::value::bool(
+        "value",
+        "ftd#boolean",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
     let text = value.map(|v| ftd::executor::element::markup_inline(v.to_string().as_str()));
     let common = common_from_properties(
         properties,
@@ -787,6 +853,7 @@ pub fn boolean_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#boolean",
     )?;
     Ok(Text {
         text,
@@ -798,6 +865,7 @@ pub fn boolean_from_properties(
             line_number,
             "text-indent",
             inherited_variables,
+            "ftd#boolean",
         )?,
         text_align: ftd::executor::TextAlign::optional_text_align(
             properties,
@@ -806,9 +874,11 @@ pub fn boolean_from_properties(
             line_number,
             "text-align",
             inherited_variables,
+            "ftd#boolean",
         )?,
         line_clamp: ftd::executor::value::optional_i64(
             "line-clamp",
+            "ftd#boolean",
             properties,
             arguments,
             doc,
@@ -822,6 +892,7 @@ pub fn boolean_from_properties(
             line_number,
             "style",
             inherited_variables,
+            "ftd#boolean",
         )?,
     })
 }
@@ -840,6 +911,7 @@ pub fn image_from_properties(
     let src = {
         let src = ftd::executor::value::record(
             "src",
+            "ftd#image",
             properties,
             arguments,
             doc,
@@ -862,6 +934,7 @@ pub fn image_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#image",
     )?;
     Ok(Image { src, common })
 }
@@ -887,6 +960,7 @@ pub fn row_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#row",
     )?;
     let container = container_from_properties(
         properties,
@@ -895,6 +969,7 @@ pub fn row_from_properties(
         line_number,
         children,
         inherited_variables,
+        "ftd#row",
     )?;
     Ok(Row { container, common })
 }
@@ -920,6 +995,7 @@ pub fn column_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#column",
     )?;
     let container = container_from_properties(
         properties,
@@ -928,6 +1004,7 @@ pub fn column_from_properties(
         line_number,
         children,
         inherited_variables,
+        "ftd#column",
     )?;
     Ok(Column { container, common })
 }
@@ -940,7 +1017,7 @@ pub fn document_from_properties(
     children: Vec<Element>,
 ) -> ftd::executor::Result<Document> {
     Ok(Document {
-        data: html_data_from_properties(properties, arguments, doc, line_number)?,
+        data: html_data_from_properties(properties, arguments, doc, line_number, "ftd#document")?,
         children,
         line_number,
     })
@@ -952,10 +1029,20 @@ pub fn html_data_from_properties(
     arguments: &[ftd::interpreter2::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
+    component_name: &str,
 ) -> ftd::executor::Result<HTMLData> {
     Ok(HTMLData {
         title: ftd::executor::value::optional_string(
             "title",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        og_title: ftd::executor::value::optional_string(
+            "og-title",
+            component_name,
             properties,
             arguments,
             doc,
@@ -974,6 +1061,7 @@ pub fn common_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    component_name: &str,
 ) -> ftd::executor::Result<Common> {
     let is_visible = if let Some(condition) = condition {
         condition.eval(&doc.itdoc())?
@@ -984,6 +1072,7 @@ pub fn common_from_properties(
     doc.js.extend(
         ftd::executor::value::string_list(
             "js-list",
+            component_name,
             properties,
             arguments,
             doc,
@@ -993,8 +1082,15 @@ pub fn common_from_properties(
         .value,
     );
 
-    if let Some(js) =
-        ftd::executor::value::optional_string("js", properties, arguments, doc, line_number)?.value
+    if let Some(js) = ftd::executor::value::optional_string(
+        "js",
+        component_name,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?
+    .value
     {
         doc.js.insert(js);
     }
@@ -1002,6 +1098,7 @@ pub fn common_from_properties(
     doc.css.extend(
         ftd::executor::value::string_list(
             "css-list",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1011,19 +1108,34 @@ pub fn common_from_properties(
         .value,
     );
 
-    if let Some(css) =
-        ftd::executor::value::optional_string("css", properties, arguments, doc, line_number)?.value
+    if let Some(css) = ftd::executor::value::optional_string(
+        "css",
+        component_name,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?
+    .value
     {
         doc.css.insert(css);
     }
 
     Ok(Common {
-        id: ftd::executor::value::optional_string("id", properties, arguments, doc, line_number)?,
+        id: ftd::executor::value::optional_string(
+            "id",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
         sticky: ftd::executor::value::optional_bool(
             "sticky",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1032,6 +1144,7 @@ pub fn common_from_properties(
         )?,
         z_index: ftd::executor::value::optional_i64(
             "z-index",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1045,6 +1158,7 @@ pub fn common_from_properties(
             line_number,
             "left",
             inherited_variables,
+            component_name,
         )?,
         right: ftd::executor::Length::optional_length(
             properties,
@@ -1053,6 +1167,7 @@ pub fn common_from_properties(
             line_number,
             "right",
             inherited_variables,
+            component_name,
         )?,
         top: ftd::executor::Length::optional_length(
             properties,
@@ -1061,6 +1176,7 @@ pub fn common_from_properties(
             line_number,
             "top",
             inherited_variables,
+            component_name,
         )?,
         bottom: ftd::executor::Length::optional_length(
             properties,
@@ -1069,6 +1185,7 @@ pub fn common_from_properties(
             line_number,
             "bottom",
             inherited_variables,
+            component_name,
         )?,
         anchor: ftd::executor::Anchor::optional_anchor(
             properties,
@@ -1077,6 +1194,7 @@ pub fn common_from_properties(
             line_number,
             "anchor",
             inherited_variables,
+            component_name,
         )?,
         role: ftd::executor::ResponsiveType::optional_responsive_type(
             properties,
@@ -1085,6 +1203,7 @@ pub fn common_from_properties(
             line_number,
             "role",
             inherited_variables,
+            component_name,
         )?,
         region: ftd::executor::Region::optional_region(
             properties,
@@ -1093,6 +1212,7 @@ pub fn common_from_properties(
             line_number,
             "region",
             inherited_variables,
+            component_name,
         )?,
         cursor: ftd::executor::Cursor::optional_cursor(
             properties,
@@ -1101,6 +1221,7 @@ pub fn common_from_properties(
             line_number,
             "cursor",
             inherited_variables,
+            component_name,
         )?,
         text_transform: ftd::executor::TextTransform::optional_text_transform(
             properties,
@@ -1109,6 +1230,7 @@ pub fn common_from_properties(
             line_number,
             "text-transform",
             inherited_variables,
+            component_name,
         )?,
         border_style: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1117,6 +1239,7 @@ pub fn common_from_properties(
             line_number,
             "border-style",
             inherited_variables,
+            component_name,
         )?,
         border_style_horizontal: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1125,6 +1248,7 @@ pub fn common_from_properties(
             line_number,
             "border-style-horizontal",
             inherited_variables,
+            component_name,
         )?,
         border_style_vertical: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1133,6 +1257,7 @@ pub fn common_from_properties(
             line_number,
             "border-style-vertical",
             inherited_variables,
+            component_name,
         )?,
         border_style_top: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1141,6 +1266,7 @@ pub fn common_from_properties(
             line_number,
             "border-style-top",
             inherited_variables,
+            component_name,
         )?,
         border_style_bottom: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1149,6 +1275,7 @@ pub fn common_from_properties(
             line_number,
             "border-style-bottom",
             inherited_variables,
+            component_name,
         )?,
         border_style_left: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1157,6 +1284,7 @@ pub fn common_from_properties(
             line_number,
             "border-style-left",
             inherited_variables,
+            component_name,
         )?,
         border_style_right: ftd::executor::BorderStyle::optional_border_style(
             properties,
@@ -1165,9 +1293,11 @@ pub fn common_from_properties(
             line_number,
             "border-style-right",
             inherited_variables,
+            component_name,
         )?,
         classes: ftd::executor::value::string_list(
             "classes",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1181,6 +1311,7 @@ pub fn common_from_properties(
             line_number,
             "padding",
             inherited_variables,
+            component_name,
         )?,
         padding_left: ftd::executor::Length::optional_length(
             properties,
@@ -1189,6 +1320,7 @@ pub fn common_from_properties(
             line_number,
             "padding-left",
             inherited_variables,
+            component_name,
         )?,
         padding_right: ftd::executor::Length::optional_length(
             properties,
@@ -1197,6 +1329,7 @@ pub fn common_from_properties(
             line_number,
             "padding-right",
             inherited_variables,
+            component_name,
         )?,
         padding_top: ftd::executor::Length::optional_length(
             properties,
@@ -1205,6 +1338,7 @@ pub fn common_from_properties(
             line_number,
             "padding-top",
             inherited_variables,
+            component_name,
         )?,
         padding_bottom: ftd::executor::Length::optional_length(
             properties,
@@ -1213,6 +1347,7 @@ pub fn common_from_properties(
             line_number,
             "padding-bottom",
             inherited_variables,
+            component_name,
         )?,
         padding_horizontal: ftd::executor::Length::optional_length(
             properties,
@@ -1221,6 +1356,7 @@ pub fn common_from_properties(
             line_number,
             "padding-horizontal",
             inherited_variables,
+            component_name,
         )?,
         padding_vertical: ftd::executor::Length::optional_length(
             properties,
@@ -1229,6 +1365,7 @@ pub fn common_from_properties(
             line_number,
             "padding-vertical",
             inherited_variables,
+            component_name,
         )?,
         margin: ftd::executor::Length::optional_length(
             properties,
@@ -1237,6 +1374,7 @@ pub fn common_from_properties(
             line_number,
             "margin",
             inherited_variables,
+            component_name,
         )?,
         margin_left: ftd::executor::Length::optional_length(
             properties,
@@ -1245,6 +1383,7 @@ pub fn common_from_properties(
             line_number,
             "margin-left",
             inherited_variables,
+            component_name,
         )?,
         margin_right: ftd::executor::Length::optional_length(
             properties,
@@ -1253,6 +1392,7 @@ pub fn common_from_properties(
             line_number,
             "margin-right",
             inherited_variables,
+            component_name,
         )?,
         margin_top: ftd::executor::Length::optional_length(
             properties,
@@ -1261,6 +1401,7 @@ pub fn common_from_properties(
             line_number,
             "margin-top",
             inherited_variables,
+            component_name,
         )?,
         margin_bottom: ftd::executor::Length::optional_length(
             properties,
@@ -1269,6 +1410,7 @@ pub fn common_from_properties(
             line_number,
             "margin-bottom",
             inherited_variables,
+            component_name,
         )?,
         margin_horizontal: ftd::executor::Length::optional_length(
             properties,
@@ -1277,6 +1419,7 @@ pub fn common_from_properties(
             line_number,
             "margin-horizontal",
             inherited_variables,
+            component_name,
         )?,
         margin_vertical: ftd::executor::Length::optional_length(
             properties,
@@ -1285,6 +1428,7 @@ pub fn common_from_properties(
             line_number,
             "margin-vertical",
             inherited_variables,
+            component_name,
         )?,
         border_width: ftd::executor::Length::length_with_default(
             properties,
@@ -1294,6 +1438,7 @@ pub fn common_from_properties(
             "border-width",
             ftd::executor::Length::Px(0),
             inherited_variables,
+            component_name,
         )?,
         border_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1302,6 +1447,7 @@ pub fn common_from_properties(
             line_number,
             "border-radius",
             inherited_variables,
+            component_name,
         )?,
         border_color: ftd::executor::Color::optional_color(
             properties,
@@ -1310,6 +1456,7 @@ pub fn common_from_properties(
             line_number,
             "border-color",
             inherited_variables,
+            component_name,
         )?,
         border_bottom_width: ftd::executor::Length::optional_length(
             properties,
@@ -1318,6 +1465,7 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-width",
             inherited_variables,
+            component_name,
         )?,
         border_bottom_color: ftd::executor::Color::optional_color(
             properties,
@@ -1326,6 +1474,7 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-color",
             inherited_variables,
+            component_name,
         )?,
         border_top_width: ftd::executor::Length::optional_length(
             properties,
@@ -1334,6 +1483,7 @@ pub fn common_from_properties(
             line_number,
             "border-top-width",
             inherited_variables,
+            component_name,
         )?,
         border_top_color: ftd::executor::Color::optional_color(
             properties,
@@ -1342,6 +1492,7 @@ pub fn common_from_properties(
             line_number,
             "border-top-color",
             inherited_variables,
+            component_name,
         )?,
         border_left_width: ftd::executor::Length::optional_length(
             properties,
@@ -1350,6 +1501,7 @@ pub fn common_from_properties(
             line_number,
             "border-left-width",
             inherited_variables,
+            component_name,
         )?,
         border_left_color: ftd::executor::Color::optional_color(
             properties,
@@ -1358,6 +1510,7 @@ pub fn common_from_properties(
             line_number,
             "border-left-color",
             inherited_variables,
+            component_name,
         )?,
         border_right_width: ftd::executor::Length::optional_length(
             properties,
@@ -1366,6 +1519,7 @@ pub fn common_from_properties(
             line_number,
             "border-right-width",
             inherited_variables,
+            component_name,
         )?,
         border_right_color: ftd::executor::Color::optional_color(
             properties,
@@ -1374,6 +1528,7 @@ pub fn common_from_properties(
             line_number,
             "border-right-color",
             inherited_variables,
+            component_name,
         )?,
         border_top_left_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1382,6 +1537,7 @@ pub fn common_from_properties(
             line_number,
             "border-top-left-radius",
             inherited_variables,
+            component_name,
         )?,
         border_top_right_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1390,6 +1546,7 @@ pub fn common_from_properties(
             line_number,
             "border-top-right-radius",
             inherited_variables,
+            component_name,
         )?,
         border_bottom_left_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1398,6 +1555,7 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-left-radius",
             inherited_variables,
+            component_name,
         )?,
         border_bottom_right_radius: ftd::executor::Length::optional_length(
             properties,
@@ -1406,6 +1564,7 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-right-radius",
             inherited_variables,
+            component_name,
         )?,
         width: ftd::executor::Resizing::resizing_with_default(
             properties,
@@ -1415,6 +1574,7 @@ pub fn common_from_properties(
             "width",
             ftd::executor::Resizing::default(),
             inherited_variables,
+            component_name,
         )?,
         height: ftd::executor::Resizing::resizing_with_default(
             properties,
@@ -1424,6 +1584,7 @@ pub fn common_from_properties(
             "height",
             ftd::executor::Resizing::default(),
             inherited_variables,
+            component_name,
         )?,
         min_width: ftd::executor::Resizing::optional_resizing(
             properties,
@@ -1432,6 +1593,7 @@ pub fn common_from_properties(
             line_number,
             "min-width",
             inherited_variables,
+            component_name,
         )?,
         max_width: ftd::executor::Resizing::optional_resizing(
             properties,
@@ -1440,6 +1602,7 @@ pub fn common_from_properties(
             line_number,
             "max-width",
             inherited_variables,
+            component_name,
         )?,
         min_height: ftd::executor::Resizing::optional_resizing(
             properties,
@@ -1448,6 +1611,7 @@ pub fn common_from_properties(
             line_number,
             "min-height",
             inherited_variables,
+            component_name,
         )?,
         max_height: ftd::executor::Resizing::optional_resizing(
             properties,
@@ -1456,9 +1620,11 @@ pub fn common_from_properties(
             line_number,
             "max-height",
             inherited_variables,
+            component_name,
         )?,
         link: ftd::executor::value::optional_string(
             "link",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1466,6 +1632,7 @@ pub fn common_from_properties(
         )?,
         open_in_new_tab: ftd::executor::value::optional_bool(
             "open-in-new-tab",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1482,6 +1649,7 @@ pub fn common_from_properties(
             line_number,
             "background",
             inherited_variables,
+            component_name,
         )?,
         color: ftd::executor::Color::optional_color(
             properties,
@@ -1490,6 +1658,7 @@ pub fn common_from_properties(
             line_number,
             "color",
             inherited_variables,
+            component_name,
         )?,
         align_self: ftd::executor::AlignSelf::optional_align_self(
             properties,
@@ -1498,6 +1667,7 @@ pub fn common_from_properties(
             line_number,
             "align-self",
             inherited_variables,
+            component_name,
         )?,
         overflow: ftd::executor::Overflow::optional_overflow(
             properties,
@@ -1506,6 +1676,7 @@ pub fn common_from_properties(
             line_number,
             "overflow",
             inherited_variables,
+            component_name,
         )?,
         overflow_x: ftd::executor::Overflow::optional_overflow(
             properties,
@@ -1514,6 +1685,7 @@ pub fn common_from_properties(
             line_number,
             "overflow-x",
             inherited_variables,
+            component_name,
         )?,
         overflow_y: ftd::executor::Overflow::optional_overflow(
             properties,
@@ -1522,6 +1694,7 @@ pub fn common_from_properties(
             line_number,
             "overflow-y",
             inherited_variables,
+            component_name,
         )?,
         resize: ftd::executor::Resize::optional_resize(
             properties,
@@ -1530,6 +1703,7 @@ pub fn common_from_properties(
             line_number,
             "resize",
             inherited_variables,
+            component_name,
         )?,
         white_space: ftd::executor::WhiteSpace::optional_whitespace(
             properties,
@@ -1538,6 +1712,7 @@ pub fn common_from_properties(
             line_number,
             "white-space",
             inherited_variables,
+            component_name,
         )?,
         shadow: ftd::executor::Shadow::optional_shadow(
             properties,
@@ -1546,6 +1721,7 @@ pub fn common_from_properties(
             line_number,
             "shadow",
             inherited_variables,
+            component_name,
         )?,
     })
 }
@@ -1557,10 +1733,12 @@ pub fn container_from_properties(
     line_number: usize,
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    component_name: &str,
 ) -> ftd::executor::Result<Container> {
     Ok(Container {
         wrap: ftd::executor::value::optional_bool(
             "wrap",
+            component_name,
             properties,
             arguments,
             doc,
@@ -1575,6 +1753,7 @@ pub fn container_from_properties(
             "align-content",
             ftd::executor::Alignment::TopLeft,
             inherited_variables,
+            component_name,
         )?,
         spacing: ftd::executor::Spacing::optional_spacing_mode(
             properties,
@@ -1583,6 +1762,7 @@ pub fn container_from_properties(
             line_number,
             "spacing",
             inherited_variables,
+            component_name,
         )?,
         children,
     })
@@ -1631,17 +1811,25 @@ pub fn text_input_from_properties(
     // TODO: `youtube` should not be conditional
     let placeholder = ftd::executor::value::optional_string(
         "placeholder",
+        "ftd#text-input",
         properties,
         arguments,
         doc,
         line_number,
     )?;
 
-    let value =
-        ftd::executor::value::optional_string("value", properties, arguments, doc, line_number)?;
+    let value = ftd::executor::value::optional_string(
+        "value",
+        "ftd#text-input",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
 
     let multiline = ftd::executor::value::bool_with_default(
         "multiline",
+        "ftd#text-input",
         properties,
         arguments,
         false,
@@ -1651,6 +1839,7 @@ pub fn text_input_from_properties(
 
     let enabled = ftd::executor::value::optional_bool(
         "enabled",
+        "ftd#text-input",
         properties,
         arguments,
         doc,
@@ -1660,6 +1849,7 @@ pub fn text_input_from_properties(
 
     let default_value = ftd::executor::value::optional_string(
         "default-value",
+        "ftd#text-input",
         properties,
         arguments,
         doc,
@@ -1673,6 +1863,7 @@ pub fn text_input_from_properties(
         line_number,
         "type",
         inherited_variables,
+        "ftd#text-input",
     )?;
 
     let common = common_from_properties(
@@ -1684,6 +1875,7 @@ pub fn text_input_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#text-input",
     )?;
 
     Ok(TextInput {
@@ -1751,6 +1943,7 @@ pub fn checkbox_from_properties(
 ) -> ftd::executor::Result<CheckBox> {
     let checked = ftd::executor::value::optional_bool(
         "checked",
+        "ftd#checkbox",
         properties,
         arguments,
         doc,
@@ -1760,6 +1953,7 @@ pub fn checkbox_from_properties(
 
     let enabled = ftd::executor::value::optional_bool(
         "enabled",
+        "ftd#checkbox",
         properties,
         arguments,
         doc,
@@ -1776,6 +1970,7 @@ pub fn checkbox_from_properties(
         local_container,
         line_number,
         inherited_variables,
+        "ftd#checkbox",
     )?;
 
     Ok(CheckBox {
