@@ -30,6 +30,11 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.ui`](ftd/built-in-types/#ftd-ui)
   - [`children`](ftd/built-in-types/#children)
 - [Derived Types](ftd/built-in-types/#derived-types)
+  - [`ftd.background`](ftd/built-in-types/#ftd-background)
+  - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
+  - [`ftd.background-repeat`](ftd/built-in-types/#ftd-background-repeat)
+  - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
+  - [`ftd.background-size`](ftd/built-in-types/#ftd-background-size)
   - [`ftd.color`](ftd/built-in-types/#ftd-color)
   - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
   - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
@@ -51,6 +56,8 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.loading`](ftd/built-in-types/#ftd-loading)
   - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
   - [`ftd.type`](ftd/built-in-types/#ftd-type)
+  - [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
+  - [`ftd.shadow`](ftd/built-in-types/#ftd-shadow)
 
 
 
@@ -340,6 +347,240 @@ Derived types are more complex and are built using primitive types or other
 derived types. Derived types comes in two types: [`record`](ftd/record/) and
 [`or-type`](ftd/or-type/).
 
+
+
+
+
+
+-- ds.h2: `ftd.background`
+
+`ftd.background` is an `or-type`. It accepts either solid color of type
+`ftd.color` or an image of type `ftd.background-image`.
+
+-- ds.code: `ftd.background`
+lang: ftd
+
+\-- or-type background:
+
+\-- ftd.color solid:
+\-- ftd.background-image image:
+
+\-- end: background
+
+-- ds.markdown:
+
+As shown above, the `ftd.background` has following variants:
+
+- `solid`: This value will set the specified solid color as the background.
+It takes value of type `ftd.color`.
+
+- `image`: This value will set the specified image as the background image
+It takes value of type `ftd.background-image`.
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.background-image`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.background-image` record
+lang: ftd
+
+\-- record background-image:
+caption ftd.image-src src:
+optional ftd.background-repeat repeat:
+optional ftd.background-position position:
+optional ftd.background-size size:
+
+-- ds.markdown:
+
+- `src`: This field of `ftd.background-image` stores the source of image to be displayed in
+both light and dark modes.
+
+- `repeat`: This field specifies whether the image needs to be repeated or not.
+It takes `ftd.background-repeat` value and is optional. By default, the background
+image will be repeated in both directions.
+
+- `size`: This field specifies the size of the background image which will be displayed.
+It takes `ftd.background-size` value and is optional.
+
+- `position`: This field specifies the position of the background image. It takes
+`ftd.background-position` value and is optional. By default, the background image
+will be shown at the top-left position.
+
+
+
+
+
+
+-- ds.h2: `ftd.background-repeat`
+
+The `ftd.background-repeat` property is used to specify how background
+images are repeated. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-repeat`
+lang: ftd
+
+\-- or-type background-repeat:
+
+\-- constant string repeat: repeat
+\-- constant string repeat-x: repeat-x
+\-- constant string repeat-y: repeat-y
+\-- constant string no-repeat: no-repeat
+\-- constant string space: space
+\-- constant string round: round
+
+\-- end: background-repeat
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-repeat` has following variants:
+
+- `repeat`: This value will make the background image repeat as much as possible in both
+directions to cover the whole container area. The last image will be clipped
+if it doesn't fit as per container dimensions.
+
+- `repeat-x`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in x-direction (horizontal direction) and the
+last image will be clipped if it doesnt fit within the container area.
+
+- `repeat-y`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in y-direction (vertical direction) and the last image will be clipped if
+it doesnt fit within the container area.
+
+- `no-repeat`: This value will make the image not repeat itself in any direction
+and hence container area might not get entirely covered in case if the container
+area is larger than the image itself.
+
+- `space`: This value will make the image repeat itself in both directions just like
+`repeat` except the fact that the last images wont be clipped and whitespace will be
+evenly distributed between the images. The only case where clipping will happen when
+there is not enough space for a single image.
+
+- `round`: This value will make the background image repeat itself
+and then are either squished or stretched to fill up the container space
+leaving no gaps.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.background-position`
+
+The `ftd.background-position` property is used to specify the
+positioning of the background image. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-position`
+lang: ftd
+
+\-- or-type background-position:
+
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom: bottom
+\-- constant string left-top: left-top
+\-- constant string left-center: left-center
+\-- constant string left-bottom: left-bottom
+\-- constant string center-top: center-top
+\-- constant string center-center: center-center
+\-- constant string center-bottom: center-bottom
+\-- constant string right-top: right-top
+\-- constant string right-center: right-center
+\-- constant string right-bottom: right-bottom
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: background-position
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-position` has following variants:
+
+- `left`- Positions the image to the left of the container.
+- `center`- Positions the image to the center of the container.
+- `right`- Positions the image to the right of the container.
+- `left-top` - Positions the image to the left in horizontal direction
+and top along the vertical direction of the container.
+- `left-center` - Positions the image to the left in horizontal direction
+and center along the vertical direction of the container.
+- `left-bottom` - Positions the image to the left in horizontal direction
+and bottom along the vertical direction of the container.
+- `center-top` - Positions the image to the center in horizontal direction
+and top along the vertical direction of the container.
+- `center-center` - Positions the image to the center in horizontal direction
+and center along the vertical direction of the container.
+- `center-bottom` - Positions the image to the center in horizontal direction
+and bottom along the vertical direction of the container.
+- `right-top` - Positions the image to the right in horizontal direction
+and top along the vertical direction of the container.
+- `right-center` - Positions the image to the right in horizontal direction
+and center along the vertical direction of the container.
+- `right-bottom` - Positions the image to the right in horizontal direction
+and bottom along the vertical direction of the container.
+- `length` - This anonymous record value will set the position value
+based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.background-size`
+
+The `ftd.background-size` property is used to specify the
+dimensions of the background image. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-size`
+lang: ftd
+
+\-- or-type background-size:
+
+\-- constant string auto: auto
+\-- constant string cover: cover
+\-- constant string contain: contain
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: background-size
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-size` has following variants:
+
+- `auto`: This value will scale the background image
+in the corresponding directions while maintaining the intrinsic proportions
+of the specified image.
+
+- `cover`: This value will scale the image to the smallest possible size
+to fill the container area leaving no empty space while preserving its ratio.
+Image will be cropped for either direction if the container dimensions differ
+from the image dimensions.
+
+- `contain`: This value will scale the background image as large as possible
+within its container area without cropping or stretching the image.
+
+- `length`: This anonymous record value will set the dimensions of the
+background image based on the specified x and y values.
 
 -- ds.h2: `ftd.color`
 
@@ -1599,6 +1840,97 @@ with dynamic keyboards.
 
 
 
+
+-- ds.h2: `ftd.text-style`
+
+`ftd.text-style` is an `or-type`. The `style` under text attributes
+accepts the `optional list` of this type. It allows various constant values which
+defines the specific inline style.
+
+-- ds.code: `ftd.text-style`
+lang: ftd
+
+\-- or-type text-style:
+
+\-- constant string underline: underline
+\-- constant string strike: strike
+\-- constant string italic: italic
+\-- constant string heavy: heavy
+\-- constant string extra-bold: extra-bold
+\-- constant string semi-bold: semi-bold
+\-- constant string bold: bold
+\-- constant string regular: regular
+\-- constant string medium: medium
+\-- constant string light: light
+\-- constant string extra-light: extra-light
+\-- constant string hairline: hairline
+
+\-- end: text-style
+
+-- ds.markdown:
+
+As you can see above the `ftd.text-style` has following variants:
+
+**Text Decoration**
+- `underline`: This value will set the text to have a decorative line beneath it.
+- `strike`: This value will set the text to have a decorative line going through its middle.
+
+**Font Style**
+- `italic`: This value will make your text italic.
+
+**Font Weights**
+- `heavy`: This value will set the font weight to 900.
+- `extra-bold`: This value will set the font weight to 800.
+- `bold`: This value will set the font weight to 700.
+- `semi-bold`: This value will set the font weight to 600.
+- `medium`: This value will set the font weight to 500.
+- `regular`: This value will set the font weight to 400.
+- `light`: This value will set the font weight to 300.
+- `extra-light`: This value will set the font weight to 200.
+- `hairline`: This value will set the font weight to 100.
+
+
+
+
+
+-- ds.h2: `ftd.shadow`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.shadow` record
+lang: ftd
+
+\-- record shadow:
+ftd.color color:
+ftd.length x-offset: 0
+ftd.length y-offset: 0
+ftd.length blur: 0
+ftd.length spread: 0
+boolean inset: false
+
+-- ds.markdown:
+
+- `color`: This field of `ftd.shadow` stores the color of the shadow to be displayed in
+both light and dark modes.
+
+- `x-offset`: It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-x` specifies the horizontal distance. Negative values place the
+shadow to the left of the element. By default, this will be set to 0px if not specified.
+
+- `y-offset`: It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-y` specifies the vertical distance. Negative values place the
+shadow above the element. By default, this will be set to 0px if not specified.
+
+- `blur`: It adds blur in shadow. The larger the value of `shadow-blur`, the bigger
+the blur, so the shadow becomes bigger and lighter. Negative values are
+not allowed. By default, this will be set to 0px if not specified.
+
+- `spread`: It specifies the size of shadow. Positive values will cause the shadow to
+expand and grow bigger, negative values will cause the shadow to shrink. By default, this will
+be set to 0px if not specified.
+
+- `inset`: This field will make the shadow inset (if provided true). By default, outset
+shadow will be used if this value is not specified or is given false.
 
 
 

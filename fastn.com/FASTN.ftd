@@ -105,6 +105,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
 - Common Attributes 🚧: /ftd/common/
+- Text Attributes 🚧: /ftd/text-attributes/
 
 ## How Tos: /install/
   document: author/how-to/install.ftd

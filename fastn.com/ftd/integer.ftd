@@ -5,23 +5,30 @@ document.
 
 -- ds.h1: Usage
 
--- ds.code:
-lang: ftd
+To use `ftd.integer`, simply add it to your `ftd` document with your desired
+integer value to display.
+
+-- ds.rendered: Sample Usage
+
+-- ds.rendered.input:
 
 \-- ftd.integer: 10
+color: $inherited.colors.text
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.integer: 10
 color: $inherited.colors.text
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
 -- ds.h1: Attributes
 
 `ftd.integer` accepts the below attributes along with the
-[common attributes](ftd/common/).
+[common](ftd/common/) and [text](ftd/text-attributes/) attributes.
 
 
 -- ds.h2: `value: integer`
@@ -31,123 +38,87 @@ This is the value to show. It is a required field.
 There are three ways to pass integer to `ftd.integer`: as `caption`, as a
 `value` `header`, or as `body`.
 
--- ds.code: As a `caption`
-lang: ftd
-
-\-- ftd.integer: 10000
 
 
--- ds.code: As a `value` header
-lang: ftd
+-- ds.rendered: value as `caption`
+
+-- ds.rendered.input:
+
+\-- ftd.integer: 10000 ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.integer: 10000
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: value as `header`
+
+-- ds.rendered.input:
 
 \-- ftd.integer:
-value: 10000
+value: 20000 ;; <hl>
 
-
--- ds.code: As a `body`
-lang: ftd
-
-\-- ftd.integer:
-
-10000
-
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.integer:
-color: $inherited.colors.text-strong
+value: 20000
 
-10000
+-- end: ds.rendered.output
 
--- end: ds.output
-
--- ds.h2: `text-align: optional ftd.text-align`
-
-This attribute is used to align the integer within `ftd.integer`. It accepts the
-[`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
-optional.
-
-
--- ftd.row:
-spacing.fixed.px: 10
-
--- ftd.integer: 100000000000000000
-width.fixed.px: 70
-text-align: center
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
+-- end: ds.rendered
 
 
 
--- ftd.integer: 100000000000000000
-width.fixed.px: 70
-text-align: start
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
+-- ds.rendered: value as `body`
+
+-- ds.rendered.input:
+
+\-- ftd.integer:
+
+1234 ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.integer:
+
+1234
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
-
--- ftd.integer: 100000000000000000
-width.fixed.px: 70
-text-align: end
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-
-
--- ftd.integer: 100000000000000000
-width.fixed.px: 70
-text-align: justify
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-
--- end: ftd.row
-
--- ds.code:
-lang: ftd
-
-\-- ftd.integer: 100000000000000000
-width.fixed.px: 70
-text-align: center
 
 
 -- ds.h2: `format: optional string`
 
-This is a format string.
+This attribute can be used to render your integer in different formats.
+You can find documentation of formatting strings
+[here](https://docs.rs/format_num/0.1.0/format_num/).
 
-Consider the following example. It is shown as (hex):
+-- ds.rendered: Sample code to format integer as hex value
 
-
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.integer:
 value: 48879
-format: #X
+format: #X ;; <hl>
 
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.integer:
 value: 48879
 format: #X
-color: $inherited.colors.text-strong
 
--- end: ds.output
+-- end: ds.rendered.output
 
--- ds.markdown:
-
-You can find documentation of formatting strings 
-[here](https://docs.rs/format_num/0.1.0/format_num/).
+-- end: ds.rendered
 
 
 -- end: my-ds.page

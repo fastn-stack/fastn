@@ -8,22 +8,26 @@
 To use `ftd.text`, simply add it to your `ftd` document with your desired text
 to display.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample usage
+
+-- ds.rendered.input:
 
 \-- ftd.text: hello world
+color: $inherited.colors.text
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: hello world
 color: $inherited.colors.text
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 -- ds.h1: Attributes
 
-`ftd.text` accepts the below attributes as well all the [common
-attributes](ftd/common/).
+`ftd.text` accepts the below attributes as well all the
+[common](ftd/common/) and [text](ftd/text-attributes/) attributes.
 
 -- ds.h2: `text: string`
 
@@ -32,118 +36,68 @@ value. It is a required attribute.
 
 You have three ways to pass text value to the `ftd.text` component.
 
-There are three ways to pass text to `ftd.text`: as `caption`, as a `text`
+There are three ways to pass text to `ftd.text` as `caption`, as a `text`
 `header`, or as multi-line text in the `body`.
 
--- ds.code: As a `caption`
-lang: ftd
+-- ds.rendered: text as `caption`
 
-\-- ftd.text: FTD example
+-- ds.rendered.input:
 
--- ds.output: Output: As a `caption`
+\-- ftd.text: FTD example ;; <hl>
+color: $inherited.colors.text-strong
+
+-- ds.rendered.output:
 
 -- ftd.text: FTD example
 color: $inherited.colors.text-strong
 
--- end: ds.output
+-- end: ds.rendered.output
 
+-- end: ds.rendered
 
--- ds.code: As a `text` header
-lang: ftd
+-- ds.rendered: text as `header`
+
+-- ds.rendered.input:
 
 \-- ftd.text:
-text: This is an example of how to use ftd.text.
+text: This is an example of how to use ftd.text. ;; <hl>
+color: $inherited.colors.text-strong
 
-
--- ds.output: Output: As a `text` header
+-- ds.rendered.output:
 
 -- ftd.text:
 text: This is an example of how to use ftd.text.
 color: $inherited.colors.text-strong
 
--- end: ds.output
+-- end: ds.rendered.output
 
--- ds.code: As a `body`
-lang: ftd
+-- end: ds.rendered
+
+
+-- ds.rendered: text as `body`
+
+-- ds.rendered.input:
 
 \-- ftd.text:
+color: $inherited.colors.text-strong
+
+This is a bigger text. ;; <hl>
+\;; <hl>
+This can span multiple lines. ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.text:
+color: $inherited.colors.text-strong
 
 This is a bigger text.
 
 This can span multiple lines.
 
+-- end: ds.rendered.output
 
--- ds.output: Output: As a `body`
+-- end: ds.rendered
 
--- ftd.text:
-color: $inherited.colors.text-strong
-
-
-This is a bigger text.
-
-This can span multiple lines.
-
--- end: ds.output
-
-
--- ds.h2: `text-align: optional ftd.text-align`
-
-This attribute is used to align the text within `ftd.text`. It accepts the
-[`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
-optional.
-
-
--- ftd.row:
-spacing.fixed.px: 10
-
--- ftd.text:
-text-align: center
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-this is **text-align: center** text. a bit longer text so you can see what's going on.
-
-
--- ftd.text:
-text-align: start
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-this is **text-align: start** text. typing dummy text for examples is so boring.
-
-
--- ftd.text:
-text-align: end
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-this is **text-align: end** aligned text. but then you got to do what you go to
-do.
-
-
--- ftd.text:
-text-align: justify
-border-width.px: 1
-border-radius.px: 3
-padding.px: 5
-color: $inherited.colors.text-strong
-
-this is **text-align: justify** text. or not. whatever works. I mean maybe it
-matters.
-
--- end: ftd.row
-
--- ds.code:
-lang: ftd
-
-\-- ftd.text: this is some center aligned text
-text-align: center
 
 
 -- ds.h2: `line-clamp: optional integer`
@@ -151,28 +105,32 @@ text-align: center
 The `line-clamp` attribute truncates text at a specific number of lines. It
 accepts an integer value and is optional.
 
--- ds.code: `line-clamp`
+-- ds.rendered: Sample code using `line-clamp`
+
+-- ds.rendered.input:
+
+\-- ds.code: `line-clamp`
 lang: ftd
 
 \-- ftd.text:
 border-width.px: 1
 padding.px: 5
 width.fixed.px: 100
-line-clamp: 4
+line-clamp: 3 ;; <hl>
 
-Writing long text can often feel like a tedious and daunting task, especially
-when faced with a blank page and a blinking cursor. It can be easy to feel
-overwhelmed by the thought of having to fill page after page with coherent
-thoughts and ideas. However, there are many reasons why writing long text can be
-a valuable and rewarding experience.
+Writing long text can often feel like a tedious and daunting task,
+especially when faced with a blank page and a blinking cursor.
+It can be easy to feel overwhelmed by the thought of having to fill
+page after page with coherent thoughts and ideas.
+However, there are many reasons why writing long text can be a
+valuable and rewarding experience.
 
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text:
 border-width.px: 1
 padding.px: 5
-line-clamp: 4
+line-clamp: 3
 color: $inherited.colors.text-strong
 
 Writing long text can often feel like a tedious and daunting task, especially
@@ -181,7 +139,9 @@ overwhelmed by the thought of having to fill page after page with coherent
 thoughts and ideas. However, there are many reasons why writing long text can be
 a valuable and rewarding experience.
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
 -- end: my-ds.page
