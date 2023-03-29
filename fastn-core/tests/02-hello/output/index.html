@@ -1092,6 +1092,54 @@ data[argument] = eval(component.getAttribute(argument));
 }
 return data;
 };
+exports.call_mutable_value_changes = function (key, id) {
+if (!window.ftd[`mutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`mutable_value_${id}`][key]) {
+let changes = window.ftd[`mutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`mutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`mutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
+exports.call_immutable_value_changes = function (key, id) {
+if (!window.ftd[`immutable_value_${id}`]) {
+return;
+}
+if (!!window.ftd[`immutable_value_${id}`][key]) {
+let changes = window.ftd[`immutable_value_${id}`][key].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+const pattern = new RegExp(`^${key}\\..+`);
+const result = Object.keys(window.ftd[`immutable_value_${id}`])
+.filter(key => pattern.test(key))
+.reduce((acc, key) => {
+acc[key] = window.ftd[`immutable_value_${id}`][key];
+return acc;
+}, {});
+for (let i in result) {
+let changes = result[i].changes;
+for (let i in changes) {
+changes[i]();
+}
+}
+};
 return exports;
 })();
 window.ftd.post_init = function () {
@@ -1618,37 +1666,37 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["1:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
 }
 
 window.node_change_main["1:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
 }
 
 window.node_change_main["1:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
 }
 
 window.node_change_main["1:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
 }
 
 window.node_change_main["1:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
 }
 window.node_change_main["2:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
@@ -1659,37 +1707,37 @@ else {document.querySelector(`[data-id="2:main"]`).style["color"] = resolve_refe
 
 window.node_change_main["2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 
 window.node_change_main["2:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
+document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).desktop)));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
+else {document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("ftd#default-types.copy-regular", data).mobile)));}
 }
 window.set_value_main = {};
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -1699,14 +1747,8 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.mutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#dark-mode"]) {
-let changes = window.ftd.immutable_value_main["ftd#dark-mode"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
 }
 };
@@ -1718,14 +1760,8 @@ set_data_value(data, "ftd#default-colors" + "." + remaining, new_value);
 set_data_value(data, "ftd#default-colors", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-colors"]) {
-let changes = window.ftd.mutable_value_main["ftd#default-colors"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-colors"]) {
-let changes = window.ftd.immutable_value_main["ftd#default-colors"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
+window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
 }
 };
@@ -1737,14 +1773,8 @@ set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
 set_data_value(data, "ftd#default-types", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#default-types"]) {
-let changes = window.ftd.mutable_value_main["ftd#default-types"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#default-types"]) {
-let changes = window.ftd.immutable_value_main["ftd#default-types"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("ftd#default-types", "main");
+window.ftd.call_immutable_value_changes("ftd#default-types", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-family"]){window.node_change_main["2:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-size"]){window.node_change_main["2:main__font-size"](data);
@@ -1764,14 +1794,8 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["ftd#device"]) {
-let changes = window.ftd.mutable_value_main["ftd#device"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["ftd#device"]) {
-let changes = window.ftd.immutable_value_main["ftd#device"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
@@ -1811,14 +1835,8 @@ set_data_value(data, "www.amitu.com/#rtype" + "." + remaining, new_value);
 set_data_value(data, "www.amitu.com/#rtype", new_value);
 }
 
-if (!!window.ftd.mutable_value_main && !!window.ftd.mutable_value_main["www.amitu.com/#rtype"]) {
-let changes = window.ftd.mutable_value_main["www.amitu.com/#rtype"].changes;
-for(let i in changes) { changes[i](); }
-}
-if (!!window.ftd.immutable_value_main && !!window.ftd.immutable_value_main["www.amitu.com/#rtype"]) {
-let changes = window.ftd.immutable_value_main["www.amitu.com/#rtype"].changes;
-for(let i in changes) { changes[i](); }
-}
+window.ftd.call_mutable_value_changes("www.amitu.com/#rtype", "main");
+window.ftd.call_immutable_value_changes("www.amitu.com/#rtype", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
