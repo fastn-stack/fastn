@@ -1,0 +1,9 @@
+-- ftd.text: Title
+role: $inherited.types.heading-hero
+color: $inherited.colors.custom.one
+text-align: center
+max-width.fixed.px if { ftd.device != "mobile" }: 10
+max-width.fixed.px if { ftd.device == "mobile" }: 5
+region: h1
+background.solid: yellow
+align-self: center

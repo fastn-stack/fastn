@@ -766,7 +766,7 @@ impl Resizing {
                 let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
                 Ok((
                     Length::get_pattern_from_variant_str(variant.as_str(), doc_id, line_number)?,
-                    false,
+                    true,
                 ))
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok(("100%", false)),
