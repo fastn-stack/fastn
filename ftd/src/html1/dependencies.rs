@@ -126,6 +126,28 @@ impl<'a> DependencyGenerator<'a> {
             result.push(value)
         }
 
+        if let Some(value) = node_for_properties(
+            &self.html_data.description,
+            var_dependencies,
+            "document__description",
+            self.doc,
+            "document.head.querySelector('meta[name=\"description\"]').content",
+            self.id,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.og_description,
+            var_dependencies,
+            "og_document__description",
+            self.doc,
+            "document.head.querySelector('meta[property=\"og:description\"]').content",
+            self.id,
+        )? {
+            result.push(value)
+        }
+
         {
             let node_change_id = "document__theme_color".to_string();
             let mut expressions = vec![];
