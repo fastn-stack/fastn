@@ -765,6 +765,11 @@
       "value": null,
       "line_number": null,
       "properties": []
+    },
+    "theme_color": {
+      "value": null,
+      "line_number": null,
+      "properties": []
     }
   },
   "dummy_instructions": {
