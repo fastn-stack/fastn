@@ -88,220 +88,42 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
 
-        {
-            let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "text");
-            let mut expressions = vec![];
-            let mut is_static = true;
-            let key = format!(
+        let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "text");
+        if let Some(value) = node_for_properties(
+            &self.node.text,
+            var_dependencies,
+            node_change_id.as_str(),
+            self.doc,
+            format!(
                 "document.querySelector(`[data-id=\"{}\"]`).innerHTML",
                 node_data_id,
-            );
-            for property_with_pattern in self.node.text.properties.iter() {
-                let property = &property_with_pattern.property;
-                let condition = property
-                    .condition
-                    .as_ref()
-                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
-
-                if !is_static_expression(&property.value, &condition, self.doc) {
-                    is_static = false;
-                }
-
-                if let Some(value_string) =
-                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
-                        self.id,
-                        self.doc,
-                        &property.value,
-                        &property_with_pattern.pattern_with_eval,
-                        None,
-                        false,
-                    )?
-                {
-                    dependency_map_from_condition(
-                        var_dependencies,
-                        &property.condition,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-                    dependency_map_from_property_value(
-                        var_dependencies,
-                        &property.value,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-
-                    let value = format!("{} = {};", key, value_string);
-                    expressions.push((condition, value));
-                }
-            }
-            let value = ftd::html1::utils::js_expression_from_list(
-                expressions,
-                Some(key.as_str()),
-                format!(
-                    "{} = {}",
-                    key,
-                    self.node
-                        .text
-                        .default
-                        .clone()
-                        .unwrap_or_else(|| "null".to_string())
-                )
-                .as_str(),
-            );
-            if !value.trim().is_empty() && !is_static {
-                result.push(format!(
-                    indoc::indoc! {"
-                         window.node_change_{id}[\"{key}\"] = function(data) {{
-                                {value}
-                         }}
-                    "},
-                    id = self.id,
-                    key = node_change_id,
-                    value = value.trim(),
-                ));
-            }
+            )
+            .as_str(),
+            self.id,
+        )? {
+            result.push(value)
         }
 
-        {
-            let node_change_id = "document__title".to_string();
-            let mut expressions = vec![];
-            let mut is_static = true;
-            let key = "document.title";
-            for property_with_pattern in self.html_data.title.properties.iter() {
-                let property = &property_with_pattern.property;
-                let condition = property
-                    .condition
-                    .as_ref()
-                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
-
-                if !is_static_expression(&property.value, &condition, self.doc) {
-                    is_static = false;
-                }
-
-                if let Some(value_string) =
-                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
-                        self.id,
-                        self.doc,
-                        &property.value,
-                        &property_with_pattern.pattern_with_eval,
-                        None,
-                        false,
-                    )?
-                {
-                    dependency_map_from_condition(
-                        var_dependencies,
-                        &property.condition,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-                    dependency_map_from_property_value(
-                        var_dependencies,
-                        &property.value,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-
-                    let value = format!("{} = {};", key, value_string);
-                    expressions.push((condition, value));
-                }
-            }
-            let value = ftd::html1::utils::js_expression_from_list(
-                expressions,
-                Some(key),
-                format!(
-                    "{} = {}",
-                    key,
-                    self.node
-                        .text
-                        .default
-                        .clone()
-                        .unwrap_or_else(|| "null".to_string())
-                )
-                .as_str(),
-            );
-            if !value.trim().is_empty() && !is_static {
-                result.push(format!(
-                    indoc::indoc! {"
-                         window.node_change_{id}[\"{key}\"] = function(data) {{
-                                {value}
-                         }}
-                    "},
-                    id = self.id,
-                    key = node_change_id,
-                    value = value.trim(),
-                ));
-            }
+        if let Some(value) = node_for_properties(
+            &self.html_data.title,
+            var_dependencies,
+            "document__title",
+            self.doc,
+            "document.title",
+            self.id,
+        )? {
+            result.push(value)
         }
 
-        {
-            let node_change_id = "og_document__title".to_string();
-            let mut expressions = vec![];
-            let mut is_static = true;
-            let key = "document.head.querySelector('meta[property=\"og:title\"]').content";
-            for property_with_pattern in self.html_data.og_title.properties.iter() {
-                let property = &property_with_pattern.property;
-                let condition = property
-                    .condition
-                    .as_ref()
-                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
-
-                if !is_static_expression(&property.value, &condition, self.doc) {
-                    is_static = false;
-                }
-
-                if let Some(value_string) =
-                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
-                        self.id,
-                        self.doc,
-                        &property.value,
-                        &property_with_pattern.pattern_with_eval,
-                        None,
-                        false,
-                    )?
-                {
-                    dependency_map_from_condition(
-                        var_dependencies,
-                        &property.condition,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-                    dependency_map_from_property_value(
-                        var_dependencies,
-                        &property.value,
-                        node_change_id.as_str(),
-                        self.doc,
-                    );
-
-                    let value = format!("{} = {};", key, value_string);
-                    expressions.push((condition, value));
-                }
-            }
-            let value = ftd::html1::utils::js_expression_from_list(
-                expressions,
-                Some(key),
-                format!(
-                    "{} = {}",
-                    key,
-                    self.node
-                        .text
-                        .default
-                        .clone()
-                        .unwrap_or_else(|| "null".to_string())
-                )
-                .as_str(),
-            );
-            if !value.trim().is_empty() && !is_static {
-                result.push(format!(
-                    indoc::indoc! {"
-                         window.node_change_{id}[\"{key}\"] = function(data) {{
-                                {value}
-                         }}
-                    "},
-                    id = self.id,
-                    key = node_change_id,
-                    value = value.trim(),
-                ));
-            }
+        if let Some(value) = node_for_properties(
+            &self.html_data.og_title,
+            var_dependencies,
+            "og_document__title",
+            self.doc,
+            "document.head.querySelector('meta[property=\"og:title\"]').content",
+            self.id,
+        )? {
+            result.push(value)
         }
 
         {
@@ -954,6 +776,77 @@ impl<'a> DependencyGenerator<'a> {
             _ => value,
         }
     }
+}
+
+fn node_for_properties(
+    value: &ftd::node::Value,
+    var_dependencies: &mut ftd::VecMap<String>,
+    node_change_id: &str,
+    doc: &ftd::interpreter2::TDoc,
+    key: &str,
+    id: &str,
+) -> ftd::html1::Result<Option<String>> {
+    let mut expressions = vec![];
+    let mut is_static = true;
+    for property_with_pattern in value.properties.iter() {
+        let property = &property_with_pattern.property;
+        let condition = property
+            .condition
+            .as_ref()
+            .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+
+        if !is_static_expression(&property.value, &condition, doc) {
+            is_static = false;
+        }
+
+        if let Some(value_string) = ftd::html1::utils::get_formatted_dep_string_from_property_value(
+            id,
+            doc,
+            &property.value,
+            &property_with_pattern.pattern_with_eval,
+            None,
+            false,
+        )? {
+            dependency_map_from_condition(
+                var_dependencies,
+                &property.condition,
+                node_change_id,
+                doc,
+            );
+            dependency_map_from_property_value(
+                var_dependencies,
+                &property.value,
+                node_change_id,
+                doc,
+            );
+
+            let value = format!("{} = {};", key, value_string);
+            expressions.push((condition, value));
+        }
+    }
+    let value = ftd::html1::utils::js_expression_from_list(
+        expressions,
+        Some(key),
+        format!(
+            "{} = {}",
+            key,
+            value.default.clone().unwrap_or_else(|| "null".to_string())
+        )
+        .as_str(),
+    );
+    if !value.trim().is_empty() && !is_static {
+        return Ok(Some(format!(
+            indoc::indoc! {"
+                 window.node_change_{id}[\"{key}\"] = function(data) {{
+                        {value}
+                 }}
+            "},
+            id = id,
+            key = node_change_id,
+            value = value.trim(),
+        )));
+    }
+    Ok(None)
 }
 
 fn dependency_map_from_condition(

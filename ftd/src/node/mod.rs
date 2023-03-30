@@ -12,4 +12,4 @@ pub(crate) mod utils;
 pub use main::{Event, HTMLData, Node};
 pub use node_data::NodeData;
 pub use raw_node::{DummyNode, RawNode};
-pub use value::Value;
+pub use value::{PropertyWithPattern, Value};

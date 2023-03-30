@@ -8447,6 +8447,36 @@ pub fn document_function() -> ftd::interpreter2::ComponentDefinition {
                 }),
                 line_number: 0,
             },
+            ftd::interpreter2::Argument {
+                name: "description".to_string(),
+                kind: ftd::interpreter2::Kind::string()
+                    .into_optional()
+                    .into_kind_data(),
+                mutable: false,
+                value: Some(ftd::interpreter2::PropertyValue::Reference {
+                    name: "ftd#document.title".to_string(),
+                    kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                    source: ftd::interpreter2::PropertyValueSource::Local("document".to_string()),
+                    is_mutable: false,
+                    line_number: 0,
+                }),
+                line_number: 0,
+            },
+            ftd::interpreter2::Argument {
+                name: "og-description".to_string(),
+                kind: ftd::interpreter2::Kind::string()
+                    .into_optional()
+                    .into_kind_data(),
+                mutable: false,
+                value: Some(ftd::interpreter2::PropertyValue::Reference {
+                    name: "ftd#document.description".to_string(),
+                    kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                    source: ftd::interpreter2::PropertyValueSource::Local("document".to_string()),
+                    is_mutable: false,
+                    line_number: 0,
+                }),
+                line_number: 0,
+            },
             ftd::interpreter2::Argument::default(
                 "theme-color",
                 ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
