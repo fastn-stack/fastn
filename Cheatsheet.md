@@ -583,17 +583,18 @@ string dark: $color.light
 - `link`: `string`
 - `open-in-new-tab`: `optional boolean`
 
-- `background`: `optional ftd.fill`
+- `background`: `optional ftd.background`
 
 
-**`ftd.fill`**
+**`ftd.background`**
 
 ```ftd
--- or-type fill:
+-- or-type background:
 
 -- ftd.color solid:
+-- ftd.background-image image:
 
--- end: fill
+-- end: background
 ```
 
 - `align-self`: `optional ftd.align-self`
