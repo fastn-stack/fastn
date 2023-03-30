@@ -22,6 +22,7 @@ pub struct HTMLData {
     pub og_title: ftd::node::Value,
     pub description: ftd::node::Value,
     pub og_description: ftd::node::Value,
+    pub og_image: ftd::node::Value,
     pub theme_color: ftd::node::Value,
 }
 
@@ -50,6 +51,15 @@ impl ftd::executor::HTMLData {
                 self.og_description.value.to_owned(),
                 self.og_description.to_owned(),
                 None,
+                doc_id,
+            ),
+            og_image: ftd::node::Value::from_executor_value(
+                self.og_image
+                    .to_owned()
+                    .map(|v| v.map(|v| v.light.value))
+                    .value,
+                self.og_image.to_owned(),
+                Some(ftd::executor::ImageSrc::image_pattern()),
                 doc_id,
             ),
             theme_color: ftd::node::Value::from_executor_value(
