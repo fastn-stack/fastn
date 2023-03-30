@@ -2,7 +2,7 @@
 <html lang="en" style="height: 100%;">
 <head>
 <meta charset="UTF-8"><base href="/">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"><meta property="og:title" content="My title"><meta name="theme-color" content="rgba(255,255,0,1)">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"><meta property="og:title" content="My title"><meta property="og:description" content="MY DESCRIPTION"><meta name="description" content="MY DESCRIPTION"><meta name="theme-color" content="rgba(255,255,0,1)">
 <title>My title</title>
 <script type="ftd" id="ftd-data">
 {
@@ -1610,6 +1610,15 @@ document.head.querySelector('meta[property="og:title"]').content = "MY OG TITLE"
 else {document.head.querySelector('meta[property="og:title"]').content = "My title";}
 }
 
+window.node_change_main["og_document__description"] = function(data) {
+if(function(){
+return (!resolve_reference("foo#flag", data));
+}()){
+document.head.querySelector('meta[property="og:description"]').content = "MY OG DESCRIPTION";
+}
+else {document.head.querySelector('meta[property="og:description"]').content = "MY DESCRIPTION";}
+}
+
 window.node_change_main["document__theme_color"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
@@ -1646,6 +1655,8 @@ window.ftd.call_immutable_value_changes("foo#flag", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }

@@ -3,6 +3,8 @@
 -- ftd.document: My title
 title if { !flag }: MY TITLE
 og-title if { !flag }: MY OG TITLE
+description: MY DESCRIPTION
+og-description if { !flag }: MY OG DESCRIPTION
 theme-color: $red-yellow
 theme-color if { !flag }: green
 
