@@ -1290,6 +1290,16 @@
       "line_number": null,
       "properties": []
     },
+    "description": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    },
+    "og_description": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    },
     "theme_color": {
       "value": null,
       "line_number": null,

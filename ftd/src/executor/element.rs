@@ -115,6 +115,8 @@ pub struct Column {
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
     pub og_title: ftd::executor::Value<Option<String>>,
+    pub description: ftd::executor::Value<Option<String>>,
+    pub og_description: ftd::executor::Value<Option<String>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
@@ -1043,6 +1045,22 @@ pub fn html_data_from_properties(
         )?,
         og_title: ftd::executor::value::optional_string(
             "og-title",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        description: ftd::executor::value::optional_string(
+            "description",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        og_description: ftd::executor::value::optional_string(
+            "og-description",
             component_name,
             properties,
             arguments,

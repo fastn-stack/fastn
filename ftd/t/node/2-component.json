@@ -507,6 +507,18 @@
       "line_number": null,
       "default": null
     },
+    "description": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
+    "og_description": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
     "theme_color": {
       "value": null,
       "properties": [],
