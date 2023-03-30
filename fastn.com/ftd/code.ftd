@@ -3,26 +3,25 @@
 `ftd.code` is a component used to render the code component in an `ftd`
 document.
 
+-- ds.rendered: Sample Usage
 
--- ds.h1: Usage
-
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
 
 print("hello world")
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
 
 print("hello world")
 
--- end: ds.output
+-- end: ds.rendered.output
 
+-- end: ds.rendered
 
 -- ds.h1: Attributes
 
@@ -30,23 +29,28 @@ The `ftd.code` component accepts the below attributes along with the
 [common attributes](ftd/common/).
 
 
--- ds.h2: `text: string`
+-- ds.h2: `text: caption or body`
 
-This is the text or code to show. It accepts the value both in caption
-or body besides in header.
+This is the text or code to show. It accepts the value both in [caption
+or body](ftd/built-in-types/#caption-or-body) besides in header.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `text`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
-text: print("hello world")
+lang: py
+text: print("hello world") ;; <hl>
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
+lang: py
 text: print("hello world")
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 -- ds.h2: `lang: optional string`
 
@@ -54,16 +58,17 @@ The `lang` property defines the language of the code. It is an
 optional field. In case if the value is not provided, this
 will take `txt` as default value.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `lang`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
-lang: py
+lang: py ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -71,7 +76,9 @@ lang: py
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
 -- ds.h2: `theme: optional string`
@@ -82,9 +89,9 @@ It is an optional field with default value `base16-ocean.dark`.
 The available themes are:
 
 - base16-ocean.dark
+- base16-ocean.light
 - base16-eighties.dark
 - base16-mocha.dark
-- base16-ocean.light
 - InspiredGitHub
 - Solarized (dark)
 - Solarized (light)
@@ -92,28 +99,18 @@ The available themes are:
 Refer [this](https://docs.rs/syntect/latest/syntect/highlighting/struct.ThemeSet.html#method.load_defaults)
 for the list of themes available
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `base16-ocean.dark` theme
+
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
-theme: Solarized (dark)
+theme: base16-ocean.dark ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output: Solarized (dark)
-
--- ftd.code:
-lang: py
-theme: Solarized (dark)
-
-value = "hello world"
-print(value)
-
--- end: ds.output
-
--- ds.output: base16-ocean.dark
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -122,32 +119,28 @@ theme: base16-ocean.dark
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
 
--- ds.output: base16-eighties.dark
+-- end: ds.rendered
 
--- ftd.code:
+
+
+
+
+
+
+-- ds.rendered: Sample code using `base16-ocean.light` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
 lang: py
-theme: base16-eighties.dark
+theme: base16-ocean.light ;; <hl>
 
 value = "hello world"
 print(value)
 
--- end: ds.output
-
-
--- ds.output: base16-mocha.dark
-
--- ftd.code:
-lang: py
-theme: base16-mocha.dark
-
-value = "hello world"
-print(value)
-
--- end: ds.output
-
--- ds.output: base16-ocean.light
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -156,10 +149,85 @@ theme: base16-ocean.light
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
--- ds.output: InspiredGitHub
+
+
+
+
+-- ds.rendered: Sample code using `base16-eighties.dark` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: base16-eighties.dark ;; <hl>
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: base16-eighties.dark
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `base16-mocha.dark` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: base16-mocha.dark ;; <hl>
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: base16-mocha.dark
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `InspiredGitHub` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: InspiredGitHub ;; <hl>
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -168,9 +236,56 @@ theme: InspiredGitHub
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
 
--- ds.output: Solarized (light)
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `Solarized (dark)` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: Solarized (dark) ;; <hl>
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: Solarized (dark)
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `Solarized (light)` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: Solarized (light) ;; <hl>
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -179,7 +294,10 @@ theme: Solarized (light)
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
 
 -- ds.h2: `text-align: optional ftd.text-align`
 
@@ -196,18 +314,19 @@ optional.
 
 The inline contents are centered within the line box.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `text-align: center`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
 width.fixed.px: 400
-text-align: center
+text-align: center ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -217,25 +336,31 @@ text-align: center
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 -- ds.h3: `start`
 
 The inline contents are aligned to the left edge of the line box.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `text-align: start`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
 width.fixed.px: 400
-text-align: start
+text-align: start ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -245,25 +370,31 @@ text-align: start
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 -- ds.h3: `end`
 
 The inline contents are aligned to the right edge of the line box.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `text-align: end`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
 width.fixed.px: 400
-text-align: end
+text-align: end ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -273,7 +404,14 @@ text-align: end
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
 
 -- ds.h3: `justify`
 
@@ -281,18 +419,19 @@ The inline contents are justified. Text should be spaced to line up
 its left and right edges to the left and right edges of the line box,
 except for the last line.
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `text-align: justify`
+
+-- ds.rendered.input:
 
 \-- ftd.code:
 lang: py
 width.fixed.px: 400
-text-align: justify
+text-align: justify ;; <hl>
 
 value = "hello world"
 print(value)
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.code:
 lang: py
@@ -302,6 +441,8 @@ text-align: justify
 value = "hello world"
 print(value)
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 -- end: my-ds.page

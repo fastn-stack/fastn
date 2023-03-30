@@ -1339,6 +1339,7 @@ This will render like this:
 
 -- ftd.text: google
 link: https://www.google.com
+color: $inherited.colors.text
 
 -- end: ds.output
 
@@ -1374,6 +1375,7 @@ margin.px: 10
 -- ftd.text: FifthTry
 shadow: $s
 margin.px: 10
+color: $inherited.colors.text
 
 -- end: ds.rendered.output
 
@@ -1386,7 +1388,7 @@ margin.px: 10
 -- ds.h1: `open-in-new-tab: optional boolean, default=False`
 
 If `link` is provided, this attribute can also be set to open the link in new
-tab instead of current tab.
+tab instead of current tab. By default, this attribute is set to `false`.
 
 -- ds.code:
 lang: ftd
@@ -1405,6 +1407,7 @@ Which will render like this:
 -- ftd.text: google (opens in new tab)
 link: https://www.google.com
 open-in-new-tab: true
+color: $inherited.colors.text
 
 -- end: ds.output
 

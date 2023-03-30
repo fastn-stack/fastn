@@ -3,7 +3,7 @@
 These attributes are available to `ftd.text`, `ftd.integer`,
 `ftd.decimal` and `ftd.boolean` components.
 
--- ds.h2: `style: optional list ftd.text-style`
+-- ds.h2: `style: ftd.text-style list`
 
 This `style` attribute can be used to add inline styles on the rendered content.
 It accepts a list of [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
@@ -69,6 +69,7 @@ text-align: center ;; <hl>
 border-width.px: 1
 border-radius.px: 3
 padding.px: 5
+width.fixed.percent: 30
 color: $inherited.colors.text-strong
 
 this is **text-align: center** text. a bit longer text so you can see what's going on.
@@ -89,12 +90,15 @@ border-radius.px: 3
 padding.px: 5
 color: $inherited.colors.text-strong
 
-\-- ftd.boolean:
+\-- ftd.text:
 text-align: justify ;; <hl>
 border-width.px: 1
 border-radius.px: 3
 padding.px: 5
+width.fixed.percent: 30
 color: $inherited.colors.text-strong
+
+this is **text-align: justify** text. a bit longer text so you can see what's going on.
 
 \-- end: ftd.row
 
@@ -129,12 +133,15 @@ border-radius.px: 3
 padding.px: 5
 color: $inherited.colors.text-strong
 
--- ftd.boolean: true
+-- ftd.text:
 text-align: justify
 border-width.px: 1
 border-radius.px: 3
 padding.px: 5
+width.fixed.percent: 30
 color: $inherited.colors.text-strong
+
+this is **text-align: justify** text. a bit longer text so you can see what's going on.
 
 -- end: ftd.row
 

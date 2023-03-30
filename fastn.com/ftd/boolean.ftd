@@ -32,7 +32,7 @@ color: $inherited.colors.text
 [common](ftd/common/) and [text](ftd/text-attributes/) attributes.
 
 
--- ds.h2: `value: boolean`
+-- ds.h2: `value: caption or body boolean`
 
 This is the value to show. It is a required field.
 
