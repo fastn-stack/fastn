@@ -19,6 +19,7 @@ pub struct HTMLData {
     pub og_title: Option<String>,
     pub description: Option<String>,
     pub og_description: Option<String>,
+    pub og_image: Option<String>,
     pub theme_color: Option<String>,
 }
 
@@ -29,6 +30,7 @@ impl ftd::node::HTMLData {
             og_title: self.og_title.value.to_owned(),
             description: self.description.value.to_owned(),
             og_description: self.og_description.value.to_owned(),
+            og_image: self.og_image.value.to_owned(),
             theme_color: self.theme_color.value.to_owned(),
         }
     }

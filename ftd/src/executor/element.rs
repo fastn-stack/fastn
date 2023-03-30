@@ -117,6 +117,7 @@ pub struct HTMLData {
     pub og_title: ftd::executor::Value<Option<String>>,
     pub description: ftd::executor::Value<Option<String>>,
     pub og_description: ftd::executor::Value<Option<String>>,
+    pub og_image: ftd::executor::Value<Option<ftd::executor::ImageSrc>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
@@ -156,6 +157,45 @@ pub struct ImageSrc {
 }
 
 impl ImageSrc {
+    pub(crate) fn optional_image(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ImageSrc>>> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_IMAGE_SRC,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ImageSrc::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<ImageSrc>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(ImageSrc::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
     pub(crate) fn from_value(
         value: ftd::interpreter2::PropertyValue,
         doc: &ftd::executor::TDoc,
@@ -222,6 +262,21 @@ impl ImageSrc {
         };
 
         Ok(ImageSrc { light, dark })
+    }
+
+    pub fn image_pattern() -> (String, bool) {
+        (
+            r#"
+                let c = {0};
+                if (typeof c === 'object' && "light" in c) {
+                    if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
+                } else {
+                    c
+                }
+            "#
+            .to_string(),
+            true,
+        )
     }
 }
 
@@ -1066,6 +1121,15 @@ pub fn html_data_from_properties(
             arguments,
             doc,
             line_number,
+        )?,
+        og_image: ftd::executor::ImageSrc::optional_image(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "og-image",
+            &Default::default(),
+            component_name,
         )?,
         theme_color: ftd::executor::Color::optional_color(
             properties,

@@ -7,6 +7,9 @@ description: MY DESCRIPTION
 og-description if { !flag }: MY OG DESCRIPTION
 theme-color: $red-yellow
 theme-color if { !flag }: green
+og-image: $image
+og-image if { !flag }: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg
+
 
 -- ftd.text: Click me and document title changes
 $on-click$: $ftd.toggle($a = $flag)
@@ -19,3 +22,8 @@ $on-click$: $ftd.toggle($a = $flag)
 -- ftd.color red-yellow:
 light: yellow
 dark: red
+
+
+-- ftd.image-src image:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg

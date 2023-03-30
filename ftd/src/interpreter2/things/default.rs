@@ -8478,6 +8478,12 @@ pub fn document_function() -> ftd::interpreter2::ComponentDefinition {
                 line_number: 0,
             },
             ftd::interpreter2::Argument::default(
+                "og-image",
+                ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_IMAGE_SRC)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
+            ftd::interpreter2::Argument::default(
                 "theme-color",
                 ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
                     .into_optional()
