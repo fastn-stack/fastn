@@ -88,6 +88,145 @@ It is an optional field with default value `base16-ocean.dark`.
 
 The available themes are:
 
+**fastn Themes**
+- fastn-theme-dark
+- fastn-theme-light
+- fastn-theme-1-dark
+- fastn-theme-1-light
+
+`Note`: Use your desired `background color` based on your theme when using
+any fastn code themes since these fastn themes doesn't define any background
+color by itself.
+
+-- ds.rendered: Sample code using `fastn-theme.dark` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: fastn-theme.dark ;; <hl>
+background.solid: black
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: fastn-theme.dark
+background.solid: black
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `fastn-theme.light` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: fastn-theme.light ;; <hl>
+background.solid: white
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: fastn-theme.light
+background.solid: white
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `fastn-theme-1.dark` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: fastn-theme-1.dark ;; <hl>
+background.solid: black
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: fastn-theme-1.dark
+background.solid: black
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `fastn-theme-1.light` theme
+
+-- ds.rendered.input:
+
+\-- ftd.code:
+lang: py
+theme: fastn-theme-1.light ;; <hl>
+background.solid: white
+
+value = "hello world"
+print(value)
+
+-- ds.rendered.output:
+
+-- ftd.code:
+lang: py
+theme: fastn-theme-1.light
+background.solid: white
+
+value = "hello world"
+print(value)
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.markdown:
+
+**Other Themes**
 - base16-ocean.dark
 - base16-ocean.light
 - base16-eighties.dark
