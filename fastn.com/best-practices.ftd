@@ -113,6 +113,7 @@ width: fill-container
 optional caption title:
 optional body body:
 children compare-wrap:
+optional string id:
 
 -- ftd.column:
 width: fill-container
@@ -124,6 +125,7 @@ padding-vertical.px: 12
 background.solid: $inherited.colors.background.code
 border-top-left-radius.px: 4
 border-top-right-radius.px: 4
+id: $best-practice.id
 
 -- ftd.row:
 spacing.fixed.px: 16
