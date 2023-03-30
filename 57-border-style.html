@@ -1135,10 +1135,6 @@ const MOBILE_CLASS = "ftd-mobile";
 const XL_CLASS = "ftd-xl";
 const FTD_DEVICE = "ftd#device";
 const FTD_BREAKPOINT_WIDTH = "ftd#breakpoint-width";
-const FTD_THEME_COLOR = "ftd#theme-color";
-const THEME_COLOR_META = "theme-color";
-const MARKDOWN_COLOR = "ftd#markdown-color";
-const MARKDOWN_BACKGROUND_COLOR = "ftd#markdown-background-color";
 let last_device;
 function initialise_device() {
 last_device = get_device();
@@ -1298,7 +1294,6 @@ window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
 window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
 document.body.classList.add(DARK_MODE_CLASS);
 set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
-update_theme_color();
 };
 window.enable_light_mode = function () {
 // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -1310,7 +1305,6 @@ if (document.body.classList.contains(DARK_MODE_CLASS)) {
 document.body.classList.remove(DARK_MODE_CLASS);
 }
 set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
-update_theme_color();
 };
 window.enable_system_mode = function () {
 // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -1329,37 +1323,7 @@ document.body.classList.remove(DARK_MODE_CLASS);
 }
 set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
 }
-update_theme_color();
 };
-function update_theme_color() {
-let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
-if (!!theme_color) {
-document.body.style.backgroundColor = FTD_THEME_COLOR;
-set_meta(THEME_COLOR_META, theme_color);
-}
-else {
-document.body.style.backgroundColor = FTD_THEME_COLOR;
-delete_meta(THEME_COLOR_META);
-}
-}
-function set_meta(name, value) {
-let meta = document.querySelector("meta[name=" + name + "]");
-if (!!meta) {
-meta.content = value;
-}
-else {
-meta = document.createElement('meta');
-meta.name = name;
-meta.content = value;
-document.getElementsByTagName('head')[0].appendChild(meta);
-}
-}
-function delete_meta(name) {
-let meta = document.querySelector("meta[name=" + name + "]");
-if (!!meta) {
-meta.remove();
-}
-}
 function set_cookie(name, value) {
 document.cookie = name + "=" + value + "; path=/";
 }
@@ -2150,15 +2114,15 @@ set_data_value(data, "foo#show-border:style:0", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:0", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:0", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-right-style"]){window.node_change_main["0:main__border-right-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-left-style"]){window.node_change_main["0:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-right-style"]){window.node_change_main["0:main__border-right-style"](data);
 }
 };
 
@@ -2171,15 +2135,15 @@ set_data_value(data, "foo#show-border:style:1", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:1", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:1", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-left-style"]){window.node_change_main["1:main__border-left-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
 }
 };
 
@@ -2192,13 +2156,13 @@ set_data_value(data, "foo#show-border:style:2", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:2", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:2", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
 }
@@ -2213,9 +2177,9 @@ set_data_value(data, "foo#show-border:style:3", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:3", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:3", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-style"]){window.node_change_main["3:main__border-left-style"](data);
 }
@@ -2234,15 +2198,15 @@ set_data_value(data, "foo#show-border:style:4", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:4", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:4", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
 }
 };
 
@@ -2255,15 +2219,15 @@ set_data_value(data, "foo#show-border:style:5", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:5", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:5", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
 }
 };
 
@@ -2278,13 +2242,13 @@ window.ftd.call_mutable_value_changes("foo#show-border:style:6", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:6", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
 }
 };
 
@@ -2388,17 +2352,17 @@ set_data_value(data, "foo#show-border:which:0", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:0", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:0", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-left-style"]){window.node_change_main["0:main__border-left-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-bottom-style"]){window.node_change_main["0:main__border-bottom-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-right-style"]){window.node_change_main["0:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-top-style"]){window.node_change_main["0:main__border-top-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
 }
 };
 
@@ -2411,17 +2375,17 @@ set_data_value(data, "foo#show-border:which:1", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:1", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:1", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-left-style"]){window.node_change_main["1:main__border-left-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-bottom-style"]){window.node_change_main["1:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-style"]){window.node_change_main["1:main__border-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-right-style"]){window.node_change_main["1:main__border-right-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-style"]){window.node_change_main["1:main__border-top-style"](data);
 }
 };
 
@@ -2434,17 +2398,17 @@ set_data_value(data, "foo#show-border:which:2", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:2", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:2", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-bottom-style"]){window.node_change_main["2:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-left-style"]){window.node_change_main["2:main__border-left-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-top-style"]){window.node_change_main["2:main__border-top-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-right-style"]){window.node_change_main["2:main__border-right-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__border-style"]){window.node_change_main["2:main__border-style"](data);
 }
 };
 
@@ -2457,17 +2421,17 @@ set_data_value(data, "foo#show-border:which:3", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:3", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:3", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-left-style"]){window.node_change_main["3:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__text"]){window.node_change_main["3,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-top-style"]){window.node_change_main["3:main__border-top-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-style"]){window.node_change_main["3:main__border-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-right-style"]){window.node_change_main["3:main__border-right-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-bottom-style"]){window.node_change_main["3:main__border-bottom-style"](data);
 }
 };
 
@@ -2480,15 +2444,15 @@ set_data_value(data, "foo#show-border:which:4", new_value);
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:4", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:4", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-top-style"]){window.node_change_main["4:main__border-top-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-left-style"]){window.node_change_main["4:main__border-left-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-right-style"]){window.node_change_main["4:main__border-right-style"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-style"]){window.node_change_main["4:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__border-bottom-style"]){window.node_change_main["4:main__border-bottom-style"](data);
 }
@@ -2505,13 +2469,13 @@ window.ftd.call_mutable_value_changes("foo#show-border:which:5", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:5", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-left-style"]){window.node_change_main["5:main__border-left-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["5,0:main__text"]){window.node_change_main["5,0:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-bottom-style"]){window.node_change_main["5:main__border-bottom-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-right-style"]){window.node_change_main["5:main__border-right-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-style"]){window.node_change_main["5:main__border-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["5,0:main__text"]){window.node_change_main["5,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["5:main__border-top-style"]){window.node_change_main["5:main__border-top-style"](data);
 }
@@ -2528,15 +2492,15 @@ window.ftd.call_mutable_value_changes("foo#show-border:which:6", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:6", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-left-style"]){window.node_change_main["6:main__border-left-style"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-style"]){window.node_change_main["6:main__border-style"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-top-style"]){window.node_change_main["6:main__border-top-style"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-right-style"]){window.node_change_main["6:main__border-right-style"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["6,0:main__text"]){window.node_change_main["6,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__border-bottom-style"]){window.node_change_main["6:main__border-bottom-style"](data);
 }
 };
 
