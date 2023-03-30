@@ -17,6 +17,7 @@ pub struct HtmlUI {
 pub struct HTMLData {
     pub title: Option<String>,
     pub og_title: Option<String>,
+    pub theme_color: Option<String>,
 }
 
 impl ftd::node::HTMLData {
@@ -24,6 +25,7 @@ impl ftd::node::HTMLData {
         HTMLData {
             title: self.title.value.to_owned(),
             og_title: self.og_title.value.to_owned(),
+            theme_color: self.theme_color.value.to_owned(),
         }
     }
 }

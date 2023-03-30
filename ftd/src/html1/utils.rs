@@ -726,5 +726,8 @@ pub fn get_meta_data(html_data: &ftd::html1::HTMLData) -> String {
             title
         ));
     }
+    if let Some(ref color) = html_data.theme_color {
+        result.push(format!("<meta name=\"theme-color\" content=\"{}\">", color));
+    }
     result.join("")
 }

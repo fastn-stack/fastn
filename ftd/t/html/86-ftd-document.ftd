@@ -3,6 +3,8 @@
 -- ftd.document: My title
 title if { !flag }: MY TITLE
 og-title if { !flag }: MY OG TITLE
+theme-color: red
+theme-color if { !flag }: green
 
 -- ftd.text: Click me and document title changes
 $on-click$: $ftd.toggle($a = $flag)

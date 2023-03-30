@@ -304,6 +304,78 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
 
+        {
+            let node_change_id = "document__theme_color".to_string();
+            let mut expressions = vec![];
+            let mut is_static = true;
+            let key = "document.head.querySelector('meta[name=\"theme-color\"]').content";
+            for property_with_pattern in self.html_data.theme_color.properties.iter() {
+                let property = &property_with_pattern.property;
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+
+                if !is_static_expression(&property.value, &condition, self.doc) {
+                    is_static = false;
+                }
+
+                if let Some(value_string) =
+                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        self.id,
+                        self.doc,
+                        &property.value,
+                        &property_with_pattern.pattern_with_eval,
+                        None,
+                        false,
+                    )?
+                {
+                    dependency_map_from_condition(
+                        var_dependencies,
+                        &property.condition,
+                        node_change_id.as_str(),
+                        self.doc,
+                    );
+                    dependency_map_from_property_value(
+                        var_dependencies,
+                        &property.value,
+                        node_change_id.as_str(),
+                        self.doc,
+                    );
+
+                    let value = format!("{} = {};", key, value_string);
+                    expressions.push((condition, value));
+                }
+            }
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key),
+                format!(
+                    "{} = {}",
+                    key,
+                    self.node
+                        .text
+                        .default
+                        .clone()
+                        .unwrap_or_else(|| "null".to_string())
+                )
+                .as_str(),
+            );
+            if !value.trim().is_empty() && !is_static {
+                result.push(format!(
+                    indoc::indoc! {"
+                         window.node_change_{id}[\"{key}\"] = function(data) {{
+                                {value}
+                         }}
+                    "},
+                    id = self.id,
+                    key = node_change_id,
+                    value = value.trim(),
+                ));
+                var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+            }
+        }
+
         for (key, attribute) in self.node.attrs.iter() {
             let mut expressions = vec![];
             let mut is_static = true;

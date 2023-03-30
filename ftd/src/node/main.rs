@@ -20,6 +20,7 @@ pub struct Node {
 pub struct HTMLData {
     pub title: ftd::node::Value,
     pub og_title: ftd::node::Value,
+    pub theme_color: ftd::node::Value,
 }
 
 impl ftd::executor::HTMLData {
@@ -35,6 +36,15 @@ impl ftd::executor::HTMLData {
                 self.og_title.value.to_owned(),
                 self.og_title.to_owned(),
                 None,
+                doc_id,
+            ),
+            theme_color: ftd::node::Value::from_executor_value(
+                self.theme_color
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.theme_color.to_owned(),
+                Some(ftd::executor::Color::color_pattern()),
                 doc_id,
             ),
         }
