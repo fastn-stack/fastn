@@ -506,6 +506,12 @@
       "properties": [],
       "line_number": null,
       "default": null
+    },
+    "theme_color": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
     }
   },
   "bag": {},
