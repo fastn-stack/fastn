@@ -588,13 +588,14 @@ width: 100%;
 body {
 height: 100%;
 width: 100%;
-word-wrap: break-word;
 }
+
 input, code {
 vertical-align: middle;
 }
 pre {
 white-space: break-spaces;
+word-wrap: break-word;
 }
 html {
 -webkit-font-smoothing: antialiased;
@@ -1642,13 +1643,13 @@ set_data_value(data, "49-import#example-product", new_value);
 
 window.ftd.call_mutable_value_changes("49-import#example-product", "main");
 window.ftd.call_immutable_value_changes("49-import#example-product", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__text"]){window.node_change_main["0,3:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__text"]){window.node_change_main["0,3:main__text"](data);
 }
 };
 
