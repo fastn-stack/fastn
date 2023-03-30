@@ -746,6 +746,12 @@
       "line_number": null,
       "default": null
     },
+    "og_image": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
     "theme_color": {
       "value": null,
       "properties": [],
