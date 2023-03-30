@@ -115,6 +115,7 @@ pub struct Column {
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
     pub og_title: ftd::executor::Value<Option<String>>,
+    pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -1047,6 +1048,15 @@ pub fn html_data_from_properties(
             arguments,
             doc,
             line_number,
+        )?,
+        theme_color: ftd::executor::Color::optional_color(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "theme-color",
+            &Default::default(),
+            component_name,
         )?,
     })
 }

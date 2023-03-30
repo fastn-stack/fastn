@@ -1709,7 +1709,7 @@ impl Color {
         or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<Color>> {
         if let Some(value) = or_type_value {
             Ok(Some(Color::from_values(value, doc, line_number)?))
         } else {
@@ -1746,6 +1746,21 @@ impl Color {
 
     pub fn to_css_string(&self) -> String {
         self.light.value.to_css_string()
+    }
+
+    pub fn color_pattern() -> (String, bool) {
+        (
+            r#"
+                let c = {0};
+                if (typeof c === 'object' && "light" in c) {
+                    if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
+                } else {
+                    c
+                }
+            "#
+            .to_string(),
+            true,
+        )
     }
 }
 
