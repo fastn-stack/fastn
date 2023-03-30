@@ -1,6 +1,8 @@
 -- my-ds.page: Common Kernel Attributes
 
-These attributes are available to all `ftd` "kernel" components.
+These attributes are available to all `ftd kernel` components.
+
+
 
 
 -- ds.h1: `id: optional string`
@@ -8,29 +10,39 @@ These attributes are available to all `ftd` "kernel" components.
 The `id` attribute is used to specify a unique id for an element. It slugifies
 the value provided. The element can be directly accessed by appending a
 hash character (#) followed by an slugified id name in current module url.
+It takes input of [`string`](ftd/built-in-types/#string) type
+and is optional.
 
--- ds.code: specifying id
-lang: ftd
+-- ds.rendered: Sample code using `id`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-id: fifthtry
+id: fifthtry ;; <hl>
+color: $inherited.colors.text
 
-
-
--- ds.output: Output: specifying id
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
-color: $inherited.colors.text
 id: fifthtry
+color: $inherited.colors.text
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 -- ds.markdown:
 
 In the above example we have an `ftd.text` element that points to the id name
-"fifthtry". This element can be accessed with `#fifthtry` appended after the
+`fifthtry`. This element can be accessed with `#fifthtry` appended after the
 current document url: http://fastn.io/ftd/common/#fifthtry
+
+
+
+
 
 
 -- ds.h1: `padding: optional ftd.length`
@@ -40,181 +52,212 @@ inside of any defined borders. It accepts the
 [`ftd.length`](ftd/built-in-types/#ftd-length) type value and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `padding`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding.px: 60
+padding.px: 60 ;; <hl>
+color: $inherited.colors.text
 border-width.px: 2
 
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 -- ds.h1: `padding-vertical: optional ftd.length`
 
-This gives top and bottom padding.
+This attribute gives top and bottom padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
+-- ds.rendered: Sample code using `padding-vertical`
 
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-vertical.px: 60
+padding-vertical.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-vertical.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 
 -- ds.h1: `padding-horizontal: optional ftd.length`
 
-This gives left and right padding.
+This attribute gives left and right padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `padding-horizontal`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-horizontal.px: 60
+padding-horizontal.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-horizontal.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 -- ds.h1: `padding-left: optional ftd.length`
 
-This gives left padding.
+This attribute gives left padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
+-- ds.rendered: Sample code using `padding-left`
 
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-left.px: 60
+padding-left.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-left.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 -- ds.h1: `padding-right: optional ftd.length`
 
-This gives right padding.
+This attribute gives right padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `padding-right`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-right.px: 60
+padding-right.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-right.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 
 -- ds.h1: `padding-top: optional ftd.length`
 
-This gives top padding.
+This attribute gives top padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
+-- ds.rendered: Sample code using `padding-top`
 
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-top.px: 60
+padding-top.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-top.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 
 -- ds.h1: `padding-bottom: optional ftd.length`
 
-This gives bottom padding.
+This attribute gives bottom padding to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
+-- ds.rendered: Sample code using `padding-bottom`
 
--- ds.code:
-lang: ftd
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-padding-bottom.px: 60
+padding-bottom.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 padding-bottom.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
 
 
 
@@ -225,206 +268,262 @@ outside of any defined borders. It accepts the
 [`ftd.length`](ftd/built-in-types/#ftd-length) type value and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin.px: 60
+margin.px: 60 ;; <hl>
+color: $inherited.colors.text
 border-width.px: 2
 
 
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
 
 
 -- ds.h1: `margin-vertical: optional ftd.length`
 
-This gives top and bottom margin.
+This attribute gives top and bottom margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-vertical`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-vertical.px: 60
+margin-vertical.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-vertical.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 
 -- ds.h1: `margin-horizontal: optional ftd.length`
 
-This gives left and right margin.
+This attribute gives left and right margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-horizontal`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-horizontal.px: 60
+margin-horizontal.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-horizontal.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
 
 
 -- ds.h1: `margin-left: optional ftd.length`
 
-This gives left margin.
+This attribute gives left margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-left`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-left.px: 60
+margin-left.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-left.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
 
 
 -- ds.h1: `margin-right: optional ftd.length`
 
-This gives right margin.
+This attribute gives right margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-right`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-right.px: 60
+margin-right.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-right.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
 
 
 
 -- ds.h1: `margin-top: optional ftd.length`
 
-This gives top margin.
+This attribute gives top margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-top`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-top.px: 60
+margin-top.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-top.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
 
 
 
 -- ds.h1: `margin-bottom: optional ftd.length`
 
-This gives bottom margin.
+This attribute gives bottom margin to an element. It takes
+input of [`ftd.length`](ftd/built-in-types/#ftd-length) type
+and is optional.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `margin-bottom`
+
+-- ds.rendered.input:
 
 \-- ftd.text: FifthTry
-margin-bottom.px: 60
+margin-bottom.px: 60 ;; <hl>
+color: $inherited.colors.text
+border-width.px: 2
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 margin-bottom.px: 60
 color: $inherited.colors.text
 border-width.px: 2
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
 
 
 -- ds.h1: `color: optional ftd.color`
 
 The color property sets the color of an element. It takes
-input of [`ftd.color`](ftd/built-in-types/#ftd-color) type.
+input of [`ftd.color`](ftd/built-in-types/#ftd-color) type
+and is optional.
 
 
--- ds.code: specifying color
-lang: ftd
+-- ds.rendered: Sample code using `color`
 
-\-- ftd.color red-yellow:
-light: red
-dark: yellow
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
 
 \-- ftd.text: FifthTry
-color: $red-yellow
+color: $red-yellow ;; <hl>
 
 
--- ds.output: Output: specifying color
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 color: $red-yellow
 
--- end: ds.output
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
 
 -- ds.h1: `background: optional ftd.background`
 
@@ -441,6 +540,10 @@ input of [`ftd.color`](ftd/built-in-types/#ftd-color) type.
 -- ds.rendered: Specifying background as a solid color
 
 -- ds.rendered.input:
+
+\-- ftd.color yellow-red: ;; <hl>
+light: yellow ;; <hl>
+dark: red ;; <hl>
 
 \-- ftd.text: FifthTry
 background.solid: $yellow-red ;; <hl>
@@ -503,174 +606,44 @@ The border-color property sets the color of an element's four borders. It takes
 input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 
--- ds.code:
-lang: ftd
+-- ds.rendered: Sample code using `border-color`
 
-\-- ftd.color red:
-light: red
-dark: red
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
 
 \-- ftd.text: FifthTry
 border-width.px: 2
-border-color: $red-yellow
+color: $inherited.colors.text
+border-color: $red-yellow ;; <hl>
 
-
--- ds.markdown:
-
-This will render like this:
-
--- ds.output:
+-- ds.rendered.output:
 
 -- ftd.text: FifthTry
 border-width.px: 2
 color: $inherited.colors.text
 border-color: $red-yellow
 
--- end: ds.output
+-- end: ds.rendered.output
 
+-- end: ds.rendered
 
 
 
 
-/-- ftd.column:
 
-/-- ds.h1: `border-width.px: Integer`
 
-Use this property to specify the width of the border. By default the `border-width`
-is zero, and is not visible.
 
-
-/-- ds.code: specifying border width
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width.px: 2
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-width.px: 2
-color: $inherited.colors.text
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-top-width.px: Integer`
-
-The border-top property sets the width of an element's top border.
-
-
-/-- ds.code: specifying border width
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-top-width.px: 2
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-top-width.px: 2
-color: $inherited.colors.text
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-bottom-width.px: Integer`
-
-The border-bottom property sets the width of an element's bottom border.
-
-
-/-- ds.code: specifying border width
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-bottom-width.px: 2
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-bottom-width.px: 2
-color: $inherited.colors.text
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-left-width.px: Integer`
-
-The border-left property sets the width of an element's left border.
-
-
-/-- ds.code: specifying border width
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-left-width.px: 2
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-left-width.px: 2
-color: $inherited.colors.text
-
-/-- end: ds.output
-
-
-/-- ds.h1: `border-right-width.px: Integer`
-
-The border-right property sets the width of an element's right border.
-
-
-/-- ds.code: specifying border width
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-right-width.px: 2
-
-
-/-- ds.markdown:
-
-This will render like this:
-
-/-- ds.output:
-
-/-- ftd.text: FifthTry
-border-right-width.px: 2
-color: $inherited.colors.text
-
-/-- end: ds.output
-
-
-
-
-
--- ds.h1: `border-style: optional ftd.border-style`
+-- ds.h1: `border-style: optional ftd.border-style, default=solid`
 
 The border-style property sets the style of an element's borders.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
-value and is optional.
+value and is optional. By default, `border-style` is set to `solid` if
+this value is not provided.
 
--- ds.rendered: Specifying border style
+-- ds.rendered: Sample code using `border-style`
 
 -- ds.rendered.input:
 
@@ -684,6 +657,11 @@ border-width.px: 2
 border-style: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 
@@ -694,7 +672,7 @@ The border-style property sets the style of an element's left border.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for left border
+-- ds.rendered: Sample code using `border-style-left`
 
 -- ds.rendered.input:
 
@@ -708,6 +686,12 @@ border-width.px: 2
 border-style-left: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
 
 
 
@@ -717,7 +701,7 @@ The border-style property sets the style of an element's right border.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for right border
+-- ds.rendered: Sample code using `border-style-right`
 
 -- ds.rendered.input:
 
@@ -731,6 +715,11 @@ border-width.px: 2
 border-style-right: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 
@@ -741,7 +730,7 @@ The border-style property sets the style of an element's top border.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for top border
+-- ds.rendered: Sample code using `border-style-top`
 
 -- ds.rendered.input:
 
@@ -755,6 +744,11 @@ border-width.px: 2
 border-style-top: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 
 
@@ -765,7 +759,7 @@ The border-style property sets the style of an element's bottom border.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for bottom border
+-- ds.rendered: Sample code using `border-style-bottom`
 
 -- ds.rendered.input:
 
@@ -779,6 +773,10 @@ border-width.px: 2
 border-style-bottom: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
 
 
 
@@ -790,7 +788,7 @@ The border-style property sets the style of an element's left and right borders.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for horizontal borders
+-- ds.rendered: Sample code using `border-style-horizontal`
 
 -- ds.rendered.input:
 
@@ -804,6 +802,10 @@ border-width.px: 2
 border-style-horizontal: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
 
 
 
@@ -815,7 +817,7 @@ The border-style property sets the style of an element's top and bottom borders.
 It takes a [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
 value and is optional.
 
--- ds.rendered: Specifying style for vertical borders
+-- ds.rendered: Sample code using `border-style-vertical`
 
 -- ds.rendered.input:
 
@@ -829,6 +831,9 @@ border-width.px: 2
 border-style-vertical: dashed
 border-width.px: 2
 
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
 
@@ -837,6 +842,107 @@ border-width.px: 2
 
 
 
+
+-- ds.h1: `link: optional String`
+
+This converts the element to a hyper link.
+
+
+-- ds.rendered: Sample code using `link`
+
+-- ds.rendered.input:
+
+\-- ftd.text: google
+link: https://www.google.com ;; <hl>
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+-- ftd.text: google
+link: https://www.google.com
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h1: `shadow: optional ftd.shadow`
+
+This property will let you create a box shadow. It takes
+[`ftd.shadow`](ftd/built-in-types/#ftd-shadow) value
+which is of record type and is optional.
+
+-- ds.rendered: Sample code using `shadow`
+
+-- ds.rendered.input:
+
+\-- ftd.color yellow-red:
+light: yellow
+dark: red
+
+\-- ftd.shadow s: ;; <hl>
+color: $yellow-red ;; <hl>
+x-offset: 3 ;; <hl>
+y-offset: 5 ;; <hl>
+blur: 1 ;; <hl>
+spread: 2 ;; <hl>
+inset: true ;; <hl>
+
+\-- ftd.text: FifthTry
+shadow: $s ;; <hl>
+margin.px: 10
+
+-- ds.rendered.output:
+
+-- ftd.text: FifthTry
+shadow: $s
+margin.px: 10
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h1: `open-in-new-tab: optional boolean, default=False`
+
+If `link` is provided, this attribute can also be set to open the link in new
+tab instead of current tab. By default, this attribute is set to `false`.
+
+-- ds.rendered: Sample code using `open-in-new-tab` along with `link`
+
+-- ds.rendered.input:
+
+\-- ftd.text: google (opens in new tab)
+link: https://www.google.com
+open-in-new-tab: true ;; <hl>
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+-- ftd.text: google (opens in new tab)
+link: https://www.google.com
+open-in-new-tab: true
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+/-- ftd.column:
 
 /-- ds.h1: `border-radius.px: Integer`
 
@@ -1319,97 +1425,137 @@ region: h1
 -- end: ftd.column
 
 
--- ds.h1: `link: optional String`
-
-This converts the element to a hyper link.
 
 
--- ds.code:
+
+/-- ftd.column:
+
+/-- ds.h1: `border-width.px: Integer`
+
+Use this property to specify the width of the border. By default the `border-width`
+is zero, and is not visible.
+
+
+/-- ds.code: specifying border width
 lang: ftd
 
-\-- ftd.text: google
-link: https://www.google.com
+\-- ftd.text: FifthTry
+border-width.px: 2
 
 
--- ds.markdown:
+/-- ds.markdown:
 
 This will render like this:
 
--- ds.output:
 
--- ftd.text: google
-link: https://www.google.com
+/-- ds.output:
+
+/-- ftd.text: FifthTry
+border-width.px: 2
 color: $inherited.colors.text
 
--- end: ds.output
+/-- end: ds.output
 
 
+/-- ds.h1: `border-top-width.px: Integer`
+
+The border-top property sets the width of an element's top border.
 
 
-
-
--- ds.h1: `shadow: optional ftd.shadow`
-
-This property will let you create a box shadow. It takes
-[`ftd.shadow`](ftd/built-in-types/#ftd-shadow) value
-which is of record type and is optional.
-
--- ds.rendered: Sample code using `shadow`
-
--- ds.rendered.input:
-
-\-- ftd.shadow s: ;; <hl>
-color: $yellow-red ;; <hl>
-x-offset: 3 ;; <hl>
-y-offset: 5 ;; <hl>
-blur: 1 ;; <hl>
-spread: 2 ;; <hl>
-inset: true ;; <hl>
-
-\-- ftd.text: FifthTry
-shadow: $s ;; <hl>
-margin.px: 10
-
--- ds.rendered.output:
-
--- ftd.text: FifthTry
-shadow: $s
-margin.px: 10
-color: $inherited.colors.text
-
--- end: ds.rendered.output
-
--- end: ds.rendered
-
-
-
-
-
--- ds.h1: `open-in-new-tab: optional boolean, default=False`
-
-If `link` is provided, this attribute can also be set to open the link in new
-tab instead of current tab. By default, this attribute is set to `false`.
-
--- ds.code:
+/-- ds.code: specifying border width
 lang: ftd
 
-\-- ftd.text: google
-link: https://www.google.com
-open-in-new-tab: true
+\-- ftd.text: FifthTry
+border-top-width.px: 2
 
 
--- ds.markdown:
+/-- ds.markdown:
 
-Which will render like this:
+This will render like this:
 
--- ds.output:
+/-- ds.output:
 
--- ftd.text: google (opens in new tab)
-link: https://www.google.com
-open-in-new-tab: true
+/-- ftd.text: FifthTry
+border-top-width.px: 2
 color: $inherited.colors.text
 
--- end: ds.output
+/-- end: ds.output
+
+
+/-- ds.h1: `border-bottom-width.px: Integer`
+
+The border-bottom property sets the width of an element's bottom border.
+
+
+/-- ds.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-bottom-width.px: 2
+
+
+/-- ds.markdown:
+
+This will render like this:
+
+/-- ds.output:
+
+/-- ftd.text: FifthTry
+border-bottom-width.px: 2
+color: $inherited.colors.text
+
+/-- end: ds.output
+
+
+/-- ds.h1: `border-left-width.px: Integer`
+
+The border-left property sets the width of an element's left border.
+
+
+/-- ds.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-left-width.px: 2
+
+
+/-- ds.markdown:
+
+This will render like this:
+
+/-- ds.output:
+
+/-- ftd.text: FifthTry
+border-left-width.px: 2
+color: $inherited.colors.text
+
+/-- end: ds.output
+
+
+/-- ds.h1: `border-right-width.px: Integer`
+
+The border-right property sets the width of an element's right border.
+
+
+/-- ds.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-right-width.px: 2
+
+
+/-- ds.markdown:
+
+This will render like this:
+
+/-- ds.output:
+
+/-- ftd.text: FifthTry
+border-right-width.px: 2
+color: $inherited.colors.text
+
+/-- end: ds.output
+
 
 
 /-- ds.h1: `submit: Option<String>`
