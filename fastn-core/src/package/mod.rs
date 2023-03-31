@@ -405,7 +405,7 @@ impl Package {
                 url = format!("{}/", url);
             }
 
-            return format!("\n<link rel=\"canonical\" href=\"{url}\" />", url = url);
+            return format!("\n<link rel=\"canonical\" href=\"{url}\" /><meta property=\"og:url\" content=\"{url}\" />", url = url);
         }
 
         if path.starts_with("-/") {
@@ -433,7 +433,7 @@ impl Package {
                 };
                 // Ignore the fastn document as that path won't exist in the reference website
                 format!(
-                    "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
+                    "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" /><meta property=\"og:url\" content=\"{canonical_base}{path}\" />",
                     canonical_base = url,
                     path = path
                 )
