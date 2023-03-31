@@ -193,3 +193,12 @@ function fallbackCopyTextToClipboard(text: string) {
 
     document.body.removeChild(textArea);
 }
+
+window.ftd.utils = {};
+window.ftd.utils.full_height = function () {
+    document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+};
+
+window.ftd.utils.reset_height = function () {
+    document.body.style.height = `100%`;
+};
