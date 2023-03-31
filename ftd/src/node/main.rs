@@ -98,7 +98,7 @@ impl Node {
     ) -> Node {
         Node {
             node: s(node),
-            display: s(display),
+            display: common.display.value.as_ref().map_or(s(display), |d| d.to_css_string()),
             condition: common.condition.to_owned(),
             attrs: common.attrs(doc_id),
             style: common.style(doc_id, &mut [], anchor_ids),
@@ -131,7 +131,7 @@ impl Node {
         let node = common.node();
 
         Node {
-            node: s(node.as_str()),
+            node: dbg!(s(node.as_str())),
             attrs,
             condition: common.condition.to_owned(),
             text: Default::default(),
@@ -150,7 +150,7 @@ impl Node {
             events: common.event.clone(),
             data_id: common.data_id.to_string(),
             line_number: common.line_number,
-            display: s(display),
+            display: dbg!(common.display.value.as_ref().map_or(s(display), |d| d.to_css_string())),
             raw_data: None,
             web_component: None,
         }
@@ -264,7 +264,7 @@ impl ftd::executor::Row {
         use ftd::node::utils::CheckMap;
 
         let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
+        if !self.common.is_not_visible && self.common.display.value.is_none() {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
@@ -343,7 +343,7 @@ impl ftd::executor::Column {
         use ftd::node::utils::CheckMap;
 
         let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
+        if !self.common.is_not_visible && self.common.display.value.is_none() {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
@@ -1017,6 +1017,17 @@ impl ftd::executor::Common {
         if self.is_not_visible {
             d.check_and_insert("display", ftd::node::Value::from_string("none"));
         }
+
+        d.check_and_insert(
+            "display",
+            ftd::node::Value::from_executor_value(
+                self.display.value.as_ref().map(|d| d.to_css_string()),
+                self.display.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
 
         d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
 

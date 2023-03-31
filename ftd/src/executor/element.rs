@@ -537,6 +537,7 @@ pub type Event = ftd::interpreter2::Event;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
+    pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
     pub id: ftd::executor::Value<Option<String>>,
     pub is_not_visible: bool,
     pub event: Vec<Event>,
@@ -1214,6 +1215,15 @@ pub fn common_from_properties(
     }
 
     Ok(Common {
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
+            inherited_variables,
+            component_name,
+        )?,
         id: ftd::executor::value::optional_string(
             "id",
             component_name,

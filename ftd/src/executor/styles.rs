@@ -3130,6 +3130,79 @@ impl WhiteSpace {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Display {
+    Block,
+    Inline,
+    InlineBlock
+}
+
+impl Display {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<ftd::executor::Display>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(ftd::executor::Display::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::Display> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_DISPLAY_BLOCK => Ok(ftd::executor::Display::Block),
+            ftd::interpreter2::FTD_DISPLAY_INLINE => Ok(ftd::executor::Display::Inline),
+            ftd::interpreter2::FTD_DISPLAY_INLINE_BLOCK => Ok(ftd::executor::Display::InlineBlock),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.display`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_display(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::executor::Display>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_DISPLAY,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ftd::executor::Display::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            ftd::executor::Display::InlineBlock => "inline-block".to_string(),
+            ftd::executor::Display::Inline => "inline".to_string(),
+            ftd::executor::Display::Block => "block".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum TextWeight {
     EXTRABOLD,
     BOLD,

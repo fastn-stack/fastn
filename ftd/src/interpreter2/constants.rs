@@ -195,6 +195,11 @@ pub const FTD_REGION_H4: &str = "ftd#region.h4";
 pub const FTD_REGION_H5: &str = "ftd#region.h5";
 pub const FTD_REGION_H6: &str = "ftd#region.h6";
 
+pub const FTD_DISPLAY: &str = "ftd#display";
+pub const FTD_DISPLAY_BLOCK: &str = "ftd#display.block";
+pub const FTD_DISPLAY_INLINE: &str = "ftd#display.inline";
+pub const FTD_DISPLAY_INLINE_BLOCK: &str = "ftd#display.inline-block";
+
 pub const FTD_WHITESPACE: &str = "ftd#white-space";
 pub const FTD_WHITESPACE_NORMAL: &str = "ftd#white-space.normal";
 pub const FTD_WHITESPACE_NOWRAP: &str = "ftd#white-space.nowrap";
