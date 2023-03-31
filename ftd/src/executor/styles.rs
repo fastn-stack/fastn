@@ -3133,7 +3133,7 @@ impl WhiteSpace {
 pub enum Display {
     Block,
     Inline,
-    InlineBlock
+    InlineBlock,
 }
 
 impl Display {
@@ -3143,7 +3143,11 @@ impl Display {
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::Display>> {
         if let Some(value) = or_type_value {
-            Ok(Some(ftd::executor::Display::from_values(value, doc, line_number)?))
+            Ok(Some(ftd::executor::Display::from_values(
+                value,
+                doc,
+                line_number,
+            )?))
         } else {
             Ok(None)
         }
@@ -3193,11 +3197,11 @@ impl Display {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_str(&self) -> &str {
         match self {
-            ftd::executor::Display::InlineBlock => "inline-block".to_string(),
-            ftd::executor::Display::Inline => "inline".to_string(),
-            ftd::executor::Display::Block => "block".to_string(),
+            ftd::executor::Display::InlineBlock => "inline-block",
+            ftd::executor::Display::Inline => "inline",
+            ftd::executor::Display::Block => "block",
         }
     }
 }

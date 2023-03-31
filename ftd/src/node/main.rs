@@ -98,7 +98,7 @@ impl Node {
     ) -> Node {
         Node {
             node: s(node),
-            display: common.display.value.as_ref().map_or(s(display), |d| d.to_css_string()),
+            display: s(display),
             condition: common.condition.to_owned(),
             attrs: common.attrs(doc_id),
             style: common.style(doc_id, &mut [], anchor_ids),
@@ -131,7 +131,7 @@ impl Node {
         let node = common.node();
 
         Node {
-            node: dbg!(s(node.as_str())),
+            node: s(node.as_str()),
             attrs,
             condition: common.condition.to_owned(),
             text: Default::default(),
@@ -150,7 +150,7 @@ impl Node {
             events: common.event.clone(),
             data_id: common.data_id.to_string(),
             line_number: common.line_number,
-            display: dbg!(common.display.value.as_ref().map_or(s(display), |d| d.to_css_string())),
+            display: s(display),
             raw_data: None,
             web_component: None,
         }
@@ -166,6 +166,7 @@ impl ftd::executor::Element {
         match self {
             ftd::executor::Element::Row(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Column(c) => c.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Ele(e) => e.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Text(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Decimal(t) => t.to_node(doc_id, anchor_ids),
@@ -264,7 +265,7 @@ impl ftd::executor::Row {
         use ftd::node::utils::CheckMap;
 
         let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible && self.common.display.value.is_none() {
+        if !self.common.is_not_visible {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
@@ -343,7 +344,7 @@ impl ftd::executor::Column {
         use ftd::node::utils::CheckMap;
 
         let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible && self.common.display.value.is_none() {
+        if !self.common.is_not_visible {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
@@ -416,6 +417,81 @@ impl ftd::executor::Column {
     }
 }
 
+impl ftd::executor::Ele {
+    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+        use ftd::node::utils::CheckMap;
+
+        let mut n = Node::from_container(
+            &self.common,
+            &self.container,
+            doc_id,
+            self.display
+                .value
+                .as_ref()
+                .map_or("block", |d| d.to_css_str()),
+            anchor_ids,
+        );
+        if !self.common.is_not_visible && self.display.value.is_none() {
+            n.style
+                .insert(s("display"), ftd::node::Value::from_string("block"));
+        }
+
+        n.style.check_and_insert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align_content
+                        .to_owned()
+                        .map(|v| v.to_css_justify_content(true))
+                        .value,
+                ),
+                self.container.align_content.to_owned(),
+                Some(ftd::executor::Alignment::justify_content_pattern(true)),
+                doc_id,
+            ),
+        );
+
+        // TODO: Need to fix this later for condition
+        if let Some(v) = n.style.get("justify-content") {
+            if let Some(jc) = &v.value {
+                if jc.eq("start") {
+                    n.style.check_and_insert(
+                        "justify-content",
+                        ftd::node::Value::from_executor_value(
+                            self.container
+                                .spacing
+                                .to_owned()
+                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                                .value,
+                            self.container.spacing.to_owned(),
+                            Some(ftd::executor::Spacing::justify_content_pattern()),
+                            doc_id,
+                        ),
+                    );
+                }
+            }
+        }
+
+        n.style.check_and_insert(
+            "align-items",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align_content
+                        .to_owned()
+                        .map(|v| v.to_css_align_items(true))
+                        .value,
+                ),
+                self.container.align_content.to_owned(),
+                Some(ftd::executor::Alignment::align_item_pattern(true)),
+                doc_id,
+            ),
+        );
+        n
+    }
+}
+
 impl ftd::executor::Text {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
@@ -429,6 +505,19 @@ impl ftd::executor::Text {
                 ftd::node::Value::from_string(slug::slugify(&self.text.value.original)),
             );
         }
+
+        n.style.check_and_insert(
+            "display",
+            ftd::node::Value::from_executor_value(
+                self.display
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_str().to_string()))
+                    .value,
+                self.display.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         n.style.check_and_insert(
             "text-indent",
@@ -1017,17 +1106,6 @@ impl ftd::executor::Common {
         if self.is_not_visible {
             d.check_and_insert("display", ftd::node::Value::from_string("none"));
         }
-
-        d.check_and_insert(
-            "display",
-            ftd::node::Value::from_executor_value(
-                self.display.value.as_ref().map(|d| d.to_css_string()),
-                self.display.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
-
 
         d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
 

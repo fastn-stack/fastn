@@ -506,6 +506,7 @@ impl<'a> ExecuteDoc<'a> {
                 current = match &mut current[*i] {
                     ftd::executor::Element::Row(r) => &mut r.container.children,
                     ftd::executor::Element::Column(r) => &mut r.container.children,
+                    ftd::executor::Element::Ele(e) => &mut e.container.children,
                     ftd::executor::Element::Document(r) => &mut r.children,
                     t => unreachable!("{:?}", t),
                 };
@@ -768,6 +769,35 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
 
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                    vec![],
+                    inherited_variables,
+                )?)
+            }
+            "ftd#ele" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+
+                ftd::executor::Element::Ele(ftd::executor::element::ele_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),

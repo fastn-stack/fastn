@@ -6,7 +6,10 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#count": 0,
+"foo#yellow-red": {
+"dark": "red",
+"light": "yellow"
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -696,7 +699,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#count&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(88,75,66,1); cursor: pointer; display: block; height: auto; text-decoration: none; width: auto" class="ft_md">Some text</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(88,75,66,1); display: block; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 2px; border-color: rgba(255,255,0,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: block; height: auto; text-decoration: none; width: auto" class="ft_md">This is a block element. It takes up the full width available and creates a new line after it.</div><div data-id="0,1:main" style="border-bottom-width: 2px; border-color: rgba(255,255,0,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: inline; height: auto; text-decoration: none; width: auto" class="ft_md">This is an inline element. It flows with the text and does not create a new line.</div><div data-id="0,2:main" style="border-bottom-width: 2px; border-color: rgba(255,255,0,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: inline; height: auto; text-decoration: none; width: auto" class="ft_md">This is another inline text</div><div data-id="0,3:main" style="border-bottom-width: 2px; border-color: rgba(255,255,0,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: inline-block; height: auto; text-decoration: none; width: auto" class="ft_md">This is an inline-block element. It takes up only the necessary width required by its content and allows other elements to appear on the same line.</div><div data-id="0,4:main" style="border-bottom-width: 2px; border-color: rgba(255,255,0,1); border-left-width: 2px; border-right-width: 2px; border-style: solid; border-top-width: 2px; box-sizing: border-box; display: inline-block; height: auto; text-decoration: none; width: auto" class="ft_md">This is another inline-block text</div></div></div>
 
 
 <script>
@@ -1588,42 +1591,62 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#count", data);
-}
-window.node_change_main["1:main__color"] = function(data) {
+window.node_change_main["0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).light;
 }
-else {document.querySelector(`[data-id="1:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("ftd#default-colors.text", data).dark;}
 }
 
-window.node_change_main["1:main__display"] = function(data) {
-if(function(){
-return (resolve_reference("foo#count", data)%3==1);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["display"] = "inline";
+window.node_change_main["0,0:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).light;
 }
-else if(function(){
-return (resolve_reference("foo#count", data)%3==2);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["display"] = "inline-block";
+else {document.querySelector(`[data-id="0,0:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).dark;}
 }
-else {document.querySelector(`[data-id="1:main"]`).style["display"] = "block";}
+window.node_change_main["0,1:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,1:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).light;
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).dark;}
+}
+window.node_change_main["0,2:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,2:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).light;
+}
+else {document.querySelector(`[data-id="0,2:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).dark;}
+}
+window.node_change_main["0,3:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,3:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).light;
+}
+else {document.querySelector(`[data-id="0,3:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).dark;}
+}
+window.node_change_main["0,4:main__border-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,4:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).light;
+}
+else {document.querySelector(`[data-id="0,4:main"]`).style["border-color"] = resolve_reference("foo#yellow-red", data).dark;}
 }
 window.set_value_main = {};
-window.set_value_main["foo#count"] = function (data, new_value, remaining) {
+window.set_value_main["foo#yellow-red"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#count" + "." + remaining, new_value);
+set_data_value(data, "foo#yellow-red" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#count", new_value);
+set_data_value(data, "foo#yellow-red", new_value);
 }
 
-window.ftd.call_mutable_value_changes("foo#count", "main");
-window.ftd.call_immutable_value_changes("foo#count", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+window.ftd.call_mutable_value_changes("foo#yellow-red", "main");
+window.ftd.call_immutable_value_changes("foo#yellow-red", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__border-color"]){window.node_change_main["0,0:main__border-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__border-color"]){window.node_change_main["0,2:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__border-color"]){window.node_change_main["0,3:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__border-color"]){window.node_change_main["0,4:main__border-color"](data);
 }
 };
 
@@ -1636,7 +1659,17 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__border-color"]){window.node_change_main["0,0:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__border-color"]){window.node_change_main["0,1:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__border-color"]){window.node_change_main["0,2:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__border-color"]){window.node_change_main["0,3:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__border-color"]){window.node_change_main["0,4:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
 
@@ -1649,7 +1682,7 @@ set_data_value(data, "ftd#default-colors", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
 window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
 

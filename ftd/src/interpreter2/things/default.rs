@@ -154,6 +154,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(row_function()),
         ),
         (
+            "ftd#ele".to_string(),
+            ftd::interpreter2::Thing::Component(ele_function()),
+        ),
+        (
             "ftd#code".to_string(),
             ftd::interpreter2::Thing::Component(code_function()),
         ),
@@ -8368,6 +8372,28 @@ pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
     }
 }
 
+pub fn ele_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#ele".to_string(),
+        arguments: [
+            container_arguments(),
+            common_arguments(),
+            vec![ftd::interpreter2::Argument::default(
+                "display",
+                ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_DISPLAY)
+                    .into_optional()
+                    .into_kind_data(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
 pub fn code_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#code".to_string(),
@@ -8599,12 +8625,6 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
-        ftd::interpreter2::Argument::default(
-            "display",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_DISPLAY)
-                .into_optional()
-                .into_kind_data(),
-        ),
         ftd::interpreter2::Argument::default(
             "shadow",
             ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_SHADOW)
@@ -9102,6 +9122,12 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn text_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "display",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_DISPLAY)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "text-align",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_ALIGN)
