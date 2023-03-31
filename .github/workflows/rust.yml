@@ -45,13 +45,16 @@ jobs:
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
+      - name: Debug Fastn path
+        id: debug
+        continue-on-error: true
+        run: which fastn
       - name: Run cargo fmt
         id: fmt
         continue-on-error: true
