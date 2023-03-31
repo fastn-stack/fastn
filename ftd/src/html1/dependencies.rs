@@ -127,6 +127,17 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         if let Some(value) = node_for_properties(
+            &self.html_data.twitter_title,
+            var_dependencies,
+            "twitter_document__title",
+            self.doc,
+            "document.head.querySelector('meta[name=\"twitter:title\"]').content",
+            self.id,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
             &self.html_data.description,
             var_dependencies,
             "document__description",
@@ -143,6 +154,17 @@ impl<'a> DependencyGenerator<'a> {
             "og_document__description",
             self.doc,
             "document.head.querySelector('meta[property=\"og:description\"]').content",
+            self.id,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.twitter_description,
+            var_dependencies,
+            "twitter_document__description",
+            self.doc,
+            "document.head.querySelector('meta[name=\"twitter:description\"]').content",
             self.id,
         )? {
             result.push(value)
