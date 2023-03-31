@@ -1219,6 +1219,12 @@
       "line_number": null,
       "default": null
     },
+    "twitter_title": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
     "description": {
       "value": null,
       "properties": [],
@@ -1226,6 +1232,12 @@
       "default": null
     },
     "og_description": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
+    "twitter_description": {
       "value": null,
       "properties": [],
       "line_number": null,

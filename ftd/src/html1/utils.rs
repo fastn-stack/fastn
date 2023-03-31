@@ -726,6 +726,12 @@ pub fn get_meta_data(html_data: &ftd::html1::HTMLData) -> String {
             title
         ));
     }
+    if let Some(ref title) = html_data.twitter_title {
+        result.push(format!(
+            "<meta name=\"twitter:title\" content=\"{}\">",
+            title
+        ));
+    }
     if let Some(ref description) = html_data.og_description {
         result.push(format!(
             "<meta property=\"og:description\" content=\"{}\">",
@@ -736,6 +742,12 @@ pub fn get_meta_data(html_data: &ftd::html1::HTMLData) -> String {
         result.push(format!(
             "<meta name=\"description\" content=\"{}\">",
             description
+        ));
+    }
+    if let Some(ref title) = html_data.twitter_description {
+        result.push(format!(
+            "<meta name=\"twitter:description\" content=\"{}\">",
+            title
         ));
     }
     if let Some(ref image) = html_data.og_image {

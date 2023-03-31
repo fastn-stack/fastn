@@ -893,12 +893,22 @@
       "line_number": null,
       "properties": []
     },
+    "twitter_title": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    },
     "description": {
       "value": null,
       "line_number": null,
       "properties": []
     },
     "og_description": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    },
+    "twitter_description": {
       "value": null,
       "line_number": null,
       "properties": []
