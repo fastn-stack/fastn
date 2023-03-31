@@ -69,13 +69,13 @@ window.ftd = (function() {
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {
-        window.ftd.utils.reset_height();
+        window.ftd.utils.reset_full_height();
         console_log(id, event);
         let actions = JSON.parse(event);
         for (const action in actions) {
             handle_event(evt, id, actions[action], obj);
         }
-        window.ftd.utils.full_height();
+        window.ftd.utils.set_full_height();
     };
 
     exports.handle_function = function (evt: Event, id: string, event: string, obj: Element) {

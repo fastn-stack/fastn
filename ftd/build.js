@@ -63,13 +63,13 @@ window.ftd = (function () {
         }
     }
     exports.handle_event = function (evt, id, event, obj) {
-        window.ftd.utils.reset_height();
+        window.ftd.utils.reset_full_height();
         console_log(id, event);
         let actions = JSON.parse(event);
         for (const action in actions) {
             handle_event(evt, id, actions[action], obj);
         }
-        window.ftd.utils.full_height();
+        window.ftd.utils.set_full_height();
     };
     exports.handle_function = function (evt, id, event, obj) {
         console_log(id, event);
@@ -643,7 +643,7 @@ window.ftd.post_init = function () {
     }
     initialise_dark_mode();
     initialise_device();
-    window.ftd.utils.full_height();
+    window.ftd.utils.set_full_height();
     // update_markdown_colors();
 };
 function console_log(...message) {
@@ -821,9 +821,9 @@ function fallbackCopyTextToClipboard(text) {
     document.body.removeChild(textArea);
 }
 window.ftd.utils = {};
-window.ftd.utils.full_height = function () {
+window.ftd.utils.set_full_height = function () {
     document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
 };
-window.ftd.utils.reset_height = function () {
+window.ftd.utils.reset_full_height = function () {
     document.body.style.height = `100%`;
 };
