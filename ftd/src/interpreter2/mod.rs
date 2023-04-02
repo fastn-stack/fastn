@@ -33,7 +33,6 @@ macro_rules! try_state {
 mod test;
 mod constants;
 mod main;
-mod main2;
 pub mod prelude;
 mod tdoc;
 mod things;
