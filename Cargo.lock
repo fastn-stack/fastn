@@ -586,9 +586,9 @@ dependencies = [
 
 [[package]]
 name = "comrak"
-version = "0.17.0"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "54b9638d96f93f8bf7b050f7505ba0d82b8267f601965b08faa0eb4882a9bba9"
+checksum = "482aa5695bca086022be453c700a40c02893f1ba7098a2c88351de55341ae894"
 dependencies = [
  "entities",
  "memchr",
@@ -1189,7 +1189,7 @@ checksum = "c1fd087255f739f4f1aeea69f11b72f8080e9c2e7645cd06955dad4a178a49e3"
 name = "ftd"
 version = "0.2.0"
 dependencies = [
- "comrak 0.17.0",
+ "comrak 0.18.0",
  "css-color-parser",
  "diffy",
  "format_num",
