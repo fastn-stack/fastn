@@ -536,6 +536,11 @@
               "value": null,
               "line_number": null,
               "properties": []
+            },
+            "display": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         }
