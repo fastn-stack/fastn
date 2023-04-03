@@ -1,5 +1,5 @@
 pub use ftd::interpreter2::constants::*;
-pub use ftd::interpreter2::main2::{
+pub use ftd::interpreter2::main::{
     interpret, interpret_with_line_number, Document, Interpreter, InterpreterState,
     InterpreterWithoutState, ParsedDocument, StateWithThing, ToProcess,
 };

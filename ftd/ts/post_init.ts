@@ -258,5 +258,6 @@ window.ftd.post_init = function () {
     }
     initialise_dark_mode();
     initialise_device();
+    window.ftd.utils.set_full_height();
     // update_markdown_colors();
 };

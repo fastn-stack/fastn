@@ -125,8 +125,10 @@ pub struct ContainerElement {
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
     pub og_title: ftd::executor::Value<Option<String>>,
+    pub twitter_title: ftd::executor::Value<Option<String>>,
     pub description: ftd::executor::Value<Option<String>>,
     pub og_description: ftd::executor::Value<Option<String>>,
+    pub twitter_description: ftd::executor::Value<Option<String>>,
     pub og_image: ftd::executor::Value<Option<ftd::executor::ImageSrc>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
@@ -1191,6 +1193,14 @@ pub fn html_data_from_properties(
             doc,
             line_number,
         )?,
+        twitter_title: ftd::executor::value::optional_string(
+            "twitter-title",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         description: ftd::executor::value::optional_string(
             "description",
             component_name,
@@ -1201,6 +1211,14 @@ pub fn html_data_from_properties(
         )?,
         og_description: ftd::executor::value::optional_string(
             "og-description",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        twitter_description: ftd::executor::value::optional_string(
+            "twitter-description",
             component_name,
             properties,
             arguments,
