@@ -2,7 +2,7 @@
 pub enum Element {
     Row(Row),
     Column(Column),
-    Ele(Ele),
+    Container(ContainerElement),
     Document(Document),
     Text(Text),
     Integer(Text),
@@ -24,7 +24,7 @@ impl Element {
         match self {
             Element::Row(r) => Some(&r.common),
             Element::Column(c) => Some(&c.common),
-            Element::Ele(e) => Some(&e.common),
+            Element::Container(e) => Some(&e.common),
             Element::Text(t) => Some(&t.common),
             Element::Integer(i) => Some(&i.common),
             Element::Boolean(b) => Some(&b.common),
@@ -60,7 +60,7 @@ impl Element {
         match self {
             Element::Row(r) => r.common.line_number,
             Element::Column(c) => c.common.line_number,
-            Element::Ele(e) => e.common.line_number,
+            Element::Container(e) => e.common.line_number,
             Element::Document(d) => d.line_number,
             Element::Text(t) => t.common.line_number,
             Element::Integer(i) => i.common.line_number,
@@ -115,9 +115,9 @@ pub struct Column {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
-pub struct Ele {
-    pub container: Container,
+pub struct ContainerElement {
     pub common: Common,
+    pub children: Vec<ftd::executor::Element>,
     pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
 }
 
@@ -1115,7 +1115,7 @@ pub fn column_from_properties(
 }
 
 #[allow(clippy::too_many_arguments)]
-pub fn ele_from_properties(
+pub fn container_element_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
@@ -1125,7 +1125,7 @@ pub fn ele_from_properties(
     line_number: usize,
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<Ele> {
+) -> ftd::executor::Result<ContainerElement> {
     let common = common_from_properties(
         properties,
         events,
@@ -1135,20 +1135,11 @@ pub fn ele_from_properties(
         local_container,
         line_number,
         inherited_variables,
-        "ftd#ele",
+        "ftd#container",
     )?;
-    let container = container_from_properties(
-        properties,
-        arguments,
-        doc,
-        line_number,
-        children,
-        inherited_variables,
-        "ftd#ele",
-    )?;
-    Ok(Ele {
-        container,
+    Ok(ContainerElement {
         common,
+        children,
         display: ftd::executor::Display::optional_display(
             properties,
             arguments,
@@ -1156,7 +1147,7 @@ pub fn ele_from_properties(
             line_number,
             "display",
             inherited_variables,
-            "ftd#ele",
+            "ftd#container",
         )?,
     })
 }

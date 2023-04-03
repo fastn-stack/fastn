@@ -1,6 +1,4 @@
--- ftd.ele:
-width: fill-container
-spacing.fixed.px: 10
+-- ftd.container:
 color: $inherited.colors.text
 
 -- ftd.text:
@@ -38,7 +36,7 @@ display: inline-block
 border-color: $yellow-red
 border-width.px: 2
 
--- end: ftd.ele
+-- end: ftd.container
 
 
 

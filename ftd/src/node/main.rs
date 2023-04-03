@@ -114,6 +114,42 @@ impl Node {
         }
     }
 
+    fn from_children(
+        common: &ftd::executor::Common,
+        children: &[ftd::executor::Element],
+        doc_id: &str,
+        display: &str,
+        anchor_ids: &mut Vec<String>,
+    ) -> Node {
+        use itertools::Itertools;
+
+        let attrs = common.attrs(doc_id);
+        let mut classes = vec![];
+        classes.extend(common.classes());
+
+        let node = common.node();
+
+        Node {
+            node: s(node.as_str()),
+            attrs,
+            condition: common.condition.to_owned(),
+            text: Default::default(),
+            children: children
+                .iter()
+                .map(|v| v.to_node(doc_id, anchor_ids))
+                .collect_vec(),
+            style: common.style(doc_id, &mut classes, anchor_ids),
+            classes,
+            null: common.is_dummy,
+            events: common.event.clone(),
+            data_id: common.data_id.to_string(),
+            line_number: common.line_number,
+            display: s(display),
+            raw_data: None,
+            web_component: None,
+        }
+    }
+
     fn from_container(
         common: &ftd::executor::Common,
         container: &ftd::executor::Container,
@@ -166,7 +202,7 @@ impl ftd::executor::Element {
         match self {
             ftd::executor::Element::Row(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Column(c) => c.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Ele(e) => e.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Container(e) => e.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Text(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Decimal(t) => t.to_node(doc_id, anchor_ids),
@@ -417,13 +453,11 @@ impl ftd::executor::Column {
     }
 }
 
-impl ftd::executor::Ele {
+impl ftd::executor::ContainerElement {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
-        use ftd::node::utils::CheckMap;
-
-        let mut n = Node::from_container(
+        let mut n = Node::from_children(
             &self.common,
-            &self.container,
+            &self.children,
             doc_id,
             self.display
                 .value
@@ -436,58 +470,6 @@ impl ftd::executor::Ele {
                 .insert(s("display"), ftd::node::Value::from_string("block"));
         }
 
-        n.style.check_and_insert(
-            "justify-content",
-            ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_justify_content(true))
-                        .value,
-                ),
-                self.container.align_content.to_owned(),
-                Some(ftd::executor::Alignment::justify_content_pattern(true)),
-                doc_id,
-            ),
-        );
-
-        // TODO: Need to fix this later for condition
-        if let Some(v) = n.style.get("justify-content") {
-            if let Some(jc) = &v.value {
-                if jc.eq("start") {
-                    n.style.check_and_insert(
-                        "justify-content",
-                        ftd::node::Value::from_executor_value(
-                            self.container
-                                .spacing
-                                .to_owned()
-                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                                .value,
-                            self.container.spacing.to_owned(),
-                            Some(ftd::executor::Spacing::justify_content_pattern()),
-                            doc_id,
-                        ),
-                    );
-                }
-            }
-        }
-
-        n.style.check_and_insert(
-            "align-items",
-            ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_align_items(true))
-                        .value,
-                ),
-                self.container.align_content.to_owned(),
-                Some(ftd::executor::Alignment::align_item_pattern(true)),
-                doc_id,
-            ),
-        );
         n
     }
 }
