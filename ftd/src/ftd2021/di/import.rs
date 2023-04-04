@@ -12,16 +12,19 @@ impl Import {
         section.name.eq(IMPORT)
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::di::Result<Import> {
+    pub(crate) fn from_p1(
+        section: &ftd::p1::Section,
+        doc_id: &str,
+    ) -> ftd::ftd2021::di::Result<Import> {
         if !Self::is_import(section) {
-            return ftd::di::parse_error(
+            return ftd::ftd2021::di::parse_error(
                 format!("Section is not import section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
             );
         }
         if !section.sub_sections.is_empty() {
-            return ftd::di::parse_error(
+            return ftd::ftd2021::di::parse_error(
                 format!(
                     "Subsection not expected for import statement `{:?}`",
                     section
@@ -34,10 +37,10 @@ impl Import {
             Some(ftd::p1::Header::KV(ftd::p1::header::KV {
                 value: Some(value), ..
             })) => {
-                let (module, alias) = ftd::di::utils::split_at(value.as_str(), AS);
+                let (module, alias) = ftd::ftd2021::di::utils::split_at(value.as_str(), AS);
                 Ok(Import { module, alias })
             }
-            t => ftd::di::parse_error(
+            t => ftd::ftd2021::di::parse_error(
                 format!(
                     "Expected value in caption for import statement, found: `{:?}`",
                     t

@@ -10,7 +10,7 @@ impl Property {
     pub(crate) fn from_p1(
         section: &ftd::p1::Section,
         doc_id: &str,
-    ) -> ftd::di::Result<Vec<Property>> {
+    ) -> ftd::ftd2021::di::Result<Vec<Property>> {
         let mut properties = vec![];
         for header in section.headers.0.iter() {
             properties.push(Property::from_header(header, doc_id, Source::Header)?)
@@ -29,7 +29,7 @@ impl Property {
         header: &ftd::p1::Header,
         doc_id: &str,
         source: Source,
-    ) -> ftd::di::Result<Property> {
+    ) -> ftd::ftd2021::di::Result<Property> {
         match header {
             ftd::p1::Header::KV(kv) => Ok(Property::from_kv(kv, source)),
             ftd::p1::Header::Section(section) => Property::from_section(section, doc_id, source),
@@ -49,7 +49,7 @@ impl Property {
     pub(crate) fn from_di_list(
         key: &str,
         kind: Option<String>,
-        di: Vec<ftd::di::DI>,
+        di: Vec<ftd::ftd2021::di::DI>,
         source: Source,
     ) -> Property {
         Property {
@@ -62,7 +62,7 @@ impl Property {
 
     pub(crate) fn from_body(body: &str) -> Property {
         Property {
-            name: ftd::di::utils::BODY.to_string(),
+            name: ftd::ftd2021::di::utils::BODY.to_string(),
             kind: None,
             value: PropertyValue::Value(Some(body.to_string())),
             source: Source::Body,
@@ -72,7 +72,7 @@ impl Property {
     #[cfg(test)]
     pub(crate) fn from_caption_str(caption: &str) -> Property {
         Property {
-            name: ftd::di::utils::CAPTION.to_string(),
+            name: ftd::ftd2021::di::utils::CAPTION.to_string(),
             kind: None,
             value: PropertyValue::Value(Some(caption.to_string())),
             source: Source::Caption,
@@ -83,8 +83,8 @@ impl Property {
         section: &ftd::p1::header::Section,
         doc_id: &str,
         source: Source,
-    ) -> ftd::di::Result<Property> {
-        let di = ftd::di::DI::from_sections(section.section.as_slice(), doc_id)?;
+    ) -> ftd::ftd2021::di::Result<Property> {
+        let di = ftd::ftd2021::di::DI::from_sections(section.section.as_slice(), doc_id)?;
         Ok(Property {
             name: section.key.to_string(),
             kind: section.kind.clone(),
@@ -98,7 +98,7 @@ impl Property {
 #[serde(tag = "pv", content = "value")]
 pub enum PropertyValue {
     Value(Option<String>),
-    DI(Vec<ftd::di::DI>),
+    DI(Vec<ftd::ftd2021::di::DI>),
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]

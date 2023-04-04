@@ -1,9 +1,10 @@
-use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+use {indoc::indoc, pretty_assertions::assert_eq};
+// macro
 
 #[track_caller]
-fn p(s: &str, t: &Vec<ftd::di::DI>) {
+fn p(s: &str, t: &Vec<ftd::ftd2021::di::DI>) {
     let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
-    let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo")
+    let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     assert_eq!(t, &ast,)
 }
@@ -11,7 +12,7 @@ fn p(s: &str, t: &Vec<ftd::di::DI>) {
 #[track_caller]
 fn f(s: &str, m: &str) {
     let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
-    let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo");
+    let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo");
     match ast {
         Ok(r) => panic!("expected failure, found: {:?}", r),
         Err(e) => {
@@ -39,7 +40,7 @@ fn test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
     for (files, json) in find_file_groups() {
-        let t: Vec<ftd::di::DI> =
+        let t: Vec<ftd::ftd2021::di::DI> =
             serde_json::from_str(std::fs::read_to_string(json).unwrap().as_str()).unwrap();
         for f in files {
             let s = std::fs::read_to_string(&f).unwrap();
@@ -73,7 +74,7 @@ fn find_all_files_matching_extension_recursively(
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("src/di/t", "ftd");
+        let mut f = find_all_files_matching_extension_recursively("src/ftd2021/di/t", "ftd");
         f.sort();
         f
     };
@@ -109,7 +110,7 @@ fn filename_with_second_last_extension_replaced_with_json(
 fn di_import() {
     p(
         "-- import: foo",
-        &ftd::di::DI::Import(ftd::di::Import {
+        &ftd::ftd2021::di::DI::Import(ftd::ftd2021::di::Import {
             module: "foo".to_string(),
             alias: None,
         })
@@ -118,7 +119,7 @@ fn di_import() {
 
     p(
         "-- import: foo as f",
-        &vec![ftd::di::DI::Import(ftd::di::Import {
+        &vec![ftd::ftd2021::di::DI::Import(ftd::ftd2021::di::Import {
             module: "foo".to_string(),
             alias: Some("f".to_string()),
         })],
@@ -158,8 +159,8 @@ fn di_record() {
             integer age: 40
             "
         ),
-        &ftd::di::DI::Record(
-            ftd::di::Record::new("foo")
+        &ftd::ftd2021::di::DI::Record(
+            ftd::ftd2021::di::Record::new("foo")
                 .add_field("name", "string", None)
                 .add_field("age", "integer", Some(s("40"))),
         )
@@ -179,8 +180,8 @@ fn di_record() {
             It can be overridden by the variable of this type.
             "
         ),
-        &ftd::di::DI::Record(
-            ftd::di::Record::new("foo")
+        &ftd::ftd2021::di::DI::Record(
+            ftd::ftd2021::di::Record::new("foo")
                 .add_field("age", "integer", None)
                 .add_field(
                     "details",
@@ -223,8 +224,8 @@ fn di_variable_definition() {
             easier and better for everyone.
             "
         ),
-        &ftd::di::DI::Definition(
-            ftd::di::Definition::new("about-us", "string")
+        &ftd::ftd2021::di::DI::Definition(
+            ftd::ftd2021::di::Definition::new("about-us", "string")
             .add_body(indoc!(
                 "FifthTry is Open Source
 
@@ -239,8 +240,8 @@ fn di_variable_definition() {
 
     p(
         "-- string about-us: FifthTry is Open Source",
-        &ftd::di::DI::Definition(
-            ftd::di::Definition::new("about-us", "string")
+        &ftd::ftd2021::di::DI::Definition(
+            ftd::ftd2021::di::Definition::new("about-us", "string")
                 .add_caption_str("FifthTry is Open Source"),
         )
         .list(),
@@ -248,7 +249,11 @@ fn di_variable_definition() {
 
     p(
         "-- string list names:",
-        &ftd::di::DI::Definition(ftd::di::Definition::new("names", "string list")).list(),
+        &ftd::ftd2021::di::DI::Definition(ftd::ftd2021::di::Definition::new(
+            "names",
+            "string list",
+        ))
+        .list(),
     );
 }
 
@@ -269,8 +274,8 @@ fn di_component_definition() {
             text: $text
             "
         ),
-        &ftd::di::DI::Definition(
-            ftd::di::Definition::new("markdown", "ftd.text")
+        &ftd::ftd2021::di::DI::Definition(
+            ftd::ftd2021::di::Definition::new("markdown", "ftd.text")
                 .add_value_property("text", Some(s("caption or body")), None, None)
                 .add_value_property("text", None, Some(s("$text")), None),
         )
@@ -287,8 +292,8 @@ fn di_component_definition() {
             -- markdown.text: $text
             "
         ),
-        &ftd::di::DI::Definition(
-            ftd::di::Definition::new("markdown", "ftd.text")
+        &ftd::ftd2021::di::DI::Definition(
+            ftd::ftd2021::di::Definition::new("markdown", "ftd.text")
                 .add_value_property("text", Some(s("caption or body")), None, None)
                 .add_value_property("text", None, Some(s("$text")), None),
         )
@@ -311,17 +316,22 @@ fn di_component_definition() {
             -- end: foo
             "
         ),
-        &ftd::di::DI::Definition(
-            ftd::di::Definition::new("foo", "ftd.column")
+        &ftd::ftd2021::di::DI::Definition(
+            ftd::ftd2021::di::Definition::new("foo", "ftd.column")
                 .add_di_property(
                     "bar",
                     Some(s("ftd.ui")),
-                    ftd::di::DI::Invocation(
-                        ftd::di::Invocation::new("ftd.text").add_caption_str("Hello there"),
+                    ftd::ftd2021::di::DI::Invocation(
+                        ftd::ftd2021::di::Invocation::new("ftd.text").add_caption_str(
+                            "Hello \
+                        there",
+                        ),
                     )
                     .list(),
                 )
-                .add_child(ftd::di::DI::Invocation(ftd::di::Invocation::new("bar"))),
+                .add_child(ftd::ftd2021::di::DI::Invocation(
+                    ftd::ftd2021::di::Invocation::new("bar"),
+                )),
         )
         .list(),
     );
@@ -343,8 +353,8 @@ fn di_variable_invocation() {
             easier and better for everyone.
             "
         ),
-        &ftd::di::DI::Invocation(
-            ftd::di::Invocation::new("about-us")
+        &ftd::ftd2021::di::DI::Invocation(
+            ftd::ftd2021::di::Invocation::new("about-us")
                 .add_body(indoc!(
                 "FifthTry is Open Source
 
@@ -359,15 +369,18 @@ fn di_variable_invocation() {
 
     p(
         "-- about-us: FifthTry is Open Source",
-        &ftd::di::DI::Invocation(
-            ftd::di::Invocation::new("about-us").add_caption_str("FifthTry is Open Source"),
+        &ftd::ftd2021::di::DI::Invocation(
+            ftd::ftd2021::di::Invocation::new("about-us").add_caption_str(
+                "FifthTry is Open \
+            Source",
+            ),
         )
         .list(),
     );
 
     p(
         "-- names:",
-        &ftd::di::DI::Invocation(ftd::di::Invocation::new("names")).list(),
+        &ftd::ftd2021::di::DI::Invocation(ftd::ftd2021::di::Invocation::new("names")).list(),
     );
 }
 
@@ -381,8 +394,8 @@ fn di_component_invocation() {
             text: $text
             "
         ),
-        &ftd::di::DI::Invocation(
-            ftd::di::Invocation::new("markdown")
+        &ftd::ftd2021::di::DI::Invocation(
+            ftd::ftd2021::di::Invocation::new("markdown")
                 .add_value_property("text", Some(s("caption or body")), None)
                 .add_value_property("text", None, Some(s("$text"))),
         )
@@ -399,8 +412,8 @@ fn di_component_invocation() {
             -- markdown.text: $text
             "
         ),
-        &ftd::di::DI::Invocation(
-            ftd::di::Invocation::new("markdown")
+        &ftd::ftd2021::di::DI::Invocation(
+            ftd::ftd2021::di::Invocation::new("markdown")
                 .add_value_property("text", Some(s("caption or body")), None)
                 .add_value_property("text", None, Some(s("$text"))),
         )
@@ -423,17 +436,22 @@ fn di_component_invocation() {
             -- end: foo
             "
         ),
-        &ftd::di::DI::Invocation(
-            ftd::di::Invocation::new("foo")
+        &ftd::ftd2021::di::DI::Invocation(
+            ftd::ftd2021::di::Invocation::new("foo")
                 .add_di_property(
                     "bar",
                     None,
-                    ftd::di::DI::Invocation(
-                        ftd::di::Invocation::new("ftd.text").add_caption_str("Hello there"),
+                    ftd::ftd2021::di::DI::Invocation(
+                        ftd::ftd2021::di::Invocation::new("ftd.text").add_caption_str(
+                            "Hello \
+                        there",
+                        ),
                     )
                     .list(),
                 )
-                .add_child(ftd::di::DI::Invocation(ftd::di::Invocation::new("bar"))),
+                .add_child(ftd::ftd2021::di::DI::Invocation(
+                    ftd::ftd2021::di::Invocation::new("bar"),
+                )),
         )
         .list(),
     );
