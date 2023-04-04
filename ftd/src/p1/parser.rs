@@ -14,14 +14,14 @@ enum ParsingStateReading {
 #[derive(Debug)]
 pub struct State {
     line_number: i32,
-    sections: Vec<ftd::p11::Section>,
+    sections: Vec<ftd::p1::Section>,
     content: String,
     doc_id: String,
-    state: Vec<(ftd::p11::Section, Vec<ParsingStateReading>)>,
+    state: Vec<(ftd::p1::Section, Vec<ParsingStateReading>)>,
 }
 
 impl State {
-    fn next(&mut self) -> ftd::p11::Result<()> {
+    fn next(&mut self) -> ftd::p1::Result<()> {
         use itertools::Itertools;
 
         self.reading_section()?;
@@ -68,7 +68,7 @@ impl State {
         Ok(())
     }
 
-    fn end(&mut self, change_state: &mut Option<ParsingStateReading>) -> ftd::p11::Result<()> {
+    fn end(&mut self, change_state: &mut Option<ParsingStateReading>) -> ftd::p1::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         if !start_line.starts_with("-- ") {
@@ -76,15 +76,15 @@ impl State {
         }
         let start_line = &start_line[2..];
         let (name, caption) = colon_separated_values(
-            ftd::p11::utils::i32_to_usize(self.line_number + 1),
+            ftd::p1::utils::i32_to_usize(self.line_number + 1),
             start_line,
             self.doc_id.as_str(),
         )?;
         if is_end(name.as_str()) {
-            let caption = caption.ok_or_else(|| ftd::p11::Error::ParseError {
+            let caption = caption.ok_or_else(|| ftd::p1::Error::ParseError {
                 message: "section name not provided for `end`".to_string(),
                 doc_id: self.doc_id.to_string(),
-                line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                line_number: ftd::p1::utils::i32_to_usize(self.line_number),
             })?;
             let mut sections = vec![];
             loop {
@@ -93,10 +93,10 @@ impl State {
                     state
                 } else {
                     let section = self.remove_latest_section()?.ok_or_else(|| {
-                        ftd::p11::Error::ParseError {
+                        ftd::p1::Error::ParseError {
                             message: format!("No section found to end: {}", caption),
                             doc_id: self.doc_id.to_string(),
-                            line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                            line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                         }
                     })?;
                     sections.push(section);
@@ -115,8 +115,8 @@ impl State {
                         condition,
                     } if caption.eq(format!("{}.{}", section.name, key).as_str()) => {
                         sections.reverse();
-                        section.headers.push(ftd::p11::Header::section(
-                            ftd::p11::utils::i32_to_usize(line_number),
+                        section.headers.push(ftd::p1::Header::section(
+                            ftd::p1::utils::i32_to_usize(line_number),
                             key.as_str(),
                             kind,
                             sections,
@@ -153,7 +153,7 @@ impl State {
         )
     }
 
-    fn reading_section(&mut self) -> ftd::p11::Result<()> {
+    fn reading_section(&mut self) -> ftd::p1::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         let start_line = start_line.trim();
@@ -162,10 +162,10 @@ impl State {
             return if start_line.is_empty() {
                 Ok(())
             } else {
-                Err(ftd::p11::Error::SectionNotFound {
+                Err(ftd::p1::Error::SectionNotFound {
                     // TODO: context should be a few lines before and after the input
                     doc_id: self.doc_id.to_string(),
-                    line_number: ftd::p11::utils::i32_to_usize(
+                    line_number: ftd::p1::utils::i32_to_usize(
                         self.line_number + (scan_line_number as i32) + 1,
                     ),
                 })
@@ -183,15 +183,15 @@ impl State {
 
         let (name_with_kind, caption) =
         //  section-kind section-name: caption
-            colon_separated_values(ftd::p11::utils::i32_to_usize(self.line_number), line, self
+            colon_separated_values(ftd::p1::utils::i32_to_usize(self.line_number), line, self
                 .doc_id.as_str())?;
         let (section_name, kind) = get_name_and_kind(name_with_kind.as_str());
         let last_section = self.get_latest_state().map(|v| v.0);
         match last_section {
             Some(section) if section_name.starts_with(format!("{}.", section.name).as_str()) => {
-                return Err(ftd::p11::Error::SectionNotFound {
+                return Err(ftd::p1::Error::SectionNotFound {
                     doc_id: self.doc_id.to_string(),
-                    line_number: ftd::p11::utils::i32_to_usize(
+                    line_number: ftd::p1::utils::i32_to_usize(
                         self.line_number + (scan_line_number as i32) + 1,
                     ),
                 });
@@ -200,20 +200,20 @@ impl State {
         }
 
         self.line_number += (scan_line_number as i32) + 1;
-        let section = ftd::p11::Section {
+        let section = ftd::p1::Section {
             name: section_name,
             kind,
             caption: caption.map(|v| {
-                ftd::p11::Header::from_caption(
+                ftd::p1::Header::from_caption(
                     v.as_str(),
-                    ftd::p11::utils::i32_to_usize(self.line_number),
+                    ftd::p1::utils::i32_to_usize(self.line_number),
                 )
             }),
             headers: Default::default(),
             body: None,
             sub_sections: Default::default(),
             is_commented,
-            line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+            line_number: ftd::p1::utils::i32_to_usize(self.line_number),
             block_body: false,
         };
 
@@ -224,15 +224,15 @@ impl State {
         Ok(())
     }
 
-    fn reading_block_headers(&mut self) -> ftd::p11::Result<()> {
+    fn reading_block_headers(&mut self) -> ftd::p1::Result<()> {
         self.end(&mut None)?;
         let (scan_line_number, content) = self.clean_content();
         let (section, parsing_states) =
             self.state
                 .last_mut()
-                .ok_or_else(|| ftd::p11::Error::SectionNotFound {
+                .ok_or_else(|| ftd::p1::Error::SectionNotFound {
                     doc_id: self.doc_id.to_string(),
-                    line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                    line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                 })?;
 
         let header_not_found_next_state = if !section.block_body {
@@ -258,7 +258,7 @@ impl State {
         };
 
         let (name_with_kind, value) = colon_separated_values(
-            ftd::p11::utils::i32_to_usize(self.line_number),
+            ftd::p1::utils::i32_to_usize(self.line_number),
             line,
             self.doc_id.as_str(),
         )?;
@@ -282,14 +282,14 @@ impl State {
         )?;
 
         if is_caption(key) && kind.is_none() && section.caption.is_some() {
-            return Err(ftd::p11::Error::MoreThanOneCaption {
+            return Err(ftd::p1::Error::MoreThanOneCaption {
                 doc_id: self.doc_id.to_string(),
                 line_number: section.line_number,
             });
         }
         if let Some(value) = value {
-            section.headers.push(ftd::p11::Header::kv(
-                ftd::p11::utils::i32_to_usize(self.line_number),
+            section.headers.push(ftd::p1::Header::kv(
+                ftd::p1::utils::i32_to_usize(self.line_number),
                 key,
                 kind,
                 Some(value),
@@ -316,8 +316,8 @@ impl State {
         header_key: &str,
         header_kind: Option<String>,
         header_condition: Option<String>,
-    ) -> ftd::p11::Result<()> {
-        if let Err(ftd::p11::Error::SectionNotFound { .. }) = self.reading_section() {
+    ) -> ftd::p1::Result<()> {
+        if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value = vec![];
             let mut new_line_number = None;
             let mut first_line = true;
@@ -333,10 +333,10 @@ impl State {
                 }
                 if first_line {
                     if !line.trim().is_empty() {
-                        return Err(ftd::p11::Error::ParseError {
+                        return Err(ftd::p1::Error::ParseError {
                             message: format!("start section header '{}' after a newline!!", line),
                             doc_id: self.doc_id.to_string(),
-                            line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                            line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                         });
                     }
                     first_line = false;
@@ -348,14 +348,14 @@ impl State {
             let line_number = self.line_number;
             let section = self
                 .remove_latest_state()
-                .ok_or(ftd::p11::Error::SectionNotFound {
+                .ok_or(ftd::p1::Error::SectionNotFound {
                     doc_id,
-                    line_number: ftd::p11::utils::i32_to_usize(line_number),
+                    line_number: ftd::p1::utils::i32_to_usize(line_number),
                 })?
                 .0;
             let value = value.join("\n").trim().to_string();
-            section.headers.push(ftd::p11::Header::kv(
-                ftd::p11::utils::i32_to_usize(line_number),
+            section.headers.push(ftd::p1::Header::kv(
+                ftd::p1::utils::i32_to_usize(line_number),
                 header_key,
                 header_kind,
                 if value.is_empty() { None } else { Some(value) },
@@ -365,7 +365,7 @@ impl State {
         Ok(())
     }
 
-    fn reading_caption_value(&mut self) -> ftd::p11::Result<()> {
+    fn reading_caption_value(&mut self) -> ftd::p1::Result<()> {
         let mut value = vec![];
         let mut new_line_number = None;
         let mut first_line = true;
@@ -381,10 +381,10 @@ impl State {
             }
             if first_line {
                 if !line.trim().is_empty() {
-                    return Err(ftd::p11::Error::ParseError {
+                    return Err(ftd::p1::Error::ParseError {
                         message: format!("start section caption '{}' after a newline!!", line),
                         doc_id: self.doc_id.to_string(),
-                        line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                        line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                     });
                 }
                 first_line = false;
@@ -396,21 +396,21 @@ impl State {
         let line_number = self.line_number;
         let section = self
             .remove_latest_state()
-            .ok_or(ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p1::Error::SectionNotFound {
                 doc_id,
-                line_number: ftd::p11::utils::i32_to_usize(line_number),
+                line_number: ftd::p1::utils::i32_to_usize(line_number),
             })?
             .0;
 
         let value = value.join("\n").trim().to_string();
-        section.caption = Some(ftd::p11::Header::from_caption(
+        section.caption = Some(ftd::p1::Header::from_caption(
             value.as_str(),
-            ftd::p11::utils::i32_to_usize(line_number),
+            ftd::p1::utils::i32_to_usize(line_number),
         ));
         Ok(())
     }
 
-    fn reading_body_value(&mut self) -> ftd::p11::Result<()> {
+    fn reading_body_value(&mut self) -> ftd::p1::Result<()> {
         let mut value = vec![];
         let mut new_line_number = None;
         let mut first_line = true;
@@ -426,10 +426,10 @@ impl State {
             }
             if first_line {
                 if !line.trim().is_empty() {
-                    return Err(ftd::p11::Error::ParseError {
+                    return Err(ftd::p1::Error::ParseError {
                         message: format!("start section body '{}' after a newline!!", line),
                         doc_id: self.doc_id.to_string(),
-                        line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                        line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                     });
                 }
                 first_line = false;
@@ -442,15 +442,15 @@ impl State {
         let line_number = self.line_number;
         let section = self
             .remove_latest_state()
-            .ok_or(ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p1::Error::SectionNotFound {
                 doc_id,
-                line_number: ftd::p11::utils::i32_to_usize(line_number),
+                line_number: ftd::p1::utils::i32_to_usize(line_number),
             })?
             .0;
         let value = value.join("\n").trim().to_string();
         if !value.is_empty() {
-            section.body = Some(ftd::p11::Body::new(
-                ftd::p11::utils::i32_to_usize(line_number),
+            section.body = Some(ftd::p1::Body::new(
+                ftd::p1::utils::i32_to_usize(line_number),
                 value.as_str(),
             ));
         }
@@ -462,7 +462,7 @@ impl State {
     }
 
     // There should not be no new line in the headers
-    fn reading_inline_headers(&mut self) -> ftd::p11::Result<()> {
+    fn reading_inline_headers(&mut self) -> ftd::p1::Result<()> {
         let mut headers = vec![];
         let mut new_line_number = None;
         for (line_number, line) in self.content.split('\n').enumerate() {
@@ -476,15 +476,15 @@ impl State {
             }
             let line = clean_line(line);
             if let Ok((name_with_kind, caption)) = colon_separated_values(
-                ftd::p11::utils::i32_to_usize(self.line_number),
+                ftd::p1::utils::i32_to_usize(self.line_number),
                 line.as_str(),
                 self.doc_id.as_str(),
             ) {
                 let (header_key, kind, condition) =
                     get_name_kind_and_condition(name_with_kind.as_str());
                 self.line_number += 1;
-                headers.push(ftd::p11::Header::kv(
-                    ftd::p11::utils::i32_to_usize(self.line_number),
+                headers.push(ftd::p1::Header::kv(
+                    ftd::p1::utils::i32_to_usize(self.line_number),
                     header_key.as_str(),
                     kind,
                     caption,
@@ -501,16 +501,16 @@ impl State {
 
         let section = self
             .mut_latest_state()
-            .ok_or(ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p1::Error::SectionNotFound {
                 doc_id,
-                line_number: ftd::p11::utils::i32_to_usize(line_number),
+                line_number: ftd::p1::utils::i32_to_usize(line_number),
             })?
             .0;
         section.headers.0.extend(headers);
         Ok(())
     }
 
-    fn mut_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, &mut ParsingStateReading)> {
+    fn mut_latest_state(&mut self) -> Option<(&mut ftd::p1::Section, &mut ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut() {
             if let Some(state) = state.last_mut() {
                 return Some((section, state));
@@ -519,7 +519,7 @@ impl State {
         None
     }
 
-    fn get_latest_state(&self) -> Option<(ftd::p11::Section, ParsingStateReading)> {
+    fn get_latest_state(&self) -> Option<(ftd::p1::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last() {
             if let Some(state) = state.last() {
                 return Some((section.to_owned(), state.to_owned()));
@@ -528,20 +528,20 @@ impl State {
         None
     }
 
-    fn remove_latest_section(&mut self) -> ftd::p11::Result<Option<ftd::p11::Section>> {
+    fn remove_latest_section(&mut self) -> ftd::p1::Result<Option<ftd::p1::Section>> {
         if let Some((section, state)) = self.state.last() {
             if !state.is_empty() {
-                return Err(ftd::p11::Error::ParseError {
+                return Err(ftd::p1::Error::ParseError {
                     message: format!("`{}` section state is not yet empty", section.name),
                     doc_id: self.doc_id.to_string(),
-                    line_number: ftd::p11::utils::i32_to_usize(self.line_number),
+                    line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                 });
             }
         }
         Ok(self.state.pop().map(|v| v.0))
     }
 
-    fn remove_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, ParsingStateReading)> {
+    fn remove_latest_state(&mut self) -> Option<(&mut ftd::p1::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut() {
             if let Some(state) = state.pop() {
                 return Some((section, state));
@@ -551,7 +551,7 @@ impl State {
     }
 }
 
-pub fn parse(content: &str, doc_id: &str) -> ftd::p11::Result<Vec<ftd::p11::Section>> {
+pub fn parse(content: &str, doc_id: &str) -> ftd::p1::Result<Vec<ftd::p1::Section>> {
     parse_with_line_number(content, doc_id, 0)
 }
 
@@ -559,7 +559,7 @@ pub fn parse_with_line_number(
     content: &str,
     doc_id: &str,
     line_number: usize,
-) -> ftd::p11::Result<Vec<ftd::p11::Section>> {
+) -> ftd::p1::Result<Vec<ftd::p1::Section>> {
     let mut state = State {
         content: content.to_string(),
         doc_id: doc_id.to_string(),
@@ -579,9 +579,9 @@ fn colon_separated_values(
     line_number: usize,
     line: &str,
     doc_id: &str,
-) -> ftd::p11::Result<(String, Option<String>)> {
+) -> ftd::p1::Result<(String, Option<String>)> {
     if !line.contains(':') {
-        return Err(ftd::p11::Error::ParseError {
+        return Err(ftd::p1::Error::ParseError {
             message: format!(": is missing in: {}", line),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
@@ -611,7 +611,7 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
 
 fn get_name_kind_and_condition(name_with_kind: &str) -> (String, Option<String>, Option<String>) {
     let (name_with_kind, condition) = if let Some((name_with_kind, condition)) =
-        name_with_kind.split_once(ftd::p11::utils::INLINE_IF)
+        name_with_kind.split_once(ftd::p1::utils::INLINE_IF)
     {
         (name_with_kind.to_string(), Some(condition.to_string()))
     } else {
@@ -670,7 +670,7 @@ pub(crate) fn get_block_header_condition(
     content: &mut String,
     line_number: &mut i32,
     doc_id: &str,
-) -> ftd::p11::Result<Option<String>> {
+) -> ftd::p1::Result<Option<String>> {
     let mut condition = None;
     let mut new_line_number = None;
     for (line_number, line) in content.split('\n').enumerate() {
@@ -681,7 +681,7 @@ pub(crate) fn get_block_header_condition(
         if let Ok((name_with_kind, caption)) =
             colon_separated_values(line_number, line.as_str(), doc_id)
         {
-            if name_with_kind.eq(ftd::p11::utils::IF) {
+            if name_with_kind.eq(ftd::p1::utils::IF) {
                 condition = caption;
                 new_line_number = Some(line_number + 1);
             }

@@ -161,7 +161,7 @@ pub enum Interpreter {
 #[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
-    sections: Vec<ftd::p11::Section>,
+    sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
     doc_aliases: ftd::Map<String>,
     foreign_variable_prefix: Vec<String>,
@@ -172,7 +172,7 @@ impl ParsedDocument {
     fn parse(id: &str, source: &str) -> ftd::ftd2021::interpreter::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
-            sections: ftd::p11::parse(source, id)?,
+            sections: ftd::p1::parse(source, id)?,
             processing_imports: true,
             doc_aliases: default_aliases(),
             foreign_variable_prefix: vec![],
@@ -209,7 +209,7 @@ impl ParsedDocument {
             .sections
             .iter()
             .filter_map(|s| s.remove_comments())
-            .collect::<Vec<ftd::p11::Section>>();
+            .collect::<Vec<ftd::p1::Section>>();
     }
 
     fn done_processing_imports(&mut self) {

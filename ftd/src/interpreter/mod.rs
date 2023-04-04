@@ -44,7 +44,7 @@ pub use tdoc::TDoc;
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("P1Error: {}", _0)]
-    P1Error(#[from] ftd::p11::Error),
+    P1Error(#[from] ftd::p1::Error),
 
     #[error("OldP1Error: {}", _0)]
     OldP1Error(#[from] crate::ftd2021::p1::Error),

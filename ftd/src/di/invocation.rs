@@ -6,17 +6,14 @@ pub struct Invocation {
 }
 
 impl Invocation {
-    pub(crate) fn is_invocation(section: &ftd::p11::Section) -> bool {
+    pub(crate) fn is_invocation(section: &ftd::p1::Section) -> bool {
         if ftd::di::Import::is_import(section) || ftd::di::Record::is_record(section) {
             return false;
         }
         section.kind.is_none()
     }
 
-    pub(crate) fn from_p1(
-        section: &ftd::p11::Section,
-        doc_id: &str,
-    ) -> ftd::di::Result<Invocation> {
+    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::di::Result<Invocation> {
         if !Self::is_invocation(section) {
             return ftd::di::parse_error(
                 format!("Section is not `invocation`, found `{:?}`", section),
@@ -60,7 +57,7 @@ impl Invocation {
     ) -> Invocation {
         let mut invocation = self;
         invocation.properties.push(ftd::di::Property::from_kv(
-            &ftd::p11::header::KV::new(key, kind, value, 0, None),
+            &ftd::p1::header::KV::new(key, kind, value, 0, None),
             ftd::di::Source::Header,
         ));
         invocation
