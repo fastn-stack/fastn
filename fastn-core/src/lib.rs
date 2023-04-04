@@ -96,6 +96,13 @@ fn build_js(s: &str) -> &str {
     s
 }
 
+fn ftd_css(s: &str) -> &str {
+    if fastn_core::utils::is_test() {
+        return "FTD_CSS";
+    }
+    s
+}
+
 fn fastn_lib_ftd() -> &'static str {
     include_str!("../ftd/fastn-lib.ftd")
 }
