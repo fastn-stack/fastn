@@ -1,22 +1,23 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct OrType {
     pub name: String,
-    pub variants: Vec<ftd::p2::Record>,
+    pub variants: Vec<crate::ftd2021::p2::Record>,
 }
 
 impl OrType {
     pub fn from_p1(
         p1: &crate::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<Self> {
-        let or_type_name = ftd::p2::utils::get_name("or-type", p1.name.as_str(), doc.name)?;
+        let or_type_name =
+            crate::ftd2021::p2::utils::get_name("or-type", p1.name.as_str(), doc.name)?;
         let name = doc.format_name(or_type_name);
-        let mut variants: Vec<ftd::p2::Record> = Default::default();
+        let mut variants: Vec<crate::ftd2021::p2::Record> = Default::default();
         for s in p1.sub_sections.0.iter() {
             if s.is_commented {
                 continue;
             }
-            variants.push(ftd::p2::Record::from_p1(
+            variants.push(crate::ftd2021::p2::Record::from_p1(
                 format!("record {}.{}", or_type_name, s.name.as_str()).as_str(),
                 &s.header,
                 doc,
@@ -30,7 +31,7 @@ impl OrType {
         &self,
         p1: &crate::ftd2021::p1::Section,
         variant: String,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         // todo: check if the its reference to other variable
         for v in self.variants.iter() {
@@ -50,7 +51,7 @@ impl OrType {
             }
         }
 
-        ftd::p2::utils::e2(
+        crate::ftd2021::p2::utils::e2(
             format!("{} is not a valid variant for {}", variant, self.name),
             doc.name,
             p1.line_number,
@@ -69,7 +70,7 @@ mod test {
         bag.insert(s("foo/bar#entity"), entity());
         bag.insert(
             s("foo/bar#abrar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("abrar"),
                 flags: ftd::VariableFlags::default(),
                 value: ftd::PropertyValue::Value {
@@ -84,7 +85,7 @@ mod test {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {

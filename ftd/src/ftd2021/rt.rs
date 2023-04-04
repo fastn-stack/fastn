@@ -2,7 +2,7 @@
 pub struct RT {
     pub name: String,
     pub aliases: ftd::Map<String>,
-    pub bag: ftd::Map<ftd::p2::Thing>,
+    pub bag: ftd::Map<crate::ftd2021::p2::Thing>,
     pub instructions: Vec<ftd::Instruction>,
 }
 
@@ -10,7 +10,7 @@ impl RT {
     pub fn from(
         name: &str,
         aliases: ftd::Map<String>,
-        bag: ftd::Map<ftd::p2::Thing>,
+        bag: ftd::Map<crate::ftd2021::p2::Thing>,
         instructions: Vec<ftd::Instruction>,
     ) -> Self {
         Self {
@@ -58,7 +58,7 @@ impl RT {
     }
 
     pub fn render_(&mut self) -> crate::ftd2021::p1::Result<ftd::Column> {
-        let mut main = ftd::p2::interpreter::default_column();
+        let mut main = crate::ftd2021::p2::interpreter::default_column();
         let mut invocations = Default::default();
         let mut local_variables = Default::default();
         let mut element = crate::ftd2021::execute_doc::ExecuteDoc {
@@ -75,8 +75,8 @@ impl RT {
         ftd::Element::set_children_count_variable(&mut element, &local_variables);
         ftd::Element::set_default_locals(&mut element);
         // ftd::Element::renest_on_region(&mut element);
-        ftd::p2::document::set_region_id(&mut element);
-        ftd::p2::document::default_scene_children_position(&mut element);
+        crate::ftd2021::p2::document::set_region_id(&mut element);
+        crate::ftd2021::p2::document::default_scene_children_position(&mut element);
 
         main.container.children.extend(element);
         store_invocations(&mut self.bag, &mut local_variables, invocations);
@@ -86,14 +86,14 @@ impl RT {
 }
 
 pub(crate) fn store_invocations(
-    bag: &mut ftd::Map<ftd::p2::Thing>,
-    local_variables: &mut ftd::Map<ftd::p2::Thing>,
+    bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
+    local_variables: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     invocations: ftd::Map<Vec<ftd::Map<ftd::Value>>>,
 ) {
     for (k, v) in invocations.into_iter() {
         if let Some(c) = bag.get_mut(k.as_str()) {
             match c {
-                ftd::p2::Thing::Component(ref mut c) => {
+                crate::ftd2021::p2::Thing::Component(ref mut c) => {
                     if !c.kernel {
                         c.invocations.extend(v)
                     }
@@ -104,7 +104,7 @@ pub(crate) fn store_invocations(
         }
         if let Some(c) = local_variables.get_mut(k.as_str()) {
             match c {
-                ftd::p2::Thing::Component(ref mut c) => {
+                crate::ftd2021::p2::Thing::Component(ref mut c) => {
                     if !c.kernel {
                         c.invocations.extend(v)
                     }

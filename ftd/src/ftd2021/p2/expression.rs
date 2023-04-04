@@ -45,7 +45,7 @@ impl Boolean {
     pub fn to_condition(
         &self,
         line_number: usize,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
@@ -55,7 +55,7 @@ impl Boolean {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
                     ftd::PropertyValue::Variable { name, .. } => doc.get_value(0, name)?,
                     _ => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("{:?} must be value or argument", right),
                             doc.name,
                             line_number,
@@ -86,7 +86,7 @@ impl Boolean {
                 )
             }
             _ => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("{:?} must not happen", self),
                     doc.name,
                     line_number,
@@ -95,7 +95,7 @@ impl Boolean {
         };
         return match value.to_serde_value() {
             None => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!(
                         "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
                         value
@@ -110,12 +110,12 @@ impl Boolean {
         fn resolve_variable(
             value: &ftd::PropertyValue,
             line_number: usize,
-            doc: &ftd::p2::TDoc,
+            doc: &crate::ftd2021::p2::TDoc,
         ) -> crate::ftd2021::p1::Result<String> {
             match value {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
-                _ => ftd::p2::utils::e2(
+                _ => crate::ftd2021::p2::utils::e2(
                     format!("{:?} must be variable or local variable", value),
                     doc.name,
                     line_number,
@@ -151,7 +151,7 @@ impl Boolean {
                 Some(rest.replace("==", "").trim().to_string()),
             ),
             _ => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("'{}' is not valid condition", rest),
                     doc_id,
                     line_number,
@@ -162,13 +162,13 @@ impl Boolean {
 
     pub fn from_expression(
         expr: &str,
-        doc: &ftd::p2::TDoc,
-        arguments: &ftd::Map<ftd::p2::Kind>,
+        doc: &crate::ftd2021::p2::TDoc,
+        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
         left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
     ) -> crate::ftd2021::p1::Result<Self> {
         let (boolean, mut left, mut right) =
-            ftd::p2::Boolean::boolean_left_right(line_number, expr, doc.name)?;
+            crate::ftd2021::p2::Boolean::boolean_left_right(line_number, expr, doc.name)?;
         left = doc.resolve_reference_name(line_number, left.as_str(), arguments)?;
         if let Some(ref r) = right {
             right = doc.resolve_reference_name(line_number, r, arguments).ok();
@@ -188,7 +188,7 @@ impl Boolean {
                         line_number,
                     )?;
                     if !value.kind().is_optional() {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("'{}' is not to an optional", left),
                             doc.name,
                             line_number,
@@ -206,7 +206,7 @@ impl Boolean {
                     )
                     .unwrap_or(ftd::PropertyValue::Variable {
                         name: left.trim_start_matches('$').to_string(),
-                        kind: ftd::p2::Kind::Element,
+                        kind: crate::ftd2021::p2::Kind::Element,
                     })
                 };
                 if boolean.as_str() == "IsNotNull" {
@@ -225,7 +225,7 @@ impl Boolean {
                     line_number,
                 )?;
                 if !value.kind().is_list() {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!("'{}' is not to a list", left),
                         doc.name,
                         line_number,
@@ -262,7 +262,7 @@ impl Boolean {
                     Boolean::Equal {
                         left: property_value(
                             &left,
-                            Some(ftd::p2::Kind::boolean()),
+                            Some(crate::ftd2021::p2::Kind::boolean()),
                             doc,
                             arguments,
                             left_right_resolved_property.0,
@@ -277,7 +277,7 @@ impl Boolean {
                 }
             }
             _ => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("'{}' is not valid condition", expr),
                     doc.name,
                     line_number,
@@ -287,9 +287,9 @@ impl Boolean {
 
         fn property_value(
             value: &str,
-            expected_kind: Option<ftd::p2::Kind>,
-            doc: &ftd::p2::TDoc,
-            arguments: &ftd::Map<ftd::p2::Kind>,
+            expected_kind: Option<crate::ftd2021::p2::Kind>,
+            doc: &crate::ftd2021::p2::TDoc,
+            arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
@@ -309,7 +309,7 @@ impl Boolean {
                         }
                         _ if value.starts_with("$PARENT") => ftd::PropertyValue::Variable {
                             name: value.trim_start_matches('$').to_string(),
-                            kind: ftd::p2::Kind::Element,
+                            kind: crate::ftd2021::p2::Kind::Element,
                         },
                         _ => return Err(e),
                     },
@@ -321,7 +321,7 @@ impl Boolean {
     pub fn is_constant(&self) -> bool {
         let is_loop_constant = {
             let mut constant = false;
-            if let ftd::p2::Boolean::Equal {
+            if let crate::ftd2021::p2::Boolean::Equal {
                 left: ftd::PropertyValue::Variable { name, .. },
                 right: ftd::PropertyValue::Value { .. },
             } = self
@@ -354,7 +354,7 @@ impl Boolean {
     pub fn is_arg_constant(&self) -> bool {
         let is_loop_constant = {
             let mut constant = false;
-            if let ftd::p2::Boolean::Equal {
+            if let crate::ftd2021::p2::Boolean::Equal {
                 left: ftd::PropertyValue::Variable { name, .. },
                 right: ftd::PropertyValue::Value { .. },
             } = self
@@ -401,7 +401,7 @@ impl Boolean {
     pub fn eval(
         &self,
         line_number: usize,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<bool> {
         Ok(match self {
             Self::Literal { value } => *value,
@@ -413,7 +413,7 @@ impl Boolean {
                 .resolve(line_number, doc)?
                 .is_equal(&right.resolve(line_number, doc)?),
             _ => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("unknown Boolean found: {:?}", self),
                     doc.name,
                     line_number,
@@ -443,7 +443,7 @@ impl Boolean {
             ),
             Self::IsNotNull { .. } | Self::IsNull { .. } => false,
             _ => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("unimplemented for type: {:?}", self),
                     doc_id,
                     line_number,

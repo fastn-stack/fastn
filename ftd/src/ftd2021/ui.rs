@@ -64,7 +64,7 @@ pub enum IText {
 impl Element {
     pub(crate) fn set_children_count_variable(
         elements: &mut [ftd::Element],
-        local_variables: &ftd::Map<ftd::p2::Thing>,
+        local_variables: &ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         for child in elements.iter_mut() {
             let (text, common) = match child {
@@ -109,7 +109,7 @@ impl Element {
 
             match &common.reference {
                 Some(reference) if reference.contains("CHILDREN-COUNT") => {
-                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                    if let Some(crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                         value:
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer { value },
@@ -132,7 +132,7 @@ impl Element {
                         let mut remove_reference = false;
                         match parameter_data.reference {
                             Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
-                                if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                                if let Some(crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                                     value:
                                         ftd::PropertyValue::Value {
                                             value: ftd::Value::Integer { value },
@@ -156,7 +156,7 @@ impl Element {
 
         fn set_markup_children_count_variable(
             elements: &mut [ftd::Markup],
-            local_variables: &ftd::Map<ftd::p2::Thing>,
+            local_variables: &ftd::Map<crate::ftd2021::p2::Thing>,
         ) {
             for child in elements.iter_mut() {
                 let (common, children, text) = match &mut child.itext {
@@ -169,7 +169,7 @@ impl Element {
 
                 match &common.reference {
                     Some(reference) if reference.contains("CHILDREN-COUNT") => {
-                        if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                        if let Some(crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                             value:
                                 ftd::PropertyValue::Value {
                                     value: ftd::Value::Integer { value },
@@ -190,13 +190,15 @@ impl Element {
                             let mut remove_reference = false;
                             match parameter_data.reference {
                                 Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
-                                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
-                                        value:
-                                            ftd::PropertyValue::Value {
-                                                value: ftd::Value::Integer { value },
-                                            },
-                                        ..
-                                    })) = local_variables.get(reference)
+                                    if let Some(crate::ftd2021::p2::Thing::Variable(
+                                        ftd::Variable {
+                                            value:
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::Integer { value },
+                                                },
+                                            ..
+                                        },
+                                    )) = local_variables.get(reference)
                                     {
                                         parameter_data.value = serde_json::json!(value);
                                         remove_reference = true;
@@ -254,7 +256,9 @@ impl Element {
                 };
 
                 if let Some(index) = check(common) {
-                    common.events.extend(ftd::p2::Event::mouse_event(&index));
+                    common
+                        .events
+                        .extend(crate::ftd2021::p2::Event::mouse_event(&index));
                 }
             }
 
@@ -797,7 +801,7 @@ impl Element {
                 let id = id.clone().expect("universal id should be present");
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(reference).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Value,
@@ -953,7 +957,7 @@ impl Element {
                     parameters
                 };
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
@@ -1028,7 +1032,7 @@ impl Element {
                 };
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
 
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
@@ -1096,7 +1100,7 @@ impl Element {
                 };
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
 
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
@@ -1135,8 +1139,10 @@ impl Element {
                     for (condition, value) in conditions_with_value {
                         let id = id.clone().expect("universal id should be present");
                         let (variable, remaining) =
-                            ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
-                                .unwrap();
+                            crate::ftd2021::p2::utils::get_doc_name_and_remaining(
+                                &condition.variable,
+                            )
+                            .unwrap();
                         if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                             let json = ftd::Dependencies {
                                 dependency_type: ftd::DependencyType::Style,
@@ -1169,7 +1175,8 @@ impl Element {
                         }
                         if let Some(ref reference) = value.reference {
                             let (variable, remaining) =
-                                ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
+                                crate::ftd2021::p2::utils::get_doc_name_and_remaining(reference)
+                                    .unwrap();
                             if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                                 let json = ftd::Dependencies {
                                     dependency_type: ftd::DependencyType::Variable,
@@ -1216,7 +1223,8 @@ impl Element {
             if let Some(condition) = condition {
                 let id = id.clone().expect("universal id should be present");
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                        .unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Visible,
@@ -1242,10 +1250,10 @@ impl Element {
     }
 
     pub fn get_device_dependencies(
-        document: &ftd::p2::Document,
+        document: &crate::ftd2021::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
-        let doc = ftd::p2::TDoc {
+        let doc = crate::ftd2021::p2::TDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &document.data,
@@ -1256,7 +1264,7 @@ impl Element {
             if !data.contains_key(k) {
                 continue;
             }
-            let keys = if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+            let keys = if let crate::ftd2021::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
                 get_ftd_type_variables(value, &doc, k)
             } else {
                 continue;
@@ -1344,14 +1352,16 @@ impl Element {
 
         fn get_ftd_type_variables(
             property_value: &ftd::PropertyValue,
-            doc: &ftd::p2::TDoc,
+            doc: &crate::ftd2021::p2::TDoc,
             key: &str,
         ) -> Vec<String> {
             match property_value.kind() {
-                ftd::p2::Kind::Record { name, .. } if ["ftd#type"].contains(&name.as_str()) => {
+                crate::ftd2021::p2::Kind::Record { name, .. }
+                    if ["ftd#type"].contains(&name.as_str()) =>
+                {
                     return vec![key.to_string()];
                 }
-                ftd::p2::Kind::Record { .. } => {
+                crate::ftd2021::p2::Kind::Record { .. } => {
                     if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, doc) {
                         let mut reference = vec![];
                         for (k, field) in fields.iter() {
@@ -1370,10 +1380,10 @@ impl Element {
     }
 
     pub fn get_dark_mode_dependencies(
-        document: &ftd::p2::Document,
+        document: &crate::ftd2021::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
-        let doc = ftd::p2::TDoc {
+        let doc = crate::ftd2021::p2::TDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &document.data,
@@ -1384,7 +1394,7 @@ impl Element {
             if !data.contains_key(k) {
                 continue;
             }
-            let keys = if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+            let keys = if let crate::ftd2021::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
                 get_ftd_type_variables(value, &doc, k)
             } else {
                 continue;
@@ -1436,16 +1446,16 @@ impl Element {
 
         fn get_ftd_type_variables(
             property_value: &ftd::PropertyValue,
-            doc: &ftd::p2::TDoc,
+            doc: &crate::ftd2021::p2::TDoc,
             key: &str,
         ) -> Vec<String> {
             match property_value.kind() {
-                ftd::p2::Kind::Record { name, .. }
+                crate::ftd2021::p2::Kind::Record { name, .. }
                     if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) =>
                 {
                     return vec![key.to_string()];
                 }
-                ftd::p2::Kind::Record { .. } => {
+                crate::ftd2021::p2::Kind::Record { .. } => {
                     if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, doc) {
                         let mut reference = vec![];
                         for (k, field) in fields.iter() {
@@ -1464,10 +1474,10 @@ impl Element {
     }
 
     pub fn get_variable_dependencies(
-        document: &ftd::p2::Document,
+        document: &crate::ftd2021::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
-        let doc = ftd::p2::TDoc {
+        let doc = crate::ftd2021::p2::TDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &document.data,
@@ -1478,16 +1488,17 @@ impl Element {
             if !data.contains_key(k) {
                 continue;
             }
-            let (conditions, default) = if let ftd::p2::Thing::Variable(ftd::Variable {
-                conditions,
-                value: default,
-                ..
-            }) = v
-            {
-                (conditions, default)
-            } else {
-                continue;
-            };
+            let (conditions, default) =
+                if let crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                    conditions,
+                    value: default,
+                    ..
+                }) = v
+                {
+                    (conditions, default)
+                } else {
+                    continue;
+                };
             let default = match default.resolve(0, &doc) {
                 Ok(v) => v,
                 _ => continue,
@@ -1495,7 +1506,7 @@ impl Element {
             for (condition, value) in conditions {
                 let condition = if let Ok(condition) = condition.to_condition(
                     0,
-                    &ftd::p2::TDoc {
+                    &crate::ftd2021::p2::TDoc {
                         name: document.name.as_str(),
                         aliases: &document.aliases,
                         bag: &document.data,
@@ -1516,7 +1527,8 @@ impl Element {
                 };
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
+                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                        .unwrap();
                 let dependencies =
                     if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                         dependencies
@@ -1790,7 +1802,8 @@ impl Element {
                                 if let Some(ftd::Element::Column(col)) = e.first_mut() {
                                     col.container.children.extend(children);
                                 } else {
-                                    let mut main = ftd::p2::interpreter::default_column();
+                                    let mut main =
+                                        crate::ftd2021::p2::interpreter::default_column();
                                     main.container.children.extend(children);
                                     e.push(ftd::Element::Column(main))
                                 }
@@ -1864,10 +1877,14 @@ impl Length {
         }
 
         if l.starts_with("calc ") {
-            let v = ftd::p2::utils::get_name("calc", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ), // TODO
             };
         }
 
@@ -1876,37 +1893,55 @@ impl Length {
         }
 
         if l.starts_with("portion ") {
-            let v = ftd::p2::utils::get_name("portion", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ), // TODO
             };
         }
         if l.starts_with("percent ") {
-            let v = ftd::p2::utils::get_name("percent", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ), // TODO
             };
         }
         if l.starts_with("vh ") {
-            let v = ftd::p2::utils::get_name("vh", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("vh", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VH { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ), // TODO
             };
         }
         if l.starts_with("vw ") {
-            let v = ftd::p2::utils::get_name("vw", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("vw", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ), // TODO
             };
         }
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", l), doc_id, 0),
+            Err(_) => {
+                crate::ftd2021::p2::utils::e2(format!("{} is not a valid integer", l), doc_id, 0)
+            }
         }
     }
 }
@@ -1947,7 +1982,11 @@ impl Position {
             Some("bottom-left") => Some(Self::BottomLeft),
             Some("bottom-right") => Some(Self::BottomRight),
             Some(t) => {
-                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+                return crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid alignment", t),
+                    doc_id,
+                    0,
+                )
             } // TODO
             None => None,
         })
@@ -2022,7 +2061,11 @@ impl Region {
             Some("announce") => Self::Announce,
             Some("announce-urgently") => Self::AnnounceUrgently,
             Some(t) => {
-                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+                return crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid alignment", t),
+                    doc_id,
+                    0,
+                )
             } // TODO
             None => return Ok(None),
         }))
@@ -2060,7 +2103,7 @@ impl Region {
             Self::H5 => Ok(-5),
             Self::H6 => Ok(-6),
             Self::H7 => Ok(-7),
-            _ => ftd::p2::utils::e2(
+            _ => crate::ftd2021::p2::utils::e2(
                 format!("{} is not a valid heading region", self.to_string()),
                 doc_id,
                 0,
@@ -2129,7 +2172,11 @@ impl Overflow {
             Some("auto") => Self::Auto,
             Some("scroll") => Self::Scroll,
             Some(t) => {
-                return ftd::p2::utils::e2(format!("{} is not a valid property", t), doc_id, 0)
+                return crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid property", t),
+                    doc_id,
+                    0,
+                )
             } // TODO
             None => return Ok(None),
         }))
@@ -2157,7 +2204,7 @@ impl Anchor {
             "window" => ftd::Anchor::Window,
             "parent" => ftd::Anchor::Parent,
             t => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!(
                         "invalid value for `absolute` expected `window` or `parent` found: {}",
                         t
@@ -2231,10 +2278,14 @@ impl GradientDirection {
             return Ok(Some(GradientDirection::Center));
         }
         if l.starts_with("angle ") {
-            let v = ftd::p2::utils::get_name("angle", l.as_str(), doc_id)?;
+            let v = crate::ftd2021::p2::utils::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
-                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0),
+                Err(_) => crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid integer", v),
+                    doc_id,
+                    0,
+                ),
             };
         }
         Ok(None)
@@ -2406,7 +2457,7 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => ftd::p2::utils::e2(
+            _ => crate::ftd2021::p2::utils::e2(
                 format!("{} is not a valid alignment, allowed: lazy, eager", s),
                 doc_id,
                 0,
@@ -2485,7 +2536,7 @@ impl TextAlign {
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
             Some(t) => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!(
                         "{} is not a valid alignment, allowed: center, left, right, justify",
                         t
@@ -2513,7 +2564,7 @@ impl FontDisplay {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
             Some(t) => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("{} is not a valid alignment, allowed: swap, block", t),
                     doc_id,
                     0,
@@ -2534,7 +2585,7 @@ pub struct ImageSrc {
 impl ImageSrc {
     pub fn from(
         l: &ftd::Map<ftd::PropertyValue>,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
     ) -> crate::ftd2021::p1::Result<ImageSrc> {
@@ -2543,9 +2594,9 @@ impl ImageSrc {
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(ImageSrc {
-            light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
+            light: crate::ftd2021::p2::utils::string_optional("light", &properties, doc.name, 0)?
                 .unwrap_or_default(),
-            dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
+            dark: crate::ftd2021::p2::utils::string_optional("dark", &properties, doc.name, 0)?
                 .unwrap_or_default(),
             reference,
         })
@@ -2564,7 +2615,7 @@ pub struct FontSize {
 impl FontSize {
     pub fn from(
         l: &ftd::Map<ftd::PropertyValue>,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
     ) -> crate::ftd2021::p1::Result<FontSize> {
@@ -2573,9 +2624,14 @@ impl FontSize {
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(FontSize {
-            line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
-            size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
-            letter_spacing: ftd::p2::utils::int("letter-spacing", &properties, doc.name, 0)?,
+            line_height: crate::ftd2021::p2::utils::int("line-height", &properties, doc.name, 0)?,
+            size: crate::ftd2021::p2::utils::int("size", &properties, doc.name, 0)?,
+            letter_spacing: crate::ftd2021::p2::utils::int(
+                "letter-spacing",
+                &properties,
+                doc.name,
+                0,
+            )?,
             reference,
         })
     }
@@ -2595,7 +2651,7 @@ pub struct Type {
 impl Type {
     pub fn from(
         l: &ftd::Map<ftd::PropertyValue>,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
     ) -> crate::ftd2021::p1::Result<Type> {
@@ -2604,13 +2660,13 @@ impl Type {
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         return Ok(Type {
-            font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
+            font: crate::ftd2021::p2::utils::string("font", &properties, doc.name, 0)?,
             desktop: get_font_size(l, doc, line_number, "desktop")?,
             mobile: get_font_size(l, doc, line_number, "mobile")?,
             xl: get_font_size(l, doc, line_number, "xl")?,
-            weight: ftd::p2::utils::int("weight", &properties, doc.name, 0)?,
+            weight: crate::ftd2021::p2::utils::int("weight", &properties, doc.name, 0)?,
             style: ftd::Style::from(
-                ftd::p2::utils::string_optional("style", &properties, doc.name, 0)?,
+                crate::ftd2021::p2::utils::string_optional("style", &properties, doc.name, 0)?,
                 doc.name,
             )?,
             reference,
@@ -2618,7 +2674,7 @@ impl Type {
 
         fn get_font_size(
             l: &ftd::Map<ftd::PropertyValue>,
-            doc: &ftd::p2::TDoc,
+            doc: &crate::ftd2021::p2::TDoc,
             line_number: usize,
             name: &str,
         ) -> crate::ftd2021::p1::Result<FontSize> {
@@ -2627,12 +2683,13 @@ impl Type {
                 .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
                 .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
 
-            let property_value = ftd::p2::utils::record_optional(name, &properties, doc.name, 0)?
-                .ok_or_else(|| crate::ftd2021::p1::Error::ParseError {
-                message: format!("expected record, for: `{}` found: `None`", name),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
+            let property_value =
+                crate::ftd2021::p2::utils::record_optional(name, &properties, doc.name, 0)?
+                    .ok_or_else(|| crate::ftd2021::p1::Error::ParseError {
+                        message: format!("expected record, for: `{}` found: `None`", name),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    })?;
 
             let reference = {
                 let mut reference = None;
@@ -2783,7 +2840,13 @@ impl Style {
                     s.weight = Some(ftd::Weight::HairLine);
                     add_in_map("hairline", &mut weights);
                 }
-                t => return ftd::p2::utils::e2(format!("{} is not a valid style", t), doc_id, 0),
+                t => {
+                    return crate::ftd2021::p2::utils::e2(
+                        format!("{} is not a valid style", t),
+                        doc_id,
+                        0,
+                    )
+                }
             }
         }
 
@@ -2847,7 +2910,11 @@ impl TextFormat {
             },
             Some("text") => ftd::TextFormat::Text,
             Some(t) => {
-                return ftd::p2::utils::e2(format!("{} is not a valid format", t), doc_id, 0)
+                return crate::ftd2021::p2::utils::e2(
+                    format!("{} is not a valid format", t),
+                    doc_id,
+                    0,
+                )
             } // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })
@@ -2916,7 +2983,7 @@ pub struct Color {
 impl Color {
     pub fn from(
         l: (Option<ftd::Map<ftd::PropertyValue>>, Option<String>),
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         line_number: usize,
     ) -> crate::ftd2021::p1::Result<Option<Color>> {
         let reference = l.1;
@@ -2931,13 +2998,13 @@ impl Color {
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(Some(Color {
-            light: ftd::p2::element::color_from(
-                ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
+            light: crate::ftd2021::p2::element::color_from(
+                crate::ftd2021::p2::utils::string_optional("light", &properties, doc.name, 0)?,
                 doc.name,
             )?
             .unwrap(),
-            dark: ftd::p2::element::color_from(
-                ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
+            dark: crate::ftd2021::p2::element::color_from(
+                crate::ftd2021::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                 doc.name,
             )?
             .unwrap(),

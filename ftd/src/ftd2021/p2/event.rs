@@ -12,7 +12,7 @@ impl Event {
     fn to_value(
         line_number: usize,
         property: &ftd::Map<Vec<ftd::PropertyValue>>,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::Map<Vec<crate::ftd2021::event::ParameterData>>> {
         let mut property_string: ftd::Map<Vec<crate::ftd2021::event::ParameterData>> =
             Default::default();
@@ -25,7 +25,7 @@ impl Event {
                     property_values_string
                         .push(crate::ftd2021::event::ParameterData { value, reference });
                 } else {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!("Can't convert value to string {:?}", value),
                         doc.name,
                         line_number,
@@ -40,7 +40,7 @@ impl Event {
 
         fn get_reference(
             property_value: &ftd::PropertyValue,
-            doc: &ftd::p2::TDoc,
+            doc: &crate::ftd2021::p2::TDoc,
             line_number: usize,
         ) -> crate::ftd2021::p1::Result<Option<String>> {
             Ok(match property_value {
@@ -67,7 +67,7 @@ impl Event {
     pub fn get_events(
         line_number: usize,
         events: &[Self],
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<Vec<ftd::Event>> {
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
@@ -82,7 +82,11 @@ impl Event {
                 action: ftd::Action {
                     action: e.action.action.to_str().to_string(),
                     target,
-                    parameters: ftd::p2::Event::to_value(line_number, &e.action.parameters, doc)?,
+                    parameters: crate::ftd2021::p2::Event::to_value(
+                        line_number,
+                        &e.action.parameters,
+                        doc,
+                    )?,
                 },
             });
         }
@@ -198,7 +202,7 @@ impl EventName {
                     .collect_vec();
                 Ok(Self::OnGlobalKeySeq(keys))
             }
-            t => ftd::p2::utils::e2(format!("{} is not a valid event", t), doc_id, 0),
+            t => crate::ftd2021::p2::utils::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
 }
@@ -208,8 +212,8 @@ impl Event {
         line_number: usize,
         event_name: &str,
         action: &str,
-        doc: &ftd::p2::TDoc,
-        arguments: &ftd::Map<ftd::p2::Kind>,
+        doc: &crate::ftd2021::p2::TDoc,
+        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
     ) -> crate::ftd2021::p1::Result<Self> {
         let event_name = EventName::from_string(event_name, doc.name)?;
         let action = Action::to_action(line_number, action, doc, arguments)?;
@@ -223,7 +227,7 @@ impl Event {
 pub struct Parameter {
     pub min: usize,
     pub max: usize,
-    pub ptype: Vec<ftd::p2::Kind>,
+    pub ptype: Vec<crate::ftd2021::p2::Kind>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
@@ -258,15 +262,15 @@ impl serde::Serialize for ActionKind {
 impl ActionKind {
     pub fn to_str(&self) -> &'static str {
         match self {
-            ftd::p2::ActionKind::Toggle => "toggle",
-            ftd::p2::ActionKind::Increment => "increment",
-            ftd::p2::ActionKind::Decrement => "decrement",
-            ftd::p2::ActionKind::Insert => "insert",
-            ftd::p2::ActionKind::StopPropagation => "stop-propagation",
-            ftd::p2::ActionKind::PreventDefault => "prevent-default",
-            ftd::p2::ActionKind::SetValue => "set-value",
-            ftd::p2::ActionKind::MessageHost => "message-host",
-            ftd::p2::ActionKind::Clear => "clear",
+            crate::ftd2021::p2::ActionKind::Toggle => "toggle",
+            crate::ftd2021::p2::ActionKind::Increment => "increment",
+            crate::ftd2021::p2::ActionKind::Decrement => "decrement",
+            crate::ftd2021::p2::ActionKind::Insert => "insert",
+            crate::ftd2021::p2::ActionKind::StopPropagation => "stop-propagation",
+            crate::ftd2021::p2::ActionKind::PreventDefault => "prevent-default",
+            crate::ftd2021::p2::ActionKind::SetValue => "set-value",
+            crate::ftd2021::p2::ActionKind::MessageHost => "message-host",
+            crate::ftd2021::p2::ActionKind::Clear => "clear",
         }
     }
 
@@ -282,46 +286,50 @@ impl ActionKind {
     //     }
     // }
 
-    pub fn parameters(&self) -> ftd::Map<ftd::p2::event::Parameter> {
-        let mut parameters: ftd::Map<ftd::p2::event::Parameter> = Default::default();
+    pub fn parameters(&self) -> ftd::Map<crate::ftd2021::p2::event::Parameter> {
+        let mut parameters: ftd::Map<crate::ftd2021::p2::event::Parameter> = Default::default();
         match self {
-            ftd::p2::ActionKind::Toggle
-            | ftd::p2::ActionKind::StopPropagation
-            | ftd::p2::ActionKind::PreventDefault
-            | ftd::p2::ActionKind::Clear
-            | ftd::p2::ActionKind::SetValue => {}
-            ftd::p2::ActionKind::MessageHost => {
+            crate::ftd2021::p2::ActionKind::Toggle
+            | crate::ftd2021::p2::ActionKind::StopPropagation
+            | crate::ftd2021::p2::ActionKind::PreventDefault
+            | crate::ftd2021::p2::ActionKind::Clear
+            | crate::ftd2021::p2::ActionKind::SetValue => {}
+            crate::ftd2021::p2::ActionKind::MessageHost => {
                 parameters.insert(
                     "data".to_string(),
-                    ftd::p2::event::Parameter {
+                    crate::ftd2021::p2::event::Parameter {
                         min: 1,
                         max: 1,
-                        ptype: vec![ftd::p2::Kind::object()],
+                        ptype: vec![crate::ftd2021::p2::Kind::object()],
                     },
                 );
             }
-            ftd::p2::ActionKind::Increment | ftd::p2::ActionKind::Decrement => {
+            crate::ftd2021::p2::ActionKind::Increment
+            | crate::ftd2021::p2::ActionKind::Decrement => {
                 parameters.insert(
                     "by".to_string(),
-                    ftd::p2::event::Parameter {
+                    crate::ftd2021::p2::event::Parameter {
                         min: 1,
                         max: 1,
-                        ptype: vec![ftd::p2::Kind::integer()],
+                        ptype: vec![crate::ftd2021::p2::Kind::integer()],
                     },
                 );
                 parameters.insert(
                     "clamp".to_string(),
-                    ftd::p2::event::Parameter {
+                    crate::ftd2021::p2::event::Parameter {
                         min: 1,
                         max: 2,
-                        ptype: vec![ftd::p2::Kind::integer(), ftd::p2::Kind::integer()],
+                        ptype: vec![
+                            crate::ftd2021::p2::Kind::integer(),
+                            crate::ftd2021::p2::Kind::integer(),
+                        ],
                     },
                 );
             }
-            ftd::p2::ActionKind::Insert => {
+            crate::ftd2021::p2::ActionKind::Insert => {
                 parameters.insert(
                     "value".to_string(),
-                    ftd::p2::event::Parameter {
+                    crate::ftd2021::p2::event::Parameter {
                         min: 1,
                         max: 1,
                         ptype: vec![],
@@ -329,10 +337,10 @@ impl ActionKind {
                 );
                 parameters.insert(
                     "at".to_string(),
-                    ftd::p2::event::Parameter {
+                    crate::ftd2021::p2::event::Parameter {
                         min: 1,
                         max: 1,
-                        ptype: vec![ftd::p2::Kind::string()],
+                        ptype: vec![crate::ftd2021::p2::Kind::string()],
                     },
                 );
             }
@@ -345,8 +353,8 @@ impl Action {
     fn to_action(
         line_number: usize,
         a: &str,
-        doc: &ftd::p2::TDoc,
-        arguments: &ftd::Map<ftd::p2::Kind>,
+        doc: &crate::ftd2021::p2::TDoc,
+        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
     ) -> crate::ftd2021::p1::Result<Self> {
         let a: String = a.split_whitespace().collect::<Vec<&str>>().join(" ");
         return match a {
@@ -357,7 +365,7 @@ impl Action {
                     value,
                     doc,
                     arguments,
-                    Some(ftd::p2::Kind::boolean()),
+                    Some(crate::ftd2021::p2::Kind::boolean()),
                 )?;
                 Ok(Self {
                     action: ActionKind::Toggle,
@@ -370,7 +378,7 @@ impl Action {
                 let target = get_target(line_number, value, doc, arguments, None)?;
                 let kind = target.kind();
                 if !kind.is_list() && !kind.is_optional() {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!(
                             "clear should have target of kind: `list` or `optional`, found: {:?}",
                             kind
@@ -435,7 +443,7 @@ impl Action {
                 let value = if let Some(val) = vector.get(1) {
                     val.to_string()
                 } else {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!(
                             "target not found, expected `{} something` found: {}",
                             action_string, a
@@ -449,7 +457,7 @@ impl Action {
                     value,
                     doc,
                     arguments,
-                    Some(ftd::p2::Kind::integer()),
+                    Some(crate::ftd2021::p2::Kind::integer()),
                 )?;
 
                 let parameters = {
@@ -460,7 +468,7 @@ impl Action {
                     for parameter in vector[2..].iter() {
                         if let Some(p) = action_kind.parameters().get(*parameter) {
                             if min > idx {
-                                return ftd::p2::utils::e2(
+                                return crate::ftd2021::p2::utils::e2(
                                     format!(
                                         "minumum number of arguments for {} are {}, found: {}",
                                         current_parameter, min, idx
@@ -477,7 +485,7 @@ impl Action {
                             parameters.insert(current_parameter.to_string(), vec![]);
                         } else if let Some(p) = parameters.get_mut(&current_parameter) {
                             if idx >= max {
-                                return ftd::p2::utils::e2(
+                                return crate::ftd2021::p2::utils::e2(
                                     format!(
                                         "maximum number of arguments for {} are {}, found: {}",
                                         current_parameter,
@@ -513,7 +521,7 @@ impl Action {
                 let value = if let Some(val) = vector.get(2) {
                     val.to_string()
                 } else {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!(
                             "target not found, expected `insert into <something>` found: {}",
                             a
@@ -524,10 +532,11 @@ impl Action {
                 };
                 let target = get_target(line_number, value.clone(), doc, arguments, None)?;
                 let kind = target.kind();
-                let expected_value_kind = if let ftd::p2::Kind::List { kind, .. } = kind {
+                let expected_value_kind = if let crate::ftd2021::p2::Kind::List { kind, .. } = kind
+                {
                     kind.as_ref().to_owned()
                 } else {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!(
                             "expected target `{}` kind is list found: `{:?}`",
                             value, kind
@@ -544,7 +553,7 @@ impl Action {
                     for parameter in vector[3..].iter() {
                         if let Some(p) = ActionKind::Insert.parameters().get(*parameter) {
                             if min > idx {
-                                return ftd::p2::utils::e2(
+                                return crate::ftd2021::p2::utils::e2(
                                     format!(
                                         "minumum number of arguments for {} are {}, found: {}",
                                         current_parameter, min, idx
@@ -561,7 +570,7 @@ impl Action {
                             parameters.insert(current_parameter.to_string(), vec![]);
                         } else if let Some(p) = parameters.get_mut(&current_parameter) {
                             if idx >= max {
-                                return ftd::p2::utils::e2(
+                                return crate::ftd2021::p2::utils::e2(
                                     format!(
                                         "maximum number of arguments for {} are {}, found: {}",
                                         current_parameter,
@@ -590,7 +599,7 @@ impl Action {
                                 )?
                             };
                             if !value.kind().inner().eq(&expected_value_kind) {
-                                return ftd::p2::utils::e2(
+                                return crate::ftd2021::p2::utils::e2(
                                     format!(
                                         "expected value kind: `{:?}` found: `{:?}`",
                                         value.kind(),
@@ -634,7 +643,7 @@ impl Action {
                 parameters: Default::default(),
             }),
             _ if a.contains('=') => {
-                let (part_1, part_2) = ftd::p2::utils::split(a, "=")?;
+                let (part_1, part_2) = crate::ftd2021::p2::utils::split(a, "=")?;
                 let target = get_target(line_number, part_1, doc, arguments, None)?;
                 let kind = target.kind();
                 let mut parameters: ftd::Map<Vec<ftd::PropertyValue>> = Default::default();
@@ -673,7 +682,7 @@ impl Action {
                 })
             }
             t => {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!("{} is not a valid action", t),
                     doc.name,
                     line_number,
@@ -684,9 +693,9 @@ impl Action {
         fn get_target(
             line_number: usize,
             value: String,
-            doc: &ftd::p2::TDoc,
-            arguments: &ftd::Map<ftd::p2::Kind>,
-            kind: Option<ftd::p2::Kind>,
+            doc: &crate::ftd2021::p2::TDoc,
+            arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
+            kind: Option<crate::ftd2021::p2::Kind>,
         ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
             ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)
         }

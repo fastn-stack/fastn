@@ -13,6 +13,7 @@ mod execute_doc;
 pub mod html;
 pub mod markup;
 pub mod or_type;
+pub mod p2;
 pub(crate) mod rendered;
 pub mod rt;
 pub mod ui;

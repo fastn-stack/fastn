@@ -137,7 +137,7 @@ pub enum Value {
     },
     Map {
         data: ftd::Map<Value>,
-        kind: ftd::p2::Kind,
+        kind: crate::ftd2021::p2::Kind,
     },
     // TODO: UI
     // UI {

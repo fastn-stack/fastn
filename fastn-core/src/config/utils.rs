@@ -15,7 +15,7 @@ pub(crate) fn find_root_for_file(
     }
 }
 
-pub async fn fastn_doc(path: &camino::Utf8Path) -> fastn_core::Result<ftd::p2::Document> {
+pub async fn fastn_doc(path: &camino::Utf8Path) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
     {
         let doc = tokio::fs::read_to_string(path);
         let lib = fastn_core::FastnLibrary::default();

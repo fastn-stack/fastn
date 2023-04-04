@@ -569,7 +569,7 @@ pub mod processor {
 
     pub fn user_groups(
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let g = config
@@ -583,7 +583,7 @@ pub mod processor {
 
     pub fn user_group_by_id(
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let id = section.header.str(doc.name, section.line_number, "id")?;
@@ -602,7 +602,7 @@ pub mod processor {
 
     pub fn get_identities(
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
@@ -624,8 +624,8 @@ pub mod processor {
                     },
                 })
                 .collect_vec(),
-            kind: ftd::p2::Kind::List {
-                kind: Box::new(ftd::p2::Kind::String {
+            kind: ftd::ftd2021::p2::Kind::List {
+                kind: Box::new(ftd::ftd2021::p2::Kind::String {
                     caption: false,
                     body: false,
                     default: None,
@@ -640,7 +640,7 @@ pub mod processor {
     // is user can_read the document or not based on defined readers in sitemap
     pub async fn is_reader<'a>(
         section: &ftd::ftd2021::p1::Section,
-        doc: &'a ftd::p2::TDoc<'_>,
+        doc: &'a ftd::ftd2021::p2::TDoc<'_>,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(config, doc)?;

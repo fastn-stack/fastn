@@ -22,12 +22,12 @@ fn read_version() -> crate::ftd2021::p1::Result<ftd::Value> {
         }
     }
 
-    ftd::p2::utils::unknown_processor_error("version not found", "".to_string(), 0)
+    crate::ftd2021::p2::utils::unknown_processor_error("version not found", "".to_string(), 0)
 }
 
 fn read_package(
     section: &crate::ftd2021::p1::Section,
-    doc: &ftd::p2::TDoc,
+    doc: &crate::ftd2021::p2::TDoc,
 ) -> crate::ftd2021::p1::Result<ftd::Value> {
     let var = ftd::Variable::list_from_p1(section, doc)?;
     let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| {
@@ -39,7 +39,7 @@ fn read_package(
     })?;
     if let Ok(ftd::Value::List {
         kind:
-            ftd::p2::Kind::String {
+            crate::ftd2021::p2::Kind::String {
                 caption,
                 body,
                 default,
@@ -67,7 +67,7 @@ fn read_package(
         }
         Ok(ftd::Value::List {
             data,
-            kind: ftd::p2::Kind::String {
+            kind: crate::ftd2021::p2::Kind::String {
                 caption,
                 body,
                 default,
@@ -75,7 +75,7 @@ fn read_package(
             },
         })
     } else {
-        ftd::p2::utils::unknown_processor_error(
+        crate::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
@@ -108,7 +108,7 @@ fn text_component() -> crate::ftd2021::p1::Result<ftd::Value> {
 
 fn read_records(
     section: &crate::ftd2021::p1::Section,
-    doc: &ftd::p2::TDoc,
+    doc: &crate::ftd2021::p2::TDoc,
 ) -> crate::ftd2021::p1::Result<ftd::Value> {
     let var = ftd::Variable::list_from_p1(section, doc)?;
     let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| {
@@ -119,7 +119,7 @@ fn read_records(
         }
     })?;
     if let Ok(ftd::Value::List {
-        kind: ftd::p2::Kind::Record {
+        kind: crate::ftd2021::p2::Kind::Record {
             name, is_reference, ..
         },
         ..
@@ -137,7 +137,7 @@ fn read_records(
                 for (k, v) in &rec.fields {
                     let part = parts.next().unwrap().trim();
                     match v {
-                        ftd::p2::Kind::String { .. } => {
+                        crate::ftd2021::p2::Kind::String { .. } => {
                             fields.insert(
                                 k.to_string(),
                                 ftd::PropertyValue::Value {
@@ -161,14 +161,14 @@ fn read_records(
         }
         Ok(ftd::Value::List {
             data,
-            kind: ftd::p2::Kind::Record {
+            kind: crate::ftd2021::p2::Kind::Record {
                 name,
                 default: None,
                 is_reference,
             },
         })
     } else {
-        ftd::p2::utils::unknown_processor_error(
+        crate::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
@@ -180,14 +180,14 @@ fn read_records(
 }
 
 impl TestLibrary {
-    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+    pub fn get(&self, name: &str, _doc: &crate::ftd2021::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
     }
 
     pub fn process(
         &self,
         section: &crate::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::Value> {
         match section
             .header
@@ -197,7 +197,7 @@ impl TestLibrary {
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
             "text-component-processor" => text_component(),
-            t => ftd::p2::utils::e2(
+            t => crate::ftd2021::p2::utils::e2(
                 format!("unknown processor: {}", t),
                 doc.name,
                 section.line_number.to_owned(),
@@ -208,11 +208,11 @@ impl TestLibrary {
     pub fn get_with_result(
         &self,
         name: &str,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => crate::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }

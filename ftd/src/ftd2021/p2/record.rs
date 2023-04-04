@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Record {
     pub name: String,
-    pub fields: ftd::Map<ftd::p2::Kind>,
+    pub fields: ftd::Map<crate::ftd2021::p2::Kind>,
     pub instances: ftd::Map<Vec<Invocation>>,
     pub order: Vec<String>,
 }
@@ -16,7 +16,7 @@ impl Record {
     pub fn fields(
         &self,
         p1: &crate::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::Map<ftd::PropertyValue>> {
         let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
@@ -26,13 +26,13 @@ impl Record {
                 p1.sub_section_by_name(name, doc.name.to_string()),
                 kind.inner(),
             ) {
-                (Ok(v), ftd::p2::Kind::String { .. }) => ftd::PropertyValue::Value {
+                (Ok(v), crate::ftd2021::p2::Kind::String { .. }) => ftd::PropertyValue::Value {
                     value: ftd::Value::String {
                         text: v.body(doc.name)?,
                         source: ftd::TextSource::Body,
                     },
                 },
-                (Ok(v), ftd::p2::Kind::Record { name, .. }) => {
+                (Ok(v), crate::ftd2021::p2::Kind::Record { name, .. }) => {
                     let record = doc.get_record(p1.line_number, name.as_str())?;
                     ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
@@ -43,14 +43,14 @@ impl Record {
                 }
                 (
                     Err(crate::ftd2021::p1::Error::NotFound { .. }),
-                    ftd::p2::Kind::List {
+                    crate::ftd2021::p2::Kind::List {
                         kind: list_kind, ..
                     },
                 ) => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType {
+                    crate::ftd2021::p2::Kind::OrType {
                         name: or_type_name, ..
                     }
-                    | ftd::p2::Kind::OrTypeWithVariant {
+                    | crate::ftd2021::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
                         let e = doc.get_or_type(p1.line_number, or_type_name)?;
@@ -79,7 +79,7 @@ impl Record {
                             },
                         }
                     }
-                    ftd::p2::Kind::Record { .. } => {
+                    crate::ftd2021::p2::Kind::Record { .. } => {
                         let mut list = ftd::Value::List {
                             kind: list_kind.inner().to_owned(),
                             data: vec![],
@@ -92,7 +92,7 @@ impl Record {
                         }
                         ftd::PropertyValue::Value { value: list }
                     }
-                    ftd::p2::Kind::String { .. } => {
+                    crate::ftd2021::p2::Kind::String { .. } => {
                         let mut values: Vec<ftd::PropertyValue> = vec![];
                         for (_, k, v) in p1.header.0.iter() {
                             if *k != *name {
@@ -112,11 +112,15 @@ impl Record {
                             },
                         }
                     }
-                    ftd::p2::Kind::Integer { .. } => {
-                        return ftd::p2::utils::e2("unexpected integer", doc.name, p1.line_number);
+                    crate::ftd2021::p2::Kind::Integer { .. } => {
+                        return crate::ftd2021::p2::utils::e2(
+                            "unexpected integer",
+                            doc.name,
+                            p1.line_number,
+                        );
                     }
                     t => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -125,14 +129,14 @@ impl Record {
                 },
                 (
                     _,
-                    ftd::p2::Kind::List {
+                    crate::ftd2021::p2::Kind::List {
                         kind: list_kind, ..
                     },
                 ) if !subsections.is_empty() => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType {
+                    crate::ftd2021::p2::Kind::OrType {
                         name: or_type_name, ..
                     }
-                    | ftd::p2::Kind::OrTypeWithVariant {
+                    | crate::ftd2021::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
                         let e = doc.get_or_type(p1.line_number, or_type_name)?;
@@ -158,7 +162,7 @@ impl Record {
                             },
                         }
                     }
-                    ftd::p2::Kind::Record { name, .. } => {
+                    crate::ftd2021::p2::Kind::Record { name, .. } => {
                         let mut list = vec![];
                         for v in subsections {
                             let record = doc.get_record(p1.line_number, name.as_str())?;
@@ -176,7 +180,7 @@ impl Record {
                             },
                         }
                     }
-                    ftd::p2::Kind::String { .. } => {
+                    crate::ftd2021::p2::Kind::String { .. } => {
                         let mut list = vec![];
                         for v in subsections {
                             let (text, from_caption) = v.body_or_caption(doc.name)?;
@@ -197,11 +201,15 @@ impl Record {
                             },
                         }
                     }
-                    ftd::p2::Kind::Integer { .. } => {
-                        return ftd::p2::utils::e2("unexpected integer", doc.name, p1.line_number);
+                    crate::ftd2021::p2::Kind::Integer { .. } => {
+                        return crate::ftd2021::p2::utils::e2(
+                            "unexpected integer",
+                            doc.name,
+                            p1.line_number,
+                        );
                     }
                     t => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -209,7 +217,7 @@ impl Record {
                     }
                 },
                 (Ok(_), _) => {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!("'{:?}' ('{}') can not be a sub-section", kind, name),
                         doc.name,
                         p1.line_number,
@@ -220,7 +228,7 @@ impl Record {
                 }
                 (
                     Err(crate::ftd2021::p1::Error::MoreThanOneSubSections { .. }),
-                    ftd::p2::Kind::List {
+                    crate::ftd2021::p2::Kind::List {
                         kind: list_kind, ..
                     },
                 ) => {
@@ -230,7 +238,7 @@ impl Record {
                             continue;
                         }
                         let v = match list_kind.inner().string_any() {
-                            ftd::p2::Kind::Record { name, .. } => {
+                            crate::ftd2021::p2::Kind::Record { name, .. } => {
                                 let record = doc.get_record(p1.line_number, name.as_str())?;
                                 ftd::PropertyValue::Value {
                                     value: ftd::Value::Record {
@@ -268,7 +276,7 @@ impl Record {
     pub fn add_instance(
         &mut self,
         p1: &crate::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<()> {
         let fields = self.fields(p1, doc)?;
         self.instances
@@ -281,7 +289,7 @@ impl Record {
     pub fn create(
         &self,
         p1: &crate::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         // todo: check if the its reference to other variable
         Ok(ftd::PropertyValue::Value {
@@ -295,7 +303,7 @@ impl Record {
     pub fn fields_from_sub_section(
         &self,
         p1: &crate::ftd2021::p1::SubSection,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::Map<ftd::PropertyValue>> {
         let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
@@ -319,7 +327,7 @@ impl Record {
         // TODO: handle body
         for (i, k, _) in p1.0.iter() {
             if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
-                return ftd::p2::utils::e2(
+                return crate::ftd2021::p2::utils::e2(
                     format!(
                         "unknown key passed: '{}' to '{}', allowed: {:?}",
                         k,
@@ -337,16 +345,16 @@ impl Record {
     pub fn from_p1(
         p1_name: &str,
         p1_header: &crate::ftd2021::p1::Header,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         line_number: usize,
     ) -> crate::ftd2021::p1::Result<Self> {
-        let name = ftd::p2::utils::get_name("record", p1_name, doc.name)?;
+        let name = crate::ftd2021::p2::utils::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = ftd::Map::new();
         let mut order = vec![];
         let object_kind = (
             name,
-            ftd::p2::Kind::Record {
+            crate::ftd2021::p2::Kind::Record {
                 name: full_name.clone(),
                 default: None,
                 is_reference: false,
@@ -371,7 +379,7 @@ impl Record {
             };
             fields.insert(
                 var_data.name.to_string(),
-                ftd::p2::Kind::for_variable(
+                crate::ftd2021::p2::Kind::for_variable(
                     i.to_owned(),
                     k,
                     v,
@@ -404,17 +412,17 @@ impl Record {
 
 fn assert_fields_valid(
     line_number: usize,
-    fields: &ftd::Map<ftd::p2::Kind>,
+    fields: &ftd::Map<crate::ftd2021::p2::Kind>,
     doc_id: &str,
 ) -> crate::ftd2021::p1::Result<()> {
     let mut caption_field: Option<String> = None;
     let mut body_field: Option<String> = None;
     for (name, kind) in fields.iter() {
-        if let ftd::p2::Kind::String { caption, body, .. } = kind {
+        if let crate::ftd2021::p2::Kind::String { caption, body, .. } = kind {
             if *caption {
                 match &caption_field {
                     Some(c) => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("both {} and {} are caption fields", name, c),
                             doc_id,
                             line_number,
@@ -426,7 +434,7 @@ fn assert_fields_valid(
             if *body {
                 match &body_field {
                     Some(c) => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("both {} and {} are body fields", name, c),
                             doc_id,
                             line_number,

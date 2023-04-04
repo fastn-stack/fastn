@@ -2,7 +2,7 @@
 #[allow(dead_code)]
 pub fn user_details(
     section: &ftd::ftd2021::p1::Section,
-    doc: &ftd::p2::TDoc,
+    doc: &ftd::ftd2021::p2::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::ftd2021::p1::Result<ftd::Value> {
     let mut found_cookie = false;
