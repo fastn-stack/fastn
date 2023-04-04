@@ -8929,30 +8929,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "shadow-offset-x",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-offset-y",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-size",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-blur",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
             "padding",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
@@ -9123,54 +9099,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "link",
             ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "min-width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "max-width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "min-height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "max-height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "region",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "color",
-            ftd::interpreter2::Kind::record("ftd#color")
                 .into_optional()
                 .into_kind_data(),
         ),
