@@ -91,7 +91,7 @@ fn text_component() -> crate::ftd2021::p1::Result<ftd::Value> {
     v.insert(
         "$caption$".to_string(),
         ftd::PropertyValue::Value {
-            value: ftd::variable::Value::String {
+            value: crate::ftd2021::variable::Value::String {
                 text: "Hello from text-component processor".to_string(),
                 source: ftd::TextSource::Header,
             },
@@ -100,7 +100,7 @@ fn text_component() -> crate::ftd2021::p1::Result<ftd::Value> {
     v.insert(
         "line-clamp".to_string(),
         ftd::PropertyValue::Value {
-            value: ftd::variable::Value::Integer { value: 40 },
+            value: crate::ftd2021::variable::Value::Integer { value: 40 },
         },
     );
     Ok(ftd::Value::Object { values: v })
@@ -141,7 +141,7 @@ fn read_records(
                             fields.insert(
                                 k.to_string(),
                                 ftd::PropertyValue::Value {
-                                    value: ftd::variable::Value::String {
+                                    value: crate::ftd2021::variable::Value::String {
                                         text: part.to_string(),
                                         source: ftd::TextSource::Header,
                                     },

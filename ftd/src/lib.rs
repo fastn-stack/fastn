@@ -2,56 +2,34 @@
 
 extern crate self as ftd;
 
-pub use component::{ChildComponent, Component, Instruction};
-pub use condition::Condition;
-pub use constants::{identifier, regex};
-pub use event::{Action, Event};
-pub use ftd::{
-    ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument},
-    value_with_default::ValueWithDefault,
-};
-pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
-pub use or_type::OrType;
-pub use rendered::Rendered;
-pub use rt::RT;
-pub use ui::{
+pub use ftd::ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument};
+pub use ftd2021::component::{ChildComponent, Component, Instruction};
+pub use ftd2021::condition::Condition;
+pub use ftd2021::constants::{identifier, regex};
+pub use ftd2021::event::{Action, Event};
+pub use ftd2021::html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
+pub use ftd2021::or_type::OrType;
+pub use ftd2021::rendered::Rendered;
+pub use ftd2021::rt::RT;
+pub use ftd2021::ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
     ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,
     Image, ImageSrc, Input, Length, Loading, Markup, Markups, NamedFont, Overflow, Position,
     Region, Row, Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
 };
-pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
-
-#[cfg(test)]
-#[macro_use]
-pub(crate) mod test;
+pub use ftd2021::value_with_default::ValueWithDefault;
+pub use ftd2021::variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
 pub mod ast;
-pub mod code;
-mod component;
-mod condition;
-mod constants;
 mod di;
-mod dnode;
 pub mod evalexpr;
-mod event;
-mod execute_doc;
 pub mod executor;
 pub mod ftd2021;
-mod html;
 pub mod html1;
 pub mod interpreter;
-pub mod markup;
 pub mod node;
-mod or_type;
 pub mod p1;
 pub mod p2;
-pub(crate) mod rendered;
-mod rt;
-mod ui;
-mod value_with_default;
-pub(crate) mod variable;
-mod youtube_id;
 
 pub fn css() -> &'static str {
     // if fastn_core::utils::is_test() {

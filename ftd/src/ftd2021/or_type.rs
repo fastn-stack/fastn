@@ -60,7 +60,7 @@ impl OrType {
 
 #[cfg(test)]
 mod test {
-    use ftd::test::*;
+    use crate::ftd2021::test::*;
 
     #[test]
     fn basic() {

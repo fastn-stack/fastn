@@ -129,7 +129,7 @@ impl InterpreterState {
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
 
-            let var_data = ftd::variable::VariableData::get_name_kind(
+            let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
                 &p1.name,
                 &doc,
                 p1.line_number,
@@ -188,8 +188,8 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
-            } else if let Ok(ftd::variable::VariableData {
-                type_: ftd::variable::Type::Component,
+            } else if let Ok(crate::ftd2021::variable::VariableData {
+                type_: crate::ftd2021::variable::Type::Component,
                 ..
             }) = var_data
             {
@@ -325,7 +325,7 @@ impl InterpreterState {
                             };
                             parsed_document.instructions.push(
                                 ftd::Instruction::RecursiveChildComponent {
-                                    child: ftd::component::recursive_child_component(
+                                    child: crate::ftd2021::component::recursive_child_component(
                                         loop_data,
                                         &section_to_subsection,
                                         &doc,
@@ -359,13 +359,15 @@ impl InterpreterState {
                                 if let Ok(loop_data) =
                                     sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
-                                    children.push(ftd::component::recursive_child_component(
-                                        loop_data,
-                                        sub,
-                                        &doc,
-                                        &parent.arguments,
-                                        None,
-                                    )?);
+                                    children.push(
+                                        crate::ftd2021::component::recursive_child_component(
+                                            loop_data,
+                                            sub,
+                                            &doc,
+                                            &parent.arguments,
+                                            None,
+                                        )?,
+                                    );
                                 } else {
                                     let root_name = ftd::p2::utils::get_root_component_name(
                                         &doc,
@@ -652,8 +654,10 @@ impl InterpreterState {
         fn find_container_instructions_with_region(
             root_component: &ftd::Component,
             doc: &ftd::p2::TDoc,
-        ) -> crate::ftd2021::p1::Result<(Vec<ftd::Instruction>, Option<ftd::component::Property>)>
-        {
+        ) -> crate::ftd2021::p1::Result<(
+            Vec<ftd::Instruction>,
+            Option<crate::ftd2021::component::Property>,
+        )> {
             if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
                 let region = root_component.properties.get("region");
                 return Ok((root_component.instructions.clone(), region.cloned()));
@@ -681,7 +685,7 @@ impl InterpreterState {
 
         fn adjust_heading_number_in_component(child: &mut ftd::ChildComponent, number: &str) {
             if child.properties.get("heading-number").is_none() {
-                let number_property = ftd::component::Property {
+                let number_property = crate::ftd2021::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: (ftd::Value::List {
                             data: {
@@ -710,7 +714,7 @@ impl InterpreterState {
         fn resolve_title_header_from_container(
             text_property_value: &ftd::PropertyValue,
             current_component: &ftd::Component,
-            properties: &ftd::Map<ftd::component::Property>,
+            properties: &ftd::Map<crate::ftd2021::component::Property>,
             doc: &ftd::p2::TDoc,
         ) -> crate::ftd2021::p1::Result<(Option<String>, Option<String>)> {
             if matches!(
@@ -1240,15 +1244,15 @@ impl InterpreterState {
                 referenced_local_variables: &mut Default::default(),
             };
 
-            let var_data = ftd::variable::VariableData::get_name_kind(
+            let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
                 &p1.name,
                 &doc,
                 p1.line_number,
                 &parsed_document.var_types,
             );
 
-            if let Ok(ftd::variable::VariableData {
-                type_: ftd::variable::Type::Variable,
+            if let Ok(crate::ftd2021::variable::VariableData {
+                type_: crate::ftd2021::variable::Type::Variable,
                 name,
                 ..
             }) = var_data
@@ -1260,7 +1264,7 @@ impl InterpreterState {
                     name: name.clone(),
                     value: ftd::PropertyValue::Value { value: dummy_value },
                     conditions: vec![],
-                    flags: ftd::variable::VariableFlags::from_p1(
+                    flags: crate::ftd2021::variable::VariableFlags::from_p1(
                         &p1.header,
                         doc.name,
                         p1.line_number,
@@ -1599,15 +1603,15 @@ impl InterpreterState {
             referenced_local_variables: &mut Default::default(),
         };
 
-        let var_data = ftd::variable::VariableData::get_name_kind(
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             &doc,
             p1.line_number,
             &parsed_document.var_types,
         );
 
-        if let Ok(ftd::variable::VariableData {
-            type_: ftd::variable::Type::Variable,
+        if let Ok(crate::ftd2021::variable::VariableData {
+            type_: crate::ftd2021::variable::Type::Variable,
             name,
             ..
         }) = var_data
@@ -1617,7 +1621,11 @@ impl InterpreterState {
                 name: name.clone(),
                 value: ftd::PropertyValue::Value { value },
                 conditions: vec![],
-                flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+                flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                    &p1.header,
+                    doc.name,
+                    p1.line_number,
+                )?,
             });
             self.bag.insert(name, variable);
             return self.continue_();

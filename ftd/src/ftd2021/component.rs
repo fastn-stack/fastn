@@ -58,7 +58,7 @@ impl Instruction {
         };
         if let Some(property) = id {
             if let Some(ftd::PropertyValue::Value {
-                value: ftd::variable::Value::String { text, .. },
+                value: crate::ftd2021::variable::Value::String { text, .. },
             }) = &property.default
             {
                 return Some(text.as_str());
@@ -84,7 +84,7 @@ pub struct ChildComponent {
 pub struct Property {
     pub default: Option<ftd::PropertyValue>,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
-    pub nested_properties: ftd::Map<ftd::component::Property>,
+    pub nested_properties: ftd::Map<crate::ftd2021::component::Property>,
 }
 
 #[derive(Debug, Clone)]
@@ -198,7 +198,7 @@ impl ChildComponent {
                         }
                     })
                     .collect::<Vec<ftd::Instruction>>();
-                let elements = ftd::execute_doc::ExecuteDoc {
+                let elements = crate::ftd2021::execute_doc::ExecuteDoc {
                     name: doc.name,
                     aliases: doc.aliases,
                     bag: doc.bag,
@@ -643,7 +643,7 @@ impl ChildComponent {
                     ) {
                         properties.insert(
                             "value".to_string(),
-                            ftd::component::Property {
+                            crate::ftd2021::component::Property {
                                 default: Some(property_value),
                                 conditions: vec![],
                                 ..Default::default()
@@ -697,7 +697,7 @@ fn markup_get_named_container(
         })
         .collect::<Vec<ftd::Instruction>>();
 
-    let container_children = ftd::execute_doc::ExecuteDoc {
+    let container_children = crate::ftd2021::execute_doc::ExecuteDoc {
         name: doc.name,
         aliases: doc.aliases,
         bag: doc.bag,
@@ -772,9 +772,9 @@ fn reevalute_markups(
         for v in markups.text.original.split("\n\n") {
             let itext = ftd::IText::Markup(ftd::Markups {
                 text: if !markups.line {
-                    ftd::rendered::markup(v)
+                    crate::ftd2021::rendered::markup(v)
                 } else {
-                    ftd::rendered::markup_line(v)
+                    crate::ftd2021::rendered::markup_line(v)
                 },
                 ..Default::default()
             });
@@ -827,7 +827,7 @@ fn reevalute_markup(
         if text[idx].eq(&'{') {
             children.push(ftd::Markup {
                 itext: ftd::IText::Text(ftd::Text {
-                    text: ftd::rendered::markup_line(traverse_string.as_str()),
+                    text: crate::ftd2021::rendered::markup_line(traverse_string.as_str()),
                     ..Default::default()
                 }),
                 children: vec![],
@@ -860,7 +860,7 @@ fn reevalute_markup(
     if !traverse_string.is_empty() && !children.is_empty() {
         children.push(ftd::Markup {
             itext: ftd::IText::Text(ftd::Text {
-                text: ftd::rendered::markup_line(traverse_string.as_str()),
+                text: crate::ftd2021::rendered::markup_line(traverse_string.as_str()),
                 ..Default::default()
             }),
             children: vec![],
@@ -920,7 +920,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
+                        t.text = crate::ftd2021::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -931,7 +931,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
+                        t.text = crate::ftd2021::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -942,7 +942,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
+                        t.text = crate::ftd2021::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -953,7 +953,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
+                        t.text = crate::ftd2021::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -964,7 +964,7 @@ fn reevalute_markup(
                 let mut t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
+                        t.text = crate::ftd2021::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -1028,13 +1028,13 @@ fn reevalute_markup(
             );
         };
 
-        if let ftd::component::Property {
+        if let crate::ftd2021::component::Property {
             default: Some(ftd::PropertyValue::Variable { kind, .. }),
             ..
         } = property_value
         {
             if !kind.has_default_value() {
-                let property = ftd::component::Property {
+                let property = crate::ftd2021::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: ftd::Value::String {
                             text: name.to_string(),
@@ -1392,7 +1392,7 @@ fn get_conditional_attributes(
                         ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
                         doc.name,
                     )? {
-                        ftd::html::color(&light)
+                        crate::ftd2021::html::color(&light)
                     } else {
                         "auto".to_string()
                     };
@@ -1400,7 +1400,7 @@ fn get_conditional_attributes(
                         ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                         doc.name,
                     )? {
-                        ftd::html::color(&dark)
+                        crate::ftd2021::html::color(&dark)
                     } else {
                         "auto".to_string()
                     };
@@ -1607,7 +1607,7 @@ impl Component {
             instructions
         };
 
-        return ftd::execute_doc::ExecuteDoc {
+        return crate::ftd2021::execute_doc::ExecuteDoc {
             name: doc.name,
             aliases: doc.aliases,
             bag: doc.bag,
@@ -1698,7 +1698,7 @@ impl Component {
         p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<Self> {
-        let var_data = ftd::variable::VariableData::get_name_kind(
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
@@ -2119,7 +2119,7 @@ pub fn recursive_child_component(
 
     properties.insert(
         "$loop$".to_string(),
-        ftd::component::Property {
+        crate::ftd2021::component::Property {
             default: Some(recursive_property_value),
             conditions: vec![],
             ..Default::default()
@@ -2276,7 +2276,7 @@ pub fn recursive_child_component(
             &arguments,
             None,
         )?;
-        Ok(ftd::component::Property {
+        Ok(crate::ftd2021::component::Property {
             default: Some(property),
             conditions: vec![],
             ..Default::default()
@@ -2335,8 +2335,13 @@ fn assert_no_extra_properties(
         if k == "component"
             || k.starts_with('$')
             || k == "if"
-            || ftd::variable::VariableData::get_name_kind(k, doc, line_number, vec![].as_slice())
-                .is_ok()
+            || crate::ftd2021::variable::VariableData::get_name_kind(
+                k,
+                doc,
+                line_number,
+                vec![].as_slice(),
+            )
+            .is_ok()
         {
             continue;
         }
@@ -3070,7 +3075,7 @@ fn root_properties_from_inherits(
         )?;
         root_properties.insert(
             inherit,
-            ftd::component::Property {
+            crate::ftd2021::component::Property {
                 default: Some(pv),
                 conditions: vec![],
                 ..Default::default()
@@ -3105,7 +3110,7 @@ fn read_arguments(
             continue;
         }
 
-        let var_data = match ftd::variable::VariableData::get_name_kind(
+        let var_data = match crate::ftd2021::variable::VariableData::get_name_kind(
             k,
             doc,
             i.to_owned(),

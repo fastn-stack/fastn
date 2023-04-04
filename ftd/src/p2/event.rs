@@ -13,15 +13,17 @@ impl Event {
         line_number: usize,
         property: &ftd::Map<Vec<ftd::PropertyValue>>,
         doc: &ftd::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<ftd::Map<Vec<ftd::event::ParameterData>>> {
-        let mut property_string: ftd::Map<Vec<ftd::event::ParameterData>> = Default::default();
+    ) -> crate::ftd2021::p1::Result<ftd::Map<Vec<crate::ftd2021::event::ParameterData>>> {
+        let mut property_string: ftd::Map<Vec<crate::ftd2021::event::ParameterData>> =
+            Default::default();
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
                 let value = property_value.resolve(line_number, doc)?;
                 let reference = get_reference(property_value, doc, line_number)?;
                 if let Some(value) = value.to_serde_value() {
-                    property_values_string.push(ftd::event::ParameterData { value, reference });
+                    property_values_string
+                        .push(crate::ftd2021::event::ParameterData { value, reference });
                 } else {
                     return ftd::p2::utils::e2(
                         format!("Can't convert value to string {:?}", value),
@@ -97,11 +99,11 @@ impl Event {
                     parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
-                            ftd::event::ParameterData {
+                            crate::ftd2021::event::ParameterData {
                                 value: serde_json::Value::Bool(true),
                                 reference: None,
                             },
-                            ftd::event::ParameterData {
+                            crate::ftd2021::event::ParameterData {
                                 value: serde_json::json!("boolean"),
                                 reference: None,
                             },
@@ -118,11 +120,11 @@ impl Event {
                     parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
-                            ftd::event::ParameterData {
+                            crate::ftd2021::event::ParameterData {
                                 value: serde_json::Value::Bool(false),
                                 reference: None,
                             },
-                            ftd::event::ParameterData {
+                            crate::ftd2021::event::ParameterData {
                                 value: serde_json::json!("boolean"),
                                 reference: None,
                             },
@@ -572,7 +574,7 @@ impl Action {
                             }
                             let value = if parameter.eq(&"$VALUE") {
                                 ftd::PropertyValue::Value {
-                                    value: ftd::variable::Value::String {
+                                    value: crate::ftd2021::variable::Value::String {
                                         text: parameter.to_string(),
                                         source: ftd::TextSource::Header,
                                     },
@@ -640,7 +642,7 @@ impl Action {
                 let value = {
                     if part_2.eq("$VALUE") || part_2.eq("$MOUSE-IN") {
                         ftd::PropertyValue::Value {
-                            value: ftd::variable::Value::String {
+                            value: crate::ftd2021::variable::Value::String {
                                 text: part_2,
                                 source: ftd::TextSource::Header,
                             },
@@ -657,7 +659,7 @@ impl Action {
                     }
                 };
                 let kind = ftd::PropertyValue::Value {
-                    value: ftd::variable::Value::String {
+                    value: crate::ftd2021::variable::Value::String {
                         text: kind.to_string(line_number, doc.name)?,
                         source: ftd::TextSource::Header,
                     },

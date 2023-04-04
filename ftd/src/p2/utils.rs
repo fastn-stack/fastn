@@ -88,11 +88,12 @@ pub fn get_name<'b>(prefix: &str, s: &'b str, doc_id: &str) -> crate::ftd2021::p
 pub fn boolean_and_ref(
     line_number: usize,
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> crate::ftd2021::p1::Result<(bool, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Boolean { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
@@ -207,11 +208,12 @@ pub fn boolean_and_ref(
 pub fn integer_and_ref(
     line_number: usize,
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> crate::ftd2021::p1::Result<(i64, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Integer { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
@@ -326,11 +328,12 @@ pub fn integer_and_ref(
 pub fn decimal_and_ref(
     line_number: usize,
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> crate::ftd2021::p1::Result<(f64, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Decimal { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
@@ -445,11 +448,12 @@ pub fn decimal_and_ref(
 pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
 ) -> crate::ftd2021::p1::Result<(String, ftd::TextSource, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::String { text, source }, reference)) => {
             Ok((text.to_string(), source.to_owned(), (*reference).to_owned()))
@@ -601,11 +605,12 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
 pub fn record_and_ref(
     line_number: usize,
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
 ) -> crate::ftd2021::p1::Result<(ftd::Map<ftd::PropertyValue>, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Record { fields, .. }, reference)) => {
             Ok((fields.to_owned(), (*reference).to_owned()))
@@ -727,11 +732,12 @@ pub fn record_and_ref(
 #[allow(clippy::type_complexity)]
 pub fn record_optional_with_ref(
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
 ) -> crate::ftd2021::p1::Result<(Option<ftd::Map<ftd::PropertyValue>>, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Record { fields, .. }, reference)) => {
             Ok((Some(fields.to_owned()), (*reference).to_owned()))
@@ -805,11 +811,12 @@ pub fn record_optional(
 #[allow(clippy::type_complexity)]
 pub fn string_optional_with_ref(
     name: &str,
-    properties: &ftd::Map<ftd::component::Property>,
+    properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
 ) -> crate::ftd2021::p1::Result<(Option<String>, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    let properties =
+        crate::ftd2021::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::String { text: v, .. }, reference)) => {
             Ok((Some(v.to_string()), (*reference).to_owned()))
@@ -1343,7 +1350,7 @@ pub fn reorder(
                         var_types,
                     )?;
                 }
-                let var_data = ftd::variable::VariableData::get_name_kind(
+                let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
                     &v.name,
                     doc,
                     v.line_number,
@@ -1416,8 +1423,12 @@ pub fn reorder(
                     )?;
                 }
             }
-            let var_data =
-                ftd::variable::VariableData::get_name_kind(&v.name, doc, v.line_number, var_types)?;
+            let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+                &v.name,
+                doc,
+                v.line_number,
+                var_types,
+            )?;
             if !is_kernel_component(var_data.kind.to_string()) && !inserted.contains(&var_data.kind)
             {
                 reorder_component(
@@ -1442,8 +1453,12 @@ pub fn reorder(
     let mut list_or_var = vec![];
     let mut var_types = vec![];
     for (idx, p1) in p1.iter().enumerate() {
-        let var_data =
-            ftd::variable::VariableData::get_name_kind(&p1.name, doc, p1.line_number, &var_types);
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+            &p1.name,
+            doc,
+            p1.line_number,
+            &var_types,
+        );
         if p1.name == "import"
             || p1.name.starts_with("record ")
             || p1.name.starts_with("or-type ")
@@ -1452,8 +1467,8 @@ pub fn reorder(
             inserted_p1.push(idx);
             new_p1.push(p1.to_owned());
         }
-        if let Ok(ftd::variable::VariableData {
-            type_: ftd::variable::Type::Variable,
+        if let Ok(crate::ftd2021::variable::VariableData {
+            type_: crate::ftd2021::variable::Type::Variable,
             ref name,
             ..
         }) = var_data
@@ -1481,8 +1496,8 @@ pub fn reorder(
             new_p1.push(p1.to_owned());
         }
 
-        if let Ok(ftd::variable::VariableData {
-            type_: ftd::variable::Type::Component,
+        if let Ok(crate::ftd2021::variable::VariableData {
+            type_: crate::ftd2021::variable::Type::Component,
             ref name,
             ..
         }) = var_data
@@ -1569,10 +1584,10 @@ pub fn structure_header_to_properties(
     doc: &ftd::p2::TDoc,
     line_number: usize,
     p1: &crate::ftd2021::p1::Header,
-) -> crate::ftd2021::p1::Result<ftd::Map<ftd::component::Property>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<crate::ftd2021::component::Property>> {
     let (name, caption) = ftd::p2::utils::split(s.to_string(), ":")?;
     match doc.get_thing(line_number, &name) {
-        Ok(ftd::p2::Thing::Component(c)) => ftd::component::read_properties(
+        Ok(ftd::p2::Thing::Component(c)) => crate::ftd2021::component::read_properties(
             line_number,
             p1,
             &if caption.is_empty() {
@@ -1762,7 +1777,8 @@ pub fn is_section_subsection_component(
     var_types: &[String],
     line_number: usize,
 ) -> crate::ftd2021::p1::Result<bool> {
-    let var_data = ftd::variable::VariableData::get_name_kind(name, doc, line_number, var_types);
+    let var_data =
+        crate::ftd2021::variable::VariableData::get_name_kind(name, doc, line_number, var_types);
 
     if name.starts_with("record ")
         || name.starts_with("or-type ")

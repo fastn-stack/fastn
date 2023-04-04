@@ -1,13 +1,13 @@
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
     reference: Option<String>,
 ) -> crate::ftd2021::p1::Result<ftd::Common> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
     let link = ftd::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
@@ -706,7 +706,7 @@ pub fn image_function() -> ftd::Component {
 }
 
 pub fn image_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -715,7 +715,7 @@ pub fn image_from_properties(
     let (src, reference) =
         ftd::p2::utils::record_and_ref(0, "src", unresolved_properties, doc, condition)?;
     let src_record = ftd::ImageSrc::from(&src, doc, 0, reference.clone())?;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
         src: src_record,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?,
@@ -763,13 +763,13 @@ pub fn row_function() -> ftd::Component {
 }
 
 pub fn row_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> crate::ftd2021::p1::Result<ftd::Row> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
         common: common_from_properties(
             unresolved_properties,
@@ -813,13 +813,13 @@ pub fn column_function() -> ftd::Component {
 }
 
 pub fn column_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> crate::ftd2021::p1::Result<ftd::Column> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
         common: common_from_properties(
             unresolved_properties,
@@ -846,11 +846,16 @@ pub fn text_render(
     doc_id: &str,
 ) -> crate::ftd2021::p1::Result<ftd::Rendered> {
     Ok(match (source, tf) {
-        (ftd::TextSource::Body, ftd::TextFormat::Markdown) => ftd::rendered::markup(text.as_str()),
-        (_, ftd::TextFormat::Markdown) => ftd::rendered::markup_line(text.as_str()),
-        (_, ftd::TextFormat::Code { lang }) => {
-            ftd::rendered::code_with_theme(text.as_str(), lang.as_str(), theme.as_str(), doc_id)?
+        (ftd::TextSource::Body, ftd::TextFormat::Markdown) => {
+            crate::ftd2021::rendered::markup(text.as_str())
         }
+        (_, ftd::TextFormat::Markdown) => crate::ftd2021::rendered::markup_line(text.as_str()),
+        (_, ftd::TextFormat::Code { lang }) => crate::ftd2021::rendered::code_with_theme(
+            text.as_str(),
+            lang.as_str(),
+            theme.as_str(),
+            doc_id,
+        )?,
         (_, ftd::TextFormat::Text) => ftd::Rendered {
             original: text.clone(),
             rendered: text,
@@ -891,7 +896,7 @@ pub fn iframe_function() -> ftd::Component {
 }
 
 pub fn iframe_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -903,7 +908,7 @@ pub fn iframe_from_properties(
             let (youtube, reference) =
                 ftd::p2::utils::string_optional_with_ref("youtube", unresolved_properties, doc, 0)?;
             (
-                youtube.and_then(|id| ftd::youtube_id::from_raw(id.as_str())),
+                youtube.and_then(|id| crate::ftd2021::youtube_id::from_raw(id.as_str())),
                 reference,
             )
         },
@@ -931,7 +936,7 @@ pub fn iframe_from_properties(
         (_, _) => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
     };
 
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
 
     Ok(ftd::IFrame {
         src,
@@ -952,7 +957,7 @@ pub fn iframe_from_properties(
 }
 
 pub fn text_block_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -965,7 +970,7 @@ pub fn text_block_from_properties(
         doc,
         condition,
     )?;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("role", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -978,9 +983,9 @@ pub fn text_block_from_properties(
     Ok(ftd::TextBlock {
         line: source != ftd::TextSource::Body,
         text: if source == ftd::TextSource::Body {
-            ftd::rendered::markup(text.as_str())
+            crate::ftd2021::rendered::markup(text.as_str())
         } else {
-            ftd::rendered::markup_line(text.as_str())
+            crate::ftd2021::rendered::markup_line(text.as_str())
         },
         common: common_from_properties(
             unresolved_properties,
@@ -1010,7 +1015,7 @@ pub fn text_block_from_properties(
 }
 
 pub fn code_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1023,7 +1028,7 @@ pub fn code_from_properties(
         doc,
         condition,
     )?;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
@@ -1035,14 +1040,14 @@ pub fn code_from_properties(
     })?;
 
     Ok(ftd::Code {
-        text: ftd::rendered::code_with_theme(
+        text: crate::ftd2021::rendered::code_with_theme(
             text.as_str(),
             ftd::p2::utils::string_optional("lang", properties, doc.name, 0)?
                 .unwrap_or_else(|| "txt".to_string())
                 .as_str(),
             ftd::p2::utils::string_with_default(
                 "theme",
-                ftd::code::DEFAULT_THEME,
+                crate::ftd2021::code::DEFAULT_THEME,
                 properties,
                 doc.name,
                 0,
@@ -1076,7 +1081,7 @@ pub fn code_from_properties(
 }
 
 pub fn integer_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1084,7 +1089,7 @@ pub fn integer_from_properties(
 ) -> crate::ftd2021::p1::Result<ftd::Text> {
     let reference =
         ftd::p2::utils::integer_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
@@ -1105,7 +1110,7 @@ pub fn integer_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: ftd::rendered::markup_line(text.as_str()),
+        text: crate::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1133,7 +1138,7 @@ pub fn integer_from_properties(
 }
 
 pub fn decimal_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1141,7 +1146,7 @@ pub fn decimal_from_properties(
 ) -> crate::ftd2021::p1::Result<ftd::Text> {
     let reference =
         ftd::p2::utils::decimal_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
@@ -1161,7 +1166,7 @@ pub fn decimal_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
     Ok(ftd::Text {
-        text: ftd::rendered::markup_line(text.as_str()),
+        text: crate::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1249,7 +1254,7 @@ fn round_1p(n: f32) -> f32 {
 }
 
 pub fn boolean_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1257,7 +1262,7 @@ pub fn boolean_from_properties(
 ) -> crate::ftd2021::p1::Result<ftd::Text> {
     let reference =
         ftd::p2::utils::boolean_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let value = ftd::p2::utils::bool_("value", properties, doc.name, 0)?;
     let text = if value {
         ftd::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
@@ -1276,7 +1281,7 @@ pub fn boolean_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: ftd::rendered::markup_line(text.as_str()),
+        text: crate::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1661,7 +1666,7 @@ pub fn input_function() -> ftd::Component {
 }
 
 pub fn input_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1677,7 +1682,7 @@ pub fn input_from_properties(
     .map(|v| v.2)
     .unwrap_or(None);
 
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
@@ -1707,13 +1712,13 @@ pub fn input_from_properties(
 }
 
 pub fn scene_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> crate::ftd2021::p1::Result<ftd::Scene> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
         common: common_from_properties(
             unresolved_properties,
@@ -1731,13 +1736,13 @@ pub fn scene_from_properties(
 }
 
 pub fn grid_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> crate::ftd2021::p1::Result<ftd::Grid> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Grid {
         slots: match ftd::p2::utils::string_optional("slots", properties, doc.name, 0)? {
             Some(val) => val,
@@ -1773,7 +1778,7 @@ pub fn grid_from_properties(
 }
 
 pub fn markup_from_properties(
-    unresolved_properties: &ftd::Map<ftd::component::Property>,
+    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1786,7 +1791,7 @@ pub fn markup_from_properties(
         doc,
         condition,
     )?;
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
@@ -1798,7 +1803,7 @@ pub fn markup_from_properties(
     })?;
 
     Ok(ftd::Markups {
-        text: ftd::rendered::markup_line(value.as_str()),
+        text: crate::ftd2021::rendered::markup_line(value.as_str()),
         common: common_from_properties(
             unresolved_properties,
             doc,

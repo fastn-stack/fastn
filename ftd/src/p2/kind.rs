@@ -699,8 +699,12 @@ impl Kind {
             default
         };
 
-        let var_data =
-            ftd::variable::VariableData::get_name_kind(s, doc, line_number, vec![].as_slice())?;
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+            s,
+            doc,
+            line_number,
+            vec![].as_slice(),
+        )?;
 
         let k = match object_kind {
             Some(object_kind) if var_data.kind.eq(object_kind.0) => object_kind.1,
@@ -737,7 +741,7 @@ impl Kind {
                             line_number,
                             doc.name.to_string()
                         ),
-                        Some(ref d) => ftd::variable::guess_type(d, false)?.kind(),
+                        Some(ref d) => crate::ftd2021::variable::guess_type(d, false)?.kind(),
                     },
                 },
             },
