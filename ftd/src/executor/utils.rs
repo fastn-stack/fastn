@@ -151,6 +151,26 @@ pub(crate) fn update_local_variable_references_in_component(
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
+    update_local_variable_references_in_component_(
+        component,
+        local_variable_map,
+        inherited_variables,
+        replace_property_value,
+        local_container,
+        doc,
+        false,
+    )
+}
+
+pub(crate) fn update_local_variable_references_in_component_(
+    component: &mut ftd::interpreter2::Component,
+    local_variable_map: &ftd::Map<String>,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
+    local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
+    is_children: bool,
+) {
     if component.is_variable() {
         let mut component_name = ftd::interpreter2::PropertyValue::Reference {
             name: component.name.to_string(),
@@ -166,6 +186,7 @@ pub(crate) fn update_local_variable_references_in_component(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
 
         component.name = component_name
@@ -182,6 +203,7 @@ pub(crate) fn update_local_variable_references_in_component(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
     }
 
@@ -194,6 +216,7 @@ pub(crate) fn update_local_variable_references_in_component(
                 replace_property_value,
                 local_container,
                 doc,
+                is_children,
             );
         }
     }
@@ -206,6 +229,7 @@ pub(crate) fn update_local_variable_references_in_component(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
     }
 
@@ -217,17 +241,19 @@ pub(crate) fn update_local_variable_references_in_component(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
     }
 
     for child in component.children.iter_mut() {
-        update_local_variable_references_in_component(
+        update_local_variable_references_in_component_(
             child,
             local_variable_map,
             inherited_variables,
             &Default::default(),
             local_container,
             doc,
+            is_children,
         );
     }
 }
@@ -239,6 +265,7 @@ fn update_local_variable_reference_in_property(
     replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
+    is_children: bool,
 ) {
     update_local_variable_reference_in_property_value(
         &mut property.value,
@@ -247,6 +274,7 @@ fn update_local_variable_reference_in_property(
         replace_property_value,
         local_container,
         doc,
+        is_children,
     );
     if let Some(ref mut condition) = property.condition {
         update_local_variable_reference_in_condition(
@@ -256,6 +284,7 @@ fn update_local_variable_reference_in_property(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
     }
 }
@@ -267,6 +296,7 @@ fn update_local_variable_reference_in_condition(
     replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
+    is_children: bool,
 ) {
     for reference in condition.references.values_mut() {
         update_local_variable_reference_in_property_value(
@@ -276,6 +306,7 @@ fn update_local_variable_reference_in_condition(
             replace_property_value,
             local_container,
             doc,
+            is_children,
         );
     }
 }
@@ -287,6 +318,7 @@ fn update_local_variable_reference_in_property_value(
     replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
+    is_children: bool, //Using children
 ) {
     let reference_or_clone = match property_value {
         ftd::interpreter2::PropertyValue::Reference { name, .. }
@@ -300,11 +332,13 @@ fn update_local_variable_reference_in_property_value(
                     replace_property_value,
                     local_container,
                     doc,
+                    is_children,
                 );
             }
             return;
         }
         ftd::interpreter2::PropertyValue::Value { value, .. } => {
+            let is_children = is_children || value.kind().inner_list().is_subsection_ui();
             return match value {
                 ftd::interpreter2::Value::List { data, .. } => {
                     for d in data.iter_mut() {
@@ -315,6 +349,7 @@ fn update_local_variable_reference_in_property_value(
                             replace_property_value,
                             local_container,
                             doc,
+                            is_children,
                         );
                     }
                 }
@@ -328,6 +363,7 @@ fn update_local_variable_reference_in_property_value(
                             replace_property_value,
                             local_container,
                             doc,
+                            is_children,
                         );
                     }
                 }
@@ -343,13 +379,14 @@ fn update_local_variable_reference_in_property_value(
                     }) {
                         *name = local_variable;
                     }
-                    update_local_variable_references_in_component(
+                    update_local_variable_references_in_component_(
                         component,
                         local_variable,
                         inherited_variables,
                         &Default::default(),
                         local_container,
                         doc,
+                        is_children,
                     )
                 }
                 ftd::interpreter2::Value::OrType { value, .. } => {
@@ -360,10 +397,11 @@ fn update_local_variable_reference_in_property_value(
                         replace_property_value,
                         local_container,
                         doc,
+                        is_children,
                     );
                 }
                 _ => {}
-            }
+            };
         }
     };
 
@@ -381,13 +419,15 @@ fn update_local_variable_reference_in_property_value(
         *property_value = replace_with.to_owned();
     }
 
-    update_inherited_reference_in_property_value(
-        property_value,
-        reference_or_clone.as_str(),
-        inherited_variables,
-        local_container,
-        doc,
-    )
+    if !is_children {
+        update_inherited_reference_in_property_value(
+            property_value,
+            reference_or_clone.as_str(),
+            inherited_variables,
+            local_container,
+            doc,
+        )
+    }
 }
 
 fn update_inherited_reference_in_property_value(
