@@ -27,7 +27,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         root: &str,
         arguments: &mut ftd::Map<ftd::p2::Kind>,
-        properties: &ftd::Map<ftd::component::Property>,
+        properties: &ftd::Map<crate::ftd2021::component::Property>,
         string_container: &str,
         local_container: &[usize],
         external_children_count: &Option<usize>,
@@ -204,7 +204,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         current_container: &str,
         parent_container: &str,
-        properties: &mut ftd::Map<ftd::component::Property>,
+        properties: &mut ftd::Map<crate::ftd2021::component::Property>,
         reference: &mut Option<(String, ftd::p2::Kind)>,
         condition: &mut Option<ftd::p2::Boolean>,
         events: &mut [ftd::p2::Event],
@@ -443,7 +443,7 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local_from_component(
         &mut self,
         component: &mut ftd::Component,
-        child_component_properties: &ftd::Map<ftd::component::Property>,
+        child_component_properties: &ftd::Map<crate::ftd2021::component::Property>,
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> crate::ftd2021::p1::Result<()> {
@@ -460,7 +460,7 @@ impl<'a> TDoc<'a> {
             external_children_count,
         )?;
 
-        ftd::component::Property::add_default_properties(
+        crate::ftd2021::component::Property::add_default_properties(
             child_component_properties,
             &mut component.properties,
         );
@@ -1514,8 +1514,9 @@ mod test {
         )
         .to_string();
 
-        let (g_bag, _g_col) = ftd::test::interpret("foo/bar", &source, &ftd::p2::TestLibrary {})
-            .expect("found error");
+        let (g_bag, _g_col) =
+            crate::ftd2021::test::interpret("foo/bar", &source, &ftd::p2::TestLibrary {})
+                .expect("found error");
         let data: Vec<Vec<serde_json::Value>> = vec![
             vec![
                 serde_json::json!("Amitu"),

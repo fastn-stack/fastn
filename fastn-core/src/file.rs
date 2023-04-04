@@ -211,12 +211,14 @@ pub(crate) async fn get_file(
                 base_path: base_path.to_path_buf(),
             })
         }
-        Some((_, ext)) if ftd::code::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
-            package_name: package_name.to_string(),
-            id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
-        }),
+        Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => {
+            File::Code(Document {
+                package_name: package_name.to_string(),
+                id: id.to_string(),
+                content: tokio::fs::read_to_string(&doc_path).await?,
+                parent_path: base_path.to_string(),
+            })
+        }
         _ => File::Static(Static {
             id: id.to_string(),
             content: tokio::fs::read(&doc_path).await?,
@@ -229,7 +231,7 @@ pub fn is_static(path: &str) -> fastn_core::Result<bool> {
     Ok(match path.rsplit_once('.') {
         Some((_, "ftd")) | Some((_, "md")) => false,
         Some((_, "svg")) | Some((_, "woff")) | Some((_, "woff2")) => true,
-        Some((_, ext)) if ftd::code::KNOWN_EXTENSIONS.contains(ext) => false,
+        Some((_, ext)) if ftd::ftd2021::code::KNOWN_EXTENSIONS.contains(ext) => false,
         None => false,
         _ => true,
     })

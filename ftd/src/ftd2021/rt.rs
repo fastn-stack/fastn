@@ -61,7 +61,7 @@ impl RT {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
         let mut local_variables = Default::default();
-        let mut element = ftd::execute_doc::ExecuteDoc {
+        let mut element = crate::ftd2021::execute_doc::ExecuteDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.bag,

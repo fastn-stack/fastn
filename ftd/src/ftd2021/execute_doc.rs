@@ -14,7 +14,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         id: Option<String>,
         referenced_local_variables: &mut ftd::Map<String>,
-    ) -> crate::ftd2021::p1::Result<ftd::component::ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<crate::ftd2021::component::ElementWithContainer> {
         let mut index = 0;
         self.execute_(
             &mut index,
@@ -37,7 +37,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_id: Option<String>,
         id: Option<String>,
         referenced_local_variables: &mut ftd::Map<String>,
-    ) -> crate::ftd2021::p1::Result<ftd::component::ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<crate::ftd2021::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: ftd::Map<Vec<Vec<usize>>> = Default::default();
         let mut children: Vec<ftd::Element> = vec![];
@@ -79,7 +79,7 @@ impl<'a> ExecuteDoc<'a> {
                         && !match_parent_id(c, &parent_id)
                     {
                         *index -= 1;
-                        return Ok(ftd::component::ElementWithContainer {
+                        return Ok(crate::ftd2021::component::ElementWithContainer {
                             element: ftd::Element::Null,
                             children,
                             child_container: Some(named_containers),
@@ -110,7 +110,7 @@ impl<'a> ExecuteDoc<'a> {
                         (parent, inner)
                     };
 
-                    let ftd::component::ElementWithContainer {
+                    let crate::ftd2021::component::ElementWithContainer {
                         element,
                         children: container_children,
                         child_container,
@@ -148,7 +148,7 @@ impl<'a> ExecuteDoc<'a> {
                         f.properties.extend(arguments.into_iter().map(|(k, v)| {
                             (
                                 k,
-                                ftd::component::Property {
+                                crate::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Value { value: v }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
@@ -171,7 +171,7 @@ impl<'a> ExecuteDoc<'a> {
                         } else {
                             let new_id = ftd::p2::utils::string_optional(
                                 "id",
-                                &ftd::component::resolve_properties_by_id(
+                                &crate::ftd2021::component::resolve_properties_by_id(
                                     f.line_number,
                                     &f.properties,
                                     &doc,
@@ -188,7 +188,7 @@ impl<'a> ExecuteDoc<'a> {
                         }
                     };
 
-                    let ftd::component::ElementWithContainer {
+                    let crate::ftd2021::component::ElementWithContainer {
                         element: mut e,
                         child_container,
                         ..
@@ -246,7 +246,7 @@ impl<'a> ExecuteDoc<'a> {
             }
         }
 
-        Ok(ftd::component::ElementWithContainer {
+        Ok(crate::ftd2021::component::ElementWithContainer {
             element: ftd::Element::Null,
             children,
             child_container: Some(named_containers),

@@ -12,7 +12,7 @@ pub fn code_with_theme(
 ) -> crate::ftd2021::p1::Result<ftd::Rendered> {
     Ok(ftd::Rendered {
         original: code.to_string(),
-        rendered: ftd::code::code(
+        rendered: crate::ftd2021::code::code(
             code.replace("\n\\-- ", "\n-- ").as_str(),
             ext,
             theme,
@@ -24,13 +24,13 @@ pub fn code_with_theme(
 pub fn markup(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: ftd::markup::markup(s),
+        rendered: crate::ftd2021::markup::markup(s),
     }
 }
 
 pub fn markup_line(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: ftd::markup::markup_inline(s),
+        rendered: crate::ftd2021::markup::markup_inline(s),
     }
 }

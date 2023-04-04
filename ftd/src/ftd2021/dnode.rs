@@ -27,7 +27,7 @@ impl DNode {
         }
         styles
             .iter()
-            .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
+            .map(|(k, v)| format!("{}: {}", *k, crate::ftd2021::html::escape(v))) // TODO: escape needed?
             .collect::<Vec<String>>()
             .join("; ")
     }
@@ -52,7 +52,7 @@ impl DNode {
 
         let attrs = {
             let mut attr = self.attrs_to_html();
-            let events = ftd::event::group_by_js_event(&self.events);
+            let events = crate::ftd2021::event::group_by_js_event(&self.events);
             for (name, actions) in events {
                 if name != "onclickoutside" && !name.starts_with("onglobalkey") {
                     let event = format!(

@@ -353,7 +353,7 @@ impl Record {
             },
         );
         for (i, k, v) in p1_header.0.iter() {
-            let var_data = match ftd::variable::VariableData::get_name_kind(
+            let var_data = match crate::ftd2021::variable::VariableData::get_name_kind(
                 k,
                 doc,
                 i.to_owned(),

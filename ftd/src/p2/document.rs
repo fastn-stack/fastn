@@ -33,7 +33,7 @@ impl Document {
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
-                if let ftd::variable::VariableFlags {
+                if let crate::ftd2021::variable::VariableFlags {
                     always_include: Some(f),
                 } = flag
                 {
@@ -400,7 +400,7 @@ impl Document {
             id: &str,
             data_id: &Option<String>,
         ) {
-            let events = ftd::event::group_by_js_event(events);
+            let events = crate::ftd2021::event::group_by_js_event(events);
             for (name, actions) in events {
                 let action = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this);",
@@ -442,7 +442,7 @@ impl Document {
                     continue;
                 }
                 if let Some(ref position) = common.position {
-                    for (key, value) in ftd::html::column_align(position) {
+                    for (key, value) in crate::ftd2021::html::column_align(position) {
                         child_node.style.insert(key.as_str().to_string(), value);
                     }
                 }

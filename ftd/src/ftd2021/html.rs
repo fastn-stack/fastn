@@ -55,7 +55,7 @@ impl Node {
         is_parent_visible: bool,
         parent_id: &str,
         is_last: bool,
-    ) -> ftd::dnode::DNode {
+    ) -> crate::ftd2021::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
             s.extend(style.clone());
@@ -123,7 +123,7 @@ impl Node {
         let mut index_of_visible_children = 0;
 
         let children = {
-            let mut children: Vec<ftd::dnode::DNode> = vec![];
+            let mut children: Vec<crate::ftd2021::dnode::DNode> = vec![];
             for (i, v) in all_children.iter().enumerate() {
                 if v.node.is_empty() {
                     continue;
@@ -196,7 +196,7 @@ impl Node {
             attrs
         };
 
-        return ftd::dnode::DNode {
+        return crate::ftd2021::dnode::DNode {
             classes: self.classes.to_owned(),
             node: self.node.to_owned(),
             attrs,
@@ -827,7 +827,7 @@ impl ftd::Collector {
             let current_styles = v
                 .styles
                 .iter()
-                .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
+                .map(|(k, v)| format!("{}: {}", *k, crate::ftd2021::html::escape(v))) // TODO: escape needed?
                 .collect::<Vec<String>>()
                 .join(";\n");
             if let Some(ref prefix) = v.prefix {

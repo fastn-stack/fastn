@@ -507,7 +507,7 @@ pub enum Value {
     UI {
         name: String,
         kind: crate::p2::Kind,
-        data: ftd::Map<ftd::component::Property>,
+        data: ftd::Map<crate::ftd2021::component::Property>,
     },
 }
 
@@ -717,7 +717,7 @@ impl Variable {
         p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<Self> {
-        let var_data = ftd::variable::VariableData::get_name_kind(
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
@@ -752,7 +752,7 @@ impl Variable {
                         },
                     },
                     conditions: vec![],
-                    flags: ftd::variable::VariableFlags::from_p1(
+                    flags: crate::ftd2021::variable::VariableFlags::from_p1(
                         &p1.header,
                         doc.name,
                         p1.line_number,
@@ -770,7 +770,11 @@ impl Variable {
                 },
             },
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                &p1.header,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
@@ -796,7 +800,11 @@ impl Variable {
                 },
             },
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                &p1.header,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
@@ -873,7 +881,7 @@ impl Variable {
         p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<Self> {
-        let var_data = ftd::variable::VariableData::get_name_kind(
+        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
@@ -906,7 +914,11 @@ impl Variable {
                     },
                 },
                 conditions: vec![],
-                flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+                flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                    &p1.header,
+                    doc.name,
+                    p1.line_number,
+                )?,
             });
         }
 
@@ -961,7 +973,11 @@ impl Variable {
             name,
             value,
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                &p1.header,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
