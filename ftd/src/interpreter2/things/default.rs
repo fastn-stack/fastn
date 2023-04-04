@@ -154,6 +154,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(row_function()),
         ),
         (
+            "ftd#container".to_string(),
+            ftd::interpreter2::Thing::Component(container_function()),
+        ),
+        (
             "ftd#code".to_string(),
             ftd::interpreter2::Thing::Component(code_function()),
         ),
@@ -2006,6 +2010,45 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                             .caption(),
                         false,
                         Some(ftd::interpreter2::Value::new_string("break-spaces")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_DISPLAY.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_DISPLAY.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_DISPLAY_BLOCK,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("block")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_DISPLAY_INLINE,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("inline")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_DISPLAY_INLINE_BLOCK,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("inline-block")
                             .into_property_value(false, 0)),
                         0,
                     )),
@@ -8319,10 +8362,36 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
 pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#row".to_string(),
-        arguments: [container_arguments(), common_arguments()]
-            .concat()
-            .into_iter()
-            .collect(),
+        arguments: [
+            container_root_arguments(),
+            container_arguments(),
+            common_arguments(),
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn container_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#container".to_string(),
+        arguments: [
+            container_root_arguments(),
+            common_arguments(),
+            vec![ftd::interpreter2::Argument::default(
+                "display",
+                ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_DISPLAY)
+                    .into_optional()
+                    .into_kind_data(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
@@ -8411,10 +8480,14 @@ pub fn iframe_function() -> ftd::interpreter2::ComponentDefinition {
 pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#column".to_string(),
-        arguments: [container_arguments(), common_arguments()]
-            .concat()
-            .into_iter()
-            .collect(),
+        arguments: [
+            container_root_arguments(),
+            container_arguments(),
+            common_arguments(),
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
@@ -8561,6 +8634,29 @@ pub fn document_function() -> ftd::interpreter2::ComponentDefinition {
     }
 }
 
+fn container_root_arguments() -> Vec<ftd::interpreter2::Argument> {
+    vec![
+        ftd::interpreter2::Argument::default(
+            "children",
+            ftd::interpreter2::Kind::subsection_ui()
+                .into_list()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "colors",
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR_SCHEME)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "types",
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE_DATA)
+                .into_optional()
+                .into_kind_data(),
+        ),
+    ]
+}
+
 fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
@@ -8578,24 +8674,6 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "spacing",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_SPACING)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "children",
-            ftd::interpreter2::Kind::subsection_ui()
-                .into_list()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "colors",
-            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR_SCHEME)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "types",
-            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE_DATA)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -8851,30 +8929,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "shadow-offset-x",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-offset-y",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-size",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "shadow-blur",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
             "padding",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
@@ -9048,59 +9102,17 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_optional()
                 .into_kind_data(),
         ),
-        ftd::interpreter2::Argument::default(
-            "width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "min-width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "max-width",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "min-height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "max-height",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "region",
-            ftd::interpreter2::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "color",
-            ftd::interpreter2::Kind::record("ftd#color")
-                .into_optional()
-                .into_kind_data(),
-        ),
     ]
 }
 
 fn text_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "display",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_DISPLAY)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "text-align",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_ALIGN)

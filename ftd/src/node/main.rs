@@ -128,6 +128,42 @@ impl Node {
         }
     }
 
+    fn from_children(
+        common: &ftd::executor::Common,
+        children: &[ftd::executor::Element],
+        doc_id: &str,
+        display: &str,
+        anchor_ids: &mut Vec<String>,
+    ) -> Node {
+        use itertools::Itertools;
+
+        let attrs = common.attrs(doc_id);
+        let mut classes = vec![];
+        classes.extend(common.classes());
+
+        let node = common.node();
+
+        Node {
+            node: s(node.as_str()),
+            attrs,
+            condition: common.condition.to_owned(),
+            text: Default::default(),
+            children: children
+                .iter()
+                .map(|v| v.to_node(doc_id, anchor_ids))
+                .collect_vec(),
+            style: common.style(doc_id, &mut classes, anchor_ids),
+            classes,
+            null: common.is_dummy,
+            events: common.event.clone(),
+            data_id: common.data_id.to_string(),
+            line_number: common.line_number,
+            display: s(display),
+            raw_data: None,
+            web_component: None,
+        }
+    }
+
     fn from_container(
         common: &ftd::executor::Common,
         container: &ftd::executor::Container,
@@ -180,6 +216,7 @@ impl ftd::executor::Element {
         match self {
             ftd::executor::Element::Row(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Column(c) => c.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Container(e) => e.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Text(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Decimal(t) => t.to_node(doc_id, anchor_ids),
@@ -430,6 +467,27 @@ impl ftd::executor::Column {
     }
 }
 
+impl ftd::executor::ContainerElement {
+    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+        let mut n = Node::from_children(
+            &self.common,
+            &self.children,
+            doc_id,
+            self.display
+                .value
+                .as_ref()
+                .map_or("block", |d| d.to_css_str()),
+            anchor_ids,
+        );
+        if !self.common.is_not_visible && self.display.value.is_none() {
+            n.style
+                .insert(s("display"), ftd::node::Value::from_string("block"));
+        }
+
+        n
+    }
+}
+
 impl ftd::executor::Text {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
@@ -443,6 +501,19 @@ impl ftd::executor::Text {
                 ftd::node::Value::from_string(slug::slugify(&self.text.value.original)),
             );
         }
+
+        n.style.check_and_insert(
+            "display",
+            ftd::node::Value::from_executor_value(
+                self.display
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_str().to_string()))
+                    .value,
+                self.display.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         n.style.check_and_insert(
             "text-indent",

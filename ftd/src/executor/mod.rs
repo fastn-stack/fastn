@@ -17,15 +17,16 @@ pub type FieldWithValue = (ftd::interpreter2::Field, Option<ftd::ast::VariableVa
 
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
-    CheckBox, Code, Column, Common, Container, Document, Element, Event, HTMLData, Iframe, Image,
-    ImageSrc, IterativeElement, RawElement, Row, Text, TextInput, WebComponent,
+    CheckBox, Code, Column, Common, Container, ContainerElement, Document, Element, Event,
+    HTMLData, Iframe, Image, ImageSrc, IterativeElement, RawElement, Row, Text, TextInput,
+    WebComponent,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BackgroundImage, BackgroundPosition,
-    BackgroundRepeat, BackgroundSize, BorderStyle, Color, ColorValue, Cursor, FontSize, Length,
-    LineClamp, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Shadow, Spacing,
-    TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
+    BackgroundRepeat, BackgroundSize, BorderStyle, Color, ColorValue, Cursor, Display, FontSize,
+    Length, LineClamp, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Shadow,
+    Spacing, TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;

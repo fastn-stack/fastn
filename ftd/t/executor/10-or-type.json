@@ -541,6 +541,11 @@
               "value": null,
               "line_number": null,
               "properties": []
+            },
+            "display": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -969,6 +974,11 @@
               "value": null,
               "line_number": null,
               "properties": []
+            },
+            "display": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             }
           }
         },
@@ -1387,6 +1397,11 @@
               }
             },
             "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "display": {
               "value": null,
               "line_number": null,
               "properties": []
@@ -1877,6 +1892,11 @@
               }
             },
             "style": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
+            "display": {
               "value": null,
               "line_number": null,
               "properties": []

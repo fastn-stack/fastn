@@ -2,6 +2,7 @@
 pub enum Element {
     Row(Row),
     Column(Column),
+    Container(ContainerElement),
     Document(Document),
     Text(Text),
     Integer(Text),
@@ -23,6 +24,7 @@ impl Element {
         match self {
             Element::Row(r) => Some(&r.common),
             Element::Column(c) => Some(&c.common),
+            Element::Container(e) => Some(&e.common),
             Element::Text(t) => Some(&t.common),
             Element::Integer(i) => Some(&i.common),
             Element::Boolean(b) => Some(&b.common),
@@ -58,6 +60,7 @@ impl Element {
         match self {
             Element::Row(r) => r.common.line_number,
             Element::Column(c) => c.common.line_number,
+            Element::Container(e) => e.common.line_number,
             Element::Document(d) => d.line_number,
             Element::Text(t) => t.common.line_number,
             Element::Integer(i) => i.common.line_number,
@@ -112,6 +115,13 @@ pub struct Column {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ContainerElement {
+    pub common: Common,
+    pub children: Vec<ftd::executor::Element>,
+    pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct HTMLData {
     pub title: ftd::executor::Value<Option<String>>,
     pub og_title: ftd::executor::Value<Option<String>>,
@@ -138,6 +148,7 @@ pub struct Text {
     pub line_clamp: ftd::executor::Value<Option<i64>>,
     pub common: Common,
     pub style: ftd::executor::Value<Option<ftd::executor::TextStyle>>,
+    pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -705,6 +716,15 @@ pub fn text_from_properties(
             inherited_variables,
             "ftd#text",
         )?,
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
+            inherited_variables,
+            "ftd#text",
+        )?,
     })
 }
 
@@ -790,6 +810,15 @@ pub fn integer_from_properties(
             doc,
             line_number,
             "style",
+            inherited_variables,
+            "ftd#integer",
+        )?,
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
             inherited_variables,
             "ftd#integer",
         )?,
@@ -881,6 +910,15 @@ pub fn decimal_from_properties(
             inherited_variables,
             "ftd#decimal",
         )?,
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
+            inherited_variables,
+            "ftd#decimal",
+        )?,
     })
 }
 
@@ -951,6 +989,15 @@ pub fn boolean_from_properties(
             doc,
             line_number,
             "style",
+            inherited_variables,
+            "ftd#boolean",
+        )?,
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
             inherited_variables,
             "ftd#boolean",
         )?,
@@ -1067,6 +1114,44 @@ pub fn column_from_properties(
         "ftd#column",
     )?;
     Ok(Column { container, common })
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn container_element_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &mut ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+    children: Vec<Element>,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+) -> ftd::executor::Result<ContainerElement> {
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+        inherited_variables,
+        "ftd#container",
+    )?;
+    Ok(ContainerElement {
+        common,
+        children,
+        display: ftd::executor::Display::optional_display(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "display",
+            inherited_variables,
+            "ftd#container",
+        )?,
+    })
 }
 
 pub fn document_from_properties(
