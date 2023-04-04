@@ -1,53 +1,55 @@
-pub use ftd::p2::interpreter::{default_bag, default_column};
+pub use crate::ftd2021::p2::interpreter::{default_bag, default_column};
 
 #[test]
 fn get_name() {
     assert_eq!(
-        ftd::p2::utils::get_name("fn", "fn foo", "test").unwrap(),
+        crate::ftd2021::p2::utils::get_name("fn", "fn foo", "test").unwrap(),
         "foo"
     )
 }
 
 /// returns the universal arguments map from component.rs as vector
-fn universal_arguments_as_vec() -> Vec<(String, ftd::p2::Kind)> {
+fn universal_arguments_as_vec() -> Vec<(String, crate::ftd2021::p2::Kind)> {
     ftd::ftd2021::component::universal_arguments()
         .into_iter()
-        .collect::<Vec<(String, ftd::p2::Kind)>>()
+        .collect::<Vec<(String, crate::ftd2021::p2::Kind)>>()
 }
 
 /// returns the universal argumnts map from component.rs
-fn universal_arguments_as_map() -> ftd::Map<ftd::p2::Kind> {
+fn universal_arguments_as_map() -> ftd::Map<crate::ftd2021::p2::Kind> {
     ftd::ftd2021::component::universal_arguments()
 }
 
 pub fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &ftd::p2::TestLibrary,
-) -> ftd::ftd2021::p1::Result<ftd::p2::Document> {
-    let mut s = ftd::p2::interpreter::interpret(name, source, &None)?;
+    lib: &crate::ftd2021::p2::TestLibrary,
+) -> ftd::ftd2021::p1::Result<crate::ftd2021::p2::Document> {
+    let mut s = crate::ftd2021::p2::interpreter::interpret(name, source, &None)?;
     let document;
     loop {
         match s {
-            ftd::p2::interpreter::Interpreter::Done { document: doc } => {
+            crate::ftd2021::p2::interpreter::Interpreter::Done { document: doc } => {
                 document = doc;
                 break;
             }
-            ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
+            crate::ftd2021::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
                 let value = lib.process(
                     &section,
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
                 )?;
                 s = state.continue_after_processor(&section, value)?;
             }
-            ftd::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
+            crate::ftd2021::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
                 let source = lib.get_with_result(
                     module.as_str(),
                     &st.tdoc(&mut Default::default(), &mut Default::default()),
                 )?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
-            ftd::p2::interpreter::Interpreter::StuckOnForeignVariable { state, .. } => {
+            crate::ftd2021::p2::interpreter::Interpreter::StuckOnForeignVariable {
+                state, ..
+            } => {
                 s = state.continue_after_variable(
                     "foo",
                     ftd::Value::String {
@@ -68,8 +70,8 @@ pub fn interpret_helper(
 pub fn interpret(
     name: &str,
     source: &str,
-    lib: &ftd::p2::TestLibrary,
-) -> ftd::ftd2021::p1::Result<(ftd::Map<ftd::p2::Thing>, ftd::Column)> {
+    lib: &crate::ftd2021::p2::TestLibrary,
+) -> ftd::ftd2021::p1::Result<(ftd::Map<crate::ftd2021::p2::Thing>, ftd::Column)> {
     let doc = ftd::ftd2021::test::interpret_helper(name, source, lib)?;
     Ok((doc.data, doc.main))
 }
@@ -79,12 +81,15 @@ macro_rules! p {
         p!($s, $t)
     };
     ($s:expr, $t: expr) => {
-        let (ebag, ecol): (ftd::Map<ftd::p2::Thing>, _) = $t;
-        let (mut bag, col) =
-            ftd::ftd2021::test::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
-                .expect("found error");
+        let (ebag, ecol): (ftd::Map<ftd::ftd2021::p2::Thing>, _) = $t;
+        let (mut bag, col) = ftd::ftd2021::test::interpret(
+            "foo/bar",
+            indoc::indoc!($s),
+            &ftd::ftd2021::p2::TestLibrary {},
+        )
+        .expect("found error");
         for v in bag.values_mut() {
-            if let ftd::p2::Thing::Component(c) = v {
+            if let ftd::ftd2021::p2::Thing::Component(c) = v {
                 c.invocations.clear();
                 c.line_number = 0;
                 for instruction in &mut c.instructions {
@@ -112,7 +117,11 @@ macro_rules! intf {
         intf!($s, $m)
     };
     ($s:expr, $m: expr) => {
-        match ftd::ftd2021::test::interpret("foo", indoc::indoc!($s), &ftd::p2::TestLibrary {}) {
+        match ftd::ftd2021::test::interpret(
+            "foo",
+            indoc::indoc!($s),
+            &ftd::ftd2021::p2::TestLibrary {},
+        ) {
             Ok(some_value) => panic!("expected failure {:?}, found: {:?}", $m, some_value),
             Err(e) => {
                 let expected_error = $m.trim();
@@ -150,12 +159,12 @@ pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
     }
 }
 
-pub fn person_fields() -> ftd::Map<ftd::p2::Kind> {
+pub fn person_fields() -> ftd::Map<crate::ftd2021::p2::Kind> {
     std::iter::IntoIterator::into_iter([
-        (s("address"), ftd::p2::Kind::string()),
-        (s("bio"), ftd::p2::Kind::body()),
-        (s("age"), ftd::p2::Kind::integer()),
-        (s("name"), ftd::p2::Kind::caption()),
+        (s("address"), crate::ftd2021::p2::Kind::string()),
+        (s("bio"), crate::ftd2021::p2::Kind::body()),
+        (s("age"), crate::ftd2021::p2::Kind::integer()),
+        (s("name"), crate::ftd2021::p2::Kind::caption()),
     ])
     .collect()
 }
@@ -192,7 +201,7 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
         (
             s("age"),
             ftd::PropertyValue::Reference {
-                kind: ftd::p2::Kind::integer(),
+                kind: crate::ftd2021::p2::Kind::integer(),
                 name: s("foo/bar#x"),
             },
         ),
@@ -200,21 +209,21 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
     .collect()
 }
 
-pub fn entity() -> ftd::p2::Thing {
-    ftd::p2::Thing::OrType(ftd::OrType {
+pub fn entity() -> crate::ftd2021::p2::Thing {
+    crate::ftd2021::p2::Thing::OrType(ftd::OrType {
         name: s("foo/bar#entity"),
         variants: vec![
-            ftd::p2::Record {
+            crate::ftd2021::p2::Record {
                 name: s("foo/bar#entity.person"),
                 fields: person_fields(),
                 instances: Default::default(),
                 order: vec![s("name"), s("address"), s("bio"), s("age")],
             },
-            ftd::p2::Record {
+            crate::ftd2021::p2::Record {
                 name: s("foo/bar#entity.company"),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("industry"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("industry"), crate::ftd2021::p2::Kind::string()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -225,18 +234,22 @@ pub fn entity() -> ftd::p2::Thing {
 }
 
 mod interpreter {
-    use crate::p2;
-    use crate::p2::interpreter;
+    use crate::ftd2021::p2;
+    use crate::ftd2021::p2::interpreter;
     use ftd::ftd2021::test::*;
 
     /// inserts integer variable with the given value in the bag
-    fn insert_update_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+    fn insert_update_integer_by_root(
+        root: &str,
+        val: i64,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
+    ) {
         // root => [doc_id]#[var_name]@[level]
         // root_parts = [ doc_id , var_name, level ]
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
 
-        let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let integer_thing = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Integer { value: val },
@@ -257,15 +270,15 @@ mod interpreter {
     /// given kind with default value = None
     fn insert_update_default_optional_type_by_root(
         root: &str,
-        kind: ftd::p2::Kind,
-        bag: &mut ftd::Map<ftd::p2::Thing>,
+        kind: crate::ftd2021::p2::Kind,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
 
         let value = ftd::Value::default_optional_value_from_kind(kind);
 
-        let optional_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let optional_thing = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
             value: ftd::PropertyValue::Value { value },
             conditions: vec![],
@@ -282,8 +295,8 @@ mod interpreter {
 
     fn insert_update_default_optional_list_type_by_root(
         root: &str,
-        kind: ftd::p2::Kind,
-        bag: &mut ftd::Map<ftd::p2::Thing>,
+        kind: crate::ftd2021::p2::Kind,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
@@ -293,10 +306,10 @@ mod interpreter {
                 data: vec![],
                 kind: kind.clone(),
             })),
-            kind: ftd::p2::Kind::list(kind),
+            kind: crate::ftd2021::p2::Kind::list(kind),
         };
 
-        let optional_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let optional_thing = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
             value: ftd::PropertyValue::Value { value },
             conditions: vec![],
@@ -312,11 +325,15 @@ mod interpreter {
     }
 
     /// inserts decimal variable with the given value in the bag
-    fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+    fn insert_update_decimal_by_root(
+        root: &str,
+        value: f64,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
+    ) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
 
-        let decimal_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let decimal_thing = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Decimal { value },
@@ -338,12 +355,12 @@ mod interpreter {
         root: &str,
         val: &str,
         source_type: &str,
-        bag: &mut ftd::Map<ftd::p2::Thing>,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
 
-        let string_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let string_thing = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::String {
@@ -380,7 +397,7 @@ mod interpreter {
     fn insert_universal_variables_by_levels(
         levels: Vec<String>,
         doc_id: &str,
-        bag: &mut ftd::Map<ftd::p2::Thing>,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         let universal_arguments_vec = universal_arguments_as_vec();
 
@@ -390,28 +407,28 @@ mod interpreter {
                     if kind.inner().is_string_list() {
                         insert_update_default_optional_list_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
-                            ftd::p2::Kind::string(),
+                            crate::ftd2021::p2::Kind::string(),
                             bag,
                         );
                     }
                     if kind.inner().is_string() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
-                            ftd::p2::Kind::string(),
+                            crate::ftd2021::p2::Kind::string(),
                             bag,
                         );
                     }
                     if kind.inner().is_integer() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
-                            ftd::p2::Kind::integer(),
+                            crate::ftd2021::p2::Kind::integer(),
                             bag,
                         );
                     }
                     if kind.inner().is_decimal() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
-                            ftd::p2::Kind::decimal(),
+                            crate::ftd2021::p2::Kind::decimal(),
                             bag,
                         );
                     }
@@ -424,7 +441,7 @@ mod interpreter {
     fn insert_universal_variables_by_count(
         lim: i32,
         doc_id: &str,
-        bag: &mut ftd::Map<ftd::p2::Thing>,
+        bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
     ) {
         let mut count: i32 = 0;
         let universal_arguments_vec = universal_arguments_as_vec();
@@ -435,28 +452,28 @@ mod interpreter {
                     if kind.inner().is_string_list() {
                         insert_update_default_optional_list_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
-                            ftd::p2::Kind::string(),
+                            crate::ftd2021::p2::Kind::string(),
                             bag,
                         );
                     }
                     if kind.inner().is_string() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
-                            ftd::p2::Kind::string(),
+                            crate::ftd2021::p2::Kind::string(),
                             bag,
                         );
                     }
                     if kind.inner().is_integer() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
-                            ftd::p2::Kind::integer(),
+                            crate::ftd2021::p2::Kind::integer(),
                             bag,
                         );
                     }
                     if kind.inner().is_decimal() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
-                            ftd::p2::Kind::decimal(),
+                            crate::ftd2021::p2::Kind::decimal(),
                             bag,
                         );
                     }
@@ -471,7 +488,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: universal_arguments_as_map(),
@@ -494,7 +511,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -520,11 +537,11 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
                 arguments: [
-                    vec![(s("name"), ftd::p2::Kind::caption())],
+                    vec![(s("name"), crate::ftd2021::p2::Kind::caption())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -536,8 +553,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Reference {
                                 name: s("foo/bar#white"),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::Record {
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
@@ -547,10 +564,10 @@ mod interpreter {
                             }),
                             conditions: vec![
                                 (
-                                    ftd::p2::Boolean::Equal {
+                                    crate::ftd2021::p2::Boolean::Equal {
                                         left: ftd::PropertyValue::Reference {
                                             name: "foo/bar#present".to_string(),
-                                            kind: ftd::p2::Kind::boolean(),
+                                            kind: crate::ftd2021::p2::Kind::boolean(),
                                         },
                                         right: ftd::PropertyValue::Value {
                                             value: ftd::Value::Boolean { value: true },
@@ -558,8 +575,8 @@ mod interpreter {
                                     },
                                     ftd::PropertyValue::Reference {
                                         name: s("foo/bar#green"),
-                                        kind: ftd::p2::Kind::Optional {
-                                            kind: Box::new(ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Optional {
+                                            kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
                                                 is_reference: false,
@@ -569,10 +586,10 @@ mod interpreter {
                                     },
                                 ),
                                 (
-                                    ftd::p2::Boolean::Equal {
+                                    crate::ftd2021::p2::Boolean::Equal {
                                         left: ftd::PropertyValue::Reference {
                                             name: "foo/bar#present".to_string(),
-                                            kind: ftd::p2::Kind::boolean(),
+                                            kind: crate::ftd2021::p2::Kind::boolean(),
                                         },
                                         right: ftd::PropertyValue::Value {
                                             value: ftd::Value::Boolean { value: false },
@@ -580,8 +597,8 @@ mod interpreter {
                                     },
                                     ftd::PropertyValue::Reference {
                                         name: s("foo/bar#red"),
-                                        kind: ftd::p2::Kind::Optional {
-                                            kind: Box::new(ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Optional {
+                                            kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
                                                 is_reference: false,
@@ -599,7 +616,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "name".to_string(),
-                                kind: ftd::p2::Kind::caption_or_body(),
+                                kind: crate::ftd2021::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
                             ..Default::default()
@@ -613,7 +630,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#green"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("green"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -648,7 +665,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#red"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("red"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -683,7 +700,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#white"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("white"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -718,7 +735,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#name@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -733,7 +750,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#present".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "present".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -841,7 +858,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#ft_toc".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#ft_toc".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -1046,19 +1063,19 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#parent".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
                 arguments: [
                     vec![
                         (
                             s("active"),
-                            ftd::p2::Kind::Optional {
-                                kind: Box::new(ftd::p2::Kind::boolean()),
+                            crate::ftd2021::p2::Kind::Optional {
+                                kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                 is_reference: false,
                             },
                         ),
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -1071,8 +1088,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::string()),
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
                             }),
@@ -1111,11 +1128,11 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
-                            condition: Some(ftd::p2::Boolean::IsNotNull {
+                            condition: Some(crate::ftd2021::p2::Boolean::IsNotNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: ftd::p2::Kind::Optional {
-                                        kind: Box::new(ftd::p2::Kind::boolean()),
+                                    kind: crate::ftd2021::p2::Kind::Optional {
+                                        kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                         is_reference: false,
                                     },
                                 },
@@ -1126,8 +1143,8 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Reference {
                                             name: s("foo/bar#white"),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
@@ -1144,7 +1161,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: ftd::p2::Kind::caption_or_body(),
+                                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -1160,11 +1177,11 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
-                            condition: Some(ftd::p2::Boolean::IsNull {
+                            condition: Some(crate::ftd2021::p2::Boolean::IsNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: ftd::p2::Kind::Optional {
-                                        kind: Box::new(ftd::p2::Kind::boolean()),
+                                    kind: crate::ftd2021::p2::Kind::Optional {
+                                        kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                         is_reference: false,
                                     },
                                 },
@@ -1175,8 +1192,8 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Reference {
                                             name: s("foo/bar#4D4D4D"),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
@@ -1193,7 +1210,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: ftd::p2::Kind::caption_or_body(),
+                                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -1212,7 +1229,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#table-of-content".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -1235,8 +1252,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::string()),
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
                             }),
@@ -1267,11 +1284,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#toc-heading".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
                 arguments: [
-                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    vec![(s("text"), crate::ftd2021::p2::Kind::caption())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -1293,7 +1310,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "text".to_string(),
-                                kind: ftd::p2::Kind::caption_or_body(),
+                                kind: crate::ftd2021::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
                             ..Default::default()
@@ -1307,7 +1324,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#active@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: true },
@@ -1318,12 +1335,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -1332,12 +1349,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -1346,12 +1363,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -1360,7 +1377,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -1374,7 +1391,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -1388,7 +1405,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -1402,7 +1419,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -1417,7 +1434,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#4D4D4D"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("4D4D4D"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -1452,7 +1469,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#white"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("white"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -1897,7 +1914,7 @@ mod interpreter {
 
         bag.insert(
             "creating-a-tree#ft_toc".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#ft_toc".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -2101,20 +2118,20 @@ mod interpreter {
 
         bag.insert(
             "creating-a-tree#parent".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
                 arguments: [
                     vec![
                         (
                             s("active"),
-                            ftd::p2::Kind::Optional {
-                                kind: Box::new(ftd::p2::Kind::boolean()),
+                            crate::ftd2021::p2::Kind::Optional {
+                                kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                 is_reference: false,
                             },
                         ),
-                        (s("id"), ftd::p2::Kind::string()),
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("id"), crate::ftd2021::p2::Kind::string()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -2127,8 +2144,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::string()),
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
                             }),
@@ -2167,11 +2184,11 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
-                            condition: Some(ftd::p2::Boolean::IsNotNull {
+                            condition: Some(crate::ftd2021::p2::Boolean::IsNotNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: ftd::p2::Kind::Optional {
-                                        kind: Box::new(ftd::p2::Kind::boolean()),
+                                    kind: crate::ftd2021::p2::Kind::Optional {
+                                        kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                         is_reference: false,
                                     },
                                 },
@@ -2182,8 +2199,8 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Reference {
                                             name: s("creating-a-tree#white"),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
@@ -2200,7 +2217,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: ftd::p2::Kind::caption_or_body(),
+                                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -2216,11 +2233,11 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
-                            condition: Some(ftd::p2::Boolean::IsNull {
+                            condition: Some(crate::ftd2021::p2::Boolean::IsNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: ftd::p2::Kind::Optional {
-                                        kind: Box::new(ftd::p2::Kind::boolean()),
+                                    kind: crate::ftd2021::p2::Kind::Optional {
+                                        kind: Box::new(crate::ftd2021::p2::Kind::boolean()),
                                         is_reference: false,
                                     },
                                 },
@@ -2231,8 +2248,8 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Reference {
                                             name: s("creating-a-tree#4D4D4D"),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
@@ -2249,7 +2266,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: ftd::p2::Kind::caption_or_body(),
+                                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -2268,11 +2285,11 @@ mod interpreter {
 
         bag.insert(
             "creating-a-tree#table-of-content".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
                 arguments: [
-                    vec![(s("id"), ftd::p2::Kind::string())],
+                    vec![(s("id"), crate::ftd2021::p2::Kind::string())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -2297,8 +2314,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::string()),
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
                             }),
@@ -2329,11 +2346,11 @@ mod interpreter {
 
         bag.insert(
             "creating-a-tree#toc-heading".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
                 arguments: [
-                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    vec![(s("text"), crate::ftd2021::p2::Kind::caption())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -2344,7 +2361,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "text".to_string(),
-                            kind: ftd::p2::Kind::caption_or_body(),
+                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
                         ..Default::default()
@@ -2356,7 +2373,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: true },
@@ -2367,12 +2384,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -2381,12 +2398,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -2395,12 +2412,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::boolean(),
+                        kind: crate::ftd2021::p2::Kind::boolean(),
                     },
                 },
                 conditions: vec![],
@@ -2409,7 +2426,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#id@0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2423,7 +2440,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#id@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2437,7 +2454,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#id@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2451,7 +2468,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#id@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2465,7 +2482,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#id@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2479,7 +2496,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2493,7 +2510,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2507,7 +2524,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2521,7 +2538,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -2535,7 +2552,7 @@ mod interpreter {
         );
         bag.insert(
             s("creating-a-tree#4D4D4D"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("4D4D4D"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -2570,7 +2587,7 @@ mod interpreter {
 
         bag.insert(
             s("creating-a-tree#white"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("white"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -2953,7 +2970,7 @@ mod interpreter {
 
         bag.insert(
             s("reference#f3f3f3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("f3f3f3"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -2988,7 +3005,7 @@ mod interpreter {
 
         bag.insert(
             "fifthtry/ft#dark-mode".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "dark-mode".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3000,7 +3017,7 @@ mod interpreter {
 
         bag.insert(
             "fifthtry/ft#toc".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "toc".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3015,11 +3032,11 @@ mod interpreter {
 
         bag.insert(
             "fifthtry/ft#markdown".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 arguments: [
-                    vec![(s("body"), ftd::p2::Kind::body())],
+                    vec![(s("body"), crate::ftd2021::p2::Kind::body())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -3030,7 +3047,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "body".to_string(),
-                            kind: ftd::p2::Kind::caption_or_body(),
+                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
                         ..Default::default()
@@ -3043,7 +3060,7 @@ mod interpreter {
 
         bag.insert(
             "reference#name".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3058,7 +3075,7 @@ mod interpreter {
 
         bag.insert(
             "reference#test-component".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "reference#test-component".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -3068,8 +3085,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Reference {
                                 name: s("reference#f3f3f3"),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::Record {
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
@@ -3107,7 +3124,7 @@ mod interpreter {
                             ftd::ftd2021::component::Property {
                                 default: Some(ftd::PropertyValue::Reference {
                                     name: "reference#name".to_string(),
-                                    kind: ftd::p2::Kind::caption_or_body(),
+                                    kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
                                 ..Default::default()
@@ -3198,11 +3215,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
                 arguments: [
-                    vec![(s("name"), ftd::p2::Kind::caption_or_body())],
+                    vec![(s("name"), crate::ftd2021::p2::Kind::caption_or_body())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -3213,7 +3230,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "name".to_string(),
-                            kind: ftd::p2::Kind::caption_or_body(),
+                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
                         ..Default::default()
@@ -3252,7 +3269,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#name@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3266,7 +3283,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#name@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3280,7 +3297,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#name@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3346,7 +3363,7 @@ mod interpreter {
                 yo yo
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -3469,7 +3486,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             "foo/bar#numbers".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#numbers".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3482,7 +3499,7 @@ mod interpreter {
                                 value: ftd::Value::Integer { value: 30 },
                             },
                         ],
-                        kind: ftd::p2::Kind::integer(),
+                        kind: crate::ftd2021::p2::Kind::integer(),
                     },
                 },
                 conditions: vec![],
@@ -3505,11 +3522,11 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             "foo/bar#point".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#point".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("x"), ftd::p2::Kind::integer()),
-                    (s("y"), ftd::p2::Kind::integer()),
+                    (s("x"), crate::ftd2021::p2::Kind::integer()),
+                    (s("y"), crate::ftd2021::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -3519,7 +3536,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#points".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#points".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3566,7 +3583,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#point"),
                             default: None,
                             is_reference: false,
@@ -3603,7 +3620,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             "foo/bar#numbers".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#numbers".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3617,7 +3634,7 @@ mod interpreter {
                             },
                             // TODO: third element
                         ],
-                        kind: ftd::p2::Kind::integer(),
+                        kind: crate::ftd2021::p2::Kind::integer(),
                     },
                 },
                 conditions: vec![],
@@ -3625,7 +3642,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3650,18 +3667,18 @@ mod interpreter {
         );
     }
 
-    fn white_two_image_bag(about_optional: bool) -> ftd::Map<ftd::p2::Thing> {
+    fn white_two_image_bag(about_optional: bool) -> ftd::Map<crate::ftd2021::p2::Thing> {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#white-two-image"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#white-two-image".to_string(),
                 root: s("ftd#column"),
                 arguments: [
                     vec![
                         (s("about"), {
-                            let s = ftd::p2::Kind::body();
+                            let s = crate::ftd2021::p2::Kind::body();
                             if about_optional {
                                 s.into_optional()
                             } else {
@@ -3669,7 +3686,7 @@ mod interpreter {
                             }
                         }),
                         (s("src"), {
-                            let s = ftd::p2::Kind::Record {
+                            let s = crate::ftd2021::p2::Kind::Record {
                                 name: s("ftd#image-src"),
                                 default: None,
                                 is_reference: false,
@@ -3680,7 +3697,7 @@ mod interpreter {
                                 s
                             }
                         }),
-                        (s("title"), ftd::p2::Kind::caption()),
+                        (s("title"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -3711,7 +3728,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: s("title"),
-                                            kind: ftd::p2::Kind::caption_or_body(),
+                                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -3739,10 +3756,10 @@ mod interpreter {
                         child: ftd::ChildComponent {
                             events: vec![],
                             condition: if about_optional {
-                                Some(ftd::p2::Boolean::IsNotNull {
+                                Some(crate::ftd2021::p2::Boolean::IsNotNull {
                                     value: ftd::PropertyValue::Variable {
                                         name: s("about"),
-                                        kind: ftd::p2::Kind::body().into_optional(),
+                                        kind: crate::ftd2021::p2::Kind::body().into_optional(),
                                     },
                                 })
                             } else {
@@ -3754,7 +3771,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("about"),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -3768,10 +3785,10 @@ mod interpreter {
                         child: ftd::ChildComponent {
                             events: vec![],
                             condition: if about_optional {
-                                Some(ftd::p2::Boolean::IsNotNull {
+                                Some(crate::ftd2021::p2::Boolean::IsNotNull {
                                     value: ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
                                             is_reference: false,
@@ -3788,7 +3805,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
                                             is_reference: false,
@@ -3874,7 +3891,7 @@ mod interpreter {
         let mut bag = white_two_image_bag(false);
         bag.insert(
             "foo/bar#about@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3888,7 +3905,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src0".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -3922,12 +3939,12 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src0"),
-                    kind: ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
                         is_reference: false,
@@ -3938,7 +3955,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4111,7 +4128,7 @@ mod interpreter {
         let mut bag = white_two_image_bag(true);
         bag.insert(
             "foo/bar#src0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src0".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4145,7 +4162,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src1".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4180,7 +4197,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#about@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4194,13 +4211,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#about@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::body(),
+                        kind: crate::ftd2021::p2::Kind::body(),
                     },
                 },
                 conditions: vec![],
@@ -4208,13 +4225,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src0"),
-                    kind: ftd::p2::Kind::Optional {
-                        kind: Box::new(ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Optional {
+                        kind: Box::new(crate::ftd2021::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
@@ -4227,13 +4244,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src1"),
-                    kind: ftd::p2::Kind::Optional {
-                        kind: Box::new(ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Optional {
+                        kind: Box::new(crate::ftd2021::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
@@ -4246,7 +4263,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4260,7 +4277,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4496,7 +4513,7 @@ mod interpreter {
         let mut bag = white_two_image_bag(true);
         bag.insert(
             "foo/bar#src0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src0".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4530,7 +4547,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src1".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4564,7 +4581,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#about@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4578,13 +4595,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#about@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::body(),
+                        kind: crate::ftd2021::p2::Kind::body(),
                     },
                 },
                 conditions: vec![],
@@ -4592,13 +4609,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#about@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "about".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::body(),
+                        kind: crate::ftd2021::p2::Kind::body(),
                     },
                 },
                 conditions: vec![],
@@ -4606,13 +4623,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src0"),
-                    kind: ftd::p2::Kind::Optional {
-                        kind: Box::new(ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Optional {
+                        kind: Box::new(crate::ftd2021::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
@@ -4625,13 +4642,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src1"),
-                    kind: ftd::p2::Kind::Optional {
-                        kind: Box::new(ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Optional {
+                        kind: Box::new(crate::ftd2021::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
@@ -4644,13 +4661,13 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
@@ -4662,7 +4679,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4676,7 +4693,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4690,7 +4707,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#title@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -4754,12 +4771,12 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("fifthtry/ft#markdown"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 root: s("ftd#text"),
                 arguments: [
-                    vec![(s("body"), ftd::p2::Kind::body())],
+                    vec![(s("body"), crate::ftd2021::p2::Kind::body())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -4770,7 +4787,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: s("body"),
-                            kind: ftd::p2::Kind::string().string_any(),
+                            kind: crate::ftd2021::p2::Kind::string().string_any(),
                         }),
                         conditions: vec![],
                         ..Default::default()
@@ -4782,7 +4799,7 @@ mod interpreter {
         );
         bag.insert(
             s("fifthtry/ft#dark-mode"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("dark-mode"),
                 value: ftd::PropertyValue::Value {
@@ -4793,7 +4810,7 @@ mod interpreter {
         );
         bag.insert(
             s("fifthtry/ft#toc"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("toc"),
                 value: ftd::PropertyValue::Value {
@@ -4807,14 +4824,14 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#h0"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
                 root: s("ftd#column"),
                 arguments: [
                     vec![
-                        (s("body"), ftd::p2::Kind::body().into_optional()),
-                        (s("title"), ftd::p2::Kind::caption()),
+                        (s("body"), crate::ftd2021::p2::Kind::body().into_optional()),
+                        (s("title"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -4832,7 +4849,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("title"),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -4845,10 +4862,10 @@ mod interpreter {
                     ftd::Instruction::ChildComponent {
                         child: ftd::ChildComponent {
                             events: vec![],
-                            condition: Some(ftd::p2::Boolean::IsNotNull {
+                            condition: Some(crate::ftd2021::p2::Boolean::IsNotNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: s("body"),
-                                    kind: ftd::p2::Kind::body().into_optional(),
+                                    kind: crate::ftd2021::p2::Kind::body().into_optional(),
                                 },
                             }),
                             root: s("fifthtry/ft#markdown"),
@@ -4857,7 +4874,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("body"),
-                                        kind: ftd::p2::Kind::body(),
+                                        kind: crate::ftd2021::p2::Kind::body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -4873,7 +4890,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#body@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("body"),
                 value: ftd::PropertyValue::Value {
@@ -4887,25 +4904,25 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#body@0,1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("body"),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#body@0".to_string(),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#body@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("body"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::body(),
+                        kind: crate::ftd2021::p2::Kind::body(),
                     },
                 },
                 conditions: vec![],
@@ -4913,19 +4930,19 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#body@1,1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("body"),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#body@1".to_string(),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#title@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("title"),
                 value: ftd::PropertyValue::Value {
@@ -4939,7 +4956,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#title@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("title"),
                 value: ftd::PropertyValue::Value {
@@ -5055,12 +5072,12 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#src@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src0"),
-                    kind: ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
                         is_reference: false,
@@ -5071,12 +5088,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#src@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#src1"),
-                    kind: ftd::p2::Kind::Record {
+                    kind: crate::ftd2021::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
                         is_reference: false,
@@ -5087,13 +5104,13 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#width@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("width"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::string(),
+                        kind: crate::ftd2021::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -5101,7 +5118,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#width@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("width"),
                 value: ftd::PropertyValue::Value {
@@ -5115,7 +5132,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#src0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src0".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -5150,7 +5167,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#src1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src1".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -5185,16 +5202,19 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#image"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
                 root: s("ftd#column"),
                 arguments: [
                     vec![
-                        (s("width"), ftd::p2::Kind::string().into_optional()),
+                        (
+                            s("width"),
+                            crate::ftd2021::p2::Kind::string().into_optional(),
+                        ),
                         (
                             s("src"),
-                            ftd::p2::Kind::Record {
+                            crate::ftd2021::p2::Kind::Record {
                                 name: s("ftd#image-src"),
                                 default: None,
                                 is_reference: false,
@@ -5217,7 +5237,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
                                             is_reference: false,
@@ -5232,7 +5252,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("width"),
-                                        kind: ftd::p2::Kind::string().into_optional(),
+                                        kind: crate::ftd2021::p2::Kind::string().into_optional(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -5322,7 +5342,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#row".to_string(),
                 instructions: vec![
@@ -5381,7 +5401,7 @@ mod interpreter {
                     },
                 ],
                 arguments: [
-                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    vec![(s("x"), crate::ftd2021::p2::Kind::integer())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -5392,7 +5412,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#x@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -5447,7 +5467,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#x@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -5459,7 +5479,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#row".to_string(),
                 instructions: vec![
@@ -5518,7 +5538,7 @@ mod interpreter {
                     },
                 ],
                 arguments: [
-                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    vec![(s("x"), crate::ftd2021::p2::Kind::integer())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -5574,7 +5594,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#row".to_string(),
                 instructions: vec![
@@ -5674,7 +5694,7 @@ mod interpreter {
                     },
                 ],
                 arguments: [
-                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    vec![(s("x"), crate::ftd2021::p2::Kind::integer())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -5685,7 +5705,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#x@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -6022,7 +6042,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -6188,7 +6208,7 @@ mod interpreter {
 
         bag.insert(
             "inner_container#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "inner_container#foo".to_string(),
                 arguments: universal_arguments_as_map(),
@@ -6388,7 +6408,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: universal_arguments_as_map(),
@@ -6605,7 +6625,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#desktop-display"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
                 arguments: universal_arguments_as_map(),
@@ -6614,8 +6634,8 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "id".to_string(),
-                            kind: ftd::p2::Kind::Optional {
-                                kind: Box::new(ftd::p2::Kind::string()),
+                            kind: crate::ftd2021::p2::Kind::Optional {
+                                kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                 is_reference: false,
                             },
                         }),
@@ -6653,7 +6673,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: universal_arguments_as_map(),
@@ -6689,10 +6709,10 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#mobile-display".to_string(),
-                            condition: Some(ftd::p2::Boolean::Equal {
+                            condition: Some(crate::ftd2021::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean {
+                                    kind: crate::ftd2021::p2::Kind::Boolean {
                                         default: None,
                                         is_reference: false,
                                     },
@@ -6723,10 +6743,10 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#desktop-display".to_string(),
-                            condition: Some(ftd::p2::Boolean::Equal {
+                            condition: Some(crate::ftd2021::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean {
+                                    kind: crate::ftd2021::p2::Kind::Boolean {
                                         default: None,
                                         is_reference: false,
                                     },
@@ -6759,7 +6779,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#mobile"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("mobile"),
                 value: ftd::PropertyValue::Value {
@@ -6771,7 +6791,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#mobile-display"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
                 arguments: universal_arguments_as_map(),
@@ -6780,8 +6800,8 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "id".to_string(),
-                            kind: ftd::p2::Kind::Optional {
-                                kind: Box::new(ftd::p2::Kind::string()),
+                            kind: crate::ftd2021::p2::Kind::Optional {
+                                kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                 is_reference: false,
                             },
                         }),
@@ -6834,7 +6854,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#id@1,0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -6843,7 +6863,7 @@ mod interpreter {
                             text: s("some-child"),
                             source: ftd::TextSource::Header,
                         })),
-                        kind: ftd::p2::Kind::string(),
+                        kind: crate::ftd2021::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -6852,7 +6872,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#id@1,0,0,1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -6861,7 +6881,7 @@ mod interpreter {
                             text: s("some-child"),
                             source: ftd::TextSource::Header,
                         })),
-                        kind: ftd::p2::Kind::string(),
+                        kind: crate::ftd2021::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -7076,7 +7096,7 @@ mod interpreter {
                 -- ftd.text: hello again
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -7205,7 +7225,7 @@ mod interpreter {
                 -- ftd.text: hello again
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -7431,7 +7451,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -7573,7 +7593,7 @@ mod interpreter {
                 -- ftd.text: hello again
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -7666,7 +7686,7 @@ mod interpreter {
                 open: false
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -7697,7 +7717,7 @@ mod interpreter {
                 submit: https://httpbin.org/post?x=10
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -7811,13 +7831,13 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: [
                     vec![
-                        (s("body"), ftd::p2::Kind::string()),
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("body"), crate::ftd2021::p2::Kind::string()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -7836,7 +7856,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -7857,7 +7877,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -7874,7 +7894,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#get".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "get".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -7889,7 +7909,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#name".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -7904,7 +7924,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#people".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -7928,7 +7948,7 @@ mod interpreter {
                                             s("name"),
                                             ftd::PropertyValue::Reference {
                                                 name: "foo/bar#name".to_string(),
-                                                kind: ftd::p2::Kind::caption(),
+                                                kind: crate::ftd2021::p2::Kind::caption(),
                                             },
                                         ),
                                     ])
@@ -7962,7 +7982,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
                             is_reference: false,
@@ -7975,7 +7995,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -7995,7 +8015,7 @@ mod interpreter {
                                 s("name"),
                                 ftd::PropertyValue::Reference {
                                     name: "foo/bar#name".to_string(),
-                                    kind: ftd::p2::Kind::caption(),
+                                    kind: crate::ftd2021::p2::Kind::caption(),
                                 },
                             ),
                         ])
@@ -8007,7 +8027,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8041,43 +8061,43 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#body@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#get"),
-                    kind: ftd::p2::Kind::string(),
+                    kind: crate::ftd2021::p2::Kind::string(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#body@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@1.bio"),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#body@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@2.bio"),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#name@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8091,24 +8111,24 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#name@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@1.name"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#name@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@2.name"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
             }),
@@ -8116,11 +8136,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("bio"), ftd::p2::Kind::body()),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("bio"), crate::ftd2021::p2::Kind::body()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -8251,13 +8271,13 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: [
                     vec![
-                        (s("body"), ftd::p2::Kind::string()),
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("body"), crate::ftd2021::p2::Kind::string()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -8276,7 +8296,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -8297,7 +8317,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -8314,7 +8334,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#people".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8386,7 +8406,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
                             is_reference: false,
@@ -8399,12 +8419,12 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("bio"), ftd::p2::Kind::body()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                    (s("ceo"), ftd::p2::Kind::boolean()),
+                    (s("bio"), crate::ftd2021::p2::Kind::body()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
+                    (s("ceo"), crate::ftd2021::p2::Kind::boolean()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -8414,7 +8434,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#$loop$@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -8455,7 +8475,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#$loop$@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -8496,11 +8516,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#body@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#$loop$@0.bio".to_string(),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -8509,11 +8529,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#body@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#$loop$@1.bio".to_string(),
-                    kind: ftd::p2::Kind::body(),
+                    kind: crate::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -8522,11 +8542,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#name@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#$loop$@0.name".to_string(),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -8535,11 +8555,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#name@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: "foo/bar#$loop$@1.name".to_string(),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -8640,7 +8660,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8654,7 +8674,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8668,7 +8688,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8682,7 +8702,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@3".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8707,7 +8727,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#people".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8732,7 +8752,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::string(),
+                        kind: crate::ftd2021::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -8754,7 +8774,7 @@ mod interpreter {
                 $loop$: $people as $obj
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -8838,12 +8858,12 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("body"), crate::ftd2021::p2::Kind::string()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
@@ -8858,7 +8878,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -8879,7 +8899,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -8932,7 +8952,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#people".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -8992,7 +9012,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
                             is_reference: true,
@@ -9005,11 +9025,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("bio"), ftd::p2::Kind::body()),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("bio"), crate::ftd2021::p2::Kind::body()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -9050,7 +9070,7 @@ mod interpreter {
                 body: $obj.bio
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         // pretty_assertions::assert_eq!(g_bag, bag);
@@ -9082,7 +9102,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#test".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9105,7 +9125,7 @@ mod interpreter {
                 -- ftd.text: $test
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -9137,7 +9157,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "test".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9162,7 +9182,7 @@ mod interpreter {
                 -- ftd.text: $test
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -9287,7 +9307,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#test".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9342,7 +9362,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::string(),
+                        kind: crate::ftd2021::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -9351,7 +9371,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9366,7 +9386,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9381,7 +9401,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@2".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9396,7 +9416,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#$loop$@3".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9410,7 +9430,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@4".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9424,7 +9444,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@5".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9438,7 +9458,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@6".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9452,7 +9472,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@7".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9466,7 +9486,7 @@ mod interpreter {
         );
         bag.insert(
             "foo/bar#$loop$@8".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -9510,7 +9530,7 @@ mod interpreter {
                 $loop$: $test as $obj
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -9779,11 +9799,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#data".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "foo/bar#data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("description"), ftd::p2::Kind::string()),
-                    (s("title"), ftd::p2::Kind::string()),
+                    (s("description"), ftd::ftd2021::p2::Kind::string()),
+                    (s("title"), ftd::ftd2021::p2::Kind::string()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -9793,12 +9813,12 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            ftd::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("body"), ftd::ftd2021::p2::Kind::string()),
+                    (s("name"), ftd::ftd2021::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
@@ -9813,7 +9833,7 @@ mod interpreter {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: ftd::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -9834,7 +9854,7 @@ mod interpreter {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: ftd::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -9851,7 +9871,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "foo/bar#test".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -10068,7 +10088,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: ftd::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#data"),
                             default: None,
                         },
@@ -10102,7 +10122,7 @@ mod interpreter {
                 body: $obj.description
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -10240,7 +10260,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#aa"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("foo/bar#aa"),
                 value: ftd::PropertyValue::Value {
@@ -10255,7 +10275,7 @@ mod interpreter {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::ftd2021::variable::Value::List {
                                                     data: vec![],
-                                                    kind: ftd::p2::Kind::Record {
+                                                    kind: crate::ftd2021::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
                                                         is_reference: true,
@@ -10294,7 +10314,7 @@ mod interpreter {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::ftd2021::variable::Value::List {
                                                     data: vec![],
-                                                    kind: ftd::p2::Kind::Record {
+                                                    kind: crate::ftd2021::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
                                                         is_reference: true,
@@ -10325,7 +10345,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
                             is_reference: true,
@@ -10338,7 +10358,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#toc"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("foo/bar#toc"),
                 value: ftd::PropertyValue::Value {
@@ -10360,7 +10380,7 @@ mod interpreter {
                                                                 ftd::PropertyValue::Value {
                                                                     value: ftd::ftd2021::variable::Value::List {
                                                                         data: vec![],
-                                                                        kind: ftd::p2::Kind::Record {
+                                                                        kind: crate::ftd2021::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
                                                                             is_reference: true,
@@ -10397,7 +10417,7 @@ mod interpreter {
                                                                 ftd::PropertyValue::Value {
                                                                     value: ftd::ftd2021::variable::Value::List {
                                                                         data: vec![],
-                                                                        kind: ftd::p2::Kind::Record {
+                                                                        kind: crate::ftd2021::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
                                                                             is_reference: true,
@@ -10427,7 +10447,7 @@ mod interpreter {
                                                             .collect(),
                                                     }},
                                                 ],
-                                                kind: ftd::p2::Kind::Record {
+                                                kind: crate::ftd2021::p2::Kind::Record {
                                                     name: s("foo/bar#toc-record"),
                                                     default: None,
                                                     is_reference: true,
@@ -10457,7 +10477,7 @@ mod interpreter {
                                     .collect(),
                             },
                         }],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
                             is_reference: true,
@@ -10470,12 +10490,12 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#toc"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#toc-item".to_string(),
                 arguments: std::iter::IntoIterator::into_iter([(
                     s("toc"),
-                    ftd::p2::Kind::Record {
+                    crate::ftd2021::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
                         default: None,
                         is_reference: true,
@@ -10494,8 +10514,8 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.link".to_string(),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::string()),
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                                 is_reference: false,
                                             },
                                         }),
@@ -10508,8 +10528,10 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.title".to_string(),
-                                            kind: ftd::p2::Kind::Optional {
-                                                kind: Box::new(ftd::p2::Kind::caption_or_body()),
+                                            kind: crate::ftd2021::p2::Kind::Optional {
+                                                kind: Box::new(
+                                                    crate::ftd2021::p2::Kind::caption_or_body(),
+                                                ),
                                                 is_reference: false,
                                             },
                                         }),
@@ -10534,7 +10556,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.children".to_string(),
-                                            kind: ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
                                                 is_reference: true,
@@ -10549,7 +10571,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "$loop$".to_string(),
-                                            kind: ftd::p2::Kind::Record {
+                                            kind: crate::ftd2021::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
                                                 is_reference: true,
@@ -10618,7 +10640,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -10649,7 +10671,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("hello-world#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("hello-world#foo"),
                 arguments: universal_arguments_as_map(),
@@ -10663,7 +10685,7 @@ mod interpreter {
                             ftd::ftd2021::component::Property {
                                 default: Some(ftd::PropertyValue::Reference {
                                     name: "hello-world-variable#hello-world".to_string(),
-                                    kind: ftd::p2::Kind::caption_or_body(),
+                                    kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
                                 ..Default::default()
@@ -10679,7 +10701,7 @@ mod interpreter {
         );
         bag.insert(
             s("hello-world-variable#hello-world"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("hello-world"),
                 value: ftd::PropertyValue::Value {
@@ -10768,18 +10790,18 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#foo"),
                 arguments: [
                     vec![
                         (
                             s("name"),
-                            ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
+                            crate::ftd2021::p2::Kind::caption().set_default(Some(s("hello world"))),
                         ),
                         (
                             s("line-clamp"),
-                            ftd::p2::Kind::Integer {
+                            crate::ftd2021::p2::Kind::Integer {
                                 default: Some(s("10")),
                                 is_reference: false,
                             },
@@ -10796,8 +10818,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: s("line-clamp"),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::from(ftd::p2::Kind::Integer {
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::from(crate::ftd2021::p2::Kind::Integer {
                                         default: Some(s("10")),
                                         is_reference: false,
                                     }),
@@ -10813,7 +10835,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: s("name"),
-                                kind: ftd::p2::Kind::caption_or_body()
+                                kind: crate::ftd2021::p2::Kind::caption_or_body()
                                     .set_default(Some(s("hello world"))),
                             }),
                             conditions: vec![],
@@ -10863,7 +10885,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -10877,7 +10899,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -10891,7 +10913,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -10905,7 +10927,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#line-clamp@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 10 },
@@ -10916,7 +10938,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#line-clamp@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 10 },
@@ -10927,7 +10949,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#line-clamp@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 20 },
@@ -10954,7 +10976,7 @@ mod interpreter {
                 line-clamp: 20
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -10973,7 +10995,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#abrar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("abrar"),
                 value: ftd::PropertyValue::Value {
@@ -10993,7 +11015,7 @@ mod interpreter {
                                 s("age"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#default-age"),
-                                    kind: ftd::p2::Kind::Integer {
+                                    kind: crate::ftd2021::p2::Kind::Integer {
                                         default: Some(s("$foo/bar#default-age")),
                                         is_reference: false,
                                     },
@@ -11012,7 +11034,7 @@ mod interpreter {
                                 s("name"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#abrar-name"),
-                                    kind: ftd::p2::Kind::caption(),
+                                    kind: crate::ftd2021::p2::Kind::caption(),
                                 },
                             ),
                             (
@@ -11030,7 +11052,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#abrar-name"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("abrar-name"),
                 value: ftd::PropertyValue::Value {
@@ -11044,7 +11066,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#default-age"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("default-age"),
                 value: ftd::PropertyValue::Value {
@@ -11055,28 +11077,28 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#person"),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#person"),
                 fields: std::iter::IntoIterator::into_iter([
                     (
                         s("address"),
-                        ftd::p2::Kind::string().set_default(Some(s("Bihar"))),
+                        crate::ftd2021::p2::Kind::string().set_default(Some(s("Bihar"))),
                     ),
                     (
                         s("age"),
-                        ftd::p2::Kind::Integer {
+                        crate::ftd2021::p2::Kind::Integer {
                             default: Some(s("$foo/bar#default-age")),
                             is_reference: false,
                         },
                     ),
                     (
                         s("bio"),
-                        ftd::p2::Kind::body().set_default(Some(s("Some Bio"))),
+                        crate::ftd2021::p2::Kind::body().set_default(Some(s("Some Bio"))),
                     ),
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                     (
                         s("size"),
-                        ftd::p2::Kind::Integer {
+                        crate::ftd2021::p2::Kind::Integer {
                             default: Some(s("10")),
                             is_reference: false,
                         },
@@ -11127,7 +11149,7 @@ mod interpreter {
                 line-clamp: $abrar.age
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -11176,7 +11198,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#default-name"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("default-name"),
                 value: ftd::PropertyValue::Value {
@@ -11190,7 +11212,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#default-size"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("default-size"),
                 value: ftd::PropertyValue::Value {
@@ -11201,18 +11223,19 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("foo/bar#foo"),
                 arguments: [
                     vec![
                         (
                             s("name"),
-                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
+                            crate::ftd2021::p2::Kind::string()
+                                .set_default(Some(s("$foo/bar#default-name"))),
                         ),
                         (
                             s("text-size"),
-                            ftd::p2::Kind::Integer {
+                            crate::ftd2021::p2::Kind::Integer {
                                 default: Some(s("$foo/bar#default-size")),
                                 is_reference: false,
                             },
@@ -11234,8 +11257,8 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("text-size"),
-                                        kind: ftd::p2::Kind::Optional {
-                                            kind: Box::new(ftd::p2::Kind::Integer {
+                                        kind: crate::ftd2021::p2::Kind::Optional {
+                                            kind: Box::new(crate::ftd2021::p2::Kind::Integer {
                                                 default: Some(s("$foo/bar#default-size")),
                                                 is_reference: false,
                                             }),
@@ -11251,7 +11274,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("name"),
-                                        kind: ftd::p2::Kind::caption_or_body()
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$foo/bar#default-name"))),
                                     }),
                                     conditions: vec![],
@@ -11269,11 +11292,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#default-name"),
-                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
+                    kind: crate::ftd2021::p2::Kind::string()
+                        .set_default(Some(s("$foo/bar#default-name"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -11281,7 +11305,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -11295,11 +11319,12 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#text-size@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("text-size"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#default-size"),
-                    kind: ftd::p2::Kind::integer().set_default(Some(s("$foo/bar#default-size"))),
+                    kind: crate::ftd2021::p2::Kind::integer()
+                        .set_default(Some(s("$foo/bar#default-size"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -11307,7 +11332,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#text-size@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("text-size"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 20 },
@@ -11400,7 +11425,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#acme"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("acme"),
                 value: ftd::PropertyValue::Value {
@@ -11450,7 +11475,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#amitu"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("amitu"),
                 value: ftd::PropertyValue::Value {
@@ -11471,7 +11496,7 @@ mod interpreter {
                                 s("phone"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#default-phone"),
-                                    kind: ftd::p2::Kind::string()
+                                    kind: crate::ftd2021::p2::Kind::string()
                                         .set_default(Some(s("$foo/bar#default-phone"))),
                                 },
                             ),
@@ -11484,7 +11509,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#default-phone"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("default-phone"),
                 value: ftd::PropertyValue::Value {
@@ -11498,16 +11523,16 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#lead"),
-            ftd::p2::Thing::OrType(ftd::OrType {
+            crate::ftd2021::p2::Thing::OrType(ftd::OrType {
                 name: s("foo/bar#lead"),
                 variants: vec![
-                    ftd::p2::Record {
+                    crate::ftd2021::p2::Record {
                         name: s("foo/bar#lead.individual"),
                         fields: std::iter::IntoIterator::into_iter([
-                            (s("name"), ftd::p2::Kind::caption()),
+                            (s("name"), crate::ftd2021::p2::Kind::caption()),
                             (
                                 s("phone"),
-                                ftd::p2::Kind::string()
+                                crate::ftd2021::p2::Kind::string()
                                     .set_default(Some(s("$foo/bar#default-phone"))),
                             ),
                         ])
@@ -11515,18 +11540,18 @@ mod interpreter {
                         instances: Default::default(),
                         order: vec![s("name"), s("phone")],
                     },
-                    ftd::p2::Record {
+                    crate::ftd2021::p2::Record {
                         name: s("foo/bar#lead.company"),
                         fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("contact"),
-                                ftd::p2::Kind::string().set_default(Some(s("1001"))),
+                                crate::ftd2021::p2::Kind::string().set_default(Some(s("1001"))),
                             ),
-                            (s("fax"), ftd::p2::Kind::string()),
-                            (s("name"), ftd::p2::Kind::caption()),
+                            (s("fax"), crate::ftd2021::p2::Kind::string()),
+                            (s("name"), crate::ftd2021::p2::Kind::caption()),
                             (
                                 s("no-of-employees"),
-                                ftd::p2::Kind::integer().set_default(Some(s("50"))),
+                                crate::ftd2021::p2::Kind::integer().set_default(Some(s("50"))),
                             ),
                         ])
                         .collect(),
@@ -11570,7 +11595,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -11730,7 +11755,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12010,7 +12035,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12096,7 +12121,7 @@ mod interpreter {
                 $on-click$: toggle $mobile
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12139,15 +12164,15 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 arguments: [
                     vec![
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                         (
                             s("open"),
-                            ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                            crate::ftd2021::p2::Kind::boolean().set_default(Some(s("true"))),
                         ),
                     ],
                     universal_arguments_as_vec(),
@@ -12160,7 +12185,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: s("name"),
-                            kind: ftd::p2::Kind::String {
+                            kind: crate::ftd2021::p2::Kind::String {
                                 caption: true,
                                 body: true,
                                 default: None,
@@ -12172,21 +12197,21 @@ mod interpreter {
                 )])
                 .collect(),
                 instructions: vec![],
-                events: vec![ftd::p2::Event {
-                    name: ftd::p2::EventName::OnClick,
-                    action: ftd::p2::Action {
-                        action: ftd::p2::ActionKind::Toggle,
+                events: vec![crate::ftd2021::p2::Event {
+                    name: crate::ftd2021::p2::EventName::OnClick,
+                    action: crate::ftd2021::p2::Action {
+                        action: crate::ftd2021::p2::ActionKind::Toggle,
                         target: ftd::PropertyValue::Variable {
                             name: s("open"),
-                            kind: ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                            kind: crate::ftd2021::p2::Kind::boolean().set_default(Some(s("true"))),
                         },
                         parameters: Default::default(),
                     },
                 }],
-                condition: Some(ftd::p2::Boolean::Equal {
+                condition: Some(crate::ftd2021::p2::Boolean::Equal {
                     left: ftd::PropertyValue::Variable {
                         name: s("open"),
-                        kind: ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                        kind: crate::ftd2021::p2::Kind::boolean().set_default(Some(s("true"))),
                     },
                     right: ftd::PropertyValue::Value {
                         value: ftd::ftd2021::variable::Value::Boolean { value: true },
@@ -12210,7 +12235,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#name@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -12224,7 +12249,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#open@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("open"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: true },
@@ -12250,7 +12275,7 @@ mod interpreter {
                 -- foo: Hello
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12333,7 +12358,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12474,7 +12499,7 @@ mod interpreter {
                 toc: $obj
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12588,7 +12613,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -12624,7 +12649,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12666,7 +12691,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12697,7 +12722,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12832,7 +12857,7 @@ mod interpreter {
                 /-- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -12919,7 +12944,7 @@ mod interpreter {
                 --- ftd.text: $greeting
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13121,7 +13146,7 @@ mod interpreter {
                 $on-click$: decrement $count clamp 2 10
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -13220,7 +13245,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -13263,7 +13288,7 @@ mod interpreter {
                 --- ftd.text: $cta
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13378,7 +13403,7 @@ mod interpreter {
                 idx: 1
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
             .expect("found error");
 
@@ -13449,7 +13474,7 @@ mod interpreter {
                 bar: $names
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13725,7 +13750,7 @@ mod interpreter {
             name: Mango Juice
             "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13796,7 +13821,7 @@ mod interpreter {
                 hello2: $hello
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13839,7 +13864,7 @@ mod interpreter {
                 -- ftd.decimal: 0.06
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -13965,7 +13990,7 @@ mod interpreter {
                 text: $body
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -14033,7 +14058,7 @@ mod interpreter {
             id: asd
             "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -14124,7 +14149,7 @@ mod interpreter {
                 string-list: $people
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14171,7 +14196,7 @@ mod interpreter {
                 --- ftd.text: Hello
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -14259,7 +14284,7 @@ mod interpreter {
                 id: some-id
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -14410,7 +14435,7 @@ mod interpreter {
                 --- ftd.text: $file.filename
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14489,7 +14514,7 @@ mod interpreter {
                 text: World
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
             .expect("found error");
 
@@ -14610,7 +14635,7 @@ mod interpreter {
                 $on-click$: $current = $msg
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14643,7 +14668,7 @@ mod interpreter {
                 top: 100
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14682,7 +14707,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14756,7 +14781,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14853,7 +14878,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -14961,7 +14986,7 @@ mod interpreter {
 
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15070,7 +15095,7 @@ mod interpreter {
                 a: 20
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15136,7 +15161,7 @@ mod interpreter {
                 -- foo:
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15316,7 +15341,7 @@ mod interpreter {
                 color if $foo: $red
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15432,7 +15457,7 @@ mod interpreter {
                 i: 20
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15483,7 +15508,7 @@ mod interpreter {
                 This is text
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15657,7 +15682,7 @@ mod interpreter {
                 >> line-clamp: 10
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15750,7 +15775,7 @@ mod interpreter {
                 if: $flags is null
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
@@ -15776,7 +15801,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#aa"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("aa"),
                 value: ftd::PropertyValue::Value {
@@ -15790,11 +15815,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
                 arguments: [
-                    vec![(s("o"), ftd::p2::Kind::object())],
+                    vec![(s("o"), crate::ftd2021::p2::Kind::object())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -15825,7 +15850,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#obj"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("obj"),
                 value: ftd::PropertyValue::Value {
@@ -15835,7 +15860,7 @@ mod interpreter {
                                 s("a"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#aa"),
-                                    kind: ftd::p2::Kind::String {
+                                    kind: crate::ftd2021::p2::Kind::String {
                                         caption: true,
                                         body: false,
                                         default: None,
@@ -15861,11 +15886,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#o@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("o"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#obj"),
-                    kind: ftd::p2::Kind::object(),
+                    kind: crate::ftd2021::p2::Kind::object(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -15900,7 +15925,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#input-data"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("input-data"),
                 value: ftd::PropertyValue::Value {
@@ -15915,7 +15940,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#obj"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("obj"),
                 value: ftd::PropertyValue::Value {
@@ -15934,7 +15959,7 @@ mod interpreter {
                                 s("value"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#input-data"),
-                                    kind: ftd::p2::Kind::String {
+                                    kind: crate::ftd2021::p2::Kind::String {
                                         caption: true,
                                         body: false,
                                         default: None,
@@ -16169,7 +16194,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#arpita"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("arpita"),
                 value: ftd::PropertyValue::Value {
@@ -16179,7 +16204,7 @@ mod interpreter {
                             s("name"),
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#bar"),
-                                kind: ftd::p2::Kind::String {
+                                kind: crate::ftd2021::p2::Kind::String {
                                     caption: true,
                                     body: false,
                                     default: None,
@@ -16196,10 +16221,13 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#person"),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#person"),
-                fields: std::iter::IntoIterator::into_iter([(s("name"), ftd::p2::Kind::caption())])
-                    .collect(),
+                fields: std::iter::IntoIterator::into_iter([(
+                    s("name"),
+                    crate::ftd2021::p2::Kind::caption(),
+                )])
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name")],
             }),
@@ -16207,12 +16235,12 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#bar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("bar"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::String {
+                    kind: crate::ftd2021::p2::Kind::String {
                         caption: true,
                         body: false,
                         default: None,
@@ -16225,7 +16253,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("foo"),
                 value: ftd::PropertyValue::Value {
@@ -16240,12 +16268,12 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#ibar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("ibar"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#ifoo"),
-                    kind: ftd::p2::Kind::Integer {
+                    kind: crate::ftd2021::p2::Kind::Integer {
                         default: None,
                         is_reference: false,
                     },
@@ -16256,7 +16284,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#ifoo"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("ifoo"),
                 value: ftd::PropertyValue::Value {
@@ -16268,13 +16296,13 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#lbar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("foo/bar#lbar"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#lfoo"),
-                    kind: ftd::p2::Kind::List {
-                        kind: Box::new(ftd::p2::Kind::String {
+                    kind: crate::ftd2021::p2::Kind::List {
+                        kind: Box::new(crate::ftd2021::p2::Kind::String {
                             caption: false,
                             body: false,
                             default: None,
@@ -16290,7 +16318,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#lfoo"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("foo/bar#lfoo"),
                 value: ftd::PropertyValue::Value {
@@ -16298,7 +16326,7 @@ mod interpreter {
                         data: vec![
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#foo"),
-                                kind: ftd::p2::Kind::String {
+                                kind: crate::ftd2021::p2::Kind::String {
                                     caption: true,
                                     body: false,
                                     default: None,
@@ -16307,7 +16335,7 @@ mod interpreter {
                             },
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#bar"),
-                                kind: ftd::p2::Kind::String {
+                                kind: crate::ftd2021::p2::Kind::String {
                                     caption: true,
                                     body: false,
                                     default: None,
@@ -16321,7 +16349,7 @@ mod interpreter {
                                 },
                             },
                         ],
-                        kind: ftd::p2::Kind::String {
+                        kind: crate::ftd2021::p2::Kind::String {
                             caption: false,
                             body: false,
                             default: None,
@@ -16335,11 +16363,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#$loop$@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16347,11 +16375,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#bar"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16359,7 +16387,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@4"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16373,7 +16401,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@5"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16388,11 +16416,11 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#$loop$@6"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16400,11 +16428,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@7"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#bar"),
-                    kind: ftd::p2::Kind::caption(),
+                    kind: crate::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16412,7 +16440,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@8"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16426,7 +16454,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#$loop$@9"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("$loop$"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16511,7 +16539,7 @@ mod interpreter {
                 -- ftd.text: $arpita.name
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -16524,7 +16552,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#active"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: true },
@@ -16535,7 +16563,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
@@ -16546,7 +16574,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#active@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
@@ -16557,25 +16585,25 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#bar"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar"),
                 arguments: [
                     vec![
                         (
                             s("active"),
-                            ftd::p2::Kind::boolean().set_default(Some(s("false"))),
+                            crate::ftd2021::p2::Kind::boolean().set_default(Some(s("false"))),
                         ),
                         (
                             s("bio"),
-                            ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
+                            crate::ftd2021::p2::Kind::string().set_default(Some(s("$subtitle"))),
                         ),
                         (
                             s("subtitle"),
-                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                            crate::ftd2021::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
                         ),
-                        (s("title"), ftd::p2::Kind::string()),
-                        (s("w"), ftd::p2::Kind::integer()),
+                        (s("title"), crate::ftd2021::p2::Kind::string()),
+                        (s("w"), crate::ftd2021::p2::Kind::integer()),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -16589,8 +16617,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: s("w"),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::integer()),
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::integer()),
                                     is_reference: false,
                                 },
                             }),
@@ -16603,8 +16631,8 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Reference {
                                 name: s("foo/bar#green"),
-                                kind: ftd::p2::Kind::Optional {
-                                    kind: Box::new(ftd::p2::Kind::Record {
+                                kind: crate::ftd2021::p2::Kind::Optional {
+                                    kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
@@ -16628,7 +16656,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("title"),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
@@ -16647,7 +16675,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("subtitle"),
-                                        kind: ftd::p2::Kind::caption_or_body()
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$foo/bar#foo"))),
                                     }),
                                     conditions: vec![],
@@ -16667,7 +16695,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("bio"),
-                                        kind: ftd::p2::Kind::caption_or_body()
+                                        kind: crate::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$subtitle"))),
                                     }),
                                     conditions: vec![],
@@ -16687,7 +16715,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("active"),
-                                        kind: ftd::p2::Kind::boolean()
+                                        kind: crate::ftd2021::p2::Kind::boolean()
                                             .set_default(Some(s("false"))),
                                     }),
                                     conditions: vec![],
@@ -16708,7 +16736,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#bar1"),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar1"),
                 arguments: universal_arguments_as_map(),
@@ -16724,11 +16752,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#bio@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("bio"),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#subtitle@0"),
-                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                    kind: crate::ftd2021::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16736,11 +16764,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#bio@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("bio"),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#subtitle@1"),
-                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                    kind: crate::ftd2021::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16748,7 +16776,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("foo"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16762,7 +16790,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#foo"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("foo"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -16776,7 +16804,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#gg@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("gg"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 1 },
@@ -16787,11 +16815,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#subtitle@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("subtitle"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                    kind: crate::ftd2021::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16799,11 +16827,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#subtitle@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("subtitle"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                    kind: crate::ftd2021::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16811,11 +16839,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#title@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("title"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::string(),
+                    kind: crate::ftd2021::p2::Kind::string(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16823,11 +16851,11 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#title@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("title"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#foo"),
-                    kind: ftd::p2::Kind::string(),
+                    kind: crate::ftd2021::p2::Kind::string(),
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -16835,7 +16863,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#w@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("w"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 2 },
@@ -16846,7 +16874,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#w@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("w"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 1 },
@@ -16857,7 +16885,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#green"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("green"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -17096,7 +17124,7 @@ mod interpreter {
         let mut bag = interpreter::default_bag();
         bag.insert(
             s("foo/bar#bar"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("bar"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
@@ -17104,7 +17132,7 @@ mod interpreter {
                             text: "Something".to_string(),
                             source: ftd::TextSource::Caption,
                         })),
-                        kind: ftd::p2::Kind::caption(),
+                        kind: crate::ftd2021::p2::Kind::caption(),
                     },
                 },
                 conditions: vec![],
@@ -17148,7 +17176,7 @@ mod interpreter {
 
         bag.insert(
             s("foo/bar#hex-color"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("hex-color"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -17228,7 +17256,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#current@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("current"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 1 },
@@ -17240,13 +17268,13 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#presentation".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#presentation"),
                 arguments: [
                     vec![(
                         "current".to_string(),
-                        ftd::p2::Kind::integer().set_default(Some(s("1"))),
+                        crate::ftd2021::p2::Kind::integer().set_default(Some(s("1"))),
                     )],
                     universal_arguments_as_vec(),
                 ]
@@ -17302,11 +17330,11 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#slide".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
+            crate::ftd2021::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#slide"),
                 arguments: [
-                    vec![(s("title"), ftd::p2::Kind::caption())],
+                    vec![(s("title"), crate::ftd2021::p2::Kind::caption())],
                     universal_arguments_as_vec(),
                 ]
                 .concat()
@@ -17317,19 +17345,19 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
                             name: s("title"),
-                            kind: ftd::p2::Kind::caption_or_body(),
+                            kind: crate::ftd2021::p2::Kind::caption_or_body(),
                         }),
                         ..Default::default()
                     },
                 )])
                 .collect(),
-                events: vec![ftd::p2::Event {
-                    name: ftd::p2::EventName::OnClick,
-                    action: ftd::p2::Action {
-                        action: ftd::p2::ActionKind::Increment,
+                events: vec![crate::ftd2021::p2::Event {
+                    name: crate::ftd2021::p2::EventName::OnClick,
+                    action: crate::ftd2021::p2::Action {
+                        action: crate::ftd2021::p2::ActionKind::Increment,
                         target: ftd::PropertyValue::Variable {
                             name: s("PARENT.current"),
-                            kind: ftd::p2::Kind::integer(),
+                            kind: crate::ftd2021::p2::Kind::integer(),
                         },
                         parameters: std::iter::IntoIterator::into_iter([(
                             s("clamp"),
@@ -17339,21 +17367,22 @@ mod interpreter {
                                 },
                                 ftd::PropertyValue::Variable {
                                     name: s("PARENT.CHILDREN-COUNT"),
-                                    kind: ftd::p2::Kind::integer().set_default(Some(s("0"))),
+                                    kind: crate::ftd2021::p2::Kind::integer()
+                                        .set_default(Some(s("0"))),
                                 },
                             ],
                         )])
                         .collect(),
                     },
                 }],
-                condition: Some(ftd::p2::Boolean::Equal {
+                condition: Some(crate::ftd2021::p2::Boolean::Equal {
                     left: ftd::PropertyValue::Variable {
                         name: s("PARENT.current"),
-                        kind: ftd::p2::Kind::Element,
+                        kind: crate::ftd2021::p2::Kind::Element,
                     },
                     right: ftd::PropertyValue::Variable {
                         name: s("SIBLING-INDEX"),
-                        kind: ftd::p2::Kind::Element,
+                        kind: crate::ftd2021::p2::Kind::Element,
                     },
                 }),
                 ..Default::default()
@@ -17362,7 +17391,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#title@0,0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("title"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -17377,7 +17406,7 @@ mod interpreter {
 
         bag.insert(
             "foo/bar#title@0,1".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: s("title"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -17550,7 +17579,7 @@ mod interpreter {
                 if: $person is not null
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &ftd::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
     }*/
@@ -17608,7 +17637,7 @@ mod interpreter {
                 toc: $obj
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &ftd::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         // pretty_assertions::assert_eq!(g_bag, bag);
@@ -17660,7 +17689,7 @@ mod interpreter {
                 toc: $obj
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &ftd::ftd2021::p2::TestLibrary {},
         )
         .expect("found error");
         // pretty_assertions::assert_eq!(g_bag, bag);
@@ -17690,9 +17719,9 @@ mod component {
 
     #[test]
     fn component() {
-        let mut bag = ftd::p2::interpreter::default_bag();
-        let aliases = ftd::p2::interpreter::default_aliases();
-        let d = ftd::p2::TDoc {
+        let mut bag = crate::ftd2021::p2::interpreter::default_bag();
+        let aliases = crate::ftd2021::p2::interpreter::default_aliases();
+        let d = crate::ftd2021::p2::TDoc {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
@@ -17711,8 +17740,11 @@ mod component {
                 root: "ftd#text".to_string(),
                 arguments: [
                     vec![
-                        (s("foo"), ftd::p2::Kind::string()),
-                        (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer())),
+                        (s("foo"), ftd::ftd2021::p2::Kind::string()),
+                        (
+                            s("bar"),
+                            ftd::ftd2021::p2::Kind::optional(ftd::ftd2021::p2::Kind::integer())
+                        ),
                     ],
                     universal_arguments_as_vec(),
                 ]
@@ -17741,9 +17773,9 @@ mod component {
 
     #[test]
     fn properties() {
-        let mut bag = ftd::p2::interpreter::default_bag();
-        let aliases = ftd::p2::interpreter::default_aliases();
-        let d = ftd::p2::TDoc {
+        let mut bag = crate::ftd2021::p2::interpreter::default_bag();
+        let aliases = crate::ftd2021::p2::interpreter::default_aliases();
+        let d = crate::ftd2021::p2::TDoc {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
@@ -17909,7 +17941,7 @@ mod component {
         let mut bag = default_bag();
         bag.insert(
             "foo/bar#name".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -17971,7 +18003,7 @@ mod component {
         let mut bag = default_bag();
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
                 instances: Default::default(),
@@ -17980,7 +18012,7 @@ mod component {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -17991,7 +18023,7 @@ mod component {
         );
         bag.insert(
             "foo/bar#abrar".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "abrar".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18042,7 +18074,7 @@ mod record {
 
     #[test]
     fn record() {
-        let sourabh: ftd::p2::record::Invocation = std::iter::IntoIterator::into_iter([
+        let sourabh: crate::ftd2021::p2::record::Invocation = std::iter::IntoIterator::into_iter([
             (
                 s("name"),
                 ftd::PropertyValue::Value {
@@ -18079,10 +18111,10 @@ mod record {
         ])
         .collect();
 
-        let mut bag = ftd::p2::interpreter::default_bag();
+        let mut bag = crate::ftd2021::p2::interpreter::default_bag();
         bag.insert(
             "foo/bar#abrar".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "abrar".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18096,7 +18128,7 @@ mod record {
         );
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
                 instances: std::iter::IntoIterator::into_iter([(
@@ -18109,7 +18141,7 @@ mod record {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18120,13 +18152,13 @@ mod record {
         );
         bag.insert(
             "foo/bar#employee".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: "foo/bar#employee".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("eid"), ftd::p2::Kind::string()),
+                    (s("eid"), crate::ftd2021::p2::Kind::string()),
                     (
                         s("who"),
-                        ftd::p2::Kind::Record {
+                        crate::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#person"),
                             default: None,
                             is_reference: false,
@@ -18140,7 +18172,7 @@ mod record {
         );
         bag.insert(
             "foo/bar#abrar_e".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "abrar_e".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18160,7 +18192,7 @@ mod record {
                                 s("who"),
                                 ftd::PropertyValue::Reference {
                                     name: s("foo/bar#abrar"),
-                                    kind: ftd::p2::Kind::Record {
+                                    kind: crate::ftd2021::p2::Kind::Record {
                                         name: s("foo/bar#person"),
                                         default: None,
                                         is_reference: false,
@@ -18177,7 +18209,7 @@ mod record {
 
         bag.insert(
             "foo/bar#sourabh".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "sourabh".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18266,7 +18298,7 @@ mod record {
 
             Software developer working at fifthtry2.
             ",
-            (bag, ftd::p2::interpreter::default_column()),
+            (bag, ftd::ftd2021::p2::interpreter::default_column()),
         );
     }
 
@@ -18277,14 +18309,14 @@ mod record {
 
             bag.insert(
                 "foo/bar#person".to_string(),
-                ftd::p2::Thing::Record(ftd::p2::Record {
+                crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                     name: "foo/bar#person".to_string(),
                     fields: std::iter::IntoIterator::into_iter([
-                        (s("name"), ftd::p2::Kind::caption()),
+                        (s("name"), crate::ftd2021::p2::Kind::caption()),
                         (
                             s("friends"),
-                            ftd::p2::Kind::List {
-                                kind: Box::new(ftd::p2::Kind::string()),
+                            crate::ftd2021::p2::Kind::List {
+                                kind: Box::new(crate::ftd2021::p2::Kind::string()),
                                 default: None,
                                 is_reference: false,
                             },
@@ -18298,7 +18330,7 @@ mod record {
 
             bag.insert(
                 "foo/bar#abrar".to_string(),
-                ftd::p2::Thing::Variable(ftd::Variable {
+                crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                     flags: ftd::VariableFlags::default(),
                     name: "abrar".to_string(),
                     value: ftd::PropertyValue::Value {
@@ -18318,7 +18350,7 @@ mod record {
                                     s("friends"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::Value::List {
-                                            kind: ftd::p2::Kind::string(),
+                                            kind: crate::ftd2021::p2::Kind::string(),
                                             data: vec![
                                                 ftd::PropertyValue::Value {
                                                     value: ftd::Value::String {
@@ -18388,11 +18420,11 @@ mod record {
 
         bag.insert(
             s("foo/bar#point"),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#point"),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("x"), ftd::p2::Kind::integer()),
-                    (s("y"), ftd::p2::Kind::integer()),
+                    (s("x"), crate::ftd2021::p2::Kind::integer()),
+                    (s("y"), crate::ftd2021::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -18402,14 +18434,14 @@ mod record {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#person"),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("name"), crate::ftd2021::p2::Kind::caption()),
                     (
                         s("points"),
-                        ftd::p2::Kind::List {
-                            kind: Box::new(ftd::p2::Kind::Record {
+                        crate::ftd2021::p2::Kind::List {
+                            kind: Box::new(crate::ftd2021::p2::Kind::Record {
                                 name: s("foo/bar#point"),
                                 default: None,
                                 is_reference: false,
@@ -18427,7 +18459,7 @@ mod record {
 
         bag.insert(
             "foo/bar#abrar".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "abrar".to_string(),
                 value: ftd::PropertyValue::Value {
@@ -18447,7 +18479,7 @@ mod record {
                                 s("points"),
                                 ftd::PropertyValue::Value {
                                     value: ftd::Value::List {
-                                        kind: ftd::p2::Kind::Record {
+                                        kind: crate::ftd2021::p2::Kind::Record {
                                             name: s("foo/bar#point"),
                                             default: None,
                                             is_reference: false,
@@ -18572,13 +18604,13 @@ mod record {
         bag.insert(s("foo/bar#entity"), entity());
         bag.insert(
             s("foo/bar#sale"),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#sale"),
                 fields: std::iter::IntoIterator::into_iter([
                     (
                         s("party"),
-                        ftd::p2::Kind::List {
-                            kind: Box::new(ftd::p2::Kind::OrType {
+                        crate::ftd2021::p2::Kind::List {
+                            kind: Box::new(crate::ftd2021::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
                                 is_reference: false,
                             }),
@@ -18586,7 +18618,7 @@ mod record {
                             is_reference: false,
                         },
                     ),
-                    (s("value"), ftd::p2::Kind::integer()),
+                    (s("value"), crate::ftd2021::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -18595,7 +18627,7 @@ mod record {
         );
         bag.insert(
             s("foo/bar#jan"),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("jan"),
                 value: ftd::PropertyValue::Value {
@@ -18612,7 +18644,7 @@ mod record {
                                 s("party"),
                                 ftd::PropertyValue::Value {
                                     value: ftd::Value::List {
-                                        kind: ftd::p2::Kind::OrType {
+                                        kind: crate::ftd2021::p2::Kind::OrType {
                                             name: s("foo/bar#entity"),
                                             is_reference: false,
                                         },
@@ -18740,7 +18772,7 @@ mod variable {
             let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), "foo").unwrap();
             let mut bag = ftd::Map::new();
             let aliases = ftd::Map::new();
-            let mut d = ftd::p2::TDoc {
+            let mut d = ftd::ftd2021::p2::TDoc {
                 name: "foo",
                 bag: &mut bag,
                 aliases: &aliases,
@@ -18861,11 +18893,11 @@ mod variable {
         let mut bag = default_bag();
         bag.insert(
             s("foo/bar#pull-request"),
-            ftd::p2::Thing::Record(ftd::p2::Record {
+            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
                 name: s("foo/bar#pull-request"),
                 fields: std::iter::IntoIterator::into_iter([
-                    (s("title"), ftd::p2::Kind::caption()),
-                    (s("about"), ftd::p2::Kind::body()),
+                    (s("title"), crate::ftd2021::p2::Kind::caption()),
+                    (s("about"), crate::ftd2021::p2::Kind::body()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -18875,7 +18907,7 @@ mod variable {
 
         bag.insert(
             "foo/bar#pr".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
+            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#pr".to_string(),
                 flags: ftd::VariableFlags::default(),
                 value: ftd::PropertyValue::Value {
@@ -18906,7 +18938,7 @@ mod variable {
                                 .collect(),
                             },
                         }],
-                        kind: ftd::p2::Kind::Record {
+                        kind: crate::ftd2021::p2::Kind::Record {
                             name: s("foo/bar#pull-request"),
                             default: None,
                             is_reference: false,
@@ -18960,7 +18992,7 @@ mod document {
             foo is the toc
             "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -19010,7 +19042,7 @@ mod document {
                 --- reader.Who: everyone
             "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -19053,7 +19085,7 @@ mod document {
                 number: 224
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -19095,7 +19127,7 @@ mod document {
                 number: 224
                 "
             ),
-            &ftd::p2::TestLibrary {},
+            &crate::ftd2021::p2::TestLibrary {},
         )
         .unwrap();
 

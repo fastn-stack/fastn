@@ -380,7 +380,8 @@ impl Config {
                 }
             }
 
-            let (_header, value) = ftd::p2::utils::split_once(id_string, doc_name, line_number)?;
+            let (_header, value) =
+                ftd::ftd2021::p2::utils::split_once(id_string, doc_name, line_number)?;
             let document_id = fastn_core::library::convert_to_document_id(doc_name);
 
             if let Some(id) = value {
@@ -1388,7 +1389,7 @@ impl Config {
     pub(crate) fn get_fastn_document(
         &self,
         package_name: &str,
-    ) -> fastn_core::Result<ftd::p2::Document> {
+    ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
         let package = fastn_core::Package::new(package_name);
         let root = self.get_root_for_package(&package);
         let package_fastn_path = root.join("FASTN.ftd");

@@ -45,7 +45,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 
 pub fn document_full_id(
     config: &fastn_core::Config,
-    doc: &ftd::p2::TDoc,
+    doc: &ftd::ftd2021::p2::TDoc,
 ) -> ftd::ftd2021::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
         doc.name
@@ -64,7 +64,7 @@ pub fn document_full_id(
 pub mod processor {
     pub fn document_id(
         _section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
@@ -86,7 +86,7 @@ pub mod processor {
     }
     pub fn document_full_id(
         _section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         Ok(ftd::Value::String {
@@ -97,7 +97,7 @@ pub mod processor {
 
     pub async fn document_name<'a>(
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc<'a>,
+        doc: &ftd::ftd2021::p2::TDoc<'a>,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
@@ -122,7 +122,7 @@ pub mod processor {
 
     pub fn document_suffix(
         _section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         config: &fastn_core::Config,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
@@ -141,7 +141,7 @@ pub mod processor {
 
         Ok(ftd::Value::Optional {
             data: Box::new(value),
-            kind: ftd::p2::Kind::String {
+            kind: ftd::ftd2021::p2::Kind::String {
                 caption: false,
                 body: false,
                 default: None,

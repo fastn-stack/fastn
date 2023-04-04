@@ -2,13 +2,13 @@
 
 extern crate self as ftd;
 
-pub use ftd::ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument};
 pub use ftd2021::component::{ChildComponent, Component, Instruction};
 pub use ftd2021::condition::Condition;
 pub use ftd2021::constants::{identifier, regex};
 pub use ftd2021::event::{Action, Event};
 pub use ftd2021::html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use ftd2021::or_type::OrType;
+pub use ftd2021::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument};
 pub use ftd2021::rendered::Rendered;
 pub use ftd2021::rt::RT;
 pub use ftd2021::ui::{
@@ -29,7 +29,6 @@ pub mod html1;
 pub mod interpreter;
 pub mod node;
 pub mod p1;
-pub mod p2;
 
 pub fn css() -> &'static str {
     // if fastn_core::utils::is_test() {
@@ -248,7 +247,7 @@ impl ExampleLibrary {
         global_ids
     }
 
-    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+    pub fn get(&self, name: &str, _doc: &ftd2021::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./ftd/examples/{}.ftd", name)).ok()
     }
 
@@ -259,7 +258,7 @@ impl ExampleLibrary {
     /// visit www.fpm.dev/glossary/#lazy-processor
     pub fn is_lazy_processor(
         section: &ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd2021::p2::TDoc,
     ) -> ftd2021::p1::Result<bool> {
         Ok(section
             .header
@@ -270,19 +269,23 @@ impl ExampleLibrary {
     pub fn process(
         &self,
         section: &ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd2021::p2::TDoc,
     ) -> ftd2021::p1::Result<ftd::Value> {
-        ftd::p2::utils::unknown_processor_error(
+        ftd2021::p2::utils::unknown_processor_error(
             format!("unimplemented for section {:?} and doc {:?}", section, doc),
             doc.name.to_string(),
             section.line_number,
         )
     }
 
-    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd2021::p1::Result<String> {
+    pub fn get_with_result(
+        &self,
+        name: &str,
+        doc: &ftd2021::p2::TDoc,
+    ) -> ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }

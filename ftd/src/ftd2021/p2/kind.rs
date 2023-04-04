@@ -120,13 +120,13 @@ impl Kind {
         doc_id: &str,
     ) -> crate::ftd2021::p1::Result<String> {
         Ok(match self.inner() {
-            ftd::p2::Kind::String { .. } => "string",
-            ftd::p2::Kind::Integer { .. } => "integer",
-            ftd::p2::Kind::Decimal { .. } => "decimal",
-            ftd::p2::Kind::Boolean { .. } => "boolean",
-            ftd::p2::Kind::Object { .. } => "object",
-            ftd::p2::Kind::List { .. } => "list",
-            _ => return ftd::p2::utils::e2(format!("1 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
+            crate::ftd2021::p2::Kind::String { .. } => "string",
+            crate::ftd2021::p2::Kind::Integer { .. } => "integer",
+            crate::ftd2021::p2::Kind::Decimal { .. } => "decimal",
+            crate::ftd2021::p2::Kind::Boolean { .. } => "boolean",
+            crate::ftd2021::p2::Kind::Object { .. } => "object",
+            crate::ftd2021::p2::Kind::List { .. } => "list",
+            _ => return crate::ftd2021::p2::utils::e2(format!("1 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }
 
@@ -136,31 +136,31 @@ impl Kind {
         doc_id: &str,
     ) -> crate::ftd2021::p1::Result<ftd::Value> {
         Ok(match self {
-            ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
-            ftd::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
+            crate::ftd2021::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
+            crate::ftd2021::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
                     Ok(v) => v,
-                    Err(_) => return ftd::p2::utils::e2(format!("{} is not an integer", d), doc_id, line_number),
+                    Err(_) => return crate::ftd2021::p2::utils::e2(format!("{} is not an integer", d), doc_id, line_number),
                 },
             },
-            ftd::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
+            crate::ftd2021::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
                 })?,
             },
-            ftd::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
+            crate::ftd2021::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
                 })?,
             },
-            ftd::p2::Kind::Optional {kind, ..} => if let Ok(f) = kind.to_value(line_number, doc_id) {
+            crate::ftd2021::p2::Kind::Optional {kind, ..} => if let Ok(f) = kind.to_value(line_number, doc_id) {
                 ftd::Value::Optional {data: Box::new(Some(f)), kind: kind.as_ref().to_owned()}
             } else {
                 ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
             },
-            ftd::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
-            _ => return ftd::p2::utils::e2(
+            crate::ftd2021::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
+            _ => return crate::ftd2021::p2::utils::e2(
                 format!("2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
                 doc_id,  line_number),
         })
@@ -476,17 +476,17 @@ impl Kind {
         p1_caption: &Option<String>,
         p1_body: &Option<(usize, String)>,
         name: &str,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
     ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         let (v, source) = match p1.str_optional(doc.name, line_number, name)? {
             Some(v) => (v.to_string(), ftd::TextSource::Header),
             None => {
                 let optional = match self {
                     Kind::Optional { kind, .. } => match kind.as_ref() {
-                        ftd::p2::Kind::String { .. }
-                        | ftd::p2::Kind::Integer { .. }
-                        | ftd::p2::Kind::Decimal { .. }
-                        | ftd::p2::Kind::Boolean { .. } => true,
+                        crate::ftd2021::p2::Kind::String { .. }
+                        | crate::ftd2021::p2::Kind::Integer { .. }
+                        | crate::ftd2021::p2::Kind::Decimal { .. }
+                        | crate::ftd2021::p2::Kind::Boolean { .. } => true,
                         _ => {
                             return Ok(ftd::PropertyValue::Value {
                                 value: ftd::Value::None {
@@ -495,12 +495,12 @@ impl Kind {
                             })
                         }
                     },
-                    ftd::p2::Kind::String { .. }
-                    | ftd::p2::Kind::Integer { .. }
-                    | ftd::p2::Kind::Decimal { .. }
-                    | ftd::p2::Kind::Boolean { .. } => false,
+                    crate::ftd2021::p2::Kind::String { .. }
+                    | crate::ftd2021::p2::Kind::Integer { .. }
+                    | crate::ftd2021::p2::Kind::Decimal { .. }
+                    | crate::ftd2021::p2::Kind::Boolean { .. } => false,
                     t => {
-                        return ftd::p2::utils::e2(
+                        return crate::ftd2021::p2::utils::e2(
                             format!("`{}` is {:?}", name, t),
                             doc.name,
                             line_number,
@@ -533,7 +533,7 @@ impl Kind {
                 } else if let Some(default) = self.get_default_value_str() {
                     (default, ftd::TextSource::Default)
                 } else {
-                    return ftd::p2::utils::e2(
+                    return crate::ftd2021::p2::utils::e2(
                         format!("`{}` is required", name),
                         doc.name,
                         line_number,
@@ -593,7 +593,7 @@ impl Kind {
             Kind::String { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::String { text: v, source },
             }),
-            v => ftd::p2::utils::e2(
+            v => crate::ftd2021::p2::utils::e2(
                 format!("unknown kind found: {:?}", v),
                 doc.name,
                 line_number,
@@ -604,11 +604,14 @@ impl Kind {
     pub fn from(
         line_number: usize,
         s: &str,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         object_kind: Option<(&str, Self)>,
     ) -> crate::ftd2021::p1::Result<Self> {
         let (optional, k) = if s.starts_with("optional ") {
-            (true, ftd::p2::utils::get_name("optional", s, doc.name)?)
+            (
+                true,
+                crate::ftd2021::p2::utils::get_name("optional", s, doc.name)?,
+            )
         } else {
             (false, s)
         };
@@ -617,7 +620,7 @@ impl Kind {
             return Ok(Kind::List {
                 kind: Box::new(Self::from(
                     line_number,
-                    ftd::p2::utils::get_name("list", k, doc.name)?,
+                    crate::ftd2021::p2::utils::get_name("list", k, doc.name)?,
                     doc,
                     object_kind,
                 )?),
@@ -659,12 +662,12 @@ impl Kind {
             "int-message" => Kind::IntMessage,
             "ftd.ui" => Kind::UI { default: None },
             _ => match doc.get_thing(line_number, k)? {
-                ftd::p2::Thing::Record(r) => Kind::Record {
+                crate::ftd2021::p2::Thing::Record(r) => Kind::Record {
                     name: r.name,
                     default: None,
                     is_reference: false,
                 },
-                ftd::p2::Thing::OrType(e) => Kind::OrType {
+                crate::ftd2021::p2::Thing::OrType(e) => Kind::OrType {
                     name: e.name,
                     is_reference: false,
                 },
@@ -686,9 +689,9 @@ impl Kind {
         line_number: usize,
         s: &str,
         default: Option<String>,
-        doc: &ftd::p2::TDoc,
+        doc: &crate::ftd2021::p2::TDoc,
         object_kind: Option<(&str, Self)>,
-        arguments: &ftd::Map<ftd::p2::Kind>,
+        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
     ) -> crate::ftd2021::p1::Result<Self> {
         let default = {
             // resolve the default value
@@ -724,12 +727,12 @@ impl Kind {
                 "int-message" => Kind::IntMessage,
                 "ftd.ui" => Kind::UI { default: None },
                 k => match doc.get_thing(line_number, k) {
-                    Ok(ftd::p2::Thing::Record(r)) => Kind::Record {
+                    Ok(crate::ftd2021::p2::Thing::Record(r)) => Kind::Record {
                         name: r.name,
                         default: None,
                         is_reference: false,
                     },
-                    Ok(ftd::p2::Thing::OrType(e)) => Kind::OrType {
+                    Ok(crate::ftd2021::p2::Thing::OrType(e)) => Kind::OrType {
                         name: e.name,
                         is_reference: false,
                     },

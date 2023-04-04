@@ -381,7 +381,7 @@ pub fn interpret_helper(
     name: &str,
     source: &str,
     lib: &ftd::ExampleLibrary,
-) -> ftd::ftd2021::p1::Result<ftd::p2::Document> {
+) -> ftd::ftd2021::p1::Result<ftd::ftd2021::p2::Document> {
     let mut s = ftd::interpret(name, source, &None)?;
     let document;
     loop {
@@ -418,7 +418,7 @@ pub fn interpret_helper(
                 s = st.continue_after_variable(
                     variable.as_str(),
                     ftd::Value::None {
-                        kind: ftd::p2::Kind::Object {
+                        kind: ftd::ftd2021::p2::Kind::Object {
                             default: None,
                             is_reference: false,
                         },

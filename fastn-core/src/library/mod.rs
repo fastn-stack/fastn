@@ -28,7 +28,7 @@ impl Library {
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, packages).await {
             Some(v) => Ok(v),
-            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 
@@ -213,7 +213,7 @@ impl Library2 {
     pub async fn get_with_result(&mut self, name: &str) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name).await {
             Some(v) => Ok(v),
-            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 
@@ -315,7 +315,7 @@ impl Library2 {
     pub fn is_lazy_processor(
         &self,
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
     ) -> ftd::ftd2021::p1::Result<bool> {
         Ok(section
             .header
@@ -326,7 +326,7 @@ impl Library2 {
     pub async fn process<'a>(
         &'a self,
         _section: &ftd::ftd2021::p1::Section,
-        _doc: &'a ftd::p2::TDoc<'a>,
+        _doc: &'a ftd::ftd2021::p2::TDoc<'a>,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         unimplemented!("we are removing support for 0.2, migrate to 0.3 please")
     }
@@ -336,7 +336,7 @@ impl Library2 {
 pub struct FastnLibrary {}
 
 impl FastnLibrary {
-    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+    pub fn get(&self, name: &str, _doc: &ftd::ftd2021::p2::TDoc) -> Option<String> {
         if name == "fastn" {
             Some(format!(
                 "{}\n\n-- optional package-data package:\n",
@@ -354,9 +354,9 @@ impl FastnLibrary {
     pub fn process(
         &self,
         section: &ftd::ftd2021::p1::Section,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-        ftd::p2::utils::unknown_processor_error(
+        ftd::ftd2021::p2::utils::unknown_processor_error(
             format!("unimplemented for section {:?} and doc {:?}", section, doc),
             doc.name.to_string(),
             section.line_number,
@@ -366,11 +366,11 @@ impl FastnLibrary {
     pub fn get_with_result(
         &self,
         name: &str,
-        doc: &ftd::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }

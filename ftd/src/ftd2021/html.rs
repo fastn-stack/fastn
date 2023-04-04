@@ -1973,14 +1973,14 @@ fn get_translate(
 ) -> crate::ftd2021::p1::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
-            return ftd::p2::utils::e2(
+            return crate::ftd2021::p2::utils::e2(
                 "move-up, move-down, move-left and move-right all 4 can't be used at once!",
                 doc_id,
                 0, // TODO
             );
         }
         (Some(_), Some(_), _, _) => {
-            return ftd::p2::utils::e2(
+            return crate::ftd2021::p2::utils::e2(
                 "move-left, move-right both can't be used at once!",
                 doc_id,
                 0, // TODO
@@ -1988,7 +1988,11 @@ fn get_translate(
         }
         (_, _, Some(_), Some(_)) => {
             // TODO
-            return ftd::p2::utils::e2("move-up, move-down both can't be used at once!", doc_id, 0);
+            return crate::ftd2021::p2::utils::e2(
+                "move-up, move-down both can't be used at once!",
+                doc_id,
+                0,
+            );
         }
         (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
         (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),

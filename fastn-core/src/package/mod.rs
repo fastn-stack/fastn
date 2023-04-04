@@ -538,7 +538,7 @@ impl Package {
 
     pub fn from_fastn_doc(
         root: &camino::Utf8Path,
-        fastn_doc: &ftd::p2::Document,
+        fastn_doc: &ftd::ftd2021::p2::Document,
     ) -> fastn_core::Result<Package> {
         let temp_package: Option<PackageTemp> = fastn_doc.get("fastn#package")?;
 
