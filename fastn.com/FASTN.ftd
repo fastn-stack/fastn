@@ -37,6 +37,18 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 ## Learn: /overview/
 
 - Overview: /overview/
+- Install `fastn`: /install/
+  document: author/how-to/install.ftd
+  - On MacOS/Linux: /macos/
+    document: author/setup/macos.ftd
+  - On Windows: /windows/
+    document: author/setup/windows.ftd
+  - Open terminal: /open-terminal/
+    document: author/how-to/open-terminal.ftd
+    skip: true
+- Syntax Highligthing For SublimeText 🚧: /sublime/
+  document: author/how-to/sublime.ftd
+  skip: true
 
 ## Features: /features/
 
@@ -80,18 +92,14 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Best Practices: /best-practices/
 - `ftd p1` grammar: /ftd/p1-grammar/
 
-## Data Modelling: /ftd/data-modelling/
+## Fontend: /ftd/ui/
 
 - Data Modelling: /ftd/data-modelling/
-- Variables: /ftd/variables/
-- Built-in Types: /ftd/built-in-types/
-- `record`: /ftd/record/
-- `or-type`: /ftd/or-type/
-- `list`: /ftd/list/
-
-## UI: /ftd/ui/
-
-- UI: /ftd/ui/
+  - Variables: /ftd/variables/
+  - Built-in Types: /ftd/built-in-types/
+  - `record`: /ftd/record/
+  - `or-type`: /ftd/or-type/
+  - `list`: /ftd/list/
 - `component`: /components/
   document: /ftd/components.ftd
 - Kernel Components: /ftd/kernel/
@@ -106,27 +114,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.text-input`: /ftd/text-input/
 - Common Attributes 🚧: /ftd/common/
 - Text Attributes 🚧: /ftd/text-attributes/
-
-## How Tos: /install/
-  document: author/how-to/install.ftd
-
-- Install `fastn`: /install/
-  document: author/how-to/install.ftd
-  - On Windows: /windows/
-    document: author/setup/windows.ftd
-  - On MacOS/Linux: /macos/
-    document: author/setup/macos.ftd
-- Open terminal: /open-terminal/
-  document: author/how-to/open-terminal.ftd
-- Use color scheme package: /use-cs/
-  document: cs/use-color-package.ftd
-- Syntax Highligthing For SublimeText 🚧: /sublime/
-  document: author/how-to/sublime.ftd
-
-## FTD Host Features: /ftd-host/
-
 - `import`: /import/
   document: ftd-host/import.ftd
+- Use color scheme package: /use-cs/
+  document: cs/use-color-package.ftd
 - `processor`: /processor/
   document: ftd-host/processor.ftd
   - `http`: http/
@@ -135,6 +126,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: ftd-host/foreign-variable.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
+
 
 ## Book 🚧: /book/
 
