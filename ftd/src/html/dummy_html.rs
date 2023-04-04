@@ -42,13 +42,13 @@ impl<'a> DummyHtmlGenerator<'a> {
     ) -> String {
         let mut functions: ftd::Map<String> = Default::default();
         for dummy_node in dummy_node {
-            let dummy_html = ftd::html1::RawHtmlGenerator::from_node(
+            let dummy_html = ftd::html::RawHtmlGenerator::from_node(
                 self.id.as_str(),
                 self.doc,
                 dummy_node.main.to_owned(),
             );
 
-            let parent_container = ftd::html1::utils::full_data_id(
+            let parent_container = ftd::html::utils::full_data_id(
                 self.id.as_str(),
                 ftd::executor::utils::get_string_container(dummy_node.parent_container.as_slice())
                     .as_str(),
@@ -182,13 +182,13 @@ impl<'a> HelperHtmlGenerator<'a> {
         raw_node: &ftd::node::RawNode,
         dependency: &str,
     ) -> String {
-        let raw_html = ftd::html1::RawHtmlGenerator::from_node(
+        let raw_html = ftd::html::RawHtmlGenerator::from_node(
             self.id.as_str(),
             self.doc,
             raw_node.node.to_owned(),
         );
 
-        let argument_string = ftd::html1::utils::to_argument_string(
+        let argument_string = ftd::html::utils::to_argument_string(
             self.id.as_str(),
             raw_node.arguments.as_slice(),
             self.doc,

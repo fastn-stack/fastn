@@ -20,7 +20,7 @@ impl<'a> DependencyGenerator<'a> {
         }
     }
 
-    pub(crate) fn get_dependencies(&self) -> ftd::html1::Result<(String, ftd::VecMap<String>)> {
+    pub(crate) fn get_dependencies(&self) -> ftd::html::Result<(String, ftd::VecMap<String>)> {
         let mut var_dependencies: ftd::VecMap<String> = Default::default();
         let dependencies = self.get_dependencies_(&mut var_dependencies)?;
         if dependencies.trim().is_empty() {
@@ -35,15 +35,14 @@ impl<'a> DependencyGenerator<'a> {
     fn get_dependencies_(
         &self,
         var_dependencies: &mut ftd::VecMap<String>,
-    ) -> ftd::html1::Result<String> {
-        let node_data_id = ftd::html1::utils::full_data_id(self.id, self.node.data_id.as_str());
+    ) -> ftd::html::Result<String> {
+        let node_data_id = ftd::html::utils::full_data_id(self.id, self.node.data_id.as_str());
         let mut result = vec![];
 
         {
             let mut expressions = vec![];
 
-            let node_change_id =
-                ftd::html1::utils::node_change_id(node_data_id.as_str(), "display");
+            let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), "display");
             dependency_map_from_condition(
                 var_dependencies,
                 &self.node.condition,
@@ -55,7 +54,7 @@ impl<'a> DependencyGenerator<'a> {
                 .node
                 .condition
                 .as_ref()
-                .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+                .map(|c| ftd::html::utils::get_condition_string_(c, false));
 
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"]",
@@ -69,7 +68,7 @@ impl<'a> DependencyGenerator<'a> {
                 expressions.push((None, neg_value));
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(
+            let value = ftd::html::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
                 format!("{} = null;", key).as_str(),
@@ -88,7 +87,7 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
 
-        let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "text");
+        let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), "text");
         if let Some(value) = node_for_properties(
             &self.node.text,
             var_dependencies,
@@ -203,22 +202,22 @@ impl<'a> DependencyGenerator<'a> {
         for (key, attribute) in self.node.attrs.iter() {
             let mut expressions = vec![];
             let mut is_static = true;
-            let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), key);
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+                    .map(|c| ftd::html::utils::get_condition_string_(c, false));
 
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
 
-                if ftd::html1::utils::is_device_dependent(&property.value, self.doc)? {
+                if ftd::html::utils::is_device_dependent(&property.value, self.doc)? {
                     let mut desktop_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -232,7 +231,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     let mut mobile_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -245,7 +244,7 @@ impl<'a> DependencyGenerator<'a> {
                     }
                     if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
-                        let value = ftd::html1::utils::js_expression_from_list(
+                        let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
@@ -302,11 +301,11 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
+                if ftd::html::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -319,7 +318,7 @@ impl<'a> DependencyGenerator<'a> {
                     }
                     let mut dark_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -333,7 +332,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     if light_value_string.ne(&dark_value_string) {
                         is_static = false;
-                        let value = ftd::html1::utils::js_expression_from_list(
+                        let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("!data[\"ftd#dark-mode\"]".to_string()),
@@ -390,7 +389,7 @@ impl<'a> DependencyGenerator<'a> {
                 }
 
                 if let Some(value_string) =
-                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                    ftd::html::utils::get_formatted_dep_string_from_property_value(
                         self.id,
                         self.doc,
                         &property.value,
@@ -418,7 +417,7 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let mut value = ftd::html1::utils::js_expression_from_list(
+            let mut value = ftd::html::utils::js_expression_from_list(
                 expressions,
                 Some(key),
                 attribute
@@ -471,7 +470,7 @@ impl<'a> DependencyGenerator<'a> {
         for (key, attribute) in self.node.style.iter() {
             let mut expressions = vec![];
             let mut is_static = true;
-            let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), key);
             let style_key = key.clone();
             if matches!(key.as_str(), "background-image" | "box-shadow") {
                 var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
@@ -486,16 +485,16 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+                    .map(|c| ftd::html::utils::get_condition_string_(c, false));
 
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
 
-                if ftd::html1::utils::is_device_dependent(&property.value, self.doc)? {
+                if ftd::html::utils::is_device_dependent(&property.value, self.doc)? {
                     let mut desktop_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -509,7 +508,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     let mut mobile_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -522,7 +521,7 @@ impl<'a> DependencyGenerator<'a> {
                     }
                     if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
-                        let value = ftd::html1::utils::js_expression_from_list(
+                        let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
@@ -567,11 +566,11 @@ impl<'a> DependencyGenerator<'a> {
                     continue;
                 }
 
-                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
+                if ftd::html::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -584,7 +583,7 @@ impl<'a> DependencyGenerator<'a> {
                     }
                     let mut dark_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -598,7 +597,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     if light_value_string.ne(&dark_value_string) {
                         is_static = false;
-                        let value = ftd::html1::utils::js_expression_from_list(
+                        let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("!data[\"ftd#dark-mode\"]".to_string()),
@@ -642,7 +641,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     /*let mut light_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -662,7 +661,7 @@ impl<'a> DependencyGenerator<'a> {
 
                     let mut dark_value_string = "".to_string();
                     if let Some(value_string) =
-                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        ftd::html::utils::get_formatted_dep_string_from_property_value(
                             self.id,
                             self.doc,
                             &property.value,
@@ -703,7 +702,7 @@ impl<'a> DependencyGenerator<'a> {
                 }
 
                 if let Some(mut value_string) =
-                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                    ftd::html::utils::get_formatted_dep_string_from_property_value(
                         self.id,
                         self.doc,
                         &property.value,
@@ -732,7 +731,7 @@ impl<'a> DependencyGenerator<'a> {
                 }
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(
+            let value = ftd::html::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
                 format!(
@@ -787,7 +786,7 @@ fn node_for_properties(
     doc: &ftd::interpreter::TDoc,
     key: &str,
     id: &str,
-) -> ftd::html1::Result<Option<String>> {
+) -> ftd::html::Result<Option<String>> {
     let mut expressions = vec![];
     let mut is_static = true;
     for property_with_pattern in value.properties.iter() {
@@ -795,13 +794,13 @@ fn node_for_properties(
         let condition = property
             .condition
             .as_ref()
-            .map(|c| ftd::html1::utils::get_condition_string_(c, false));
+            .map(|c| ftd::html::utils::get_condition_string_(c, false));
 
         if !is_static_expression(&property.value, &condition, doc) {
             is_static = false;
         }
 
-        if let Some(value_string) = ftd::html1::utils::get_formatted_dep_string_from_property_value(
+        if let Some(value_string) = ftd::html::utils::get_formatted_dep_string_from_property_value(
             id,
             doc,
             &property.value,
@@ -826,7 +825,7 @@ fn node_for_properties(
             expressions.push((condition, value));
         }
     }
-    let value = ftd::html1::utils::js_expression_from_list(
+    let value = ftd::html::utils::js_expression_from_list(
         expressions,
         Some(key),
         format!(
@@ -870,7 +869,7 @@ fn dependency_map_from_property_value(
     node_change_id: &str,
     doc: &ftd::interpreter::TDoc,
 ) {
-    let values = ftd::html1::utils::dependencies_from_property_value(property_value, doc);
+    let values = ftd::html::utils::dependencies_from_property_value(property_value, doc);
     for v in values {
         var_dependencies.insert(v, node_change_id.to_string());
     }

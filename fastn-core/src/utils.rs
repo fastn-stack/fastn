@@ -445,17 +445,17 @@ fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> S
 #[allow(clippy::too_many_arguments)]
 pub fn replace_markers_2022(
     s: &str,
-    html_ui: ftd::html1::HtmlUI,
+    html_ui: ftd::html::HtmlUI,
     ftd_js: &str,
     config: &mut fastn_core::Config,
     main_id: &str,
     font_style: &str,
     base_url: &str,
 ) -> String {
-    ftd::html1::utils::trim_all_lines(
+    ftd::html::utils::trim_all_lines(
         s.replace(
             "__ftd_meta_data__",
-            ftd::html1::utils::get_meta_data(&html_ui.html_data).as_str(),
+            ftd::html::utils::get_meta_data(&html_ui.html_data).as_str(),
         )
         .replace(
             "__ftd_doc_title__",

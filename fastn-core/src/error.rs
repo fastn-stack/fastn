@@ -25,7 +25,7 @@ pub enum Error {
     FTDInterpreterError(#[from] ftd::interpreter::Error),
 
     #[error("FTDHtmlError: {}", _0)]
-    FTDHtmlError(#[from] ftd::html1::Error),
+    FTDHtmlError(#[from] ftd::html::Error),
 
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),

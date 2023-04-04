@@ -4,9 +4,9 @@ pub struct Action {
     pub values: Vec<(String, serde_json::Value)>,
 }
 
-impl ftd::html1::Action {
-    pub fn new(name: &str, values: Vec<(String, serde_json::Value)>) -> ftd::html1::Action {
-        ftd::html1::Action {
+impl ftd::html::Action {
+    pub fn new(name: &str, values: Vec<(String, serde_json::Value)>) -> ftd::html::Action {
+        ftd::html::Action {
             name: name.to_string(),
             values,
         }
@@ -16,12 +16,12 @@ impl ftd::html1::Action {
         function_call: &ftd::interpreter::FunctionCall,
         id: &str,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::html1::Result<ftd::html1::Action> {
-        let values = ftd::html1::Action::from_values(function_call, doc)?;
+    ) -> ftd::html::Result<ftd::html::Action> {
+        let values = ftd::html::Action::from_values(function_call, doc)?;
 
-        let function_name = ftd::html1::utils::name_with_id(function_call.name.as_str(), id);
-        Ok(ftd::html1::Action::new(
-            ftd::html1::utils::function_name_to_js_function(function_name.as_str()).as_str(),
+        let function_name = ftd::html::utils::name_with_id(function_call.name.as_str(), id);
+        Ok(ftd::html::Action::new(
+            ftd::html::utils::function_name_to_js_function(function_name.as_str()).as_str(),
             values,
         ))
     }
@@ -29,13 +29,13 @@ impl ftd::html1::Action {
     fn from_values(
         function_call: &ftd::interpreter::FunctionCall,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::html1::Result<Vec<(String, serde_json::Value)>> {
+    ) -> ftd::html::Result<Vec<(String, serde_json::Value)>> {
         function_call
             .order
             .iter()
             .filter_map(|k| {
                 function_call.values.get(k).map(|v| {
-                    ftd::html1::Action::from_property_value(v, doc).map(|v| (k.to_string(), v))
+                    ftd::html::Action::from_property_value(v, doc).map(|v| (k.to_string(), v))
                 })
             })
             .collect()
@@ -44,10 +44,10 @@ impl ftd::html1::Action {
     fn from_property_value(
         value: &ftd::interpreter::PropertyValue,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::html1::Result<serde_json::Value> {
+    ) -> ftd::html::Result<serde_json::Value> {
         Ok(match value {
             ftd::interpreter::PropertyValue::Value { value, .. } => {
-                ftd::html1::Action::from_value(value)
+                ftd::html::Action::from_value(value)
             }
             ftd::interpreter::PropertyValue::Reference {
                 name, is_mutable, ..
@@ -59,7 +59,7 @@ impl ftd::html1::Action {
             }
             t @ ftd::interpreter::PropertyValue::Clone { line_number, .. } => {
                 let value = t.clone().resolve(doc, *line_number)?;
-                ftd::html1::Action::from_value(&value)
+                ftd::html::Action::from_value(&value)
             }
             ftd::interpreter::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
         })
@@ -73,7 +73,7 @@ impl ftd::html1::Action {
             ftd::interpreter::Value::Boolean { value } => serde_json::json!(value),
             ftd::interpreter::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    ftd::html1::Action::from_value(data)
+                    ftd::html::Action::from_value(data)
                 } else {
                     serde_json::Value::Null
                 }
@@ -84,22 +84,22 @@ impl ftd::html1::Action {
         }
     }
 
-    fn into_list(self) -> Vec<ftd::html1::Action> {
+    fn into_list(self) -> Vec<ftd::html::Action> {
         vec![self]
     }
 }
 
-impl<'a> ftd::html1::main::HtmlGenerator<'a> {
+impl<'a> ftd::html::main::HtmlGenerator<'a> {
     pub(crate) fn group_by_js_event(
         &self,
         evts: &[ftd::node::Event],
-    ) -> ftd::html1::Result<ftd::Map<String>> {
+    ) -> ftd::html::Result<ftd::Map<String>> {
         // key: onclick
         // value: after group by for onclick find all actions, and call to_js_event()
-        let mut events: ftd::Map<Vec<ftd::html1::Action>> = Default::default();
+        let mut events: ftd::Map<Vec<ftd::html::Action>> = Default::default();
         for event in evts {
             if let Some(actions) = events.get_mut(to_event_name(&event.name).as_str()) {
-                actions.push(ftd::html1::Action::from_function_call(
+                actions.push(ftd::html::Action::from_function_call(
                     &event.action,
                     self.id.as_str(),
                     self.doc,
@@ -107,7 +107,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
             } else {
                 events.insert(
                     to_event_name(&event.name),
-                    ftd::html1::Action::from_function_call(
+                    ftd::html::Action::from_function_call(
                         &event.action,
                         self.id.as_str(),
                         self.doc,

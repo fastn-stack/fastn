@@ -7,7 +7,7 @@ impl FunctionGenerator {
         FunctionGenerator { id: id.to_string() }
     }
 
-    pub fn get_functions(&self, node_data: &ftd::node::NodeData) -> ftd::html1::Result<String> {
+    pub fn get_functions(&self, node_data: &ftd::node::NodeData) -> ftd::html::Result<String> {
         let mut vector = vec![];
         vector.extend(from_default_functions());
         for function in node_data
@@ -21,7 +21,7 @@ impl FunctionGenerator {
         Ok(vector.join("\n\n"))
     }
 
-    pub fn get_function(&self, function: ftd::interpreter::Function) -> ftd::html1::Result<String> {
+    pub fn get_function(&self, function: ftd::interpreter::Function) -> ftd::html::Result<String> {
         use itertools::Itertools;
 
         /*let node = dbg!(ftd::evalexpr::build_operator_tree(
@@ -38,15 +38,15 @@ impl FunctionGenerator {
             .collect_vec();
         for expression in function.expression {
             let node = ftd::evalexpr::build_operator_tree(expression.expression.as_str())?;
-            result.push(ftd::html1::utils::trim_brackets(
+            result.push(ftd::html::utils::trim_brackets(
                 ExpressionGenerator
                     .to_string(&node, true, arguments.as_slice())
                     .as_str(),
             ));
         }
         let expressions = result.join("\n");
-        let function_name = ftd::html1::utils::function_name_to_js_function(
-            ftd::html1::utils::name_with_id(function.name.as_str(), self.id.as_str()).as_str(),
+        let function_name = ftd::html::utils::function_name_to_js_function(
+            ftd::html::utils::name_with_id(function.name.as_str(), self.id.as_str()).as_str(),
         );
 
         let mut arguments = arguments.iter().map(|(k, _)| k).join(",");
@@ -126,7 +126,7 @@ impl ExpressionGenerator {
         if self.is_chain(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                let val = ftd::html1::utils::trim_brackets(
+                let val = ftd::html::utils::trim_brackets(
                     self.to_string_(children, true, arguments, extra_args)
                         .trim(),
                 );

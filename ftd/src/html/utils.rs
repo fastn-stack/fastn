@@ -66,7 +66,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
     string_needs_no_quotes: bool,
-) -> ftd::html1::Result<Option<String>> {
+) -> ftd::html::Result<Option<String>> {
     /*let field = match field {
         None if property_value.kind().is_ftd_length()
             || property_value.kind().is_ftd_resizing_fixed() =>
@@ -108,7 +108,7 @@ pub(crate) fn get_condition_string_(
     let node = condition
         .expression
         .update_node_with_variable_reference(&condition.references);
-    let expression = ftd::html1::ExpressionGenerator.to_string_(&node, true, &[], extra_args);
+    let expression = ftd::html::ExpressionGenerator.to_string_(&node, true, &[], extra_args);
     format!(
         indoc::indoc! {"
                 function(){{
@@ -168,7 +168,7 @@ pub(crate) fn js_expression_from_list(
 pub(crate) fn is_dark_mode_dependent(
     value: &ftd::interpreter::PropertyValue,
     doc: &ftd::interpreter::TDoc,
-) -> ftd::html1::Result<bool> {
+) -> ftd::html::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
     Ok(value.is_record(ftd::interpreter::FTD_IMAGE_SRC)
         || value.is_record(ftd::interpreter::FTD_COLOR)
@@ -178,7 +178,7 @@ pub(crate) fn is_dark_mode_dependent(
 pub(crate) fn is_device_dependent(
     value: &ftd::interpreter::PropertyValue,
     doc: &ftd::interpreter::TDoc,
-) -> ftd::html1::Result<bool> {
+) -> ftd::html::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
     Ok(value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
         || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE))
@@ -271,7 +271,7 @@ impl ftd::interpreter::PropertyValue {
         field: Option<String>,
         id: &str,
         string_needs_no_quotes: bool,
-    ) -> ftd::html1::Result<Option<String>> {
+    ) -> ftd::html::Result<Option<String>> {
         Ok(match self {
             ftd::interpreter::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
@@ -281,7 +281,7 @@ impl ftd::interpreter::PropertyValue {
                     .unwrap_or_else(|| "".to_string())
             )),
             ftd::interpreter::PropertyValue::FunctionCall(function_call) => {
-                let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
+                let action = serde_json::to_string(&ftd::html::Action::from_function_call(
                     function_call,
                     id,
                     doc,
@@ -309,7 +309,7 @@ impl ftd::interpreter::Value {
         field: Option<String>,
         id: &str,
         string_needs_no_quotes: bool,
-    ) -> ftd::html1::Result<Option<String>> {
+    ) -> ftd::html::Result<Option<String>> {
         Ok(match self {
             ftd::interpreter::Value::String { text } if !string_needs_no_quotes => {
                 Some(format!("\"{}\"", text))
@@ -572,9 +572,9 @@ pub(crate) fn to_properties_string(
             let condition = property
                 .condition
                 .as_ref()
-                .map(ftd::html1::utils::get_condition_string);
+                .map(ftd::html::utils::get_condition_string);
             if let Ok(Some(value_string)) =
-                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                ftd::html::utils::get_formatted_dep_string_from_property_value(
                     id,
                     doc,
                     &property.value,
@@ -588,7 +588,7 @@ pub(crate) fn to_properties_string(
             }
         }
         let value =
-            ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()), "null");
+            ftd::html::utils::js_expression_from_list(expressions, Some(key.as_str()), "null");
         properties_string = format!("{}\n\n{}", properties_string, value);
     }
     if properties_string.is_empty() {
@@ -613,7 +613,7 @@ pub(crate) fn to_argument_string(
         let mut result_value = "null".to_string();
         if let Some(ref value) = argument.value {
             if let Ok(Some(value_string)) =
-                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                ftd::html::utils::get_formatted_dep_string_from_property_value(
                     id, doc, value, &None, None, false,
                 )
             {
@@ -663,7 +663,7 @@ pub(crate) fn mutable_value(mutable_variables: &[String], id: &str) -> String {
                      }};
                 "},
             id = id,
-            key = ftd::html1::utils::js_reference_name(var.as_str())
+            key = ftd::html::utils::js_reference_name(var.as_str())
         ));
     }
     format!(
@@ -688,7 +688,7 @@ pub(crate) fn immutable_value(immutable_variables: &[String], id: &str) -> Strin
                      }};
                 "},
             id = id,
-            key = ftd::html1::utils::js_reference_name(var.as_str())
+            key = ftd::html::utils::js_reference_name(var.as_str())
         ));
     }
     format!(
@@ -718,7 +718,7 @@ pub fn get_css_html(external_css: &[String]) -> String {
     result
 }
 
-pub fn get_meta_data(html_data: &ftd::html1::HTMLData) -> String {
+pub fn get_meta_data(html_data: &ftd::html::HTMLData) -> String {
     let mut result = vec![];
     if let Some(ref title) = html_data.og_title {
         result.push(format!(

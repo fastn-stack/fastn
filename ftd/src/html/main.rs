@@ -46,7 +46,7 @@ impl HtmlUI {
         node_data: ftd::node::NodeData,
         id: &str,
         test: bool,
-    ) -> ftd::html1::Result<HtmlUI> {
+    ) -> ftd::html::Result<HtmlUI> {
         use itertools::Itertools;
 
         let tdoc = ftd::interpreter::TDoc::new(
@@ -55,23 +55,23 @@ impl HtmlUI {
             &node_data.bag,
         );
 
-        let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
-        let (dependencies, var_dependencies) = ftd::html1::dependencies::DependencyGenerator::new(
+        let functions = ftd::html::FunctionGenerator::new(id).get_functions(&node_data)?;
+        let (dependencies, var_dependencies) = ftd::html::dependencies::DependencyGenerator::new(
             id,
             &node_data.node,
             &node_data.html_data,
             &tdoc,
         )
         .get_dependencies()?;
-        let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
+        let variable_dependencies = ftd::html::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies, test)?;
-        let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
+        let variables = ftd::html::data::DataGenerator::new(&tdoc).get_data()?;
         let (html, outer_events, mutable_variable, immutable_variable) =
             HtmlGenerator::new(id, &tdoc).as_html_and_outer_events(node_data.node)?;
-        let dummy_html = ftd::html1::DummyHtmlGenerator::new(id, &tdoc)
+        let dummy_html = ftd::html::DummyHtmlGenerator::new(id, &tdoc)
             .as_string_from_dummy_nodes(&node_data.dummy_nodes);
 
-        let raw_html = ftd::html1::HelperHtmlGenerator::new(id, &tdoc)
+        let raw_html = ftd::html::HelperHtmlGenerator::new(id, &tdoc)
             .as_string_from_raw_nodes(&node_data.raw_nodes);
 
         /*for (dependency, raw_node) in node_data.raw_nodes {
@@ -92,10 +92,8 @@ impl HtmlUI {
             mutable_variable,
             immutable_variable,
             html_data: node_data.html_data.to_html_data(),
-            js: ftd::html1::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
-            css: ftd::html1::utils::get_css_html(
-                node_data.css.into_iter().collect_vec().as_slice(),
-            ),
+            js: ftd::html::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
+            css: ftd::html::utils::get_css_html(node_data.css.into_iter().collect_vec().as_slice()),
         })
     }
 }
@@ -147,10 +145,10 @@ impl<'a> HtmlGenerator<'a> {
         &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
-    ) -> ftd::html1::Result<()> {
+    ) -> ftd::html::Result<()> {
         if let Some(raw_data) = node.raw_data {
             dummy_html.iteration = raw_data.iteration;
-            dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+            dummy_html.properties_string = ftd::html::utils::to_properties_string(
                 self.id.as_str(),
                 raw_data.properties.as_slice(),
                 self.doc,
@@ -175,19 +173,17 @@ impl<'a> HtmlGenerator<'a> {
     pub fn as_html_and_outer_events(
         &mut self,
         node: ftd::node::Node,
-    ) -> ftd::html1::Result<(String, String, String, String)> {
+    ) -> ftd::html::Result<(String, String, String, String)> {
         let (html, events) = self.as_html_(node)?;
 
         let mutable_value =
-            ftd::html1::utils::mutable_value(self.mutable_variable.as_slice(), self.id.as_str());
-        let immutable_value = ftd::html1::utils::immutable_value(
-            self.immutable_variable.as_slice(),
-            self.id.as_str(),
-        );
+            ftd::html::utils::mutable_value(self.mutable_variable.as_slice(), self.id.as_str());
+        let immutable_value =
+            ftd::html::utils::immutable_value(self.immutable_variable.as_slice(), self.id.as_str());
 
         Ok((
             html,
-            ftd::html1::utils::events_to_string(events),
+            ftd::html::utils::events_to_string(events),
             mutable_value,
             immutable_value,
         ))
@@ -198,13 +194,13 @@ impl<'a> HtmlGenerator<'a> {
         &mut self,
         node: ftd::node::Node,
         dummy_html: &mut RawHtmlGenerator,
-    ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
+    ) -> ftd::html::Result<(String, Vec<(String, String, String)>)> {
         if node.is_null() {
             return Ok(("".to_string(), vec![]));
         }
 
         if let Some(raw_data) = node.raw_data {
-            let number = ftd::html1::utils::get_new_number(
+            let number = ftd::html::utils::get_new_number(
                 &dummy_html
                     .helper_html
                     .iter()
@@ -218,7 +214,7 @@ impl<'a> HtmlGenerator<'a> {
                 .insert(node_name.to_string(), Default::default());
             let helper_dummy_html = dummy_html.helper_html.get_mut(node_name.as_str()).unwrap();
             helper_dummy_html.iteration = raw_data.iteration;
-            helper_dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+            helper_dummy_html.properties_string = ftd::html::utils::to_properties_string(
                 self.id.as_str(),
                 raw_data.properties.as_slice(),
                 self.doc,
@@ -252,7 +248,7 @@ impl<'a> HtmlGenerator<'a> {
                         self.id, actions
                     );
                     outer_events.push((
-                        ftd::html1::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
+                        ftd::html::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
                         name,
                         event,
                     ));
@@ -281,7 +277,7 @@ impl<'a> HtmlGenerator<'a> {
                     }
                     Err(e) => Err(e),
                 })
-                .collect::<ftd::html1::Result<Vec<String>>>()?
+                .collect::<ftd::html::Result<Vec<String>>>()?
                 .join(""),
         };
 
@@ -302,7 +298,7 @@ impl<'a> HtmlGenerator<'a> {
     pub fn as_html_(
         &mut self,
         node: ftd::node::Node,
-    ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
+    ) -> ftd::html::Result<(String, Vec<(String, String, String)>)> {
         if node.is_null() {
             return Ok(("".to_string(), vec![]));
         }
@@ -324,7 +320,7 @@ impl<'a> HtmlGenerator<'a> {
                         self.id, actions
                     );
                     outer_events.push((
-                        ftd::html1::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
+                        ftd::html::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
                         name,
                         event,
                     ));
@@ -353,7 +349,7 @@ impl<'a> HtmlGenerator<'a> {
                     }
                     Err(e) => Err(e),
                 })
-                .collect::<ftd::html1::Result<Vec<String>>>()?
+                .collect::<ftd::html::Result<Vec<String>>>()?
                 .join(""),
         };
 
@@ -424,7 +420,7 @@ impl<'a> HtmlGenerator<'a> {
                         return s(k);
                     }
                     let v = if k.eq("data-id") {
-                        ftd::html1::utils::full_data_id(self.id.as_str(), v)
+                        ftd::html::utils::full_data_id(self.id.as_str(), v)
                     } else {
                         v.to_string()
                     };

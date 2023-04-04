@@ -7,7 +7,7 @@ impl<'a> DataGenerator<'a> {
         DataGenerator { doc }
     }
 
-    pub(crate) fn get_data(&self) -> ftd::html1::Result<ftd::Map<serde_json::Value>> {
+    pub(crate) fn get_data(&self) -> ftd::html::Result<ftd::Map<serde_json::Value>> {
         let mut d: ftd::Map<serde_json::Value> = Default::default();
         for (k, v) in self.doc.bag().iter() {
             if let ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
@@ -28,11 +28,11 @@ impl<'a> DataGenerator<'a> {
                 match value.clone().resolve(self.doc, value.line_number()) {
                     Ok(value) => {
                         if let Some(value) = ftd::interpreter::utils::get_value(self.doc, &value)? {
-                            d.insert(ftd::html1::utils::js_reference_name(k), value);
+                            d.insert(ftd::html::utils::js_reference_name(k), value);
                         }
                     }
                     Err(e) if *mutable => {
-                        return Err(ftd::html1::Error::ParseError {
+                        return Err(ftd::html::Error::ParseError {
                             message: format!(
                                 "Mutablility for inherited is not yet supported, {}",
                                 e
