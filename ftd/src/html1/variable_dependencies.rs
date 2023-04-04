@@ -1,12 +1,12 @@
 pub struct VariableDependencyGenerator<'a> {
     pub id: &'a str,
-    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
 impl<'a> VariableDependencyGenerator<'a> {
     pub(crate) fn new(
         id: &'a str,
-        doc: &'a ftd::interpreter2::TDoc,
+        doc: &'a ftd::interpreter::TDoc,
     ) -> VariableDependencyGenerator<'a> {
         VariableDependencyGenerator { id, doc }
     }
@@ -50,9 +50,9 @@ impl<'a> VariableDependencyGenerator<'a> {
 
         fn dependencies_from_property_value(
             result: &mut ftd::VecMap<String>,
-            value: &ftd::interpreter2::PropertyValue,
+            value: &ftd::interpreter::PropertyValue,
             name: &str,
-            doc: &ftd::interpreter2::TDoc,
+            doc: &ftd::interpreter::TDoc,
         ) {
             let value = ftd::html1::utils::dependencies_from_property_value(value, doc);
             for v in value {

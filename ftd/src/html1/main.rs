@@ -49,7 +49,7 @@ impl HtmlUI {
     ) -> ftd::html1::Result<HtmlUI> {
         use itertools::Itertools;
 
-        let tdoc = ftd::interpreter2::TDoc::new(
+        let tdoc = ftd::interpreter::TDoc::new(
             node_data.name.as_str(),
             &node_data.aliases,
             &node_data.bag,
@@ -104,9 +104,9 @@ impl HtmlUI {
 pub(crate) struct RawHtmlGenerator {
     pub name: String,
     pub html: String,
-    pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub properties: Vec<(String, ftd::interpreter::Property)>,
     pub properties_string: Option<String>,
-    pub iteration: Option<ftd::interpreter2::Loop>,
+    pub iteration: Option<ftd::interpreter::Loop>,
     pub helper_html: ftd::Map<RawHtmlGenerator>,
     pub children: Vec<RawHtmlGenerator>,
 }
@@ -114,7 +114,7 @@ pub(crate) struct RawHtmlGenerator {
 impl RawHtmlGenerator {
     pub(crate) fn from_node(
         id: &str,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &ftd::interpreter::TDoc,
         node: ftd::node::Node,
     ) -> RawHtmlGenerator {
         let mut dummy_html = Default::default();
@@ -128,13 +128,13 @@ impl RawHtmlGenerator {
 
 pub(crate) struct HtmlGenerator<'a> {
     pub id: String,
-    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub doc: &'a ftd::interpreter::TDoc<'a>,
     pub mutable_variable: Vec<String>,
     pub immutable_variable: Vec<String>,
 }
 
 impl<'a> HtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter2::TDoc<'a>) -> HtmlGenerator<'a> {
+    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HtmlGenerator<'a> {
         HtmlGenerator {
             id: id.to_string(),
             doc,
@@ -378,10 +378,10 @@ impl<'a> HtmlGenerator<'a> {
             .filter_map(|(k, v)| {
                 v.value
                     .map(|v| match v.as_str() {
-                        ftd::interpreter2::FTD_NO_VALUE => (k, "".to_string()),
+                        ftd::interpreter::FTD_NO_VALUE => (k, "".to_string()),
                         _ => (k, v),
                     })
-                    .filter(|s| !s.1.eq(ftd::interpreter2::FTD_IGNORE_KEY))
+                    .filter(|s| !s.1.eq(ftd::interpreter::FTD_IGNORE_KEY))
             })
             .collect();
         if !visible {
@@ -417,10 +417,10 @@ impl<'a> HtmlGenerator<'a> {
                     return None;
                 }
                 v.value.as_ref().map(|v| {
-                    if v.eq(ftd::interpreter2::FTD_IGNORE_KEY) {
+                    if v.eq(ftd::interpreter::FTD_IGNORE_KEY) {
                         return s("");
                     }
-                    if v.eq(ftd::interpreter2::FTD_NO_VALUE) {
+                    if v.eq(ftd::interpreter::FTD_NO_VALUE) {
                         return s(k);
                     }
                     let v = if k.eq("data-id") {

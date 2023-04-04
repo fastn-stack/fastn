@@ -4,8 +4,8 @@ use std::option::Option::Some;
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
-    pub instructions: &'a [ftd::interpreter2::Component],
+    pub bag: &'a mut ftd::Map<ftd::interpreter::Thing>,
+    pub instructions: &'a [ftd::interpreter::Component],
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
@@ -16,7 +16,7 @@ pub struct ExecuteDoc<'a> {
 pub struct RT {
     pub name: String,
     pub aliases: ftd::Map<String>,
-    pub bag: ftd::Map<ftd::interpreter2::Thing>,
+    pub bag: ftd::Map<ftd::interpreter::Thing>,
     pub main: ftd::executor::Column,
     pub html_data: ftd::executor::HTMLData,
     pub dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
@@ -43,7 +43,7 @@ impl Default for RT {
 
 impl<'a> ExecuteDoc<'a> {
     #[tracing::instrument(skip_all)]
-    pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
+    pub fn from_interpreter(document: ftd::interpreter::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
         let mut dummy_instructions = ftd::VecMap::new();
         let mut element_constructor = Default::default();
@@ -112,12 +112,11 @@ impl<'a> ExecuteDoc<'a> {
 
     #[allow(clippy::type_complexity)]
     pub(crate) fn get_instructions_from_instructions(
-        instructions: &[ftd::interpreter2::Component],
+        instructions: &[ftd::interpreter::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
-    {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter::Component)>> {
         let mut elements = vec![];
         let mut count = 0;
         for instruction in instructions.iter() {
@@ -136,13 +135,12 @@ impl<'a> ExecuteDoc<'a> {
 
     #[allow(clippy::type_complexity)]
     fn get_instructions_from_instruction(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
-    {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter::Component)>> {
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,
@@ -159,10 +157,10 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn execute_web_component(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        web_component_definition: ftd::interpreter2::WebComponentDefinition,
+        web_component_definition: ftd::interpreter::WebComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let local_variable_map = doc.insert_local_variables(
@@ -175,16 +173,16 @@ impl<'a> ExecuteDoc<'a> {
             true,
         )?;
 
-        let mut properties: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+        let mut properties: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
 
         for argument in web_component_definition.arguments.as_slice() {
             let property_value = if let Some(local_variable) = local_variable_map
                 .get(format!("{}.{}", instruction.name, argument.name.as_str()).as_str())
             {
-                ftd::interpreter2::PropertyValue::Reference {
+                ftd::interpreter::PropertyValue::Reference {
                     name: local_variable.to_string(),
                     kind: argument.kind.to_owned(),
-                    source: ftd::interpreter2::PropertyValueSource::Global,
+                    source: ftd::interpreter::PropertyValueSource::Global,
                     is_mutable: argument.mutable,
                     line_number: instruction.line_number,
                 }
@@ -207,12 +205,12 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn get_simple_instruction(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: ftd::interpreter2::ComponentDefinition,
+        component_definition: ftd::interpreter::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::interpreter2::Component> {
+    ) -> ftd::executor::Result<ftd::interpreter::Component> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
             component_definition.name.as_str(),
@@ -256,16 +254,16 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn get_instruction_from_variable(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
-    ) -> ftd::executor::Result<ftd::interpreter2::Component> {
+    ) -> ftd::executor::Result<ftd::interpreter::Component> {
         if doc
             .itdoc()
             .get_component(instruction.name.as_str(), instruction.line_number)
             .is_ok()
         {
             let mut component = instruction.to_owned();
-            component.source = ftd::interpreter2::ComponentSource::Declaration;
+            component.source = ftd::interpreter::ComponentSource::Declaration;
             return Ok(component);
         }
         let mut component = doc
@@ -286,20 +284,19 @@ impl<'a> ExecuteDoc<'a> {
             instruction.events.to_owned(),
         );
 
-        component.source = ftd::interpreter2::ComponentSource::Declaration;
+        component.source = ftd::interpreter::ComponentSource::Declaration;
 
         Ok(component)
     }
 
     #[allow(clippy::type_complexity)]
     fn get_loop_instructions(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter2::Component)>>
-    {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter::Component)>> {
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
             iteration
         } else {
@@ -310,7 +307,7 @@ impl<'a> ExecuteDoc<'a> {
             );
         };
 
-        let doc_name = ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+        let doc_name = ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
             iteration.alias.as_str(),
             doc.name,
             instruction.line_number,
@@ -375,7 +372,7 @@ impl<'a> ExecuteDoc<'a> {
     // TODO: Remove this after: Throw error when dummy is ready
     #[allow(unused_must_use)]
     fn execute_from_instructions_loop(
-        instructions: &[ftd::interpreter2::Component],
+        instructions: &[ftd::interpreter::Component],
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         let mut elements = vec![];
@@ -515,7 +512,7 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     /*    fn execute_from_instructions(
-        instructions: &[ftd::interpreter2::Component],
+        instructions: &[ftd::interpreter::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
@@ -545,7 +542,7 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn execute_from_instruction(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
@@ -580,7 +577,7 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn execute_recursive_component(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
@@ -631,10 +628,10 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     fn execute_simple_component(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: ftd::interpreter2::ComponentDefinition,
+        component_definition: ftd::interpreter::ComponentDefinition,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
@@ -661,10 +658,10 @@ impl<'a> ExecuteDoc<'a> {
     }*/
 
     pub(crate) fn execute_kernel_components(
-        instruction: &ftd::interpreter2::Component,
+        instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: &ftd::interpreter2::ComponentDefinition,
+        component_definition: &ftd::interpreter::ComponentDefinition,
         is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Element> {

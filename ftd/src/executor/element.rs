@@ -82,8 +82,8 @@ impl Element {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct RawElement {
     pub name: String,
-    pub properties: Vec<(String, ftd::interpreter2::Property)>,
-    pub condition: Option<ftd::interpreter2::Expression>,
+    pub properties: Vec<(String, ftd::interpreter::Property)>,
+    pub condition: Option<ftd::interpreter::Expression>,
     pub children: Vec<Element>,
     pub events: Vec<Event>,
     pub line_number: usize,
@@ -92,13 +92,13 @@ pub struct RawElement {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct IterativeElement {
     pub element: Box<ftd::executor::Element>,
-    pub iteration: ftd::interpreter2::Loop,
+    pub iteration: ftd::interpreter::Loop,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct WebComponent {
     pub name: String,
-    pub properties: ftd::Map<ftd::interpreter2::PropertyValue>,
+    pub properties: ftd::Map<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
@@ -171,8 +171,8 @@ pub struct ImageSrc {
 
 impl ImageSrc {
     pub(crate) fn optional_image(
-        properties: &[ftd::interpreter2::Property],
-        arguments: &[ftd::interpreter2::Argument],
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -186,7 +186,7 @@ impl ImageSrc {
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_IMAGE_SRC,
+            ftd::interpreter::FTD_IMAGE_SRC,
             inherited_variables,
         )?;
 
@@ -198,7 +198,7 @@ impl ImageSrc {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
+        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ImageSrc>> {
@@ -210,14 +210,14 @@ impl ImageSrc {
     }
 
     pub(crate) fn from_value(
-        value: ftd::interpreter2::PropertyValue,
+        value: ftd::interpreter::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter2::Value::Record { name, fields })
-                if name.eq(ftd::interpreter2::FTD_IMAGE_SRC) =>
+            Some(ftd::interpreter::Value::Record { name, fields })
+                if name.eq(ftd::interpreter::FTD_IMAGE_SRC) =>
             {
                 fields
             }
@@ -225,7 +225,7 @@ impl ImageSrc {
                 return ftd::executor::utils::parse_error(
                     format!(
                         "Expected value of type record `{}`, found: {:?}",
-                        ftd::interpreter2::FTD_IMAGE_SRC,
+                        ftd::interpreter::FTD_IMAGE_SRC,
                         t
                     ),
                     doc.name,
@@ -237,7 +237,7 @@ impl ImageSrc {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
@@ -255,7 +255,7 @@ impl ImageSrc {
                     .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("light"))],
+                vec![value.into_property(ftd::interpreter::PropertySource::header("light"))],
             )
         };
 
@@ -267,7 +267,7 @@ impl ImageSrc {
                         .resolve(&doc.itdoc(), line_number)?
                         .string(doc.name, line_number)?,
                     Some(line_number),
-                    vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
+                    vec![value.into_property(ftd::interpreter::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
@@ -303,10 +303,10 @@ pub struct Code {
 
 #[allow(clippy::too_many_arguments)]
 pub fn code_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -409,10 +409,10 @@ pub struct Iframe {
 
 #[allow(clippy::too_many_arguments)]
 pub fn iframe_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -546,7 +546,7 @@ pub struct Container {
     pub children: Vec<Element>,
 }
 
-pub type Event = ftd::interpreter2::Event;
+pub type Event = ftd::interpreter::Event;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
@@ -606,7 +606,7 @@ pub struct Common {
     pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
     pub data_id: String,
     pub line_number: usize,
-    pub condition: Option<ftd::interpreter2::Expression>,
+    pub condition: Option<ftd::interpreter::Expression>,
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
@@ -637,10 +637,10 @@ pub fn default_column() -> Column {
 
 #[allow(clippy::too_many_arguments)]
 pub fn text_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     is_dummy: bool,
@@ -730,10 +730,10 @@ pub fn text_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn integer_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -827,10 +827,10 @@ pub fn integer_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn decimal_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -924,10 +924,10 @@ pub fn decimal_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn boolean_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1006,10 +1006,10 @@ pub fn boolean_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn image_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1023,7 +1023,7 @@ pub fn image_from_properties(
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_IMAGE_SRC,
+            ftd::interpreter::FTD_IMAGE_SRC,
         )?;
         ftd::executor::Value::new(
             ImageSrc::from_values(src.value, doc, line_number)?,
@@ -1048,10 +1048,10 @@ pub fn image_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn row_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1083,10 +1083,10 @@ pub fn row_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn column_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1118,10 +1118,10 @@ pub fn column_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn container_element_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1155,8 +1155,8 @@ pub fn container_element_from_properties(
 }
 
 pub fn document_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    arguments: &[ftd::interpreter2::Argument],
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -1170,8 +1170,8 @@ pub fn document_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn html_data_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    arguments: &[ftd::interpreter2::Argument],
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     component_name: &str,
@@ -1248,10 +1248,10 @@ pub fn html_data_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1922,8 +1922,8 @@ pub fn common_from_properties(
 }
 
 pub fn container_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    arguments: &[ftd::interpreter2::Argument],
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -1985,7 +1985,7 @@ impl TextInput {
                         \"\"
                     }}
                 "},
-                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+                remove_key = ftd::interpreter::FTD_REMOVE_KEY,
             ),
             true,
         )
@@ -1994,10 +1994,10 @@ impl TextInput {
 
 #[allow(clippy::too_many_arguments)]
 pub fn text_input_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -2102,7 +2102,7 @@ impl CheckBox {
                         \"{remove_key}\"
                     }}
                 "},
-                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+                remove_key = ftd::interpreter::FTD_REMOVE_KEY,
             ),
             true,
         )
@@ -2118,7 +2118,7 @@ impl CheckBox {
                         \"\"
                     }}
                 "},
-                remove_key = ftd::interpreter2::FTD_REMOVE_KEY,
+                remove_key = ftd::interpreter::FTD_REMOVE_KEY,
             ),
             true,
         )
@@ -2127,10 +2127,10 @@ impl CheckBox {
 
 #[allow(clippy::too_many_arguments)]
 pub fn checkbox_from_properties(
-    properties: &[ftd::interpreter2::Property],
-    events: &[ftd::interpreter2::Event],
-    arguments: &[ftd::interpreter2::Argument],
-    condition: &Option<ftd::interpreter2::Expression>,
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,

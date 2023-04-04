@@ -8,7 +8,7 @@ pub struct OrType {
 impl OrType {
     fn new(
         name: &str,
-        variants: Vec<ftd::interpreter2::OrTypeVariant>,
+        variants: Vec<ftd::interpreter::OrTypeVariant>,
         line_number: usize,
     ) -> OrType {
         OrType {
@@ -20,31 +20,31 @@ impl OrType {
 
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let or_type = ast.get_or_type(doc.name)?;
         for mut variant in or_type.variants {
             variant.set_name(format!("{}.{}", or_type.name, variant.name()).as_str());
-            ftd::interpreter2::OrTypeVariant::scan_ast(variant, doc)?;
+            ftd::interpreter::OrTypeVariant::scan_ast(variant, doc)?;
         }
         Ok(())
     }
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<OrType>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrType>> {
         let or_type = ast.get_or_type(doc.name)?;
         let name = doc.resolve_name(or_type.name.as_str());
         let line_number = or_type.line_number();
         let mut variants = vec![];
         for mut variant in or_type.variants {
             variant.set_name(format!("{}.{}", or_type.name, variant.name()).as_str());
-            variants.push(try_ok_state!(ftd::interpreter2::OrTypeVariant::from_ast(
+            variants.push(try_ok_state!(ftd::interpreter::OrTypeVariant::from_ast(
                 variant, doc
             )?))
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(OrType::new(
+        Ok(ftd::interpreter::StateWithThing::new_thing(OrType::new(
             name.as_str(),
             variants,
             line_number,
@@ -54,26 +54,26 @@ impl OrType {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum OrTypeVariant {
-    AnonymousRecord(ftd::interpreter2::Record),
-    Regular(ftd::interpreter2::Field),
-    Constant(ftd::interpreter2::Field),
+    AnonymousRecord(ftd::interpreter::Record),
+    Regular(ftd::interpreter::Field),
+    Constant(ftd::interpreter::Field),
 }
 
 impl OrTypeVariant {
-    pub fn new_record(record: ftd::interpreter2::Record) -> OrTypeVariant {
+    pub fn new_record(record: ftd::interpreter::Record) -> OrTypeVariant {
         OrTypeVariant::AnonymousRecord(record)
     }
 
-    pub fn new_constant(variant: ftd::interpreter2::Field) -> OrTypeVariant {
+    pub fn new_constant(variant: ftd::interpreter::Field) -> OrTypeVariant {
         OrTypeVariant::Constant(variant)
     }
 
-    pub fn new_regular(variant: ftd::interpreter2::Field) -> OrTypeVariant {
+    pub fn new_regular(variant: ftd::interpreter::Field) -> OrTypeVariant {
         OrTypeVariant::Regular(variant)
     }
 
     pub fn is_constant(&self) -> bool {
-        matches!(self, ftd::interpreter2::OrTypeVariant::Constant(_))
+        matches!(self, ftd::interpreter::OrTypeVariant::Constant(_))
     }
 
     pub fn name(&self) -> String {
@@ -84,13 +84,10 @@ impl OrTypeVariant {
         }
     }
 
-    pub fn ok_constant(
-        &self,
-        doc_id: &str,
-    ) -> ftd::interpreter2::Result<&ftd::interpreter2::Field> {
+    pub fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&ftd::interpreter::Field> {
         match self {
-            ftd::interpreter2::OrTypeVariant::Constant(c) => Ok(c),
-            t => ftd::interpreter2::utils::e2(
+            ftd::interpreter::OrTypeVariant::Constant(c) => Ok(c),
+            t => ftd::interpreter::utils::e2(
                 format!("Expected constant, found: {:?}", t),
                 doc_id,
                 t.line_number(),
@@ -108,59 +105,55 @@ impl OrTypeVariant {
 
     pub fn scan_ast(
         ast_variant: ftd::ast::OrTypeVariant,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         match ast_variant {
             ftd::ast::OrTypeVariant::AnonymousRecord(record) => {
-                ftd::interpreter2::Record::scan_record(record, doc)
+                ftd::interpreter::Record::scan_record(record, doc)
             }
             ftd::ast::OrTypeVariant::Regular(variant) => {
-                ftd::interpreter2::Field::scan_ast_field(variant, doc, &Default::default())
+                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
             }
             ftd::ast::OrTypeVariant::Constant(variant) => {
-                ftd::interpreter2::Field::scan_ast_field(variant, doc, &Default::default())
+                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
             }
         }
     }
 
     pub fn from_ast(
         ast_variant: ftd::ast::OrTypeVariant,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<OrTypeVariant>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrTypeVariant>> {
         match ast_variant {
             ftd::ast::OrTypeVariant::AnonymousRecord(record) => {
-                Ok(ftd::interpreter2::StateWithThing::new_thing(
-                    ftd::interpreter2::OrTypeVariant::new_record(try_ok_state!(
-                        ftd::interpreter2::Record::from_record(record, doc)?
+                Ok(ftd::interpreter::StateWithThing::new_thing(
+                    ftd::interpreter::OrTypeVariant::new_record(try_ok_state!(
+                        ftd::interpreter::Record::from_record(record, doc)?
                     )),
                 ))
             }
             ftd::ast::OrTypeVariant::Regular(variant) => {
-                Ok(ftd::interpreter2::StateWithThing::new_thing(
-                    ftd::interpreter2::OrTypeVariant::new_regular(try_ok_state!(
-                        ftd::interpreter2::Field::from_ast_field(
-                            variant,
-                            doc,
-                            &Default::default()
-                        )?
+                Ok(ftd::interpreter::StateWithThing::new_thing(
+                    ftd::interpreter::OrTypeVariant::new_regular(try_ok_state!(
+                        ftd::interpreter::Field::from_ast_field(variant, doc, &Default::default())?
                     )),
                 ))
             }
             ftd::ast::OrTypeVariant::Constant(variant) => {
-                let variant = try_ok_state!(ftd::interpreter2::Field::from_ast_field(
+                let variant = try_ok_state!(ftd::interpreter::Field::from_ast_field(
                     variant,
                     doc,
                     &Default::default()
                 )?);
                 validate_constant_variant(&variant, doc)?;
-                Ok(ftd::interpreter2::StateWithThing::new_thing(
-                    ftd::interpreter2::OrTypeVariant::new_regular(variant),
+                Ok(ftd::interpreter::StateWithThing::new_thing(
+                    ftd::interpreter::OrTypeVariant::new_regular(variant),
                 ))
             }
         }
     }
 
-    pub fn fields(&self) -> Vec<&ftd::interpreter2::Field> {
+    pub fn fields(&self) -> Vec<&ftd::interpreter::Field> {
         match self {
             OrTypeVariant::AnonymousRecord(r) => r.fields.iter().collect(),
             OrTypeVariant::Regular(r) => vec![r],
@@ -170,13 +163,13 @@ impl OrTypeVariant {
 }
 
 fn validate_constant_variant(
-    variant: &ftd::interpreter2::Field,
-    doc: &ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<()> {
+    variant: &ftd::interpreter::Field,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
     if variant.value.is_none()
         && !(variant.kind.is_void() || variant.kind.is_optional() || variant.kind.is_list())
     {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!("The constant variant `{}` can't be empty", variant.name),
             doc.name,
             variant.line_number,

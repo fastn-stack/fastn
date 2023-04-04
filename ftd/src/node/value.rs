@@ -8,13 +8,13 @@ pub struct Value {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct PropertyWithPattern {
-    pub property: ftd::interpreter2::Property,
+    pub property: ftd::interpreter::Property,
     pub pattern_with_eval: Option<(String, bool)>,
 }
 
 impl PropertyWithPattern {
     fn new(
-        property: ftd::interpreter2::Property,
+        property: ftd::interpreter::Property,
         pattern_with_eval: Option<(String, bool)>,
     ) -> PropertyWithPattern {
         PropertyWithPattern {
@@ -86,19 +86,19 @@ impl Value {
     }
 }
 
-impl ftd::interpreter2::Kind {
+impl ftd::interpreter::Kind {
     fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
         match self {
-            ftd::interpreter2::Kind::OrType { name, .. }
-                if name.eq(ftd::interpreter2::FTD_LENGTH) =>
+            ftd::interpreter::Kind::OrType { name, .. }
+                if name.eq(ftd::interpreter::FTD_LENGTH) =>
             {
                 None
             }
-            ftd::interpreter2::Kind::OrType {
+            ftd::interpreter::Kind::OrType {
                 name,
                 variant: Some(variant),
                 full_variant,
-            } if name.eq(ftd::interpreter2::FTD_RESIZING) => {
+            } if name.eq(ftd::interpreter::FTD_RESIZING) => {
                 ftd::executor::Resizing::get_pattern_from_variant_str(
                     variant,
                     full_variant.as_ref().unwrap_or(variant),

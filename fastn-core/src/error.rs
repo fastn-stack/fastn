@@ -22,7 +22,7 @@ pub enum Error {
     FTDExecError(#[from] ftd::executor::Error),
 
     #[error("FTDInterpreterError: {}", _0)]
-    FTDInterpreterError(#[from] ftd::interpreter2::Error),
+    FTDInterpreterError(#[from] ftd::interpreter::Error),
 
     #[error("FTDHtmlError: {}", _0)]
     FTDHtmlError(#[from] ftd::html1::Error),

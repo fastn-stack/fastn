@@ -335,7 +335,7 @@ impl VariableValue {
     pub(crate) fn into_list(
         self,
         doc_name: &str,
-        kind: &ftd::interpreter2::Kind,
+        kind: &ftd::interpreter::Kind,
     ) -> ftd::ast::Result<Vec<(String, VariableValue)>> {
         match self {
             VariableValue::String {

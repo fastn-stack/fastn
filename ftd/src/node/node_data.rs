@@ -5,7 +5,7 @@ pub struct NodeData {
     pub name: String,
     pub node: ftd::node::Node,
     pub html_data: ftd::node::HTMLData,
-    pub bag: ftd::Map<ftd::interpreter2::Thing>,
+    pub bag: ftd::Map<ftd::interpreter::Thing>,
     pub aliases: ftd::Map<String>,
     pub dummy_nodes: ftd::VecMap<ftd::node::DummyNode>,
     pub raw_nodes: ftd::Map<ftd::node::RawNode>,

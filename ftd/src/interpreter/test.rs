@@ -3,16 +3,16 @@ use pretty_assertions::assert_eq; // macro
 pub fn interpret_helper(
     name: &str,
     source: &str,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
-    let mut s = ftd::interpreter2::interpret(name, source)?;
+) -> ftd::interpreter::Result<ftd::interpreter::Document> {
+    let mut s = ftd::interpreter::interpret(name, source)?;
     let document;
     loop {
         match s {
-            ftd::interpreter2::Interpreter::Done { document: doc } => {
+            ftd::interpreter::Interpreter::Done { document: doc } => {
                 document = doc;
                 break;
             }
-            ftd::interpreter2::Interpreter::StuckOnImport {
+            ftd::interpreter::Interpreter::StuckOnImport {
                 module, state: st, ..
             } => {
                 let source = "";
@@ -22,7 +22,7 @@ pub fn interpret_helper(
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                let document = ftd::interpreter2::ParsedDocument::parse(module.as_str(), source)?;
+                let document = ftd::interpreter::ParsedDocument::parse(module.as_str(), source)?;
                 s = st.continue_after_import(
                     module.as_str(),
                     document,
@@ -31,12 +31,12 @@ pub fn interpret_helper(
                     0,
                 )?;
             }
-            ftd::interpreter2::Interpreter::StuckOnProcessor {
+            ftd::interpreter::Interpreter::StuckOnProcessor {
                 state, ast, module, ..
             } => {
                 let variable_definition = ast.clone().get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
-                let value = ftd::interpreter2::Value::String {
+                let value = ftd::interpreter::Value::String {
                     text: variable_definition
                         .value
                         .caption()
@@ -46,19 +46,19 @@ pub fn interpret_helper(
                 };
                 s = state.continue_after_processor(value, ast)?;
             }
-            ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+            ftd::interpreter::Interpreter::StuckOnForeignVariable {
                 state,
                 module,
                 variable,
                 ..
             } => {
                 if module.eq("test") {
-                    let value = ftd::interpreter2::Value::String {
+                    let value = ftd::interpreter::Value::String {
                         text: variable.to_uppercase().to_string(),
                     };
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
-                    return ftd::interpreter2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("Unknown module {}", module),
                         module.as_str(),
                         0,
@@ -73,7 +73,7 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let mut i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    for thing in ftd::interpreter2::default::default_bag().keys() {
+    for thing in ftd::interpreter::default::default_bag().keys() {
         i.data.remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&i).unwrap();
@@ -81,7 +81,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    let t: ftd::interpreter2::Document = serde_json::from_str(t)
+    let t: ftd::interpreter::Document = serde_json::from_str(t)
         .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
     assert_eq!(&t, &i, "Expected JSON: {}", expected_json)
 }
@@ -166,7 +166,7 @@ fn filename_with_second_last_extension_replaced_with_json(
 #[test]
 fn evalexpr_test() {
     use ftd::evalexpr::*;
-    let mut context = ftd::interpreter2::default::default_context().unwrap();
+    let mut context = ftd::interpreter::default::default_context().unwrap();
     dbg!(ftd::evalexpr::build_operator_tree("$a >= $b").unwrap());
     dbg!(ftd::evalexpr::build_operator_tree(
         "(e = \"\"; ftd.is_empty(e)) && (d = \

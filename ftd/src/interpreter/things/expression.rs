@@ -1,14 +1,14 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Expression {
     pub expression: ftd::evalexpr::ExprNode,
-    pub references: ftd::Map<ftd::interpreter2::PropertyValue>,
+    pub references: ftd::Map<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
 impl Expression {
     pub fn new(
         expression: ftd::evalexpr::ExprNode,
-        references: ftd::Map<ftd::interpreter2::PropertyValue>,
+        references: ftd::Map<ftd::interpreter::PropertyValue>,
         line_number: usize,
     ) -> Expression {
         Expression {
@@ -22,8 +22,8 @@ impl Expression {
         condition: ftd::ast::Condition,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
             Expression::scan_references(
@@ -36,7 +36,7 @@ impl Expression {
 
             return Ok(());
         }
-        ftd::interpreter2::utils::e2(
+        ftd::interpreter::utils::e2(
             format!(
                 "Expected condition in expression mode, found: {}",
                 condition.expression
@@ -48,10 +48,10 @@ impl Expression {
 
     pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
-        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
             let references = try_ok_state!(Expression::get_references(
@@ -62,11 +62,11 @@ impl Expression {
                 condition.line_number,
             )?);
 
-            return Ok(ftd::interpreter2::StateWithThing::new_thing(
+            return Ok(ftd::interpreter::StateWithThing::new_thing(
                 Expression::new(node, references, condition.line_number),
             ));
         }
-        ftd::interpreter2::utils::e2(
+        ftd::interpreter::utils::e2(
             format!(
                 "Expected condition in expression mode, found: {}",
                 condition.expression
@@ -80,14 +80,14 @@ impl Expression {
         node: &mut ftd::evalexpr::ExprNode,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<()> {
+    ) -> ftd::interpreter::Result<()> {
         let variable_identifier_reads = get_variable_identifier_read(node);
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
-            ftd::interpreter2::PropertyValue::scan_string_with_argument(
+            ftd::interpreter::PropertyValue::scan_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
                 line_number,
@@ -100,19 +100,19 @@ impl Expression {
 
     pub(crate) fn get_references(
         node: &mut ftd::evalexpr::ExprNode,
-        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<
-        ftd::interpreter2::StateWithThing<ftd::Map<ftd::interpreter2::PropertyValue>>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<ftd::Map<ftd::interpreter::PropertyValue>>,
     > {
         let variable_identifier_reads = get_variable_identifier_read(node);
-        let mut result: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+        let mut result: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
-            let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
+            let value = try_ok_state!(ftd::interpreter::PropertyValue::from_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
                 None,
@@ -123,10 +123,10 @@ impl Expression {
             )?);
             result.insert(variable, value);
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(result))
+        Ok(ftd::interpreter::StateWithThing::new_thing(result))
     }
 
-    pub fn eval(&self, doc: &ftd::interpreter2::TDoc) -> ftd::interpreter2::Result<bool> {
+    pub fn eval(&self, doc: &ftd::interpreter::TDoc) -> ftd::interpreter::Result<bool> {
         let mut values: ftd::Map<ftd::evalexpr::Value> = Default::default();
         for (key, property_value) in self.references.iter() {
             values.insert(
@@ -138,11 +138,11 @@ impl Expression {
             );
         }
         let node = self.expression.update_node_with_value(&values);
-        let mut context = ftd::interpreter2::default::default_context()?;
+        let mut context = ftd::interpreter::default::default_context()?;
         Ok(node.eval_boolean_with_context_mut(&mut context)?)
     }
 
-    pub fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
+    pub fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
         for val in self.references.values() {
             if !val.is_static(doc) {
                 return false;
@@ -207,13 +207,13 @@ impl ftd::evalexpr::ExprNode {
 
     pub fn update_node_with_variable_reference(
         &self,
-        references: &ftd::Map<ftd::interpreter2::PropertyValue>,
+        references: &ftd::Map<ftd::interpreter::PropertyValue>,
     ) -> ftd::evalexpr::ExprNode {
         let mut operator = self.operator().clone();
         if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
-            if format!("${}", ftd::interpreter2::FTD_LOOP_COUNTER).eq(identifier) {
-                if let Some(ftd::interpreter2::PropertyValue::Value {
-                    value: ftd::interpreter2::Value::Integer { value },
+            if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
+                if let Some(ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Integer { value },
                     ..
                 }) = references.get(identifier)
                 {
@@ -221,13 +221,13 @@ impl ftd::evalexpr::ExprNode {
                         identifier: value.to_string(),
                     }
                 }
-            } else if let Some(ftd::interpreter2::PropertyValue::Reference { name, .. }) =
+            } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
                 references.get(identifier)
             {
                 operator = ftd::evalexpr::Operator::VariableIdentifierRead {
                     identifier: format!(
                         "resolve_reference(\"{}\", data)",
-                        ftd::interpreter2::utils::js_reference_name(name)
+                        ftd::interpreter::utils::js_reference_name(name)
                     ),
                 }
             }

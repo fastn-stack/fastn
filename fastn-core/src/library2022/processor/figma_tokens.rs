@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 pub fn process_figma_tokens(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &mut ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &mut ftd::interpreter::TDoc,
     _config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -45,10 +45,10 @@ pub fn process_figma_tokens(
 
 pub fn process_figma_tokens_old(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &mut ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &mut ftd::interpreter::TDoc,
     _config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -259,16 +259,16 @@ pub fn capitalize_word(s: &str) -> String {
 
 fn extract_light_dark_colors(
     value: ftd::ast::VariableValue,
-    doc: &mut ftd::interpreter2::TDoc,
+    doc: &mut ftd::interpreter::TDoc,
     variable_name: &mut Option<String>,
     light_colors: &mut ftd::Map<ftd::Map<VT>>,
     dark_colors: &mut ftd::Map<ftd::Map<VT>>,
     line_number: usize,
-) -> ftd::interpreter2::Result<()> {
+) -> ftd::interpreter::Result<()> {
     let headers = match &value {
         ftd::ast::VariableValue::Record { headers, .. } => headers,
         _ => {
-            return Err(ftd::interpreter2::Error::InvalidKind {
+            return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!("Expected record of color-scheme found: {:?}", value),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -284,7 +284,7 @@ fn extract_light_dark_colors(
                 *variable_name = Some(hval.to_string())
             }
             _ => {
-                return Err(ftd::interpreter2::Error::InvalidKind {
+                return Err(ftd::interpreter::Error::InvalidKind {
                     doc_id: doc.name.to_string(),
                     line_number,
                     message: format!("Expected string kind for name found: {:?}", variable_name),
@@ -296,7 +296,7 @@ fn extract_light_dark_colors(
     let variable = if let Some(variable) = header {
         variable
     } else {
-        return Err(ftd::interpreter2::Error::InvalidKind {
+        return Err(ftd::interpreter::Error::InvalidKind {
             message: format!("`variable` named header not found: {:?}", value),
             doc_id: doc.name.to_string(),
             line_number,
@@ -306,7 +306,7 @@ fn extract_light_dark_colors(
     let hval = match &variable.value {
         ftd::ast::VariableValue::String { value: hval, .. } => hval,
         t => {
-            return Err(ftd::interpreter2::Error::InvalidKind {
+            return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(
                     "Expected `variable` header as key value pair: found: {:?}",
                     t
@@ -324,9 +324,9 @@ fn extract_light_dark_colors(
     let bag_thing = doc.bag().get(bag_entry.as_str());
 
     let v = match bag_thing {
-        Some(ftd::interpreter2::Thing::Variable(v)) => v,
+        Some(ftd::interpreter::Thing::Variable(v)) => v,
         t => {
-            return Err(ftd::interpreter2::Error::InvalidKind {
+            return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!("Expected Variable reference, found: {:?}", t),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -335,12 +335,12 @@ fn extract_light_dark_colors(
     };
 
     let fields = match &v.value {
-        ftd::interpreter2::PropertyValue::Value {
-            value: ftd::interpreter2::Value::Record { fields, .. },
+        ftd::interpreter::PropertyValue::Value {
+            value: ftd::interpreter::Value::Record { fields, .. },
             ..
         } => fields,
         t => {
-            return Err(ftd::interpreter2::Error::InvalidKind {
+            return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(
                     "Expected variable of type record `ftd.color-scheme`: found {:?}",
                     t
@@ -407,15 +407,15 @@ fn format_color_title(title: &str) -> String {
 
 fn extract_colors(
     color_name: String,
-    color_value: &ftd::interpreter2::Value,
-    doc: &ftd::interpreter2::TDoc,
+    color_value: &ftd::interpreter::Value,
+    doc: &ftd::interpreter::TDoc,
     extracted_light_colors: &mut ftd::Map<VT>,
     extracted_dark_colors: &mut ftd::Map<VT>,
-) -> ftd::interpreter2::Result<()> {
-    if let ftd::interpreter2::Value::Record { fields, .. } = color_value {
+) -> ftd::interpreter::Result<()> {
+    if let ftd::interpreter::Value::Record { fields, .. } = color_value {
         if color_value.is_record("ftd#color") {
-            if let Some(ftd::interpreter2::PropertyValue::Value {
-                value: ftd::interpreter2::Value::String { text: light_value },
+            if let Some(ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::String { text: light_value },
                 ..
             }) = fields.get("light")
             {
@@ -427,8 +427,8 @@ fn extract_colors(
                     },
                 );
             }
-            if let Some(ftd::interpreter2::PropertyValue::Value {
-                value: ftd::interpreter2::Value::String { text: dark_value },
+            if let Some(ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::String { text: dark_value },
                 ..
             }) = fields.get("dark")
             {

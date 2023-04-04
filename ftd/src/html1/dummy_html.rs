@@ -2,11 +2,11 @@ use itertools::Itertools;
 
 pub(crate) struct DummyHtmlGenerator<'a> {
     pub id: String,
-    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
 impl<'a> DummyHtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter2::TDoc<'a>) -> DummyHtmlGenerator<'a> {
+    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> DummyHtmlGenerator<'a> {
         DummyHtmlGenerator {
             id: id.to_string(),
             doc,
@@ -150,11 +150,11 @@ impl<'a> DummyHtmlGenerator<'a> {
 
 pub(crate) struct HelperHtmlGenerator<'a> {
     pub id: String,
-    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
 impl<'a> HelperHtmlGenerator<'a> {
-    pub fn new(id: &str, doc: &'a ftd::interpreter2::TDoc<'a>) -> HelperHtmlGenerator<'a> {
+    pub fn new(id: &str, doc: &'a ftd::interpreter::TDoc<'a>) -> HelperHtmlGenerator<'a> {
         HelperHtmlGenerator {
             id: id.to_string(),
             doc,

@@ -106,7 +106,7 @@ fn highlighted_html_for_string(
 
     for line in syntect::util::LinesWithEndings::from(s) {
         let mut regions = highlighter.highlight_line(line, ss)?;
-        let highlighted = ftd::interpreter2::FTD_HIGHLIGHTER.is_match(line);
+        let highlighted = ftd::interpreter::FTD_HIGHLIGHTER.is_match(line);
         if ext.eq("ftd") && highlighted {
             let style = regions.remove(regions.len() - 2).0;
             let b = color_to_hex(&style.background);

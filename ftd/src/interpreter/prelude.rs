@@ -1,10 +1,10 @@
-pub use ftd::interpreter2::constants::*;
-pub use ftd::interpreter2::main::{
+pub use ftd::interpreter::constants::*;
+pub use ftd::interpreter::main::{
     interpret, interpret_with_line_number, Document, Interpreter, InterpreterState,
     InterpreterWithoutState, ParsedDocument, StateWithThing, ToProcess,
 };
 
-pub use ftd::interpreter2::things::{
+pub use ftd::interpreter::things::{
     component::{
         Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop,
         Property, PropertySource,

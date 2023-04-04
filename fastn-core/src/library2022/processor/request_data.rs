@@ -1,14 +1,14 @@
 pub fn process(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: URL params not yet handled
     let req = match config.request.as_ref() {
         Some(v) => v,
         None => {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 "config does not contain http-request object",
                 doc.name,
                 value.line_number(),
@@ -37,7 +37,7 @@ pub fn process(
         }
         Ok(None) => {}
         Err(e) => {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("Error while parsing request body: {:?}", e),
                 doc.name,
                 value.line_number(),

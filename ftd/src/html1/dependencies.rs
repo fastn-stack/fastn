@@ -2,7 +2,7 @@ pub struct DependencyGenerator<'a> {
     pub id: &'a str,
     pub node: &'a ftd::node::Node,
     pub html_data: &'a ftd::node::HTMLData,
-    pub doc: &'a ftd::interpreter2::TDoc<'a>,
+    pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
 
 impl<'a> DependencyGenerator<'a> {
@@ -10,7 +10,7 @@ impl<'a> DependencyGenerator<'a> {
         id: &'a str,
         node: &'a ftd::node::Node,
         html_data: &'a ftd::node::HTMLData,
-        doc: &'a ftd::interpreter2::TDoc,
+        doc: &'a ftd::interpreter::TDoc,
     ) -> DependencyGenerator<'a> {
         DependencyGenerator {
             id,
@@ -447,7 +447,7 @@ impl<'a> DependencyGenerator<'a> {
             "},
                 node_data_id,
                 key,
-                ftd::interpreter2::FTD_REMOVE_KEY,
+                ftd::interpreter::FTD_REMOVE_KEY,
                 node_data_id,
                 key
             );
@@ -725,7 +725,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.doc,
                     );
                     value_string = self.filter_style_data(&style_key, value_string.to_string());
-                    if !value_string.eq(ftd::interpreter2::FTD_VALUE_UNCHANGED) {
+                    if !value_string.eq(ftd::interpreter::FTD_VALUE_UNCHANGED) {
                         let value = format!("{} = {};", key, value_string);
                         expressions.push((condition, value));
                     }
@@ -784,7 +784,7 @@ fn node_for_properties(
     value: &ftd::node::Value,
     var_dependencies: &mut ftd::VecMap<String>,
     node_change_id: &str,
-    doc: &ftd::interpreter2::TDoc,
+    doc: &ftd::interpreter::TDoc,
     key: &str,
     id: &str,
 ) -> ftd::html1::Result<Option<String>> {
@@ -853,9 +853,9 @@ fn node_for_properties(
 
 fn dependency_map_from_condition(
     var_dependencies: &mut ftd::VecMap<String>,
-    condition: &Option<ftd::interpreter2::Expression>,
+    condition: &Option<ftd::interpreter::Expression>,
     node_change_id: &str,
-    doc: &ftd::interpreter2::TDoc,
+    doc: &ftd::interpreter::TDoc,
 ) {
     if let Some(condition) = condition.as_ref() {
         for reference in condition.references.values() {
@@ -866,9 +866,9 @@ fn dependency_map_from_condition(
 
 fn dependency_map_from_property_value(
     var_dependencies: &mut ftd::VecMap<String>,
-    property_value: &ftd::interpreter2::PropertyValue,
+    property_value: &ftd::interpreter::PropertyValue,
     node_change_id: &str,
-    doc: &ftd::interpreter2::TDoc,
+    doc: &ftd::interpreter::TDoc,
 ) {
     let values = ftd::html1::utils::dependencies_from_property_value(property_value, doc);
     for v in values {
@@ -877,12 +877,12 @@ fn dependency_map_from_property_value(
 }
 
 fn is_static_expression(
-    property_value: &ftd::interpreter2::PropertyValue,
+    property_value: &ftd::interpreter::PropertyValue,
     condition: &Option<String>,
-    doc: &ftd::interpreter2::TDoc,
+    doc: &ftd::interpreter::TDoc,
 ) -> bool {
     if property_value.kind().is_ftd_length() {
-        if let ftd::interpreter2::PropertyValue::Value {
+        if let ftd::interpreter::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
@@ -897,13 +897,13 @@ fn is_static_expression(
     }
 
     if property_value.kind().is_ftd_resizing() {
-        if let ftd::interpreter2::PropertyValue::Value {
+        if let ftd::interpreter::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
             let property_value = value.get_or_type(doc.name, *line_number).unwrap().2;
             if property_value.kind().is_ftd_length() {
-                if let ftd::interpreter2::PropertyValue::Value {
+                if let ftd::interpreter::PropertyValue::Value {
                     value, line_number, ..
                 } = property_value
                 {

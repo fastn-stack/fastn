@@ -1,9 +1,9 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Variable {
     pub name: String,
-    pub kind: ftd::interpreter2::KindData,
+    pub kind: ftd::interpreter::KindData,
     pub mutable: bool,
-    pub value: ftd::interpreter2::PropertyValue,
+    pub value: ftd::interpreter::PropertyValue,
     pub conditional_value: Vec<ConditionalValue>,
     pub line_number: usize,
     pub is_static: bool,
@@ -12,36 +12,36 @@ pub struct Variable {
 impl Variable {
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
-        ftd::interpreter2::KindData::scan_ast_kind(
+        ftd::interpreter::KindData::scan_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
         )?;
 
-        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+        ftd::interpreter::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
 
         if let Some(processor) = variable_definition.processor {
             let name = doc.resolve_name(processor.as_str());
             let state = if let Some(state) = {
                 match &mut doc.bag {
-                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
-                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                    ftd::interpreter::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter::tdoc::BagOrState::State(s) => Some(s),
                 }
             } {
                 state
             } else {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("Processor: `{}` not found", processor),
                     doc.name,
                     variable_definition.line_number,
                 );
             };
             let (doc_name, thing_name, _remaining) =
-                ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
                     name.as_str(),
                     doc.name,
                     variable_definition.line_number,
@@ -68,13 +68,13 @@ impl Variable {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         number_of_scan: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
@@ -84,20 +84,20 @@ impl Variable {
         if let Some(processor) = variable_definition.processor {
             let state = if let Some(state) = {
                 match &mut doc.bag {
-                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
-                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                    ftd::interpreter::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter::tdoc::BagOrState::State(s) => Some(s),
                 }
             } {
                 (*state).clone()
             } else {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("Processor: `{}` not found", processor),
                     doc.name,
                     variable_definition.line_number,
                 );
             };
             let (doc_name, thing_name, remaining) =
-                ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
                     doc.resolve_name(processor.as_str()).as_str(),
                     doc.name,
                     variable_definition.line_number,
@@ -106,8 +106,8 @@ impl Variable {
             let parsed_document = match state.parsed_libs.get(doc_name.as_str()) {
                 Some(p) => p,
                 None => {
-                    return Ok(ftd::interpreter2::StateWithThing::new_state(
-                        ftd::interpreter2::InterpreterWithoutState::StuckOnImport {
+                    return Ok(ftd::interpreter::StateWithThing::new_state(
+                        ftd::interpreter::InterpreterWithoutState::StuckOnImport {
                             module: doc_name,
                             caller_module: doc.name.to_string(),
                         },
@@ -121,14 +121,14 @@ impl Variable {
                 .any(|v| thing_name.eq(v))
             {
                 if number_of_scan.lt(&1) {
-                    ftd::interpreter2::PropertyValue::scan_ast_value(
+                    ftd::interpreter::PropertyValue::scan_ast_value(
                         variable_definition.value,
                         doc,
                     )?;
-                    return Ok(ftd::interpreter2::StateWithThing::new_continue());
+                    return Ok(ftd::interpreter::StateWithThing::new_continue());
                 }
-                let result = ftd::interpreter2::StateWithThing::new_state(
-                    ftd::interpreter2::InterpreterWithoutState::StuckOnProcessor {
+                let result = ftd::interpreter::StateWithThing::new_state(
+                    ftd::interpreter::InterpreterWithoutState::StuckOnProcessor {
                         ast,
                         module: doc_name,
                         processor: if let Some(remaining) = remaining {
@@ -144,9 +144,9 @@ impl Variable {
                 } else {
                     return Ok(result);
                 };
-                ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+                ftd::interpreter::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
                 if initial_length < doc.state().unwrap().pending_imports.stack.len() {
-                    return Ok(ftd::interpreter2::StateWithThing::new_continue());
+                    return Ok(ftd::interpreter::StateWithThing::new_continue());
                 }
                 Ok(result)
             } else {
@@ -159,7 +159,7 @@ impl Variable {
             };
         }
 
-        let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
+        let value = try_ok_state!(ftd::interpreter::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             variable_definition.mutable,
@@ -177,23 +177,23 @@ impl Variable {
         }
         .set_static(doc);
 
-        ftd::interpreter2::utils::validate_variable(&variable, doc)?;
+        ftd::interpreter::utils::validate_variable(&variable, doc)?;
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(variable))
+        Ok(ftd::interpreter::StateWithThing::new_thing(variable))
     }
 
     pub(crate) fn scan_update_from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
-        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)
+        ftd::interpreter::PropertyValue::scan_ast_value(variable_definition.value, doc)
     }
 
     pub(crate) fn update_from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
         let kind = try_ok_state!(doc.get_kind(
@@ -201,7 +201,7 @@ impl Variable {
             variable_definition.line_number,
         )?);
 
-        let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
+        let value = try_ok_state!(ftd::interpreter::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             true,
@@ -213,10 +213,10 @@ impl Variable {
             value,
             variable_definition.line_number,
         )?;
-        Ok(ftd::interpreter2::StateWithThing::new_thing(variable))
+        Ok(ftd::interpreter::StateWithThing::new_thing(variable))
     }
 
-    pub fn set_static(self, doc: &ftd::interpreter2::TDoc) -> Self {
+    pub fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self {
         let mut variable = self;
         if !variable.is_static {
             return variable;
@@ -249,15 +249,15 @@ impl Variable {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ConditionalValue {
-    pub condition: ftd::interpreter2::Expression,
-    pub value: ftd::interpreter2::PropertyValue,
+    pub condition: ftd::interpreter::Expression,
+    pub value: ftd::interpreter::PropertyValue,
     pub line_number: usize,
 }
 
 impl ConditionalValue {
     pub fn new(
-        condition: ftd::interpreter2::Expression,
-        value: ftd::interpreter2::PropertyValue,
+        condition: ftd::interpreter::Expression,
+        value: ftd::interpreter::PropertyValue,
         line_number: usize,
     ) -> ConditionalValue {
         ConditionalValue {
