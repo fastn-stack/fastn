@@ -291,6 +291,9 @@ a single component of type `ftd.text` with text property value as `Hello`.
 components, and is inherited by children. Anywhere you can use
 `$inherited.colors` variable of type `ftd.color-scheme` to access colors.
 
+Checkout [using color-schemes](/use-cs/) to learn more about how to use colors
+properly.
+
 -- ds.code: `ftd.color-scheme`
 lang: ftd
 
@@ -317,54 +320,54 @@ ftd.custom-colors custom:
 lang: ftd
 
 \-- record background-colors:
-color base:
-color step-1:
-color step-2:
-color overlay:
-color code:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
 
 -- ds.code: `ftd.cta-colors`
 lang: ftd
 
 \-- record cta-colors:
-color base:
-color hover:
-color pressed:
-color disabled:
-color focused:
-color border:
-color text:
+ftd.color base:
+ftd.color hover:
+ftd.color pressed:
+ftd.color disabled:
+ftd.color focused:
+ftd.color border:
+ftd.color text:
 
 -- ds.code: `ftd.pst`
 lang: ftd
 
 \-- record pst:
-color primary:
-color secondary:
-color tertiary:
+ftd.color primary:
+ftd.color secondary:
+ftd.color tertiary:
 
 -- ds.code: `ftd.btb`
 lang: ftd
 
-\-- record: btb
-color base:
-color text:
-color border:
+\-- record btb:
+ftd.color base:
+ftd.color text:
+ftd.color border:
 
 -- ds.code: `ftd.custom`
 lang: ftd
 
 \-- record custom:
-color one:
-color two:
-color three:
-color four:
-color five:
-color six:
-color seven:
-color eight:
-color nine:
-color ten:
+ftd.color one:
+ftd.color two:
+ftd.color three:
+ftd.color four:
+ftd.color five:
+ftd.color six:
+ftd.color seven:
+ftd.color eight:
+ftd.color nine:
+ftd.color ten:
 
 -- ds.h2: `children`
 

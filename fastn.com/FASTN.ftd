@@ -95,7 +95,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Best Practices: /best-practices/
 - `ftd p1` grammar: /ftd/p1-grammar/
 
-## Fontend: /frontend/
+## Frontend: /frontend/
 
 - Overview 🚧: /frontend/
 - Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
@@ -104,6 +104,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Data Modelling: /ftd/data-modelling/
   - Variables: /ftd/variables/
   - Built-in Types: /ftd/built-in-types/
+  - Built-in Variables: /built-in-variables/
+    document: ftd/built-in-variables.ftd
   - `record`: /ftd/record/
   - `or-type`: /ftd/or-type/
   - `list`: /ftd/list/
