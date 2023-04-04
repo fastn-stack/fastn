@@ -206,8 +206,8 @@ impl Library2022 {
         &'a self,
         ast: ftd::ast::AST,
         processor: String,
-        doc: &'a mut ftd::interpreter2::TDoc<'a>,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        doc: &'a mut ftd::interpreter::TDoc<'a>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         tracing::info!(
             msg = "stuck-on-processor",
             doc = doc.name,
@@ -272,7 +272,7 @@ impl Library2022 {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
 
-            t => Err(ftd::interpreter2::Error::ParseError {
+            t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
                 message: format!("fastn-Error: No such processor: {}", t),
@@ -283,19 +283,19 @@ impl Library2022 {
 
 fn get_processor_data(
     ast: ftd::ast::AST,
-    doc: &mut ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<(String, ftd::ast::VariableValue, ftd::interpreter2::Kind)> {
+    doc: &mut ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<(String, ftd::ast::VariableValue, ftd::interpreter::Kind)> {
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
-        let kind = ftd::interpreter2::KindData::from_ast_kind(
+        let kind = ftd::interpreter::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
         )?
         .into_optional()
-        .ok_or(ftd::interpreter2::Error::ValueNotFound {
+        .ok_or(ftd::interpreter::Error::ValueNotFound {
             doc_id: doc.name.to_string(),
             line_number,
             message: format!(
@@ -306,7 +306,7 @@ fn get_processor_data(
         let processor =
             variable_definition
                 .processor
-                .ok_or(ftd::interpreter2::Error::ParseError {
+                .ok_or(ftd::interpreter::Error::ParseError {
                     message: format!("No processor found for `{}`", ast_name),
                     doc_id: doc.name.to_string(),
                     line_number,
@@ -323,7 +323,7 @@ fn get_processor_data(
         let processor =
             variable_invocation
                 .processor
-                .ok_or(ftd::interpreter2::Error::ParseError {
+                .ok_or(ftd::interpreter::Error::ParseError {
                     message: format!("No processor found for `{}`", ast_name),
                     doc_id: doc.name.to_string(),
                     line_number,

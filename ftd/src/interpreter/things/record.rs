@@ -16,47 +16,45 @@ impl Record {
 
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let record = ast.get_record(doc.name)?;
         Record::scan_record(record, doc)
     }
 
     pub(crate) fn scan_record(
         record: ftd::ast::Record,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
-            ftd::interpreter2::Kind::record(name.as_str()),
+            ftd::interpreter::Kind::record(name.as_str()),
         )])
-        .collect::<ftd::Map<ftd::interpreter2::Kind>>();
+        .collect::<ftd::Map<ftd::interpreter::Kind>>();
         Field::scan_ast_fields(record.fields, doc, &known_kinds)
     }
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
-    {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
         let record = ast.get_record(doc.name)?;
         Record::from_record(record, doc)
     }
 
     pub(crate) fn from_record(
         record: ftd::ast::Record,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
-    {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
-            ftd::interpreter2::Kind::Record {
+            ftd::interpreter::Kind::Record {
                 name: name.to_string(),
             },
         )])
-        .collect::<ftd::Map<ftd::interpreter2::Kind>>();
+        .collect::<ftd::Map<ftd::interpreter::Kind>>();
         let fields = try_ok_state!(Field::from_ast_fields(
             record.name.as_str(),
             record.fields,
@@ -64,7 +62,7 @@ impl Record {
             &known_kinds
         )?);
         validate_record_fields(name.as_str(), &fields, doc.name)?;
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
+        Ok(ftd::interpreter::StateWithThing::new_thing(Record::new(
             name.as_str(),
             fields,
             record.line_number,
@@ -76,12 +74,12 @@ impl Record {
         name: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<&Field> {
+    ) -> ftd::interpreter::Result<&Field> {
         use itertools::Itertools;
 
         let field = self.fields.iter().filter(|v| v.name.eq(name)).collect_vec();
         if field.is_empty() {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Cannot find the field `{}` for record `{}`",
                     name, self.name
@@ -93,7 +91,7 @@ impl Record {
         }
 
         if field.len() > 1 {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Multiple fields `{}` for record `{}` found",
                     name, self.name
@@ -111,18 +109,18 @@ impl Record {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
     pub name: String,
-    pub kind: ftd::interpreter2::KindData,
+    pub kind: ftd::interpreter::KindData,
     pub mutable: bool,
-    pub value: Option<ftd::interpreter2::PropertyValue>,
+    pub value: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
 impl Field {
     pub fn new(
         name: &str,
-        kind: ftd::interpreter2::KindData,
+        kind: ftd::interpreter::KindData,
         mutable: bool,
-        value: Option<ftd::interpreter2::PropertyValue>,
+        value: Option<ftd::interpreter::PropertyValue>,
         line_number: usize,
     ) -> Field {
         Field {
@@ -134,27 +132,27 @@ impl Field {
         }
     }
 
-    pub fn to_sources(&self) -> Vec<ftd::interpreter2::PropertySource> {
-        let mut sources = vec![ftd::interpreter2::PropertySource::Header {
+    pub fn to_sources(&self) -> Vec<ftd::interpreter::PropertySource> {
+        let mut sources = vec![ftd::interpreter::PropertySource::Header {
             name: self.name.to_string(),
             mutable: self.mutable,
         }];
         if self.is_caption() {
-            sources.push(ftd::interpreter2::PropertySource::Caption);
+            sources.push(ftd::interpreter::PropertySource::Caption);
         }
 
         if self.is_body() {
-            sources.push(ftd::interpreter2::PropertySource::Body);
+            sources.push(ftd::interpreter::PropertySource::Body);
         }
 
         if self.is_subsection_ui() {
-            sources.push(ftd::interpreter2::PropertySource::Subsection);
+            sources.push(ftd::interpreter::PropertySource::Subsection);
         }
 
         sources
     }
 
-    pub fn default(name: &str, kind: ftd::interpreter2::KindData) -> Field {
+    pub fn default(name: &str, kind: ftd::interpreter::KindData) -> Field {
         Field {
             name: name.to_string(),
             kind,
@@ -166,9 +164,9 @@ impl Field {
 
     pub(crate) fn scan_ast_fields(
         fields: Vec<ftd::ast::Field>,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<()> {
         for field in fields {
             Field::scan_ast_field(field, doc, known_kinds)?;
         }
@@ -177,10 +175,10 @@ impl Field {
 
     pub fn resolve_kinds_from_ast_fields(
         ast_fields: Vec<ftd::ast::Field>,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<
-        ftd::interpreter2::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
     > {
         let mut fields_with_resolved_kinds = vec![];
         for field in ast_fields {
@@ -190,7 +188,7 @@ impl Field {
                 known_kinds
             )?));
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
+        Ok(ftd::interpreter::StateWithThing::new_thing(
             fields_with_resolved_kinds,
         ))
     }
@@ -198,8 +196,8 @@ impl Field {
     pub fn resolve_values_from_ast_fields(
         definition_name: &str,
         mut fields_with_resolved_kinds: Vec<(Field, Option<ftd::ast::VariableValue>)>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
         use itertools::Itertools;
 
         let mut fields = fields_with_resolved_kinds
@@ -209,7 +207,7 @@ impl Field {
         for (field, value) in fields_with_resolved_kinds.iter_mut() {
             let value = if let Some(value) = value {
                 Some(try_ok_state!(
-                    ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                    ftd::interpreter::PropertyValue::from_ast_value_with_argument(
                         value.to_owned(),
                         doc,
                         field.mutable,
@@ -229,17 +227,15 @@ impl Field {
             .map(|v| v.0)
             .collect_vec();
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
-            resolved_fields,
-        ))
+        Ok(ftd::interpreter::StateWithThing::new_thing(resolved_fields))
     }
 
     pub(crate) fn from_ast_fields(
         name: &str,
         fields: Vec<ftd::ast::Field>,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
         // First resolve all kinds from ast fields
         let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
             fields,
@@ -256,18 +252,13 @@ impl Field {
 
     pub(crate) fn scan_ast_field(
         field: ftd::ast::Field,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<()> {
-        ftd::interpreter2::KindData::scan_ast_kind(
-            field.kind,
-            known_kinds,
-            doc,
-            field.line_number,
-        )?;
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<()> {
+        ftd::interpreter::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
 
         if let Some(value) = field.value {
-            ftd::interpreter2::PropertyValue::scan_ast_value(value, doc)?;
+            ftd::interpreter::PropertyValue::scan_ast_value(value, doc)?;
         }
 
         Ok(())
@@ -275,10 +266,10 @@ impl Field {
 
     pub(crate) fn from_ast_field(
         field: ftd::ast::Field,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Field>> {
-        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
+        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
@@ -287,7 +278,7 @@ impl Field {
 
         let value = if let Some(value) = field.value {
             Some(try_ok_state!(
-                ftd::interpreter2::PropertyValue::from_ast_value(
+                ftd::interpreter::PropertyValue::from_ast_value(
                     value,
                     doc,
                     field.mutable,
@@ -298,7 +289,7 @@ impl Field {
             None
         };
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Field {
+        Ok(ftd::interpreter::StateWithThing::new_thing(Field {
             name: field.name.to_string(),
             kind,
             mutable: field.mutable,
@@ -309,19 +300,19 @@ impl Field {
 
     pub(crate) fn from_ast_field_kind(
         field: ftd::ast::Field,
-        doc: &mut ftd::interpreter2::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<
-        ftd::interpreter2::StateWithThing<(Field, Option<ftd::ast::VariableValue>)>,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<(Field, Option<ftd::ast::VariableValue>)>,
     > {
-        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
             field.line_number,
         )?);
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing((
+        Ok(ftd::interpreter::StateWithThing::new_thing((
             Field {
                 name: field.name.to_string(),
                 kind,
@@ -348,9 +339,9 @@ impl Field {
     pub(crate) fn for_component_or_web_component(
         component_name: &str,
         definition_name_with_arguments: &Option<(&str, &mut [Field])>,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
         match Self::for_component(
             component_name,
             definition_name_with_arguments,
@@ -365,21 +356,19 @@ impl Field {
                 line_number,
             ) {
                 Ok(swt) => Ok(swt),
-                Err(e2) => ftd::interpreter2::utils::e2(
-                    format!("{:?} {:?}", e1, e2),
-                    doc.name,
-                    line_number,
-                ),
+                Err(e2) => {
+                    ftd::interpreter::utils::e2(format!("{:?} {:?}", e1, e2), doc.name, line_number)
+                }
             },
         }
     }
     pub(crate) fn for_component(
         component_name: &str,
         definition_name_with_arguments: &Option<(&str, &mut [Field])>,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+        Ok(ftd::interpreter::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
                 _ => try_ok_state!(doc.search_component(component_name, line_number)?).arguments,
@@ -390,10 +379,10 @@ impl Field {
     pub(crate) fn for_web_component(
         component_name: &str,
         definition_name_with_arguments: &Option<(&str, &mut [Field])>,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+        Ok(ftd::interpreter::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
                 _ => {
@@ -405,12 +394,12 @@ impl Field {
 
     pub fn update_with_or_type_variant(
         &mut self,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         variant: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>> {
         match self.kind.kind.mut_inner() {
-            ftd::interpreter2::Kind::OrType {
+            ftd::interpreter::Kind::OrType {
                 name,
                 variant: v,
                 full_variant,
@@ -426,7 +415,7 @@ impl Field {
                             .trim_start_matches(format!("{}.", name).as_str())
                             .eq(variant_name.as_str())
                     })
-                    .ok_or(ftd::interpreter2::Error::ParseError {
+                    .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "Cannot find variant `{}` for or-type `{}`",
                             variant, name
@@ -440,9 +429,9 @@ impl Field {
 
                 *v = variant.clone();
                 *full_variant = variant;
-                Ok(ftd::interpreter2::StateWithThing::new_thing(()))
+                Ok(ftd::interpreter::StateWithThing::new_thing(()))
             }
-            t => ftd::interpreter2::utils::e2(
+            t => ftd::interpreter::utils::e2(
                 format!(
                     "Expected or-type for variant `{}`, found: `{:?}`",
                     variant, t
@@ -458,9 +447,9 @@ fn validate_record_fields(
     rec_name: &str,
     fields: &[Field],
     doc_id: &str,
-) -> ftd::interpreter2::Result<()> {
+) -> ftd::interpreter::Result<()> {
     if let Some(field) = fields.iter().find(|v| v.mutable) {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!(
                 "Currently, mutable field `{}` in record `{}` is not supported.",
                 field.name, rec_name
@@ -474,15 +463,15 @@ fn validate_record_fields(
 }
 
 fn check_variant_if_constant(
-    or_variant: &ftd::interpreter2::OrTypeVariant,
+    or_variant: &ftd::interpreter::OrTypeVariant,
     _remaining: Option<String>,
-    doc: &ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<()> {
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
     match or_variant {
-        ftd::interpreter2::OrTypeVariant::AnonymousRecord(_r) => {} // Todo: check on remaining for constant and throw error if found
-        ftd::interpreter2::OrTypeVariant::Regular(_r) => {} // Todo: check on remaining for constant and throw error if found
-        ftd::interpreter2::OrTypeVariant::Constant(c) => {
-            return ftd::interpreter2::utils::e2(
+        ftd::interpreter::OrTypeVariant::AnonymousRecord(_r) => {} // Todo: check on remaining for constant and throw error if found
+        ftd::interpreter::OrTypeVariant::Regular(_r) => {} // Todo: check on remaining for constant and throw error if found
+        ftd::interpreter::OrTypeVariant::Constant(c) => {
+            return ftd::interpreter::utils::e2(
                 format!("Cannot pass deconstructed constant variant `{}`", c.name),
                 doc.name,
                 c.line_number,

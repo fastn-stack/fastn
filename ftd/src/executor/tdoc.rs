@@ -2,7 +2,7 @@
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
+    pub bag: &'a mut ftd::Map<ftd::interpreter::Thing>,
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
@@ -10,8 +10,8 @@ pub struct TDoc<'a> {
 }
 
 impl<'a> TDoc<'a> {
-    pub(crate) fn itdoc(&self) -> ftd::interpreter2::TDoc {
-        ftd::interpreter2::TDoc::new(self.name, self.aliases, self.bag)
+    pub(crate) fn itdoc(&self) -> ftd::interpreter::TDoc {
+        ftd::interpreter::TDoc::new(self.name, self.aliases, self.bag)
     }
 
     pub fn resolve_all_self_references(
@@ -72,7 +72,7 @@ impl<'a> TDoc<'a> {
                     })
                     .collect();
                 let variable = match self.bag.get_mut(name.as_str()).unwrap() {
-                    ftd::interpreter2::Thing::Variable(v) => v,
+                    ftd::interpreter::Thing::Variable(v) => v,
                     _ => unreachable!("Reference {} is not a valid variable", name.as_str()),
                 };
 
@@ -88,8 +88,8 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local_variables(
         &mut self,
         component_name: &str,
-        properties: &[ftd::interpreter2::Property],
-        arguments: &[ftd::interpreter2::Argument],
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -117,8 +117,8 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local_variable(
         &mut self,
         component_name: &str,
-        properties: &[ftd::interpreter2::Property],
-        argument: &ftd::interpreter2::Argument,
+        properties: &[ftd::interpreter::Property],
+        argument: &ftd::interpreter::Argument,
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -126,7 +126,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::executor::Result<Option<(String, String, Vec<String>)>> {
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
-        let properties = ftd::interpreter2::utils::find_properties_by_source(
+        let properties = ftd::interpreter::utils::find_properties_by_source(
             source.as_slice(),
             properties,
             self.name,
@@ -136,7 +136,7 @@ impl<'a> TDoc<'a> {
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         if argument.kind.is_module() {
-            if let ftd::interpreter2::Value::Module { name, .. } = properties
+            if let ftd::interpreter::Value::Module { name, .. } = properties
                 .first()
                 .unwrap()
                 .resolve(&self.itdoc(), &Default::default())?
@@ -151,7 +151,7 @@ impl<'a> TDoc<'a> {
             (None, vec![]),
             |(mut default, mut conditions), property| {
                 if let Some(condition) = property.condition {
-                    conditions.push(ftd::interpreter2::ConditionalValue::new(
+                    conditions.push(ftd::interpreter::ConditionalValue::new(
                         condition,
                         property.value,
                         property.line_number,
@@ -167,8 +167,8 @@ impl<'a> TDoc<'a> {
             (default.0, default.1, false)
         } else {
             (
-                ftd::interpreter2::PropertyValue::Value {
-                    value: ftd::interpreter2::Value::Optional {
+                ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Optional {
                         data: Box::new(None),
                         kind: argument.kind.to_owned(),
                     },
@@ -230,7 +230,7 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        let variable = ftd::interpreter2::Variable {
+        let variable = ftd::interpreter::Variable {
             name: variable_name.to_string(),
             kind: argument.kind.to_owned(),
             mutable: argument.mutable,
@@ -241,11 +241,11 @@ impl<'a> TDoc<'a> {
         }
         .set_static(&self.itdoc());
 
-        ftd::interpreter2::utils::validate_variable(&variable, &self.itdoc())?;
+        ftd::interpreter::utils::validate_variable(&variable, &self.itdoc())?;
 
         self.bag.insert(
             variable.name.to_string(),
-            ftd::interpreter2::Thing::Variable(variable),
+            ftd::interpreter::Thing::Variable(variable),
         );
 
         Ok(Some((
@@ -257,17 +257,17 @@ impl<'a> TDoc<'a> {
 }
 
 fn get_self_reference(
-    default: &ftd::interpreter2::PropertyValue,
+    default: &ftd::interpreter::PropertyValue,
     component_name: &str,
 ) -> Vec<String> {
     match default {
-        ftd::interpreter2::PropertyValue::Reference { name, .. }
-        | ftd::interpreter2::PropertyValue::Clone { name, .. }
+        ftd::interpreter::PropertyValue::Reference { name, .. }
+        | ftd::interpreter::PropertyValue::Clone { name, .. }
             if name.starts_with(format!("{}.", component_name).as_str()) =>
         {
             vec![name.to_string()]
         }
-        ftd::interpreter2::PropertyValue::FunctionCall(f) => {
+        ftd::interpreter::PropertyValue::FunctionCall(f) => {
             let mut self_reference = vec![];
             for arguments in f.values.values() {
                 self_reference.extend(get_self_reference(arguments, component_name));
@@ -278,13 +278,13 @@ fn get_self_reference(
     }
 }
 
-fn set_reference_name(default: &mut ftd::interpreter2::PropertyValue, values: &ftd::Map<String>) {
+fn set_reference_name(default: &mut ftd::interpreter::PropertyValue, values: &ftd::Map<String>) {
     match default {
-        ftd::interpreter2::PropertyValue::Reference { name, .. }
-        | ftd::interpreter2::PropertyValue::Clone { name, .. } => {
+        ftd::interpreter::PropertyValue::Reference { name, .. }
+        | ftd::interpreter::PropertyValue::Clone { name, .. } => {
             *name = values.get(name).unwrap().to_string();
         }
-        ftd::interpreter2::PropertyValue::FunctionCall(f) => {
+        ftd::interpreter::PropertyValue::FunctionCall(f) => {
             for arguments in f.values.values_mut() {
                 set_reference_name(arguments, values);
             }

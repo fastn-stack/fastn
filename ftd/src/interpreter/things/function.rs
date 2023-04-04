@@ -1,20 +1,20 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub return_kind: ftd::interpreter2::KindData,
-    pub arguments: Vec<ftd::interpreter2::Argument>,
+    pub return_kind: ftd::interpreter::KindData,
+    pub arguments: Vec<ftd::interpreter::Argument>,
     pub expression: Vec<Expression>,
-    pub js: Option<ftd::interpreter2::PropertyValue>,
+    pub js: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
 impl Function {
     fn new(
         name: &str,
-        return_kind: ftd::interpreter2::KindData,
-        arguments: Vec<ftd::interpreter2::Argument>,
+        return_kind: ftd::interpreter::KindData,
+        arguments: Vec<ftd::interpreter::Argument>,
         expression: Vec<Expression>,
-        js: Option<ftd::interpreter2::PropertyValue>,
+        js: Option<ftd::interpreter::PropertyValue>,
         line_number: usize,
     ) -> Function {
         Function {
@@ -29,12 +29,12 @@ impl Function {
 
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let function = ast.get_function(doc.name)?;
-        ftd::interpreter2::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
+        ftd::interpreter::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
 
-        ftd::interpreter2::KindData::scan_ast_kind(
+        ftd::interpreter::KindData::scan_ast_kind(
             function.kind,
             &Default::default(),
             doc,
@@ -46,15 +46,15 @@ impl Function {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Function>>
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
 
         let js = if let Some(ref js) = function.js {
             Some(try_ok_state!(
-                ftd::interpreter2::PropertyValue::from_ast_value(
+                ftd::interpreter::PropertyValue::from_ast_value(
                     ftd::ast::VariableValue::String {
                         value: js.to_string(),
                         line_number: function.line_number(),
@@ -62,21 +62,21 @@ impl Function {
                     },
                     doc,
                     false,
-                    Some(&ftd::interpreter2::Kind::string().into_kind_data()),
+                    Some(&ftd::interpreter::Kind::string().into_kind_data()),
                 )?
             ))
         } else {
             None
         };
 
-        let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
+        let arguments = try_ok_state!(ftd::interpreter::Argument::from_ast_fields(
             function.name.as_str(),
             function.arguments,
             doc,
             &Default::default(),
         )?);
 
-        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
             function.kind,
             &Default::default(),
             doc,
@@ -88,7 +88,7 @@ impl Function {
             line_number: function.definition.line_number,
         }];
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Function::new(
+        Ok(ftd::interpreter::StateWithThing::new_thing(Function::new(
             name.as_str(),
             kind,
             arguments,
@@ -100,18 +100,18 @@ impl Function {
 
     pub(crate) fn resolve(
         &self,
-        _kind: &ftd::interpreter2::KindData,
-        values: &ftd::Map<ftd::interpreter2::PropertyValue>,
-        doc: &ftd::interpreter2::TDoc,
+        _kind: &ftd::interpreter::KindData,
+        values: &ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::Value>> {
+    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
         use ftd::evalexpr::*;
 
         struct VariableContext {
             value: ftd::evalexpr::Value,
             reference: Option<String>,
             mutable: bool,
-            kind: ftd::interpreter2::Kind,
+            kind: ftd::interpreter::Kind,
         }
 
         let mut context: ftd::Map<VariableContext> = Default::default();
@@ -119,7 +119,7 @@ impl Function {
             let function_value =
                 values
                     .get(argument.name.as_str())
-                    .ok_or(ftd::interpreter2::Error::ParseError {
+                    .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "{} argument not found for function call `{}`",
                             argument.name, self.name
@@ -128,7 +128,7 @@ impl Function {
                         line_number,
                     })?;
             if !argument.mutable.eq(&function_value.is_mutable()) {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!(
                         "Mutability conflict for argument `{}` in function `{}`",
                         argument.name, self.name
@@ -138,7 +138,7 @@ impl Function {
                 );
             }
             if !argument.kind.kind.is_same_as(&function_value.kind()) {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!(
                         "Expected kind: `{:?}` found: `{:?}`",
                         argument.kind.kind,
@@ -161,7 +161,7 @@ impl Function {
             );
         }
 
-        let mut evalexpr_context = ftd::interpreter2::default::default_context()?;
+        let mut evalexpr_context = ftd::interpreter::default::default_context()?;
         for (key, context) in context.iter() {
             evalexpr_context.set_value(key.to_string(), context.value.to_owned())?;
         }
@@ -174,7 +174,7 @@ impl Function {
         for (key, context) in context {
             match context.reference {
                 Some(reference) if context.mutable => {
-                    let value = ftd::interpreter2::Value::from_evalexpr_value(
+                    let value = ftd::interpreter::Value::from_evalexpr_value(
                         evalexpr_context.get_value(key.as_str()).unwrap().clone(),
                         &context.kind,
                         doc.name,
@@ -183,7 +183,7 @@ impl Function {
                     // TODO: insert new value in doc.bag
                     let _variable = doc.set_value(
                         reference.as_str(),
-                        ftd::interpreter2::PropertyValue::Value {
+                        ftd::interpreter::PropertyValue::Value {
                             value,
                             is_mutable: true,
                             line_number,
@@ -196,7 +196,7 @@ impl Function {
         }
 
         if !self.return_kind.is_void() {
-            return Ok(Some(ftd::interpreter2::Value::from_evalexpr_value(
+            return Ok(Some(ftd::interpreter::Value::from_evalexpr_value(
                 eval,
                 &self.return_kind.kind,
                 doc.name,
@@ -221,7 +221,7 @@ impl Function {
 Todo: Convert Expression into
     #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
     pub enum Expression {
-        Value(ftd::interpreter2::PropertyValue),
+        Value(ftd::interpreter::PropertyValue),
         Operation(Operation),
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -237,20 +237,20 @@ pub struct Expression {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCall {
     pub name: String,
-    pub kind: ftd::interpreter2::KindData,
+    pub kind: ftd::interpreter::KindData,
     pub is_mutable: bool,
     pub line_number: usize,
-    pub values: ftd::Map<ftd::interpreter2::PropertyValue>,
+    pub values: ftd::Map<ftd::interpreter::PropertyValue>,
     pub order: Vec<String>,
 }
 
 impl FunctionCall {
     pub fn new(
         name: &str,
-        kind: ftd::interpreter2::KindData,
+        kind: ftd::interpreter::KindData,
         is_mutable: bool,
         line_number: usize,
-        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
         order: Vec<String>,
     ) -> FunctionCall {
         FunctionCall {
@@ -265,17 +265,17 @@ impl FunctionCall {
 
     pub(crate) fn scan_string(
         value: &str,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<()> {
+    ) -> ftd::interpreter::Result<()> {
         let expression = value
-            .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+            .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();
 
         let (function_name, properties) =
-            ftd::interpreter2::utils::get_function_name_and_properties(
+            ftd::interpreter::utils::get_function_name_and_properties(
                 expression.as_str(),
                 doc.name,
                 line_number,
@@ -284,7 +284,7 @@ impl FunctionCall {
         doc.scan_initial_thing(function_name.as_str(), line_number)?;
 
         for (_, value) in properties.iter() {
-            ftd::interpreter2::PropertyValue::scan_string_with_argument(
+            ftd::interpreter::PropertyValue::scan_string_with_argument(
                 value,
                 doc,
                 line_number,
@@ -298,32 +298,32 @@ impl FunctionCall {
 
     pub(crate) fn from_string(
         value: &str,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::FunctionCall>>
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::FunctionCall>>
     {
         let expression = value
-            .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+            .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();
 
         let (function_name, properties) =
-            ftd::interpreter2::utils::get_function_name_and_properties(
+            ftd::interpreter::utils::get_function_name_and_properties(
                 expression.as_str(),
                 doc.name,
                 line_number,
             )?;
         let function = try_ok_state!(doc.search_function(function_name.as_str(), line_number)?);
-        let mut values: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+        let mut values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
         let mut order = vec![];
 
         for argument in function.arguments.iter() {
             let property_value = if let Some((property, property_key, mutable)) =
                 properties.iter().find_map(|(key, property)| {
                     let (property_key, mutable) =
-                        if let Some(key) = key.strip_prefix(ftd::interpreter2::utils::REFERENCE) {
+                        if let Some(key) = key.strip_prefix(ftd::interpreter::utils::REFERENCE) {
                             (key.to_string(), true)
                         } else {
                             (key.to_string(), false)
@@ -335,7 +335,7 @@ impl FunctionCall {
                     }
                 }) {
                 if !(mutable.eq(&argument.mutable)) {
-                    return ftd::interpreter2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!(
                             "Mutability conflict in argument `{}` for function `{}`",
                             property_key, function_name
@@ -345,7 +345,7 @@ impl FunctionCall {
                     );
                 }
                 try_ok_state!(
-                    ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                    ftd::interpreter::PropertyValue::from_ast_value_with_argument(
                         ftd::ast::VariableValue::String {
                             value: property,
                             line_number,
@@ -362,13 +362,13 @@ impl FunctionCall {
                 match argument.value {
                     Some(ref value) => value.clone(),
                     None if argument.kind.is_optional() => {
-                        ftd::interpreter2::PropertyValue::new_none(
+                        ftd::interpreter::PropertyValue::new_none(
                             argument.kind.clone(),
                             argument.line_number,
                         )
                     }
                     _ => {
-                        return ftd::interpreter2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!(
                                 "Cannot find argument `{}` in function `{}`",
                                 argument.name, function_name
@@ -383,11 +383,11 @@ impl FunctionCall {
             order.push(argument.name.to_string());
         }
 
-        let reference_full_name = ftd::interpreter2::PropertyValueSource::Global
+        let reference_full_name = ftd::interpreter::PropertyValueSource::Global
             .get_reference_name(function_name.as_str(), doc);
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
-            ftd::interpreter2::FunctionCall::new(
+        Ok(ftd::interpreter::StateWithThing::new_thing(
+            ftd::interpreter::FunctionCall::new(
                 reference_full_name.as_str(),
                 function.return_kind,
                 mutable,

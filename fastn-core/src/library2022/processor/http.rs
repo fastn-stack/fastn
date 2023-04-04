@@ -1,9 +1,9 @@
 pub async fn process<'a>(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
     } else {
@@ -16,7 +16,7 @@ pub async fn process<'a>(
         .to_lowercase();
 
     if method.as_str().ne("get") && method.as_str().ne("post") {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!("only GET and POST methods are allowed, found: {}", method),
             doc.name,
             line_number,
@@ -26,7 +26,7 @@ pub async fn process<'a>(
     let url = match headers.get_optional_string_by_key("url", doc.name, line_number)? {
         Some(v) => v,
         None => {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 "'url' key is required when using `$processor$: http`",
                 doc.name,
                 line_number,
@@ -35,7 +35,7 @@ pub async fn process<'a>(
     };
 
     let (_, mut url, conf) = fastn_core::config::utils::get_clean_url(config, url.as_str())
-        .map_err(|e| ftd::interpreter2::Error::ParseError {
+        .map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("invalid url: {:?}", e),
             doc_id: doc.name.to_string(),
             line_number,
@@ -99,7 +99,7 @@ pub async fn process<'a>(
     let response = match response {
         Ok(v) => v,
         Err(e) => {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("HTTP::get failed: {:?}", e),
                 doc.name,
                 line_number,
@@ -108,13 +108,13 @@ pub async fn process<'a>(
     };
 
     let response_string =
-        String::from_utf8(response).map_err(|e| ftd::interpreter2::Error::ParseError {
+        String::from_utf8(response).map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("`http` processor API response error: {}", e),
             doc_id: doc.name.to_string(),
             line_number,
         })?;
     let response_json: serde_json::Value = serde_json::from_str(&response_string)
-        .map_err(|e| ftd::interpreter2::Error::Serde { source: e })?;
+        .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, line_number)
 }

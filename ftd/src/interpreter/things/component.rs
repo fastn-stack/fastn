@@ -3,7 +3,7 @@ pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
     pub definition: Component,
-    pub css: Option<ftd::interpreter2::PropertyValue>,
+    pub css: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
@@ -12,7 +12,7 @@ impl ComponentDefinition {
         name: &str,
         arguments: Vec<Argument>,
         definition: Component,
-        css: Option<ftd::interpreter2::PropertyValue>,
+        css: Option<ftd::interpreter::PropertyValue>,
         line_number: usize,
     ) -> ComponentDefinition {
         ComponentDefinition {
@@ -26,8 +26,8 @@ impl ComponentDefinition {
 
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         use itertools::Itertools;
 
         let component_definition = ast.get_component_definition(doc.name)?;
@@ -53,14 +53,14 @@ impl ComponentDefinition {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ComponentDefinition>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
 
         let css = if let Some(ref css) = component_definition.css {
             Some(try_ok_state!(
-                ftd::interpreter2::PropertyValue::from_ast_value(
+                ftd::interpreter::PropertyValue::from_ast_value(
                     ftd::ast::VariableValue::String {
                         value: css.to_string(),
                         line_number: component_definition.line_number(),
@@ -68,7 +68,7 @@ impl ComponentDefinition {
                     },
                     doc,
                     false,
-                    Some(&ftd::interpreter2::Kind::string().into_kind_data()),
+                    Some(&ftd::interpreter::Kind::string().into_kind_data()),
                 )?
             ))
         } else {
@@ -90,14 +90,14 @@ impl ComponentDefinition {
             doc,
         )?);
         if let Some(iteration) = definition.iteration.as_ref() {
-            return Err(ftd::interpreter2::Error::ParseError {
+            return Err(ftd::interpreter::Error::ParseError {
                 message: "The component definition cannot have loop. Help: use container component as it's parent"
                     .to_string(),
                 doc_id: doc.name.to_string(),
                 line_number: iteration.line_number,
             });
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
+        Ok(ftd::interpreter::StateWithThing::new_thing(
             ComponentDefinition::new(
                 name.as_str(),
                 arguments,
@@ -108,8 +108,8 @@ impl ComponentDefinition {
         ))
     }
 
-    pub fn to_value(&self, kind: &ftd::interpreter2::KindData) -> ftd::interpreter2::Value {
-        ftd::interpreter2::Value::UI {
+    pub fn to_value(&self, kind: &ftd::interpreter::KindData) -> ftd::interpreter::Value {
+        ftd::interpreter::Value::UI {
             name: self.name.to_string(),
             kind: kind.to_owned(),
             component: self.definition.to_owned(),
@@ -117,14 +117,14 @@ impl ComponentDefinition {
     }
 }
 
-pub type Argument = ftd::interpreter2::Field;
+pub type Argument = ftd::interpreter::Field;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
-    pub condition: Box<Option<ftd::interpreter2::Expression>>,
+    pub condition: Box<Option<ftd::interpreter::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub source: ComponentSource,
@@ -154,8 +154,8 @@ impl Component {
 
     pub fn get_children(
         &self,
-        doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<Vec<Component>> {
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<Vec<Component>> {
         let property = if let Some(property) = self
             .properties
             .iter()
@@ -167,15 +167,15 @@ impl Component {
         };
 
         let value = property.value.clone().resolve(doc, property.line_number)?;
-        if let ftd::interpreter2::Value::UI { component, .. } = value {
+        if let ftd::interpreter::Value::UI { component, .. } = value {
             return Ok(vec![component]);
         }
-        if let ftd::interpreter2::Value::List { data, kind } = value {
+        if let ftd::interpreter::Value::List { data, kind } = value {
             if kind.is_ui() {
                 let mut children = vec![];
                 for value in data {
                     let value = value.resolve(doc, property.line_number)?;
-                    if let ftd::interpreter2::Value::UI { component, .. } = value {
+                    if let ftd::interpreter::Value::UI { component, .. } = value {
                         children.push(component);
                     }
                 }
@@ -191,14 +191,13 @@ impl Component {
     }
 
     pub(crate) fn is_variable(&self) -> bool {
-        self.source
-            .eq(&ftd::interpreter2::ComponentSource::Variable)
+        self.source.eq(&ftd::interpreter::ComponentSource::Variable)
     }
 
     pub(crate) fn scan_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
         Component::scan_ast_component(component_invocation, None, doc)
     }
@@ -206,8 +205,8 @@ impl Component {
     pub(crate) fn scan_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: Option<(&str, &[String])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         Property::scan_ast_children(ast_component.children, definition_name_with_arguments, doc)?;
         match definition_name_with_arguments {
             Some((definition, _)) if ast_component.name.eq(definition) => {}
@@ -221,7 +220,7 @@ impl Component {
         };
 
         if let Some(v) = ast_component.condition {
-            ftd::interpreter2::Expression::scan_ast_condition(
+            ftd::interpreter::Expression::scan_ast_condition(
                 v,
                 definition_name_with_arguments,
                 &loop_object_name_and_kind,
@@ -248,8 +247,8 @@ impl Component {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
         Component::from_ast_component(component_invocation, &mut None, doc)
     }
@@ -257,13 +256,13 @@ impl Component {
     pub(crate) fn from_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
         let name = doc.resolve_name(ast_component.name.as_str());
 
         // If the component is from `module` type argument
-        ftd::interpreter2::utils::insert_module_thing(
-            &ftd::interpreter2::Kind::ui().into_kind_data(),
+        ftd::interpreter::utils::insert_module_thing(
+            &ftd::interpreter::Kind::ui().into_kind_data(),
             ast_component.name.as_str(),
             name.as_str(),
             definition_name_with_arguments,
@@ -287,7 +286,7 @@ impl Component {
 
         let condition = if let Some(v) = ast_component.condition {
             Some(try_ok_state!(
-                ftd::interpreter2::Expression::from_ast_condition(
+                ftd::interpreter::Expression::from_ast_condition(
                     v,
                     definition_name_with_arguments,
                     &loop_object_name_and_kind,
@@ -317,7 +316,7 @@ impl Component {
             &ast_component.children,
             ast_component.line_number
         )?) {
-            return Ok(ftd::interpreter2::StateWithThing::new_thing(component));
+            return Ok(ftd::interpreter::StateWithThing::new_thing(component));
         }
 
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
@@ -330,7 +329,7 @@ impl Component {
             ast_component.line_number,
         )?);
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Component {
+        Ok(ftd::interpreter::StateWithThing::new_thing(Component {
             name,
             properties,
             iteration: Box::new(iteration),
@@ -349,15 +348,15 @@ impl Component {
     fn variable_component_from_ast(
         name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        doc: &mut ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter::TDoc,
         iteration: &Option<Loop>,
-        condition: &Option<ftd::interpreter2::Expression>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        condition: &Option<ftd::interpreter::Expression>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
         events: &[Event],
         ast_properties: &Vec<ftd::ast::Property>,
         ast_children: &Vec<ftd::ast::Component>,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Component>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<Component>>> {
         let name = doc.resolve_name(name);
 
         if definition_name_with_arguments.is_none()
@@ -366,7 +365,7 @@ impl Component {
                 .ne(&name)
         {
             let mut var_name = if let Some(value) =
-                ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
+                ftd::interpreter::utils::get_argument_for_reference_and_remaining(
                     name.as_str(),
                     doc,
                     definition_name_with_arguments,
@@ -400,9 +399,9 @@ impl Component {
                                 .clone()
                                 .resolve(doc, line_number)?
                             {
-                                ftd::interpreter2::Value::Module { name, things } => (name, things),
+                                ftd::interpreter::Value::Module { name, things } => (name, things),
                                 t => {
-                                    return ftd::interpreter2::utils::e2(
+                                    return ftd::interpreter::utils::e2(
                                         format!("Expected module, found: {:?}", t),
                                         doc.name,
                                         line_number,
@@ -432,7 +431,7 @@ impl Component {
                     }
                 }
 
-                return Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+                return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
                     Component {
                         name,
                         properties,
@@ -440,14 +439,14 @@ impl Component {
                         condition: Box::new(condition.to_owned()),
                         events: events.to_vec(),
                         children: vec![],
-                        source: ftd::interpreter2::ComponentSource::Variable,
+                        source: ftd::interpreter::ComponentSource::Variable,
                         line_number,
                     },
                 )));
             }
         }
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(None))
+        Ok(ftd::interpreter::StateWithThing::new_thing(None))
     }
 }
 
@@ -503,18 +502,18 @@ impl From<ftd::ast::PropertySource> for PropertySource {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
-    pub value: ftd::interpreter2::PropertyValue,
-    pub source: ftd::interpreter2::PropertySource,
-    pub condition: Option<ftd::interpreter2::Expression>,
+    pub value: ftd::interpreter::PropertyValue,
+    pub source: ftd::interpreter::PropertySource,
+    pub condition: Option<ftd::interpreter::Expression>,
     pub line_number: usize,
 }
 
 impl Property {
     pub(crate) fn resolve(
         &self,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &ftd::interpreter::TDoc,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::Value>> {
+    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
         Ok(match self.condition {
             Some(ref condition) if !condition.eval(doc)? => None,
             _ => Some(self.value.clone().resolve_with_inherited(
@@ -530,10 +529,10 @@ impl Property {
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
         let mut properties = try_ok_state!(Property::from_ast_properties(
             ast_properties,
             component_name,
@@ -560,13 +559,13 @@ impl Property {
             properties.push(property);
         }
 
-        return Ok(ftd::interpreter2::StateWithThing::new_thing(properties));
+        return Ok(ftd::interpreter::StateWithThing::new_thing(properties));
 
         fn validate_children_kind_property_against_children(
             properties: &[Property],
             ast_children: &[ftd::ast::Component],
             doc_id: &str,
-        ) -> ftd::interpreter2::Result<()> {
+        ) -> ftd::interpreter::Result<()> {
             use itertools::Itertools;
 
             let properties = properties
@@ -581,7 +580,7 @@ impl Property {
             let first_property = properties.first().unwrap();
 
             if properties.len() > 1 {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     "Can't pass multiple children",
                     doc_id,
                     first_property.line_number,
@@ -589,7 +588,7 @@ impl Property {
             }
 
             if !ast_children.is_empty() {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     "Can't have children passed in both subsection and header",
                     doc_id,
                     first_property.line_number,
@@ -597,7 +596,7 @@ impl Property {
             }
 
             if first_property.condition.is_some() {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     "Not supporting condition for children",
                     doc_id,
                     first_property.line_number,
@@ -618,10 +617,10 @@ impl Property {
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Property>>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<Property>>> {
         if ast_children.is_empty() {
-            return Ok(ftd::interpreter2::StateWithThing::new_thing(None));
+            return Ok(ftd::interpreter::StateWithThing::new_thing(None));
         }
 
         let line_number = ast_children.first().unwrap().line_number;
@@ -633,7 +632,7 @@ impl Property {
         )?);
 
         let _argument = Property::get_argument_for_children(&component_arguments).ok_or(
-            ftd::interpreter2::Error::ParseError {
+            ftd::interpreter::Error::ParseError {
                 message: "Subsection is unexpected".to_string(),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -652,30 +651,30 @@ impl Property {
             children
         };
 
-        let value = ftd::interpreter2::PropertyValue::Value {
-            value: ftd::interpreter2::Value::List {
+        let value = ftd::interpreter::PropertyValue::Value {
+            value: ftd::interpreter::Value::List {
                 data: children
                     .into_iter()
-                    .map(|v| ftd::interpreter2::PropertyValue::Value {
+                    .map(|v| ftd::interpreter::PropertyValue::Value {
                         line_number: v.line_number,
-                        value: ftd::interpreter2::Value::UI {
+                        value: ftd::interpreter::Value::UI {
                             name: v.name.to_string(),
-                            kind: ftd::interpreter2::Kind::subsection_ui().into_kind_data(),
+                            kind: ftd::interpreter::Kind::subsection_ui().into_kind_data(),
                             component: v,
                         },
                         is_mutable: false,
                     })
                     .collect(),
-                kind: ftd::interpreter2::Kind::subsection_ui().into_kind_data(),
+                kind: ftd::interpreter::Kind::subsection_ui().into_kind_data(),
             },
             is_mutable: false,
             line_number,
         };
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+        Ok(ftd::interpreter::StateWithThing::new_thing(Some(
             Property {
                 value,
-                source: ftd::interpreter2::PropertySource::Subsection,
+                source: ftd::interpreter::PropertySource::Subsection,
                 condition: None,
                 line_number,
             },
@@ -685,8 +684,8 @@ impl Property {
     fn scan_ast_children(
         ast_children: Vec<ftd::ast::Component>,
         definition_name_with_arguments: Option<(&str, &[String])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         if ast_children.is_empty() {
             return Ok(());
         }
@@ -702,8 +701,8 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         for property in ast_properties {
             Property::scan_ast_property(
                 property,
@@ -719,9 +718,9 @@ impl Property {
         ast_property: ftd::ast::Property,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
-        ftd::interpreter2::PropertyValue::scan_ast_value_with_argument(
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
+        ftd::interpreter::PropertyValue::scan_ast_value_with_argument(
             ast_property.value.to_owned(),
             doc,
             definition_name_with_arguments,
@@ -729,7 +728,7 @@ impl Property {
         )?;
 
         if let Some(ref v) = ast_property.condition {
-            ftd::interpreter2::Expression::scan_ast_condition(
+            ftd::interpreter::Expression::scan_ast_condition(
                 ftd::ast::Condition::new(v, ast_property.line_number),
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
@@ -744,10 +743,10 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Property>>> {
         let mut properties = vec![];
         let component_arguments = try_ok_state!(Argument::for_component_or_web_component(
             component_name,
@@ -774,7 +773,7 @@ impl Property {
             line_number,
         )?);
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(properties))
+        Ok(ftd::interpreter::StateWithThing::new_thing(properties))
     }
 
     fn from_ast_property(
@@ -782,9 +781,9 @@ impl Property {
         component_name: &str,
         component_arguments: &[Argument],
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Property>> {
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Property>> {
         let argument = try_ok_state!(Property::get_argument_for_property(
             &ast_property,
             component_name,
@@ -793,7 +792,7 @@ impl Property {
         )?);
 
         let value = try_ok_state!(
-            ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+            ftd::interpreter::PropertyValue::from_ast_value_with_argument(
                 ast_property.value.to_owned(),
                 doc,
                 argument.mutable,
@@ -805,7 +804,7 @@ impl Property {
 
         let condition = if let Some(ref v) = ast_property.condition {
             Some(try_ok_state!(
-                ftd::interpreter2::Expression::from_ast_condition(
+                ftd::interpreter::Expression::from_ast_condition(
                     ftd::ast::Condition::new(v, ast_property.line_number),
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
@@ -817,7 +816,7 @@ impl Property {
         };
 
         if ast_property.value.is_null() && !argument.kind.is_optional() {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Excepted Value for argument {} in component {}",
                     argument.name, component_name
@@ -829,13 +828,13 @@ impl Property {
 
         let source = {
             let mut source = ast_property.source.into();
-            if let ftd::interpreter2::PropertySource::Header { name, .. } = &mut source {
+            if let ftd::interpreter::PropertySource::Header { name, .. } = &mut source {
                 *name = argument.name;
             }
             source
         };
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Property {
+        Ok(ftd::interpreter::StateWithThing::new_thing(Property {
             value,
             source,
             condition,
@@ -847,14 +846,14 @@ impl Property {
         ast_property: &ftd::ast::Property,
         component_name: &str,
         component_argument: &[Argument],
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Argument>> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Argument>> {
         match &ast_property.source {
-            ftd::ast::PropertySource::Caption => Ok(ftd::interpreter2::StateWithThing::new_thing(
+            ftd::ast::PropertySource::Caption => Ok(ftd::interpreter::StateWithThing::new_thing(
                 component_argument
                     .iter()
                     .find(|v| v.is_caption())
-                    .ok_or(ftd::interpreter2::Error::ParseError {
+                    .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "Caption type argument not found for component `{}`",
                             component_name
@@ -864,11 +863,11 @@ impl Property {
                     })
                     .map(ToOwned::to_owned)?,
             )),
-            ftd::ast::PropertySource::Body => Ok(ftd::interpreter2::StateWithThing::new_thing(
+            ftd::ast::PropertySource::Body => Ok(ftd::interpreter::StateWithThing::new_thing(
                 component_argument
                     .iter()
                     .find(|v| v.is_body())
-                    .ok_or(ftd::interpreter2::Error::ParseError {
+                    .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "Body type argument not found for component `{}`",
                             component_name
@@ -879,11 +878,11 @@ impl Property {
                     .map(ToOwned::to_owned)?,
             )),
             ftd::ast::PropertySource::Header { name, mutable } => {
-                let (name, remaining) = ftd::interpreter2::utils::split_at(name, ".");
+                let (name, remaining) = ftd::interpreter::utils::split_at(name, ".");
                 let mut argument = component_argument
                     .iter()
                     .find(|v| v.name.eq(name.as_str()))
-                    .ok_or(ftd::interpreter2::Error::ParseError {
+                    .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "Header type `{}` mutable: `{}` argument not found for component `{}`",
                             name, mutable, component_name
@@ -898,7 +897,7 @@ impl Property {
                     } else {
                         "immutable"
                     };
-                    return ftd::interpreter2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("Expected `{}` for {}", mutable, argument.name),
                         doc.name,
                         ast_property.line_number,
@@ -913,7 +912,7 @@ impl Property {
                     )?);
                 }
 
-                Ok(ftd::interpreter2::StateWithThing::new_thing(argument))
+                Ok(ftd::interpreter::StateWithThing::new_thing(argument))
             }
         }
     }
@@ -931,17 +930,17 @@ impl Property {
 
 fn search_things_for_module(
     component_name: &str,
-    properties: &[ftd::interpreter2::Property],
-    doc: &mut ftd::interpreter2::TDoc,
-    arguments: &[ftd::interpreter2::Argument],
+    properties: &[ftd::interpreter::Property],
+    doc: &mut ftd::interpreter::TDoc,
+    arguments: &[ftd::interpreter::Argument],
     line_number: usize,
-) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
+) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>> {
     for argument in arguments.iter() {
         if !argument.kind.is_module() {
             continue;
         }
         let sources = argument.to_sources();
-        let property = ftd::interpreter2::utils::find_properties_by_source(
+        let property = ftd::interpreter::utils::find_properties_by_source(
             sources.as_slice(),
             properties,
             doc.name,
@@ -949,7 +948,7 @@ fn search_things_for_module(
             argument.line_number,
         )?;
         if property.len() != 1 {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Expected one value for `module` type argument `{}`, found `{}` values",
                     argument.name,
@@ -967,9 +966,9 @@ fn search_things_for_module(
             // TODO: Remove unwrap()
             .unwrap()
         {
-            ftd::interpreter2::Value::Module { name, things } => (name, things),
+            ftd::interpreter::Value::Module { name, things } => (name, things),
             t => {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("Expected module, found: {:?}", t),
                     doc.name,
                     line_number,
@@ -982,8 +981,8 @@ fn search_things_for_module(
         {
             let current_parsed_document = if let Some(state) = {
                 match &mut doc.bag {
-                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
-                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                    ftd::interpreter::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter::tdoc::BagOrState::State(s) => Some(s),
                 }
             } {
                 state.parsed_libs.get_mut(state.id.as_str()).unwrap()
@@ -1010,7 +1009,7 @@ fn search_things_for_module(
                 )
             );
             let thing_real_name =
-                ftd::interpreter2::utils::resolve_name(thing_.as_str(), doc.name, &aliases);
+                ftd::interpreter::utils::resolve_name(thing_.as_str(), doc.name, &aliases);
             if unresolved_thing.is_some() {
                 doc.scan_thing(&thing_real_name, line_number)?;
             } else {
@@ -1028,18 +1027,18 @@ fn search_things_for_module(
             try_ok_state!(unresolved_thing);
         }
     }
-    Ok(ftd::interpreter2::StateWithThing::new_thing(()))
+    Ok(ftd::interpreter::StateWithThing::new_thing(()))
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Loop {
-    pub on: ftd::interpreter2::PropertyValue,
+    pub on: ftd::interpreter::PropertyValue,
     pub alias: String,
     pub line_number: usize,
 }
 
 impl Loop {
-    fn new(on: ftd::interpreter2::PropertyValue, alias: &str, line_number: usize) -> Loop {
+    fn new(on: ftd::interpreter::PropertyValue, alias: &str, line_number: usize) -> Loop {
         Loop {
             on,
             alias: alias.to_string(),
@@ -1049,12 +1048,12 @@ impl Loop {
 
     pub(crate) fn loop_object_as_argument(
         &self,
-        doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Argument> {
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Argument> {
         let kind = self.loop_object_kind(doc.name)?;
-        Ok(ftd::interpreter2::Argument {
+        Ok(ftd::interpreter::Argument {
             name: self.alias.to_string(),
-            kind: ftd::interpreter2::KindData::new(kind),
+            kind: ftd::interpreter::KindData::new(kind),
             mutable: self.on.is_mutable(),
             value: Some(self.on.to_owned()),
             line_number: self.on.line_number(),
@@ -1064,11 +1063,11 @@ impl Loop {
     pub(crate) fn loop_object_kind(
         &self,
         doc_id: &str,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Kind> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::Kind> {
         let kind = self.on.kind();
         match kind {
-            ftd::interpreter2::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
-            t => ftd::interpreter2::utils::e2(
+            ftd::interpreter::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
+            t => ftd::interpreter::utils::e2(
                 format!("Expected list kind, found: {:?}", t),
                 doc_id,
                 self.line_number,
@@ -1079,9 +1078,9 @@ impl Loop {
     fn scan_ast_loop(
         ast_loop: ftd::ast::Loop,
         definition_name_with_arguments: Option<(&str, &[String])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
-        ftd::interpreter2::PropertyValue::scan_string_with_argument(
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
+        ftd::interpreter::PropertyValue::scan_string_with_argument(
             ast_loop.on.as_str(),
             doc,
             ast_loop.line_number,
@@ -1095,9 +1094,9 @@ impl Loop {
     fn from_ast_loop(
         ast_loop: ftd::ast::Loop,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Loop>> {
-        let mut on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Loop>> {
+        let mut on = try_ok_state!(ftd::interpreter::PropertyValue::from_string_with_argument(
             ast_loop.on.as_str(),
             doc,
             None,
@@ -1107,11 +1106,8 @@ impl Loop {
             &None,
         )?);
 
-        if let Some(reference) = ast_loop
-            .on
-            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
-        {
-            if let Ok(ftd::interpreter2::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
+        if let Some(reference) = ast_loop.on.strip_prefix(ftd::interpreter::utils::REFERENCE) {
+            if let Ok(ftd::interpreter::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
                 reference,
                 ast_loop.line_number,
                 definition_name_with_arguments,
@@ -1121,11 +1117,11 @@ impl Loop {
             }
         }
 
-        if ast_loop.on.starts_with(ftd::interpreter2::utils::CLONE) {
+        if ast_loop.on.starts_with(ftd::interpreter::utils::CLONE) {
             on.set_mutable(true);
         }
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Loop::new(
+        Ok(ftd::interpreter::StateWithThing::new_thing(Loop::new(
             on,
             doc.resolve_name(ast_loop.alias.as_str()).as_str(),
             ast_loop.line_number,
@@ -1134,16 +1130,16 @@ impl Loop {
 
     pub fn children(
         &self,
-        doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<(
-        Vec<ftd::interpreter2::PropertyValue>,
-        ftd::interpreter2::KindData,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<(
+        Vec<ftd::interpreter::PropertyValue>,
+        ftd::interpreter::KindData,
     )> {
         let value = self.on.clone().resolve(doc, self.line_number)?;
-        if let ftd::interpreter2::Value::List { data, kind } = value {
+        if let ftd::interpreter::Value::List { data, kind } = value {
             Ok((data, kind))
         } else {
-            ftd::interpreter2::utils::e2(
+            ftd::interpreter::utils::e2(
                 format!("Expected list type data, found: {:?}", self.on),
                 doc.name,
                 self.line_number,
@@ -1154,8 +1150,8 @@ impl Loop {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    pub name: ftd::interpreter2::EventName,
-    pub action: ftd::interpreter2::FunctionCall,
+    pub name: ftd::interpreter::EventName,
+    pub action: ftd::interpreter::FunctionCall,
     pub line_number: usize,
 }
 
@@ -1163,10 +1159,10 @@ impl Event {
     fn from_ast_event(
         ast_event: ftd::ast::Event,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Event>> {
-        let action = try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Event>> {
+        let action = try_ok_state!(ftd::interpreter::FunctionCall::from_string(
             ast_event.action.as_str(),
             doc,
             false,
@@ -1175,13 +1171,13 @@ impl Event {
             ast_event.line_number,
         )?);
 
-        let event_name = ftd::interpreter2::EventName::from_string(
+        let event_name = ftd::interpreter::EventName::from_string(
             ast_event.name.as_str(),
             doc.name,
             ast_event.line_number,
         )?;
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Event {
+        Ok(ftd::interpreter::StateWithThing::new_thing(Event {
             name: event_name,
             action,
             line_number: ast_event.line_number,
@@ -1191,9 +1187,9 @@ impl Event {
     fn from_ast_events(
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Event>>> {
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Event>>> {
         let mut events = vec![];
         for event in ast_events {
             events.push(try_ok_state!(Event::from_ast_event(
@@ -1203,15 +1199,15 @@ impl Event {
                 doc,
             )?));
         }
-        Ok(ftd::interpreter2::StateWithThing::new_thing(events))
+        Ok(ftd::interpreter::StateWithThing::new_thing(events))
     }
 
     fn scan_ast_events(
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         for event in ast_events {
             Event::scan_ast_event(
                 event,
@@ -1227,9 +1223,9 @@ impl Event {
         ast_event: ftd::ast::Event,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
-        ftd::interpreter2::FunctionCall::scan_string(
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
+        ftd::interpreter::FunctionCall::scan_string(
             ast_event.action.as_str(),
             doc,
             definition_name_with_arguments,
@@ -1260,7 +1256,7 @@ impl EventName {
         e: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::EventName> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::EventName> {
         use itertools::Itertools;
 
         match e {
@@ -1290,11 +1286,9 @@ impl EventName {
                     .collect_vec();
                 Ok(EventName::GlobalKeySeq(keys))
             }
-            t => ftd::interpreter2::utils::e2(
-                format!("`{}` event not found", t),
-                doc_id,
-                line_number,
-            ),
+            t => {
+                ftd::interpreter::utils::e2(format!("`{}` event not found", t), doc_id, line_number)
+            }
         }
     }
 

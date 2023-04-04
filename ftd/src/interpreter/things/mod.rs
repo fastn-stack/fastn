@@ -11,28 +11,28 @@ pub(crate) mod web_component;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
-    Record(ftd::interpreter2::Record),
-    OrType(ftd::interpreter2::OrType),
+    Record(ftd::interpreter::Record),
+    OrType(ftd::interpreter::OrType),
     OrTypeWithVariant {
         or_type: String,
-        variant: ftd::interpreter2::OrTypeVariant,
+        variant: ftd::interpreter::OrTypeVariant,
     },
-    Variable(ftd::interpreter2::Variable),
-    Component(ftd::interpreter2::ComponentDefinition),
-    WebComponent(ftd::interpreter2::WebComponentDefinition),
-    Function(ftd::interpreter2::Function),
+    Variable(ftd::interpreter::Variable),
+    Component(ftd::interpreter::ComponentDefinition),
+    WebComponent(ftd::interpreter::WebComponentDefinition),
+    Function(ftd::interpreter::Function),
 }
 
 impl Thing {
     pub(crate) fn name(&self) -> String {
         match self {
-            ftd::interpreter2::Thing::Record(r) => r.name.clone(),
-            ftd::interpreter2::Thing::OrType(o) => o.name.clone(),
-            ftd::interpreter2::Thing::OrTypeWithVariant { or_type, .. } => or_type.clone(),
-            ftd::interpreter2::Thing::Variable(v) => v.name.to_string(),
-            ftd::interpreter2::Thing::Component(c) => c.name.to_string(),
-            ftd::interpreter2::Thing::Function(f) => f.name.to_string(),
-            ftd::interpreter2::Thing::WebComponent(w) => w.name.to_string(),
+            ftd::interpreter::Thing::Record(r) => r.name.clone(),
+            ftd::interpreter::Thing::OrType(o) => o.name.clone(),
+            ftd::interpreter::Thing::OrTypeWithVariant { or_type, .. } => or_type.clone(),
+            ftd::interpreter::Thing::Variable(v) => v.name.to_string(),
+            ftd::interpreter::Thing::Component(c) => c.name.to_string(),
+            ftd::interpreter::Thing::Function(f) => f.name.to_string(),
+            ftd::interpreter::Thing::WebComponent(w) => w.name.to_string(),
         }
     }
     pub fn line_number(&self) -> usize {
@@ -51,10 +51,10 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
         match self {
-            ftd::interpreter2::Thing::Variable(v) => Ok(v),
-            t => ftd::interpreter2::utils::e2(
+            ftd::interpreter::Thing::Variable(v) => Ok(v),
+            t => ftd::interpreter::utils::e2(
                 format!("Expected Variable, found: `{:?}`", t),
                 doc_id,
                 line_number,
@@ -66,10 +66,10 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::Record> {
         match self {
-            ftd::interpreter2::Thing::Record(v) => Ok(v),
-            t => ftd::interpreter2::utils::e2(
+            ftd::interpreter::Thing::Record(v) => Ok(v),
+            t => ftd::interpreter::utils::e2(
                 format!("Expected Record, found: `{:?}`", t),
                 doc_id,
                 line_number,
@@ -81,10 +81,10 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Function> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::Function> {
         match self {
-            ftd::interpreter2::Thing::Function(v) => Ok(v),
-            t => ftd::interpreter2::utils::e2(
+            ftd::interpreter::Thing::Function(v) => Ok(v),
+            t => ftd::interpreter::utils::e2(
                 format!("Expected Function, found: `{:?}`", t),
                 doc_id,
                 line_number,

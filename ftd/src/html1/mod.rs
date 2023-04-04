@@ -21,7 +21,7 @@ pub use variable_dependencies::VariableDependencyGenerator;
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("InterpreterError: {}", _0)]
-    InterpreterError(#[from] ftd::interpreter2::Error),
+    InterpreterError(#[from] ftd::interpreter::Error),
 
     #[error("{doc_id}:{line_number} -> {message}")]
     ParseError {

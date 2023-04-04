@@ -1,11 +1,11 @@
 pub async fn fetch_files<'a>(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if !kind.is_string() {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!("Expected kind is `string`, found: `{:?}`", kind),
             doc.name,
             value.line_number(),
@@ -17,16 +17,16 @@ pub async fn fetch_files<'a>(
     };
     let path = headers
         .get_optional_string_by_key("path", doc.name, value.line_number())?
-        .ok_or(ftd::interpreter2::Error::ParseError {
+        .ok_or(ftd::interpreter::Error::ParseError {
             message: "`path` not found".to_string(),
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
 
-    Ok(ftd::interpreter2::Value::String {
+    Ok(ftd::interpreter::Value::String {
         text: tokio::fs::read_to_string(config.root.join(path))
             .await
-            .map_err(|v| ftd::interpreter2::Error::ParseError {
+            .map_err(|v| ftd::interpreter::Error::ParseError {
                 message: v.to_string(),
                 doc_id: doc.name.to_string(),
                 line_number: value.line_number(),

@@ -4,7 +4,7 @@ pub struct Node {
     pub events: Vec<Event>,
     pub node: String,
     pub display: String,
-    pub condition: Option<ftd::interpreter2::Expression>,
+    pub condition: Option<ftd::interpreter::Expression>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,
@@ -91,13 +91,13 @@ impl ftd::executor::HTMLData {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct RawNodeData {
-    pub properties: Vec<(String, ftd::interpreter2::Property)>,
-    pub iteration: Option<ftd::interpreter2::Loop>,
+    pub properties: Vec<(String, ftd::interpreter::Property)>,
+    pub iteration: Option<ftd::interpreter::Loop>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct WebComponentData {
-    pub properties: ftd::Map<ftd::interpreter2::PropertyValue>,
+    pub properties: ftd::Map<ftd::interpreter::PropertyValue>,
 }
 
 pub type Event = ftd::executor::Event;
@@ -845,9 +845,9 @@ impl ftd::executor::TextInput {
                     .map(|v| {
                         v.map(|b| {
                             if b {
-                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                                s(ftd::interpreter::FTD_IGNORE_KEY)
                             } else {
-                                s(ftd::interpreter2::FTD_NO_VALUE)
+                                s(ftd::interpreter::FTD_NO_VALUE)
                             }
                         })
                     })
@@ -925,9 +925,9 @@ impl ftd::executor::CheckBox {
                     .map(|v| {
                         v.map(|b| {
                             if b {
-                                s(ftd::interpreter2::FTD_NO_VALUE)
+                                s(ftd::interpreter::FTD_NO_VALUE)
                             } else {
-                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                                s(ftd::interpreter::FTD_IGNORE_KEY)
                             }
                         })
                     })
@@ -946,9 +946,9 @@ impl ftd::executor::CheckBox {
                     .map(|v| {
                         v.map(|b| {
                             if b {
-                                s(ftd::interpreter2::FTD_IGNORE_KEY)
+                                s(ftd::interpreter::FTD_IGNORE_KEY)
                             } else {
-                                s(ftd::interpreter2::FTD_NO_VALUE)
+                                s(ftd::interpreter::FTD_NO_VALUE)
                             }
                         })
                     })

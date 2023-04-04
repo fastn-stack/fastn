@@ -186,16 +186,16 @@ padding-bottom: 20
 pub fn ftd_v2_interpret_helper(
     name: &str,
     source: &str,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
-    let mut s = ftd::interpreter2::interpret(name, source)?;
+) -> ftd::interpreter::Result<ftd::interpreter::Document> {
+    let mut s = ftd::interpreter::interpret(name, source)?;
     let document;
     loop {
         match s {
-            ftd::interpreter2::Interpreter::Done { document: doc } => {
+            ftd::interpreter::Interpreter::Done { document: doc } => {
                 document = doc;
                 break;
             }
-            ftd::interpreter2::Interpreter::StuckOnImport {
+            ftd::interpreter::Interpreter::StuckOnImport {
                 module, state: st, ..
             } => {
                 let mut source = "".to_string();
@@ -208,7 +208,7 @@ pub fn ftd_v2_interpret_helper(
                 if let Ok(value) = std::fs::read_to_string(format!("./ftd/t/html/{}.ftd", module)) {
                     source = value;
                 }
-                let document = ftd::interpreter2::ParsedDocument::parse_with_line_number(
+                let document = ftd::interpreter::ParsedDocument::parse_with_line_number(
                     module.as_str(),
                     source.as_str(),
                     0,
@@ -222,12 +222,12 @@ pub fn ftd_v2_interpret_helper(
                     0,
                 )?;
             }
-            ftd::interpreter2::Interpreter::StuckOnProcessor {
+            ftd::interpreter::Interpreter::StuckOnProcessor {
                 state, ast, module, ..
             } => {
                 let variable_definition = ast.clone().get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
-                let value = ftd::interpreter2::Value::String {
+                let value = ftd::interpreter::Value::String {
                     text: variable_definition
                         .value
                         .caption()
@@ -237,19 +237,19 @@ pub fn ftd_v2_interpret_helper(
                 };
                 s = state.continue_after_processor(value, ast)?;
             }
-            ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+            ftd::interpreter::Interpreter::StuckOnForeignVariable {
                 state,
                 module,
                 variable,
                 ..
             } => {
                 if module.eq("test") {
-                    let value = ftd::interpreter2::Value::String {
+                    let value = ftd::interpreter::Value::String {
                         text: variable.to_uppercase().to_string(),
                     };
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
-                    return ftd::interpreter2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("Unknown module {}", module),
                         module.as_str(),
                         0,

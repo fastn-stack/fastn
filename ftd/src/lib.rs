@@ -40,7 +40,7 @@ pub mod executor;
 pub mod ftd2021;
 mod html;
 pub mod html1;
-pub mod interpreter2;
+pub mod interpreter;
 pub mod markup;
 pub mod node;
 mod or_type;

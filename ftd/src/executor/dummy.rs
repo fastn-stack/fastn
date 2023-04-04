@@ -21,7 +21,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction(
-        instruction: ftd::interpreter2::Component,
+        instruction: ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         dummy_reference: String,
         local_container: &[usize],
@@ -51,7 +51,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction_to_element(
-        mut instruction: ftd::interpreter2::Component,
+        mut instruction: ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -100,7 +100,7 @@ impl DummyElement {
             for argument in component_definition.arguments.iter() {
                 let sources = argument.to_sources();
                 properties.extend(
-                    ftd::interpreter2::utils::find_properties_by_source(
+                    ftd::interpreter::utils::find_properties_by_source(
                         sources.as_slice(),
                         instruction.properties.as_slice(),
                         doc.name,
@@ -149,14 +149,14 @@ impl DummyElement {
 
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub struct ElementConstructor {
-    pub arguments: Vec<ftd::interpreter2::Argument>,
+    pub arguments: Vec<ftd::interpreter::Argument>,
     pub element: ftd::executor::Element,
     pub name: String,
 }
 
 impl ElementConstructor {
     pub(crate) fn new(
-        arguments: &[ftd::interpreter2::Argument],
+        arguments: &[ftd::interpreter::Argument],
         element: ftd::executor::Element,
         name: &str,
     ) -> ElementConstructor {

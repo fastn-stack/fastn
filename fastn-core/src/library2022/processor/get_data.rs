@@ -1,9 +1,9 @@
 pub fn process(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {
         Ok(val) => (
             val.0.to_owned(),
@@ -23,7 +23,7 @@ pub fn process(
     };
 
     if body.is_some() && value.caption().is_some() {
-        return Err(ftd::interpreter2::Error::ParseError {
+        return Err(ftd::interpreter::Error::ParseError {
             message: "Cannot pass both caption and body".to_string(),
             doc_id: doc.name.to_string(),
             line_number,
@@ -50,9 +50,9 @@ pub fn process(
         if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
             if let Some(data) = extra_data.get(key.as_str()) {
                 return match kind {
-                    ftd::interpreter2::Kind::Integer => {
+                    ftd::interpreter::Kind::Integer => {
                         let value = data.parse::<i64>().map_err(|e| {
-                            ftd::interpreter2::Error::ParseError {
+                            ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
@@ -60,9 +60,9 @@ pub fn process(
                         })?;
                         doc.from_json(&value, &kind, line_number)
                     }
-                    ftd::interpreter2::Kind::Decimal { .. } => {
+                    ftd::interpreter::Kind::Decimal { .. } => {
                         let value = data.parse::<f64>().map_err(|e| {
-                            ftd::interpreter2::Error::ParseError {
+                            ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
@@ -70,9 +70,9 @@ pub fn process(
                         })?;
                         doc.from_json(&value, &kind, line_number)
                     }
-                    ftd::interpreter2::Kind::Boolean { .. } => {
+                    ftd::interpreter::Kind::Boolean { .. } => {
                         let value = data.parse::<bool>().map_err(|e| {
-                            ftd::interpreter2::Error::ParseError {
+                            ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
@@ -92,7 +92,7 @@ pub fn process(
         match camino::Utf8Path::new(path.as_str()).extension() {
             Some(extension) => {
                 if !extension.eq("json") {
-                    return Err(ftd::interpreter2::Error::ParseError {
+                    return Err(ftd::interpreter::Error::ParseError {
                         message: format!("only json file supported {}", path),
                         doc_id: doc.name.to_string(),
                         line_number,
@@ -100,7 +100,7 @@ pub fn process(
                 }
             }
             None => {
-                return Err(ftd::interpreter2::Error::ParseError {
+                return Err(ftd::interpreter::Error::ParseError {
                     message: format!("file does not have any extension {}", path),
                     doc_id: doc.name.to_string(),
                     line_number,
@@ -109,7 +109,7 @@ pub fn process(
         }
 
         let file = std::fs::read_to_string(path.as_str()).map_err(|_e| {
-            ftd::interpreter2::Error::ParseError {
+            ftd::interpreter::Error::ParseError {
                 message: format!("file path not found {}", path),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -133,7 +133,7 @@ pub fn process(
     let caption = match value.caption() {
         Some(ref caption) => caption.to_string(),
         None => {
-            return Err(ftd::interpreter2::Error::ParseError {
+            return Err(ftd::interpreter::Error::ParseError {
                 message: format!("caption name not passed for section: {}", section_name),
                 doc_id: doc.name.to_string(),
                 line_number,

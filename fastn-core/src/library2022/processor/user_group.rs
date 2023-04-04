@@ -1,9 +1,9 @@
 pub fn process(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
     let g = config
         .package
@@ -17,10 +17,10 @@ pub fn process(
 /// processor: user-group-by-id
 pub fn process_by_id(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
         Err(e) => return Err(e.into()),
@@ -29,7 +29,7 @@ pub fn process_by_id(
     let group_id = match headers.get_optional_string_by_key("id", doc.name, value.line_number())? {
         Some(k) => k,
         None => {
-            return Err(ftd::interpreter2::Error::ParseError {
+            return Err(ftd::interpreter::Error::ParseError {
                 message: "`id` field is mandatory in `user-group-by-id` processor".to_string(),
                 doc_id: doc.name.to_string(),
                 line_number: value.line_number(),
@@ -54,10 +54,10 @@ pub fn process_by_id(
 /// This is used to get all the identities of the current document
 pub fn get_identities(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
 
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
@@ -69,18 +69,18 @@ pub fn get_identities(
             line_number: value.line_number(),
         })?;
 
-    Ok(ftd::interpreter2::Value::List {
+    Ok(ftd::interpreter::Value::List {
         data: identities
             .into_iter()
-            .map(|i| ftd::interpreter2::PropertyValue::Value {
-                value: ftd::interpreter2::Value::String {
+            .map(|i| ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::String {
                     text: i.to_string(),
                 },
                 is_mutable: false,
                 line_number: value.line_number(),
             })
             .collect_vec(),
-        kind: ftd::interpreter2::KindData {
+        kind: ftd::interpreter::KindData {
             kind,
             caption: false,
             body: false,
@@ -91,10 +91,10 @@ pub fn get_identities(
 // is user can_read the document or not based on defined readers in sitemap
 pub async fn is_reader<'a>(
     value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    _kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
     let is_reader = config
         .can_read(config.request.as_ref().unwrap(), &doc_id, false)
@@ -105,5 +105,5 @@ pub async fn is_reader<'a>(
             line_number: value.line_number(),
         })?;
 
-    Ok(ftd::interpreter2::Value::Boolean { value: is_reader })
+    Ok(ftd::interpreter::Value::Boolean { value: is_reader })
 }

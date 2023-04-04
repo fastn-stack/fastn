@@ -21,10 +21,7 @@ impl FunctionGenerator {
         Ok(vector.join("\n\n"))
     }
 
-    pub fn get_function(
-        &self,
-        function: ftd::interpreter2::Function,
-    ) -> ftd::html1::Result<String> {
+    pub fn get_function(&self, function: ftd::interpreter::Function) -> ftd::html1::Result<String> {
         use itertools::Itertools;
 
         /*let node = dbg!(ftd::evalexpr::build_operator_tree(
@@ -298,6 +295,6 @@ impl ExpressionGenerator {
 }
 
 fn from_default_functions() -> Vec<String> {
-    // todo: check ftd::interpreter2::default::default_functions()
+    // todo: check ftd::interpreter::default::default_functions()
     vec!["".to_string()]
 }

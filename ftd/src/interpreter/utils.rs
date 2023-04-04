@@ -1,13 +1,13 @@
 pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> String {
     let name = name
-        .trim_start_matches(ftd::interpreter2::utils::CLONE)
-        .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+        .trim_start_matches(ftd::interpreter::utils::CLONE)
+        .trim_start_matches(ftd::interpreter::utils::REFERENCE)
         .to_string();
 
     if name.contains('#') {
         return name;
     }
-    match ftd::interpreter2::utils::split_module(name.as_str()) {
+    match ftd::interpreter::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
             Some(m) => format!("{}#{}", m, v),
             None => format!("{}#{}.{}", doc_name, m, v),
@@ -31,11 +31,11 @@ pub fn split_module(id: &str) -> (Option<&str>, &str, Option<&str>) {
     }
 }
 
-pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<T>
+pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<T>
 where
     S1: Into<String>,
 {
-    Err(ftd::interpreter2::Error::ParseError {
+    Err(ftd::interpreter::Error::ParseError {
         message: m.into(),
         doc_id: doc_id.to_string(),
         line_number,
@@ -46,11 +46,11 @@ pub(crate) fn invalid_kind_error<S>(
     message: S,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Error
+) -> ftd::interpreter::Error
 where
     S: Into<String>,
 {
-    ftd::interpreter2::Error::InvalidKind {
+    ftd::interpreter::Error::InvalidKind {
         message: message.into(),
         doc_id: doc_id.to_string(),
         line_number,
@@ -59,18 +59,18 @@ where
 
 pub(crate) fn kind_eq(
     key: &str,
-    kind: &ftd::interpreter2::Kind,
-    doc: &mut ftd::interpreter2::TDoc,
+    kind: &ftd::interpreter::Kind,
+    doc: &mut ftd::interpreter::TDoc,
     line_number: usize,
-) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<bool>> {
+) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<bool>> {
     let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;
-    let kind_data = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
+    let kind_data = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
         var_kind,
         &Default::default(),
         doc,
         line_number,
     )?);
-    Ok(ftd::interpreter2::StateWithThing::new_thing(
+    Ok(ftd::interpreter::StateWithThing::new_thing(
         kind_data.kind.is_same_as(kind),
     ))
 }
@@ -82,7 +82,7 @@ pub(crate) fn get_function_name(
     s: &str,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Result<String> {
+) -> ftd::interpreter::Result<String> {
     Ok(get_function_name_and_properties(s, doc_id, line_number)?.0)
 }
 
@@ -90,11 +90,11 @@ pub(crate) fn get_function_name_and_properties(
     s: &str,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Result<(String, Vec<(String, String)>)> {
+) -> ftd::interpreter::Result<(String, Vec<(String, String)>)> {
     let (si, ei) = match (s.find('('), s.find(')')) {
         (Some(si), Some(ei)) if si < ei => (si, ei),
         _ => {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("{} is not a function", s),
                 doc_id,
                 line_number,
@@ -105,7 +105,7 @@ pub(crate) fn get_function_name_and_properties(
     let mut properties = vec![];
     if !s[si + 1..ei].trim().is_empty() {
         for value in s[si + 1..ei].split(',') {
-            let (p1, p2) = ftd::interpreter2::utils::split(value, "=", doc_id, line_number)?;
+            let (p1, p2) = ftd::interpreter::utils::split(value, "=", doc_id, line_number)?;
             properties.push((p1.trim().to_string(), p2.trim().to_string()));
         }
     }
@@ -126,7 +126,7 @@ pub(crate) fn get_doc_name_and_remaining(
     }
     if pattern_to_split_at.contains('.') {
         let (p1, p2) =
-            ftd::interpreter2::utils::split(pattern_to_split_at.as_str(), ".", doc_id, line_number)
+            ftd::interpreter::utils::split(pattern_to_split_at.as_str(), ".", doc_id, line_number)
                 .unwrap();
         (format!("{}{}", part1, p1), Some(p2))
     } else {
@@ -152,9 +152,9 @@ pub fn split(
     split_at: &str,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Result<(String, String)> {
+) -> ftd::interpreter::Result<(String, String)> {
     if !name.contains(split_at) {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!("{} is not found in {}", split_at, name),
             doc_id,
             line_number,
@@ -187,7 +187,7 @@ pub(crate) fn get_special_variable() -> Vec<&'static str> {
 
 pub fn is_argument_in_component_or_loop<'a>(
     name: &'a str,
-    doc: &'a ftd::interpreter2::TDoc,
+    doc: &'a ftd::interpreter::TDoc,
     component_definition_name_with_arguments: Option<(&'a str, &'a [String])>,
     loop_object_name_and_kind: &'a Option<String>,
 ) -> bool {
@@ -198,7 +198,7 @@ pub fn is_argument_in_component_or_loop<'a>(
             .strip_prefix(format!("{}.", component_name).as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
-            let (p1, _p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            let (p1, _p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
             if arguments.iter().contains(&p1) {
                 return true;
             }
@@ -223,20 +223,20 @@ pub fn get_mut_argument_for_reference<'a>(
     doc_name: &str,
     component_definition_name_with_arguments: &'a mut Option<(
         &str,
-        &mut [ftd::interpreter2::Argument],
+        &mut [ftd::interpreter::Argument],
     )>,
     line_number: usize,
-) -> ftd::interpreter2::Result<Option<&'a mut ftd::interpreter2::Argument>> {
+) -> ftd::interpreter::Result<Option<&'a mut ftd::interpreter::Argument>> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc_name, component_name).as_str()))
         {
-            let (p1, _) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            let (p1, _) = ftd::interpreter::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
                 Ok(Some(argument))
             } else {
-                ftd::interpreter2::utils::e2(
+                ftd::interpreter::utils::e2(
                     format!("{} is not the argument in {}", p1, component_name),
                     doc_name,
                     line_number,
@@ -249,15 +249,15 @@ pub fn get_mut_argument_for_reference<'a>(
 
 pub fn get_argument_for_reference_and_remaining(
     name: &str,
-    doc: &ftd::interpreter2::TDoc,
-    component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter2::Argument])>,
-    loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+    doc: &ftd::interpreter::TDoc,
+    component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter::Argument])>,
+    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
     line_number: usize,
-) -> ftd::interpreter2::Result<
+) -> ftd::interpreter::Result<
     Option<(
-        ftd::interpreter2::Argument,
+        ftd::interpreter::Argument,
         Option<String>,
-        ftd::interpreter2::PropertyValueSource,
+        ftd::interpreter::PropertyValueSource,
     )>,
 > {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
@@ -265,15 +265,15 @@ pub fn get_argument_for_reference_and_remaining(
             .strip_prefix(format!("{}.", component_name).as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
-            let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            let (p1, p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
                 Ok(Some((
                     argument.to_owned(),
                     p2,
-                    ftd::interpreter2::PropertyValueSource::Local(component_name.to_string()),
+                    ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
                 )))
             } else {
-                ftd::interpreter2::utils::e2(
+                ftd::interpreter::utils::e2(
                     format!("{} is not the argument in {}", p1, component_name),
                     doc.name,
                     line_number,
@@ -282,7 +282,7 @@ pub fn get_argument_for_reference_and_remaining(
         }
     }
     if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
-        let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
+        let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
             || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
@@ -292,21 +292,20 @@ pub fn get_argument_for_reference_and_remaining(
             return Ok(Some((
                 loop_argument.to_owned(),
                 p2,
-                ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
+                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
-        if name
-            .starts_with(format!("{}#{}", doc.name, ftd::interpreter2::FTD_LOOP_COUNTER).as_str())
+        if name.starts_with(format!("{}#{}", doc.name, ftd::interpreter::FTD_LOOP_COUNTER).as_str())
         {
             return Ok(Some((
-                ftd::interpreter2::Field::default(
-                    ftd::interpreter2::FTD_LOOP_COUNTER,
-                    ftd::interpreter2::Kind::integer()
+                ftd::interpreter::Field::default(
+                    ftd::interpreter::FTD_LOOP_COUNTER,
+                    ftd::interpreter::Kind::integer()
                         .into_optional()
                         .into_kind_data(),
                 ),
                 None,
-                ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
+                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
     }
@@ -315,14 +314,14 @@ pub fn get_argument_for_reference_and_remaining(
 }
 
 pub fn validate_variable(
-    variable: &ftd::interpreter2::Variable,
-    doc: &ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<()> {
+    variable: &ftd::interpreter::Variable,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
     if !variable.mutable {
         return Ok(());
     }
     if !variable.conditional_value.is_empty() {
-        return ftd::interpreter2::utils::e2(
+        return ftd::interpreter::utils::e2(
             format!(
                 "conditional properties are not supported for mutable argument `{}`",
                 variable.name,
@@ -337,36 +336,36 @@ pub fn validate_variable(
 }
 
 pub fn validate_record_value(
-    value: &ftd::interpreter2::PropertyValue,
-    doc: &ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<()> {
-    if let ftd::interpreter2::PropertyValue::Value { value, .. } = value {
-        if let Some(ftd::interpreter2::Value::Record { fields, .. }) = value.ref_inner() {
+    value: &ftd::interpreter::PropertyValue,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
+    if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
+        if let Some(ftd::interpreter::Value::Record { fields, .. }) = value.ref_inner() {
             validate_fields(fields.values().collect(), doc)?;
         }
     }
     return Ok(());
 
     fn validate_fields(
-        fields: Vec<&ftd::interpreter2::PropertyValue>,
-        doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        fields: Vec<&ftd::interpreter::PropertyValue>,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         for value in fields.iter() {
             if let Some(reference_name) = value.reference_name() {
-                return ftd::interpreter2::utils::e2(format!(
+                return ftd::interpreter::utils::e2(format!(
                     "Currently, reference `{}` to record field  is not supported. Use clone (*) instead", reference_name
                 ), doc.name, value.line_number());
             }
 
-            if let ftd::interpreter2::PropertyValue::Value { value, .. } = value {
+            if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
                 match value.ref_inner() {
-                    Some(ftd::interpreter2::Value::Record { fields, .. }) => {
+                    Some(ftd::interpreter::Value::Record { fields, .. }) => {
                         validate_fields(fields.values().collect(), doc)?;
                     }
-                    Some(ftd::interpreter2::Value::OrType { value, .. }) => {
+                    Some(ftd::interpreter::Value::OrType { value, .. }) => {
                         validate_fields(vec![value], doc)?;
                     }
-                    Some(ftd::interpreter2::Value::List { data, .. }) => {
+                    Some(ftd::interpreter::Value::List { data, .. }) => {
                         validate_fields(data.iter().collect(), doc)?;
                     }
                     _ => {}
@@ -378,13 +377,13 @@ pub fn validate_record_value(
 }
 
 pub fn validate_property_value_for_mutable(
-    value: &ftd::interpreter2::PropertyValue,
-    doc: &ftd::interpreter2::TDoc,
-) -> ftd::interpreter2::Result<()> {
+    value: &ftd::interpreter::PropertyValue,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
     if let Some(name) = value.reference_name() {
         if let Ok(ref_variable) = doc.get_variable(name, value.line_number()) {
             if !ref_variable.mutable {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!(
                         "Cannot pass immutable reference `{}` to mutable",
                         ref_variable.name
@@ -401,12 +400,12 @@ pub fn validate_property_value_for_mutable(
     return Ok(());
 
     fn validate_function_call(
-        function_call: &ftd::interpreter2::FunctionCall,
-        doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
+        function_call: &ftd::interpreter::FunctionCall,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
         for (key, value) in function_call.values.iter() {
             if let Some(ref_name) = value.reference_name() {
-                return ftd::interpreter2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!(
                         "Cannot pass reference `{}`:`{}` to mutable: Hint: Use *${} instead.",
                         key, ref_name, ref_name
@@ -424,14 +423,14 @@ pub fn validate_property_value_for_mutable(
 }
 
 pub(crate) fn get_value(
-    doc: &ftd::interpreter2::TDoc,
-    value: &ftd::interpreter2::Value,
-) -> ftd::interpreter2::Result<Option<serde_json::Value>> {
-    if let ftd::interpreter2::Value::List { data, .. } = value {
+    doc: &ftd::interpreter::TDoc,
+    value: &ftd::interpreter::Value,
+) -> ftd::interpreter::Result<Option<serde_json::Value>> {
+    if let ftd::interpreter::Value::List { data, .. } = value {
         let mut list_data = vec![];
         for val in data {
             let value = match val {
-                ftd::interpreter2::PropertyValue::Value { value, .. } => value,
+                ftd::interpreter::PropertyValue::Value { value, .. } => value,
                 _ => continue, //todo
             };
             if let Some(val) = get_value(doc, value)? {
@@ -444,13 +443,13 @@ pub(crate) fn get_value(
 
     Ok(match value {
         None => Some(serde_json::Value::Null),
-        Some(ftd::interpreter2::Value::Boolean { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter2::Value::Integer { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter2::Value::String { text: value, .. }) => {
+        Some(ftd::interpreter::Value::Boolean { value }) => serde_json::to_value(value).ok(),
+        Some(ftd::interpreter::Value::Integer { value }) => serde_json::to_value(value).ok(),
+        Some(ftd::interpreter::Value::String { text: value, .. }) => {
             serde_json::to_value(value).ok()
         }
-        Some(ftd::interpreter2::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter2::Value::Record { fields, .. }) => {
+        Some(ftd::interpreter::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
+        Some(ftd::interpreter::Value::Record { fields, .. }) => {
             let mut value_fields = ftd::Map::new();
             for (k, v) in fields {
                 if let Some(value) = get_value(doc, &v.clone().resolve(doc, v.line_number())?)? {
@@ -459,7 +458,7 @@ pub(crate) fn get_value(
             }
             serde_json::to_value(value_fields).ok()
         }
-        Some(ftd::interpreter2::Value::OrType {
+        Some(ftd::interpreter::Value::OrType {
             value,
             variant,
             full_variant,
@@ -468,7 +467,7 @@ pub(crate) fn get_value(
         }) => {
             let value = get_value(doc, &value.clone().resolve(doc, value.line_number())?)?;
             match value {
-                Some(value) if name.eq(ftd::interpreter2::FTD_LENGTH) => {
+                Some(value) if name.eq(ftd::interpreter::FTD_LENGTH) => {
                     if let Ok(pattern) = ftd::executor::Length::set_value_from_variant(
                         variant.as_str(),
                         value.to_string().as_str(),
@@ -480,7 +479,7 @@ pub(crate) fn get_value(
                         Some(value)
                     }
                 }
-                Some(value) if name.eq(ftd::interpreter2::FTD_FONT_SIZE) => {
+                Some(value) if name.eq(ftd::interpreter::FTD_FONT_SIZE) => {
                     if let Ok(pattern) = ftd::executor::FontSize::set_value_from_variant(
                         variant.as_str(),
                         value.to_string().as_str(),
@@ -493,8 +492,8 @@ pub(crate) fn get_value(
                     }
                 }
                 Some(value)
-                    if name.eq(ftd::interpreter2::FTD_RESIZING_FIXED)
-                        && variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) =>
+                    if name.eq(ftd::interpreter::FTD_RESIZING_FIXED)
+                        && variant.ne(ftd::interpreter::FTD_RESIZING_FIXED) =>
                 {
                     if let Ok(pattern) = ftd::executor::Resizing::set_value_from_variant(
                         variant.as_str(),
@@ -529,12 +528,12 @@ pub(crate) fn find_inherited_variables(
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     local_container: Option<&[usize]>,
 ) -> Option<String> {
-    if !reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
+    if !reference_or_clone.starts_with(ftd::interpreter::FTD_INHERITED) {
         return None;
     }
-    let values = if reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
+    let values = if reference_or_clone.starts_with(ftd::interpreter::FTD_INHERITED) {
         let reference_or_clone = reference_or_clone
-            .trim_start_matches(format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str());
+            .trim_start_matches(format!("{}.", ftd::interpreter::FTD_INHERITED).as_str());
         inherited_variables.get_value_and_rem(reference_or_clone)
     } else {
         vec![]
@@ -575,24 +574,22 @@ pub(crate) fn find_inherited_variables(
 
     if values.is_empty()
         && (reference_or_clone
-            .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+            .starts_with(format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str())
             || reference_or_clone
-                .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
+                .starts_with(format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str()))
     {
         return Some(format!(
             "ftd#default-{}{}",
             if reference_or_clone
-                .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+                .starts_with(format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str())
             {
                 "types"
             } else {
                 "colors"
             },
             reference_or_clone
-                .trim_start_matches(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
-                .trim_start_matches(
-                    format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()
-                )
+                .trim_start_matches(format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str())
+                .trim_start_matches(format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str())
         ));
     }
 
@@ -600,28 +597,28 @@ pub(crate) fn find_inherited_variables(
 }
 
 pub(crate) fn insert_module_thing(
-    kind: &ftd::interpreter2::KindData,
+    kind: &ftd::interpreter::KindData,
     reference: &str,
     reference_full_name: &str,
-    definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter2::Argument])>,
+    definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
     line_number: usize,
     doc_name: &str,
-) -> ftd::interpreter2::Result<()> {
+) -> ftd::interpreter::Result<()> {
     let arg = get_mut_argument_for_reference(
         reference,
         doc_name,
         definition_name_with_arguments,
         line_number,
     )?
-    .ok_or(ftd::interpreter2::Error::ValueNotFound {
+    .ok_or(ftd::interpreter::Error::ValueNotFound {
         doc_id: doc_name.to_string(),
         line_number,
         message: format!("{} not found in component arguments.", reference,),
     })?;
-    if let ftd::interpreter2::Value::Module { things, .. } = arg
+    if let ftd::interpreter::Value::Module { things, .. } = arg
         .value
         .as_mut()
-        .ok_or(ftd::interpreter2::Error::ValueNotFound {
+        .ok_or(ftd::interpreter::Error::ValueNotFound {
             doc_id: doc_name.to_string(),
             line_number,
             message: format!("{} not found in component arguments.", reference),
@@ -635,12 +632,12 @@ pub(crate) fn insert_module_thing(
 }
 
 pub(crate) fn find_properties_by_source(
-    sources: &[ftd::interpreter2::PropertySource],
-    properties: &[ftd::interpreter2::Property],
+    sources: &[ftd::interpreter::PropertySource],
+    properties: &[ftd::interpreter::Property],
     doc_name: &str,
-    argument: &ftd::interpreter2::Argument,
+    argument: &ftd::interpreter::Argument,
     line_number: usize,
-) -> ftd::interpreter2::Result<Vec<ftd::interpreter2::Property>> {
+) -> ftd::interpreter::Result<Vec<ftd::interpreter::Property>> {
     use itertools::Itertools;
 
     let mut properties = properties
@@ -655,17 +652,17 @@ pub(crate) fn find_properties_by_source(
 }
 
 pub(crate) fn validate_properties_and_set_default(
-    properties: &mut Vec<ftd::interpreter2::Property>,
-    argument: &ftd::interpreter2::Argument,
+    properties: &mut Vec<ftd::interpreter::Property>,
+    argument: &ftd::interpreter::Argument,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Result<()> {
+) -> ftd::interpreter::Result<()> {
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
     for property in properties.iter_mut() {
         let found_kind = property.value.kind();
         if !found_kind.is_same_as(expected_kind) {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Expected kind is `{:?}`, found: `{:?}`",
                     expected_kind, found_kind,
@@ -676,7 +673,7 @@ pub(crate) fn validate_properties_and_set_default(
         }
 
         if found_default.is_some() && property.condition.is_none() {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Already found default property in line number {:?}",
                     found_default
@@ -696,9 +693,9 @@ pub(crate) fn validate_properties_and_set_default(
                 .unwrap()
                 .value(doc_id, line_number)?
             {
-                ftd::interpreter2::Value::Module { things, .. } => things,
+                ftd::interpreter::Value::Module { things, .. } => things,
                 t => {
-                    return ftd::interpreter2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("Expected module, found: {:?}", t),
                         doc_id,
                         line_number,
@@ -706,8 +703,8 @@ pub(crate) fn validate_properties_and_set_default(
                 }
             };
 
-            if let ftd::interpreter2::PropertyValue::Value {
-                value: ftd::interpreter2::Value::Module { things, .. },
+            if let ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::Module { things, .. },
                 ..
             } = &mut property.value
             {
@@ -717,14 +714,14 @@ pub(crate) fn validate_properties_and_set_default(
     }
     if found_default.is_none() {
         if let Some(ref default_value) = argument.value {
-            properties.push(ftd::interpreter2::Property {
+            properties.push(ftd::interpreter::Property {
                 value: default_value.to_owned(),
-                source: ftd::interpreter2::PropertySource::Default,
+                source: ftd::interpreter::PropertySource::Default,
                 condition: None,
                 line_number: argument.line_number,
             });
         } else if !expected_kind.is_optional() && !expected_kind.is_list() {
-            return ftd::interpreter2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!(
                     "Need value of kind: `{:?}` for `{}`",
                     expected_kind, argument.name

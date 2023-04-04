@@ -2,7 +2,7 @@
 pub struct RawNode {
     pub name: String,
     pub node: ftd::node::Node,
-    pub arguments: Vec<ftd::interpreter2::Argument>,
+    pub arguments: Vec<ftd::interpreter::Argument>,
 }
 
 impl RawNode {
@@ -29,8 +29,8 @@ impl RawNode {
 
 /*pub struct HelperNode {
     pub name: String,
-    pub properties: Vec<(String, ftd::interpreter2::Property)>,
-    pub iteration: Option<ftd::interpreter2::Loop>,
+    pub properties: Vec<(String, ftd::interpreter::Property)>,
+    pub iteration: Option<ftd::interpreter::Loop>,
     pub node: ftd::node::Node,
 }*/
 

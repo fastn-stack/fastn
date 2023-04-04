@@ -1,10 +1,10 @@
 pub fn process_readers(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
     document_id: &str,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
     // TODO: document key should be optional
 
@@ -34,11 +34,11 @@ pub fn process_readers(
 
 pub fn process_writers(
     value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
     document_id: &str,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     use itertools::Itertools;
 
     let headers = match value.get_record(doc.name) {
@@ -67,10 +67,10 @@ pub fn process_writers(
 
 pub fn document_id(
     _value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    _kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -84,33 +84,33 @@ pub fn document_id(
         .trim_matches('/');
 
     if document_id.is_empty() {
-        return Ok(ftd::interpreter2::Value::String {
+        return Ok(ftd::interpreter::Value::String {
             text: "/".to_string(),
         });
     }
 
-    Ok(ftd::interpreter2::Value::String {
+    Ok(ftd::interpreter::Value::String {
         text: format!("/{}/", document_id),
     })
 }
 
 pub fn document_full_id(
     _value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    _kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
-    Ok(ftd::interpreter2::Value::String {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    Ok(ftd::interpreter::Value::String {
         text: fastn_core::library2022::utils::document_full_id(config, doc)?,
     })
 }
 
 pub fn document_suffix(
     _value: ftd::ast::VariableValue,
-    kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -120,11 +120,11 @@ pub fn document_suffix(
     let value = doc_id
         .split_once("/-/")
         .map(|(_, y)| y.trim().to_string())
-        .map(|suffix| ftd::interpreter2::Value::String { text: suffix });
+        .map(|suffix| ftd::interpreter::Value::String { text: suffix });
 
-    Ok(ftd::interpreter2::Value::Optional {
+    Ok(ftd::interpreter::Value::Optional {
         data: Box::new(value),
-        kind: ftd::interpreter2::KindData {
+        kind: ftd::interpreter::KindData {
             kind,
             caption: false,
             body: false,
@@ -134,10 +134,10 @@ pub fn document_suffix(
 
 pub async fn document_name<'a>(
     value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc<'a>,
+    _kind: ftd::interpreter::Kind,
+    doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
-) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -154,7 +154,7 @@ pub async fn document_name<'a>(
                 line_number: value.line_number(),
             })?;
 
-    Ok(ftd::interpreter2::Value::String {
+    Ok(ftd::interpreter::Value::String {
         text: file_path.trim().to_string(),
     })
 }

@@ -13,7 +13,7 @@ pub(crate) mod utils;
 mod value;
 mod youtube_id;
 
-pub type FieldWithValue = (ftd::interpreter2::Field, Option<ftd::ast::VariableValue>);
+pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd::ast::VariableValue>);
 
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
@@ -34,7 +34,7 @@ pub(crate) use value::Value;
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("InterpreterError: {}", _0)]
-    InterpreterError(#[from] ftd::interpreter2::Error),
+    InterpreterError(#[from] ftd::interpreter::Error),
 
     #[error("{doc_id}:{line_number} -> {message}")]
     ParseError {
