@@ -1,5 +1,3 @@
-use crate::fastn_2022_js;
-
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
     fn values_of_(&self, name: &str) -> Vec<String>;
@@ -485,7 +483,12 @@ pub fn replace_markers_2022(
         )
         .replace(
             "__ftd_js__",
-            format!("{}{}", ftd_js, fastn_2022_js()).as_str(),
+            format!(
+                "{}{}",
+                fastn_core::build_js(ftd_js),
+                fastn_core::fastn_2022_js()
+            )
+            .as_str(),
         )
         .replace(
             "__extra_js__",
