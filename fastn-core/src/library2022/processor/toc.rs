@@ -14,7 +14,7 @@ pub fn process(
         body.map(|v| v.value).unwrap_or_default().as_str(),
         doc.name,
     )
-    .map_err(|e| ftd::p1::Error::ParseError {
+    .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
         message: format!("Cannot parse body: {:?}", e),
         doc_id: doc.name.to_string(),
         line_number,

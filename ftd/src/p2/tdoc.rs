@@ -31,7 +31,7 @@ impl<'a> TDoc<'a> {
         string_container: &str,
         local_container: &[usize],
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         for (k, arg) in arguments.iter() {
             let mut default = if let Some(d) = properties.get(k) {
                 let default = if let Some(ref d) = d.default {
@@ -211,7 +211,7 @@ impl<'a> TDoc<'a> {
         insert_only: bool,
         ignore_loop: bool,
         ignore_mouse_in: bool,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         for (_, property) in properties.iter_mut() {
             if let Some(ref mut default) = property.default {
                 rename_property_value(
@@ -293,7 +293,7 @@ impl<'a> TDoc<'a> {
             insert_only: bool,
             ignore_loop: bool,
             ignore_mouse_in: bool,
-        ) -> ftd::p1::Result<()> {
+        ) -> crate::ftd2021::p1::Result<()> {
             match condition {
                 ftd::p2::Boolean::IsNotNull { value }
                 | ftd::p2::Boolean::IsNull { value }
@@ -353,7 +353,7 @@ impl<'a> TDoc<'a> {
             insert_only: bool,
             ignore_loop: bool,
             ignore_mouse_in: bool,
-        ) -> ftd::p1::Result<()> {
+        ) -> crate::ftd2021::p1::Result<()> {
             if let ftd::PropertyValue::Variable { ref mut name, kind } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
@@ -423,7 +423,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         local_container: &[usize],
         child: &mut ftd::ChildComponent,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
 
         self.update_component_data(
@@ -446,7 +446,7 @@ impl<'a> TDoc<'a> {
         child_component_properties: &ftd::Map<ftd::component::Property>,
         local_container: &[usize],
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if component.root == "ftd.kernel" {
             return Ok(());
@@ -509,7 +509,7 @@ impl<'a> TDoc<'a> {
         children: &mut [ftd::ChildComponent],
         local_container: &[usize],
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if parent.root == "ftd.kernel" {
             return Ok(());
@@ -556,7 +556,10 @@ impl<'a> TDoc<'a> {
         Ok(())
     }
 
-    pub fn get_variable_kind(&self, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::p2::Kind> {
+    pub fn get_variable_kind(
+        &self,
+        section: &crate::ftd2021::p1::Section,
+    ) -> crate::ftd2021::p1::Result<ftd::p2::Kind> {
         if let Ok(v) = self.get_value(0, section.name.as_str()) {
             return Ok(v.kind());
         }
@@ -576,15 +579,20 @@ impl<'a> TDoc<'a> {
         )
     }
 
-    pub fn from_json<T>(&self, json: &T, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::Value>
+    pub fn from_json<T>(
+        &self,
+        json: &T,
+        section: &crate::ftd2021::p1::Section,
+    ) -> crate::ftd2021::p1::Result<ftd::Value>
     where
         T: serde::Serialize + std::fmt::Debug,
     {
-        let json = serde_json::to_value(json).map_err(|e| ftd::p1::Error::ParseError {
-            message: format!("Can't serialize to json: {:?}, found: {:?}", e, json),
-            doc_id: self.name.to_string(),
-            line_number: section.line_number,
-        })?;
+        let json =
+            serde_json::to_value(json).map_err(|e| crate::ftd2021::p1::Error::ParseError {
+                message: format!("Can't serialize to json: {:?}, found: {:?}", e, json),
+                doc_id: self.name.to_string(),
+                line_number: section.line_number,
+            })?;
 
         if let Ok(v) = self.get_value(0, section.name.as_str()) {
             return self.from_json_(section.line_number, &json, v.kind());
@@ -619,11 +627,11 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         json: &serde_json::Value,
         kind: ftd::p2::Kind,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         Ok(match kind {
             ftd::p2::Kind::String { .. } => ftd::Value::String {
                 text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
-                    ftd::p1::Error::ParseError {
+                    crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to string, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -633,7 +641,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Integer { .. } => ftd::Value::Integer {
                 value: serde_json::from_value::<i64>(json.to_owned()).map_err(|_| {
-                    ftd::p1::Error::ParseError {
+                    crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to integer, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -642,7 +650,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Decimal { .. } => ftd::Value::Decimal {
                 value: serde_json::from_value::<f64>(json.to_owned()).map_err(|_| {
-                    ftd::p1::Error::ParseError {
+                    crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to decimal, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -651,7 +659,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Boolean { .. } => ftd::Value::Boolean {
                 value: serde_json::from_value::<bool>(json.to_owned()).map_err(|_| {
-                    ftd::p1::Error::ParseError {
+                    crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to boolean,found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -731,9 +739,9 @@ impl<'a> TDoc<'a> {
 
     pub fn from_json_rows(
         &self,
-        section: &ftd::p1::Section,
+        section: &crate::ftd2021::p1::Section,
         rows: &[Vec<serde_json::Value>],
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         if let Ok(v) = self.get_value(0, section.name.as_str()) {
             return from_json_rows_(section.line_number, self, rows, v.kind());
         }
@@ -748,7 +756,7 @@ impl<'a> TDoc<'a> {
             doc: &ftd::p2::TDoc,
             rows: &[Vec<serde_json::Value>],
             kind: ftd::p2::Kind,
-        ) -> ftd::p1::Result<ftd::Value> {
+        ) -> crate::ftd2021::p1::Result<ftd::Value> {
             Ok(match kind {
                 ftd::p2::Kind::List { kind, .. } => {
                     let kind = kind.as_ref();
@@ -776,9 +784,9 @@ impl<'a> TDoc<'a> {
 
     pub fn from_json_row(
         &self,
-        section: &ftd::p1::Section,
+        section: &crate::ftd2021::p1::Section,
         row: &[serde_json::Value],
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         if let Ok(v) = self.get_value(0, section.name.as_str()) {
             return self.from_json_row_(section.line_number, row, v.kind());
         }
@@ -799,7 +807,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         row: &[serde_json::Value],
         kind: ftd::p2::Kind,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         Ok(match kind {
             ftd::p2::Kind::Record { name, .. } => {
                 let rec = self.get_record(line_number, &name)?;
@@ -835,7 +843,7 @@ impl<'a> TDoc<'a> {
             }
             ftd::p2::Kind::String { .. } if row.first().is_some() => ftd::Value::String {
                 text: serde_json::from_value::<String>(row.first().unwrap().to_owned()).map_err(
-                    |_| ftd::p1::Error::ParseError {
+                    |_| crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to string, found: {:?}", row),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -845,7 +853,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Integer { .. } if row.first().is_some() => ftd::Value::Integer {
                 value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
-                    |_| ftd::p1::Error::ParseError {
+                    |_| crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to integer, found: {:?}", row),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -854,7 +862,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Decimal { .. } if row.first().is_some() => ftd::Value::Decimal {
                 value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
-                    |_| ftd::p1::Error::ParseError {
+                    |_| crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to decimal, found: {:?}", row),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -863,7 +871,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Boolean { .. } if row.first().is_some() => ftd::Value::Boolean {
                 value: serde_json::from_value::<bool>(row.first().unwrap().to_owned()).map_err(
-                    |_| ftd::p1::Error::ParseError {
+                    |_| crate::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to boolean,found: {:?}", row),
                         doc_id: self.name.to_string(),
                         line_number,
@@ -887,7 +895,7 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
@@ -916,7 +924,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         instructions: &[ftd::Instruction],
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
@@ -968,7 +976,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         return Ok(if let Some(l) = name.strip_prefix('$') {
             /*let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(l)?;
             if get_special_variable().iter().any(|v| part1.starts_with(v)) {
@@ -1006,7 +1014,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         container: &str,
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         ftd::p2::utils::resolve_local_variable_name(
             line_number,
             name,
@@ -1016,18 +1024,30 @@ impl<'a> TDoc<'a> {
         )
     }
 
-    pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
+    pub fn resolve_name(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<String> {
         ftd::p2::utils::resolve_name(line_number, name, self.name, self.aliases)
     }
 
-    pub fn get_record(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::p2::Record> {
+    pub fn get_record(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::p2::Record> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Record(v) => Ok(v),
             v => self.err("not a record", v, "get_record", line_number),
         }
     }
 
-    pub fn get_or_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::OrType> {
+    pub fn get_or_type(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::OrType> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::OrType(v) => Ok(v),
             v => self.err("not an or-type", v, "get_or_type", line_number),
@@ -1038,14 +1058,18 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> ftd::p1::Result<ftd::OrType> {
+    ) -> crate::ftd2021::p1::Result<ftd::OrType> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::OrTypeWithVariant { e, .. } => Ok(e),
             v => self.err("not an or-type", v, "get_or_type", line_number),
         }
     }
 
-    pub fn is_variable_record_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<bool> {
+    pub fn is_variable_record_type(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<bool> {
         Ok(match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => v.value.kind().is_record(),
             _ => false,
@@ -1056,7 +1080,7 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> ftd::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
+    ) -> crate::ftd2021::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => Ok((
                 v.value.resolve(line_number, self)?,
@@ -1075,7 +1099,11 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
+    pub fn get_value(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => v.value.partial_resolve(line_number, self),
@@ -1089,7 +1117,7 @@ impl<'a> TDoc<'a> {
         ctx: T2,
         f: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<T> {
+    ) -> crate::ftd2021::p1::Result<T> {
         ftd::p2::utils::e2(
             format!("{}: {} ({:?}), f: {}", self.name, msg, ctx, f),
             self.name,
@@ -1097,14 +1125,22 @@ impl<'a> TDoc<'a> {
         )
     }
 
-    pub fn get_component(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Component> {
+    pub fn get_component(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::Component> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Component(v) => Ok(v),
             v => self.err("not a component", v, "get_component", line_number),
         }
     }
 
-    pub fn get_root(&'a self, name: &'a str, line_number: usize) -> ftd::p1::Result<Option<&str>> {
+    pub fn get_root(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> crate::ftd2021::p1::Result<Option<&str>> {
         if name.contains('#') {
             match name.split_once('#') {
                 Some((p1, _)) => {
@@ -1137,7 +1173,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> ftd::p1::Result<(ftd::p2::Thing, Option<String>)> {
+    ) -> crate::ftd2021::p1::Result<(ftd::p2::Thing, Option<String>)> {
         if name.contains('#') {
             let (name, remaining_value) = {
                 let mut full_name = (name.to_string(), None);
@@ -1212,7 +1248,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &'a str,
         value: ftd::Variable,
-    ) -> ftd::p1::Result<ftd::Variable> {
+    ) -> crate::ftd2021::p1::Result<ftd::Variable> {
         let (initial_thing, remaining) = self.get_initial_thing(line_number, name)?;
 
         let remaining = if let Some(remaining) = remaining {
@@ -1247,7 +1283,7 @@ impl<'a> TDoc<'a> {
             name: &str,
             var_value: &ftd::PropertyValue,
             set_value: ftd::PropertyValue,
-        ) -> ftd::p1::Result<ftd::PropertyValue> {
+        ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
             let (v, remaining) = name
                 .split_once('.')
                 .map(|(v, n)| (v, Some(n)))
@@ -1295,7 +1331,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> ftd::p1::Result<ftd::p2::Thing> {
+    ) -> crate::ftd2021::p1::Result<ftd::p2::Thing> {
         let name = if let Some(name) = name.strip_prefix('$') {
             name
         } else {
@@ -1314,7 +1350,7 @@ impl<'a> TDoc<'a> {
             line_number: usize,
             name: &str,
             thing: &ftd::p2::Thing,
-        ) -> ftd::p1::Result<ftd::p2::Thing> {
+        ) -> crate::ftd2021::p1::Result<ftd::p2::Thing> {
             let (v, remaining) = name
                 .split_once('.')
                 .map(|(v, n)| (v, Some(n)))
@@ -1431,7 +1467,7 @@ mod test {
             local_variables: &mut Default::default(),
             referenced_local_variables: &mut Default::default(),
         };
-        let section = ftd::p1::parse(
+        let section = crate::ftd2021::p1::parse(
             indoc::indoc!(
                 "
             -- string list city:
@@ -1501,7 +1537,7 @@ mod test {
             local_variables: &mut Default::default(),
             referenced_local_variables: &mut Default::default(),
         };
-        let section = ftd::p1::parse(
+        let section = crate::ftd2021::p1::parse(
             indoc::indoc!(
                 "
             -- person list people:

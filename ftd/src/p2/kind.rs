@@ -56,7 +56,7 @@ pub enum Kind {
         is_reference: bool,
     },
     UI {
-        default: Option<(String, ftd::p1::Header)>,
+        default: Option<(String, crate::ftd2021::p1::Header)>,
     },
 }
 
@@ -114,7 +114,11 @@ impl Kind {
         matches!(self, Kind::Record { .. })
     }
 
-    pub fn to_string(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<String> {
+    pub fn to_string(
+        &self,
+        line_number: usize,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<String> {
         Ok(match self.inner() {
             ftd::p2::Kind::String { .. } => "string",
             ftd::p2::Kind::Integer { .. } => "integer",
@@ -126,7 +130,11 @@ impl Kind {
         }.to_string())
     }
 
-    pub fn to_value(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<ftd::Value> {
+    pub fn to_value(
+        &self,
+        line_number: usize,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::Value> {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
             ftd::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
@@ -134,13 +142,13 @@ impl Kind {
                     Err(_) => return ftd::p2::utils::e2(format!("{} is not an integer", d), doc_id, line_number),
                 },
             },
-            ftd::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
+            ftd::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
                 })?,
             },
-            ftd::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|ftd::p1::Error::ParseError {
+            ftd::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e| crate::ftd2021::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
@@ -464,12 +472,12 @@ impl Kind {
     pub fn read_section(
         &self,
         line_number: usize,
-        p1: &ftd::p1::Header,
+        p1: &crate::ftd2021::p1::Header,
         p1_caption: &Option<String>,
         p1_body: &Option<(usize, String)>,
         name: &str,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         let (v, source) = match p1.str_optional(doc.name, line_number, name)? {
             Some(v) => (v.to_string(), ftd::TextSource::Header),
             None => {
@@ -549,33 +557,36 @@ impl Kind {
             Kind::Integer { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::Integer {
                     value: p1.i64(doc.name, line_number, name).unwrap_or(
-                        v.parse::<i64>().map_err(|e| ftd::p1::Error::ParseError {
-                            message: e.to_string(),
-                            doc_id: doc.name.to_string(),
-                            line_number,
-                        })?,
+                        v.parse::<i64>()
+                            .map_err(|e| crate::ftd2021::p1::Error::ParseError {
+                                message: e.to_string(),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?,
                     ),
                 },
             }),
             Kind::Decimal { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::Decimal {
                     value: p1.f64(doc.name, line_number, name).unwrap_or(
-                        v.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
-                            message: e.to_string(),
-                            doc_id: doc.name.to_string(),
-                            line_number,
-                        })?,
+                        v.parse::<f64>()
+                            .map_err(|e| crate::ftd2021::p1::Error::ParseError {
+                                message: e.to_string(),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?,
                     ),
                 },
             }),
             Kind::Boolean { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::Boolean {
                     value: p1.bool(doc.name, line_number, name).unwrap_or(
-                        v.parse::<bool>().map_err(|e| ftd::p1::Error::ParseError {
-                            message: e.to_string(),
-                            doc_id: doc.name.to_string(),
-                            line_number,
-                        })?,
+                        v.parse::<bool>()
+                            .map_err(|e| crate::ftd2021::p1::Error::ParseError {
+                                message: e.to_string(),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?,
                     ),
                 },
             }),
@@ -595,7 +606,7 @@ impl Kind {
         s: &str,
         doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let (optional, k) = if s.starts_with("optional ") {
             (true, ftd::p2::utils::get_name("optional", s, doc.name)?)
         } else {
@@ -678,7 +689,7 @@ impl Kind {
         doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let default = {
             // resolve the default value
             let mut default = default;

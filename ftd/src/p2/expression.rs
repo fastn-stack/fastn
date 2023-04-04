@@ -46,7 +46,7 @@ impl Boolean {
         &self,
         line_number: usize,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Condition> {
+    ) -> crate::ftd2021::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
                 let variable = resolve_variable(left, line_number, doc)?;
@@ -111,7 +111,7 @@ impl Boolean {
             value: &ftd::PropertyValue,
             line_number: usize,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<String> {
+        ) -> crate::ftd2021::p1::Result<String> {
             match value {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
@@ -128,7 +128,7 @@ impl Boolean {
         line_number: usize,
         expr: &str,
         doc_id: &str,
-    ) -> ftd::p1::Result<(String, String, Option<String>)> {
+    ) -> crate::ftd2021::p1::Result<(String, String, Option<String>)> {
         let expr: String = expr.split_whitespace().collect::<Vec<&str>>().join(" ");
         if expr == "true" || expr == "false" {
             return Ok(("Literal".to_string(), expr, None));
@@ -166,7 +166,7 @@ impl Boolean {
         arguments: &ftd::Map<ftd::p2::Kind>,
         left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let (boolean, mut left, mut right) =
             ftd::p2::Boolean::boolean_left_right(line_number, expr, doc.name)?;
         left = doc.resolve_reference_name(line_number, left.as_str(), arguments)?;
@@ -292,7 +292,7 @@ impl Boolean {
             arguments: &ftd::Map<ftd::p2::Kind>,
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
-        ) -> ftd::p1::Result<ftd::PropertyValue> {
+        ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
             Ok(
                 match ftd::PropertyValue::resolve_value(
                     line_number,
@@ -398,7 +398,11 @@ impl Boolean {
             || is_loop_constant
     }
 
-    pub fn eval(&self, line_number: usize, doc: &ftd::p2::TDoc) -> ftd::p1::Result<bool> {
+    pub fn eval(
+        &self,
+        line_number: usize,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<bool> {
         Ok(match self {
             Self::Literal { value } => *value,
             Self::IsNotNull { value } => !value.resolve(line_number, doc)?.is_null(),
@@ -418,7 +422,7 @@ impl Boolean {
         })
     }
 
-    pub fn set_null(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<bool> {
+    pub fn set_null(&self, line_number: usize, doc_id: &str) -> crate::ftd2021::p1::Result<bool> {
         Ok(match self {
             Self::Literal { .. } | Self::IsNotEmpty { .. } | Self::IsEmpty { .. } => true,
             Self::Equal { left, right } => matches!(

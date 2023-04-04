@@ -148,7 +148,7 @@ pub async fn document_name<'a>(
         config
             .get_file_path(&doc_id)
             .await
-            .map_err(|e| ftd::p1::Error::ParseError {
+            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id: doc.name.to_string(),
                 line_number: value.line_number(),

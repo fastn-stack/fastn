@@ -568,10 +568,10 @@ pub mod processor {
     use itertools::Itertools;
 
     pub fn user_groups(
-        section: &ftd::p1::Section,
+        section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let g = config
             .package
             .groups
@@ -582,17 +582,17 @@ pub mod processor {
     }
 
     pub fn user_group_by_id(
-        section: &ftd::p1::Section,
+        section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let id = section.header.str(doc.name, section.line_number, "id")?;
         let g = config
             .package
             .groups
             .get(id)
             .map(|g| g.to_group_compat())
-            .ok_or_else(|| ftd::p1::Error::NotFound {
+            .ok_or_else(|| ftd::ftd2021::p1::Error::NotFound {
                 key: format!("user-group: `{}` not found", id),
                 doc_id: doc.name.to_string(),
                 line_number: section.line_number,
@@ -601,13 +601,13 @@ pub mod processor {
     }
 
     pub fn get_identities(
-        section: &ftd::p1::Section,
+        section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
         let identities = super::get_identities(config, doc_id.as_str(), true).map_err(|e| {
-            ftd::p1::Error::ParseError {
+            ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
                 line_number: section.line_number,
@@ -639,15 +639,15 @@ pub mod processor {
 
     // is user can_read the document or not based on defined readers in sitemap
     pub async fn is_reader<'a>(
-        section: &ftd::p1::Section,
+        section: &ftd::ftd2021::p1::Section,
         doc: &'a ftd::p2::TDoc<'_>,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = fastn_core::library::document::document_full_id(config, doc)?;
         let is_reader = config
             .can_read(config.request.as_ref().unwrap(), &doc_id, false)
             .await
-            .map_err(|e| ftd::p1::Error::ParseError {
+            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
                 line_number: section.line_number,

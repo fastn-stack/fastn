@@ -13,7 +13,7 @@ impl Event {
         line_number: usize,
         property: &ftd::Map<Vec<ftd::PropertyValue>>,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Map<Vec<ftd::event::ParameterData>>> {
+    ) -> crate::ftd2021::p1::Result<ftd::Map<Vec<ftd::event::ParameterData>>> {
         let mut property_string: ftd::Map<Vec<ftd::event::ParameterData>> = Default::default();
         for (s, property_values) in property {
             let mut property_values_string = vec![];
@@ -40,7 +40,7 @@ impl Event {
             property_value: &ftd::PropertyValue,
             doc: &ftd::p2::TDoc,
             line_number: usize,
-        ) -> ftd::p1::Result<Option<String>> {
+        ) -> crate::ftd2021::p1::Result<Option<String>> {
             Ok(match property_value {
                 ftd::PropertyValue::Reference { name, .. }
                 | ftd::PropertyValue::Variable { name, .. } => {
@@ -66,7 +66,7 @@ impl Event {
         line_number: usize,
         events: &[Self],
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Vec<ftd::Event>> {
+    ) -> crate::ftd2021::p1::Result<Vec<ftd::Event>> {
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
             let target = match &e.action.target {
@@ -168,7 +168,7 @@ impl std::fmt::Display for EventName {
 }
 
 impl EventName {
-    pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
+    pub fn from_string(s: &str, doc_id: &str) -> crate::ftd2021::p1::Result<Self> {
         match s {
             "click" => Ok(Self::OnClick),
             "change" => Ok(Self::OnChange),
@@ -208,7 +208,7 @@ impl Event {
         action: &str,
         doc: &ftd::p2::TDoc,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let event_name = EventName::from_string(event_name, doc.name)?;
         let action = Action::to_action(line_number, action, doc, arguments)?;
         Ok(Self {
@@ -345,7 +345,7 @@ impl Action {
         a: &str,
         doc: &ftd::p2::TDoc,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let a: String = a.split_whitespace().collect::<Vec<&str>>().join(" ");
         return match a {
             _ if a.starts_with("toggle ") => {
@@ -685,7 +685,7 @@ impl Action {
             doc: &ftd::p2::TDoc,
             arguments: &ftd::Map<ftd::p2::Kind>,
             kind: Option<ftd::p2::Kind>,
-        ) -> ftd::p1::Result<ftd::PropertyValue> {
+        ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
             ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)
         }
     }

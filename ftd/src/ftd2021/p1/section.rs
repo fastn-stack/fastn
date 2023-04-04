@@ -1,4 +1,4 @@
-pub use ftd::p1::{Error, Header, Result, SubSection, SubSections};
+pub use ftd::ftd2021::p1::{Error, Header, Result, SubSection, SubSections};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Section {
@@ -199,7 +199,7 @@ impl Section {
         self
     }
 
-    pub fn sub_sections_by_name(&self, name: &str) -> Vec<&ftd::p1::SubSection> {
+    pub fn sub_sections_by_name(&self, name: &str) -> Vec<&ftd::ftd2021::p1::SubSection> {
         let mut sub_sections = vec![];
         for s in self.sub_sections.0.iter() {
             if s.is_commented {
@@ -216,7 +216,7 @@ impl Section {
         &self,
         name: &str,
         doc_id: String,
-    ) -> ftd::p1::Result<&ftd::p1::SubSection> {
+    ) -> ftd::ftd2021::p1::Result<&ftd::ftd2021::p1::SubSection> {
         let mut count = 0;
         for s in self.sub_sections.0.iter() {
             if s.is_commented {
@@ -227,7 +227,7 @@ impl Section {
             }
         }
         if count > 1 {
-            return Err(ftd::p1::Error::MoreThanOneSubSections {
+            return Err(ftd::ftd2021::p1::Error::MoreThanOneSubSections {
                 key: name.to_string(),
                 doc_id,
                 line_number: self.line_number,
@@ -243,7 +243,7 @@ impl Section {
             }
         }
 
-        Err(ftd::p1::Error::NotFound {
+        Err(ftd::ftd2021::p1::Error::NotFound {
             doc_id,
             line_number: self.line_number,
             key: name.to_string(),

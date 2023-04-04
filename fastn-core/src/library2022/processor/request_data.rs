@@ -19,13 +19,14 @@ pub fn process(
 
     let mut named_parameters = std::collections::HashMap::new();
     for (name, param_value) in config.named_parameters.iter() {
-        let json_value = param_value
-            .to_serde_value()
-            .ok_or(ftd::p1::Error::ParseError {
-                message: format!("ftd value cannot be parsed to json: name: {}", name),
-                doc_id: doc.name.to_string(),
-                line_number: value.line_number(),
-            })?;
+        let json_value =
+            param_value
+                .to_serde_value()
+                .ok_or(ftd::ftd2021::p1::Error::ParseError {
+                    message: format!("ftd value cannot be parsed to json: name: {}", name),
+                    doc_id: doc.name.to_string(),
+                    line_number: value.line_number(),
+                })?;
         named_parameters.insert(name.to_string(), json_value);
     }
 

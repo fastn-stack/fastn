@@ -1,10 +1,10 @@
 // Return the login information of the user
 #[allow(dead_code)]
 pub fn user_details(
-    section: &ftd::p1::Section,
+    section: &ftd::ftd2021::p1::Section,
     doc: &ftd::p2::TDoc,
     config: &fastn_core::Config,
-) -> ftd::p1::Result<ftd::Value> {
+) -> ftd::ftd2021::p1::Result<ftd::Value> {
     let mut found_cookie = false;
     let is_login = match &config.request {
         Some(req) => {

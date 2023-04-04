@@ -13,7 +13,7 @@ pub enum Error {
     SerdeJsonError(#[from] serde_json::Error),
 
     #[error("FTDError: {}", _0)]
-    FTDError(#[from] ftd::p1::Error),
+    FTDError(#[from] ftd::ftd2021::p1::Error),
 
     #[error("FTDP1Error: {}", _0)]
     FTDP1Error(#[from] ftd::p11::Error),

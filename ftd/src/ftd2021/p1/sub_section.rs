@@ -1,4 +1,4 @@
-pub use ftd::p1::{Error, Header, Result};
+pub use ftd::ftd2021::p1::{Error, Header, Result};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SubSections(pub Vec<SubSection>);
@@ -113,12 +113,12 @@ impl SubSection {
     pub fn body_or_caption(&self, doc_id: &str) -> Result<(String, bool)> {
         let (has_body, has_caption) = (self.body.is_some(), self.caption.is_some());
         match (has_body, has_caption) {
-            (true, true) => Err(ftd::p1::Error::ForbiddenUsage {
+            (true, true) => Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                 message: "both body and caption are passed !!".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: self.line_number,
             }),
-            (false, false) => Err(ftd::p1::Error::ParseError {
+            (false, false) => Err(ftd::ftd2021::p1::Error::ParseError {
                 message: "no caption or body is passed !!".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: self.line_number,

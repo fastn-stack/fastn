@@ -231,7 +231,7 @@ impl Package {
         id: &str,
         line_number: usize,
         with_alias: bool,
-    ) -> ftd::p1::Result<String> {
+    ) -> ftd::ftd2021::p1::Result<String> {
         let mut parts = import_content.splitn(2, '/');
         match (parts.next(), parts.next()) {
             (Some(front), Some(rem)) => {
@@ -259,7 +259,7 @@ impl Package {
             }
             _ => {
                 // Throw error for unknown type-1 import
-                Err(ftd::p1::Error::ParseError {
+                Err(ftd::ftd2021::p1::Error::ParseError {
                     message: "invalid aliased import !! (Type-1)".to_string(),
                     doc_id: id.to_string(),
                     line_number,
@@ -274,7 +274,7 @@ impl Package {
         import_content: &str,
         id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<String> {
+    ) -> ftd::ftd2021::p1::Result<String> {
         let mut parts = import_content.splitn(2, " as ");
 
         match (parts.next(), parts.next()) {
@@ -289,7 +289,7 @@ impl Package {
             }
             _ => {
                 // Throw error for unknown type-2 import
-                Err(ftd::p1::Error::ParseError {
+                Err(ftd::ftd2021::p1::Error::ParseError {
                     message: "invalid aliased import !! (Type-2)".to_string(),
                     doc_id: id.to_string(),
                     line_number,
@@ -326,7 +326,7 @@ impl Package {
     ///
     /// map:    -- import full_path_of_alias as alias_2
     ///
-    pub fn fix_imports_in_body(&self, body: &str, id: &str) -> ftd::p1::Result<String> {
+    pub fn fix_imports_in_body(&self, body: &str, id: &str) -> ftd::ftd2021::p1::Result<String> {
         let mut new_body = String::new();
         let mut ln = 1;
 
@@ -338,7 +338,7 @@ impl Package {
                     // Split [-- import | content]
                     let import_tokens: Vec<&str> = line_string.split(':').collect();
                     if import_tokens.len() <= 1 {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "Import content missing !!".to_string(),
                             doc_id: id.to_string(),
                             line_number: ln,

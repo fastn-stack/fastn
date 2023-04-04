@@ -1,4 +1,4 @@
-pub use ftd::p1::{Error, Header, Result, Section, SubSection, SubSections};
+pub use ftd::ftd2021::p1::{Error, Header, Result, Section, SubSection, SubSections};
 
 #[derive(Debug)]
 enum ParsingState {
@@ -23,7 +23,7 @@ fn colon_separated_values(
     doc_id: &str,
 ) -> Result<(String, Option<String>)> {
     if !line.contains(':') {
-        return Err(ftd::p1::Error::ParseError {
+        return Err(ftd::ftd2021::p1::Error::ParseError {
             message: format!("`:` is missing in: {}", line),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
@@ -60,7 +60,7 @@ impl State {
         let is_commented = line.starts_with("/-- ");
 
         if !line.starts_with("-- ") && !line.starts_with("/-- ") {
-            return Err(ftd::p1::Error::ParseError {
+            return Err(ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Expecting -- , found: {}", line,),
                 // TODO: context should be a few lines before and after the input
                 doc_id: doc_id.to_string(),
@@ -116,7 +116,7 @@ impl State {
         // immediately after reading all possible headers for the current section/subsection
         // then throw error
         if !line.contains(':') {
-            return Err(ftd::p1::Error::ParseError {
+            return Err(ftd::ftd2021::p1::Error::ParseError {
                 message: format!("start section body \'{}\' after a newline!!", line),
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -154,7 +154,7 @@ impl State {
         // or read next section/subsection
         // otherwise throw error
         if !line.contains(':') {
-            return Err(ftd::p1::Error::ParseError {
+            return Err(ftd::ftd2021::p1::Error::ParseError {
                 message: format!("start sub-section body \'{}\' after a newline!!", line),
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -403,7 +403,9 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
 
 #[cfg(test)]
 mod test {
-    use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+    use {indoc::indoc, pretty_assertions::assert_eq};
+
+    // macro
 
     // these are macros instead of functions so stack trace top points to actual
     // invocation of these, instead of inside these, so jumping to failing test
@@ -418,7 +420,7 @@ mod test {
                     .unwrap_or_else(|e| panic!("{}", e))
                     .iter()
                     .map(|v| v.without_line_number())
-                    .collect::<Vec<ftd::p1::Section>>(),
+                    .collect::<Vec<ftd::ftd2021::p1::Section>>(),
                 $t
             )
         };

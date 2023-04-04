@@ -13,10 +13,10 @@ pub struct VariableFlags {
 
 impl VariableFlags {
     pub(crate) fn from_p1(
-        p1: &ftd::p1::Header,
+        p1: &crate::ftd2021::p1::Header,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         Ok(VariableFlags {
             always_include: p1.bool_optional(doc_id, line_number, "$always-include$")?,
         })
@@ -87,7 +87,7 @@ impl PropertyValue {
         doc: &ftd::p2::TDoc,
         arguments: &ftd::Map<ftd::p2::Kind>,
         source: Option<ftd::TextSource>,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
         } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind.as_ref().map(|v| v.inner()) {
@@ -218,7 +218,7 @@ impl PropertyValue {
                     ftd::p2::Kind::Integer { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
                             value: string.parse::<i64>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
+                                crate::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -229,7 +229,7 @@ impl PropertyValue {
                     ftd::p2::Kind::Decimal { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Decimal {
                             value: string.parse::<f64>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
+                                crate::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -240,7 +240,7 @@ impl PropertyValue {
                     ftd::p2::Kind::Boolean { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Boolean {
                             value: string.parse::<bool>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
+                                crate::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -288,7 +288,7 @@ impl PropertyValue {
             p2: Option<String>,
             doc: &ftd::p2::TDoc,
             expected_kind: &Option<ftd::p2::Kind>,
-        ) -> ftd::p1::Result<ftd::p2::Kind> {
+        ) -> crate::ftd2021::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
@@ -307,7 +307,7 @@ impl PropertyValue {
                                 .variants
                                 .into_iter()
                                 .find(|v| v.name.eq(&format!("{}.{}", name, variant)))
-                                .ok_or_else(|| ftd::p1::Error::ParseError {
+                                .ok_or_else(|| crate::ftd2021::p1::Error::ParseError {
                                     message: format!(
                                         "expected variant `{}` in or_type `{}`",
                                         variant, name
@@ -370,7 +370,11 @@ impl PropertyValue {
     }
 
     /// resolves all the internal fields too
-    pub fn resolve(&self, line_number: usize, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Value> {
+    pub fn resolve(
+        &self,
+        line_number: usize,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Value> {
         let mut value = self.partial_resolve(line_number, doc)?;
         // In case of Object resolve all the values
         if let ftd::Value::Object { values } = &mut value {
@@ -387,7 +391,7 @@ impl PropertyValue {
         &self,
         line_number: usize,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Value> {
+    ) -> crate::ftd2021::p1::Result<Value> {
         Ok(match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
@@ -433,7 +437,7 @@ impl TextSource {
         kind: &ftd::p2::Kind,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         Ok(match kind {
             ftd::p2::Kind::String { caption, body, .. } => {
                 if *caption {
@@ -709,7 +713,10 @@ impl Value {
 }
 
 impl Variable {
-    pub fn list_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn list_from_p1(
+        p1: &crate::ftd2021::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Self> {
         let var_data = ftd::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
@@ -767,7 +774,10 @@ impl Variable {
         })
     }
 
-    pub fn map_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn map_from_p1(
+        p1: &crate::ftd2021::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
             ftd::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
@@ -792,15 +802,15 @@ impl Variable {
 
     pub fn update_from_p1(
         &mut self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         fn read_value(
             line_number: usize,
             kind: &ftd::p2::Kind,
-            p1: &ftd::p1::Section,
+            p1: &crate::ftd2021::p1::Section,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<ftd::PropertyValue> {
+        ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
             Ok(match kind {
                 ftd::p2::Kind::Integer { .. } => read_integer(p1, doc)?,
                 ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc)?,
@@ -859,7 +869,10 @@ impl Variable {
         Ok(())
     }
 
-    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn from_p1(
+        p1: &crate::ftd2021::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Self> {
         let var_data = ftd::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
@@ -954,9 +967,9 @@ impl Variable {
 
     pub fn get_value(
         &self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         match self.value.kind().inner() {
             ftd::p2::Kind::String { .. } => read_string(p1, doc),
             ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
@@ -989,7 +1002,7 @@ impl Variable {
     }
 }
 
-pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
+pub fn guess_type(s: &str, is_body: bool) -> crate::ftd2021::p1::Result<Value> {
     if is_body {
         return Ok(Value::String {
             text: s.to_string(),
@@ -1016,7 +1029,10 @@ pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
     })
 }
 
-fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_string(
+    p1: &crate::ftd2021::p1::Section,
+    doc: &ftd::p2::TDoc,
+) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
     let (text, source, line_number) = match (&p1.caption, &p1.body) {
         (Some(c), Some(b)) => {
             return ftd::p2::utils::e2(
@@ -1052,7 +1068,10 @@ fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
     })
 }
 
-fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_integer(
+    p1: &crate::ftd2021::p1::Section,
+    doc: &ftd::p2::TDoc,
+) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
@@ -1072,7 +1091,10 @@ fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     })
 }
 
-fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_decimal(
+    p1: &crate::ftd2021::p1::Section,
+    doc: &ftd::p2::TDoc,
+) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
@@ -1092,7 +1114,10 @@ fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     })
 }
 
-fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_boolean(
+    p1: &crate::ftd2021::p1::Section,
+    doc: &ftd::p2::TDoc,
+) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
@@ -1112,7 +1137,10 @@ fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     })
 }
 
-fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_object(
+    p1: &crate::ftd2021::p1::Section,
+    doc: &ftd::p2::TDoc,
+) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
     let mut values: ftd::Map<PropertyValue> = Default::default();
     if let Some(ref caption) = p1.caption {
         if let Some(text) = caption.strip_prefix('$') {
@@ -1202,7 +1230,7 @@ impl VariableData {
         doc: &ftd::p2::TDoc,
         line_number: usize,
         var_types: &[String],
-    ) -> ftd::p1::Result<VariableData> {
+    ) -> crate::ftd2021::p1::Result<VariableData> {
         if s.starts_with("record ")
             || s.starts_with("or-type ")
             || s.starts_with("map ")
@@ -1254,7 +1282,7 @@ impl VariableData {
             }
         }
 
-        let var_kind = kind.ok_or(ftd::p1::Error::ParseError {
+        let var_kind = kind.ok_or(crate::ftd2021::p1::Error::ParseError {
             message: format!("kind not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,
@@ -1273,7 +1301,7 @@ impl VariableData {
             _ => Type::Component,
         };
 
-        let name = name.ok_or(ftd::p1::Error::ParseError {
+        let name = name.ok_or(crate::ftd2021::p1::Error::ParseError {
             message: format!("name not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,

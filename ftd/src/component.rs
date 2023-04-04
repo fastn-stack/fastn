@@ -100,7 +100,7 @@ impl Property {
         line_number: usize,
         name: &str,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<&ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<&ftd::PropertyValue> {
         let mut property_value = ftd::p2::utils::e2(
             format!("condition is not complete, name: {}", name),
             doc.name,
@@ -137,7 +137,7 @@ impl Property {
         &self,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         if let Some(property_value) = &self.default {
             if let Some(val) = property_value.resolve(line_number, doc)?.to_string() {
                 return Ok(val);
@@ -155,7 +155,7 @@ impl ChildComponent {
         invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         local_container: &[usize],
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
         let id = ftd::p2::utils::string_optional(
             "id",
             &resolve_properties(self.line_number, &self.properties, doc)?,
@@ -269,7 +269,7 @@ impl ChildComponent {
         invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         is_child: bool,
         local_container: &[usize],
-    ) -> ftd::p1::Result<Vec<ElementWithContainer>> {
+    ) -> crate::ftd2021::p1::Result<Vec<ElementWithContainer>> {
         let root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
@@ -366,7 +366,7 @@ impl ChildComponent {
             invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
             is_child: bool,
             local_container: &[usize],
-        ) -> ftd::p1::Result<ElementWithContainer> {
+        ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
             let mut root = root.to_owned();
             let local_container = {
                 let mut container = local_container[..local_container.len() - 1].to_vec();
@@ -472,7 +472,7 @@ impl ChildComponent {
         local_container: &[usize],
         id: Option<String>,
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(self.line_number, doc)? {
                 if let Ok(true) = b.set_null(self.line_number, doc.name) {
@@ -539,12 +539,12 @@ impl ChildComponent {
     pub fn from_p1(
         line_number: usize,
         name: &str,
-        p1: &ftd::p1::Header,
+        p1: &crate::ftd2021::p1::Header,
         caption: &Option<String>,
         body: &Option<(usize, String)>,
         doc: &ftd::p2::TDoc,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let mut reference = None;
         let root =
             if let Some(ftd::p2::Kind::UI { default }) = arguments.get(name).map(|v| v.inner()) {
@@ -622,7 +622,7 @@ impl ChildComponent {
             doc: &ftd::p2::TDoc,
             arguments: &ftd::Map<ftd::p2::Kind>,
             inherits: Vec<String>,
-        ) -> ftd::p1::Result<ftd::Map<Property>> {
+        ) -> crate::ftd2021::p1::Result<ftd::Map<Property>> {
             let mut properties: ftd::Map<Property> =
                 root_properties_from_inherits(line_number, arguments, inherits, doc)?;
             if let Some(caption) = caption {
@@ -664,7 +664,7 @@ fn markup_get_named_container(
     doc: &mut ftd::p2::TDoc,
     invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
     local_container: &[usize],
-) -> ftd::p1::Result<ftd::Map<ftd::Element>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<ftd::Element>> {
     let children = {
         let mut children = children.to_vec();
         let root_name = ftd::p2::utils::get_root_component_name(doc, root, line_number)?;
@@ -734,7 +734,7 @@ fn markup_get_named_container(
         container_children: &[ftd::Element],
         elements_name: &[String],
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Map<ftd::Element>> {
+    ) -> crate::ftd2021::p1::Result<ftd::Map<ftd::Element>> {
         let mut named_container = ftd::Map::new();
         for (idx, container) in container_children.iter().enumerate() {
             match elements_name.get(idx) {
@@ -761,7 +761,7 @@ fn reevalute_markups(
     markups: &mut ftd::Markups,
     named_container: ftd::Map<ftd::Element>,
     doc: &mut ftd::p2::TDoc,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     if !markups.children.is_empty() {
         // no need to re-evalute
         // already evaluted
@@ -809,7 +809,7 @@ fn reevalute_markup(
     markup: &mut ftd::Markup,
     named_container: &ftd::Map<ftd::Element>,
     doc: &mut ftd::p2::TDoc,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     let text = match &markup.itext {
         ftd::IText::Text(ftd::Text { text, .. })
         | ftd::IText::TextBlock(ftd::TextBlock { text, .. })
@@ -877,7 +877,11 @@ fn reevalute_markup(
     return Ok(());
 
     /// Get text between `{` and `}`
-    fn get_inner_text(text: &[char], idx: &mut usize, doc_id: &str) -> ftd::p1::Result<String> {
+    fn get_inner_text(
+        text: &[char],
+        idx: &mut usize,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<String> {
         let mut stack = vec!['{'];
         let mut traverse_string = "".to_string();
         while !stack.is_empty() {
@@ -910,7 +914,7 @@ fn reevalute_markup(
         text: Option<&str>,
         root: &str,
         named_container: &ftd::Map<ftd::Element>,
-    ) -> ftd::p1::Result<ftd::IText> {
+    ) -> crate::ftd2021::p1::Result<ftd::IText> {
         Ok(match element {
             ftd::Element::Integer(t) => {
                 let t = {
@@ -997,14 +1001,17 @@ fn reevalute_markup(
         })
     }
 
-    fn get_element_doc(doc: &mut ftd::p2::TDoc, name: &str) -> ftd::p1::Result<ftd::Element> {
-        let mut root = doc
-            .get_component(0, name)
-            .map_err(|_| ftd::p1::Error::ParseError {
-                message: format!("This component not found in ftd.text {}", name),
-                doc_id: doc.name.to_string(),
-                line_number: 0,
-            })?;
+    fn get_element_doc(
+        doc: &mut ftd::p2::TDoc,
+        name: &str,
+    ) -> crate::ftd2021::p1::Result<ftd::Element> {
+        let mut root =
+            doc.get_component(0, name)
+                .map_err(|_| crate::ftd2021::p1::Error::ParseError {
+                    message: format!("This component not found in ftd.text {}", name),
+                    doc_id: doc.name.to_string(),
+                    line_number: 0,
+                })?;
 
         let property_value = if let Some(p) = root.properties.get("text") {
             p
@@ -1049,7 +1056,7 @@ fn resolve_recursive_property(
     line_number: usize,
     self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<ftd::Value> {
+) -> crate::ftd2021::p1::Result<ftd::Value> {
     if let Some(value) = self_properties.get("$loop$") {
         if let Ok(property_value) = value.eval(line_number, "$loop$", doc) {
             return property_value.resolve(line_number, doc);
@@ -1066,7 +1073,7 @@ pub fn resolve_properties(
     line_number: usize,
     self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<ftd::Map<ftd::Value>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<ftd::Value>> {
     resolve_properties_by_id(line_number, self_properties, doc, None)
 }
 
@@ -1075,7 +1082,7 @@ pub fn resolve_properties_by_id(
     self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
     id: Option<String>,
-) -> ftd::p1::Result<ftd::Map<ftd::Value>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<ftd::Value>> {
     let mut properties: ftd::Map<ftd::Value> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
@@ -1097,7 +1104,7 @@ fn get_conditional_attributes(
     line_number: usize,
     properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<ftd::Map<ftd::ConditionalAttribute>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<ftd::ConditionalAttribute>> {
     let mut conditional_attribute: ftd::Map<ftd::ConditionalAttribute> = Default::default();
 
     let mut dictionary: ftd::Map<Vec<String>> = Default::default();
@@ -1266,7 +1273,7 @@ fn get_conditional_attributes(
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
-    ) -> ftd::p1::Result<ftd::ConditionalValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::ConditionalValue> {
         let style_integer = vec![
             "padding",
             "padding-left",
@@ -1380,7 +1387,7 @@ fn get_conditional_attributes(
                     let properties = fields
                         .iter()
                         .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-                        .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+                        .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
                     let light = if let Some(light) = ftd::p2::element::color_from(
                         ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
                         doc.name,
@@ -1544,7 +1551,7 @@ pub(crate) fn resolve_properties_with_ref(
     line_number: usize,
     self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<ftd::Map<(ftd::Value, Option<String>)>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<(ftd::Value, Option<String>)>> {
     let mut properties: ftd::Map<(ftd::Value, Option<String>)> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
@@ -1577,7 +1584,7 @@ impl Component {
         invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         call_container: &[usize],
         id: Option<String>,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
         let new_instruction = {
             let mut instructions: Vec<Instruction> = self.instructions.clone();
             for instruction in instructions.iter_mut() {
@@ -1614,7 +1621,7 @@ impl Component {
             child: &mut ChildComponent,
             line_number: usize,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<()> {
+        ) -> crate::ftd2021::p1::Result<()> {
             if let Some(ref c) = child.reference {
                 match doc.get_component(line_number, &c.0) {
                     Ok(_) => {
@@ -1687,7 +1694,10 @@ impl Component {
         new_caption_title
     }
 
-    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn from_p1(
+        p1: &crate::ftd2021::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Self> {
         let var_data = ftd::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
@@ -1825,7 +1835,7 @@ impl Component {
     fn call_without_values(
         &self,
         doc: &mut ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
         self.call(
             &Default::default(),
             doc,
@@ -1851,7 +1861,7 @@ impl Component {
         local_container: &[usize],
         id: Option<String>,
         external_children_count: &Option<usize>,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    ) -> crate::ftd2021::p1::Result<ElementWithContainer> {
         invocations
             .entry(self.full_name.clone())
             .or_default()
@@ -2049,7 +2059,7 @@ impl Component {
         }
     }
 
-    pub fn to_value(&self, kind: &ftd::p2::Kind) -> ftd::p1::Result<ftd::Value> {
+    pub fn to_value(&self, kind: &ftd::p2::Kind) -> crate::ftd2021::p1::Result<ftd::Value> {
         Ok(ftd::Value::UI {
             name: self.full_name.to_string(),
             kind: kind.to_owned(),
@@ -2060,11 +2070,11 @@ impl Component {
 
 pub fn recursive_child_component(
     loop_data: &str,
-    sub: &ftd::p1::SubSection,
+    sub: &crate::ftd2021::p1::SubSection,
     doc: &ftd::p2::TDoc,
     arguments: &ftd::Map<ftd::p2::Kind>,
     name_with_component: Option<(String, ftd::Component)>,
-) -> ftd::p1::Result<ftd::ChildComponent> {
+) -> crate::ftd2021::p1::Result<ftd::ChildComponent> {
     let mut loop_ref = "object".to_string();
     let mut loop_on_component = loop_data.to_string();
 
@@ -2116,7 +2126,7 @@ pub fn recursive_child_component(
         },
     );
 
-    let mut new_header = ftd::p1::Header(vec![]);
+    let mut new_header = crate::ftd2021::p1::Header(vec![]);
     let (mut left_boolean, mut right_boolean) = (None, None);
     for (i, k, v) in &sub.header.0 {
         if k == "$loop$" {
@@ -2255,7 +2265,7 @@ pub fn recursive_child_component(
         recursive_kind: &ftd::p2::Kind,
         doc: &ftd::p2::TDoc,
         reference: String,
-    ) -> ftd::p1::Result<Property> {
+    ) -> crate::ftd2021::p1::Result<Property> {
         let mut arguments: ftd::Map<ftd::p2::Kind> = Default::default();
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
         let property = ftd::PropertyValue::resolve_value(
@@ -2315,12 +2325,12 @@ fn is_component(name: &str) -> bool {
 
 fn assert_no_extra_properties(
     line_number: usize,
-    p1: &ftd::p1::Header,
+    p1: &crate::ftd2021::p1::Header,
     root: &str,
     root_arguments: &ftd::Map<ftd::p2::Kind>,
     name: &str,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     for (i, k, _) in p1.0.iter() {
         if k == "component"
             || k.starts_with('$')
@@ -2384,17 +2394,17 @@ fn check_input_conflicting_values(
     properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     fn get_property_default_value(
         property_name: &str,
         properties: &ftd::Map<Property>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<String> {
+    ) -> crate::ftd2021::p1::Result<String> {
         if let Some(property) = properties.get(property_name) {
             return property.resolve_default_value_string(doc, line_number);
         }
-        Err(ftd::p1::Error::NotFound {
+        Err(crate::ftd2021::p1::Error::NotFound {
             doc_id: doc.name.to_string(),
             line_number,
             key: property_name.to_string(),
@@ -2410,7 +2420,7 @@ fn check_input_conflicting_values(
             let default_value =
                 get_property_default_value("default-value", properties, doc, line_number)?;
 
-            Err(ftd::p1::Error::ForbiddenUsage {
+            Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                 message: format!(
                     "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
                     value, default_value
@@ -2426,7 +2436,7 @@ fn check_input_conflicting_values(
 #[allow(clippy::too_many_arguments)]
 pub fn read_properties(
     line_number: usize,
-    p1: &ftd::p1::Header,
+    p1: &crate::ftd2021::p1::Header,
     caption: &Option<String>,
     body: &Option<(usize, String)>,
     fn_name: &str,
@@ -2436,7 +2446,7 @@ pub fn read_properties(
     doc: &ftd::p2::TDoc,
     root_properties: &ftd::Map<Property>,
     is_reference: bool,
-) -> ftd::p1::Result<ftd::Map<Property>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<Property>> {
     let mut properties: ftd::Map<Property> = Default::default();
 
     for (name, kind) in root_arguments.iter() {
@@ -2455,7 +2465,7 @@ pub fn read_properties(
                 ftd::TextSource::Header,
             ),
             (
-                Err(ftd::p1::Error::NotFound { .. }),
+                Err(crate::ftd2021::p1::Error::NotFound { .. }),
                 ftd::p2::Kind::String {
                     caption: c,
                     body: b,
@@ -2493,7 +2503,7 @@ pub fn read_properties(
                     );
                 }
             }
-            (Err(ftd::p1::Error::NotFound { .. }), k) => {
+            (Err(crate::ftd2021::p1::Error::NotFound { .. }), k) => {
                 if matches!(kind, ftd::p2::Kind::Optional { .. }) {
                     continue;
                 }
@@ -2581,7 +2591,7 @@ pub fn read_properties(
                                 }
                             }
                         }
-                        ftd::p1::Header(headers)
+                        crate::ftd2021::p1::Header(headers)
                     };
                     ftd::p2::utils::structure_header_to_properties(
                         &value,
@@ -2649,12 +2659,12 @@ pub fn read_properties(
 ///
 fn assert_caption_body_checks(
     root: &str,
-    p1: &ftd::p1::Header,
+    p1: &crate::ftd2021::p1::Header,
     doc: &ftd::p2::TDoc,
     caption: &Option<String>,
     body: &Option<(usize, String)>,
     line_number: usize,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     // No checks on ftd#ui
     if is_it_ui(root) {
         return Ok(());
@@ -2664,7 +2674,7 @@ fn assert_caption_body_checks(
     let mut has_body = body.is_some();
 
     let mut properties = None;
-    let mut header_list: Option<&ftd::p1::Header> = Some(p1);
+    let mut header_list: Option<&crate::ftd2021::p1::Header> = Some(p1);
 
     let mut thing = doc.get_thing(line_number, root)?;
     loop {
@@ -2713,15 +2723,15 @@ fn assert_caption_body_checks(
         full_name: &str,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
         properties: Option<std::collections::BTreeMap<String, Property>>,
-        p1: Option<&ftd::p1::Header>,
+        p1: Option<&crate::ftd2021::p1::Header>,
         doc: &ftd::p2::TDoc,
         has_caption: bool,
         has_body: bool,
         line_number: usize,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         /// returns a hashset`<key>` of header keys which have non-empty values
         fn get_header_set_with_values(
-            p1: Option<&ftd::p1::Header>,
+            p1: Option<&crate::ftd2021::p1::Header>,
         ) -> std::collections::HashSet<String> {
             let mut header_set = std::collections::HashSet::new();
 
@@ -2788,7 +2798,7 @@ fn assert_caption_body_checks(
                                 && (has_caption || has_value))
                                 || (has_property && has_body)
                             {
-                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
                                         "pass either body or caption or header_value, ambiguity in \'{}\'",
                                         arg
@@ -2808,7 +2818,7 @@ fn assert_caption_body_checks(
                                 || has_default
                                 || kind.is_optional())
                             {
-                                return Err(ftd::p1::Error::MissingData {
+                                return Err(crate::ftd2021::p1::Error::MissingData {
                                     message: format!(
                                         "body or caption or header_value, none of them are passed for \'{}\'",
                                         arg
@@ -2834,7 +2844,7 @@ fn assert_caption_body_checks(
                             if ((has_property || has_value) && has_caption)
                                 || (has_value && has_property)
                             {
-                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
                                         "pass either caption or header_value for header \'{}\'",
                                         arg
@@ -2853,7 +2863,7 @@ fn assert_caption_body_checks(
                                 || has_default
                                 || kind.is_optional())
                             {
-                                return Err(ftd::p1::Error::MissingData {
+                                return Err(crate::ftd2021::p1::Error::MissingData {
                                     message: format!(
                                         "caption or header_value, none of them are passed for \'{}\'",
                                         arg
@@ -2874,7 +2884,7 @@ fn assert_caption_body_checks(
                             if ((has_property || has_value) && has_body)
                                 || (has_property && has_value)
                             {
-                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
                                         "pass either body or header_value for header \'{}\'",
                                         arg
@@ -2893,7 +2903,7 @@ fn assert_caption_body_checks(
                                 || has_default
                                 || kind.is_optional())
                             {
-                                return Err(ftd::p1::Error::MissingData {
+                                return Err(crate::ftd2021::p1::Error::MissingData {
                                     message: format!(
                                         "body or header_value, none of them are passed for \'{}\'",
                                         arg
@@ -2925,7 +2935,7 @@ fn assert_caption_body_checks(
 
                     // check if data conflicts from any 2 two ways
                     if ((has_property || has_value) && has_caption) || (has_value && has_property) {
-                        return Err(ftd::p1::Error::ForbiddenUsage {
+                        return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                             message: format!(
                                 "pass either caption or header_value for header \'{}\'",
                                 arg
@@ -2942,7 +2952,7 @@ fn assert_caption_body_checks(
                         || has_default
                         || kind.is_optional())
                     {
-                        return Err(ftd::p1::Error::MissingData {
+                        return Err(crate::ftd2021::p1::Error::MissingData {
                             message: format!(
                                 "caption or header_value, none of them are passed for \'{}\'",
                                 arg
@@ -2965,7 +2975,7 @@ fn assert_caption_body_checks(
         if !(caption_pass && body_pass) {
             // if caption is passed and caption not utilized then throw error
             if !caption_pass && has_caption {
-                return Err(ftd::p1::Error::UnknownData {
+                return Err(crate::ftd2021::p1::Error::UnknownData {
                     message: "caption passed with no header accepting it !!".to_string(),
                     doc_id: doc.name.to_string(),
                     line_number,
@@ -2974,7 +2984,7 @@ fn assert_caption_body_checks(
 
             // if body is passed and body not utilized then throw error
             if !body_pass && has_body {
-                return Err(ftd::p1::Error::UnknownData {
+                return Err(crate::ftd2021::p1::Error::UnknownData {
                     message: "body passed with no header accepting it !!".to_string(),
                     doc_id: doc.name.to_string(),
                     line_number,
@@ -3047,7 +3057,7 @@ fn root_properties_from_inherits(
     arguments: &ftd::Map<ftd::p2::Kind>,
     inherits: Vec<String>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<ftd::Map<Property>> {
+) -> crate::ftd2021::p1::Result<ftd::Map<Property>> {
     let mut root_properties: ftd::Map<Property> = Default::default();
     for inherit in inherits {
         let pv = ftd::PropertyValue::resolve_value(
@@ -3071,12 +3081,12 @@ fn root_properties_from_inherits(
 }
 
 fn read_arguments(
-    p1: &ftd::p1::Header,
+    p1: &crate::ftd2021::p1::Header,
     root: &str,
     root_arguments: &ftd::Map<ftd::p2::Kind>,
     arguments: &ftd::Map<ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<(ftd::Map<ftd::p2::Kind>, Vec<String>)> {
+) -> crate::ftd2021::p1::Result<(ftd::Map<ftd::p2::Kind>, Vec<String>)> {
     let mut args: ftd::Map<ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
@@ -3109,7 +3119,7 @@ fn read_arguments(
                         if kind.inner().is_list() {
                             continue;
                         }
-                        return Err(ftd::p1::Error::ForbiddenUsage {
+                        return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                             message: format!("repeated usage of \'{}\' not allowed !!", k),
                             doc_id: doc.name.to_string(),
                             line_number: *i,
@@ -3170,7 +3180,7 @@ fn read_arguments(
                         break;
                     }
                 }
-                ftd::p1::Header(headers)
+                crate::ftd2021::p1::Header(headers)
             };
             *h = headers;
             *ui_id = doc.resolve_name(*i, ui_id.as_str())?;
@@ -3178,7 +3188,7 @@ fn read_arguments(
 
         // Duplicate header definition check
         if args.contains_key(var_data.name.as_str()) {
-            return Err(ftd::p1::Error::ForbiddenUsage {
+            return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                 message: format!(
                     "\'{}\' is already used as header name/identifier !!",
                     &var_data.name
@@ -3190,7 +3200,7 @@ fn read_arguments(
 
         // checking if any universal argument is declared by the user (forbidden)
         if universal_arguments_set.contains(&var_data.name) {
-            return Err(ftd::p1::Error::ForbiddenUsage {
+            return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                 message: format!(
                     "redundant declaration of universal argument \'{}\' !!",
                     &var_data.name

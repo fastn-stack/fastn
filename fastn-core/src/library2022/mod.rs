@@ -169,7 +169,7 @@ impl Library2022 {
         &mut self,
         module: &str,
         package: &fastn_core::Package,
-    ) -> ftd::p1::Result<()> {
+    ) -> ftd::ftd2021::p1::Result<()> {
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),
@@ -183,15 +183,13 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package =
-            self.config
-                .resolve_package(package)
-                .await
-                .map_err(|_| ftd::p1::Error::ParseError {
-                    message: format!("Cannot resolve the package: {}", package.name),
-                    doc_id: self.document_id.to_string(),
-                    line_number: 0,
-                })?;
+        let package = self.config.resolve_package(package).await.map_err(|_| {
+            ftd::ftd2021::p1::Error::ParseError {
+                message: format!("Cannot resolve the package: {}", package.name),
+                doc_id: self.document_id.to_string(),
+                line_number: 0,
+            }
+        })?;
 
         self.config
             .all_packages
