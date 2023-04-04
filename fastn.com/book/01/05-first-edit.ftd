@@ -33,7 +33,7 @@ but do give it a read, and try to find correspondence between what you see in
 -- ds.code: line number 5 of `index.ftd`
 lang: ftd
 
-\-- ds.page: Welcome to your [FASTN site](https://fastn.dev/)
+\-- ds.page: Welcome to your [FASTN site](https://fastn.io/)
 
 -- ds.markdown:
 
@@ -88,7 +88,7 @@ manner professional programmers do it, and it was not that hard. You will learn
 to make bigger changes.
 
 
--- ds.h1: Let's Review Our Change
+-- ds.h1: Let's Review Our Changes
 
 So you have edited the line number 5 of the file `index.ftd`. Or maybe you went
 on your own and made more changes in `index.ftd`. Or maybe you edited other
@@ -108,6 +108,59 @@ just modified 1 line in `index.ftd`", but memory is sometimes unreliable. Also
 you may have done some accidental changes without realising. We have a better
 way.
 
-Let's switch back to our terminal.
+Let's open another terminal session by clicking on the `+` button in the
+terminal and run `git status` to see the status of our project as per `git`.
+
+-- ds.image: `git status` in a new terminal
+src: $assets.files.book.images.git-status.gif
+
+As you see it shows one file modified, `index.ftd`. If you had accidentally
+modified other files it would have shown them.
+
+-- ds.image: output of `git status` and `git diff`
+src: $assets.files.book.images.git-status-and-diff.png
+
+As you see, `git` is pretty good at keeping track of changes. `git status` tells
+you about the files that have been edited, added, deleted etc, and `git diff`
+shows the actual change in those files.
+
+The output of `git diff` tells you which files is edited, shows the "deleted"
+line in `red`, and also with a `-` prefix, so if you see clearly the red line
+has three `-`s in the beginning, two of them from our file, and one extra `-`
+to indicate that line is gone. It also shows added line in `green`, and with a
+`+` in the beginning, so the green line is `+-- ds.page: Yo, hello there`.
+
+Instead of terminal you can also use [`vscode`'s built in version control user
+interface](https://code.visualstudio.com/docs/sourcecontrol/overview).
+
+-- ds.image: Viewing Changes Using Diff Viewer
+src: $assets.files.book.images.diff-viewer.gif
+
+The UI is good to learn and helps you at times, we recommend familiarising
+yourself with terminal equivalents as well. `git` command on the terminal is
+more powerful, it let's you do lot more than the UI like this let's you do.
+Also the UI like this may not always be available, maybe you are not using
+`vscode`, maybe you are trying to debug things on a server. `git` will work in
+a lot more places so it helps to learn it.
+
+-- ds.h1: Committing The Changes
+
+So you have modified one line in one file so far. You have previewed the change
+in the preview browser and are happy with the output. You have also reviewed
+the changes using `git diff` to satisfy yourself that you have not accidentally
+made some other change, and the change looks good to you.
+
+Your changes are still on your codespace and no one can see those changes yet.
+If you lose access to the codespace you will lose these changes. To preserve
+the change we have to do two things, create a commit containing your changes
+and then push the commit to your repository.
+
+What is a commit? A `git` repository is built on top of commits. `commits` is
+the core concept of `git`. `commit`s contain changes. A commit can contain
+information about one or more changes. You have some changes so far, one change
+to be precise. You can convert this change into a commit using `git commit`
+command.
+
+We are going to do that next. Let's run `git commit -am 
 
 -- end: my-ds.page
