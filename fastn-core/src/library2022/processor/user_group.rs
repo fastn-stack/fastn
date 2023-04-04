@@ -42,7 +42,7 @@ pub fn process_by_id(
         .groups
         .get(group_id.as_str())
         .map(|g| g.to_group_compat())
-        .ok_or_else(|| ftd::p1::Error::NotFound {
+        .ok_or_else(|| ftd::ftd2021::p1::Error::NotFound {
             key: format!("user-group: `{}` not found", group_id.as_str()),
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
@@ -63,7 +63,7 @@ pub fn get_identities(
     let doc_id = fastn_core::library2022::utils::document_full_id(config, doc)?;
 
     let identities = fastn_core::user_group::get_identities(config, doc_id.as_str(), true)
-        .map_err(|e| ftd::p1::Error::ParseError {
+        .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
             message: e.to_string(),
             doc_id,
             line_number: value.line_number(),
@@ -99,7 +99,7 @@ pub async fn is_reader<'a>(
     let is_reader = config
         .can_read(config.request.as_ref().unwrap(), &doc_id, false)
         .await
-        .map_err(|e| ftd::p1::Error::ParseError {
+        .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
             message: e.to_string(),
             doc_id,
             line_number: value.line_number(),

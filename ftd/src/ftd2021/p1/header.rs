@@ -1,4 +1,4 @@
-pub use ftd::p1::{Error, Result};
+pub use ftd::ftd2021::p1::{Error, Result};
 
 #[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Header(pub Vec<(usize, String, String)>);
@@ -69,7 +69,7 @@ impl Header {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
                 } else {
-                    Err(ftd::p1::Error::ParseError {
+                    Err(ftd::ftd2021::p1::Error::ParseError {
                         message: "can't parse bool".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
@@ -115,7 +115,7 @@ impl Header {
         for (l, k, v) in self.0.iter() {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
-                    ftd::p1::Error::ParseError {
+                    ftd::ftd2021::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
@@ -134,7 +134,7 @@ impl Header {
         for (l, k, v) in self.0.iter() {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
-                    ftd::p1::Error::ParseError {
+                    ftd::ftd2021::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
@@ -166,7 +166,7 @@ impl Header {
         for (l, k, v) in self.0.iter() {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseFloatError| {
-                    ftd::p1::Error::ParseError {
+                    ftd::ftd2021::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
@@ -213,7 +213,7 @@ impl Header {
         line_number: usize,
         doc: &ftd::p2::TDoc,
         arguments: &ftd::Map<ftd::p2::Kind>,
-    ) -> ftd::p1::Result<Vec<ftd::p2::Event>> {
+    ) -> ftd::ftd2021::p1::Result<Vec<ftd::p2::Event>> {
         let events = {
             let mut events = vec![];
             for (_, k, v) in self.0.iter() {

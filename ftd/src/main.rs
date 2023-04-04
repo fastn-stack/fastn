@@ -381,7 +381,7 @@ pub fn interpret_helper(
     name: &str,
     source: &str,
     lib: &ftd::ExampleLibrary,
-) -> ftd::p1::Result<ftd::p2::Document> {
+) -> ftd::ftd2021::p1::Result<ftd::p2::Document> {
     let mut s = ftd::interpret(name, source, &None)?;
     let document;
     loop {
@@ -441,7 +441,7 @@ pub fn interpret_helper(
                         let link = lib
                             .dummy_global_ids_map()
                             .get(id)
-                            .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                            .ok_or_else(|| ftd::ftd2021::p1::Error::ForbiddenUsage {
                                 message: format!("id: {} not found while linking", id),
                                 doc_id: st.id.clone(),
                                 line_number: *ln,

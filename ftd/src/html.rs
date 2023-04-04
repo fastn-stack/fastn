@@ -1970,7 +1970,7 @@ fn get_translate(
     scale_y: &Option<f64>,
     rotate: &Option<i64>,
     doc_id: &str,
-) -> ftd::p1::Result<Option<String>> {
+) -> crate::ftd2021::p1::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
             return ftd::p2::utils::e2(

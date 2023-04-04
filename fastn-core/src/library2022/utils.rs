@@ -1,7 +1,7 @@
 pub fn document_full_id(
     config: &fastn_core::Config,
     doc: &ftd::interpreter::TDoc,
-) -> ftd::p1::Result<String> {
+) -> ftd::ftd2021::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()

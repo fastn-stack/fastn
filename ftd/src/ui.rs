@@ -1841,7 +1841,10 @@ pub enum Length {
 }
 
 impl Length {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Length>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<Option<ftd::Length>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -1927,7 +1930,10 @@ impl Default for Position {
 }
 
 impl Position {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Position>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<Option<ftd::Position>> {
         Ok(match l.as_deref() {
             Some("center") => Some(Self::Center),
             Some("top") => Some(Self::Top),
@@ -1992,7 +1998,10 @@ impl ToString for Region {
 }
 
 impl Region {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Region>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<Option<ftd::Region>> {
         Ok(Some(match l.as_deref() {
             Some("h0") => Self::H0,
             Some("h1") => Self::H1,
@@ -2039,7 +2048,7 @@ impl Region {
     ///
     /// will throw error if tried to compute heading priority
     /// of any non-heading region
-    pub fn heading_priority_value(&self, doc_id: &str) -> ftd::p1::Result<i32> {
+    pub fn heading_priority_value(&self, doc_id: &str) -> crate::ftd2021::p1::Result<i32> {
         match self {
             Self::H0 => Ok(0),
             Self::H1 => Ok(-1),
@@ -2108,7 +2117,10 @@ pub enum Overflow {
 }
 
 impl Overflow {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Overflow>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<Option<ftd::Overflow>> {
         Ok(Option::from(match l.as_deref() {
             Some("hidden") => Self::Hidden,
             Some("visible") => Self::Visible,
@@ -2130,7 +2142,10 @@ pub enum Anchor {
 }
 
 impl Anchor {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Anchor>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> crate::ftd2021::p1::Result<Option<ftd::Anchor>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -2180,7 +2195,7 @@ impl GradientDirection {
     pub fn from(
         l: Option<String>,
         doc_id: &str,
-    ) -> ftd::p1::Result<Option<ftd::GradientDirection>> {
+    ) -> crate::ftd2021::p1::Result<Option<ftd::GradientDirection>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -2346,7 +2361,7 @@ pub enum Spacing {
 }
 
 impl Spacing {
-    pub fn from(l: Option<String>) -> ftd::p1::Result<Option<ftd::Spacing>> {
+    pub fn from(l: Option<String>) -> crate::ftd2021::p1::Result<Option<ftd::Spacing>> {
         Ok(match l.as_deref() {
             Some("space-evenly") => Some(ftd::Spacing::SpaceEvenly),
             Some("space-between") => Some(ftd::Spacing::SpaceBetween),
@@ -2385,7 +2400,7 @@ pub enum Loading {
 }
 
 impl Loading {
-    pub fn from(s: &str, doc_id: &str) -> ftd::p1::Result<Loading> {
+    pub fn from(s: &str, doc_id: &str) -> crate::ftd2021::p1::Result<Loading> {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
@@ -2461,7 +2476,7 @@ pub enum TextAlign {
 }
 
 impl TextAlign {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::TextAlign> {
+    pub fn from(l: Option<String>, doc_id: &str) -> crate::ftd2021::p1::Result<ftd::TextAlign> {
         Ok(match l.as_deref() {
             Some("center") => ftd::TextAlign::Center,
             Some("left") => ftd::TextAlign::Left,
@@ -2491,7 +2506,7 @@ pub enum FontDisplay {
 }
 
 impl FontDisplay {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::FontDisplay> {
+    pub fn from(l: Option<String>, doc_id: &str) -> crate::ftd2021::p1::Result<ftd::FontDisplay> {
         Ok(match l.as_deref() {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
@@ -2520,11 +2535,11 @@ impl ImageSrc {
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
-    ) -> ftd::p1::Result<ImageSrc> {
+    ) -> crate::ftd2021::p1::Result<ImageSrc> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+            .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(ImageSrc {
             light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
                 .unwrap_or_default(),
@@ -2550,11 +2565,11 @@ impl FontSize {
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
-    ) -> ftd::p1::Result<FontSize> {
+    ) -> crate::ftd2021::p1::Result<FontSize> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+            .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(FontSize {
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
@@ -2581,11 +2596,11 @@ impl Type {
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
-    ) -> ftd::p1::Result<Type> {
+    ) -> crate::ftd2021::p1::Result<Type> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+            .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         return Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
             desktop: get_font_size(l, doc, line_number, "desktop")?,
@@ -2604,14 +2619,14 @@ impl Type {
             doc: &ftd::p2::TDoc,
             line_number: usize,
             name: &str,
-        ) -> ftd::p1::Result<FontSize> {
+        ) -> crate::ftd2021::p1::Result<FontSize> {
             let properties = l
                 .iter()
                 .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-                .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+                .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
 
             let property_value = ftd::p2::utils::record_optional(name, &properties, doc.name, 0)?
-                .ok_or_else(|| ftd::p1::Error::ParseError {
+                .ok_or_else(|| crate::ftd2021::p1::Error::ParseError {
                 message: format!("expected record, for: `{}` found: `None`", name),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -2639,7 +2654,7 @@ pub enum NamedFont {
 }
 
 impl NamedFont {
-    pub fn from(l: Option<String>) -> ftd::p1::Result<ftd::NamedFont> {
+    pub fn from(l: Option<String>) -> crate::ftd2021::p1::Result<ftd::NamedFont> {
         Ok(match l.as_deref() {
             Some("monospace") => ftd::NamedFont::Monospace,
             Some("serif") => ftd::NamedFont::Serif,
@@ -2694,7 +2709,7 @@ pub struct Style {
 }
 
 impl Style {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Style> {
+    pub fn from(l: Option<String>, doc_id: &str) -> crate::ftd2021::p1::Result<ftd::Style> {
         fn add_in_map(style: &str, map: &mut ftd::Map<i32>) {
             if !map.contains_key(style) {
                 map.insert(style.to_string(), 1);
@@ -2773,7 +2788,7 @@ impl Style {
         // Checks if there is repeatation in Underline,italic,strike
         for (style, count) in booleans.iter() {
             if count > &1 {
-                return Err(ftd::p1::Error::ForbiddenUsage {
+                return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                     message: format!("\'{}\' repeated {} times in \'{}\'", style, count, &l),
                     doc_id: doc_id.to_string(),
                     line_number: 0,
@@ -2783,7 +2798,7 @@ impl Style {
 
         // Checks if there is conflict in font weights
         if weights.len() > 1 {
-            return Err(ftd::p1::Error::ForbiddenUsage {
+            return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                 message: format!("Conflicting weights {:?} in \'{}\'", weights.keys(), &l),
                 doc_id: doc_id.to_string(),
                 line_number: 0,
@@ -2793,7 +2808,7 @@ impl Style {
         // Checks if there is repeatation in font weights
         for (weight, count) in weights.iter() {
             if count > &1 {
-                return Err(ftd::p1::Error::ForbiddenUsage {
+                return Err(crate::ftd2021::p1::Error::ForbiddenUsage {
                     message: format!("\'{}\' repeated {} times in \'{}\'", weight, count, &l),
                     doc_id: doc_id.to_string(),
                     line_number: 0,
@@ -2822,7 +2837,7 @@ impl TextFormat {
         l: Option<String>,
         lang: Option<String>,
         doc_id: &str,
-    ) -> ftd::p1::Result<ftd::TextFormat> {
+    ) -> crate::ftd2021::p1::Result<ftd::TextFormat> {
         Ok(match l.as_deref() {
             Some("markup") => ftd::TextFormat::Markdown,
             Some("code") => ftd::TextFormat::Code {
@@ -2901,7 +2916,7 @@ impl Color {
         l: (Option<ftd::Map<ftd::PropertyValue>>, Option<String>),
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<Option<Color>> {
+    ) -> crate::ftd2021::p1::Result<Option<Color>> {
         let reference = l.1;
         let l = if let Some(l) = l.0 {
             l
@@ -2912,7 +2927,7 @@ impl Color {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
+            .collect::<crate::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(Some(Color {
             light: ftd::p2::element::color_from(
                 ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,

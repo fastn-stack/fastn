@@ -9,7 +9,7 @@ pub fn code_with_theme(
     ext: &str,
     theme: &str,
     doc_id: &str,
-) -> ftd::p1::Result<ftd::Rendered> {
+) -> crate::ftd2021::p1::Result<ftd::Rendered> {
     Ok(ftd::Rendered {
         original: code.to_string(),
         rendered: ftd::code::code(

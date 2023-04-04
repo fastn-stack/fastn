@@ -22,7 +22,7 @@ pub fn interpret_helper(
     name: &str,
     source: &str,
     lib: &ftd::p2::TestLibrary,
-) -> ftd::p1::Result<ftd::p2::Document> {
+) -> crate::ftd2021::p1::Result<ftd::p2::Document> {
     let mut s = ftd::p2::interpreter::interpret(name, source, &None)?;
     let document;
     loop {
@@ -67,7 +67,7 @@ pub fn interpret(
     name: &str,
     source: &str,
     lib: &ftd::p2::TestLibrary,
-) -> ftd::p1::Result<(ftd::Map<ftd::p2::Thing>, ftd::Column)> {
+) -> crate::ftd2021::p1::Result<(ftd::Map<ftd::p2::Thing>, ftd::Column)> {
     let doc = ftd::test::interpret_helper(name, source, lib)?;
     Ok((doc.data, doc.main))
 }
@@ -17653,7 +17653,7 @@ mod component {
             p2!($s, $doc, $t)
         };
         ($s:expr, $doc: expr, $t: expr) => {
-            let p1 = ftd::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
+            let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
             pretty_assertions::assert_eq!(ftd::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
         };
     }
@@ -18711,7 +18711,7 @@ mod variable {
             p2!($s, $n, $v, $c)
         };
         ($s:expr, $n: expr, $v: expr, $c: expr) => {
-            let p1 = ftd::p1::parse(indoc::indoc!($s), "foo").unwrap();
+            let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), "foo").unwrap();
             let mut bag = ftd::Map::new();
             let aliases = ftd::Map::new();
             let mut d = ftd::p2::TDoc {

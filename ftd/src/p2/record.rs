@@ -15,9 +15,9 @@ impl Record {
 
     pub fn fields(
         &self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Map<ftd::PropertyValue>> {
+    ) -> crate::ftd2021::p1::Result<ftd::Map<ftd::PropertyValue>> {
         let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
@@ -42,7 +42,7 @@ impl Record {
                     }
                 }
                 (
-                    Err(ftd::p1::Error::NotFound { .. }),
+                    Err(crate::ftd2021::p1::Error::NotFound { .. }),
                     ftd::p2::Kind::List {
                         kind: list_kind, ..
                     },
@@ -215,11 +215,11 @@ impl Record {
                         p1.line_number,
                     );
                 }
-                (Err(ftd::p1::Error::NotFound { .. }), _) => {
+                (Err(crate::ftd2021::p1::Error::NotFound { .. }), _) => {
                     kind.read_section(p1.line_number, &p1.header, &p1.caption, &p1.body, name, doc)?
                 }
                 (
-                    Err(ftd::p1::Error::MoreThanOneSubSections { .. }),
+                    Err(crate::ftd2021::p1::Error::MoreThanOneSubSections { .. }),
                     ftd::p2::Kind::List {
                         kind: list_kind, ..
                     },
@@ -267,9 +267,9 @@ impl Record {
 
     pub fn add_instance(
         &mut self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         let fields = self.fields(p1, doc)?;
         self.instances
             .entry(doc.name.to_string())
@@ -280,9 +280,9 @@ impl Record {
 
     pub fn create(
         &self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         // todo: check if the its reference to other variable
         Ok(ftd::PropertyValue::Value {
             value: ftd::Value::Record {
@@ -294,9 +294,9 @@ impl Record {
 
     pub fn fields_from_sub_section(
         &self,
-        p1: &ftd::p1::SubSection,
+        p1: &crate::ftd2021::p1::SubSection,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Map<ftd::PropertyValue>> {
+    ) -> crate::ftd2021::p1::Result<ftd::Map<ftd::PropertyValue>> {
         let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
@@ -311,10 +311,10 @@ impl Record {
     fn assert_no_extra_fields(
         &self,
         doc_id: &str,
-        p1: &ftd::p1::Header,
+        p1: &crate::ftd2021::p1::Header,
         _caption: &Option<String>,
         _body: &Option<(usize, String)>,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         // TODO: handle caption
         // TODO: handle body
         for (i, k, _) in p1.0.iter() {
@@ -336,10 +336,10 @@ impl Record {
 
     pub fn from_p1(
         p1_name: &str,
-        p1_header: &ftd::p1::Header,
+        p1_header: &crate::ftd2021::p1::Header,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> crate::ftd2021::p1::Result<Self> {
         let name = ftd::p2::utils::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = ftd::Map::new();
@@ -390,12 +390,12 @@ impl Record {
             order,
         });
 
-        fn normalise_value(s: &str) -> ftd::p1::Result<String> {
+        fn normalise_value(s: &str) -> crate::ftd2021::p1::Result<String> {
             // TODO: normalise spaces in v
             Ok(s.to_string())
         }
 
-        fn validate_key(_k: &str) -> ftd::p1::Result<()> {
+        fn validate_key(_k: &str) -> crate::ftd2021::p1::Result<()> {
             // TODO: ensure k in valid (only alphanumeric, _, and -)
             Ok(())
         }
@@ -406,7 +406,7 @@ fn assert_fields_valid(
     line_number: usize,
     fields: &ftd::Map<ftd::p2::Kind>,
     doc_id: &str,
-) -> ftd::p1::Result<()> {
+) -> crate::ftd2021::p1::Result<()> {
     let mut caption_field: Option<String> = None;
     let mut body_field: Option<String> = None;
     for (name, kind) in fields.iter() {

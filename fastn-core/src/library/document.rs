@@ -46,7 +46,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 pub fn document_full_id(
     config: &fastn_core::Config,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<String> {
+) -> ftd::ftd2021::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -63,10 +63,10 @@ pub fn document_full_id(
 #[allow(dead_code)]
 pub mod processor {
     pub fn document_id(
-        _section: &ftd::p1::Section,
+        _section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name
                 .to_string()
@@ -85,10 +85,10 @@ pub mod processor {
         })
     }
     pub fn document_full_id(
-        _section: &ftd::p1::Section,
+        _section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         Ok(ftd::Value::String {
             text: super::document_full_id(config, doc)?,
             source: ftd::TextSource::Default,
@@ -96,25 +96,23 @@ pub mod processor {
     }
 
     pub async fn document_name<'a>(
-        section: &ftd::p1::Section,
+        section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name
                 .to_string()
                 .replace(config.package.name.as_str(), "")
         });
 
-        let file_path =
-            config
-                .get_file_path(&doc_id)
-                .await
-                .map_err(|e| ftd::p1::Error::ParseError {
-                    message: e.to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number: section.line_number,
-                })?;
+        let file_path = config.get_file_path(&doc_id).await.map_err(|e| {
+            ftd::ftd2021::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id: doc.name.to_string(),
+                line_number: section.line_number,
+            }
+        })?;
 
         Ok(ftd::Value::String {
             text: file_path.trim().to_string(),
@@ -123,10 +121,10 @@ pub mod processor {
     }
 
     pub fn document_suffix(
-        _section: &ftd::p1::Section,
+        _section: &ftd::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         config: &fastn_core::Config,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name
                 .to_string()

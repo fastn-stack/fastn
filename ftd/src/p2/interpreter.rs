@@ -42,7 +42,7 @@ impl InterpreterState {
         }
     }
 
-    fn continue_(mut self) -> ftd::p1::Result<Interpreter> {
+    fn continue_(mut self) -> crate::ftd2021::p1::Result<Interpreter> {
         if self.document_stack.is_empty() {
             panic!()
         }
@@ -315,7 +315,7 @@ impl InterpreterState {
                             });
                         }
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
-                            let section_to_subsection = ftd::p1::SubSection {
+                            let section_to_subsection = crate::ftd2021::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
                                 header: p1.header.to_owned(),
@@ -526,7 +526,7 @@ impl InterpreterState {
         child: &mut ftd::ChildComponent,
         doc: &ftd::p2::TDoc,
         package_name: &Option<String>,
-    ) -> ftd::p1::Result<()> {
+    ) -> crate::ftd2021::p1::Result<()> {
         // todo: work on all these cases
         // Case 2: Container component (with defined id)
         //      id = use user defined id for linking else the auto-generated one
@@ -652,7 +652,8 @@ impl InterpreterState {
         fn find_container_instructions_with_region(
             root_component: &ftd::Component,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<(Vec<ftd::Instruction>, Option<ftd::component::Property>)> {
+        ) -> crate::ftd2021::p1::Result<(Vec<ftd::Instruction>, Option<ftd::component::Property>)>
+        {
             if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
                 let region = root_component.properties.get("region");
                 return Ok((root_component.instructions.clone(), region.cloned()));
@@ -670,7 +671,7 @@ impl InterpreterState {
 
         pub fn resolve_property_value(
             property_value: &ftd::PropertyValue,
-        ) -> ftd::p1::Result<Option<String>> {
+        ) -> crate::ftd2021::p1::Result<Option<String>> {
             match property_value {
                 ftd::PropertyValue::Value { value } => Ok(value.to_string()),
                 ftd::PropertyValue::Variable { name, .. } => Ok(Some(format!("${}", name))),
@@ -711,7 +712,7 @@ impl InterpreterState {
             current_component: &ftd::Component,
             properties: &ftd::Map<ftd::component::Property>,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
+        ) -> crate::ftd2021::p1::Result<(Option<String>, Option<String>)> {
             if matches!(
                 current_component.full_name.as_str(),
                 "ftd#row" | "ftd#column"
@@ -787,7 +788,7 @@ impl InterpreterState {
             doc_name: &str,
             region: String,
             package_name: &Option<String>,
-        ) -> ftd::p1::Result<ftd::PageHeadingItem> {
+        ) -> crate::ftd2021::p1::Result<ftd::PageHeadingItem> {
             let processed_url = make_url(doc_name, id, package_name);
             let ph = ftd::PageHeadingItem {
                 title: Some(title.to_string()),
@@ -805,7 +806,7 @@ impl InterpreterState {
             heading_number: &Option<String>,
             doc_name: &str,
             package_name: &Option<String>,
-        ) -> ftd::p1::Result<String> {
+        ) -> crate::ftd2021::p1::Result<String> {
             fn assign_auto_slug_id(
                 heading: &mut ftd::PageHeadingItem,
                 _assigned_number: &str,
@@ -883,10 +884,10 @@ impl InterpreterState {
     }
 
     fn resolve_foreign_variable(
-        section: &mut ftd::p1::Section,
+        section: &mut crate::ftd2021::p1::Section,
         foreign_variables: &[String],
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Option<String>> {
+    ) -> crate::ftd2021::p1::Result<Option<String>> {
         if let Some(variable) = resolve_all_properties(
             &mut section.caption,
             &mut section.header,
@@ -915,12 +916,12 @@ impl InterpreterState {
 
         fn resolve_all_properties(
             caption: &mut Option<String>,
-            header: &mut ftd::p1::Header,
+            header: &mut crate::ftd2021::p1::Header,
             body: &mut Option<(usize, String)>,
             line_number: usize,
             foreign_variables: &[String],
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<Option<String>> {
+        ) -> crate::ftd2021::p1::Result<Option<String>> {
             if let Some(ref mut caption) = caption {
                 if let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
@@ -953,7 +954,7 @@ impl InterpreterState {
             foreign_variables: &[String],
             doc: &ftd::p2::TDoc,
             line_number: usize,
-        ) -> ftd::p1::Result<Option<String>> {
+        ) -> crate::ftd2021::p1::Result<Option<String>> {
             if value.contains('#') {
                 return Ok(None);
             }
@@ -974,7 +975,7 @@ impl InterpreterState {
             foreign_variables: &[String],
             doc: &ftd::p2::TDoc,
             line_number: usize,
-        ) -> ftd::p1::Result<bool> {
+        ) -> crate::ftd2021::p1::Result<bool> {
             let var_name = doc.resolve_name(line_number, variable)?;
 
             if foreign_variables.iter().any(|v| var_name.starts_with(v)) {
@@ -992,10 +993,11 @@ impl InterpreterState {
     /// text-source includes caption, header, body of the section
     #[allow(clippy::type_complexity)]
     fn resolve_global_ids(
-        section: &mut ftd::p1::Section,
+        section: &mut crate::ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
         var_types: &[String],
-    ) -> ftd::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>> {
+    ) -> crate::ftd2021::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>
+    {
         // will contain all replace blocks for section and its subsections
         // where link replacement or escape links need to be resolved
         let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
@@ -1061,7 +1063,7 @@ impl InterpreterState {
         /// escaped links resolution needs to happen for a single section/ subsection
         fn resolve_id_from_all_sources(
             caption: &Option<String>,
-            header: &ftd::p1::Header,
+            header: &crate::ftd2021::p1::Header,
             body: &Option<(usize, String)>,
             line_number: usize,
             is_from_section: bool,
@@ -1183,7 +1185,7 @@ impl InterpreterState {
     fn process_imports(
         top: &mut ParsedDocument,
         bag: &ftd::Map<ftd::p2::Thing>,
-    ) -> ftd::p1::Result<Option<String>> {
+    ) -> crate::ftd2021::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
             if top.sections[iteration_index].name != "import" {
@@ -1223,13 +1225,13 @@ impl InterpreterState {
     /// and continue for the next section
     pub fn continue_after_storing_section(
         mut self,
-        section: &ftd::p1::Section,
-    ) -> ftd::p1::Result<Interpreter> {
+        section: &crate::ftd2021::p1::Section,
+    ) -> crate::ftd2021::p1::Result<Interpreter> {
         fn add_dummy_variable(
             parsed_document: &mut ParsedDocument,
-            p1: &ftd::p1::Section,
+            p1: &crate::ftd2021::p1::Section,
             bag: &mut ftd::Map<ftd::p2::Thing>,
-        ) -> ftd::p1::Result<()> {
+        ) -> crate::ftd2021::p1::Result<()> {
             let doc = ftd::p2::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
@@ -1291,7 +1293,7 @@ impl InterpreterState {
     pub fn continue_after_checking_id(
         mut self,
         replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>>,
-    ) -> ftd::p1::Result<Interpreter> {
+    ) -> crate::ftd2021::p1::Result<Interpreter> {
         // Checking in the last section from the topmost document in the document stack
         // which isn't popped out yet and replace links based on the captured id set
         // it received from the current processing section
@@ -1332,7 +1334,7 @@ impl InterpreterState {
 
                             let current_processing_subsection = subsections
                                 .get_mut(target_subsection_index)
-                                .ok_or_else(|| ftd::p1::Error::UnknownData {
+                                .ok_or_else(|| crate::ftd2021::p1::Error::UnknownData {
                                     message: format!(
                                         "No subsection present at index {} in subsections",
                                         target_subsection_index
@@ -1386,7 +1388,7 @@ impl InterpreterState {
             id_map: &std::collections::HashMap<String, String>,
             doc_id: String,
             line_number: usize,
-        ) -> ftd::p1::Result<bool> {
+        ) -> crate::ftd2021::p1::Result<bool> {
             let mut is_replaced = false;
             let mut matches_with_replacements: Vec<(String, usize, usize)> = vec![];
             // Character Prefix Group <prefix>
@@ -1442,17 +1444,16 @@ impl InterpreterState {
                             }
                         }
 
-                        let link =
-                            id_map
-                                .get(captured_id)
-                                .ok_or_else(|| ftd::p1::Error::NotFound {
-                                    doc_id: doc_id.clone(),
-                                    line_number,
-                                    key: format!(
-                                        "{} not found in id_map while replacing for links",
-                                        captured_id
-                                    ),
-                                })?;
+                        let link = id_map.get(captured_id).ok_or_else(|| {
+                            crate::ftd2021::p1::Error::NotFound {
+                                doc_id: doc_id.clone(),
+                                line_number,
+                                key: format!(
+                                    "{} not found in id_map while replacing for links",
+                                    captured_id
+                                ),
+                            }
+                        })?;
 
                         let mut replacement = format!("[{}]({})", linked_text, link);
                         if !prefix.is_empty() {
@@ -1494,17 +1495,16 @@ impl InterpreterState {
                             continue;
                         }
 
-                        let link =
-                            id_map
-                                .get(captured_id)
-                                .ok_or_else(|| ftd::p1::Error::NotFound {
-                                    doc_id: doc_id.clone(),
-                                    line_number,
-                                    key: format!(
-                                        "{} not found in id_map while replacing for links",
-                                        captured_id
-                                    ),
-                                })?;
+                        let link = id_map.get(captured_id).ok_or_else(|| {
+                            crate::ftd2021::p1::Error::NotFound {
+                                doc_id: doc_id.clone(),
+                                line_number,
+                                key: format!(
+                                    "{} not found in id_map while replacing for links",
+                                    captured_id
+                                ),
+                            }
+                        })?;
 
                         let mut replacement = format!("[{}]({})", linked_text, link);
                         if !prefix.is_empty() {
@@ -1537,7 +1537,11 @@ impl InterpreterState {
         }
     }
 
-    pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+    pub fn continue_after_import(
+        mut self,
+        id: &str,
+        source: &str,
+    ) -> crate::ftd2021::p1::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
         // interpret then
@@ -1548,7 +1552,7 @@ impl InterpreterState {
         mut self,
         variable: &str,
         value: ftd::Value,
-    ) -> ftd::p1::Result<Interpreter> {
+    ) -> crate::ftd2021::p1::Result<Interpreter> {
         let l = self.document_stack.len() - 1;
         let doc = ftd::p2::TDoc {
             name: &self.document_stack[l].name,
@@ -1572,7 +1576,7 @@ impl InterpreterState {
         self.continue_()
     }
 
-    pub fn continue_after_pop(mut self) -> ftd::p1::Result<Interpreter> {
+    pub fn continue_after_pop(mut self) -> crate::ftd2021::p1::Result<Interpreter> {
         self.document_stack.pop();
         self.continue_()
         // interpret then
@@ -1581,9 +1585,9 @@ impl InterpreterState {
 
     pub fn continue_after_processor(
         mut self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         value: ftd::Value,
-    ) -> ftd::p1::Result<Interpreter> {
+    ) -> crate::ftd2021::p1::Result<Interpreter> {
         let l = self.document_stack.len() - 1;
         let parsed_document = &mut self.document_stack[l];
 
@@ -1645,7 +1649,7 @@ impl InterpreterState {
         // handle top / start_from
     }
 
-    pub(crate) fn p1_from_processor(p1: &mut ftd::p1::Section, value: ftd::Value) {
+    pub(crate) fn p1_from_processor(p1: &mut crate::ftd2021::p1::Section, value: ftd::Value) {
         for (idx, (_, k, _)) in p1.header.0.iter().enumerate() {
             if k.eq("$processor$") {
                 p1.header.0.remove(idx);
@@ -1679,7 +1683,7 @@ impl InterpreterState {
 #[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
-    sections: Vec<ftd::p1::Section>,
+    sections: Vec<crate::ftd2021::p1::Section>,
     processing_imports: bool,
     processing_comments: bool,
     process_lazy_processors: bool,
@@ -1689,16 +1693,16 @@ pub struct ParsedDocument {
     instructions: Vec<ftd::Instruction>,
     /// sections stored which needs to be processed
     /// after interpretation of the current document is over
-    lazy_processor_sections: Vec<ftd::p1::Section>,
+    lazy_processor_sections: Vec<crate::ftd2021::p1::Section>,
     /// page headings of the current document will be stored in this list
     page_headings: Vec<ftd::PageHeadingItem>,
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> ftd::p1::Result<ParsedDocument> {
+    fn parse(id: &str, source: &str) -> crate::ftd2021::p1::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
-            sections: ftd::p1::parse(source, id)?,
+            sections: crate::ftd2021::p1::parse(source, id)?,
             processing_imports: true,
             processing_comments: true,
             process_lazy_processors: false,
@@ -1719,11 +1723,11 @@ impl ParsedDocument {
         self.processing_comments = false;
     }
 
-    pub fn get_last_section(&self) -> Option<&ftd::p1::Section> {
+    pub fn get_last_section(&self) -> Option<&crate::ftd2021::p1::Section> {
         self.sections.last()
     }
 
-    pub fn get_last_mut_section(&mut self) -> Option<&mut ftd::p1::Section> {
+    pub fn get_last_mut_section(&mut self) -> Option<&mut crate::ftd2021::p1::Section> {
         self.sections.last_mut()
     }
 
@@ -1757,10 +1761,10 @@ impl ParsedDocument {
             .iter()
             .filter(|s| !s.is_commented)
             .map(|s| s.remove_comments())
-            .collect::<Vec<ftd::p1::Section>>();
+            .collect::<Vec<crate::ftd2021::p1::Section>>();
     }
 
-    fn reorder(&mut self, bag: &ftd::Map<ftd::p2::Thing>) -> ftd::p1::Result<()> {
+    fn reorder(&mut self, bag: &ftd::Map<ftd::p2::Thing>) -> crate::ftd2021::p1::Result<()> {
         let (mut new_p1, var_types) = ftd::p2::utils::reorder(
             &self.sections,
             &ftd::p2::TDoc {
@@ -1791,7 +1795,7 @@ pub enum Interpreter {
     },
     StuckOnProcessor {
         state: InterpreterState,
-        section: ftd::p1::Section,
+        section: crate::ftd2021::p1::Section,
     },
     StuckOnForeignVariable {
         variable: String,
@@ -1810,7 +1814,7 @@ pub fn interpret(
     id: &str,
     source: &str,
     package_name: &Option<String>,
-) -> ftd::p1::Result<Interpreter> {
+) -> crate::ftd2021::p1::Result<Interpreter> {
     let mut s = InterpreterState::new(id.to_string(), package_name.clone());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()

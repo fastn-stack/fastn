@@ -44,7 +44,6 @@ pub mod interpreter;
 pub mod markup;
 pub mod node;
 mod or_type;
-pub mod p1;
 pub mod p11;
 pub mod p2;
 pub(crate) mod rendered;
@@ -281,9 +280,9 @@ impl ExampleLibrary {
     /// for more details
     /// visit www.fpm.dev/glossary/#lazy-processor
     pub fn is_lazy_processor(
-        section: &ftd::p1::Section,
+        section: &ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<bool> {
+    ) -> ftd2021::p1::Result<bool> {
         Ok(section
             .header
             .str(doc.name, section.line_number, "$processor$")?
@@ -292,9 +291,9 @@ impl ExampleLibrary {
 
     pub fn process(
         &self,
-        section: &ftd::p1::Section,
+        section: &ftd2021::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd2021::p1::Result<ftd::Value> {
         ftd::p2::utils::unknown_processor_error(
             format!("unimplemented for section {:?} and doc {:?}", section, doc),
             doc.name.to_string(),
@@ -302,7 +301,7 @@ impl ExampleLibrary {
         )
     }
 
-    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
             None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),

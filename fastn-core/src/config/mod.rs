@@ -406,7 +406,8 @@ impl Config {
         }
 
         // Vec<captured_id, line_number>
-        let captured_global_ids: Vec<(String, usize)> = ftd::p1::parse_file_for_global_ids(data);
+        let captured_global_ids: Vec<(String, usize)> =
+            ftd::ftd2021::p1::parse_file_for_global_ids(data);
         for (captured_id, ln) in captured_global_ids.iter() {
             update_id_map(&mut self.global_ids, captured_id.as_str(), doc_id, *ln)?;
         }

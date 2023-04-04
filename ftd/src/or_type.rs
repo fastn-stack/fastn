@@ -5,7 +5,10 @@ pub struct OrType {
 }
 
 impl OrType {
-    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn from_p1(
+        p1: &crate::ftd2021::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::ftd2021::p1::Result<Self> {
         let or_type_name = ftd::p2::utils::get_name("or-type", p1.name.as_str(), doc.name)?;
         let name = doc.format_name(or_type_name);
         let mut variants: Vec<ftd::p2::Record> = Default::default();
@@ -25,10 +28,10 @@ impl OrType {
 
     pub fn create(
         &self,
-        p1: &ftd::p1::Section,
+        p1: &crate::ftd2021::p1::Section,
         variant: String,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
         // todo: check if the its reference to other variable
         for v in self.variants.iter() {
             if v.name

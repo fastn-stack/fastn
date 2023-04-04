@@ -1,11 +1,11 @@
-pub fn to_string(p1: &[ftd::p1::Section]) -> String {
+pub fn to_string(p1: &[ftd::ftd2021::p1::Section]) -> String {
     p1.iter()
         .map(|v| v.to_string().trim().to_string())
         .collect::<Vec<String>>()
         .join("\n\n\n")
 }
 
-impl std::fmt::Display for ftd::p1::Section {
+impl std::fmt::Display for ftd::ftd2021::p1::Section {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.is_commented {
             write!(f, "/-- {}:", self.name.as_str())?;
@@ -34,7 +34,7 @@ impl std::fmt::Display for ftd::p1::Section {
     }
 }
 
-impl std::fmt::Display for ftd::p1::SubSection {
+impl std::fmt::Display for ftd::ftd2021::p1::SubSection {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if self.is_commented {
             write!(f, "/--- {}:", self.name.as_str())?;
@@ -75,7 +75,9 @@ fn escape_body(body: &str) -> String {
 
 #[cfg(test)]
 mod test {
-    use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+    use {indoc::indoc, pretty_assertions::assert_eq};
+
+    // macro
 
     #[test]
     pub fn test_comments() {
@@ -89,7 +91,7 @@ mod test {
                 hello world"
             ),
             super::to_string(
-                &ftd::p1::parse(
+                &ftd::ftd2021::p1::parse(
                     indoc!(
                         "
                     /-- ftd.row:
@@ -120,7 +122,7 @@ mod test {
                 hello world"
             ),
             super::to_string(
-                &ftd::p1::parse(
+                &ftd::ftd2021::p1::parse(
                     indoc!(
                         "
                 -- ftd.row:
@@ -147,7 +149,7 @@ mod test {
                 hello world again"
             ),
             super::to_string(
-                &ftd::p1::parse(
+                &ftd::ftd2021::p1::parse(
                     indoc!(
                         "
                      -- ftd.text:
@@ -189,18 +191,18 @@ mod test {
             bar body"
             ),
             super::to_string(&vec![
-                ftd::p1::Section::with_name("foo")
+                ftd::ftd2021::p1::Section::with_name("foo")
                     .and_body("body ho")
                     .add_header("key", "value")
                     .add_sub_section(
-                        ftd::p1::SubSection::with_name("dodo")
+                        ftd::ftd2021::p1::SubSection::with_name("dodo")
                             .and_caption("foo")
                             .add_header("foo", "bar"),
                     )
                     .add_sub_section(
-                        ftd::p1::SubSection::with_name("dodo").add_header("foo", "bar")
+                        ftd::ftd2021::p1::SubSection::with_name("dodo").add_header("foo", "bar")
                     ),
-                ftd::p1::Section::with_name("bar").and_body("bar body")
+                ftd::ftd2021::p1::Section::with_name("bar").and_body("bar body")
             ]),
         );
 
@@ -213,7 +215,7 @@ mod test {
             body ho"
             ),
             super::to_string(&vec![
-                ftd::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")
+                ftd::ftd2021::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")
             ]),
         );
 
@@ -224,8 +226,8 @@ mod test {
 
             --- bar:"
             ),
-            super::to_string(&vec![ftd::p1::Section::with_name("foo")
-                .add_sub_section(ftd::p1::SubSection::with_name("bar")),]),
+            super::to_string(&vec![ftd::ftd2021::p1::Section::with_name("foo")
+                .add_sub_section(ftd::ftd2021::p1::SubSection::with_name("bar")),]),
         );
     }
 }
