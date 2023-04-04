@@ -15,11 +15,11 @@ impl Import {
             line_number,
         }
     }
-    pub(crate) fn is_import(section: &ftd::p11::Section) -> bool {
+    pub(crate) fn is_import(section: &ftd::p1::Section) -> bool {
         section.name.eq(IMPORT)
     }
 
-    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Import> {
+    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<Import> {
         if !Self::is_import(section) {
             return ftd::ast::parse_error(
                 format!("Section is not import section, found `{:?}`", section),
@@ -38,7 +38,7 @@ impl Import {
             );
         }
         match &section.caption {
-            Some(ftd::p11::Header::KV(ftd::p11::header::KV {
+            Some(ftd::p1::Header::KV(ftd::p1::header::KV {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ast::utils::get_import_alias(value.as_str());

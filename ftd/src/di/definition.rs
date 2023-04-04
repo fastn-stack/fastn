@@ -7,17 +7,14 @@ pub struct Definition {
 }
 
 impl Definition {
-    pub(crate) fn is_definition(section: &ftd::p11::Section) -> bool {
+    pub(crate) fn is_definition(section: &ftd::p1::Section) -> bool {
         if ftd::di::Import::is_import(section) || ftd::di::Record::is_record(section) {
             return false;
         }
         section.kind.is_some()
     }
 
-    pub(crate) fn from_p1(
-        section: &ftd::p11::Section,
-        doc_id: &str,
-    ) -> ftd::di::Result<Definition> {
+    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::di::Result<Definition> {
         if !Self::is_definition(section) {
             return ftd::di::parse_error(
                 format!("Section is not `definition`, found `{:?}`", section),
@@ -77,7 +74,7 @@ impl Definition {
     ) -> Definition {
         let mut definition = self;
         definition.properties.push(ftd::di::Property::from_kv(
-            &ftd::p11::header::KV::new(key, kind, value, 0, condition),
+            &ftd::p1::header::KV::new(key, kind, value, 0, condition),
             ftd::di::Source::Header,
         ));
         definition

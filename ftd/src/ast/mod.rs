@@ -31,7 +31,7 @@ pub use web_component::WebComponentDefinition;
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("P1Error: {}", _0)]
-    P1(#[from] ftd::p11::Error),
+    P1(#[from] ftd::p1::Error),
 
     #[error("ASTParseError: {doc_id}:{line_number} -> {message}")]
     Parse {

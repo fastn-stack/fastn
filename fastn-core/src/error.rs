@@ -16,7 +16,7 @@ pub enum Error {
     FTDError(#[from] ftd::ftd2021::p1::Error),
 
     #[error("FTDP1Error: {}", _0)]
-    FTDP1Error(#[from] ftd::p11::Error),
+    FTDP1Error(#[from] ftd::p1::Error),
 
     #[error("FTDExecError: {}", _0)]
     FTDExecError(#[from] ftd::executor::Error),

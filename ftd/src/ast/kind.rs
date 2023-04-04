@@ -416,7 +416,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1_with_modifier(
-        section: &ftd::p11::Section,
+        section: &ftd::p1::Section,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -425,7 +425,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_header_with_modifier(
-        header: &ftd::p11::Header,
+        header: &ftd::p1::Header,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -473,7 +473,7 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> VariableValue {
+    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> VariableValue {
         use itertools::Itertools;
 
         let values = section
@@ -548,14 +548,14 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1_header(header: &ftd::p11::Header, doc_id: &str) -> VariableValue {
+    pub(crate) fn from_p1_header(header: &ftd::p1::Header, doc_id: &str) -> VariableValue {
         use itertools::Itertools;
 
         match header {
-            ftd::p11::Header::KV(ftd::p11::header::KV {
+            ftd::p1::Header::KV(ftd::p1::header::KV {
                 value, line_number, ..
             }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
-            ftd::p11::Header::Section(ftd::p11::header::Section {
+            ftd::p1::Header::Section(ftd::p1::header::Section {
                 section,
                 line_number,
                 ..
@@ -625,7 +625,7 @@ impl Condition {
     }
 
     pub(crate) fn from_headers(
-        headers: &ftd::p11::Headers,
+        headers: &ftd::p1::Headers,
         doc_id: &str,
     ) -> ftd::ast::Result<Option<Condition>> {
         let condition = headers

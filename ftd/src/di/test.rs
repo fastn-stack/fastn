@@ -2,7 +2,7 @@ use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
 #[track_caller]
 fn p(s: &str, t: &Vec<ftd::di::DI>) {
-    let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     assert_eq!(t, &ast,)
@@ -10,7 +10,7 @@ fn p(s: &str, t: &Vec<ftd::di::DI>) {
 
 #[track_caller]
 fn f(s: &str, m: &str) {
-    let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo");
     match ast {
         Ok(r) => panic!("expected failure, found: {:?}", r),

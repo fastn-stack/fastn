@@ -33,7 +33,7 @@ pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
 }
 
 pub(crate) fn get_js_and_fields_from_headers(
-    headers: &ftd::p11::Headers,
+    headers: &ftd::p1::Headers,
     doc_id: &str,
 ) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
     let mut fields: Vec<ftd::ast::Argument> = Default::default();
@@ -53,7 +53,7 @@ pub(crate) fn get_js_and_fields_from_headers(
 }
 
 pub(crate) fn get_css_and_fields_from_headers(
-    headers: &ftd::p11::Headers,
+    headers: &ftd::p1::Headers,
     doc_id: &str,
 ) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
     let mut fields: Vec<ftd::ast::Argument> = Default::default();
