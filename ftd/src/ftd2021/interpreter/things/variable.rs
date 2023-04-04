@@ -1,7 +1,9 @@
+use crate::ftd2021;
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct Variable {
     pub name: String,
-    pub value: ftd::interpreter::PropertyValue,
+    pub value: ftd2021::interpreter::PropertyValue,
     pub conditions: Vec<ConditionalValue>,
     pub flags: VariableFlags,
 }
@@ -10,10 +12,10 @@ impl Variable {
     pub(crate) fn from_p1_section(
         s: &ftd::p11::Section,
         doc_id: &str,
-    ) -> ftd::interpreter::Result<Variable> {
-        let value = ftd::interpreter::PropertyValue::from_p1_section(s, doc_id)?;
+    ) -> ftd2021::interpreter::Result<Variable> {
+        let value = ftd2021::interpreter::PropertyValue::from_p1_section(s, doc_id)?;
         if !s.headers.find("if").is_empty() {
-            return Err(ftd::interpreter::Error::ParseError {
+            return Err(ftd2021::interpreter::Error::ParseError {
                 message: format!(
                     "`if` can't be present in variable declaration for section: `{}`",
                     s.name
@@ -35,23 +37,23 @@ impl Variable {
         s: &ftd::p11::Section,
         doc_id: &str,
     ) -> ftd::p11::Result<VariableFlags> {
-        let header = match ftd::interpreter::PropertyValue::for_header_with_kind(
+        let header = match ftd2021::interpreter::PropertyValue::for_header_with_kind(
             s,
             doc_id,
             ALWAYS_INCLUDE,
-            &ftd::interpreter::KindData::boolean(),
+            &ftd2021::interpreter::KindData::boolean(),
         ) {
             Ok(val) => val,
             _ => return Ok(VariableFlags::default()),
         };
 
         match header {
-            ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Boolean { value },
+            ftd2021::interpreter::PropertyValue::Value {
+                value: ftd2021::interpreter::Value::Boolean { value },
             } => Ok(VariableFlags {
                 always_include: Some(value),
             }),
-            ftd::interpreter::PropertyValue::Reference { .. } => unimplemented!(),
+            ftd2021::interpreter::PropertyValue::Reference { .. } => unimplemented!(),
             t => Err(ftd::p11::Error::ParseError {
                 message: format!("Expected boolean found: {:?}", t),
                 doc_id: doc_id.to_string(),
@@ -63,8 +65,8 @@ impl Variable {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ConditionalValue {
-    pub expression: ftd::interpreter::Boolean,
-    pub value: ftd::interpreter::PropertyValue,
+    pub expression: ftd2021::interpreter::Boolean,
+    pub value: ftd2021::interpreter::PropertyValue,
 }
 
 #[derive(Debug, PartialEq, Clone, Default)]
@@ -76,8 +78,10 @@ pub const ALWAYS_INCLUDE: &str = "$always-include$";
 
 #[cfg(test)]
 mod test {
+    use crate::ftd2021;
+
     #[track_caller]
-    fn p(s: &str, t: ftd::interpreter::Variable) {
+    fn p(s: &str, t: ftd2021::interpreter::Variable) {
         let section = ftd::p11::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .first()
@@ -124,8 +128,8 @@ mod test {
             "-- integer age: 40",
             super::Variable {
                 name: "age".to_string(),
-                value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Integer { value: 40 },
+                value: ftd2021::interpreter::PropertyValue::Value {
+                    value: ftd2021::interpreter::Value::Integer { value: 40 },
                 },
                 conditions: vec![],
                 flags: Default::default(),
@@ -149,19 +153,19 @@ mod test {
             ),
             super::Variable {
                 name: "ages".to_string(),
-                value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::List {
+                value: ftd2021::interpreter::PropertyValue::Value {
+                    value: ftd2021::interpreter::Value::List {
                         data: vec![
-                            ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::Integer { value: 40 },
+                            ftd2021::interpreter::PropertyValue::Value {
+                                value: ftd2021::interpreter::Value::Integer { value: 40 },
                             },
-                            ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::Integer { value: 50 },
+                            ftd2021::interpreter::PropertyValue::Value {
+                                value: ftd2021::interpreter::Value::Integer { value: 50 },
                             },
                         ],
-                        kind: ftd::interpreter::KindData {
-                            kind: ftd::interpreter::Kind::List {
-                                kind: Box::new(ftd::interpreter::Kind::Integer),
+                        kind: ftd2021::interpreter::KindData {
+                            kind: ftd2021::interpreter::Kind::List {
+                                kind: Box::new(ftd2021::interpreter::Kind::Integer),
                             },
                             caption: false,
                             body: false,
@@ -194,11 +198,11 @@ mod test {
             "-- optional integer age: 40",
             super::Variable {
                 name: "age".to_string(),
-                value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Optional {
-                        data: Box::new(Some(ftd::interpreter::Value::Integer { value: 40 })),
-                        kind: ftd::interpreter::KindData {
-                            kind: ftd::interpreter::Kind::Integer,
+                value: ftd2021::interpreter::PropertyValue::Value {
+                    value: ftd2021::interpreter::Value::Optional {
+                        data: Box::new(Some(ftd2021::interpreter::Value::Integer { value: 40 })),
+                        kind: ftd2021::interpreter::KindData {
+                            kind: ftd2021::interpreter::Kind::Integer,
                             caption: false,
                             body: false,
                         },
@@ -213,11 +217,11 @@ mod test {
             "-- optional integer age: ",
             super::Variable {
                 name: "age".to_string(),
-                value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Optional {
+                value: ftd2021::interpreter::PropertyValue::Value {
+                    value: ftd2021::interpreter::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::interpreter::KindData {
-                            kind: ftd::interpreter::Kind::Integer,
+                        kind: ftd2021::interpreter::KindData {
+                            kind: ftd2021::interpreter::Kind::Integer,
                             caption: false,
                             body: false,
                         },

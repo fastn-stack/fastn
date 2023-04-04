@@ -1,7 +1,7 @@
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
-    pub bag: ftd::Map<ftd::interpreter::Thing>,
+    pub bag: ftd::Map<ftd::ftd2021::interpreter::Thing>,
     pub document_stack: Vec<ParsedDocument>,
     pub parsed_libs: ftd::Map<Vec<String>>,
 }
@@ -15,7 +15,7 @@ impl InterpreterState {
         }
     }
 
-    fn continue_(mut self) -> ftd::interpreter::Result<Interpreter> {
+    fn continue_(mut self) -> ftd::ftd2021::interpreter::Result<Interpreter> {
         if self.document_stack.is_empty() {
             panic!()
         }
@@ -58,7 +58,7 @@ impl InterpreterState {
         while let Some(_p1) = parsed_document.sections.last_mut() {
             // StuckOnForeignVariable
 
-            let doc = ftd::interpreter::TDoc {
+            let doc = ftd::ftd2021::interpreter::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
                 bag: &self.bag,
@@ -68,10 +68,12 @@ impl InterpreterState {
 
             let p1 = parsed_document.sections.pop().unwrap();
 
-            let variable = ftd::interpreter::Variable::from_p1_section(&p1, doc.name)?;
+            let variable = ftd::ftd2021::interpreter::Variable::from_p1_section(&p1, doc.name)?;
             let variable_name = doc.resolve_name(variable.name.as_str());
-            self.bag
-                .insert(variable_name, ftd::interpreter::Thing::Variable(variable));
+            self.bag.insert(
+                variable_name,
+                ftd::ftd2021::interpreter::Thing::Variable(variable),
+            );
         }
 
         let document = Document {
@@ -88,7 +90,7 @@ impl InterpreterState {
         mut self,
         id: &str,
         source: &str,
-    ) -> ftd::interpreter::Result<Interpreter> {
+    ) -> ftd::ftd2021::interpreter::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
     }
@@ -105,15 +107,15 @@ impl InterpreterState {
 
     fn process_imports(
         top: &mut ParsedDocument,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
-    ) -> ftd::interpreter::Result<Option<String>> {
+        bag: &ftd::Map<ftd::ftd2021::interpreter::Thing>,
+    ) -> ftd::ftd2021::interpreter::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
             if top.sections[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
-            let (library_name, alias) = ftd::interpreter::utils::parse_import(
+            let (library_name, alias) = ftd::ftd2021::interpreter::utils::parse_import(
                 &top.sections[iteration_index]
                     .caption
                     .as_ref()
@@ -138,7 +140,7 @@ impl InterpreterState {
     }
 }
 
-pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter> {
+pub fn interpret(id: &str, source: &str) -> ftd::ftd2021::interpreter::Result<Interpreter> {
     let mut s = InterpreterState::new(id.to_string());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
@@ -167,7 +169,7 @@ pub struct ParsedDocument {
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> ftd::interpreter::Result<ParsedDocument> {
+    fn parse(id: &str, source: &str) -> ftd::ftd2021::interpreter::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
             sections: ftd::p11::parse(source, id)?,
@@ -225,7 +227,7 @@ pub fn default_aliases() -> ftd::Map<String> {
 
 #[derive(Debug, Default, PartialEq)]
 pub struct Document {
-    pub data: ftd::Map<ftd::interpreter::Thing>,
+    pub data: ftd::Map<ftd::ftd2021::interpreter::Thing>,
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub aliases: ftd::Map<String>,

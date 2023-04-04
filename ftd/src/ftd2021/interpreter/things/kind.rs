@@ -57,12 +57,12 @@ impl KindData {
         str_kind: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<KindData> {
+    ) -> ftd::ftd2021::interpreter::Result<KindData> {
         use itertools::Itertools;
 
         let mut s = str_kind.split_whitespace().join(" ");
         if s.is_empty() {
-            return Err(ftd::interpreter::utils::invalid_kind_error(
+            return Err(ftd::ftd2021::interpreter::utils::invalid_kind_error(
                 str_kind,
                 doc_id,
                 line_number,
@@ -72,7 +72,7 @@ impl KindData {
         let optional = check_for_optional(&mut s);
 
         if s.is_empty() {
-            return Err(ftd::interpreter::utils::invalid_kind_error(
+            return Err(ftd::ftd2021::interpreter::utils::invalid_kind_error(
                 str_kind,
                 doc_id,
                 line_number,
@@ -83,7 +83,7 @@ impl KindData {
 
         if s.is_empty() {
             if !(caption || body) {
-                return Err(ftd::interpreter::utils::invalid_kind_error(
+                return Err(ftd::ftd2021::interpreter::utils::invalid_kind_error(
                     str_kind,
                     doc_id,
                     line_number,
@@ -105,7 +105,7 @@ impl KindData {
             Some(kind) => kind,
             _ if caption || body => Kind::String,
             _ => {
-                return Err(ftd::interpreter::utils::invalid_kind_error(
+                return Err(ftd::ftd2021::interpreter::utils::invalid_kind_error(
                     str_kind,
                     doc_id,
                     line_number,

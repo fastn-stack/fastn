@@ -2,11 +2,11 @@ pub(crate) fn invalid_kind_error<S>(
     message: S,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter::Error
+) -> ftd::ftd2021::interpreter::Error
 where
     S: Into<String>,
 {
-    ftd::interpreter::Error::InvalidKind {
+    ftd::ftd2021::interpreter::Error::InvalidKind {
         message: message.into(),
         doc_id: doc_id.to_string(),
         line_number,
@@ -17,11 +17,11 @@ pub fn parse_import(
     c: &Option<String>,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter::Result<(String, String)> {
+) -> ftd::ftd2021::interpreter::Result<(String, String)> {
     let v = match c {
         Some(v) => v.trim(),
         None => {
-            return Err(ftd::interpreter::Error::ParseError {
+            return Err(ftd::ftd2021::interpreter::Error::ParseError {
                 message: "caption is missing in import statement".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -33,7 +33,7 @@ pub fn parse_import(
         let mut parts = v.splitn(2, " as ");
         return match (parts.next(), parts.next()) {
             (Some(n), Some(a)) => Ok((n.to_string(), a.to_string())),
-            _ => Err(ftd::interpreter::Error::ParseError {
+            _ => Err(ftd::ftd2021::interpreter::Error::ParseError {
                 message: "invalid use of keyword as in import statement".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -45,7 +45,7 @@ pub fn parse_import(
         let mut parts = v.rsplitn(2, '/');
         return match (parts.next(), parts.next()) {
             (Some(t), Some(_)) => Ok((v.to_string(), t.to_string())),
-            _ => Err(ftd::interpreter::Error::ParseError {
+            _ => Err(ftd::ftd2021::interpreter::Error::ParseError {
                 message: "doc id must contain /".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -64,7 +64,7 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
     if name.contains('#') {
         return name.to_string();
     }
-    match ftd::interpreter::utils::split_module(name) {
+    match ftd::ftd2021::interpreter::utils::split_module(name) {
         (Some(m), v, None) => match aliases.get(m) {
             Some(m) => format!("{}#{}", m, v),
             None => format!("{}#{}.{}", doc_name, m, v),
