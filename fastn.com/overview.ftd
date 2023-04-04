@@ -51,6 +51,9 @@ you can also write multiline messages easily!
 
 no quotes. and **markdown** is *supported*.
 
+-- ds.markdown:
+
+Learn more about [`ftd` Programming Language](/ftd/).
 
 
 -- ds.h1: There are a lot of ready made `ftd` components available today

@@ -37,6 +37,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 ## Learn: /overview/
 
 - Overview: /overview/
+- `ftd` Programming Language: /ftd/
+- Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
 - Install `fastn`: /install/
   document: author/how-to/install.ftd
   - On MacOS/Linux: /macos/
@@ -92,8 +94,12 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Best Practices: /best-practices/
 - `ftd p1` grammar: /ftd/p1-grammar/
 
-## Fontend: /ftd/ui/
+## Fontend: /frontend/
 
+- Overview 🚧: /frontend/
+- Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
+- Design System 🚧: /design-system/
+  document: frontend/design-system.ftd
 - Data Modelling: /ftd/data-modelling/
   - Variables: /ftd/variables/
   - Built-in Types: /ftd/built-in-types/
