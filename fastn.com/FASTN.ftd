@@ -104,8 +104,6 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Data Modelling: /ftd/data-modelling/
   - Variables: /ftd/variables/
   - Built-in Types: /ftd/built-in-types/
-  - Built-in Variables: /built-in-variables/
-    document: ftd/built-in-variables.ftd
   - `record`: /ftd/record/
   - `or-type`: /ftd/or-type/
   - `list`: /ftd/list/
@@ -125,11 +123,13 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Text Attributes 🚧: /ftd/text-attributes/
 - `import`: /import/
   document: ftd-host/import.ftd
+- Built-in Variables: /built-in-variables/
+  document: ftd/built-in-variables.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/
   document: ftd-host/processor.ftd
-  - `http`: http/
+  - `http`: /http/
     document: ftd-host/http.ftd
 - `foreign variables`: /foreign-variable/
   document: ftd-host/foreign-variable.ftd

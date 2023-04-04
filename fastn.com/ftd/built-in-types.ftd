@@ -44,6 +44,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
   - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
   - [`ftd.length`](ftd/built-in-types/#ftd-length)
+  - [`ftd.length-pair`](ftd/built-in-types/#ftd-length-pair)
   - [`ftd.loading`](ftd/built-in-types/#ftd-loading)
   - [`ftd.overflow`](ftd/built-in-types/#ftd-overflow)
   - [`ftd.region`](ftd/built-in-types/#ftd-region)
@@ -1029,7 +1030,7 @@ lang: ftd
 \-- ftd.text: Hello
 width.fixed.percent: 50
 height.fixed.px: 300
-margin.px: 2rem
+margin.rem: 2
 padding.calc: 100% - 80px
 
 -- ds.markdown:
@@ -1044,7 +1045,17 @@ of the root element, and a padding calculated using the expression 100% - 80px.
 
 
 
+-- ds.h2: `ftd.length-pair`
 
+`ftd.length-pair` is used to store two lengths, `.x` and `.y`, usually used
+for representing screen coordinates.
+
+-- ds.code:
+lang: ftd
+
+\-- record length-pair:
+ftd.length x:
+ftd.length y:
 
 
 
