@@ -9,10 +9,11 @@ consists of command line tool `fastn`.
 To get started, you need to install `fastn`. Refer to the [install
 `fastn`](install/) page to learn how to install `fastn`.
 
-
 -- ds.image:
 src: $fastn-assets.files.images.create-serve-fastn.gif
 width: fill-container
+
+
 
 
 -- ds.h1: Create a package
@@ -21,6 +22,8 @@ There are two ways to create a fastn package:
 
 -- utils.switcher:
 s: $create
+
+
 
 
 -- ds.h1: Serving the package
@@ -57,25 +60,14 @@ After starting the HTTP server, open any web browser and type
 "http://127.0.0.1:8000" into the URL bar. Voila! You can now view your "hello
 world" page in the browser.
 
-
 -- ds.image:
 src: $fastn-assets.files.images.hello-world-page.png
 width: fill-container
-
-
 
 -- package-file-info:
 
 
 -- end: my-ds.page
-
-
-
-
-
-
-
-
 
 
 
@@ -121,10 +113,8 @@ fastn create-package hello-fastn
 ;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
 
 The above command will create a folder named `hello-fastn` containing two files:
-[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and
-[`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of
-this folder in a text editor such as
-([SublimeText](https://www.sublimetext.com/3)).
+[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and [`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of this folder in
+a text editor such as [SublimeText](https://www.sublimetext.com/3).
 
 
 
