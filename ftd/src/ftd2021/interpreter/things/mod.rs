@@ -5,5 +5,5 @@ pub(crate) mod variable;
 
 #[derive(Debug, PartialEq)]
 pub enum Thing {
-    Variable(ftd::interpreter::Variable),
+    Variable(ftd::ftd2021::interpreter::Variable),
 }
