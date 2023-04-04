@@ -11,9 +11,12 @@ impl Record {
         section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::di::Result<Record> {
+    pub(crate) fn from_p1(
+        section: &ftd::p1::Section,
+        doc_id: &str,
+    ) -> ftd::ftd2021::di::Result<Record> {
         if !Self::is_record(section) {
-            return ftd::di::parse_error(
+            return ftd::ftd2021::di::parse_error(
                 format!("Section is not record section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
@@ -51,7 +54,10 @@ pub struct Field {
 }
 
 impl Field {
-    pub(crate) fn from_header(header: &ftd::p1::Header, doc_id: &str) -> ftd::di::Result<Field> {
+    pub(crate) fn from_header(
+        header: &ftd::p1::Header,
+        doc_id: &str,
+    ) -> ftd::ftd2021::di::Result<Field> {
         match header {
             ftd::p1::Header::KV(ftd::p1::header::KV {
                 line_number,
@@ -61,7 +67,7 @@ impl Field {
                 condition,
             }) => {
                 if condition.is_some() {
-                    return ftd::di::parse_error(
+                    return ftd::ftd2021::di::parse_error(
                         format!(
                             "Record field can't have condition: `{:?}` `{:?}`",
                             key, condition
@@ -77,7 +83,7 @@ impl Field {
                         value: value.to_owned(),
                     })
                 } else {
-                    ftd::di::parse_error(
+                    ftd::ftd2021::di::parse_error(
                         format!("Can't find kind for record field: `{:?}`", key),
                         doc_id,
                         *line_number,
@@ -101,7 +107,7 @@ impl Field {
 pub(crate) fn get_fields_from_headers(
     headers: &ftd::p1::Headers,
     doc_id: &str,
-) -> ftd::di::Result<Vec<Field>> {
+) -> ftd::ftd2021::di::Result<Vec<Field>> {
     let mut fields: Vec<Field> = Default::default();
     for header in headers.0.iter() {
         fields.push(Field::from_header(header, doc_id)?);

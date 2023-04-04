@@ -7,6 +7,7 @@ pub mod code;
 pub mod component;
 pub mod condition;
 pub mod constants;
+mod di;
 mod dnode;
 pub mod event;
 mod execute_doc;
