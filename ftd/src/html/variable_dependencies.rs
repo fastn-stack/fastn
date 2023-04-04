@@ -54,7 +54,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             name: &str,
             doc: &ftd::interpreter::TDoc,
         ) {
-            let value = ftd::html1::utils::dependencies_from_property_value(value, doc);
+            let value = ftd::html::utils::dependencies_from_property_value(value, doc);
             for v in value {
                 result.insert(v, name.to_string());
             }
@@ -116,7 +116,7 @@ impl<'a> VariableDependencyGenerator<'a> {
         &self,
         var_dependencies: &ftd::VecMap<String>,
         test: bool,
-    ) -> ftd::html1::Result<String> {
+    ) -> ftd::html::Result<String> {
         let (set_function, mut dep) = self.js_set_functions(var_dependencies, test);
         let mut js_resolve_functions = vec![];
         if !set_function.trim().is_empty() {
@@ -208,7 +208,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                      }};
                 "},
                     id = self.id,
-                    key = ftd::html1::utils::js_reference_name(key.as_str()),
+                    key = ftd::html::utils::js_reference_name(key.as_str()),
                     dependencies = v.join("\n"),
                     node_changes_calls = node_changes_calls.join("\n"),
                 ));
@@ -218,7 +218,7 @@ impl<'a> VariableDependencyGenerator<'a> {
         (result_1.join("\n"), result_2.into_iter().collect())
     }
 
-    fn js_resolve_function(&self, key: &str) -> ftd::html1::Result<String> {
+    fn js_resolve_function(&self, key: &str) -> ftd::html::Result<String> {
         let variable = match self.doc.get_variable(key, 0) {
             Ok(variable) if !variable.conditional_value.is_empty() => variable,
             _ => return Ok("".to_string()),
@@ -227,9 +227,9 @@ impl<'a> VariableDependencyGenerator<'a> {
         let mut expressions = vec![];
         for condition in variable.conditional_value {
             let condition_str =
-                ftd::html1::utils::get_condition_string_(&condition.condition, false);
+                ftd::html::utils::get_condition_string_(&condition.condition, false);
             if let Some(value_string) =
-                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                ftd::html::utils::get_formatted_dep_string_from_property_value(
                     self.id,
                     self.doc,
                     &condition.value,
@@ -246,7 +246,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             }
         }
 
-        if let Some(value_string) = ftd::html1::utils::get_formatted_dep_string_from_property_value(
+        if let Some(value_string) = ftd::html::utils::get_formatted_dep_string_from_property_value(
             self.id,
             self.doc,
             &variable.value,
@@ -260,7 +260,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             );
             expressions.push((None, value));
         }
-        let value = ftd::html1::utils::js_expression_from_list(expressions, None, "");
+        let value = ftd::html::utils::js_expression_from_list(expressions, None, "");
         Ok(format!(
             indoc::indoc! {"
                  window.resolve_value_{id}[\"{key}\"] = function(data) {{

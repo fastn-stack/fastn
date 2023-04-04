@@ -24,7 +24,7 @@ pub mod ast;
 pub mod evalexpr;
 pub mod executor;
 pub mod ftd2021;
-pub mod html1;
+pub mod html;
 pub mod interpreter;
 pub mod node;
 pub mod p1;

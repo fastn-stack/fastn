@@ -81,15 +81,15 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main", false)
+    let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", false)
         .unwrap_or_else(|e| panic!("{:?}", e));
     let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
-    let html_str = ftd::html1::utils::trim_all_lines(
+    let html_str = ftd::html::utils::trim_all_lines(
         std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
             .replace(
                 "__ftd_meta_data__",
-                ftd::html1::utils::get_meta_data(&html_ui.html_data).as_str(),
+                ftd::html::utils::get_meta_data(&html_ui.html_data).as_str(),
             )
             .replace(
                 "__ftd_doc_title__",
