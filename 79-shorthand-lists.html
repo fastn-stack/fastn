@@ -775,11 +775,13 @@ change_value(function_arguments, ftd_data[id], id);
 }
 }
 exports.handle_event = function (evt, id, event, obj) {
+window.ftd.utils.reset_full_height();
 console_log(id, event);
 let actions = JSON.parse(event);
 for (const action in actions) {
 handle_event(evt, id, actions[action], obj);
 }
+window.ftd.utils.set_full_height();
 };
 exports.handle_function = function (evt, id, event, obj) {
 console_log(id, event);
@@ -1353,6 +1355,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", upd
 }
 initialise_dark_mode();
 initialise_device();
+window.ftd.utils.set_full_height();
 // update_markdown_colors();
 };
 function console_log(...message) {
@@ -1529,6 +1532,13 @@ console.error('Fallback: Oops, unable to copy', err);
 }
 document.body.removeChild(textArea);
 }
+window.ftd.utils = {};
+window.ftd.utils.set_full_height = function () {
+document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+};
+window.ftd.utils.reset_full_height = function () {
+document.body.style.height = `100%`;
+};
 
 
 
@@ -1629,13 +1639,13 @@ set_data_value(data, "foo#ages", new_value);
 
 window.ftd.call_mutable_value_changes("foo#ages", "main");
 window.ftd.call_immutable_value_changes("foo#ages", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["6:main__text"]){window.node_change_main["6:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["5:main__text"]){window.node_change_main["5:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["4:main__text"]){window.node_change_main["4:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["5:main__text"]){window.node_change_main["5:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["6:main__text"]){window.node_change_main["6:main__text"](data);
 }
 };
 
@@ -1648,11 +1658,11 @@ set_data_value(data, "foo#new-persons", new_value);
 
 window.ftd.call_mutable_value_changes("foo#new-persons", "main");
 window.ftd.call_immutable_value_changes("foo#new-persons", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
 };
 

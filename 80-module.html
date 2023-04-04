@@ -771,11 +771,13 @@ change_value(function_arguments, ftd_data[id], id);
 }
 }
 exports.handle_event = function (evt, id, event, obj) {
+window.ftd.utils.reset_full_height();
 console_log(id, event);
 let actions = JSON.parse(event);
 for (const action in actions) {
 handle_event(evt, id, actions[action], obj);
 }
+window.ftd.utils.set_full_height();
 };
 exports.handle_function = function (evt, id, event, obj) {
 console_log(id, event);
@@ -1349,6 +1351,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", upd
 }
 initialise_dark_mode();
 initialise_device();
+window.ftd.utils.set_full_height();
 // update_markdown_colors();
 };
 function console_log(...message) {
@@ -1525,6 +1528,13 @@ console.error('Fallback: Oops, unable to copy', err);
 }
 document.body.removeChild(textArea);
 }
+window.ftd.utils = {};
+window.ftd.utils.set_full_height = function () {
+document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
+};
+window.ftd.utils.reset_full_height = function () {
+document.body.style.height = `100%`;
+};
 
 
 
@@ -1666,11 +1676,11 @@ set_data_value(data, "25-expander#box:open:0,0", new_value);
 
 window.ftd.call_mutable_value_changes("25-expander#box:open:0,0", "main");
 window.ftd.call_immutable_value_changes("25-expander#box:open:0,0", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,2:main__display"]){window.node_change_main["0,0,0,2:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__display"]){window.node_change_main["0,0,0,1:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1:main__display"]){window.node_change_main["0,0,1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__display"]){window.node_change_main["0,0,0,1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,2:main__display"]){window.node_change_main["0,0,0,2:main__display"](data);
 }
 };
 
@@ -1709,11 +1719,11 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
 }
