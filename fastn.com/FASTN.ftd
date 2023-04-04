@@ -38,7 +38,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 - Overview: /overview/
 - `ftd` Programming Language: /ftd/
-- Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
+- Why?:
+  - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
 - Install `fastn`: /install/
   document: author/how-to/install.ftd
   - On MacOS/Linux: /macos/

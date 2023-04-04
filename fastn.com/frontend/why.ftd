@@ -1,10 +1,14 @@
 -- my-ds.page: Why Use `fastn` for Your Next Front-end?
 
+Instead of React/Angular or JavaScript, you can use `fastn` as the frontend of
+your next webapp or website.
+
 -- ds.h1: Easy To Learn
 
 `fastn` is designed to be easy to learn for people who have very little to no
 prior frontend development experience. Backend developers, designers can easily
 learn it for building their web projects.
+
 
 -- ds.code:
 lang: ftd
@@ -18,6 +22,30 @@ logo: $fastn-assets.files.images.logo-fifthtry.svg
 
 The web has lost some of the exuberance from the
 early 2000s, and it makes me a little sad.
+
+-- ds.markdown:
+
+The language to author content and the language to build the components is the
+same and one can gradually learn ftd by first only using ready made components,
+and then slowly learning to build components.
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
+
+\-- end: toggle-text
 
 
 -- ds.h1: Easy To Author - Great For Content Sites

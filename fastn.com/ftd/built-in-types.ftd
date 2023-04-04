@@ -30,34 +30,34 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.ui`](ftd/built-in-types/#ftd-ui)
   - [`children`](ftd/built-in-types/#children)
 - [Derived Types](ftd/built-in-types/#derived-types)
-  - [`ftd.background`](ftd/built-in-types/#ftd-background)
-  - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
-  - [`ftd.background-repeat`](ftd/built-in-types/#ftd-background-repeat)
-  - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
-  - [`ftd.background-size`](ftd/built-in-types/#ftd-background-size)
-  - [`ftd.color`](ftd/built-in-types/#ftd-color)
-  - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
-  - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
-  - [`ftd.length`](ftd/built-in-types/#ftd-length)
-  - [`ftd.type`](ftd/built-in-types/#ftd-type)
-  - [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
   - [`ftd.align-self`](ftd/built-in-types/#ftd-align-self)
   - [`ftd.align`](ftd/built-in-types/#ftd-align)
-  - [`ftd.text-align`](ftd/built-in-types/#ftd-text-align)
-  - [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
   - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
-  - [`ftd.resize`](ftd/built-in-types/#ftd-resize)
-  - [`ftd.overflow`](ftd/built-in-types/#ftd-overflow)
-  - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
-  - [`ftd.region`](ftd/built-in-types/#ftd-region)
-  - [`ftd.white-space`](ftd/built-in-types/#ftd-white-space)
-  - [`ftd.text-transform`](ftd/built-in-types/#ftd-text-transform)
+  - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
+  - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
+  - [`ftd.background-repeat`](ftd/built-in-types/#ftd-background-repeat)
+  - [`ftd.background-size`](ftd/built-in-types/#ftd-background-size)
+  - [`ftd.background`](ftd/built-in-types/#ftd-background)
   - [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
+  - [`ftd.color`](ftd/built-in-types/#ftd-color)
+  - [`ftd.color-scheme`](ftd/built-in-types/#ftd-color-scheme)
+  - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
+  - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
+  - [`ftd.length`](ftd/built-in-types/#ftd-length)
   - [`ftd.loading`](ftd/built-in-types/#ftd-loading)
-  - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
-  - [`ftd.type`](ftd/built-in-types/#ftd-type)
-  - [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
+  - [`ftd.overflow`](ftd/built-in-types/#ftd-overflow)
+  - [`ftd.region`](ftd/built-in-types/#ftd-region)
+  - [`ftd.resize`](ftd/built-in-types/#ftd-resize)
+  - [`ftd.resizing`](ftd/built-in-types/#ftd-resizing)
+  - [`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type)
   - [`ftd.shadow`](ftd/built-in-types/#ftd-shadow)
+  - [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
+  - [`ftd.text-align`](ftd/built-in-types/#ftd-text-align)
+  - [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type)
+  - [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
+  - [`ftd.text-transform`](ftd/built-in-types/#ftd-text-transform)
+  - [`ftd.type`](ftd/built-in-types/#ftd-type)
+  - [`ftd.white-space`](ftd/built-in-types/#ftd-white-space)
 
 
 
@@ -284,6 +284,87 @@ a single component of type `ftd.text` with text property value as `Hello`.
 -- uis.0:
 -- end: ds.output
 
+
+-- ds.h2: `ftd.color-scheme`
+
+`ftd.color-scheme` can be passed to `ftd.document`, `ftd.row` or `ftd.column`
+components, and is inherited by children. Anywhere you can use
+`$inherited.colors` variable of type `ftd.color-scheme` to access colors.
+
+-- ds.code: `ftd.color-scheme`
+lang: ftd
+
+\-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+-- ds.code: `ftd.background-colors`
+lang: ftd
+
+\-- record background-colors:
+color base:
+color step-1:
+color step-2:
+color overlay:
+color code:
+
+-- ds.code: `ftd.cta-colors`
+lang: ftd
+
+\-- record cta-colors:
+color base:
+color hover:
+color pressed:
+color disabled:
+color focused:
+color border:
+color text:
+
+-- ds.code: `ftd.pst`
+lang: ftd
+
+\-- record pst:
+color primary:
+color secondary:
+color tertiary:
+
+-- ds.code: `ftd.btb`
+lang: ftd
+
+\-- record: btb
+color base:
+color text:
+color border:
+
+-- ds.code: `ftd.custom`
+lang: ftd
+
+\-- record custom:
+color one:
+color two:
+color three:
+color four:
+color five:
+color six:
+color seven:
+color eight:
+color nine:
+color ten:
 
 -- ds.h2: `children`
 
