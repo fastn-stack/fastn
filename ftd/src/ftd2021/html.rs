@@ -386,7 +386,7 @@ impl ftd::Scene {
                             ..Default::default()
                         };
                         n.attrs.insert(s("src"), img.light.to_string());
-                        n.attrs.insert(s("alt"), escape("Scene"));
+                        n.attrs.insert(s("alt"), ftd::html::escape("Scene"));
                         n
                     } else {
                         Node {
@@ -827,7 +827,7 @@ impl ftd::Collector {
             let current_styles = v
                 .styles
                 .iter()
-                .map(|(k, v)| format!("{}: {}", *k, crate::ftd2021::html::escape(v))) // TODO: escape needed?
+                .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
                 .collect::<Vec<String>>()
                 .join(";\n");
             if let Some(ref prefix) = v.prefix {
@@ -1023,8 +1023,10 @@ impl ftd::Image {
             Some(_) => {
                 let mut n = Node::from_common("a", &self.common, doc_id, collector);
                 if let Some(ref id) = self.common.data_id {
-                    n.attrs
-                        .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+                    n.attrs.insert(
+                        s("data-id"),
+                        ftd::html::escape(format!("{}:parent", id).as_str()),
+                    );
                 }
                 let mut img = update_img(
                     self,
@@ -1047,11 +1049,12 @@ impl ftd::Image {
         fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
             n.attrs.insert(s("loading"), s(img.loading.to_html()));
             if let Some(ref id) = img.common.data_id {
-                n.attrs.insert(s("data-id"), escape(id));
+                n.attrs.insert(s("data-id"), ftd::html::escape(id));
             }
-            n.attrs.insert(s("src"), escape(img.src.light.as_str()));
+            n.attrs
+                .insert(s("src"), ftd::html::escape(img.src.light.as_str()));
             if let Some(ref description) = img.description {
-                n.attrs.insert(s("alt"), escape(description));
+                n.attrs.insert(s("alt"), ftd::html::escape(description));
             }
 
             if img.crop {
@@ -1070,7 +1073,8 @@ impl ftd::Image {
 impl ftd::IFrame {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let mut n = Node::from_common("iframe", &self.common, doc_id, collector);
-        n.attrs.insert(s("src"), escape(self.src.as_str()));
+        n.attrs
+            .insert(s("src"), ftd::html::escape(self.src.as_str()));
         n.attrs.insert(s("allow"), s("fullscreen"));
         n.attrs.insert(s("allowfullscreen"), s("allowfullscreen"));
         n
@@ -1181,21 +1185,21 @@ impl ftd::Input {
         }
 
         if let Some(ref p) = self.placeholder {
-            n.attrs.insert(s("placeholder"), escape(p));
+            n.attrs.insert(s("placeholder"), ftd::html::escape(p));
         }
         if let Some(ref type_) = self.type_ {
-            n.attrs.insert(s("type"), escape(type_));
+            n.attrs.insert(s("type"), ftd::html::escape(type_));
         }
         if let Some(ref p) = self.value {
             if self.multiline {
                 n.text = Some(p.to_string());
             } else {
-                n.attrs.insert(s("value"), escape(p));
+                n.attrs.insert(s("value"), ftd::html::escape(p));
             }
         }
         // add defaultValue attribute if passed
         if let Some(ref def_value) = self.default_value {
-            n.attrs.insert(s("data-dv"), escape(def_value));
+            n.attrs.insert(s("data-dv"), ftd::html::escape(def_value));
         }
         n
     }
@@ -1563,26 +1567,26 @@ impl ftd::Common {
     fn attrs(&self) -> ftd::Map<String> {
         let mut d: ftd::Map<String> = Default::default();
         if let Some(ref id) = self.data_id {
-            d.insert(s("data-id"), escape(id));
+            d.insert(s("data-id"), ftd::html::escape(id));
         }
         if let Some(ref id) = self.id {
-            d.insert(s("id"), escape(id));
+            d.insert(s("id"), ftd::html::escape(id));
         }
         // TODO(move-to-ftd): the link should be escaped
         if let Some(ref link) = self.link {
             d.insert(s("href"), link.to_string());
         }
         if let Some(ref title) = self.title {
-            d.insert(s("title"), escape(title));
+            d.insert(s("title"), ftd::html::escape(title));
         }
         if self.open_in_new_tab {
-            d.insert(s("target"), escape("_blank"));
+            d.insert(s("target"), ftd::html::escape("_blank"));
         }
         if let Some(ref link) = self.submit {
             if cfg!(feature = "realm") {
                 d.insert(
                     s("onclick"),
-                    format!("window.REALM_SUBMIT('{}');", escape(link)),
+                    format!("window.REALM_SUBMIT('{}');", ftd::html::escape(link)),
                 );
             } else {
                 d.insert(s("onclick"), "this.submit()".to_string());
@@ -1631,12 +1635,6 @@ impl ftd::Container {
         let d: Vec<String> = Default::default();
         d
     }
-}
-
-pub fn escape(s: &str) -> String {
-    let s = s.replace('>', "\\u003E");
-    let s = s.replace('<', "\\u003C");
-    s.replace('&', "\\u0026")
 }
 
 fn s(s: &str) -> String {

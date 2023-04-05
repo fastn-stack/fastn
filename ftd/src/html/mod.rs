@@ -14,7 +14,7 @@ mod variable_dependencies;
 pub(crate) use dummy_html::{DummyHtmlGenerator, HelperHtmlGenerator};
 pub use events::Action;
 pub use functions::{ExpressionGenerator, FunctionGenerator};
-pub(crate) use main::RawHtmlGenerator;
+pub(crate) use main::{escape, RawHtmlGenerator};
 pub use main::{HTMLData, HtmlUI};
 pub use variable_dependencies::VariableDependencyGenerator;
 

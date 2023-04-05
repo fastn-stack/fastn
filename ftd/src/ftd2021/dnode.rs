@@ -15,7 +15,7 @@ impl DNode {
     fn attrs_to_html(&self) -> String {
         self.attrs
             .iter()
-            .map(|(k, v)| format!("{}={}", *k, quote(v))) // TODO: escape needed?
+            .map(|(k, v)| format!("{}={}", *k, quote(v)))
             .collect::<Vec<String>>()
             .join(" ")
     }
@@ -27,7 +27,7 @@ impl DNode {
         }
         styles
             .iter()
-            .map(|(k, v)| format!("{}: {}", *k, crate::ftd2021::html::escape(v))) // TODO: escape needed?
+            .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
             .collect::<Vec<String>>()
             .join("; ")
     }
