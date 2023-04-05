@@ -4,6 +4,10 @@ We have a bunch of backward incompatible changes that we want to make when
 create our next edition. Currently we do not have edition support, so before we
 implement these changes we have to add edition support as well.
 
+-- ds.h1: `fastn` is `fastn serve`
+
+PR: https://github.com/fastn-stack/fastn/pull/826.
+
 -- ds.h1: `ftd.device`: `string -> or-type`
 
 We currently use `string` to represent `ftd.device`. Our `or-type` is superior
