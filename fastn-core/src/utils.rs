@@ -55,6 +55,40 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     }
 }
 
+pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> String {
+    use colored::Colorize;
+
+    match value {
+        serde_json::Value::Null => "null".bright_black().to_string(),
+        serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
+        serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
+        serde_json::Value::String(v) => format!("\"{}\"", v).bright_yellow().to_string(),
+        serde_json::Value::Array(v) => {
+            let mut s = String::new();
+            for (_, value) in v.iter().enumerate() {
+                s.push_str(&format!(
+                    "{indent}{value}\n",
+                    indent = "  ".repeat(indent_level as usize),
+                    value = value_to_colored_string(value, indent_level + 1)
+                ));
+            }
+            format!("[\n{}{}]", s, "  ".repeat((indent_level - 1) as usize))
+        }
+        serde_json::Value::Object(v) => {
+            let mut s = String::new();
+            for (key, value) in v {
+                s.push_str(&format!(
+                    "{indent}{i}: {value}\n",
+                    indent = "  ".repeat(indent_level as usize),
+                    i = key.bright_cyan(),
+                    value = value_to_colored_string(value, indent_level + 1)
+                ));
+            }
+            format!("{{\n{}{}}}", s, "  ".repeat((indent_level - 1) as usize))
+        }
+    }
+}
+
 pub fn time(msg: &str) -> Timer {
     Timer {
         start: std::time::Instant::now(),

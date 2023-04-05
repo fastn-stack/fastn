@@ -62,6 +62,10 @@ impl File {
             Self::Image(_) | Self::Static(_) | Self::Markdown(_) | Self::Code(_)
         )
     }
+
+    pub(crate) fn is_ftd(&self) -> bool {
+        matches!(self, Self::Ftd(_))
+    }
 }
 
 #[derive(Debug, Clone)]
