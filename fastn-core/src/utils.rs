@@ -65,26 +65,82 @@ pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> 
         serde_json::Value::String(v) => format!("\"{}\"", v).bright_yellow().to_string(),
         serde_json::Value::Array(v) => {
             let mut s = String::new();
-            for (_, value) in v.iter().enumerate() {
+            for (idx, value) in v.iter().enumerate() {
                 s.push_str(&format!(
-                    "{indent}{value}\n",
+                    "{comma}\n{indent}{value}",
                     indent = "  ".repeat(indent_level as usize),
-                    value = value_to_colored_string(value, indent_level + 1)
+                    value = value_to_colored_string(value, indent_level + 1),
+                    comma = if idx.eq(&0) { "" } else { "," }
                 ));
             }
-            format!("[\n{}{}]", s, "  ".repeat((indent_level - 1) as usize))
+            format!("[{}\n{}]", s, "  ".repeat((indent_level - 1) as usize))
         }
         serde_json::Value::Object(v) => {
             let mut s = String::new();
-            for (key, value) in v {
+            for (idx, (key, value)) in v.iter().enumerate() {
                 s.push_str(&format!(
-                    "{indent}{i}: {value}\n",
+                    "{comma}\n{indent}\"{i}\": {value}",
                     indent = "  ".repeat(indent_level as usize),
                     i = key.bright_cyan(),
-                    value = value_to_colored_string(value, indent_level + 1)
+                    value = value_to_colored_string(value, indent_level + 1),
+                    comma = if idx.eq(&0) { "" } else { "," }
                 ));
             }
-            format!("{{\n{}{}}}", s, "  ".repeat((indent_level - 1) as usize))
+            format!("{{{}\n{}}}", s, "  ".repeat((indent_level - 1) as usize))
+        }
+    }
+}
+
+pub fn value_to_colored_string_without_null(
+    value: &serde_json::Value,
+    indent_level: u32,
+) -> String {
+    use colored::Colorize;
+
+    match value {
+        serde_json::Value::Null => "".to_string(),
+        serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
+        serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
+        serde_json::Value::String(v) => format!("\"{}\"", v).bright_yellow().to_string(),
+        serde_json::Value::Array(v) if v.is_empty() => "".to_string(),
+        serde_json::Value::Array(v) => {
+            let mut s = String::new();
+            let mut is_first = true;
+            for (_, value) in v.iter().enumerate() {
+                let value_string = value_to_colored_string_without_null(value, indent_level + 1);
+                if !value_string.is_empty() {
+                    s.push_str(&format!(
+                        "{comma}\n{indent}{value}",
+                        indent = "  ".repeat(indent_level as usize),
+                        value = value_string,
+                        comma = if is_first { "" } else { "," }
+                    ));
+                    is_first = false;
+                }
+            }
+            if s.is_empty() {
+                "".to_string()
+            } else {
+                format!("[{}\n{}]", s, "  ".repeat((indent_level - 1) as usize))
+            }
+        }
+        serde_json::Value::Object(v) => {
+            let mut s = String::new();
+            let mut is_first = true;
+            for (key, value) in v {
+                let value_string = value_to_colored_string_without_null(value, indent_level + 1);
+                if !value_string.is_empty() {
+                    s.push_str(&format!(
+                        "{comma}\n{indent}\"{i}\": {value}",
+                        indent = "  ".repeat(indent_level as usize),
+                        i = key.bright_cyan(),
+                        value = value_string,
+                        comma = if is_first { "" } else { "," }
+                    ));
+                    is_first = false;
+                }
+            }
+            format!("{{{}\n{}}}", s, "  ".repeat((indent_level - 1) as usize))
         }
     }
 }
