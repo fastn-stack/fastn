@@ -1,24 +1,24 @@
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
+    events: &[ftd::ftd2021::p2::Event],
     reference: Option<String>,
-) -> crate::ftd2021::p1::Result<ftd::Common> {
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let submit = crate::ftd2021::p2::utils::string_optional("submit", properties, doc.name, 0)?;
-    let link = crate::ftd2021::p2::utils::string_optional("link", properties, doc.name, 0)?;
+) -> ftd::ftd2021::p1::Result<ftd::Common> {
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let submit = ftd::ftd2021::p2::utils::string_optional("submit", properties, doc.name, 0)?;
+    let link = ftd::ftd2021::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
-        return crate::ftd2021::p2::utils::e2(
+        return ftd::ftd2021::p2::utils::e2(
             "Cannot have both submit and link together",
             doc.name,
             0,
         );
     }
     let gradient_color_str =
-        crate::ftd2021::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
+        ftd::ftd2021::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
 
     let gradient_colors: Vec<ftd::ColorValue> = match gradient_color_str {
         Some(f) => f
@@ -29,7 +29,7 @@ pub fn common_from_properties(
     };
 
     let anchor = ftd::Anchor::from(
-        crate::ftd2021::p2::utils::string_optional("anchor", properties, doc.name, 0)?,
+        ftd::ftd2021::p2::utils::string_optional("anchor", properties, doc.name, 0)?,
         doc.name,
     )?;
 
@@ -42,12 +42,11 @@ pub fn common_from_properties(
             },
             None => false,
         };
-        let position_inner = match crate::ftd2021::p2::utils::string_optional(
-            "position", properties, doc.name, 0,
-        )? {
-            None => crate::ftd2021::p2::utils::string_optional("align", properties, doc.name, 0)?,
-            Some(v) => Some(v),
-        };
+        let position_inner =
+            match ftd::ftd2021::p2::utils::string_optional("position", properties, doc.name, 0)? {
+                None => ftd::ftd2021::p2::utils::string_optional("align", properties, doc.name, 0)?,
+                Some(v) => Some(v),
+            };
         if let Some(position_inner) = position_inner {
             if let Some(p) = position_inner.strip_prefix("inner ") {
                 position = ftd::Position::from(Some(p.to_string()), doc.name)?;
@@ -75,105 +74,100 @@ pub fn common_from_properties(
     };
 
     Ok(ftd::Common {
-        title: crate::ftd2021::p2::utils::string_optional("title", properties, doc.name, 0)?,
+        title: ftd::ftd2021::p2::utils::string_optional("title", properties, doc.name, 0)?,
         conditional_attribute: Default::default(),
         condition: cond,
         is_not_visible: !is_visible,
         is_dummy: false,
-        events: crate::ftd2021::p2::Event::get_events(0, events, doc)?,
+        events: ftd::ftd2021::p2::Event::get_events(0, events, doc)?,
         reference,
         region: ftd::Region::from(
-            crate::ftd2021::p2::utils::string_optional("region", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("region", properties, doc.name, 0)?,
             doc.name,
         )?,
-        padding: crate::ftd2021::p2::utils::int_optional("padding", properties, doc.name, 0)?,
-        padding_vertical: crate::ftd2021::p2::utils::int_optional(
+        padding: ftd::ftd2021::p2::utils::int_optional("padding", properties, doc.name, 0)?,
+        padding_vertical: ftd::ftd2021::p2::utils::int_optional(
             "padding-vertical",
             properties,
             doc.name,
             0,
         )?,
-        padding_horizontal: crate::ftd2021::p2::utils::int_optional(
+        padding_horizontal: ftd::ftd2021::p2::utils::int_optional(
             "padding-horizontal",
             properties,
             doc.name,
             0,
         )?,
-        classes: crate::ftd2021::p2::utils::string_optional("classes", properties, doc.name, 0)?,
-        padding_left: crate::ftd2021::p2::utils::int_optional(
+        classes: ftd::ftd2021::p2::utils::string_optional("classes", properties, doc.name, 0)?,
+        padding_left: ftd::ftd2021::p2::utils::int_optional(
             "padding-left",
             properties,
             doc.name,
             0,
         )?,
-        padding_right: crate::ftd2021::p2::utils::int_optional(
+        padding_right: ftd::ftd2021::p2::utils::int_optional(
             "padding-right",
             properties,
             doc.name,
             0,
         )?,
-        padding_top: crate::ftd2021::p2::utils::int_optional(
-            "padding-top",
-            properties,
-            doc.name,
-            0,
-        )?,
-        padding_bottom: crate::ftd2021::p2::utils::int_optional(
+        padding_top: ftd::ftd2021::p2::utils::int_optional("padding-top", properties, doc.name, 0)?,
+        padding_bottom: ftd::ftd2021::p2::utils::int_optional(
             "padding-bottom",
             properties,
             doc.name,
             0,
         )?,
-        border_top_radius: crate::ftd2021::p2::utils::int_optional(
+        border_top_radius: ftd::ftd2021::p2::utils::int_optional(
             "border-top-radius",
             properties,
             doc.name,
             0,
         )?,
-        border_bottom_radius: crate::ftd2021::p2::utils::int_optional(
+        border_bottom_radius: ftd::ftd2021::p2::utils::int_optional(
             "border-bottom-radius",
             properties,
             doc.name,
             0,
         )?,
-        border_left_radius: crate::ftd2021::p2::utils::int_optional(
+        border_left_radius: ftd::ftd2021::p2::utils::int_optional(
             "border-left-radius",
             properties,
             doc.name,
             0,
         )?,
-        border_right_radius: crate::ftd2021::p2::utils::int_optional(
+        border_right_radius: ftd::ftd2021::p2::utils::int_optional(
             "border-right-radius",
             properties,
             doc.name,
             0,
         )?,
         width: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("width", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("width", properties, doc.name, 0)?,
             doc.name,
         )?,
         min_width: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("min-width", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("min-width", properties, doc.name, 0)?,
             doc.name,
         )?,
         max_width: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("max-width", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("max-width", properties, doc.name, 0)?,
             doc.name,
         )?,
         height: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("height", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("height", properties, doc.name, 0)?,
             doc.name,
         )?,
         min_height: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("min-height", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("min-height", properties, doc.name, 0)?,
             doc.name,
         )?,
         max_height: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("max-height", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("max-height", properties, doc.name, 0)?,
             doc.name,
         )?,
         color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "color",
                 unresolved_properties,
                 doc,
@@ -183,7 +177,7 @@ pub fn common_from_properties(
             0,
         )?,
         background_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "background-color",
                 unresolved_properties,
                 doc,
@@ -193,7 +187,7 @@ pub fn common_from_properties(
             0,
         )?,
         border_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "border-color",
                 unresolved_properties,
                 doc,
@@ -202,21 +196,21 @@ pub fn common_from_properties(
             doc,
             0,
         )?,
-        border_width: crate::ftd2021::p2::utils::int_with_default(
+        border_width: ftd::ftd2021::p2::utils::int_with_default(
             "border-width",
             0,
             properties,
             doc.name,
             0,
         )?,
-        border_radius: crate::ftd2021::p2::utils::int_with_default(
+        border_radius: ftd::ftd2021::p2::utils::int_with_default(
             "border-radius",
             0,
             properties,
             doc.name,
             0,
         )?,
-        data_id: crate::ftd2021::p2::utils::string_optional("id", properties, doc.name, 0)?.map(
+        data_id: ftd::ftd2021::p2::utils::string_optional("id", properties, doc.name, 0)?.map(
             |v| {
                 if is_child {
                     v
@@ -227,34 +221,29 @@ pub fn common_from_properties(
         ),
         id: None,
         overflow_x: ftd::Overflow::from(
-            crate::ftd2021::p2::utils::string_optional("overflow-x", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("overflow-x", properties, doc.name, 0)?,
             doc.name,
         )?,
         overflow_y: ftd::Overflow::from(
-            crate::ftd2021::p2::utils::string_optional("overflow-y", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("overflow-y", properties, doc.name, 0)?,
             doc.name,
         )?,
-        border_top: crate::ftd2021::p2::utils::int_optional("border-top", properties, doc.name, 0)?,
-        border_left: crate::ftd2021::p2::utils::int_optional(
-            "border-left",
-            properties,
-            doc.name,
-            0,
-        )?,
-        border_right: crate::ftd2021::p2::utils::int_optional(
+        border_top: ftd::ftd2021::p2::utils::int_optional("border-top", properties, doc.name, 0)?,
+        border_left: ftd::ftd2021::p2::utils::int_optional("border-left", properties, doc.name, 0)?,
+        border_right: ftd::ftd2021::p2::utils::int_optional(
             "border-right",
             properties,
             doc.name,
             0,
         )?,
-        border_bottom: crate::ftd2021::p2::utils::int_optional(
+        border_bottom: ftd::ftd2021::p2::utils::int_optional(
             "border-bottom",
             properties,
             doc.name,
             0,
         )?,
         border_top_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "border-top-color",
                 unresolved_properties,
                 doc,
@@ -264,7 +253,7 @@ pub fn common_from_properties(
             0,
         )?,
         border_left_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "border-left-color",
                 unresolved_properties,
                 doc,
@@ -274,7 +263,7 @@ pub fn common_from_properties(
             0,
         )?,
         border_right_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "border-right-color",
                 unresolved_properties,
                 doc,
@@ -284,7 +273,7 @@ pub fn common_from_properties(
             0,
         )?,
         border_bottom_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "border-bottom-color",
                 unresolved_properties,
                 doc,
@@ -293,68 +282,53 @@ pub fn common_from_properties(
             doc,
             0,
         )?,
-        margin_top: crate::ftd2021::p2::utils::int_optional("margin-top", properties, doc.name, 0)?,
-        margin_bottom: crate::ftd2021::p2::utils::int_optional(
+        margin_top: ftd::ftd2021::p2::utils::int_optional("margin-top", properties, doc.name, 0)?,
+        margin_bottom: ftd::ftd2021::p2::utils::int_optional(
             "margin-bottom",
             properties,
             doc.name,
             0,
         )?,
-        margin_left: crate::ftd2021::p2::utils::int_optional(
-            "margin-left",
-            properties,
-            doc.name,
-            0,
-        )?,
-        margin_right: crate::ftd2021::p2::utils::int_optional(
+        margin_left: ftd::ftd2021::p2::utils::int_optional("margin-left", properties, doc.name, 0)?,
+        margin_right: ftd::ftd2021::p2::utils::int_optional(
             "margin-right",
             properties,
             doc.name,
             0,
         )?,
         link,
-        open_in_new_tab: crate::ftd2021::p2::utils::bool_with_default(
+        open_in_new_tab: ftd::ftd2021::p2::utils::bool_with_default(
             "open-in-new-tab",
             false,
             properties,
             doc.name,
             0,
         )?,
-        sticky: crate::ftd2021::p2::utils::bool_with_default(
+        sticky: ftd::ftd2021::p2::utils::bool_with_default(
             "sticky", false, properties, doc.name, 0,
         )?,
-        top: crate::ftd2021::p2::utils::int_optional("top", properties, doc.name, 0)?,
-        bottom: crate::ftd2021::p2::utils::int_optional("bottom", properties, doc.name, 0)?,
-        left: crate::ftd2021::p2::utils::int_optional("left", properties, doc.name, 0)?,
-        right: crate::ftd2021::p2::utils::int_optional("right", properties, doc.name, 0)?,
-        cursor: crate::ftd2021::p2::utils::string_optional("cursor", properties, doc.name, 0)?,
+        top: ftd::ftd2021::p2::utils::int_optional("top", properties, doc.name, 0)?,
+        bottom: ftd::ftd2021::p2::utils::int_optional("bottom", properties, doc.name, 0)?,
+        left: ftd::ftd2021::p2::utils::int_optional("left", properties, doc.name, 0)?,
+        right: ftd::ftd2021::p2::utils::int_optional("right", properties, doc.name, 0)?,
+        cursor: ftd::ftd2021::p2::utils::string_optional("cursor", properties, doc.name, 0)?,
         submit,
-        shadow_offset_x: crate::ftd2021::p2::utils::int_optional(
+        shadow_offset_x: ftd::ftd2021::p2::utils::int_optional(
             "shadow-offset-x",
             properties,
             doc.name,
             0,
         )?,
-        shadow_offset_y: crate::ftd2021::p2::utils::int_optional(
+        shadow_offset_y: ftd::ftd2021::p2::utils::int_optional(
             "shadow-offset-y",
             properties,
             doc.name,
             0,
         )?,
-        shadow_size: crate::ftd2021::p2::utils::int_optional(
-            "shadow-size",
-            properties,
-            doc.name,
-            0,
-        )?,
-        shadow_blur: crate::ftd2021::p2::utils::int_optional(
-            "shadow-blur",
-            properties,
-            doc.name,
-            0,
-        )?,
+        shadow_size: ftd::ftd2021::p2::utils::int_optional("shadow-size", properties, doc.name, 0)?,
+        shadow_blur: ftd::ftd2021::p2::utils::int_optional("shadow-blur", properties, doc.name, 0)?,
         shadow_color: ftd::Color::from(
-            crate::ftd2021::p2::utils::record_optional_with_ref(
+            ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "shadow-color",
                 unresolved_properties,
                 doc,
@@ -364,7 +338,7 @@ pub fn common_from_properties(
             0,
         )?,
         gradient_direction: ftd::GradientDirection::from(
-            crate::ftd2021::p2::utils::string_optional(
+            ftd::ftd2021::p2::utils::string_optional(
                 "gradient-direction",
                 properties,
                 doc.name,
@@ -375,7 +349,7 @@ pub fn common_from_properties(
         anchor,
         gradient_colors,
         background_image: {
-            let (src, reference) = crate::ftd2021::p2::utils::record_optional_with_ref(
+            let (src, reference) = ftd::ftd2021::p2::utils::record_optional_with_ref(
                 "background-image",
                 unresolved_properties,
                 doc,
@@ -385,58 +359,58 @@ pub fn common_from_properties(
                 ftd::ImageSrc::from(&r, doc, 0, reference).map(Some)
             })?
         },
-        background_repeat: crate::ftd2021::p2::utils::bool_with_default(
+        background_repeat: ftd::ftd2021::p2::utils::bool_with_default(
             "background-repeat",
             false,
             properties,
             doc.name,
             0,
         )?,
-        background_parallax: crate::ftd2021::p2::utils::bool_with_default(
+        background_parallax: ftd::ftd2021::p2::utils::bool_with_default(
             "background-parallax",
             false,
             properties,
             doc.name,
             0,
         )?,
-        scale: crate::ftd2021::p2::utils::decimal_optional("scale", properties, doc.name, 0)?,
-        scale_x: crate::ftd2021::p2::utils::decimal_optional("scale-x", properties, doc.name, 0)?,
-        scale_y: crate::ftd2021::p2::utils::decimal_optional("scale-y", properties, doc.name, 0)?,
-        rotate: crate::ftd2021::p2::utils::int_optional("rotate", properties, doc.name, 0)?,
-        move_up: crate::ftd2021::p2::utils::int_optional("move-up", properties, doc.name, 0)?,
-        move_down: crate::ftd2021::p2::utils::int_optional("move-down", properties, doc.name, 0)?,
-        move_left: crate::ftd2021::p2::utils::int_optional("move-left", properties, doc.name, 0)?,
-        move_right: crate::ftd2021::p2::utils::int_optional("move-right", properties, doc.name, 0)?,
+        scale: ftd::ftd2021::p2::utils::decimal_optional("scale", properties, doc.name, 0)?,
+        scale_x: ftd::ftd2021::p2::utils::decimal_optional("scale-x", properties, doc.name, 0)?,
+        scale_y: ftd::ftd2021::p2::utils::decimal_optional("scale-y", properties, doc.name, 0)?,
+        rotate: ftd::ftd2021::p2::utils::int_optional("rotate", properties, doc.name, 0)?,
+        move_up: ftd::ftd2021::p2::utils::int_optional("move-up", properties, doc.name, 0)?,
+        move_down: ftd::ftd2021::p2::utils::int_optional("move-down", properties, doc.name, 0)?,
+        move_left: ftd::ftd2021::p2::utils::int_optional("move-left", properties, doc.name, 0)?,
+        move_right: ftd::ftd2021::p2::utils::int_optional("move-right", properties, doc.name, 0)?,
         position,
         inner,
-        z_index: crate::ftd2021::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
-        slot: crate::ftd2021::p2::utils::string_optional("slot", properties, doc.name, 0)?,
-        grid_column: crate::ftd2021::p2::utils::string_optional(
+        z_index: ftd::ftd2021::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
+        slot: ftd::ftd2021::p2::utils::string_optional("slot", properties, doc.name, 0)?,
+        grid_column: ftd::ftd2021::p2::utils::string_optional(
             "grid-column",
             properties,
             doc.name,
             0,
         )?,
-        grid_row: crate::ftd2021::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
-        white_space: crate::ftd2021::p2::utils::string_optional(
+        grid_row: ftd::ftd2021::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
+        white_space: ftd::ftd2021::p2::utils::string_optional(
             "white-space",
             properties,
             doc.name,
             0,
         )?,
-        border_style: crate::ftd2021::p2::utils::string_optional(
+        border_style: ftd::ftd2021::p2::utils::string_optional(
             "border-style",
             properties,
             doc.name,
             0,
         )?,
-        text_transform: crate::ftd2021::p2::utils::string_optional(
+        text_transform: ftd::ftd2021::p2::utils::string_optional(
             "text-transform",
             properties,
             doc.name,
             0,
         )?,
-        heading_number: crate::ftd2021::p2::utils::string_list_optional(
+        heading_number: ftd::ftd2021::p2::utils::string_list_optional(
             "heading-number",
             properties,
             doc,
@@ -445,92 +419,92 @@ pub fn common_from_properties(
     })
 }
 
-fn common_arguments() -> Vec<(String, crate::ftd2021::p2::Kind)> {
+fn common_arguments() -> Vec<(String, ftd::ftd2021::p2::Kind)> {
     vec![
         (
             "classes".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "padding".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-vertical".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-horizontal".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-left".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-right".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-top".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-bottom".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-top-radius".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-bottom-radius".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-left-radius".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-right-radius".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "width".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "min-width".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "max-width".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "height".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "min-height".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "max-height".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             // TODO: remove this after verifying that no existing document is using this
             "explain".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "region".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "color".to_string(),
-            crate::ftd2021::p2::Kind::Record {
+            ftd::ftd2021::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
                 is_reference: false,
@@ -539,7 +513,7 @@ fn common_arguments() -> Vec<(String, crate::ftd2021::p2::Kind)> {
         ),
         (
             "background-color".to_string(),
-            crate::ftd2021::p2::Kind::Record {
+            ftd::ftd2021::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
                 is_reference: false,
@@ -548,7 +522,7 @@ fn common_arguments() -> Vec<(String, crate::ftd2021::p2::Kind)> {
         ),
         (
             "border-color".to_string(),
-            crate::ftd2021::p2::Kind::Record {
+            ftd::ftd2021::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
                 is_reference: false,
@@ -557,211 +531,211 @@ fn common_arguments() -> Vec<(String, crate::ftd2021::p2::Kind)> {
         ),
         (
             "border-width".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-radius".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "id".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "overflow-x".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "overflow-y".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "border-top".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-bottom".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-left".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-right".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "border-top-color".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#color").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-left-color".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#color").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-right-color".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#color").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-bottom-color".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#color").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "margin-top".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-bottom".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-left".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-right".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "link".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "submit".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "open-in-new-tab".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "sticky".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "top".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "bottom".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "left".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "right".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "cursor".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "anchor".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "gradient-direction".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "gradient-colors".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "shadow-offset-x".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "shadow-offset-y".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "shadow-blur".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "shadow-size".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "shadow-color".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#color").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "background-image".to_string(),
-            crate::ftd2021::p2::Kind::record("ftd#image-src").into_optional(),
+            ftd::ftd2021::p2::Kind::record("ftd#image-src").into_optional(),
         ),
         (
             "background-repeat".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "background-parallax".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "scale".to_string(),
-            crate::ftd2021::p2::Kind::decimal().into_optional(),
+            ftd::ftd2021::p2::Kind::decimal().into_optional(),
         ),
         (
             "scale-x".to_string(),
-            crate::ftd2021::p2::Kind::decimal().into_optional(),
+            ftd::ftd2021::p2::Kind::decimal().into_optional(),
         ),
         (
             "scale-y".to_string(),
-            crate::ftd2021::p2::Kind::decimal().into_optional(),
+            ftd::ftd2021::p2::Kind::decimal().into_optional(),
         ),
         (
             "rotate".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "move-up".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "move-down".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "move-left".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "move-right".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "position".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "z-index".to_string(),
-            crate::ftd2021::p2::Kind::integer().into_optional(),
+            ftd::ftd2021::p2::Kind::integer().into_optional(),
         ),
         (
             "slot".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "white-space".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "border-style".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "text-transform".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "heading-number".to_string(),
-            crate::ftd2021::p2::Kind::list(crate::ftd2021::p2::Kind::string()).into_optional(),
+            ftd::ftd2021::p2::Kind::list(ftd::ftd2021::p2::Kind::string()).into_optional(),
         ),
         /*(
             "grid-column".to_string(),
@@ -785,39 +759,34 @@ pub fn null() -> ftd::Component {
 
 pub fn container_from_properties(
     properties: &ftd::Map<ftd::Value>,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::Container> {
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::Container> {
     Ok(ftd::Container {
         children: Default::default(),
         external_children: Default::default(),
-        open: crate::ftd2021::p2::utils::bool_optional("open", properties, doc.name, 0)?,
-        append_at: crate::ftd2021::p2::utils::string_optional(
-            "append-at",
-            properties,
-            doc.name,
-            0,
-        )?,
-        wrap: crate::ftd2021::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
+        open: ftd::ftd2021::p2::utils::bool_optional("open", properties, doc.name, 0)?,
+        append_at: ftd::ftd2021::p2::utils::string_optional("append-at", properties, doc.name, 0)?,
+        wrap: ftd::ftd2021::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
 
-fn container_arguments() -> Vec<(String, crate::ftd2021::p2::Kind)> {
+fn container_arguments() -> Vec<(String, ftd::ftd2021::p2::Kind)> {
     vec![
         (
             "open".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
         (
             "append-at".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "align".to_string(),
-            crate::ftd2021::p2::Kind::string().into_optional(),
+            ftd::ftd2021::p2::Kind::string().into_optional(),
         ),
         (
             "wrap".to_string(),
-            crate::ftd2021::p2::Kind::boolean().into_optional(),
+            ftd::ftd2021::p2::Kind::boolean().into_optional(),
         ),
     ]
 }
@@ -831,27 +800,27 @@ pub fn image_function() -> ftd::Component {
             vec![
                 (
                     "src".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#image-src"),
+                    ftd::ftd2021::p2::Kind::record("ftd#image-src"),
                 ),
                 (
                     "description".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "title".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "crop".to_string(),
-                    crate::ftd2021::p2::Kind::boolean().into_optional(),
+                    ftd::ftd2021::p2::Kind::boolean().into_optional(),
                 ),
                 (
                     "loading".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -870,19 +839,19 @@ pub fn image_function() -> ftd::Component {
 }
 
 pub fn image_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Image> {
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Image> {
     let (src, reference) =
-        crate::ftd2021::p2::utils::record_and_ref(0, "src", unresolved_properties, doc, condition)?;
+        ftd::ftd2021::p2::utils::record_and_ref(0, "src", unresolved_properties, doc, condition)?;
     let src_record = ftd::ImageSrc::from(&src, doc, 0, reference.clone())?;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
         src: src_record,
-        description: crate::ftd2021::p2::utils::string_optional(
+        description: ftd::ftd2021::p2::utils::string_optional(
             "description",
             properties,
             doc.name,
@@ -897,13 +866,13 @@ pub fn image_from_properties(
             reference,
         )?,
         loading: ftd::Loading::from(
-            crate::ftd2021::p2::utils::string_with_default(
+            ftd::ftd2021::p2::utils::string_with_default(
                 "loading", "lazy", properties, doc.name, 0,
             )?
             .as_str(),
             doc.name,
         )?,
-        crop: crate::ftd2021::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
+        crop: ftd::ftd2021::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
 
@@ -917,7 +886,7 @@ pub fn row_function() -> ftd::Component {
             common_arguments(),
             vec![(
                 "spacing".to_string(),
-                crate::ftd2021::p2::Kind::string().into_optional(),
+                ftd::ftd2021::p2::Kind::string().into_optional(),
             )],
         ]
         .concat()
@@ -934,13 +903,13 @@ pub fn row_function() -> ftd::Component {
 }
 
 pub fn row_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Row> {
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Row> {
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
         common: common_from_properties(
             unresolved_properties,
@@ -951,7 +920,7 @@ pub fn row_from_properties(
             None,
         )?,
         container: container_from_properties(properties, doc)?,
-        spacing: ftd::Spacing::from(crate::ftd2021::p2::utils::string_optional(
+        spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
         )?)?,
     })
@@ -968,7 +937,7 @@ pub fn column_function() -> ftd::Component {
             common_arguments(),
             vec![(
                 "spacing".to_string(),
-                crate::ftd2021::p2::Kind::string().into_optional(),
+                ftd::ftd2021::p2::Kind::string().into_optional(),
             )],
         ]
         .concat()
@@ -984,13 +953,13 @@ pub fn column_function() -> ftd::Component {
 }
 
 pub fn column_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Column> {
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Column> {
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
         common: common_from_properties(
             unresolved_properties,
@@ -1001,7 +970,7 @@ pub fn column_from_properties(
             None,
         )?,
         container: container_from_properties(properties, doc)?,
-        spacing: ftd::Spacing::from(crate::ftd2021::p2::utils::string_optional(
+        spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
         )?)?,
     })
@@ -1015,19 +984,19 @@ pub fn text_render(
     source: ftd::TextSource,
     theme: String,
     doc_id: &str,
-) -> crate::ftd2021::p1::Result<ftd::Rendered> {
+) -> ftd::ftd2021::p1::Result<ftd::ftd2021::Rendered> {
     Ok(match (source, tf) {
         (ftd::TextSource::Body, ftd::TextFormat::Markdown) => {
-            crate::ftd2021::rendered::markup(text.as_str())
+            ftd::ftd2021::rendered::markup(text.as_str())
         }
-        (_, ftd::TextFormat::Markdown) => crate::ftd2021::rendered::markup_line(text.as_str()),
-        (_, ftd::TextFormat::Code { lang }) => crate::ftd2021::rendered::code_with_theme(
+        (_, ftd::TextFormat::Markdown) => ftd::ftd2021::rendered::markup_line(text.as_str()),
+        (_, ftd::TextFormat::Code { lang }) => ftd::ftd2021::rendered::code_with_theme(
             text.as_str(),
             lang.as_str(),
             theme.as_str(),
             doc_id,
         )?,
-        (_, ftd::TextFormat::Text) => ftd::Rendered {
+        (_, ftd::TextFormat::Text) => ftd::ftd2021::Rendered {
             original: text.clone(),
             rendered: text,
         },
@@ -1044,15 +1013,15 @@ pub fn iframe_function() -> ftd::Component {
             vec![
                 (
                     "src".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "youtube".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "loading".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1070,23 +1039,23 @@ pub fn iframe_function() -> ftd::Component {
 }
 
 pub fn iframe_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::IFrame> {
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::IFrame> {
     let src = match (
-        crate::ftd2021::p2::utils::string_optional_with_ref("src", unresolved_properties, doc, 0)?,
+        ftd::ftd2021::p2::utils::string_optional_with_ref("src", unresolved_properties, doc, 0)?,
         {
-            let (youtube, reference) = crate::ftd2021::p2::utils::string_optional_with_ref(
+            let (youtube, reference) = ftd::ftd2021::p2::utils::string_optional_with_ref(
                 "youtube",
                 unresolved_properties,
                 doc,
                 0,
             )?;
             (
-                youtube.and_then(|id| crate::ftd2021::youtube_id::from_raw(id.as_str())),
+                youtube.and_then(|id| ftd::ftd2021::youtube_id::from_raw(id.as_str())),
                 reference,
             )
         },
@@ -1094,10 +1063,10 @@ pub fn iframe_from_properties(
         ((Some(src), _), (None, _)) => src,
         ((None, _), (Some(id), _)) => id,
         ((Some(_), _), (Some(_), _)) => {
-            return crate::ftd2021::p2::utils::e2("both src and youtube id provided", doc.name, 0)
+            return ftd::ftd2021::p2::utils::e2("both src and youtube id provided", doc.name, 0)
         }
         ((None, Some(reference)), (None, None)) | ((None, None), (None, Some(reference))) => {
-            if let Some(crate::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
                 match value {
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. }
@@ -1106,7 +1075,7 @@ pub fn iframe_from_properties(
                         "".to_string()
                     }
                     _ => {
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             "src or youtube id is required",
                             doc.name,
                             0,
@@ -1114,20 +1083,18 @@ pub fn iframe_from_properties(
                     }
                 }
             } else {
-                return crate::ftd2021::p2::utils::e2("src or youtube id is required", doc.name, 0);
+                return ftd::ftd2021::p2::utils::e2("src or youtube id is required", doc.name, 0);
             }
         }
-        (_, _) => {
-            return crate::ftd2021::p2::utils::e2("src or youtube id is required", doc.name, 0)
-        }
+        (_, _) => return ftd::ftd2021::p2::utils::e2("src or youtube id is required", doc.name, 0),
     };
 
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
 
     Ok(ftd::IFrame {
         src,
         loading: ftd::Loading::from(
-            crate::ftd2021::p2::utils::string_with_default(
+            ftd::ftd2021::p2::utils::string_with_default(
                 "loading", "lazy", properties, doc.name, 0,
             )?
             .as_str(),
@@ -1145,21 +1112,21 @@ pub fn iframe_from_properties(
 }
 
 pub fn text_block_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::TextBlock> {
-    let (text, source, reference) = crate::ftd2021::p2::utils::string_and_source_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::TextBlock> {
+    let (text, source, reference) = ftd::ftd2021::p2::utils::string_and_source_and_ref(
         0,
         "text",
         unresolved_properties,
         doc,
         condition,
     )?;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = crate::ftd2021::p2::utils::string_optional("role", properties, doc.name, 0)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let font_str = ftd::ftd2021::p2::utils::string_optional("role", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1171,9 +1138,9 @@ pub fn text_block_from_properties(
     Ok(ftd::TextBlock {
         line: source != ftd::TextSource::Body,
         text: if source == ftd::TextSource::Body {
-            crate::ftd2021::rendered::markup(text.as_str())
+            ftd::ftd2021::rendered::markup(text.as_str())
         } else {
-            crate::ftd2021::rendered::markup_line(text.as_str())
+            ftd::ftd2021::rendered::markup_line(text.as_str())
         },
         common: common_from_properties(
             unresolved_properties,
@@ -1184,48 +1151,43 @@ pub fn text_block_from_properties(
             reference,
         )?,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        size: crate::ftd2021::p2::utils::int_optional("size", properties, doc.name, 0)?,
+        size: ftd::ftd2021::p2::utils::int_optional("size", properties, doc.name, 0)?,
         font,
-        line_height: crate::ftd2021::p2::utils::int_optional(
-            "line-height",
-            properties,
-            doc.name,
-            0,
-        )?,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_height: ftd::ftd2021::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })
 }
 
 pub fn code_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Code> {
-    let (text, _, reference) = crate::ftd2021::p2::utils::string_and_source_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Code> {
+    let (text, _, reference) = ftd::ftd2021::p2::utils::string_and_source_and_ref(
         0,
         "text",
         unresolved_properties,
         doc,
         condition,
     )?;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -1239,14 +1201,14 @@ pub fn code_from_properties(
     })?;
 
     Ok(ftd::Code {
-        text: crate::ftd2021::rendered::code_with_theme(
+        text: ftd::ftd2021::rendered::code_with_theme(
             text.as_str(),
-            crate::ftd2021::p2::utils::string_optional("lang", properties, doc.name, 0)?
+            ftd::ftd2021::p2::utils::string_optional("lang", properties, doc.name, 0)?
                 .unwrap_or_else(|| "txt".to_string())
                 .as_str(),
-            crate::ftd2021::p2::utils::string_with_default(
+            ftd::ftd2021::p2::utils::string_with_default(
                 "theme",
-                crate::ftd2021::code::DEFAULT_THEME,
+                ftd::ftd2021::code::DEFAULT_THEME,
                 properties,
                 doc.name,
                 0,
@@ -1263,30 +1225,30 @@ pub fn code_from_properties(
             reference,
         )?,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
         font,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })
 }
 
 pub fn integer_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Text> {
-    let reference = crate::ftd2021::p2::utils::integer_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Text> {
+    let reference = ftd::ftd2021::p2::utils::integer_and_ref(
         0,
         "value",
         unresolved_properties,
@@ -1294,21 +1256,20 @@ pub fn integer_from_properties(
         condition,
     )?
     .1;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
-    let text = match crate::ftd2021::p2::utils::string_optional("format", properties, doc.name, 0)?
-    {
+    let text = match ftd::ftd2021::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
             f.as_str(),
-            crate::ftd2021::p2::utils::int("value", properties, doc.name, 0)? as f64,
+            ftd::ftd2021::p2::utils::int("value", properties, doc.name, 0)? as f64,
         ),
-        None => crate::ftd2021::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
+        None => ftd::ftd2021::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -1322,7 +1283,7 @@ pub fn integer_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: crate::ftd2021::rendered::markup_line(text.as_str()),
+        text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1333,30 +1294,30 @@ pub fn integer_from_properties(
             reference,
         )?,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
         font,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })
 }
 
 pub fn decimal_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Text> {
-    let reference = crate::ftd2021::p2::utils::decimal_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Text> {
+    let reference = ftd::ftd2021::p2::utils::decimal_and_ref(
         0,
         "value",
         unresolved_properties,
@@ -1364,21 +1325,20 @@ pub fn decimal_from_properties(
         condition,
     )?
     .1;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
-    let text = match crate::ftd2021::p2::utils::string_optional("format", properties, doc.name, 0)?
-    {
+    let text = match ftd::ftd2021::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
             f.as_str(),
-            crate::ftd2021::p2::utils::decimal("value", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::decimal("value", properties, doc.name, 0)?,
         ),
-        None => crate::ftd2021::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
+        None => ftd::ftd2021::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -1391,7 +1351,7 @@ pub fn decimal_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
     Ok(ftd::Text {
-        text: crate::ftd2021::rendered::markup_line(text.as_str()),
+        text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1402,17 +1362,17 @@ pub fn decimal_from_properties(
             reference,
         )?,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
         font,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })
@@ -1421,7 +1381,7 @@ pub fn decimal_from_properties(
 pub fn color_from(
     l: Option<String>,
     doc_id: &str,
-) -> crate::ftd2021::p1::Result<Option<ftd::ColorValue>> {
+) -> ftd::ftd2021::p1::Result<Option<ftd::ColorValue>> {
     use std::str::FromStr;
 
     let v = match l {
@@ -1438,7 +1398,7 @@ pub fn color_from(
         let (_, value_string) = string.split_at(1);
 
         let iv = u64::from_str_radix(value_string, 16).map_err(|e| {
-            crate::ftd2021::p1::Error::ParseError {
+            ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: 0,
@@ -1447,7 +1407,7 @@ pub fn color_from(
 
         // (7thSigil) unlike original js code, NaN is impossible
         if iv > 0xffffffff {
-            return crate::ftd2021::p2::utils::e2(format!("{} is not a valid color", v), doc_id, 0);
+            return ftd::ftd2021::p2::utils::e2(format!("{} is not a valid color", v), doc_id, 0);
         }
 
         //Code for accepting 6-digit hexa-color code
@@ -1465,7 +1425,7 @@ pub fn color_from(
                 b: v.b,
                 alpha: v.a,
             })),
-            Err(e) => crate::ftd2021::p2::utils::e2(
+            Err(e) => ftd::ftd2021::p2::utils::e2(
                 format!("{} is not a valid color: {:?}", v, e),
                 doc_id,
                 0,
@@ -1483,13 +1443,13 @@ fn round_1p(n: f32) -> f32 {
 }
 
 pub fn boolean_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Text> {
-    let reference = crate::ftd2021::p2::utils::boolean_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Text> {
+    let reference = ftd::ftd2021::p2::utils::boolean_and_ref(
         0,
         "value",
         unresolved_properties,
@@ -1497,18 +1457,18 @@ pub fn boolean_from_properties(
         condition,
     )?
     .1;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let value = crate::ftd2021::p2::utils::bool_("value", properties, doc.name, 0)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let value = ftd::ftd2021::p2::utils::bool_("value", properties, doc.name, 0)?;
     let text = if value {
-        crate::ftd2021::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
+        ftd::ftd2021::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
     } else {
-        crate::ftd2021::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
+        ftd::ftd2021::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
     };
 
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -1522,7 +1482,7 @@ pub fn boolean_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: crate::ftd2021::rendered::markup_line(text.as_str()),
+        text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1533,17 +1493,17 @@ pub fn boolean_from_properties(
             reference,
         )?,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
         font,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })
@@ -1559,31 +1519,31 @@ pub fn text_function() -> ftd::Component {
             vec![
                 (
                     "text".to_string(),
-                    crate::ftd2021::p2::Kind::caption_or_body(),
+                    ftd::ftd2021::p2::Kind::caption_or_body(),
                 ),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
-                    crate::ftd2021::p2::Kind::integer().into_optional(),
+                    ftd::ftd2021::p2::Kind::integer().into_optional(),
                 ),
                 (
                     "text-indent".to_string(),
-                    crate::ftd2021::p2::Kind::integer().into_optional(),
+                    ftd::ftd2021::p2::Kind::integer().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1610,39 +1570,39 @@ pub fn code_function() -> ftd::Component {
             vec![
                 (
                     "text".to_string(),
-                    crate::ftd2021::p2::Kind::caption_or_body(),
+                    ftd::ftd2021::p2::Kind::caption_or_body(),
                 ),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "lang".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "theme".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
-                    crate::ftd2021::p2::Kind::integer().into_optional(),
+                    ftd::ftd2021::p2::Kind::integer().into_optional(),
                 ),
                 (
                     "text-indent".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1667,26 +1627,26 @@ pub fn integer_function() -> ftd::Component {
         full_name: "ftd#integer".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::ftd2021::p2::Kind::integer()),
+                ("value".to_string(), ftd::ftd2021::p2::Kind::integer()),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "format".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "text-align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1711,26 +1671,26 @@ pub fn decimal_function() -> ftd::Component {
         full_name: "ftd#decimal".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::ftd2021::p2::Kind::decimal()),
+                ("value".to_string(), ftd::ftd2021::p2::Kind::decimal()),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "format".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "text-align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1749,12 +1709,12 @@ pub fn decimal_function() -> ftd::Component {
 
 pub fn scene_function() -> ftd::Component {
     let arguments = {
-        let mut arguments: ftd::Map<crate::ftd2021::p2::Kind> = [
+        let mut arguments: ftd::Map<ftd::ftd2021::p2::Kind> = [
             container_arguments(),
             common_arguments(),
             vec![(
                 "spacing".to_string(),
-                crate::ftd2021::p2::Kind::string().into_optional(),
+                ftd::ftd2021::p2::Kind::string().into_optional(),
             )],
         ]
         .concat()
@@ -1790,31 +1750,31 @@ pub fn markup_function() -> ftd::Component {
             vec![
                 (
                     "text".to_string(),
-                    crate::ftd2021::p2::Kind::caption_or_body(),
+                    ftd::ftd2021::p2::Kind::caption_or_body(),
                 ),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
-                    crate::ftd2021::p2::Kind::integer().into_optional(),
+                    ftd::ftd2021::p2::Kind::integer().into_optional(),
                 ),
                 (
                     "text-indent".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1832,26 +1792,26 @@ pub fn markup_function() -> ftd::Component {
 }
 
 pub fn grid_function() -> ftd::Component {
-    let arguments: ftd::Map<crate::ftd2021::p2::Kind> = [
+    let arguments: ftd::Map<ftd::ftd2021::p2::Kind> = [
         container_arguments(),
         common_arguments(),
         vec![
-            ("slots".to_string(), crate::ftd2021::p2::Kind::string()),
+            ("slots".to_string(), ftd::ftd2021::p2::Kind::string()),
             (
                 "slot-widths".to_string(),
-                crate::ftd2021::p2::Kind::string().into_optional(),
+                ftd::ftd2021::p2::Kind::string().into_optional(),
             ),
             (
                 "slot-heights".to_string(),
-                crate::ftd2021::p2::Kind::string().into_optional(),
+                ftd::ftd2021::p2::Kind::string().into_optional(),
             ),
             (
                 "spacing".to_string(),
-                crate::ftd2021::p2::Kind::integer().into_optional(),
+                ftd::ftd2021::p2::Kind::integer().into_optional(),
             ),
             (
                 "inline".to_string(),
-                crate::ftd2021::p2::Kind::boolean().into_optional(),
+                ftd::ftd2021::p2::Kind::boolean().into_optional(),
             ),
         ],
     ]
@@ -1882,30 +1842,30 @@ pub fn boolean_function() -> ftd::Component {
         full_name: "ftd#boolean".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::ftd2021::p2::Kind::boolean()),
+                ("value".to_string(), ftd::ftd2021::p2::Kind::boolean()),
                 (
                     "align".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "style".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "format".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "true".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "false".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1932,27 +1892,27 @@ pub fn input_function() -> ftd::Component {
             vec![
                 (
                     "placeholder".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "value".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "default-value".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
                 (
                     "multiline".to_string(),
-                    crate::ftd2021::p2::Kind::boolean().set_default(Some("false".to_string())),
+                    ftd::ftd2021::p2::Kind::boolean().set_default(Some("false".to_string())),
                 ),
                 (
                     "role".to_string(),
-                    crate::ftd2021::p2::Kind::record("ftd#type").into_optional(),
+                    ftd::ftd2021::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "type".to_string(),
-                    crate::ftd2021::p2::Kind::string().into_optional(),
+                    ftd::ftd2021::p2::Kind::string().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1970,13 +1930,13 @@ pub fn input_function() -> ftd::Component {
 }
 
 pub fn input_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Input> {
-    let reference = crate::ftd2021::p2::utils::string_and_source_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Input> {
+    let reference = ftd::ftd2021::p2::utils::string_and_source_and_ref(
         0,
         "value",
         unresolved_properties,
@@ -1986,11 +1946,11 @@ pub fn input_from_properties(
     .map(|v| v.2)
     .unwrap_or(None);
 
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -2012,16 +1972,16 @@ pub fn input_from_properties(
             events,
             reference,
         )?,
-        placeholder: crate::ftd2021::p2::utils::string_optional(
+        placeholder: ftd::ftd2021::p2::utils::string_optional(
             "placeholder",
             properties,
             doc.name,
             0,
         )?,
-        multiline: crate::ftd2021::p2::utils::bool_("multiline", properties, doc.name, 0)?,
-        type_: crate::ftd2021::p2::utils::string_optional("type", properties, doc.name, 0)?,
-        value: crate::ftd2021::p2::utils::string_optional("value", properties, doc.name, 0)?,
-        default_value: crate::ftd2021::p2::utils::string_optional(
+        multiline: ftd::ftd2021::p2::utils::bool_("multiline", properties, doc.name, 0)?,
+        type_: ftd::ftd2021::p2::utils::string_optional("type", properties, doc.name, 0)?,
+        value: ftd::ftd2021::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        default_value: ftd::ftd2021::p2::utils::string_optional(
             "default-value",
             properties,
             doc.name,
@@ -2032,13 +1992,13 @@ pub fn input_from_properties(
 }
 
 pub fn scene_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Scene> {
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Scene> {
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
         common: common_from_properties(
             unresolved_properties,
@@ -2049,45 +2009,45 @@ pub fn scene_from_properties(
             None,
         )?,
         container: container_from_properties(properties, doc)?,
-        spacing: ftd::Spacing::from(crate::ftd2021::p2::utils::string_optional(
+        spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
         )?)?,
     })
 }
 
 pub fn grid_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Grid> {
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Grid> {
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Grid {
-        slots: match crate::ftd2021::p2::utils::string_optional("slots", properties, doc.name, 0)? {
+        slots: match ftd::ftd2021::p2::utils::string_optional("slots", properties, doc.name, 0)? {
             Some(val) => val,
-            None => return crate::ftd2021::p2::utils::e2("expected slots", doc.name, 0),
+            None => return ftd::ftd2021::p2::utils::e2("expected slots", doc.name, 0),
         },
-        slot_widths: crate::ftd2021::p2::utils::string_optional(
+        slot_widths: ftd::ftd2021::p2::utils::string_optional(
             "slot-widths",
             properties,
             doc.name,
             0,
         )?,
-        slot_heights: crate::ftd2021::p2::utils::string_optional(
+        slot_heights: ftd::ftd2021::p2::utils::string_optional(
             "slot-heights",
             properties,
             doc.name,
             0,
         )?,
-        spacing: crate::ftd2021::p2::utils::int_optional("spacing", properties, doc.name, 0)?,
-        spacing_vertical: crate::ftd2021::p2::utils::int_optional(
+        spacing: ftd::ftd2021::p2::utils::int_optional("spacing", properties, doc.name, 0)?,
+        spacing_vertical: ftd::ftd2021::p2::utils::int_optional(
             "spacing-vertical",
             properties,
             doc.name,
             0,
         )?,
-        spacing_horizontal: crate::ftd2021::p2::utils::int_optional(
+        spacing_horizontal: ftd::ftd2021::p2::utils::int_optional(
             "spacing-horizontal",
             properties,
             doc.name,
@@ -2102,37 +2062,32 @@ pub fn grid_from_properties(
             None,
         )?,
         container: container_from_properties(properties, doc)?,
-        inline: crate::ftd2021::p2::utils::bool_with_default(
+        inline: ftd::ftd2021::p2::utils::bool_with_default(
             "inline", false, properties, doc.name, 0,
         )?,
-        auto_flow: crate::ftd2021::p2::utils::string_optional(
-            "auto-flow",
-            properties,
-            doc.name,
-            0,
-        )?,
+        auto_flow: ftd::ftd2021::p2::utils::string_optional("auto-flow", properties, doc.name, 0)?,
     })
 }
 
 pub fn markup_from_properties(
-    unresolved_properties: &ftd::Map<crate::ftd2021::component::Property>,
-    doc: &crate::ftd2021::p2::TDoc,
-    condition: &Option<crate::ftd2021::p2::Boolean>,
+    unresolved_properties: &ftd::Map<ftd::ftd2021::component::Property>,
+    doc: &ftd::ftd2021::p2::TDoc,
+    condition: &Option<ftd::ftd2021::p2::Boolean>,
     is_child: bool,
-    events: &[crate::ftd2021::p2::Event],
-) -> crate::ftd2021::p1::Result<ftd::Markups> {
-    let (value, source, reference) = crate::ftd2021::p2::utils::string_and_source_and_ref(
+    events: &[ftd::ftd2021::p2::Event],
+) -> ftd::ftd2021::p1::Result<ftd::Markups> {
+    let (value, source, reference) = ftd::ftd2021::p2::utils::string_and_source_and_ref(
         0,
         "text",
         unresolved_properties,
         doc,
         condition,
     )?;
-    let properties = &crate::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = crate::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
+    let font_str = ftd::ftd2021::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
-        font_reference = crate::ftd2021::p2::utils::record_and_ref(
+        font_reference = ftd::ftd2021::p2::utils::record_and_ref(
             0,
             "role",
             unresolved_properties,
@@ -2146,7 +2101,7 @@ pub fn markup_from_properties(
     })?;
 
     Ok(ftd::Markups {
-        text: crate::ftd2021::rendered::markup_line(value.as_str()),
+        text: ftd::ftd2021::rendered::markup_line(value.as_str()),
         common: common_from_properties(
             unresolved_properties,
             doc,
@@ -2158,17 +2113,17 @@ pub fn markup_from_properties(
         children: vec![],
         line: source != ftd::TextSource::Body,
         text_align: ftd::TextAlign::from(
-            crate::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
         )?,
         style: ftd::Style::from(
-            crate::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
         font,
-        line_clamp: crate::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        line_clamp: ftd::ftd2021::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
         text_indent: ftd::Length::from(
-            crate::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            ftd::ftd2021::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
             doc.name,
         )?,
     })

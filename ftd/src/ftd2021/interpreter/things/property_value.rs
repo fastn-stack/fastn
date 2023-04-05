@@ -1,4 +1,4 @@
-use crate::ftd2021;
+use ftd::ftd2021;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum PropertyValue {
@@ -137,7 +137,7 @@ pub enum Value {
     },
     Map {
         data: ftd::Map<Value>,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     // TODO: UI
     // UI {
@@ -341,7 +341,7 @@ pub(crate) fn get_reference(s: &str) -> Option<&str> {
 
 #[cfg(test)]
 mod test {
-    use crate::ftd2021;
+    use ftd::ftd2021;
 
     #[track_caller]
     fn p(s: &str, t: ftd2021::interpreter::PropertyValue) {

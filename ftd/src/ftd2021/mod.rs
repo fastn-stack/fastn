@@ -22,4 +22,7 @@ pub mod value_with_default;
 pub(crate) mod variable;
 pub mod youtube_id;
 
+pub use or_type::OrType;
 pub use p2::interpreter::{interpret, Interpreter, InterpreterState};
+pub use rendered::Rendered;
+pub use rt::RT;

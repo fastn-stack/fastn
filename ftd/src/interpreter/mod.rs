@@ -47,7 +47,7 @@ pub enum Error {
     P1Error(#[from] ftd::p1::Error),
 
     #[error("OldP1Error: {}", _0)]
-    OldP1Error(#[from] crate::ftd2021::p1::Error),
+    OldP1Error(#[from] ftd::ftd2021::p1::Error),
 
     #[error("ASTError: {}", _0)]
     ASTError(#[from] ftd::ast::Error),

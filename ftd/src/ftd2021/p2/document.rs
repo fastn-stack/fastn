@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 #[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Document {
-    pub data: ftd::Map<crate::ftd2021::p2::Thing>,
+    pub data: ftd::Map<ftd::ftd2021::p2::Thing>,
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub main: ftd::Column,
@@ -13,7 +13,7 @@ impl Document {
     fn get_data(&self) -> (ftd::Map<serde_json::Value>, Vec<String>) {
         let mut d: ftd::Map<serde_json::Value> = Default::default();
         let mut always_include = vec![];
-        let doc = crate::ftd2021::p2::TDoc {
+        let doc = ftd::ftd2021::p2::TDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
@@ -21,7 +21,7 @@ impl Document {
             referenced_local_variables: &mut Default::default(),
         };
         for (k, v) in self.data.iter() {
-            if let crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            if let ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 value, flags: flag, ..
             }) = v
             {
@@ -33,7 +33,7 @@ impl Document {
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
-                if let crate::ftd2021::variable::VariableFlags {
+                if let ftd::ftd2021::variable::VariableFlags {
                     always_include: Some(f),
                 } = flag
                 {
@@ -47,7 +47,7 @@ impl Document {
 
         fn get_value(
             value: &ftd::Value,
-            doc: &crate::ftd2021::p2::TDoc,
+            doc: &ftd::ftd2021::p2::TDoc,
         ) -> Option<serde_json::Value> {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
@@ -145,12 +145,8 @@ impl Document {
         data_dependencies
     }
 
-    pub fn rerender(
-        &mut self,
-        id: &str,
-        doc_id: &str,
-    ) -> crate::ftd2021::p1::Result<ftd::Document> {
-        let mut rt = ftd::RT::from(
+    pub fn rerender(&mut self, id: &str, doc_id: &str) -> ftd::ftd2021::p1::Result<ftd::Document> {
+        let mut rt = ftd::ftd2021::RT::from(
             self.name.as_str(),
             self.aliases.clone(),
             self.data.clone(),
@@ -403,7 +399,7 @@ impl Document {
             id: &str,
             data_id: &Option<String>,
         ) {
-            let events = crate::ftd2021::event::group_by_js_event(events);
+            let events = ftd::ftd2021::event::group_by_js_event(events);
             for (name, actions) in events {
                 let action = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this);",
@@ -445,7 +441,7 @@ impl Document {
                     continue;
                 }
                 if let Some(ref position) = common.position {
-                    for (key, value) in crate::ftd2021::html::column_align(position) {
+                    for (key, value) in ftd::ftd2021::html::column_align(position) {
                         child_node.style.insert(key.as_str().to_string(), value);
                     }
                 }
@@ -528,7 +524,7 @@ impl Document {
         })
     }
 
-    pub fn get_heading<F>(children: &[ftd::Element], f: &F) -> Option<ftd::Rendered>
+    pub fn get_heading<F>(children: &[ftd::Element], f: &F) -> Option<ftd::ftd2021::Rendered>
     where
         F: Fn(&ftd::Region) -> bool,
     {
@@ -577,7 +573,7 @@ impl Document {
         None
     }
 
-    pub fn title(&self) -> Option<ftd::Rendered> {
+    pub fn title(&self) -> Option<ftd::ftd2021::Rendered> {
         // find the text of first primary heading
         for i in vec![
             ftd::Region::H0,
@@ -611,7 +607,7 @@ impl Document {
         None
     }
 
-    pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> crate::ftd2021::p1::Result<T> {
+    pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> ftd::ftd2021::p1::Result<T> {
         let v = self.json(key)?;
         Ok(serde_json::from_value(v)?)
     }
@@ -624,7 +620,7 @@ impl Document {
         }
     }
 
-    pub fn only_instance<T>(&self, record: &str) -> crate::ftd2021::p1::Result<Option<T>>
+    pub fn only_instance<T>(&self, record: &str) -> ftd::ftd2021::p1::Result<Option<T>>
     where
         T: serde::de::DeserializeOwned,
     {
@@ -633,7 +629,7 @@ impl Document {
             return Ok(None);
         }
         if v.len() > 1 {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("more than one instances({}) of {} found", v.len(), record),
                 self.name.as_str(),
                 0,
@@ -642,7 +638,7 @@ impl Document {
         Ok(Some(v.into_iter().next().unwrap())) // unwrap okay because v not empty
     }
 
-    pub fn instances<T>(&self, record: &str) -> crate::ftd2021::p1::Result<Vec<T>>
+    pub fn instances<T>(&self, record: &str) -> ftd::ftd2021::p1::Result<Vec<T>>
     where
         T: serde::de::DeserializeOwned,
     {
@@ -653,7 +649,7 @@ impl Document {
         };
 
         let json = match thing {
-            crate::ftd2021::p2::Thing::Record(r) => {
+            ftd::ftd2021::p2::Thing::Record(r) => {
                 let mut a = vec![];
                 for c in match r.instances.get(self.name.as_str()) {
                     Some(v) => v.iter(),
@@ -664,7 +660,7 @@ impl Document {
                 serde_json::Value::Array(a)
             }
             t => {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("not a record: {:?}", t),
                     self.name.as_str(),
                     0,
@@ -675,19 +671,19 @@ impl Document {
         Ok(serde_json::from_value(json)?)
     }
 
-    pub fn json(&self, key: &str) -> crate::ftd2021::p1::Result<serde_json::Value> {
+    pub fn json(&self, key: &str) -> ftd::ftd2021::p1::Result<serde_json::Value> {
         let key = self.name(key);
         let thing = match self.data.get(key.as_str()) {
             Some(v) => v,
             None => {
-                return Err(crate::ftd2021::p1::Error::NotFound {
+                return Err(ftd::ftd2021::p1::Error::NotFound {
                     doc_id: "".to_string(),
                     line_number: 0,
                     key: key.to_string(),
                 })
             }
         };
-        let doc = crate::ftd2021::p2::TDoc {
+        let doc = ftd::ftd2021::p2::TDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
@@ -696,7 +692,7 @@ impl Document {
         };
 
         match thing {
-            crate::ftd2021::p2::Thing::Variable(v) => {
+            ftd::ftd2021::p2::Thing::Variable(v) => {
                 let mut property_value = &v.value;
                 for (boolean, pv) in v.conditions.iter() {
                     if boolean.eval(0, &doc)? {
@@ -709,8 +705,8 @@ impl Document {
         }
     }
 
-    fn value_to_json(&self, v: &ftd::Value) -> crate::ftd2021::p1::Result<serde_json::Value> {
-        let doc = crate::ftd2021::p2::TDoc {
+    fn value_to_json(&self, v: &ftd::Value) -> ftd::ftd2021::p1::Result<serde_json::Value> {
+        let doc = ftd::ftd2021::p2::TDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
@@ -743,7 +739,7 @@ impl Document {
                 None => serde_json::Value::Null,
             },
             _ => {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,
@@ -752,7 +748,7 @@ impl Document {
         })
     }
 
-    fn list_to_json(&self, data: &[ftd::Value]) -> crate::ftd2021::p1::Result<serde_json::Value> {
+    fn list_to_json(&self, data: &[ftd::Value]) -> ftd::ftd2021::p1::Result<serde_json::Value> {
         let mut list = vec![];
         for item in data.iter() {
             list.push(self.value_to_json(item)?)
@@ -764,7 +760,7 @@ impl Document {
     fn object2_to_json(
         &self,
         fields: &ftd::Map<ftd::Value>,
-    ) -> crate::ftd2021::p1::Result<serde_json::Value> {
+    ) -> ftd::ftd2021::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
             map.insert(k.to_string(), self.value_to_json(v)?);
@@ -776,7 +772,7 @@ impl Document {
         &self,
         variant: Option<&String>,
         fields: &ftd::Map<ftd::PropertyValue>,
-    ) -> crate::ftd2021::p1::Result<serde_json::Value> {
+    ) -> ftd::ftd2021::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         if let Some(v) = variant {
             map.insert("type".to_string(), serde_json::Value::String(v.to_owned()));
@@ -790,7 +786,7 @@ impl Document {
     fn property_value_to_json(
         &self,
         v: &ftd::PropertyValue,
-    ) -> crate::ftd2021::p1::Result<serde_json::Value> {
+    ) -> ftd::ftd2021::p1::Result<serde_json::Value> {
         match v {
             ftd::PropertyValue::Value { value, .. } => self.value_to_json(value),
             ftd::PropertyValue::Reference { name, .. } => self.json(name),
@@ -821,7 +817,7 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
                 if common.region.as_ref().filter(|v| v.is_heading()).is_some()
                     && common.data_id.is_none()
                 {
-                    if let Some(h) = crate::ftd2021::p2::Document::get_heading(
+                    if let Some(h) = ftd::ftd2021::p2::Document::get_heading(
                         vec![element.clone()].as_slice(),
                         &|r| r.is_heading(),
                     ) {

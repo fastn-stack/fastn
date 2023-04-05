@@ -26,17 +26,12 @@ pub static KNOWN_EXTENSIONS: once_cell::sync::Lazy<std::collections::HashSet<Str
 pub static TS: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
     once_cell::sync::Lazy::new(syntect::highlighting::ThemeSet::load_defaults);
 
-pub fn code(
-    code: &str,
-    ext: &str,
-    theme: &str,
-    doc_id: &str,
-) -> crate::ftd2021::p1::Result<String> {
+pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::ftd2021::p1::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
     if !TS.themes.contains_key(theme) {
-        return Err(crate::ftd2021::p1::Error::ParseError {
+        return Err(ftd::ftd2021::p1::Error::ParseError {
             message: format!("'{}' is not a valid theme", theme),
             doc_id: doc_id.to_string(),
             line_number: 0,

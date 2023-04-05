@@ -2,7 +2,7 @@
 pub struct Variable {
     pub name: String,
     pub value: ftd::PropertyValue,
-    pub conditions: Vec<(crate::ftd2021::p2::Boolean, ftd::PropertyValue)>,
+    pub conditions: Vec<(ftd::ftd2021::p2::Boolean, ftd::PropertyValue)>,
     pub flags: VariableFlags,
 }
 
@@ -13,10 +13,10 @@ pub struct VariableFlags {
 
 impl VariableFlags {
     pub(crate) fn from_p1(
-        p1: &crate::ftd2021::p1::Header,
+        p1: &ftd::ftd2021::p1::Header,
         doc_id: &str,
         line_number: usize,
-    ) -> crate::ftd2021::p1::Result<Self> {
+    ) -> ftd::ftd2021::p1::Result<Self> {
         Ok(VariableFlags {
             always_include: p1.bool_optional(doc_id, line_number, "$always-include$")?,
         })
@@ -31,11 +31,11 @@ pub enum PropertyValue {
     },
     Reference {
         name: String,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     Variable {
         name: String,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
 }
 
@@ -79,7 +79,7 @@ impl PropertyValue {
                 *value = value.clone().into_optional();
             }
             PropertyValue::Reference { kind, .. } | PropertyValue::Variable { kind, .. } => {
-                *kind = crate::ftd2021::p2::Kind::Optional {
+                *kind = ftd::ftd2021::p2::Kind::Optional {
                     kind: Box::new(kind.clone()),
                     is_reference: false,
                 };
@@ -91,24 +91,24 @@ impl PropertyValue {
     pub fn resolve_value(
         line_number: usize,
         value: &str,
-        expected_kind: Option<crate::ftd2021::p2::Kind>,
-        doc: &crate::ftd2021::p2::TDoc,
-        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
+        expected_kind: Option<ftd::ftd2021::p2::Kind>,
+        doc: &ftd::ftd2021::p2::TDoc,
+        arguments: &ftd::Map<ftd::ftd2021::p2::Kind>,
         source: Option<ftd::TextSource>,
-    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    ) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
-        } else if let Some(crate::ftd2021::p2::Kind::UI { .. }) =
+        } else if let Some(ftd::ftd2021::p2::Kind::UI { .. }) =
             expected_kind.as_ref().map(|v| v.inner())
         {
             if !value.contains(':') {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("expected `:`, found: `{}`", value),
                     doc.name,
                     line_number,
                 );
             }
-            let name = crate::ftd2021::p2::utils::split(value.to_string(), ":")?.0;
+            let name = ftd::ftd2021::p2::utils::split(value.to_string(), ":")?.0;
             PropertyType::Component { name }
         } else {
             let value = if let Some(value) = value.strip_prefix('\\') {
@@ -120,7 +120,7 @@ impl PropertyValue {
         };
 
         let (part1, mut part2) =
-            crate::ftd2021::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
+            ftd::ftd2021::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
 
         return Ok(match property_type {
             PropertyType::Variable(ref string)
@@ -129,28 +129,28 @@ impl PropertyValue {
             } => {
                 let (kind, is_doc) = match arguments.get(&part1) {
                     _ if part1.eq("MOUSE-IN") => (
-                        crate::ftd2021::p2::Kind::Boolean {
+                        ftd::ftd2021::p2::Kind::Boolean {
                             default: Some("false".to_string()),
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => (
-                        crate::ftd2021::p2::Kind::Integer {
+                        ftd::ftd2021::p2::Kind::Integer {
                             default: None,
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("CHILDREN-COUNT") => (
-                        crate::ftd2021::p2::Kind::Integer {
+                        ftd::ftd2021::p2::Kind::Integer {
                             default: Some("0".to_string()),
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("CHILDREN-COUNT-MINUS-ONE") => (
-                        crate::ftd2021::p2::Kind::Integer {
+                        ftd::ftd2021::p2::Kind::Integer {
                             default: Some("-1".to_string()),
                             is_reference: false,
                         },
@@ -158,19 +158,19 @@ impl PropertyValue {
                     ),
                     _ if part1.eq("PARENT") => {
                         let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
-                            crate::ftd2021::p2::Kind::Integer {
+                            ftd::ftd2021::p2::Kind::Integer {
                                 default: Some("0".to_string()),
                                 is_reference: false,
                             }
                         } else if part2.eq(&Some("CHILDREN-COUNT-MINUS-ONE".to_string())) {
-                            crate::ftd2021::p2::Kind::Integer {
+                            ftd::ftd2021::p2::Kind::Integer {
                                 default: Some("-1".to_string()),
                                 is_reference: false,
                             }
                         } else if let Some(ref kind) = expected_kind {
                             kind.clone()
                         } else {
-                            return crate::ftd2021::p2::utils::e2(
+                            return ftd::ftd2021::p2::utils::e2(
                                 format!("{}.{:?} expected kind for parent variable", part1, part2),
                                 doc.name,
                                 line_number,
@@ -181,16 +181,16 @@ impl PropertyValue {
                         (kind, false)
                     }
                     None => match doc.get_initial_thing(line_number, string) {
-                        Ok((crate::ftd2021::p2::Thing::Variable(v), name)) => {
+                        Ok((ftd::ftd2021::p2::Thing::Variable(v), name)) => {
                             part2 = name;
                             (v.value.kind(), true)
                         }
-                        Ok((crate::ftd2021::p2::Thing::Component(_), name)) => {
+                        Ok((ftd::ftd2021::p2::Thing::Component(_), name)) => {
                             part2 = name;
-                            (crate::ftd2021::p2::Kind::UI { default: None }, true)
+                            (ftd::ftd2021::p2::Kind::UI { default: None }, true)
                         }
                         e => {
-                            return crate::ftd2021::p2::utils::e2(
+                            return ftd::ftd2021::p2::utils::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
                                 line_number,
@@ -217,7 +217,7 @@ impl PropertyValue {
             }
             PropertyType::Value(string) => {
                 if expected_kind.is_none() {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         "expected expected_kind while calling resolve_value",
                         doc.name,
                         line_number,
@@ -225,10 +225,10 @@ impl PropertyValue {
                 }
                 let expected_kind = expected_kind.unwrap();
                 match expected_kind.inner() {
-                    crate::ftd2021::p2::Kind::Integer { .. } => ftd::PropertyValue::Value {
+                    ftd::ftd2021::p2::Kind::Integer { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
                             value: string.parse::<i64>().map_err(|e| {
-                                crate::ftd2021::p1::Error::ParseError {
+                                ftd::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -236,10 +236,10 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    crate::ftd2021::p2::Kind::Decimal { .. } => ftd::PropertyValue::Value {
+                    ftd::ftd2021::p2::Kind::Decimal { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Decimal {
                             value: string.parse::<f64>().map_err(|e| {
-                                crate::ftd2021::p1::Error::ParseError {
+                                ftd::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -247,10 +247,10 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    crate::ftd2021::p2::Kind::Boolean { .. } => ftd::PropertyValue::Value {
+                    ftd::ftd2021::p2::Kind::Boolean { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::Boolean {
                             value: string.parse::<bool>().map_err(|e| {
-                                crate::ftd2021::p1::Error::ParseError {
+                                ftd::ftd2021::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -258,14 +258,14 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    crate::ftd2021::p2::Kind::String { .. } => ftd::PropertyValue::Value {
+                    ftd::ftd2021::p2::Kind::String { .. } => ftd::PropertyValue::Value {
                         value: ftd::Value::String {
                             text: string,
                             source: source.unwrap_or(ftd::TextSource::Header),
                         },
                     },
                     t => {
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("can't resolve value {} to expected kind {:?}", string, t),
                             doc.name,
                             line_number,
@@ -294,20 +294,20 @@ impl PropertyValue {
 
         fn get_kind(
             line_number: usize,
-            kind: &crate::ftd2021::p2::Kind,
+            kind: &ftd::ftd2021::p2::Kind,
             p2: Option<String>,
-            doc: &crate::ftd2021::p2::TDoc,
-            expected_kind: &Option<crate::ftd2021::p2::Kind>,
-        ) -> crate::ftd2021::p1::Result<crate::ftd2021::p2::Kind> {
+            doc: &ftd::ftd2021::p2::TDoc,
+            expected_kind: &Option<ftd::ftd2021::p2::Kind>,
+        ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::p2::Kind> {
             let mut found_kind = kind.to_owned();
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
-                    crate::ftd2021::p2::Kind::Record { ref name, .. } => (
+                    ftd::ftd2021::p2::Kind::Record { ref name, .. } => (
                         name.to_string(),
                         doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
                             .fields,
                     ),
-                    crate::ftd2021::p2::Kind::OrTypeWithVariant {
+                    ftd::ftd2021::p2::Kind::OrTypeWithVariant {
                         ref name, variant, ..
                     } => {
                         let name = doc.resolve_name(line_number, name)?;
@@ -317,7 +317,7 @@ impl PropertyValue {
                                 .variants
                                 .into_iter()
                                 .find(|v| v.name.eq(&format!("{}.{}", name, variant)))
-                                .ok_or_else(|| crate::ftd2021::p1::Error::ParseError {
+                                .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
                                     message: format!(
                                         "expected variant `{}` in or_type `{}`",
                                         variant, name
@@ -333,7 +333,7 @@ impl PropertyValue {
                 let mut p1 = p2.to_string();
                 let mut p2 = None;
                 if p1.contains('.') {
-                    let split_txt = crate::ftd2021::p2::utils::split(p1.to_string(), ".")?;
+                    let split_txt = ftd::ftd2021::p2::utils::split(p1.to_string(), ".")?;
                     p1 = split_txt.0;
                     p2 = Some(split_txt.1);
                 }
@@ -343,7 +343,7 @@ impl PropertyValue {
                     }
                     Some(kind) => kind.to_owned(),
                     _ => {
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("{} is not present in {} of type {:?}", p1, name, fields),
                             doc.name,
                             line_number,
@@ -355,7 +355,7 @@ impl PropertyValue {
                 if !e_kind.is_same_as(&found_kind)
                     && !matches!(e_kind, ftd::ftd2021::p2::Kind::Element)
                 {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
                         line_number,
@@ -373,7 +373,7 @@ impl PropertyValue {
         }
     }
 
-    pub fn kind(&self) -> crate::ftd2021::p2::Kind {
+    pub fn kind(&self) -> ftd::ftd2021::p2::Kind {
         match self {
             Self::Value { value: v } => v.kind(),
             Self::Reference { kind, .. } => kind.to_owned(),
@@ -385,8 +385,8 @@ impl PropertyValue {
     pub fn resolve(
         &self,
         line_number: usize,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Value> {
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Value> {
         let mut value = self.partial_resolve(line_number, doc)?;
         // In case of Object resolve all the values
         if let ftd::Value::Object { values } = &mut value {
@@ -402,8 +402,8 @@ impl PropertyValue {
     pub fn partial_resolve(
         &self,
         line_number: usize,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Value> {
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Value> {
         Ok(match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
@@ -446,12 +446,12 @@ pub enum TextSource {
 
 impl TextSource {
     pub fn from_kind(
-        kind: &crate::ftd2021::p2::Kind,
+        kind: &ftd::ftd2021::p2::Kind,
         doc_id: &str,
         line_number: usize,
-    ) -> crate::ftd2021::p1::Result<Self> {
+    ) -> ftd::ftd2021::p1::Result<Self> {
         Ok(match kind {
-            crate::ftd2021::p2::Kind::String { caption, body, .. } => {
+            ftd::ftd2021::p2::Kind::String { caption, body, .. } => {
                 if *caption {
                     TextSource::Caption
                 } else if *body {
@@ -460,9 +460,9 @@ impl TextSource {
                     TextSource::Header
                 }
             }
-            crate::ftd2021::p2::Kind::Element => TextSource::Header,
+            ftd::ftd2021::p2::Kind::Element => TextSource::Header,
             t => {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("expected string kind, found: {:?}", t),
                     doc_id,
                     line_number,
@@ -477,7 +477,7 @@ impl TextSource {
 #[allow(clippy::large_enum_variant)]
 pub enum Value {
     None {
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     String {
         text: String,
@@ -506,26 +506,26 @@ pub enum Value {
     },
     List {
         data: Vec<PropertyValue>,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     Optional {
         data: Box<Option<Value>>,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     Map {
         data: ftd::Map<Value>,
-        kind: crate::ftd2021::p2::Kind,
+        kind: ftd::ftd2021::p2::Kind,
     },
     UI {
         name: String,
-        kind: crate::ftd2021::p2::Kind,
-        data: ftd::Map<crate::ftd2021::component::Property>,
+        kind: ftd::ftd2021::p2::Kind,
+        data: ftd::Map<ftd::ftd2021::component::Property>,
     },
 }
 
 impl Value {
     /// returns a default optional value from given kind
-    pub fn default_optional_value_from_kind(kind: crate::ftd2021::p2::Kind) -> Self {
+    pub fn default_optional_value_from_kind(kind: ftd::ftd2021::p2::Kind) -> Self {
         Value::Optional {
             data: Box::new(None),
             kind,
@@ -592,41 +592,41 @@ impl Value {
         false
     }
 
-    pub fn kind(&self) -> crate::ftd2021::p2::Kind {
+    pub fn kind(&self) -> ftd::ftd2021::p2::Kind {
         match self {
             Value::None { kind: k } => k.to_owned(),
-            Value::String { source, .. } => crate::ftd2021::p2::Kind::String {
+            Value::String { source, .. } => ftd::ftd2021::p2::Kind::String {
                 caption: *source == TextSource::Caption,
                 body: *source == TextSource::Body,
                 default: None,
                 is_reference: false,
             },
-            Value::Integer { .. } => crate::ftd2021::p2::Kind::integer(),
-            Value::Decimal { .. } => crate::ftd2021::p2::Kind::decimal(),
-            Value::Boolean { .. } => crate::ftd2021::p2::Kind::boolean(),
-            Value::Object { .. } => crate::ftd2021::p2::Kind::object(),
-            Value::Record { name: id, .. } => crate::ftd2021::p2::Kind::Record {
+            Value::Integer { .. } => ftd::ftd2021::p2::Kind::integer(),
+            Value::Decimal { .. } => ftd::ftd2021::p2::Kind::decimal(),
+            Value::Boolean { .. } => ftd::ftd2021::p2::Kind::boolean(),
+            Value::Object { .. } => ftd::ftd2021::p2::Kind::object(),
+            Value::Record { name: id, .. } => ftd::ftd2021::p2::Kind::Record {
                 name: id.to_string(),
                 default: None,
                 is_reference: false,
             },
             Value::OrType {
                 name: id, variant, ..
-            } => crate::ftd2021::p2::Kind::OrTypeWithVariant {
+            } => ftd::ftd2021::p2::Kind::OrTypeWithVariant {
                 name: id.to_string(),
                 variant: variant.to_string(),
                 is_reference: false,
             },
-            Value::List { kind, .. } => crate::ftd2021::p2::Kind::List {
+            Value::List { kind, .. } => ftd::ftd2021::p2::Kind::List {
                 kind: Box::new(kind.to_owned()),
                 default: None,
                 is_reference: false,
             },
-            Value::Optional { kind, .. } => crate::ftd2021::p2::Kind::Optional {
+            Value::Optional { kind, .. } => ftd::ftd2021::p2::Kind::Optional {
                 kind: Box::new(kind.to_owned()),
                 is_reference: false,
             },
-            Value::Map { kind, .. } => crate::ftd2021::p2::Kind::Map {
+            Value::Map { kind, .. } => ftd::ftd2021::p2::Kind::Map {
                 kind: Box::new(kind.to_owned()),
                 is_reference: false,
             },
@@ -726,17 +726,17 @@ impl Value {
 
 impl Variable {
     pub fn list_from_p1(
-        p1: &crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Self> {
-        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+        p1: &ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Self> {
+        let var_data = ftd::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
             vec![].as_slice(),
         )?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-        let kind = crate::ftd2021::p2::Kind::for_variable(
+        let kind = ftd::ftd2021::p2::Kind::for_variable(
             p1.line_number,
             &p1.name,
             None,
@@ -745,7 +745,7 @@ impl Variable {
             &Default::default(),
         )?;
         if !kind.is_list() {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("Expected list found: {:?}", p1),
                 doc.name,
                 p1.line_number,
@@ -757,14 +757,14 @@ impl Variable {
                     name,
                     value: ftd::PropertyValue::Reference {
                         name: doc.resolve_name(p1.line_number, text)?,
-                        kind: crate::ftd2021::p2::Kind::List {
+                        kind: ftd::ftd2021::p2::Kind::List {
                             kind: Box::new(kind.list_kind().to_owned()),
                             default: None,
                             is_reference: false,
                         },
                     },
                     conditions: vec![],
-                    flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                    flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                         &p1.header,
                         doc.name,
                         p1.line_number,
@@ -782,7 +782,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
-            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+            flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                 &p1.header,
                 doc.name,
                 p1.line_number,
@@ -791,19 +791,19 @@ impl Variable {
     }
 
     pub fn map_from_p1(
-        p1: &crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Self> {
+        p1: &ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
-            crate::ftd2021::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
+            ftd::ftd2021::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
         )?;
         Ok(Variable {
             name,
             value: ftd::PropertyValue::Value {
                 value: Value::Map {
                     data: Default::default(),
-                    kind: crate::ftd2021::p2::Kind::from(
+                    kind: ftd::ftd2021::p2::Kind::from(
                         p1.line_number,
                         p1.header.str(doc.name, p1.line_number, "type")?,
                         doc,
@@ -812,7 +812,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
-            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+            flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                 &p1.header,
                 doc.name,
                 p1.line_number,
@@ -822,21 +822,21 @@ impl Variable {
 
     pub fn update_from_p1(
         &mut self,
-        p1: &crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<()> {
+        p1: &ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<()> {
         fn read_value(
             line_number: usize,
-            kind: &crate::ftd2021::p2::Kind,
-            p1: &crate::ftd2021::p1::Section,
-            doc: &crate::ftd2021::p2::TDoc,
-        ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+            kind: &ftd::ftd2021::p2::Kind,
+            p1: &ftd::ftd2021::p1::Section,
+            doc: &ftd::ftd2021::p2::TDoc,
+        ) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
             Ok(match kind {
-                crate::ftd2021::p2::Kind::Integer { .. } => read_integer(p1, doc)?,
-                crate::ftd2021::p2::Kind::Decimal { .. } => read_decimal(p1, doc)?,
-                crate::ftd2021::p2::Kind::Boolean { .. } => read_boolean(p1, doc)?,
-                crate::ftd2021::p2::Kind::String { .. } => read_string(p1, doc)?,
-                crate::ftd2021::p2::Kind::Record { name, .. } => {
+                ftd::ftd2021::p2::Kind::Integer { .. } => read_integer(p1, doc)?,
+                ftd::ftd2021::p2::Kind::Decimal { .. } => read_decimal(p1, doc)?,
+                ftd::ftd2021::p2::Kind::Boolean { .. } => read_boolean(p1, doc)?,
+                ftd::ftd2021::p2::Kind::String { .. } => read_string(p1, doc)?,
+                ftd::ftd2021::p2::Kind::Record { name, .. } => {
                     doc.get_record(line_number, name)?.create(p1, doc)?
                 }
                 _ => unimplemented!("{:?}", kind),
@@ -857,10 +857,10 @@ impl Variable {
             &self.value.kind(),
             &self.value.resolve(p1.line_number, doc)?,
         ) {
-            (crate::ftd2021::p2::Kind::Record { name, .. }, _) => {
+            (ftd::ftd2021::p2::Kind::Record { name, .. }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
-            (crate::ftd2021::p2::Kind::List { kind, .. }, ftd::Value::List { data, .. }) => {
+            (ftd::ftd2021::p2::Kind::List { kind, .. }, ftd::Value::List { data, .. }) => {
                 let mut data = data.clone();
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
                 self.value = ftd::PropertyValue::Value {
@@ -870,7 +870,7 @@ impl Variable {
                     },
                 };
             }
-            (crate::ftd2021::p2::Kind::Optional { kind, .. }, ftd::Value::Optional { .. }) => {
+            (ftd::ftd2021::p2::Kind::Optional { kind, .. }, ftd::Value::Optional { .. }) => {
                 self.value = read_value(p1.line_number, kind, &p1, doc)
                     .map(|v| v.into_optional())
                     .unwrap_or(ftd::PropertyValue::Value {
@@ -880,8 +880,8 @@ impl Variable {
                         },
                     });
             }
-            (crate::ftd2021::p2::Kind::Map { .. }, _) => {
-                return crate::ftd2021::p2::utils::e2("unexpected map", doc.name, p1.line_number)
+            (ftd::ftd2021::p2::Kind::Map { .. }, _) => {
+                return ftd::ftd2021::p2::utils::e2("unexpected map", doc.name, p1.line_number)
             }
             (k, _) => self.value = read_value(p1.line_number, k, &p1, doc)?,
         };
@@ -890,17 +890,17 @@ impl Variable {
     }
 
     pub fn from_p1(
-        p1: &crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Self> {
-        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+        p1: &ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Self> {
+        let var_data = ftd::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
             vec![].as_slice(),
         )?;
         if !var_data.is_variable() {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("expected variable, found: {}", p1.name),
                 doc.name,
                 p1.line_number,
@@ -909,7 +909,7 @@ impl Variable {
         let name = var_data.name.clone();
 
         if var_data.is_optional() && p1.caption.is_none() && p1.body.is_none() {
-            let kind = crate::ftd2021::p2::Kind::for_variable(
+            let kind = ftd::ftd2021::p2::Kind::for_variable(
                 p1.line_number,
                 &p1.name,
                 None,
@@ -926,7 +926,7 @@ impl Variable {
                     },
                 },
                 conditions: vec![],
-                flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                     &p1.header,
                     doc.name,
                     p1.line_number,
@@ -942,12 +942,12 @@ impl Variable {
                 "boolean" => read_boolean(p1, doc)?,
                 "object" => read_object(p1, doc)?,
                 t => match doc.get_thing(p1.line_number, t)? {
-                    crate::ftd2021::p2::Thing::Record(r) => r.create(p1, doc)?,
-                    crate::ftd2021::p2::Thing::OrTypeWithVariant { e, variant } => {
+                    ftd::ftd2021::p2::Thing::Record(r) => r.create(p1, doc)?,
+                    ftd::ftd2021::p2::Thing::OrTypeWithVariant { e, variant } => {
                         e.create(p1, variant, doc)?
                     }
                     t => {
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("unexpected thing found: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -956,7 +956,7 @@ impl Variable {
                 },
             };
             if var_data.is_optional() {
-                let kind = crate::ftd2021::p2::Kind::for_variable(
+                let kind = ftd::ftd2021::p2::Kind::for_variable(
                     p1.line_number,
                     &p1.name,
                     None,
@@ -985,7 +985,7 @@ impl Variable {
             name,
             value,
             conditions: vec![],
-            flags: crate::ftd2021::variable::VariableFlags::from_p1(
+            flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                 &p1.header,
                 doc.name,
                 p1.line_number,
@@ -995,38 +995,38 @@ impl Variable {
 
     pub fn get_value(
         &self,
-        p1: &crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+        p1: &ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
         match self.value.kind().inner() {
-            crate::ftd2021::p2::Kind::String { .. } => read_string(p1, doc),
-            crate::ftd2021::p2::Kind::Integer { .. } => read_integer(p1, doc),
-            crate::ftd2021::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
-            crate::ftd2021::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
-            crate::ftd2021::p2::Kind::Record { name, .. } => {
+            ftd::ftd2021::p2::Kind::String { .. } => read_string(p1, doc),
+            ftd::ftd2021::p2::Kind::Integer { .. } => read_integer(p1, doc),
+            ftd::ftd2021::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
+            ftd::ftd2021::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
+            ftd::ftd2021::p2::Kind::Record { name, .. } => {
                 match doc.get_thing(p1.line_number, name)? {
-                    crate::ftd2021::p2::Thing::Record(r) => r.create(p1, doc),
-                    t => crate::ftd2021::p2::utils::e2(
+                    ftd::ftd2021::p2::Thing::Record(r) => r.create(p1, doc),
+                    t => ftd::ftd2021::p2::utils::e2(
                         format!("expected record type, found: {:?}", t),
                         doc.name,
                         p1.line_number,
                     ),
                 }
             }
-            crate::ftd2021::p2::Kind::OrType { name, .. }
-            | crate::ftd2021::p2::Kind::OrTypeWithVariant { name, .. } => {
+            ftd::ftd2021::p2::Kind::OrType { name, .. }
+            | ftd::ftd2021::p2::Kind::OrTypeWithVariant { name, .. } => {
                 match doc.get_thing(p1.line_number, name)? {
-                    crate::ftd2021::p2::Thing::OrTypeWithVariant { e, variant } => {
+                    ftd::ftd2021::p2::Thing::OrTypeWithVariant { e, variant } => {
                         e.create(p1, variant, doc)
                     }
-                    t => crate::ftd2021::p2::utils::e2(
+                    t => ftd::ftd2021::p2::utils::e2(
                         format!("expected or-type type, found: {:?}", t),
                         doc.name,
                         p1.line_number,
                     ),
                 }
             }
-            t => crate::ftd2021::p2::utils::e2(
+            t => ftd::ftd2021::p2::utils::e2(
                 format!("unexpected type found: {:?}", t),
                 doc.name,
                 p1.line_number,
@@ -1035,7 +1035,7 @@ impl Variable {
     }
 }
 
-pub fn guess_type(s: &str, is_body: bool) -> crate::ftd2021::p1::Result<Value> {
+pub fn guess_type(s: &str, is_body: bool) -> ftd::ftd2021::p1::Result<Value> {
     if is_body {
         return Ok(Value::String {
             text: s.to_string(),
@@ -1063,12 +1063,12 @@ pub fn guess_type(s: &str, is_body: bool) -> crate::ftd2021::p1::Result<Value> {
 }
 
 fn read_string(
-    p1: &crate::ftd2021::p1::Section,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    p1: &ftd::ftd2021::p1::Section,
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let (text, source, line_number) = match (&p1.caption, &p1.body) {
         (Some(c), Some(b)) => {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("both caption: `{}` and body: `{}` present", c, b.1),
                 doc.name,
                 p1.line_number,
@@ -1077,7 +1077,7 @@ fn read_string(
         (Some(caption), None) => (caption.to_string(), TextSource::Caption, p1.line_number),
         (None, Some(body)) => (body.1.to_string(), TextSource::Body, body.0),
         (None, None) => {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 "either body or caption is required for string",
                 doc.name,
                 p1.line_number,
@@ -1087,7 +1087,7 @@ fn read_string(
     Ok(if let Some(text) = text.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(line_number, text)?,
-            kind: crate::ftd2021::p2::Kind::String {
+            kind: ftd::ftd2021::p2::Kind::String {
                 caption: source.eq(&ftd::TextSource::Caption),
                 body: source.eq(&ftd::TextSource::Body),
                 default: None,
@@ -1102,14 +1102,14 @@ fn read_string(
 }
 
 fn read_integer(
-    p1: &crate::ftd2021::p1::Section,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    p1: &ftd::ftd2021::p1::Section,
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: crate::ftd2021::p2::Kind::Integer {
+            kind: ftd::ftd2021::p2::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
@@ -1120,19 +1120,19 @@ fn read_integer(
                 value: Value::Integer { value: v },
             });
         }
-        return crate::ftd2021::p2::utils::e2("not a valid integer", doc.name, p1.line_number);
+        return ftd::ftd2021::p2::utils::e2("not a valid integer", doc.name, p1.line_number);
     })
 }
 
 fn read_decimal(
-    p1: &crate::ftd2021::p1::Section,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    p1: &ftd::ftd2021::p1::Section,
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: crate::ftd2021::p2::Kind::Integer {
+            kind: ftd::ftd2021::p2::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
@@ -1143,19 +1143,19 @@ fn read_decimal(
                 value: Value::Decimal { value: v },
             });
         }
-        return crate::ftd2021::p2::utils::e2("not a valid float", doc.name, p1.line_number);
+        return ftd::ftd2021::p2::utils::e2("not a valid float", doc.name, p1.line_number);
     })
 }
 
 fn read_boolean(
-    p1: &crate::ftd2021::p1::Section,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    p1: &ftd::ftd2021::p1::Section,
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: crate::ftd2021::p2::Kind::Integer {
+            kind: ftd::ftd2021::p2::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
@@ -1166,20 +1166,20 @@ fn read_boolean(
                 value: Value::Boolean { value: v },
             });
         }
-        return crate::ftd2021::p2::utils::e2("not a valid bool", doc.name, p1.line_number);
+        return ftd::ftd2021::p2::utils::e2("not a valid bool", doc.name, p1.line_number);
     })
 }
 
 fn read_object(
-    p1: &crate::ftd2021::p1::Section,
-    doc: &crate::ftd2021::p2::TDoc,
-) -> crate::ftd2021::p1::Result<ftd::PropertyValue> {
+    p1: &ftd::ftd2021::p1::Section,
+    doc: &ftd::ftd2021::p2::TDoc,
+) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let mut values: ftd::Map<PropertyValue> = Default::default();
     if let Some(ref caption) = p1.caption {
         if let Some(text) = caption.strip_prefix('$') {
             return Ok(ftd::PropertyValue::Reference {
                 name: doc.resolve_name(p1.line_number, text)?,
-                kind: crate::ftd2021::p2::Kind::Object {
+                kind: ftd::ftd2021::p2::Kind::Object {
                     default: None,
                     is_reference: false,
                 },
@@ -1193,7 +1193,7 @@ fn read_object(
         } else if let Ok(v) = ftd::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(crate::ftd2021::p2::Kind::decimal()),
+            Some(ftd::ftd2021::p2::Kind::decimal()),
             doc,
             &Default::default(),
             None,
@@ -1202,7 +1202,7 @@ fn read_object(
         } else if let Ok(v) = ftd::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(crate::ftd2021::p2::Kind::boolean()),
+            Some(ftd::ftd2021::p2::Kind::boolean()),
             doc,
             &Default::default(),
             None,
@@ -1211,7 +1211,7 @@ fn read_object(
         } else if let Ok(v) = ftd::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(crate::ftd2021::p2::Kind::integer()),
+            Some(ftd::ftd2021::p2::Kind::integer()),
             doc,
             &Default::default(),
             None,
@@ -1221,7 +1221,7 @@ fn read_object(
             ftd::PropertyValue::resolve_value(
                 line_number,
                 v,
-                Some(crate::ftd2021::p2::Kind::string()),
+                Some(ftd::ftd2021::p2::Kind::string()),
                 doc,
                 &Default::default(),
                 None,
@@ -1260,16 +1260,16 @@ pub enum Type {
 impl VariableData {
     pub fn get_name_kind(
         s: &str,
-        doc: &crate::ftd2021::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         line_number: usize,
         var_types: &[String],
-    ) -> crate::ftd2021::p1::Result<VariableData> {
+    ) -> ftd::ftd2021::p1::Result<VariableData> {
         if s.starts_with("record ")
             || s.starts_with("or-type ")
             || s.starts_with("map ")
             || s == "container"
         {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1277,7 +1277,7 @@ impl VariableData {
         }
         let expr = s.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 4 || expr.len() <= 1 {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1291,7 +1291,7 @@ impl VariableData {
                 kind = Some(expr[..3].join(" "));
                 name = expr.get(3);
             } else {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,
@@ -1307,7 +1307,7 @@ impl VariableData {
                 name = expr.get(2);
                 kind = expr.get(1).map(|k| k.to_string());
             } else {
-                return crate::ftd2021::p2::utils::e2(
+                return ftd::ftd2021::p2::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,
@@ -1315,7 +1315,7 @@ impl VariableData {
             }
         }
 
-        let var_kind = kind.ok_or(crate::ftd2021::p1::Error::ParseError {
+        let var_kind = kind.ok_or(ftd::ftd2021::p1::Error::ParseError {
             message: format!("kind not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,
@@ -1334,7 +1334,7 @@ impl VariableData {
             _ => Type::Component,
         };
 
-        let name = name.ok_or(crate::ftd2021::p1::Error::ParseError {
+        let name = name.ok_or(ftd::ftd2021::p1::Error::ParseError {
             message: format!("name not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,

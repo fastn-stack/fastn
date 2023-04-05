@@ -1,4 +1,4 @@
-use crate::ftd2021;
+use ftd::ftd2021;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Variable {
@@ -75,7 +75,7 @@ pub const ALWAYS_INCLUDE: &str = "$always-include$";
 
 #[cfg(test)]
 mod test {
-    use crate::ftd2021;
+    use ftd::ftd2021;
 
     #[track_caller]
     fn p(s: &str, t: ftd2021::interpreter::Variable) {

@@ -55,7 +55,7 @@ impl Node {
         is_parent_visible: bool,
         parent_id: &str,
         is_last: bool,
-    ) -> crate::ftd2021::dnode::DNode {
+    ) -> ftd::ftd2021::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
             s.extend(style.clone());
@@ -123,7 +123,7 @@ impl Node {
         let mut index_of_visible_children = 0;
 
         let children = {
-            let mut children: Vec<crate::ftd2021::dnode::DNode> = vec![];
+            let mut children: Vec<ftd::ftd2021::dnode::DNode> = vec![];
             for (i, v) in all_children.iter().enumerate() {
                 if v.node.is_empty() {
                     continue;
@@ -196,7 +196,7 @@ impl Node {
             attrs
         };
 
-        return crate::ftd2021::dnode::DNode {
+        return ftd::ftd2021::dnode::DNode {
             classes: self.classes.to_owned(),
             node: self.node.to_owned(),
             attrs,
@@ -1968,17 +1968,17 @@ fn get_translate(
     scale_y: &Option<f64>,
     rotate: &Option<i64>,
     doc_id: &str,
-) -> crate::ftd2021::p1::Result<Option<String>> {
+) -> ftd::ftd2021::p1::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 "move-up, move-down, move-left and move-right all 4 can't be used at once!",
                 doc_id,
                 0, // TODO
             );
         }
         (Some(_), Some(_), _, _) => {
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 "move-left, move-right both can't be used at once!",
                 doc_id,
                 0, // TODO
@@ -1986,7 +1986,7 @@ fn get_translate(
         }
         (_, _, Some(_), Some(_)) => {
             // TODO
-            return crate::ftd2021::p2::utils::e2(
+            return ftd::ftd2021::p2::utils::e2(
                 "move-up, move-down both can't be used at once!",
                 doc_id,
                 0,
