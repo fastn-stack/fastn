@@ -8,7 +8,6 @@ pub use ftd2021::constants::{identifier, regex};
 pub use ftd2021::event::{Action, Event};
 pub use ftd2021::html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use ftd2021::or_type::OrType;
-pub use ftd2021::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument};
 pub use ftd2021::rendered::Rendered;
 pub use ftd2021::rt::RT;
 pub use ftd2021::ui::{

@@ -353,7 +353,7 @@ impl InterpreterState {
                                 &Default::default(),
                             )?;
 
-                            ftd::InterpreterState::evaluate_component_for_headings(
+                            ftd::ftd2021::InterpreterState::evaluate_component_for_headings(
                                 &mut parsed_document.page_headings,
                                 &c,
                                 &mut parent,
@@ -453,7 +453,7 @@ impl InterpreterState {
                 // currently only page-headings is a lazy processor
                 if ftd::ExampleLibrary::is_lazy_processor(&section, &doc)? {
                     let mut final_list: Vec<ftd::PageHeadingItemCompat> = vec![];
-                    ftd::InterpreterState::from_page_heading_list_to_compat(
+                    ftd::ftd2021::InterpreterState::from_page_heading_list_to_compat(
                         &parsed_document.page_headings,
                         &mut final_list,
                     );
@@ -523,7 +523,7 @@ impl InterpreterState {
         for heading_item in page_headings {
             let mut start_compat_node =
                 make_compat_item(&heading_item.title, &heading_item.url, &heading_item.number);
-            ftd::InterpreterState::from_page_heading_list_to_compat(
+            ftd::ftd2021::InterpreterState::from_page_heading_list_to_compat(
                 &heading_item.children,
                 &mut start_compat_node.children,
             );
@@ -978,7 +978,7 @@ impl InterpreterState {
             if let Some(val) = value.clone().strip_prefix('$') {
                 if is_foreign_variable(val, foreign_variables, doc, line_number)? {
                     let val = doc.resolve_name(line_number, val)?;
-                    *value = ftd::InterpreterState::resolve_foreign_variable_name(
+                    *value = ftd::ftd2021::InterpreterState::resolve_foreign_variable_name(
                         format!("${}", val.as_str()).as_str(),
                     );
                     return Ok(Some(val));
@@ -1578,7 +1578,7 @@ impl InterpreterState {
             local_variables: &mut Default::default(),
             referenced_local_variables: &mut Default::default(),
         };
-        let var_name = ftd::InterpreterState::resolve_foreign_variable_name(
+        let var_name = ftd::ftd2021::InterpreterState::resolve_foreign_variable_name(
             doc.resolve_name(0, variable)?.as_str(),
         );
         self.bag.insert(
