@@ -111,8 +111,8 @@ impl InterpreterState {
     /// Increments the scan count of the first element in the
     /// AST stack of the `to_process` field of `InterpreterState` instance.
     pub fn increase_scan_count(&mut self) {
-        if let Some((_, asts)) = self.to_process.stack.last_mut() {
-            if let Some(ast) = asts.first_mut() {
+        if let Some((_, ast_list)) = self.to_process.stack.last_mut() {
+            if let Some(ast) = ast_list.first_mut() {
                 ast.0 += 1;
             }
         }
@@ -348,13 +348,13 @@ impl InterpreterState {
     ///
     /// The method looks at the last element in the stack field of the to_process field of the
     /// InterpreterState instance it is called on. If the last element exists, it looks at the
-    /// first element in the asts field of the last element. If the first element exists, the
+    /// first element in the ast_list field of the last element. If the first element exists, the
     /// method returns a tuple containing the doc_name as a String, the `number_of_scan` as an
     /// usize, and the ast as a reference to an ftd::ast::AST. If either the last element of the
-    /// stack or the first element of the asts field do not exist, the method returns None.
+    /// stack or the first element of the ast_list field do not exist, the method returns None.
     pub fn peek_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
-        if let Some((doc_name, asts)) = self.to_process.stack.last() {
-            if let Some((number_of_scan, ast)) = asts.first() {
+        if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
+            if let Some((number_of_scan, ast)) = ast_list.first() {
                 return Some((doc_name.to_string(), *number_of_scan, ast));
             }
         }
@@ -366,13 +366,13 @@ impl InterpreterState {
     /// The `get_next_ast` method retrieves the next available AST (abstract syntax tree) from
     /// the `InterpreterState` struct. It does this by first checking if there are any ASTs
     /// remaining in the `to_process` field's stack field. If there are, it returns the first one
-    /// in the asts vector. If there are no ASTs remaining in the current stack element, it
+    /// in the ast_list vector. If there are no ASTs remaining in the current stack element, it
     /// checks if the stack element is empty. If it is, it removes it from the stack and
     /// continues the loop. If the stack is empty, it returns None.
     pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd::ast::AST)> {
         loop {
-            if let Some((doc_name, asts)) = self.to_process.stack.last() {
-                if let Some((number_of_scan, ast)) = asts.first() {
+            if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
+                if let Some((number_of_scan, ast)) = ast_list.first() {
                     return Some((doc_name.to_string(), *number_of_scan, ast.clone()));
                 }
             }
@@ -649,8 +649,8 @@ pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter::Result<I
 }
 
 #[tracing::instrument(skip_all)]
-pub fn interpret_with_line_number<'a>(
-    id: &'a str,
+pub fn interpret_with_line_number(
+    id: &str,
     document: ParsedDocument,
     _line_number: usize,
 ) -> ftd::interpreter::Result<Interpreter> {
