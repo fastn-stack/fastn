@@ -4,7 +4,7 @@ pub async fn json_dump(
     path: Option<&str>,
     with_null: bool,
 ) -> fastn_core::Result<()> {
-    let mut documents = std::collections::BTreeMap::from_iter(
+    let documents = std::collections::BTreeMap::from_iter(
         config
             .get_files(&config.package)
             .await?
@@ -31,7 +31,26 @@ pub async fn json_dump(
 
         return Ok(());
     }
-    unimplemented!()
+    let mut values: serde_json::Map<String, serde_json::Value> = serde_json::Map::new();
+    for file in documents.values() {
+        if file.is_ftd() {
+            let value = get_ftd_json(file, stage)?;
+            values.insert(file.get_id(), value);
+        }
+    }
+
+    let value = serde_json::Value::Object(values);
+
+    println!(
+        "{}",
+        if with_null {
+            fastn_core::utils::value_to_colored_string(&value, 1)
+        } else {
+            fastn_core::utils::value_to_colored_string_without_null(&value, 1)
+        }
+    );
+
+    Ok(())
 }
 
 fn get_ftd_json(file: &fastn_core::File, stage: &str) -> fastn_core::Result<serde_json::Value> {
