@@ -9,10 +9,10 @@ pub fn code_with_theme(
     ext: &str,
     theme: &str,
     doc_id: &str,
-) -> crate::ftd2021::p1::Result<ftd::Rendered> {
-    Ok(ftd::Rendered {
+) -> ftd::ftd2021::p1::Result<ftd::ftd2021::Rendered> {
+    Ok(ftd::ftd2021::Rendered {
         original: code.to_string(),
-        rendered: crate::ftd2021::code::code(
+        rendered: ftd::ftd2021::code::code(
             code.replace("\n\\-- ", "\n-- ").as_str(),
             ext,
             theme,
@@ -21,16 +21,16 @@ pub fn code_with_theme(
     })
 }
 
-pub fn markup(s: &str) -> ftd::Rendered {
-    ftd::Rendered {
+pub fn markup(s: &str) -> ftd::ftd2021::Rendered {
+    ftd::ftd2021::Rendered {
         original: s.to_string(),
-        rendered: crate::ftd2021::markup::markup(s),
+        rendered: ftd::ftd2021::markup::markup(s),
     }
 }
 
-pub fn markup_line(s: &str) -> ftd::Rendered {
-    ftd::Rendered {
+pub fn markup_line(s: &str) -> ftd::ftd2021::Rendered {
+    ftd::ftd2021::Rendered {
         original: s.to_string(),
-        rendered: crate::ftd2021::markup::markup_inline(s),
+        rendered: ftd::ftd2021::markup::markup_inline(s),
     }
 }

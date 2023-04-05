@@ -2,7 +2,7 @@
 pub struct InterpreterState {
     pub id: String,
     pub package_name: Option<String>,
-    pub bag: ftd::Map<crate::ftd2021::p2::Thing>,
+    pub bag: ftd::Map<ftd::ftd2021::p2::Thing>,
     pub document_stack: Vec<ParsedDocument>,
     pub parsed_libs: ftd::Map<Vec<String>>,
 }
@@ -12,18 +12,18 @@ impl InterpreterState {
         InterpreterState {
             id,
             package_name,
-            bag: crate::ftd2021::p2::interpreter::default_bag(),
+            bag: ftd::ftd2021::p2::interpreter::default_bag(),
             ..Default::default()
         }
     }
 
     pub fn tdoc<'a>(
         &'a self,
-        local_variables: &'a mut ftd::Map<crate::ftd2021::p2::Thing>,
+        local_variables: &'a mut ftd::Map<ftd::ftd2021::p2::Thing>,
         referenced_local_variables: &'a mut ftd::Map<String>,
-    ) -> crate::ftd2021::p2::TDoc<'a> {
+    ) -> ftd::ftd2021::p2::TDoc<'a> {
         let l = self.document_stack.len() - 1;
-        crate::ftd2021::p2::TDoc {
+        ftd::ftd2021::p2::TDoc {
             name: &self.document_stack[l].name,
             aliases: &self.document_stack[l].doc_aliases,
             bag: &self.bag,
@@ -42,7 +42,7 @@ impl InterpreterState {
         }
     }
 
-    fn continue_(mut self) -> crate::ftd2021::p1::Result<Interpreter> {
+    fn continue_(mut self) -> ftd::ftd2021::p1::Result<Interpreter> {
         if self.document_stack.is_empty() {
             panic!()
         }
@@ -89,7 +89,7 @@ impl InterpreterState {
         while let Some(p1) = parsed_document.sections.last_mut() {
             // first resolve the foreign_variables in the section before proceeding further
 
-            let doc = crate::ftd2021::p2::TDoc {
+            let doc = ftd::ftd2021::p2::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
                 bag: &self.bag,
@@ -129,7 +129,7 @@ impl InterpreterState {
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
 
-            let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+            let var_data = ftd::ftd2021::variable::VariableData::get_name_kind(
                 &p1.name,
                 &doc,
                 p1.line_number,
@@ -140,7 +140,7 @@ impl InterpreterState {
 
             if p1.name.starts_with("record ") {
                 // declare a record
-                let d = crate::ftd2021::p2::Record::from_p1(
+                let d = ftd::ftd2021::p2::Record::from_p1(
                     p1.name.as_str(),
                     &p1.header,
                     &doc,
@@ -148,36 +148,36 @@ impl InterpreterState {
                 )?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, crate::ftd2021::p2::Thing::Record(d)));
+                thing.push((name, ftd::ftd2021::p2::Thing::Record(d)));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
-                let d = ftd::OrType::from_p1(&p1, &doc)?;
+                let d = ftd::ftd2021::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, crate::ftd2021::p2::Thing::OrType(d)));
+                thing.push((name, ftd::ftd2021::p2::Thing::OrType(d)));
             } else if p1.name.starts_with("map ") {
                 let d = ftd::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, crate::ftd2021::p2::Thing::Variable(d)));
+                thing.push((name, ftd::ftd2021::p2::Thing::Variable(d)));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
@@ -192,8 +192,8 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
-            } else if let Ok(crate::ftd2021::variable::VariableData {
-                type_: crate::ftd2021::variable::Type::Component,
+            } else if let Ok(ftd::ftd2021::variable::VariableData {
+                type_: ftd::ftd2021::variable::Type::Component,
                 ..
             }) = var_data
             {
@@ -201,13 +201,13 @@ impl InterpreterState {
                 let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("{} is already declared", d.full_name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, crate::ftd2021::p2::Thing::Component(d)));
+                thing.push((name, ftd::ftd2021::p2::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
                 let d = if p1
@@ -229,14 +229,14 @@ impl InterpreterState {
                 };
                 let name = doc.resolve_name(p1.line_number, &d.name)?;
                 if self.bag.contains_key(name.as_str()) {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, crate::ftd2021::p2::Thing::Variable(d)));
-            } else if let crate::ftd2021::p2::Thing::Variable(mut v) =
+                thing.push((name, ftd::ftd2021::p2::Thing::Variable(d)));
+            } else if let ftd::ftd2021::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
                 assert!(
@@ -248,7 +248,7 @@ impl InterpreterState {
                             .str_optional(doc.name, p1.line_number, "$processor$")?
                             .is_some())
                 );
-                let (doc_name, remaining) = crate::ftd2021::p2::utils::get_doc_name_and_remaining(
+                let (doc_name, remaining) = ftd::ftd2021::p2::utils::get_doc_name_and_remaining(
                     doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
                 )?;
                 if remaining.is_some()
@@ -257,7 +257,7 @@ impl InterpreterState {
                         .str_optional(doc.name, p1.line_number, "if")?
                         .is_some()
                 {
-                    return crate::ftd2021::p2::utils::e2(
+                    return ftd::ftd2021::p2::utils::e2(
                         "Currently not supporting `if` for field value update.",
                         doc.name,
                         p1.line_number,
@@ -266,7 +266,7 @@ impl InterpreterState {
                 if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                     let val = v.get_value(&p1, &doc)?;
                     v.conditions.push((
-                        crate::ftd2021::p2::Boolean::from_expression(
+                        ftd::ftd2021::p2::Boolean::from_expression(
                             expr,
                             &doc,
                             &Default::default(),
@@ -294,7 +294,7 @@ impl InterpreterState {
                 }
                 thing.push((
                     doc.resolve_name(p1.line_number, doc_name.as_str())?,
-                    crate::ftd2021::p2::Thing::Variable(doc.set_value(
+                    ftd::ftd2021::p2::Thing::Variable(doc.set_value(
                         p1.line_number,
                         p1.name.as_str(),
                         v,
@@ -303,14 +303,14 @@ impl InterpreterState {
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
-                    crate::ftd2021::p2::Thing::Variable(_) => {
-                        return crate::ftd2021::p2::utils::e2(
+                    ftd::ftd2021::p2::Thing::Variable(_) => {
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    crate::ftd2021::p2::Thing::Component(c) => {
+                    ftd::ftd2021::p2::Thing::Component(c) => {
                         if p1
                             .header
                             .str_optional(doc.name, p1.line_number, "$processor$")?
@@ -323,7 +323,7 @@ impl InterpreterState {
                             });
                         }
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
-                            let section_to_subsection = crate::ftd2021::p1::SubSection {
+                            let section_to_subsection = ftd::ftd2021::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
                                 header: p1.header.to_owned(),
@@ -333,7 +333,7 @@ impl InterpreterState {
                             };
                             parsed_document.instructions.push(
                                 ftd::Instruction::RecursiveChildComponent {
-                                    child: crate::ftd2021::component::recursive_child_component(
+                                    child: ftd::ftd2021::component::recursive_child_component(
                                         loop_data,
                                         &section_to_subsection,
                                         &doc,
@@ -368,7 +368,7 @@ impl InterpreterState {
                                     sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
                                     children.push(
-                                        crate::ftd2021::component::recursive_child_component(
+                                        ftd::ftd2021::component::recursive_child_component(
                                             loop_data,
                                             sub,
                                             &doc,
@@ -378,13 +378,13 @@ impl InterpreterState {
                                     );
                                 } else {
                                     let root_name =
-                                        crate::ftd2021::p2::utils::get_root_component_name(
+                                        ftd::ftd2021::p2::utils::get_root_component_name(
                                             &doc,
                                             parent.root.as_str(),
                                             sub.line_number,
                                         )?;
                                     let child = if root_name.eq("ftd#text") {
-                                        crate::ftd2021::p2::utils::get_markup_child(
+                                        ftd::ftd2021::p2::utils::get_markup_child(
                                             sub,
                                             &doc,
                                             &parent.arguments,
@@ -409,24 +409,24 @@ impl InterpreterState {
                                 .push(ftd::Instruction::Component { children, parent })
                         }
                     }
-                    crate::ftd2021::p2::Thing::Record(mut r) => {
+                    ftd::ftd2021::p2::Thing::Record(mut r) => {
                         r.add_instance(&p1, &doc)?;
                         thing.push((
                             doc.resolve_name(p1.line_number, &p1.name)?,
-                            crate::ftd2021::p2::Thing::Record(r),
+                            ftd::ftd2021::p2::Thing::Record(r),
                         ));
                     }
-                    crate::ftd2021::p2::Thing::OrType(_r) => {
+                    ftd::ftd2021::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    crate::ftd2021::p2::Thing::OrTypeWithVariant { .. } => {
+                    ftd::ftd2021::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
                             doc.name,
                             p1.line_number,
@@ -441,7 +441,7 @@ impl InterpreterState {
             // process lazy processors and add those to the bag
             // after interpreting the entire document
 
-            let doc = crate::ftd2021::p2::TDoc {
+            let doc = ftd::ftd2021::p2::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
                 bag: &self.bag,
@@ -468,7 +468,7 @@ impl InterpreterState {
             return self.continue_after_pop();
         }
 
-        let mut rt = ftd::RT::from(
+        let mut rt = ftd::ftd2021::RT::from(
             &self.id,
             self.document_stack[0].get_doc_aliases(),
             self.bag,
@@ -481,7 +481,7 @@ impl InterpreterState {
             rt.render()?
         };
 
-        let d = crate::ftd2021::p2::document::Document {
+        let d = ftd::ftd2021::p2::document::Document {
             main,
             name: rt.name,
             data: rt.bag.clone(),
@@ -535,9 +535,9 @@ impl InterpreterState {
         page_headings: &mut Vec<ftd::PageHeadingItem>,
         parent: &ftd::Component,
         child: &mut ftd::ChildComponent,
-        doc: &crate::ftd2021::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         package_name: &Option<String>,
-    ) -> crate::ftd2021::p1::Result<()> {
+    ) -> ftd::ftd2021::p1::Result<()> {
         // todo: work on all these cases
         // Case 2: Container component (with defined id)
         //      id = use user defined id for linking else the auto-generated one
@@ -553,7 +553,7 @@ impl InterpreterState {
         //                      - Fetch the title from this component
         //                        (if found otherwise no heading)
 
-        if crate::ftd2021::p2::utils::is_container_component(
+        if ftd::ftd2021::p2::utils::is_container_component(
             doc,
             &parent.full_name,
             parent.line_number,
@@ -627,7 +627,7 @@ impl InterpreterState {
             instruction: &ftd::Instruction,
             parent: &ftd::Component,
             child: &ftd::ChildComponent,
-            doc: &crate::ftd2021::p2::TDoc,
+            doc: &ftd::ftd2021::p2::TDoc,
         ) -> Option<(Option<String>, Option<String>)> {
             if let ftd::Instruction::ChildComponent { child: cc } = instruction {
                 if cc.root.eq("ftd#text") {
@@ -666,10 +666,10 @@ impl InterpreterState {
         /// finds the container instructions along with its region
         fn find_container_instructions_with_region(
             root_component: &ftd::Component,
-            doc: &crate::ftd2021::p2::TDoc,
-        ) -> crate::ftd2021::p1::Result<(
+            doc: &ftd::ftd2021::p2::TDoc,
+        ) -> ftd::ftd2021::p1::Result<(
             Vec<ftd::Instruction>,
-            Option<crate::ftd2021::component::Property>,
+            Option<ftd::ftd2021::component::Property>,
         )> {
             if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
                 let region = root_component.properties.get("region");
@@ -688,7 +688,7 @@ impl InterpreterState {
 
         pub fn resolve_property_value(
             property_value: &ftd::PropertyValue,
-        ) -> crate::ftd2021::p1::Result<Option<String>> {
+        ) -> ftd::ftd2021::p1::Result<Option<String>> {
             match property_value {
                 ftd::PropertyValue::Value { value } => Ok(value.to_string()),
                 ftd::PropertyValue::Variable { name, .. } => Ok(Some(format!("${}", name))),
@@ -698,7 +698,7 @@ impl InterpreterState {
 
         fn adjust_heading_number_in_component(child: &mut ftd::ChildComponent, number: &str) {
             if child.properties.get("heading-number").is_none() {
-                let number_property = crate::ftd2021::component::Property {
+                let number_property = ftd::ftd2021::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: (ftd::Value::List {
                             data: {
@@ -713,7 +713,7 @@ impl InterpreterState {
                                 }
                                 property_values
                             },
-                            kind: crate::ftd2021::p2::Kind::string(),
+                            kind: ftd::ftd2021::p2::Kind::string(),
                         }),
                     }),
                     ..Default::default()
@@ -727,9 +727,9 @@ impl InterpreterState {
         fn resolve_title_header_from_container(
             text_property_value: &ftd::PropertyValue,
             current_component: &ftd::Component,
-            properties: &ftd::Map<crate::ftd2021::component::Property>,
-            doc: &crate::ftd2021::p2::TDoc,
-        ) -> crate::ftd2021::p1::Result<(Option<String>, Option<String>)> {
+            properties: &ftd::Map<ftd::ftd2021::component::Property>,
+            doc: &ftd::ftd2021::p2::TDoc,
+        ) -> ftd::ftd2021::p1::Result<(Option<String>, Option<String>)> {
             if matches!(
                 current_component.full_name.as_str(),
                 "ftd#row" | "ftd#column"
@@ -789,7 +789,7 @@ impl InterpreterState {
 
             // remove package name from the url and keep the rest
             if let Some(actual_id) = id {
-                let document_id = crate::ftd2021::p2::utils::convert_to_document_id(doc_name);
+                let document_id = ftd::ftd2021::p2::utils::convert_to_document_id(doc_name);
                 let original_url = format!("{}#{}", document_id, slug::slugify(actual_id));
                 let url = trim_package_from_url(original_url, package_name);
 
@@ -805,7 +805,7 @@ impl InterpreterState {
             doc_name: &str,
             region: String,
             package_name: &Option<String>,
-        ) -> crate::ftd2021::p1::Result<ftd::PageHeadingItem> {
+        ) -> ftd::ftd2021::p1::Result<ftd::PageHeadingItem> {
             let processed_url = make_url(doc_name, id, package_name);
             let ph = ftd::PageHeadingItem {
                 title: Some(title.to_string()),
@@ -823,7 +823,7 @@ impl InterpreterState {
             heading_number: &Option<String>,
             doc_name: &str,
             package_name: &Option<String>,
-        ) -> crate::ftd2021::p1::Result<String> {
+        ) -> ftd::ftd2021::p1::Result<String> {
             fn assign_auto_slug_id(
                 heading: &mut ftd::PageHeadingItem,
                 _assigned_number: &str,
@@ -901,10 +901,10 @@ impl InterpreterState {
     }
 
     fn resolve_foreign_variable(
-        section: &mut crate::ftd2021::p1::Section,
+        section: &mut ftd::ftd2021::p1::Section,
         foreign_variables: &[String],
-        doc: &crate::ftd2021::p2::TDoc,
-    ) -> crate::ftd2021::p1::Result<Option<String>> {
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<Option<String>> {
         if let Some(variable) = resolve_all_properties(
             &mut section.caption,
             &mut section.header,
@@ -933,12 +933,12 @@ impl InterpreterState {
 
         fn resolve_all_properties(
             caption: &mut Option<String>,
-            header: &mut crate::ftd2021::p1::Header,
+            header: &mut ftd::ftd2021::p1::Header,
             body: &mut Option<(usize, String)>,
             line_number: usize,
             foreign_variables: &[String],
-            doc: &crate::ftd2021::p2::TDoc,
-        ) -> crate::ftd2021::p1::Result<Option<String>> {
+            doc: &ftd::ftd2021::p2::TDoc,
+        ) -> ftd::ftd2021::p1::Result<Option<String>> {
             if let Some(ref mut caption) = caption {
                 if let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
@@ -969,9 +969,9 @@ impl InterpreterState {
         fn process_foreign_variables(
             value: &mut String,
             foreign_variables: &[String],
-            doc: &crate::ftd2021::p2::TDoc,
+            doc: &ftd::ftd2021::p2::TDoc,
             line_number: usize,
-        ) -> crate::ftd2021::p1::Result<Option<String>> {
+        ) -> ftd::ftd2021::p1::Result<Option<String>> {
             if value.contains('#') {
                 return Ok(None);
             }
@@ -990,9 +990,9 @@ impl InterpreterState {
         fn is_foreign_variable(
             variable: &str,
             foreign_variables: &[String],
-            doc: &crate::ftd2021::p2::TDoc,
+            doc: &ftd::ftd2021::p2::TDoc,
             line_number: usize,
-        ) -> crate::ftd2021::p1::Result<bool> {
+        ) -> ftd::ftd2021::p1::Result<bool> {
             let var_name = doc.resolve_name(line_number, variable)?;
 
             if foreign_variables.iter().any(|v| var_name.starts_with(v)) {
@@ -1010,26 +1010,26 @@ impl InterpreterState {
     /// text-source includes caption, header, body of the section
     #[allow(clippy::type_complexity)]
     fn resolve_global_ids(
-        section: &mut crate::ftd2021::p1::Section,
-        doc: &crate::ftd2021::p2::TDoc,
+        section: &mut ftd::ftd2021::p1::Section,
+        doc: &ftd::ftd2021::p2::TDoc,
         var_types: &[String],
-    ) -> crate::ftd2021::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>
+    ) -> ftd::ftd2021::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>
     {
         // will contain all replace blocks for section and its subsections
         // where link replacement or escape links need to be resolved
         let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
             vec![];
 
-        if crate::ftd2021::p2::utils::is_section_subsection_component(
+        if ftd::ftd2021::p2::utils::is_section_subsection_component(
             section.name.as_str(),
             doc,
             var_types,
             section.line_number,
         )? {
-            if let crate::ftd2021::p2::Thing::Component(c) =
+            if let ftd::ftd2021::p2::Thing::Component(c) =
                 doc.get_thing(section.line_number, section.name.as_str())?
             {
-                if crate::ftd2021::p2::utils::is_markdown_component(
+                if ftd::ftd2021::p2::utils::is_markdown_component(
                     doc,
                     c.full_name.as_str(),
                     section.line_number,
@@ -1047,16 +1047,16 @@ impl InterpreterState {
         }
 
         for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
-            if crate::ftd2021::p2::utils::is_section_subsection_component(
+            if ftd::ftd2021::p2::utils::is_section_subsection_component(
                 subsection.name.as_str(),
                 doc,
                 var_types,
                 subsection.line_number,
             )? {
-                if let crate::ftd2021::p2::Thing::Component(c) =
+                if let ftd::ftd2021::p2::Thing::Component(c) =
                     doc.get_thing(subsection.line_number, subsection.name.as_str())?
                 {
-                    if crate::ftd2021::p2::utils::is_markdown_component(
+                    if ftd::ftd2021::p2::utils::is_markdown_component(
                         doc,
                         c.full_name.as_str(),
                         subsection.line_number,
@@ -1080,7 +1080,7 @@ impl InterpreterState {
         /// escaped links resolution needs to happen for a single section/ subsection
         fn resolve_id_from_all_sources(
             caption: &Option<String>,
-            header: &crate::ftd2021::p1::Header,
+            header: &ftd::ftd2021::p1::Header,
             body: &Option<(usize, String)>,
             line_number: usize,
             is_from_section: bool,
@@ -1201,15 +1201,15 @@ impl InterpreterState {
 
     fn process_imports(
         top: &mut ParsedDocument,
-        bag: &ftd::Map<crate::ftd2021::p2::Thing>,
-    ) -> crate::ftd2021::p1::Result<Option<String>> {
+        bag: &ftd::Map<ftd::ftd2021::p2::Thing>,
+    ) -> ftd::ftd2021::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
             if top.sections[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
-            let (library_name, alias) = crate::ftd2021::p2::utils::parse_import(
+            let (library_name, alias) = ftd::ftd2021::p2::utils::parse_import(
                 &top.sections[iteration_index].caption,
                 top.name.as_str(),
                 top.sections[iteration_index].line_number,
@@ -1242,14 +1242,14 @@ impl InterpreterState {
     /// and continue for the next section
     pub fn continue_after_storing_section(
         mut self,
-        section: &crate::ftd2021::p1::Section,
-    ) -> crate::ftd2021::p1::Result<Interpreter> {
+        section: &ftd::ftd2021::p1::Section,
+    ) -> ftd::ftd2021::p1::Result<Interpreter> {
         fn add_dummy_variable(
             parsed_document: &mut ParsedDocument,
-            p1: &crate::ftd2021::p1::Section,
-            bag: &mut ftd::Map<crate::ftd2021::p2::Thing>,
-        ) -> crate::ftd2021::p1::Result<()> {
-            let doc = crate::ftd2021::p2::TDoc {
+            p1: &ftd::ftd2021::p1::Section,
+            bag: &mut ftd::Map<ftd::ftd2021::p2::Thing>,
+        ) -> ftd::ftd2021::p1::Result<()> {
+            let doc = ftd::ftd2021::p2::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
                 bag,
@@ -1257,15 +1257,15 @@ impl InterpreterState {
                 referenced_local_variables: &mut Default::default(),
             };
 
-            let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+            let var_data = ftd::ftd2021::variable::VariableData::get_name_kind(
                 &p1.name,
                 &doc,
                 p1.line_number,
                 &parsed_document.var_types,
             );
 
-            if let Ok(crate::ftd2021::variable::VariableData {
-                type_: crate::ftd2021::variable::Type::Variable,
+            if let Ok(ftd::ftd2021::variable::VariableData {
+                type_: ftd::ftd2021::variable::Type::Variable,
                 name,
                 ..
             }) = var_data
@@ -1273,11 +1273,11 @@ impl InterpreterState {
                 let name = doc.resolve_name(p1.line_number, &name)?;
                 let ph: Vec<ftd::PageHeadingItem> = vec![];
                 let dummy_value = doc.from_json(&ph, p1)?;
-                let variable = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                let variable = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                     name: name.clone(),
                     value: ftd::PropertyValue::Value { value: dummy_value },
                     conditions: vec![],
-                    flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                    flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                         &p1.header,
                         doc.name,
                         p1.line_number,
@@ -1310,7 +1310,7 @@ impl InterpreterState {
     pub fn continue_after_checking_id(
         mut self,
         replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>>,
-    ) -> crate::ftd2021::p1::Result<Interpreter> {
+    ) -> ftd::ftd2021::p1::Result<Interpreter> {
         // Checking in the last section from the topmost document in the document stack
         // which isn't popped out yet and replace links based on the captured id set
         // it received from the current processing section
@@ -1351,7 +1351,7 @@ impl InterpreterState {
 
                             let current_processing_subsection = subsections
                                 .get_mut(target_subsection_index)
-                                .ok_or_else(|| crate::ftd2021::p1::Error::UnknownData {
+                                .ok_or_else(|| ftd::ftd2021::p1::Error::UnknownData {
                                     message: format!(
                                         "No subsection present at index {} in subsections",
                                         target_subsection_index
@@ -1405,7 +1405,7 @@ impl InterpreterState {
             id_map: &std::collections::HashMap<String, String>,
             doc_id: String,
             line_number: usize,
-        ) -> crate::ftd2021::p1::Result<bool> {
+        ) -> ftd::ftd2021::p1::Result<bool> {
             let mut is_replaced = false;
             let mut matches_with_replacements: Vec<(String, usize, usize)> = vec![];
             // Character Prefix Group <prefix>
@@ -1462,7 +1462,7 @@ impl InterpreterState {
                         }
 
                         let link = id_map.get(captured_id).ok_or_else(|| {
-                            crate::ftd2021::p1::Error::NotFound {
+                            ftd::ftd2021::p1::Error::NotFound {
                                 doc_id: doc_id.clone(),
                                 line_number,
                                 key: format!(
@@ -1513,7 +1513,7 @@ impl InterpreterState {
                         }
 
                         let link = id_map.get(captured_id).ok_or_else(|| {
-                            crate::ftd2021::p1::Error::NotFound {
+                            ftd::ftd2021::p1::Error::NotFound {
                                 doc_id: doc_id.clone(),
                                 line_number,
                                 key: format!(
@@ -1558,7 +1558,7 @@ impl InterpreterState {
         mut self,
         id: &str,
         source: &str,
-    ) -> crate::ftd2021::p1::Result<Interpreter> {
+    ) -> ftd::ftd2021::p1::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
         // interpret then
@@ -1569,9 +1569,9 @@ impl InterpreterState {
         mut self,
         variable: &str,
         value: ftd::Value,
-    ) -> crate::ftd2021::p1::Result<Interpreter> {
+    ) -> ftd::ftd2021::p1::Result<Interpreter> {
         let l = self.document_stack.len() - 1;
-        let doc = crate::ftd2021::p2::TDoc {
+        let doc = ftd::ftd2021::p2::TDoc {
             name: &self.document_stack[l].name,
             aliases: &self.document_stack[l].doc_aliases,
             bag: &self.bag,
@@ -1583,7 +1583,7 @@ impl InterpreterState {
         );
         self.bag.insert(
             var_name.clone(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: var_name,
                 value: ftd::PropertyValue::Value { value },
                 conditions: vec![],
@@ -1593,7 +1593,7 @@ impl InterpreterState {
         self.continue_()
     }
 
-    pub fn continue_after_pop(mut self) -> crate::ftd2021::p1::Result<Interpreter> {
+    pub fn continue_after_pop(mut self) -> ftd::ftd2021::p1::Result<Interpreter> {
         self.document_stack.pop();
         self.continue_()
         // interpret then
@@ -1602,13 +1602,13 @@ impl InterpreterState {
 
     pub fn continue_after_processor(
         mut self,
-        p1: &crate::ftd2021::p1::Section,
+        p1: &ftd::ftd2021::p1::Section,
         value: ftd::Value,
-    ) -> crate::ftd2021::p1::Result<Interpreter> {
+    ) -> ftd::ftd2021::p1::Result<Interpreter> {
         let l = self.document_stack.len() - 1;
         let parsed_document = &mut self.document_stack[l];
 
-        let doc = crate::ftd2021::p2::TDoc {
+        let doc = ftd::ftd2021::p2::TDoc {
             name: &parsed_document.name,
             aliases: &parsed_document.doc_aliases,
             bag: &self.bag,
@@ -1616,25 +1616,25 @@ impl InterpreterState {
             referenced_local_variables: &mut Default::default(),
         };
 
-        let var_data = crate::ftd2021::variable::VariableData::get_name_kind(
+        let var_data = ftd::ftd2021::variable::VariableData::get_name_kind(
             &p1.name,
             &doc,
             p1.line_number,
             &parsed_document.var_types,
         );
 
-        if let Ok(crate::ftd2021::variable::VariableData {
-            type_: crate::ftd2021::variable::Type::Variable,
+        if let Ok(ftd::ftd2021::variable::VariableData {
+            type_: ftd::ftd2021::variable::Type::Variable,
             name,
             ..
         }) = var_data
         {
             let name = doc.resolve_name(p1.line_number, &name)?;
-            let variable = crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            let variable = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: name.clone(),
                 value: ftd::PropertyValue::Value { value },
                 conditions: vec![],
-                flags: crate::ftd2021::variable::VariableFlags::from_p1(
+                flags: ftd::ftd2021::variable::VariableFlags::from_p1(
                     &p1.header,
                     doc.name,
                     p1.line_number,
@@ -1645,22 +1645,22 @@ impl InterpreterState {
         }
 
         match doc.get_thing(p1.line_number, p1.name.as_str())? {
-            crate::ftd2021::p2::Thing::Variable(mut v) => {
+            ftd::ftd2021::p2::Thing::Variable(mut v) => {
                 // for case: 2
-                let doc_name = crate::ftd2021::p2::utils::get_doc_name_and_remaining(
+                let doc_name = ftd::ftd2021::p2::utils::get_doc_name_and_remaining(
                     doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
                 )?
                 .0;
                 v.value = ftd::PropertyValue::Value { value };
                 let key = doc.resolve_name(p1.line_number, doc_name.as_str())?;
-                let variable = crate::ftd2021::p2::Thing::Variable(doc.set_value(
+                let variable = ftd::ftd2021::p2::Thing::Variable(doc.set_value(
                     p1.line_number,
                     p1.name.as_str(),
                     v,
                 )?);
                 self.bag.insert(key, variable);
             }
-            crate::ftd2021::p2::Thing::Component(_) => {
+            ftd::ftd2021::p2::Thing::Component(_) => {
                 // for case: 3
                 let mut p1 = p1.clone();
                 Self::p1_from_processor(&mut p1, value);
@@ -1673,7 +1673,7 @@ impl InterpreterState {
         // handle top / start_from
     }
 
-    pub(crate) fn p1_from_processor(p1: &mut crate::ftd2021::p1::Section, value: ftd::Value) {
+    pub(crate) fn p1_from_processor(p1: &mut ftd::ftd2021::p1::Section, value: ftd::Value) {
         for (idx, (_, k, _)) in p1.header.0.iter().enumerate() {
             if k.eq("$processor$") {
                 p1.header.0.remove(idx);
@@ -1707,7 +1707,7 @@ impl InterpreterState {
 #[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
-    sections: Vec<crate::ftd2021::p1::Section>,
+    sections: Vec<ftd::ftd2021::p1::Section>,
     processing_imports: bool,
     processing_comments: bool,
     process_lazy_processors: bool,
@@ -1717,20 +1717,20 @@ pub struct ParsedDocument {
     instructions: Vec<ftd::Instruction>,
     /// sections stored which needs to be processed
     /// after interpretation of the current document is over
-    lazy_processor_sections: Vec<crate::ftd2021::p1::Section>,
+    lazy_processor_sections: Vec<ftd::ftd2021::p1::Section>,
     /// page headings of the current document will be stored in this list
     page_headings: Vec<ftd::PageHeadingItem>,
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> crate::ftd2021::p1::Result<ParsedDocument> {
+    fn parse(id: &str, source: &str) -> ftd::ftd2021::p1::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
-            sections: crate::ftd2021::p1::parse(source, id)?,
+            sections: ftd::ftd2021::p1::parse(source, id)?,
             processing_imports: true,
             processing_comments: true,
             process_lazy_processors: false,
-            doc_aliases: crate::ftd2021::p2::interpreter::default_aliases(),
+            doc_aliases: ftd::ftd2021::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
             instructions: vec![],
@@ -1747,11 +1747,11 @@ impl ParsedDocument {
         self.processing_comments = false;
     }
 
-    pub fn get_last_section(&self) -> Option<&crate::ftd2021::p1::Section> {
+    pub fn get_last_section(&self) -> Option<&ftd::ftd2021::p1::Section> {
         self.sections.last()
     }
 
-    pub fn get_last_mut_section(&mut self) -> Option<&mut crate::ftd2021::p1::Section> {
+    pub fn get_last_mut_section(&mut self) -> Option<&mut ftd::ftd2021::p1::Section> {
         self.sections.last_mut()
     }
 
@@ -1785,16 +1785,13 @@ impl ParsedDocument {
             .iter()
             .filter(|s| !s.is_commented)
             .map(|s| s.remove_comments())
-            .collect::<Vec<crate::ftd2021::p1::Section>>();
+            .collect::<Vec<ftd::ftd2021::p1::Section>>();
     }
 
-    fn reorder(
-        &mut self,
-        bag: &ftd::Map<crate::ftd2021::p2::Thing>,
-    ) -> crate::ftd2021::p1::Result<()> {
-        let (mut new_p1, var_types) = crate::ftd2021::p2::utils::reorder(
+    fn reorder(&mut self, bag: &ftd::Map<ftd::ftd2021::p2::Thing>) -> ftd::ftd2021::p1::Result<()> {
+        let (mut new_p1, var_types) = ftd::ftd2021::p2::utils::reorder(
             &self.sections,
-            &crate::ftd2021::p2::TDoc {
+            &ftd::ftd2021::p2::TDoc {
                 name: &self.name,
                 aliases: &self.doc_aliases,
                 bag,
@@ -1822,7 +1819,7 @@ pub enum Interpreter {
     },
     StuckOnProcessor {
         state: InterpreterState,
-        section: crate::ftd2021::p1::Section,
+        section: ftd::ftd2021::p1::Section,
     },
     StuckOnForeignVariable {
         variable: String,
@@ -1833,7 +1830,7 @@ pub enum Interpreter {
         state: InterpreterState,
     },
     Done {
-        document: crate::ftd2021::p2::Document,
+        document: ftd::ftd2021::p2::Document,
     },
 }
 
@@ -1841,7 +1838,7 @@ pub fn interpret(
     id: &str,
     source: &str,
     package_name: &Option<String>,
-) -> crate::ftd2021::p1::Result<Interpreter> {
+) -> ftd::ftd2021::p1::Result<Interpreter> {
     let mut s = InterpreterState::new(id.to_string(), package_name.clone());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
@@ -1853,75 +1850,78 @@ pub fn interpret(
 pub enum Thing {
     Component(ftd::Component),
     Variable(ftd::Variable),
-    Record(crate::ftd2021::p2::Record),
-    OrType(ftd::OrType),
-    OrTypeWithVariant { e: ftd::OrType, variant: String },
+    Record(ftd::ftd2021::p2::Record),
+    OrType(ftd::ftd2021::OrType),
+    OrTypeWithVariant {
+        e: ftd::ftd2021::OrType,
+        variant: String,
+    },
     // Library -> Name of library successfully parsed
 }
 
-pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
-    let record = |n: &str, r: &str| (n.to_string(), crate::ftd2021::p2::Kind::record(r));
+pub fn default_bag() -> ftd::Map<ftd::ftd2021::p2::Thing> {
+    let record = |n: &str, r: &str| (n.to_string(), ftd::ftd2021::p2::Kind::record(r));
     let color = |n: &str| record(n, "ftd#color");
     std::iter::IntoIterator::into_iter([
         (
             "ftd#row".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::row_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::row_function()),
         ),
         (
             "ftd#column".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::column_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::column_function()),
         ),
         (
             "ftd#text-block".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::text_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::text_function()),
         ),
         (
             "ftd#code".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::code_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::code_function()),
         ),
         (
             "ftd#image".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::image_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::image_function()),
         ),
         (
             "ftd#iframe".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::iframe_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::iframe_function()),
         ),
         (
             "ftd#integer".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::integer_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::integer_function()),
         ),
         (
             "ftd#decimal".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::decimal_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::decimal_function()),
         ),
         (
             "ftd#boolean".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::boolean_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::boolean_function()),
         ),
         (
             "ftd#scene".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::scene_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::scene_function()),
         ),
         (
             "ftd#grid".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::grid_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::grid_function()),
         ),
         (
             "ftd#text".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::markup_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::markup_function()),
         ),
         (
             "ftd#input".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::input_function()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::input_function()),
         ),
         (
             "ftd#null".to_string(),
-            crate::ftd2021::p2::Thing::Component(crate::ftd2021::p2::element::null()),
+            ftd::ftd2021::p2::Thing::Component(ftd::ftd2021::p2::element::null()),
         ),
         (
             "ftd#dark-mode".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#dark-mode".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
@@ -1934,7 +1934,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#system-dark-mode".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#system-dark-mode".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
@@ -1947,7 +1947,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#follow-system-dark-mode".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#follow-system-dark-mode".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: true },
@@ -1960,7 +1960,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#device".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#device".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -1976,7 +1976,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#mobile-breakpoint".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#mobile-breakpoint".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 768 },
@@ -1989,7 +1989,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#desktop-breakpoint".to_string(),
-            crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+            ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#desktop-breakpoint".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 1440 },
@@ -2002,32 +2002,32 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#markdown-color-data".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#markdown-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     (
                         "link".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-visited".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-visited-code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "ul-ol-li-before".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                 ])
                 .collect(),
@@ -2045,32 +2045,32 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ("ftd#markdown-color".to_string(), markdown::color()),
         (
             "ftd#markdown-background-color-data".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#markdown-background-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     (
                         "link".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-visited".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "link-visited-code".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                     (
                         "ul-ol-li-before".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#color"),
+                        ftd::ftd2021::p2::Kind::record("ftd#color"),
                     ),
                 ])
                 .collect(),
@@ -2091,11 +2091,11 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#image-src".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#image-src".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    ("light".to_string(), crate::ftd2021::p2::Kind::caption()),
-                    ("dark".to_string(), crate::ftd2021::p2::Kind::string()),
+                    ("light".to_string(), ftd::ftd2021::p2::Kind::caption()),
+                    ("dark".to_string(), ftd::ftd2021::p2::Kind::string()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -2104,11 +2104,11 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#color".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#color".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    ("light".to_string(), crate::ftd2021::p2::Kind::caption()),
-                    ("dark".to_string(), crate::ftd2021::p2::Kind::string()),
+                    ("light".to_string(), ftd::ftd2021::p2::Kind::caption()),
+                    ("dark".to_string(), ftd::ftd2021::p2::Kind::string()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -2117,17 +2117,14 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#font-size".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#font-size".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    (
-                        "line-height".to_string(),
-                        crate::ftd2021::p2::Kind::integer(),
-                    ),
-                    ("size".to_string(), crate::ftd2021::p2::Kind::integer()),
+                    ("line-height".to_string(), ftd::ftd2021::p2::Kind::integer()),
+                    ("size".to_string(), ftd::ftd2021::p2::Kind::integer()),
                     (
                         "letter-spacing".to_string(),
-                        crate::ftd2021::p2::Kind::integer().set_default(Some("0".to_string())),
+                        ftd::ftd2021::p2::Kind::integer().set_default(Some("0".to_string())),
                     ),
                 ])
                 .collect(),
@@ -2141,29 +2138,29 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#type".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#type".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    ("font".to_string(), crate::ftd2021::p2::Kind::caption()),
+                    ("font".to_string(), ftd::ftd2021::p2::Kind::caption()),
                     (
                         "desktop".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#font-size"),
+                        ftd::ftd2021::p2::Kind::record("ftd#font-size"),
                     ),
                     (
                         "mobile".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#font-size"),
+                        ftd::ftd2021::p2::Kind::record("ftd#font-size"),
                     ),
                     (
                         "xl".to_string(),
-                        crate::ftd2021::p2::Kind::record("ftd#font-size"),
+                        ftd::ftd2021::p2::Kind::record("ftd#font-size"),
                     ),
                     (
                         "weight".to_string(),
-                        crate::ftd2021::p2::Kind::integer().set_default(Some("400".to_string())),
+                        ftd::ftd2021::p2::Kind::integer().set_default(Some("400".to_string())),
                     ),
                     (
                         "style".to_string(),
-                        crate::ftd2021::p2::Kind::string().into_optional(),
+                        ftd::ftd2021::p2::Kind::string().into_optional(),
                     ),
                 ])
                 .collect(),
@@ -2180,7 +2177,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#btb".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#btb".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     color("base"),
@@ -2194,7 +2191,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#pst".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#pst".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     color("primary"),
@@ -2212,7 +2209,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#background-colors".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#background-colors".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     color("base"),
@@ -2234,7 +2231,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#custom-colors".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#custom-colors".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     color("one"),
@@ -2266,7 +2263,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#cta-colors".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#cta-colors".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     color("base"),
@@ -2292,7 +2289,7 @@ pub fn default_bag() -> ftd::Map<crate::ftd2021::p2::Thing> {
         ),
         (
             "ftd#color-scheme".to_string(),
-            crate::ftd2021::p2::Thing::Record(crate::ftd2021::p2::Record {
+            ftd::ftd2021::p2::Thing::Record(ftd::ftd2021::p2::Record {
                 name: "ftd#color-scheme".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     record("background", "ftd#background-colors"),
@@ -2415,8 +2412,8 @@ pub mod markdown {
         ("blockquote".to_string(), theme_color(light, dark))
     }
 
-    pub fn color() -> crate::ftd2021::p2::Thing {
-        crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+    pub fn color() -> ftd::ftd2021::p2::Thing {
+        ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: "ftd#markdown-color".to_string(),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Record {
@@ -2439,8 +2436,8 @@ pub mod markdown {
         })
     }
 
-    pub fn background_color() -> crate::ftd2021::p2::Thing {
-        crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+    pub fn background_color() -> ftd::ftd2021::p2::Thing {
+        ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
             name: "ftd#markdown-background-color".to_string(),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Record {

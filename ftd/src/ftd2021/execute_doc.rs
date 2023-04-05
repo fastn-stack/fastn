@@ -2,8 +2,8 @@
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a ftd::Map<crate::ftd2021::p2::Thing>,
-    pub local_variables: &'a mut ftd::Map<crate::ftd2021::p2::Thing>,
+    pub bag: &'a ftd::Map<ftd::ftd2021::p2::Thing>,
+    pub local_variables: &'a mut ftd::Map<ftd::ftd2021::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
     pub invocations: &'a mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
 }
@@ -14,7 +14,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         id: Option<String>,
         referenced_local_variables: &mut ftd::Map<String>,
-    ) -> crate::ftd2021::p1::Result<crate::ftd2021::component::ElementWithContainer> {
+    ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::component::ElementWithContainer> {
         let mut index = 0;
         self.execute_(
             &mut index,
@@ -37,14 +37,14 @@ impl<'a> ExecuteDoc<'a> {
         parent_id: Option<String>,
         id: Option<String>,
         referenced_local_variables: &mut ftd::Map<String>,
-    ) -> crate::ftd2021::p1::Result<crate::ftd2021::component::ElementWithContainer> {
+    ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: ftd::Map<Vec<Vec<usize>>> = Default::default();
         let mut children: Vec<ftd::Element> = vec![];
         let mut external_children_count = if is_external { Some(0_usize) } else { None };
 
         while *index < self.instructions.len() {
-            let mut doc = crate::ftd2021::p2::TDoc {
+            let mut doc = ftd::ftd2021::p2::TDoc {
                 name: self.name,
                 aliases: self.aliases,
                 bag: self.bag,
@@ -79,7 +79,7 @@ impl<'a> ExecuteDoc<'a> {
                         && !match_parent_id(c, &parent_id)
                     {
                         *index -= 1;
-                        return Ok(crate::ftd2021::component::ElementWithContainer {
+                        return Ok(ftd::ftd2021::component::ElementWithContainer {
                             element: ftd::Element::Null,
                             children,
                             child_container: Some(named_containers),
@@ -110,7 +110,7 @@ impl<'a> ExecuteDoc<'a> {
                         (parent, inner)
                     };
 
-                    let crate::ftd2021::component::ElementWithContainer {
+                    let ftd::ftd2021::component::ElementWithContainer {
                         element,
                         children: container_children,
                         child_container,
@@ -138,7 +138,7 @@ impl<'a> ExecuteDoc<'a> {
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
                     let (arguments, is_visible) = if let Some(ref condition) = f.condition {
-                        crate::ftd2021::p2::utils::arguments_on_condition(
+                        ftd::ftd2021::p2::utils::arguments_on_condition(
                             condition,
                             f.line_number,
                             &doc,
@@ -152,7 +152,7 @@ impl<'a> ExecuteDoc<'a> {
                         f.properties.extend(arguments.into_iter().map(|(k, v)| {
                             (
                                 k,
-                                crate::ftd2021::component::Property {
+                                ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Value { value: v }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
@@ -173,9 +173,9 @@ impl<'a> ExecuteDoc<'a> {
                         {
                             None
                         } else {
-                            let new_id = crate::ftd2021::p2::utils::string_optional(
+                            let new_id = ftd::ftd2021::p2::utils::string_optional(
                                 "id",
-                                &crate::ftd2021::component::resolve_properties_by_id(
+                                &ftd::ftd2021::component::resolve_properties_by_id(
                                     f.line_number,
                                     &f.properties,
                                     &doc,
@@ -192,7 +192,7 @@ impl<'a> ExecuteDoc<'a> {
                         }
                     };
 
-                    let crate::ftd2021::component::ElementWithContainer {
+                    let ftd::ftd2021::component::ElementWithContainer {
                         element: mut e,
                         child_container,
                         ..
@@ -250,7 +250,7 @@ impl<'a> ExecuteDoc<'a> {
             }
         }
 
-        Ok(crate::ftd2021::component::ElementWithContainer {
+        Ok(ftd::ftd2021::component::ElementWithContainer {
             element: ftd::Element::Null,
             children,
             child_container: Some(named_containers),
@@ -271,7 +271,7 @@ impl<'a> ExecuteDoc<'a> {
         container_children: Vec<ftd::Element>,
         referenced_local_variables: &mut ftd::Map<String>,
         parent_children_length: usize,
-    ) -> crate::ftd2021::p1::Result<Vec<ftd::Element>> {
+    ) -> ftd::ftd2021::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
             current = match &mut current[*i] {
@@ -329,7 +329,7 @@ impl<'a> ExecuteDoc<'a> {
                         new_parent_container
                             .extend(current_container.iter().map(ToOwned::to_owned));
                         new_parent_container.push(len + parent_children_length);
-                        crate::ftd2021::p2::utils::get_string_container(
+                        ftd::ftd2021::p2::utils::get_string_container(
                             new_parent_container.as_slice(),
                         )
                     };
@@ -353,14 +353,14 @@ impl<'a> ExecuteDoc<'a> {
                     };
 
                     self.local_variables.insert(
-                        crate::ftd2021::p2::utils::resolve_local_variable_name(
+                        ftd::ftd2021::p2::utils::resolve_local_variable_name(
                             0,
                             "CHILDREN-COUNT",
                             string_container.as_str(),
                             self.name,
                             self.aliases,
                         )?,
-                        crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                        ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                             name: "CHILDREN-COUNT".to_string(),
                             value: ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer {
@@ -373,14 +373,14 @@ impl<'a> ExecuteDoc<'a> {
                     );
 
                     self.local_variables.insert(
-                        crate::ftd2021::p2::utils::resolve_local_variable_name(
+                        ftd::ftd2021::p2::utils::resolve_local_variable_name(
                             0,
                             "CHILDREN-COUNT-MINUS-ONE",
                             string_container.as_str(),
                             self.name,
                             self.aliases,
                         )?,
-                        crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                        ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                             name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
                             value: ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer {
@@ -396,7 +396,7 @@ impl<'a> ExecuteDoc<'a> {
                         if child.is_empty() {
                             vec![]
                         } else {
-                            let mut main = crate::ftd2021::p2::interpreter::default_column();
+                            let mut main = ftd::ftd2021::p2::interpreter::default_column();
                             main.container.children.extend(child);
                             vec![ftd::Element::Column(main)]
                         }
@@ -405,7 +405,7 @@ impl<'a> ExecuteDoc<'a> {
                     if let Some((_, _, ref mut e)) = c.external_children {
                         e.extend(external_children);
                     } else {
-                        return crate::ftd2021::p2::utils::e2(
+                        return ftd::ftd2021::p2::utils::e2(
                             format!("expected external_children data for id: {}", append_at),
                             "",
                             0,
@@ -419,7 +419,7 @@ impl<'a> ExecuteDoc<'a> {
                 let mut new_parent_container = parent_container.to_vec();
                 new_parent_container.extend(current_container.iter().map(ToOwned::to_owned));
                 new_parent_container.push(len + parent_children_length);
-                crate::ftd2021::p2::utils::get_string_container(new_parent_container.as_slice())
+                ftd::ftd2021::p2::utils::get_string_container(new_parent_container.as_slice())
             };
             let mut child_count = 0;
             let container = match current.last_mut() {
@@ -478,14 +478,14 @@ impl<'a> ExecuteDoc<'a> {
             }
 
             self.local_variables.insert(
-                crate::ftd2021::p2::utils::resolve_local_variable_name(
+                ftd::ftd2021::p2::utils::resolve_local_variable_name(
                     0,
                     "CHILDREN-COUNT",
                     string_container.as_str(),
                     self.name,
                     self.aliases,
                 )?,
-                crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                     name: "CHILDREN-COUNT".to_string(),
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
@@ -498,14 +498,14 @@ impl<'a> ExecuteDoc<'a> {
             );
 
             self.local_variables.insert(
-                crate::ftd2021::p2::utils::resolve_local_variable_name(
+                ftd::ftd2021::p2::utils::resolve_local_variable_name(
                     0,
                     "CHILDREN-COUNT-MINUS-ONE",
                     string_container.as_str(),
                     self.name,
                     self.aliases,
                 )?,
-                crate::ftd2021::p2::Thing::Variable(ftd::Variable {
+                ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
                     name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
@@ -536,7 +536,7 @@ fn change_container(
     named_containers: &mut ftd::Map<Vec<Vec<usize>>>,
     parent_id: &Option<String>,
     doc_id: &str,
-) -> crate::ftd2021::p1::Result<()> {
+) -> ftd::ftd2021::p1::Result<()> {
     let name = name.replace('.', "#");
     if name == "ftd#main" || match_parent_id(name.as_str(), parent_id) {
         *current_container = vec![];
@@ -546,7 +546,7 @@ fn change_container(
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
             let error_msg = format!("no such container: {}", name);
-            return crate::ftd2021::p2::utils::e2(error_msg.as_str(), doc_id, 0);
+            return ftd::ftd2021::p2::utils::e2(error_msg.as_str(), doc_id, 0);
         }
     };
     Ok(())

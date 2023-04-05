@@ -211,9 +211,9 @@ impl Header {
     pub fn get_events(
         &self,
         line_number: usize,
-        doc: &crate::ftd2021::p2::TDoc,
-        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
-    ) -> ftd::ftd2021::p1::Result<Vec<crate::ftd2021::p2::Event>> {
+        doc: &ftd::ftd2021::p2::TDoc,
+        arguments: &ftd::Map<ftd::ftd2021::p2::Kind>,
+    ) -> ftd::ftd2021::p1::Result<Vec<ftd::ftd2021::p2::Event>> {
         let events = {
             let mut events = vec![];
             for (_, k, v) in self.0.iter() {
@@ -227,7 +227,7 @@ impl Header {
         };
         let mut event = vec![];
         for (e, a) in events {
-            event.push(crate::ftd2021::p2::Event::to_event(
+            event.push(ftd::ftd2021::p2::Event::to_event(
                 line_number,
                 &e,
                 &a,
@@ -254,10 +254,10 @@ impl Header {
     #[allow(clippy::type_complexity)]
     pub fn conditional_str(
         &self,
-        doc: &crate::ftd2021::p2::TDoc,
+        doc: &ftd::ftd2021::p2::TDoc,
         line_number: usize,
         name: &str,
-        arguments: &ftd::Map<crate::ftd2021::p2::Kind>,
+        arguments: &ftd::Map<ftd::ftd2021::p2::Kind>,
     ) -> Result<Vec<(usize, String, Option<String>, bool)>> {
         let mut conditional_vector = vec![];
         for (idx, (_, k, v)) in self.0.iter().enumerate() {

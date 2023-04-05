@@ -1,10 +1,10 @@
-use crate::ftd2021;
-pub use crate::ftd2021::di::definition::Definition;
-pub use crate::ftd2021::di::import::Import;
-pub use crate::ftd2021::di::invocation::Invocation;
-pub use crate::ftd2021::di::main::DI;
-pub use crate::ftd2021::di::property::{Property, PropertyValue, Source};
-pub use crate::ftd2021::di::record::Record;
+use ftd::ftd2021;
+pub use ftd::ftd2021::di::definition::Definition;
+pub use ftd::ftd2021::di::import::Import;
+pub use ftd::ftd2021::di::invocation::Invocation;
+pub use ftd::ftd2021::di::main::DI;
+pub use ftd::ftd2021::di::property::{Property, PropertyValue, Source};
+pub use ftd::ftd2021::di::record::Record;
 
 #[cfg(test)]
 #[macro_use]

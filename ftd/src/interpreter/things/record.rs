@@ -406,7 +406,7 @@ impl Field {
             } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, self.line_number)?);
                 let (variant_name, remaining) =
-                    crate::ftd2021::p2::utils::get_doc_name_and_remaining(variant)?;
+                    ftd::ftd2021::p2::utils::get_doc_name_and_remaining(variant)?;
                 let or_variant = or_type
                     .variants
                     .iter()

@@ -51,7 +51,7 @@ impl DNode {
 
         let attrs = {
             let mut attr = self.attrs_to_html();
-            let events = crate::ftd2021::event::group_by_js_event(&self.events);
+            let events = ftd::ftd2021::event::group_by_js_event(&self.events);
             for (name, actions) in events {
                 if name != "onclickoutside" && !name.starts_with("onglobalkey") {
                     let event = format!(
