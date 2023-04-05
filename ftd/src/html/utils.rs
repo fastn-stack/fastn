@@ -595,7 +595,7 @@ pub(crate) fn to_properties_string(
         None
     } else {
         Some(format!(
-            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            "args[\"{}\"]={{}};\n{}",
             node,
             properties_string.trim(),
         ))
@@ -629,7 +629,7 @@ pub(crate) fn to_argument_string(
         None
     } else {
         Some(format!(
-            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            "args[\"{}\"]={{}};\n{}",
             node,
             properties_string.trim()
         ))

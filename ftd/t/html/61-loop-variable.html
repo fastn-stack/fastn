@@ -1832,7 +1832,7 @@ let data = {...args, ...all_data};
 if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
 data[""] = window.raw_nodes_main[""](data);
 }
-let html = "<div data-id=\"main\" style=\"align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto\" ><div data-id=\"0:main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#foo.name}</div></div>".replace_format(data);
+let html = '<div data-id=\"main\" style=\"align-items: start; background-color: rgba(239,179,65,1); border-bottom-width: 10px; border-color: rgba(65,125,239,1); border-left-width: 10px; border-radius: 10px; border-right-width: 10px; border-style: solid; border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: row; gap: 30px; height: auto; justify-content: start; margin: 20px; padding: 20px; text-decoration: none; width: auto\" ><div data-id=\"0:main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto\" class=\"ft_md\">{foo#foo.name}</div></div>'.replace_format(data);
 return html;
 }
 
