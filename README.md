@@ -85,3 +85,9 @@ Get ready to experience the power of Fastn!
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Ffpm?ref=badge_large)
+
+## Examples
+
+The following examples are intended for testing purposes and showcase the range of capabilities of ftd language, from basic to advanced use cases. These examples are provided to ensure the proper functioning of ftd and to highlight its diverse features.
+
+You can find the examples at the following link: https://fastn-stack.github.io/fastn/
