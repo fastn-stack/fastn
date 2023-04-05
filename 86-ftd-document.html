@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" style="height: 100%;">
 <head>
-<meta charset="UTF-8"><base href="/">
+<meta charset="UTF-8"><base href="/fastn/">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"><meta property="og:title" content="My title"><meta name="twitter:title" content="My title"><meta property="og:description" content="MY DESCRIPTION"><meta name="description" content="MY DESCRIPTION"><meta name="twitter:description" content="MY DESCRIPTION"><meta property="og:image" content="https://fastn.io/-/fastn.io/images/fastn.svg"><meta name="theme-color" content="rgba(255,255,0,1)">
 <title>My title</title>
 <script type="ftd" id="ftd-data">
@@ -1689,15 +1689,15 @@ set_data_value(data, "foo#flag", new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
 }
 };
 
