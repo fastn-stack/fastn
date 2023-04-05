@@ -64,9 +64,9 @@ pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> 
         serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
         serde_json::Value::String(v) => format!(
             "\"{}\"",
-            v.replace("\\", "\\\\")
-                .replace("\n", "\\n")
-                .replace("\"", "\\\"")
+            v.replace('\\', "\\\\")
+                .replace('\n', "\\n")
+                .replace('\"', "\\\"")
         )
         .bright_yellow()
         .to_string(),
@@ -110,9 +110,9 @@ pub fn value_to_colored_string_without_null(
         serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
         serde_json::Value::String(v) => format!(
             "\"{}\"",
-            v.replace("\\", "\\\\")
-                .replace("\n", "\\n")
-                .replace("\"", "\\\"")
+            v.replace('\\', "\\\\")
+                .replace('\n', "\\n")
+                .replace('\"', "\\\"")
         )
         .bright_yellow()
         .to_string(),

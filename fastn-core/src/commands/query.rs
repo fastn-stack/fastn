@@ -1,4 +1,4 @@
-pub async fn json_dump(
+pub async fn query(
     config: &fastn_core::Config,
     stage: &str,
     path: Option<&str>,
