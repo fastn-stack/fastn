@@ -4,22 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-     - '**.rs'
-     - 'ftd/**.ftd'
-     - 'Cargo.*'
-     - 'rust-toolchain'
-     - '.github/workflows/rust.yml'
-     - 'fastn-core/tests/**'
   pull_request:
     branches: [ main ]
-    paths:
-     - '**.rs'
-     - 'ftd/**.ftd'
-     - 'Cargo.*'
-     - 'rust-toolchain'
-     - '.github/workflows/rust.yml'
-     - 'fastn-core/tests/**'
 jobs:
   everything:
     name: Rust Checks
@@ -33,13 +19,6 @@ jobs:
           profile: minimal
           override: true
           components: rustfmt, clippy
-      - name: Fastn install
-        id: fastn-install
-        continue-on-error: true
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: --path fastn --profile dev
 #      - name: Set up cargo cache
 #        uses: actions/cache@v3 # there is also https://github.com/Swatinem/rust-cache
 #        continue-on-error: false
@@ -51,10 +30,6 @@ jobs:
 #            target/
 #          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 #          restore-keys: ${{ runner.os }}-cargo-
-      - name: Debug Fastn path
-        id: debug
-        continue-on-error: true
-        run: which fastn
       - name: Run cargo fmt
         id: fmt
         continue-on-error: true

@@ -1,2 +1,2 @@
 -- fbt:
-build: cargo build
+build: cd .. && cargo install --path fastn --profile dev
