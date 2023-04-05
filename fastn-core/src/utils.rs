@@ -62,7 +62,14 @@ pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> 
         serde_json::Value::Null => "null".bright_black().to_string(),
         serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
         serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
-        serde_json::Value::String(v) => format!("\"{}\"", v).bright_yellow().to_string(),
+        serde_json::Value::String(v) => format!(
+            "\"{}\"",
+            v.replace("\\", "\\\\")
+                .replace("\n", "\\n")
+                .replace("\"", "\\\"")
+        )
+        .bright_yellow()
+        .to_string(),
         serde_json::Value::Array(v) => {
             let mut s = String::new();
             for (idx, value) in v.iter().enumerate() {
@@ -101,7 +108,14 @@ pub fn value_to_colored_string_without_null(
         serde_json::Value::Null => "".to_string(),
         serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
         serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
-        serde_json::Value::String(v) => format!("\"{}\"", v).bright_yellow().to_string(),
+        serde_json::Value::String(v) => format!(
+            "\"{}\"",
+            v.replace("\\", "\\\\")
+                .replace("\n", "\\n")
+                .replace("\"", "\\\"")
+        )
+        .bright_yellow()
+        .to_string(),
         serde_json::Value::Array(v) if v.is_empty() => "".to_string(),
         serde_json::Value::Array(v) => {
             let mut s = String::new();
