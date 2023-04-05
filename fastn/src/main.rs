@@ -204,6 +204,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             &config,
             json_dump.value_of_("stage").unwrap(),
             json_dump.value_of_("path"),
+            json_dump.get_flag("null"),
         )
         .await;
     }
@@ -321,6 +322,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--stage <STAGE> "The stage. Currently supported (p1)").required
                 (true))
                 .arg(clap::arg!(-p --path [PATH] "The path of the file"))
+                .arg(clap::arg!(-n --null "JSON with null and empty list"))
         )
         .subcommand(
             clap::Command::new("clone")

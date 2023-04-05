@@ -2,6 +2,7 @@ pub async fn json_dump(
     config: &fastn_core::Config,
     stage: &str,
     path: Option<&str>,
+    with_null: bool,
 ) -> fastn_core::Result<()> {
     let mut documents = std::collections::BTreeMap::from_iter(
         config
@@ -21,10 +22,11 @@ pub async fn json_dump(
         let value = get_ftd_json(file, stage)?;
         println!(
             "{}",
-            format!(
-                "{{\n{}",
+            if with_null {
                 fastn_core::utils::value_to_colored_string(&value, 1)
-            )
+            } else {
+                fastn_core::utils::value_to_colored_string_without_null(&value, 1)
+            }
         );
 
         return Ok(());
