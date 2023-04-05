@@ -1,0 +1,124 @@
+-- my-ds.page: `ftd.document` 🚧
+
+`ftd.document` is a kernel component that provides root-level configuration to
+the document. In addition to the usual document attributes like title,
+theme-color, etc., it includes a range of SEO-related attributes that enhance
+the accessibility of your page. These attributes can significantly improve the
+search engine ranking and enhance the user experience.
+
+This element can only appear once in the document and must be at the root level,
+which means it cannot be a child of any container components.
+
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.document: My Title
+description: My Description
+og-image: https://www.fifthtry.com/assets/images/logo-fifthtry.svg
+
+<other elements>
+
+\-- end: ftd.document
+
+-- ds.markdown:
+
+In the above example, `ftd.document` sets the title of the document to "My
+Title". The description attribute provides a brief description of the content of
+the page, and `og-image` specifies the image that should be displayed when the
+page is shared on social media.
+
+
+-- ds.h2: Rules for Using `ftd.document`
+
+When using `ftd.document` in the ftd, it is essential to follow certain rules to
+ensure that the document is structured correctly and functions as intended.
+
+-- ds.h3: Rule 1: `ftd.document` Cannot Be a Child Component
+
+`ftd.document` cannot be a child of any container components. It must be at the
+root level of the document, meaning it cannot be nested within any other
+component, including `ftd.column`, `ftd.row`, or any other container components.
+Attempting to use ftd.document as a child component will result in an error.
+
+-- ds.rendered:
+-- ds.rendered.input:
+
+\-- ftd.column:
+
+\-- ftd.document:
+\-- end: ftd.document
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- ftd.text:
+color: $inherited.colors.error.text
+role: $inherited.types.copy-regular
+
+FTDExecError(ParseError { message: "ftd.document can occur only once and must be
+the root", doc_id: "<doc_id>", line_number: <line_number> })
+
+-- end: ds.rendered.output
+
+
+-- ds.h3: Rule 2: `ftd.document` Can Only Occur Once
+
+`ftd.document` can only occur once in the document. Attempting to use it more
+than once will result in an error. This is because `ftd.document` is the
+root-level configuration of the document, and having multiple root-level
+configurations can cause conflicts and inconsistencies.
+
+-- ds.rendered:
+-- ds.rendered.input:
+
+\-- ftd.document:
+\-- end: ftd.document
+
+\-- ftd.document:
+\-- end: ftd.document
+
+
+-- ds.rendered.output:
+
+-- ftd.text:
+color: $inherited.colors.error.text
+role: $inherited.types.copy-regular
+
+FTDExecError(ParseError { message: "ftd.document can occur only once and must be
+the root", doc_id: "<doc_id>", line_number: <line_number> })
+
+-- end: ds.rendered.output
+
+
+-- ds.h1: Attributes
+
+;; TODO: Add link to `container root attributes`
+`ftd.document` accepts the below attributes as well all the container root
+attributes.
+
+-- ds.h2: `title: optional caption or body`
+
+The `title` attribute specifies the title of the document. It is displayed in
+the browser's title bar or tab. The content within the title tag is crucial for
+both user experience and search engine optimization (SEO) purposes.
+
+
+-- ds.code: Example of using title
+lang: ftd
+
+\-- ftd.document: My title
+
+\;; or
+
+\-- ftd.document:
+title: My title
+
+
+
+
+
+-- end: my-ds.page
