@@ -21,3 +21,5 @@ pub mod ui;
 pub mod value_with_default;
 pub(crate) mod variable;
 pub mod youtube_id;
+
+pub use p2::interpreter::{interpret, Interpreter, InterpreterState};
