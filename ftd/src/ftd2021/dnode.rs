@@ -45,7 +45,6 @@ impl DNode {
                 .join(" ")
         )
     }
-    #[cfg_attr(feature = "cargo-clippy", allow(clippy::format_push_string))]
     pub fn to_html(&self, id: &str) -> String {
         let style = format!("style=\"{}\"", self.style_to_html(self.visible));
         let classes = self.class_to_html();
