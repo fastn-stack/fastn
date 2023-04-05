@@ -45,6 +45,7 @@ fn get_ftd_json(file: &fastn_core::File, stage: &str) -> fastn_core::Result<serd
 
     match stage {
         "p1" => get_p1_json(document),
+        "ast" => get_ast_json(document),
         _ => unimplemented!(),
     }
 }
@@ -55,6 +56,16 @@ fn get_p1_json(document: &fastn_core::Document) -> fastn_core::Result<serde_json
         document.id_with_package().as_str(),
     )?;
     let value = serde_json::to_value(p1)?;
+
+    Ok(value)
+}
+
+fn get_ast_json(document: &fastn_core::Document) -> fastn_core::Result<serde_json::Value> {
+    let id = document.id_with_package();
+    let p1 = ftd::p1::parse(document.content.as_str(), id.as_str())?;
+
+    let ast = ftd::ast::AST::from_sections(p1.as_slice(), id.as_str())?;
+    let value = serde_json::to_value(ast)?;
 
     Ok(value)
 }
