@@ -1,0 +1,27 @@
+-- my-ds.page: Planned Changes In Next Edition
+
+We have a bunch of backward incompatible changes that we want to make when
+create our next edition. Currently we do not have edition support, so before we
+implement these changes we have to add edition support as well.
+
+-- ds.h1: `ftd.device`: `string -> or-type`
+
+We currently use `string` to represent `ftd.device`. Our `or-type` is superior
+and recommended way for modelling such enumerated constants.
+
+-- ds.h1: `ftd.ui` -> `ui`
+
+Every other built in type has no prefix, so why does `ui`? Also `children`,
+which is and alias for `ftd.ui list` does not have `ftd.` prefix.
+
+-- ds.h1: `ftd.color-scheme` related types
+
+We have a few abbrevated names. We prefer longer/descriptive names.
+
+- `ftd.btb -> ftd.body-text-border`
+- `ftd.pst -> ftd.primary-secondary-tertiary`
+- `ftd.custom -> ftd.custom-colors`
+
+Long names are okay as these types are infrequently used.
+
+-- end: my-ds.page

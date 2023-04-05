@@ -248,6 +248,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 - Overview: /d/
 - Maintainence: /d/m/
+- Next Edition: /d/next-edition/
 
 # Content Planning: /planning/
   skip: true
