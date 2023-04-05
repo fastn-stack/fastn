@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being
 /// interpreted.
@@ -726,19 +724,6 @@ impl ParsedDocument {
             foreign_function: vec![],
             instructions: vec![],
         })
-    }
-
-    fn done_processing_imports(&mut self) {
-        self.processing_imports = false;
-    }
-
-    fn reorder(
-        &mut self,
-        _bag: &ftd::Map<ftd::interpreter::Thing>,
-    ) -> ftd::interpreter::Result<()> {
-        // TODO: reorder
-        self.ast.reverse();
-        Ok(())
     }
 
     pub fn get_doc_aliases(&self) -> ftd::Map<String> {
