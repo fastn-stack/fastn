@@ -58,7 +58,7 @@ pub fn interpret_helper(
                     },
                 )?;
             }
-            ftd::Interpreter::CheckID { .. } => {
+            ftd::ftd2021::Interpreter::CheckID { .. } => {
                 // No config in TestLibrary ignoring processing terms for now
                 unimplemented!()
             }
@@ -210,7 +210,7 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
 }
 
 pub fn entity() -> ftd::ftd2021::p2::Thing {
-    ftd::ftd2021::p2::Thing::OrType(ftd::OrType {
+    ftd::ftd2021::p2::Thing::OrType(ftd::ftd2021::OrType {
         name: s("foo/bar#entity"),
         variants: vec![
             ftd::ftd2021::p2::Record {
@@ -11520,7 +11520,7 @@ mod interpreter {
         );
         bag.insert(
             s("foo/bar#lead"),
-            ftd::ftd2021::p2::Thing::OrType(ftd::OrType {
+            ftd::ftd2021::p2::Thing::OrType(ftd::ftd2021::OrType {
                 name: s("foo/bar#lead"),
                 variants: vec![
                     ftd::ftd2021::p2::Record {
