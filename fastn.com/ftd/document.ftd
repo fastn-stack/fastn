@@ -3,8 +3,7 @@
 `ftd.document` is a kernel component that provides root-level configuration to
 the document. In addition to the usual document attributes like title,
 theme-color, etc., it includes a range of SEO-related attributes that enhance
-the accessibility of your page. These attributes can significantly improve the
-search engine ranking and enhance the user experience.
+the accessibility of your page.
 
 This element can only appear once in the document and must be at the root level,
 which means it cannot be a child of any container components.
