@@ -145,7 +145,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: backend/dynamic-urls.ftd
 - `http` processor: /http/
   document: ftd-host/http.ftd
-- Custom URLs 🚧: /custom-url/
+- Custom URLs: /custom-url/
   document: backend/custom-urls.ftd
 - Request Data Processor 🚧: /request-data/
   document: ftd-host/request-data.ftd
