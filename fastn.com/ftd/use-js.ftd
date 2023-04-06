@@ -1,0 +1,13 @@
+-- my-ds.page: Javascript in `fastn` World
+
+`ftd` provides support for JavaScript integration in various places, which
+allows for greater flexibility when creating components. There are two main ways
+to incorporate JavaScript in `ftd`:
+
+- **JS in function**: A JavaScript function can be called within a function
+- **Web component**: A custom web component, created using JavaScript (or other
+languages too, that compiles to JS) can be incorporated into ftd documentation.
+
+This gives you flexibility of using JS in `ftd` module.
+
+-- end: my-ds.page

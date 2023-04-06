@@ -160,6 +160,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: ftd-host/foreign-variable.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
+- Using JS: /use-js/
+  document: ftd/use-js.ftd
+  - JS in function: /js-in-function/
+    document: ftd/js-in-function.ftd
 
 
 ## Backend: /backend/
