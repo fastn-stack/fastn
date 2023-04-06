@@ -4,6 +4,18 @@ We have a bunch of backward incompatible changes that we want to make when
 create our next edition. Currently we do not have edition support, so before we
 implement these changes we have to add edition support as well.
 
+;; add content here in reverse chronological fashion, latest content on the top
+
+-- ds.h1: `ftd.color`
+
+We should introduce `ftd.raw-color` and change the definition of `ftd.color` to
+use `ftd.raw-color` instead of `string` as `light` and `dark`.
+
+-- ds.h1: `ftd.image-src`
+
+We should also have `ftd.raw-image-src` as the types of `light` and `dark`
+instead of `string`.
+
 -- ds.h1: `fastn` is `fastn serve`
 
 PR: https://github.com/fastn-stack/fastn/pull/826.
