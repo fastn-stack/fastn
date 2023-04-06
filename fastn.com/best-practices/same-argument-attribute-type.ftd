@@ -1,6 +1,6 @@
 -- import: fastn.io/utils
 
--- ds.page: Same argument and attribute types
+-- my-ds.page: Same argument and attribute types
 
 It refers to the concept of ensuring that the input data being passed into a
 particular component or function is of the same data type as specified by
@@ -52,4 +52,4 @@ argument `text-width` as integer and then it passes it to one of the variant,
 in this case `px`, of `ftd.resizing` type. This narrows down all the other
 possible values that can be accepted by `width`. 
 
--- end: ds.page
+-- end: my-ds.page

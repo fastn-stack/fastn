@@ -1,4 +1,4 @@
--- ds.page: Import the packages
+-- my-ds.page: Import the packages
 
 We `import` the packages at the start of the `.ftd` file and there should be no
 space between two imports.
@@ -35,4 +35,4 @@ page content goes here
 \-- end: ds.page
 
 
--- end: ds.page
+-- end: my-ds.page

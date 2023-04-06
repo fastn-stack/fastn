@@ -1,6 +1,6 @@
 -- import: fastn.io/utils
 
--- ds.page: How to use Conditions
+-- my-ds.page: How to use Conditions
 
 By following the best practices for writing conditional statements, developers
 can create code that is less error-prone and more efficient, making it easier
@@ -89,8 +89,8 @@ It is not recommended to create same conditions on element and it's children.
 This approach adds an unnecessary line of code and can make the `ftd` code more
 difficult to read and maintain.
 
-Instead, it is recommended to apply conditions only to the element
-itself, and omit applying conditions to its children.
+Instead, the recommended approach is to include the condition only on the 
+element and then include any necessary child within that element.
 
 -- ds.code: Not recommended
 lang: ftd
@@ -170,4 +170,4 @@ if: { flag } ;; <hl>
 -- end: utils.code-display
 
 
--- end: ds.page
+-- end: my-ds.page

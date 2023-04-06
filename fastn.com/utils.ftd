@@ -245,13 +245,9 @@ width.fixed.percent if { ftd.device == "mobile" }: 80
 -- ftd.column:
 width: fill-container
 spacing.fixed.px: 32
-;; border-width.px: 1
-;; border-color: $inherited.colors.border
 padding-horizontal.px: 24
 padding-vertical.px: 24
-;; border-bottom-left-radius.px: 4
-;; border-bottom-right-radius.px: 4
-;; border-top-width.px: 0
+
 
 -- ftd.text:
 if: { code-display.body != NULL }

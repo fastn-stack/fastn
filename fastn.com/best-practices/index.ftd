@@ -1,4 +1,4 @@
--- ds.page: FTD Code Guidelines
+-- my-ds.page: FTD Code Guidelines
 
 The FifthTry team follows standard coding guidelines. These guidelines are
 imporant for several reasons:
@@ -27,4 +27,4 @@ imporant for several reasons:
     security, performance, and other critical concerns.
 
 
--- end: ds.page
+-- end: my-ds.page

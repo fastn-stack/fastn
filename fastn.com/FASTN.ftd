@@ -112,7 +112,12 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
     document: /best-practices/fscript-guidelines.ftd
   - Inherited guidelines: /inherited-guidelines/
     document: /best-practices/inherited-guidelines.ftd
- 
+  - Variable and it's Type: /variable-type-guidelines/
+    document: /best-practices/variable-type.ftd
+  - Optional Arguments guidelines: /optional-argument-guidelines/
+    document: /best-practices/optional-arg-not-null.ftd
+  - Commenting guidelines: /commenting-guidelines/
+    document: /best-practices/commenting-guidelines.ftd
 
 
 

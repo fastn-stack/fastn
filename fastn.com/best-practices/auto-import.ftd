@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/bling/note
 
--- ds.page: Auto-import
+-- my-ds.page: Auto-import
 
 We `auto-import` the packages in the `FASTN.ftd` file. 
 
@@ -34,4 +34,4 @@ unnecessarily big.
 If a package is not used in any `.ftd` file but it is `auto-imported` in the `FASTN.ftd` file, that package would not be downloaded.
 
 
--- end: ds.page
+-- end: my-ds.page
