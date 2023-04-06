@@ -1,0 +1,249 @@
+-- import: fastn.io/assets
+-- import: fastn.io/utils
+-- import: fifthtry.github.io/bling/tip as tip
+
+
+-- ds.page: Formatting guidelines
+
+Formatting guidelines help us to ensure that code is consistent, more readable,
+well-formatted which can enhance the quality and effectiveness of
+communication.
+
+-- ds.h1: Why we should format code document
+
+Formatting code documents is important for creating maintainable, efficient,
+and collaborative codebases.
+
+
+Following are the formatting guidelines we follow:
+
+-- ds.h1: 80 char in text editor
+
+80-character word wrapping is a useful practice that can not only improve the
+readability, consistency, compatibility, accessibility, formatting of written
+documents, but also the portability as it is more likely to work across
+editors.
+
+**Example:** 
+
+-- ds.image: 
+src: $assets.files.images.best-practices.80-char-ruler.png
+width: fill-container
+
+
+-- utils.tippy: Shortcut keys to Wrap Paragraph at Ruler in Sublime Text
+
+- **MacOS**: Cmd + Option + Q
+- **Windows**: Alt + Q
+
+-- ds.markdown:
+
+**When Paragraph is not wrapped at ruler:**
+
+-- ds.image: 
+src: $assets.files.images.best-practices.bad-word-wrapping.png
+width: fill-container
+
+
+-- ds.markdown:
+
+**When Paragraph is wrapped at ruler:**
+
+-- ds.image: 
+src: $assets.files.images.best-practices.good-word-wrapping.png
+width: fill-container
+
+-- ds.h1: Spacing guidelines
+
+-- utils.code-display: `section-gap`: One line space between two sections
+id: section-gap
+
+Adding one line space between sections in a document can improve
+it's `readability` and make it `easier for readers to distinguish different
+parts` of the content.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- component planning:  ;; <hl>
+\-- ftd.row:  ;; <hl>
+margin-top.px: 26
+padding-left.px: 50
+width.fixed.px: 1400
+height: fill-container
+\-- end: ftd.row:  ;; <hl>
+\-- end: planning  ;; <hl>
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- component planning:
+\;; <hl>
+\-- ftd.row:
+margin-top.px: 26
+padding-left.px: 50
+width.fixed.px: 1400
+height: fill-container
+
+\-- end: ftd.row:
+\;; <hl>
+\-- end: planning
+
+-- end: utils.code-display
+
+
+
+
+
+
+-- utils.code-display: `after-colon-space`: One char space after `:`
+id: after-colon-space
+
+The convention of adding `one character space after a colon` in written 
+language is used to improve the `readability` of the text and make it `easier `
+for readers to distinguish between the preceding text` and the `information 
+that follows`.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- ftd.text:Hello
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- ftd.text: Hello 
+
+-- end: utils.code-display
+
+
+
+
+
+
+
+
+
+
+-- utils.code-display: `component-gap`: 10 line space between two components
+id: component-gap
+
+The convention of adding 10 line spaces between two components in a document is
+a `formatting technique used to create a clear visual separation` and help
+organize the content for easier reading and comprehension.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- component c1:
+
+content of component goes here
+
+\-- end: c1
+
+\-- component c2:
+
+content of component goes here
+
+\-- end: c2
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- component c1:
+
+content of component goes here
+
+\-- end: c1
+
+
+
+
+
+
+
+
+
+
+\-- component c2:
+
+content of component goes here
+
+\-- end: c2
+
+-- end: utils.code-display
+
+
+-- utils.code-display: `end-line`: Adding a line to the end of the document
+id: end-line
+
+It is done to ensure that the last line of code in the file does not end 
+without a newline.
+
+This is because some programming languages or tools might interpret the
+lack of a newline character as an error or warning, and it can also cause
+problems when different code files are merged or concatenated. Therefore,
+adding a newline at the end of the document is a good practice to ensure
+consistent behavior across different tools and systems.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- ds.page: Page 1
+
+content goes here.
+
+\-- end: ds.page
+
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- ds.page: Page 1
+
+content goes here.
+
+\-- end: ds.page
+\;; <hl>
+
+-- end: utils.code-display
+
+
+
+
+
+
+
+
+-- utils.code-display: `conditional-expression`: One char space at the start and end of conditional expression
+id: conditional-expression
+
+The convention of including a single space character before and after a
+conditional expression is a common coding style that helps to make the code
+more readable and easier to understand.
+
+Including these spaces is not strictly necessary for the code to function
+correctly, but it is considered good coding practice and can help make the code
+easier to maintain and modify in the future.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- integer num: 1
+
+\-- ftd.text: Number is 1
+if: {num == 1}	;; <hl>
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- integer num: 1
+
+\-- ftd.text: Number is 1
+if: { num == 1 }	;; <hl>
+
+-- end: utils.code-display
+
+
+
+-- end: ds.page

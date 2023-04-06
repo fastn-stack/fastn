@@ -1,0 +1,38 @@
+-- ds.page: Import the packages
+
+We `import` the packages at the start of the `.ftd` file and there should be no
+space between two imports.
+
+-- ds.h1: Why adding import statement at the top of code a best practice?
+
+It makes it easier for other programmers to understand the dependencies
+and requirements of the code. When all the necessary modules and libraries are
+clearly listed at the beginning of the code, it allows other developers to
+quickly see what external resources are needed to run the code.
+
+In addition, having all the imports at the top of the code also helps prevent
+naming conflicts between modules or libraries. If import statements were
+scattered throughout the code, it could be difficult to determine which import
+statement introduced a particular function or class, which could lead to
+confusion or errors.
+
+Overall, adding import statements at the top of a code document is a common
+convention that helps improve the clarity, organization, and maintainability of
+the code.
+
+-- ds.code: Example
+lang: ftd
+
+\-- import: <package-1>
+\-- import: <package-2>
+...
+\-- import: <package-n>
+
+\-- ds.page: title
+
+page content goes here
+
+\-- end: ds.page
+
+
+-- end: ds.page

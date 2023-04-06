@@ -49,6 +49,14 @@ ftd.ui list elements:
 
 
 
+
+
+
+
+
+
+
+
 -- component switcher:
 switches list s:
 integer $is-active: 0
@@ -76,6 +84,14 @@ $loop$: $switcher.s as $obj
 -- end: ftd.column
 
 -- end: switcher
+
+
+
+
+
+
+
+
 
 
 
@@ -111,6 +127,8 @@ role: $inherited.types.copy-regular
 
 
 
+
+
 -- component box:
 ftd.ui list child:
 
@@ -118,18 +136,6 @@ ftd.ui list child:
 children: $box.child
 
 -- end: box
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -190,3 +196,138 @@ width: fill-container
 -- end: ftd.column
 
 -- end: compact-text
+
+
+
+
+
+
+
+
+
+-- component code-display:
+optional caption title:
+optional body body:
+children compare-wrap:
+optional string id: 
+
+-- ftd.column:
+width: fill-container
+id: $code-display.id
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.px: 14
+padding-vertical.px: 12
+background.solid: $inherited.colors.background.code
+
+-- ftd.row:
+spacing.fixed.px: 16
+align-content: center
+
+-- ftd.column:
+width.fixed.px: 8
+height.fixed.px: 8
+background.solid: $inherited.colors.custom.one
+
+-- end: ftd.column
+
+-- ftd.text: $code-display.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+width.fixed.percent if { ftd.device == "mobile" }: 80
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 32
+;; border-width.px: 1
+;; border-color: $inherited.colors.border
+padding-horizontal.px: 24
+padding-vertical.px: 24
+;; border-bottom-left-radius.px: 4
+;; border-bottom-right-radius.px: 4
+;; border-top-width.px: 0
+
+-- ftd.text:
+if: { code-display.body != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+$code-display.body
+
+-- ftd.row:
+if: { ftd.device != "mobile" }
+width: fill-container
+spacing.fixed.px: 50
+children: $code-display.compare-wrap
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { ftd.device == "mobile" }
+width: fill-container
+spacing.fixed.px: 50
+children: $code-display.compare-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: code-display
+
+
+
+
+
+
+
+
+
+
+-- component tippy:
+optional caption title:
+optional body body:
+children tippy-wrap:
+
+-- ftd.column:
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.background.step-1
+padding.px: 16
+border-radius.px: 4
+border-width.px: 1
+width: fill-container
+margin-top.px: 8
+margin-bottom.px: 32
+
+
+
+
+-- ftd.text: $tippy.title
+if: { tippy.title != NULL }
+color: $inherited.colors.text-strong
+role: $inherited.types.heading-small
+width: fill-container
+margin-bottom.px: 24
+
+
+-- ds.markdown:
+body: $tippy.body
+
+
+
+-- ftd.column:
+children: $tippy.tippy-wrap
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: tippy

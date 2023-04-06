@@ -1,0 +1,35 @@
+-- import: fastn.io/utils
+
+-- ds.page: Container Component guidelines
+
+-- utils.code-display: `conditional-attributes-removes-component-duplication`: Using conditional attributes to avoid duplicating similar components
+id: conditional-attributes-removes-component-duplication
+
+ It's a good practice to avoid duplicating similar components with minor
+ variations. Instead, you can use conditional attributes to modify the behavior
+ or appearance of a component based on certain conditions.
+
+
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- ftd.decimal: $rent1
+if: { !is-price }	;; <hl>
+
+\-- ftd.decimal: $rent2
+if: { is-price } ;; <hl>
+
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- ftd.decimal:
+value if { is-price }: $rent2	;; <hl>
+value: $rent1
+
+-- end: utils.code-display
+
+
+
+-- end: ds.page

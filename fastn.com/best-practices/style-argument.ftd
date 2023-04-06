@@ -1,0 +1,10 @@
+-- ds.page: Avoid style arguments
+
+Any `ftd` file is either a `component library` or `content`. 
+Content files should not use "style arguments".
+
+Avoid taking style related attributes from the component's argument.
+
+
+
+-- end: ds.page

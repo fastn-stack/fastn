@@ -27,9 +27,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 
 
 
+
+
+
 -- fastn.sitemap:
-
-
 
 
 # Learn: /overview/
@@ -92,8 +93,27 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: ftd/setup.ftd
 - Create `fastn` package: /create-fastn-package/
   document: author/how-to/create-fastn-package.ftd
-- Best Practices: /best-practices/
 - `ftd p1` grammar: /ftd/p1-grammar/
+- Best Practices 🚧: /best-practices/
+  - Formatting guidelines: /formatting/
+    document: /best-practices/formatting.ftd
+  - Import the packages: /import-at-top/
+    document: /best-practices/import-at-top.ftd
+  - Auto-import the packages: /auto-import/
+    document: /best-practices/auto-import.ftd
+  - How to use Conditions: /how-to-use-conditions/
+    document: /best-practices/use-conditions.ftd
+  - Container guidelines: /container-guidelines/
+    document: /best-practices/container-guidelines.ftd
+  - Same argument and attribute types: /same-argument-attribute-type/
+    document: /best-practices/same-argument-attribute-type.ftd
+  - FScript guidelines: /fscript-guidelines/
+    document: /best-practices/fscript-guidelines.ftd
+  - Inherited guidelines: /inherited-guidelines/
+    document: /best-practices/inherited-guidelines.ftd
+ 
+
+
 
 ## Frontend: /frontend/
 
