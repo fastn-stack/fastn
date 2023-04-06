@@ -122,10 +122,10 @@ FTDExecError(ParseError { message: "ftd.document can't have siblings.", doc_id:
 -- ds.h1: Attributes
 
 ;; TODO: Add link to `container root attributes`
-`ftd.document` accepts the below attributes as well all the container root
-attributes.
+`ftd.document` accepts the below attributes as well all the [container root
+attributes](/ftd/container-root-attributes/).
 
--- ds.h2: `title: optional caption or body`
+-- ds.h2: `title: optional caption`
 
 The `title` attribute specifies the title of the document. It is displayed in
 the browser's title bar or tab. The content within the title tag is crucial for
@@ -142,6 +142,95 @@ lang: ftd
 \-- ftd.document:
 title: My title
 
+
+-- ds.h2: `og-title: optional string`
+
+The `og-title` attribute provides the title of a webpage for social media
+platforms and other websites when the webpage is shared or linked. The og in
+`og-title` stands for Open Graph, which is a protocol that allows webpages to
+become rich objects in social media platforms.
+
+** This attribute takes default value same as `title` attribute value, if not
+provided explicitly**
+
+-- ds.code: Example of using og-title
+lang: ftd
+
+\-- ftd.document:
+og-title: My Page Title
+
+
+
+-- ds.h2: `twitter-title: optional string`
+
+The `twitter-title` attribute provides the title of a webpage for Twitter cards.
+When a webpage is shared on Twitter, the `twitter-title` attribute is used to
+display the title of the webpage in the Twitter card preview.
+
+** This attribute takes default value same as `title` attribute value, if not
+provided explicitly**
+
+-- ds.code: Example of using twitter-title
+lang: ftd
+
+\-- ftd.document:
+twitter-title: My Page Twitter Title
+
+
+
+
+-- ds.h2: `description: optional body`
+
+The `description` attribute specifies a brief summary or description of the
+content of a page. The description is typically displayed in search engine
+results as a preview snippet or as the description text below the page title.
+
+
+-- ds.code: Example of using description
+lang: ftd
+
+\-- ftd.document:
+description: This is a brief description of my webpage.
+
+\;; or
+
+\-- ftd.document:
+
+This is a brief description of my webpage.
+
+
+
+-- ds.h2: `og-description: optional string`
+
+The `og-description` attribute provides a brief description of a webpage for
+Open Graph protocol. The Open Graph protocol is used by social media platforms,
+like Facebook and LinkedIn, to display a preview of a webpage when it is shared.
+
+** This attribute takes default value same as `description` attribute value, if not
+provided explicitly**
+
+-- ds.code: Example of using og-description
+lang: ftd
+
+\-- ftd.document:
+og-description: This is the description of my webpage for Open Graph protocol.
+
+
+
+-- ds.h2: `twitter-description: optional string`
+
+The `twitter-description` attribute provides a brief description of a webpage
+for Twitter Cards. Twitter Cards are used by Twitter to display a preview of a
+webpage when it is shared.
+
+** This attribute takes default value same as `description` attribute value, if
+not provided explicitly**
+
+-- ds.code: Example of using twitter-description
+lang: ftd
+
+\-- ftd.document:
+twitter-title: My Page Twitter Title
 
 
 
