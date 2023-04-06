@@ -23,8 +23,10 @@ lang: ftd
 
 -- ds.h1: Attributes
 
-Row accepts the [container attributes](ftd/container/) as well all the [common
-attributes ](ftd/common/).
+`ftd.row` accepts the [container root
+attributes](ftd/container-root-attributes/), [container
+attributes](ftd/container-attributes/) as well all the [common
+attributes](ftd/common/).
 
 -- ds.h1: Example
 
