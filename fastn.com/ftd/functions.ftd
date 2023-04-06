@@ -1,0 +1,1052 @@
+-- my-ds.page: ftd functions
+
+These functions are available as a part of ftd and can be used in any ftd
+document.
+
+-- ds.h1: List functions
+
+-- ds.h2: `len(a: list)`
+
+This function will return the length of the list.
+
+-- ds.rendered: Sample code using `len()`
+
+-- ds.rendered.input:
+
+\-- string list places: Mumbai, New York, Bangalore
+
+\-- integer length(a):
+string list a:
+
+len(a) ;; <hl>
+
+\;; This will show the length of the
+\;; list `places` defined above
+
+\-- ftd.integer: $length(a = $places)
+color: $inherited.colors.text
+
+-- ds.rendered.output:
+
+-- ftd.integer: $length(a = $places)
+color: $inherited.colors.text
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+-- ds.h2: `append($a: mutable list, v: string) ⚠️`
+
+This is a default ftd function that will append a string `v`
+to the end of the given mutable string list `a`.
+
+-- ds.rendered: Sample code using `append()`
+
+-- ds.rendered.input:
+
+\-- string list vowels: a, e
+
+\-- void append(a,v): ;; <hl>
+string list $a: ;; <hl>
+string v: ;; <hl>
+\;; <hl>
+ftd.append(a, v); ;; <hl>
+
+\-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+
+\-- display-text: Append text
+$on-click$: $append($a = $vowels, v = fifthtry) ;; <hl>
+
+\-- display-text: $val
+$loop$: $vowels as $val
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- append-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h1: Dark/light mode functions
+
+
+-- ds.h2: `enable_dark_mode()`
+
+This is FScript as well as a standard ftd function. This function enables the dark mode.
+
+-- ds.rendered: Sample code using `enable_dark_mode()`
+
+-- ds.rendered.input:
+
+\-- void set-dark(): ;; <hl>
+\;; <hl>
+enable_dark_mode() ;; <hl>
+
+\-- ftd.text: Dark Mode
+$on-click$: $set-dark() ;; <hl>
+
+\;; Alternative way
+\-- ftd.text: Click to set Dark Mode
+$on-click$: $ftd.enable-dark-mode() ;; <hl>
+
+-- ds.rendered.output:
+
+-- enable-dark-mode-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `enable_light_mode()`
+
+This is FScript as well as a standard ftd function. This function enables the
+light mode.
+
+-- ds.rendered: Sample code using `enable_light_mode()`
+
+-- ds.rendered.input:
+
+\-- void set-light():;; <hl>
+\;; <hl>
+enable_light_mode() ;; <hl>
+
+\-- ftd.text: Light Mode
+$on-click$: $set-light() ;; <hl>
+
+\;; Alternative way
+\-- ftd.text: Click to set Light Mode
+$on-click$: $ftd.enable-light-mode() ;; <hl>
+
+-- ds.rendered.output:
+
+-- enable-light-mode-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.h2: `enable_system_mode()`
+
+This is FScript as well as a standard ftd function. This function enables the
+system mode.
+
+-- ds.rendered: Sample code using `enable_system_mode()`
+
+-- ds.rendered.input:
+
+\-- void set-system(): ;; <hl>
+\;; <hl>
+enable_system_mode() ;; <hl>
+
+\-- ftd.text: System Mode
+$on-click$: $set-system() ;; <hl>
+
+\;; Alternative way
+\-- ftd.text: Click to set System Mode
+$on-click$: $ftd.enable-system-mode() ;; <hl>
+
+-- ds.rendered.output:
+
+-- enable-system-mode-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: Other functions
+
+-- ds.h2: `toggle($a: bool)`
+
+This is FScript function. It will toggle the boolean variable which is passed
+as argument `a` to this function.
+
+-- ds.rendered: Sample code using `toggle()`
+
+-- ds.rendered.input:
+
+\-- boolean $b: false
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-boolean: $b
+
+\-- display-text: Click to toggle
+$on-click$: $ftd.toggle($a = $b) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- toggle-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: `increment($a: integer)`
+
+This is FScript function. It will increment the integer variable by 1 which is passed
+as argument `a` to this function.
+
+
+-- ds.rendered: Sample code using `increment()`
+
+-- ds.rendered.input:
+
+\-- integer $x: 1
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-integer: $x
+
+\-- display-text: Click to increment by 1
+$on-click$: $ftd.increment($a = $x) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- increment-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `increment-by($a: integer, v: integer)️`
+
+This is FScript function. It will increment the integer variable by value `v` which is passed
+as argument `a` to this function.
+
+-- ds.rendered: Sample code using `increment-by()`
+
+-- ds.rendered.input:
+
+\-- integer $z: 1
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-integer: $z
+
+\-- display-text: Click to increment by 5
+$on-click$: $ftd.increment-by($a = $z, v = 5) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- increment-by-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `set-bool($a: bool, v: bool)`
+
+This is FScript function. It will set the boolean variable by value `v` which is passed
+as argument `a` to this function.
+
+-- ds.rendered: Sample code using `set-bool()`
+
+-- ds.rendered.input:
+
+\-- boolean $b1: false
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-boolean: $b1
+
+\-- display-text: Click to set the boolean as true
+$on-click$: $ftd.set-bool($a = $b1, v = true) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- set-bool-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: `set-string($a: string, v: string)`
+
+This is FScript function. It will set the string variable by value `v` which is passed
+as argument `a` to this function.
+
+-- ds.rendered: Sample code using `set-string()`
+
+-- ds.rendered.input:
+
+\-- string $s: Hello
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-text: $s
+
+\-- display-text: Click to set the string as World
+$on-click$: $ftd.set-string($a = $s, v = World) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- set-string-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: `set-integer($a: integer, v: integer)`
+
+This is FScript function. It will set the integer variable by value `v` which is passed
+as argument `a` to this function.
+
+-- ds.rendered: Sample code using `set-integer()`
+
+-- ds.rendered.input:
+
+\-- integer $y: 1
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- display-integer: $y
+
+\-- display-text: Click to set the integer as 100
+$on-click$: $ftd.set-integer($a = $y, v = 100) ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- set-integer-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `is_empty(a: any)`
+
+This is FScript function. It gives if the value passed to argument `a` is null or empty.
+
+-- ds.rendered: Sample code using `is_empty()`
+
+-- ds.rendered.input:
+
+\-- optional string name:
+
+\-- string list names:
+
+\-- display-text: name is empty
+if: { ftd.is_empty(name) } ;; <hl>
+
+\-- display-text: There is no name in names
+if: { ftd.is_empty(names) } ;; <hl>
+
+-- ds.rendered.output:
+
+-- is-empty-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h1: Some frequently used functions
+
+Below mentioned are some of the most frequently used functions which can be
+created as per the requirement and are not part of ftd.
+
+-- ds.h2: Clamp
+
+-- ds.h3: Regular Clamp
+
+-- ds.rendered: Sample code using `regular-clamp()`
+
+-- ds.rendered.input:
+
+\-- integer $num: 0
+
+\-- display-integer: $num
+$on-click$: $regular-clamp($a = $num, by = 1, clamp = 6)  ;; <hl>
+
+\-- void regular-clamp(a,by,clamp): ;; <hl>
+integer $a: ;; <hl>
+integer by: ;; <hl>
+integer clamp: ;; <hl>
+\;; <hl>
+a = (a + by) % clamp ;; <hl>
+
+-- ds.rendered.output:
+
+-- regular-clamp-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h3: Clamp with min and max
+
+-- ds.rendered: Sample code using `clamp_with_limits()`
+
+-- ds.rendered.input:
+
+\-- integer $n: 1
+
+\-- display-integer: $n
+$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6) ;; <hl>
+
+\-- void clamp_with_limits(a,by,min,max):  ;; <hl>
+integer $a:  ;; <hl>
+integer by: 1  ;; <hl>
+integer min: 0  ;; <hl>
+integer max: 5  ;; <hl>
+\;; <hl>
+a = (((a - min) + by) % (max - min)) + min  ;; <hl>
+
+-- ds.rendered.output:
+
+-- clamp-with-limits-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.h1: Common Components used within sample codes to render content
+
+-- ds.h2: `display-text: Renders text`
+
+-- ds.code: Component Definition
+lang: ftd
+
+\-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+\-- component display-text:
+caption text:
+ftd.color border-color: $red-yellow
+
+\-- ftd.text: $display-text.text
+color: $inherited.colors.text
+border-color: $display-text.border-color
+border-width.px: 2
+padding.px: 10
+
+\-- end: display-text
+
+
+-- ds.h2: `display-integer: Renders integer value`
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+\-- component display-integer:
+caption integer value:
+ftd.color border-color: $red-yellow
+
+\-- ftd.integer: $display-integer.value
+color: $inherited.colors.text
+border-color: $display-integer.border-color
+border-width.px: 2
+padding.px: 10
+
+\-- end: display-integer
+
+
+
+
+
+
+
+-- ds.h2: `display-boolean: Renders boolean value`
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+\-- component display-boolean:
+caption boolean value:
+ftd.color border-color: $red-yellow
+
+\-- ftd.boolean: $display-boolean.value
+color: $inherited.colors.text
+border-color: $display-integer.border-color
+border-width.px: 2
+padding.px: 10
+
+\-- end: display-boolean
+
+
+
+-- end: my-ds.page
+
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+
+;; VARIABLES ---------------------------------------
+-- optional string name:
+
+-- string list names:
+
+-- string $s: Hello
+
+-- integer $num: 0
+
+-- integer $n: 1
+
+-- integer $x: 1
+
+-- integer $x1: 1
+
+-- integer $y: 1
+
+-- integer $z: 1
+
+-- boolean $b: false
+
+-- boolean $b1: false
+
+-- string list $vowels: a, e
+
+-- string list places: Mumbai, New York, Bangalore
+
+;; FUNCTIONS ----------------------------------------
+-- void set-dark():
+
+enable_dark_mode()
+
+
+-- void set-light():
+
+enable_light_mode()
+
+
+-- void set-system():
+
+enable_system_mode()
+
+
+-- integer length(a):
+string list a:
+
+len(a)
+
+
+-- void append(a,v):
+string list $a:
+string v:
+
+ftd.append(a, v);
+
+
+-- void regular-clamp(a,by,clamp):
+integer $a:
+integer by:
+integer clamp:
+
+a = (a + by) % clamp
+
+
+
+
+-- void clamp_with_limits(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+a = (((a - min) + by) % (max - min)) + min
+
+
+
+
+
+-- component display-text:
+caption text:
+ftd.color border-color: $red-yellow
+
+-- ftd.text: $display-text.text
+color: $inherited.colors.text
+border-color: $display-text.border-color
+border-width.px: 2
+padding.px: 10
+
+-- end: display-text
+
+
+
+
+
+
+
+
+
+-- component display-integer:
+caption integer value:
+ftd.color border-color: $red-yellow
+
+-- ftd.integer: $display-integer.value
+color: $inherited.colors.text
+border-color: $display-integer.border-color
+border-width.px: 2
+padding.px: 10
+
+-- end: display-integer
+
+
+
+
+
+
+
+
+
+-- component display-boolean:
+caption boolean value:
+ftd.color border-color: $red-yellow
+
+-- ftd.boolean: $display-boolean.value
+color: $inherited.colors.text
+border-color: $display-boolean.border-color
+border-width.px: 2
+padding.px: 10
+
+-- end: display-boolean
+
+
+
+
+
+
+
+
+
+
+
+;; CODE SAMPLES -------------------------------------
+-- component append-sample:
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+
+-- display-text: Append text
+$on-click$: $append($a = $vowels, v = fifthtry)
+
+-- display-text: $val
+$loop$: $vowels as $val
+
+-- end: ftd.column
+
+-- end: append-sample
+
+
+
+
+
+-- component toggle-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-boolean: $b
+
+-- display-text: Click to toggle
+$on-click$: $ftd.toggle($a = $b) ;; <hl>
+
+-- end: ftd.column
+
+-- end: toggle-sample
+
+
+
+
+
+
+-- component increment-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-integer: $x
+
+-- display-text: Click to increment by 1
+$on-click$: $ftd.increment($a = $x)
+
+-- end: ftd.column
+
+-- end: increment-sample
+
+
+
+
+
+
+
+-- component increment-by-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-integer: $z
+
+-- display-text: Click to increment by 5
+$on-click$: $ftd.increment-by($a = $z, v = 5)
+
+-- end: ftd.column
+
+-- end: increment-by-sample
+
+
+
+
+
+
+-- component set-bool-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-boolean: $b1
+
+-- display-text: Click to set the boolean as true
+$on-click$: $ftd.set-bool($a = $b1, v = true)
+
+-- end: ftd.column
+
+
+-- end: set-bool-sample
+
+
+
+
+
+
+
+
+-- component set-string-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-text: $s
+
+-- display-text: Click to set the string as World
+$on-click$: $ftd.set-string($a = $s, v = World)
+
+-- end: ftd.column
+
+-- end: set-string-sample
+
+
+
+
+
+-- component set-integer-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-integer: $x1
+
+-- display-text: Click to set the integer as 100
+$on-click$: $ftd.set-integer($a = $x1, v = 100)
+
+-- end: ftd.column
+
+-- end: set-integer-sample
+
+
+
+
+
+
+
+
+-- component is-empty-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-text: name is empty
+if: { ftd.is_empty(name) }
+
+-- display-text: There is no name in names
+if: { ftd.is_empty(names) }
+
+-- end: ftd.column
+
+-- end: is-empty-sample
+
+
+
+
+
+
+
+-- component enable-dark-mode-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-text: Dark Mode
+$on-click$: $set-dark()
+
+-- display-text: Click to set Dark Mode
+$on-click$: $ftd.enable-dark-mode()
+
+-- end: ftd.column
+
+
+-- end: enable-dark-mode-sample
+
+
+
+
+
+
+
+
+
+
+-- component enable-light-mode-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-text: Light Mode
+$on-click$: $set-light()
+
+-- display-text: Click to set Light Mode
+$on-click$: $ftd.enable-light-mode()
+
+-- end: ftd.column
+
+-- end: enable-light-mode-sample
+
+
+
+
+
+
+
+
+
+-- component enable-system-mode-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- display-text: System Mode
+$on-click$: $set-system()
+
+-- display-text: Click to set System Mode
+$on-click$: $ftd.enable-system-mode()
+
+-- end: ftd.column
+
+-- end: enable-system-mode-sample
+
+
+
+
+
+
+
+
+
+-- component regular-clamp-sample:
+
+-- display-integer: $num
+$on-click$: $regular-clamp($a = $num, by = 1, clamp = 6)
+
+-- end: regular-clamp-sample
+
+
+
+
+
+
+
+
+
+-- component clamp-with-limits-sample:
+
+-- display-integer: $n
+$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6)
+
+-- end: clamp-with-limits-sample
+
+
+
+
+
+
+
+
+

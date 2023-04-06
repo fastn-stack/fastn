@@ -1,0 +1,373 @@
+-- import: fastn.io/ftd/utils as appendix
+
+-- my-ds.page: Attributes
+
+-- ds.h1: Appendix
+
+-- appendix.letter-stack:
+height.fixed.px: 800
+contents-a: $letter-contents-a
+contents-b: $letter-contents-b
+contents-c: $letter-contents-c
+contents-d: $letter-contents-d
+contents-e: $letter-contents-e
+contents-f: $letter-contents-f
+contents-g: $letter-contents-g
+contents-h: $letter-contents-h
+contents-i: $letter-contents-i
+contents-j: $letter-contents-j
+contents-k: $letter-contents-k
+contents-l: $letter-contents-l
+contents-m: $letter-contents-m
+contents-n: $letter-contents-n
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-q: $letter-contents-q
+contents-r: $letter-contents-r
+contents-s: $letter-contents-s
+contents-t: $letter-contents-t
+contents-u: $letter-contents-u
+contents-v: $letter-contents-v
+contents-w: $letter-contents-w
+contents-x: $letter-contents-x
+contents-y: $letter-contents-y
+contents-z: $letter-contents-z
+
+-- end: my-ds.page
+
+
+
+
+
+
+
+
+
+
+
+;; APPENDIX ------------------------------------------------------------
+
+-- appendix.letter-data list letter-contents-a:
+
+-- appendix.letter-data: anchor
+link: /ftd/common/#anchor
+
+-- appendix.letter-data: align-self
+link: /ftd/common/#align-self
+
+-- appendix.letter-data: align-content
+link: /ftd/container-attributes/#align-content
+
+-- end: letter-contents-a
+
+-- appendix.letter-data list letter-contents-b:
+
+-- appendix.letter-data: bottom
+link: /ftd/common/#bottom
+
+-- appendix.letter-data: background
+link: /ftd/common/#background
+
+-- appendix.letter-data: border-color
+link: /ftd/common/#border-color
+
+-- appendix.letter-data: border-left-color
+link: /ftd/common/#border-left-color
+
+-- appendix.letter-data: border-right-color
+link: /ftd/common/#border-right-color
+
+-- appendix.letter-data: border-top-color
+link: /ftd/common/#border-top-color
+
+-- appendix.letter-data: border-bottom-color
+link: /ftd/common/#border-bottom-color
+
+-- appendix.letter-data: border-style
+link: /ftd/common/#border-style
+
+-- appendix.letter-data: border-style-left
+link: /ftd/common/#border-style-left
+
+-- appendix.letter-data: border-style-right
+link: /ftd/common/#border-style-right
+
+-- appendix.letter-data: border-style-top
+link: /ftd/common/#border-style-top
+
+-- appendix.letter-data: border-style-bottom
+link: /ftd/common/#border-style-bottom
+
+-- appendix.letter-data: border-style-horizontal
+link: /ftd/common/#border-style-horizontal
+
+-- appendix.letter-data: border-style-vertical
+link: /ftd/common/#border-style-vertical
+
+-- appendix.letter-data: border-width
+link: /ftd/common/#border-width
+
+-- appendix.letter-data: border-left-width
+link: /ftd/common/#border-left-width
+
+-- appendix.letter-data: border-right-width
+link: /ftd/common/#border-right-width
+
+-- appendix.letter-data: border-top-width
+link: /ftd/common/#border-top-width
+
+-- appendix.letter-data: border-bottom-width
+link: /ftd/common/#border-bottom-width
+
+-- appendix.letter-data: border-radius
+link: /ftd/common/#border-radius
+
+-- appendix.letter-data: border-top-left-radius
+link: /ftd/common/#border-top-left-radius
+
+-- appendix.letter-data: border-top-right-radius
+link: /ftd/common/#border-top-right-radius
+
+-- appendix.letter-data: border-bottom-left-radius
+link: /ftd/common/#border-bottom-left-radius
+
+-- appendix.letter-data: border-bottom-right-radius
+link: /ftd/common/#border-bottom-right-radius
+
+-- end: letter-contents-b
+
+-- appendix.letter-data list letter-contents-c:
+
+-- appendix.letter-data: color
+link: /ftd/common/#color
+
+-- appendix.letter-data: colors
+link: /ftd/container-root-attributes/#colors
+
+-- appendix.letter-data: cursor
+link: /ftd/common/#cursor
+
+-- appendix.letter-data: classes
+link: /ftd/common/#classes
+
+-- appendix.letter-data: css
+link: /ftd/common/#css
+
+-- appendix.letter-data: css-list
+link: /ftd/common/#css-list
+
+-- appendix.letter-data: children
+link: /ftd/container-root-attributes/#children
+
+-- end: letter-contents-c
+
+-- appendix.letter-data list letter-contents-d:
+
+-- appendix.letter-data: display
+link: /ftd/text-attributes/#display
+
+-- end: letter-contents-d
+
+-- appendix.letter-data list letter-contents-e:
+
+-- appendix.letter-data list letter-contents-f:
+
+-- appendix.letter-data list letter-contents-g:
+
+-- appendix.letter-data list letter-contents-h:
+
+-- appendix.letter-data: height
+link: /ftd/common/#height
+
+-- end: letter-contents-h
+
+-- appendix.letter-data list letter-contents-i:
+
+-- appendix.letter-data: id
+link: /ftd/common/#id
+
+-- end: letter-contents-i
+
+-- appendix.letter-data list letter-contents-j:
+
+-- appendix.letter-data: js
+link: /ftd/common/#js
+
+-- appendix.letter-data: js-list
+link: /ftd/common/#js-list
+
+-- end: letter-contents-j
+
+-- appendix.letter-data list letter-contents-k:
+
+-- appendix.letter-data list letter-contents-l:
+
+-- appendix.letter-data: left
+link: /ftd/common/#left
+
+-- appendix.letter-data: link
+link: /ftd/common/#link
+
+-- end: letter-contents-l
+
+-- appendix.letter-data list letter-contents-m:
+
+-- appendix.letter-data: margin
+link: /ftd/common/#margin
+
+-- appendix.letter-data: margin-left
+link: /ftd/common/#margin-left
+
+-- appendix.letter-data: margin-right
+link: /ftd/common/#margin-right
+
+-- appendix.letter-data: margin-top
+link: /ftd/common/#margin-top
+
+-- appendix.letter-data: margin-bottom
+link: /ftd/common/#margin-bottom
+
+-- appendix.letter-data: margin-horizontal
+link: /ftd/common/#margin-horizontal
+
+-- appendix.letter-data: margin-vertical
+link: /ftd/common/#margin-vertical
+
+-- appendix.letter-data: max-width
+link: /ftd/common/#max-width
+
+-- appendix.letter-data: min-width
+link: /ftd/common/#min-width
+
+-- appendix.letter-data: max-height
+link: /ftd/common/#max-height
+
+-- appendix.letter-data: min-height
+link: /ftd/common/#min-height
+
+-- end: letter-contents-m
+
+-- appendix.letter-data list letter-contents-n:
+
+-- appendix.letter-data list letter-contents-o:
+
+-- appendix.letter-data: open-in-new-tab
+link: /ftd/common/#open-in-new-tab
+
+-- appendix.letter-data: overflow
+link: /ftd/common/#overflow
+
+-- appendix.letter-data: overflow-x
+link: /ftd/common/#overflow-x
+
+-- appendix.letter-data: overflow-y
+link: /ftd/common/#overflow-y
+
+-- end: letter-contents-o
+
+-- appendix.letter-data list letter-contents-p:
+
+-- appendix.letter-data: padding
+link: /ftd/common/#padding
+
+-- appendix.letter-data: padding-left
+link: /ftd/common/#padding-left
+
+-- appendix.letter-data: padding-right
+link: /ftd/common/#padding-right
+
+-- appendix.letter-data: padding-top
+link: /ftd/common/#padding-top
+
+-- appendix.letter-data: padding-bottom
+link: /ftd/common/#padding-bottom
+
+-- appendix.letter-data: padding-horizontal
+link: /ftd/common/#padding-horizontal
+
+-- appendix.letter-data: padding-vertical
+link: /ftd/common/#padding-vertical
+
+-- end: letter-contents-p
+
+-- appendix.letter-data list letter-contents-q:
+
+-- appendix.letter-data list letter-contents-r:
+
+
+-- appendix.letter-data: right
+link: /ftd/common/#right
+
+-- appendix.letter-data: region
+link: /ftd/common/#region
+
+-- appendix.letter-data: role
+link: /ftd/common/#role
+
+-- appendix.letter-data: resize
+link: /ftd/common/#resize
+
+-- end: letter-contents-r
+
+-- appendix.letter-data list letter-contents-s:
+
+-- appendix.letter-data: shadow
+link: /ftd/common/#shadow
+
+-- appendix.letter-data: sticky
+link: /ftd/common/#sticky
+
+-- appendix.letter-data: spacing
+link: /ftd/container-attributes/#spacing
+
+-- appendix.letter-data: style
+link: /ftd/text-attributes/#style
+
+-- end: letter-contents-s
+
+-- appendix.letter-data list letter-contents-t:
+
+-- appendix.letter-data: types
+link: /ftd/container-root-attributes/#types
+
+-- appendix.letter-data: top
+link: /ftd/common/#top
+
+-- appendix.letter-data: text-transform
+link: /ftd/common/#text-transform
+
+-- appendix.letter-data: text-indent
+link: /ftd/text-attributes/#text-indent
+
+-- appendix.letter-data: text-align
+link: /ftd/text-attributes/#text-align
+
+-- end: letter-contents-t
+
+-- appendix.letter-data list letter-contents-u:
+
+-- appendix.letter-data list letter-contents-v:
+
+-- appendix.letter-data list letter-contents-w:
+
+-- appendix.letter-data: whitespace
+link: /ftd/common/#whitespace
+
+-- appendix.letter-data: width
+link: /ftd/common/#width
+
+-- appendix.letter-data: wrap
+link: /ftd/container-attributes/#wrap
+
+-- end: letter-contents-w
+
+-- appendix.letter-data list letter-contents-x:
+
+-- appendix.letter-data list letter-contents-y:
+
+-- appendix.letter-data list letter-contents-z:
+
+-- appendix.letter-data: z-index
+link: /ftd/common/#z-index
+
+-- end: letter-contents-z

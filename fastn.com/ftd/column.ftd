@@ -24,8 +24,9 @@ lang: ftd
 
 -- ds.h1: Attributes
 
-`ftd.column` accepts the [container attributes ](container/) as well all the
-[common attributes](ftd/common/).
+`ftd.column` accepts the [container root attributes](container-root-attributes/)
+,[container attributes](container-attributes/) as well
+all the [common attributes](ftd/common/).
 
 -- ds.h1: Example
 

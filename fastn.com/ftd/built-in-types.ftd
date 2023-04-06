@@ -40,6 +40,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.background`](ftd/built-in-types/#ftd-background)
   - [`ftd.border-style`](ftd/built-in-types/#ftd-border-style)
   - [`ftd.color`](ftd/built-in-types/#ftd-color)
+  - [`ftd.display`](ftd/built-in-types/#ftd-display)
   - [`ftd.color-scheme`](ftd/built-in-types/#ftd-color-scheme)
   - [`ftd.cursor`](ftd/built-in-types/#ftd-cursor)
   - [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
@@ -1635,6 +1636,47 @@ and left (south/west)
 - `zoom-out`: The cursor indicates that something can be zoomed out
 
 
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.display`
+
+`ftd.display` is an `or-type`. It is a type for `display` property under
+text-attributes. It specifies the display behaviour of an element.
+
+-- ds.code: `ftd.display`
+lang: ftd
+
+\-- or-type display:
+
+\-- constant string block: block
+\-- constant string inline: inline
+\-- constant string inline-block: inline-block
+
+\-- end: display
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.display` has following variants:
+
+- `block`: This value creates a rectangular box that takes up the full width
+available within its parent container and creates a new line after it.
+
+- `inline`: This value causes an element to flow with the text,
+allowing it to appear alongside other inline elements.
+It does not create a new line after it, and the width and height of the
+element are determined by its content.
+
+- `inline-block`: This value combines the features of both block and
+inline displays. It creates a rectangular box that takes up only the
+necessary width required by its content, but also allows for other
+elements to appear on the same line.
 
 
 

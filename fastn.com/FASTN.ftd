@@ -19,6 +19,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.dependency: fifthtry.github.io/fastn-ui
 -- fastn.dependency: fifthtry.github.io/fastn-typography
 -- fastn.dependency: fifthtry.github.io/fastn-io-typography
+-- fastn.dependency: fifthtry.github.io/virgil-font-typography
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -133,6 +134,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.document` 🚧: /ftd/document/
   - `ftd.row`: /ftd/row/
   - `ftd.column`: /ftd/column/
+  - `ftd.container`: /ftd/container/
   - `ftd.text`: /ftd/text/
   - `ftd.image`: /ftd/image/
   - `ftd.integer`: /ftd/integer/
@@ -140,8 +142,12 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.boolean`: /ftd/boolean/
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
-- Common Attributes 🚧: /ftd/common/
-- Text Attributes 🚧: /ftd/text-attributes/
+- Attributes: /ftd/attributes/
+  - Common Attributes 🚧: /ftd/common/
+  - Text Attributes 🚧: /ftd/text-attributes/
+  - Container Attributes 🚧: /ftd/container-attributes/
+  - Container Root Attributes 🚧: /ftd/container-root-attributes/
+- FTD functions 🚧: /ftd/functions/
 - `import`: /import/
   document: ftd-host/import.ftd
 - Built-in Variables: /built-in-variables/
