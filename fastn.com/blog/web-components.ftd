@@ -112,7 +112,7 @@ All this are possible, the way to think about it is that data that you want to
 share between the two worlds is "managed" / "owned" by FTD, and from your JS you
 use `ftd` APIs to mutate the ftd owned data.
 
-Let's take a look at the web compnent of this demo:
+Let's take a look at the web component of this demo:
 
 -- ds.code:
 lang: ftd

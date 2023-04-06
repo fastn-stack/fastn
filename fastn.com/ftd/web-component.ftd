@@ -1,0 +1,76 @@
+-- my-ds.page: Web Component 🚧
+
+The `ftd` allows for the integration of custom web components created using
+JavaScript (or other languages that compile to JavaScript).
+
+Like [`component`](/ftd/component/), `web-component`s are independent and
+reusable bits of code and they have arguments.
+
+
+-- ds.h1: Create Your Web Component
+
+A "web-component" in `ftd` can be created using `web-component` keyword.
+Here's an example of how to integrate a web component created using the standard
+Web Components API.
+
+
+-- ds.code: `web-component.js`
+lang: js
+
+class HelloWorld extends HTMLElement {
+  constructor() {
+    super();
+    const shadow = this.attachShadow({ mode: 'open' });
+    const div = document.createElement('div');
+    div.classList.add('hello-world');
+    div.textContent = 'Hello World!';
+    div.style.color = 'orange';
+    shadow.appendChild(div);
+  }
+}
+
+customElements.define('hello-world', HelloWorld);
+
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\;; component call
+\-- hello-world:
+
+\;; Create a web component
+\-- web-component hello-world:
+js: web-component.js
+
+\-- end: word-count
+
+
+-- ds.markdown:
+
+In above code we have create a web component `hello-world` in
+`web-component.js`. Then, we've included the web component in the ftd using the
+`web-component` , and used it in the ftd component tree using the
+hello-world element. used it in `index.ftd`.
+
+-- ds.output:
+
+-- hello-world:
+
+-- end: ds.output
+
+
+
+-- ds.h1: Data Across JS and `ftd` Worlds
+
+
+When working with web components, it is possible to share the data between the
+JS and `ftd` worlds, which can be managed and updated efficiently, reflecting
+the changes in both worlds.
+
+
+-- end: my-ds.page
+
+
+
+-- web-component hello-world:
+js: web-component.js

@@ -3,7 +3,7 @@
 -- my-ds.page: `component`
 
 A `component` in `ftd` is similar to "react component". Components are
-independent and reusable bits of code. `component`s have  "arguments", these are
+independent and reusable bits of code. `component`s have "arguments", these are
 the data that must be passed to them, and using `component`s we construct the
 user interface.
 
