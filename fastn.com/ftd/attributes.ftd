@@ -2,10 +2,24 @@
 
 -- my-ds.page: Attributes
 
+The attributes in ftd are classified into several different groups:
+
+- [Common attributes](/ftd/common/) - Attributes common to all kernel components.
+
+- [Text attributes](/ftd/text-attributes/) - Attributes common to all rendering
+components which are `ftd.text`, `ftd.integer`, `ftd.decimal` and `ftd.boolean`.
+
+- [Container attributes](/ftd/container-attributes/) - Attributes common to all
+flex container components which are `ftd.row` and `ftd.column`.
+
+- [Container Root attributes](/ftd/container-root-attributes/) - Attributes
+common to all container components.
+
 -- ds.h1: Appendix
 
 -- appendix.letter-stack:
-height.fixed.px: 800
+height.fixed.px if { ftd.device != "mobile" }: 1000
+height: fill-container
 contents-a: $letter-contents-a
 contents-b: $letter-contents-b
 contents-c: $letter-contents-c
@@ -153,9 +167,6 @@ link: /ftd/common/#classes
 -- appendix.letter-data: css
 link: /ftd/common/#css
 
--- appendix.letter-data: css-list
-link: /ftd/common/#css-list
-
 -- appendix.letter-data: children
 link: /ftd/container-root-attributes/#children
 
@@ -192,9 +203,6 @@ link: /ftd/common/#id
 
 -- appendix.letter-data: js
 link: /ftd/common/#js
-
--- appendix.letter-data: js-list
-link: /ftd/common/#js-list
 
 -- end: letter-contents-j
 

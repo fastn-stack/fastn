@@ -137,6 +137,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.container`: /ftd/container/
   - `ftd.text`: /ftd/text/
   - `ftd.image`: /ftd/image/
+  - `ftd.iframe`: /ftd/iframe/
   - `ftd.integer`: /ftd/integer/
   - `ftd.decimal`: /ftd/decimal/
   - `ftd.boolean`: /ftd/boolean/

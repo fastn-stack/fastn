@@ -2904,45 +2904,25 @@ color: $inherited.colors.text
 
 
 
--- ds.h1: `css: optional string`
+
+
+
+-- ds.h1: `css: string list`
 id: css
-
-This property will let you specify any external css file which you might want
-to use with your ftd components. This takes value of type string which will
-be the name of the css file you want to include in your ftd document and is
-optional.
-
--- ds.code: Sample code using `css`
-lang: ftd
-
-\;; Assuming you have defined some text css for
-\;; elements having class `custom-text` inside `text.css`
-\-- ftd.text:
-css: text.css ;; <hl>
-classes: custom-text
-
-
-
-
-
-
-
-
--- ds.h1: `css-list: string list`
-id: css-list
 
 This property will let you specify any external css files which you might want
 to use with your ftd components. This takes value as a list of strings which
 will be the names of all css files you want to include in your ftd document.
 
--- ds.code: Sample code using `css-list`
+-- ds.code: Sample code using `css`
 lang: ftd
 
 \;; Assuming you have defined some css for
 \;; elements having class `custom-text`, `custom-shadow`
 \;; inside `text.css` and `shadow.css` respectively
+
 \-- ftd.text:
-css-list: text.css, shadow.css ;; <hl>
+css: text.css, shadow.css ;; <hl>
 classes: custom-text, custom-shadow
 
 
@@ -2950,56 +2930,18 @@ classes: custom-text, custom-shadow
 
 
 
-
-
-
--- ds.h1: `js: optional string`
+-- ds.h1: `js: string list`
 id: js
-
-This property lets you include any external javascript file which you might
-want to use inside your ftd document. This takes value of type string
-which will be the name of the js file to be included and is optional.
-
-
--- ds.code: Sample code using `js`
-lang: ftd
-
-\;; Assuming you have a js file named `str.js`
-\;; and you want to use some function named len(string: s)
-\;; which returns the length of the string
-
-\-- string s1: Hello
-
-\-- integer foo(s):
-string s:
-js: str.js
-
-len(s)
-
-\-- ftd.integer: $foo(s = $s1)
-
-
-
-
-
-
-
--- ds.h1: `js-list: optional string`
-id: js-list
 
 This property lets you include any external javascript files which you might
 want to use inside your ftd document. This takes value as a list of string
 which will be the names of all js files which needs to be included.
 
-`NOTE`: This property is same as js except for the fact that it takes
-a list of js files
-
-
--- ds.code: Sample code using `js-list`
+-- ds.code: Sample code using `js`
 lang: ftd
 
 \;; Assuming you have js files named `str.js`, `math.js`
-\;; which contains functions `len(string: s)`, double(integer: i)
+\;; which contains functions `len(s)`, double(i)
 \;; len(s) = which returns the length of the string
 \;; double(i) = which doubles the value
 
@@ -3007,7 +2949,7 @@ lang: ftd
 
 \-- integer foo(s):
 string s:
-js-list: str.js, math.js
+js: str.js, math.js
 
 double(len(s))
 
