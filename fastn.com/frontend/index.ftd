@@ -3,4 +3,7 @@
 `fastn` can be used for building frontend for your next webapp or website.
 [Read our guide on why](/frontend/why/).
 
+`fastn` also supports a bunch of features that helps you create dynamic websites.
+Checkout our [backend guide](/backend/) to learn more.
+
 -- end: my-ds.page

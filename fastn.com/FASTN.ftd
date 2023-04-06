@@ -130,13 +130,27 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: cs/use-color-package.ftd
 - `processor`: /processor/
   document: ftd-host/processor.ftd
-  - `http`: /http/
-    document: ftd-host/http.ftd
 - `foreign variables`: /foreign-variable/
   document: ftd-host/foreign-variable.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
 
+
+## Backend: /backend/
+
+- Overview: /backend/
+- Endpoint Guide 🚧: /endpoint/
+  document: backend/endpoint.ftd
+- Dynamic URLs 🚧: /dynamic-urls/
+  document: backend/dynamic-urls.ftd
+- `http` processor: /http/
+  document: ftd-host/http.ftd
+- Custom URLs 🚧: /custom-url/
+  document: backend/custom-urls.ftd
+- Request Data Processor 🚧: /request-data/
+  document: ftd-host/request-data.ftd
+- SQL Processor 🚧: /package-query/
+  document: ftd-host/package-query.ftd
 
 ## Book 🚧: /book/
 

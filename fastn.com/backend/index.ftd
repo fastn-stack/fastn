@@ -1,0 +1,42 @@
+-- my-ds.page: Backend And `fastn`
+
+Along with building [building frontends](/frontend/) `fastn` can be used for
+building dynamic websites as well. With features already built and planned
+`fastn` aspires to be a full stack framework.
+
+-- ds.h1: Integration With Existing Backend
+
+If a backend APIs are already available, you can interact with them, and include
+the API responses and create dynamic web pages. Checkout the [http
+processor](/http/) about how to do this.
+
+`fastn` also has support for `endpoint` definitions, which allows frontend code
+to communicate with existing APIs without worrying about cross origin policies
+and exposiing a unified domain. Read about it in the [endpoint
+guide](/endpoint/).
+
+-- ds.h1: Dynamic URLs
+
+`fastn` by default generates URLs of your webpages based on the file path, but
+you can define dynamic URLs to create beutiful URLs independent of file
+organisation, or to create documents that is served when any URLs matching some
+pattern is accessed.
+
+Read more about it in our [Dynamic URLs Guide](/dynamic-urls/).
+
+-- ds.h1: HTTP Request Data
+
+When rendering any `ftd document` you can use `request data processor` to
+extract request data like URL, query parameter etc, and use it with your APIs
+or queries.
+
+Read more about [Request Data Processor](/request-data/).
+
+-- ds.h1: SQLite Data
+
+`fastn` can be used to query data from sqlite database to generate dynamic
+websites.
+
+Read more about our [package query processor](/package-query/).
+
+-- end: my-ds.page
