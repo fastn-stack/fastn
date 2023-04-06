@@ -80,7 +80,6 @@ configurations can cause conflicts and inconsistencies.
 \-- ftd.document:
 \-- end: ftd.document
 
-
 -- ds.rendered.output:
 
 -- ftd.text:
@@ -89,6 +88,33 @@ role: $inherited.types.copy-regular
 
 FTDExecError(ParseError { message: "ftd.document can occur only once and must be
 the root", doc_id: "<doc_id>", line_number: <line_number> })
+
+-- end: ds.rendered.output
+
+
+
+-- ds.h3: Rule 3: `ftd.document` Cannot Have Any Sibling
+
+`ftd.document`element cannot have any siblings. This means that the
+`ftd.document` element must be the only root-level element in the document and
+cannot have any other elements at the same level.
+
+-- ds.rendered:
+-- ds.rendered.input:
+
+\-- ftd.document:
+\-- end: ftd.document
+
+\-- ftd.text: Hello World!
+
+-- ds.rendered.output:
+
+-- ftd.text:
+color: $inherited.colors.error.text
+role: $inherited.types.copy-regular
+
+FTDExecError(ParseError { message: "ftd.document can't have siblings.", doc_id:
+"<doc_id>", line_number: <line_number> })
 
 -- end: ds.rendered.output
 
