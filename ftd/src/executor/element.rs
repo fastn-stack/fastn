@@ -1266,7 +1266,7 @@ pub fn common_from_properties(
 
     doc.js.extend(
         ftd::executor::value::string_list(
-            "js-list",
+            "js",
             component_name,
             properties,
             arguments,
@@ -1276,23 +1276,10 @@ pub fn common_from_properties(
         )?
         .value,
     );
-
-    if let Some(js) = ftd::executor::value::optional_string(
-        "js",
-        component_name,
-        properties,
-        arguments,
-        doc,
-        line_number,
-    )?
-    .value
-    {
-        doc.js.insert(js);
-    }
 
     doc.css.extend(
         ftd::executor::value::string_list(
-            "css-list",
+            "css",
             component_name,
             properties,
             arguments,
@@ -1302,19 +1289,6 @@ pub fn common_from_properties(
         )?
         .value,
     );
-
-    if let Some(css) = ftd::executor::value::optional_string(
-        "css",
-        component_name,
-        properties,
-        arguments,
-        doc,
-        line_number,
-    )?
-    .value
-    {
-        doc.css.insert(css);
-    }
 
     Ok(Common {
         id: ftd::executor::value::optional_string(

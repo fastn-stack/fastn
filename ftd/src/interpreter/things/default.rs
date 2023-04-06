@@ -8815,19 +8815,7 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
-            "js-list",
-            ftd::interpreter::Kind::string()
-                .into_list()
-                .into_kind_data(),
-        ),
-        ftd::interpreter::Argument::default(
             "js",
-            ftd::interpreter::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter::Argument::default(
-            "css-list",
             ftd::interpreter::Kind::string()
                 .into_list()
                 .into_kind_data(),
@@ -8835,7 +8823,7 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
         ftd::interpreter::Argument::default(
             "css",
             ftd::interpreter::Kind::string()
-                .into_optional()
+                .into_list()
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
