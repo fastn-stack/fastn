@@ -151,10 +151,10 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
 - Attributes: /ftd/attributes/
-  - Common Attributes 🚧: /ftd/common/
-  - Text Attributes 🚧: /ftd/text-attributes/
-  - Container Attributes 🚧: /ftd/container-attributes/
-  - Container Root Attributes 🚧: /ftd/container-root-attributes/
+  - Common Attributes: /ftd/common/
+  - Text Attributes: /ftd/text-attributes/
+  - Container Attributes: /ftd/container-attributes/
+  - Container Root Attributes: /ftd/container-root-attributes/
 - FTD functions 🚧: /ftd/functions/
 - `import`: /import/
   document: ftd-host/import.ftd

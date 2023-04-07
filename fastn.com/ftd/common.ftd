@@ -1425,6 +1425,163 @@ border-color: $red-yellow
 
 
 
+
+
+
+-- ds.h1: `border-left-color: optional ftd.color`
+id: border-left-color
+
+The border-left-color property sets the color of an element's left border. It
+takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+-- ds.rendered: Sample code using `border-left-color`
+
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
+
+\-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-left-color: $red-yellow ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-left-color: $red-yellow
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: `border-right-color: optional ftd.color`
+id: border-right-color
+
+The border-right-color property sets the color of an element's right border. It
+takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+-- ds.rendered: Sample code using `border-right-color`
+
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
+
+\-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-right-color: $red-yellow ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-right-color: $red-yellow
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h1: `border-top-color: optional ftd.color`
+id: border-top-color
+
+The border-top-color property sets the color of an element's top border. It
+takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+-- ds.rendered: Sample code using `border-top-color`
+
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
+
+\-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-top-color: $red-yellow ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-top-color: $red-yellow
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h1: `border-bottom-color: optional ftd.color`
+id: border-bottom-color
+
+The border-bottom-color property sets the color of an element's bottom border.
+It takes input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+-- ds.rendered: Sample code using `border-bottom-color`
+
+-- ds.rendered.input:
+
+\-- ftd.color red-yellow: ;; <hl>
+light: red ;; <hl>
+dark: yellow ;; <hl>
+
+\-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-bottom-color: $red-yellow ;; <hl>
+
+-- ds.rendered.output:
+
+-- ftd.text: FifthTry
+border-width.px: 2
+color: $inherited.colors.text
+border-bottom-color: $red-yellow
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
 -- ds.h1: `border-style: optional ftd.border-style, default=solid`
 id: border-style
 
@@ -2283,6 +2440,200 @@ color: $inherited.colors.text
 
 
 
+-- ds.h1: `role: optional ftd.responsive-type`
+id: role
+
+This property is used to define several text different properties such as
+font-size, font-weight, letter-spacing, font-family and line-height.
+It takes value of type
+[`ftd.responsive-type`](ftd/built-in-types/#ftd-responsive-type) and
+is optional.
+
+-- ds.rendered: Sample code using `role`
+
+-- ds.rendered.input:
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+\-- ftd.text: Heading Hero
+role: $inherited.types.heading-hero ;; <hl>
+
+\-- ftd.text: Heading Large
+role: $inherited.types.heading-large ;; <hl>
+
+\-- ftd.text: Copy Regular
+role: $inherited.types.copy-regular ;; <hl>
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- role-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: `resize: optional ftd.resize`
+id: resize
+
+This property sets whether the element is resizable in any direction or not.
+It takes value of type [`ftd.resize`](ftd/built-in-types/#ftd-resize)
+and is optional
+
+-- ds.rendered: Sample code using `resize`
+
+-- ds.rendered.input:
+
+\-- ftd.row:
+resize: both ;; <hl>
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+\-- ftd.text: This row is resizable both directions
+color: $inherited.colors.text
+
+\-- end: ftd.row
+
+\-- ftd.row:
+resize: horizontal ;; <hl>
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+\-- ftd.text: This row is resizable only horizontally
+color: $inherited.colors.text
+
+\-- end: ftd.row
+
+\-- ftd.row:
+resize: vertical ;; <hl>
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+\-- ftd.text: This row is resizable only vertically
+color: $inherited.colors.text
+
+\-- end: ftd.row
+
+-- ds.rendered.output:
+
+-- ftd.row:
+resize: both
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+-- ftd.text: This row is resizable both directions
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: horizontal
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+-- ftd.text: This row is resizable only horizontally
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: vertical
+border-color: $red-yellow
+border-width.px: 1
+margin.px: 10
+
+-- ftd.text: This row is resizable only vertically
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: `sticky: optional boolean`
+id: sticky
+
+This property lets you make an element stick to a specific position
+on the page when it is scrolled. It takes value of type boolean and is
+optional.
+
+-- ds.rendered: Sample code using `sticky`
+
+-- ds.rendered.input:
+
+\-- ftd.column:
+padding.px: 10
+color: $inherited.colors.text
+spacing.fixed.px: 50
+height.fixed.px: 200
+width.fixed.px: 300
+overflow-y: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+\-- ftd.text: The blue planet below is sticky
+
+\-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true ;; <hl>
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+\-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think ftd code written
+by humans are still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- sticky-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
 
 -- ds.h1: `shadow: optional ftd.shadow`
 id: shadow
@@ -2959,6 +3310,78 @@ double(len(s))
 
 
 
+
+
+
+
+
+-- ds.h1: `z-index: optional integer`
+id: z-index
+
+This property lets you control the stacking order of positioned elements.
+It specifies the order in which elements are stacked on top of each other
+when they overlap. Elements with a higher z-index value appear on top
+of elements with a lower z-index value. It takes value of type
+[`integer`](ftd/built-in-types/#integer) and is optional.
+
+-- ds.rendered: Sample code using `z-index`
+
+-- ds.rendered.input:
+
+\-- ftd.color red-blue:
+light: red
+dark: blue
+
+\-- ftd.row:
+width: fill-container
+height.fixed.px: 180
+color: black
+
+\-- ftd.text: z-index = 3
+left.px: 50
+top.px: 20
+padding.px: 20
+width.fixed.px: 200
+text-align: center
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 3 ;; <hl>
+anchor: parent
+
+\-- ftd.text: z-index = 2
+left.px: 70
+top.px: 60
+padding.px: 20
+text-align: center
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 2 ;; <hl>
+anchor: parent
+
+\-- ftd.text: z-index = 1
+left.px: 90
+top.px: 100
+padding.px: 20
+text-align: center
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 1 ;; <hl>
+anchor: parent
+
+\-- end: ftd.row
+
+-- ds.rendered.output:
+
+-- z-index-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 
 
@@ -4102,6 +4525,10 @@ and smiled, and passed it off Ere from the door she stept—
 light: red
 dark: yellow
 
+-- ftd.color red-blue:
+light: red
+dark: blue
+
 -- ftd.color yellow-red:
 light: yellow
 dark: red
@@ -4138,3 +4565,123 @@ But ere she from the church-door stepped She smiled and told us why:
 She smiled, and smiled, and passed it off Ere from the door she stept—
 
 -- end: sample-text
+
+-- component sticky-sample:
+
+-- ftd.column:
+padding.px: 10
+color: $inherited.colors.text
+spacing.fixed.px: 50
+height.fixed.px: 200
+width.fixed.px: 300
+overflow-y: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+-- ftd.text: The blue planet below is sticky
+
+-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think ftd code written
+by humans are still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+-- end: ftd.column
+
+-- end: sticky-sample
+
+
+
+
+
+
+
+-- component z-index-sample:
+
+-- ftd.row:
+width: fill-container
+height.fixed.px: 180
+color: black
+
+-- ftd.text: z-index = 3
+left.px: 50
+top.px: 20
+padding.px: 20
+width.fixed.px: 200
+text-align: center
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 3
+anchor: parent
+
+-- ftd.text: z-index = 2
+left.px: 70
+top.px: 60
+padding.px: 20
+text-align: center
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 2
+anchor: parent
+
+-- ftd.text: z-index = 1
+left.px: 90
+top.px: 100
+padding.px: 20
+text-align: center
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 1
+anchor: parent
+
+-- end: ftd.row
+
+-- end: z-index-sample
+
+
+
+
+
+
+
+
+
+
+-- component role-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd.text: Heading Hero
+role: $inherited.types.heading-hero
+
+-- ftd.text: Heading Large
+role: $inherited.types.heading-large
+
+-- ftd.text: Copy Regular
+role: $inherited.types.copy-regular
+
+-- end: ftd.column
+
+-- end: role-sample

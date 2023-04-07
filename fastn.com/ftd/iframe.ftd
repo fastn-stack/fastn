@@ -23,7 +23,7 @@ or `youtube`.
 
 This attribute specifies the URL of the page
 which needs to be embedded within your iframe element.
-It takes value of type string and is optional.
+It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
 
 
 -- ds.rendered: Sample code using `src`
@@ -88,7 +88,7 @@ padding.px: 20
 -- ds.h2: `youtube: optional string`
 
 This attribute will embed any youtube video in your iframe element.
-It takes value of type string and is optional.
+It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
 
 -- ds.rendered: Sample code using `youtube`
 
