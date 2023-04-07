@@ -113,8 +113,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
     document: /best-practices/same-argument-attribute-type.ftd
   - FScript: /fscript-guidelines/
     document: /best-practices/fscript-guidelines.ftd
-  - Inherited: /inherited-guidelines/
-    document: /best-practices/inherited-guidelines.ftd
+  - Inherited Types: /inherited-guidelines/
+    document: /best-practices/inherited-types.ftd
   - Variable & it's Type: /variable-type-guidelines/
     document: /best-practices/variable-type.ftd
   - Optional Arguments: /optional-argument-guidelines/
@@ -149,6 +149,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   - `ftd.integer`: /ftd/integer/
   - `ftd.decimal`: /ftd/decimal/
   - `ftd.boolean`: /ftd/boolean/
+
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
 - Attributes: /ftd/attributes/
