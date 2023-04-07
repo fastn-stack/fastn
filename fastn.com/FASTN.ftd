@@ -98,27 +98,27 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: author/how-to/create-fastn-package.ftd
 - `ftd p1` grammar: /ftd/p1-grammar/
 - Best Practices 🚧: /best-practices/
-  - Formatting guidelines: /formatting/
+  - Formatting: /formatting/
     document: /best-practices/formatting.ftd
-  - Import the packages: /import-at-top/
+  - Import: /import-at-top/
     document: /best-practices/import-at-top.ftd
-  - Auto-import the packages: /auto-import/
+  - Auto-import: /auto-import/
     document: /best-practices/auto-import.ftd
-  - How to use Conditions: /how-to-use-conditions/
+  - Conditions: /how-to-use-conditions/
     document: /best-practices/use-conditions.ftd
-  - Container guidelines: /container-guidelines/
+  - Container: /container-guidelines/
     document: /best-practices/container-guidelines.ftd
-  - Same argument and attribute types: /same-argument-attribute-type/
+  - Same argument & attribute types: /same-argument-attribute-type/
     document: /best-practices/same-argument-attribute-type.ftd
-  - FScript guidelines: /fscript-guidelines/
+  - FScript: /fscript-guidelines/
     document: /best-practices/fscript-guidelines.ftd
-  - Inherited guidelines: /inherited-guidelines/
+  - Inherited: /inherited-guidelines/
     document: /best-practices/inherited-guidelines.ftd
-  - Variable and it's Type: /variable-type-guidelines/
+  - Variable & it's Type: /variable-type-guidelines/
     document: /best-practices/variable-type.ftd
-  - Optional Arguments guidelines: /optional-argument-guidelines/
+  - Optional Arguments: /optional-argument-guidelines/
     document: /best-practices/optional-arg-not-null.ftd
-  - Commenting guidelines: /commenting-guidelines/
+  - Commenting: /commenting-guidelines/
     document: /best-practices/commenting-guidelines.ftd
 
 

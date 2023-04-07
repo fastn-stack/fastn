@@ -1,10 +1,10 @@
 -- import: fastn.io/utils
 
--- my-ds.page: Best Practices for `ftd`/`fastn`
+-- my-ds.page: Inherited colors over specific colors
 
 
 
--- utils.code-display: `inherited-colors`: Prefer use `$inherited.colors`
+-- utils.code-display: `inherited-colors`: Prefer using `$inherited.colors`
 id: inherited-colors
 
 `$inherited.colors` are part of `fastn` design system. If you use custom /

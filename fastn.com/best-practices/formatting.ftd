@@ -251,4 +251,58 @@ if: { num == 1 }	;; <hl>
 
 
 
+
+
+
+
+-- utils.code-display: `space-before-emoji`: One char space before emoji
+id: space-before-emoji
+
+Emoji are often considered as part of text in modern communication, and it is
+essential to give proper formatting and spacing to ensure clear and effective
+communication. When using an emoji after a word, it is recommended to treat it
+as a separate word and leave a one-character space before the emoji.
+
+Just as we give space between two different words, it is advisable to treat
+words followed by emojis as two separate entities to maintain clarity and
+effective communication.
+
+-- ds.code: Not recommended
+lang: ftd
+
+\;; -------- Example 1 --------
+
+\-- ds.page: Formatting🚧
+
+\;; -------- Example 2 --------
+
+\-- fastn.sitemap:
+
+# Guidelines🚧
+
+## Formatting🚧
+
+- Space before emoji🚧: /url/
+
+-- ds.code: Recommended
+lang: ftd
+
+\;; -------- Example 1 --------
+
+\-- ds.page: Formatting 🚧
+
+\;; -------- Example 2 --------
+
+\-- fastn.sitemap:
+
+# Guidelines 🚧
+
+## Formatting 🚧
+
+- Space before emoji 🚧: /url/
+
+-- end: utils.code-display
+
+
+
 -- end: my-ds.page
