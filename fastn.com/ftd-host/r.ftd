@@ -1,0 +1,9 @@
+-- import: fastn/processors as pr
+
+-- record r-data:
+string message: default value
+
+-- r-data data:
+$processor$: pr.request-data
+
+-- ds.markdown: $data.message

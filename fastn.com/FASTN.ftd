@@ -27,12 +27,14 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 -- fastn.auto-import: fifthtry.github.io/common as common
 
 
+-- fastn.dynamic-urls:
 
-
+# RD Test:
+  url: /rd-test/<string:message>/
+  document: ftd-host/r.ftd
 
 
 -- fastn.sitemap:
-
 
 # Learn: /overview/
 
@@ -179,13 +181,13 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Overview: /backend/
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
-- Dynamic URLs 🚧: /dynamic-urls/
+- Dynamic URLs: /dynamic-urls/
   document: backend/dynamic-urls.ftd
 - `http` processor: /http/
   document: ftd-host/http.ftd
 - Custom URLs: /custom-url/
   document: backend/custom-urls.ftd
-- Request Data Processor 🚧: /request-data/
+- Request Data Processor: /request-data/
   document: ftd-host/request-data.ftd
 - SQL Processor 🚧: /package-query/
   document: ftd-host/package-query.ftd

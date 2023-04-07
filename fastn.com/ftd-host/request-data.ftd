@@ -1,3 +1,61 @@
--- my-ds.page: Request Data Processor 🚧
+-- my-ds.page: `request-data` processor
+
+`request-data` processor can be used to find the data from query string and
+[named-path parameters](/dynamic-urls/) or from request body.
+
+-- ds.h1: Query Parameters
+
+-- ds.code:
+lang: sh
+
+curl 'http://127.0.0.1:8000/test/?message=hello%20world'
+
+-- ds.markdown:
+
+In above example url contains query parameter `message` with value `hello
+world`. We can access this value in `ftd` file as like below by calling
+`request-data` processor.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- record r-data:
+string message:
+
+\-- r-data data:
+$processor$: pr.request-data
+
+\-- ds.markdown: $data.message
+
+-- ds.markdown:
+
+Please note that all the parameters defined in the record must be present. If
+you have not specified the default value to any of the record fields, they will
+not be used if the parameter is missing in the request. [RFC
+#832](https://github.com/orgs/fastn-stack/discussions/832) is to fix this
+behaviour.
+
+-- ds.h1: Named Parameters In Dynamic URLs
+
+When using [dynamic URLs](/dynamic-urls/), the named parameters can also be
+extracted using the same method:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# RD Test:
+  url: /rd-test/<string:message>/
+  document: ftd-host/r.ftd
+
+-- ds.markdown:
+
+The same code used above will get the data from URL as well if someone visits,
+say, `/rd-test/hello/`, the value `data.message` would be `hello`.
+
+-- ds.h1: JSON Body
 
 -- end: my-ds.page
