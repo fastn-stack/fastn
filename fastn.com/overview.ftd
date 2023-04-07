@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/bling/quote
 -- import: fastn.io/ftd as ftd-index
 
--- my-ds.page: Overview of `fastn` and `ftd`
+-- my-ds.page: `fastn` - Full-stack Web Development Made Easy
 sidebar: false
 
 ;; Audiance: People considering using it for their team.
@@ -176,7 +176,7 @@ src: $fastn-assets.files.images.github-pages.png
 -- ds.code: fetching data from API
 lang: ftd
 
-\-- import: fastn/processor as pr
+\-- import: fastn/processors as pr
 
 \-- result r:
 $processor$: pr.http
