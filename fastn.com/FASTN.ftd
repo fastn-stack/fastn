@@ -41,7 +41,7 @@ favicon: /-/fastn.io/images/favicon.svg
 
 ## Home: /
 
-- Home: /overview/
+- Home: /
 - `ftd` Programming Language: /ftd/
 - Why?:
   - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
@@ -75,7 +75,7 @@ favicon: /-/fastn.io/images/favicon.svg
 
 
 ## Events: events/01/
-skip: true
+   skip: true
 
 # Design: /figma/
   document: /cs/ftd-to-figma/

@@ -2,7 +2,6 @@
 -- import: fastn.io/ftd as ftd-index
 
 -- my-ds.page: `fastn` - Full-stack Web Development Made Easy
-sidebar: false
 
 ;; Audiance: People considering using it for their team.
 

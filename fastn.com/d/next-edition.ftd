@@ -6,6 +6,33 @@ implement these changes we have to add edition support as well.
 
 ;; add content here in reverse chronological fashion, latest content on the top
 
+-- ds.h1: Remove `classes`
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: hello
+class: yo
+
+-- ds.markdown:
+
+Looks better than
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: hello
+classes: yo
+
+-- ds.markdown:
+
+Most of the time we want to add a single attribute. We use singular name for
+plural even for [text style](https://fastn.io/ftd/text-attributes/#style) and
+[css](https://fastn.io/ftd/common/#css) etc.
+
+We can not remove `classes` as it would break existing code, so we have to it on
+next edition.
+
 -- ds.h1: `ftd.color`
 
 We should introduce `ftd.raw-color` and change the definition of `ftd.color` to
