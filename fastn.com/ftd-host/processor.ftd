@@ -1,14 +1,55 @@
--- my-ds.page: Understanding `processor`
+-- my-ds.page: `processor` In `fastn`
 
 `ftd` gives a way for its platform, `fastn`, to define some functions known as
-`processors` or `foreign functions`. These functions, then, can be used in the
-`ftd` code whose computation is handled by the platform. This gives `fastn`
-power over `ftd` to define its own functions.
+`processors`. These functions, then, can be used in the `ftd`, and their
+execution is handled by the platform.
 
 At present, `fastn` contains the following processors:
 
-- [`$processor$: http`](http/)
-;; - [`$processor$: toc`](toc/)
-;; - [`$processor$: package-query`](package-query/)
+- [HTTP Processor](/http/)
+- [Request Data Processor](/request-data/)
+- [Get Data Processor](/get-data/)
+- [SQLite Processor](/package-query/)
+
+All processors are defined in a module `fastn/processor` which must be imported
+to use any of these processors.
+
+-- ds.h1: `$processor$`
+
+A processor is used when declaring a variable. The processor is in control of
+the variable if `$processor$` key is used.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+$processor$: pr.package-query
+db: db.sqlite
+
+SELECT * FROM user;
+
+-- ds.markdown:
+
+As you see `$processor$` key was used when defining the variable called
+`people`. Once `$processor$` is used, the rest of the section is in determined
+bu the specific processor used. Like in this case the processor
+`pr.package-query` expects a key named `db`, which refers to the database file,
+and the body of the section is the SQL query to execute against the database.
+
+A processor must be used on a variable or a list with matching type as the
+output of the processor. In this case we are using `SELECT * FROM user;` so the
+columns of the `user` table must match the fields of the record `person`. Extra
+data will be ignored, but all required data must be passed for processor to
+work correctly.
+
+The details of what the processor returns is documented as part of each
+processors documentation.
+
+-- ds.h1: Planned: Custom Processors
+
+`fastn` is planning to use [wasmtime](https://wasmtime.dev) to let anyone write
+their own custom processors, which will allow much more functionalities.
 
 -- end: my-ds.page

@@ -171,8 +171,6 @@ Convert your fastn packages to static sites and deploy to your favorite service.
 -- end: ft.benefits-card
 
 
--- ds.footer:
-footer-toc: $footer-toc
 
 
 

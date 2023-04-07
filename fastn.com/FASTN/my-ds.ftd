@@ -10,9 +10,8 @@ optional body body:
 boolean sidebar: true
 optional boolean widthfill: false
 
--- ds.page:
+-- ds.page: $page.title
 site-logo: $fastn-assets.files.images.fastn.svg
-title: $page.title
 body: $page.body
 wrapper: $page.wrapper
 colors: $dark-flame-cs.main
