@@ -189,7 +189,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
   document: backend/custom-urls.ftd
 - Request Data Processor: /request-data/
   document: ftd-host/request-data.ftd
-- SQL Processor 🚧: /package-query/
+- SQL Processor: /package-query/
   document: ftd-host/package-query.ftd
 
 ## Book 🚧: /book/
