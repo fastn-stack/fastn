@@ -2,13 +2,13 @@
 
 Here is an example of how you can integrate JavaScript in ftd functions.
 
-Suppose we have a JavaScript function `show_on_alert` defined in `functions.js`
+Suppose we have a JavaScript function `show_alert` defined in `functions.js`
 as follows:
 
 -- ds.code: `functions.js`
 lang: js
 
-function show_on_alert(a) {
+function show_alert(a) {
     alert(a);
 }
 
@@ -21,13 +21,13 @@ component. Here's how we can achieve this in `index.ftd`:
 lang: ftd
 
 \-- ftd.text: Click here to print name in alert!
-$on-click$: $call-js-fn(a = FifthTry)
+$on-click$: $call-js-fn(a = FifthTry Alert)
 
 \-- void call-js-fn(a):
 string a:
 js: functions.ftd ;; <hl>
 
-show_on_alert(a) ;; <hl>
+show_alert(a) ;; <hl>
 
 
 -- ds.markdown:
@@ -35,13 +35,13 @@ show_on_alert(a) ;; <hl>
 In the above example, when the user clicks the text component, the `call-js-fn`
 function is called, passing the `FifthTry` value to the argument `a`. This
 function, then, references `functions.js` by using the `js` attribute and calls
-the `show_on_alert` function.
+the `show_alert` function.
 
 -- ds.output:
 
 -- ftd.text: Click here to print name in alert!
 color: $inherited.colors.text
-$on-click$: $call-js-fn(a = FifthTry)
+$on-click$: $call-js-fn(a = FifthTry Alert)
 
 -- end: ds.output
 
@@ -52,4 +52,4 @@ $on-click$: $call-js-fn(a = FifthTry)
 string a:
 js: $fastn-assets.files.functions.js
 
-show_on_alert(a)
+show_alert(a)

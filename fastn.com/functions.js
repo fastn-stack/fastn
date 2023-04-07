@@ -1,3 +1,3 @@
-function show_on_alert(a) {
+function show_alert(a) {
     alert(a);
 }
