@@ -1,4 +1,4 @@
--- my-ds.page: Web Component 🚧
+-- my-ds.page: Web Component
 
 The `ftd` allows for the integration of custom web components created using
 JavaScript (or other languages that compile to JavaScript).
@@ -25,6 +25,10 @@ class HelloWorld extends HTMLElement {
     div.classList.add('hello-world');
     div.textContent = 'Hello World!';
     div.style.color = 'orange';
+    div.style.borderWidth = '1px';
+    div.style.borderColor = 'yellow';
+    div.style.borderStyle = 'dashed';
+    div.style.padding = '10px';
     shadow.appendChild(div);
   }
 }
@@ -112,6 +116,10 @@ class NumToWords extends HTMLElement {
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
         shadow.appendChild(div);
     }
 }
@@ -177,9 +185,13 @@ class NumToWords extends HTMLElement {
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
 
-        // `on_change()` method listen to any changes done against the
-        // argument value in ftd.
+        // `on_change()` method listen to any changes done
+        // against the argument value in ftd.
         data.num.on_change(function () { ;; <hl>
             const changed_value = data.num.get();  ;; <hl>
             div.textContent = numberToWords(changed_value);  ;; <hl>
@@ -209,7 +221,77 @@ color: $inherited.colors.text
 -- end: ds.output
 
 
+-- ds.markdown:
 
+Now let mutate the data from `js` world too.
+
+-- ds.code: `web-component.js`
+lang: ftd
+
+class NumToWords extends HTMLElement {
+    constructor() {
+        super();
+        let data = window.ftd.component_data(this);
+        let num = data.num.get();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        const div = document.createElement('div');
+        div.textContent = numberToWords(num);
+        div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.cursor = 'pointer';
+        div.style.padding = '10px';
+
+        div.onclick = function (_) { ;; <hl>
+            let current_num = data.num.get(); ;; <hl>
+            current_num -= 1; ;; <hl>
+            div.textContent = numberToWords(current_num); ;; <hl>
+            data.num.set(current_num); ;; <hl>
+        } ;; <hl>
+
+        data.num.on_change(function () {
+            const changed_value = data.num.get();
+            div.textContent = numberToWords(changed_value);
+        });
+
+        shadow.appendChild(div);
+    }
+}
+
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- num-to-words:
+$num: $num
+
+\-- web-component num-to-words:
+caption integer $num: ;; <hl>
+js: web-component.js
+
+
+-- ds.markdown:
+
+In the above code as you can see that we are passing the mutable reference of
+`num` variable to the web-component `num-to-words` which then decrements by it.
+
+
+
+-- ds.output:
+
+-- ftd.integer: $num-1
+color: $inherited.colors.text-strong
+
+-- ftd.text: I increment the `num`
+$on-click$: $ftd.increment($a = $num-1)
+color: $inherited.colors.text
+
+-- mut-num-to-words:
+$num: $num-1
+
+-- end: ds.output
 
 
 
@@ -229,6 +311,9 @@ color: $inherited.colors.text
 -- integer $num: 0
 
 
+-- integer $num-1: 0
+
+
 -- web-component hello-world:
 js: web-component.js
 
@@ -236,4 +321,9 @@ js: web-component.js
 
 -- web-component num-to-words:
 caption integer num:
+js: web-component.js
+
+
+-- web-component mut-num-to-words:
+caption integer $num:
 js: web-component.js

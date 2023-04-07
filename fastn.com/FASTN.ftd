@@ -177,7 +177,7 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd/use-js.ftd
   - JS in function: /js-in-function/
     document: ftd/js-in-function.ftd
-  - Web Component 🚧: /web-component/
+  - Web Component: /web-component/
     document: ftd/web-component.ftd
 
 

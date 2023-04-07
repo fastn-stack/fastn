@@ -33,11 +33,15 @@ class NumToWords extends HTMLElement {
         const div = document.createElement('div');
         div.textContent = numberToWords(num);
         div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
 
         data.num.on_change(function () {
             const changed_value = data.num.get();
             div.textContent = numberToWords(changed_value);
-        })
+        });
 
         shadow.appendChild(div);
     }
@@ -45,6 +49,48 @@ class NumToWords extends HTMLElement {
 
 // Register the web component
 customElements.define('num-to-words', NumToWords);
+
+
+
+// Define the web component using the standard Web Components API
+class MutNumToWords extends HTMLElement {
+    constructor() {
+        super();
+        let data = window.ftd.component_data(this);
+        let num = data.num.get();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        const div = document.createElement('div');
+        div.innerHTML = "Output is "
+            + numberToWords(num)
+            + "<br> Btw, I decrement num";
+        div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
+        div.style.cursor = 'pointer';
+
+        div.onclick = function (_) {
+            let current_num = data.num.get();
+            current_num -= 1;
+            data.num.set(current_num);
+        }
+
+        data.num.on_change(function () {
+            const changed_value = data.num.get();
+            div.innerHTML = "Output is "
+                + numberToWords(changed_value)
+                + "<br> Btw, I decrement num";
+        });
+
+
+        shadow.appendChild(div);
+    }
+}
+
+// Register the web component
+customElements.define('mut-num-to-words', MutNumToWords);
 
 
 
