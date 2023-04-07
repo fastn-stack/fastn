@@ -38,6 +38,42 @@ if: { show }
 
 
 
+
+
+
+
+
+-- ds.h1: `on-click-outside`
+
+The `on-click-outside` event can be used to call a function when the user
+clicked outside the element
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: false
+
+\-- ftd.text: Click me and click outside then
+$on-click$: $ftd.set-bool($a = $show, v = true)
+$on-click-outside$: $ftd.set-bool($a = $show, v = false)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+-- on-click-outside-event:
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+
 -- ds.h1: `on-mouse-enter`
 
 The `on-mouse-enter` event can be used to call a function when the mouse cursor
@@ -61,6 +97,9 @@ if: { show }
 -- on-mouse-enter-event:
 
 -- end: ds.rendered.output
+
+
+
 
 
 
@@ -128,6 +167,88 @@ $on-input$: $ftd.set-string($a = $txt, v = $VALUE)
 
 
 
+
+
+
+
+-- ds.h1: `on-change`
+
+The `on-change` event can be used to call a function when the value of the
+element changes and focus is moved out of the element.
+
+In the below example we have also used a special variable `VALUE` which is
+available for `ftd.text-input` component. This gives the value typed by user on
+this element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- string $txt: Fifthtry
+
+\-- ftd.text: $txt
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-change$: $ftd.set-string($a = $txt, v = $VALUE)
+
+-- ds.rendered.output:
+
+-- on-change-event:
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+
+-- ds.h1: `on-blur`
+
+The `on-blur` event can be used to call a function when an element loses focus.
+
+
+-- ds.h1: `on-focus`
+
+The `on-focus` event can be used to call a function when an element receives
+focus.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: false
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+background.solid if { flag }: $inherited.colors.background.step-1
+background.solid: $inherited.colors.background.step-2
+$on-focus$: $ftd.set-bool($a = $flag, v = true) ;; <hl>
+$on-blur$: $ftd.set-bool($a = $flag, v = false) ;; <hl>
+
+-- ds.rendered.output:
+
+-- on-focus-blur-event:
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
 -- end: my-ds.page
 
 
@@ -149,6 +270,30 @@ if: { on-click-event.show }
 -- end: ftd.column
 
 -- end: on-click-event
+
+
+
+
+
+
+
+-- component on-click-outside-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: Click me and click outside then
+$on-click$: $ftd.set-bool($a = $on-click-outside-event.show, v = true)
+$on-click-outside$: $ftd.set-bool($a = $on-click-outside-event.show, v = false)
+
+-- ftd.text: Hide and Seek
+if: { on-click-outside-event.show }
+
+-- end: ftd.column
+
+-- end: on-click-outside-event
+
 
 
 
@@ -217,3 +362,44 @@ $on-input$: $ftd.set-string($a = $on-input-event.txt, v = $VALUE)
 -- end: ftd.column
 
 -- end: on-input-event
+
+
+
+
+
+-- component on-change-event:
+string $txt: Fifthtry
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: $on-change-event.txt
+
+-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-change$: $ftd.set-string($a = $on-change-event.txt, v = $VALUE)
+
+-- end: ftd.column
+
+-- end: on-change-event
+
+
+
+-- component on-focus-blur-event:
+boolean $flag: false
+
+-- ftd.text-input:
+color: $inherited.colors.text
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+background.solid if { on-focus-blur-event.flag }: $inherited.colors.background.step-1
+background.solid: $inherited.colors.background.step-2
+$on-focus$: $ftd.set-bool($a = $on-focus-blur-event.flag, v = true)
+$on-blur$: $ftd.set-bool($a = $on-focus-blur-event.flag, v = false)
+
+-- end: on-focus-blur-event
