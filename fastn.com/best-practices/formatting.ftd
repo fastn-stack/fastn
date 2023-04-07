@@ -100,8 +100,8 @@ height: fill-container
 
 
 
--- utils.code-display: `after-colon-space`: One char space after `:`
-id: after-colon-space
+-- utils.code-display: `colon-after-space`: One char space after `:`
+id: colon-after-space
 
 The convention of adding `one character space after a colon` in written 
 language is used to improve the `readability` of the text and make it `easier `
@@ -178,7 +178,8 @@ content of component goes here
 -- end: utils.code-display
 
 
--- utils.code-display: `end-line`: Adding a line to the end of the document
+-- utils.code-display: 
+title: `end-line`: ensure a document ends with a trailing new line
 id: end-line
 
 It is done to ensure that the last line of code in the file does not end 
@@ -219,8 +220,9 @@ content goes here.
 
 
 
--- utils.code-display: `conditional-expression`: One char space at the start and end of conditional expression
-id: conditional-expression
+-- utils.code-display: 
+title: `space-around-expression`: One char space at the start and end of conditional expression
+id: space-around-expression
 
 The convention of including a single space character before and after a
 conditional expression is a common coding style that helps to make the code
