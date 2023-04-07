@@ -175,6 +175,8 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd/built-in-functions/
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
+- `ftd` Events: /events/
+  document: ftd/events.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/

@@ -1,0 +1,219 @@
+-- my-ds.page: Events in `ftd`
+
+The change in the state of an object is known as an Event. In `ftd`, there are
+various events which represents that some activity is performed by the user. A
+function reacts over these events and allow the execution. This process of
+reacting over the events is called Event Handling.
+
+We can create [our own function](/functions/) or use [`built-in
+function`](/built-in-functions/).
+
+Here is the list of the events present in `ftd`
+
+- `on-click`
+
+-- ds.h1: `on-click`
+
+The `on-click` event can be used to call a function when the user clicks on the
+element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Click me!
+$on-click$: $ftd.toggle($a = $show)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+-- on-click-event:
+
+-- end: ds.rendered.output
+
+
+
+
+-- ds.h1: `on-mouse-enter`
+
+The `on-mouse-enter` event can be used to call a function when the mouse cursor
+enters the element.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.toggle($a = $show)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+-- on-mouse-enter-event:
+
+-- end: ds.rendered.output
+
+
+
+
+-- ds.h1: `on-mouse-leave`
+
+The `on-mouse-leave` event can be used to call a function when the mouse cursor
+leaves the element.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.set-bool($a = $show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $show, v = false)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+-- on-mouse-leave-event:
+
+-- end: ds.rendered.output
+
+
+
+
+
+
+-- ds.h1: `on-input`
+
+The `on-input` event can be used to call a function when the user inputs
+something into the element.
+
+In the below example we have also used a special variable `VALUE` which is
+available for `ftd.text-input` component. This gives the value typed by user on
+this element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- string $txt: Fifthtry
+
+\-- ftd.text: $txt
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $txt, v = $VALUE)
+
+-- ds.rendered.output:
+
+-- on-input-event:
+
+-- end: ds.rendered.output
+
+
+
+
+-- end: my-ds.page
+
+
+
+
+
+-- component on-click-event:
+boolean $show: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: Click me!
+$on-click$: $ftd.toggle($a = $on-click-event.show)
+
+-- ftd.text: Hide and Seek
+if: { on-click-event.show }
+
+-- end: ftd.column
+
+-- end: on-click-event
+
+
+
+
+
+
+-- component on-mouse-enter-event:
+boolean $show: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.toggle($a = $on-mouse-enter-event.show)
+
+-- ftd.text: Hide and Seek
+if: { on-mouse-enter-event.show }
+
+-- end: ftd.column
+
+-- end: on-mouse-enter-event
+
+
+
+
+
+
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+
+-- ftd.text: Hide and Seek
+if: { on-mouse-leave-event.show }
+
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
+
+
+
+
+
+
+-- component on-input-event:
+string $txt: Fifthtry
+
+-- ftd.column:
+color: $inherited.colors.text
+
+-- ftd.text: $on-input-event.txt
+
+-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $on-input-event.txt, v = $VALUE)
+
+-- end: ftd.column
+
+-- end: on-input-event
