@@ -122,6 +122,8 @@ favicon: /-/fastn.io/images/favicon.svg
     document: /best-practices/optional-arg-not-null.ftd
   - Commenting: /commenting-guidelines/
     document: /best-practices/commenting-guidelines.ftd
+  - Property: /property-guidelines/
+    document: /best-practices/property-guidelines.ftd
 
 
 
