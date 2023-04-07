@@ -39,4 +39,11 @@ websites.
 
 Read more about our [package query processor](/package-query/).
 
+-- ds.h1: Reading JSON
+
+`fastn` can also read data in JSON files that are part of your package to help
+you create data visualisation websites.
+
+Read more about [reading JSON](/get-data/).
+
 -- end: my-ds.page
