@@ -56,6 +56,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 - Syntax Highligthing For SublimeText 🚧: /sublime/
   document: author/how-to/sublime.ftd
   skip: true
+- `fastn` Community: /community/
 
 ## Features: /features/
 
