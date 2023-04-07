@@ -4,12 +4,15 @@
 
 `ftd.text-input` is used to create interactive controls for web-based forms in
 order to accept text type data from the user; a wide variety of types of input
-data and control widgets are available.
+data and control widgets are available. There is a special variable `$VALUE`
+which can be used to access the current value of `ftd.text-input`.
 
 -- ds.h1: Usage
 
 -- ds.code:
 lang: ftd
+
+\-- string $current-value: Nothing typed yet
 
 \-- ftd.text-input:
 placeholder: Type any text ...
@@ -19,6 +22,11 @@ width.fixed.px: 200
 border-width.px: 1
 border-color: $inherited.colors.border
 border-radius.px: 4
+$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
+
+\-- ftd.text: $current-value
+color: coral
+padding.px: 10
 
 -- ds.output:
 
@@ -30,6 +38,11 @@ width.fixed.px: 200
 border-width.px: 1
 border-color: $inherited.colors.border
 border-radius.px: 4
+$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
+
+-- ftd.text: $current-value
+color: coral
+padding.px: 10
 
 -- end: ds.output
 
@@ -292,3 +305,6 @@ type: url
 
 
 -- end: my-ds.page
+
+
+-- string $current-value: Nothing typed yet
