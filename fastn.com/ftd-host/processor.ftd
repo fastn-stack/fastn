@@ -1,3 +1,6 @@
+-- import: fifthtry.github.io/admonitions as cbox
+-- import: fifthtry.github.io/bling/read-more
+
 -- my-ds.page: `processor` In `fastn`
 
 `ftd` gives a way for its platform, `fastn`, to define some functions known as
@@ -13,6 +16,8 @@ At present, `fastn` contains the following processors:
 
 All processors are defined in a module `fastn/processor` which must be imported
 to use any of these processors.
+
+-- static-vs-dynamic:
 
 -- ds.h1: `$processor$`
 
@@ -53,3 +58,21 @@ processors documentation.
 their own custom processors, which will allow much more functionalities.
 
 -- end: my-ds.page
+
+-- component static-vs-dynamic:
+
+-- cbox.warning: Static Vs Dynamic
+
+This feature works better with dynamic hosting. If you are using `fastn` in
+[static site mode](/static/), then how the page looked when `fastn build` was
+called will be shown to everyone. But if you are using [dynamic
+mode](/server/) then this page would be regenerated on every page load.
+
+-- read-more.read-more: Learn More
+link: /static-vs-dynamic/
+
+static vs dynamic
+
+-- end: cbox.warning
+
+-- end: static-vs-dynamic

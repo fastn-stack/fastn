@@ -292,10 +292,16 @@ favicon: /-/fastn.io/images/favicon.svg
 # Deploy: /github-pages/
   document: author/how-to/github-pages.ftd
 
-- Publishing On Github pages: /github-pages/
-  document: author/how-to/github-pages.ftd
-- Publishing On Vercel: /vercel/
-  document: author/how-to/vercel.ftd
+- Static vs Dynamic: /static-vs-dynamic/
+  document: deploy/static-vs-dynamic.ftd
+- Static Hosting:
+  - Github pages: /github-pages/
+    document: author/how-to/github-pages.ftd
+  - Vercel: /vercel/
+    document: author/how-to/vercel.ftd
+- Dynamic Hosting:
+  - Heroku: /heroku/
+    document: deploy/heroku.ftd
 
 # Blog: /blog/web-components/
 
