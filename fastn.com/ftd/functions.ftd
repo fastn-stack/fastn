@@ -49,7 +49,7 @@ to the end of the given mutable string list `a`.
 
 -- ds.rendered.input:
 
-\-- string list vowels: a, e
+\-- string list $vowels:
 
 \-- void append(a,v): ;; <hl>
 string list $a: ;; <hl>
@@ -559,11 +559,10 @@ dark: yellow
 
 \-- component display-text:
 caption text:
-ftd.color border-color: $red-yellow
 
 \-- ftd.text: $display-text.text
 color: $inherited.colors.text
-border-color: $display-text.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -581,11 +580,10 @@ dark: yellow
 
 \-- component display-integer:
 caption integer value:
-ftd.color border-color: $red-yellow
 
 \-- ftd.integer: $display-integer.value
 color: $inherited.colors.text
-border-color: $display-integer.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -608,11 +606,10 @@ dark: yellow
 
 \-- component display-boolean:
 caption boolean value:
-ftd.color border-color: $red-yellow
 
 \-- ftd.boolean: $display-boolean.value
 color: $inherited.colors.text
-border-color: $display-integer.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -651,7 +648,7 @@ dark: yellow
 
 -- boolean $b1: false
 
--- string list $vowels: a, e
+-- string list $vowels:
 
 -- string list places: Mumbai, New York, Bangalore
 
@@ -708,11 +705,10 @@ a = (((a - min) + by) % (max - min)) + min
 
 -- component display-text:
 caption text:
-ftd.color border-color: $red-yellow
 
 -- ftd.text: $display-text.text
 color: $inherited.colors.text
-border-color: $display-text.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -728,11 +724,10 @@ padding.px: 10
 
 -- component display-integer:
 caption integer value:
-ftd.color border-color: $red-yellow
 
 -- ftd.integer: $display-integer.value
 color: $inherited.colors.text
-border-color: $display-integer.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -748,11 +743,10 @@ padding.px: 10
 
 -- component display-boolean:
 caption boolean value:
-ftd.color border-color: $red-yellow
 
 -- ftd.boolean: $display-boolean.value
 color: $inherited.colors.text
-border-color: $display-boolean.border-color
+border-color: $red-yellow
 border-width.px: 2
 padding.px: 10
 
@@ -1041,12 +1035,3 @@ $on-click$: $regular-clamp($a = $num, by = 1, clamp = 6)
 $on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6)
 
 -- end: clamp-with-limits-sample
-
-
-
-
-
-
-
-
-
