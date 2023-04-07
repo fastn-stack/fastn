@@ -176,4 +176,42 @@ align-self: start
 
 
 
+
+
+-- utils.code-display: `parent-propogation`: Propagating Child Properties to Parent Containers
+id: parent-propogation
+
+-- ds.code: Not recommended
+lang: ftd
+
+\-- ftd.column:
+
+\-- ftd.text: Hello World
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+\-- ftd.text: Hello Multiverse
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+\-- end: ftd.column
+
+
+-- ds.code: Recommended
+lang: ftd
+
+\-- ftd.column:
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+\-- ftd.text: Hello World
+
+\-- ftd.text: Hello Multiverse
+
+
+\-- end: ftd.column
+
+-- end: utils.code-display
+
+
 -- end: my-ds.page
