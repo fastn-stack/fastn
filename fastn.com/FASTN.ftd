@@ -2,7 +2,7 @@
 
 -- fastn.package: fastn.io
 download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
-favicon: images/fastn-logo.svg
+favicon: /-/fastn.io/images/favicon.svg
 
 -- fastn.dependency: fastn-stack.github.io/fastn-js
 -- fastn.dependency: fifthtry.github.io/doc-site as ds
