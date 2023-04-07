@@ -2,6 +2,7 @@
 -- import: fifthtry.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.io/utils
+-- import: fifthtry.github.io/banner
 
 -- component page:
 children wrapper:
@@ -18,6 +19,17 @@ colors: $dark-flame-cs.main
 $sidebar: *$page.sidebar
 $widthfill: *$page.widthfill
 types: $typo.types
+show-banner: true
+
+-- ds.page.banner:
+
+-- banner.cta-banner:
+cta-text: Welcome WittyHack-ers!
+cta-link: /wittyhacks/
+
+🚀 Participating in the hackathon?
+
+-- end: ds.page.banner
 
 -- ds.page.extra-headers:
 
@@ -61,5 +73,6 @@ would be possible without your support. We would love to hear from you.
 
 
 -- end: ds.page.extra-headers
+
 
 -- end: page

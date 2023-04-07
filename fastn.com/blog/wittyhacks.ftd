@@ -1,0 +1,13 @@
+-- import: fastn.io/assets
+
+-- my-ds.page: Witty-Hacks!
+
+So we, at FifthTry, are Silver sponsors of [WittyHacks
+2023](https://wittyhacks.in). Super excited, first hackathon where people are
+using `fastn` to build websites and webapps!
+
+-- ds.image:
+src: $assets.files.images.wittyhacks.jpeg
+
+
+-- end: my-ds.page

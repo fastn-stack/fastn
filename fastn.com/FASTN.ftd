@@ -5,22 +5,22 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
 favicon: /-/fastn.io/images/favicon.svg
 
 -- fastn.dependency: fastn-stack.github.io/fastn-js
--- fastn.dependency: fifthtry.github.io/doc-site as ds
--- fastn.dependency: fifthtry.github.io/winter-cs
--- fastn.dependency: fifthtry.github.io/dark-flame-cs
--- fastn.dependency: fifthtry.github.io/forest-cs
--- fastn.dependency: fifthtry.github.io/saturated-sunset-cs
+-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
 -- fastn.dependency: fifthtry.github.io/admonitions
+-- fastn.dependency: fifthtry.github.io/banner
 -- fastn.dependency: fifthtry.github.io/bling
 -- fastn.dependency: fifthtry.github.io/button
--- fastn.dependency: fifthtry.github.io/admonitions
--- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
--- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/common
--- fastn.dependency: fifthtry.github.io/fastn-ui
--- fastn.dependency: fifthtry.github.io/fastn-typography
+-- fastn.dependency: fifthtry.github.io/dark-flame-cs
+-- fastn.dependency: fifthtry.github.io/doc-site as ds
 -- fastn.dependency: fifthtry.github.io/fastn-io-typography
+-- fastn.dependency: fifthtry.github.io/fastn-typography
+-- fastn.dependency: fifthtry.github.io/fastn-ui
+-- fastn.dependency: fifthtry.github.io/forest-cs
+-- fastn.dependency: fifthtry.github.io/saturated-sunset-cs
 -- fastn.dependency: fifthtry.github.io/virgil-font-typography
+-- fastn.dependency: fifthtry.github.io/winter-cs
+-- fastn.dependency: gargajit.github.io/expander
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -303,8 +303,11 @@ favicon: /-/fastn.io/images/favicon.svg
   - Heroku: /heroku/
     document: deploy/heroku.ftd
 
-# Blog: /blog/web-components/
+# Blog: /wittyhacks/
+  document: blog/wittyhacks.ftd
 
+- Witty Hacks!: /wittyhacks/
+  document: blog/wittyhacks.ftd
 - Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
