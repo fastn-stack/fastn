@@ -40,8 +40,8 @@ color: green
 
 
 
--- utils.code-display: `condition-to-remove-redundancy`: Avoid redundancy with Conditions
-id: condition-to-remove-redundancy
+-- utils.code-display: `avoid-redundant-conditions`: Avoid redundancy with Conditions
+id: avoid-redundant-conditions
 
 Avoid Unnecessary Conditional Statements for `always true` or `always false`
 statements.
@@ -129,7 +129,7 @@ color: green ;; <hl>
 
 
 
--- utils.code-display: 'mutually-exclusive-conditions': Avoiding mutually exclusive conditions on element and it's children
+-- utils.code-display: `mutually-exclusive-conditions`: Avoiding mutually exclusive conditions on element and it's children
 id: mutually-exclusive-conditions
 
 
