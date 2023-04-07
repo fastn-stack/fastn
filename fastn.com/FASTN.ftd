@@ -155,14 +155,22 @@ favicon: /-/fastn.io/images/favicon.svg
 
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
-- Attributes: /ftd/attributes/
-  - Common Attributes: /ftd/common/
-  - Text Attributes: /ftd/text-attributes/
-  - Container Attributes: /ftd/container-attributes/
-  - Container Root Attributes: /ftd/container-root-attributes/
-- FTD functions 🚧: /ftd/functions/
+- Attributes: /attributes/
+  document: /ftd/attributes/
+  - Common Attributes: /common-attributes/
+    document: /ftd/common/
+  - Text Attributes: /text-attributes/
+    document: /ftd/text-attributes/
+  - Container Attributes: /container-attributes/
+    document: /ftd/container-attributes/
+  - Container Root Attributes: /container-root-attributes/
+    document: /ftd/container-root-attributes/
 - `import`: /import/
   document: ftd-host/import.ftd
+- Functions: /functions/
+  document: ftd/functions/
+- Built-in Functions 🚧: /built-in-functions/
+  document: ftd/built-in-functions/
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
 - Use color scheme package: /use-cs/
@@ -173,6 +181,12 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd-host/foreign-variable.ftd
 - `assets`: /assets/
   document: ftd-host/assets.ftd
+- How to access files: /accessing-files/
+  document: ftd-host/accessing-files.ftd
+- How to access fonts: /accessing-fonts/
+  document: ftd-host/accessing-fonts.ftd
+- How to make page responsive: /making-responsive-pages/
+  document: frontend/make-page-responsive.ftd
 - Using JS: /use-js/
   document: ftd/use-js.ftd
   - JS in function: /js-in-function/

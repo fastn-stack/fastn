@@ -4,18 +4,19 @@
 
 The attributes in ftd are classified into several different groups:
 
-- [Common attributes](/ftd/common/) - Attributes common to all kernel components.
+- [Common attributes](/common-attributes/) - Attributes common to all kernel
+components.
 
-- [Text attributes](/ftd/text-attributes/) - Attributes common to all rendering
+- [Text attributes](/text-attributes/) - Attributes common to all rendering
 components which are `ftd.text`, `ftd.integer`, `ftd.decimal` and `ftd.boolean`.
 
-- [Container attributes](/ftd/container-attributes/) - Attributes common to all
+- [Container attributes](/container-attributes/) - Attributes common to all
 flex container components which are `ftd.row` and `ftd.column`.
 
-- [Container Root attributes](/ftd/container-root-attributes/) - Attributes
+- [Container Root attributes](/container-root-attributes/) - Attributes
 common to all container components.
 
--- ds.h1: Appendix
+-- ds.h1: Index
 
 -- appendix.letter-stack:
 height.fixed.px if { ftd.device != "mobile" }: 1000
@@ -64,118 +65,118 @@ contents-z: $letter-contents-z
 -- appendix.letter-data list letter-contents-a:
 
 -- appendix.letter-data: anchor
-link: /ftd/common/#anchor
+link: /common-attributes/#anchor
 
 -- appendix.letter-data: align-self
-link: /ftd/common/#align-self
+link: /common-attributes/#align-self
 
 -- appendix.letter-data: align-content
-link: /ftd/container-attributes/#align-content
+link: /container-attributes/#align-content
 
 -- end: letter-contents-a
 
 -- appendix.letter-data list letter-contents-b:
 
 -- appendix.letter-data: bottom
-link: /ftd/common/#bottom
+link: /common-attributes/#bottom
 
 -- appendix.letter-data: background
-link: /ftd/common/#background
+link: /common-attributes/#background
 
 -- appendix.letter-data: border-color
-link: /ftd/common/#border-color
+link: /common-attributes/#border-color
 
 -- appendix.letter-data: border-left-color
-link: /ftd/common/#border-left-color
+link: /common-attributes/#border-left-color
 
 -- appendix.letter-data: border-right-color
-link: /ftd/common/#border-right-color
+link: /common-attributes/#border-right-color
 
 -- appendix.letter-data: border-top-color
-link: /ftd/common/#border-top-color
+link: /common-attributes/#border-top-color
 
 -- appendix.letter-data: border-bottom-color
-link: /ftd/common/#border-bottom-color
+link: /common-attributes/#border-bottom-color
 
 -- appendix.letter-data: border-style
-link: /ftd/common/#border-style
+link: /common-attributes/#border-style
 
 -- appendix.letter-data: border-style-left
-link: /ftd/common/#border-style-left
+link: /common-attributes/#border-style-left
 
 -- appendix.letter-data: border-style-right
-link: /ftd/common/#border-style-right
+link: /common-attributes/#border-style-right
 
 -- appendix.letter-data: border-style-top
-link: /ftd/common/#border-style-top
+link: /common-attributes/#border-style-top
 
 -- appendix.letter-data: border-style-bottom
-link: /ftd/common/#border-style-bottom
+link: /common-attributes/#border-style-bottom
 
 -- appendix.letter-data: border-style-horizontal
-link: /ftd/common/#border-style-horizontal
+link: /common-attributes/#border-style-horizontal
 
 -- appendix.letter-data: border-style-vertical
-link: /ftd/common/#border-style-vertical
+link: /common-attributes/#border-style-vertical
 
 -- appendix.letter-data: border-width
-link: /ftd/common/#border-width
+link: /common-attributes/#border-width
 
 -- appendix.letter-data: border-left-width
-link: /ftd/common/#border-left-width
+link: /common-attributes/#border-left-width
 
 -- appendix.letter-data: border-right-width
-link: /ftd/common/#border-right-width
+link: /common-attributes/#border-right-width
 
 -- appendix.letter-data: border-top-width
-link: /ftd/common/#border-top-width
+link: /common-attributes/#border-top-width
 
 -- appendix.letter-data: border-bottom-width
-link: /ftd/common/#border-bottom-width
+link: /common-attributes/#border-bottom-width
 
 -- appendix.letter-data: border-radius
-link: /ftd/common/#border-radius
+link: /common-attributes/#border-radius
 
 -- appendix.letter-data: border-top-left-radius
-link: /ftd/common/#border-top-left-radius
+link: /common-attributes/#border-top-left-radius
 
 -- appendix.letter-data: border-top-right-radius
-link: /ftd/common/#border-top-right-radius
+link: /common-attributes/#border-top-right-radius
 
 -- appendix.letter-data: border-bottom-left-radius
-link: /ftd/common/#border-bottom-left-radius
+link: /common-attributes/#border-bottom-left-radius
 
 -- appendix.letter-data: border-bottom-right-radius
-link: /ftd/common/#border-bottom-right-radius
+link: /common-attributes/#border-bottom-right-radius
 
 -- end: letter-contents-b
 
 -- appendix.letter-data list letter-contents-c:
 
 -- appendix.letter-data: color
-link: /ftd/common/#color
+link: /common-attributes/#color
 
 -- appendix.letter-data: colors
-link: /ftd/container-root-attributes/#colors
+link: /container-root-attributes/#colors
 
 -- appendix.letter-data: cursor
-link: /ftd/common/#cursor
+link: /common-attributes/#cursor
 
 -- appendix.letter-data: classes
-link: /ftd/common/#classes
+link: /common-attributes/#classes
 
 -- appendix.letter-data: css
-link: /ftd/common/#css
+link: /common-attributes/#css
 
 -- appendix.letter-data: children
-link: /ftd/container-root-attributes/#children
+link: /container-root-attributes/#children
 
 -- end: letter-contents-c
 
 -- appendix.letter-data list letter-contents-d:
 
 -- appendix.letter-data: display
-link: /ftd/text-attributes/#display
+link: /text-attributes/#display
 
 -- end: letter-contents-d
 
@@ -188,21 +189,21 @@ link: /ftd/text-attributes/#display
 -- appendix.letter-data list letter-contents-h:
 
 -- appendix.letter-data: height
-link: /ftd/common/#height
+link: /common-attributes/#height
 
 -- end: letter-contents-h
 
 -- appendix.letter-data list letter-contents-i:
 
 -- appendix.letter-data: id
-link: /ftd/common/#id
+link: /common-attributes/#id
 
 -- end: letter-contents-i
 
 -- appendix.letter-data list letter-contents-j:
 
 -- appendix.letter-data: js
-link: /ftd/common/#js
+link: /common-attributes/#js
 
 -- end: letter-contents-j
 
@@ -211,47 +212,47 @@ link: /ftd/common/#js
 -- appendix.letter-data list letter-contents-l:
 
 -- appendix.letter-data: left
-link: /ftd/common/#left
+link: /common-attributes/#left
 
 -- appendix.letter-data: link
-link: /ftd/common/#link
+link: /common-attributes/#link
 
 -- end: letter-contents-l
 
 -- appendix.letter-data list letter-contents-m:
 
 -- appendix.letter-data: margin
-link: /ftd/common/#margin
+link: /common-attributes/#margin
 
 -- appendix.letter-data: margin-left
-link: /ftd/common/#margin-left
+link: /common-attributes/#margin-left
 
 -- appendix.letter-data: margin-right
-link: /ftd/common/#margin-right
+link: /common-attributes/#margin-right
 
 -- appendix.letter-data: margin-top
-link: /ftd/common/#margin-top
+link: /common-attributes/#margin-top
 
 -- appendix.letter-data: margin-bottom
-link: /ftd/common/#margin-bottom
+link: /common-attributes/#margin-bottom
 
 -- appendix.letter-data: margin-horizontal
-link: /ftd/common/#margin-horizontal
+link: /common-attributes/#margin-horizontal
 
 -- appendix.letter-data: margin-vertical
-link: /ftd/common/#margin-vertical
+link: /common-attributes/#margin-vertical
 
 -- appendix.letter-data: max-width
-link: /ftd/common/#max-width
+link: /common-attributes/#max-width
 
 -- appendix.letter-data: min-width
-link: /ftd/common/#min-width
+link: /common-attributes/#min-width
 
 -- appendix.letter-data: max-height
-link: /ftd/common/#max-height
+link: /common-attributes/#max-height
 
 -- appendix.letter-data: min-height
-link: /ftd/common/#min-height
+link: /common-attributes/#min-height
 
 -- end: letter-contents-m
 
@@ -260,41 +261,41 @@ link: /ftd/common/#min-height
 -- appendix.letter-data list letter-contents-o:
 
 -- appendix.letter-data: open-in-new-tab
-link: /ftd/common/#open-in-new-tab
+link: /common-attributes/#open-in-new-tab
 
 -- appendix.letter-data: overflow
-link: /ftd/common/#overflow
+link: /common-attributes/#overflow
 
 -- appendix.letter-data: overflow-x
-link: /ftd/common/#overflow-x
+link: /common-attributes/#overflow-x
 
 -- appendix.letter-data: overflow-y
-link: /ftd/common/#overflow-y
+link: /common-attributes/#overflow-y
 
 -- end: letter-contents-o
 
 -- appendix.letter-data list letter-contents-p:
 
 -- appendix.letter-data: padding
-link: /ftd/common/#padding
+link: /common-attributes/#padding
 
 -- appendix.letter-data: padding-left
-link: /ftd/common/#padding-left
+link: /common-attributes/#padding-left
 
 -- appendix.letter-data: padding-right
-link: /ftd/common/#padding-right
+link: /common-attributes/#padding-right
 
 -- appendix.letter-data: padding-top
-link: /ftd/common/#padding-top
+link: /common-attributes/#padding-top
 
 -- appendix.letter-data: padding-bottom
-link: /ftd/common/#padding-bottom
+link: /common-attributes/#padding-bottom
 
 -- appendix.letter-data: padding-horizontal
-link: /ftd/common/#padding-horizontal
+link: /common-attributes/#padding-horizontal
 
 -- appendix.letter-data: padding-vertical
-link: /ftd/common/#padding-vertical
+link: /common-attributes/#padding-vertical
 
 -- end: letter-contents-p
 
@@ -304,51 +305,51 @@ link: /ftd/common/#padding-vertical
 
 
 -- appendix.letter-data: right
-link: /ftd/common/#right
+link: /common-attributes/#right
 
 -- appendix.letter-data: region
-link: /ftd/common/#region
+link: /common-attributes/#region
 
 -- appendix.letter-data: role
-link: /ftd/common/#role
+link: /common-attributes/#role
 
 -- appendix.letter-data: resize
-link: /ftd/common/#resize
+link: /common-attributes/#resize
 
 -- end: letter-contents-r
 
 -- appendix.letter-data list letter-contents-s:
 
 -- appendix.letter-data: shadow
-link: /ftd/common/#shadow
+link: /common-attributes/#shadow
 
 -- appendix.letter-data: sticky
-link: /ftd/common/#sticky
+link: /common-attributes/#sticky
 
 -- appendix.letter-data: spacing
-link: /ftd/container-attributes/#spacing
+link: /container-attributes/#spacing
 
 -- appendix.letter-data: style
-link: /ftd/text-attributes/#style
+link: /text-attributes/#style
 
 -- end: letter-contents-s
 
 -- appendix.letter-data list letter-contents-t:
 
 -- appendix.letter-data: types
-link: /ftd/container-root-attributes/#types
+link: /container-root-attributes/#types
 
 -- appendix.letter-data: top
-link: /ftd/common/#top
+link: /common-attributes/#top
 
 -- appendix.letter-data: text-transform
-link: /ftd/common/#text-transform
+link: /common-attributes/#text-transform
 
 -- appendix.letter-data: text-indent
-link: /ftd/text-attributes/#text-indent
+link: /text-attributes/#text-indent
 
 -- appendix.letter-data: text-align
-link: /ftd/text-attributes/#text-align
+link: /text-attributes/#text-align
 
 -- end: letter-contents-t
 
@@ -359,13 +360,13 @@ link: /ftd/text-attributes/#text-align
 -- appendix.letter-data list letter-contents-w:
 
 -- appendix.letter-data: whitespace
-link: /ftd/common/#whitespace
+link: /common-attributes/#whitespace
 
 -- appendix.letter-data: width
-link: /ftd/common/#width
+link: /common-attributes/#width
 
 -- appendix.letter-data: wrap
-link: /ftd/container-attributes/#wrap
+link: /container-attributes/#wrap
 
 -- end: letter-contents-w
 
@@ -376,6 +377,6 @@ link: /ftd/container-attributes/#wrap
 -- appendix.letter-data list letter-contents-z:
 
 -- appendix.letter-data: z-index
-link: /ftd/common/#z-index
+link: /common-attributes/#z-index
 
 -- end: letter-contents-z
