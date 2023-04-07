@@ -1,5 +1,4 @@
 -- my-ds.page: `fastn` for Website Builders
-sidebar: false
 
 `ftd` is a programming language designed for ease of content authoring.
 
@@ -9,7 +8,6 @@ lang: ftd
 \-- import: fifthtry.github.io/bling/quote
 
 \-- my-ds.page: `fastn` for Website Builders
-sidebar: false
 
 `ftd` is a programming language for building user interfaces and content centric
 websites. `ftd` is easy to learn, especially for non programmers, but does not
