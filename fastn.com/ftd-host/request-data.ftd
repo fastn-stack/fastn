@@ -58,4 +58,14 @@ say, `/rd-test/hello/`, the value `data.message` would be `hello`.
 
 -- ds.h1: JSON Body
 
+If the request body is not empty, and has content type `application/json`, the
+body is parsed as JSON and the fields in your record are looked in the JSON as
+well.
+
+-- ds.h1: Note On Priority
+
+If a field is present in more than one places, the JSON value is preferred over
+the named URL pattern, which itself is preferred over the query string.
+
+
 -- end: my-ds.page
