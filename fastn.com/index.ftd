@@ -1,189 +1,239 @@
--- import: fifthtry.github.io/fastn-ui/lib as ft
--- import: fifthtry.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
--- import: fifthtry.github.io/fastn-ui/assets as ft-assets
--- import: fastn/processors as pr
+-- import: fifthtry.github.io/bling/quote
+-- import: fastn.io/ftd as ftd-index
 
-
--- my-ds.page:
+-- my-ds.page: `fastn` - Full-stack Web Development Made Easy
 sidebar: false
-widthfill: true
 
--- ftd.column:
-types: $typo.types
-width: fill-container
-margin-top.px: 100
+;; Audiance: People considering using it for their team.
 
--- ft.hero-section: fastn: Web-framework and CMS for ftd
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hero-image.svg
-cta-left-text: Explore More
-cta-left-url: overview
-cta-right-text: Get Started
-cta-right-url: setup
+`ftd` is a programming language for building user interfaces and content centric
+websites. `ftd` is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
 
--- ft.hero-section.info:
+`fastn` is a web-framework, a content management system, and an integrated
+development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
+to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
+FifthTry.
 
-Create stunning websites with ease, powered by fastn and the user-friendly ftd language
+;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
+;; Language](/first/).
 
--- end: ft.hero-section
+-- ds.h1: `ftd`: Programming Language For The Next Billion Programmers
 
--- end: ftd.column
+`ftd` is designed with minimal and uniform syntax, and at first glance does not
+even look like a programming language.
 
+-- ds.code: No quotes for string, multi-line strings are easy
+lang: ftd
 
--- ftd.column:
-background.solid: $inherited.colors.background.step-1
-width: fill-container
+\-- amitu: Hello World! 😀
 
--- ft.hero-section: `ftd` Programming Language For Prose
-image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
-center: true
-cta-left-text: Explore More
-cta-left-url: ftd
-height: 485
-width: 1160
+\-- amitu:
 
--- ft.hero-section.info: A beginner-friendly language for crafting custom web experiences with minimal hassle.
+you can also write multiline messages easily!
 
--- end: ftd.column
+no quotes. and **markdown** is *supported*.
 
 
+-- ds.markdown:
 
--- ft.row-container:
-spacing: 24
-spacing if {ftd.device == "mobile"}: 32
-switch-to-column if {ftd.device == "mobile"}: true
+We have called a "function" named "amitu" with "Hello World! 😀" as input, yet
+it does not feel technical.
 
--- ft.stages-vertical: Get Started with fastn in Seconds
-rect: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hosting/rect-num.svg
-stage: 01
-cta-text: Explore more
-cta-link: install/
-right: true
+This is what it produces:
 
-Install fastn with a Single Command
 
--- ft.code-block-system:
+-- ftd-index.amitu: Hello World! 😀
+
+-- ftd-index.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+Learn more about [`ftd` Programming Language](/ftd/).
+
+
+-- ds.h1: There are a lot of ready made `ftd` components available today
+
+-- ds.code: Ready made components can be imported and used.
+lang: ftd
+
+
+\-- import: fifthtry.github.io/bling/quote
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+
+-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+-- ds.h1: Or you can create your own components
+
+-- ds.code: Creating a custom component
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
+
+\-- end: toggle-text
+
+\-- toggle-text: `ftd` is cool!
+
+
+-- ds.output:
+
+-- ftd-index.toggle-text: click me to toggle colors
+
+-- end: ds.output
+
+-- ds.markdown:
+
+`ftd`'s event handling capabilities can be used for form validation, ajax
+requests etc, to create fully functional frontend applications.
+
+-- ds.h1: You Use `fastn` To Work With `ftd`
+
+We ship pre built binaries for Linux, Mac and Windows.
+
+-- ds.code:
 lang: sh
-width: 412
-show-double: false
+copy: false
 
 curl -fsSL https://fastn.io/install.sh | bash
 
--- end: ft.row-container
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.fastn.png
+
+-- ds.h1: Integrated Web Development Experience
+
+`ftd` and `fastn` come with package management, web server, opinionated design
+system, dark mode and resposive by default.
+
+If you are getting started with frontend development, `fastn` framework takes
+care of a lot of things for you, and all you have to focus on is your product.
+
+We are working towards our own hosted web based IDE, version controlled code
+hosting and collaboration platform so you and your team gets a one stop solution
+for building websites.
 
 
+-- ds.h1: `fastn` for Static Sites
 
--- ft.card-with-icons-bottom: Components & fastn Library
-cta-text: Browse Components
-cta-link: featured
+`fastn` websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg Vercel, Github Pages etc.
 
--- ft.card-with-icons-bottom.info:
+-- ds.code: `ftd` source code of the page you are reading
+lang: ftd
 
-Easily create dynamic and visually stunning websites with our reusable
-components. Save time and effort by utilizing our pre-built packages,
-customizable to fit your unique needs.
+\-- import: fifthtry.github.io/bling/quote
+\-- import: fastn.io/ftd as ftd-index
 
+\-- my-ds.page: Overview of `fastn` and `ftd`
+sidebar: false
 
--- ft.image-card-with-title: Atom
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/vertical-bar.svg
+`ftd` is a programming language for building user interfaces and content centric
+websites. `ftd` is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
 
--- ft.image-card-with-title:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/plus-sign-circled.svg
+-- ds.markdown:
 
--- ft.image-card-with-title: Molecule
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/polygon-top.svg
+`ftd` is a good alternative for content websites like blogs, knowledge bases,
+portfolio websites, project and marketing websites etc. It is cheap, fast, and
+requires little maintenance.
 
--- ft.image-card-with-title:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/plus-sign-circled.svg
-
--- ft.image-card-with-title: Organism
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/circle-shape.svg
-
--- ft.image-card-with-title:
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/eqals-sign-circled.svg
-
--- ft.image-card-with-title: Template
-src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/mixed-chart-icons.svg
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.github-pages.png
 
 
--- end: ft.card-with-icons-bottom
+-- ds.h1: Data Driven Website
+
+-- ds.code: fetching data from API
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- result r:
+$processor$: pr.http
+url: https://api.github.com/search/repositories
+sort: stars
+order: desc
+q: language:python
+
+-- ds.code: Working With SQL Is Breeze
+lang: ftd
+
+\-- people:
+$processor$: package-query
+db: db.sqlite
+
+SELECT * FROM user;
 
 
+\-- show-person:
+p: $p
+$loop$: $people as $p
 
+-- ds.markdown:
 
+`fastn` can be used to create data driven website, dashboards.
 
+-- ds.code: Dynamic URLs
+lang: ftd
 
+\-- fastn.dynamic-urls:
 
--- ft.benefits-card: Benefits of fastn
+# Profile Page
+url: /<string:username>/
+document: profile.ftd
 
--- ft.benefits-info-card: Easy to learn
-icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+-- ds.markdown:
 
+`fastn` can be used for creating a lot of web application backends as well.
 
--- ft.benefits-info-card.info:
+-- ds.h1: Upcoming WASM Support
 
-The ftd programming language used by fastn is designed to be easy to learn, even
-for non-programmers.
+We are working on `wasm` support so developers can extend `ftd's` standard
+libraries and offer access to more backend functionalities.
 
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.wasm.png
 
--- end: ft.benefits-info-card
+-- ds.h1: Hosting Dynamic Sites
 
--- ft.benefits-info-card: User-friendly
-icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+For dynamic sites you can deploy `fastn` cli on the platform of your choice. We
+ship ready made Docker containers that you can add to your infrastructure.
 
+-- ds.h1: `fastn` Cloud
 
--- ft.benefits-info-card.info:
-
-fastn is a user-friendly web framework and content management system, making it
-easy to build robust websites and user interfaces.
-
-
--- end: ft.benefits-info-card
-
--- ft.benefits-info-card: Streamline Your Web Development
-icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
-
-
--- ft.benefits-info-card.info:
-
-Build stunning websites with ease using fastn's integrated package management,
-web server, design system, dark mode, and responsive features. Spend less time
-on setup and more time creating your product.
-
-
--- end: ft.benefits-info-card
-
-
-
-
-
--- ft.benefits-info-card: Easy Deployment
-icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
-
-
--- ft.benefits-info-card.info:
-
-Convert your fastn packages to static sites and deploy to your favorite service.
-
-
--- end: ft.benefits-info-card
-
--- end: ft.benefits-card
-
-
-
-
+We also offer our own hosting solution for your static and dynamic sites. Using
+`fastn` Cloud frees you from devops needs, and you get a fully integrated,
+managed hosting solution, that a non programmers can use with ease.
 
 -- end: my-ds.page
-
-
--- pr.toc-item list footer-toc:
-$processor$: pr.toc
-
-- Overview: /overview/
-- Get Started: /setup/
-  - Install fastn: /install/
-  - Create fastn package: /create-fastn-package/
-- Get Help: /community/
-  - GitHub Q&A discussion: https://github.com/fastnstack/fastn/discussions/categories/q-a
-  - Discord: https://discord.gg/a7eBUeutWD

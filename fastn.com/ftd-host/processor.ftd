@@ -69,9 +69,9 @@ called will be shown to everyone. But if you are using [dynamic
 mode](/server/) then this page would be regenerated on every page load.
 
 -- read-more.read-more: Learn More
-link: /static-vs-dynamic/
+link: /deploy/
 
-static vs dynamic
+Deploying `fastn` Sites
 
 -- end: cbox.warning
 

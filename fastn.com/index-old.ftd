@@ -1,0 +1,189 @@
+-- import: fifthtry.github.io/fastn-ui/lib as ft
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fifthtry.github.io/fastn-ui/assets as ft-assets
+-- import: fastn/processors as pr
+
+
+-- my-ds.page:
+sidebar: false
+widthfill: true
+
+-- ftd.column:
+types: $typo.types
+width: fill-container
+margin-top.px: 100
+
+-- ft.hero-section: fastn: Web-framework and CMS for ftd
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hero-image.svg
+cta-left-text: Explore More
+cta-left-url: overview
+cta-right-text: Get Started
+cta-right-url: setup
+
+-- ft.hero-section.info:
+
+Create stunning websites with ease, powered by fastn and the user-friendly ftd language
+
+-- end: ft.hero-section
+
+-- end: ftd.column
+
+
+-- ftd.column:
+background.solid: $inherited.colors.background.step-1
+width: fill-container
+
+-- ft.hero-section: `ftd` Programming Language For Prose
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+center: true
+cta-left-text: Explore More
+cta-left-url: ftd
+height: 485
+width: 1160
+
+-- ft.hero-section.info: A beginner-friendly language for crafting custom web experiences with minimal hassle.
+
+-- end: ftd.column
+
+
+
+-- ft.row-container:
+spacing: 24
+spacing if {ftd.device == "mobile"}: 32
+switch-to-column if {ftd.device == "mobile"}: true
+
+-- ft.stages-vertical: Get Started with fastn in Seconds
+rect: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/hosting/rect-num.svg
+stage: 01
+cta-text: Explore more
+cta-link: install/
+right: true
+
+Install fastn with a Single Command
+
+-- ft.code-block-system:
+lang: sh
+width: 412
+show-double: false
+
+curl -fsSL https://fastn.io/install.sh | bash
+
+-- end: ft.row-container
+
+
+
+-- ft.card-with-icons-bottom: Components & fastn Library
+cta-text: Browse Components
+cta-link: featured
+
+-- ft.card-with-icons-bottom.info:
+
+Easily create dynamic and visually stunning websites with our reusable
+components. Save time and effort by utilizing our pre-built packages,
+customizable to fit your unique needs.
+
+
+-- ft.image-card-with-title: Atom
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/vertical-bar.svg
+
+-- ft.image-card-with-title:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/plus-sign-circled.svg
+
+-- ft.image-card-with-title: Molecule
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/polygon-top.svg
+
+-- ft.image-card-with-title:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/plus-sign-circled.svg
+
+-- ft.image-card-with-title: Organism
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/circle-shape.svg
+
+-- ft.image-card-with-title:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/icons/eqals-sign-circled.svg
+
+-- ft.image-card-with-title: Template
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/mixed-chart-icons.svg
+
+
+-- end: ft.card-with-icons-bottom
+
+
+
+
+
+
+
+-- ft.benefits-card: Benefits of fastn
+
+-- ft.benefits-info-card: Easy to learn
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+
+
+-- ft.benefits-info-card.info:
+
+The ftd programming language used by fastn is designed to be easy to learn, even
+for non-programmers.
+
+
+-- end: ft.benefits-info-card
+
+-- ft.benefits-info-card: User-friendly
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+
+
+-- ft.benefits-info-card.info:
+
+fastn is a user-friendly web framework and content management system, making it
+easy to build robust websites and user interfaces.
+
+
+-- end: ft.benefits-info-card
+
+-- ft.benefits-info-card: Streamline Your Web Development
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+
+
+-- ft.benefits-info-card.info:
+
+Build stunning websites with ease using fastn's integrated package management,
+web server, design system, dark mode, and responsive features. Spend less time
+on setup and more time creating your product.
+
+
+-- end: ft.benefits-info-card
+
+
+
+
+
+-- ft.benefits-info-card: Easy Deployment
+icon: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+
+
+-- ft.benefits-info-card.info:
+
+Convert your fastn packages to static sites and deploy to your favorite service.
+
+
+-- end: ft.benefits-info-card
+
+-- end: ft.benefits-card
+
+
+
+
+
+-- end: my-ds.page
+
+
+-- pr.toc-item list footer-toc:
+$processor$: pr.toc
+
+- Overview: /overview/
+- Get Started: /setup/
+  - Install fastn: /install/
+  - Create fastn package: /create-fastn-package/
+- Get Help: /community/
+  - GitHub Q&A discussion: https://github.com/fastnstack/fastn/discussions/categories/q-a
+  - Discord: https://discord.gg/a7eBUeutWD

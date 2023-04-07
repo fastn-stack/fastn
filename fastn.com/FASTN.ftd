@@ -37,11 +37,11 @@ favicon: /-/fastn.io/images/favicon.svg
 
 -- fastn.sitemap:
 
-# Learn: /overview/
+# Home: /
 
-## Learn: /overview/
+## Home: /
 
-- Overview: /overview/
+- Home: /overview/
 - `ftd` Programming Language: /ftd/
 - Why?:
   - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
@@ -75,7 +75,7 @@ favicon: /-/fastn.io/images/favicon.svg
 
 
 ## Events: events/01/
-
+skip: true
 
 # Design: /figma/
   document: /cs/ftd-to-figma/
@@ -289,11 +289,9 @@ favicon: /-/fastn.io/images/favicon.svg
 - Part 2. Basic UI: /expander/basic-ui/-/build/
 - Part 3. Publish a package: /expander/publish/-/build/
 
-# Deploy: /github-pages/
-  document: author/how-to/github-pages.ftd
+# Deploy: /deploy/
 
-- Static vs Dynamic: /static-vs-dynamic/
-  document: deploy/static-vs-dynamic.ftd
+- Overview: /deploy/
 - Static Hosting:
   - Github pages: /github-pages/
     document: author/how-to/github-pages.ftd
