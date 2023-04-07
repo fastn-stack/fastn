@@ -10,8 +10,6 @@ function`](/built-in-functions/).
 
 Here is the list of the events present in `ftd`
 
-- `on-click`
-
 -- ds.h1: `on-click`
 
 The `on-click` event can be used to call a function when the user clicks on the
