@@ -35,8 +35,8 @@ value: $rent1
 
 
 
--- utils.code-display: `minimize-Container-components`: Avoid using container components with single or no child
-id: minimize-Container-components
+-- utils.code-display: `minimize-container-components`: Avoid using container components with single or no child
+id: minimize-container-components
 
 
 This guideline advises against using container components when there is only 
