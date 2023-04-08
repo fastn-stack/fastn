@@ -12,16 +12,22 @@
 
 # `fastn` - Full-stack Web Development Made Easy
 
-`ftd` is a programming language for building user interfaces and content 
-centric websites. `ftd` is easy to learn, especially for non programmers, 
-but does not compromise on what you can build with it.
+`ftd` is a programming language for building user interfaces and content centric
+websites. `ftd` is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
 
 `fastn` is a web-framework, a content management system, and an integrated
-development environment for `ftd`. `fastn` is a webserver, and compiles  
-`ftd` to HTML/CSS/JS, and can be deployed on your server, or on `fastn 
-cloud` by FifthTry.
+development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
+to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
+FifthTry.
 
-## ftd`: Programming Language For The Next Billion Programmers
+The quickest way to learn `fastn` is the [short video course we have created:
+expander](https://fastn.io/expander/), it takes you through the basics.
+
+Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
+our documentation.
+
+## `ftd`: Programming Language For The Next Billion Programmers
 
 `ftd` is designed with minimal and uniform syntax, and at first glance 
 does not even look like a programming language.
@@ -43,7 +49,7 @@ yet it does not feel technical.
 
 This is what it produces:
 
-[![img.png](img.png)](https://fastn.io/#ftd-programming-language-for-the-next-billion-programmers)
+<a href="https://fastn.io/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
 
 
 Learn more about [`ftd` Programming Language](https://fastn.io/ftd/).
@@ -91,7 +97,7 @@ border-radius.px: 5
 ```
 
 <div align="center">
-    <img src="img_2.png" width="150" alt="toggle button"/>
+    <img src="img_2.png" width="225" alt="toggle button"/>
 </div>
 
 `ftd`'s event handling capabilities can be used for form validation, ajax
