@@ -27,38 +27,6 @@
       ]
     },
     {
-      "login": "AbrarNitk",
-      "name": "Abrar Khan",
-      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
-      "profile": "https://github.com/AbrarNitk",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "ideas",
-        "maintenance",
-        "mentoring",
-        "review",
-        "test"
-      ]
-    },
-    {
-      "login": "sharmashobhit",
-      "name": "Shobhit Sharma",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
-      "profile": "https://github.com/sharmashobhit",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "ideas",
-        "maintenance",
-        "mentoring",
-        "review",
-        "test"
-      ]
-    },
-    {
       "login": "amitu",
       "name": "Amit Upadhyay",
       "avatar_url": "https://avatars.githubusercontent.com/u/58662?v=4",
@@ -87,19 +55,9 @@
         "code",
         "doc",
         "test",
-        "ideas"
-      ]
-    },
-    {
-      "login": "AviralVerma13",
-      "name": "Aviral Verma",
-      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
-      "profile": "http://fifthtry.com",
-      "contributions": [
-        "code",
-        "doc",
-        "test",
-        "ideas"
+        "ideas",
+        "review",
+        "maintenance",
       ]
     },
     {
@@ -115,7 +73,46 @@
         "mentoring",
         "review"
       ]
-    }
+    },
+    {
+      "login": "AbrarNitk",
+      "name": "Abrar Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
+      "profile": "https://github.com/AbrarNitk",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "sharmashobhit",
+      "name": "Shobhit Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
+      "profile": "https://github.com/sharmashobhit",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "test"
+      ]
+    },
+    {
+      "login": "AviralVerma13",
+      "name": "Aviral Verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
+      "profile": "http://fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
+      ]
+    },
   ],
   "contributorsPerLine": 7,
   "skipCi": true,
