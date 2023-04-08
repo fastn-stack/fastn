@@ -96,9 +96,7 @@ border-radius.px: 5
 -- toggle-text: `ftd` is cool!
 ```
 
-<div align="center">
-    <img src="img_2.png" width="225" alt="toggle button"/>
-</div>
+<a href="https://fastn.io/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
 
 `ftd`'s event handling capabilities can be used for form validation, ajax
 requests etc, to create fully functional frontend applications.
@@ -202,7 +200,8 @@ document: profile.ftd
 We are working on `wasm` support so developers can extend `ftd's` standard
 libraries and offer access to more backend functionalities.
 
-[![wasm.png](wasm.png)](https://fastn.io/#upcoming-wasm-support)
+
+<a href="https://fastn.io/#upcoming-wasm-support" rel="nofollow"><img src="wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
 
 
 ## Hosting Dynamic Sites
