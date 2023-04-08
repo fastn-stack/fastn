@@ -57,7 +57,7 @@
         "test",
         "ideas",
         "review",
-        "maintenance",
+        "maintenance"
       ]
     },
     {
@@ -112,12 +112,12 @@
         "test",
         "ideas"
       ]
-    },
+    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "projectName": "fpm",
-  "projectOwner": "ftd-lang"
+  "projectName": "fastn",
+  "projectOwner": "fastn-stack"
 }
