@@ -3,9 +3,10 @@
 
 -- my-ds.page: Basic UI
 
-In this video, I will first show you how to utilize the `fastn packages` that are there for use. 
-Then, we will continue our learning and understand what are `Properties` and how to use them. 
-Later, we will use `container components`and start creating the layout of our Expander project.
+In this video, I will first show you how to utilize the `fastn packages` that
+are there for use. Then, we will continue our learning and understand what are
+`Properties` and how to use them. Later, we will use `container components`and
+start creating the layout of our Expander project.
 
 -- ds.youtube:
 if: { source == "default" }
@@ -20,21 +21,23 @@ v: XNsTZ1s5KL8
 
 -- ds.h1: Featured Components - How to use?
 
-This Crash Course is for everyone, for the one's who want to learn how to create a components like the one
-we are going to create in this Crash Course.
-And we also respect the choice of those wanting to know **how to use** the `Featured Components` directly and 
-rather focus on building their websites or blog-posts or create exciting UIs.
+This Crash Course is for everyone, for the one's who want to learn how to 
+create a components like the one we are going to create in this Crash Course.
+And we also respect the choice of those wanting to know **how to use** the 
+`Featured Components` directly and rather focus on building their websites or 
+blog-posts or create exciting UIs.
 
 
 
 -- ds.markdown:
 
-If you check the [`featured page`](https://fastn.io/featured) you will come across some amazing components.
-We are going to use few of them to show. For our convenience I am going to use these components in a new file `demo.ftd`
-and leave `index.ftd` file as it is, so that we can continue our learning there.
+If you check the [`featured page`](https://fastn.io/featured) you will come
+across some amazing components. We are going to use few of them to show. For
+our convenience I am going to use these components in a new file `demo.ftd` and
+leave `index.ftd` file as it is, so that we can continue our learning there.
 
-As we did earlier, we will add a new file in our project. I have saved the file as `demo.ftd`. Now, I will apply
-some of the `featured components`.
+As we did earlier, we will add a new file in our project. I have saved the file
+as `demo.ftd`. Now, I will apply some of the `featured components`.
 
 Here is the list of packages I have used:
 
@@ -55,7 +58,8 @@ fifthtry.github.io/winter-cs
 
 -- ds.markdown: 
 
-You can include any such component of your own. For example, I will include the box component I created earlier.
+You can include any such component of your own. For example, I will include the
+box component I created earlier.
 
 
 -- cbox.text-4: **expander**
@@ -88,22 +92,23 @@ lang: ftd
 
 -- ds.markdown:
 
-In the `package-name`, anything that is after the `/` is a default alias. But sometimes,
-the alias can be a long one, and if you want to use a component of that package,
-you will have to use the long name. Instead, you can give a new and shorter alias
-using `as` command.
+In the `package-name`, anything that is after the `/` is a default alias. But
+sometimes, the alias can be a long one, and if you want to use a component of
+that package, you will have to use the long name. Instead, you can give a new
+and shorter alias using `as` command.
 
 For example:
 
 -- ds.code: New alias for `doc-site`
 lang: ftd
 
-\-- import:fifthtry.github.io/doc-site as `ds`
+\-- import:fifthtry.github.io/doc-site as ds
 
 -- ds.markdown:
 
-Using the default alias or a new alias, you can use the `components` of the packages you have imported.
-These simple steps need to be done everytime you want to use a new package in your project.
+Using the default alias or a new alias, you can use the `components` of the
+packages you have imported. These simple steps need to be done everytime you
+want to use a new package in your project.
 
 For example:
 
@@ -117,15 +122,18 @@ For `admonitions` package, we have used `info` component.
 
 -- cbox.info: Note
 
-With just two steps, just like we did earlier, we can use any `fastn package` in our project.
+With just two steps, just like we did earlier, we can use any `fastn package`
+in our project.
 
 
 -- ds.h1: Let's keep learning
 if: { source == "default" }
 
-Let's continue our learning in the `index.ftd` file and build our project step-by-step.
+Let's continue our learning in the `index.ftd` file and build our project
+step-by-step.
 
-Following is the list of the `properties` we will apply to the `container components`.
+Following is the list of the `properties` we will apply to the `container
+components`.
 
 
 -- ds.h2: Properties

@@ -2,7 +2,6 @@
 -- import: gargajit.github.io/expander
 
 
-
 -- my-ds.page: Expander Crash Course
 
 
@@ -29,8 +28,10 @@ named it as box.
 It handles three events:
 
 - on-click - Body expands and collapses when click on Header area
-- on-mouse-enter - Header area is highlighted when mouse hovers over Header area
-- on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
+- on-mouse-enter - Header area is highlighted when mouse hovers over Header
+  area
+- on-mouse-leave - Header area is de-highlighted when mouse leaves the Header
+  area
 
 
 
@@ -47,15 +48,11 @@ Start with the [part 1 now](/expander/hello-world/).
 
 
 
-
-
-
-
 -- ds.h3: Resources
 
 - [`fastn` installation instructions](https://fastn.io/install/)
-- Create a new fastn project using this [Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
-
+- Create a new fastn project using this 
+[Fastn Github Template](https://github.com/ftd-lang/fastn-template/generate)
 
 
 

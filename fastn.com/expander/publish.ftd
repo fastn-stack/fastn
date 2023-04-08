@@ -14,15 +14,15 @@ published on GitHub.
 
 You can create a package from scratch or you can use a template. 
 
-If you choose to use a template, go to the `Resource Section` of the `Overview` 
+If you choose to use a template, go to the `Resource Section` of the `Overview`
 page of this Crash Course, you will find the `fastn-template` link.
 
 
 Use that template to create your package and copy your project code and 
 replace the pre-defined code of tempate in the `index.ftd` file.
 
-This way, you have moved your project into a package that anyone can use in their
-projects.
+This way, you have moved your project into a package that anyone can use in
+their projects.
 
 -- ds.markdown:
 
