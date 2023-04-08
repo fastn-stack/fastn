@@ -87,7 +87,8 @@
         "code",
         "doc",
         "test",
-        "ideas"
+        "ideas",
+        "maintenance"
       ]
     },
     {
@@ -121,6 +122,6 @@
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "projectName": "fpm",
-  "projectOwner": "ftd-lang"
+  "projectName": "fastn",
+  "projectOwner": "fastn-stack"
 }
