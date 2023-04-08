@@ -17,6 +17,13 @@ FifthTry.
 ;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
 ;; Language](/first/).
 
+The quickest way to learn `fastn` is the [short video course we have created:
+expander](https://fastn.io/expander/), it takes you through the basics.
+
+Then checkout the [fontend](/frontend/) and [backend](/backend/) sections of
+our documentation.
+
+
 -- ds.h1: `ftd`: Programming Language For The Next Billion Programmers
 
 `ftd` is designed with minimal and uniform syntax, and at first glance does not
