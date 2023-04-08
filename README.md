@@ -169,15 +169,16 @@ q: language:python
 **Working With SQL Is Breeze**
 
 ```ftd
+-- import: fastn/processors as pr
+
 -- people:
-$processor$: package-query
+$processor$: pr.package-query
 db: db.sqlite
 
 SELECT * FROM user;
 
 
--- show-person:
-p: $p
+-- show-person: $p
 $loop$: $people as $p
 ```
 
