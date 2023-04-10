@@ -23,7 +23,8 @@
         "tool",
         "test",
         "tutorial",
-        "video"
+        "video",
+        "blog"
       ]
     },
     {
@@ -43,7 +44,8 @@
         "tool",
         "test",
         "tutorial",
-        "video"
+        "video",
+        "blog"
       ]
     },
     {
@@ -57,7 +59,8 @@
         "test",
         "ideas",
         "review",
-        "maintenance"
+        "maintenance",
+        "blog"
       ]
     },
     {
@@ -75,6 +78,27 @@
       ]
     },
     {
+      "login": "priyanka9634",
+      "name": "Priyanka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102957031?v=4",
+      "profile": "https://github.com/priyanka9634",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "gargajit",
+      "name": "Ajit Garg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/118595104?v=4",
+      "profile": "https://github.com/gargajit",
+      "contributions": [
+        "code",
+        "doc",
+        "blog"
+      ]
+    },
+    {
       "login": "AbrarNitk",
       "name": "Abrar Khan",
       "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
@@ -82,8 +106,6 @@
       "contributions": [
         "code",
         "doc",
-        "example",
-        "ideas",
         "review",
         "test"
       ]
@@ -96,8 +118,6 @@
       "contributions": [
         "code",
         "doc",
-        "example",
-        "ideas",
         "test"
       ]
     },
