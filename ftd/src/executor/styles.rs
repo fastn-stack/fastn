@@ -1076,12 +1076,12 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "src" in bg) {
+                if (typeof bg === 'object' && !!bg && "src" in bg) {
                     let img_src = bg.src;
-                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
                         "url(" + img_src.light + ")"
                     }
-                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
                         "url(" + img_src.dark + ")"
                     }
                     else {
@@ -1090,7 +1090,8 @@ impl Background {
                 } else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -1099,7 +1100,7 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "repeat" in bg) {
+                if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
                     bg.repeat
                 } else {
                     null
@@ -1114,9 +1115,9 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "size" in bg) {
+                if (typeof bg === 'object' && !!bg && "size" in bg) {
                     let sz = bg.size;
-                    if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+                    if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
                         sz.x + " " + sz.y
                     }
                     else {
@@ -1135,9 +1136,9 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "position" in bg) {
+                if (typeof bg === 'object' && !!bg  && "position" in bg) {
                     let pos = bg.position;
-                    if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+                    if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
                         pos.x + " " + pos.y
                     }
                     else {
@@ -1557,7 +1558,7 @@ impl Shadow {
         (
             r#"
                 let shadow = {0};
-                if (typeof shadow === 'object') {
+                if (typeof shadow === 'object' && !!shadow) {
                 var inset, blur, spread, x_off, y_off, color;
                 inset = "";
                 blur = spread = x_off = y_off = "0px";
@@ -1735,7 +1736,7 @@ impl Color {
         (
             r#"
                 let c = {0};
-                if (typeof c === 'object' && "light" in c) {
+                if (typeof c === 'object' && !!c && "light" in c) {
                     if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
                 } else {
                     c
