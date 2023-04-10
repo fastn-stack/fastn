@@ -70,10 +70,10 @@ impl ftd::executor::HTMLData {
             og_image: ftd::node::Value::from_executor_value(
                 self.og_image
                     .to_owned()
-                    .map(|v| v.map(|v| v.light.value))
+                    .map(|v| v.map(|v| v.src.value))
                     .value,
                 self.og_image.to_owned(),
-                Some(ftd::executor::ImageSrc::image_pattern()),
+                Some(ftd::executor::RawImage::image_pattern()),
                 doc_id,
             ),
             theme_color: ftd::node::Value::from_executor_value(

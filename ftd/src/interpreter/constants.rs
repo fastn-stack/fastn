@@ -83,6 +83,8 @@ pub const FTD_BACKGROUND_POSITION_RIGHT_CENTER: &str = "ftd#background-position.
 pub const FTD_BACKGROUND_POSITION_RIGHT_BOTTOM: &str = "ftd#background-position.right-bottom";
 pub const FTD_BACKGROUND_POSITION_LENGTH: &str = "ftd#background-position.length";
 
+pub const FTD_RAW_IMAGE_SRC: &str = "ftd#raw-image-src";
+
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";
 pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";

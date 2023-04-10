@@ -129,7 +129,7 @@ pub struct HTMLData {
     pub description: ftd::executor::Value<Option<String>>,
     pub og_description: ftd::executor::Value<Option<String>>,
     pub twitter_description: ftd::executor::Value<Option<String>>,
-    pub og_image: ftd::executor::Value<Option<ftd::executor::ImageSrc>>,
+    pub og_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
@@ -169,6 +169,7 @@ pub struct ImageSrc {
     pub dark: ftd::executor::Value<String>,
 }
 
+#[allow(dead_code)]
 impl ImageSrc {
     pub(crate) fn optional_image(
         properties: &[ftd::interpreter::Property],
@@ -286,6 +287,87 @@ impl ImageSrc {
                 } else {
                     c
                 }
+            "#
+            .to_string(),
+            true,
+        )
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct RawImage {
+    pub src: ftd::executor::Value<String>,
+}
+
+impl RawImage {
+    pub(crate) fn optional_image(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<RawImage>>> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_RAW_IMAGE_SRC,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            RawImage::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<RawImage>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(RawImage::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<RawImage> {
+        let src = {
+            let value = values.get("src").ok_or(ftd::executor::Error::ParseError {
+                message: "`src` field in ftd.raw-image-src not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter::PropertySource::header("src"))],
+            )
+        };
+
+        Ok(RawImage { src })
+    }
+
+    pub fn image_pattern() -> (String, bool) {
+        (
+            r#"
+                let c = {0};
+                if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
             "#
             .to_string(),
             true,
@@ -1225,7 +1307,7 @@ pub fn html_data_from_properties(
             doc,
             line_number,
         )?,
-        og_image: ftd::executor::ImageSrc::optional_image(
+        og_image: ftd::executor::RawImage::optional_image(
             properties,
             arguments,
             doc,
