@@ -1169,25 +1169,20 @@ impl BackgroundRepeat {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundRepeat::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundRepeat::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundRepeat::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
@@ -1251,25 +1246,20 @@ impl BackgroundSize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundSize::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundSize::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundSize::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
@@ -1329,25 +1319,20 @@ impl BackgroundPosition {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundPosition::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundPosition::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundPosition::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
