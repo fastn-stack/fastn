@@ -1649,7 +1649,7 @@ return resolve_reference("foo#mouse-entered", data);
 }()){
 document.querySelector(`[data-id="0:main"]`).style["box-shadow"] = eval(`
 let shadow = {0};
-if (typeof shadow === 'object') {
+if (typeof shadow === 'object' && !!shadow) {
 var inset, blur, spread, x_off, y_off, color;
 inset = "";
 blur = spread = x_off = y_off = "0px";
@@ -1695,7 +1695,7 @@ null
 }
 else {document.querySelector(`[data-id="0:main"]`).style["box-shadow"] = eval(`
 let shadow = {0};
-if (typeof shadow === 'object') {
+if (typeof shadow === 'object' && !!shadow) {
 var inset, blur, spread, x_off, y_off, color;
 inset = "";
 blur = spread = x_off = y_off = "0px";
@@ -1754,12 +1754,12 @@ window.node_change_main["1,0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1772,12 +1772,12 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1793,9 +1793,9 @@ window.node_change_main["1,0:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1808,9 +1808,9 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1826,7 +1826,7 @@ window.node_change_main["1,0:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1835,7 +1835,7 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1847,9 +1847,9 @@ window.node_change_main["1,0:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1862,9 +1862,9 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1890,12 +1890,12 @@ window.node_change_main["1,1:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1908,12 +1908,12 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1929,9 +1929,9 @@ window.node_change_main["1,1:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1944,9 +1944,9 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1962,7 +1962,7 @@ window.node_change_main["1,1:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1971,7 +1971,7 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1983,9 +1983,9 @@ window.node_change_main["1,1:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1998,9 +1998,9 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -2026,12 +2026,12 @@ window.node_change_main["1,2:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -2044,12 +2044,12 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -2065,9 +2065,9 @@ window.node_change_main["1,2:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -2080,9 +2080,9 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -2098,7 +2098,7 @@ window.node_change_main["1,2:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -2107,7 +2107,7 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -2119,9 +2119,9 @@ window.node_change_main["1,2:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -2134,9 +2134,9 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -2235,33 +2235,7 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-repeat"]){window.node_change_main["1,2:main__background-repeat"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-position"]){window.node_change_main["1,2:main__background-position"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-size"]){window.node_change_main["1,1:main__background-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
@@ -2269,9 +2243,35 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__backgrou
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__color"]){window.node_change_main["1,1:main__color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-position"]){window.node_change_main["1,2:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-repeat"]){window.node_change_main["1,2:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__box-shadow"]){window.node_change_main["0:main__box-shadow"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__color"]){window.node_change_main["1,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__color"]){window.node_change_main["1,2:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-size"]){window.node_change_main["1,1:main__background-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
 }
 };
 

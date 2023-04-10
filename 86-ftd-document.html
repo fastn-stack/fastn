@@ -1639,21 +1639,13 @@ return (!resolve_reference("foo#flag", data));
 }()){
 document.head.querySelector('meta[property="og:image"]').content = eval(`
 let c = {0};
-if (typeof c === 'object' && "light" in c) {
-if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
-} else {
-c
-}
-`.format(JSON.stringify({"dark": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg", "light": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg"})));
+if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
+`.format(JSON.stringify({"src": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg"})));
 }
 else {document.head.querySelector('meta[property="og:image"]').content = eval(`
 let c = {0};
-if (typeof c === 'object' && "light" in c) {
-if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
-} else {
-c
-}
-`.format(JSON.stringify(resolve_reference("foo#image", data))));}
+if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
+`.format(JSON.stringify({"src": resolve_reference("foo#image.light", data)})));}
 }
 
 window.node_change_main["document__theme_color"] = function(data) {
@@ -1662,7 +1654,7 @@ return (!resolve_reference("foo#flag", data));
 }()){
 document.head.querySelector('meta[name="theme-color"]').content = eval(`
 let c = {0};
-if (typeof c === 'object' && "light" in c) {
+if (typeof c === 'object' && !!c && "light" in c) {
 if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
 } else {
 c
@@ -1671,7 +1663,7 @@ c
 }
 else {document.head.querySelector('meta[name="theme-color"]').content = eval(`
 let c = {0};
-if (typeof c === 'object' && "light" in c) {
+if (typeof c === 'object' && !!c && "light" in c) {
 if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
 } else {
 c
@@ -1693,24 +1685,11 @@ if(!!window["node_change_main"] && !!window.node_change_main["document__title"])
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
 }
-};
-
-window.set_value_main["foo#image"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#image" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#image", new_value);
-}
-
-window.ftd.call_mutable_value_changes("foo#image", "main");
-window.ftd.call_immutable_value_changes("foo#image", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
 }
 };
 
