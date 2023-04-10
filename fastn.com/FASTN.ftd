@@ -58,6 +58,7 @@ favicon: /-/fastn.io/images/favicon.svg
   document: author/how-to/sublime.ftd
   skip: true
 - `fastn` Community: /community/
+- Docs: /docs/
 
 ## Features: /features/
 
@@ -89,11 +90,10 @@ favicon: /-/fastn.io/images/favicon.svg
 - Create `font` package: /create-font-package/
   document: author/how-to/create-font-package.ftd
 
-# Develop: /docs/
+# Frontend: /frontend/
 
-## Docs: /docs/
+## Docs: /frontend/
 
-- Docs Home: /docs/
 - Getting Started: /setup/
   document: ftd/setup.ftd
 - Create `fastn` package: /create-fastn-package/
@@ -199,24 +199,6 @@ favicon: /-/fastn.io/images/favicon.svg
     document: ftd/web-component.ftd
 
 
-## Backend: /backend/
-
-- Overview: /backend/
-- Endpoint Guide 🚧: /endpoint/
-  document: backend/endpoint.ftd
-- Dynamic URLs: /dynamic-urls/
-  document: backend/dynamic-urls.ftd
-- `http` processor: /http/
-  document: ftd-host/http.ftd
-- Custom URLs: /custom-url/
-  document: backend/custom-urls.ftd
-- Request Data Processor: /request-data/
-  document: ftd-host/request-data.ftd
-- SQL Processor: /package-query/
-  document: ftd-host/package-query.ftd
-- Reading JSON: /get-data/
-  document: ftd-host/get-data.ftd
-
 ## Book 🚧: /book/
 
 - The Book Of `fastn` and `ftd`: /book/
@@ -279,11 +261,30 @@ favicon: /-/fastn.io/images/favicon.svg
 - Part 5. Publish a package: /expander/publish/
 - Part 6. Polishing UI: /expander/polish/
 
-# Build: /install/-/build/
+# Fullstack: /backend/
+
+- Overview: /backend/
+- Endpoint Guide 🚧: /endpoint/
+  document: backend/endpoint.ftd
+- Dynamic URLs: /dynamic-urls/
+  document: backend/dynamic-urls.ftd
+- `http` processor: /http/
+  document: ftd-host/http.ftd
+- Custom URLs: /custom-url/
+  document: backend/custom-urls.ftd
+- Request Data Processor: /request-data/
+  document: ftd-host/request-data.ftd
+- SQL Processor: /package-query/
+  document: ftd-host/package-query.ftd
+- Reading JSON: /get-data/
+  document: ftd-host/get-data.ftd
+
+
+# Create Website: /install/-/build/
   document: author/how-to/install.ftd
   source: build
   
-## Build: /install/-/build/
+## Create Website: /install/-/build/
   document: author/how-to/install.ftd
 
 - Install: /install/-/build/
@@ -297,6 +298,18 @@ favicon: /-/fastn.io/images/favicon.svg
 - Component Libraries: /featured/components-library/
 - Fonts: /featured/fonts/
 
+## Deploy: /deploy/
+
+- Overview: /deploy/
+- Static Hosting:
+  - Github pages: /github-pages/
+    document: author/how-to/github-pages.ftd
+  - Vercel: /vercel/
+    document: author/how-to/vercel.ftd
+- Dynamic Hosting:
+  - Heroku: /heroku/
+    document: deploy/heroku.ftd
+
 ## Crash Course: /expander/hello-world/-/build/
 
 - Part 1. Hello World: /expander/hello-world/-/build/
@@ -309,17 +322,6 @@ favicon: /-/fastn.io/images/favicon.svg
 - Part 2. Basic UI: /expander/basic-ui/-/build/
 - Part 3. Publish a package: /expander/publish/-/build/
 
-# Deploy: /deploy/
-
-- Overview: /deploy/
-- Static Hosting:
-  - Github pages: /github-pages/
-    document: author/how-to/github-pages.ftd
-  - Vercel: /vercel/
-    document: author/how-to/vercel.ftd
-- Dynamic Hosting:
-  - Heroku: /heroku/
-    document: deploy/heroku.ftd
 
 # Blog: /wittyhacks/
   document: blog/wittyhacks.ftd
