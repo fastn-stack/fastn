@@ -281,7 +281,7 @@ impl ImageSrc {
         (
             r#"
                 let c = {0};
-                if (typeof c === 'object' && "light" in c) {
+                if (typeof c === 'object' && !!c && "light" in c) {
                     if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
                 } else {
                     c
