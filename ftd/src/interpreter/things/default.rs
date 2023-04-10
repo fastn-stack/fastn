@@ -608,6 +608,23 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "src".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ])
+                    .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_COLOR.to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
                 name: ftd::interpreter::FTD_COLOR.to_string(),
@@ -8581,18 +8598,18 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
             },
             ftd::interpreter::Argument::default(
                 "og-image",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
             ),
             ftd::interpreter::Argument {
                 name: "twitter-image".to_string(),
-                kind: ftd::interpreter::Kind::string()
+                kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
                 value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.description".to_string(),
+                    name: "ftd#document.og-image".to_string(),
                     kind: ftd::interpreter::Kind::string().into_kind_data(),
                     source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
                     is_mutable: false,

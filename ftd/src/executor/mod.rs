@@ -18,8 +18,8 @@ pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd::ast::VariableVal
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
     CheckBox, Code, Column, Common, Container, ContainerElement, Document, Element, Event,
-    HTMLData, Iframe, Image, ImageSrc, IterativeElement, RawElement, Row, Text, TextInput,
-    WebComponent,
+    HTMLData, Iframe, Image, ImageSrc, IterativeElement, RawElement, RawImage, Row, Text,
+    TextInput, WebComponent,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
