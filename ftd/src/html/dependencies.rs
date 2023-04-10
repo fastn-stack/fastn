@@ -185,6 +185,21 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         if let Some(value) = node_for_properties(
+            &self.html_data.twitter_image,
+            var_dependencies,
+            "twitter_document__image",
+            self.doc,
+            "document.head.querySelector('meta[property=\"twitter:image\"]').content",
+            self.id,
+        )? {
+            result.push(value);
+            var_dependencies.insert(
+                "ftd#dark-mode".to_string(),
+                "twitter_document__image".to_string(),
+            );
+        }
+
+        if let Some(value) = node_for_properties(
             &self.html_data.theme_color,
             var_dependencies,
             "document__theme_color",

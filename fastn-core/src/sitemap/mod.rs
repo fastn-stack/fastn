@@ -925,7 +925,7 @@ impl Sitemap {
                             .map(|v| fastn_core::utils::ids_matches(v, id))
                             .unwrap_or(false);
                         let toc = toc::TocItemCompat::new(
-                            v.id.clone(),
+                            v.id.as_ref().and_then(|v| get_url(v.as_str())),
                             v.title.clone(),
                             active,
                             active,
