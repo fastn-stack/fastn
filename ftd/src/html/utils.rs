@@ -756,6 +756,12 @@ pub fn get_meta_data(html_data: &ftd::html::HTMLData) -> String {
             image
         ));
     }
+    if let Some(ref image) = html_data.twitter_image {
+        result.push(format!(
+            "<meta property=\"twitter:image\" content=\"{}\">",
+            image
+        ));
+    }
     if let Some(ref color) = html_data.theme_color {
         result.push(format!("<meta name=\"theme-color\" content=\"{}\">", color));
     }

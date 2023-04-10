@@ -130,6 +130,7 @@ pub struct HTMLData {
     pub og_description: ftd::executor::Value<Option<String>>,
     pub twitter_description: ftd::executor::Value<Option<String>>,
     pub og_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
+    pub twitter_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
@@ -1313,6 +1314,15 @@ pub fn html_data_from_properties(
             doc,
             line_number,
             "og-image",
+            &Default::default(),
+            component_name,
+        )?,
+        twitter_image: ftd::executor::RawImage::optional_image(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "twitter-image",
             &Default::default(),
             component_name,
         )?,
