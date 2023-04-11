@@ -77,6 +77,51 @@ border-color if { ftd.device == "mobile" }: coral ;; <hl>
 -- end: ds.rendered
 
 
+-- ds.h1: Using responsive types
+
+In ftd, there are several attributes which support responsive type such as
+`ftd.responsive-length` which can be used with any attribute of type `ftd
+.length`.
+
+-- ds.rendered: Sample code using `ftd.responsive-length`
+
+-- ds.rendered.input:
+
+\-- ftd.responsive-length responsive-padding-length:  ;; <hl>
+desktop.px: 15  ;; <hl>
+mobile.px: 5  ;; <hl>
+
+\-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+
+\-- ftd.text: This text has responsive padding for desktop and mobile
+padding.responsive: $responsive-padding-length ;; <hl>
+border-color: $red-yellow
+border-width.px: 2
+
+\-- ftd.text: This is another piece of text having same responsive padding
+padding.responsive: $responsive-padding-length ;; <hl>
+border-color: $red-yellow
+border-width.px: 2
+
+\-- end: ftd.column
+
+-- ds.rendered.output:
+
+-- responsive-length-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
 
 
 
@@ -176,6 +221,10 @@ $on-mouse-leave$: $ftd.set-bool($a = $is-hovered, v = false) ;; <hl>
 
 -- end: my-ds.page
 
+-- ftd.responsive-length responsive-padding-length:
+desktop.px: 15
+mobile.px: 5
+
 -- integer $component-number: 1
 
 -- boolean $is-hovered: false
@@ -190,7 +239,9 @@ blur.px: 1
 light: yellow
 dark: red
 
-
+-- ftd.color red-yellow:
+light: red
+dark: yellow
 
 -- component if-component-sample:
 
@@ -279,3 +330,31 @@ $on-mouse-enter$: $ftd.set-bool($a = $is-hovered, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $is-hovered, v = false)
 
 -- end: event-handling-attribute-sample
+
+
+
+
+
+
+
+
+
+-- component responsive-length-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+
+-- ftd.text: This text has responsive padding for desktop and mobile
+padding.responsive: $responsive-padding-length
+border-color: $red-yellow
+border-width.px: 2
+
+-- ftd.text: This is another piece of text having same responsive padding
+padding.responsive: $responsive-padding-length
+border-color: $red-yellow
+border-width.px: 2
+
+-- end: ftd.column
+
+-- end: responsive-length-sample
