@@ -1,0 +1,31 @@
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fifthtry.github.io/dark-mode-switcher as dms
+
+-- ftd.column:
+background.solid: $dark-flame-cs.main.background.step-1
+color: $dark-flame-cs.main.text
+width: fill-container
+height: fill-container
+padding-vertical.px: 100
+padding-horizontal.px: 40
+align-content: center
+
+-- ftd.text: Page Not Found!
+role: $typo.types.heading-hero
+
+-- ftd.image:
+src: $fastn-assets.files.images.404.png
+
+-- ftd.text:
+role: $typo.types.heading-small
+text-align: center
+
+Uh oh, Panda can’t seem to find the page you’re looking for.
+
+Go to [Home Page](/)
+
+-- dms.dark-mode-switcher-float:
+
+
+-- end: ftd.column
