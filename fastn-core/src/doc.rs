@@ -313,9 +313,17 @@ pub async fn resolve_foreign_variable2022(
         }
         for (alias, package) in package.aliases() {
             if alias.eq(&package_name) {
+                lib.push_package_under_process(doc_name, package).await?;
+                let package = lib
+                    .config
+                    .all_packages
+                    .borrow()
+                    .get(package.name.as_str())
+                    .unwrap_or(package)
+                    .to_owned();
                 if let Ok(value) = get_assets_value(
                     doc_name,
-                    package,
+                    &package,
                     files.as_str(),
                     lib,
                     base_url,
