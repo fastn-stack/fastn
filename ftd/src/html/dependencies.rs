@@ -99,6 +99,7 @@ impl<'a> DependencyGenerator<'a> {
             )
             .as_str(),
             self.id,
+            false,
         )? {
             result.push(value)
         }
@@ -110,6 +111,7 @@ impl<'a> DependencyGenerator<'a> {
             self.doc,
             "document.title",
             self.id,
+            false,
         )? {
             result.push(value)
         }
@@ -119,8 +121,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "og_document__title",
             self.doc,
-            "document.head.querySelector('meta[property=\"og:title\"]').content",
+            "let ti = document.head.querySelector('meta[property=\"og:title\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value)
         }
@@ -130,8 +134,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "twitter_document__title",
             self.doc,
-            "document.head.querySelector('meta[name=\"twitter:title\"]').content",
+            "let ti = document.head.querySelector('meta[name=\"twitter:title\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value)
         }
@@ -141,8 +147,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "document__description",
             self.doc,
-            "document.head.querySelector('meta[name=\"description\"]').content",
+            "let ti = document.head.querySelector('meta[name=\"description\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value)
         }
@@ -152,8 +160,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "og_document__description",
             self.doc,
-            "document.head.querySelector('meta[property=\"og:description\"]').content",
+            "let ti = document.head.querySelector('meta[property=\"og:description\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value)
         }
@@ -163,8 +173,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "twitter_document__description",
             self.doc,
-            "document.head.querySelector('meta[name=\"twitter:description\"]').content",
+            "let ti = document.head.querySelector('meta[name=\"twitter:description\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value)
         }
@@ -174,8 +186,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "og_document__image",
             self.doc,
-            "document.head.querySelector('meta[property=\"og:image\"]').content",
+            "let ti = document.head.querySelector('meta[property=\"og:image\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value);
             var_dependencies.insert(
@@ -189,8 +203,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "twitter_document__image",
             self.doc,
-            "document.head.querySelector('meta[property=\"twitter:image\"]').content",
+            "let ti = document.head.querySelector('meta[property=\"twitter:image\"]'); \
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value);
             var_dependencies.insert(
@@ -204,8 +220,10 @@ impl<'a> DependencyGenerator<'a> {
             var_dependencies,
             "document__theme_color",
             self.doc,
-            "document.head.querySelector('meta[name=\"theme-color\"]').content",
+            "let ti = document.head.querySelector('meta[name=\"theme-color\"]');\
+            if (!!ti) { ti.content = {0}; }",
             self.id,
+            true,
         )? {
             result.push(value);
             var_dependencies.insert(
@@ -801,6 +819,7 @@ fn node_for_properties(
     doc: &ftd::interpreter::TDoc,
     key: &str,
     id: &str,
+    eval: bool,
 ) -> ftd::html::Result<Option<String>> {
     let mut expressions = vec![];
     let mut is_static = true;
@@ -836,18 +855,30 @@ fn node_for_properties(
                 doc,
             );
 
-            let value = format!("{} = {};", key, value_string);
+            let value = if eval {
+                format!("eval(`{}`.format(JSON.stringify({})))", key, value_string)
+            } else {
+                format!("{} = {};", key, value_string)
+            };
             expressions.push((condition, value));
         }
     }
     let value = ftd::html::utils::js_expression_from_list(
         expressions,
         Some(key),
-        format!(
-            "{} = {}",
-            key,
-            value.default.clone().unwrap_or_else(|| "null".to_string())
-        )
+        if eval {
+            format!(
+                "eval(`{}`.format(JSON.stringify({})))",
+                key,
+                value.default.clone().unwrap_or_else(|| "null".to_string())
+            )
+        } else {
+            format!(
+                "{} = {};",
+                key,
+                value.default.clone().unwrap_or_else(|| "null".to_string())
+            )
+        }
         .as_str(),
     );
     if !value.trim().is_empty() && !is_static {
