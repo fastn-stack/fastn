@@ -1,29 +1,34 @@
--- import: fifthtry.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-io-typography as typo
--- import: fifthtry.github.io/dark-mode-switcher as dms
+-- import: fastn-stack.github.io/media/assets as m-assets
+
+
+
+-- my-ds.page:
+widthfill: true
+sidebar: false
 
 -- ftd.column:
-background.solid: $dark-flame-cs.main.background.step-1
-color: $dark-flame-cs.main.text
-width: fill-container
-height: fill-container
-padding-vertical.px: 100
-padding-horizontal.px: 40
 align-content: center
+color: $inherited.colors.text
+height: fill-container
+width: fill-container
+padding-vertical.px: 40
+padding-horizontal.px: 20
+spacing.fixed.px: 20
 
 -- ftd.text: Page Not Found!
-role: $typo.types.heading-hero
+role: $inherited.types.heading-hero
 
+-- ftd.image:
+src: $m-assets.files.page-not-found-panda.svg
+width.fixed.percent if { ftd.device == "desktop" }: 50
+width: fill-container
 
 -- ftd.text:
-role: $typo.types.heading-small
+role: $inherited.types.heading-small
 text-align: center
 
-Uh oh, We can’t seem to find the page you’re looking for.
-
-Go to [Home Page](/)
-
--- dms.dark-mode-switcher-float:
-
+Uh oh, Panda can’t seem to find the page you’re looking for.
 
 -- end: ftd.column
+
+-- end: my-ds.page

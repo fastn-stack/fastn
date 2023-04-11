@@ -22,6 +22,7 @@ favicon: /-/fastn.io/images/favicon.svg
 -- fastn.dependency: fifthtry.github.io/winter-cs
 -- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
+-- fastn.dependency: fastn-stack.github.io/media
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -93,7 +94,7 @@ favicon: /-/fastn.io/images/favicon.svg
 
 # Frontend: /frontend/
 
-## Docs: /frontend/
+## Docs: /setup/
 
 - Getting Started: /setup/
   document: ftd/setup.ftd
