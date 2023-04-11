@@ -18,7 +18,7 @@ spacing.fixed.px: 20
 -- ftd.text: Page Not Found!
 role: $inherited.types.heading-hero
 
--- ftd.image:
+/-- ftd.image:
 src: $m-assets.files.page-not-found-panda.svg
 width.fixed.percent if { ftd.device == "desktop" }: 50
 width: fill-container

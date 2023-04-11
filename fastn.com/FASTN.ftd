@@ -95,6 +95,7 @@ favicon: /-/fastn.io/images/favicon.svg
 # Frontend: /frontend/
 
 ## Docs: /setup/
+  document: ftd/setup.ftd
 
 - Getting Started: /setup/
   document: ftd/setup.ftd
