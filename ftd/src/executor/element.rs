@@ -694,6 +694,7 @@ pub struct Common {
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
+    pub opacity: ftd::executor::Value<Option<f64>>,
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
     pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
@@ -1966,6 +1967,14 @@ pub fn common_from_properties(
             "overflow-y",
             inherited_variables,
             component_name,
+        )?,
+        opacity: ftd::executor::value::optional_f64(
+            "opacity",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
         )?,
         resize: ftd::executor::Resize::optional_resize(
             properties,

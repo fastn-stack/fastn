@@ -8708,6 +8708,12 @@ fn container_arguments() -> Vec<ftd::interpreter::Argument> {
 fn common_arguments() -> Vec<ftd::interpreter::Argument> {
     vec![
         ftd::interpreter::Argument::default(
+            "opacity",
+            ftd::interpreter::Kind::decimal()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter::Argument::default(
             "shadow",
             ftd::interpreter::Kind::record(ftd::interpreter::FTD_SHADOW)
                 .into_optional()
