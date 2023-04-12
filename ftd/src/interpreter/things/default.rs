@@ -8137,10 +8137,10 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
             common_arguments(),
             vec![
                 ftd::interpreter::Argument::default(
-                "src",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
-                    .into_kind_data()
-                    .caption(),
+                    "src",
+                    ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        .into_kind_data()
+                        .caption(),
                 ),
                 ftd::interpreter::Argument::default(
                     "alt-text",

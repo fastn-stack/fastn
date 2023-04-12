@@ -1137,7 +1137,11 @@ pub fn image_from_properties(
         inherited_variables,
         "ftd#image",
     )?;
-    Ok(Image { src, alt_text, common })
+    Ok(Image {
+        src,
+        alt_text,
+        common,
+    })
 }
 
 #[allow(clippy::too_many_arguments)]
