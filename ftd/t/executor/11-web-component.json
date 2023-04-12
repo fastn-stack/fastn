@@ -669,5 +669,6 @@
   "js": [
     "ftd/t/web_component.js:type=\"module\""
   ],
-  "css": []
+  "css": [],
+  "rive_data": []
 }
