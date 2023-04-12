@@ -746,13 +746,13 @@ fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
 
     format!(
         indoc::indoc! {"
-            const {rive_name} = new rive.Rive({{
+            window.{rive_name} = new rive.Rive({{
                 src: '{src}',
                 canvas: document.getElementById('{id}'),
                 autoplay: true,
                 stateMachines: '{state_machines}',
                 onLoad: (_) => {{
-                    {rive_name}.resizeDrawingSurfaceToCanvas();
+                    window.{rive_name}.resizeDrawingSurfaceToCanvas();
                 }},
             }});
         "},
