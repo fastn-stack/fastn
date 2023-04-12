@@ -6,9 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#name": "Arpita",
-"foo#new-name": "Arpita FifthTry",
-"foo#number": 10,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -698,7 +695,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 5px; text-decoration: none; width: auto" class="ft_md">hello world</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 14px; text-decoration: none; width: auto" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 15px; text-decoration: none; width: auto" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><img alt="Image not found" data-id="0:main" src="foo.jpg" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" ></img></div>
 
 
 <script>
@@ -1534,31 +1531,6 @@ document.body.style.height = `100%`;
 
 
 
-function foo__append___main(a,b,args,data,id){
-return (a+" "+b);
-}
-
-
-
-function foo__compare___main(a,b,c,d,args,data,id){
-let e = a+c;
-return (if((e>b),c,d,args,data,id));
-}
-
-
-
-function foo__length___main(a,args,data,id){
-return (len(a,args,data,id));
-}
-
-
-
-function foo__sum___main(a,b,args,data,id){
-return (a+b);
-}
-
-
-
 function ftd__clean_code___main(a,lang,args,data,id){
 return (ftd.clean_code(a,lang,args,data,id));
 }
@@ -1624,79 +1596,7 @@ a.value = !a.value
 }
 
 
-window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a","hello"],["b","world"]]}', this);
-}
 
-window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)));
-}
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a",{"mutable":false,"reference":"foo#name"}],["b","Jaiswal"]]}', this);
-}
-
-window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)));
-}
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
-}
-
-window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)));
-}
-window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#name" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#name", new_value);
-}
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
-} else {
-let value = resolve_reference("foo#name", data, null);
-set_data_value(data, "foo#new-name", value);
-}
-window.ftd.call_mutable_value_changes("foo#name", "main");
-window.ftd.call_immutable_value_changes("foo#name", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#new-name" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#new-name", new_value);
-}
-
-window.ftd.call_mutable_value_changes("foo#new-name", "main");
-window.ftd.call_immutable_value_changes("foo#new-name", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#number"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#number" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#number", new_value);
-}
-
-window.ftd.call_mutable_value_changes("foo#number", "main");
-window.ftd.call_immutable_value_changes("foo#number", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
-};
 
 
 

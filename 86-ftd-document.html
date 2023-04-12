@@ -2,7 +2,7 @@
 <html lang="en" style="height: 100%;">
 <head>
 <meta charset="UTF-8"><base href="/fastn/">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"><meta property="og:title" content="My title"><meta name="twitter:title" content="My title"><meta property="og:description" content="MY DESCRIPTION"><meta name="description" content="MY DESCRIPTION"><meta name="twitter:description" content="MY DESCRIPTION"><meta property="og:image" content="https://fastn.io/-/fastn.io/images/fastn.svg"><meta name="theme-color" content="rgba(255,255,0,1)">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"><meta property="og:title" content="My title"><meta name="twitter:title" content="My title"><meta property="og:description" content="MY DESCRIPTION"><meta name="description" content="MY DESCRIPTION"><meta name="twitter:description" content="MY DESCRIPTION"><meta property="og:image" content="https://fastn.io/-/fastn.io/images/fastn.svg"><meta property="twitter:image" content="https://fastn.io/-/fastn.io/images/fastn.svg"><meta name="theme-color" content="rgba(255,255,0,1)">
 <title>My title</title>
 <script type="ftd" id="ftd-data">
 {
@@ -1619,56 +1619,56 @@ window.node_change_main["og_document__title"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
-document.head.querySelector('meta[property="og:title"]').content = "MY OG TITLE";
+eval(`let ti = document.head.querySelector('meta[property="og:title"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG TITLE")))
 }
-else {document.head.querySelector('meta[property="og:title"]').content = "My title";}
+else {eval(`let ti = document.head.querySelector('meta[property="og:title"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("My title")))}
 }
 
 window.node_change_main["og_document__description"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
-document.head.querySelector('meta[property="og:description"]').content = "MY OG DESCRIPTION";
+eval(`let ti = document.head.querySelector('meta[property="og:description"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG DESCRIPTION")))
 }
-else {document.head.querySelector('meta[property="og:description"]').content = "MY DESCRIPTION";}
+else {eval(`let ti = document.head.querySelector('meta[property="og:description"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY DESCRIPTION")))}
 }
 
 window.node_change_main["og_document__image"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
-document.head.querySelector('meta[property="og:image"]').content = eval(`
+eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
 if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
-`.format(JSON.stringify({"src": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg"})));
+`.format(JSON.stringify({"src": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg"}))))))
 }
-else {document.head.querySelector('meta[property="og:image"]').content = eval(`
+else {eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
 if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
-`.format(JSON.stringify({"src": resolve_reference("foo#image.light", data)})));}
+`.format(JSON.stringify({"src": resolve_reference("foo#image.light", data)}))))))}
 }
 
 window.node_change_main["document__theme_color"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
-document.head.querySelector('meta[name="theme-color"]').content = eval(`
+eval(`let ti = document.head.querySelector('meta[name="theme-color"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
 if (typeof c === 'object' && !!c && "light" in c) {
 if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
 } else {
 c
 }
-`.format(JSON.stringify({"dark": "green", "light": "green"})));
+`.format(JSON.stringify({"dark": "green", "light": "green"}))))))
 }
-else {document.head.querySelector('meta[name="theme-color"]').content = eval(`
+else {eval(`let ti = document.head.querySelector('meta[name="theme-color"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
 if (typeof c === 'object' && !!c && "light" in c) {
 if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
 } else {
 c
 }
-`.format(JSON.stringify(resolve_reference("foo#red-yellow", data))));}
+`.format(JSON.stringify(resolve_reference("foo#red-yellow", data)))))))}
 }
 
 window.set_value_main = {};
@@ -1681,15 +1681,15 @@ set_data_value(data, "foo#flag", new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
 };
 
@@ -1715,9 +1715,9 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
 }
 };
 
