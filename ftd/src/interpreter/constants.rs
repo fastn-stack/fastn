@@ -109,6 +109,17 @@ pub const FTD_TEXT_ALIGN_JUSTIFY: &str = "ftd#text-align.justify";
 pub const FTD_SHADOW: &str = "ftd#shadow";
 pub const FTD_SHADOW_COLOR: &str = "ftd#shadow.color";
 
+pub const FTD_DOCUMENT_META: &str = "ftd#document-meta";
+pub const FTD_DOCUMENT_META_TITLE: &str = "ftd#document-meta.title";
+pub const FTD_DOCUMENT_META_OG_TITLE: &str = "ftd#document-meta.og-title";
+pub const FTD_DOCUMENT_META_TWITTER_TITLE: &str = "ftd#document-meta.twitter-title";
+pub const FTD_DOCUMENT_META_DESCRIPTION: &str = "ftd#document-meta.description";
+pub const FTD_DOCUMENT_META_OG_DESCRIPTION: &str = "ftd#document-meta.og-description";
+pub const FTD_DOCUMENT_META_TWITTER_DESCRIPTION: &str = "ftd#document-meta.twitter-description";
+pub const FTD_DOCUMENT_META_OG_IMAGE: &str = "ftd#document-meta.og-image";
+pub const FTD_DOCUMENT_META_TWITTER_IMAGE: &str = "ftd#document-meta.twitter-image";
+pub const FTD_DOCUMENT_META_THEME_COLOR: &str = "ftd#document-meta.theme-color";
+
 // FTD overflow(todo docs link)
 pub const FTD_OVERFLOW: &str = "ftd#overflow";
 pub const FTD_OVERFLOW_SCROLL: &str = "ftd#overflow.scroll";

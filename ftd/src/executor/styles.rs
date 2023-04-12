@@ -1613,7 +1613,7 @@ pub struct Color {
 }
 
 impl Color {
-    fn from_value(
+    pub fn from_value(
         value: ftd::interpreter::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,

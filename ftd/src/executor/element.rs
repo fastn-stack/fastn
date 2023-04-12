@@ -133,6 +133,138 @@ pub struct HTMLData {
     pub twitter_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
+impl HTMLData {
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::HTMLData> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!("`{}` field in ftd.document-meta not found", field_name),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })
+        };
+
+        let title = ftd::executor::Value::new(
+            get_property_value("title")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("title")?
+                .into_property(ftd::interpreter::PropertySource::header("title"))],
+        );
+
+        let og_title = ftd::executor::Value::new(
+            get_property_value("og-title")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("og-title")?
+                .into_property(ftd::interpreter::PropertySource::header("og-title"))],
+        );
+
+        let twitter_title = ftd::executor::Value::new(
+            get_property_value("twitter-title")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("twitter-title")?
+                .into_property(ftd::interpreter::PropertySource::header("twitter-title"))],
+        );
+
+        let description = ftd::executor::Value::new(
+            get_property_value("description")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("description")?
+                .into_property(ftd::interpreter::PropertySource::header("description"))],
+        );
+
+        let og_description = ftd::executor::Value::new(
+            get_property_value("og-description")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("og-description")?
+                .into_property(ftd::interpreter::PropertySource::header("og-description"))],
+        );
+
+        let twitter_description = ftd::executor::Value::new(
+            get_property_value("twitter-description")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .optional_string(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("twitter-description")?.into_property(
+                ftd::interpreter::PropertySource::header("twitter-description"),
+            )],
+        );
+
+        Ok(HTMLData {
+            title,
+            og_title,
+            twitter_title,
+            description,
+            og_description,
+            twitter_description,
+            og_image: Default::default(),
+            twitter_image: Default::default(),
+            theme_color: Default::default(),
+        })
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::HTMLData> {
+        if let Some(value) = or_type_value {
+            Ok(ftd::executor::HTMLData::from_values(
+                value,
+                doc,
+                line_number,
+            )?)
+        } else {
+            Ok(Default::default())
+        }
+    }
+
+    fn document_meta(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::HTMLData> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_DOCUMENT_META,
+            &Default::default(),
+        )?;
+
+        Ok(ftd::executor::HTMLData::from_optional_values(
+            record_values.value,
+            doc,
+            line_number,
+        )?)
+    }
+}
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Document {
@@ -1259,83 +1391,15 @@ pub fn html_data_from_properties(
     line_number: usize,
     component_name: &str,
 ) -> ftd::executor::Result<HTMLData> {
-    Ok(HTMLData {
-        title: ftd::executor::value::optional_string(
-            "title",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        og_title: ftd::executor::value::optional_string(
-            "og-title",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        twitter_title: ftd::executor::value::optional_string(
-            "twitter-title",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        description: ftd::executor::value::optional_string(
-            "description",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        og_description: ftd::executor::value::optional_string(
-            "og-description",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        twitter_description: ftd::executor::value::optional_string(
-            "twitter-description",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
-        og_image: ftd::executor::RawImage::optional_image(
-            properties,
-            arguments,
-            doc,
-            line_number,
-            "og-image",
-            &Default::default(),
-            component_name,
-        )?,
-        twitter_image: ftd::executor::RawImage::optional_image(
-            properties,
-            arguments,
-            doc,
-            line_number,
-            "twitter-image",
-            &Default::default(),
-            component_name,
-        )?,
-        theme_color: ftd::executor::Color::optional_color(
-            properties,
-            arguments,
-            doc,
-            line_number,
-            "theme-color",
-            &Default::default(),
-            component_name,
-        )?,
-    })
+    dbg!(&properties, &arguments);
+    ftd::executor::HTMLData::document_meta(
+        properties,
+        arguments,
+        doc,
+        line_number,
+        "meta",
+        component_name
+    )
 }
 
 #[allow(clippy::too_many_arguments)]

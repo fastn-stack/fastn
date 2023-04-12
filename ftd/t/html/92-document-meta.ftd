@@ -1,0 +1,11 @@
+-- ftd.document:
+meta: $doc-meta
+
+-- ftd.text: Hello There
+
+-- end: ftd.document
+
+
+
+-- ftd.document-meta doc-meta:
+title: This is doc title 2

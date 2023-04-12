@@ -830,6 +830,143 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                 line_number: 0,
             }),
         ),
+        // pub const FTD_DOCUMENT_META_TITLE: &str = "ftd#document-meta.title";
+        // pub const FTD_DOCUMENT_META_OG_TITLE: &str = "ftd#document-meta.og-title";
+        // pub const FTD_DOCUMENT_META_TWITTER_TITLE: &str = "ftd#document-meta.twitter-title";
+        // pub const FTD_DOCUMENT_META_DESCRIPTION: &str = "ftd#document-meta.description";
+        // pub const FTD_DOCUMENT_META_OG_DESCRIPTION: &str = "ftd#document-meta.og-description";
+        // pub const FTD_DOCUMENT_META_TWITTER_DESCRIPTION: &str = "ftd#document-meta.twitter-description";
+        // pub const FTD_DOCUMENT_META_OG_IMAGE: &str = "ftd#document-meta.og-image";
+        // pub const FTD_DOCUMENT_META_TWITTER_IMAGE: &str = "ftd#document-meta.twitter-image";
+        // pub const FTD_DOCUMENT_META_THEME_COLOR: &str = "ftd#document-meta.theme-color";
+        (
+            ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "title".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "og-title".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_DOCUMENT_META_TITLE.to_string(),
+                            kind: ftd::interpreter::Kind::string().into_kind_data().into_optional(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "twitter-title".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_DOCUMENT_META_TITLE.to_string(),
+                            kind: ftd::interpreter::Kind::string().into_kind_data().into_optional(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "description".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "og-description".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_DOCUMENT_META_DESCRIPTION.to_string(),
+                            kind: ftd::interpreter::Kind::string().into_kind_data().into_optional(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "twitter-description".to_string(),
+                        kind: ftd::interpreter::Kind::string()
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_DOCUMENT_META_DESCRIPTION.to_string(),
+                            kind: ftd::interpreter::Kind::string().into_kind_data().into_optional(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "og-image".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "twitter-image".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Reference {
+                            name: ftd::interpreter::FTD_DOCUMENT_META_OG_IMAGE.to_string(),
+                            kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                                .into_kind_data()
+                                .into_optional(),
+                            source: ftd::interpreter::PropertyValueSource::Local(
+                                ftd::interpreter::FTD_DOCUMENT_META.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "theme-color".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                            .into_kind_data()
+                            .into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
         (
             ftd::interpreter::FTD_BG_IMAGE.to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
@@ -8514,134 +8651,15 @@ pub fn column_function() -> ftd::interpreter::ComponentDefinition {
 pub fn document_function() -> ftd::interpreter::ComponentDefinition {
     ftd::interpreter::ComponentDefinition {
         name: "ftd#document".to_string(),
-        arguments: [vec![
-            ftd::interpreter::Argument::default(
-                "title",
-                ftd::interpreter::Kind::string()
-                    .into_optional()
-                    .into_kind_data()
-                    .caption_or_body(),
-            ),
-            ftd::interpreter::Argument {
-                name: "og-title".to_string(),
-                kind: ftd::interpreter::Kind::string()
+        arguments: [
+            container_root_arguments(),
+            vec![ftd::interpreter::Argument::default(
+                "meta",
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_DOCUMENT_META)
                     .into_optional()
                     .into_kind_data(),
-                mutable: false,
-                value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.title".to_string(),
-                    kind: ftd::interpreter::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
-                    is_mutable: false,
-                    line_number: 0,
-                }),
-                line_number: 0,
-            },
-            ftd::interpreter::Argument {
-                name: "twitter-title".to_string(),
-                kind: ftd::interpreter::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-                mutable: false,
-                value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.title".to_string(),
-                    kind: ftd::interpreter::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
-                    is_mutable: false,
-                    line_number: 0,
-                }),
-                line_number: 0,
-            },
-            ftd::interpreter::Argument::default(
-                "description",
-                ftd::interpreter::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-            ),
-            ftd::interpreter::Argument {
-                name: "og-description".to_string(),
-                kind: ftd::interpreter::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-                mutable: false,
-                value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.description".to_string(),
-                    kind: ftd::interpreter::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
-                    is_mutable: false,
-                    line_number: 0,
-                }),
-                line_number: 0,
-            },
-            ftd::interpreter::Argument {
-                name: "twitter-description".to_string(),
-                kind: ftd::interpreter::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-                mutable: false,
-                value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.description".to_string(),
-                    kind: ftd::interpreter::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
-                    is_mutable: false,
-                    line_number: 0,
-                }),
-                line_number: 0,
-            },
-            ftd::interpreter::Argument::default(
-                "og-image",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
-                    .into_optional()
-                    .into_kind_data(),
-            ),
-            ftd::interpreter::Argument {
-                name: "twitter-image".to_string(),
-                kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
-                    .into_optional()
-                    .into_kind_data(),
-                mutable: false,
-                value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.og-image".to_string(),
-                    kind: ftd::interpreter::Kind::string().into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
-                    is_mutable: false,
-                    line_number: 0,
-                }),
-                line_number: 0,
-            },
-            ftd::interpreter::Argument::default(
-                "theme-color",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
-                    .into_optional()
-                    .into_kind_data(),
-            ),
-            ftd::interpreter::Argument::default(
-                "children",
-                ftd::interpreter::Kind::subsection_ui()
-                    .into_list()
-                    .into_kind_data(),
-            ),
-            ftd::interpreter::Argument::default(
-                "colors",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR_SCHEME)
-                    .into_optional()
-                    .into_kind_data(),
-            ),
-            ftd::interpreter::Argument::default(
-                "types",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_TYPE_DATA)
-                    .into_optional()
-                    .into_kind_data(),
-            ),
-        ]]
+            )],
+        ]
         .concat()
         .into_iter()
         .collect(),
