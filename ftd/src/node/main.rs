@@ -236,6 +236,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::CheckBox(c) => c.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Rive(r) => r.to_node(doc_id),
             ftd::executor::Element::Null { line_number } => Node {
                 classes: vec![],
                 events: vec![],
@@ -653,23 +654,69 @@ impl ftd::executor::Text {
         );
         n
     }
+}
 
-    pub fn set_auto_id(&mut self) {
-        if self
-            .common
-            .region
-            .value
-            .as_ref()
-            .filter(|r| r.is_heading())
-            .is_some()
-            && self.common.id.value.is_none()
-        {
-            self.common.id = ftd::executor::Value::new(
-                Some(slug::slugify(self.text.value.original.as_str())),
-                Some(self.common.line_number),
-                vec![],
-            )
+impl ftd::executor::Rive {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        Node {
+            node: s("canvas"),
+            display: s("block"),
+            condition: self.condition.to_owned(),
+            attrs: self.attrs(doc_id),
+            style: Default::default(),
+            children: vec![],
+            text: Default::default(),
+            classes: vec![],
+            null: false,
+            events: vec![],
+            data_id: self.data_id.clone(),
+            line_number: self.line_number,
+            raw_data: None,
+            web_component: None,
         }
+    }
+
+    fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
+        use ftd::node::utils::CheckMap;
+
+        let mut d: ftd::Map<ftd::node::Value> = Default::default();
+
+        d.check_and_insert(
+            "id",
+            ftd::node::Value::from_executor_value(
+                Some(self.id.value.to_owned()),
+                self.id.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "data-id",
+            ftd::node::Value::from_string(self.data_id.as_str()),
+        );
+
+        d.check_and_insert(
+            "width",
+            ftd::node::Value::from_executor_value(
+                Some(self.width.value.to_string()),
+                self.width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "height",
+            ftd::node::Value::from_executor_value(
+                Some(self.height.value.to_string()),
+                self.height.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d
     }
 }
 

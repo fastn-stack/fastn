@@ -223,7 +223,10 @@ fn ftd_v2_write(id: &str, s: &str) {
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())
-            .replace("__extra_js__", html_ui.js.as_str())
+            .replace(
+                "__extra_js__",
+                format!("{}{}", html_ui.js.as_str(), html_ui.rive_data.as_str()).as_str(),
+            )
             .replace("__base_url__", "/fastn/")
             .replace("__extra_css__", html_ui.css.as_str())
             .replace(

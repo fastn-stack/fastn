@@ -16,6 +16,7 @@ pub enum Element {
     IterativeElement(IterativeElement),
     CheckBox(CheckBox),
     WebComponent(WebComponent),
+    Rive(Rive),
     Null { line_number: usize },
 }
 
@@ -38,6 +39,7 @@ impl Element {
             Element::Null { .. } => None,
             Element::RawElement(_) => None,
             Element::WebComponent(_) => None,
+            Element::Rive(_) => None,
             Element::IterativeElement(i) => i.element.get_common(),
         }
     }
@@ -74,6 +76,7 @@ impl Element {
             Element::IterativeElement(i) => i.iteration.line_number,
             Element::CheckBox(c) => c.common.line_number,
             Element::WebComponent(w) => w.line_number,
+            Element::Rive(r) => r.line_number,
             Element::Null { line_number } => *line_number,
         }
     }
@@ -115,6 +118,18 @@ pub struct Column {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Rive {
+    pub id: ftd::executor::Value<String>,
+    pub src: ftd::executor::Value<String>,
+    pub width: ftd::executor::Value<i64>,
+    pub height: ftd::executor::Value<i64>,
+    pub state_machine: ftd::executor::Value<Vec<String>>,
+    pub line_number: usize,
+    pub condition: Option<ftd::interpreter::Expression>,
+    pub data_id: String,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct ContainerElement {
     pub common: Common,
     pub children: Vec<ftd::executor::Element>,
@@ -150,6 +165,26 @@ pub struct Text {
     pub common: Common,
     pub style: ftd::executor::Value<Option<ftd::executor::TextStyle>>,
     pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
+}
+
+impl Text {
+    pub(crate) fn set_auto_id(&mut self) {
+        if self
+            .common
+            .region
+            .value
+            .as_ref()
+            .filter(|r| r.is_heading())
+            .is_some()
+            && self.common.id.value.is_none()
+        {
+            self.common.id = ftd::executor::Value::new(
+                Some(slug::slugify(self.text.value.original.as_str())),
+                Some(self.common.line_number),
+                vec![],
+            )
+        }
+    }
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -1246,6 +1281,82 @@ pub fn container_element_from_properties(
             "ftd#container",
         )?,
     })
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn rive_from_properties(
+    properties: &[ftd::interpreter::Property],
+    _events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
+    doc: &mut ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+) -> ftd::executor::Result<Rive> {
+    let component_name = "ftd#rive";
+    let rive = Rive {
+        id: ftd::executor::value::string(
+            "id",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        src: ftd::executor::value::string(
+            "src",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        width: ftd::executor::value::i64(
+            "width",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        height: ftd::executor::value::i64(
+            "height",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        state_machine: ftd::executor::value::string_list(
+            "state-machine",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            inherited_variables,
+        )?,
+        condition: condition.to_owned(),
+        data_id: ftd::executor::utils::get_string_container(local_container),
+        line_number,
+    };
+
+    if rive.state_machine.value.is_empty() {
+        return ftd::executor::utils::parse_error(
+            format!("`state-machine` not found: `{:?}`", rive),
+            doc.name,
+            line_number,
+        );
+    }
+
+    doc.rive_data.push(ftd::executor::RiveData {
+        id: rive.id.value.to_string(),
+        src: rive.src.value.to_string(),
+        state_machine: rive.state_machine.value.clone(),
+    });
+
+    Ok(rive)
 }
 
 pub fn document_from_properties(

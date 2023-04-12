@@ -1,0 +1,6 @@
+-- ftd.rive:
+id: panda
+src: ftd/ftd/t/panda.riv
+width: 500
+height: 500
+state-machine: State Machine 1

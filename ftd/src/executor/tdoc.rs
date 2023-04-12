@@ -7,6 +7,7 @@ pub struct TDoc<'a> {
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
     pub css: &'a mut std::collections::HashSet<String>,
+    pub rive_data: &'a mut Vec<ftd::executor::RiveData>,
 }
 
 impl<'a> TDoc<'a> {

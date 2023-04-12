@@ -12,6 +12,7 @@ pub struct HtmlUI {
     pub html_data: HTMLData,
     pub js: String,
     pub css: String,
+    pub rive_data: String,
 }
 
 pub struct HTMLData {
@@ -96,6 +97,7 @@ impl HtmlUI {
             html_data: node_data.html_data.to_html_data(),
             js: ftd::html::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
             css: ftd::html::utils::get_css_html(node_data.css.into_iter().collect_vec().as_slice()),
+            rive_data: ftd::html::utils::get_rive_data_html(node_data.rive_data.as_slice(), id),
         })
     }
 }
