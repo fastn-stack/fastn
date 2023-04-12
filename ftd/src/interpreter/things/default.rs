@@ -8135,12 +8135,20 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
         name: "ftd#image".to_string(),
         arguments: [
             common_arguments(),
-            vec![ftd::interpreter::Argument::default(
+            vec![
+                ftd::interpreter::Argument::default(
                 "src",
                 ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
                     .into_kind_data()
                     .caption(),
-            )],
+                ),
+                ftd::interpreter::Argument::default(
+                    "alt-text",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+            ],
         ]
         .concat()
         .into_iter()
