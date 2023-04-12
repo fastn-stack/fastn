@@ -5,6 +5,7 @@ pub(crate) mod figma_tokens;
 pub(crate) mod get_data;
 pub(crate) mod http;
 pub(crate) mod package_tree;
+pub(crate) mod query;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
 pub(crate) mod sqlite;

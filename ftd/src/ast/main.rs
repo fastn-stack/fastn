@@ -1,11 +1,16 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+// #[serde(tag = "ast-type", content = "c")]
 pub enum AST {
+    #[serde(rename = "import")]
     Import(ftd::ast::Import),
+    #[serde(rename = "record")]
     Record(ftd::ast::Record),
+    #[serde(rename = "or-type")]
     OrType(ftd::ast::OrType),
     VariableDefinition(ftd::ast::VariableDefinition),
     VariableInvocation(ftd::ast::VariableInvocation),
     ComponentDefinition(ftd::ast::ComponentDefinition),
+    #[serde(rename = "component-invocation")]
     ComponentInvocation(ftd::ast::Component),
     FunctionDefinition(ftd::ast::Function),
     WebComponentDefinition(ftd::ast::WebComponentDefinition),

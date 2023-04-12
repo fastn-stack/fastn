@@ -86,3 +86,20 @@ string list writers:
 section-compat-data list sections:
 string list readers:
 string list writers:
+
+
+
+-- record ast:
+optional import-data import:
+optional component-invocation-data component-invocation:
+
+
+
+-- record import-data:
+string module:
+string alias:
+integer line-number:
+
+
+-- record component-invocation-data:
+string name:

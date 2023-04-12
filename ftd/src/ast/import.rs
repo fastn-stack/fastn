@@ -2,6 +2,7 @@
 pub struct Import {
     pub module: String,
     pub alias: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 

@@ -201,7 +201,7 @@ impl Library2022 {
     /// process the $processor$ and return the processor's output
     #[tracing::instrument(name = "fastn_core::stuck-on-processor", skip_all, err)]
     pub async fn process<'a>(
-        &'a self,
+        &'a mut self,
         ast: ftd::ast::AST,
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
@@ -269,7 +269,16 @@ impl Library2022 {
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
-
+            "query" => {
+                processor::query::process(
+                    value,
+                    kind,
+                    doc,
+                    &mut self.config,
+                    self.document_id.as_str(),
+                )
+                .await
+            }
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

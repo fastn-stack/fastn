@@ -1706,10 +1706,13 @@ impl<'a> TDoc<'a> {
             ftd::interpreter::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(&name, line_number)?.fields;
                 let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+                dbg!(&rec_fields, &json);
                 if let serde_json::Value::Object(o) = json {
                     for field in rec_fields {
                         let val = match o.get(&field.name) {
-                            Some(v) => v,
+                            Some(v) => v.to_owned(),
+                            None if field.kind.is_optional() => serde_json::Value::Null,
+                            None if field.kind.is_list() => serde_json::Value::Array(vec![]),
                             None => {
                                 return ftd::interpreter::utils::e2(
                                     format!("key not found: {}", field.name.as_str()),
@@ -1721,7 +1724,7 @@ impl<'a> TDoc<'a> {
                         fields.insert(
                             field.name,
                             ftd::interpreter::PropertyValue::Value {
-                                value: self.as_json_(line_number, val, field.kind.kind)?,
+                                value: self.as_json_(line_number, &val, field.kind.kind)?,
                                 is_mutable: false,
                                 line_number,
                             },
