@@ -206,6 +206,160 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Component(image_function()),
         ),
         (
+            "ftd#set-rive-boolean".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#set-rive-boolean".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "canvas".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::boolean().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.set_rive_boolean(canvas, input, value)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#toggle-rive-boolean".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#toggle-rive-boolean".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "canvas".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.toggle_rive_boolean(canvas, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#set-rive-integer".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#set-rive-integer".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "canvas".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::integer().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.set_rive_integer(canvas, input, value)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#fire-rive".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#fire-rive".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "canvas".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.fire_rive(canvas, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
             "ftd#toggle".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#toggle".to_string(),

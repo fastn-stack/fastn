@@ -202,3 +202,19 @@ window.ftd.utils.set_full_height = function () {
 window.ftd.utils.reset_full_height = function () {
     document.body.style.height = `100%`;
 };
+
+window.ftd.utils.function_name_to_js_function = function (s: string) {
+    let new_string = s;
+    let startsWithDigit = /^\d/.test(s);
+    if (startsWithDigit) {
+        new_string = "_" + s;
+    }
+    new_string = new_string.replace('#', "__") .replace('-', "_")
+        .replace(':', "___")
+        .replace(',', "$")
+        .replace("\\\\", "/")
+        .replace('\\', "/")
+        .replace('/', "_").replace('.', "_");
+
+    return new_string;
+};
