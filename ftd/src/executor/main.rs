@@ -10,6 +10,7 @@ pub struct ExecuteDoc<'a> {
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
     pub css: &'a mut std::collections::HashSet<String>,
+    pub rive_data: &'a mut Vec<ftd::executor::RiveData>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
@@ -23,6 +24,7 @@ pub struct RT {
     pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
+    pub rive_data: Vec<ftd::executor::RiveData>,
 }
 
 impl Default for RT {
@@ -37,6 +39,7 @@ impl Default for RT {
             element_constructor: Default::default(),
             js: Default::default(),
             css: Default::default(),
+            rive_data: vec![],
         }
     }
 }
@@ -49,6 +52,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut element_constructor = Default::default();
         let mut js: std::collections::HashSet<String> = document.js;
         let mut css: std::collections::HashSet<String> = document.css;
+        let mut rive_data: Vec<ftd::executor::RiveData> = vec![];
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
@@ -58,6 +62,7 @@ impl<'a> ExecuteDoc<'a> {
             element_constructor: &mut element_constructor,
             js: &mut js,
             css: &mut css,
+            rive_data: &mut rive_data,
         }
         .execute()?;
 
@@ -93,6 +98,7 @@ impl<'a> ExecuteDoc<'a> {
             element_constructor,
             js,
             css,
+            rive_data,
         })
     }
     #[tracing::instrument(skip_all)]
@@ -105,6 +111,7 @@ impl<'a> ExecuteDoc<'a> {
             element_constructor: self.element_constructor,
             js: self.js,
             css: self.css,
+            rive_data: self.rive_data,
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
@@ -709,6 +716,18 @@ impl<'a> ExecuteDoc<'a> {
             }
             "ftd#decimal" => {
                 ftd::executor::Element::Decimal(ftd::executor::element::decimal_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                )?)
+            }
+            "ftd#rive" => {
+                ftd::executor::Element::Rive(ftd::executor::element::rive_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),

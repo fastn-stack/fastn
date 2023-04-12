@@ -154,6 +154,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Component(row_function()),
         ),
         (
+            "ftd#rive".to_string(),
+            ftd::interpreter::Thing::Component(rive_function()),
+        ),
+        (
             "ftd#container".to_string(),
             ftd::interpreter::Thing::Component(container_function()),
         ),
@@ -8392,6 +8396,42 @@ pub fn row_function() -> ftd::interpreter::ComponentDefinition {
             container_arguments(),
             common_arguments(),
         ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#rive".to_string(),
+        arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "id",
+                ftd::interpreter::Kind::string().into_kind_data().caption(),
+            ),
+            ftd::interpreter::Argument::default(
+                "src",
+                ftd::interpreter::Kind::string().into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
+                "width",
+                ftd::interpreter::Kind::integer().into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
+                "height",
+                ftd::interpreter::Kind::integer().into_kind_data(),
+            ),
+            ftd::interpreter::Argument::default(
+                "state-machine",
+                ftd::interpreter::Kind::string()
+                    .into_list()
+                    .into_kind_data(),
+            ),
+        ]]
         .concat()
         .into_iter()
         .collect(),
