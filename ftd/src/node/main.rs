@@ -1010,8 +1010,8 @@ impl ftd::executor::Image {
             n.attrs.insert(
                 s("alt"),
                 ftd::node::Value::from_executor_value(
-                    image.alt_text.to_owned().value,
-                    image.alt_text.to_owned(),
+                    image.alt.to_owned().value,
+                    image.alt.to_owned(),
                     None,
                     doc_id,
                 ),

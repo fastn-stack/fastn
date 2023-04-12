@@ -8143,7 +8143,7 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
                         .caption(),
                 ),
                 ftd::interpreter::Argument::default(
-                    "alt-text",
+                    "alt",
                     ftd::interpreter::Kind::string()
                         .into_kind_data()
                         .into_optional(),
