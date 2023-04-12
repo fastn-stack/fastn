@@ -1055,6 +1055,42 @@ console.log('Async: Copying to clipboard was successful!');
 console.error('Async: Could not copy text: ', err);
 });
 };
+exports.set_rive_boolean = function (canva_id, input, value, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.value = value;
+};
+exports.toggle_rive_boolean = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const trigger = inputs.find(i => i.name === input);
+trigger.value = !trigger.value;
+};
+exports.set_rive_integer = function (canva_id, input, value, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.value = value;
+};
+exports.fire_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.fire();
+};
 exports.component_data = function (component) {
 let data = {};
 for (let idx in component.getAttributeNames()) {
@@ -1539,6 +1575,20 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
 };
+window.ftd.utils.function_name_to_js_function = function (s) {
+let new_string = s;
+let startsWithDigit = /^\d/.test(s);
+if (startsWithDigit) {
+new_string = "_" + s;
+}
+new_string = new_string.replace('#', "__").replace('-', "_")
+.replace(':', "___")
+.replace(',', "$")
+.replace("\\\\", "/")
+.replace('\\', "/")
+.replace('/', "_").replace('.', "_");
+return new_string;
+};
 
 
 
@@ -1572,6 +1622,12 @@ return (enable_system_mode(args,data,id));
 
 
 
+function ftd__fire_rive___main(canvas,input,args,data,id){
+return (ftd.fire_rive(canvas,input,args,data,id));
+}
+
+
+
 function ftd__increment___main(a,args,data,id){
 return (a.value += 1);
 }
@@ -1596,6 +1652,18 @@ a.value = v
 
 
 
+function ftd__set_rive_boolean___main(canvas,input,value,args,data,id){
+return (ftd.set_rive_boolean(canvas,input,value,args,data,id));
+}
+
+
+
+function ftd__set_rive_integer___main(canvas,input,value,args,data,id){
+return (ftd.set_rive_integer(canvas,input,value,args,data,id));
+}
+
+
+
 function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
@@ -1604,6 +1672,12 @@ a.value = v
 
 function ftd__toggle___main(a,args,data,id){
 a.value = !a.value
+}
+
+
+
+function ftd__toggle_rive_boolean___main(canvas,input,args,data,id){
+return (ftd.toggle_rive_boolean(canvas,input,args,data,id));
 }
 
 
@@ -1666,9 +1740,9 @@ set_data_value(data, "73-complex-ftd-ui#c", new_value);
 
 window.ftd.call_mutable_value_changes("73-complex-ftd-ui#c", "main");
 window.ftd.call_immutable_value_changes("73-complex-ftd-ui#c", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 };
 
@@ -1681,13 +1755,13 @@ set_data_value(data, "73-complex-ftd-ui#switcher:is-active:0", new_value);
 
 window.ftd.call_mutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
 window.ftd.call_immutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__display"]){window.node_change_main["0,3:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__display"]){window.node_change_main["0,2:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__display"]){window.node_change_main["0,2:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
 }
 };
 
@@ -1700,9 +1774,9 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__color"]){window.node_change_main["0,1:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__color"]){window.node_change_main["0,0:main__color"](data);
 }
 };
 
