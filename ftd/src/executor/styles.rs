@@ -1613,6 +1613,38 @@ pub struct Color {
 }
 
 impl Color {
+    pub fn optional_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Color>> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &value {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+        let fields = match value.inner() {
+            Some(ftd::interpreter::Value::Record { name, fields })
+                if name.eq(ftd::interpreter::FTD_COLOR) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter::FTD_COLOR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Ok(Some(Color::from_values(fields, doc, line_number)?))
+    }
+
     pub fn from_value(
         value: ftd::interpreter::PropertyValue,
         doc: &ftd::executor::TDoc,

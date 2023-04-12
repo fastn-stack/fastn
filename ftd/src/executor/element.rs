@@ -210,6 +210,39 @@ impl HTMLData {
             )],
         );
 
+        let og_image = ftd::executor::Value::new(
+            ftd::executor::RawImage::optional_value(
+                get_property_value("og-image")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("og-image")?
+                .into_property(ftd::interpreter::PropertySource::header("og-image"))],
+        );
+
+        let twitter_image = ftd::executor::Value::new(
+            ftd::executor::RawImage::optional_value(
+                get_property_value("twitter-image")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("twitter-image")?
+                .into_property(ftd::interpreter::PropertySource::header("twitter-image"))],
+        );
+
+        let theme_color = ftd::executor::Value::new(
+            ftd::executor::Color::optional_value(
+                get_property_value("theme-color")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("theme-color")?
+                .into_property(ftd::interpreter::PropertySource::header("theme-color"))],
+        );
+
         Ok(HTMLData {
             title,
             og_title,
@@ -217,9 +250,9 @@ impl HTMLData {
             description,
             og_description,
             twitter_description,
-            og_image: Default::default(),
-            twitter_image: Default::default(),
-            theme_color: Default::default(),
+            og_image,
+            twitter_image,
+            theme_color,
         })
     }
 
@@ -432,6 +465,7 @@ pub struct RawImage {
     pub src: ftd::executor::Value<String>,
 }
 
+#[allow(dead_code)]
 impl RawImage {
     pub(crate) fn optional_image(
         properties: &[ftd::interpreter::Property],
@@ -470,6 +504,38 @@ impl RawImage {
         } else {
             Ok(None)
         }
+    }
+
+    pub fn optional_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<RawImage>> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &value {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+        let fields = match value.inner() {
+            Some(ftd::interpreter::Value::Record { name, fields })
+            if name.eq(ftd::interpreter::FTD_RAW_IMAGE_SRC) =>
+                {
+                    fields
+                }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter::FTD_RAW_IMAGE_SRC,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Ok(Some(RawImage::from_values(fields, doc, line_number)?))
     }
 
     fn from_values(
@@ -1377,29 +1443,17 @@ pub fn document_from_properties(
     children: Vec<Element>,
 ) -> ftd::executor::Result<Document> {
     Ok(Document {
-        data: html_data_from_properties(properties, arguments, doc, line_number, "ftd#document")?,
+        data: ftd::executor::HTMLData::document_meta(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "meta",
+            "ftd#document",
+        )?,
         children,
         line_number,
     })
-}
-
-#[allow(clippy::too_many_arguments)]
-pub fn html_data_from_properties(
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
-    doc: &mut ftd::executor::TDoc,
-    line_number: usize,
-    component_name: &str,
-) -> ftd::executor::Result<HTMLData> {
-    dbg!(&properties, &arguments);
-    ftd::executor::HTMLData::document_meta(
-        properties,
-        arguments,
-        doc,
-        line_number,
-        "meta",
-        component_name
-    )
 }
 
 #[allow(clippy::too_many_arguments)]
