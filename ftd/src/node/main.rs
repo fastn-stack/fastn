@@ -1007,6 +1007,15 @@ impl ftd::executor::Image {
                     doc_id,
                 ),
             );
+            n.attrs.insert(
+                s("alt"),
+                ftd::node::Value::from_executor_value(
+                    image.alt_text.to_owned().value,
+                    image.alt_text.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
             n
         }
     }

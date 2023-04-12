@@ -161,6 +161,7 @@ pub struct Rendered {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ftd::executor::Value<ImageSrc>,
+    pub alt_text: ftd::executor::Value<Option<String>>,
     pub common: Common,
 }
 
@@ -1115,6 +1116,15 @@ pub fn image_from_properties(
         )
     };
 
+    let alt_text = ftd::executor::value::optional_string(
+        "alt-text",
+        "ftd#image",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
     let common = common_from_properties(
         properties,
         events,
@@ -1126,7 +1136,7 @@ pub fn image_from_properties(
         inherited_variables,
         "ftd#image",
     )?;
-    Ok(Image { src, common })
+    Ok(Image { src, alt_text, common })
 }
 
 #[allow(clippy::too_many_arguments)]
