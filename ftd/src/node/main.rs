@@ -1134,6 +1134,16 @@ impl ftd::executor::Common {
             ),
         );
 
+        d.check_and_insert(
+            "opacity",
+            ftd::node::Value::from_executor_value(
+                self.opacity.value.as_ref().map(|v| v.to_string()),
+                self.opacity.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         if self.sticky.value.is_some() {
             // When sticky is used, setting top = 0px  and left = 0px
             d.check_and_insert(
