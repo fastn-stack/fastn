@@ -112,11 +112,22 @@ padding-bottom.px: 20
     write_doc = format!("{}\n-- end: ftd.column\n", write_doc,);
 
     ftd_v2_write("index.ftd", write_doc.as_str());
-    std::fs::create_dir_all("./docs/ftd/t/").expect("failed to create docs folder");
-    std::fs::copy("./ftd/t/test.css", "./docs/ftd/t/test.css").expect("failed to copy test.css");
-    std::fs::copy("./ftd/t/test.js", "./docs/ftd/t/test.js").expect("failed to copy test.js");
-    std::fs::copy("./ftd/t/web_component.js", "./docs/ftd/t/web_component.js")
-        .expect("failed to copy web_component.js");
+
+    let assets_dir = std::path::Path::new("./ftd/t/assets/");
+    std::fs::create_dir_all("./docs/ftd/ftd/t/assets/").expect("failed to create docs folder");
+    for entry in std::fs::read_dir(assets_dir)
+        .unwrap_or_else(|_| panic!("{:?} is not a directory", new_ftd_dir.to_str()))
+    {
+        let path = entry.expect("no files inside ./examples").path();
+        let source = path
+            .to_str()
+            .map(ToString::to_string)
+            .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+        let split: Vec<_> = source.split('/').collect();
+        let id = split.last().expect("Filename should be present");
+        std::fs::copy(path, format!("./docs/ftd/ftd/t/assets/{}", id).as_str())
+            .expect(format!("failed to copy {}", id).as_str());
+    }
 }
 
 pub fn ftd_v2_interpret_helper(

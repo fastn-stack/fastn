@@ -73,7 +73,7 @@
           "Value": {
             "value": {
               "String": {
-                "text": "ftd/t/web_component.js"
+                "text": "ftd/ftd/t/assets/web_component.js"
               }
             },
             "is_mutable": false,
