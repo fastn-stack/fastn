@@ -695,7 +695,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><canvas data-id="0:main" height="200" id="toggle" width="200" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;canvas&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;canvas&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,false]]}]', this)" style="" ></canvas><div data-id="1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;canvas&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;canvas&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Mouse hover me</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;canvas&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md">Click me</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><canvas data-id="0:main" height="200" id="toggle" width="200" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" ></canvas><div data-id="1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;],[&quot;value&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Mouse hover me</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;toggle&quot;],[&quot;input&quot;,&quot;Toggle&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md">Click me</div></div>
 
 
 <script>
@@ -1611,8 +1611,8 @@ return (enable_system_mode(args,data,id));
 
 
 
-function ftd__fire_rive___main(canvas,input,args,data,id){
-return (ftd.fire_rive(canvas,input,args,data,id));
+function ftd__fire_rive___main(rive,input,args,data,id){
+return (ftd.fire_rive(rive,input,args,data,id));
 }
 
 
@@ -1641,14 +1641,14 @@ a.value = v
 
 
 
-function ftd__set_rive_boolean___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_boolean(canvas,input,value,args,data,id));
+function ftd__set_rive_boolean___main(rive,input,value,args,data,id){
+return (ftd.set_rive_boolean(rive,input,value,args,data,id));
 }
 
 
 
-function ftd__set_rive_integer___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_integer(canvas,input,value,args,data,id));
+function ftd__set_rive_integer___main(rive,input,value,args,data,id){
+return (ftd.set_rive_integer(rive,input,value,args,data,id));
 }
 
 
@@ -1665,8 +1665,8 @@ a.value = !a.value
 
 
 
-function ftd__toggle_rive_boolean___main(canvas,input,args,data,id){
-return (ftd.toggle_rive_boolean(canvas,input,args,data,id));
+function ftd__toggle_rive_boolean___main(rive,input,args,data,id){
+return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 

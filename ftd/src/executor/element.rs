@@ -76,7 +76,7 @@ impl Element {
             Element::IterativeElement(i) => i.iteration.line_number,
             Element::CheckBox(c) => c.common.line_number,
             Element::WebComponent(w) => w.line_number,
-            Element::Rive(r) => r.line_number,
+            Element::Rive(r) => r.common.line_number,
             Element::Null { line_number } => *line_number,
         }
     }
@@ -119,15 +119,11 @@ pub struct Column {
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Rive {
-    pub id: ftd::executor::Value<String>,
     pub src: ftd::executor::Value<String>,
-    pub width: ftd::executor::Value<i64>,
-    pub height: ftd::executor::Value<i64>,
+    pub canvas_width: ftd::executor::Value<i64>,
+    pub canvas_height: ftd::executor::Value<i64>,
     pub state_machine: ftd::executor::Value<Vec<String>>,
-    pub line_number: usize,
-    pub condition: Option<ftd::interpreter::Expression>,
-    pub event: Vec<Event>,
-    pub data_id: String,
+    pub common: Common,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -1296,15 +1292,18 @@ pub fn rive_from_properties(
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Rive> {
     let component_name = "ftd#rive";
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+        inherited_variables,
+        component_name,
+    )?;
     let rive = Rive {
-        id: ftd::executor::value::string(
-            "id",
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
         src: ftd::executor::value::string(
             "src",
             component_name,
@@ -1313,16 +1312,16 @@ pub fn rive_from_properties(
             doc,
             line_number,
         )?,
-        width: ftd::executor::value::i64(
-            "width",
+        canvas_width: ftd::executor::value::i64(
+            "canvas-width",
             component_name,
             properties,
             arguments,
             doc,
             line_number,
         )?,
-        height: ftd::executor::value::i64(
-            "height",
+        canvas_height: ftd::executor::value::i64(
+            "canvas-height",
             component_name,
             properties,
             arguments,
@@ -1338,10 +1337,7 @@ pub fn rive_from_properties(
             line_number,
             inherited_variables,
         )?,
-        condition: condition.to_owned(),
-        event: events.to_owned(),
-        data_id: ftd::executor::utils::get_string_container(local_container),
-        line_number,
+        common,
     };
 
     if rive.state_machine.value.is_empty() {
@@ -1352,8 +1348,19 @@ pub fn rive_from_properties(
         );
     }
 
+    let id = rive
+        .common
+        .id
+        .value
+        .clone()
+        .ok_or(ftd::executor::Error::ParseError {
+            message: "id is required".to_string(),
+            doc_id: doc.name.to_string(),
+            line_number,
+        })?;
+
     doc.rive_data.push(ftd::executor::RiveData {
-        id: rive.id.value.to_string(),
+        id,
         src: rive.src.value.to_string(),
         state_machine: rive.state_machine.value.clone(),
     });
