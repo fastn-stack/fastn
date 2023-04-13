@@ -126,6 +126,7 @@ pub struct Rive {
     pub state_machine: ftd::executor::Value<Vec<String>>,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter::Expression>,
+    pub event: Vec<Event>,
     pub data_id: String,
 }
 
@@ -1286,7 +1287,7 @@ pub fn container_element_from_properties(
 #[allow(clippy::too_many_arguments)]
 pub fn rive_from_properties(
     properties: &[ftd::interpreter::Property],
-    _events: &[ftd::interpreter::Event],
+    events: &[ftd::interpreter::Event],
     arguments: &[ftd::interpreter::Argument],
     condition: &Option<ftd::interpreter::Expression>,
     doc: &mut ftd::executor::TDoc,
@@ -1338,6 +1339,7 @@ pub fn rive_from_properties(
             inherited_variables,
         )?,
         condition: condition.to_owned(),
+        event: events.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
     };
