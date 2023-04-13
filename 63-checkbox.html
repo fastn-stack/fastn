@@ -1750,13 +1750,13 @@ set_data_value(data, "foo#flag", new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3,1:main__checked"]){window.node_change_main["3,1:main__checked"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3,1:main__checked"]){window.node_change_main["3,1:main__checked"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 };
 
