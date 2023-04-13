@@ -360,9 +360,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             })
         ),
         (
-            "ftd#play-rive-animation".to_string(),
+            "ftd#play-rive".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
-                name: "ftd#play-rive-animation".to_string(),
+                name: "ftd#play-rive".to_string(),
                 return_kind: ftd::interpreter::KindData {
                     kind: ftd::interpreter::Kind::void(),
                     caption: false,
@@ -386,7 +386,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "ftd.play_rive_animation(rive, input)".to_string(),
+                        expression: "ftd.play_rive(rive, input)".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -395,9 +395,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             })
         ),
         (
-            "ftd#pause-rive-animation".to_string(),
+            "ftd#pause-rive".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
-                name: "ftd#pause-rive-animation".to_string(),
+                name: "ftd#pause-rive".to_string(),
                 return_kind: ftd::interpreter::KindData {
                     kind: ftd::interpreter::Kind::void(),
                     caption: false,
@@ -421,7 +421,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "ftd.pause_rive_animation(rive, input)".to_string(),
+                        expression: "ftd.pause_rive(rive, input)".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -430,9 +430,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             })
         ),
         (
-            "ftd#play-pause-rive-animation".to_string(),
+            "ftd#toggle-play-rive".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
-                name: "ftd#play-pause-rive-animation".to_string(),
+                name: "ftd#toggle-play-rive".to_string(),
                 return_kind: ftd::interpreter::KindData {
                     kind: ftd::interpreter::Kind::void(),
                     caption: false,
@@ -456,7 +456,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "ftd.play_pause_rive_animation(rive, input)".to_string(),
+                        expression: "ftd.toggle_play_rive(rive, input)".to_string(),
                         line_number: 0,
                     }
                 ],

@@ -602,20 +602,14 @@ return (a.value += v);
 
 
 
-function ftd__pause_rive_animation___main(rive,input,args,data,id){
-return (ftd.pause_rive_animation(rive,input,args,data,id));
+function ftd__pause_rive___main(rive,input,args,data,id){
+return (ftd.pause_rive(rive,input,args,data,id));
 }
 
 
 
-function ftd__play_pause_rive_animation___main(rive,input,args,data,id){
-return (ftd.play_pause_rive_animation(rive,input,args,data,id));
-}
-
-
-
-function ftd__play_rive_animation___main(rive,input,args,data,id){
-return (ftd.play_rive_animation(rive,input,args,data,id));
+function ftd__play_rive___main(rive,input,args,data,id){
+return (ftd.play_rive(rive,input,args,data,id));
 }
 
 
@@ -652,6 +646,12 @@ a.value = v
 
 function ftd__toggle___main(a,args,data,id){
 a.value = !a.value
+}
+
+
+
+function ftd__toggle_play_rive___main(rive,input,args,data,id){
+return (ftd.toggle_play_rive(rive,input,args,data,id));
 }
 
 
