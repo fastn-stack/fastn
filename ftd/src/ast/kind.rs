@@ -615,6 +615,7 @@ impl VariableValue {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Condition {
     pub expression: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 

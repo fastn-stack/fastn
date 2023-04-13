@@ -48,22 +48,3 @@ async fn handle_view_source(
         }
     }
 }
-
-pub(crate) async fn get_diff(
-    doc: &fastn_core::File,
-    snapshots: &std::collections::BTreeMap<String, u128>,
-) -> fastn_core::Result<Option<String>> {
-    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
-        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
-
-        let existing_doc = tokio::fs::read_to_string(&path).await?;
-        if content.eq(&existing_doc) {
-            return Ok(None);
-        }
-        let patch = diffy::create_patch(&existing_doc, &content);
-
-        return Ok(Some(patch.to_string().replace("---", "\\---")));
-    }
-    Ok(None)
-}

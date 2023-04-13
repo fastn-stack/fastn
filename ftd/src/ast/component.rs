@@ -85,6 +85,7 @@ pub struct Component {
     pub condition: Option<ftd::ast::Condition>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -414,6 +415,7 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -540,6 +542,7 @@ impl Loop {
 pub struct Event {
     pub name: String,
     pub action: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 

@@ -104,6 +104,34 @@ integer line-number:
 -- record component-invocation-data:
 string name:
 property-data list properties:
+optional loop-data iteration:
+optional condition-data condition:
+event-data list events:
+component-invocation-data list children:
+integer line-number:
+
+
+
+-- record event-data:
+string name:
+string action:
+integer line-number:
+
+
+
+
+-- record condition-data:
+string expression:
+integer line-number:
+
+
+
+-- record loop-data:
+string on:
+string alias:
+integer line-number:
+
+
 
 
 
