@@ -1099,6 +1099,24 @@ const inputs = window[rive_const].stateMachineInputs(stateMachineName);
 const bumpTrigger = inputs.find(i => i.name === input);
 bumpTrigger.fire();
 };
+exports.play_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].play(input);
+};
+exports.pause_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].pause(input);
+};
+exports.toggle_play_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+let r = window[rive_const];
+r.playingAnimationNames.includes(input)
+? r.pause(input)
+: r.play(input);
+};
 exports.component_data = function (component) {
 let data = {};
 for (let idx in component.getAttributeNames()) {
@@ -1638,8 +1656,8 @@ return (enable_system_mode(args,data,id));
 
 
 
-function ftd__fire_rive___main(canvas,input,args,data,id){
-return (ftd.fire_rive(canvas,input,args,data,id));
+function ftd__fire_rive___main(rive,input,args,data,id){
+return (ftd.fire_rive(rive,input,args,data,id));
 }
 
 
@@ -1656,6 +1674,18 @@ return (a.value += v);
 
 
 
+function ftd__pause_rive___main(rive,input,args,data,id){
+return (ftd.pause_rive(rive,input,args,data,id));
+}
+
+
+
+function ftd__play_rive___main(rive,input,args,data,id){
+return (ftd.play_rive(rive,input,args,data,id));
+}
+
+
+
 function ftd__set_bool___main(a,v,args,data,id){
 a.value = v
 }
@@ -1668,14 +1698,14 @@ a.value = v
 
 
 
-function ftd__set_rive_boolean___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_boolean(canvas,input,value,args,data,id));
+function ftd__set_rive_boolean___main(rive,input,value,args,data,id){
+return (ftd.set_rive_boolean(rive,input,value,args,data,id));
 }
 
 
 
-function ftd__set_rive_integer___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_integer(canvas,input,value,args,data,id));
+function ftd__set_rive_integer___main(rive,input,value,args,data,id){
+return (ftd.set_rive_integer(rive,input,value,args,data,id));
 }
 
 
@@ -1692,8 +1722,14 @@ a.value = !a.value
 
 
 
-function ftd__toggle_rive_boolean___main(canvas,input,args,data,id){
-return (ftd.toggle_rive_boolean(canvas,input,args,data,id));
+function ftd__toggle_play_rive___main(rive,input,args,data,id){
+return (ftd.toggle_play_rive(rive,input,args,data,id));
+}
+
+
+
+function ftd__toggle_rive_boolean___main(rive,input,args,data,id){
+return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 

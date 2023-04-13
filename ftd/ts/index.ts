@@ -423,6 +423,27 @@ window.ftd = (function() {
         bumpTrigger.fire();
     }
 
+    exports.play_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        window[rive_const].play(input);
+    }
+
+    exports.pause_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        window[rive_const].pause(input);
+    }
+
+    exports.toggle_play_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        let r = window[rive_const];
+        r.playingAnimationNames.includes(input)
+            ? r.pause(input)
+            : r.play(input);
+    }
+
     exports.component_data = function (component: HTMLElement) {
         let data = {};
         for (let idx in component.getAttributeNames()) {

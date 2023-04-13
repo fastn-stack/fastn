@@ -1,0 +1,33 @@
+-- ftd.rive:
+id: vehicle
+src: https://cdn.rive.app/animations/vehicles.riv
+canvas-width: 200
+canvas-height: 200
+autoplay: false
+artboard: Jeep
+
+
+-- ftd.text: Idle/ \Run
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+
+
+-- ftd.text: Wiper On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = windshield_wipers)
+
+-- ftd.text: Rainy On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = rainy)
+
+-- ftd.text: No Wiper On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = no_wipers)
+
+-- ftd.text: Sunny On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = sunny)
+
+-- ftd.text: Stationary On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = stationary)
+
+-- ftd.text: Bouncing On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = bouncing)
+
+-- ftd.text: Broken On/Off
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = broken)
