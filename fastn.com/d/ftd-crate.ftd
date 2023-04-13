@@ -34,7 +34,7 @@ let mut interpreter_state = ftd::interpreter::interpret(name, source)?;
 `ftd::interpreter::interpret()` returns a `ftd::interpreter::Interpreter` on
 success:
 
--- ftd.code: `ftd::interpreter::Interpreter`
+-- ds.code: `ftd::interpreter::Interpreter`
 lang: rs
 
 pub enum Interpreter {
