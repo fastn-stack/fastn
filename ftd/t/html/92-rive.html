@@ -1080,6 +1080,16 @@ const inputs = window[rive_const].stateMachineInputs(stateMachineName);
 const bumpTrigger = inputs.find(i => i.name === input);
 bumpTrigger.fire();
 };
+exports.play_rive_animation = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].play(input);
+};
+exports.pause_rive_animation = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].pause(input);
+};
 exports.component_data = function (component) {
 let data = {};
 for (let idx in component.getAttributeNames()) {
@@ -1629,6 +1639,18 @@ return (a.value += v);
 
 
 
+function ftd__pause_rive_animation___main(rive,input,args,data,id){
+return (ftd.pause_rive_animation(rive,input,args,data,id));
+}
+
+
+
+function ftd__play_rive_animation___main(rive,input,args,data,id){
+return (ftd.play_rive_animation(rive,input,args,data,id));
+}
+
+
+
 function ftd__set_bool___main(a,v,args,data,id){
 a.value = v
 }
@@ -1683,6 +1705,7 @@ src: 'ftd/ftd/t/assets/panda.riv',
 canvas: document.getElementById('panda'),
 autoplay: true,
 stateMachines: 'State Machine 1',
+artboard: null,
 onLoad: (_) => {
 window.panda___main.resizeDrawingSurfaceToCanvas();
 },

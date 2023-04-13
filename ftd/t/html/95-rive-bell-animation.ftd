@@ -1,0 +1,15 @@
+-- ftd.rive:
+id: bell
+src: ftd/ftd/t/assets/bell-icon.riv
+canvas-width: 200
+canvas-height: 200
+autoplay: false
+$on-mouse-enter$: $ftd.play-rive-animation(rive = bell, input = Hover)
+$on-mouse-enter$: $ftd.pause-rive-animation(rive = bell, input = Idle)
+$on-mouse-leave$: $ftd.pause-rive-animation(rive = bell, input = Hover)
+$on-mouse-leave$: $ftd.play-rive-animation(rive = bell, input = Idle)
+
+
+-- ftd.text: Ring bell
+$on-mouse-enter$: $ftd.play-rive-animation(rive = bell, input = Hover)
+$on-mouse-leave$: $ftd.pause-rive-animation(rive = bell, input = Hover)

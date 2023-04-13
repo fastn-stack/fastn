@@ -733,7 +733,7 @@ fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
     );
 
     let state_machines = if rive.state_machine.len().eq(&1) {
-        rive.state_machine[0].to_string()
+        format!("'{}'", rive.state_machine[0])
     } else {
         format!(
             "[{}]",
@@ -744,13 +744,19 @@ fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
         )
     };
 
+    let artboard = rive
+        .artboard
+        .as_ref()
+        .map_or("null".to_string(), |v| format!("'{}'", v));
+
     format!(
         indoc::indoc! {"
             window.{rive_name} = new rive.Rive({{
                 src: '{src}',
                 canvas: document.getElementById('{id}'),
-                autoplay: true,
-                stateMachines: '{state_machines}',
+                autoplay: {autoplay},
+                stateMachines: {state_machines},
+                artboard: {artboard},
                 onLoad: (_) => {{
                     window.{rive_name}.resizeDrawingSurfaceToCanvas();
                 }},
@@ -759,7 +765,9 @@ fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
         rive_name = rive_name,
         src = rive.src,
         id = rive.id,
-        state_machines = state_machines
+        autoplay = rive.autoplay,
+        state_machines = state_machines,
+        artboard = artboard
     )
 }
 
