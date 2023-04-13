@@ -1,0 +1,11 @@
+-- my-ds.page: `optional` type
+
+`fastn lang` supports optional types.
+
+-- ds.code:
+lang: ftd
+
+\-- optional integer x:
+
+
+-- end: my-ds.page

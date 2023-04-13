@@ -1,0 +1,60 @@
+-- import: fastn.io/assets
+
+-- my-ds.page: `ftd.rive` - Rive Animations
+
+`ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
+animation](https://rive.app) in a `fastn` document.
+
+
+-- ds.rendered: Hello Rive!
+
+-- ds.rendered.input:
+
+\-- import: fastn.io/assets
+
+\-- ftd.rive:
+id: panda
+background.solid: #aaa
+src: $assets.files.rive.panda.riv
+canvas-width: 200
+canvas-height: 200
+width.fixed.px: 200
+
+-- ds.rendered.output:
+
+-- ftd.rive:
+id: panda
+background.solid: #aaa
+src: $assets.files.rive.panda.riv
+canvas-width: 200
+canvas-height: 200
+width.fixed.px: 200
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+`ftd.rive` accepts all the [common attributes](/common-attributes/), and the
+ones listed below.
+
+-- ds.h1: `id`
+
+Type: **Required** `string`
+
+The unique `id` used to identify this rive object. This `id` is used in
+communication with the [Rive state
+machine](https://help.rive.app/editor/state-machine).
+
+-- ds.h1: `src`
+
+Type: **Required** `string`
+
+This is URL of riv file to load. It is recommended you store the riv file as
+part of your `fastn` package and use the auto generated `assets` module to refer
+to them.
+
+
+
+-- end: my-ds.page

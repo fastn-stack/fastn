@@ -125,7 +125,9 @@ FTDExecError(ParseError { message: "ftd.document can't have siblings.", doc_id:
 `ftd.document` accepts the below attributes as well all the [container root
 attributes](/ftd/container-root-attributes/).
 
--- ds.h2: `title: optional caption`
+-- ds.h2: `title`
+
+Type: : `optional` [`caption`](/ftd/built-in-types/#caption)
 
 The `title` attribute specifies the title of the document. It is displayed in
 the browser's title bar or tab. The content within the title tag is crucial for
@@ -150,10 +152,10 @@ platforms and other websites when the webpage is shared or linked. The og in
 `og-title` stands for Open Graph, which is a protocol that allows webpages to
 become rich objects in social media platforms.
 
-** This attribute takes default value same as `title` attribute value, if not
+**This attribute takes default value same as `title` attribute value, if not
 provided explicitly**
 
--- ds.code: Example of using og-title
+-- ds.code: Example of using `og-title`
 lang: ftd
 
 \-- ftd.document:

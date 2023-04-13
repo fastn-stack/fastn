@@ -1,6 +1,7 @@
 -- my-ds.page: `ftd.text`
 
-`ftd.text` is a component used to render text in an `ftd` document.
+`ftd.text` is a [kernel component](/ftd/kernel/) used to render text in an `ftd`
+document.
 
 
 -- ds.h1: Usage
