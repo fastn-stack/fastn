@@ -668,7 +668,7 @@ impl ftd::executor::Rive {
             text: Default::default(),
             classes: vec![],
             null: false,
-            events: vec![],
+            events: self.event.clone(),
             data_id: self.data_id.clone(),
             line_number: self.line_number,
             raw_data: None,

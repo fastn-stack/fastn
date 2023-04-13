@@ -4,6 +4,8 @@ src: ftd/ftd/t/bell-icon.riv
 width: 200
 height: 200
 state-machine: State Machine 1
+$on-mouse-enter$: $ftd.set-rive-boolean(canvas = bell, input = Hover, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(canvas = bell, input = Hover, value = false)
 
 
 -- ftd.text: Ring bell
