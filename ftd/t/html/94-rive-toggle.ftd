@@ -1,18 +1,18 @@
 -- ftd.rive:
 id: toggle
 src: ftd/ftd/t/assets/toggleufbot.riv
-width: 200
-height: 200
+canvas-width: 200
+canvas-height: 200
 state-machine: StateMachine
-$on-mouse-enter$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = false)
+$on-mouse-enter$: $ftd.set-rive-boolean(rive = toggle, input = Toggle, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(rive = toggle, input = Toggle, value = false)
 
 
 -- ftd.text: Mouse hover me
-$on-mouse-enter$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = false)
+$on-mouse-enter$: $ftd.set-rive-boolean(rive = toggle, input = Toggle, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(rive = toggle, input = Toggle, value = false)
 
 
 
 -- ftd.text: Click me
-$on-click$: $ftd.toggle-rive-boolean(canvas = toggle, input = Toggle)
+$on-click$: $ftd.toggle-rive-boolean(rive = toggle, input = Toggle)

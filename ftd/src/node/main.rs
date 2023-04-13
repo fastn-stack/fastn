@@ -236,7 +236,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::CheckBox(c) => c.to_node(doc_id, anchor_ids),
-            ftd::executor::Element::Rive(r) => r.to_node(doc_id),
+            ftd::executor::Element::Rive(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Null { line_number } => Node {
                 classes: vec![],
                 events: vec![],
@@ -657,20 +657,20 @@ impl ftd::executor::Text {
 }
 
 impl ftd::executor::Rive {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         Node {
             node: s("canvas"),
             display: s("block"),
-            condition: self.condition.to_owned(),
+            condition: self.common.condition.to_owned(),
             attrs: self.attrs(doc_id),
-            style: Default::default(),
+            style: self.common.style(doc_id, &mut [], anchor_ids),
             children: vec![],
             text: Default::default(),
-            classes: vec![],
+            classes: self.common.classes(),
             null: false,
-            events: self.event.clone(),
-            data_id: self.data_id.clone(),
-            line_number: self.line_number,
+            events: self.common.event.clone(),
+            data_id: self.common.data_id.clone(),
+            line_number: self.common.line_number,
             raw_data: None,
             web_component: None,
         }
@@ -679,28 +679,13 @@ impl ftd::executor::Rive {
     fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
         use ftd::node::utils::CheckMap;
 
-        let mut d: ftd::Map<ftd::node::Value> = Default::default();
-
-        d.check_and_insert(
-            "id",
-            ftd::node::Value::from_executor_value(
-                Some(self.id.value.to_owned()),
-                self.id.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
-
-        d.check_and_insert(
-            "data-id",
-            ftd::node::Value::from_string(self.data_id.as_str()),
-        );
+        let mut d: ftd::Map<ftd::node::Value> = self.common.attrs(doc_id);
 
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(self.width.value.to_string()),
-                self.width.to_owned(),
+                Some(self.canvas_width.value.to_string()),
+                self.canvas_width.to_owned(),
                 None,
                 doc_id,
             ),
@@ -709,8 +694,8 @@ impl ftd::executor::Rive {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(self.height.value.to_string()),
-                self.height.to_owned(),
+                Some(self.canvas_height.value.to_string()),
+                self.canvas_height.to_owned(),
                 None,
                 doc_id,
             ),
