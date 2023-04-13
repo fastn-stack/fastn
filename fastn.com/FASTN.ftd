@@ -101,7 +101,6 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd/setup.ftd
 - Create `fastn` package: /create-fastn-package/
   document: author/how-to/create-fastn-package.ftd
-- `ftd p1` grammar: /ftd/p1-grammar/
 - Best Practices 🚧: /best-practices/
   - Formatting: /formatting/
     document: /best-practices/formatting.ftd
@@ -341,6 +340,16 @@ favicon: /-/fastn.io/images/favicon.svg
 - Overview: /d/
 - Maintainence: /d/m/
 - Next Edition: /d/next-edition/
+- Architecutre: /architecture/
+  document: d/architecture.ftd
+  - `ftd` crate 🚧: /ftd-crate/
+    document: d/ftd-crate.ftd
+  - `fastn-core` crate 🚧: /fastn-core-crate/
+    document: d/fastn-core-crate.ftd
+  - `fastn` crate 🚧: /fastn-crate/
+    document: d/fastn-crate.ftd
+- `ftd p1` grammar: /p1-grammar/
+  document: ftd/p1-grammer.ftd
 
 # Content Planning: /planning/
   skip: true
