@@ -33,6 +33,7 @@ declare global {
         fire_rive(canva_id: string, input: string, args: any, data: any, id: string): void;
         play_rive_animation(canva_id: string, input: string, args: any, data: any, id: string): void;
         pause_rive_animation(canva_id: string, input: string, args: any, data: any, id: string): void;
+        play_pause_rive_animation(canva_id: string, input: string, args: any, data: any, id: string): void;
         http(url: string, method: string, ...request_data: any): void;
         component_data(component: HTMLElement): any;
         create_list(array_name: string, id: string): void;
