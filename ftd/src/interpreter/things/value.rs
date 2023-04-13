@@ -1727,12 +1727,10 @@ impl Value {
             ftd::interpreter::Value::Optional { data, kind } if kind.is_string() => {
                 if let Some(data) = data.as_ref() {
                     data.optional_string(doc_id, line_number)
+                } else if default.value.is_some() {
+                    Ok(default.value.to_owned())
                 } else {
-                    return if !default.value.is_none() {
-                        Ok(default.value.to_owned())
-                    } else {
-                        Ok(None)
-                    }
+                    Ok(None)
                 }
             }
             ftd::interpreter::Value::String { text } => Ok(Some(text.to_string())),

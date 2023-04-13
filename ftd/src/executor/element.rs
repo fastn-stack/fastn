@@ -291,11 +291,7 @@ impl HTMLData {
             &Default::default(),
         )?;
 
-        Ok(ftd::executor::HTMLData::from_optional_values(
-            record_values.value,
-            doc,
-            line_number,
-        )?)
+        ftd::executor::HTMLData::from_optional_values(record_values.value, doc, line_number)
     }
 }
 
@@ -519,10 +515,10 @@ impl RawImage {
         }
         let fields = match value.inner() {
             Some(ftd::interpreter::Value::Record { name, fields })
-            if name.eq(ftd::interpreter::FTD_RAW_IMAGE_SRC) =>
-                {
-                    fields
-                }
+                if name.eq(ftd::interpreter::FTD_RAW_IMAGE_SRC) =>
+            {
+                fields
+            }
             t => {
                 return ftd::executor::utils::parse_error(
                     format!(
