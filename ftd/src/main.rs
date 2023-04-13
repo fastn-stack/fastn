@@ -126,7 +126,7 @@ padding-bottom.px: 20
         let split: Vec<_> = source.split('/').collect();
         let id = split.last().expect("Filename should be present");
         std::fs::copy(path, format!("./docs/ftd/ftd/t/assets/{}", id).as_str())
-            .expect(format!("failed to copy {}", id).as_str());
+            .unwrap_or_else(|_| panic!("failed to copy {}", id));
     }
 }
 
