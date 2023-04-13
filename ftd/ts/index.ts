@@ -423,19 +423,19 @@ window.ftd = (function() {
         bumpTrigger.fire();
     }
 
-    exports.play_rive_animation = function (canva_id: string, input: string, args: any, data: any, id: string) {
+    exports.play_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
         let canva_with_id = canva_id + ":" + id;
         let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
         window[rive_const].play(input);
     }
 
-    exports.pause_rive_animation = function (canva_id: string, input: string, args: any, data: any, id: string) {
+    exports.pause_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
         let canva_with_id = canva_id + ":" + id;
         let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
         window[rive_const].pause(input);
     }
 
-    exports.play_pause_rive_animation = function (canva_id: string, input: string, args: any, data: any, id: string) {
+    exports.toggle_play_rive = function (canva_id: string, input: string, args: any, data: any, id: string) {
         let canva_with_id = canva_id + ":" + id;
         let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
         let r = window[rive_const];
