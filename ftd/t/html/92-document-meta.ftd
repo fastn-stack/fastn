@@ -8,4 +8,5 @@ meta: $doc-meta
 
 
 -- ftd.document-meta doc-meta:
-title: This is doc title 2
+title: This is title
+description: This is some description

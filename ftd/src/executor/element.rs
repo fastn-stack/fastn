@@ -163,7 +163,7 @@ impl HTMLData {
             get_property_value("og-title")?
                 .clone()
                 .resolve(&doc.itdoc(), line_number)?
-                .optional_string(doc.name, line_number)?,
+                .optional_string_with_default(doc.name, line_number, &title)?,
             Some(line_number),
             vec![get_property_value("og-title")?
                 .into_property(ftd::interpreter::PropertySource::header("og-title"))],
@@ -173,7 +173,7 @@ impl HTMLData {
             get_property_value("twitter-title")?
                 .clone()
                 .resolve(&doc.itdoc(), line_number)?
-                .optional_string(doc.name, line_number)?,
+                .optional_string_with_default(doc.name, line_number, &title)?,
             Some(line_number),
             vec![get_property_value("twitter-title")?
                 .into_property(ftd::interpreter::PropertySource::header("twitter-title"))],
@@ -193,7 +193,7 @@ impl HTMLData {
             get_property_value("og-description")?
                 .clone()
                 .resolve(&doc.itdoc(), line_number)?
-                .optional_string(doc.name, line_number)?,
+                .optional_string_with_default(doc.name, line_number, &description)?,
             Some(line_number),
             vec![get_property_value("og-description")?
                 .into_property(ftd::interpreter::PropertySource::header("og-description"))],
@@ -203,7 +203,7 @@ impl HTMLData {
             get_property_value("twitter-description")?
                 .clone()
                 .resolve(&doc.itdoc(), line_number)?
-                .optional_string(doc.name, line_number)?,
+                .optional_string_with_default(doc.name, line_number, &description)?,
             Some(line_number),
             vec![get_property_value("twitter-description")?.into_property(
                 ftd::interpreter::PropertySource::header("twitter-description"),

@@ -1717,6 +1717,33 @@ impl Value {
         }
     }
 
+    pub fn optional_string_with_default(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+        default: &ftd::executor::Value<Option<String>>,
+    ) -> ftd::interpreter::Result<Option<String>> {
+        match self {
+            ftd::interpreter::Value::Optional { data, kind } if kind.is_string() => {
+                if let Some(data) = data.as_ref() {
+                    data.optional_string(doc_id, line_number)
+                } else {
+                    return if !default.value.is_none() {
+                        Ok(default.value.to_owned())
+                    } else {
+                        Ok(None)
+                    }
+                }
+            }
+            ftd::interpreter::Value::String { text } => Ok(Some(text.to_string())),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected Optional String, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64> {
         match self {
             ftd::interpreter::Value::Decimal { value } => Ok(*value),
