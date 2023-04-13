@@ -1621,8 +1621,8 @@ return (enable_system_mode(args,data,id));
 
 
 
-function ftd__fire_rive___main(canvas,input,args,data,id){
-return (ftd.fire_rive(canvas,input,args,data,id));
+function ftd__fire_rive___main(rive,input,args,data,id){
+return (ftd.fire_rive(rive,input,args,data,id));
 }
 
 
@@ -1651,14 +1651,14 @@ a.value = v
 
 
 
-function ftd__set_rive_boolean___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_boolean(canvas,input,value,args,data,id));
+function ftd__set_rive_boolean___main(rive,input,value,args,data,id){
+return (ftd.set_rive_boolean(rive,input,value,args,data,id));
 }
 
 
 
-function ftd__set_rive_integer___main(canvas,input,value,args,data,id){
-return (ftd.set_rive_integer(canvas,input,value,args,data,id));
+function ftd__set_rive_integer___main(rive,input,value,args,data,id){
+return (ftd.set_rive_integer(rive,input,value,args,data,id));
 }
 
 
@@ -1675,8 +1675,8 @@ a.value = !a.value
 
 
 
-function ftd__toggle_rive_boolean___main(canvas,input,args,data,id){
-return (ftd.toggle_rive_boolean(canvas,input,args,data,id));
+function ftd__toggle_rive_boolean___main(rive,input,args,data,id){
+return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 
@@ -1748,13 +1748,13 @@ set_data_value(data, "foo#foo:resize:1", value);
 }
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
@@ -1782,9 +1782,9 @@ set_data_value(data, "foo#foo:px:1", new_value);
 
 window.ftd.call_mutable_value_changes("foo#foo:px:1", "main");
 window.ftd.call_immutable_value_changes("foo#foo:px:1", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
@@ -1804,6 +1804,15 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]
 };
 
 window.resolve_value_main = {};
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
+}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
+
+}
 window.resolve_value_main["foo#foo:align:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -1820,15 +1829,6 @@ return resolve_reference("foo#flag", data);
 set_data_value(data, "foo#foo:px:1", 30);
 }
 else {set_data_value(data, "foo#foo:px:1", 40);}
-
-}
-window.resolve_value_main["foo#foo:resize:1"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
-}
-else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
 
 }
 
