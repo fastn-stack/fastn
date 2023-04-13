@@ -1740,11 +1740,11 @@ set_data_value(data, "foo#code:title:0", new_value);
 
 window.ftd.call_mutable_value_changes("foo#code:title:0", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:0", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__text"]){window.node_change_main["0,1:main__text"](data);
 }
 };
 
@@ -1776,11 +1776,11 @@ set_data_value(data, "foo#code:description:2", value);
 }
 window.ftd.call_mutable_value_changes("foo#code:title:2", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:2", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
 }
 };
 
