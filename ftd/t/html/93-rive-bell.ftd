@@ -1,6 +1,6 @@
 -- ftd.rive:
 id: bell
-src: ftd/ftd/t/bell-icon.riv
+src: ftd/ftd/t/assets/bell-icon.riv
 width: 200
 height: 200
 state-machine: State Machine 1

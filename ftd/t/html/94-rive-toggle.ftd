@@ -1,16 +1,11 @@
--- ftd.column:
-$on-mouse-enter$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = true)
-$on-mouse-leave$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = false)
-
 -- ftd.rive:
 id: toggle
-src: ftd/ftd/t/toggleufbot.riv
+src: ftd/ftd/t/assets/toggleufbot.riv
 width: 200
 height: 200
 state-machine: StateMachine
-
-
--- end: ftd.column
+$on-mouse-enter$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(canvas = toggle, input = Toggle, value = false)
 
 
 -- ftd.text: Mouse hover me
