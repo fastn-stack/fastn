@@ -103,3 +103,46 @@ integer line-number:
 
 -- record component-invocation-data:
 string name:
+property-data list properties:
+
+
+
+-- record property-data:
+variable-value-data value:
+
+
+-- record variable-value-data:
+optional optional-value-data optional-value:
+optional list-value-data list-value:
+optional record-value-data record-value:
+
+
+
+-- record optional-value-data:
+optional variable-value-data value:
+integer line-number:
+
+
+-- record list-value-data:
+variable-key-value list value:
+integer line-number:
+
+
+-- record record-value-data:
+string name:
+optional variable-value-data caption:
+header-data list headers:
+
+
+
+-- record header-data:
+string key:
+boolean mutable:
+variable-value-data
+
+
+
+-- record variable-key-value:
+optional caption key:
+optional optional-value-data optional-value:
+optional list-value-data list-value:

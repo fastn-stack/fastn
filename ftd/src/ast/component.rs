@@ -208,8 +208,12 @@ impl Component {
             }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
-                for (key, val) in value {
-                    children.push(Component::from_variable_value(key.as_str(), val, doc_id)?);
+                for val in value {
+                    children.push(Component::from_variable_value(
+                        val.key.as_str(),
+                        val.value,
+                        doc_id,
+                    )?);
                 }
                 Ok(ftd::ast::Component {
                     name: key.to_string(),
@@ -269,10 +273,10 @@ impl Component {
 
                 let mut children = vec![];
 
-                for (_, child) in values {
+                for child in values {
                     children.push(Component::from_variable_value(
                         name.as_str(),
-                        child,
+                        child.value,
                         doc_id,
                     )?);
                 }
