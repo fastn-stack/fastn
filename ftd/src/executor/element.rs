@@ -123,6 +123,8 @@ pub struct Rive {
     pub canvas_width: ftd::executor::Value<i64>,
     pub canvas_height: ftd::executor::Value<i64>,
     pub state_machine: ftd::executor::Value<Vec<String>>,
+    pub autoplay: ftd::executor::Value<bool>,
+    pub artboard: ftd::executor::Value<Option<String>>,
     pub common: Common,
 }
 
@@ -1337,16 +1339,24 @@ pub fn rive_from_properties(
             line_number,
             inherited_variables,
         )?,
+        autoplay: ftd::executor::value::bool(
+            "autoplay",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        artboard: ftd::executor::value::optional_string(
+            "artboard",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         common,
     };
-
-    if rive.state_machine.value.is_empty() {
-        return ftd::executor::utils::parse_error(
-            format!("`state-machine` not found: `{:?}`", rive),
-            doc.name,
-            line_number,
-        );
-    }
 
     let id = rive
         .common
@@ -1363,6 +1373,8 @@ pub fn rive_from_properties(
         id,
         src: rive.src.value.to_string(),
         state_machine: rive.state_machine.value.clone(),
+        artboard: rive.artboard.value.clone(),
+        autoplay: rive.autoplay.value,
     });
 
     Ok(rive)
