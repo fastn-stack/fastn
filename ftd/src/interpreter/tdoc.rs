@@ -1657,6 +1657,8 @@ impl<'a> TDoc<'a> {
             line_number,
         })?;
 
+        dbg!(&json);
+
         self.as_json_(line_number, &json, kind.to_owned())
     }
 
@@ -1728,6 +1730,25 @@ impl<'a> TDoc<'a> {
                                 is_mutable: false,
                                 line_number,
                             },
+                        );
+                    }
+                } else if let serde_json::Value::String(s) = json {
+                    if let Some(field) = rec_fields.into_iter().find(|field| field.kind.caption) {
+                        fields.insert(
+                            field.name,
+                            ftd::interpreter::PropertyValue::Value {
+                                value: ftd::interpreter::Value::String {
+                                    text: s.to_string(),
+                                },
+                                is_mutable: false,
+                                line_number,
+                            },
+                        );
+                    } else {
+                        return ftd::interpreter::utils::e2(
+                            format!("expected object of record type, found: {}", json),
+                            self.name,
+                            line_number,
                         );
                     }
                 } else {

@@ -112,37 +112,20 @@ variable-value-data value:
 
 
 -- record variable-value-data:
-optional optional-value-data optional-value:
-optional list-value-data list-value:
-optional record-value-data record-value:
+optional string-value-data string-value:
 
 
-
--- record optional-value-data:
-optional variable-value-data value:
+-- record string-value-data:
+string value:
 integer line-number:
+source-data source:
 
 
--- record list-value-data:
-variable-key-value list value:
-integer line-number:
-
-
--- record record-value-data:
-string name:
-optional variable-value-data caption:
-header-data list headers:
-
+-- record source-data:
+optional caption name:
+optional header-data header:
 
 
 -- record header-data:
-string key:
 boolean mutable:
-variable-value-data
-
-
-
--- record variable-key-value:
-optional caption key:
-optional optional-value-data optional-value:
-optional list-value-data list-value:
+string name:

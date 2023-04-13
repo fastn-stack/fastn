@@ -85,19 +85,14 @@ impl VariableKind {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum VariableValue {
-    #[serde(rename = "optional-value")]
     Optional {
         value: Box<Option<VariableValue>>,
-        #[serde(rename = "line-number")]
         line_number: usize,
     },
-    #[serde(rename = "list-value")]
     List {
         value: Vec<VariableKeyValue>,
-        #[serde(rename = "line-number")]
         line_number: usize,
     },
-    #[serde(rename = "record-value")]
     Record {
         name: String,
         caption: Box<Option<VariableValue>>,
@@ -106,8 +101,10 @@ pub enum VariableValue {
         values: Vec<VariableKeyValue>,
         line_number: usize,
     },
+    #[serde(rename = "string-value")]
     String {
         value: String,
+        #[serde(rename = "line-number")]
         line_number: usize,
         source: ValueSource,
     },
@@ -123,7 +120,11 @@ pub struct VariableKeyValue {
 pub enum ValueSource {
     Caption,
     Body,
-    Header { name: String, mutable: bool },
+    #[serde(rename = "header")]
+    Header {
+        name: String,
+        mutable: bool,
+    },
     Default,
 }
 
@@ -144,6 +145,7 @@ impl ValueSource {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct BodyValue {
     pub value: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -214,6 +216,7 @@ pub struct HeaderValue {
     pub key: String,
     pub mutable: bool,
     pub value: VariableValue,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
     pub kind: Option<String>,
     pub condition: Option<String>,

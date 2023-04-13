@@ -39,13 +39,16 @@ pub async fn interpret_helper<'a>(
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     tracing::info!(document = name);
     let doc = cached_parse(name, source, line_number)?;
+    dbg!("interpret_helper", &doc);
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc, line_number)?;
+    dbg!("interpret_helper*** s", &s);
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),
     );
     let document;
     loop {
+        dbg!("loop", &s);
         match s {
             ftd::interpreter::Interpreter::Done { document: doc } => {
                 document = doc;
@@ -60,6 +63,10 @@ pub async fn interpret_helper<'a>(
                     resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
                         .await?;
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
+                dbg!(
+                    "ftd::interpreter::Interpreter::StuckOnImport ****",
+                    &doc.instructions
+                );
                 s = st.continue_after_import(
                     module.as_str(),
                     doc,
