@@ -137,6 +137,15 @@ integer line-number:
 
 -- record property-data:
 variable-value-data value:
+source-data source:
+optional string condition:
+integer line-number:
+
+
+
+
+
+
 
 
 -- record variable-value-data:

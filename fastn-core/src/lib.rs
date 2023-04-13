@@ -177,10 +177,10 @@ fn package_editor_source(
 
             
             -- pi.editor:
-            asts: $asts
+            $asts: $asts
             path: {file_name}
 
-            -- pr.ast list asts:
+            -- pr.ast list $asts:
             $processor$: pr.query
             file: {file_name}
         ",

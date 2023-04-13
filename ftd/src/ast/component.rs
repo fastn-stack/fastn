@@ -323,6 +323,7 @@ pub struct Property {
     pub value: ftd::ast::VariableValue,
     pub source: PropertySource,
     pub condition: Option<String>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -383,6 +384,7 @@ pub enum PropertySource {
     #[default]
     Caption,
     Body,
+    #[serde(rename = "header")]
     Header {
         name: String,
         mutable: bool,
