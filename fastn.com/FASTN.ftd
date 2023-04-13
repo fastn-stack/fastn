@@ -349,7 +349,7 @@ favicon: /-/fastn.io/images/favicon.svg
   - `fastn` crate 🚧: /fastn-crate/
     document: d/fastn-crate.ftd
 - `ftd p1` grammar: /p1-grammar/
-  document: ftd/p1-grammer.ftd
+  document: ftd/p1-grammar.ftd
 
 # Content Planning: /planning/
   skip: true
