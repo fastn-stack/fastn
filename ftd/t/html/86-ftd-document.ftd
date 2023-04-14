@@ -1,15 +1,18 @@
 -- boolean $flag: true
 
--- ftd.document: My title
-title if { !flag }: MY TITLE
-og-title if { !flag }: MY OG TITLE
-description: MY DESCRIPTION
-og-description if { !flag }: MY OG DESCRIPTION
-theme-color: $red-yellow
-theme-color if { !flag }: green
-og-image: $image.light
-og-image if { !flag }: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg
+-- ftd.document-meta doc-meta:
+title: MY TITLE
+og-title: MY OG TITLE
+og-description: MY OG DESCRIPTION
+og-image: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg
 
+-- ftd.document-meta doc-meta-2:
+description: MY DESCRIPTION
+og-image: $image.light
+
+-- ftd.document:
+meta: $doc-meta-2
+meta if { !flag }: $doc-meta
 
 -- ftd.text: Click me and document title changes
 $on-click$: $ftd.toggle($a = $flag)

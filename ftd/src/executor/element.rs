@@ -293,6 +293,189 @@ impl HTMLData {
 
         ftd::executor::HTMLData::from_optional_values(record_values.value, doc, line_number)
     }
+
+    pub fn title_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var title = null;
+                    if ("title" in meta) {
+                        title = meta.title;
+                    }
+                    title
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn og_title_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var og_title = null;
+                    if ("og-title" in meta) {
+                        og_title = meta["og-title"];
+                    }
+                    og_title
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn twitter_title_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var twitter_title = null;
+                    if ("twitter-title" in meta) {
+                        twitter_title = meta["twitter-title"];
+                    }
+                    twitter_title
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn description_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var description = null;
+                    if ("description" in meta) {
+                        description = meta["description"];
+                    }
+                    description
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn og_description_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var og_description = null;
+                    if ("og-description" in meta) {
+                        og_description = meta["og-description"];
+                    }
+                    og_description
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn twitter_description_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var twitter_description = null;
+                    if ("twitter-description" in meta) {
+                        twitter_description = meta["twitter-description"];
+                    }
+                    twitter_description
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn og_image_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var img = null;
+                    if ("og-image" in meta) {
+                        img = meta["og-image"];
+                        if (typeof img === 'object' && !!img && "src" in img)
+                        {img.src}
+                        else {img}
+                    }
+                    img
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn twitter_image_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var img = null;
+                    if ("twitter-image" in meta) {
+                        img = meta["twitter-image"];
+                        if (typeof img === 'object' && !!img && "src" in img)
+                        { img.src }
+                        else { img }
+                    }
+                    img
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
+
+    pub fn theme_color_pattern() -> (String, bool) {
+        (
+            r#"
+                let meta = {0};
+                if (typeof meta === 'object' && !!meta) {
+                    var color = null;
+                    if ("theme-color" in meta) {
+                        color = meta["theme-color"];
+                        if (typeof color === 'object' && !!color && "light" in color) {
+                            if (data["ftd#dark-mode"] && "dark" in color)
+                            { color.dark }
+                            else { color.light }
+                        }
+                        else { color }
+                    }
+                    color
+                }
+                else {
+                    null
+                }
+            "#.to_string(),
+            true,
+        )
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]

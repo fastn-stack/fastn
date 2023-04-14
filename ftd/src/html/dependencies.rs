@@ -104,6 +104,259 @@ impl<'a> DependencyGenerator<'a> {
             result.push(value)
         }
 
+        let meta_title_key = r#"
+            let meta = {0};
+            var title = null;
+            if (typeof meta === 'object' && !!meta) {
+                if ("title" in meta) {
+                    title = meta["title"];
+                }
+            }
+            document.title = title;
+        "#;
+
+        let meta_og_title_key = r#"
+            let meta = {0};
+            let og_title = document.head.querySelector('meta[property="og:title"]');
+            if (!!og_title) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("og-title" in meta) {
+                        value = meta["og-title"];
+                    }
+                }
+                og_title.content = value;
+            }
+        "#;
+
+        let meta_twitter_title_key = r#"
+            let meta = {0};
+            let twitter_title = document.head.querySelector('meta[property="twitter:title"]');
+            if (!!twitter_title) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("twitter-title" in meta) {
+                        value = meta["twitter-title"];
+                    }
+                }
+                twitter_title.content = value;
+            }
+        "#;
+
+        let meta_description_key = r#"
+            let meta = {0};
+            let description = document.head.querySelector('meta[name="description"]');
+            if (!!description) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("description" in meta) {
+                        value = meta["description"];
+                    }
+                }
+                description.content = value;
+            }
+        "#;
+
+        let meta_og_description_key = r#"
+            let meta = {0};
+            let og_description = document.head.querySelector('meta[property="og:description"]');
+            if (!!og_description) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("og-description" in meta) {
+                        value = meta["og-description"];
+                    }
+                }
+                og_description.content = value;
+            }
+        "#;
+
+        let meta_twitter_description_key = r#"
+            let meta = {0};
+            let twitter_description = document.head.querySelector('meta[property="twitter:description"]');
+            if (!!twitter_description) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("twitter-description" in meta) {
+                        value = meta["twitter-description"];
+                    }
+                }
+                twitter_description.content = value;
+            }
+        "#;
+
+        let meta_og_image_key = r#"
+            let meta = {0};
+            let og_image = document.head.querySelector('meta[property="og:image"]');
+            if (!!og_image) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("og-image" in meta) {
+                        var img = meta["og-image"];
+                        if (typeof img === 'object' && !!img && "src" in img)
+                        { value = img.src }
+                    }
+                }
+                og_image.content = value;
+            }
+        "#;
+
+        let meta_twitter_image_key = r#"
+            let meta = {0};
+            let twitter_image = document.head.querySelector('meta[property="twitter:image"]');
+            if (!!twitter_image) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("twitter-image" in meta) {
+                        var img = meta["twitter-image"];
+                        if (typeof img === 'object' && !!img && "src" in img)
+                        { value = img.src }
+                    }
+                }
+                twitter_image.content = value;
+            }
+        "#;
+
+        let meta_theme_color_key = r#"
+            let meta = {0};
+            let theme_color = document.head.querySelector('meta[name="theme-color"]');
+            if (!!theme_color) {
+                var value = null;
+                if (typeof meta === 'object' && !!meta) {
+                    if ("theme-color" in meta) {
+                        var color = meta["theme-color"];
+                        if (typeof color === 'object' && !!color && "light" in color) {
+                            if (data["ftd#dark-mode"] && "dark" in color)
+                            { value = color.dark }
+                            else { value = color.light }
+                        }
+                    }
+                }
+                theme_color.content = value;
+            }
+        "#;
+
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.title,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_title_key,
+            self.id,
+            true,
+        )? {
+            result.push(value);
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.og_title,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_og_title_key,
+            self.id,
+            true,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.twitter_title,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_twitter_title_key,
+            self.id,
+            true,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.description,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_description_key,
+            self.id,
+            true,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.og_description,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_og_description_key,
+            self.id,
+            true,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.twitter_description,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_twitter_description_key,
+            self.id,
+            true,
+        )? {
+            result.push(value)
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.og_image,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_og_image_key,
+            self.id,
+            true,
+        )? {
+            result.push(value);
+            var_dependencies.insert(
+                "ftd#dark-mode".to_string(),
+                "document__meta".to_string(),
+            );
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.twitter_image,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_twitter_image_key,
+            self.id,
+            true,
+        )? {
+            result.push(value);
+            var_dependencies.insert(
+                "ftd#dark-mode".to_string(),
+                "document__meta".to_string(),
+            );
+        }
+
+        if let Some(value) = node_for_properties(
+            &self.html_data.theme_color,
+            var_dependencies,
+            "document__meta",
+            self.doc,
+            meta_theme_color_key,
+            self.id,
+            true,
+        )? {
+            result.push(value);
+            var_dependencies.insert(
+                "ftd#dark-mode".to_string(),
+                "document__meta".to_string(),
+            );
+        }
+
         if let Some(value) = node_for_properties(
             &self.html_data.title,
             var_dependencies,
