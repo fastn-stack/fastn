@@ -2797,6 +2797,69 @@ left.px: 0
 
 
 
+-- ds.h1: `opacity: optional decimal`
+id: opacity
+
+This property defines the opacity of the element. The level of opacity
+corresponds to the level of transparency, with a value of 1 indicating
+no transparency, 0.5 indicating 50% transparency, and 0 indicating
+complete transparency.
+
+-- ds.rendered: Sample code using `opacity`
+
+-- ds.rendered.input:
+
+\-- integer $counter: 0
+
+\-- string sample-text:
+
+Far far away, behind the word mountains, far from the countries
+Vokalia and Consonantia, there live the blind texts. Separated they
+in Bookmarksgrove right at the coast of the Semantics, a large language
+ocean. A small river named Duden flows by their place and supplies it
+with the necessary regelialia. It is a paradisematic country, in which
+roasted parts of sentences fly into your mouth. Even the all-powerful
+Pointing has no control about the blind texts it is an almost unorthographic
+life One day however a small line of blind text by the name of Lorem
+Ipsum decided to leave for the far World of Grammar.
+
+\-- ftd.column:
+width: fill-container
+background.solid: #963770
+opacity: 1.0
+opacity if { counter % 4 == 1 }: 0.7
+opacity if { counter % 4 == 2 }: 0.5
+opacity if { counter % 4 == 3 }: 0.2
+
+\-- ftd.text: $sample-text
+color: white
+padding.px: 10
+
+\-- end: ftd.column
+
+\-- ftd.text: Change opacity
+color: $inherited.colors.text
+$on-click$: $ftd.increment($a = $counter)
+margin-vertical.px: 10
+border-width.px: 1
+align-self: center
+text-align: center
+
+-- ds.rendered.output:
+
+-- opacity-sample:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
 
 -- ds.h1: `whitespace: optional ftd.whitespace`
 id: whitespace
@@ -4519,7 +4582,19 @@ and smiled, and passed it off Ere from the door she stept—
 
 -- end: my-ds.page
 
+-- integer $opacity-counter: 0
 
+-- string opacity-sample-text:
+
+Far far away, behind the word mountains, far from the countries
+Vokalia and Consonantia, there live the blind texts. Separated they
+in Bookmarksgrove right at the coast of the Semantics, a large language
+ocean. A small river named Duden flows by their place and supplies it
+with the necessary regelialia. It is a paradisematic country, in which
+roasted parts of sentences fly into your mouth. Even the all-powerful
+Pointing has no control about the blind texts it is an almost unorthographic
+life One day however a small line of blind text by the name of Lorem
+Ipsum decided to leave for the far World of Grammar.
 
 -- ftd.color red-yellow:
 light: red
@@ -4685,3 +4760,42 @@ role: $inherited.types.copy-regular
 -- end: ftd.column
 
 -- end: role-sample
+
+
+
+
+
+
+
+
+
+-- component opacity-sample:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd.column:
+width: fill-container
+background.solid: #963770
+opacity: 1.0
+opacity if { opacity-counter % 4 == 1 }: 0.7
+opacity if { opacity-counter % 4 == 2 }: 0.5
+opacity if { opacity-counter % 4 == 3 }: 0.2
+
+-- ftd.text: $opacity-sample-text
+color: white
+padding.px: 10
+
+-- end: ftd.column
+
+-- ftd.text: Change opacity
+color: $inherited.colors.text
+$on-click$: $ftd.increment($a = $opacity-counter)
+border-width.px: 1
+align-self: center
+text-align: center
+
+-- end: ftd.column
+
+-- end: opacity-sample

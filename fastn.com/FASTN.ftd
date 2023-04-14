@@ -158,7 +158,6 @@ favicon: /-/fastn.io/images/favicon.svg
   - `ftd.integer`: /ftd/integer/
   - `ftd.decimal`: /ftd/decimal/
   - `ftd.boolean`: /ftd/boolean/
-
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
 - Attributes: /attributes/

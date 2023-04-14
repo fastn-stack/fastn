@@ -272,6 +272,9 @@ link: /common-attributes/#overflow-x
 -- appendix.letter-data: overflow-y
 link: /common-attributes/#overflow-y
 
+-- appendix.letter-data: opacity
+link: /common-attributes/#opacity
+
 -- end: letter-contents-o
 
 -- appendix.letter-data list letter-contents-p:

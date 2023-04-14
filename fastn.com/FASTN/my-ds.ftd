@@ -21,15 +21,6 @@ $widthfill: *$page.widthfill
 types: $typo.types
 show-banner: true
 
--- ds.page.banner:
-
--- banner.cta-banner:
-cta-text: Welcome WittyHack-ers!
-cta-link: /wittyhacks/
-
-🚀 Participating in the hackathon?
-
--- end: ds.page.banner
 
 -- ds.page.extra-headers:
 

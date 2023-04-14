@@ -165,6 +165,12 @@ folder, it will be used for the `dark` field, while `show-cs-1.svg` will be used
 for the light field.
 
 
+
+
+
+
+
+
 -- ds.h2: `alt`
 
 Type: `optional` [`string`](ftd/built-in-types/#string)
@@ -174,28 +180,34 @@ Required: False
 The `alt` attribute specifies alternate [text description of the
 image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt).
 
--- ds.rendered: Usage
+-- ds.rendered: Sample code using `alt`
 
 -- ds.rendered.input:
 
 \-- import: fastn.io/assets
 
-\-- ftd.image:
-src: $assets.files.images.cs.show-cs-1.jpg
-alt: some alt text
+\-- ftd.image: foo.jpg
+alt: Image can't be displayed ;; <hl>
+color: $inherited.colors.text
+padding.px: 10
 
 -- ds.rendered.output:
 
--- ftd.image:
-src: $assets.files.images.cs.show-cs-1.jpg
-alt: some alt text
+-- ftd.image: foo.jpg
+alt: Image can't be displayed
+color: $inherited.colors.text
+padding.px: 10
 
 -- end: ds.rendered.output
 
 -- end: ds.rendered
 
-
 -- end: my-ds.page
+
+
+
+
+
 
 
 -- ftd.image-src my-images:
