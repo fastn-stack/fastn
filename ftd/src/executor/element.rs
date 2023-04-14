@@ -696,7 +696,7 @@ pub struct Common {
     pub margin_bottom: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub margin_horizontal: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub margin_vertical: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub border_width: ftd::executor::Value<ftd::executor::Length>,
+    pub border_width: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_color: ftd::executor::Value<Option<ftd::executor::Color>>,
     pub border_bottom_width: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -1834,13 +1834,12 @@ pub fn common_from_properties(
             inherited_variables,
             component_name,
         )?,
-        border_width: ftd::executor::Length::length_with_default(
+        border_width: ftd::executor::Length::optional_length(
             properties,
             arguments,
             doc,
             line_number,
             "border-width",
-            ftd::executor::Length::Px(0),
             inherited_variables,
             component_name,
         )?,

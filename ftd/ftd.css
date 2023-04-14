@@ -49,6 +49,17 @@ pre code {
     padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+    text-decoration: none;
+    box-sizing: border-box;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: solid;
+}
+
 .ft_md ul,
 .ft_md ol{
     margin: 10px 0;
