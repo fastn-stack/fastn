@@ -5,9 +5,5 @@ canvas-width: 100
 canvas-height: 100
 state-machine: State Machine 1
 width.fixed.px: 200
-anchor: parent
-top.px: -64
-left.px: -11
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
-background.solid: $inherited.colors.background.base
