@@ -236,7 +236,6 @@ impl<'a> DependencyGenerator<'a> {
             }
         "#;
 
-
         if let Some(value) = node_for_properties(
             &self.html_data.title,
             var_dependencies,
@@ -319,10 +318,7 @@ impl<'a> DependencyGenerator<'a> {
             true,
         )? {
             result.push(value);
-            var_dependencies.insert(
-                "ftd#dark-mode".to_string(),
-                "document__meta".to_string(),
-            );
+            var_dependencies.insert("ftd#dark-mode".to_string(), "document__meta".to_string());
         }
 
         if let Some(value) = node_for_properties(
@@ -335,10 +331,7 @@ impl<'a> DependencyGenerator<'a> {
             true,
         )? {
             result.push(value);
-            var_dependencies.insert(
-                "ftd#dark-mode".to_string(),
-                "document__meta".to_string(),
-            );
+            var_dependencies.insert("ftd#dark-mode".to_string(), "document__meta".to_string());
         }
 
         if let Some(value) = node_for_properties(
@@ -351,10 +344,7 @@ impl<'a> DependencyGenerator<'a> {
             true,
         )? {
             result.push(value);
-            var_dependencies.insert(
-                "ftd#dark-mode".to_string(),
-                "document__meta".to_string(),
-            );
+            var_dependencies.insert("ftd#dark-mode".to_string(), "document__meta".to_string());
         }
 
         if let Some(value) = node_for_properties(

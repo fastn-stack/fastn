@@ -308,7 +308,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -327,7 +328,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -346,7 +348,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -365,7 +368,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -384,7 +388,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -403,7 +408,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -425,7 +431,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -447,7 +454,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -472,7 +480,8 @@ impl HTMLData {
                 else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }

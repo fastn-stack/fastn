@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"><base href="/">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<link rel="canonical" href="https://some-other-site.com/" /><meta property="og:url" content="https://some-other-site.com/" /><meta property="og:title" content="My title"><meta name="twitter:title" content="My title"><meta property="og:description" content="MY DESCRIPTION"><meta name="description" content="MY DESCRIPTION"><meta name="twitter:description" content="MY DESCRIPTION"><meta property="og:image" content="https://fastn.io/-/fastn.io/images/fastn.svg"><meta property="twitter:image" content="https://fastn.io/-/fastn.io/images/fastn.svg">
-<title>My title</title>
+<link rel="canonical" href="https://some-other-site.com/" /><meta property="og:url" content="https://some-other-site.com/" />
+<title></title>
 <script type="ftd" id="ftd-data">
 {
 "ftd#breakpoint-width": {
@@ -521,6 +521,19 @@
 "ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
 "ftd#system-dark-mode": false,
+"www.amitu.com/#doc-meta-2": {
+"description": "MY DESCRIPTION",
+"og-description": null,
+"og-image": {
+"src": "https://fastn.io/-/fastn.io/images/fastn.svg"
+},
+"og-title": null,
+"theme-color": null,
+"title": null,
+"twitter-description": null,
+"twitter-image": null,
+"twitter-title": null
+},
 "www.amitu.com/#dtype": {
 "font-family": "cursive",
 "letter-spacing": "5px",
@@ -656,48 +669,6 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["document__title"] = function(data) {
-if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
-}()){
-document.title = "MY TITLE";
-}
-else {document.title = "My title";}
-}
-
-window.node_change_main["og_document__title"] = function(data) {
-if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
-}()){
-eval(`let ti = document.head.querySelector('meta[property="og:title"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG TITLE")))
-}
-else {eval(`let ti = document.head.querySelector('meta[property="og:title"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("My title")))}
-}
-
-window.node_change_main["og_document__description"] = function(data) {
-if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
-}()){
-eval(`let ti = document.head.querySelector('meta[property="og:description"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG DESCRIPTION")))
-}
-else {eval(`let ti = document.head.querySelector('meta[property="og:description"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY DESCRIPTION")))}
-}
-
-window.node_change_main["og_document__image"] = function(data) {
-if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
-}()){
-eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
-let c = {0};
-if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
-`.format(JSON.stringify({"src": "https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg"}))))))
-}
-else {eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
-let c = {0};
-if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
-`.format(JSON.stringify({"src": resolve_reference("www.amitu.com/#image.light", data)}))))))}
-}
-
 window.node_change_main["0,2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
 document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
@@ -785,8 +756,6 @@ window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__color"]){window.node_change_main["0,3:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
@@ -861,25 +830,6 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__font-wei
 if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__letter-spacing"]){window.node_change_main["0,4:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__line-height"]){window.node_change_main["0,4:main__line-height"](data);
-}
-};
-
-window.set_value_main["www.amitu.com/#flag"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "www.amitu.com/#flag" + "." + remaining, new_value);
-} else {
-set_data_value(data, "www.amitu.com/#flag", new_value);
-}
-
-window.ftd.call_mutable_value_changes("www.amitu.com/#flag", "main");
-window.ftd.call_immutable_value_changes("www.amitu.com/#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
 };
 
