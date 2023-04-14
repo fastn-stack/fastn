@@ -646,6 +646,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "opacity": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "resize": {
                         "value": null,
                         "line_number": null,
@@ -1059,6 +1064,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "opacity": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "resize": {
                                 "value": null,
                                 "line_number": null,
@@ -1413,6 +1423,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "opacity": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "resize": {
                         "value": null,
                         "line_number": null,
@@ -1753,6 +1768,11 @@
                 "properties": []
               },
               "overflow_y": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "opacity": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -2101,6 +2121,11 @@
         "line_number": null,
         "properties": []
       },
+      "opacity": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "resize": {
         "value": null,
         "line_number": null,
@@ -2215,5 +2240,6 @@
   },
   "element_constructor": {},
   "js": [],
-  "css": []
+  "css": [],
+  "rive_data": []
 }

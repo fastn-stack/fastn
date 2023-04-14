@@ -2,6 +2,6 @@
 $on-click$: $external-fun()
 
 -- void external-fun():
-js: ftd/t/test.js
+js: ftd/ftd/t/assets/test.js
 
 show("Hello World!");

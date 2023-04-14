@@ -528,12 +528,13 @@ pub fn get_inline_css_html(inline_js: &[String]) -> String {
     result
 }
 
-fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str) -> String {
+fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str, rive_data: &str) -> String {
     format!(
-        "{}{}{}",
+        "{}{}{}{}",
         get_external_js_html(external_js),
         get_inline_js_html(inline_js),
-        js
+        js,
+        rive_data
     )
 }
 
@@ -600,6 +601,7 @@ pub fn replace_markers_2022(
                 config.ftd_external_js.as_slice(),
                 config.ftd_inline_js.as_slice(),
                 html_ui.js.as_str(),
+                html_ui.rive_data.as_str(),
             )
             .as_str(),
         )
