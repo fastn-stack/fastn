@@ -77,9 +77,9 @@ favicon: /-/fastn.io/images/favicon.svg
   document: features/sitemap.ftd
 
 
-## Events: events/01/
-   skip: true
-
+## Events: /events/webdev-with-ftd/
+   document: webdev-with-ftd.ftd
+   
 # Design: /figma/
   document: /cs/ftd-to-figma/
 
@@ -326,8 +326,8 @@ favicon: /-/fastn.io/images/favicon.svg
 - Part 3. Publish a package: /expander/publish/-/build/
 
 
-# Blog: /wittyhacks/
-  document: blog/wittyhacks.ftd
+# Blog: /trizwitlabs/
+  document: blog/trizwitlabs.ftd
 
 - Witty Hacks!: /wittyhacks/
   document: blog/wittyhacks.ftd

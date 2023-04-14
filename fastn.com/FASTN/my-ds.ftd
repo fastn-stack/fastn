@@ -22,6 +22,17 @@ types: $typo.types
 show-banner: true
 
 
+-- ds.page.banner:
+
+-- banner.cta-banner:
+cta-text: Jumpstart your Web Development with FTD!
+cta-link: /trizwitlabs/
+
+📅 Upcoming Event hosted by Trizwit Labs & GDSC MACE -
+
+-- end: ds.page.banner
+
+
 -- ds.page.extra-headers:
 
 
