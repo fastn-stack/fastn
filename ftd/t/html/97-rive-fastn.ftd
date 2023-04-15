@@ -16,5 +16,6 @@ src: ftd/ftd/t/assets/fastn-anime.riv
 canvas-width: 500
 canvas-height: 500
 state-machine: State Machine 1
-width.fixed.px: 440
+width.fixed.px: 800
+width.fixed.px if { ftd.device == "mobile" }: 380
 $on-mouse-enter$: $ftd.play-rive(rive = fastn-anime, input = play)

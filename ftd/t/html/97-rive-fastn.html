@@ -695,7 +695,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><canvas data-id="0:main" height="500" id="fastn" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 440px" ></canvas><canvas data-id="1:main" height="500" id="fastn-anime" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__play_rive___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn-anime&quot;],[&quot;input&quot;,&quot;play&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 440px" ></canvas></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><canvas data-id="0:main" height="500" id="fastn" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 440px" ></canvas><canvas data-id="1:main" height="500" id="fastn-anime" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__play_rive___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn-anime&quot;],[&quot;input&quot;,&quot;play&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: 800px" ></canvas></div>
 
 
 <script>
@@ -1706,7 +1706,28 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 
+window.node_change_main = {};
+window.node_change_main["1:main__width"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(380)))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(800)))));}
+}
+window.set_value_main = {};
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#device", new_value);
+}
 
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+};
 
 
 
