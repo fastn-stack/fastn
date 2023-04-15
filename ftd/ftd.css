@@ -58,6 +58,23 @@ pre code {
     border-left-width: 0px;
     border-right-width: 0px;
     border-style: solid;
+    height: auto;
+    width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+    display: flex;
+    align-items: start;
+    justify-content: start
+}
+
+.ft_row {
+    flex-direction: row;
+}
+
+.ft_column {
+    flex-direction: column;
 }
 
 .ft_md ul,

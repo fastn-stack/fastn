@@ -659,7 +659,7 @@ pub fn code_with_theme(
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
     pub wrap: ftd::executor::Value<Option<bool>>,
-    pub align_content: ftd::executor::Value<ftd::executor::Alignment>,
+    pub align_content: ftd::executor::Value<Option<ftd::executor::Alignment>>,
     pub spacing: ftd::executor::Value<Option<ftd::executor::Spacing>>,
     pub children: Vec<Element>,
 }
@@ -711,8 +711,8 @@ pub struct Common {
     pub border_top_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_left_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub width: ftd::executor::Value<ftd::executor::Resizing>,
-    pub height: ftd::executor::Value<ftd::executor::Resizing>,
+    pub width: ftd::executor::Value<Option<ftd::executor::Resizing>>,
+    pub height: ftd::executor::Value<Option<ftd::executor::Resizing>>,
     pub min_width: ftd::executor::Value<Option<ftd::executor::Resizing>>,
     pub max_width: ftd::executor::Value<Option<ftd::executor::Resizing>>,
     pub min_height: ftd::executor::Value<Option<ftd::executor::Resizing>>,
@@ -747,8 +747,10 @@ pub fn default_column() -> Column {
     ftd::executor::Column {
         container: Default::default(),
         common: ftd::executor::Common {
-            width: ftd::executor::Value::new(ftd::executor::Resizing::FillContainer, None, vec![]),
-            height: ftd::executor::Value::new(ftd::executor::Resizing::FillContainer, None, vec![]),
+            width: ftd::executor::Value::new(Some(ftd::executor::Resizing::FillContainer), None,
+                                             vec![]),
+            height: ftd::executor::Value::new(Some(ftd::executor::Resizing::FillContainer), None,
+            vec![]),
             ..Default::default()
         },
     }
@@ -1969,23 +1971,21 @@ pub fn common_from_properties(
             inherited_variables,
             component_name,
         )?,
-        width: ftd::executor::Resizing::resizing_with_default(
+        width: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
             line_number,
             "width",
-            ftd::executor::Resizing::default(),
             inherited_variables,
             component_name,
         )?,
-        height: ftd::executor::Resizing::resizing_with_default(
+        height: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
             line_number,
             "height",
-            ftd::executor::Resizing::default(),
             inherited_variables,
             component_name,
         )?,
@@ -2156,13 +2156,12 @@ pub fn container_from_properties(
             line_number,
             inherited_variables,
         )?,
-        align_content: ftd::executor::Alignment::alignment_with_default(
+        align_content: ftd::executor::Alignment::optional_alignment(
             properties,
             arguments,
             doc,
             line_number,
             "align-content",
-            ftd::executor::Alignment::TopLeft,
             inherited_variables,
             component_name,
         )?,

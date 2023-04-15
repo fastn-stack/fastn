@@ -180,6 +180,7 @@ impl Node {
         doc_id: &str,
         display: &str,
         anchor_ids: &mut Vec<String>,
+        container_class: &str,
     ) -> Node {
         use itertools::Itertools;
 
@@ -187,6 +188,7 @@ impl Node {
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
         classes.extend(common.classes());
+        classes.push(container_class.to_string());
 
         let node = common.node();
 
@@ -325,35 +327,17 @@ impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
-            n.style
-                .insert(s("display"), ftd::node::Value::from_string("flex"));
-        }
-
-        n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_string("row"));
-
-        n.style.insert(
-            s("align-items"),
-            ftd::node::Value::from_string("flex-start"),
-        );
-
-        n.style.insert(
-            s("justify-content"),
-            ftd::node::Value::from_string("flex-start"),
-        );
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex",
+                                         anchor_ids, "ft_row");
 
         n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_justify_content(true))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_justify_content(true)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(true)),
                 doc_id,
@@ -384,13 +368,11 @@ impl ftd::executor::Row {
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_align_items(true))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_align_items(true)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(true)),
                 doc_id,
@@ -404,34 +386,17 @@ impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
-            n.style
-                .insert(s("display"), ftd::node::Value::from_string("flex"));
-        }
-        n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_string("column"));
-
-        n.style.insert(
-            s("align-items"),
-            ftd::node::Value::from_string("flex-start"),
-        );
-
-        n.style.insert(
-            s("justify-content"),
-            ftd::node::Value::from_string("flex-start"),
-        );
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex",
+                                         anchor_ids, "ft_column");
 
         n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_justify_content(false))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_justify_content(false)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(false)),
                 doc_id,
@@ -462,13 +427,11 @@ impl ftd::executor::Column {
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
-                Some(
                     self.container
                         .align_content
                         .to_owned()
-                        .map(|v| v.to_css_align_items(false))
+                        .map(|v| v.map(|a| a.to_css_align_items(false)))
                         .value,
-                ),
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(false)),
                 doc_id,
@@ -1257,7 +1220,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(self.width.to_owned().map(|v| v.to_css_string()).value),
+                self.width.value.to_owned().map(|v| v.to_css_string()),
                 self.width.to_owned(),
                 None,
                 doc_id,
@@ -1531,7 +1494,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(self.height.to_owned().map(|v| v.to_css_string()).value),
+                self.height.value.as_ref().map(|v| v.to_css_string()),
                 self.height.to_owned(),
                 None,
                 doc_id,

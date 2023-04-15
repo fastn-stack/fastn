@@ -133,35 +133,6 @@ impl Length {
         ))
     }
 
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn length_with_default(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-        key: &str,
-        default: Length,
-        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-        component_name: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Length>> {
-        let or_type_value = ftd::executor::value::optional_or_type(
-            key,
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-            ftd::interpreter::FTD_LENGTH,
-            inherited_variables,
-        )?;
-
-        Ok(ftd::executor::Value::new(
-            Length::from_optional_values(or_type_value.value, doc, line_number)?.unwrap_or(default),
-            or_type_value.line_number,
-            or_type_value.properties,
-        ))
-    }
-
     pub fn to_css_string(&self) -> String {
         match self {
             Length::Px(px) => format!("{}px", px),
@@ -417,36 +388,6 @@ impl Alignment {
                 line_number,
             ),
         }
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn alignment_with_default(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-        key: &str,
-        default: ftd::executor::Alignment,
-        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-        component_name: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Alignment>> {
-        let or_type_value = ftd::executor::value::optional_or_type(
-            key,
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-            ftd::interpreter::FTD_ALIGN,
-            inherited_variables,
-        )?;
-
-        Ok(ftd::executor::Value::new(
-            Alignment::from_optional_values(or_type_value.value, doc, line_number)?
-                .unwrap_or(default),
-            or_type_value.line_number,
-            or_type_value.properties,
-        ))
     }
 
     #[allow(dead_code)]
@@ -708,36 +649,6 @@ impl Resizing {
 
         Ok(ftd::executor::Value::new(
             Resizing::from_optional_values(or_type_value.value, doc, line_number)?,
-            or_type_value.line_number,
-            or_type_value.properties,
-        ))
-    }
-
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn resizing_with_default(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-        key: &str,
-        default: Resizing,
-        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-        component_name: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Resizing>> {
-        let or_type_value = ftd::executor::value::optional_or_type(
-            key,
-            component_name,
-            properties,
-            arguments,
-            doc,
-            line_number,
-            ftd::interpreter::FTD_RESIZING,
-            inherited_variables,
-        )?;
-
-        Ok(ftd::executor::Value::new(
-            Resizing::from_optional_values(or_type_value.value, doc, line_number)?
-                .unwrap_or(default),
             or_type_value.line_number,
             or_type_value.properties,
         ))
