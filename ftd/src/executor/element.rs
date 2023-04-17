@@ -747,10 +747,16 @@ pub fn default_column() -> Column {
     ftd::executor::Column {
         container: Default::default(),
         common: ftd::executor::Common {
-            width: ftd::executor::Value::new(Some(ftd::executor::Resizing::FillContainer), None,
-                                             vec![]),
-            height: ftd::executor::Value::new(Some(ftd::executor::Resizing::FillContainer), None,
-            vec![]),
+            width: ftd::executor::Value::new(
+                Some(ftd::executor::Resizing::FillContainer),
+                None,
+                vec![],
+            ),
+            height: ftd::executor::Value::new(
+                Some(ftd::executor::Resizing::FillContainer),
+                None,
+                vec![],
+            ),
             ..Default::default()
         },
     }

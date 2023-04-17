@@ -384,7 +384,6 @@ impl<'a> HtmlGenerator<'a> {
                     .filter(|s| !s.1.eq(ftd::interpreter::FTD_IGNORE_KEY))
             })
             .collect();
-        dbg!(&styles);
         if !visible {
             styles.insert("display".to_string(), "none".to_string());
         }

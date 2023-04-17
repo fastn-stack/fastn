@@ -327,8 +327,14 @@ impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex",
-                                         anchor_ids, "ft_row");
+        let mut n = Node::from_container(
+            &self.common,
+            &self.container,
+            doc_id,
+            "flex",
+            anchor_ids,
+            "ft_row",
+        );
 
         n.style.check_and_insert(
             "justify-content",
@@ -386,8 +392,14 @@ impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex",
-                                         anchor_ids, "ft_column");
+        let mut n = Node::from_container(
+            &self.common,
+            &self.container,
+            doc_id,
+            "flex",
+            anchor_ids,
+            "ft_column",
+        );
 
         n.style.check_and_insert(
             "justify-content",
@@ -427,11 +439,11 @@ impl ftd::executor::Column {
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.map(|a| a.to_css_align_items(false)))
-                        .value,
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_align_items(false)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(false)),
                 doc_id,
@@ -1017,7 +1029,6 @@ impl ftd::executor::Image {
 }
 
 impl ftd::executor::Common {
-
     fn classes(&self) -> Vec<String> {
         let mut classes = self.classes.to_owned().value;
         classes.push("ft_common".to_string());
