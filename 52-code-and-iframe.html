@@ -584,6 +584,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -699,7 +727,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__copy_to_clipboard___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value:clean:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__copy_to_clipboard___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value:clean:0&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">caption title</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">body description</span><span style="color:#696b70;">:
 </span><span style="background-color:#e4eaf6; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4387ff inset"><span style="color:#a846b9;">boolean $open</span><span style="color:#696b70;">: </span><span style="color:#36464e;">true
@@ -720,7 +748,7 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-ui
 </span></pre>
-</div></div><div data-id="1:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: auto; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
+</div></div><div data-id="1:main" style="gap: 20px; justify-content: start; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">caption title</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">body description</span><span style="color:#696b70;">:
 </span><span style="background-color:#e4eaf6; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4387ff inset"><span style="color:#a846b9;">boolean $open</span><span style="color:#696b70;">: </span><span style="color:#36464e;">true
@@ -741,7 +769,7 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-ui
 </span></pre>
-</div><div data-id="1,1:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
+</div><div data-id="1,1:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">component toggle-ui</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">caption title</span><span style="color:#a7adba;">:
 </span><span style="color:#b41b98;">body description</span><span style="color:#a7adba;">:
 </span><span style="background-color:#fcf7eb; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #af7515 inset"><span style="color:#b41b98;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#142eab;">true
@@ -762,7 +790,7 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#a7adba;">-- </span><span style="color:#c5441c;">end</span><span style="color:#a7adba;">: </span><span style="color:#67ba20;">toggle-ui
 </span></pre>
-</div><div data-id="1,2:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">component toggle-ui</span><span style="background-color:#eff1f5;color:#a7adba;">:
+</div><div data-id="1,2:main" style="background-color: rgba(255,255,255,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">component toggle-ui</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5;color:#b48ead;">caption title</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5;color:#b48ead;">body description</span><span style="background-color:#eff1f5;color:#a7adba;">:
 </span><span style="background-color:#eff1f5; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #b48ead inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#a7adba;">: </span><span style="color:#d08770;">true
@@ -783,7 +811,7 @@ margin-block-end: 1em;
 </span><span style="background-color:#eff1f5;color:#4f5b66;">
 </span><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">end</span><span style="background-color:#eff1f5;color:#a7adba;">: </span><span style="background-color:#eff1f5;color:#a3be8c;">toggle-ui
 </span></pre>
-</div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 20px; height: auto; justify-content: start; padding: 20px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
+</div></div><div data-id="2:main" style="gap: 20px; justify-content: start; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">caption title</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">body description</span><span style="color:#cecfd2;">:
 </span><span style="background-color:#222b42; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #2a77ff inset"><span style="color:#c973d9;">boolean $open</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">true
@@ -804,7 +832,7 @@ margin-block-end: 1em;
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">end</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">toggle-ui
 </span></pre>
-</div><div data-id="2,1:main" style="background-color: rgba(49,51,56,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
+</div><div data-id="2,1:main" style="background-color: rgba(49,51,56,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">component toggle-ui</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">caption title</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">body description</span><span style="color:#65737e;">:
 </span><span style="background-color:#444039; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #eeb232 inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
@@ -825,7 +853,7 @@ margin-block-end: 1em;
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">end</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">toggle-ui
 </span></pre>
-</div><div data-id="2,2:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: sans-serif; font-size: 18px; font-weight: 400; height: auto; line-height: 30px; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#2b303b;"><span style="background-color:#2b303b;color:#65737e;">-- </span><span style="background-color:#2b303b;color:#ebcb8b;">component toggle-ui</span><span style="background-color:#2b303b;color:#65737e;">:
+</div><div data-id="2,2:main" style="background-color: rgba(0,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#2b303b;"><span style="background-color:#2b303b;color:#65737e;">-- </span><span style="background-color:#2b303b;color:#ebcb8b;">component toggle-ui</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b;color:#b48ead;">caption title</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b;color:#b48ead;">body description</span><span style="background-color:#2b303b;color:#65737e;">:
 </span><span style="background-color:#2b303b; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #b48ead inset"><span style="color:#b48ead;">boolean $open</span><span style="color:#65737e;">: </span><span style="color:#d08770;">true
@@ -846,13 +874,13 @@ margin-block-end: 1em;
 </span><span style="background-color:#2b303b;color:#c0c5ce;">
 </span><span style="background-color:#2b303b;color:#65737e;">-- </span><span style="background-color:#2b303b;color:#ebcb8b;">end</span><span style="background-color:#2b303b;color:#65737e;">: </span><span style="background-color:#2b303b;color:#a3be8c;">toggle-ui
 </span></pre>
-</div></div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#b48ead;">fn </span><span style="background-color:#eff1f5;color:#8fa1b3;">hello_world</span><span style="background-color:#eff1f5;color:#4f5b66;">() {
+</div></div><div data-id="3:main" style="" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; background-color:#eff1f5;"><span style="background-color:#eff1f5;color:#b48ead;">fn </span><span style="background-color:#eff1f5;color:#8fa1b3;">hello_world</span><span style="background-color:#eff1f5;color:#4f5b66;">() {
 </span><span style="background-color:#eff1f5;color:#4f5b66;">    println!(&quot;</span><span style="background-color:#eff1f5;color:#a3be8c;">Hello World</span><span style="background-color:#eff1f5;color:#4f5b66;">&quot;);
 </span><span style="background-color:#eff1f5;color:#4f5b66;">}
 </span></pre>
-</div><div data-id="4:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c0c5ce;">$foo
+</div><div data-id="4:main" style="" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c0c5ce;">$foo
 </span></pre>
-</div><iframe allowfullscreen="allowfullscreen" data-id="5:main" loading="lazy" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" src="https://youtube.com/embed/10MHfy3b3c8" webkitallowfullscreen="webkitallowfullscreen" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"></iframe><iframe allowfullscreen="allowfullscreen" data-id="6:main" loading="lazy" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" srcdoc="<p>Hello world!</p>" webkitallowfullscreen="webkitallowfullscreen" style="border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"></iframe><div data-id="7:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="7,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">SDFSD</div><div data-id="7,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Arpita</div></div></div>
+</div><iframe allowfullscreen="allowfullscreen" data-id="5:main" loading="lazy" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" src="https://youtube.com/embed/10MHfy3b3c8" webkitallowfullscreen="webkitallowfullscreen" style="" class="ft_common ft_md"></iframe><iframe allowfullscreen="allowfullscreen" data-id="6:main" loading="lazy" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" srcdoc="<p>Hello world!</p>" webkitallowfullscreen="webkitallowfullscreen" style="border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; padding: 20px" class="ft_common ft_md"></iframe><div data-id="7:main" style="" class="ft_common ft_column"><div data-id="7,0:main" style="" class="ft_common ft_md">SDFSD</div><div data-id="7,1:main" style="" class="ft_common ft_md">Arpita</div></div></div>
 
 
 <script>
@@ -1571,7 +1599,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;
@@ -2121,19 +2149,19 @@ set_data_value(data, "foo#value:clean:0", value);
 }
 window.ftd.call_mutable_value_changes("foo#code", "main");
 window.ftd.call_immutable_value_changes("foo#code", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__text"]){window.node_change_main["2,2:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__text"]){window.node_change_main["2,0:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__text"]){window.node_change_main["1,2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__text"]){window.node_change_main["2,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__text"]){window.node_change_main["1,0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__text"]){window.node_change_main["1,1:main__text"](data);
 }
 };
 
@@ -2163,63 +2191,63 @@ window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-size"]){window.node_change_main["1,1:main__background-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-image"]){window.node_change_main["2,1:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-size"]){window.node_change_main["2,0:main__background-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-repeat"]){window.node_change_main["2,1:main__background-repeat"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-position"]){window.node_change_main["2,1:main__background-position"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-image"]){window.node_change_main["2,0:main__background-image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-repeat"]){window.node_change_main["2,2:main__background-repeat"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-position"]){window.node_change_main["2,2:main__background-position"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-size"]){window.node_change_main["2,2:main__background-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-repeat"]){window.node_change_main["1,2:main__background-repeat"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-size"]){window.node_change_main["1,2:main__background-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-image"]){window.node_change_main["1,2:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-color"]){window.node_change_main["2,0:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-color"]){window.node_change_main["2,2:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-position"]){window.node_change_main["2,2:main__background-position"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-size"]){window.node_change_main["2,1:main__background-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-size"]){window.node_change_main["2,0:main__background-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-position"]){window.node_change_main["2,0:main__background-position"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-repeat"]){window.node_change_main["2,0:main__background-repeat"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-position"]){window.node_change_main["1,0:main__background-position"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-color"]){window.node_change_main["1,0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-image"]){window.node_change_main["1,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-repeat"]){window.node_change_main["2,1:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-image"]){window.node_change_main["2,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-position"]){window.node_change_main["1,1:main__background-position"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-position"]){window.node_change_main["1,2:main__background-position"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-image"]){window.node_change_main["2,2:main__background-image"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-size"]){window.node_change_main["1,0:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__background-image"]){window.node_change_main["2,0:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-size"]){window.node_change_main["2,1:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-image"]){window.node_change_main["1,1:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-position"]){window.node_change_main["2,1:main__background-position"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__background-repeat"]){window.node_change_main["1,0:main__background-repeat"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__background-color"]){window.node_change_main["2,1:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-repeat"]){window.node_change_main["1,1:main__background-repeat"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-image"]){window.node_change_main["2,2:main__background-image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-size"]){window.node_change_main["2,2:main__background-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__background-repeat"]){window.node_change_main["2,2:main__background-repeat"](data);
 }
 };
 
@@ -2232,65 +2260,65 @@ set_data_value(data, "ftd#default-types", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#default-types", "main");
 window.ftd.call_immutable_value_changes("ftd#default-types", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
 }
 };
 
@@ -2303,65 +2331,65 @@ set_data_value(data, "ftd#device", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-weight"]){window.node_change_main["1,2:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-family"]){window.node_change_main["1,0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__line-height"]){window.node_change_main["1,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-weight"]){window.node_change_main["2,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__line-height"]){window.node_change_main["2,1:main__line-height"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__letter-spacing"]){window.node_change_main["2,2:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-size"]){window.node_change_main["2,0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__line-height"]){window.node_change_main["1,1:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-weight"]){window.node_change_main["2,1:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-family"]){window.node_change_main["1,2:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__letter-spacing"]){window.node_change_main["2,1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-weight"]){window.node_change_main["2,2:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__letter-spacing"]){window.node_change_main["1,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-family"]){window.node_change_main["2,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-family"]){window.node_change_main["1,1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-size"]){window.node_change_main["1,1:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__font-size"]){window.node_change_main["1,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__line-height"]){window.node_change_main["2,2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__line-height"]){window.node_change_main["1,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__line-height"]){window.node_change_main["2,0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-weight"]){window.node_change_main["1,0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__font-size"]){window.node_change_main["2,1:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__letter-spacing"]){window.node_change_main["1,2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__font-size"]){window.node_change_main["1,0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__font-weight"]){window.node_change_main["1,1:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-family"]){window.node_change_main["2,2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__letter-spacing"]){window.node_change_main["2,0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,2:main__font-size"]){window.node_change_main["2,2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__letter-spacing"]){window.node_change_main["1,1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__font-family"]){window.node_change_main["2,0:main__font-family"](data);
 }
 };
 

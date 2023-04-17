@@ -580,6 +580,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -695,7 +723,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><h1 data-id="0:main" id="heading-1" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 20px; padding-right: 20px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 1</h1><h2 data-id="1:main" id="heading-2" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 30px; padding-right: 30px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 2</h2><h3 data-id="2:main" id="heading-3" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 40px; padding-right: 40px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 3</h3><h4 data-id="3:main" id="heading-4" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 50px; padding-right: 50px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 4</h4><h5 data-id="4:main" id="heading-5" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 60px; padding-right: 60px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 5</h5><h6 data-id="5:main" id="heading-6" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding-bottom: 20px; padding-left: 70px; padding-right: 70px; padding-top: 20px; text-decoration: none; width: auto" class="ft_md">Heading 6</h6></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><h1 data-id="0:main" id="heading-1" style="padding-bottom: 20px; padding-left: 20px; padding-right: 20px; padding-top: 20px" class="ft_common ft_md">Heading 1</h1><h2 data-id="1:main" id="heading-2" style="padding-bottom: 20px; padding-left: 30px; padding-right: 30px; padding-top: 20px" class="ft_common ft_md">Heading 2</h2><h3 data-id="2:main" id="heading-3" style="padding-bottom: 20px; padding-left: 40px; padding-right: 40px; padding-top: 20px" class="ft_common ft_md">Heading 3</h3><h4 data-id="3:main" id="heading-4" style="padding-bottom: 20px; padding-left: 50px; padding-right: 50px; padding-top: 20px" class="ft_common ft_md">Heading 4</h4><h5 data-id="4:main" id="heading-5" style="padding-bottom: 20px; padding-left: 60px; padding-right: 60px; padding-top: 20px" class="ft_common ft_md">Heading 5</h5><h6 data-id="5:main" id="heading-6" style="padding-bottom: 20px; padding-left: 70px; padding-right: 70px; padding-top: 20px" class="ft_common ft_md">Heading 6</h6></div>
 
 
 <script>
@@ -1414,7 +1442,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;

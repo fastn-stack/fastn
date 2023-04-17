@@ -582,6 +582,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -697,7 +725,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: -webkit-box; height: auto; overflow: hidden; text-decoration: none; width: 100px" class="ft_md">Hello world This is some random sample text</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag_2&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; background-color: rgba(33,34,44,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: -webkit-box; height: auto; overflow: hidden; text-decoration: none; width: auto" class="ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c973d9;">pub fn </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">() {
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; cursor: pointer; display: -webkit-box; overflow: hidden; width: 100px" class="ft_common ft_md">Hello world This is some random sample text</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag_2&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; background-color: rgba(33,34,44,1); cursor: pointer; display: -webkit-box; overflow: hidden" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c973d9;">pub fn </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">() {
 </span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#2fb170;">Hello world!</span><span style="color:#c0c5ce;">&quot;);
 </span><span style="color:#c0c5ce;">}
 </span></pre>
@@ -1420,7 +1448,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;
@@ -1795,11 +1823,11 @@ window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-box-orient"]){window.node_change_main["0:main__-webkit-box-orient"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-line-clamp"]){window.node_change_main["0:main__-webkit-line-clamp"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__overflow"]){window.node_change_main["0:main__overflow"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-line-clamp"]){window.node_change_main["0:main__-webkit-line-clamp"](data);
 }
 };
 
@@ -1814,11 +1842,11 @@ window.ftd.call_mutable_value_changes("foo#flag_2", "main");
 window.ftd.call_immutable_value_changes("foo#flag_2", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__overflow"]){window.node_change_main["1:main__overflow"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-line-clamp"]){window.node_change_main["1:main__-webkit-line-clamp"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-box-orient"]){window.node_change_main["1:main__-webkit-box-orient"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-line-clamp"]){window.node_change_main["1:main__-webkit-line-clamp"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
 };
 
@@ -1831,15 +1859,15 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-size"]){window.node_change_main["1:main__background-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-repeat"]){window.node_change_main["1:main__background-repeat"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-image"]){window.node_change_main["1:main__background-image"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-position"]){window.node_change_main["1:main__background-position"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-size"]){window.node_change_main["1:main__background-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-repeat"]){window.node_change_main["1:main__background-repeat"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
 }
 };
 
