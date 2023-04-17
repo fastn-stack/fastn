@@ -1076,12 +1076,12 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "src" in bg) {
+                if (typeof bg === 'object' && !!bg && "src" in bg) {
                     let img_src = bg.src;
-                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
                         "url(" + img_src.light + ")"
                     }
-                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
                         "url(" + img_src.dark + ")"
                     }
                     else {
@@ -1090,7 +1090,8 @@ impl Background {
                 } else {
                     null
                 }
-            "#.to_string(),
+            "#
+            .to_string(),
             true,
         )
     }
@@ -1099,7 +1100,7 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "repeat" in bg) {
+                if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
                     bg.repeat
                 } else {
                     null
@@ -1114,9 +1115,9 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "size" in bg) {
+                if (typeof bg === 'object' && !!bg && "size" in bg) {
                     let sz = bg.size;
-                    if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+                    if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
                         sz.x + " " + sz.y
                     }
                     else {
@@ -1135,9 +1136,9 @@ impl Background {
         (
             r#"
                 let bg = {0};
-                if (typeof bg === 'object' && "position" in bg) {
+                if (typeof bg === 'object' && !!bg  && "position" in bg) {
                     let pos = bg.position;
-                    if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+                    if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
                         pos.x + " " + pos.y
                     }
                     else {
@@ -1169,25 +1170,20 @@ impl BackgroundRepeat {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundRepeat::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundRepeat::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundRepeat::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
@@ -1251,25 +1247,20 @@ impl BackgroundSize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundSize::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundSize::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundSize::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
@@ -1329,25 +1320,20 @@ impl BackgroundPosition {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
-        match value.value(doc.name, line_number)? {
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => Ok(None),
-            _ => Ok(Some(ftd::executor::BackgroundPosition::from_value(
-                value,
-                doc,
-                line_number,
-            )?)),
-        }
-    }
-
-    fn from_value(
-        value: ftd::interpreter::PropertyValue,
-        doc: &ftd::executor::TDoc,
-        line_number: usize,
-    ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
+        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if data.is_none() {
+                return Ok(None);
+            }
+        }
+
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
-        ftd::executor::BackgroundPosition::from_values(value, doc, line_number)
+        Ok(Some(ftd::executor::BackgroundPosition::from_values(
+            value,
+            doc,
+            line_number,
+        )?))
     }
 
     fn from_values(
@@ -1572,7 +1558,7 @@ impl Shadow {
         (
             r#"
                 let shadow = {0};
-                if (typeof shadow === 'object') {
+                if (typeof shadow === 'object' && !!shadow) {
                 var inset, blur, spread, x_off, y_off, color;
                 inset = "";
                 blur = spread = x_off = y_off = "0px";
@@ -1750,7 +1736,7 @@ impl Color {
         (
             r#"
                 let c = {0};
-                if (typeof c === 'object' && "light" in c) {
+                if (typeof c === 'object' && !!c && "light" in c) {
                     if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
                 } else {
                     c

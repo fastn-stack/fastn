@@ -40,6 +40,6 @@ This, is, the, body.
 body body:
 integer $count:
 string separator: ,
-js: ftd/ftd/t/web_component.js
+js: ftd/ftd/t/assets/web_component.js
 
 -- end: word-count

@@ -1,6 +1,6 @@
 -- boolean $open: true
 
--- string css-location: ftd/t/test.css
+-- string css-location: ftd/ftd/t/assets/test.css
 
 -- show:
 

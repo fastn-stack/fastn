@@ -10,6 +10,7 @@ pub mod edit;
 pub mod mark_resolved;
 pub mod mark_upto_date;
 pub mod merge;
+pub mod query;
 pub mod resolve_conflict;
 pub mod revert;
 pub mod rm;

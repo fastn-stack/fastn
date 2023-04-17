@@ -343,6 +343,60 @@ window.ftd = (function () {
             console.error('Async: Could not copy text: ', err);
         });
     };
+    exports.set_rive_boolean = function (canva_id, input, value, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        const stateMachineName = window[rive_const].stateMachineNames[0];
+        const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+        // @ts-ignore
+        const bumpTrigger = inputs.find(i => i.name === input);
+        bumpTrigger.value = value;
+    };
+    exports.toggle_rive_boolean = function (canva_id, input, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        const stateMachineName = window[rive_const].stateMachineNames[0];
+        const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+        // @ts-ignore
+        const trigger = inputs.find(i => i.name === input);
+        trigger.value = !trigger.value;
+    };
+    exports.set_rive_integer = function (canva_id, input, value, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        const stateMachineName = window[rive_const].stateMachineNames[0];
+        const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+        // @ts-ignore
+        const bumpTrigger = inputs.find(i => i.name === input);
+        bumpTrigger.value = value;
+    };
+    exports.fire_rive = function (canva_id, input, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        const stateMachineName = window[rive_const].stateMachineNames[0];
+        const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+        // @ts-ignore
+        const bumpTrigger = inputs.find(i => i.name === input);
+        bumpTrigger.fire();
+    };
+    exports.play_rive = function (canva_id, input, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        window[rive_const].play(input);
+    };
+    exports.pause_rive = function (canva_id, input, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        window[rive_const].pause(input);
+    };
+    exports.toggle_play_rive = function (canva_id, input, args, data, id) {
+        let canva_with_id = canva_id + ":" + id;
+        let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+        let r = window[rive_const];
+        r.playingAnimationNames.includes(input)
+            ? r.pause(input)
+            : r.play(input);
+    };
     exports.component_data = function (component) {
         let data = {};
         for (let idx in component.getAttributeNames()) {
@@ -826,4 +880,18 @@ window.ftd.utils.set_full_height = function () {
 };
 window.ftd.utils.reset_full_height = function () {
     document.body.style.height = `100%`;
+};
+window.ftd.utils.function_name_to_js_function = function (s) {
+    let new_string = s;
+    let startsWithDigit = /^\d/.test(s);
+    if (startsWithDigit) {
+        new_string = "_" + s;
+    }
+    new_string = new_string.replace('#', "__").replace('-', "_")
+        .replace(':', "___")
+        .replace(',', "$")
+        .replace("\\\\", "/")
+        .replace('\\', "/")
+        .replace('/', "_").replace('.', "_");
+    return new_string;
 };

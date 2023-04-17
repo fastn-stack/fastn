@@ -456,7 +456,9 @@ pub(crate) async fn process_ftd(
         main
     };
 
-    let file_rel_path = if main.id.contains("index.ftd") {
+    let file_rel_path = if main.id.eq("404.ftd") {
+        "404.html".to_string()
+    } else if main.id.contains("index.ftd") {
         main.id.replace("index.ftd", "index.html")
     } else {
         main.id.replace(

@@ -233,6 +233,12 @@
       "line_number": null,
       "default": null
     },
+    "twitter_image": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
     "theme_color": {
       "value": null,
       "properties": [],
@@ -314,7 +320,7 @@
           "Value": {
             "value": {
               "String": {
-                "text": "ftd/t/web_component.js"
+                "text": "ftd/ftd/t/assets/web_component.js"
               }
             },
             "is_mutable": false,
@@ -434,7 +440,8 @@
   },
   "raw_nodes": {},
   "js": [
-    "ftd/t/web_component.js:type=\"module\""
+    "ftd/ftd/t/assets/web_component.js:type=\"module\""
   ],
-  "css": []
+  "css": [],
+  "rive_data": []
 }

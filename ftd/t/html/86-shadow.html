@@ -1090,6 +1090,60 @@ console.log('Async: Copying to clipboard was successful!');
 console.error('Async: Could not copy text: ', err);
 });
 };
+exports.set_rive_boolean = function (canva_id, input, value, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.value = value;
+};
+exports.toggle_rive_boolean = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const trigger = inputs.find(i => i.name === input);
+trigger.value = !trigger.value;
+};
+exports.set_rive_integer = function (canva_id, input, value, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.value = value;
+};
+exports.fire_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+const stateMachineName = window[rive_const].stateMachineNames[0];
+const inputs = window[rive_const].stateMachineInputs(stateMachineName);
+// @ts-ignore
+const bumpTrigger = inputs.find(i => i.name === input);
+bumpTrigger.fire();
+};
+exports.play_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].play(input);
+};
+exports.pause_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+window[rive_const].pause(input);
+};
+exports.toggle_play_rive = function (canva_id, input, args, data, id) {
+let canva_with_id = canva_id + ":" + id;
+let rive_const = window.ftd.utils.function_name_to_js_function(canva_with_id);
+let r = window[rive_const];
+r.playingAnimationNames.includes(input)
+? r.pause(input)
+: r.play(input);
+};
 exports.component_data = function (component) {
 let data = {};
 for (let idx in component.getAttributeNames()) {
@@ -1574,6 +1628,20 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
 };
+window.ftd.utils.function_name_to_js_function = function (s) {
+let new_string = s;
+let startsWithDigit = /^\d/.test(s);
+if (startsWithDigit) {
+new_string = "_" + s;
+}
+new_string = new_string.replace('#', "__").replace('-', "_")
+.replace(':', "___")
+.replace(',', "$")
+.replace("\\\\", "/")
+.replace('\\', "/")
+.replace('/', "_").replace('.', "_");
+return new_string;
+};
 
 
 
@@ -1607,6 +1675,12 @@ return (enable_system_mode(args,data,id));
 
 
 
+function ftd__fire_rive___main(rive,input,args,data,id){
+return (ftd.fire_rive(rive,input,args,data,id));
+}
+
+
+
 function ftd__increment___main(a,args,data,id){
 return (a.value += 1);
 }
@@ -1615,6 +1689,18 @@ return (a.value += 1);
 
 function ftd__increment_by___main(a,v,args,data,id){
 return (a.value += v);
+}
+
+
+
+function ftd__pause_rive___main(rive,input,args,data,id){
+return (ftd.pause_rive(rive,input,args,data,id));
+}
+
+
+
+function ftd__play_rive___main(rive,input,args,data,id){
+return (ftd.play_rive(rive,input,args,data,id));
 }
 
 
@@ -1631,6 +1717,18 @@ a.value = v
 
 
 
+function ftd__set_rive_boolean___main(rive,input,value,args,data,id){
+return (ftd.set_rive_boolean(rive,input,value,args,data,id));
+}
+
+
+
+function ftd__set_rive_integer___main(rive,input,value,args,data,id){
+return (ftd.set_rive_integer(rive,input,value,args,data,id));
+}
+
+
+
 function ftd__set_string___main(a,v,args,data,id){
 a.value = v
 }
@@ -1642,6 +1740,18 @@ a.value = !a.value
 }
 
 
+
+function ftd__toggle_play_rive___main(rive,input,args,data,id){
+return (ftd.toggle_play_rive(rive,input,args,data,id));
+}
+
+
+
+function ftd__toggle_rive_boolean___main(rive,input,args,data,id){
+return (ftd.toggle_rive_boolean(rive,input,args,data,id));
+}
+
+
 window.node_change_main = {};
 window.node_change_main["0:main__box-shadow"] = function(data) {
 if(function(){
@@ -1649,7 +1759,7 @@ return resolve_reference("foo#mouse-entered", data);
 }()){
 document.querySelector(`[data-id="0:main"]`).style["box-shadow"] = eval(`
 let shadow = {0};
-if (typeof shadow === 'object') {
+if (typeof shadow === 'object' && !!shadow) {
 var inset, blur, spread, x_off, y_off, color;
 inset = "";
 blur = spread = x_off = y_off = "0px";
@@ -1695,7 +1805,7 @@ null
 }
 else {document.querySelector(`[data-id="0:main"]`).style["box-shadow"] = eval(`
 let shadow = {0};
-if (typeof shadow === 'object') {
+if (typeof shadow === 'object' && !!shadow) {
 var inset, blur, spread, x_off, y_off, color;
 inset = "";
 blur = spread = x_off = y_off = "0px";
@@ -1754,12 +1864,12 @@ window.node_change_main["1,0:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1772,12 +1882,12 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1793,9 +1903,9 @@ window.node_change_main["1,0:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1808,9 +1918,9 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1826,7 +1936,7 @@ window.node_change_main["1,0:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1835,7 +1945,7 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1847,9 +1957,9 @@ window.node_change_main["1,0:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1862,9 +1972,9 @@ null
 }
 else {document.querySelector(`[data-id="1,0:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1890,12 +2000,12 @@ window.node_change_main["1,1:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1908,12 +2018,12 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -1929,9 +2039,9 @@ window.node_change_main["1,1:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1944,9 +2054,9 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -1962,7 +2072,7 @@ window.node_change_main["1,1:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1971,7 +2081,7 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -1983,9 +2093,9 @@ window.node_change_main["1,1:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -1998,9 +2108,9 @@ null
 }
 else {document.querySelector(`[data-id="1,1:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -2026,12 +2136,12 @@ window.node_change_main["1,2:main__background-image"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -2044,12 +2154,12 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-image"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "src" in bg) {
+if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
-if(!data["ftd#dark-mode"] && typeof img_src === 'object' && "light" in img_src) {
+if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
 "url(" + img_src.light + ")"
 }
-else if(data["ftd#dark-mode"] && typeof img_src === 'object' && "dark" in img_src){
+else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
 "url(" + img_src.dark + ")"
 }
 else {
@@ -2065,9 +2175,9 @@ window.node_change_main["1,2:main__background-position"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -2080,9 +2190,9 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-position"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "position" in bg) {
+if (typeof bg === 'object' && !!bg  && "position" in bg) {
 let pos = bg.position;
-if (typeof pos === 'object' && "x" in pos && "y" in pos) {
+if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
 pos.x + " " + pos.y
 }
 else {
@@ -2098,7 +2208,7 @@ window.node_change_main["1,2:main__background-repeat"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -2107,7 +2217,7 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-repeat"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "repeat" in bg) {
+if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
 bg.repeat
 } else {
 null
@@ -2119,9 +2229,9 @@ window.node_change_main["1,2:main__background-size"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,2:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {
@@ -2134,9 +2244,9 @@ null
 }
 else {document.querySelector(`[data-id="1,2:main"]`).style["background-size"] = eval(`
 let bg = {0};
-if (typeof bg === 'object' && "size" in bg) {
+if (typeof bg === 'object' && !!bg && "size" in bg) {
 let sz = bg.size;
-if (typeof sz === 'object' && "x" in sz && "y" in sz) {
+if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
 sz.x + " " + sz.y
 }
 else {

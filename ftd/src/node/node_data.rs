@@ -11,6 +11,7 @@ pub struct NodeData {
     pub raw_nodes: ftd::Map<ftd::node::RawNode>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
+    pub rive_data: Vec<ftd::executor::RiveData>,
 }
 
 impl NodeData {
@@ -33,6 +34,7 @@ impl NodeData {
             raw_nodes: raw_node,
             js: rt.js,
             css: rt.css,
+            rive_data: rt.rive_data,
         }
     }
 }

@@ -4,7 +4,7 @@
 -- ftd.column:
 width.fixed.px: 100
 height.fixed.px: 100
-css: ftd/t/test.css
+css: ftd/ftd/t/assets/test.css
 $on-click$: $toggle($a = $open)
 
 -- ftd.column.classes:

@@ -1248,6 +1248,12 @@
       "line_number": null,
       "default": null
     },
+    "twitter_image": {
+      "value": null,
+      "properties": [],
+      "line_number": null,
+      "default": null
+    },
     "theme_color": {
       "value": null,
       "properties": [],
@@ -1265,5 +1271,6 @@
   },
   "raw_nodes": {},
   "js": [],
-  "css": []
+  "css": [],
+  "rive_data": []
 }

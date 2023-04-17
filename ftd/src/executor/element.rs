@@ -16,6 +16,7 @@ pub enum Element {
     IterativeElement(IterativeElement),
     CheckBox(CheckBox),
     WebComponent(WebComponent),
+    Rive(Rive),
     Null { line_number: usize },
 }
 
@@ -38,6 +39,7 @@ impl Element {
             Element::Null { .. } => None,
             Element::RawElement(_) => None,
             Element::WebComponent(_) => None,
+            Element::Rive(_) => None,
             Element::IterativeElement(i) => i.element.get_common(),
         }
     }
@@ -74,6 +76,7 @@ impl Element {
             Element::IterativeElement(i) => i.iteration.line_number,
             Element::CheckBox(c) => c.common.line_number,
             Element::WebComponent(w) => w.line_number,
+            Element::Rive(r) => r.common.line_number,
             Element::Null { line_number } => *line_number,
         }
     }
@@ -115,6 +118,17 @@ pub struct Column {
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Rive {
+    pub src: ftd::executor::Value<String>,
+    pub canvas_width: ftd::executor::Value<i64>,
+    pub canvas_height: ftd::executor::Value<i64>,
+    pub state_machine: ftd::executor::Value<Vec<String>>,
+    pub autoplay: ftd::executor::Value<bool>,
+    pub artboard: ftd::executor::Value<Option<String>>,
+    pub common: Common,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct ContainerElement {
     pub common: Common,
     pub children: Vec<ftd::executor::Element>,
@@ -129,7 +143,8 @@ pub struct HTMLData {
     pub description: ftd::executor::Value<Option<String>>,
     pub og_description: ftd::executor::Value<Option<String>>,
     pub twitter_description: ftd::executor::Value<Option<String>>,
-    pub og_image: ftd::executor::Value<Option<ftd::executor::ImageSrc>>,
+    pub og_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
+    pub twitter_image: ftd::executor::Value<Option<ftd::executor::RawImage>>,
     pub theme_color: ftd::executor::Value<Option<ftd::executor::Color>>,
 }
 
@@ -151,6 +166,26 @@ pub struct Text {
     pub display: ftd::executor::Value<Option<ftd::executor::Display>>,
 }
 
+impl Text {
+    pub(crate) fn set_auto_id(&mut self) {
+        if self
+            .common
+            .region
+            .value
+            .as_ref()
+            .filter(|r| r.is_heading())
+            .is_some()
+            && self.common.id.value.is_none()
+        {
+            self.common.id = ftd::executor::Value::new(
+                Some(slug::slugify(self.text.value.original.as_str())),
+                Some(self.common.line_number),
+                vec![],
+            )
+        }
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
 pub struct Rendered {
     pub original: String,
@@ -160,6 +195,7 @@ pub struct Rendered {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ftd::executor::Value<ImageSrc>,
+    pub alt: ftd::executor::Value<Option<String>>,
     pub common: Common,
 }
 
@@ -169,6 +205,7 @@ pub struct ImageSrc {
     pub dark: ftd::executor::Value<String>,
 }
 
+#[allow(dead_code)]
 impl ImageSrc {
     pub(crate) fn optional_image(
         properties: &[ftd::interpreter::Property],
@@ -281,11 +318,92 @@ impl ImageSrc {
         (
             r#"
                 let c = {0};
-                if (typeof c === 'object' && "light" in c) {
+                if (typeof c === 'object' && !!c && "light" in c) {
                     if (data["ftd#dark-mode"] && "dark" in c){ c.dark } else { c.light }
                 } else {
                     c
                 }
+            "#
+            .to_string(),
+            true,
+        )
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct RawImage {
+    pub src: ftd::executor::Value<String>,
+}
+
+impl RawImage {
+    pub(crate) fn optional_image(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<RawImage>>> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_RAW_IMAGE_SRC,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            RawImage::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<RawImage>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(RawImage::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<RawImage> {
+        let src = {
+            let value = values.get("src").ok_or(ftd::executor::Error::ParseError {
+                message: "`src` field in ftd.raw-image-src not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter::PropertySource::header("src"))],
+            )
+        };
+
+        Ok(RawImage { src })
+    }
+
+    pub fn image_pattern() -> (String, bool) {
+        (
+            r#"
+                let c = {0};
+                if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
             "#
             .to_string(),
             true,
@@ -610,6 +728,7 @@ pub struct Common {
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
+    pub opacity: ftd::executor::Value<Option<f64>>,
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
     pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
@@ -1032,6 +1151,15 @@ pub fn image_from_properties(
         )
     };
 
+    let alt = ftd::executor::value::optional_string(
+        "alt",
+        "ftd#image",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
     let common = common_from_properties(
         properties,
         events,
@@ -1043,7 +1171,7 @@ pub fn image_from_properties(
         inherited_variables,
         "ftd#image",
     )?;
-    Ok(Image { src, common })
+    Ok(Image { src, alt, common })
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1154,6 +1282,104 @@ pub fn container_element_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
+pub fn rive_from_properties(
+    properties: &[ftd::interpreter::Property],
+    events: &[ftd::interpreter::Event],
+    arguments: &[ftd::interpreter::Argument],
+    condition: &Option<ftd::interpreter::Expression>,
+    doc: &mut ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+) -> ftd::executor::Result<Rive> {
+    let component_name = "ftd#rive";
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+        inherited_variables,
+        component_name,
+    )?;
+    let rive = Rive {
+        src: ftd::executor::value::string(
+            "src",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        canvas_width: ftd::executor::value::i64(
+            "canvas-width",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        canvas_height: ftd::executor::value::i64(
+            "canvas-height",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        state_machine: ftd::executor::value::string_list(
+            "state-machine",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            inherited_variables,
+        )?,
+        autoplay: ftd::executor::value::bool(
+            "autoplay",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        artboard: ftd::executor::value::optional_string(
+            "artboard",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        common,
+    };
+
+    let id = rive
+        .common
+        .id
+        .value
+        .clone()
+        .ok_or(ftd::executor::Error::ParseError {
+            message: "id is required".to_string(),
+            doc_id: doc.name.to_string(),
+            line_number,
+        })?;
+
+    doc.rive_data.push(ftd::executor::RiveData {
+        id,
+        src: rive.src.value.to_string(),
+        state_machine: rive.state_machine.value.clone(),
+        artboard: rive.artboard.value.clone(),
+        autoplay: rive.autoplay.value,
+    });
+
+    Ok(rive)
+}
+
 pub fn document_from_properties(
     properties: &[ftd::interpreter::Property],
     arguments: &[ftd::interpreter::Argument],
@@ -1225,12 +1451,21 @@ pub fn html_data_from_properties(
             doc,
             line_number,
         )?,
-        og_image: ftd::executor::ImageSrc::optional_image(
+        og_image: ftd::executor::RawImage::optional_image(
             properties,
             arguments,
             doc,
             line_number,
             "og-image",
+            &Default::default(),
+            component_name,
+        )?,
+        twitter_image: ftd::executor::RawImage::optional_image(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "twitter-image",
             &Default::default(),
             component_name,
         )?,
@@ -1266,7 +1501,7 @@ pub fn common_from_properties(
 
     doc.js.extend(
         ftd::executor::value::string_list(
-            "js-list",
+            "js",
             component_name,
             properties,
             arguments,
@@ -1276,23 +1511,10 @@ pub fn common_from_properties(
         )?
         .value,
     );
-
-    if let Some(js) = ftd::executor::value::optional_string(
-        "js",
-        component_name,
-        properties,
-        arguments,
-        doc,
-        line_number,
-    )?
-    .value
-    {
-        doc.js.insert(js);
-    }
 
     doc.css.extend(
         ftd::executor::value::string_list(
-            "css-list",
+            "css",
             component_name,
             properties,
             arguments,
@@ -1302,19 +1524,6 @@ pub fn common_from_properties(
         )?
         .value,
     );
-
-    if let Some(css) = ftd::executor::value::optional_string(
-        "css",
-        component_name,
-        properties,
-        arguments,
-        doc,
-        line_number,
-    )?
-    .value
-    {
-        doc.css.insert(css);
-    }
 
     Ok(Common {
         id: ftd::executor::value::optional_string(
@@ -1890,6 +2099,14 @@ pub fn common_from_properties(
             "overflow-y",
             inherited_variables,
             component_name,
+        )?,
+        opacity: ftd::executor::value::optional_f64(
+            "opacity",
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
         )?,
         resize: ftd::executor::Resize::optional_resize(
             properties,

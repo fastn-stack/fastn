@@ -55,6 +55,110 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
     }
 }
 
+pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> String {
+    use colored::Colorize;
+
+    match value {
+        serde_json::Value::Null => "null".bright_black().to_string(),
+        serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
+        serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
+        serde_json::Value::String(v) => format!(
+            "\"{}\"",
+            v.replace('\\', "\\\\")
+                .replace('\n', "\\n")
+                .replace('\"', "\\\"")
+        )
+        .bright_yellow()
+        .to_string(),
+        serde_json::Value::Array(v) => {
+            let mut s = String::new();
+            for (idx, value) in v.iter().enumerate() {
+                s.push_str(&format!(
+                    "{comma}\n{indent}{value}",
+                    indent = "  ".repeat(indent_level as usize),
+                    value = value_to_colored_string(value, indent_level + 1),
+                    comma = if idx.eq(&0) { "" } else { "," }
+                ));
+            }
+            format!("[{}\n{}]", s, "  ".repeat((indent_level - 1) as usize))
+        }
+        serde_json::Value::Object(v) => {
+            let mut s = String::new();
+            for (idx, (key, value)) in v.iter().enumerate() {
+                s.push_str(&format!(
+                    "{comma}\n{indent}\"{i}\": {value}",
+                    indent = "  ".repeat(indent_level as usize),
+                    i = key.bright_cyan(),
+                    value = value_to_colored_string(value, indent_level + 1),
+                    comma = if idx.eq(&0) { "" } else { "," }
+                ));
+            }
+            format!("{{{}\n{}}}", s, "  ".repeat((indent_level - 1) as usize))
+        }
+    }
+}
+
+pub fn value_to_colored_string_without_null(
+    value: &serde_json::Value,
+    indent_level: u32,
+) -> String {
+    use colored::Colorize;
+
+    match value {
+        serde_json::Value::Null => "".to_string(),
+        serde_json::Value::Bool(v) => v.to_string().bright_green().to_string(),
+        serde_json::Value::Number(v) => v.to_string().bright_blue().to_string(),
+        serde_json::Value::String(v) => format!(
+            "\"{}\"",
+            v.replace('\\', "\\\\")
+                .replace('\n', "\\n")
+                .replace('\"', "\\\"")
+        )
+        .bright_yellow()
+        .to_string(),
+        serde_json::Value::Array(v) if v.is_empty() => "".to_string(),
+        serde_json::Value::Array(v) => {
+            let mut s = String::new();
+            let mut is_first = true;
+            for (_, value) in v.iter().enumerate() {
+                let value_string = value_to_colored_string_without_null(value, indent_level + 1);
+                if !value_string.is_empty() {
+                    s.push_str(&format!(
+                        "{comma}\n{indent}{value}",
+                        indent = "  ".repeat(indent_level as usize),
+                        value = value_string,
+                        comma = if is_first { "" } else { "," }
+                    ));
+                    is_first = false;
+                }
+            }
+            if s.is_empty() {
+                "".to_string()
+            } else {
+                format!("[{}\n{}]", s, "  ".repeat((indent_level - 1) as usize))
+            }
+        }
+        serde_json::Value::Object(v) => {
+            let mut s = String::new();
+            let mut is_first = true;
+            for (key, value) in v {
+                let value_string = value_to_colored_string_without_null(value, indent_level + 1);
+                if !value_string.is_empty() {
+                    s.push_str(&format!(
+                        "{comma}\n{indent}\"{i}\": {value}",
+                        indent = "  ".repeat(indent_level as usize),
+                        i = key.bright_cyan(),
+                        value = value_string,
+                        comma = if is_first { "" } else { "," }
+                    ));
+                    is_first = false;
+                }
+            }
+            format!("{{{}\n{}}}", s, "  ".repeat((indent_level - 1) as usize))
+        }
+    }
+}
+
 pub fn time(msg: &str) -> Timer {
     Timer {
         start: std::time::Instant::now(),
@@ -424,12 +528,13 @@ pub fn get_inline_css_html(inline_js: &[String]) -> String {
     result
 }
 
-fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str) -> String {
+fn get_extra_js(external_js: &[String], inline_js: &[String], js: &str, rive_data: &str) -> String {
     format!(
-        "{}{}{}",
+        "{}{}{}{}",
         get_external_js_html(external_js),
         get_inline_js_html(inline_js),
-        js
+        js,
+        rive_data
     )
 }
 
@@ -496,6 +601,7 @@ pub fn replace_markers_2022(
                 config.ftd_external_js.as_slice(),
                 config.ftd_inline_js.as_slice(),
                 html_ui.js.as_str(),
+                html_ui.rive_data.as_str(),
             )
             .as_str(),
         )

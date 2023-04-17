@@ -25,6 +25,7 @@ pub struct HTMLData {
     pub og_description: ftd::node::Value,
     pub twitter_description: ftd::node::Value,
     pub og_image: ftd::node::Value,
+    pub twitter_image: ftd::node::Value,
     pub theme_color: ftd::node::Value,
 }
 
@@ -70,10 +71,19 @@ impl ftd::executor::HTMLData {
             og_image: ftd::node::Value::from_executor_value(
                 self.og_image
                     .to_owned()
-                    .map(|v| v.map(|v| v.light.value))
+                    .map(|v| v.map(|v| v.src.value))
                     .value,
                 self.og_image.to_owned(),
-                Some(ftd::executor::ImageSrc::image_pattern()),
+                Some(ftd::executor::RawImage::image_pattern()),
+                doc_id,
+            ),
+            twitter_image: ftd::node::Value::from_executor_value(
+                self.twitter_image
+                    .to_owned()
+                    .map(|v| v.map(|v| v.src.value))
+                    .value,
+                self.twitter_image.to_owned(),
+                Some(ftd::executor::RawImage::image_pattern()),
                 doc_id,
             ),
             theme_color: ftd::node::Value::from_executor_value(
@@ -226,6 +236,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id, anchor_ids),
             ftd::executor::Element::CheckBox(c) => c.to_node(doc_id, anchor_ids),
+            ftd::executor::Element::Rive(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::Null { line_number } => Node {
                 classes: vec![],
                 events: vec![],
@@ -643,23 +654,54 @@ impl ftd::executor::Text {
         );
         n
     }
+}
 
-    pub fn set_auto_id(&mut self) {
-        if self
-            .common
-            .region
-            .value
-            .as_ref()
-            .filter(|r| r.is_heading())
-            .is_some()
-            && self.common.id.value.is_none()
-        {
-            self.common.id = ftd::executor::Value::new(
-                Some(slug::slugify(self.text.value.original.as_str())),
-                Some(self.common.line_number),
-                vec![],
-            )
+impl ftd::executor::Rive {
+    pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
+        Node {
+            node: s("canvas"),
+            display: s("block"),
+            condition: self.common.condition.to_owned(),
+            attrs: self.attrs(doc_id),
+            style: self.common.style(doc_id, &mut [], anchor_ids),
+            children: vec![],
+            text: Default::default(),
+            classes: self.common.classes(),
+            null: false,
+            events: self.common.event.clone(),
+            data_id: self.common.data_id.clone(),
+            line_number: self.common.line_number,
+            raw_data: None,
+            web_component: None,
         }
+    }
+
+    fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
+        use ftd::node::utils::CheckMap;
+
+        let mut d: ftd::Map<ftd::node::Value> = self.common.attrs(doc_id);
+
+        d.check_and_insert(
+            "width",
+            ftd::node::Value::from_executor_value(
+                Some(self.canvas_width.value.to_string()),
+                self.canvas_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "height",
+            ftd::node::Value::from_executor_value(
+                Some(self.canvas_height.value.to_string()),
+                self.canvas_height.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d
     }
 }
 
@@ -997,6 +1039,15 @@ impl ftd::executor::Image {
                     doc_id,
                 ),
             );
+            n.attrs.insert(
+                s("alt"),
+                ftd::node::Value::from_executor_value(
+                    image.alt.to_owned().value,
+                    image.alt.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
             n
         }
     }
@@ -1110,6 +1161,16 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.z_index.value.as_ref().map(|v| v.to_string()),
                 self.z_index.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "opacity",
+            ftd::node::Value::from_executor_value(
+                self.opacity.value.as_ref().map(|v| v.to_string()),
+                self.opacity.to_owned(),
                 None,
                 doc_id,
             ),

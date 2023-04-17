@@ -3,7 +3,7 @@ body body:
 integer start: 0
 integer $count:
 string separator: ,
-js: ftd/t/web_component.js
+js: ftd/ftd/t/assets/web_component.js
 
 -- end: word-count
 

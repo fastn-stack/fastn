@@ -154,6 +154,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Component(row_function()),
         ),
         (
+            "ftd#rive".to_string(),
+            ftd::interpreter::Thing::Component(rive_function()),
+        ),
+        (
             "ftd#container".to_string(),
             ftd::interpreter::Thing::Component(container_function()),
         ),
@@ -200,6 +204,265 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
         (
             "ftd#image".to_string(),
             ftd::interpreter::Thing::Component(image_function()),
+        ),
+        (
+            "ftd#set-rive-boolean".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#set-rive-boolean".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::boolean().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.set_rive_boolean(rive, input, value)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#toggle-rive-boolean".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#toggle-rive-boolean".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.toggle_rive_boolean(rive, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#set-rive-integer".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#set-rive-integer".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::integer().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.set_rive_integer(rive, input, value)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#fire-rive".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#fire-rive".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.fire_rive(rive, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#play-rive".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#play-rive".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.play_rive(rive, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#pause-rive".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#pause-rive".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.pause_rive(rive, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#toggle-play-rive".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#toggle-play-rive".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "rive".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "input".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.toggle_play_rive(rive, input)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+            })
         ),
         (
             "ftd#toggle".to_string(),
@@ -604,6 +867,23 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                     },
                 ])
                 .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "src".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ])
+                    .collect(),
                 line_number: 0,
             }),
         ),
@@ -8118,12 +8398,20 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
         name: "ftd#image".to_string(),
         arguments: [
             common_arguments(),
-            vec![ftd::interpreter::Argument::default(
-                "src",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
-                    .into_kind_data()
-                    .caption(),
-            )],
+            vec![
+                ftd::interpreter::Argument::default(
+                    "src",
+                    ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        .into_kind_data()
+                        .caption(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "alt",
+                    ftd::interpreter::Kind::string()
+                        .into_kind_data()
+                        .into_optional(),
+                ),
+            ],
         ]
         .concat()
         .into_iter()
@@ -8376,6 +8664,67 @@ pub fn row_function() -> ftd::interpreter::ComponentDefinition {
     }
 }
 
+pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
+    use itertools::Itertools;
+
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#rive".to_string(),
+        arguments: [
+            common_arguments()
+                .into_iter()
+                .filter(|v| v.name.ne("id"))
+                .collect_vec(),
+            vec![
+                ftd::interpreter::Argument::default(
+                    "id",
+                    ftd::interpreter::Kind::string().into_kind_data().caption(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "src",
+                    ftd::interpreter::Kind::string().into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "canvas-width",
+                    ftd::interpreter::Kind::integer().into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "canvas-height",
+                    ftd::interpreter::Kind::integer().into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "state-machine",
+                    ftd::interpreter::Kind::string()
+                        .into_list()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument {
+                    name: "autoplay".to_string(),
+                    kind: ftd::interpreter::Kind::boolean().into_kind_data(),
+                    mutable: false,
+                    value: Some(ftd::interpreter::PropertyValue::Value {
+                        value: ftd::interpreter::Value::Boolean { value: true },
+                        is_mutable: false,
+                        line_number: 0,
+                    }),
+                    line_number: 0,
+                },
+                ftd::interpreter::Argument::default(
+                    "artboard",
+                    ftd::interpreter::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
 pub fn container_function() -> ftd::interpreter::ComponentDefinition {
     ftd::interpreter::ComponentDefinition {
         name: "ftd#container".to_string(),
@@ -8581,18 +8930,18 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
             },
             ftd::interpreter::Argument::default(
                 "og-image",
-                ftd::interpreter::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
             ),
             ftd::interpreter::Argument {
                 name: "twitter-image".to_string(),
-                kind: ftd::interpreter::Kind::string()
+                kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
                 value: Some(ftd::interpreter::PropertyValue::Reference {
-                    name: "ftd#document.description".to_string(),
+                    name: "ftd#document.og-image".to_string(),
                     kind: ftd::interpreter::Kind::string().into_kind_data(),
                     source: ftd::interpreter::PropertyValueSource::Local("document".to_string()),
                     is_mutable: false,
@@ -8682,6 +9031,12 @@ fn container_arguments() -> Vec<ftd::interpreter::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter::Argument> {
     vec![
+        ftd::interpreter::Argument::default(
+            "opacity",
+            ftd::interpreter::Kind::decimal()
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter::Argument::default(
             "shadow",
             ftd::interpreter::Kind::record(ftd::interpreter::FTD_SHADOW)
@@ -8815,19 +9170,7 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(
-            "js-list",
-            ftd::interpreter::Kind::string()
-                .into_list()
-                .into_kind_data(),
-        ),
-        ftd::interpreter::Argument::default(
             "js",
-            ftd::interpreter::Kind::string()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter::Argument::default(
-            "css-list",
             ftd::interpreter::Kind::string()
                 .into_list()
                 .into_kind_data(),
@@ -8835,7 +9178,7 @@ fn common_arguments() -> Vec<ftd::interpreter::Argument> {
         ftd::interpreter::Argument::default(
             "css",
             ftd::interpreter::Kind::string()
-                .into_optional()
+                .into_list()
                 .into_kind_data(),
         ),
         ftd::interpreter::Argument::default(

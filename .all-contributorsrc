@@ -23,39 +23,8 @@
         "tool",
         "test",
         "tutorial",
-        "video"
-      ]
-    },
-    {
-      "login": "AbrarNitk",
-      "name": "Abrar Khan",
-      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
-      "profile": "https://github.com/AbrarNitk",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "ideas",
-        "maintenance",
-        "mentoring",
-        "review",
-        "test"
-      ]
-    },
-    {
-      "login": "sharmashobhit",
-      "name": "Shobhit Sharma",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
-      "profile": "https://github.com/sharmashobhit",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "ideas",
-        "maintenance",
-        "mentoring",
-        "review",
-        "test"
+        "video",
+        "blog"
       ]
     },
     {
@@ -75,7 +44,8 @@
         "tool",
         "test",
         "tutorial",
-        "video"
+        "video",
+        "blog"
       ]
     },
     {
@@ -87,19 +57,10 @@
         "code",
         "doc",
         "test",
-        "ideas"
-      ]
-    },
-    {
-      "login": "AviralVerma13",
-      "name": "Aviral Verma",
-      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
-      "profile": "http://fifthtry.com",
-      "contributions": [
-        "code",
-        "doc",
-        "test",
-        "ideas"
+        "ideas",
+        "review",
+        "maintenance",
+        "blog"
       ]
     },
     {
@@ -115,12 +76,68 @@
         "mentoring",
         "review"
       ]
+    },
+    {
+      "login": "priyanka9634",
+      "name": "Priyanka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102957031?v=4",
+      "profile": "https://github.com/priyanka9634",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "gargajit",
+      "name": "Ajit Garg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/118595104?v=4",
+      "profile": "https://github.com/gargajit",
+      "contributions": [
+        "code",
+        "doc",
+        "blog"
+      ]
+    },
+    {
+      "login": "AbrarNitk",
+      "name": "Abrar Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
+      "profile": "https://github.com/AbrarNitk",
+      "contributions": [
+        "code",
+        "doc",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "sharmashobhit",
+      "name": "Shobhit Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
+      "profile": "https://github.com/sharmashobhit",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "AviralVerma13",
+      "name": "Aviral Verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
+      "profile": "http://fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "projectName": "fpm",
-  "projectOwner": "ftd-lang"
+  "projectName": "fastn",
+  "projectOwner": "fastn-stack"
 }

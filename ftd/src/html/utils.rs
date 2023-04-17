@@ -595,7 +595,7 @@ pub(crate) fn to_properties_string(
         None
     } else {
         Some(format!(
-            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            "args[\"{}\"]={{}};\n{}",
             node,
             properties_string.trim(),
         ))
@@ -629,7 +629,7 @@ pub(crate) fn to_argument_string(
         None
     } else {
         Some(format!(
-            "var args={{}};\nargs[\"{}\"]={{}};\n{}",
+            "args[\"{}\"]={{}};\n{}",
             node,
             properties_string.trim()
         ))
@@ -710,6 +710,67 @@ pub fn get_js_html(external_js: &[String]) -> String {
     result
 }
 
+pub fn get_rive_data_html(rive_data: &[ftd::executor::RiveData], id: &str) -> String {
+    if rive_data.is_empty() {
+        return "".to_string();
+    }
+
+    let mut result = vec![];
+    for rive in rive_data {
+        result.push(get_rive_html(rive, id));
+    }
+    format!(
+        "<script src=\"https://unpkg.com/@rive-app/canvas@1.0.98\"></script><script>{}</script>",
+        result.join("\n")
+    )
+}
+
+fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
+    use itertools::Itertools;
+
+    let rive_name = ftd::html::utils::function_name_to_js_function(
+        ftd::html::utils::name_with_id(rive.id.as_str(), id).as_str(),
+    );
+
+    let state_machines = if rive.state_machine.len().eq(&1) {
+        format!("'{}'", rive.state_machine[0])
+    } else {
+        format!(
+            "[{}]",
+            rive.state_machine
+                .iter()
+                .map(|v| format!("'{}'", v))
+                .join(",")
+        )
+    };
+
+    let artboard = rive
+        .artboard
+        .as_ref()
+        .map_or("null".to_string(), |v| format!("'{}'", v));
+
+    format!(
+        indoc::indoc! {"
+            window.{rive_name} = new rive.Rive({{
+                src: '{src}',
+                canvas: document.getElementById('{id}'),
+                autoplay: {autoplay},
+                stateMachines: {state_machines},
+                artboard: {artboard},
+                onLoad: (_) => {{
+                    window.{rive_name}.resizeDrawingSurfaceToCanvas();
+                }},
+            }});
+        "},
+        rive_name = rive_name,
+        src = rive.src,
+        id = rive.id,
+        autoplay = rive.autoplay,
+        state_machines = state_machines,
+        artboard = artboard
+    )
+}
+
 pub fn get_css_html(external_css: &[String]) -> String {
     let mut result = "".to_string();
     for css in external_css {
@@ -753,6 +814,12 @@ pub fn get_meta_data(html_data: &ftd::html::HTMLData) -> String {
     if let Some(ref image) = html_data.og_image {
         result.push(format!(
             "<meta property=\"og:image\" content=\"{}\">",
+            image
+        ));
+    }
+    if let Some(ref image) = html_data.twitter_image {
+        result.push(format!(
+            "<meta property=\"twitter:image\" content=\"{}\">",
             image
         ));
     }

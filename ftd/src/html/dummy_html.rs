@@ -65,6 +65,7 @@ impl<'a> DummyHtmlGenerator<'a> {
                                 \"LOOP__COUNTER\": index
                             }};
                             let data = {{...new_data, ...all_data}};
+                            var args={{}};
                             {arguments}
                             data = {{...args, ...all_data}};
                             if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
@@ -102,12 +103,13 @@ impl<'a> DummyHtmlGenerator<'a> {
                 format!(
                     indoc::indoc! {"
                     window.dummy_data_{id}[\"{dependency}\"][\"{data_id}\"] = function(all_data){{
+                        var args={{}};
                         {arguments}
                         let data = {{...args, ...all_data}};
                         if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
                             data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                         }}
-                        let html = \"{html}\".replace_format(data);
+                        let html = '{html}'.replace_format(data);
                         return [html, \"{data_id}\", {start_index}]
                     }}"
                     },
@@ -198,12 +200,13 @@ impl<'a> HelperHtmlGenerator<'a> {
         format!(
             indoc::indoc! {"
                 window.raw_nodes_{id}[\"{dependency}\"] = function(all_data){{
+                    var args={{}};
                     {arguments}
                     let data = {{...args, ...all_data}};
                     if (!!\"{node}\".trim() && !!window[\"raw_nodes_{id}\"] && !!window.raw_nodes_{id}[\"{node}\"]) {{
                         data[\"{node}\"] = window.raw_nodes_{id}[\"{node}\"](data);
                     }}
-                    let html = \"{html}\".replace_format(data);
+                    let html = '{html}'.replace_format(data);
                     return html;
                 }}"
             },

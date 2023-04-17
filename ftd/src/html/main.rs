@@ -12,6 +12,7 @@ pub struct HtmlUI {
     pub html_data: HTMLData,
     pub js: String,
     pub css: String,
+    pub rive_data: String,
 }
 
 pub struct HTMLData {
@@ -22,6 +23,7 @@ pub struct HTMLData {
     pub og_description: Option<String>,
     pub twitter_description: Option<String>,
     pub og_image: Option<String>,
+    pub twitter_image: Option<String>,
     pub theme_color: Option<String>,
 }
 
@@ -35,6 +37,7 @@ impl ftd::node::HTMLData {
             og_description: self.og_description.value.to_owned(),
             twitter_description: self.twitter_description.value.to_owned(),
             og_image: self.og_image.value.to_owned(),
+            twitter_image: self.twitter_image.value.to_owned(),
             theme_color: self.theme_color.value.to_owned(),
         }
     }
@@ -94,6 +97,7 @@ impl HtmlUI {
             html_data: node_data.html_data.to_html_data(),
             js: ftd::html::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
             css: ftd::html::utils::get_css_html(node_data.css.into_iter().collect_vec().as_slice()),
+            rive_data: ftd::html::utils::get_rive_data_html(node_data.rive_data.as_slice(), id),
         })
     }
 }

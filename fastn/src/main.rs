@@ -199,6 +199,16 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::abort_merge(&config, abort_merge.value_of_("path").unwrap()).await;
     }
 
+    if let Some(query) = matches.subcommand_matches("query") {
+        return fastn_core::query(
+            &config,
+            query.value_of_("stage").unwrap(),
+            query.value_of_("path"),
+            query.get_flag("null"),
+        )
+        .await;
+    }
+
     if let Some(revert) = matches.subcommand_matches("revert") {
         return fastn_core::revert(&config, revert.value_of_("path").unwrap()).await;
     }
@@ -305,6 +315,14 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Aborts the remote changes")
                 .arg(clap::arg!(path: <PATH> "The path of the conflicted file"))
                 .hide(true), // hidden since the feature is not being released yet.
+        )
+        .subcommand(
+            clap::Command::new("query")
+                .about("JSON Dump in various stages")
+                .arg(clap::arg!(--stage <STAGE> "The stage. Currently supported (p1)").required
+                (true))
+                .arg(clap::arg!(-p --path [PATH] "The path of the file"))
+                .arg(clap::arg!(-n --null "JSON with null and empty list"))
         )
         .subcommand(
             clap::Command::new("clone")

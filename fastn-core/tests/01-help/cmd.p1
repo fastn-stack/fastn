@@ -10,6 +10,7 @@ Usage: fastn [OPTIONS] [COMMAND]
 Commands:
   create-package  Create a new fastn package
   build           Build static site from this fastn package
+  query           JSON Dump in various stages
   update          Reinstall all the dependency packages
   serve           Serve package content over HTTP
   publish-static  Publish fastn package statically

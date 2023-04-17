@@ -78,7 +78,7 @@
           "Value": {
             "value": {
               "String": {
-                "text": "ftd/t/web_component.js"
+                "text": "ftd/ftd/t/assets/web_component.js"
               }
             },
             "is_mutable": false,
@@ -548,6 +548,11 @@
         "line_number": null,
         "properties": []
       },
+      "opacity": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "resize": {
         "value": null,
         "line_number": null,
@@ -646,6 +651,11 @@
       "line_number": null,
       "properties": []
     },
+    "twitter_image": {
+      "value": null,
+      "line_number": null,
+      "properties": []
+    },
     "theme_color": {
       "value": null,
       "line_number": null,
@@ -657,7 +667,8 @@
   },
   "element_constructor": {},
   "js": [
-    "ftd/t/web_component.js:type=\"module\""
+    "ftd/ftd/t/assets/web_component.js:type=\"module\""
   ],
-  "css": []
+  "css": [],
+  "rive_data": []
 }
