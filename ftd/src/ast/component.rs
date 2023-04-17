@@ -245,7 +245,7 @@ impl Component {
                 }
                 for header in headers.0.iter() {
                     if header.key.eq(ftd::ast::utils::LOOP)
-                        || Event::get_event_name(header.key.as_str()).is_some()
+                        || Event::get_event_name_from_header_value(header).is_some()
                         || ftd::ast::utils::is_condition(header.key.as_str(), &header.kind)
                     {
                         continue;
@@ -558,6 +558,14 @@ impl Event {
         }
     }
 
+    fn get_event_name_from_header_value(header_value: &HeaderValue) -> Option<String> {
+        let mut name = header_value.key.clone();
+        if header_value.mutable {
+            name = format!("${}", name);
+        }
+        Event::get_event_name(name.as_str())
+    }
+
     fn get_event_name(input: &str) -> Option<String> {
         if !(input.starts_with("$on-") && input.ends_with(ftd::ast::utils::REFERENCE)) {
             return None;
@@ -581,7 +589,7 @@ impl Event {
     }
 
     fn from_ast_header(header: &HeaderValue, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
-        let event_name = if let Some(name) = Event::get_event_name(header.key.as_str()) {
+        let event_name = if let Some(name) = Event::get_event_name_from_header_value(header) {
             name
         } else {
             return Ok(None);

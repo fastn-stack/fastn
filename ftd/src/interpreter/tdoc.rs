@@ -1657,8 +1657,6 @@ impl<'a> TDoc<'a> {
             line_number,
         })?;
 
-        dbg!(&json);
-
         self.as_json_(line_number, &json, kind.to_owned())
     }
 
@@ -1708,7 +1706,6 @@ impl<'a> TDoc<'a> {
             ftd::interpreter::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(&name, line_number)?.fields;
                 let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
-                dbg!(&rec_fields, &json);
                 if let serde_json::Value::Object(o) = json {
                     for field in rec_fields {
                         let val = match o.get(&field.name) {
