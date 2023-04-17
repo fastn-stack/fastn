@@ -7,8 +7,6 @@ pub async fn process<'a>(
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: document key should be optional
 
-    dbg!("query", &value);
-
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
         Err(_e) => ftd::ast::HeaderValues::new(vec![]),
