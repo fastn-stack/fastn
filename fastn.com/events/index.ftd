@@ -228,7 +228,7 @@ color: $inherited.colors.text
 
 -- title-name: $event-desktop.start-date
 
--- title-name: at
+-- title-name: from
 
 -- title-name: $event-desktop.start-time
 

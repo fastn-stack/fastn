@@ -15,8 +15,8 @@ sidebar: false
 
 -- event.event: Jumpstart your Web Development with FTD
 banner-src: $assets.files.images.events.event-banner.svg
-start-time: 7:30 PM
-end-time: 9:30 PM (IST)
+start-time: 8:00 PM
+end-time: 10:00 PM (IST)
 start-day: Monday
 start-month: April 17
 start-date: 2023
