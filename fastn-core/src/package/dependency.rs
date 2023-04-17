@@ -463,7 +463,6 @@ impl fastn_core::Package {
     ///
     /// `process_fastn()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
-    ///
     #[async_recursion::async_recursion(?Send)]
     async fn process_fastn(
         root: &camino::Utf8PathBuf,
