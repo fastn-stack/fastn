@@ -609,6 +609,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -724,7 +752,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="align-items: start; background-image: url(https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg); background-position: center top; background-repeat: no-repeat; background-size: contain; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: 150px; justify-content: start; text-decoration: none; width: 150px" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); height: auto; text-decoration: none; width: auto" class="ft_md">Hello Image</div></div><div data-id="2:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; gap: 0; height: auto; justify-content: space-between; text-decoration: none; width: 100%" ><div data-id="2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_dark_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(45,212,191,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">Dark Mode</div><div data-id="2,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_light_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(79,178,223,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">Light Mode</div><div data-id="2,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_system_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(223,137,79,1); border-bottom-width: 0px; border-left-width: 0px; border-radius: 2px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; height: auto; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; text-decoration: none; width: 132px" class="ft_md">System Mode</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="background-image: url(https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg); background-position: center top; background-repeat: no-repeat; background-size: contain; cursor: pointer; height: 150px; width: 150px" class="ft_common ft_column"><div data-id="1,0:main" style="color: rgba(255,255,255,1)" class="ft_common ft_md">Hello Image</div></div><div data-id="2:main" style="gap: 0; justify-content: space-between; width: 100%" class="ft_common ft_row"><div data-id="2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_dark_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(45,212,191,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Dark Mode</div><div data-id="2,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_light_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(79,178,223,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Light Mode</div><div data-id="2,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_system_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(223,137,79,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">System Mode</div></div></div>
 
 
 <script>
@@ -1443,7 +1471,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;

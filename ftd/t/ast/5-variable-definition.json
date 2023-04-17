@@ -8,9 +8,9 @@
       },
       "mutable": false,
       "value": {
-        "String": {
+        "string-value": {
           "value": "40",
-          "line_number": 1,
+          "line-number": 1,
           "source": "Default"
         }
       },

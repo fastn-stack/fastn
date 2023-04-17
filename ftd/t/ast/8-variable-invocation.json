@@ -8,9 +8,9 @@
       },
       "mutable": false,
       "value": {
-        "String": {
+        "string-value": {
           "value": "true",
-          "line_number": 1,
+          "line-number": 1,
           "source": "Default"
         }
       },
@@ -25,9 +25,9 @@
     "VariableInvocation": {
       "name": "score",
       "value": {
-        "String": {
+        "string-value": {
           "value": "40",
-          "line_number": 3,
+          "line-number": 3,
           "source": "Default"
         }
       },
@@ -43,9 +43,9 @@
         "Record": {
           "name": "$score",
           "caption": {
-            "String": {
+            "string-value": {
               "value": "50",
-              "line_number": 5,
+              "line-number": 5,
               "source": "Default"
             }
           },
@@ -54,13 +54,13 @@
               "key": "if",
               "mutable": false,
               "value": {
-                "String": {
+                "string-value": {
                   "value": "not $flag",
-                  "line_number": 6,
+                  "line-number": 6,
                   "source": "Default"
                 }
               },
-              "line_number": 6,
+              "line-number": 6,
               "kind": null,
               "condition": null
             }
@@ -72,7 +72,7 @@
       },
       "condition": {
         "expression": "not $flag",
-        "line_number": 6
+        "line-number": 6
       },
       "processor": null,
       "line_number": 5

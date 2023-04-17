@@ -6,10 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#value": {
-"address": "Some address",
-"is-selected": true
-},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -727,7 +723,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_row"><div data-id="0,0:main" style="" class="ft_common ft_md">true</div><input checked data-id="0,1:main" type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value.is-selected&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md"></input><div data-id="0,2:main" style="" class="ft_common ft_md">Some address</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><canvas data-id="0:main" height="500" id="fastn" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_rive_boolean___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn&quot;],[&quot;input&quot;,&quot;play&quot;],[&quot;value&quot;,false]]}]', this)" style="width: 440px" class="ft_common"></canvas><canvas data-id="1:main" height="500" id="fastn-anime" width="500" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__play_rive___main&quot;,&quot;values&quot;:[[&quot;rive&quot;,&quot;fastn-anime&quot;],[&quot;input&quot;,&quot;play&quot;]]}]', this)" style="width: 800px" class="ft_common"></canvas></div>
 
 
 <script>
@@ -1739,30 +1735,25 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 
 
 window.node_change_main = {};
-window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#value.is-selected", data);
+window.node_change_main["1:main__width"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(380)))));
 }
-window.node_change_main["0,1:main__checked"] = function(data) {
-if (document.querySelector(`[data-id="0,1:main"]`).getAttribute("checked") == "REMOVE-KEY"){
-document.querySelector(`[data-id="0,1:main"]`).removeAttribute("checked");
-}
-}
-window.node_change_main["0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#value.address", data);
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(800)))));}
 }
 window.set_value_main = {};
-window.set_value_main["foo#value"] = function (data, new_value, remaining) {
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#value" + "." + remaining, new_value);
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#value", new_value);
+set_data_value(data, "ftd#device", new_value);
 }
 
-window.ftd.call_mutable_value_changes("foo#value", "main");
-window.ftd.call_immutable_value_changes("foo#value", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__text"]){window.node_change_main["0,0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
@@ -1772,6 +1763,27 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
+<script src="https://unpkg.com/@rive-app/canvas@1.0.98"></script><script>window.fastn___main = new rive.Rive({
+src: 'ftd/ftd/t/assets/fastn.riv',
+canvas: document.getElementById('fastn'),
+autoplay: true,
+stateMachines: 'State Machine 1',
+artboard: null,
+onLoad: (_) => {
+window.fastn___main.resizeDrawingSurfaceToCanvas();
+},
+});
 
+window.fastn_anime___main = new rive.Rive({
+src: 'ftd/ftd/t/assets/fastn-anime.riv',
+canvas: document.getElementById('fastn-anime'),
+autoplay: true,
+stateMachines: 'State Machine 1',
+artboard: null,
+onLoad: (_) => {
+window.fastn_anime___main.resizeDrawingSurfaceToCanvas();
+},
+});
+</script>
 </body>
 </html>

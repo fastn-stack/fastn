@@ -1,9 +1,9 @@
 [
   {
-    "Import": {
+    "import": {
       "module": "foo",
       "alias": "foo",
-      "line_number": 1
+      "line-number": 1
     }
   }
 ]

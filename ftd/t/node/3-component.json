@@ -1,7 +1,10 @@
 {
   "name": "foo",
   "node": {
-    "classes": [],
+    "classes": [
+      "ft_common",
+      "ft_column"
+    ],
     "events": [],
     "node": "div",
     "display": "flex",
@@ -21,74 +24,8 @@
       }
     },
     "style": {
-      "align-items": {
-        "value": "start",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "border-bottom-width": {
-        "value": "0px",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "border-left-width": {
-        "value": "0px",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "border-right-width": {
-        "value": "0px",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "border-style": {
-        "value": "solid",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "border-top-width": {
-        "value": "0px",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "box-sizing": {
-        "value": "border-box",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "display": {
-        "value": "flex",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "flex-direction": {
-        "value": "column",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
       "height": {
         "value": "100%",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "justify-content": {
-        "value": "start",
-        "properties": [],
-        "line_number": null,
-        "default": null
-      },
-      "text-decoration": {
-        "value": "none",
         "properties": [],
         "line_number": null,
         "default": null
@@ -102,7 +39,10 @@
     },
     "children": [
       {
-        "classes": [],
+        "classes": [
+          "ft_common",
+          "ft_row"
+        ],
         "events": [],
         "node": "div",
         "display": "flex",
@@ -122,72 +62,6 @@
           }
         },
         "style": {
-          "align-items": {
-            "value": "start",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "border-bottom-width": {
-            "value": "0px",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "border-left-width": {
-            "value": "0px",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "border-right-width": {
-            "value": "0px",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "border-style": {
-            "value": "solid",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "border-top-width": {
-            "value": "0px",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "box-sizing": {
-            "value": "border-box",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "display": {
-            "value": "flex",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "flex-direction": {
-            "value": "row",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "height": {
-            "value": "auto",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "justify-content": {
-            "value": "start",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
           "padding": {
             "value": "40px",
             "properties": [
@@ -231,23 +105,12 @@
             ],
             "line_number": 4,
             "default": null
-          },
-          "text-decoration": {
-            "value": "none",
-            "properties": [],
-            "line_number": null,
-            "default": null
-          },
-          "width": {
-            "value": "auto",
-            "properties": [],
-            "line_number": null,
-            "default": null
           }
         },
         "children": [
           {
             "classes": [
+              "ft_common",
               "ft_md"
             ],
             "events": [],
@@ -269,48 +132,6 @@
               }
             },
             "style": {
-              "border-bottom-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-left-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-right-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-style": {
-                "value": "solid",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-top-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "box-sizing": {
-                "value": "border-box",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "height": {
-                "value": "auto",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
               "padding": {
                 "value": "20px",
                 "properties": [
@@ -421,18 +242,6 @@
                 ],
                 "line_number": 7,
                 "default": null
-              },
-              "text-decoration": {
-                "value": "none",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "width": {
-                "value": "auto",
-                "properties": [],
-                "line_number": null,
-                "default": null
               }
             },
             "children": [],
@@ -470,6 +279,7 @@
           },
           {
             "classes": [
+              "ft_common",
               "ft_md"
             ],
             "events": [],
@@ -491,48 +301,6 @@
               }
             },
             "style": {
-              "border-bottom-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-left-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-right-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-style": {
-                "value": "solid",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "border-top-width": {
-                "value": "0px",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "box-sizing": {
-                "value": "border-box",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "height": {
-                "value": "auto",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -647,18 +415,6 @@
                   }
                 ],
                 "line_number": 12,
-                "default": null
-              },
-              "text-decoration": {
-                "value": "none",
-                "properties": [],
-                "line_number": null,
-                "default": null
-              },
-              "width": {
-                "value": "auto",
-                "properties": [],
-                "line_number": null,
                 "default": null
               }
             },

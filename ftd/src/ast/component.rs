@@ -276,11 +276,12 @@ impl Component {
 
                 for child in values {
                     children.push(Component::from_variable_value(
-                        name.as_str(),
+                        child.key.as_str(),
                         child.value,
                         doc_id,
                     )?);
                 }
+
                 Ok(ftd::ast::Component {
                     name,
                     properties,
