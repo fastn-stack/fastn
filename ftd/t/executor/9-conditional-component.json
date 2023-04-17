@@ -289,7 +289,7 @@
         "properties": []
       },
       "align_content": {
-        "value": "TopLeft",
+        "value": null,
         "line_number": null,
         "properties": []
       },
@@ -638,9 +638,7 @@
                 "properties": []
               },
               "border_width": {
-                "value": {
-                  "Px": 0
-                },
+                "value": null,
                 "line_number": null,
                 "properties": []
               },
@@ -715,12 +713,12 @@
                 "properties": []
               },
               "width": {
-                "value": "Auto",
+                "value": null,
                 "line_number": null,
                 "properties": []
               },
               "height": {
-                "value": "Auto",
+                "value": null,
                 "line_number": null,
                 "properties": []
               },
@@ -1078,9 +1076,7 @@
         "properties": []
       },
       "border_width": {
-        "value": {
-          "Px": 0
-        },
+        "value": null,
         "line_number": null,
         "properties": []
       },

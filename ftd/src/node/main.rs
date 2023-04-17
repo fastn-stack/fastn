@@ -180,6 +180,7 @@ impl Node {
         doc_id: &str,
         display: &str,
         anchor_ids: &mut Vec<String>,
+        container_class: &str,
     ) -> Node {
         use itertools::Itertools;
 
@@ -187,6 +188,7 @@ impl Node {
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
         classes.extend(common.classes());
+        classes.push(container_class.to_string());
 
         let node = common.node();
 
@@ -325,35 +327,23 @@ impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
-            n.style
-                .insert(s("display"), ftd::node::Value::from_string("flex"));
-        }
-
-        n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_string("row"));
-
-        n.style.insert(
-            s("align-items"),
-            ftd::node::Value::from_string("flex-start"),
-        );
-
-        n.style.insert(
-            s("justify-content"),
-            ftd::node::Value::from_string("flex-start"),
+        let mut n = Node::from_container(
+            &self.common,
+            &self.container,
+            doc_id,
+            "flex",
+            anchor_ids,
+            "ft_row",
         );
 
         n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_justify_content(true))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_justify_content(true)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(true)),
                 doc_id,
@@ -384,13 +374,11 @@ impl ftd::executor::Row {
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_align_items(true))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_align_items(true)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(true)),
                 doc_id,
@@ -404,34 +392,23 @@ impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str, anchor_ids: &mut Vec<String>) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex", anchor_ids);
-        if !self.common.is_not_visible {
-            n.style
-                .insert(s("display"), ftd::node::Value::from_string("flex"));
-        }
-        n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_string("column"));
-
-        n.style.insert(
-            s("align-items"),
-            ftd::node::Value::from_string("flex-start"),
-        );
-
-        n.style.insert(
-            s("justify-content"),
-            ftd::node::Value::from_string("flex-start"),
+        let mut n = Node::from_container(
+            &self.common,
+            &self.container,
+            doc_id,
+            "flex",
+            anchor_ids,
+            "ft_column",
         );
 
         n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_justify_content(false))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_justify_content(false)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(false)),
                 doc_id,
@@ -462,13 +439,11 @@ impl ftd::executor::Column {
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.container
-                        .align_content
-                        .to_owned()
-                        .map(|v| v.to_css_align_items(false))
-                        .value,
-                ),
+                self.container
+                    .align_content
+                    .to_owned()
+                    .map(|v| v.map(|a| a.to_css_align_items(false)))
+                    .value,
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(false)),
                 doc_id,
@@ -1054,18 +1029,10 @@ impl ftd::executor::Image {
 }
 
 impl ftd::executor::Common {
-    fn no_border_style(&self) -> bool {
-        self.border_style.value.is_none()
-            && self.border_style_horizontal.value.is_none()
-            && self.border_style_vertical.value.is_none()
-            && self.border_style_top.value.is_none()
-            && self.border_style_bottom.value.is_none()
-            && self.border_style_left.value.is_none()
-            && self.border_style_right.value.is_none()
-    }
-
     fn classes(&self) -> Vec<String> {
-        self.classes.to_owned().value
+        let mut classes = self.classes.to_owned().value;
+        classes.push("ft_common".to_string());
+        classes
     }
 
     fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
@@ -1148,13 +1115,9 @@ impl ftd::executor::Common {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
 
-        d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
-
         if self.is_not_visible {
             d.check_and_insert("display", ftd::node::Value::from_string("none"));
         }
-
-        d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
 
         d.check_and_insert(
             "z-index",
@@ -1268,7 +1231,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(self.width.to_owned().map(|v| v.to_css_string()).value),
+                self.width.value.to_owned().map(|v| v.to_css_string()),
                 self.width.to_owned(),
                 None,
                 doc_id,
@@ -1542,7 +1505,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(self.height.to_owned().map(|v| v.to_css_string()).value),
+                self.height.value.as_ref().map(|v| v.to_css_string()),
                 self.height.to_owned(),
                 None,
                 doc_id,
@@ -1910,28 +1873,13 @@ impl ftd::executor::Common {
             ),
         );
 
-        // Default border-style
-        if self.no_border_style() {
-            d.check_and_insert(
-                "border-style",
-                ftd::node::Value::from_executor_value(
-                    Some(s("solid")),
-                    ftd::executor::Value::new(None::<String>, None, vec![]),
-                    None,
-                    doc_id,
-                ),
-            );
-        }
-
         d.check_and_insert(
             "border-bottom-width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.border_width
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
+                self.border_width
+                    .to_owned()
+                    .map(|v| v.map(|l| l.to_css_string()))
+                    .value,
                 self.border_width.to_owned(),
                 None,
                 doc_id,
@@ -1941,12 +1889,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-top-width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.border_width
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
+                self.border_width
+                    .to_owned()
+                    .map(|v| v.map(|l| l.to_css_string()))
+                    .value,
                 self.border_width.to_owned(),
                 None,
                 doc_id,
@@ -1956,12 +1902,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-left-width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.border_width
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
+                self.border_width
+                    .to_owned()
+                    .map(|v| v.map(|l| l.to_css_string()))
+                    .value,
                 self.border_width.to_owned(),
                 None,
                 doc_id,
@@ -1971,12 +1915,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-right-width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.border_width
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
+                self.border_width
+                    .to_owned()
+                    .map(|v| v.map(|l| l.to_css_string()))
+                    .value,
                 self.border_width.to_owned(),
                 None,
                 doc_id,
