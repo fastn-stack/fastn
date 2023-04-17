@@ -581,6 +581,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -696,7 +724,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;SDFSD&quot;],[&quot;num&quot;,2]]},{&quot;name&quot;:&quot;foo__delete___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;num&quot;,3]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: none; flex-direction: row; height: auto; justify-content: start; margin-top: 26px; padding-left: 50px; text-decoration: none; width: 1400px" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">click to add</div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;trial&quot;],[&quot;num&quot;,0]]}]', this)" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; height: auto; justify-content: start; margin-top: 26px; padding-left: 50px; text-decoration: none; width: 1400px" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">click to add</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;SDFSD&quot;],[&quot;num&quot;,2]]},{&quot;name&quot;:&quot;foo__delete___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;num&quot;,3]]}]', this)" style="cursor: pointer; display: none; margin-top: 26px; padding-left: 50px; width: 1400px" class="ft_common ft_row"><div data-id="0,0:main" style="" class="ft_common ft_md">click to add</div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,&quot;trial&quot;],[&quot;num&quot;,0]]}]', this)" style="cursor: pointer; margin-top: 26px; padding-left: 50px; width: 1400px" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">click to add</div></div></div>
 
 
 <script>
@@ -1804,7 +1832,7 @@ let data = {...args, ...all_data};
 if (!!"".trim() && !!window["raw_nodes_main"] && !!window.raw_nodes_main[""]) {
 data[""] = window.raw_nodes_main[""](data);
 }
-let html = '<div data-id=\"main\" style=\"border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; margin: 20px; text-decoration: none; width: auto\" class=\"ft_md\">{foo#listCard.name}</div>'.replace_format(data);
+let html = '<div data-id=\"main\" style=\"margin: 20px\" class=\"ft_common ft_md\">{foo#listCard.name}</div>'.replace_format(data);
 return html;
 }
 

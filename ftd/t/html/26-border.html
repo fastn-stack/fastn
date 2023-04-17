@@ -580,6 +580,34 @@ display: block;
 padding: 10px !important;
 }
 
+/* Common styles  */
+.ft_common{
+text-decoration: none;
+box-sizing: border-box;
+border-top-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+border-right-width: 0px;
+border-style: solid;
+height: auto;
+width: auto;
+}
+
+/* Common container attributes */
+.ft_row, .ft_column {
+display: flex;
+align-items: start;
+justify-content: start
+}
+
+.ft_row {
+flex-direction: row;
+}
+
+.ft_column {
+flex-direction: column;
+}
+
 .ft_md ul,
 .ft_md ol{
 margin: 10px 0;
@@ -695,7 +723,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-color: rgba(255,0,0,1); border-bottom-width: 11px; border-left-color: rgba(0,128,0,1); border-left-width: 7px; border-right-color: rgba(128,0,128,1); border-right-width: 9px; border-style: solid; border-top-color: rgba(0,0,255,1); border-top-width: 5px; box-sizing: border-box; display: flex; flex-direction: column; height: 200px; justify-content: start; margin: 50px; text-decoration: none; width: 200px" ></div><div data-id="1:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-color: rgba(255,0,0,1); border-bottom-width: 10px; border-left-color: rgba(0,128,0,1); border-left-width: 10px; border-right-color: rgba(128,0,128,1); border-right-width: 10px; border-style: solid; border-top-color: rgba(0,0,255,1); border-top-width: 10px; box-sizing: border-box; display: flex; flex-direction: column; height: 200px; justify-content: start; margin: 50px; text-decoration: none; width: 200px" ></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); border-bottom-color: rgba(255,0,0,1); border-bottom-width: 11px; border-left-color: rgba(0,128,0,1); border-left-width: 7px; border-right-color: rgba(128,0,128,1); border-right-width: 9px; border-top-color: rgba(0,0,255,1); border-top-width: 5px; height: 200px; margin: 50px; width: 200px" class="ft_common ft_column"></div><div data-id="1:main" style="background-color: rgba(255,255,0,1); border-bottom-color: rgba(255,0,0,1); border-bottom-width: 10px; border-left-color: rgba(0,128,0,1); border-left-width: 10px; border-right-color: rgba(128,0,128,1); border-right-width: 10px; border-top-color: rgba(0,0,255,1); border-top-width: 10px; height: 200px; margin: 50px; width: 200px" class="ft_common ft_column"></div></div>
 
 
 <script>
