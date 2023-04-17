@@ -1,6 +1,6 @@
 [
   {
-    "Record": {
+    "record": {
       "name": "foo",
       "fields": [
         {
@@ -21,9 +21,9 @@
           },
           "mutable": false,
           "value": {
-            "String": {
+            "string-value": {
               "value": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type.",
-              "line_number": 8,
+              "line-number": 8,
               "source": "Default"
             }
           },

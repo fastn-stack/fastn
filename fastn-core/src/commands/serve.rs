@@ -498,6 +498,13 @@ pub(crate) async fn view_source(
     Ok(fastn_core::apis::view_source(&req).await)
 }
 
+pub(crate) async fn edit_source(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let _lock = LOCK.read().await;
+    Ok(fastn_core::apis::edit_source(&req).await)
+}
+
 pub async fn edit(
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
@@ -565,6 +572,7 @@ async fn route(
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
         ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
+        ("get", t) if t.starts_with("/-/edit-src/") => edit_source(req).await,
         ("post", "/-/edit/") => edit(req).await,
         ("post", "/-/revert/") => revert(req).await,
         ("get", "/-/editor-sync/") => editor_sync(req).await,

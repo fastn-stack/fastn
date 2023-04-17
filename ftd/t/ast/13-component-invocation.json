@@ -10,36 +10,36 @@
       "value": {
         "List": {
           "value": [
-            [
-              "string",
-              {
-                "String": {
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
                   "value": "Varanasi",
-                  "line_number": 3,
+                  "line-number": 3,
                   "source": "Default"
                 }
               }
-            ],
-            [
-              "string",
-              {
-                "String": {
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
                   "value": "Prayagraj",
-                  "line_number": 4,
+                  "line-number": 4,
                   "source": "Default"
                 }
               }
-            ],
-            [
-              "string",
-              {
-                "String": {
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
                   "value": "Bengaluru",
-                  "line_number": 5,
+                  "line-number": 5,
                   "source": "Default"
                 }
               }
-            ]
+            }
           ],
           "line_number": 1
         }
@@ -60,9 +60,9 @@
       },
       "mutable": false,
       "value": {
-        "String": {
+        "string-value": {
           "value": "true",
-          "line_number": 9,
+          "line-number": 9,
           "source": "Default"
         }
       },
@@ -74,7 +74,7 @@
     }
   },
   {
-    "ComponentInvocation": {
+    "component-invocation": {
       "name": "ftd.column",
       "properties": [],
       "iteration": null,
@@ -86,66 +86,66 @@
           "properties": [
             {
               "value": {
-                "String": {
+                "string-value": {
                   "value": "$obj",
-                  "line_number": 13,
+                  "line-number": 13,
                   "source": "Default"
                 }
               },
               "source": "Caption",
               "condition": null,
-              "line_number": 13
+              "line-number": 13
             }
           ],
           "iteration": {
             "on": "$locations",
             "alias": "obj",
-            "line_number": 14
+            "line-number": 14
           },
           "condition": null,
           "events": [],
           "children": [],
-          "line_number": 13
+          "line-number": 13
         },
         {
           "name": "ftd.text",
           "properties": [
             {
               "value": {
-                "String": {
+                "string-value": {
                   "value": "$description",
-                  "line_number": 16,
+                  "line-number": 16,
                   "source": "Default"
                 }
               },
               "source": "Caption",
               "condition": null,
-              "line_number": 16
+              "line-number": 16
             }
           ],
           "iteration": null,
           "condition": {
             "expression": "$flag",
-            "line_number": 17
+            "line-number": 17
           },
           "events": [],
           "children": [],
-          "line_number": 16
+          "line-number": 16
         },
         {
           "name": "ftd.text",
           "properties": [
             {
               "value": {
-                "String": {
+                "string-value": {
                   "value": "Click Here",
-                  "line_number": 19,
+                  "line-number": 19,
                   "source": "Default"
                 }
               },
               "source": "Caption",
               "condition": null,
-              "line_number": 19
+              "line-number": 19
             }
           ],
           "iteration": null,
@@ -154,14 +154,14 @@
             {
               "name": "click",
               "action": "toggle $flag",
-              "line_number": 20
+              "line-number": 20
             }
           ],
           "children": [],
-          "line_number": 19
+          "line-number": 19
         }
       ],
-      "line_number": 11
+      "line-number": 11
     }
   }
 ]

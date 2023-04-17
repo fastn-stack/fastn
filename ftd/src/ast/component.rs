@@ -85,6 +85,7 @@ pub struct Component {
     pub condition: Option<ftd::ast::Condition>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -208,8 +209,12 @@ impl Component {
             }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
-                for (key, val) in value {
-                    children.push(Component::from_variable_value(key.as_str(), val, doc_id)?);
+                for val in value {
+                    children.push(Component::from_variable_value(
+                        val.key.as_str(),
+                        val.value,
+                        doc_id,
+                    )?);
                 }
                 Ok(ftd::ast::Component {
                     name: key.to_string(),
@@ -269,8 +274,12 @@ impl Component {
 
                 let mut children = vec![];
 
-                for (key, child) in values {
-                    children.push(Component::from_variable_value(key.as_str(), child, doc_id)?);
+                for child in values {
+                    children.push(Component::from_variable_value(
+                        child.key.as_str(),
+                        child.value,
+                        doc_id,
+                    )?);
                 }
 
                 Ok(ftd::ast::Component {
@@ -315,6 +324,7 @@ pub struct Property {
     pub value: ftd::ast::VariableValue,
     pub source: PropertySource,
     pub condition: Option<String>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -375,6 +385,7 @@ pub enum PropertySource {
     #[default]
     Caption,
     Body,
+    #[serde(rename = "header")]
     Header {
         name: String,
         mutable: bool,
@@ -407,6 +418,7 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -533,6 +545,7 @@ impl Loop {
 pub struct Event {
     pub name: String,
     pub action: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
