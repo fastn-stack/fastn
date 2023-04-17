@@ -23,6 +23,7 @@ optional body body:
 children wrap:
 common.host host: 
 common.venue venue: 
+string share-button-text: Share Now
 
 -- ftd.column:
 width: fill-container
@@ -45,6 +46,7 @@ body: $event.body
 wrap: $event.wrap
 venue: $event.venue
 host: $event.host
+share-button-text: $event.share-button-text
 
 -- event-mobile: $event.title
 if: {ftd.device == "mobile"}
@@ -64,6 +66,8 @@ body: $event.body
 wrap: $event.wrap
 venue: $event.venue
 host: $event.host
+share-button-text: $event.share-button-text
+
 
 -- end: ftd.column
 
@@ -96,6 +100,7 @@ optional body body:
 children wrap:
 common.host host:
 common.venue venue:
+string share-button-text:
 
 -- ftd.column:
 width: fill-container
@@ -284,7 +289,7 @@ align-content: center
 -- ftd.image:
 src: $assets.files.images.events.share.svg
 
--- title-name: Share now
+-- title-name: $event-desktop.share-button-text
 url: $event-desktop.event-link
 text-color: $inherited.colors.accent.primary
 
@@ -325,6 +330,7 @@ optional body body:
 children wrap:
 common.host host:
 common.venue venue:
+string share-button-text:
 
 -- ftd.column:
 width: fill-container
@@ -488,7 +494,7 @@ align-content: center
 -- ftd.image:
 src: $assets.files.images.events.share.svg
 
--- title-name: Share now
+-- title-name: $event-mobile.share-button-text
 url: $event-mobile.event-link
 text-color: $inherited.colors.accent.primary
 
