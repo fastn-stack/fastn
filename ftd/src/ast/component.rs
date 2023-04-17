@@ -269,13 +269,10 @@ impl Component {
 
                 let mut children = vec![];
 
-                for (_, child) in values {
-                    children.push(Component::from_variable_value(
-                        name.as_str(),
-                        child,
-                        doc_id,
-                    )?);
+                for (key, child) in values {
+                    children.push(Component::from_variable_value(key.as_str(), child, doc_id)?);
                 }
+
                 Ok(ftd::ast::Component {
                     name,
                     properties,
