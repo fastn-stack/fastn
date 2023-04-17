@@ -37,14 +37,6 @@ create their own UI component can use yours to create their websites.
 `fastn` has also rudimentary support for writing [backend stuff](/backend/), so
 you can start packaging some dynamic websites and web components also.
 
--- ds.h2: Qualification
-
-You can go with any problem statement by the WittyHacks organisers, you have to
-use `fastn` either as static, content areas of your project, like the landing
-page, contact us page etc, or you can use us to build the whole frontend.
-
-To submit your entries send a PR against github.com/fastn-stack/fastn.io and
-edit this document and yourself in the `Participants` section.
 
 -- ds.h2: How to Learn `fastn`?
 
