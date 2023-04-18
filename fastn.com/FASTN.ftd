@@ -361,9 +361,3 @@ favicon: /-/fastn.io/images/favicon.svg
 
 - Overview: /planning/
 - Developer Course: /planning/developer-course/
-
--- fastn.redirects:
-
-/ftd/component/: /components/
-/book/hello-world/: /book/repo/
-/python/: https://python.org
