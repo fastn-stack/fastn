@@ -1,6 +1,6 @@
 -- import: fastn.io/assets
 
--- my-ds.page: `ftd.rive` - Rive Animations
+-- my-ds.page: `ftd.rive` - Rive Animations 🚧
 
 `ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
 animation](https://rive.app) in a `fastn` document.
@@ -16,9 +16,7 @@ animation](https://rive.app) in a `fastn` document.
 id: panda
 background.solid: #aaa
 src: $assets.files.rive.panda.riv
-canvas-width: 200
-canvas-height: 200
-width.fixed.px: 200
+width.fixed.px: 400
 
 -- ds.rendered.output:
 
@@ -26,9 +24,7 @@ width.fixed.px: 200
 id: panda
 background.solid: #aaa
 src: $assets.files.rive.panda.riv
-canvas-width: 200
-canvas-height: 200
-width.fixed.px: 200
+width.fixed.px: 400
 
 -- end: ds.rendered.output
 
@@ -54,6 +50,29 @@ Type: **Required** `string`
 This is URL of riv file to load. It is recommended you store the riv file as
 part of your `fastn` package and use the auto generated `assets` module to refer
 to them.
+
+-- ds.h1: `state-machine`
+
+Type: `string list`
+
+It accepts the name or list of names of [Rive state
+machines](https://help.rive.app/editor/state-machine) to load.
+
+
+-- ds.h1: `autoplay`
+
+Type: `boolean`
+default: `true`
+
+If set `true`, the animation will automatically start playing when loaded.
+
+
+-- ds.h1: `artboard`
+
+Type: `optional string`
+
+It accepts the name of the [rive
+artboard](https://help.rive.app/editor/fundamentals/artboards) to use.
 
 
 

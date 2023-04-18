@@ -152,7 +152,7 @@ favicon: /-/fastn.io/images/favicon.svg
   - `ftd.container`: /ftd/container/
   - `ftd.text`: /ftd/text/
   - `ftd.image`: /ftd/image/
-  - `ftd.rive`: /rive/
+  - `ftd.rive` 🚧: /rive/
     document: ftd/rive.ftd
   - `ftd.iframe`: /ftd/iframe/
   - `ftd.integer`: /ftd/integer/

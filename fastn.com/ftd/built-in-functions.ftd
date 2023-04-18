@@ -7,6 +7,8 @@ document.
 
 -- ds.h2: `len(a: list)`
 
+Return type: `integer`
+
 This function will return the length of the list.
 
 -- ds.rendered: Sample code using `len()`
@@ -40,10 +42,12 @@ color: $inherited.colors.text
 
 
 
--- ds.h2: `append($a: mutable list, v: string)️`
+-- ds.h2: `ftd.append($a: <any> list, v: <any>)️`
 
-This is a default ftd function that will append a string `v`
-to the end of the given mutable string list `a`.
+Return type: `void`
+
+This is a default ftd function that will append a value `v` of any type
+to the end of the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `append()`
 
@@ -51,7 +55,7 @@ to the end of the given mutable string list `a`.
 
 \-- string list $some-list:
 
-\-- void append(a,v): ;; <hl>
+\-- void append-fn(a,v): ;; <hl>
 string list $a: ;; <hl>
 string v: ;; <hl>
 \;; <hl>
@@ -63,7 +67,7 @@ color: $inherited.colors.text
 spacing.fixed.px: 5
 
 \-- display-text: Append text
-$on-click$: $append($a = $some-list, v = fifthtry) ;; <hl>
+$on-click$: $append-fn($a = $some-list, v = fifthtry) ;; <hl>
 
 \-- display-list-item: $val
 $loop$: $some-list as $val
@@ -83,16 +87,16 @@ $loop$: $some-list as $val
 
 
 
--- ds.h2: `insert_at($a: mutable list, v: string, num: integer)`
+-- ds.h2: `ftd.insert_at($a: <any> list, v: <any>, num: integer)`
 
-This is a default ftd function that will insert a string `v`
-at the index `num` in the given mutable string list `a`.
+This is a default ftd function that will insert a value `v` of any type
+at the index `num` in the given mutable list `a` of same type as `v`.
 
 -- ds.rendered: Sample code using `insert_at()`
 
 -- ds.rendered.input:
 
-\-- void insert_at(a,v,num): ;; <hl>
+\-- void insert-at(a,v,num): ;; <hl>
 string list $a: ;; <hl>
 string v: ;; <hl>
 integer num: ;; <hl>
@@ -107,7 +111,7 @@ color: $inherited.colors.text
 spacing.fixed.px: 5
 
 \-- display-text: Insert Fifthtry at 2nd index
-$on-click$: $insert_at($a = $alphabets, v = Fifthtry, num = 2) ;; <hl>
+$on-click$: $insert-at($a = $alphabets, v = Fifthtry, num = 2) ;; <hl>
 
 \-- display-list-item: $val
 $loop$: $alphabets as $val
@@ -130,16 +134,16 @@ $loop$: $alphabets as $val
 
 
 
--- ds.h2: `delete_at($a: mutable list, v: integer)`
+-- ds.h2: `ftd.delete_at($a: <any> list, v: integer)`
 
-This is a default ftd function that will delete the string
-from index `num` from the given mutable string list `a`.
+This is a default ftd function that will delete the value
+from index `num` from the given mutable list `a`.
 
 -- ds.rendered: Sample code using `delete_at()`
 
 -- ds.rendered.input:
 
-\-- void delete_at(a,num): ;; <hl>
+\-- void delete-at(a,num): ;; <hl>
 string list $a: ;; <hl>
 integer num: ;; <hl>
 \;; <hl>
@@ -153,7 +157,7 @@ color: $inherited.colors.text
 spacing.fixed.px: 5
 
 \-- display-text: Delete Value from 1st index
-$on-click$: $delete_at($a = $places, num = 1) ;; <hl>
+$on-click$: $delete-at($a = $places, num = 1) ;; <hl>
 
 \-- display-list-item: $val
 $loop$: $places as $val
@@ -178,10 +182,10 @@ $loop$: $places as $val
 
 
 
--- ds.h2: `clear($a: mutable list)`
+-- ds.h2: `ftd.clear($a: <any> list)`
 
 This is a default ftd function that will clear the given
-mutable string list `a`.
+mutable list `a`.
 
 -- ds.rendered: Sample code using `clear()`
 
@@ -189,7 +193,7 @@ mutable string list `a`.
 
 \-- string list $palindromes: dad, bob, racecar
 
-\-- void clear(a): ;; <hl>
+\-- void clear-fn(a): ;; <hl>
 string list $a: ;; <hl>
 \;; <hl>
 ftd.clear(a); ;; <hl>
@@ -199,7 +203,7 @@ width: fill-container
 spacing.fixed.px: 5
 
 \-- display-text: Click to Clear list
-$on-click$: $clear($a = $palindromes) ;; <hl>
+$on-click$: $clear-fn($a = $palindromes) ;; <hl>
 
 \-- display-list-item: $val
 $loop$: $palindromes as $val
@@ -363,6 +367,176 @@ padding.px: 10
 -- end: ds.rendered
 
 
+
+
+
+
+
+
+
+-- ds.h1: Rive Functions
+
+-- ds.h2: `ftd.toggle-play-rive(rive: string, input: string)`
+
+Return type: `void`
+
+It plays an animation, if the animation is not playing, or else pauses it.
+
+It takes `rive` which is the [`id`](rive/#id) provided while declaring a rive
+component. It also takes `input` which is the animation name.
+
+-- ds.rendered: Sample code using `ftd.toggle-play-rive(...)`
+
+\-- ftd.rive:
+id: vehicle
+src: https://cdn.rive.app/animations/vehicles.riv
+autoplay: false
+artboard: Jeep
+width.fixed.px: 600
+
+\-- ftd.text: Idle/ \Run
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+align-self: center
+
+
+-- ftd.rive:
+id: vehicle
+src: https://cdn.rive.app/animations/vehicles.riv
+autoplay: false
+artboard: Jeep
+width.fixed.px: 600
+
+-- ftd.text: Idle/Run
+$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+align-self: center
+color: $inherited.colors.text
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h2: `ftd.play-rive(rive: string, input: string)`
+
+Return type: `void`
+
+It plays an animation.
+
+It takes `rive` which is the [`id`](rive/#id) provided while declaring a rive
+component. It also takes `input` which is the animation name.
+
+
+
+
+-- ds.h2: `ftd.pause-rive(rive: string, input: string)`
+
+Return type: `void`
+
+It pauses an animation.
+
+It takes `rive` which is the [`id`](rive/#id) provided while declaring a rive
+component. It also takes `input` which is the animation name.
+
+
+-- ds.rendered: Sample code using `ftd.play-rive(...)` and `ftd.pause-rive(...)`
+
+\-- ftd.rive:
+id: bell
+src: $fastn-assets.files.assets.bell-icon.riv
+autoplay: false
+width.fixed.px: 200
+$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
+$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
+
+-- ftd.rive:
+id: bell
+src: $fastn-assets.files.assets.bell-icon.riv
+autoplay: false
+width.fixed.px: 200
+$on-mouse-enter$: $ftd.play-rive(rive = bell, input = Hover)
+$on-mouse-leave$: $ftd.pause-rive(rive = bell, input = Hover)
+
+
+-- end: ds.rendered
+
+
+
+
+-- ds.h2: `ftd.fire-rive(rive: string, input: string)`
+
+Return type: `void`
+
+It fires `trigger` identify by `input`.
+
+It takes `rive` which is the [`id`](rive/#id) provided while declaring a rive
+component. It also takes `input` which is the trigger type.
+
+
+
+-- ds.rendered: Sample code using `ftd.fire-rive(...)`
+
+\-- ftd.rive:
+id: van
+src: https://cdn.rive.app/animations/vehicles.riv
+width.fixed.px: 400
+state-machine: bumpy
+$on-click$: $ftd.fire-rive(rive = van, input = bump)
+
+-- ftd.rive:
+id: van
+src: https://cdn.rive.app/animations/vehicles.riv
+width.fixed.px: 400
+state-machine: bumpy
+$on-click$: $ftd.fire-rive(rive = van, input = bump)
+
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.set-rive-integer(rive: string, input: string, value: integer)`
+
+Return type: `void`
+
+It take the number type input and sets the value
+
+It takes `rive` which is the [`id`](rive/#id) provided while declaring a rive
+component, `input` which is the number type and `value` which is set to the
+input.
+
+
+-- ds.rendered: Sample code using `ftd.fire-rive(...)`
+
+\-- ftd.rive:
+id: helix-loader
+src: $fastn-assets.files.assets.helix-loader.riv
+width.fixed.px: 400
+state-machine: State Machine
+$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
+
+-- ftd.rive:
+id: helix-loader
+src: $fastn-assets.files.assets.helix-loader.riv
+width.fixed.px: 400
+state-machine: State Machine
+$on-click$: $ftd.set-rive-integer(rive = helix-loader, input = Load Percentage, value = 50)
+
+
+-- end: ds.rendered
 
 
 
@@ -1229,5 +1403,3 @@ $loop$: $palindromes as $val
 -- end: ftd.column
 
 -- end: clear-list-sample
-
-
