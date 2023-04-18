@@ -8685,11 +8685,15 @@ pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
                 ),
                 ftd::interpreter::Argument::default(
                     "canvas-width",
-                    ftd::interpreter::Kind::integer().into_kind_data(),
+                    ftd::interpreter::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
                 ),
                 ftd::interpreter::Argument::default(
                     "canvas-height",
-                    ftd::interpreter::Kind::integer().into_kind_data(),
+                    ftd::interpreter::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
                 ),
                 ftd::interpreter::Argument::default(
                     "state-machine",

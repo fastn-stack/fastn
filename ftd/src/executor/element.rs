@@ -120,8 +120,8 @@ pub struct Column {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Rive {
     pub src: ftd::executor::Value<String>,
-    pub canvas_width: ftd::executor::Value<i64>,
-    pub canvas_height: ftd::executor::Value<i64>,
+    pub canvas_width: ftd::executor::Value<Option<i64>>,
+    pub canvas_height: ftd::executor::Value<Option<i64>>,
     pub state_machine: ftd::executor::Value<Vec<String>>,
     pub autoplay: ftd::executor::Value<bool>,
     pub artboard: ftd::executor::Value<Option<String>>,
@@ -1322,21 +1322,23 @@ pub fn rive_from_properties(
             doc,
             line_number,
         )?,
-        canvas_width: ftd::executor::value::i64(
+        canvas_width: ftd::executor::value::optional_i64(
             "canvas-width",
             component_name,
             properties,
             arguments,
             doc,
             line_number,
+            inherited_variables,
         )?,
-        canvas_height: ftd::executor::value::i64(
+        canvas_height: ftd::executor::value::optional_i64(
             "canvas-height",
             component_name,
             properties,
             arguments,
             doc,
             line_number,
+            inherited_variables,
         )?,
         state_machine: ftd::executor::value::string_list(
             "state-machine",
