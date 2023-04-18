@@ -1,6 +1,6 @@
 -- import: fastn.io/assets
 
--- my-ds.page: `ftd.rive` - Rive Animations 🚧
+-- my-ds.page: `ftd.rive` - Rive Animations
 
 `ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
 animation](https://rive.app) in a `fastn` document.
@@ -73,6 +73,35 @@ Type: `optional string`
 
 It accepts the name of the [rive
 artboard](https://help.rive.app/editor/fundamentals/artboards) to use.
+
+
+-- ds.h1: Rive functions
+
+`fastn` language has various rive related [built-in
+functions](built-in-functions/#rive-functions). These functions help to interact
+with rive on various events.
+
+-- ds.rendered: Sample code
+
+\-- ftd.rive:
+id: fastn
+src: $fastn-assets.files.assets.fastn.riv
+width.fixed.px: 440
+state-machine: Together
+$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+
+
+-- ftd.rive:
+id: fastn
+src: $fastn-assets.files.assets.fastn.riv
+width.fixed.px: 600
+state-machine: Together
+$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+
+
+-- end: ds.rendered
 
 
 
