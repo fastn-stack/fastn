@@ -1,8 +1,6 @@
 -- ftd.rive:
 id: vehicle
 src: https://cdn.rive.app/animations/vehicles.riv
-canvas-width: 200
-canvas-height: 200
 autoplay: false
 artboard: Jeep
 

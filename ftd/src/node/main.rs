@@ -645,7 +645,10 @@ impl ftd::executor::Rive {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(self.canvas_width.value.to_string()),
+                self.canvas_width
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
                 self.canvas_width.to_owned(),
                 None,
                 doc_id,
@@ -655,7 +658,10 @@ impl ftd::executor::Rive {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(self.canvas_height.value.to_string()),
+                self.canvas_height
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
                 self.canvas_height.to_owned(),
                 None,
                 doc_id,
