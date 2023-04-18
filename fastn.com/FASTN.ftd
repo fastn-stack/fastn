@@ -23,6 +23,7 @@ favicon: /-/fastn.io/images/favicon.svg
 -- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
 -- fastn.dependency: fastn-stack.github.io/media
+-- fastn.dependency: gargajit.github.io/expander
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -331,11 +332,14 @@ favicon: /-/fastn.io/images/favicon.svg
 
 - trizwitlabs web event: /trizwitlabs/
   document: blog/trizwitlabs.ftd
+- `fastn` goes to Philippines 🚧: /namaste-philippines/
+  document: blog/philippines.ftd
 - Witty Hacks!: /wittyhacks/
   document: blog/wittyhacks.ftd
 - Ahoy, Web Components!: /blog/web-components/
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
+
 
 # dev: /d/
   skip: true
