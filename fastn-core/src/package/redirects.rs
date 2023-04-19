@@ -5,12 +5,10 @@ pub struct RedirectsTemp {
 }
 
 impl RedirectsTemp {
-
     pub(crate) fn redirects_from_body(&self) -> ftd::Map<String> {
         let body = self.body.as_str();
         let mut redirects: ftd::Map<String> = ftd::Map::new();
         for line in body.lines() {
-
             if line.trim_start().starts_with(';') {
                 continue;
             }
@@ -21,5 +19,4 @@ impl RedirectsTemp {
         }
         redirects
     }
-
 }

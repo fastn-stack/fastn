@@ -39,14 +39,12 @@ impl actix_web::ResponseError for fastn_core::Error {}
 pub type Response = actix_web::HttpResponse;
 
 pub async fn get_external_response(url: &str) -> fastn_core::Result<fastn_core::http::Response> {
-    dbg!(url);
-    let response = reqwest::Client::new().get(url)
-        .send()
-        .await?;
+    let response = reqwest::Client::new().get(url).send().await?;
 
     let response_text = response.text().await?;
 
-    Ok(fastn_core::http::Response::PermanentRedirect().insert_header(("LOCATION", url))
+    Ok(fastn_core::http::Response::PermanentRedirect()
+        .insert_header(("LOCATION", url))
         .content_type(mime_guess::mime::TEXT_HTML)
         .body(response_text))
 }

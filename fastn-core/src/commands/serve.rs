@@ -9,7 +9,6 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    dbg!(&path);
     let url_regex = fastn_core::http::url_regex();
 
     let mut path = path.clone();
@@ -28,20 +27,18 @@ async fn serve_file(
         }
     }
 
-    dbg!(&path, &has_redirect_url, &has_external_redirect);
-
     if has_external_redirect {
         return match fastn_core::http::get_external_response(current_path.as_str()).await {
             Ok(r) => r,
             Err(e) => {
                 tracing::error!(
-                msg = "fastn-error external redirect path not found",
-                path = path.as_str(),
-                error = %e
-            );
+                    msg = "fastn-error external redirect path not found",
+                    path = path.as_str(),
+                    error = %e
+                );
                 fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
             }
-        }
+        };
     }
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
@@ -111,7 +108,7 @@ async fn serve_file(
                     fastn_core::http::redirect(main_document.content.as_bytes().to_vec())
                 } else {
                     fastn_core::http::ok(main_document.content.as_bytes().to_vec())
-                }
+                };
             }
             match fastn_core::package::package_doc::read_ftd(
                 config,
@@ -122,13 +119,15 @@ async fn serve_file(
             )
             .await
             {
-                Ok(r) => {
-                    match has_redirect_url {
-                        true => fastn_core::http::redirect_with_content_type(r,
-                                                                             mime_guess::mime::TEXT_HTML_UTF_8),
-                        false => fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                Ok(r) => match has_redirect_url {
+                    true => fastn_core::http::redirect_with_content_type(
+                        r,
+                        mime_guess::mime::TEXT_HTML_UTF_8,
+                    ),
+                    false => {
+                        fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
                     }
-                }
+                },
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
