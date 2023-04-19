@@ -24,6 +24,7 @@ favicon: /-/fastn.io/images/favicon.svg
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
 -- fastn.dependency: fastn-stack.github.io/media
 -- fastn.dependency: gargajit.github.io/expander
+-- fastn.dependency: fifthtry.github.io/banner
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds

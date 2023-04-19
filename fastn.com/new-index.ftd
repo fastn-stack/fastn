@@ -1,0 +1,316 @@
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography/inter as typo
+-- import: fifthtry.github.io/fastn-io-typography as doc-typo
+-- import: fastn.io/ftd as ftd-index
+-- import: fifthtry.github.io/banner
+
+-- home-page:
+
+-- hero-section: Full-stack Web Development Made Easy
+
+Build web apps in minutes. Deploy with a single command.
+
+-- chakra:
+
+-- first-chakra:
+
+
+-- banner.floating-banner:
+link: https://github.com/fastn-stack/fastn/
+
+Star on GitHub ⭐
+
+-- end: home-page
+
+
+
+
+
+
+
+
+
+
+-- component home-page:
+children wrapper:
+
+-- ds.page:
+site-logo: $fastn-assets.files.images.fastn.svg
+colors: $dark-flame-cs.main
+$widthfill: true
+types: $doc-typo.types
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+types: $typo.types
+children: $home-page.wrapper
+
+-- end: ftd.column
+
+-- end: ds.page
+
+-- end: home-page
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component hero-section:
+caption title:
+body subtitle:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+color: $inherited.colors.text-strong
+background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 600
+padding-vertical.em: 7
+align-self: center
+align-content: center
+
+-- ftd.text: $hero-section.title
+text-align: center
+role: $inherited.types.heading-hero
+
+-- ftd.text: with
+text-align: center
+color: $inherited.colors.text
+role: $inherited.types.heading-medium
+
+-- ftd.text: fastn
+text-align: center
+role: $inherited.types.heading-hero
+classes: fastn, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: $hero-section.subtitle
+role: $inherited.types.heading-tiny
+text-align: center
+margin-top.em: 2
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+
+-- end: hero-section
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component chakra:
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.em: 3
+padding-top.em: 2
+padding-bottom.em: 5
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: Build anything, faster.
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 1.5
+
+fastn language is designed for building user interfaces and content centric
+websites.
+
+-- ftd.text: **1**. Any use case.
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 0.5
+
+With fastn you can build anything starting from designing to full web app
+creation.
+
+-- ftd.text: This entire website is made in fastn!
+role: $inherited.types.heading-tiny
+color: $inherited.colors.cta-primary.base
+margin-bottom.em: 1.5
+
+-- ftd.text: **2**. Easy to learn.
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+
+fastn language is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it. It supports markdown too.
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+
+-- ftd.code:
+lang: ftd
+shadow: $s
+width: fill-container
+role: $inherited.types.source-code
+background.solid: $inherited.colors.background.base
+
+\-- chat-female-avatar: Hello World! 😀
+
+\-- chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+-- ftd-index.chat-female-avatar: Hello World! 😀
+
+-- ftd-index.chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component first-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 2
+margin-vertical.em: 5
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+
+-- ftd.text: 1
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+-- ftd.text.classes:
+-- string: color-1
+-- end: ftd.text.classes
+
+
+-- ftd.text: Design
+role: $inherited.types.heading-large
+classes: color-1, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: Create your design system
+role: $inherited.types.heading-large
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+
+Get a different look and feel in just one line change.
+
+-- end: ftd.column
+
+-- end: first-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.shadow s:
+color: #00000026
+x-offset.px: 0
+y-offset.px: 2
+blur.px: 8

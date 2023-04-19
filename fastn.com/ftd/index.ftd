@@ -14,6 +14,17 @@ caption or body message:
 -- end: amitu
 
 
+-- component chat-female-avatar:
+caption or body message:
+
+-- chat.message-left: $chat-female-avatar.message
+avatar: $fastn-assets.files.images.female-avatar.svg
+
+-- end: chat.message-left
+
+-- end: chat-female-avatar
+
+
 -- my-ds.page: `ftd` Programming Language
 
 `ftd` is designed for everyone, not just programmers.

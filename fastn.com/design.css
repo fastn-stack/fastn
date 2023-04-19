@@ -1,0 +1,14 @@
+
+.fastn {
+    background-image: linear-gradient(271.68deg, #EE756A 25%, #756AEE 50%);
+}
+
+.color-1 {
+    background-image: linear-gradient(70deg,#6b63f6,#b563f6);
+}
+
+
+.text-color {
+    color: transparent;
+    -webkit-background-clip: text;
+}
