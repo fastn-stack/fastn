@@ -53,8 +53,8 @@ pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn redirect(data: Vec<u8>) -> fastn_core::http::Response {
-    actix_web::HttpResponse::PermanentRedirect().body(data)
+pub fn redirect(data: Vec<u8>, url: &str) -> fastn_core::http::Response {
+    actix_web::HttpResponse::PermanentRedirect().insert_header(("LOCATION", url)).body(data)
 }
 
 pub fn ok_with_content_type(
@@ -69,9 +69,11 @@ pub fn ok_with_content_type(
 pub fn redirect_with_content_type(
     data: Vec<u8>,
     content_type: mime_guess::Mime,
+    url: &str,
 ) -> fastn_core::http::Response {
     actix_web::HttpResponse::PermanentRedirect()
         .content_type(content_type)
+        .insert_header(("LOCATION", url))
         .body(data)
 }
 

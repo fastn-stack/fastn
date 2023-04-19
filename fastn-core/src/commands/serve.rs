@@ -9,7 +9,23 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
+
+    fn find_redirect(redirects: &ftd::Map<String>, path: &str) -> Option<String> {
+
+        let original = path;
+        let fixed = format!("/{}/",path.trim_start_matches('/').trim_end_matches('/'));
+
+        return if redirects.contains_key(original) {
+            redirects.get(original).cloned()
+        } else if redirects.contains_key(fixed.as_str()) {
+            redirects.get(fixed.as_str()).cloned()
+        } else {
+            None
+        }
+    }
+
     let url_regex = fastn_core::http::url_regex();
+    dbg!(path.as_str());
 
     let mut path = path.clone();
     let redirects = config.package.redirects.clone();
@@ -17,11 +33,11 @@ async fn serve_file(
     let mut has_redirect_url = false;
     let mut has_external_redirect = false;
     if let Some(r) = redirects {
-        if let Some(redirected_path) = r.get(current_path.as_str()) {
+        if let Some(redirected_path) = find_redirect(&r, current_path.as_str()) {
             current_path = redirected_path.to_string();
             path = camino::Utf8Path::new(current_path.as_str());
             has_redirect_url = true;
-            if url_regex.is_match(redirected_path) {
+            if url_regex.is_match(redirected_path.as_str()) {
                 has_external_redirect = true;
             }
         }
@@ -104,7 +120,7 @@ async fn serve_file(
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return if has_redirect_url {
-                    fastn_core::http::redirect(main_document.content.as_bytes().to_vec())
+                    fastn_core::http::redirect(main_document.content.as_bytes().to_vec(), current_path.as_str(),)
                 } else {
                     fastn_core::http::ok(main_document.content.as_bytes().to_vec())
                 };
@@ -122,6 +138,7 @@ async fn serve_file(
                     true => fastn_core::http::redirect_with_content_type(
                         r,
                         mime_guess::mime::TEXT_HTML_UTF_8,
+                        current_path.as_str(),
                     ),
                     false => {
                         fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
