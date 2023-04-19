@@ -6,4 +6,115 @@ the scripts etc here.
 - [Developer Course](/planning/developer-course/)
 
 
+
+
+-- ds.h1: Common
+
+- R: why (5 videos)
+- R: what is a fastn package? (dependencies, auto import, sitemap, dynamic-urls, redirects)
+- R: fastn document, variables, etc
+- R: creating a component (basics)
+- R: understanding colors
+- R: understanding fonts
+- R: github pages (templates, publishing, domain mapping? etc)
+- R: installing
+
+-- ds.h1: Design A FastN Compatible Site
+
+- R: what is a fastn package?
+- P: creating a font
+- R: creating a color scheme
+- R: importing colors to figma
+- R: exporting colors from figma
+- D: importing typography to figma
+- D: exporting types from figma
+- R: rapid prototyping using fastn
+
+-- ds.h1: Frontend - Delivering Client Project
+
+- R: sales:
+  - easy to author without cms
+  - easy to change color and typography in one line
+  - easy to change entire site design using out module system
+- R: clean code checklist and guidelines
+- R: proper data modelling
+- Common UI:
+    - R: expand collapse tree
+    - R: dialog
+    - R: form
+    - R: tabs
+    - R: dropdown
+- R: creating various page layouts
+- R: event handling
+- R: creating docs pages
+- D: using module system to create interchangable packages
+- D: translation--
+- R: using rive
+- R: embedding youtube or iframes
+- R: mobile responsive site
+- R: using css for things fastn is lacking
+- R: integration with JS
+
+
+-- ds.code:
+lang: txt
+
+- Getting Started: /expander/hello-world/
+  - Install `fastn`: /install/-/expander/
+    document: author/how-to/install.ftd
+    - On Windows: /windows/-/expander/
+      document: author/setup/windows.ftd
+    - On MacOS/Linux: /macos/-/expander/
+      document: author/setup/macos.ftd
+- Publish Your First Website: /expander/publish/
+- Creating A Component: /expander/
+  - Part 2. Basic UI: /expander/basic-ui/
+  - Part 3. Components: /expander/components/
+  - Part 4. Event Handling: /expander/events/
+  - Part 6. Polishing UI: /expander/polish/
+
+
+-- ds.h1: Basic Backend Features
+
+- R: api powered pages
+- R: sqlite, why and how
+- D: page view counter, likes, comments
+- D: subscription, walling content (only subscribers can see)
+
+-- ds.h1: Author
+
+- R: changing color scheme, typography of your site
+- R: deploying on vercel, github, ..
+- R: deploying on heroku, digital ocean
+- D: using supabase powered fastn packages
+
+
+
+
+-- ds.h1: Apps
+
+- basic site
+- forms
+- subscription
+- docs (reviews, like, comment)
+- classroom
+
+
+
+
+
+-- ds.h1: Wasm Backends
+
+- rust to wasm
+- wasm routes
+- wasm auth
+- wasm processors and functions
+
+-- ds.h1: Author Portal
+
+- hostn
+- cr
+- translation
+- versioning
+
 -- end: my-ds.page

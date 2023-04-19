@@ -45,8 +45,22 @@ favicon: /-/fastn.io/images/favicon.svg
 ## Home: /
 
 - Home: /
-- `ftd` Programming Language: /ftd/
+- The `fastn` Language: /ftd/
 - Why?:
+  - `fastn` is Easy To Learn: /easy/
+    document: why/easy.ftd
+    skip: true
+  - Optimised For Content Focused Sites: /content-focused/
+    document: why/content.ftd
+    skip: true
+  - Stable Architecture: /stable/
+    document: why/stable.ftd
+    skip: true
+  - Design System: /why/design/
+    skip: true
+  - FullStack Apps: /fullstack/
+    skip: true
+    document: why/fullstack.ftd
   - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
 - Install `fastn`: /install/
   document: author/how-to/install.ftd
@@ -95,49 +109,14 @@ favicon: /-/fastn.io/images/favicon.svg
 
 # Frontend: /frontend/
 
-## Docs: /setup/
-  document: ftd/setup.ftd
-
-- Getting Started: /setup/
-  document: ftd/setup.ftd
-- Create `fastn` package: /create-fastn-package/
-  document: author/how-to/create-fastn-package.ftd
-- Best Practices 🚧: /best-practices/
-  - Formatting: /formatting/
-    document: /best-practices/formatting.ftd
-  - Import: /import-at-top/
-    document: /best-practices/import-at-top.ftd
-  - Auto-import: /auto-import/
-    document: /best-practices/auto-import.ftd
-  - Conditions: /how-to-use-conditions/
-    document: /best-practices/use-conditions.ftd
-  - Container: /container-guidelines/
-    document: /best-practices/container-guidelines.ftd
-  - Same argument & attribute types: /same-argument-attribute-type/
-    document: /best-practices/same-argument-attribute-type.ftd
-  - FScript: /fscript-guidelines/
-    document: /best-practices/fscript-guidelines.ftd
-  - Inherited Types: /inherited-guidelines/
-    document: /best-practices/inherited-types.ftd
-  - Variable & it's Type: /variable-type-guidelines/
-    document: /best-practices/variable-type.ftd
-  - Optional Arguments: /optional-argument-guidelines/
-    document: /best-practices/optional-arg-not-null.ftd
-  - Commenting: /commenting-guidelines/
-    document: /best-practices/commenting-guidelines.ftd
-  - Self referencing: /self-referencing-guidelines/
-    document: /best-practices/self-referencing.ftd
-  - Property: /property-guidelines/
-    document: /best-practices/property-guidelines.ftd
-
-
-
-## Frontend: /frontend/
+## Docs: /frontend/
 
 - Overview 🚧: /frontend/
 - Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
 - Design System 🚧: /design-system/
   document: frontend/design-system.ftd
+- Getting Started: /setup/
+  document: ftd/setup.ftd
 - Data Modelling: /ftd/data-modelling/
   - Variables: /ftd/variables/
   - Built-in Types: /ftd/built-in-types/
@@ -201,6 +180,35 @@ favicon: /-/fastn.io/images/favicon.svg
     document: ftd/js-in-function.ftd
   - Web Component: /web-component/
     document: ftd/web-component.ftd
+- Create `fastn` package: /create-fastn-package/
+  document: author/how-to/create-fastn-package.ftd
+- Best Practices 🚧: /best-practices/
+  - Formatting: /formatting/
+    document: /best-practices/formatting.ftd
+  - Import: /import-at-top/
+    document: /best-practices/import-at-top.ftd
+  - Auto-import: /auto-import/
+    document: /best-practices/auto-import.ftd
+  - Conditions: /how-to-use-conditions/
+    document: /best-practices/use-conditions.ftd
+  - Container: /container-guidelines/
+    document: /best-practices/container-guidelines.ftd
+  - Same argument & attribute types: /same-argument-attribute-type/
+    document: /best-practices/same-argument-attribute-type.ftd
+  - FScript: /fscript-guidelines/
+    document: /best-practices/fscript-guidelines.ftd
+  - Inherited Types: /inherited-guidelines/
+    document: /best-practices/inherited-types.ftd
+  - Variable & it's Type: /variable-type-guidelines/
+    document: /best-practices/variable-type.ftd
+  - Optional Arguments: /optional-argument-guidelines/
+    document: best-practices/optional-arg-not-null.ftd
+  - Commenting: /commenting-guidelines/
+    document: best-practices/commenting-guidelines.ftd
+  - Self referencing: /self-referencing-guidelines/
+    document: best-practices/self-referencing.ftd
+  - Property: /property-guidelines/
+    document: best-practices/property-guidelines.ftd
 
 
 ## Book 🚧: /book/
@@ -249,7 +257,7 @@ favicon: /-/fastn.io/images/favicon.svg
   - **g** Hosting 🚧: /book/hosting/
     document: book/appendix/g-hosting.ftd
 
-## Crash Course: /expander/
+## Video Course: /expander/
 
 - Overview: /expander/
 - Part 1. Hello World: /expander/hello-world/
@@ -264,6 +272,7 @@ favicon: /-/fastn.io/images/favicon.svg
 - Part 4. Event Handling: /expander/events/
 - Part 5. Publish a package: /expander/publish/
 - Part 6. Polishing UI: /expander/polish/
+
 
 # Fullstack: /backend/
 
