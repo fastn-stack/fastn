@@ -18,7 +18,7 @@ guide](/endpoint/).
 -- ds.h1: Dynamic URLs
 
 `fastn` by default generates URLs of your webpages based on the file path, but
-you can define dynamic URLs to create beutiful URLs independent of file
+you can define dynamic URLs to create beautiful URLs independent of file
 organisation, or to create documents that is served when any URLs matching some
 pattern is accessed.
 

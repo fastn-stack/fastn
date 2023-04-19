@@ -17,6 +17,10 @@ Build web apps in minutes. Deploy with a single command.
 
 -- frontend-chakra:
 
+-- fullstack-chakra:
+
+-- deploy-chakra:
+
 
 -- banner.floating-banner:
 link: https://github.com/fastn-stack/fastn/
@@ -288,10 +292,12 @@ classes: color-1, text-color
 
 -- ftd.text: Create your design system
 role: $inherited.types.heading-large
+text-align: center
 
 -- ftd.text:
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
+text-align: center
 
 fastn comes with opinionated design system which can instantly switch up your
 website's appearance with one line of code.
@@ -385,10 +391,12 @@ classes: color-2, text-color
 
 -- ftd.text: Write your entire web app using fastn language
 role: $inherited.types.heading-large
+text-align: center
 
 -- ftd.text:
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
+text-align: center
 
 fastn provides an easy-to-learn programming language and framework. Use one
 language for your entire app.
@@ -438,6 +446,220 @@ package or in totally different package.
 
 
 
+-- component fullstack-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 7
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+
+-- ftd.text: 3
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-3
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Fullstack
+role: $inherited.types.heading-large
+classes: color-3, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: fastn for building dynamic websites
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+fastn can be used for building dynamic websites as well. With features already
+built and planned fastn aspires to be a full stack framework.
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Existing Backend Integration
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /endpoint/
+cta-text: Endpoint guide ->
+
+Interact with backend APIs and create dynamic web pages using fastn. Check out
+our [http processor](/http/) for more details
+
+Plus, with endpoint definitions support, communicate with APIs without
+cross-origin policy concerns.
+
+
+
+-- card: Dynamic URLs
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /dynamic-urls/
+cta-text: Dynamic URLs guide ->
+
+Create beautiful, custom URLs independent of file organization, or serve
+documents based on specific URL patterns.
+
+
+-- card: HTTP Request Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-link: /request-data/
+cta-text: Request Data Processor ->
+min-height.fixed.em: 20
+
+Extract and use request data like URL, query parameter etc in your web pages,
+APIs or queries.
+
+
+-- card: SQLite Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-link: /package-query/
+cta-text: Package query processor ->
+min-height.fixed.em: 20
+
+Query data from sqlite database to generate dynamic websites.
+
+
+-- card: Reading JSON
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
+cta-link: /get-data/
+cta-text: Reading JSON ->
+width: fill-container
+
+Read data in JSON files and create data visualisation websites.
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fullstack-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component deploy-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 7
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: 4
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-4
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Deploy
+role: $inherited.types.heading-large
+classes: color-4, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: Deploy your app in seconds.
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+Simplify the process of deploying your app with fastn. fastn can be deployed in
+two main modes, static and dynamic.
+
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Static Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/projects-icon.svg
+
+`fastn` websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg [Github
+Pages](/how-to/github-pages/), [Vercel](/how-to/vercel/) etc.
+
+
+
+-- card: Dynamic Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: https://github.com/fastn-stack/fastn/releases/latest
+cta-text: fastn binary ->
+
+Deploy fastn in Dynamic Mode to create a fully featured web application with
+authentication, data collection, and real-time updates. fastn binary can run on
+Linux, Windows and Mac.
+
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: deploy-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -462,12 +684,14 @@ package or in totally different package.
 ftd.image-src image:
 caption title:
 body description:
-string cta-link:
-string cta-text:
+optional string cta-link:
+optional string cta-text:
 optional ftd.resizing width:
+optional ftd.resizing min-height:
 
 -- ftd.column:
-min-height.fixed.em if { card.width == NULL }: 25
+min-height.fixed.em if { card.width == NULL && card.min-height == NULL }: 25
+min-height if { card.width == NULL && card.min-height != NULL }: $card.min-height
 padding.em: 2
 height: fill-container
 spacing.fixed.em: 1
@@ -494,6 +718,7 @@ role: $inherited.types.copy-regular
 color: $inherited.colors.text
 
 -- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
 role: $inherited.types.copy-regular
 link: $card.cta-link
 
