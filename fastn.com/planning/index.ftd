@@ -3,15 +3,11 @@
 We are using fastn.io for planning fastn related official course. You will find
 the scripts etc here.
 
-- [Developer Course](/planning/developer-course/)
-
-
-
-
 -- ds.h1: Common
 
 - R: why (5 videos)
-- R: what is a fastn package? (dependencies, auto import, sitemap, dynamic-urls, redirects)
+- R: what is a fastn package?
+  - dependencies, auto import, sitemap, dynamic-urls, redirects, 404
 - R: fastn document, variables, etc
 - R: creating a component (basics)
 - R: understanding colors
@@ -48,8 +44,8 @@ the scripts etc here.
 - R: event handling
 - R: creating docs pages
 - D: using module system to create interchangable packages
-- D: translation--
-- R: using rive
+- D: translation crosslinks
+- R: [using rive](/planning/rive/)
 - R: embedding youtube or iframes
 - R: mobile responsive site
 - R: using css for things fastn is lacking
@@ -87,6 +83,10 @@ lang: txt
 - R: deploying on vercel, github, ..
 - R: deploying on heroku, digital ocean
 - D: using supabase powered fastn packages
+- R: 404 pages
+- R: favicon
+- R: seo optimisation
+- R: redirects and short urls
 
 
 
