@@ -116,6 +116,7 @@ children: $meet-the-team.players
 integer $active-tab-no: 0
 tab list tabs: $project-tabs
 
+
 -- ftd.column:
 width: fill-container
 
@@ -125,18 +126,18 @@ width: fill-container
 spacing: space-between
 
 
-
--- ftd.text: $a.title
+-- tab-ui:
 $loop$: $tab-component.tabs as $a
-color: $inherited.colors.cta-primary.text
-$on-click$: $ftd.set-integer( $a = $tab-component.active-tab-no, v = $LOOP.COUNTER )
-border-width.px: 2
-border-color if { $tab-component.active-tab-no == $LOOP.COUNTER } : $inherited.colors.cta-primary.border
-background.solid if { $tab-component.active-tab-no == $LOOP.COUNTER } : $inherited.colors.cta-primary.base
-padding.px: 10
-border-radius.px: 25
+a: $a
+idx: $LOOP.COUNTER
+$active-tab-no: $tab-component.active-tab-no
 
 -- end: ftd.row
+
+
+
+
+
 
 -- single-ui:
 if: { $tab-component.active-tab-no == $LOOP.COUNTER }
@@ -152,6 +153,43 @@ ui: $a.tab-content
 
 
 
+
+
+-- component tab-ui:
+tab a: 
+integer idx:
+integer $active-tab-no:
+boolean $is-hover: false
+
+-- ftd.text: $tab-ui.a.title
+color: $inherited.colors.cta-primary.text
+$on-click$: $ftd.set-integer( $a = $tab-ui.active-tab-no, v = $tab-ui.idx )
+border-width.px: 2
+border-color if { $tab-ui.active-tab-no == $tab-ui.idx } : $inherited.colors.cta-primary.border
+background.solid if { $tab-ui.active-tab-no == $tab-ui.idx } : $inherited.colors.cta-danger.base
+padding.px: 10
+border-radius.px: 25
+shadow if { tab-ui.is-hover }: $s
+$on-mouse-enter$: $ftd.set-bool($a = $tab-ui.is-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $tab-ui.is-hover, v = false)
+
+
+-- end: tab-ui
+
+
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 1
+y-offset.px: 1
+blur.px: 50
+spread.px: 7
+
+
+
+-- ftd.color shadow-color:
+light: #e8bfb9
+dark: #E4B0AC
 
 
 
@@ -184,20 +222,22 @@ body body: Default Body
 boolean $open: false 
 boolean $over: false
 ftd.color textcolor: $inherited.colors.text
-ftd.color bordercolor: $inherited.colors.border-strong
-ftd.color hovercolor: $inherited.colors.cta-primary.hover
+ftd.color bordercolor: $inherited.colors.warning.border
+ftd.color hovercolor: $inherited.colors.cta-danger.base
 ftd.color bg-color: $inherited.colors.background.base
 children wrapper: 
 
 
+
 ;; column for box
 -- ftd.column:
-border-width.px: 4
+border-width.px: 3
 spacing.fixed.px: 10
 width: fill-container
 border-color: $box.bordercolor
 color: $box.textcolor
 background.solid: $box.bg-color
+border-radius.px: 5
 
 
 
@@ -205,7 +245,7 @@ background.solid: $box.bg-color
 -- ftd.row:
 width: fill-container
 spacing: space-between
-border-bottom-width.px: 1
+border-bottom-width.px if { box.open }: 2
 padding.px: 10
 color: $box.textcolor
 background.solid: $box.bg-color
@@ -244,6 +284,7 @@ if: { box.open }
 -- ftd.column:
 if: { box.open }
 width: fill-container
+padding.px: 10
 children: $box.wrapper
 
 -- end: ftd.column
@@ -297,6 +338,7 @@ integer num: 0
 -- ftd.row:
 width: fill-container
 spacing: space-between
+margin.px: 20
 
 -- project-card:
 width.fixed.percent: 40
@@ -326,6 +368,7 @@ integer num: 0
 -- ftd.row:
 width: fill-container
 spacing: space-around
+margin.px: 20
 
 -- project-card:
 width.fixed.percent: 40
@@ -348,10 +391,12 @@ ftd.resizing width: fill-container
 -- ftd.column:
 width: $project-card.width
 
+
+
 -- ftd.row:
 width: fill-container
 spacing: space-between
-color: $inherited.colors.text
+color: $inherited.colors.custom.three
 
 -- ftd.text: $project-card.member.name
 align-self: start
@@ -389,6 +434,9 @@ width: fill-container
 color: $inherited.colors.text
 border-width.px: 2
 padding.px: 5
+border-radius.px: 5
+border-color: $inherited.colors.background.step-2
+background.solid: $inherited.colors.background.step-1
 
 -- ftd.text: $inner-proj-card.title
 role: $inherited.types.heading-medium
@@ -399,10 +447,12 @@ style if { inner-proj-card.title-hover }: underline
 $on-mouse-enter$: $ftd.set-bool($a = $inner-proj-card.title-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $inner-proj-card.title-hover, v = false)
 
+
 -- ftd.text: $inner-proj-card.description
 role: $inherited.types.copy-regular
-text-align: justify
+text-align: start
 align-self: center
+border-top-width.px: 1
 
 -- end: ftd.column
 
@@ -441,7 +491,7 @@ m2: $zyle
 ;; Submissions tab content
 
 -- ftd.column:
-;; width: fill-container
+width: fill-container
 
 -- ds.h1: Submissions
 
@@ -464,7 +514,7 @@ m2: $zyle
 
 
 -- ftd.column:
-;; width: fill-container
+width: fill-container
 
 -- ds.h1: FAQ section
 
@@ -499,94 +549,282 @@ color: $inherited.colors.text
 
 
 
+
+
+
 ;; Master Nomenclature
 
 -- ftd.column:
 
 -- ds.h1: Component Nomenclatures
 
--- ds.code: Page
+In the first activity, the team has created their own component for expander 
+box along with event handling.
+
+Finishing that exercise followed with their own blog posts using the `doc-site`
+package has given all of us the confidence that they are ready to create some
+really exciting UIs for blog site. 
+
+This naturally becomes their next assignment to create various components
+one-by-one that will be applied as they wish in their blog site templates.
+
+We came up with the idea to help them with a definite set of reference
+`component names`, their `properties` as well as `records` that they can use to
+create a uniformity in the structure so that when they finally create the main
+component, let's say `home-page` and `blog-page`, we will have 5 different sets
+of same components and records. The benefit of this structure is, by changing
+the name to the corresponding set, the blog-page or home-page can have totally
+different UI without breaking the content or page UI, as everything else is
+same.
+
+The structure of component name, it's properties as well as records are as
+follows:
+
+-- ds.h2: Structure of `components`
+
+Following is the list of components that the team uses along with their
+properties:
+
+
+-- ds.code: Home Page 
 lang: ftd
 
-\-- import: fastn/processors as pr
-
-\-- pr.sitemap-data sitemap:
-$processor$: fastn.sitemap
-
-\-- page:
-optional caption title:
-optional string description:
-optional body body:
-ftd.type-data types:
-ftd.color-scheme colors:
-optional ftd.image-src site-logo:
-optional string $site-url:
-optional string site-name:
-pr.toc-item list toc: $sitemap.toc
-pr.toc-item list sections: $sitemap.sections
-pr.toc-item list sub-sections: $sitemap.subsections
-optional pr.toc-item current-section: $sitemap.current-section
-optional pr.toc-item current-subsection: $sitemap.current-subsection
-optional pr.toc-item current-page: $sitemap.current-page
-pr.toc-item list footer-toc:
-children wrapper:
-ftd.ui list banner:
+\-- component home-page:
+optional header-data header:
+optional article-data top-article:
+article-collection articles:
+optional article-collection popular-articles:
+ftd.ui list uis:
 ftd.ui list footer:
+ftd.type-data types: <default>
+ftd.color-scheme colors: <default>
 
-<CREATE YOUR UI HERE>
 
-\-- end: page
 
--- ds.code: Header
+
+-- ds.code: Blog Page
 lang: ftd
 
-\-- component h1:
+\-- component blog-page:
 caption title:
-optional body body:
-children inner:
-optional string id:
+optional body description:
+children uis:
+optional header-data header:
+optional ftd.ui list right-sidebar:
+ftd.ui list footer:
+article-data data:
+ftd.type-data types: <default>
+ftd.color-scheme colors: <default>
 
-<CREATE YOUR UI HERE>
 
-\-- end: h1
 
--- ds.markdown:
+-- ds.code: Post Card 
+lang: ftd
 
-Similarly, use the same header nomenclature for other header components like h2,
- h3, ...
+\-- component post-card-1:
+caption title:
+optional string subtitle:
+optional body description:
+optional graphic-data graphic:
+optional string cta-link:
+optional string cta-text:
+
+
+
+
 
 -- ds.code: Markdown
 lang: ftd
 
 \-- component markdown:
-body body:
+body text:
 
-<CREATE YOUR UI HERE>
 
-\-- end: markdown
 
--- ds.code: Code Block
+
+
+-- ds.code: Header - h1
+lang: ftd
+
+\-- component h1:
+caption title:
+optional body text:
+
+
+
+
+-- ds.code: Header - h2
+lang: ftd
+
+\-- component h2:
+caption title:
+optional body text:
+
+
+
+
+-- ds.code: Header - h3
+lang: ftd
+
+\-- component h3:
+caption title:
+optional body text:
+
+
+
+
+-- ds.code: Code
 lang: ftd
 
 \-- component code:
-optional caption caption:
-optional string download:
-body body:
 string lang:
+optional caption title:
+body text:
 
-<CREATE YOUR UI HERE>
 
-\-- end: code
 
--- ds.h1: Color Scheme
 
-Go to this [sailing-shark-cs repo](https://github.com/FifthTry/sailing-shark-cs)
-and use it as template and create your own color scheme by changing the values
-inside `colors.ftd`.
+
+-- ds.code: Footer TOC
+lang: ftd
+
+\-- component footer-toc:
+caption title:
+optional body description:
+optional graphic-data image:
+pr.toc-item list toc:
+
+
+
+
+-- ds.code: Footer inline
+lang: ftd
+
+\-- component footer-inline:
+caption title:
+optional string link:
+
+
+
+
+
+-- ds.h2: Structure of `records`
+
+Following is the list of records that the team uses along with their
+properties:
+
+
+-- ds.code: Header Data
+lang: ftd
+
+\-- record header-data:
+optional string title:
+optional ftd.image-src logo:
+optional ftd.image-src bg-image:
+optional graphic-data graphic:
+optional string subtitle:
+optional string link:
+
+
+
+
+-- ds.code: Graphic Data
+lang: ftd
+
+\-- record graphic-data:
+optional caption ftd.image-src image:
+optional string youtube:
+optional string link:
+ftd.ui list uis:
+
+
+
+-- ds.code: Article Data
+lang: ftd
+
+\-- record article-data:
+caption title:
+optional body description:
+optional graphic-data graphic:
+string date:
+author-data author:
+string cta-link:
+optional string cta-text:
+
+
+
+-- ds.code: Article Collection
+lang: ftd
+
+\-- record article-collection:
+optional caption title:
+optional body description:
+article-data list articles:
+
+
+
+
+-- ds.code: Author Data
+lang: ftd
+
+\-- record author-data:
+caption name:
+optional body bio:
+optional graphic-data avatar:
+key-value-data list key-value:
+
+
+
+
+-- ds.code: Key-Value data
+lang: ftd
+
+\-- record key-value-data:
+caption key:
+body value:
+
+
+
+
+
+-- ds.h2: Color Scheme
+
+The team is free to use 
+[sailing-shark-cs repo](https://github.com/FifthTry/sailing-shark-cs) 
+and use it as template and create their own color schemes by changing the 
+values inside `colors.ftd`.
+
+The variables that are defined in the `colors.ftd` are of record types as 
+shown [here](https://fastn.io/ftd/built-in-types/#ftd-color-scheme). 
+
+
+
+-- ds.h2: Reference blog examples
+
+For this activity, we have chosen to focus on the `software development` genre
+of blog sites, with the aim of providing developers with a wide range of
+options for starting their own blogs.
+
+Our goal is to create templates for other genres as well, in order to offer a
+similar level of choice and support for bloggers across different fields.
+
+
+To create our master contract we went through some blog sites that are listed 
+in the site of [wearedevelopers](https://www.wearedevelopers.com/).
+
+
+-- ds.h3: **Blog Site Examples**
+
+
+1. [https://www.joshwcomeau.com/](https://www.joshwcomeau.com/)
+2. [https://web.dev/blog/ ](https://web.dev/blog/)
+3. [https://css-tricks.com/](https://css-tricks.com/)
+4. [https://www.smashingmagazine.com/](https://www.smashingmagazine.com/)
+5. [https://netflixtechblog.com/](https://netflixtechblog.com/)
+
+
 
 -- end: ftd.column
-
-
 
 -- end: contents
 
@@ -618,6 +856,10 @@ tab-content: $contents.3
 
 
 ;; records -------------------------------------------
+
+
+
+
 
 -- record tab:
 caption title:
@@ -652,8 +894,10 @@ string status: Pending
 -- project: Expander
 project-url: https://fastn.io/expander
 
-Complete the Expander Crash Course and show the UI.
-
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread 
 
 -- end: glenn-projects
 
@@ -663,7 +907,10 @@ Complete the Expander Crash Course and show the UI.
 -- project: Expander
 project-url: https://fastn.io/expander
 
-Complete the Expander Crash Course and show the UI.
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread 
 
 
 -- end: hadrian-projects
@@ -675,7 +922,10 @@ Complete the Expander Crash Course and show the UI.
 -- project: Expander
 project-url: https://fastn.io/expander
 
-Complete the Expander Crash Course and show the UI.
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread 
 
 
 -- end: nicole-projects
@@ -687,7 +937,10 @@ Complete the Expander Crash Course and show the UI.
 -- project: Expander
 project-url: https://fastn.io/expander
 
-Complete the Expander Crash Course and show the UI.
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread 
 
 
 -- end: mark-projects
@@ -699,7 +952,10 @@ Complete the Expander Crash Course and show the UI.
 -- project: Expander
 project-url: https://fastn.io/expander
 
-Complete the Expander Crash Course and show the UI.
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread 
 
 
 -- end: zyle-projects
@@ -716,7 +972,7 @@ drawings into UI/UX designs. I also code website front-ends that hopefully
 brings joy and amusement to people around me. 
 
 
--- member hadrian: John Hadrian (aka Ian)
+-- member hadrian: Hadrian
 projects: $nicole-projects
 avatar: $fastn-assets.files.images.blog.hadrian.jpg
 
