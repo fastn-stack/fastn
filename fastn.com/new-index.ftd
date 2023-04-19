@@ -21,6 +21,8 @@ Build web apps in minutes. Deploy with a single command.
 
 -- deploy-chakra:
 
+-- install:
+
 
 -- banner.floating-banner:
 link: https://github.com/fastn-stack/fastn/
@@ -209,12 +211,7 @@ compromise on what you can build with it. It supports markdown too.
 width: fill-container
 spacing.fixed.em: 1.5
 
--- ftd.code:
-lang: ftd
-shadow: $s
-width: fill-container
-role: $inherited.types.source-code
-background.solid: $inherited.colors.background.base
+-- code:
 
 \-- chat-female-avatar: Hello World! 😀
 
@@ -624,6 +621,7 @@ padding-vertical.em: 2
 
 -- card: Static Mode
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/projects-icon.svg
+min-height.fixed.em: 20
 
 `fastn` websites can be compiled into static html, js, css etc, and can be
 deployed on any static hosting providers eg [Github
@@ -635,6 +633,7 @@ Pages](/how-to/github-pages/), [Vercel](/how-to/vercel/) etc.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-link: https://github.com/fastn-stack/fastn/releases/latest
 cta-text: fastn binary ->
+min-height.fixed.em: 20
 
 Deploy fastn in Dynamic Mode to create a fully featured web application with
 authentication, data collection, and real-time updates. fastn binary can run on
@@ -647,6 +646,61 @@ Linux, Windows and Mac.
 -- end: ftd.column
 
 -- end: deploy-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component install:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.em: 8
+padding-horizontal.em: 10
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+;; background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/event-background.svg
+background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+width: fill-container
+align-content: center
+
+-- ftd.text: Get Started with fastn in Seconds!
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- ftd.text: Install fastn with a Single Command
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+margin-bottom.em: 4
+
+-- code:
+width: hug-content
+role: $inherited.types.copy-large
+
+curl -fsSL https://fastn.io/install.sh | bash
+
+-- ftd.text: Learn More
+link: /install/
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-radius.em: 0.375
+padding-vertical.em: 1
+padding-horizontal.em: 2
+margin-top.em: 2
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: install
 
 
 
@@ -691,7 +745,7 @@ optional ftd.resizing min-height:
 
 -- ftd.column:
 min-height.fixed.em if { card.width == NULL && card.min-height == NULL }: 25
-min-height if { card.width == NULL && card.min-height != NULL }: $card.min-height
+min-height: $card.min-height
 padding.em: 2
 height: fill-container
 spacing.fixed.em: 1
@@ -748,3 +802,41 @@ blur.px: 8
 -- ftd.color shadow-color:
 light: #00000026
 dark: #f6f5f557
+
+
+
+-- component code:
+body text:
+optional ftd.resizing width:
+optional ftd.responsive-type role:
+
+
+-- ftd.column:
+width if { code.width == NULL }: fill-container
+width: $code.width
+role if { code.role == NULL }: $inherited.types.source-code
+role: $code.role
+
+-- ftd.code:
+lang: ftd
+shadow: $s
+width: fill-container
+background.solid: $inherited.colors.background.base
+if: { ftd.dark-mode }
+
+$code.text
+
+
+-- ftd.code:
+lang: ftd
+shadow: $s
+width: fill-container
+background.solid: $inherited.colors.background.base
+theme: fastn-theme.light
+if: { !ftd.dark-mode }
+
+$code.text
+
+-- end: ftd.column
+
+-- end: code
