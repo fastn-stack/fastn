@@ -1,6 +1,6 @@
 -- my-ds.page: Backend And `fastn`
 
-Along with building [building frontends](/frontend/) `fastn` can be used for
+Along with [building frontends](/frontend/) `fastn` can be used for
 building dynamic websites as well. With features already built and planned
 `fastn` aspires to be a full stack framework.
 
@@ -12,7 +12,7 @@ processor](/http/) about how to do this.
 
 `fastn` also has support for `endpoint` definitions, which allows frontend code
 to communicate with existing APIs without worrying about cross origin policies
-and exposiing a unified domain. Read about it in the [endpoint
+and exposing a unified domain. Read about it in the [endpoint
 guide](/endpoint/).
 
 -- ds.h1: Dynamic URLs
