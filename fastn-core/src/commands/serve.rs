@@ -104,7 +104,6 @@ async fn serve_file(
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return if has_redirect_url {
-                    println!("Here 1");
                     fastn_core::http::redirect(main_document.content.as_bytes().to_vec())
                 } else {
                     fastn_core::http::ok(main_document.content.as_bytes().to_vec())
