@@ -2,6 +2,7 @@ pub mod app;
 pub mod dependency;
 pub mod package_doc;
 pub mod user_group;
+pub mod redirects;
 
 #[derive(Debug, Clone)]
 pub struct Package {
@@ -66,6 +67,9 @@ pub struct Package {
 
     /// Package Icon
     pub icon: Option<ftd::ImageSrc>,
+
+    /// Redirect URLs
+    pub redirects: Option<ftd::Map<String>>,
 }
 
 impl Package {
@@ -98,6 +102,7 @@ impl Package {
             backend_headers: None,
             apps: vec![],
             icon: None,
+            redirects: None,
         }
     }
 
@@ -583,6 +588,13 @@ impl Package {
         package.dependencies = deps;
         package.fastn_path = Some(root.join("FASTN.ftd"));
 
+        package.redirects = {
+            let redirects_temp: Option<redirects::RedirectsTemp> = fastn_doc.get("fastn#redirects")?;
+            redirects_temp.map(|r| r.redirects_from_body())
+        };
+
+        dbg!(&package.redirects);
+
         package.auto_import = fastn_doc
             .get::<Vec<String>>("fastn#auto-import")?
             .iter()
@@ -746,6 +758,7 @@ impl PackageTemp {
             backend_headers: self.backend_headers,
             apps: vec![],
             icon: self.icon,
+            redirects: None,
         }
     }
 }

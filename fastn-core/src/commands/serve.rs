@@ -9,6 +9,41 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
+    dbg!(&path);
+    let url_regex = fastn_core::http::url_regex();
+
+    let mut path = path.clone();
+    let redirects = config.package.redirects.clone();
+    let mut current_path = path.to_string();
+    let mut has_redirect_url = false;
+    let mut has_external_redirect = false;
+    if let Some(r) = redirects {
+        if let Some(redirected_path) = r.get(current_path.as_str()) {
+            current_path = redirected_path.to_string();
+            path = camino::Utf8Path::new(current_path.as_str());
+            has_redirect_url = true;
+            if url_regex.is_match(redirected_path) {
+                has_external_redirect = true;
+            }
+        }
+    }
+
+    dbg!(&path, &has_redirect_url, &has_external_redirect);
+
+    if has_external_redirect {
+        return match fastn_core::http::get_external_response(current_path.as_str()).await {
+            Ok(r) => r,
+            Err(e) => {
+                tracing::error!(
+                msg = "fastn-error external redirect path not found",
+                path = path.as_str(),
+                error = %e
+            );
+                fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
+            }
+        }
+    }
+
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -71,7 +106,12 @@ async fn serve_file(
     match f {
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
-                return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
+                return if has_redirect_url {
+                    println!("Here 1");
+                    fastn_core::http::redirect(main_document.content.as_bytes().to_vec())
+                } else {
+                    fastn_core::http::ok(main_document.content.as_bytes().to_vec())
+                }
             }
             match fastn_core::package::package_doc::read_ftd(
                 config,
@@ -83,7 +123,11 @@ async fn serve_file(
             .await
             {
                 Ok(r) => {
-                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                    match has_redirect_url {
+                        true => fastn_core::http::redirect_with_content_type(r,
+                                                                             mime_guess::mime::TEXT_HTML_UTF_8),
+                        false => fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                    }
                 }
                 Err(e) => {
                     tracing::error!(
