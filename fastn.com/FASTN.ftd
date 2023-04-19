@@ -25,6 +25,7 @@ favicon: /-/fastn.io/images/favicon.svg
 -- fastn.dependency: fastn-stack.github.io/media
 -- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/banner
+-- fastn.dependency: fifthtry.github.io/footer
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
@@ -41,11 +42,11 @@ favicon: /-/fastn.io/images/favicon.svg
 
 -- fastn.sitemap:
 
-# Home: /
+# Home: /home/
 
-## Home: /
+## Home: /home/
 
-- Home: /
+- Home: /home/
 - The `fastn` Language: /ftd/
 - Why?:
   - `fastn` is Easy To Learn: /easy/

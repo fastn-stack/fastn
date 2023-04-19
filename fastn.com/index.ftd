@@ -1,247 +1,867 @@
--- import: fifthtry.github.io/bling/quote
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography/inter as typo
+-- import: fifthtry.github.io/fastn-io-typography as doc-typo
 -- import: fastn.io/ftd as ftd-index
+-- import: fifthtry.github.io/banner
+-- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
+-- import: fifthtry.github.io/footer
+-- import: fastn/processors as pr
 
--- my-ds.page: `fastn` - Full-stack Web Development Made Easy
+-- home-page:
 
-;; Audience: People considering using it for their team.
+-- hero-section: Full-stack Web Development Made Easy
 
-`ftd` is a programming language for building user interfaces and content centric
-websites. `ftd` is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+Build web apps in minutes. Deploy with a single command.
 
-`fastn` is a web-framework, a content management system, and an integrated
-development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
-to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
-FifthTry.
+-- chakra:
 
-;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
-;; Language](/first/).
+-- first-chakra:
 
-The quickest way to learn `fastn` is the [short video course we have created:
-expander](https://fastn.io/expander/), it takes you through the basics.
+-- frontend-chakra:
 
-Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
-our documentation.
+-- fullstack-chakra:
 
+-- deploy-chakra:
 
--- ds.h1: `ftd`: Programming Language For The Next Billion Programmers
-
-`ftd` is designed with minimal and uniform syntax, and at first glance does not
-even look like a programming language.
-
--- ds.code: No quotes for string, multi-line strings are easy
-lang: ftd
-
-\-- amitu: Hello World! 😀
-
-\-- amitu:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+-- install:
 
 
--- ds.markdown:
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
-We have called a "function" named "amitu" with "Hello World! 😀" as input, yet
-it does not feel technical.
+.
 
-This is what it produces:
+-- banner.floating-banner:
+link: https://github.com/fastn-stack/fastn/
 
+Star on GitHub ⭐
 
--- ftd-index.amitu: Hello World! 😀
-
--- ftd-index.amitu:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
-
--- ds.markdown:
-
-Learn more about [`ftd` Programming Language](/ftd/).
+-- end: home-page
 
 
--- ds.h1: There are a lot of ready made `ftd` components available today
-
--- ds.code: Ready made components can be imported and used.
-lang: ftd
 
 
-\-- import: fifthtry.github.io/bling/quote
-
-\-- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
-avatar: $fastn-assets.files.images.amitu.jpg
-logo: $fastn-assets.files.images.logo-fifthtry.svg
-
-The web has lost some of the exuberance from the
-early 2000s, and it makes me a little sad.
 
 
--- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
-avatar: $fastn-assets.files.images.amitu.jpg
-logo: $fastn-assets.files.images.logo-fifthtry.svg
 
-The web has lost some of the exuberance from the
-early 2000s, and it makes me a little sad.
 
--- ds.h1: Or you can create your own components
 
--- ds.code: Creating a custom component
-lang: ftd
 
-\-- component toggle-text:
-boolean $current: false
+
+
+
+
+-- component home-page:
+children wrapper:
+
+-- ds.page:
+site-logo: $fastn-assets.files.images.fastn.svg
+colors: $dark-flame-cs.main
+$widthfill: true
+types: $doc-typo.types
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+types: $typo.types
+children: $home-page.wrapper
+
+-- end: ftd.column
+
+-- end: ds.page
+
+-- end: home-page
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component hero-section:
 caption title:
+body subtitle:
 
-\-- ftd.text: $toggle-text.title
+-- ftd.column:
+width: fill-container
+height: fill-container
+color: $inherited.colors.text-strong
+background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 600
+padding-vertical.em: 7
 align-self: center
+align-content: center
+
+-- ftd.text: $hero-section.title
 text-align: center
-color if { toggle-text.current }: #D42D42
-color: $inherited.colors.cta-primary.text
-background.solid: $inherited.colors.cta-primary.base
-$on-click$: $ftd.toggle($a = $toggle-text.current)
-border-radius.px: 5
+role: $inherited.types.heading-hero
 
-\-- end: toggle-text
+-- ftd.text: with
+text-align: center
+color: $inherited.colors.text
+role: $inherited.types.heading-medium
 
-\-- toggle-text: `ftd` is cool!
+-- ftd.text: fastn
+text-align: center
+role: $inherited.types.heading-hero
+classes: fastn, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
 
 
--- ds.output:
+-- ftd.text: $hero-section.subtitle
+role: $inherited.types.heading-tiny
+text-align: center
+margin-top.em: 2
+color: $inherited.colors.text
 
--- ftd-index.toggle-text: click me to toggle colors
+-- end: ftd.column
 
--- end: ds.output
+-- end: ftd.column
 
--- ds.markdown:
 
-`ftd`'s event handling capabilities can be used for form validation, ajax
-requests etc, to create fully functional frontend applications.
+-- end: hero-section
 
--- ds.h1: You Use `fastn` To Work With `ftd`
 
-We ship pre built binaries for Linux, Mac and Windows.
 
--- ds.code:
-lang: sh
-copy: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component chakra:
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.em: 3
+padding-top.em: 2
+padding-bottom.em: 5
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.image:
+src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+width.fixed.em: 4
+height.fixed.em: 4
+margin-bottom.em: 1
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: Build anything, faster.
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 1.5
+
+fastn language is designed for building user interfaces and content centric
+websites.
+
+-- ftd.text: **1**. Any use case.
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 0.5
+
+With fastn you can build anything starting from designing to full web app
+creation.
+
+-- ftd.text: This entire website is made using fastn!
+role: $inherited.types.heading-tiny
+color: $inherited.colors.cta-primary.base
+margin-bottom.em: 1.5
+
+-- ftd.text: **2**. Easy to learn.
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+
+fastn language is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it. It supports markdown too.
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 1.5
+
+-- code:
+
+\-- chat-female-avatar: Hello World! 😀
+
+\-- chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+-- ftd-index.chat-female-avatar: Hello World! 😀
+
+-- ftd-index.chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component first-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 2
+margin-vertical.em: 5
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+
+-- ftd.text: 1
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-1
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Design
+role: $inherited.types.heading-large
+classes: color-1, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: Create your design system
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+fastn comes with opinionated design system which can instantly switch up your
+website's appearance with one line of code.
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Colors and Typography
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /featured/cs/
+cta-text: Check out the full library ->
+
+fastn has well defined structure to define color schema and typography. This
+can change your website look and feel just with **one line**. You can create
+your own scheme or use them from library provided by fastn.
+
+
+
+-- card: Figma Token With fastn Color Scheme
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /figma/
+cta-text: Using figma token guides ->
+
+You can use figma token with fastn color scheme. You also can create your own
+fastn color scheme from figma json.
+
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: first-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component frontend-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 7
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: 2
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-2
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Frontend
+role: $inherited.types.heading-large
+classes: color-2, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: Write your entire web app using fastn language
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+fastn provides an easy-to-learn programming language and framework. Use one
+language for your entire app.
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Built-in UI Components
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-link: /featured/
+cta-text: Check out the full library ->
+
+fastn comes with a library of ready to use UI components. These components are
+fully customizable. Change the property values of the component to match your
+project.
+
+
+
+
+-- card: Custom Components
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-link: /components/
+cta-text: Create component guide ->
+
+Create your own components in a few lines of code. Use them in rest of your app
+package or in totally different package.
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: frontend-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component fullstack-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 7
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+
+-- ftd.text: 3
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-3
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Fullstack
+role: $inherited.types.heading-large
+classes: color-3, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: fastn for building dynamic websites
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+fastn can be used for building dynamic websites as well. With features already
+built and planned fastn aspires to be a full stack framework.
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Existing Backend Integration
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
+cta-link: /endpoint/
+cta-text: Endpoint guide ->
+
+Interact with backend APIs and create dynamic web pages using fastn. Check out
+our [http processor](/http/) for more details
+
+Plus, with endpoint definitions support, communicate with APIs without
+cross-origin policy concerns.
+
+
+
+-- card: Dynamic URLs
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: /dynamic-urls/
+cta-text: Dynamic URLs guide ->
+
+Create beautiful, custom URLs independent of file organization, or serve
+documents based on specific URL patterns.
+
+
+-- card: HTTP Request Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+cta-link: /request-data/
+cta-text: Request Data Processor ->
+min-height.fixed.em: 20
+
+Extract and use request data like URL, query parameter etc in your web pages,
+APIs or queries.
+
+
+-- card: SQLite Data
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
+cta-link: /package-query/
+cta-text: Package query processor ->
+min-height.fixed.em: 20
+
+Query data from sqlite database to generate dynamic websites.
+
+
+-- card: Reading JSON
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
+cta-link: /get-data/
+cta-text: Reading JSON ->
+min-height.fixed.em: 20
+
+Read data in JSON files and create data visualisation websites.
+
+
+
+-- card: Upcoming WASM Support
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/uses/image1.svg
+min-height.fixed.em: 20
+
+We are working on wasm support so developers can extend fastn's standard
+libraries and offer access to more backend functionalities.
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fullstack-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component deploy-chakra:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em: 3
+padding-vertical.em: 7
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: 4
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: color-4
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+
+-- ftd.text: Deploy
+role: $inherited.types.heading-large
+classes: color-4, text-color
+
+-- ftd.text.css:
+-- string: $fastn-assets.files.design.css
+-- end: ftd.text.css
+
+
+-- ftd.text: Deploy your app in seconds.
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+Simplify the process of deploying your app with fastn. fastn can be deployed in
+two main modes, static and dynamic.
+
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+
+
+-- card: Static Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/projects-icon.svg
+min-height.fixed.em: 20
+
+fastn websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg [Github
+Pages](/how-to/github-pages/), [Vercel](/how-to/vercel/) etc.
+
+
+
+-- card: Dynamic Mode
+image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
+cta-link: https://github.com/fastn-stack/fastn/releases/latest
+cta-text: fastn binary ->
+min-height.fixed.em: 20
+
+Deploy fastn in Dynamic Mode to create a fully featured web application with
+authentication, data collection, and real-time updates. fastn binary can run on
+Linux, Windows and Mac.
+
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: deploy-chakra
+
+
+
+
+
+
+
+
+
+
+
+
+-- component install:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.em: 8
+padding-horizontal.em: 10
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.column:
+;; background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/event-background.svg
+background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+width: fill-container
+align-content: center
+
+-- ftd.text: Get Started with fastn
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- ftd.text: Install fastn with a Single Command
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+margin-bottom.em: 4
+
+-- code:
+width: hug-content
+role: $inherited.types.copy-large
 
 curl -fsSL https://fastn.io/install.sh | bash
 
--- ds.image:
+-- ftd.text: Learn More
+link: /install/
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-radius.em: 0.375
+padding-vertical.em: 1
+padding-horizontal.em: 2
+margin-top.em: 2
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component card:
+ftd.image-src image:
+caption title:
+body description:
+optional string cta-link:
+optional string cta-text:
+optional ftd.resizing width:
+optional ftd.resizing min-height:
+
+-- ftd.column:
+min-height.fixed.em if { card.width == NULL && card.min-height == NULL }: 25
+min-height: $card.min-height
+padding.em: 2
+height: fill-container
+spacing.fixed.em: 1
+shadow: $s
+border-radius.em: 1
+width.fixed.percent: 48
+width if { card.width != NULL }: $card.width
+background.solid: $inherited.colors.background.base
+
+-- ftd.image:
+src: $card.image
+height.fixed.em: 3
+width.fixed.em: 3
+max-width: fill-container
+
+-- ftd.text: $card.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+padding-bottom.em: 0.5
+
+
+-- ftd.text: $card.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: $card.cta-text
+if: { card.cta-text != NULL }
+role: $inherited.types.copy-regular
+link: $card.cta-link
+
+-- end: ftd.column
+
+-- end: card
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 0
+y-offset.px: 2
+blur.px: 8
+
+
+-- ftd.color shadow-color:
+light: #00000026
+dark: #f6f5f557
+
+
+
+-- component code:
+body text:
+optional ftd.resizing width:
+optional ftd.responsive-type role:
+
+
+-- ftd.column:
+width if { code.width == NULL }: fill-container
+width: $code.width
+role if { code.role == NULL }: $inherited.types.source-code
+role: $code.role
+
+-- ftd.code:
+lang: ftd
+shadow: $s
 width: fill-container
-src: $fastn-assets.files.images.fastn.png
+background.solid: $inherited.colors.background.base
+if: { ftd.dark-mode }
 
--- ds.h1: Integrated Web Development Experience
-
-`ftd` and `fastn` come with package management, web server, opinionated design
-system, dark mode and responsive by default.
-
-If you are getting started with frontend development, `fastn` framework takes
-care of a lot of things for you, and all you have to focus on is your product.
-
-We are working towards our own hosted web based IDE, version controlled code
-hosting and collaboration platform so you and your team gets a one stop solution
-for building websites.
+$code.text
 
 
--- ds.h1: `fastn` for Static Sites
-
-`fastn` websites can be compiled into static html, js, css etc, and can be
-deployed on any static hosting providers eg [Github
-Pages](https://fastn.io/how-to/github-pages/),
-[Vercel](https://fastn.io/how-to/vercel/) etc.
-
--- ds.code: `ftd` source code of the page you are reading
+-- ftd.code:
 lang: ftd
-
-\-- import: fifthtry.github.io/bling/quote
-\-- import: fastn.io/ftd as ftd-index
-
-\-- my-ds.page: Overview of `fastn` and `ftd`
-
-`ftd` is a programming language for building user interfaces and content centric
-websites. `ftd` is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
-
--- ds.markdown:
-
-`ftd` is a good alternative for content websites like blogs, knowledge bases,
-portfolio websites, project and marketing websites etc. It is cheap, fast, and
-requires little maintenance.
-
--- ds.image:
+shadow: $s
 width: fill-container
-src: $fastn-assets.files.images.github-pages.png
+background.solid: $inherited.colors.background.base
+theme: fastn-theme.light
+if: { !ftd.dark-mode }
 
+$code.text
 
--- ds.h1: Data Driven Website
+-- end: ftd.column
 
--- ds.code: fetching data from API
-lang: ftd
-
-\-- import: fastn/processors as pr
-
-\-- result r:
-$processor$: pr.http
-url: https://api.github.com/search/repositories
-sort: stars
-order: desc
-q: language:python
-
--- ds.code: Working With SQL Is Breeze
-lang: ftd
-
-\-- import: fastn/processors as pr
-
-\-- people:
-$processor$: pr.package-query
-db: db.sqlite
-
-SELECT * FROM user;
-
-
-\-- show-person: $p
-$loop$: $people as $p
-
--- ds.markdown:
-
-`fastn` can be used to create data driven website, dashboards.
-
--- ds.code: Dynamic URLs
-lang: ftd
-
-\-- fastn.dynamic-urls:
-
-# Profile Page
-url: /<string:username>/
-document: profile.ftd
-
--- ds.markdown:
-
-`fastn` can be used for creating a lot of web application backends as well.
-
--- ds.h1: Upcoming WASM Support
-
-We are working on `wasm` support so developers can extend `ftd's` standard
-libraries and offer access to more backend functionalities.
-
--- ds.image:
-width: fill-container
-src: $fastn-assets.files.images.wasm.png
-
--- ds.h1: Hosting Dynamic Sites
-
-For dynamic sites you can deploy `fastn` cli on the platform of your choice. We
-ship ready made Docker containers that you can add to your infrastructure.
-
--- ds.h1: `fastn` Cloud
-
-We also offer our own hosting solution for your static and dynamic sites. Using
-`fastn` Cloud frees you from devops needs, and you get a fully integrated,
-managed hosting solution, that a non programmers can use with ease.
-
--- end: my-ds.page
+-- end: code

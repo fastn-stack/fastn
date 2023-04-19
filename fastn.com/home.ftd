@@ -1,87 +1,247 @@
--- import: fifthtry.github.io/admonitions as cbox
+-- import: fifthtry.github.io/bling/quote
+-- import: fastn.io/ftd as ftd-index
+
+-- my-ds.page: `fastn` - Full-stack Web Development Made Easy
+
+;; Audience: People considering using it for their team.
+
+`ftd` is a programming language for building user interfaces and content centric
+websites. `ftd` is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
+
+`fastn` is a web-framework, a content management system, and an integrated
+development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
+to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
+FifthTry.
+
+;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
+;; Language](/first/).
+
+The quickest way to learn `fastn` is the [short video course we have created:
+expander](https://fastn.io/expander/), it takes you through the basics.
+
+Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
+our documentation.
 
 
--- my-ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
+-- ds.h1: `ftd`: Programming Language For The Next Billion Programmers
 
-`fastn` is a comprehensive new-age web development platform. It has been built
-specifically to make workflows across design, development & deployment simple
-and consistent.
+`ftd` is designed with minimal and uniform syntax, and at first glance does not
+even look like a programming language.
 
-Note: we are revamping this site, [the old version is 
-here](https://fpm-45o5tfuxc-fifthtry.vercel.app/).
+-- ds.code: No quotes for string, multi-line strings are easy
+lang: ftd
 
-`fastn` is powered by three important elements - an indigenous design system, a
-curated list of UI components / templates and a powerful tailor-made programming
-language - [`ftd`](/ftd/).
+\-- amitu: Hello World! 😀
 
-[`ftd`](/ftd/) is a language designed for creating web pages and documents for
-publishing on the web. It starts with the simplicity of Markdown, but takes it
-to the next level by adding features to create full page layouts, reusable `"ftd
-components"`, and first-class support for data modeling. This makes `ftd` a
-replacement for traditional data exchange format like JSON, CSV etc.
+\-- amitu:
 
-Here are some key [features of `fastn`](/features/) that makes it a good-to-have
-tool:
+you can also write multiline messages easily!
 
-- [Supports ftd](/ftd/)
-- [`ftd` package manager](/package-manager/)
-- [Static site generator](/static/)
-- [`fastn` Server](/server/)
-- [Customizable color schemes](/cs/)
-- [Sitemap](/sitemap/)
-- `fastn` for Distributing Static Assets
+no quotes. and **markdown** is *supported*.
 
 
+-- ds.markdown:
 
--- cbox.warning: `fastn` Performance
+We have called a "function" named "amitu" with "Hello World! 😀" as input, yet
+it does not feel technical.
 
-Currently, `fastn` generates pages of size `~1MB`. We are working on
-improving this.
-
-
-
--- ds.h1: How to install `fastn`?
-
-Installing `fastn` is easy and can be done on multiple operating systems.
-Check out the ["How to Install"](/install/) section for more
-information. Additionally, an editor is required to use `fastn`, and we
-recommend using [Sublime Text](https://www.sublimetext.com/3).
+This is what it produces:
 
 
+-- ftd-index.amitu: Hello World! 😀
+
+-- ftd-index.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+Learn more about [`ftd` Programming Language](/ftd/).
 
 
+-- ds.h1: There are a lot of ready made `ftd` components available today
 
-/-- ds.h1: Learning Resource
-
-We are writing three manuals to help you learn `fastn`:
-
-- [Author Manual](/author/), if you want to use `fastn` as a end user, to power
-  your next blog, book, portfolio site, product landing page etc.
-- [Builder Manual](/themes/), if you want to create `fastn packages` that other
-  people can use.
+-- ds.code: Ready made components can be imported and used.
+lang: ftd
 
 
+\-- import: fifthtry.github.io/bling/quote
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
 
 
--- ds.h1: Development
+-- quote.charcoal: Amit Upadhyay
+label: Creator of FTD
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
 
-Checkout what we are planning and what we are working on in
-[github discussions](https://github.com/ftd-lang/fastn/discussions).
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
 
-You can also check `ftd` related discussion
-[here](https://github.com/ftd-lang/ftd/discussions).
+-- ds.h1: Or you can create your own components
 
-Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)
+-- ds.code: Creating a custom component
+lang: ftd
 
-Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
+\-- component toggle-text:
+boolean $current: false
+caption title:
 
-Q&A: [Questions and Answer](https://github.com/ftd-lang/ftd/discussions/categories/q-a)
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
 
-License: BSD
+\-- end: toggle-text
 
-We are trying to create the language for human beings and we do not believe it
-would be possible without your support. We would love to hear from you.
+\-- toggle-text: `ftd` is cool!
 
 
+-- ds.output:
+
+-- ftd-index.toggle-text: click me to toggle colors
+
+-- end: ds.output
+
+-- ds.markdown:
+
+`ftd`'s event handling capabilities can be used for form validation, ajax
+requests etc, to create fully functional frontend applications.
+
+-- ds.h1: You Use `fastn` To Work With `ftd`
+
+We ship pre built binaries for Linux, Mac and Windows.
+
+-- ds.code:
+lang: sh
+copy: false
+
+curl -fsSL https://fastn.io/install.sh | bash
+
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.fastn.png
+
+-- ds.h1: Integrated Web Development Experience
+
+`ftd` and `fastn` come with package management, web server, opinionated design
+system, dark mode and responsive by default.
+
+If you are getting started with frontend development, `fastn` framework takes
+care of a lot of things for you, and all you have to focus on is your product.
+
+We are working towards our own hosted web based IDE, version controlled code
+hosting and collaboration platform so you and your team gets a one stop solution
+for building websites.
+
+
+-- ds.h1: `fastn` for Static Sites
+
+`fastn` websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg [Github
+Pages](https://fastn.io/how-to/github-pages/),
+[Vercel](https://fastn.io/how-to/vercel/) etc.
+
+-- ds.code: `ftd` source code of the page you are reading
+lang: ftd
+
+\-- import: fifthtry.github.io/bling/quote
+\-- import: fastn.io/ftd as ftd-index
+
+\-- my-ds.page: Overview of `fastn` and `ftd`
+
+`ftd` is a programming language for building user interfaces and content centric
+websites. `ftd` is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
+
+-- ds.markdown:
+
+`ftd` is a good alternative for content websites like blogs, knowledge bases,
+portfolio websites, project and marketing websites etc. It is cheap, fast, and
+requires little maintenance.
+
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.github-pages.png
+
+
+-- ds.h1: Data Driven Website
+
+-- ds.code: fetching data from API
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- result r:
+$processor$: pr.http
+url: https://api.github.com/search/repositories
+sort: stars
+order: desc
+q: language:python
+
+-- ds.code: Working With SQL Is Breeze
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- people:
+$processor$: pr.package-query
+db: db.sqlite
+
+SELECT * FROM user;
+
+
+\-- show-person: $p
+$loop$: $people as $p
+
+-- ds.markdown:
+
+`fastn` can be used to create data driven website, dashboards.
+
+-- ds.code: Dynamic URLs
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# Profile Page
+url: /<string:username>/
+document: profile.ftd
+
+-- ds.markdown:
+
+`fastn` can be used for creating a lot of web application backends as well.
+
+-- ds.h1: Upcoming WASM Support
+
+We are working on `wasm` support so developers can extend `ftd's` standard
+libraries and offer access to more backend functionalities.
+
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.wasm.png
+
+-- ds.h1: Hosting Dynamic Sites
+
+For dynamic sites you can deploy `fastn` cli on the platform of your choice. We
+ship ready made Docker containers that you can add to your infrastructure.
+
+-- ds.h1: `fastn` Cloud
+
+We also offer our own hosting solution for your static and dynamic sites. Using
+`fastn` Cloud frees you from devops needs, and you get a fully integrated,
+managed hosting solution, that a non programmers can use with ease.
 
 -- end: my-ds.page
