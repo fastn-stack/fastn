@@ -42,11 +42,11 @@ favicon: /-/fastn.io/images/favicon.svg
 
 -- fastn.sitemap:
 
-# Home: /home/
+# Overview: /home/
 
-## Home: /home/
+## Overview: /home/
 
-- Home: /home/
+- `fastn` Overview: /home/
 - The `fastn` Language: /ftd/
 - Why?:
   - `fastn` is Easy To Learn: /easy/
