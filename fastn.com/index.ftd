@@ -649,8 +649,8 @@ image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/
 min-height.fixed.em: 20
 
 fastn websites can be compiled into static html, js, css etc, and can be
-deployed on any static hosting providers eg [Github
-Pages](/how-to/github-pages/), [Vercel](/how-to/vercel/) etc.
+deployed on any static hosting providers eg [Github Pages](/github-pages/),
+[Vercel](/vercel/) etc.
 
 
 
