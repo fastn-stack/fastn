@@ -2600,6 +2600,16 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_property_value(false, 0)),
                         0,
                     )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATETIME,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("datetime-local")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
                 ],
                 line_number: 0,
             }),

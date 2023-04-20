@@ -2784,6 +2784,7 @@ pub enum TextInputType {
     EMAIL,
     PASSWORD,
     URL,
+    DATETIME,
 }
 
 impl TextInputType {
@@ -2809,6 +2810,7 @@ impl TextInputType {
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_EMAIL => Ok(TextInputType::EMAIL),
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_PASSWORD => Ok(TextInputType::PASSWORD),
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_URL => Ok(TextInputType::URL),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATETIME => Ok(TextInputType::DATETIME),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.text-input-type`", t),
                 doc.name,
@@ -2850,6 +2852,7 @@ impl TextInputType {
             TextInputType::EMAIL => "email".to_string(),
             TextInputType::PASSWORD => "password".to_string(),
             TextInputType::URL => "url".to_string(),
+            TextInputType::DATETIME => "datetime-local".to_string(),
         }
     }
 }

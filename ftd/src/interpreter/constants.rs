@@ -188,6 +188,7 @@ pub const FTD_TEXT_INPUT_TYPE_TEXT: &str = "ftd#text-input-type.text";
 pub const FTD_TEXT_INPUT_TYPE_EMAIL: &str = "ftd#text-input-type.email";
 pub const FTD_TEXT_INPUT_TYPE_PASSWORD: &str = "ftd#text-input-type.password";
 pub const FTD_TEXT_INPUT_TYPE_URL: &str = "ftd#text-input-type.url";
+pub const FTD_TEXT_INPUT_TYPE_DATETIME: &str = "ftd#text-input-type.datetime";
 
 pub const FTD_REGION: &str = "ftd#region";
 pub const FTD_REGION_H1: &str = "ftd#region.h1";
