@@ -21,14 +21,8 @@ Assumption: Don't know about Rive
 
 Screen: Slide 2 on creen
 
-Live video of Presenter.
-
--- ds.image: Background Image
-src: $assets.files.planning.rive.ftd-rive-page.png
-
 Today we are going to talk about how we can use animations to make your website
-more happening. We are quick to notice movements, and when this is used
-correctly we can create a much more dynamic experience.
+more interesting.
 
 -- ds.h1: Rive Screen
 

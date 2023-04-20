@@ -5,6 +5,8 @@
 `ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
 animation](https://rive.app) in a `fastn` document.
 
+-- ds.youtube:
+v: cZI2dVTIOHM
 
 -- ds.rendered: Hello Rive!
 
@@ -80,6 +82,10 @@ artboard](https://help.rive.app/editor/fundamentals/artboards) to use.
 `fastn` language has various rive related [built-in
 functions](built-in-functions/#rive-functions). These functions help to interact
 with rive on various events.
+
+-- ds.youtube:
+v: H6PH8-fuCNs
+
 
 -- ds.rendered: Sample code
 

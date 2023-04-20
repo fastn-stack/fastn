@@ -10,9 +10,21 @@
 
 -- home-page:
 
--- hero-section: Full-stack Web Development Made Easy
+;; build your next website "without developers"
 
-Build web apps in minutes. Deploy with a single command.
+;; programming language for non developers -
+
+;; -- hero-section: build your next website without developers
+
+-- hero-section: Build your next landing page, blog, or webapp
+
+_Easy to learn_ full-stack framework designed for creating **good looking
+content centric** or API and database driven websites.
+
+;; Create rich user interfaces, integrate with
+
+;; Domain specific language for writing content and creating rich user interfaces,
+;; integrate with APIs and databases.
 
 -- chakra:
 
@@ -199,29 +211,33 @@ margin-bottom.em: 1.5
 fastn language is designed for building user interfaces and content centric
 websites.
 
--- ftd.text: **1**. Any use case.
+-- ftd.text: **1**. Everything in one place
 role: $inherited.types.heading-small
 margin-bottom.em: 0.5
 
 -- ftd.text:
 margin-bottom.em: 0.5
 
-With fastn you can build anything starting from designing to full web app
-creation.
+;; With `fastn` you can build anything starting from designing to full web app
+;; creation.
 
--- ftd.text: This entire website is made using fastn!
+With `fastn` you can design your website, create the frontend, integrate with
+backend, write content, and deploy your websites.
+
+
+-- ftd.text: This website is made using fastn!
 role: $inherited.types.heading-tiny
 color: $inherited.colors.cta-primary.base
 margin-bottom.em: 1.5
 
--- ftd.text: **2**. Easy to learn.
+-- ftd.text: **2**. Easy to learn
 role: $inherited.types.heading-small
 margin-bottom.em: 0.5
 
 -- ftd.text:
 
 fastn language is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it. It supports markdown too.
+compromise on what you can build with it.
 
 -- end: ftd.column
 
