@@ -6,11 +6,17 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#color": "color",
+"foo#date": "date",
 "foo#datetime": "Datetime",
 "foo#email": "Fifthtry",
+"foo#file": "file",
+"foo#month": "month",
 "foo#pass": "Fifthtry",
+"foo#time": "time",
 "foo#txt": "Fifthtry",
 "foo#url": "Fifthtry",
+"foo#week": "week",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -728,7 +734,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">Fifthtry</div><input data-dv="Hello default-value" data-id="1:main" placeholder="Type any text ..." style="" class="ft_common ft_md"></input><input data-id="2:main" placeholder="Type any text ..." value="Hello value" style="" class="ft_common ft_md"></input><input data-id="3:main" placeholder="Type any text ..." type="text" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#txt&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="4:main" style="" class="ft_common ft_md">Fifthtry</div><textarea data-id="5:main" placeholder="Type your email here..." type="email" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#email&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></textarea><div data-id="6:main" style="" class="ft_common ft_md">Fifthtry</div><input data-id="7:main" placeholder="Type your password..." type="password" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#pass&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="8:main" style="" class="ft_common ft_md">Fifthtry</div><input data-id="9:main" placeholder="Type any url..." type="url" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#url&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="10:main" style="" class="ft_common ft_md">Datetime</div><input data-id="11:main" placeholder="Type your datetime here..." type="datetime-local" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#datetime&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">Fifthtry</div><input data-dv="Hello default-value" data-id="1:main" placeholder="Type any text ..." style="" class="ft_common ft_md"></input><input data-id="2:main" placeholder="Type any text ..." value="Hello value" style="" class="ft_common ft_md"></input><input data-id="3:main" placeholder="Type any text ..." type="text" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#txt&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="4:main" style="" class="ft_common ft_md">Fifthtry</div><textarea data-id="5:main" placeholder="Type your email here..." type="email" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#email&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></textarea><div data-id="6:main" style="" class="ft_common ft_md">Fifthtry</div><input data-id="7:main" placeholder="Type your password..." type="password" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#pass&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="8:main" style="" class="ft_common ft_md">Fifthtry</div><input data-id="9:main" placeholder="Type any url..." type="url" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#url&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="10:main" style="" class="ft_common ft_md">Datetime</div><input data-id="11:main" placeholder="Type your datetime here..." type="datetime-local" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#datetime&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="12:main" style="" class="ft_common ft_md">date</div><input data-id="13:main" placeholder="Type your date here..." type="date" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#date&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="14:main" style="" class="ft_common ft_md">time</div><input data-id="15:main" placeholder="Type your time here..." type="time" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#time&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="16:main" style="" class="ft_common ft_md">month</div><input data-id="17:main" placeholder="Type your month here..." type="month" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#month&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="18:main" style="" class="ft_common ft_md">week</div><input data-id="19:main" placeholder="Type your week here..." type="week" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#week&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input><div data-id="20:main" style="" class="ft_common ft_md">color</div><input data-id="21:main" placeholder="Type your color here..." type="color" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#color&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; height: 40px; width: 40px" class="ft_common ft_md"></input><div data-id="22:main" style="" class="ft_common ft_md">file</div><input data-id="23:main" placeholder="Type your file here..." type="file" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#file&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; width: 400px" class="ft_common ft_md"></input></div>
 
 
 <script>
@@ -1755,7 +1761,51 @@ document.querySelector(`[data-id="8:main"]`).innerHTML = resolve_reference("foo#
 window.node_change_main["10:main__text"] = function(data) {
 document.querySelector(`[data-id="10:main"]`).innerHTML = resolve_reference("foo#datetime", data);
 }
+window.node_change_main["12:main__text"] = function(data) {
+document.querySelector(`[data-id="12:main"]`).innerHTML = resolve_reference("foo#date", data);
+}
+window.node_change_main["14:main__text"] = function(data) {
+document.querySelector(`[data-id="14:main"]`).innerHTML = resolve_reference("foo#time", data);
+}
+window.node_change_main["16:main__text"] = function(data) {
+document.querySelector(`[data-id="16:main"]`).innerHTML = resolve_reference("foo#month", data);
+}
+window.node_change_main["18:main__text"] = function(data) {
+document.querySelector(`[data-id="18:main"]`).innerHTML = resolve_reference("foo#week", data);
+}
+window.node_change_main["20:main__text"] = function(data) {
+document.querySelector(`[data-id="20:main"]`).innerHTML = resolve_reference("foo#color", data);
+}
+window.node_change_main["22:main__text"] = function(data) {
+document.querySelector(`[data-id="22:main"]`).innerHTML = resolve_reference("foo#file", data);
+}
 window.set_value_main = {};
+window.set_value_main["foo#color"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#color" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#color", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#color", "main");
+window.ftd.call_immutable_value_changes("foo#color", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["20:main__text"]){window.node_change_main["20:main__text"](data);
+}
+};
+
+window.set_value_main["foo#date"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#date" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#date", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#date", "main");
+window.ftd.call_immutable_value_changes("foo#date", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["12:main__text"]){window.node_change_main["12:main__text"](data);
+}
+};
+
 window.set_value_main["foo#datetime"] = function (data, new_value, remaining) {
 if (!!remaining) {
 set_data_value(data, "foo#datetime" + "." + remaining, new_value);
@@ -1782,6 +1832,32 @@ if(!!window["node_change_main"] && !!window.node_change_main["4:main__text"]){wi
 }
 };
 
+window.set_value_main["foo#file"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#file" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#file", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#file", "main");
+window.ftd.call_immutable_value_changes("foo#file", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["22:main__text"]){window.node_change_main["22:main__text"](data);
+}
+};
+
+window.set_value_main["foo#month"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#month" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#month", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#month", "main");
+window.ftd.call_immutable_value_changes("foo#month", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["16:main__text"]){window.node_change_main["16:main__text"](data);
+}
+};
+
 window.set_value_main["foo#pass"] = function (data, new_value, remaining) {
 if (!!remaining) {
 set_data_value(data, "foo#pass" + "." + remaining, new_value);
@@ -1792,6 +1868,19 @@ set_data_value(data, "foo#pass", new_value);
 window.ftd.call_mutable_value_changes("foo#pass", "main");
 window.ftd.call_immutable_value_changes("foo#pass", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["6:main__text"]){window.node_change_main["6:main__text"](data);
+}
+};
+
+window.set_value_main["foo#time"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#time" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#time", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#time", "main");
+window.ftd.call_immutable_value_changes("foo#time", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["14:main__text"]){window.node_change_main["14:main__text"](data);
 }
 };
 
@@ -1818,6 +1907,19 @@ set_data_value(data, "foo#url", new_value);
 window.ftd.call_mutable_value_changes("foo#url", "main");
 window.ftd.call_immutable_value_changes("foo#url", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["8:main__text"]){window.node_change_main["8:main__text"](data);
+}
+};
+
+window.set_value_main["foo#week"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#week" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#week", new_value);
+}
+
+window.ftd.call_mutable_value_changes("foo#week", "main");
+window.ftd.call_immutable_value_changes("foo#week", "main");
+if(!!window["node_change_main"] && !!window.node_change_main["18:main__text"]){window.node_change_main["18:main__text"](data);
 }
 };
 

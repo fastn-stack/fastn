@@ -1819,15 +1819,15 @@ set_data_value(data, "foo#flag", new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
 }
 };
 
@@ -1853,9 +1853,9 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["document__theme_color"]){window.node_change_main["document__theme_color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
 }
 };
 
