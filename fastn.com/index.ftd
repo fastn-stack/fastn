@@ -7,6 +7,7 @@
 -- import: fifthtry.github.io/footer
 -- import: fastn/processors as pr
 
+
 -- home-page:
 
 -- hero-section: Full-stack Web Development Made Easy
@@ -15,7 +16,8 @@ Build web apps in minutes. Deploy with a single command.
 
 -- chakra:
 
--- first-chakra:
+-- design-chakra:
+
 
 -- frontend-chakra:
 
@@ -266,8 +268,15 @@ no quotes. and **markdown** is *supported*.
 
 
 
-
--- component first-chakra:
+-- component summary-cards:
+caption title:
+string number:
+string subtitle:
+body description:
+children cards:
+optional ftd.background bg-color:
+string list color-css:
+string list title-css:
 
 -- ftd.column:
 width: fill-container
@@ -277,8 +286,10 @@ padding-vertical.em: 2
 margin-vertical.em: 5
 spacing.fixed.em: 0.5
 color: $inherited.colors.text-strong
+background: $summary-cards.bg-color
 
--- ftd.text: 1
+
+-- ftd.text: $summary-cards.number
 height.fixed.em: 2
 width.fixed.em: 2
 border-radius.percent: 50
@@ -286,40 +297,63 @@ padding-top.em: 0.3
 text-align: center
 role: $inherited.types.heading-medium
 color: white
-classes: color-1
+classes: $summary-cards.color-css
 
 -- ftd.text.css:
 -- string: $fastn-assets.files.design.css
 -- end: ftd.text.css
 
 
-
--- ftd.text: Design
+-- ftd.text: $summary-cards.title
 role: $inherited.types.heading-large
-classes: color-1, text-color
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
+classes: $summary-cards.title-css
 
 
--- ftd.text: Create your design system
+-- ftd.text: $summary-cards.subtitle
 role: $inherited.types.heading-large
 text-align: center
 
--- ftd.text:
+-- ftd.text: $summary-cards.description
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 text-align: center
 
-fastn comes with opinionated design system which can instantly switch up your
-website's appearance with one line of code.
 
 -- ftd.row:
 width: fill-container
 wrap: true
 spacing.fixed.em: 2
 padding-vertical.em: 2
+children: $summary-cards.cards
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: summary-cards
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component design-chakra:
+
+-- summary-cards: Design
+number: 1
+subtitle: Create your design system
+color-css: color-1
+title-css: color-1, text-color
+
+fastn comes with opinionated design system which can instantly switch up your
+website's appearance with one line of code.
 
 
 -- card: Colors and Typography
@@ -342,17 +376,9 @@ You can use figma token with fastn color scheme. You also can create your own
 fastn color scheme from figma json.
 
 
+-- end: summary-cards
 
--- end: ftd.row
-
--- end: ftd.column
-
--- end: first-chakra
-
-
-
-
-
+-- end: design-chakra
 
 
 
@@ -368,57 +394,15 @@ fastn color scheme from figma json.
 
 -- component frontend-chakra:
 
--- ftd.column:
-width: fill-container
-align-content: center
-padding-horizontal.em: 3
-padding-vertical.em: 7
-spacing.fixed.em: 0.5
-color: $inherited.colors.text-strong
-background.solid: $inherited.colors.background.step-1
-
--- ftd.text: 2
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: color-2
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
-
--- ftd.text: Frontend
-role: $inherited.types.heading-large
-classes: color-2, text-color
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
--- ftd.text: Write your entire web app using fastn language
-role: $inherited.types.heading-large
-text-align: center
-
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: center
+-- summary-cards: Frontend
+number: 2
+subtitle: Write your entire web app using fastn language
+color-css: color-2
+title-css: color-2, text-color
+bg-color.solid: $inherited.colors.background.step-1
 
 fastn provides an easy-to-learn programming language and framework. Use one
 language for your entire app.
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-vertical.em: 2
 
 
 -- card: Built-in UI Components
@@ -431,8 +415,6 @@ fully customizable. Change the property values of the component to match your
 project.
 
 
-
-
 -- card: Custom Components
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 cta-link: /components/
@@ -442,9 +424,7 @@ Create your own components in a few lines of code. Use them in rest of your app
 package or in totally different package.
 
 
--- end: ftd.row
-
--- end: ftd.column
+-- end: summary-cards
 
 -- end: frontend-chakra
 
@@ -457,60 +437,16 @@ package or in totally different package.
 
 
 
-
-
 -- component fullstack-chakra:
 
--- ftd.column:
-width: fill-container
-align-content: center
-padding-horizontal.em: 3
-padding-vertical.em: 7
-spacing.fixed.em: 0.5
-color: $inherited.colors.text-strong
-
--- ftd.text: 3
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: color-3
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
-
--- ftd.text: Fullstack
-role: $inherited.types.heading-large
-classes: color-3, text-color
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
--- ftd.text: fastn for building dynamic websites
-role: $inherited.types.heading-large
-text-align: center
-
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: center
+-- summary-cards: Fullstack
+number: 3
+subtitle: fastn for building dynamic websites
+color-css: color-3
+title-css: color-3, text-color
 
 fastn can be used for building dynamic websites as well. With features already
 built and planned fastn aspires to be a full stack framework.
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-vertical.em: 2
 
 
 -- card: Existing Backend Integration
@@ -571,9 +507,8 @@ min-height.fixed.em: 20
 We are working on wasm support so developers can extend fastn's standard
 libraries and offer access to more backend functionalities.
 
--- end: ftd.row
 
--- end: ftd.column
+-- end: summary-cards
 
 -- end: fullstack-chakra
 
@@ -588,60 +523,19 @@ libraries and offer access to more backend functionalities.
 
 
 
+
+
 -- component deploy-chakra:
 
--- ftd.column:
-width: fill-container
-align-content: center
-padding-horizontal.em: 3
-padding-vertical.em: 7
-spacing.fixed.em: 0.5
-color: $inherited.colors.text-strong
-background.solid: $inherited.colors.background.step-1
-
--- ftd.text: 4
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: color-4
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
-
--- ftd.text: Deploy
-role: $inherited.types.heading-large
-classes: color-4, text-color
-
--- ftd.text.css:
--- string: $fastn-assets.files.design.css
--- end: ftd.text.css
-
-
--- ftd.text: Deploy your app in seconds.
-role: $inherited.types.heading-large
-text-align: center
-
--- ftd.text:
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: center
+-- summary-cards: Deploy
+number: 4
+subtitle: Deploy your app in seconds.
+color-css: color-4
+title-css: color-4, text-color
+bg-color.solid: $inherited.colors.background.step-1
 
 Simplify the process of deploying your app with fastn. fastn can be deployed in
 two main modes, static and dynamic.
-
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-vertical.em: 2
 
 
 -- card: Static Mode
@@ -665,12 +559,11 @@ authentication, data collection, and real-time updates. fastn binary can run on
 Linux, Windows and Mac.
 
 
-
--- end: ftd.row
-
--- end: ftd.column
+-- end: summary-cards
 
 -- end: deploy-chakra
+
+
 
 
 
@@ -777,6 +670,7 @@ spacing.fixed.em: 1
 shadow: $s
 border-radius.em: 1
 width.fixed.percent: 48
+width if { ftd.device == "mobile" }: fill-container
 width if { card.width != NULL }: $card.width
 background.solid: $inherited.colors.background.base
 
