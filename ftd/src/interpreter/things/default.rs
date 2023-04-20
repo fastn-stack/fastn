@@ -2610,6 +2610,66 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_property_value(false, 0)),
                         0,
                     )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATE,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("date")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_TIME,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("time")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_MONTH,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("month")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_WEEK,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("week")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_COLOR,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("color")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_FILE,
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter::Value::new_string("file")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
                 ],
                 line_number: 0,
             }),
