@@ -1780,9 +1780,9 @@ set_data_value(data, "foo#g", new_value);
 
 window.ftd.call_mutable_value_changes("foo#g", "main");
 window.ftd.call_immutable_value_changes("foo#g", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 
