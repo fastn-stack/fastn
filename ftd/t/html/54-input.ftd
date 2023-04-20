@@ -2,6 +2,7 @@
 -- string $email: Fifthtry
 -- string $pass: Fifthtry
 -- string $url: Fifthtry
+-- string $datetime: Datetime
 
 -- ftd.text: $txt
 
@@ -47,3 +48,13 @@ type: url
 width.fixed.px: 400
 border-width.px: 2
 $on-input$: $ftd.set-string($a = $url, v = $VALUE)
+
+
+-- ftd.text: $datetime
+
+-- ftd.text-input:
+type: datetime
+placeholder: Type your datetime here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $datetime, v = $VALUE)
