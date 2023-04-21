@@ -73,7 +73,7 @@ favicon: /-/fastn.io/images/favicon.svg
   - Open terminal: /open-terminal/
     document: author/how-to/open-terminal.ftd
     skip: true
-- Syntax Highligthing For SublimeText 🚧: /sublime/
+- Syntax Highlighting For SublimeText 🚧: /sublime/
   document: author/how-to/sublime.ftd
   skip: true
 - `fastn` Community: /community/
@@ -124,10 +124,12 @@ favicon: /-/fastn.io/images/favicon.svg
   - Built-in Types: /ftd/built-in-types/
   - `record`: /ftd/record/
   - `or-type`: /ftd/or-type/
-  - `list`: /ftd/list/
+  - `list`: /list/
+    document: /ftd/list.ftd
 - `component`: /components/
   document: /ftd/components.ftd
-- Kernel Components: /ftd/kernel/
+- Kernel Components: /kernel/
+  document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /ftd/document/
   - `ftd.row`: /ftd/row/
   - `ftd.column`: /ftd/column/
@@ -356,9 +358,9 @@ favicon: /-/fastn.io/images/favicon.svg
   skip: true
 
 - Overview: /d/
-- Maintainence: /d/m/
+- Maintenance: /d/m/
 - Next Edition: /d/next-edition/
-- Architecutre: /architecture/
+- Architecture: /architecture/
   document: d/architecture.ftd
   - `ftd` crate 🚧: /ftd-crate/
     document: d/ftd-crate.ftd
@@ -375,3 +377,9 @@ favicon: /-/fastn.io/images/favicon.svg
 - Overview: /planning/
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
+
+
+-- fastn.redirects:
+
+/ftd/kernel/: /kernel/
+/ftd/list/: /list/
