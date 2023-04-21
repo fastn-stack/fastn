@@ -304,6 +304,146 @@ type: url
 -- end: ds.output
 
 
+
+-- ds.code: `type: datetime`
+lang: ftd
+
+\-- ftd.text-input:
+type: datetime
+
+
+-- ds.output: Output: `type: datetime`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: datetime
+
+-- end: ds.output
+
+
+
+
+
+-- ds.code: `type: date`
+lang: ftd
+
+\-- ftd.text-input:
+type: date
+
+
+-- ds.output: Output: `type: date`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: date
+
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: time`
+lang: ftd
+
+\-- ftd.text-input:
+type: time
+
+
+-- ds.output: Output: `type: time`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: time
+
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: month`
+lang: ftd
+
+\-- ftd.text-input:
+type: month
+
+
+-- ds.output: Output: `type: month`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: month
+
+-- end: ds.output
+
+
+
+
+
+-- ds.code: `type: week`
+lang: ftd
+
+\-- ftd.text-input:
+type: week
+
+
+-- ds.output: Output: `type: week`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: week
+
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: color`
+lang: ftd
+
+\-- ftd.text-input:
+type: color
+width.fixed.px: 40
+height.fixed.px: 40
+
+
+-- ds.output: Output: `type: color`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: color
+width.fixed.px: 40
+height.fixed.px: 40
+
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: file`
+lang: ftd
+
+\-- ftd.text-input:
+type: file
+
+
+-- ds.output: Output: `type: file`
+
+-- ftd.text-input:
+border-width.px: 1
+border-color: $inherited.colors.border
+type: file
+
+-- end: ds.output
+
+
+
+
 -- end: my-ds.page
 
 
