@@ -44,7 +44,10 @@ body sitemap-body:
 
 -- optional sitemap-rec sitemap:
 
+-- record redirects-rec:
+body redirects-body:
 
+-- optional redirects-rec redirects:
 
 ;; Example: Dynamic Urls
 ;; -- fastn.dynamic-urls:

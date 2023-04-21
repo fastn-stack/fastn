@@ -38,8 +38,25 @@ impl actix_web::ResponseError for fastn_core::Error {}
 
 pub type Response = actix_web::HttpResponse;
 
+pub async fn get_external_response(url: &str) -> fastn_core::Result<fastn_core::http::Response> {
+    let response = reqwest::Client::new().get(url).send().await?;
+
+    let response_text = response.text().await?;
+
+    Ok(fastn_core::http::Response::PermanentRedirect()
+        .insert_header(("LOCATION", url))
+        .content_type(mime_guess::mime::TEXT_HTML)
+        .body(response_text))
+}
+
 pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
+}
+
+pub fn redirect(data: Vec<u8>, url: &str) -> fastn_core::http::Response {
+    actix_web::HttpResponse::PermanentRedirect()
+        .insert_header(("LOCATION", url))
+        .body(data)
 }
 
 pub fn ok_with_content_type(
@@ -48,6 +65,17 @@ pub fn ok_with_content_type(
 ) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok()
         .content_type(content_type)
+        .body(data)
+}
+
+pub fn redirect_with_content_type(
+    data: Vec<u8>,
+    content_type: mime_guess::Mime,
+    url: &str,
+) -> fastn_core::http::Response {
+    actix_web::HttpResponse::PermanentRedirect()
+        .content_type(content_type)
+        .insert_header(("LOCATION", url))
         .body(data)
 }
 
