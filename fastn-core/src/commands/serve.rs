@@ -10,7 +10,6 @@ async fn serve_file(
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
     let url_regex = fastn_core::http::url_regex();
-    dbg!(path.as_str());
 
     let mut path = path.clone();
     let redirects = config.package.redirects.clone();
