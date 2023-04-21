@@ -51,6 +51,8 @@ the scripts etc here.
 - R: using css for things fastn is lacking
 - R: integration with JS
 
+- R: How to use icon libraries like `react-icons` or `font-awesome` or any external icon library in fastn
+
 
 -- ds.code:
 lang: txt
