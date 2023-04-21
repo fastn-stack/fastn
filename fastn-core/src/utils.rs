@@ -557,10 +557,16 @@ pub fn replace_markers_2022(
     font_style: &str,
     base_url: &str,
 ) -> String {
+    dbg!(base_url, main_id);
+    dbg!(&config.package.redirects);
     ftd::html::utils::trim_all_lines(
         s.replace(
             "__ftd_meta_data__",
             ftd::html::utils::get_meta_data(&html_ui.html_data).as_str(),
+        ).replace(
+            "__ftd_meta_refresh__",
+            ftd::html::utils::get_refresh_meta(config.package.redirects.as_ref().map_or(None, |r|
+                fastn_core::package::redirects::find_redirect(&r, main_id))).trim_start_matches('/')
         )
         .replace(
             "__ftd_doc_title__",

@@ -54,7 +54,9 @@ pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
 }
 
 pub fn redirect(data: Vec<u8>, url: &str) -> fastn_core::http::Response {
-    actix_web::HttpResponse::PermanentRedirect().insert_header(("LOCATION", url)).body(data)
+    actix_web::HttpResponse::PermanentRedirect()
+        .insert_header(("LOCATION", url))
+        .body(data)
 }
 
 pub fn ok_with_content_type(

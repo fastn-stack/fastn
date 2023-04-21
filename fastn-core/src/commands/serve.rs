@@ -9,21 +9,6 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-
-    fn find_redirect(redirects: &ftd::Map<String>, path: &str) -> Option<String> {
-
-        let original = path;
-        let fixed = format!("/{}/",path.trim_start_matches('/').trim_end_matches('/'));
-
-        return if redirects.contains_key(original) {
-            redirects.get(original).cloned()
-        } else if redirects.contains_key(fixed.as_str()) {
-            redirects.get(fixed.as_str()).cloned()
-        } else {
-            None
-        }
-    }
-
     let url_regex = fastn_core::http::url_regex();
     dbg!(path.as_str());
 
@@ -33,7 +18,9 @@ async fn serve_file(
     let mut has_redirect_url = false;
     let mut has_external_redirect = false;
     if let Some(r) = redirects {
-        if let Some(redirected_path) = find_redirect(&r, current_path.as_str()) {
+        if let Some(redirected_path) =
+            fastn_core::package::redirects::find_redirect(&r, current_path.as_str())
+        {
             current_path = redirected_path.to_string();
             path = camino::Utf8Path::new(current_path.as_str());
             has_redirect_url = true;
@@ -120,7 +107,10 @@ async fn serve_file(
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
                 return if has_redirect_url {
-                    fastn_core::http::redirect(main_document.content.as_bytes().to_vec(), current_path.as_str(),)
+                    fastn_core::http::redirect(
+                        main_document.content.as_bytes().to_vec(),
+                        current_path.as_str(),
+                    )
                 } else {
                     fastn_core::http::ok(main_document.content.as_bytes().to_vec())
                 };

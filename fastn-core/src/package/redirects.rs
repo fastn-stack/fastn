@@ -20,3 +20,16 @@ impl RedirectsTemp {
         redirects
     }
 }
+
+pub fn find_redirect(redirects: &ftd::Map<String>, path: &str) -> Option<String> {
+    let original = path;
+    let fixed = format!("/{}/", path.trim_start_matches('/').trim_end_matches('/'));
+
+    return if redirects.contains_key(original) {
+        redirects.get(original).cloned()
+    } else if redirects.contains_key(fixed.as_str()) {
+        redirects.get(fixed.as_str()).cloned()
+    } else {
+        None
+    };
+}
