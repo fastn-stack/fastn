@@ -783,9 +783,12 @@ pub fn get_refresh_meta(redirect_url: Option<String>) -> String {
     let mut result = String::new();
 
     if let Some(redirect) = redirect_url {
-        let meta = format!(r#"
+        let meta = format!(
+            r#"
         <meta http-equiv="refresh" content="0;url={}">
-        <link rel="canonical" href="{}">"#, redirect, redirect);
+        <link rel="canonical" href="{}">"#,
+            redirect, redirect
+        );
         result.push_str(meta.as_str());
     }
 

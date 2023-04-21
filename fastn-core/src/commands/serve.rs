@@ -11,7 +11,7 @@ async fn serve_file(
 ) -> fastn_core::http::Response {
     let url_regex = fastn_core::http::url_regex();
 
-    let mut path = path.clone();
+    let mut path = <&camino::Utf8Path>::clone(&path);
     let redirects = config.package.redirects.clone();
     let mut current_path = path.to_string();
     let mut has_redirect_url = false;

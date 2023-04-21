@@ -561,10 +561,17 @@ pub fn replace_markers_2022(
         s.replace(
             "__ftd_meta_data__",
             ftd::html::utils::get_meta_data(&html_ui.html_data).as_str(),
-        ).replace(
+        )
+        .replace(
             "__ftd_meta_refresh__",
-            ftd::html::utils::get_refresh_meta(config.package.redirects.as_ref().map_or(None, |r|
-                fastn_core::package::redirects::find_redirect(&r, main_id))).trim_start_matches('/')
+            ftd::html::utils::get_refresh_meta(
+                config
+                    .package
+                    .redirects
+                    .as_ref()
+                    .and_then(|r| fastn_core::package::redirects::find_redirect(r, main_id)),
+            )
+            .trim_start_matches('/'),
         )
         .replace(
             "__ftd_doc_title__",
