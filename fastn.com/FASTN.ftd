@@ -368,6 +368,8 @@ favicon: /-/fastn.io/images/favicon.svg
     document: d/fastn-core-crate.ftd
   - `fastn` crate 🚧: /fastn-crate/
     document: d/fastn-crate.ftd
+  - `fastn-package` crate 🚧: /fastn-package/
+    document: d/fastn-package.ftd
 - `ftd p1` grammar: /p1-grammar/
   document: ftd/p1-grammar.ftd
 
