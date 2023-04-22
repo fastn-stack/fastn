@@ -180,9 +180,13 @@ class Document():
 All files are stored in this table. Files are discoverd from on-disc as well
 as from Dependency list packages.
 
+-- ds.code:
+lang: py
+
 class File():
-    # the name of the file. We store relative path of file with respect to
-    # package name. main package is stored with the "main-package" name.
+    # the name of the file. We store relative path of file with
+    # respect to package name. main package is stored with the
+    # "main-package" name.
     name = models.TextField(primary_key=True)
     # the name of the package this is part of
     package = models.TextField()
@@ -199,16 +203,16 @@ lang: py
 
 class URL():
     path = models.TextField()
-    # we do not serve html files present in the current package as text/html
-    # text/html is reserved for ftd files. html files get 404. for non ftd file
-    # mostly this will contain images, maybe PDF, font files etc. We also do not
-    # serve JS/CSS files.
+    # we do not serve html files present in the current package as
+    # text/html text/html is reserved for ftd files. html files get
+    # 404. for non ftd file mostly this will contain images, maybe
+    # PDF, font files etc. We also do not serve JS/CSS files.
     document = models.ForeignKey(Document)
     content_type = models.TextField()
-    # if we have to redirect to some other url, this column should be set
+    # if we have to redirect to some other url, this should be set
     redirect = models.TextField(null=True)
-    # for every URL we add we add a canonical url, which can be itself, or
-    # something else
+    # for every URL we add we add a canonical url, which can be
+    # itself, or something else
     canonical = models.TextField()
 
 -- ds.markdown:
