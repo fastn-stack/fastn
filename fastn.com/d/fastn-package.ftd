@@ -208,6 +208,14 @@ class URL():
     # 404. for non ftd file mostly this will contain images, maybe
     # PDF, font files etc. We also do not serve JS/CSS files.
     document = models.ForeignKey(Document)
+    kind = models.TextField(
+        choices=[
+            "current-package",
+            "dependency-package",
+            "current-package-static",
+            "dependency-package-static",
+        ]
+    )
     content_type = models.TextField()
     # if we have to redirect to some other url, this should be set
     redirect = models.TextField(null=True)
@@ -219,6 +227,14 @@ class URL():
 
 `content_type`, `redirect` and `canonical` can be over-ridden by the document
 during the interpreter phase.
+
+We need not compute all dynamic URLs for `fastn serve` use case. We compute the
+static URLs, and store dynamic patterns, and compute dynamic URLs on demand. For
+`fastn build` we need all the dynamic URLs we can discover from the package as
+we have to generate static HTML for each of them.
+
+So this table will contain fewer entries till `discover-dynamic-urls` method is
+called.
 
 -- ds.h3: Discovered URLs during `fastn serve`
 
@@ -232,5 +248,28 @@ the some path has been requested or not.
 
 When we are creating static site, the discovered URLs are note stored in this
 table, but is stored in some in-memory structure in build process.
+
+
+-- ds.h1: How Would Incremental Compilation Work
+
+For `fastn build` to do incremental compilation we need the snapshot of the last
+build. We will store a build-snapshot.sqlite file after successful `fastn
+build`.
+
+-- ds.h1: How Would Hot Reload Work
+
+If one of the pages is open in local (or workspace) environment, and any of the
+files that are a dependency of that page is modified, we want to modify that
+page. Eventually we may do patch based relaod, where we will send precise
+information from server to browser about what has changed. For now we will do a
+document.reload().
+
+To do this we need to know what all pages are currently loaded in any browser
+tab and for each of those pages the dependency tree. We can store the dependency
+tree for all URLs in the in memory, but that would be a lot of computation, we
+can keep the page dependency list in the generated page itself, and pass this
+information to browser based poller, who will pass this information back to the
+server.
+
 
 -- end: my-ds.page
