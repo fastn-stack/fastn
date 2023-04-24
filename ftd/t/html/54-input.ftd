@@ -2,6 +2,7 @@
 -- string $email: Fifthtry
 -- string $pass: Fifthtry
 -- string $url: Fifthtry
+-- string $datetime: Datetime
 
 -- ftd.text: $txt
 
@@ -47,3 +48,84 @@ type: url
 width.fixed.px: 400
 border-width.px: 2
 $on-input$: $ftd.set-string($a = $url, v = $VALUE)
+
+
+-- ftd.text: $datetime
+
+-- ftd.text-input:
+type: datetime
+placeholder: Type your datetime here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $datetime, v = $VALUE)
+
+
+
+-- string $date: date
+-- ftd.text: $date
+
+-- ftd.text-input:
+type: date
+placeholder: Type your date here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $date, v = $VALUE)
+
+
+-- string $time: time
+-- ftd.text: $time
+
+-- ftd.text-input:
+type: time
+placeholder: Type your time here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $time, v = $VALUE)
+
+
+-- string $month: month
+-- ftd.text: $month
+
+-- ftd.text-input:
+type: month
+placeholder: Type your month here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $month, v = $VALUE)
+
+
+
+-- string $week: week
+-- ftd.text: $week
+
+-- ftd.text-input:
+type: week
+placeholder: Type your week here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $week, v = $VALUE)
+
+
+
+-- string $color: color
+-- ftd.text: $color
+
+-- ftd.text-input:
+type: color
+placeholder: Type your color here...
+width.fixed.px: 40
+height.fixed.px: 40
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $color, v = $VALUE)
+
+
+
+-- string $file: file
+-- ftd.text: $file
+
+-- ftd.text-input:
+type: file
+placeholder: Type your file here...
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $file, v = $VALUE)

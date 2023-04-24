@@ -90,7 +90,7 @@ pub enum VariableValue {
         line_number: usize,
     },
     List {
-        value: Vec<(String, VariableValue)>,
+        value: Vec<VariableKeyValue>,
         line_number: usize,
     },
     Record {
@@ -98,21 +98,33 @@ pub enum VariableValue {
         caption: Box<Option<VariableValue>>,
         headers: HeaderValues,
         body: Option<BodyValue>,
-        values: Vec<(String, VariableValue)>,
+        values: Vec<VariableKeyValue>,
         line_number: usize,
     },
+    #[serde(rename = "string-value")]
     String {
         value: String,
+        #[serde(rename = "line-number")]
         line_number: usize,
         source: ValueSource,
     },
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct VariableKeyValue {
+    pub key: String,
+    pub value: VariableValue,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ValueSource {
     Caption,
     Body,
-    Header { name: String, mutable: bool },
+    #[serde(rename = "header")]
+    Header {
+        name: String,
+        mutable: bool,
+    },
     Default,
 }
 
@@ -133,6 +145,7 @@ impl ValueSource {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct BodyValue {
     pub value: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -203,6 +216,7 @@ pub struct HeaderValue {
     pub key: String,
     pub mutable: bool,
     pub value: VariableValue,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
     pub kind: Option<String>,
     pub condition: Option<String>,
@@ -280,15 +294,13 @@ impl VariableValue {
         VariableValue::List {
             value: raw_values
                 .iter()
-                .map(|v| {
-                    (
-                        kind_name.clone(),
-                        VariableValue::from_value(
-                            &Some(v.to_string()),
-                            source.clone(),
-                            line_number,
-                        ),
-                    )
+                .map(|v| VariableKeyValue {
+                    key: kind_name.clone(),
+                    value: VariableValue::from_value(
+                        &Some(v.to_string()),
+                        source.clone(),
+                        line_number,
+                    ),
                 })
                 .collect_vec(),
             line_number,
@@ -337,6 +349,8 @@ impl VariableValue {
         doc_name: &str,
         kind: &ftd::interpreter::Kind,
     ) -> ftd::ast::Result<Vec<(String, VariableValue)>> {
+        use itertools::Itertools;
+
         match self {
             VariableValue::String {
                 value,
@@ -351,7 +365,9 @@ impl VariableValue {
                     line_number,
                 );
                 match bracket_list {
-                    VariableValue::List { value, .. } => Ok(value),
+                    VariableValue::List { value, .. } => {
+                        Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
+                    }
                     t => ftd::ast::parse_error(
                         format!("Invalid bracket list, found: `{:?}`", t),
                         doc_name,
@@ -359,7 +375,9 @@ impl VariableValue {
                     ),
                 }
             }
-            VariableValue::List { value, .. } => Ok(value),
+            VariableValue::List { value, .. } => {
+                Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
+            }
             t => ftd::ast::parse_error(
                 format!("Expected list, found: `{:?}`", t),
                 doc_name,
@@ -385,7 +403,7 @@ impl VariableValue {
         &Box<Option<VariableValue>>,
         &HeaderValues,
         &Option<BodyValue>,
-        &Vec<(String, VariableValue)>,
+        &Vec<VariableKeyValue>,
         usize,
     )> {
         match self {
@@ -479,7 +497,10 @@ impl VariableValue {
         let values = section
             .sub_sections
             .iter()
-            .map(|v| (v.name.to_string(), VariableValue::from_p1(v, doc_id)))
+            .map(|v| VariableKeyValue {
+                key: v.name.to_string(),
+                value: VariableValue::from_p1(v, doc_id),
+            })
             .collect_vec();
 
         let caption = section
@@ -562,7 +583,10 @@ impl VariableValue {
             }) => VariableValue::List {
                 value: section
                     .iter()
-                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v, doc_id)))
+                    .map(|v| VariableKeyValue {
+                        key: v.name.to_string(),
+                        value: VariableValue::from_p1(v, doc_id),
+                    })
                     .collect_vec(),
                 line_number: *line_number,
             },
@@ -591,6 +615,7 @@ impl VariableValue {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Condition {
     pub expression: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 

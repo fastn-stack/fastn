@@ -53,7 +53,10 @@ pub async fn query(
     Ok(())
 }
 
-fn get_ftd_json(file: &fastn_core::File, stage: &str) -> fastn_core::Result<serde_json::Value> {
+pub(crate) fn get_ftd_json(
+    file: &fastn_core::File,
+    stage: &str,
+) -> fastn_core::Result<serde_json::Value> {
     let document = if let fastn_core::File::Ftd(document) = file {
         document
     } else {

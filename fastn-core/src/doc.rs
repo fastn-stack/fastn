@@ -205,6 +205,7 @@ pub async fn resolve_import_2022<'a>(
                 "package-query".to_string(),
                 "package-tree".to_string(),
                 "fetch-file".to_string(),
+                "query".to_string(),
             ],
             0,
         )

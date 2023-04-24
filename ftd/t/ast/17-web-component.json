@@ -21,9 +21,9 @@
           },
           "mutable": false,
           "value": {
-            "String": {
+            "string-value": {
               "value": "0",
-              "line_number": 3,
+              "line-number": 3,
               "source": "Default"
             }
           },
@@ -47,9 +47,9 @@
           },
           "mutable": false,
           "value": {
-            "String": {
+            "string-value": {
               "value": ",",
-              "line_number": 5,
+              "line-number": 5,
               "source": "Default"
             }
           },
@@ -61,44 +61,44 @@
     }
   },
   {
-    "ComponentInvocation": {
+    "component-invocation": {
       "name": "word-count",
       "properties": [
         {
           "value": {
-            "String": {
+            "string-value": {
               "value": "0",
-              "line_number": 11,
+              "line-number": 11,
               "source": "Default"
             }
           },
           "source": {
-            "Header": {
+            "header": {
               "name": "count",
               "mutable": true
             }
           },
           "condition": null,
-          "line_number": 11
+          "line-number": 11
         },
         {
           "value": {
-            "String": {
+            "string-value": {
               "value": "This is the body.",
-              "line_number": 13,
+              "line-number": 13,
               "source": "Body"
             }
           },
           "source": "Body",
           "condition": null,
-          "line_number": 13
+          "line-number": 13
         }
       ],
       "iteration": null,
       "condition": null,
       "events": [],
       "children": [],
-      "line_number": 10
+      "line-number": 10
     }
   }
 ]

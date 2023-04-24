@@ -161,6 +161,37 @@ fn package_info_about(config: &fastn_core::Config) -> fastn_core::Result<String>
     })
 }
 
+fn package_editor_source(
+    config: &fastn_core::Config,
+    file_name: &str,
+) -> fastn_core::Result<String> {
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    let editor_ftd = indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/e as pi
+            -- import: fastn/processors as pr
+
+            
+            -- pi.editor:
+            $asts: $asts
+            path: {file_name}
+
+            -- pr.ast list $asts:
+            $processor$: pr.query
+            file: {file_name}
+        ",
+        body_prefix = body_prefix,
+        package_info_package = config.package.name,
+        file_name = file_name
+    };
+
+    Ok(editor_ftd)
+}
+
 fn package_info_editor(
     config: &fastn_core::Config,
     file_name: &str,

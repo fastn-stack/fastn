@@ -350,26 +350,19 @@ impl ftd::executor::Row {
             ),
         );
 
-        // TODO: Need to fix this later for condition
-        if let Some(v) = n.style.get("justify-content") {
-            if let Some(jc) = &v.value {
-                if jc.eq("start") {
-                    n.style.check_and_insert(
-                        "justify-content",
-                        ftd::node::Value::from_executor_value(
-                            self.container
-                                .spacing
-                                .to_owned()
-                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                                .value,
-                            self.container.spacing.to_owned(),
-                            Some(ftd::executor::Spacing::justify_content_pattern()),
-                            doc_id,
-                        ),
-                    );
-                }
-            }
-        }
+        n.style.check_and_insert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                self.container
+                    .spacing
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                    .value,
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
+                doc_id,
+            ),
+        );
 
         n.style.check_and_insert(
             "align-items",
@@ -415,26 +408,19 @@ impl ftd::executor::Column {
             ),
         );
 
-        // TODO: Need to fix this later for condition
-        if let Some(v) = n.style.get("justify-content") {
-            if let Some(jc) = &v.value {
-                if jc.eq("start") {
-                    n.style.check_and_insert(
-                        "justify-content",
-                        ftd::node::Value::from_executor_value(
-                            self.container
-                                .spacing
-                                .to_owned()
-                                .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                                .value,
-                            self.container.spacing.to_owned(),
-                            Some(ftd::executor::Spacing::justify_content_pattern()),
-                            doc_id,
-                        ),
-                    );
-                }
-            }
-        }
+        n.style.check_and_insert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                self.container
+                    .spacing
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                    .value,
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
+                doc_id,
+            ),
+        );
 
         n.style.check_and_insert(
             "align-items",
@@ -659,7 +645,10 @@ impl ftd::executor::Rive {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(self.canvas_width.value.to_string()),
+                self.canvas_width
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
                 self.canvas_width.to_owned(),
                 None,
                 doc_id,
@@ -669,7 +658,10 @@ impl ftd::executor::Rive {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(self.canvas_height.value.to_string()),
+                self.canvas_height
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
                 self.canvas_height.to_owned(),
                 None,
                 doc_id,

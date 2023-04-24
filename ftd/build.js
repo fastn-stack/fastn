@@ -713,7 +713,7 @@ function stringToHTML(str) {
     var doc = parser.parseFromString(str, 'text/html');
     return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
     let part1 = "";
     let pattern_to_split_at = name;

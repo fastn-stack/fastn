@@ -631,9 +631,9 @@ impl PropertyValue {
                 )?;
             }
             ftd::ast::VariableValue::List { value, .. } => {
-                for (_, value) in value {
+                for val in value {
                     PropertyValue::scan_ast_value_with_argument(
-                        value,
+                        val.value,
                         doc,
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
@@ -681,9 +681,9 @@ impl PropertyValue {
                     )?;
                 }
 
-                for (_, value) in values {
+                for val in values {
                     PropertyValue::scan_ast_value_with_argument(
-                        value,
+                        val.value,
                         doc,
                         definition_name_with_arguments,
                         loop_object_name_and_kind,

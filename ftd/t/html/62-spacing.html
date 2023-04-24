@@ -728,7 +728,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(0,128,0,1); cursor: pointer; gap: 50px; height: 40px; margin-bottom: 20px; margin-top: 20px; padding-bottom: 20px; padding-top: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">hello 1</div><div data-id="1,1:main" style="" class="ft_common ft_md">hello 2</div><div data-id="1,2:main" style="" class="ft_common ft_md">hello 3</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(0,128,0,1); cursor: pointer; gap: 50px; height: 40px; justify-content: start; margin-bottom: 20px; margin-top: 20px; padding-bottom: 20px; padding-top: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">hello 1</div><div data-id="1,1:main" style="" class="ft_common ft_md">hello 2</div><div data-id="1,2:main" style="" class="ft_common ft_md">hello 3</div></div></div>
 
 
 <script>
@@ -1447,7 +1447,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-;
+
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;
@@ -1914,6 +1914,45 @@ null
 }
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(50)))));}
 }
+
+window.node_change_main["1:main__justify-content"] = function(data) {
+if(function(){
+return (resolve_reference("foo#num", data)%4==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"start"
+}
+`.format(JSON.stringify("space-between")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"start"
+}
+`.format(JSON.stringify("space-around")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"start"
+}
+`.format(JSON.stringify("space-evenly")));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"start"
+}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(50)))));}
+}
 window.set_value_main = {};
 window.set_value_main["foo#num"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -1927,6 +1966,8 @@ window.ftd.call_immutable_value_changes("foo#num", "main");
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__gap"]){window.node_change_main["1:main__gap"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 };
 

@@ -11,9 +11,9 @@
           },
           "mutable": false,
           "value": {
-            "String": {
+            "string-value": {
               "value": "true",
-              "line_number": 3,
+              "line-number": 3,
               "source": "Default"
             }
           },
@@ -27,9 +27,9 @@
           },
           "mutable": false,
           "value": {
-            "String": {
+            "string-value": {
               "value": "This is description of display component",
-              "line_number": 8,
+              "line-number": 8,
               "source": "Default"
             }
           },
@@ -45,36 +45,36 @@
           "value": {
             "List": {
               "value": [
-                [
-                  "string",
-                  {
-                    "String": {
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
                       "value": "Varanasi",
-                      "line_number": 11,
+                      "line-number": 11,
                       "source": "Default"
                     }
                   }
-                ],
-                [
-                  "string",
-                  {
-                    "String": {
+                },
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
                       "value": "Prayagraj",
-                      "line_number": 12,
+                      "line-number": 12,
                       "source": "Default"
                     }
                   }
-                ],
-                [
-                  "string",
-                  {
-                    "String": {
+                },
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
                       "value": "Bengaluru",
-                      "line_number": 13,
+                      "line-number": 13,
                       "source": "Default"
                     }
                   }
-                ]
+                }
               ],
               "line_number": 13
             }
@@ -94,58 +94,58 @@
             "properties": [
               {
                 "value": {
-                  "String": {
+                  "string-value": {
                     "value": "$obj",
-                    "line_number": 19,
+                    "line-number": 19,
                     "source": "Default"
                   }
                 },
                 "source": "Caption",
                 "condition": null,
-                "line_number": 19
+                "line-number": 19
               }
             ],
             "iteration": {
               "on": "$locations",
               "alias": "obj",
-              "line_number": 20
+              "line-number": 20
             },
             "condition": null,
             "events": [],
             "children": [],
-            "line_number": 19
+            "line-number": 19
           },
           {
             "name": "ftd.text",
             "properties": [
               {
                 "value": {
-                  "String": {
+                  "string-value": {
                     "value": "red",
-                    "line_number": 24,
+                    "line-number": 24,
                     "source": "Default"
                   }
                 },
                 "source": {
-                  "Header": {
+                  "header": {
                     "name": "color",
                     "mutable": false
                   }
                 },
                 "condition": "$flag",
-                "line_number": 24
+                "line-number": 24
               },
               {
                 "value": {
-                  "String": {
+                  "string-value": {
                     "value": "$description",
-                    "line_number": 22,
+                    "line-number": 22,
                     "source": "Default"
                   }
                 },
                 "source": "Caption",
                 "condition": null,
-                "line_number": 22
+                "line-number": 22
               }
             ],
             "iteration": null,
@@ -154,14 +154,14 @@
               {
                 "name": "click",
                 "action": "toggle $flag",
-                "line_number": 23
+                "line-number": 23
               }
             ],
             "children": [],
-            "line_number": 22
+            "line-number": 22
           }
         ],
-        "line_number": 17
+        "line-number": 17
       },
       "css": null,
       "line_number": 1

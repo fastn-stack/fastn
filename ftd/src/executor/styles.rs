@@ -2784,6 +2784,13 @@ pub enum TextInputType {
     EMAIL,
     PASSWORD,
     URL,
+    DATETIME,
+    DATE,
+    TIME,
+    MONTH,
+    WEEK,
+    COLOR,
+    FILE,
 }
 
 impl TextInputType {
@@ -2809,6 +2816,13 @@ impl TextInputType {
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_EMAIL => Ok(TextInputType::EMAIL),
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_PASSWORD => Ok(TextInputType::PASSWORD),
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_URL => Ok(TextInputType::URL),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATETIME => Ok(TextInputType::DATETIME),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATE => Ok(TextInputType::DATE),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_TIME => Ok(TextInputType::TIME),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_MONTH => Ok(TextInputType::MONTH),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_WEEK => Ok(TextInputType::WEEK),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_COLOR => Ok(TextInputType::COLOR),
+            ftd::interpreter::FTD_TEXT_INPUT_TYPE_FILE => Ok(TextInputType::FILE),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.text-input-type`", t),
                 doc.name,
@@ -2850,6 +2864,13 @@ impl TextInputType {
             TextInputType::EMAIL => "email".to_string(),
             TextInputType::PASSWORD => "password".to_string(),
             TextInputType::URL => "url".to_string(),
+            TextInputType::DATETIME => "datetime-local".to_string(),
+            TextInputType::DATE => "date".to_string(),
+            TextInputType::TIME => "time".to_string(),
+            TextInputType::MONTH => "month".to_string(),
+            TextInputType::WEEK => "week".to_string(),
+            TextInputType::COLOR => "color".to_string(),
+            TextInputType::FILE => "file".to_string(),
         }
     }
 }

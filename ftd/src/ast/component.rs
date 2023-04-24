@@ -85,6 +85,7 @@ pub struct Component {
     pub condition: Option<ftd::ast::Condition>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -208,8 +209,12 @@ impl Component {
             }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
-                for (key, val) in value {
-                    children.push(Component::from_variable_value(key.as_str(), val, doc_id)?);
+                for val in value {
+                    children.push(Component::from_variable_value(
+                        val.key.as_str(),
+                        val.value,
+                        doc_id,
+                    )?);
                 }
                 Ok(ftd::ast::Component {
                     name: key.to_string(),
@@ -240,7 +245,7 @@ impl Component {
                 }
                 for header in headers.0.iter() {
                     if header.key.eq(ftd::ast::utils::LOOP)
-                        || Event::get_event_name(header.key.as_str()).is_some()
+                        || Event::get_event_name_from_header_value(header).is_some()
                         || ftd::ast::utils::is_condition(header.key.as_str(), &header.kind)
                     {
                         continue;
@@ -269,13 +274,14 @@ impl Component {
 
                 let mut children = vec![];
 
-                for (_, child) in values {
+                for child in values {
                     children.push(Component::from_variable_value(
-                        name.as_str(),
-                        child,
+                        child.key.as_str(),
+                        child.value,
                         doc_id,
                     )?);
                 }
+
                 Ok(ftd::ast::Component {
                     name,
                     properties,
@@ -318,6 +324,7 @@ pub struct Property {
     pub value: ftd::ast::VariableValue,
     pub source: PropertySource,
     pub condition: Option<String>,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -378,6 +385,7 @@ pub enum PropertySource {
     #[default]
     Caption,
     Body,
+    #[serde(rename = "header")]
     Header {
         name: String,
         mutable: bool,
@@ -410,6 +418,7 @@ impl PropertySource {
 pub struct Loop {
     pub on: String,
     pub alias: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -536,6 +545,7 @@ impl Loop {
 pub struct Event {
     pub name: String,
     pub action: String,
+    #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
@@ -546,6 +556,14 @@ impl Event {
             action: action.to_string(),
             line_number,
         }
+    }
+
+    fn get_event_name_from_header_value(header_value: &HeaderValue) -> Option<String> {
+        let mut name = header_value.key.clone();
+        if header_value.mutable {
+            name = format!("${}", name);
+        }
+        Event::get_event_name(name.as_str())
     }
 
     fn get_event_name(input: &str) -> Option<String> {
@@ -571,7 +589,7 @@ impl Event {
     }
 
     fn from_ast_header(header: &HeaderValue, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
-        let event_name = if let Some(name) = Event::get_event_name(header.key.as_str()) {
+        let event_name = if let Some(name) = Event::get_event_name_from_header_value(header) {
             name
         } else {
             return Ok(None);

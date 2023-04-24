@@ -779,6 +779,22 @@ pub fn get_css_html(external_css: &[String]) -> String {
     result
 }
 
+pub fn get_refresh_meta(redirect_url: Option<String>) -> String {
+    let mut result = String::new();
+
+    if let Some(redirect) = redirect_url {
+        let meta = format!(
+            r#"
+        <meta http-equiv="refresh" content="0;url={}">
+        <link rel="canonical" href="{}">"#,
+            redirect, redirect
+        );
+        result.push_str(meta.as_str());
+    }
+
+    result
+}
+
 pub fn get_meta_data(html_data: &ftd::html::HTMLData) -> String {
     let mut result = vec![];
     if let Some(ref title) = html_data.og_title {

@@ -86,3 +86,83 @@ string list writers:
 section-compat-data list sections:
 string list readers:
 string list writers:
+
+
+
+-- record ast:
+optional import-data import:
+optional component-invocation-data component-invocation:
+
+
+
+-- record import-data:
+string module:
+string alias:
+integer line-number:
+
+
+-- record component-invocation-data:
+string name:
+property-data list properties:
+optional loop-data iteration:
+optional condition-data condition:
+event-data list events:
+component-invocation-data list children:
+integer line-number:
+
+
+
+-- record event-data:
+string name:
+string action:
+integer line-number:
+
+
+
+
+-- record condition-data:
+string expression:
+integer line-number:
+
+
+
+-- record loop-data:
+string on:
+string alias:
+integer line-number:
+
+
+
+
+
+-- record property-data:
+variable-value-data value:
+source-data source:
+optional string condition:
+integer line-number:
+
+
+
+
+
+
+
+
+-- record variable-value-data:
+optional string-value-data string-value:
+
+
+-- record string-value-data:
+string value:
+integer line-number:
+source-data source:
+
+
+-- record source-data:
+optional caption name:
+optional header-data header:
+
+
+-- record header-data:
+boolean mutable:
+string name:
