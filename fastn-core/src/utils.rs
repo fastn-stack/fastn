@@ -40,6 +40,33 @@ macro_rules! warning {
     }};
 }
 
+pub fn redirect_page_html(url: &str) -> String {
+    let html = format!(indoc::indoc! { r#"
+        <!DOCTYPE html>
+        <meta charset="utf-8">
+        <title>Redirecting to {}</title>
+        <meta http-equiv="refresh" content="0; URL={}">
+        <link rel="canonical" href="{}">
+        <body>
+        <script type="text/javascript">
+              window.onload = updateRedirectURL();
+              function updateRedirectURL() {{
+                 const url = new URL(window.location.href);
+                 let search_hash = url.search + url.hash;
+                 let refresh_meta_element = document.head.querySelector('meta[http-equiv="refresh"]');
+                 if (search_hash) {{
+                    refresh_meta_element.content = refresh_meta_element.content.replace(/\/$/g, '');
+                 }}
+                 refresh_meta_element.content += search_hash;
+              }}
+        </script>
+        </body>
+        "#
+    }, url, url, url);
+
+    html
+}
+
 pub fn print_end(msg: &str, start: std::time::Instant) {
     use colored::Colorize;
 

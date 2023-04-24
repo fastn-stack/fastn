@@ -13,6 +13,27 @@ pub async fn build(
     // No need to build static files when file is passed during fastn_core build (no-static behaviour)
     let no_static: bool = file.is_some();
 
+    // All redirect html files under .build
+    let redirects = config.package.redirects.clone();
+    if let Some(r) = redirects {
+        for (redirect_from, redirect_to) in r.iter() {
+            println!(
+                "Processing redirect {}/{} ... ",
+                config.package.name.as_str(),
+                format!("{} -> {}", redirect_from.trim_matches('/'), redirect_to)
+            );
+
+            let content = fastn_core::utils::redirect_page_html(redirect_to.as_str());
+            let save_file = match redirect_from.as_str().ends_with(".ftd") {
+                true => redirect_from.replace(".ftd","/index.html"),
+                false => format!("{}/index.html", redirect_from.trim_start_matches('/').trim_end_matches('/'))
+            };
+
+            let save_path = config.root.join(".build").join(save_file.as_str());
+            fastn_core::utils::update(save_path, content.as_bytes()).await.ok();
+        }
+    }
+
     for main in documents.values() {
         if file.is_some() && file != Some(main.get_id().as_str()) {
             continue;
@@ -32,6 +53,15 @@ pub async fn build(
                     .ftd_edition
                     .eq(&fastn_core::config::FTDEdition::FTD2021)
                 {
+                    // Ignore redirect paths
+                    if let Some(r) = config.package.redirects.as_ref() {
+                        if fastn_core::package::redirects::find_redirect
+                            (&r, doc.id.as_str()).is_some() {
+                            println!("Ignored by redirect {}", doc.id.as_str());
+                            continue;
+                        }
+                    }
+
                     fastn_core::utils::copy(
                         config.root.join(doc.id.as_str()),
                         config.root.join(".build").join(doc.id.as_str()),
