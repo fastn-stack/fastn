@@ -26,8 +26,8 @@ pub fn find_redirect(redirects: &ftd::Map<String>, path: &str) -> Option<String>
     let fixed = format!(
         "/{}/",
         path.trim_matches('/')
-            .trim_end_matches(".ftd")
             .trim_end_matches("index.ftd")
+            .trim_end_matches(".ftd")
     );
 
     return if redirects.contains_key(original) {
