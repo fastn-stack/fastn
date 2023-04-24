@@ -222,7 +222,6 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
 
 window.ftd.utils.add_extra_in_id = function (node_id: string, data: any) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
-    // get the current ID of the element
     if (element) {
         changeElementId(element, "____device", true);
     }
@@ -230,7 +229,6 @@ window.ftd.utils.add_extra_in_id = function (node_id: string, data: any) {
 
 window.ftd.utils.remove_extra_from_id = function (node_id: string, data: any) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
-    // get the current ID of the element
     if (element) {
         changeElementId(element, "____device", false);
     }
