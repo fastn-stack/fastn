@@ -1,3 +1,5 @@
+use fastn_core::package::PackageTempIntoPackage;
+
 #[derive(Debug, Clone)]
 pub struct Dependency {
     pub package: fastn_core::Package,
@@ -143,7 +145,7 @@ impl fastn_core::Package {
                     };
 
                 ftd_document
-                    .get::<fastn_core::package::PackageTemp>("fastn#package")?
+                    .get::<fastn_package::old_fastn::PackageTemp>("fastn#package")?
                     .into_package()
                     .zip
                     .ok_or(fastn_core::Error::UsageError {
@@ -486,7 +488,7 @@ impl fastn_core::Package {
             }
         };
         let mut package = {
-            let temp_package: fastn_core::package::PackageTemp =
+            let temp_package: fastn_package::old_fastn::PackageTemp =
                 ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };
@@ -605,7 +607,7 @@ impl fastn_core::Package {
             }
         };
         let mut package = {
-            let temp_package: fastn_core::package::PackageTemp =
+            let temp_package: fastn_package::old_fastn::PackageTemp =
                 ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };

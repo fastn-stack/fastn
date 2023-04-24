@@ -60,7 +60,7 @@ pub struct Package {
     pub backend: bool,
 
     /// Headers for the WASM backend
-    pub backend_headers: Option<Vec<BackendHeader>>,
+    pub backend_headers: Option<Vec<fastn_package::old_fastn::BackendHeader>>,
 
     /// Installed Apps
     pub apps: Vec<app::App>,
@@ -491,7 +491,8 @@ impl Package {
             }
         };
         let mut package = {
-            let temp_package: PackageTemp = fastn_document.get("fastn#package")?;
+            let temp_package: fastn_package::old_fastn::PackageTemp =
+                fastn_document.get("fastn#package")?;
             temp_package.into_package()
         };
         package.translation_status_summary =
@@ -545,7 +546,8 @@ impl Package {
         root: &camino::Utf8Path,
         fastn_doc: &ftd::ftd2021::p2::Document,
     ) -> fastn_core::Result<Package> {
-        let temp_package: Option<PackageTemp> = fastn_doc.get("fastn#package")?;
+        let temp_package: Option<fastn_package::old_fastn::PackageTemp> =
+            fastn_doc.get("fastn#package")?;
 
         let mut package = match temp_package {
             Some(v) => v.into_package(),
@@ -672,49 +674,12 @@ impl Package {
     }
 }
 
-/// Backend Header is a struct that is used to read and store the backend-header from the FASTN.ftd file
-#[derive(serde::Deserialize, Debug, Clone)]
-pub struct BackendHeader {
-    #[serde(rename = "header-key")]
-    pub header_key: String,
-    #[serde(rename = "header-value")]
-    pub header_value: String,
-}
-/// PackageTemp is a struct that is used for mapping the `fastn.package` data in FASTN.ftd file. It is
-/// not used elsewhere in program, it is immediately converted to `fastn_core::Package` struct during
-/// deserialization process
-#[derive(serde::Deserialize, Debug, Clone)]
-pub(crate) struct PackageTemp {
-    pub name: String,
-    pub versioned: bool,
-    #[serde(rename = "translation-of")]
-    pub translation_of: Option<String>,
-    #[serde(rename = "translation")]
-    pub translations: Vec<String>,
-    #[serde(rename = "language")]
-    pub language: Option<String>,
-    pub about: Option<String>,
-    pub zip: Option<String>,
-    #[serde(rename = "download-base-url")]
-    pub download_base_url: Option<String>,
-    #[serde(rename = "canonical-url")]
-    pub canonical_url: Option<String>,
-    #[serde(rename = "inherit-auto-imports-from-original")]
-    pub import_auto_imports_from_original: bool,
-    #[serde(rename = "favicon")]
-    pub favicon: Option<String>,
-    #[serde(rename = "endpoint")]
-    pub endpoint: Option<String>,
-    #[serde(rename = "backend")]
-    pub backend: bool,
-    #[serde(rename = "backend-headers")]
-    pub backend_headers: Option<Vec<BackendHeader>>,
-    #[serde(rename = "icon")]
-    pub icon: Option<ftd::ImageSrc>,
+trait PackageTempIntoPackage {
+    fn into_package(self) -> Package;
 }
 
-impl PackageTemp {
-    pub fn into_package(self) -> Package {
+impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
+    fn into_package(self) -> Package {
         // TODO: change this method to: `validate(self) -> fastn_core::Result<fastn_core::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.

@@ -1146,6 +1146,7 @@ dependencies = [
  "ftd 0.2.0",
  "once_cell",
  "rusqlite",
+ "serde",
  "thiserror",
  "tokio",
 ]
