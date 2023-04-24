@@ -1145,6 +1145,7 @@ dependencies = [
  "once_cell",
  "rusqlite",
  "thiserror",
+ "tokio",
 ]
 
 [[package]]

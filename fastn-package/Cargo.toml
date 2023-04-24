@@ -10,4 +10,5 @@ rusqlite.workspace = true
 async-trait.workspace = true
 thiserror.workspace = true
 once_cell.workspace = true
+tokio.workspace = true
 ftd = { path = "../ftd" }

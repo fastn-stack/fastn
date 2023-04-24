@@ -15,6 +15,9 @@ pub enum InitialisePackageError {
 pub async fn initialize(
     i: impl fastn_package::initializer::Initializer,
 ) -> Result<(), InitialisePackageError> {
+    fastn_package::FTD_CACHE
+        .get_or_init(|| async { tokio::sync::RwLock::new(std::collections::HashMap::new()) })
+        .await;
     fastn_package::sqlite::initialize_db()?;
     process_fastn_ftd(i).await?;
     todo!()
