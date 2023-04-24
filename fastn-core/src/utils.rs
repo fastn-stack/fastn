@@ -41,7 +41,8 @@ macro_rules! warning {
 }
 
 pub fn redirect_page_html(url: &str) -> String {
-    let html = format!(indoc::indoc! { r#"
+    let html = format!(
+        indoc::indoc! { r#"
         <!DOCTYPE html>
         <meta charset="utf-8">
         <title>Redirecting to {}</title>
@@ -62,7 +63,9 @@ pub fn redirect_page_html(url: &str) -> String {
         </script>
         </body>
         "#
-    }, url, url, url);
+        },
+        url, url, url
+    );
 
     html
 }

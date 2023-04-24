@@ -18,19 +18,25 @@ pub async fn build(
     if let Some(r) = redirects {
         for (redirect_from, redirect_to) in r.iter() {
             println!(
-                "Processing redirect {}/{} ... ",
+                "Processing redirect {}/{} -> {}... ",
                 config.package.name.as_str(),
-                format!("{} -> {}", redirect_from.trim_matches('/'), redirect_to)
+                redirect_from.trim_matches('/'),
+                redirect_to
             );
 
             let content = fastn_core::utils::redirect_page_html(redirect_to.as_str());
             let save_file = match redirect_from.as_str().ends_with(".ftd") {
-                true => redirect_from.replace(".ftd","/index.html"),
-                false => format!("{}/index.html", redirect_from.trim_start_matches('/').trim_end_matches('/'))
+                true => redirect_from.replace(".ftd", "/index.html"),
+                false => format!(
+                    "{}/index.html",
+                    redirect_from.trim_start_matches('/').trim_end_matches('/')
+                ),
             };
 
             let save_path = config.root.join(".build").join(save_file.as_str());
-            fastn_core::utils::update(save_path, content.as_bytes()).await.ok();
+            fastn_core::utils::update(save_path, content.as_bytes())
+                .await
+                .ok();
         }
     }
 
@@ -55,8 +61,9 @@ pub async fn build(
                 {
                     // Ignore redirect paths
                     if let Some(r) = config.package.redirects.as_ref() {
-                        if fastn_core::package::redirects::find_redirect
-                            (&r, doc.id.as_str()).is_some() {
+                        if fastn_core::package::redirects::find_redirect(r, doc.id.as_str())
+                            .is_some()
+                        {
                             println!("Ignored by redirect {}", doc.id.as_str());
                             continue;
                         }
