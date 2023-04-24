@@ -318,7 +318,7 @@ impl Library2 {
     ) -> ftd::ftd2021::p1::Result<bool> {
         Ok(section
             .header
-            .str(doc.name, section.line_number, "$processor$")?
+            .str(doc.name, section.line_number, ftd::PROCESSOR_MARKER)?
             .eq("page-headings"))
     }
 

@@ -11,6 +11,8 @@ pub enum OldFastnParseError {
     },
     #[error("FASTN.ftd imported something other then fastn: {module}")]
     InvalidImport { module: String },
+    #[error("FASTN.ftd tried to use a processor: {processor}")]
+    ProcessorUsed { processor: String },
 }
 
 pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFastnParseError> {
@@ -22,8 +24,14 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
                 document = doc;
                 break;
             }
-            ftd::ftd2021::Interpreter::StuckOnProcessor { .. } => {
-                unimplemented!()
+            ftd::ftd2021::Interpreter::StuckOnProcessor { section, .. } => {
+                return Err(OldFastnParseError::ProcessorUsed {
+                    processor: section
+                        .header
+                        .str("FASTN.ftd", section.line_number, ftd::PROCESSOR_MARKER)
+                        .expect("we cant get stuck on processor without processor marker")
+                        .to_string(),
+                })
             }
             ftd::ftd2021::Interpreter::StuckOnImport { module, state: st } => {
                 let source = if module == "fastn" {
@@ -34,10 +42,9 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
                 s = st.continue_after_import(module.as_str(), source)?;
             }
             ftd::ftd2021::Interpreter::StuckOnForeignVariable { .. } => {
-                unimplemented!()
+                unreachable!("we never register any foreign variable so we cant come here")
             }
             ftd::ftd2021::Interpreter::CheckID { .. } => {
-                // No config in fastn_package::old_fastn::fastnLibrary ignoring processing terms here
                 unimplemented!()
             }
         }
