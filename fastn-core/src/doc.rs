@@ -802,7 +802,7 @@ pub async fn resolve_foreign_variable2(
 pub fn parse_ftd(
     name: &str,
     source: &str,
-    lib: &fastn_package::old_fastn::FastnLibrary,
+    lib: &fastn_core::FastnLibrary,
 ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::p2::Document> {
     let mut s = ftd::ftd2021::interpret(name, source, &None)?;
     let document;
@@ -826,7 +826,7 @@ pub fn parse_ftd(
                 unimplemented!()
             }
             ftd::ftd2021::Interpreter::CheckID { .. } => {
-                // No config in fastn_package::old_fastn::fastnLibrary ignoring processing terms here
+                // No config in fastn_core::FastnLibrary ignoring processing terms here
                 unimplemented!()
             }
         }

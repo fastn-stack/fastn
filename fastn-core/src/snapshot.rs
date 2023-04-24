@@ -10,7 +10,7 @@ pub(crate) async fn resolve_snapshots(
     if content.trim().is_empty() {
         return Ok(Default::default());
     }
-    let lib = fastn_package::old_fastn::FastnLibrary::default();
+    let lib = fastn_core::FastnLibrary::default();
     let b = match fastn_core::doc::parse_ftd(".latest.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
@@ -105,7 +105,7 @@ impl Workspace {
 pub(crate) async fn resolve_workspace(
     content: &str,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Workspace>> {
-    let lib = fastn_package::old_fastn::FastnLibrary::default();
+    let lib = fastn_core::FastnLibrary::default();
     let b = match fastn_core::doc::parse_ftd("workspace.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {

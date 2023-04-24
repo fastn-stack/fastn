@@ -330,3 +330,29 @@ impl Library2 {
         unimplemented!("we are removing support for 0.2, migrate to 0.3 please")
     }
 }
+
+#[derive(Default)]
+pub struct FastnLibrary {}
+
+impl FastnLibrary {
+    pub fn get(&self, name: &str, _doc: &ftd::ftd2021::p2::TDoc) -> Option<String> {
+        if name == "fastn" {
+            Some(fastn_package::old_fastn::fastn_ftd().to_string())
+        } else {
+            // Note: currently we do not allow users to import other modules from FASTN.ftd
+            eprintln!("FASTN.ftd can only import `fastn` module");
+            None
+        }
+    }
+
+    pub fn get_with_result(
+        &self,
+        name: &str,
+        doc: &ftd::ftd2021::p2::TDoc,
+    ) -> ftd::ftd2021::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
+        }
+    }
+}
