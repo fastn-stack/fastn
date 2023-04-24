@@ -1,5 +1,5 @@
 pub fn fastn_ftd() -> &'static str {
-    include_str!("../fastn.ftd")
+    include_str!("../fastn_2021.ftd")
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -53,8 +53,62 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum GetNameError {}
+pub enum GetNameError {
+    #[error("Can't find fastn.package in FASTN.ftd, must be impossible: {source}")]
+    CantFindPackage {
+        #[from]
+        source: ftd::ftd2021::p1::Error,
+    },
+    #[error("fastn.package was not initialised")]
+    PackageIsNone,
+}
 
-pub fn get_name(_doc: ftd::ftd2021::p2::Document) -> Result<String, GetNameError> {
-    todo!()
+pub fn get_name(doc: ftd::ftd2021::p2::Document) -> Result<String, GetNameError> {
+    let op: Option<PackageTemp> = doc.get("fastn#package")?;
+    match op {
+        Some(p) => Ok(p.name),
+        None => Err(GetNameError::PackageIsNone),
+    }
+}
+
+/// Backend Header is a struct that is used to read and store the backend-header from the FASTN.ftd file
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct BackendHeader {
+    #[serde(rename = "header-key")]
+    pub header_key: String,
+    #[serde(rename = "header-value")]
+    pub header_value: String,
+}
+
+/// PackageTemp is a struct that is used for mapping the `fastn.package` data in FASTN.ftd file. It is
+/// not used elsewhere in program, it is immediately converted to `fastn_core::Package` struct during
+/// deserialization process
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct PackageTemp {
+    pub name: String,
+    pub versioned: bool,
+    #[serde(rename = "translation-of")]
+    pub translation_of: Option<String>,
+    #[serde(rename = "translation")]
+    pub translations: Vec<String>,
+    #[serde(rename = "language")]
+    pub language: Option<String>,
+    pub about: Option<String>,
+    pub zip: Option<String>,
+    #[serde(rename = "download-base-url")]
+    pub download_base_url: Option<String>,
+    #[serde(rename = "canonical-url")]
+    pub canonical_url: Option<String>,
+    #[serde(rename = "inherit-auto-imports-from-original")]
+    pub import_auto_imports_from_original: bool,
+    #[serde(rename = "favicon")]
+    pub favicon: Option<String>,
+    #[serde(rename = "endpoint")]
+    pub endpoint: Option<String>,
+    #[serde(rename = "backend")]
+    pub backend: bool,
+    #[serde(rename = "backend-headers")]
+    pub backend_headers: Option<Vec<BackendHeader>>,
+    #[serde(rename = "icon")]
+    pub icon: Option<ftd::ImageSrc>,
 }
