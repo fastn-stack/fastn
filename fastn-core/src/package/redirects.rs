@@ -27,7 +27,7 @@ pub fn find_redirect(redirects: &ftd::Map<String>, path: &str) -> Option<String>
         "/{}/",
         path.trim_matches('/')
             .trim_end_matches(".ftd")
-            .trim_end_matches("index")
+            .trim_end_matches("index.ftd")
     );
 
     return if redirects.contains_key(original) {
