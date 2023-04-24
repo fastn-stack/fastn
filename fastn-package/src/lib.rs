@@ -6,4 +6,6 @@ pub(crate) mod sqlite;
 
 pub use initialize::initialize;
 
-// a rwlock  containing a hashmap of string to string
+static FTD_CACHE: tokio::sync::OnceCell<
+    tokio::sync::RwLock<std::collections::HashMap<String, ftd::ast::AST>>,
+> = tokio::sync::OnceCell::const_new();
