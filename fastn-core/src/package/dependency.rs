@@ -131,7 +131,7 @@ impl fastn_core::Package {
 
             // Read FASTN.ftd and get download zip url from `zip` argument
             let download_url = {
-                let lib = fastn_core::FastnLibrary::default();
+                let lib = fastn_package::old_fastn::FastnLibrary::default();
                 let ftd_document =
                     match fastn_core::doc::parse_ftd("fastn", fastn_string.as_str(), &lib) {
                         Ok(v) => v,
@@ -213,7 +213,7 @@ impl fastn_core::Package {
             root.join("FASTN.ftd")
         } else {
             let doc = std::fs::read_to_string(root.join("fastn.manifest.ftd"));
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => {
                     let k: String = fastn_manifest_processed.get("fastn.manifest#package-root")?;
@@ -333,7 +333,7 @@ impl fastn_core::Package {
             root.join("FASTN.ftd")
         } else {
             let doc = std::fs::read_to_string(root.join("fastn.manifest.ftd"));
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => {
                     let k: String = fastn_manifest_processed.get("fastn.manifest#package-root")?;
@@ -475,7 +475,7 @@ impl fastn_core::Package {
     ) -> fastn_core::Result<()> {
         let ftd_document = {
             let doc = std::fs::read_to_string(fastn_path)?;
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
@@ -594,7 +594,7 @@ impl fastn_core::Package {
     ) -> fastn_core::Result<()> {
         let ftd_document = {
             let doc = std::fs::read_to_string(fastn_path)?;
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {

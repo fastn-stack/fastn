@@ -45,7 +45,7 @@ pub(crate) async fn resolve_tracking_info(
             message: format!("Content is empty in track file for {}", path),
         });
     }
-    let lib = fastn_core::FastnLibrary::default();
+    let lib = fastn_package::old_fastn::FastnLibrary::default();
     let b = match fastn_core::doc::parse_ftd(path.to_string().as_str(), content, &lib) {
         Ok(v) => v,
         Err(e) => {

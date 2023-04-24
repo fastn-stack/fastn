@@ -802,7 +802,7 @@ pub async fn resolve_foreign_variable2(
 pub fn parse_ftd(
     name: &str,
     source: &str,
-    lib: &fastn_core::FastnLibrary,
+    lib: &fastn_package::old_fastn::FastnLibrary,
 ) -> ftd::ftd2021::p1::Result<ftd::ftd2021::p2::Document> {
     let mut s = ftd::ftd2021::interpret(name, source, &None)?;
     let document;
@@ -812,12 +812,8 @@ pub fn parse_ftd(
                 document = doc;
                 break;
             }
-            ftd::ftd2021::Interpreter::StuckOnProcessor { state, section } => {
-                let value = lib.process(
-                    &section,
-                    &state.tdoc(&mut Default::default(), &mut Default::default()),
-                )?;
-                s = state.continue_after_processor(&section, value)?;
+            ftd::ftd2021::Interpreter::StuckOnProcessor { .. } => {
+                unimplemented!()
             }
             ftd::ftd2021::Interpreter::StuckOnImport { module, state: st } => {
                 let source = lib.get_with_result(
@@ -826,12 +822,11 @@ pub fn parse_ftd(
                 )?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
-            ftd::ftd2021::Interpreter::StuckOnForeignVariable { variable, state } => {
-                let value = resolve_ftd_foreign_variable(variable.as_str(), name)?;
-                s = state.continue_after_variable(variable.as_str(), value)?
+            ftd::ftd2021::Interpreter::StuckOnForeignVariable { .. } => {
+                unimplemented!()
             }
             ftd::ftd2021::Interpreter::CheckID { .. } => {
-                // No config in fastn_core::fastnLibrary ignoring processing terms here
+                // No config in fastn_package::old_fastn::fastnLibrary ignoring processing terms here
                 unimplemented!()
             }
         }

@@ -191,7 +191,7 @@ impl FileHistory {
 
     pub(crate) fn from_ftd(file: &str) -> fastn_core::Result<Vec<FileHistory>> {
         let doc = {
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             fastn_core::doc::parse_ftd("history.ftd", file, &lib)?
         };
         Ok(doc.get("fastn#history")?)

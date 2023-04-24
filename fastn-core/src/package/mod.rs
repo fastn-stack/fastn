@@ -476,7 +476,7 @@ impl Package {
         tracing::info!(path = fastn_path.as_str());
         let fastn_document = {
             let doc = tokio::fs::read_to_string(fastn_path).await?;
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {

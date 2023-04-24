@@ -72,10 +72,6 @@ impl Library2022 {
             return Some((fastn_core::library::fastn_dot_ftd::get2022(self).await, 0));
         }
 
-        if name == "fastn-lib" {
-            return Some((fastn_core::fastn_lib_ftd().to_string(), 0));
-        }
-
         return get_for_package(
             format!("{}/", name.trim_end_matches('/')).as_str(),
             self,
