@@ -11,4 +11,5 @@ async-trait.workspace = true
 thiserror.workspace = true
 once_cell.workspace = true
 tokio.workspace = true
+camino.workspace = true
 ftd = { path = "../ftd" }

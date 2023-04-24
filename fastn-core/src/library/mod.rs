@@ -20,7 +20,6 @@ pub struct Library {
 }
 
 impl Library {
-    // TODO: async
     pub async fn get_with_result(
         &self,
         name: &str,
