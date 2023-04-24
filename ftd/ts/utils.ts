@@ -218,3 +218,55 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
 
     return new_string;
 };
+
+
+window.ftd.utils.add_extra_in_id = function (node_id: string, data: any) {
+    let element = document.querySelector(`[data-id=\"${node_id}\"]`);
+    // get the current ID of the element
+    if (element) {
+        changeElementId(element, "____device", true);
+    }
+}
+
+window.ftd.utils.remove_extra_from_id = function (node_id: string, data: any) {
+    let element = document.querySelector(`[data-id=\"${node_id}\"]`);
+    // get the current ID of the element
+    if (element) {
+        changeElementId(element, "____device", false);
+    }
+}
+
+
+function changeElementId(element: Element, suffix: string, add: boolean) {
+    // check if the current ID is not empty
+    if (element.id) {
+        // set the new ID for the element
+        element.id =  updatedID(element.id, add, suffix);
+    }
+
+    // get all the children nodes of the element
+    // @ts-ignore
+    const childrenNodes = element.children;
+
+    // loop through all the children nodes
+    for (let i = 0; i < childrenNodes.length; i++) {
+        // get the current child node
+        const currentNode = childrenNodes[i];
+
+        // recursively call this function for the current child node
+        changeElementId(currentNode, suffix, add);
+    }
+}
+
+
+
+function updatedID(str: string, flag: boolean, suffix: string) {
+    // check if the flag is set
+    if (flag) {
+        // append suffix to the string
+        return str + suffix;
+    } else {
+        // remove suffix from the string (if it exists)
+        return str.replace(suffix, "");
+    }
+}

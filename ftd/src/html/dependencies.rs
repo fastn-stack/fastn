@@ -62,8 +62,26 @@ impl<'a> DependencyGenerator<'a> {
             );
 
             if let Some(condition) = condition {
-                let pos_value = format!("{} = \"{}\";", key, self.node.display);
-                let neg_value = format!("{} = \"none\";", key);
+                let pos_condition = if condition.contains("ftd#device") {
+                    format!(
+                        "window.ftd.utils.remove_extra_from_id(\"{}\", data);",
+                        node_data_id
+                    )
+                } else {
+                    "".to_string()
+                };
+
+                let neg_condition = if condition.contains("ftd#device") {
+                    format!(
+                        "window.ftd.utils.add_extra_in_id(\"{}\", data);",
+                        node_data_id
+                    )
+                } else {
+                    "".to_string()
+                };
+
+                let pos_value = format!("{} = \"{}\";{}", key, self.node.display, pos_condition);
+                let neg_value = format!("{} = \"none\";{}", key, neg_condition);
                 expressions.push((Some(condition), pos_value));
                 expressions.push((None, neg_value));
             }
