@@ -98,12 +98,12 @@ favicon: /-/fastn.io/images/favicon.svg
    document: webdev-with-ftd.ftd
    
 # Design: /figma/
-  document: /cs/ftd-to-figma/
+  document: cs/ftd-to-figma.ftd
 
 - Use Figma Tokens with fastn color schemes: /figma/
-  document: /cs/ftd-to-figma/
+  document: cs/ftd-to-figma.ftd
 - Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
-  document: /cs/figma-to-ftd/
+  document: cs/figma-to-ftd.ftd
 - Modify color scheme package: /modify-cs/
   document: cs/modify-cs.ftd
 - Create `font` package: /create-font-package/
@@ -145,21 +145,21 @@ favicon: /-/fastn.io/images/favicon.svg
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
 - Attributes: /attributes/
-  document: /ftd/attributes/
+  document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/
-    document: /ftd/common/
+    document: ftd/common.ftd
   - Text Attributes: /text-attributes/
-    document: /ftd/text-attributes/
+    document: ftd/text-attributes.ftd
   - Container Attributes: /container-attributes/
-    document: /ftd/container-attributes/
+    document: ftd/container-attributes.ftd
   - Container Root Attributes: /container-root-attributes/
-    document: /ftd/container-root-attributes/
+    document: ftd/container-root-attributes.ftd
 - `import`: /import/
   document: ftd-host/import.ftd
 - Functions: /functions/
   document: ftd/functions/
 - Built-in Functions 🚧: /built-in-functions/
-  document: ftd/built-in-functions/
+  document: ftd/built-in-functions.ftd
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
 - `ftd` Events: /events/
@@ -295,6 +295,8 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd-host/package-query.ftd
 - Reading JSON: /get-data/
   document: ftd-host/get-data.ftd
+- Redirects: /redirects/
+  document: backend/redirects.ftd
 
 
 # Create Website: /install/-/build/
