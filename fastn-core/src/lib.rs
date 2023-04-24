@@ -177,12 +177,13 @@ fn package_editor_source(
             path: {file_name}
 
             -- pr.ast list $asts:
-            $processor$: pr.query
+            {processor_marker}: pr.query
             file: {file_name}
         ",
         body_prefix = body_prefix,
         package_info_package = config.package.name,
-        file_name = file_name
+        file_name = file_name,
+        processor_marker = ftd::PROCESSOR_MARKER,
     };
 
     Ok(editor_ftd)
@@ -209,12 +210,13 @@ fn package_info_editor(
             path: {file_name}
 
             -- string source:
-            $processor$: pr.fetch-file
+            {processor_marker}: pr.fetch-file
             path: {file_name}
         ",
         body_prefix = body_prefix,
         package_info_package = config.package_info_package(),
-        file_name = file_name
+        file_name = file_name,
+        processor_marker = ftd::PROCESSOR_MARKER,
     };
     if let Ok(Some(diff)) = diff {
         editor_ftd = format!("{}\n\n\n-- pi.diff:\n\n{}", editor_ftd, diff);

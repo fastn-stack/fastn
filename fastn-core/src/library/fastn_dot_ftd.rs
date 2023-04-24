@@ -796,12 +796,13 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
                     {fastn_base}
                     
                     -- language-toc:
-                    $processor$: toc
+                    {processor_marker}: toc
         
                     {languages}
                 "},
                 fastn_base = fastn_base,
                 languages = languages,
+                processor_marker = ftd::PROCESSOR_MARKER,
             );
         }
     }

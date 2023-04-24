@@ -27,7 +27,10 @@ pub async fn process<'a>(
         Some(v) => v,
         None => {
             return ftd::interpreter::utils::e2(
-                "'url' key is required when using `$processor$: http`",
+                format!(
+                    "'url' key is required when using `{}: http`",
+                    ftd::PROCESSOR_MARKER
+                ),
                 doc.name,
                 line_number,
             )
@@ -43,8 +46,7 @@ pub async fn process<'a>(
 
     let mut body = vec![];
     for header in headers.0 {
-        if header.key.as_str() == "$processor$"
-            || header.key.as_str() == "processor$"
+        if header.key.as_str() == ftd::PROCESSOR_MARKER
             || header.key.as_str() == "url"
             || header.key.as_str() == "method"
         {

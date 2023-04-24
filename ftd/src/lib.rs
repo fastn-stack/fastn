@@ -25,6 +25,8 @@ pub mod interpreter;
 pub mod node;
 pub mod p1;
 
+pub const PROCESSOR_MARKER: &str = "$processor$";
+
 pub fn css() -> &'static str {
     // if fastn_core::utils::is_test() {
     //     return "FTD_CSS";
