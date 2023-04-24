@@ -16,14 +16,17 @@ async-trait = "0.1"
 camino = "1"
 clap = "4"
 colored = "2"
+css-color-parser = "0.1"
 diffy = "0.3"
 edit = "0.1"
 env_logger = "0.10"
 fluent = "0.16"
+format_num = "0.1"
 ftd = { path = "../ftd" }
 futures = "0.3"
 home = "0.5"
 ignore = "0.4"
+include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.10"
@@ -32,14 +35,17 @@ mime_guess = "2"
 oauth2 = { version = "4" }
 once_cell = "1"
 pretty_assertions = "1"
+rand = "0.8"
+rand_pcg = "0.3"
 realm-lang = "0.1"
 regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
+ron = "0.8"
 rusty-hook = "^0.11.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
-slug = { version = "0.1" }
+slug = "0.1"
 tejar = "0.1"
 thiserror = "1"
 tokio = { version = "1.27.0", features = ["full"] }
@@ -91,3 +97,35 @@ features=["macos_kqueue"]
 [workspace.dependencies.fbt-lib]
 git = "https://github.com/FifthTry/fbt"
 rev = "ea0ee98"
+
+[workspace.dependencies.syntect]
+# We use syntect for syntax highlighting feature in ftd.code.
+version = "5"
+
+# By default syntect uses https://docs.rs/onig/. Rust has two popular regular expression
+# crates, `regex` and `onig`. `onig` is a wrapper over a library implemented in C:
+# https://github.com/kkos/oniguruma. https://docs.rs/regex/ is a pure Rust implementation.
+#
+# We are using `regex` ourselves. `comrak` also uses `regex`. So we disable their default
+# feature, which brings in onig, and use `default-fancy`, which uses `fancy-regex`, which
+# in turn uses `regex`.
+default-features = false
+features = [
+    # TODO: This feature brings in a lot of feaures, we have to pare it down to exactly
+    #       the features we need.
+    "default-fancy"
+]
+
+[workspace.dependencies.comrak]
+# We use comrak for markup processing.
+
+version = "0.18"
+# By default comrak ships with support for syntax highlighting using syntext for "fenced
+# code blocks". We have disabled that by not using default features. We did that because
+# we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6
+# and we are using 5, which means we have two sytnax highlighting libraries.
+#
+# Further, in future we have to manipulate the markup at AST level, instead of using the
+# to_string() interface. https://fpm.dev/journal/#markdown-styling. So in the meanwhile
+# we are disabling their conflicting syntect implementation.
+default-features = false
