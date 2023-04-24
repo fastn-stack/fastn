@@ -30,7 +30,7 @@ if: { show-grid }
 templates: $bling
 more-link: /featured/components-library/
 
--- grid-view: Color Schemes:
+/-- grid-view: Color Schemes:
 if: { show-grid }
 templates: $schemes
 more-link: /featured/cs/
@@ -414,15 +414,6 @@ github-url: https://github.com/FifthTry/bling/
 `fifthtry.github.io/bling` is develoed and designed with various components which 
 can be used inside `ftd` web packages.
 
-/-- template: Image Gallery
-template-url: https://fifthtry.github.io/imago-gallery-ig/
-screenshot: $fastn-assets.files.static.slideshow-demo.png
-licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
-github-url: https://github.com/FifthTry/imago-gallery-ig/
-
-`fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
-inside `ftd` web packages.
-
 -- end: bling
 
 
@@ -436,21 +427,37 @@ inside `ftd` web packages.
 
 -- template list font:
 
--- template: Inter
-template-url: https://fifthtry.github.io/inter/
-licence-url: https://github.com/FifthTry/inter/blob/main/LICENSE
-github-url: https://github.com/FifthTry/inter
+-- template: Opensans
+template-url: https://fastn-community.github.io/opensans-font/
+licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
+github-url: https://github.com/fastn-community/opensans-font
 
-`fifthtry.github.io/inter` font is available and can be used inside `ftd` web 
-packages.
+`fastn-community.github.io/opensans-font` font is available and can be used
+inside `ftd` web packages.
 
--- template: Roboto
-template-url: https://fifthtry.github.io/roboto/
-licence-url: https://github.com/FifthTry/roboto/blob/main/LICENSE
-github-url: https://github.com/FifthTry/roboto/
+-- template: Lato
+template-url: https://fastn-community.github.io/lato-font/
+licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
+github-url: https://github.com/fastn-community/lato-font
 
-`fifthtry.github.io/roboto` font is available and can be used inside `ftd` web 
-packages.
+`fastn-community.github.io/lato-font` font is available and can be used inside
+`ftd` web packages.
+
+-- template: Roboto Mono
+template-url: https://fastn-community.github.io/roboto-mono-font/
+licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
+github-url: https://github.com/fastn-community/roboto-mono-font
+
+`fastn-community.github.io/roboto-mono-font` font is available and can be used
+inside `ftd` web packages.
+
+-- template: Lobster
+template-url: https://fastn-community.github.io/lobster-font/
+licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
+github-url: https://github.com/fastn-community/lobster-font
+
+`fastn-community.github.io/lobster-font` font is available and can be used
+inside `ftd` web packages.
 
 -- end: font
 
