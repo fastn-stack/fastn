@@ -48,7 +48,7 @@ pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
-pub use library::{Library, Library2};
+pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;

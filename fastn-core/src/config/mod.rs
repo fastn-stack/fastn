@@ -1187,7 +1187,7 @@ impl Config {
         };
 
         let doc = tokio::fs::read_to_string(fastn_manifest_path.join("fastn.manifest.ftd"));
-        let lib = fastn_package::old_fastn::FastnLibrary::default();
+        let lib = fastn_core::FastnLibrary::default();
         let fastn_manifest_processed =
             match fastn_core::doc::parse_ftd("fastn.manifest", doc.await?.as_str(), &lib) {
                 Ok(fastn_manifest_processed) => fastn_manifest_processed,
@@ -1393,7 +1393,7 @@ impl Config {
         let root = self.get_root_for_package(&package);
         let package_fastn_path = root.join("FASTN.ftd");
         let doc = std::fs::read_to_string(package_fastn_path)?;
-        let lib = fastn_package::old_fastn::FastnLibrary::default();
+        let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
 

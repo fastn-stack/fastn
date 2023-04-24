@@ -54,7 +54,7 @@ pub(crate) async fn resolve_cr_meta(
             message: "Content is empty in cr about".to_string(),
         });
     }
-    let lib = fastn_package::old_fastn::FastnLibrary::default();
+    let lib = fastn_core::FastnLibrary::default();
     let b = match fastn_core::doc::parse_ftd(".about.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
@@ -153,7 +153,7 @@ pub(crate) async fn resolve_cr_deleted(
     if content.trim().is_empty() {
         return Ok(vec![]);
     }
-    let lib = fastn_package::old_fastn::FastnLibrary::default();
+    let lib = fastn_core::FastnLibrary::default();
     let b = match fastn_core::doc::parse_ftd("deleted.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
