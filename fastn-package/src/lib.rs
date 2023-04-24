@@ -1,9 +1,9 @@
-#[derive(thiserror::Error, Debug)]
-pub enum InitialisePackageError {}
+extern crate self as fastn_package;
 
-#[async_trait::async_trait]
-pub trait PackageInitializer {}
+mod initialize;
+pub mod initializer;
+pub(crate) mod sqlite;
 
-pub async fn initialize_packages(_: impl PackageInitializer) -> Result<(), InitialisePackageError> {
-    Ok(())
-}
+pub use initialize::initialize;
+
+// a rwlock  containing a hashmap of string to string

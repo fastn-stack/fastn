@@ -5,11 +5,17 @@ pub enum InitialisePackageError {
         #[from]
         source: FastnFTDError,
     },
+    #[error("db initialisation error: {source}")]
+    InitializeDBError {
+        #[from]
+        source: fastn_package::sqlite::InitializeDBError,
+    },
 }
 
-pub async fn initialize_packages(
-    i: impl fastn_package::Initializer,
+pub async fn initialize(
+    i: impl fastn_package::initializer::Initializer,
 ) -> Result<(), InitialisePackageError> {
+    fastn_package::sqlite::initialize_db()?;
     process_fastn_ftd(i).await?;
     todo!()
 }
@@ -23,8 +29,10 @@ pub enum FastnFTDError {
     },
 }
 
-async fn process_fastn_ftd(_i: impl fastn_package::Initializer) -> Result<(), FastnFTDError> {
-    let content = i.read_file("FASTN.ftd").await?;
+async fn process_fastn_ftd(
+    i: impl fastn_package::initializer::Initializer,
+) -> Result<(), FastnFTDError> {
+    let _content = i.file_as_string("FASTN.ftd").await?;
 
     todo!()
 }
