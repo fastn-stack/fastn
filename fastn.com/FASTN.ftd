@@ -379,6 +379,7 @@ favicon: /-/fastn.io/images/favicon.svg
   skip: true
 
 - Overview: /planning/
+- Button Video: /planning/button/
 - Rive Video: /planning/rive/
 - Developer Course: /planning/developer-course/
 
