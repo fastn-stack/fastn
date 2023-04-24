@@ -1,8 +1,6 @@
--- import: fastn.io/planning/creators-series as c
-
 -- my-ds.page: Button using `fastn` 🚧
 
-Video Title: How to create a button
+Video Title: How to create a button using `fastn`
 
 Owner: Ajit
 
@@ -62,9 +60,6 @@ There you go, we have created a button. You have choice to go and create your
 own amazing UIs over this button or if you want to re-create the button I am
 creating, you can watch the next video. 
 
-We would love to see your pacakge. Checkout our "show-and-tell" channel on
-Discord where you can share with us your own UIs and I can also create a video
-to show who has created what.
 
 
 
@@ -82,7 +77,14 @@ to polish the UI.
 We will use the concepts of <so and so>
 
 
+-- ds.h2: Done
+
+So we have polished the UI. I hope you have learnt with me and found this video
+easy to follow. You can share your feedbacks if you wish to.
+
+We would love to see your package. Checkout our "show-and-tell"
+channel on Discord where you can share with us your own UIs and I can also
+create a video to show who has created what.
 
 
 -- end: my-ds.page
-
