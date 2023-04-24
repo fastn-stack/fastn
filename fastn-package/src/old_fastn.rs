@@ -51,3 +51,10 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
     }
     Ok(document)
 }
+
+#[derive(thiserror::Error, Debug)]
+pub enum GetNameError {}
+
+pub fn get_name(_doc: ftd::ftd2021::p2::Document) -> Result<String, GetNameError> {
+    todo!()
+}

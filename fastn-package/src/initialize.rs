@@ -25,15 +25,20 @@ pub async fn initialize(
 
 #[derive(thiserror::Error, Debug)]
 pub enum FastnFTDError {
-    #[error("FASTN.ftd read error: {source}")]
+    #[error("Can't read FASTN.ftd: {source}")]
     CantReadFTDFile {
         #[from]
         source: fastn_package::initializer::FileAsStringError,
     },
-    #[error("FASTN.ftd parse error: {source}")]
-    OldFastnParseError {
+    #[error("Cant parse FASTN.ftd: {source}")]
+    CantParseFASTNFile {
         #[from]
         source: fastn_package::old_fastn::OldFastnParseError,
+    },
+    #[error("Cant get package name from FASTN.ftd: {source}")]
+    CantGetPackageName {
+        #[from]
+        source: fastn_package::old_fastn::GetNameError,
     },
 }
 
@@ -42,8 +47,8 @@ async fn process_fastn_ftd(
     _conn: rusqlite::Connection,
 ) -> Result<(), FastnFTDError> {
     let content = i.file_as_string("FASTN.ftd").await?;
-    let _doc = fastn_package::old_fastn::parse_old_fastn(content.as_str())?;
+    let doc = fastn_package::old_fastn::parse_old_fastn(content.as_str())?;
     // TODO: insert package name to main_package table
-
+    let _name = fastn_package::old_fastn::get_name(doc)?;
     todo!()
 }
