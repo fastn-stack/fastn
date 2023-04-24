@@ -64,7 +64,7 @@ impl<'a> DependencyGenerator<'a> {
             if let Some(condition) = condition {
                 let pos_condition = if condition.contains("ftd#device") {
                     format!(
-                        "window.ftd.utils.remove_extra_from_id(\"{}\", data);",
+                        "window.ftd.utils.remove_extra_from_id(\"{}\");",
                         node_data_id
                     )
                 } else {
@@ -72,10 +72,7 @@ impl<'a> DependencyGenerator<'a> {
                 };
 
                 let neg_condition = if condition.contains("ftd#device") {
-                    format!(
-                        "window.ftd.utils.add_extra_in_id(\"{}\", data);",
-                        node_data_id
-                    )
+                    format!("window.ftd.utils.add_extra_in_id(\"{}\");", node_data_id)
                 } else {
                     "".to_string()
                 };
