@@ -40,6 +40,10 @@ macro_rules! warning {
     }};
 }
 
+pub fn redirect_page_html(url: &str) -> String {
+    include_str!("../redirect.html").replace("__REDIRECT_URL__", url)
+}
+
 pub fn print_end(msg: &str, start: std::time::Instant) {
     use colored::Colorize;
 
