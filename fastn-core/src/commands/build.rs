@@ -25,12 +25,10 @@ pub async fn build(
             );
 
             let content = fastn_core::utils::redirect_page_html(redirect_to.as_str());
-            let save_file = match redirect_from.as_str().ends_with(".ftd") {
-                true => redirect_from.replace(".ftd", "/index.html"),
-                false => format!(
-                    "{}/index.html",
-                    redirect_from.trim_start_matches('/').trim_end_matches('/')
-                ),
+            let save_file = if redirect_from.as_str().ends_with(".ftd") {
+                redirect_from.replace(".ftd", "/index.html")
+            } else {
+                format!("{}/index.html", redirect_from.trim_matches('/'))
             };
 
             let save_path = config.root.join(".build").join(save_file.as_str());
