@@ -61,113 +61,40 @@ env_logger.workspace = true
 fluent.workspace = true
 ftd = { path = "../ftd" }
 futures.workspace = true
+hyper.workspace = true
 ignore.workspace = true
 indoc.workspace = true
 intl-memoizer.workspace = true
 itertools.workspace = true
+magic-crypt.workspace = true
 mime_guess.workspace = true
+notify.workspace = true
 oauth2 = { workspace = true, optional = true }
 once_cell.workspace = true
 realm-lang.workspace = true
 regex.workspace = true
+reqwest.workspace = true
+rusqlite.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
 slug.workspace = true
 thiserror.workspace = true
-tracing.workspace = true
+tokio.workspace = true
+tracing-forest.workspace = true
 tracing-subscriber.workspace = true
+tracing.workspace = true
 url.workspace = true
 zip.workspace = true
-
 
 #wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
 #fastn-utils = { git = "https://github.com/ftd-lang/fastn-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
 # fastn-utils = { path = "../fastn-utils/crates/fastn-utils-host"}
 
-[dependencies.tracing-forest]
-version = "0.1"
-features = [
-    "ansi", # This is for printing the ColorLevel in the events
-    "smallvec",
-    "serde",
-    "tokio",
 
-    # "uuid",  # This is for printing uuid for every request
-    # "chrono", # This is for printing the time of the event
-    # "env-filter",
-]
-
-[dependencies.magic-crypt]
-version = "3"
-default-features = false
-
-[dependencies.hyper]
-version = "0.14"
-default-features = false
-features = ["http1", "server"]
-
-[dependencies.notify]
-# Read the following why we disable the default feature:
-# https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
-version = "5"
-default-features = false
-features=["macos_kqueue"]
-
-
-[dependencies.reqwest]
-# We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`
-# does too much (bundled) tls for example, that we can not.
-version = "0.11"
-features = [
-    # Check the note on bundling rusqlite later in this file. Without bundling
-    # we will have a dependency on libssl.
-    "native-tls-vendored",
-    "json",
-    "blocking",
-]
-
-[dependencies.tokio]
-workspace = true
-features = [
-    "sync",
-    "macros", # tokio::select! macro
-
-    # We are currently using the "heavier" schedule.
-    #
-    # > rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
-    # > rt-multi-thread: Enables the heavier, multi-threaded, work-stealing scheduler.
-    #
-    # Is it justified?
-    "rt-multi-thread",
-
-    # https://docs.rs/tokio/1.20.1/tokio/fs/#usage says:
-    #
-    # > Warning: These adapters may create a large number of temporary tasks, especially when reading
-    # > large files. When performing a lot of operations in one batch, it may be significantly faster
-    # > to use spawn_blocking directly.
-    #
-    # We may be suffering from this problem, we do a lot of reads, each read becomes a task.
-    "fs",
-]
-
-[dependencies.rusqlite]
-workspace = true
-features = [
-    # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
-    # dependency. By default, if we do not bundle, our binary will link against system
-    # provided sqlite, which would have been a good thing, if we used system sqlite, our
-    # binary size would be smaller, compile time lesser, but unfortunately we can not assume
-    # sqlite dynamic library is installed on everyone's machine. We can chose to give two
-    # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
-    "bundled",
-]
 
 [dev-dependencies]
-indoc = "2"
-pretty_assertions = "1"
-rusty-hook = "^0.11.2"
-
-[dev-dependencies.fbt-lib]
-git = "https://github.com/FifthTry/fbt"
-rev = "ea0ee98"
+indoc.workspace = true
+pretty_assertions.workspace = true
+rusty-hook.workspace = true
+fbt-lib.workspace = true
