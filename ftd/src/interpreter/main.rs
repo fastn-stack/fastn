@@ -688,7 +688,6 @@ pub struct ParsedDocument {
     pub doc_aliases: ftd::Map<String>,
     pub foreign_variable: Vec<String>,
     pub foreign_function: Vec<String>,
-    pub instructions: Vec<ftd::interpreter::Component>,
 }
 
 impl ParsedDocument {
@@ -722,7 +721,6 @@ impl ParsedDocument {
             doc_aliases,
             foreign_variable: vec![],
             foreign_function: vec![],
-            instructions: vec![],
         })
     }
 

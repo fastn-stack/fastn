@@ -1385,7 +1385,6 @@ impl Config {
             .insert(package.name.to_string(), package.to_owned());
     }
 
-    #[allow(dead_code)]
     pub(crate) fn get_fastn_document(
         &self,
         package_name: &str,
