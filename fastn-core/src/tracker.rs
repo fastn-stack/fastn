@@ -20,7 +20,7 @@ pub(crate) fn get_tracks(
         return Ok(tracks);
     }
 
-    let lib = fastn_core::FastnLibrary::default();
+    let lib = fastn_package::old_fastn::FastnLibrary::default();
     let doc = std::fs::read_to_string(path)?;
     let b = match fastn_core::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,

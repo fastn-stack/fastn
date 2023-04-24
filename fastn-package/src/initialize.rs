@@ -18,8 +18,8 @@ pub async fn initialize(
     fastn_package::FTD_CACHE
         .get_or_init(|| async { tokio::sync::RwLock::new(std::collections::HashMap::new()) })
         .await;
-    fastn_package::sqlite::initialize_db()?;
-    process_fastn_ftd(i).await?;
+    let conn = fastn_package::sqlite::initialize_db()?;
+    process_fastn_ftd(i, conn).await?;
     todo!()
 }
 
@@ -34,8 +34,11 @@ pub enum FastnFTDError {
 
 async fn process_fastn_ftd(
     i: impl fastn_package::initializer::Initializer,
+    _conn: rusqlite::Connection,
 ) -> Result<(), FastnFTDError> {
     let _content = i.file_as_string("FASTN.ftd").await?;
+    // TODO: parse _content into ftd Document
+    // TODO: insert package name to main_package table
 
     todo!()
 }

@@ -2,6 +2,7 @@ extern crate self as fastn_package;
 
 mod initialize;
 pub mod initializer;
+pub mod old_fastn;
 pub(crate) mod sqlite;
 
 pub use initialize::initialize;

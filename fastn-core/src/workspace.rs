@@ -94,7 +94,7 @@ impl fastn_core::Config {
     pub(crate) async fn read_workspace(&self) -> fastn_core::Result<Vec<WorkspaceEntry>> {
         let workspace = {
             let workspace = tokio::fs::read_to_string(self.workspace_file());
-            let lib = fastn_core::FastnLibrary::default();
+            let lib = fastn_package::old_fastn::FastnLibrary::default();
             fastn_core::doc::parse_ftd("fastn", workspace.await?.as_str(), &lib)?
         };
         Ok(workspace.get("fastn#client-workspace")?)
