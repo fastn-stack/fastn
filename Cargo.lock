@@ -1141,6 +1141,8 @@ name = "fastn-package"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "ftd 0.2.0",
+ "once_cell",
  "rusqlite",
  "thiserror",
 ]
