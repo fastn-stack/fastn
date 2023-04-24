@@ -220,14 +220,14 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
 };
 
 
-window.ftd.utils.add_extra_in_id = function (node_id: string, data: any) {
+window.ftd.utils.add_extra_in_id = function (node_id: string) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
     if (element) {
         changeElementId(element, "____device", true);
     }
 }
 
-window.ftd.utils.remove_extra_from_id = function (node_id: string, data: any) {
+window.ftd.utils.remove_extra_from_id = function (node_id: string) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
     if (element) {
         changeElementId(element, "____device", false);

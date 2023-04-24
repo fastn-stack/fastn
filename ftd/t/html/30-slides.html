@@ -1652,13 +1652,13 @@ new_string = new_string.replace('#', "__").replace('-', "_")
 .replace('/', "_").replace('.', "_");
 return new_string;
 };
-window.ftd.utils.add_extra_in_id = function (node_id, data) {
+window.ftd.utils.add_extra_in_id = function (node_id) {
 let element = document.querySelector(`[data-id=\"${node_id}\"]`);
 if (element) {
 changeElementId(element, "____device", true);
 }
 };
-window.ftd.utils.remove_extra_from_id = function (node_id, data) {
+window.ftd.utils.remove_extra_from_id = function (node_id) {
 let element = document.querySelector(`[data-id=\"${node_id}\"]`);
 if (element) {
 changeElementId(element, "____device", false);

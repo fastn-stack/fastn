@@ -1679,13 +1679,13 @@ new_string = new_string.replace('#', "__").replace('-', "_")
 .replace('/', "_").replace('.', "_");
 return new_string;
 };
-window.ftd.utils.add_extra_in_id = function (node_id, data) {
+window.ftd.utils.add_extra_in_id = function (node_id) {
 let element = document.querySelector(`[data-id=\"${node_id}\"]`);
 if (element) {
 changeElementId(element, "____device", true);
 }
 };
-window.ftd.utils.remove_extra_from_id = function (node_id, data) {
+window.ftd.utils.remove_extra_from_id = function (node_id) {
 let element = document.querySelector(`[data-id=\"${node_id}\"]`);
 if (element) {
 changeElementId(element, "____device", false);
@@ -1851,9 +1851,9 @@ window.node_change_main["1,0:main__display"] = function(data) {
 if(function(){
 return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("1,0:main", data);
+document.querySelector(`[data-id="1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("1,0:main");
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("1,0:main", data);}
+else {document.querySelector(`[data-id="1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("1,0:main");}
 }
 
 window.node_change_main["1,0,0:main__background-color"] = function(data) {
