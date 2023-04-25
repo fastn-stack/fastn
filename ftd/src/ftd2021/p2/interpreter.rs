@@ -1818,6 +1818,7 @@ pub enum Interpreter {
         state: InterpreterState,
     },
     StuckOnProcessor {
+        // TODO: this should contain the name of processor as well
         state: InterpreterState,
         section: ftd::ftd2021::p1::Section,
     },

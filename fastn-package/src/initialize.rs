@@ -12,12 +12,11 @@ pub enum InitialisePackageError {
     },
 }
 
+/// initialise() is called on application start and also when file watcher registers a change
 pub async fn initialize(
     i: impl fastn_package::initializer::Initializer,
 ) -> Result<(), InitialisePackageError> {
-    fastn_package::FTD_CACHE
-        .get_or_init(|| async { tokio::sync::RwLock::new(std::collections::HashMap::new()) })
-        .await;
+    fastn_package::FTD_CACHE.write().await.clear();
     let conn = fastn_package::sqlite::initialize_db()?;
     process_fastn_ftd(i, conn).await?;
     todo!()
