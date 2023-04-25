@@ -1443,7 +1443,7 @@ var parser = new DOMParser();
 var doc = parser.parseFromString(str, 'text/html');
 return doc.body;
 }
-
+;
 function get_name_and_remaining(name) {
 let part1 = "";
 let pattern_to_split_at = name;
@@ -1625,6 +1625,46 @@ new_string = new_string.replace('#', "__").replace('-', "_")
 .replace('/', "_").replace('.', "_");
 return new_string;
 };
+window.ftd.utils.add_extra_in_id = function (node_id) {
+let element = document.querySelector(`[data-id=\"${node_id}\"]`);
+if (element) {
+changeElementId(element, "____device", true);
+}
+};
+window.ftd.utils.remove_extra_from_id = function (node_id) {
+let element = document.querySelector(`[data-id=\"${node_id}\"]`);
+if (element) {
+changeElementId(element, "____device", false);
+}
+};
+function changeElementId(element, suffix, add) {
+// check if the current ID is not empty
+if (element.id) {
+// set the new ID for the element
+element.id = updatedID(element.id, add, suffix);
+}
+// get all the children nodes of the element
+// @ts-ignore
+const childrenNodes = element.children;
+// loop through all the children nodes
+for (let i = 0; i < childrenNodes.length; i++) {
+// get the current child node
+const currentNode = childrenNodes[i];
+// recursively call this function for the current child node
+changeElementId(currentNode, suffix, add);
+}
+}
+function updatedID(str, flag, suffix) {
+// check if the flag is set
+if (flag) {
+// append suffix to the string
+return str + suffix;
+}
+else {
+// remove suffix from the string (if it exists)
+return str.replace(suffix, "");
+}
+}
 
 
 
@@ -1762,9 +1802,9 @@ set_data_value(data, "foo#num", new_value);
 
 window.ftd.call_mutable_value_changes("foo#num", "main");
 window.ftd.call_immutable_value_changes("foo#num", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__padding"]){window.node_change_main["2,1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2,0:main__padding"]){window.node_change_main["2,0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2,1:main__padding"]){window.node_change_main["2,1:main__padding"](data);
 }
 };
 
