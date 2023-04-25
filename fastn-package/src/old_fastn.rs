@@ -64,7 +64,7 @@ pub enum GetNameError {
 }
 
 pub fn get_name(doc: ftd::ftd2021::p2::Document) -> Result<String, GetNameError> {
-    let op: Option<PackageTemp> = doc.get("fastn#package")?;
+    let op: Option<PackageTemp> = doc.get(fastn_package::FASTN_PACKAGE_VARIABLE)?;
     match op {
         Some(p) => Ok(p.name),
         None => Err(GetNameError::PackageIsNone),

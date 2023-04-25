@@ -7,6 +7,8 @@ pub(crate) mod sqlite;
 
 pub use initialize::initialize;
 
-static FTD_CACHE: tokio::sync::OnceCell<
+const FASTN_PACKAGE_VARIABLE: &str = "fastn#package";
+
+static FTD_CACHE: once_cell::sync::Lazy<
     tokio::sync::RwLock<std::collections::HashMap<String, ftd::ast::AST>>,
-> = tokio::sync::OnceCell::const_new();
+> = once_cell::sync::Lazy::new(|| tokio::sync::RwLock::new(std::collections::HashMap::new()));
