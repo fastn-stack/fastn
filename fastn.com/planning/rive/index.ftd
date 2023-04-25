@@ -1,4 +1,3 @@
--- import: fastn.io/assets
 -- import: fastn.io/planning/creators-series as c
 
 -- my-ds.page: Rive Video Planning
@@ -19,7 +18,7 @@ Assumption: Don't know about Rive
 
 -- ds.h1: Intro Clip
 
-Screen: Slide 2 on creen
+Screen: Slide 2 on screen
 
 Today we are going to talk about how we can use animations to make your website
 more interesting.

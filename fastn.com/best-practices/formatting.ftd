@@ -15,7 +15,7 @@ codebases.
 
 -- utils.code-display: `80-char`: 80 char in text editor
 id: 80-char
-show-horizontal: false 
+show-vertical: true 
 
 80-character word wrapping is a useful practice that can not only improve the
 readability, consistency, compatibility, accessibility, formatting of written
@@ -60,7 +60,7 @@ width: fill-container
 -- utils.code-display:
 title: `list-indentation`: Consistent markdown list indentation while wrapping
 id: list-indentation
-show-horizontal: false 
+show-vertical: true
 
 Indent wrapped lines in markdown lists by the same number of spaces as the 
 first character of the previous line, excluding any special characters.

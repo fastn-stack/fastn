@@ -40,6 +40,8 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
+    - R: button 🚧
+    - R: post card 🚧
 - R: creating various page layouts
 - R: event handling
 - R: creating docs pages
@@ -50,8 +52,9 @@ the scripts etc here.
 - R: mobile responsive site
 - R: using css for things fastn is lacking
 - R: integration with JS
+- R: How to use icon libraries like `react-icons` or `font-awesome` or any 
+  external icon library in fastn
 
-- R: How to use icon libraries like `react-icons` or `font-awesome` or any external icon library in fastn
 
 
 -- ds.code:

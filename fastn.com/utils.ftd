@@ -231,14 +231,14 @@ optional caption title:
 optional body body:
 children compare-wrap:
 optional string id: 
-boolean show-horizontal: true
+boolean show-vertical: false
 
 -- ftd.column:
 width: fill-container
 id: $code-display.id
 background.solid: $cd-bg-color
 border-radius.px:10
-margin-top.px: 40
+margin-bottom.px: 40
 
 
 -- ftd.column:
@@ -284,7 +284,7 @@ color: $inherited.colors.text
 $code-display.body
 
 -- ftd.row:
-if: { code-display.show-horizontal }
+if: { !code-display.show-vertical }
 width: fill-container
 spacing.fixed.px: 50
 children: $code-display.compare-wrap
@@ -292,7 +292,7 @@ children: $code-display.compare-wrap
 -- end: ftd.row
 
 -- ftd.column:
-if: { !code-display.show-horizontal }
+if: { code-display.show-vertical }
 width: fill-container
 spacing.fixed.px: 10
 children: $code-display.compare-wrap
