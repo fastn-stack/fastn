@@ -20,6 +20,9 @@ In this part we will create simple UI for button.
 
 **Screen**: Introduction slide
 
+-- ds.image:
+src: $fastn-assets.files.planning.button.button-using-fastn.jpg
+
 **Script**
 
 Hey Guys, Welcome to the video where we are going to create a button using
