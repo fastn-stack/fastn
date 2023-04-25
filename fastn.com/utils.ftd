@@ -238,7 +238,7 @@ width: fill-container
 id: $code-display.id
 background.solid: $cd-bg-color
 border-radius.px:10
-margin-top.px: 40
+margin-bottom.px: 40
 
 
 -- ftd.column:
