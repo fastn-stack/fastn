@@ -54,12 +54,12 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
 
 #[derive(thiserror::Error, Debug)]
 pub enum GetNameError {
-    #[error("Can't find fastn.package in FASTN.ftd, must be impossible: {source}")]
+    #[error("Can't find fastn.package in FASTN.ftd, this is impossible: {source}")]
     CantFindPackage {
         #[from]
         source: ftd::ftd2021::p1::Error,
     },
-    #[error("fastn.package was not initialised")]
+    #[error("fastn.package was not initialised in FASTN.ftd")]
     PackageIsNone,
 }
 
