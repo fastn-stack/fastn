@@ -1385,6 +1385,7 @@ pub fn rive_from_properties(
         state_machine: rive.state_machine.value.clone(),
         artboard: rive.artboard.value.clone(),
         autoplay: rive.autoplay.value,
+        events: events.to_vec(),
     });
 
     Ok(rive)
