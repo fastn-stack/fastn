@@ -9,6 +9,6 @@ pub use initialize::initialize;
 
 const FASTN_PACKAGE_VARIABLE: &str = "fastn#package";
 
-static FTD_CACHE: once_cell::sync::Lazy<
+static FTD_CACHE: tokio::sync::OnceCell<
     tokio::sync::RwLock<std::collections::HashMap<String, ftd::ast::AST>>,
-> = once_cell::sync::Lazy::new(|| tokio::sync::RwLock::new(std::collections::HashMap::new()));
+> = tokio::sync::OnceCell::const_new();

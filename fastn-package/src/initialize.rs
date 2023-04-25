@@ -12,14 +12,27 @@ pub enum InitialisePackageError {
     },
 }
 
-/// initialise() is called on application start and also when file watcher registers a change
-pub async fn initialize(
+/// re_initialise() is called when any file is changed in the package
+pub async fn re_initialise(
     i: impl fastn_package::initializer::Initializer,
 ) -> Result<(), InitialisePackageError> {
-    fastn_package::FTD_CACHE.write().await.clear();
+    if let Some(v) = fastn_package::FTD_CACHE.get() {
+        let mut v = v.write().await;
+        v.clear();
+    }
     let conn = fastn_package::sqlite::initialize_db()?;
     process_fastn_ftd(i, conn).await?;
     todo!()
+}
+
+/// initialise() is called on application start
+pub async fn initialize(
+    i: impl fastn_package::initializer::Initializer,
+) -> Result<(), InitialisePackageError> {
+    fastn_package::FTD_CACHE
+        .get_or_init(|| async { tokio::sync::RwLock::new(std::collections::HashMap::new()) })
+        .await;
+    re_initialise(i).await
 }
 
 #[derive(thiserror::Error, Debug)]
