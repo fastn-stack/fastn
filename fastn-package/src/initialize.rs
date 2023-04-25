@@ -26,17 +26,17 @@ pub async fn initialize(
 #[derive(thiserror::Error, Debug)]
 pub enum FastnFTDError {
     #[error("Can't read FASTN.ftd: {source}")]
-    CantReadFTDFile {
+    ReadFTDFile {
         #[from]
         source: fastn_package::initializer::FileAsStringError,
     },
     #[error("Cant parse FASTN.ftd: {source}")]
-    CantParseFASTNFile {
+    ParseFASTNFile {
         #[from]
         source: fastn_package::old_fastn::OldFastnParseError,
     },
     #[error("Cant store package name: {source}")]
-    CantStorePackageName {
+    StorePackageName {
         #[from]
         source: StoreNameError,
     },
