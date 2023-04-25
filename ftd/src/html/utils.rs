@@ -720,7 +720,11 @@ pub fn get_rive_data_html(
     }
 
     let mut result = vec![];
+    let mut already_found_rives = std::collections::HashSet::new();
     for rive in rive_data {
+        if !already_found_rives.insert(rive.id.to_string()) {
+            continue;
+        }
         result.push(get_rive_html(rive, id, doc)?);
     }
     Ok(format!(
