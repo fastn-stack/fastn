@@ -9,7 +9,6 @@ edition = "2021"
 rusqlite.workspace = true
 async-trait.workspace = true
 thiserror.workspace = true
-once_cell.workspace = true
 tokio.workspace = true
 camino.workspace = true
 serde.workspace = true
