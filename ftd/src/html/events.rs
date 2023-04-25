@@ -84,7 +84,7 @@ impl ftd::html::Action {
         }
     }
 
-    fn into_list(self) -> Vec<ftd::html::Action> {
+    pub(crate) fn into_list(self) -> Vec<ftd::html::Action> {
         vec![self]
     }
 }
@@ -138,5 +138,12 @@ fn to_event_name(event_name: &ftd::interpreter::EventName) -> String {
         ftd::interpreter::EventName::Change => "onchange".to_string(),
         ftd::interpreter::EventName::Blur => "onblur".to_string(),
         ftd::interpreter::EventName::Focus => "onfocus".to_string(),
+        ftd::interpreter::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
+        ftd::interpreter::EventName::RiveStateChange(state_change) => {
+            format!("onrivestatechange[{}]", state_change)
+        }
+        ftd::interpreter::EventName::RivePause(timeline) => {
+            format!("onrivepause[{}]", timeline)
+        }
     }
 }
