@@ -1,0 +1,92 @@
+-- my-ds.page: Button using `fastn` 🚧
+
+Video Title: How to create a button using `fastn`
+
+Owner: Ajit
+
+Audience: Frontend developer, designer
+
+Goal: To help users to create button using `fastn`
+
+Assumption: Have already installed `fastn` and create a fastn package.
+Understanding of datatypes, components.
+
+
+-- ds.h1: Part 1 - Create Button
+
+In this part we will create simple UI for button.
+
+-- ds.h2: Intro Clip
+
+Screen: Introduction slide
+
+Hey Guys, Welcome to the video where we are going to create a button using
+`fastn`. 
+
+We will do it by creating a component and at first we are going to use
+only the required properties to it. 
+
+
+-- ds.h2: button.ftd file
+
+Screen
+
+Button UI
+
+-- ds.image:
+src: $fastn-assets.files.planning.button.button-shadow.png
+
+Script
+
+We have taken inspiration to create a UI similar to what you can see. I found
+this UI of button in Vercel. In this video we will create a basic button that
+displays just the text and give a url to these buttons.
+
+In the next video, we will polish the UI and try to re-create similar UI.
+
+
+-- ds.h2: Basic UI
+
+Script
+
+Let's start creating the button using the component.
+
+
+;; create the component
+
+
+
+-- ds.h2: Done
+
+There you go, we have created a button. You have choice to go and create your
+own amazing UIs over this button or if you want to re-create the button I am
+creating, you can watch the next video. 
+
+
+
+
+-- ds.h1: Part 2 - Polishing UI
+
+In this part we will polish the UI to re-create the button.
+
+-- ds.h2: Intro Clip
+
+Screen: Introduction slide
+
+Welcome back, let's jump straight into adding properties and create variables
+to polish the UI.
+
+We will use the concepts of <so and so>
+
+
+-- ds.h2: Done
+
+So we have polished the UI. I hope you have learnt with me and found this video
+easy to follow. You can share your feedbacks if you wish to.
+
+We would love to see your package. Checkout our "show-and-tell"
+channel on Discord where you can share with us your own UIs and I can also
+create a video to show who has created what.
+
+
+-- end: my-ds.page

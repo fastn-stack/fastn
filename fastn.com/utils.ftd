@@ -205,21 +205,48 @@ width: fill-container
 
 
 
+
+;; code-display color-scheme
+
+-- ftd.color cd-bg-color:
+dark: #2b2b2b
+light: #f7f3f1
+
+
+-- ftd.color tippy-bg-color:
+dark: #1f3c4e
+light: #e0e0e0	
+
+
+
+
+
+
+
+
+
+
 -- component code-display:
 optional caption title:
 optional body body:
 children compare-wrap:
 optional string id: 
+boolean show-horizontal: true
 
 -- ftd.column:
 width: fill-container
 id: $code-display.id
+background.solid: $cd-bg-color
+border-radius.px:10
+margin-top.px: 40
+
 
 -- ftd.column:
 width: fill-container
 padding-horizontal.px: 14
 padding-vertical.px: 12
-background.solid: $inherited.colors.background.code
+
+
 
 -- ftd.row:
 spacing.fixed.px: 16
@@ -257,7 +284,7 @@ color: $inherited.colors.text
 $code-display.body
 
 -- ftd.row:
-if: { ftd.device != "mobile" }
+if: { code-display.show-horizontal }
 width: fill-container
 spacing.fixed.px: 50
 children: $code-display.compare-wrap
@@ -265,9 +292,9 @@ children: $code-display.compare-wrap
 -- end: ftd.row
 
 -- ftd.column:
-if: { ftd.device == "mobile" }
+if: { !code-display.show-horizontal }
 width: fill-container
-spacing.fixed.px: 50
+spacing.fixed.px: 10
 children: $code-display.compare-wrap
 
 -- end: ftd.column
@@ -294,7 +321,7 @@ children tippy-wrap:
 
 -- ftd.column:
 border-color: $inherited.colors.border
-background.solid: $inherited.colors.background.step-1
+background.solid: $tippy-bg-color
 padding.px: 16
 border-radius.px: 4
 border-width.px: 1

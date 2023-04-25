@@ -8,23 +8,20 @@ Formatting guidelines help us to ensure that code is consistent, more readable,
 well-formatted which can enhance the quality and effectiveness of
 communication.
 
--- ds.h1: Why we should format code document
+It is important for creating maintainable, efficient, and collaborative
+codebases.
 
-Formatting code documents is important for creating maintainable, efficient,
-and collaborative codebases.
-
-
-Following are the formatting guidelines we follow:
+-- ds.h1: Best Practices
 
 -- utils.code-display: `80-char`: 80 char in text editor
 id: 80-char
+show-horizontal: false 
 
 80-character word wrapping is a useful practice that can not only improve the
 readability, consistency, compatibility, accessibility, formatting of written
 documents, but also the portability as it is more likely to work across
 editors.
 
--- end: utils.code-display
 
 -- ds.markdown:
 
@@ -56,6 +53,39 @@ width: fill-container
 -- ds.image: 
 src: $assets.files.images.best-practices.good-word-wrapping.png
 width: fill-container
+
+-- end: utils.code-display
+
+
+-- utils.code-display:
+title: `list-indentation`: Consistent markdown list indentation while wrapping
+id: list-indentation
+show-horizontal: false 
+
+Indent wrapped lines in markdown lists by the same number of spaces as the 
+first character of the previous line, excluding any special characters.
+
+-- ds.markdown:
+
+**Not Recommended** 
+
+-- ds.image: 
+src: $assets.files.images.best-practices.list-indentation-bad.png
+width: fill-container
+
+
+**Recommended**
+
+-- ds.image: 
+src: $assets.files.images.best-practices.list-indentation-good.png
+width: fill-container
+
+
+-- end: utils.code-display
+
+
+
+
 
 
 
