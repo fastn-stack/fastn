@@ -1144,6 +1144,7 @@ dependencies = [
  "async-trait",
  "camino",
  "ftd 0.2.0",
+ "futures",
  "rusqlite",
  "serde",
  "thiserror",
