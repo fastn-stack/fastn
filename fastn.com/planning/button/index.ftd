@@ -18,39 +18,36 @@ In this part we will create simple UI for button.
 
 -- ds.h2: Intro Clip
 
-Screen: Introduction slide
+**Screen**: Introduction slide
+
+**Script**
 
 Hey Guys, Welcome to the video where we are going to create a button using
 `fastn`. 
-We will do it by creating a component and at first we are going to use only 
-the required properties to it. 
+
+First, will learn how to create a button with basic UI then we will try to
+recreate this button UI in later stages of this video.
 
 
--- ds.h2: button.ftd file
 
-Screen
+To make the button we will use the concept of [components](https://fastn.com/components). 
+The link is in the description box.
 
-Button UI
+We will define various properties to the component. 
+
+Also, we will do some event handling that gives the shadow to the button
+on-hover.
+
 
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-shadow.png
 
-Script
+-- ds.h2: button.ftd file
 
-We have taken inspiration to create a UI similar to what you can see. I found
-this UI of button in Vercel. In this video we will create a basic button that
-displays just the text and give a url to these buttons.
-
-In the next video, we will polish the UI and try to re-create similar UI.
-
-
--- ds.h2: Basic UI
+**Basic UI**
 
 Script
 
-<<<<<<< Updated upstream
-Let's start creating the button using the component.
-=======
 Let's start by creating a `component` called `button`.
 The syntax is:
 
@@ -63,6 +60,7 @@ lang: ftd
 
 -- ds.markdown:
 
+
 We will give the basic properties to this component like, `title` and `link`.
 `title` will be of `caption` type. 
 `link` is of `string` type.
@@ -73,11 +71,13 @@ it.
 -- ds.code:
 lang: ftd
 
+
 \-- component button:
 caption title:
 optional string link: 
 
 \-- end: button
+
 
 First, let's create a button.
 
@@ -124,10 +124,8 @@ border-width.px: 2
 role: $button.role 			;; <hl>
 color: $button.text-color 	;; <hl>
 style: bold 				;; <hl>
->>>>>>> Stashed changes
 
 
-;; create the component
 
 
 
