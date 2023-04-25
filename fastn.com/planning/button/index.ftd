@@ -190,11 +190,11 @@ lang: ftd
 
 \-- component button:
 caption title:
-ftd.responsive-type role: $inherited.types.copy-regular
 optional string link:
+ftd.responsive-type role: $inherited.types.copy-regular
 ftd.color text-color: $inherited.colors.text-strong
-optional ftd.color bg-color:
-optional ftd.color border-color:
+optional ftd.color bg-color:				;; <hl>
+optional ftd.color border-color:			;; <hl>
 
 -- ds.markdown:
 
@@ -208,8 +208,8 @@ link: $button.link
 border-width.px: 2
 border-radius.px: 6
 padding.px: 10
-background.solid: $button.bg-color
-border-color: $button.border-color 
+background.solid: $button.bg-color				;; <hl>
+border-color: $button.border-color 				;; <hl>
 
 
 \-- ftd.text: $button.title
@@ -237,8 +237,8 @@ dark: white
 
 
 \-- ftd.color monochrome-light:
-dark: white
-light: black
+light: white
+dark: black
 
 \-- ftd.color shadow-color:
 light: #cae9ee
@@ -328,8 +328,8 @@ boolean variable to component definition and create two events of
 -- ds.code:
 lang: ftd
 
-$on-mouse-enter$: $ftd.set-bool($a = $button.is-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $button.is-hover, v = false)
+\$on-mouse-enter$: $ftd.set-bool($a = $button.is-hover, v = true)
+\$on-mouse-leave$: $ftd.set-bool($a = $button.is-hover, v = false)
 
 -- ds.markdown:
 
@@ -359,17 +359,18 @@ spacing.fixed.px: 20
 
 \-- button: Start Deploying
 left-icon: $assets.files.images.uparrow.svg
-bg-color: $b1-bg-color
-text-color: $b1-text-color
-link: https://fastn.io/
 border-color: black
+bg-color: $monochrome-dark
+text-color: $monochrome-light
+link: https://fastn.io/
+
 
 
 \-- button: Get a Demo
 hover-shadow: $s
 border-color: $shadow-color
-text-color: $b2-text-color
-bg-color: $b2-bg-color
+text-color: $monochrome-dark
+bg-color: $monochrome-light
 link: https://fastn.io/expander
 
 \-- end: ftd.row
