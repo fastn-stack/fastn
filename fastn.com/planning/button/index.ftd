@@ -48,7 +48,83 @@ In the next video, we will polish the UI and try to re-create similar UI.
 
 Script
 
+<<<<<<< Updated upstream
 Let's start creating the button using the component.
+=======
+Let's start by creating a `component` called `button`.
+The syntax is:
+
+-- ds.code:
+lang: ftd
+
+\-- component button:
+
+\-- end: button
+
+-- ds.markdown:
+
+We will give the basic properties to this component like, `title` and `link`.
+`title` will be of `caption` type. 
+`link` is of `string` type.
+
+You can also make the link as `optional`, if you do not want to add any link to
+it.
+
+-- ds.code:
+lang: ftd
+
+\-- component button:
+caption title:
+optional string link: 
+
+\-- end: button
+
+First, let's create a button.
+
+Inside this component we will add `ftd.text` that will take the title and other
+properties.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $button.title
+link: $button.link
+border-width.px: 2
+
+
+-- ds.markdown:
+
+We have a basic button ready.
+
+Now let's give some styling properties 
+
+So, in the component definition we will add:
+
+-- ds.code:
+lang: ftd
+
+\-- component button:
+caption title:
+optional string link: 
+ftd.responsive-type role: $inherited.types.copy-regular ;; <hl>
+ftd.color text-color: $inherited.colors.text-strong 	;; <hl>
+
+
+\-- end: button
+
+
+In the `ftd.text`, we will use these component properties.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $button.title
+link: $button.link
+border-width.px: 2
+role: $button.role 			;; <hl>
+color: $button.text-color 	;; <hl>
+style: bold 				;; <hl>
+>>>>>>> Stashed changes
 
 
 ;; create the component
