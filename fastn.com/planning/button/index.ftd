@@ -345,6 +345,10 @@ shadow if { button.hover-shadow != NULL && button.is-hover }: $button.hover-shad
 
 The button component where it is called.
 
+
+-- ds.code:
+lang: ftd
+
 \-- ftd.column:
 background.solid: white
 width: fill-container
@@ -379,7 +383,7 @@ link: https://fastn.io/expander
 
 
 
--- ds.h2: Done
+-- ds.h2: Closing remarks
 
 There you go, we have polished the UI and it looks similar to our original UI. 
 I hope you have learnt with me and found this video easy to follow. You 
