@@ -38,7 +38,7 @@ more-link: /featured/cs/
 -- grid-view: Fonts:
 if: { show-grid }
 templates: $font
-more-link-text: How to use fonts
+more-link-text: View all
 more-link: /featured/fonts/
 
 -- end: my-ds.page

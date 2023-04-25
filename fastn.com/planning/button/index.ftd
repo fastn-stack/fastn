@@ -21,8 +21,9 @@ In this part we will create simple UI for button.
 Screen: Introduction slide
 
 Hey Guys, Welcome to the video where we are going to create a button using
-`fastn`. We will do it by creating a component and at first we are going to use
-only the required properties to it. 
+`fastn`. 
+We will do it by creating a component and at first we are going to use only 
+the required properties to it. 
 
 
 -- ds.h2: button.ftd file

@@ -247,7 +247,96 @@ $on-blur$: $ftd.set-bool($a = $flag, v = false) ;; <hl>
 
 
 
+
+
+
+
+
+-- ds.h1: `on-global-key[<hyphen-seperated-keys>]`
+
+The `on-global-key` event can be used to call a function when gives keys are
+pressed simultaneously. For instance, `on-global-key[ctrl-a-s]` triggers the
+event when keys `ctrl`, `a` and `s` are pressed simultaneously.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: true
+
+\-- ftd.text: Press ctrl, a and s simultaneously
+color: purple
+color if { flag }: green
+$on-global-key[ctrl-a-s]$: $ftd.toggle($a = $flag)
+
+-- ds.rendered.output:
+
+-- on-global-key-event:
+
+-- end: ds.rendered.output
+
+
+
+
+-- ds.h1: `on-global-key-seq[<hyphen-seperated-keys>]`
+
+The `on-global-key` event can be used to call a function when gives keys are
+pressed sequentially i.e. one after another. For instance,
+`on-global-key-seq[ctrl-ctrl-ctrl]` triggers the event when keys `ctrl`, `ctrl`
+and `ctrl` are pressed sequentially.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: true
+
+\-- ftd.text: Press ctrl, ctrl and ctrl sequentially
+color: purple
+color if { flag }: green
+$on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $flag)
+
+-- ds.rendered.output:
+
+-- on-global-key-seq-event:
+
+-- end: ds.rendered.output
+
+
+
+
+
 -- end: my-ds.page
+
+
+
+
+
+
+
+-- component on-global-key-event:
+boolean $show: true
+
+-- ftd.text: Press ctrl, a and s simultaneously
+color: purple
+color if { on-global-key-event.show }: green
+$on-global-key[ctrl-a-s]$: $ftd.toggle($a = $on-global-key-event.show)
+
+-- end: on-global-key-event
+
+
+
+-- component on-global-key-seq-event:
+boolean $show: true
+
+-- ftd.text: Press ctrl, ctrl and ctrl simultaneously
+color: purple
+color if { on-global-key-seq-event.show }: green
+$on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $on-global-key-seq-event.show)
+
+-- end: on-global-key-seq-event
 
 
 
