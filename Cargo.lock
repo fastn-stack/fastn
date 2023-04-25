@@ -1138,16 +1138,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-issues"
+version = "0.1.0"
+dependencies = [
+ "ftd 0.2.0",
+ "rusqlite",
+ "thiserror",
+]
+
+[[package]]
 name = "fastn-package"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "camino",
+ "fastn-issues",
  "ftd 0.2.0",
  "futures",
  "rusqlite",
  "serde",
- "thiserror",
  "tokio",
 ]
 

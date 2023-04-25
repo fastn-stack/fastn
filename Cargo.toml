@@ -5,6 +5,7 @@ members = [
     "fastn-core",
     "fastn-cloud",
     "fastn-package",
+    "fastn-issues"
 ]
 
 [workspace.dependencies]

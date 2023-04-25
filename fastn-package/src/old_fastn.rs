@@ -2,20 +2,9 @@ pub fn fastn_ftd() -> &'static str {
     include_str!("../fastn_2021.ftd")
 }
 
-#[derive(thiserror::Error, Debug)]
-pub enum OldFastnParseError {
-    #[error("FASTN.ftd is invalid ftd: {source}")]
-    FTDError {
-        #[from]
-        source: ftd::ftd2021::p1::Error,
-    },
-    #[error("FASTN.ftd imported something other then fastn: {module}")]
-    InvalidImport { module: String },
-    #[error("FASTN.ftd tried to use a processor: {processor}")]
-    ProcessorUsed { processor: String },
-}
-
-pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFastnParseError> {
+pub fn parse_old_fastn(
+    source: &str,
+) -> Result<ftd::ftd2021::p2::Document, fastn_issues::initialization::OldFastnParseError> {
     let mut s = ftd::ftd2021::interpret("FASTN", source, &None)?;
     let document;
     loop {
@@ -25,19 +14,23 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
                 break;
             }
             ftd::ftd2021::Interpreter::StuckOnProcessor { section, .. } => {
-                return Err(OldFastnParseError::ProcessorUsed {
-                    processor: section
-                        .header
-                        .str("FASTN.ftd", section.line_number, ftd::PROCESSOR_MARKER)
-                        .expect("we cant get stuck on processor without processor marker")
-                        .to_string(),
-                })
+                return Err(
+                    fastn_issues::initialization::OldFastnParseError::ProcessorUsed {
+                        processor: section
+                            .header
+                            .str("FASTN.ftd", section.line_number, ftd::PROCESSOR_MARKER)
+                            .expect("we cant get stuck on processor without processor marker")
+                            .to_string(),
+                    },
+                )
             }
             ftd::ftd2021::Interpreter::StuckOnImport { module, state: st } => {
                 let source = if module == "fastn" {
                     fastn_ftd()
                 } else {
-                    return Err(OldFastnParseError::InvalidImport { module });
+                    return Err(
+                        fastn_issues::initialization::OldFastnParseError::InvalidImport { module },
+                    );
                 };
                 s = st.continue_after_import(module.as_str(), source)?;
             }
@@ -52,22 +45,13 @@ pub fn parse_old_fastn(source: &str) -> Result<ftd::ftd2021::p2::Document, OldFa
     Ok(document)
 }
 
-#[derive(thiserror::Error, Debug)]
-pub enum GetNameError {
-    #[error("Can't find fastn.package in FASTN.ftd, this is impossible: {source}")]
-    CantFindPackage {
-        #[from]
-        source: ftd::ftd2021::p1::Error,
-    },
-    #[error("fastn.package was not initialised in FASTN.ftd")]
-    PackageIsNone,
-}
-
-pub fn get_name(doc: ftd::ftd2021::p2::Document) -> Result<String, GetNameError> {
+pub fn get_name(
+    doc: ftd::ftd2021::p2::Document,
+) -> Result<String, fastn_issues::initialization::GetNameError> {
     let op: Option<PackageTemp> = doc.get(fastn_package::FASTN_PACKAGE_VARIABLE)?;
     match op {
         Some(p) => Ok(p.name),
-        None => Err(GetNameError::PackageIsNone),
+        None => Err(fastn_issues::initialization::GetNameError::PackageIsNone),
     }
 }
 
