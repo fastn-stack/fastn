@@ -11,6 +11,9 @@ members = [
 [workspace.dependencies]
 actix-web = "4"
 antidote = "1"
+# ariadne = "0.14"
+dioxus = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
+dioxus-tui = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
 async-lock = "2"
 async-recursion = "1"
 async-trait = "0.1"
