@@ -985,28 +985,28 @@ impl Background {
 
     pub fn background_image_pattern() -> (String, bool) {
         (
-            "window.dependencies.eval_background_image({0}, data)".to_string(),
+            "window.ftd.dependencies.eval_background_image({0}, data)".to_string(),
             true,
         )
     }
 
     pub fn background_repeat_pattern() -> (String, bool) {
         (
-            "window.dependencies.eval_background_repeat({0})".to_string(),
+            "window.ftd.dependencies.eval_background_repeat({0})".to_string(),
             true,
         )
     }
 
     pub fn background_size_pattern() -> (String, bool) {
         (
-            "window.dependencies.eval_background_size({0})".to_string(),
+            "window.ftd.dependencies.eval_background_size({0})".to_string(),
             true,
         )
     }
 
     pub fn background_position_pattern() -> (String, bool) {
         (
-            "window.dependencies.eval_background_position({0})".to_string(),
+            "window.ftd.dependencies.eval_background_position({0})".to_string(),
             true,
         )
     }
@@ -1414,7 +1414,7 @@ impl Shadow {
 
     pub fn box_shadow_pattern() -> (String, bool) {
         (
-            "window.dependencies.eval_box_shadow({0}, data)".to_string(),
+            "window.ftd.dependencies.eval_box_shadow({0}, data)".to_string(),
             true,
         )
     }

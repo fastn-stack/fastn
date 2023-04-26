@@ -219,14 +219,13 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
     return new_string;
 };
 
-window.helpers = {};
-window.helpers.node_change_call = function(id: string, key: string, data: any){
+window.ftd.utils.node_change_call = function(id: string, key: string, data: any){
     let node_function = `node_change_${id}`;
     if(!!window[node_function] && !!window[node_function][key]) {
         window[node_function][key](data);
     }
 }
-window.helpers.set_value_helper = function(data: any, key: string, remaining: string, new_value: any) {
+window.ftd.utils.set_value_helper = function(data: any, key: string, remaining: string, new_value: any) {
     if (!!remaining) {
         set_data_value(data, key + "." + remaining, new_value);
     } else {
@@ -234,8 +233,8 @@ window.helpers.set_value_helper = function(data: any, key: string, remaining: st
     }
 }
 
-window.dependencies = {}
-window.dependencies.eval_background_size = function(bg: any) {
+window.ftd.dependencies = {}
+window.ftd.dependencies.eval_background_size = function(bg: any) {
     if (typeof bg === 'object' && !!bg && "size" in bg) {
         let sz = bg.size;
         if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
@@ -249,7 +248,7 @@ window.dependencies.eval_background_size = function(bg: any) {
     }
 }
 
-window.dependencies.eval_background_position = function(bg: any) {
+window.ftd.dependencies.eval_background_position = function(bg: any) {
     if (typeof bg === 'object' && !!bg  && "position" in bg) {
         let pos = bg.position;
         if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
@@ -263,7 +262,7 @@ window.dependencies.eval_background_position = function(bg: any) {
     }
 }
 
-window.dependencies.eval_background_repeat = function(bg: any) {
+window.ftd.dependencies.eval_background_repeat = function(bg: any) {
     if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
         return bg.repeat;
     } else {
@@ -271,7 +270,7 @@ window.dependencies.eval_background_repeat = function(bg: any) {
     }
 }
 
-window.dependencies.eval_background_image = function(bg: any, data: any) {
+window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
     if (typeof bg === 'object' && !!bg && "src" in bg) {
         let img_src = bg.src;
         if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
@@ -288,7 +287,7 @@ window.dependencies.eval_background_image = function(bg: any, data: any) {
     }
 }
 
-window.dependencies.eval_box_shadow = function(shadow: any, data: any) {
+window.ftd.dependencies.eval_box_shadow = function(shadow: any, data: any) {
     if (typeof shadow === 'object' && !!shadow) {
         var inset, blur, spread, x_off, y_off, color;
         inset = "";
