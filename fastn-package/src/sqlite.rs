@@ -11,11 +11,9 @@ fn rw_flags() -> rusqlite::OpenFlags {
 pub(crate) fn initialize_db(
 ) -> Result<rusqlite::Connection, fastn_issues::initialization::InitializeDBError> {
     let conn = rusqlite::Connection::open_with_flags(DB_URL, rw_flags()).map_err(|e| {
-        fastn_issues::initialization::InitializeDBError::CantOpenDBConnection { source: e }
+        fastn_issues::initialization::InitializeDBError::OpenDBConnection { source: e }
     })?;
     conn.execute_batch(include_str!("../create-db.sql"))
-        .map_err(
-            |e| fastn_issues::initialization::InitializeDBError::CantCreateTables { source: e },
-        )?;
+        .map_err(|e| fastn_issues::initialization::InitializeDBError::CreateTables { source: e })?;
     Ok(conn)
 }

@@ -14,12 +14,12 @@ repository = "https://github.com/ftd-lang/fastn"
 homepage = "https://fastn.io"
 
 [dependencies]
-fastn-core = { path = "../fastn-core" }
-fastn-cloud = { path = "../fastn-cloud" }
-clap = { workspace = true }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
-colored = { workspace = true }
-thiserror = { workspace = true }
-tokio = { workspace = true }
 tracing-forest = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+colored = { workspace = true }
+tracing-subscriber = { workspace = true }
+tracing = { workspace = true }
+clap = { workspace = true }
+fastn-cloud = { path = "../fastn-cloud" }
+fastn-core = { path = "../fastn-core" }

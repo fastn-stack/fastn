@@ -58,9 +58,9 @@ colored.workspace = true
 diffy.workspace = true
 edit.workspace = true
 env_logger.workspace = true
+fastn-package = { path = "../fastn-package" }
 fluent.workspace = true
 ftd = { path = "../ftd" }
-fastn-package = { path = "../fastn-package" }
 futures.workspace = true
 hyper.workspace = true
 ignore.workspace = true

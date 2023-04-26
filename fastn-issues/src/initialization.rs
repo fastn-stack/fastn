@@ -91,7 +91,7 @@ pub enum GetNameError {
 #[derive(thiserror::Error, Debug)]
 pub enum InitializeDBError {
     #[error("cant open db connection: {source}")]
-    CantOpenDBConnection { source: rusqlite::Error },
+    OpenDBConnection { source: rusqlite::Error },
     #[error("cant create tables: {source}")]
-    CantCreateTables { source: rusqlite::Error },
+    CreateTables { source: rusqlite::Error },
 }
