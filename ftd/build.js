@@ -910,3 +910,92 @@ window.helpers.set_value_helper = function (data, key, remaining, new_value) {
         set_data_value(data, key, new_value);
     }
 };
+window.dependencies = {};
+window.dependencies.eval_background_size = function (bg) {
+    if (typeof bg === 'object' && !!bg && "size" in bg) {
+        let sz = bg.size;
+        if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
+            return sz.x + " " + sz.y;
+        }
+        else {
+            return sz;
+        }
+    }
+    else {
+        return null;
+    }
+};
+window.dependencies.eval_background_position = function (bg) {
+    if (typeof bg === 'object' && !!bg && "position" in bg) {
+        let pos = bg.position;
+        if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
+            return pos.x + " " + pos.y;
+        }
+        else {
+            return pos.replace("-", " ");
+        }
+    }
+    else {
+        return null;
+    }
+};
+window.dependencies.eval_background_repeat = function (bg) {
+    if (typeof bg === 'object' && !!bg && "repeat" in bg) {
+        return bg.repeat;
+    }
+    else {
+        return null;
+    }
+};
+window.dependencies.eval_background_image = function (bg, data) {
+    if (typeof bg === 'object' && !!bg && "src" in bg) {
+        let img_src = bg.src;
+        if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+            return "url(" + img_src.light + ")";
+        }
+        else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+            return "url(" + img_src.dark + ")";
+        }
+        else {
+            return null;
+        }
+    }
+    else {
+        return null;
+    }
+};
+window.dependencies.eval_box_shadow = function (shadow, data) {
+    if (typeof shadow === 'object' && !!shadow) {
+        var inset, blur, spread, x_off, y_off, color;
+        inset = "";
+        blur = spread = x_off = y_off = "0px";
+        color = "black";
+        if ("inset" in shadow) {
+            if (shadow.inset)
+                inset = "inset";
+        }
+        if ("blur" in shadow)
+            blur = shadow.blur;
+        if ("spread" in shadow)
+            spread = shadow.spread;
+        if ("x-offset" in shadow)
+            x_off = shadow["x-offset"];
+        if ("y-offset" in shadow)
+            y_off = shadow["y-offset"];
+        if ("color" in shadow) {
+            if (data["ftd#dark-mode"]) {
+                color = shadow.color.dark;
+            }
+            else {
+                color = shadow.color.light;
+            }
+        }
+        // inset, color, x_offset, y_offset, blur, spread
+        let res = inset + " " + color + " " + x_off + " " + y_off + " " + blur + " " + spread;
+        res = res.trim();
+        return res;
+    }
+    else {
+        return null;
+    }
+};

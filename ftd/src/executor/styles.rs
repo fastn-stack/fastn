@@ -985,81 +985,28 @@ impl Background {
 
     pub fn background_image_pattern() -> (String, bool) {
         (
-            r#"
-                let bg = {0};
-                if (typeof bg === 'object' && !!bg && "src" in bg) {
-                    let img_src = bg.src;
-                    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
-                        "url(" + img_src.light + ")"
-                    }
-                    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
-                        "url(" + img_src.dark + ")"
-                    }
-                    else {
-                        null
-                    }
-                } else {
-                    null
-                }
-            "#
-            .to_string(),
+            "window.dependencies.eval_background_image({0}, data)".to_string(),
             true,
         )
     }
 
     pub fn background_repeat_pattern() -> (String, bool) {
         (
-            r#"
-                let bg = {0};
-                if (typeof bg === 'object' && !!bg  && "repeat" in bg) {
-                    bg.repeat
-                } else {
-                    null
-                }
-            "#
-            .to_string(),
+            "window.dependencies.eval_background_repeat({0})".to_string(),
             true,
         )
     }
 
     pub fn background_size_pattern() -> (String, bool) {
         (
-            r#"
-                let bg = {0};
-                if (typeof bg === 'object' && !!bg && "size" in bg) {
-                    let sz = bg.size;
-                    if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
-                        sz.x + " " + sz.y
-                    }
-                    else {
-                        sz
-                    }
-                } else {
-                    null
-                }
-            "#
-            .to_string(),
+            "window.dependencies.eval_background_size({0})".to_string(),
             true,
         )
     }
 
     pub fn background_position_pattern() -> (String, bool) {
         (
-            r#"
-                let bg = {0};
-                if (typeof bg === 'object' && !!bg  && "position" in bg) {
-                    let pos = bg.position;
-                    if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
-                        pos.x + " " + pos.y
-                    }
-                    else {
-                        pos.replace("-", " ")
-                    }
-                } else {
-                    null
-                }
-            "#
-            .to_string(),
+            "window.dependencies.eval_background_position({0})".to_string(),
             true,
         )
     }
@@ -1467,51 +1414,7 @@ impl Shadow {
 
     pub fn box_shadow_pattern() -> (String, bool) {
         (
-            r#"
-                let shadow = {0};
-                if (typeof shadow === 'object' && !!shadow) {
-                var inset, blur, spread, x_off, y_off, color;
-                inset = "";
-                blur = spread = x_off = y_off = "0px";
-                color = "black";
-
-                if ("inset" in shadow) {
-                    if (shadow.inset) {
-                        inset = "inset";
-                    }
-                }
-
-                if ("blur" in shadow) {
-                    blur = shadow.blur;
-                }
-                if ("spread" in shadow) {
-                    spread = shadow.spread;
-                }
-                if ("x-offset" in shadow) {
-                    x_off = shadow["x-offset"];
-                }
-                if ("y-offset" in shadow) {
-                    y_off = shadow["y-offset"];
-                }
-
-                if ("color" in shadow) {
-                    if (data["ftd#dark-mode"]){
-                        color = shadow.color.dark;
-                    }
-                    else {
-                        color = shadow.color.light;
-                    }
-                }
-
-                // inset, color, x_offset, y_offset, blur, spread
-                let res = inset + " " + color + " " + x_off + " " + y_off + " " + blur + " " + spread;
-                res = res.trim();
-                res
-            }
-            else {
-                null
-            }
-            "#.to_string(),
+            "window.dependencies.eval_box_shadow({0}, data)".to_string(),
             true,
         )
     }
