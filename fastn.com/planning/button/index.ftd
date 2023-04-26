@@ -1,4 +1,4 @@
--- my-ds.page: Button using `fastn` 🚧
+-- my-ds.page: Button using `fastn`
 
 Video Title: How to create a button using `fastn`
 
@@ -25,31 +25,42 @@ src: $fastn-assets.files.planning.button.button-using-fastn.jpg
 
 **Script**
 
-Hey Guys, Welcome to the video where we are going to create a button using
-`fastn`. 
+Hey Guys, my name is Ajit and I am back with another video on fastn.
+In this video we are going to create a button using `fastn`. 
+
 
 First, we will learn how to create a button with basic UI then we will
-recreate this button UI in later stages of this video.
-
-To make the button we will use the concept of 
-[components](https://fastn.com/components). The link is in the description box.
-
-We will define various properties to the component. 
-
-Also, we will do some event handling that gives the shadow to the button
-on-hover.
+recreate these buttons as you can see in the later stages of this video.
 
 
-
--- ds.h2: **Basic UI**
-
-Open button.ftd file
-
+This UI is just an inspiration we took from Vercel. We will make it look like
+this using `fastn` but do some of our own stuffs like giving it a shadow on
+hover because in Vercel it is a continous shadow.
 
 
-Script
+To make the button we will use the concepts like: 
+- [components](https://fastn.com/components) 
+- To the component we will apply various properties with their respective
+  `built-in types`. 
+  Some of the `Primitive Types` like `caption`, `string`, `boolean` while 
+  others of `Derived Types` 
+- We will do `event handling` that gives **shadow** to the button `on-hover`
+- We will take use of `records` as well to define colors for both light and 
+  dark mode as well as shadow-color similar to what we have in second button.
 
-Let's start by creating a `component` called `button`.
+You can find all the URLs of the concepts which we will discuss in this video
+in the description below. 
+
+
+
+-- ds.h2: **Project build-up**
+
+\;; Open button.ftd file
+
+**Script:**
+
+
+Let's start by creating a `component` and we will call it `button`.
 The syntax is:
 
 -- ds.code:
@@ -76,15 +87,16 @@ lang: ftd
 caption title:
 optional string link: 
 
+
 \-- end: button
 
 
 -- ds.markdown:
 
-Let's start with one button.
+First, let's create one basic button.
 
-Inside this component we will add `ftd.text` that will take the title and other
-properties.
+Inside this component we will add `ftd.text` that will take the title, a link
+and apply the border property to it.
 
 -- ds.code:
 lang: ftd
@@ -99,24 +111,25 @@ border-width.px: 2
 We have a basic button ready.
 
 
-**Show the UI**
+\;; Show the UI
 
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-shadow.png
 
 Let's start with the second part where we start putting things together to make
 these two buttons. As you can see the two buttons are in a row so we will use
-container component. There are various style properties applied with differnt
-background color as well as the first button has a icon, so will will add that
-too. Later on we will add shadow to the second button.
+`ftd.row` container component. There are various style properties applied with
+differnt background color as well as the first button has a icon, so will will
+add that too. Later on we will add shadow to the second button.
 
 I also want you to understand the concept of inheritence and why we use it? How
 we use it? Why it is the best practice to use concept of inheritence while
-giving a role or color. So for that I will use a package called `doc-site`
-which is a template built using fastn language. For the purpose to stick to the
-concept we are learning, we will skip that part ie how to use another package
-in your project. If you want to learn about it. You can checkout the Part 2
-video of the Expander course I have created.
+giving a `role` or `color`. So for that I will use a package called `doc-site`
+which is a template built using `fastn language`. For the purpose to stick to
+the concept we are learning, we will skip that part ie. how to use another
+package in your project? If you want to learn about it. You can checkout the
+Part 2 video of the Expander course I have created. Link is shared in the
+description.
 
 So let's put the buttons in a row.
 
@@ -254,18 +267,23 @@ You might have seen that the first button has an icon to it. So we will add
 that as well. And since this icon is only used in first button, so we will add 
 a condition to it as well.
 
+
 -- ds.code:
 lang: ftd
 
 \-- component button:
 caption title:
-ftd.responsive-type role: $inherited.types.copy-regular
 optional string link:
+ftd.responsive-type role: $inherited.types.copy-regular
 ftd.color text-color: $inherited.colors.text-strong
-optional ftd.color bg-color:
-optional ftd.color border-color:
+optional ftd.color bg-color:		
+optional ftd.color border-color:	
 optional ftd.image-src left-icon: 	;; <hl>
 
+
+-- ds.markdown: 
+
+And add the image along with styling properties.
 
 -- ds.code:
 lang: ftd
@@ -276,6 +294,7 @@ src: $button.left-icon
 align-self: start
 margin-right.px: 3
 height.fixed.px: 24
+
 
 
 
@@ -385,16 +404,16 @@ link: https://fastn.io/expander
 \-- end: ftd.column
 
 
-
 -- ds.h2: Closing remarks
 
-There you go, we have polished the UI and it looks similar to our original UI. 
-I hope you have learnt with me and found this video easy to follow. You 
-can share your feedbacks if you wish to.
+There you go, we have polished the UI and it looks similar to our original UI
+with our own touch to it. I hope you have learnt with me and found this video
+easy to follow. You can share your feedbacks if you wish to in comments or on
+our official Discord server.
 
-We would love to see your package. Checkout our "show-and-tell"
-channel on Discord where you can share with us your own UIs and I can also
-create a video to show who has created what.
+Also, we would love to see your package which you will create following this
+video. You can share it on the dicord's "show-and-tell" channel. Thank you
+guys.
 
 
 -- end: my-ds.page
