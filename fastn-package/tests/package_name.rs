@@ -4,7 +4,7 @@ fn fastn_package_test() {
 
     futures::executor::block_on(async {
         match dbg!(fastn_package::initialize(TestInitializer::default()).await) {
-            Err(InitialisePackageError::FastnFTDError { source }) => match source {
+            Err(InitializePackageError::FastnFTDError { source }) => match source {
                 FastnFTDError::ReadFTDFile { source } => match source {
                     FileAsStringError::FileDoesNotExist { name, source } => {
                         assert_eq!(name, "FASTN.ftd");
