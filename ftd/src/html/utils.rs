@@ -710,22 +710,34 @@ pub fn get_js_html(external_js: &[String]) -> String {
     result
 }
 
-pub fn get_rive_data_html(rive_data: &[ftd::executor::RiveData], id: &str) -> String {
+pub fn get_rive_data_html(
+    rive_data: &[ftd::executor::RiveData],
+    id: &str,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::html::Result<String> {
     if rive_data.is_empty() {
-        return "".to_string();
+        return Ok("".to_string());
     }
 
     let mut result = vec![];
+    let mut already_found_rives = std::collections::HashSet::new();
     for rive in rive_data {
-        result.push(get_rive_html(rive, id));
+        if !already_found_rives.insert(rive.id.to_string()) {
+            continue;
+        }
+        result.push(get_rive_html(rive, id, doc)?);
     }
-    format!(
+    Ok(format!(
         "<script src=\"https://unpkg.com/@rive-app/canvas@1.0.98\"></script><script>{}</script>",
         result.join("\n")
-    )
+    ))
 }
 
-fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
+fn get_rive_html(
+    rive: &ftd::executor::RiveData,
+    id: &str,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::html::Result<String> {
     use itertools::Itertools;
 
     let rive_name = ftd::html::utils::function_name_to_js_function(
@@ -749,26 +761,90 @@ fn get_rive_html(rive: &ftd::executor::RiveData, id: &str) -> String {
         .as_ref()
         .map_or("null".to_string(), |v| format!("'{}'", v));
 
-    format!(
+    let events = get_rive_event(rive, id, doc)?;
+
+    Ok(format!(
         indoc::indoc! {"
-            window.{rive_name} = new rive.Rive({{
-                src: '{src}',
-                canvas: document.getElementById('{id}'),
-                autoplay: {autoplay},
-                stateMachines: {state_machines},
-                artboard: {artboard},
-                onLoad: (_) => {{
-                    window.{rive_name}.resizeDrawingSurfaceToCanvas();
-                }},
-            }});
-        "},
+                window.{rive_name} = new rive.Rive({{
+                    src: '{src}',
+                    canvas: document.getElementById('{id}'),
+                    autoplay: {autoplay},
+                    stateMachines: {state_machines},
+                    artboard: {artboard},
+                    onLoad: (_) => {{
+                        window.{rive_name}.resizeDrawingSurfaceToCanvas();
+                    }},
+                    {events}
+                }});
+            "},
         rive_name = rive_name,
         src = rive.src,
         id = rive.id,
         autoplay = rive.autoplay,
         state_machines = state_machines,
-        artboard = artboard
-    )
+        artboard = artboard,
+        events = events
+    ))
+}
+
+fn get_rive_event(
+    rive: &ftd::executor::RiveData,
+    id: &str,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::html::Result<String> {
+    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
+        ftd::VecMap::new();
+    for event in rive.events.iter() {
+        let (event_name, input, action) = match &event.name {
+            ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            ftd::interpreter::EventName::RivePause(timeline) => {
+                ("onPause", timeline, &event.action)
+            }
+            ftd::interpreter::EventName::RiveStateChange(state) => {
+                ("onStateChange", state, &event.action)
+            }
+            _ => continue,
+        };
+        events_map.insert(event_name.to_string(), (input, action));
+    }
+
+    let mut events_vec = vec![];
+    for (on, actions) in events_map.value {
+        let mut actions_vec = vec![];
+        for (input, action) in actions {
+            let action = {
+                let action = ftd::html::Action::from_function_call(action, id, doc)?.into_list();
+                let serde_action = serde_json::to_string(&action).expect("");
+                format!(
+                    "window.ftd.handle_event(event, '{}', '{}', this)",
+                    id, serde_action
+                )
+            };
+            actions_vec.push(format!(
+                indoc::indoc! {"
+                      if (input === \"{input}\") {{
+                        {action}
+                      }}
+                "},
+                input = input,
+                action = action
+            ));
+        }
+
+        events_vec.push(format!(
+            indoc::indoc! {"
+                    {on}: (event) => {{
+                        const inputs = event.data;
+                        inputs.forEach((input) => {{
+                          {actions_vec}
+                        }});
+                    }},
+                "},
+            on = on,
+            actions_vec = actions_vec.join("\n")
+        ));
+    }
+    Ok(events_vec.join("\n"))
 }
 
 pub fn get_css_html(external_css: &[String]) -> String {
