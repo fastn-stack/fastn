@@ -12,17 +12,12 @@ pub mod test {
         FastnFTDError, FileAsStringError, InitializePackageError,
     };
 
+    #[derive(Default)]
     pub struct TestInitializer {
         files: std::collections::HashMap<String, String>,
     }
 
     impl TestInitializer {
-        pub fn new() -> Self {
-            Self {
-                files: std::collections::HashMap::new(),
-            }
-        }
-
         pub fn add_file(&mut self, name: &str, content: &str) {
             self.files.insert(name.to_string(), content.to_string());
         }

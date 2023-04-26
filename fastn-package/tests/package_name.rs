@@ -3,7 +3,7 @@ fn fastn_package_test() {
     use fastn_package::initializer::test::*;
 
     futures::executor::block_on(async {
-        match dbg!(fastn_package::initialize(TestInitializer::new()).await) {
+        match dbg!(fastn_package::initialize(TestInitializer::default()).await) {
             Err(InitialisePackageError::FastnFTDError { source }) => match source {
                 FastnFTDError::ReadFTDFile { source } => match source {
                     FileAsStringError::FileDoesNotExist { name, source } => {
