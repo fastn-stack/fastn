@@ -7,16 +7,18 @@ use std::sync::{Arc, RwLock};
 struct Document {}
 
 impl Document {
-    fn parse_ftd_document() -> ftd::node::NodeData {
+    fn parse_ftd_document() -> ftd::node::Node {
         let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", "-- ftd.text: hello world")
             .unwrap_or_else(|e| panic!("{:?}", e));
         let executor =
             ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-        ftd::node::NodeData::from_rt(executor)
+        ftd::node::NodeData::from_rt(executor).node
     }
 
-    fn create(mut root: NodeMut, _node: ftd::node::NodeData) -> Self {
+    fn create(mut root: NodeMut, node: ftd::node::Node) -> Self {
         let myself = Document {};
+
+        dbg!(node);
 
         let root_id = root.id();
         let rdom = root.real_dom_mut();
@@ -32,7 +34,7 @@ impl Document {
 
 impl Driver for Document {
     fn update(&mut self, _: &Arc<RwLock<RealDom>>) {
-        println!("Document.update()");
+        // println!("Document.update()");
     }
 
     fn handle_event(
@@ -43,11 +45,11 @@ impl Driver for Document {
         _: Rc<EventData>,
         _: bool,
     ) {
-        println!("Document.handle_event()");
+        // println!("Document.handle_event()");
     }
 
     fn poll_async(&mut self) -> std::pin::Pin<Box<dyn futures::Future<Output = ()> + '_>> {
-        println!("Document.poll_async()");
+        // println!("Document.poll_async()");
         // leaving this as is for now.
         Box::pin(async move { tokio::time::sleep(std::time::Duration::from_millis(1000)).await })
     }
