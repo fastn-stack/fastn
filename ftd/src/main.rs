@@ -37,6 +37,11 @@ fn t() {
 }
 
 pub fn main() {
+    // cargo run --features terminal -- --terminal
+    if std::env::args().any(|e| e == "--terminal") {
+        ftd::terminal::run();
+        return;
+    }
     // t();
     // return;
 
