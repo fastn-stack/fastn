@@ -295,8 +295,6 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd-host/package-query.ftd
 - Reading JSON: /get-data/
   document: ftd-host/get-data.ftd
-- Redirects: /redirects/
-  document: backend/redirects.ftd
 
 
 # Create Website: /install/-/build/
@@ -308,6 +306,9 @@ favicon: /-/fastn.io/images/favicon.svg
 
 - Install: /install/-/build/
   document: author/how-to/install.ftd
+
+- Redirects: /redirects/
+  document: backend/redirects.ftd
 
 ## Featured Components: /featured/
 
@@ -388,3 +389,4 @@ favicon: /-/fastn.io/images/favicon.svg
 
 /ftd/kernel/: /kernel/
 /ftd/list/: /list/
+/discord/: https://discord.gg/eNXVBMq4xt

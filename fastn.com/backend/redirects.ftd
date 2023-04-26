@@ -1,7 +1,7 @@
--- my-ds.page: Redirects using fastn.redirects
+-- my-ds.page: fastn Redirects
 
-`fastn` allows to redirect any outdated/broken url to any other url.
-It could be any sitemap url or any other external link. This can be done by
+`fastn` allows to redirect any outdated/broken URL to any other URL.
+It could be any sitemap URL or any other external link. This can be done by
 using `fastn.redirects`.
 
 -- ds.h1: Format of using redirects
@@ -10,18 +10,18 @@ The links which needs to be redirected somewhere has to be listed down in the
 body section of `fastn.redirects` as `key-value` tuples in the format
 `<REDIRECT-FROM>: <REDIRECT-TO>`.
 
--- ds.code: fastn.redirects example
+-- ds.code: `fastn.redirects` example
 lang: ftd
 
 \-- fastn.redirects:
 
 /ftd/kernel/: /kernel/
-/python/: https://www.python.org/
+/discord/: https://discord.gg/eNXVBMq4xt
 
 -- ds.markdown:
 
 In the above example, the url `/ftd/kernel/` will be redirected to `/kernel/`.
-Similarly, visiting `/python/` will redirect to the official
-`https://www.python.org/`
+Similarly, visiting `/discord/` will redirect to the official fastn discord
+server [link](https://discord.gg/eNXVBMq4xt)
 
 -- end: my-ds.page
