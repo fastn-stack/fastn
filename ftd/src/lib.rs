@@ -26,6 +26,7 @@ pub mod node;
 pub mod p1;
 #[cfg(feature = "terminal")]
 pub mod terminal;
+pub mod test_helper;
 
 pub const PROCESSOR_MARKER: &str = "$processor$";
 
