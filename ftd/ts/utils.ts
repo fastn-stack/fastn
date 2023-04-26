@@ -218,3 +218,18 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
 
     return new_string;
 };
+
+window.helpers = {};
+window.helpers.node_change_call = function(id: string, key: string, data: any){
+    let node_function = `node_change_${id}`;
+    if(!!window[node_function] && !!window[node_function][key]) {
+        window[node_function][key](data);
+    }
+}
+window.helpers.set_value_helper = function(data: any, key: string, remaining: string, new_value: any) {
+    if (!!remaining) {
+        set_data_value(data, key + "." + remaining, new_value);
+    } else {
+        set_data_value(data, key, new_value);
+    }
+}

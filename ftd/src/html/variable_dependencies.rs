@@ -176,9 +176,8 @@ impl<'a> VariableDependencyGenerator<'a> {
                 for key in node_changes.iter() {
                     node_changes_calls.push(format!(
                         indoc::indoc! {"
-                            if(!!window[\"node_change_{id}\"] && !!window.node_change_{id}[\"{key}\"]){{\
-                                window.node_change_{id}[\"{key}\"](data);
-                            }}"
+                            window.helpers.node_change_call(\"{id}\", \"{key}\", data);\
+                            "
                         },
                         id = self.id,
                         key = key,
@@ -196,11 +195,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                 result_1.push(format!(
                     indoc::indoc! {"
                      window.set_value_{id}[\"{key}\"] = function (data, new_value, remaining) {{
-                            if (!!remaining) {{
-                            set_data_value(data, \"{key}\" + \".\" + remaining, new_value);
-                            }} else {{
-                            set_data_value(data, \"{key}\", new_value);
-                            }}
+                            window.helpers.set_value_helper(data, \"{key}\", remaining, new_value);
                             {dependencies}
                             window.ftd.call_mutable_value_changes(\"{key}\", \"{id}\");
                             window.ftd.call_immutable_value_changes(\"{key}\", \"{id}\");

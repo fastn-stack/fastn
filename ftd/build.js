@@ -713,7 +713,7 @@ function stringToHTML(str) {
     var doc = parser.parseFromString(str, 'text/html');
     return doc.body;
 }
-
+;
 function get_name_and_remaining(name) {
     let part1 = "";
     let pattern_to_split_at = name;
@@ -894,4 +894,19 @@ window.ftd.utils.function_name_to_js_function = function (s) {
         .replace('\\', "/")
         .replace('/', "_").replace('.', "_");
     return new_string;
+};
+window.helpers = {};
+window.helpers.node_change_call = function (id, key, data) {
+    let node_function = `node_change_${id}`;
+    if (!!window[node_function] && !!window[node_function][key]) {
+        window[node_function][key](data);
+    }
+};
+window.helpers.set_value_helper = function (data, key, remaining, new_value) {
+    if (!!remaining) {
+        set_data_value(data, key + "." + remaining, new_value);
+    }
+    else {
+        set_data_value(data, key, new_value);
+    }
 };
