@@ -442,7 +442,7 @@ pub(crate) fn get_value(
     let value = value.inner();
 
     Ok(match value {
-        None => Some(serde_json::Value::Null),
+        None => None,
         Some(ftd::interpreter::Value::Boolean { value }) => serde_json::to_value(value).ok(),
         Some(ftd::interpreter::Value::Integer { value }) => serde_json::to_value(value).ok(),
         Some(ftd::interpreter::Value::String { text: value, .. }) => {
