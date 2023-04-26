@@ -97,7 +97,11 @@ impl HtmlUI {
             html_data: node_data.html_data.to_html_data(),
             js: ftd::html::utils::get_js_html(node_data.js.into_iter().collect_vec().as_slice()),
             css: ftd::html::utils::get_css_html(node_data.css.into_iter().collect_vec().as_slice()),
-            rive_data: ftd::html::utils::get_rive_data_html(node_data.rive_data.as_slice(), id),
+            rive_data: ftd::html::utils::get_rive_data_html(
+                node_data.rive_data.as_slice(),
+                id,
+                &tdoc,
+            )?,
         })
     }
 }
@@ -318,6 +322,9 @@ impl<'a> HtmlGenerator<'a> {
             let mut attr = self.attrs_to_html(&node);
             let events = self.group_by_js_event(&node.events)?;
             for (name, actions) in events {
+                if name.starts_with("onrive") {
+                    continue;
+                }
                 if name.eq("onclickoutside") || name.starts_with("onglobalkey") {
                     let event = format!(
                         "window.ftd.handle_event(event, '{}', '{}', this)",

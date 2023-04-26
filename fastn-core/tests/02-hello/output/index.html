@@ -817,133 +817,77 @@ else {document.querySelector(`[data-id="0,3:main"]`).style["line-height"] = eval
 }
 window.set_value_main = {};
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#dark-mode", new_value);
-}
+window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__color"]){window.node_change_main["0,3:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
+window.ftd.utils.node_change_call("main","0,3:main__color", data);
+window.ftd.utils.node_change_call("main","og_document__image", data);
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#default-colors" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#default-colors", new_value);
-}
+window.ftd.utils.set_value_helper(data, "ftd#default-colors", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
 window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__color"]){window.node_change_main["0,3:main__color"](data);
-}
+window.ftd.utils.node_change_call("main","0,3:main__color", data);
 };
 
 window.set_value_main["ftd#default-types"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#default-types" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#default-types", new_value);
-}
+window.ftd.utils.set_value_helper(data, "ftd#default-types", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#default-types", "main");
 window.ftd.call_immutable_value_changes("ftd#default-types", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-family"]){window.node_change_main["0,3:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-size"]){window.node_change_main["0,3:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-weight"]){window.node_change_main["0,3:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__letter-spacing"]){window.node_change_main["0,3:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__line-height"]){window.node_change_main["0,3:main__line-height"](data);
-}
+window.ftd.utils.node_change_call("main","0,3:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,3:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,3:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,3:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,3:main__line-height", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#device" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#device", new_value);
-}
+window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-family"]){window.node_change_main["0,3:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-size"]){window.node_change_main["0,3:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__font-weight"]){window.node_change_main["0,3:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__letter-spacing"]){window.node_change_main["0,3:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,3:main__line-height"]){window.node_change_main["0,3:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__font-family"]){window.node_change_main["0,4:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__font-size"]){window.node_change_main["0,4:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__font-weight"]){window.node_change_main["0,4:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__letter-spacing"]){window.node_change_main["0,4:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,4:main__line-height"]){window.node_change_main["0,4:main__line-height"](data);
-}
+window.ftd.utils.node_change_call("main","0,2:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,2:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,2:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,2:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,2:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,3:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,3:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,3:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,3:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,3:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,4:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,4:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,4:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,4:main__line-height", data);
 };
 
 window.set_value_main["www.amitu.com/#flag"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "www.amitu.com/#flag" + "." + remaining, new_value);
-} else {
-set_data_value(data, "www.amitu.com/#flag", new_value);
-}
+window.ftd.utils.set_value_helper(data, "www.amitu.com/#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("www.amitu.com/#flag", "main");
 window.ftd.call_immutable_value_changes("www.amitu.com/#flag", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["document__title"]){window.node_change_main["document__title"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__description"]){window.node_change_main["og_document__description"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__image"]){window.node_change_main["og_document__image"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["og_document__title"]){window.node_change_main["og_document__title"](data);
-}
+window.ftd.utils.node_change_call("main","document__title", data);
+window.ftd.utils.node_change_call("main","og_document__description", data);
+window.ftd.utils.node_change_call("main","og_document__image", data);
+window.ftd.utils.node_change_call("main","og_document__title", data);
 };
 
 window.set_value_main["www.amitu.com/#rtype"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "www.amitu.com/#rtype" + "." + remaining, new_value);
-} else {
-set_data_value(data, "www.amitu.com/#rtype", new_value);
-}
+window.ftd.utils.set_value_helper(data, "www.amitu.com/#rtype", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("www.amitu.com/#rtype", "main");
 window.ftd.call_immutable_value_changes("www.amitu.com/#rtype", "main");
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-family"]){window.node_change_main["0,2:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-size"]){window.node_change_main["0,2:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__font-weight"]){window.node_change_main["0,2:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__letter-spacing"]){window.node_change_main["0,2:main__letter-spacing"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__line-height"]){window.node_change_main["0,2:main__line-height"](data);
-}
+window.ftd.utils.node_change_call("main","0,2:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,2:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,2:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,2:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,2:main__line-height", data);
 };
 
 

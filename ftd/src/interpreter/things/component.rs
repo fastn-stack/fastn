@@ -1249,6 +1249,9 @@ pub enum EventName {
     Change,
     Blur,
     Focus,
+    RivePlay(String),
+    RiveStateChange(String),
+    RivePause(String),
 }
 
 impl EventName {
@@ -1285,6 +1288,27 @@ impl EventName {
                     .map(|v| v.to_string())
                     .collect_vec();
                 Ok(EventName::GlobalKeySeq(keys))
+            }
+            t if t.starts_with("rive-play[") && t.ends_with(']') => {
+                let timeline = t
+                    .trim_start_matches("rive-play[")
+                    .trim_end_matches(']')
+                    .to_string();
+                Ok(EventName::RivePlay(timeline))
+            }
+            t if t.starts_with("rive-state-change[") && t.ends_with(']') => {
+                let state = t
+                    .trim_start_matches("rive-state-change[")
+                    .trim_end_matches(']')
+                    .to_string();
+                Ok(EventName::RiveStateChange(state))
+            }
+            t if t.starts_with("rive-pause[") && t.ends_with(']') => {
+                let pause = t
+                    .trim_start_matches("rive-pause[")
+                    .trim_end_matches(']')
+                    .to_string();
+                Ok(EventName::RivePause(pause))
             }
             t => {
                 ftd::interpreter::utils::e2(format!("`{}` event not found", t), doc_id, line_number)
