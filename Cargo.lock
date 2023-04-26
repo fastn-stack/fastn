@@ -1497,16 +1497,9 @@ dependencies = [
 name = "fastn-issues"
 version = "0.1.0"
 dependencies = [
- "dioxus-html",
- "dioxus-native-core",
- "dioxus-native-core-macro",
  "ftd 0.2.0",
- "futures",
- "rink",
  "rusqlite",
- "rustc-hash",
  "thiserror",
- "tokio",
 ]
 
 [[package]]
@@ -1663,7 +1656,11 @@ dependencies = [
  "comrak 0.18.0",
  "css-color-parser",
  "diffy",
+ "dioxus-html",
+ "dioxus-native-core",
+ "dioxus-native-core-macro",
  "format_num",
+ "futures",
  "include_dir",
  "indoc 2.0.1",
  "itertools",
@@ -1672,13 +1669,16 @@ dependencies = [
  "rand",
  "rand_pcg",
  "regex",
+ "rink",
  "ron",
+ "rustc-hash",
  "rusty-hook",
  "serde",
  "serde_json",
  "slug",
  "syntect",
  "thiserror",
+ "tokio",
  "tracing",
 ]
 

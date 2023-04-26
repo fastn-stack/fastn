@@ -12,6 +12,10 @@ license = "MIT"
 repository = "https://github.com/FifthTry/ftd"
 homepage = "https://fastn.io/ftd/"
 
+[features]
+default = []
+terminal = ["rink", "dioxus-native-core", "dioxus-native-core-macro", "dioxus-html", "futures", "tokio", "rustc-hash"]
+
 [dependencies]
 css-color-parser.workspace = true
 serde.workspace = true
@@ -27,8 +31,13 @@ itertools.workspace = true
 tracing.workspace = true
 syntect.workspace = true
 comrak.workspace = true
-
-
+rink = { workspace = true, optional = true }
+dioxus-html = { workspace = true, optional = true }
+dioxus-native-core = { workspace = true, optional = true }
+dioxus-native-core-macro = { workspace = true, optional = true }
+futures = { workspace = true, optional = true }
+tokio = { workspace = true, optional = true }
+rustc-hash = { workspace = true, optional = true }
 
 [dev-dependencies]
 diffy.workspace = true
