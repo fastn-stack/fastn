@@ -1,5 +1,3 @@
-use sha2::digest::FixedOutput;
-
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
     fn values_of_(&self, name: &str) -> Vec<String>;
@@ -801,6 +799,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
     )
 }
 pub fn generate_hash(content: &str) -> String {
+    use sha2::digest::FixedOutput;
     use sha2::Digest;
     let mut hasher = sha2::Sha256::new();
     hasher.update(content);
