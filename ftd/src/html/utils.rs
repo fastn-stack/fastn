@@ -719,14 +719,20 @@ pub fn get_rive_data_html(
         return Ok("".to_string());
     }
 
-    let mut result = vec![];
-    let mut already_found_rives = std::collections::HashSet::new();
+    let mut rive_elements: ftd::Map<ftd::executor::RiveData> = Default::default();
     for rive in rive_data {
-        if !already_found_rives.insert(rive.id.to_string()) {
-            continue;
+        if let Some(rive_data) = rive_elements.get_mut(&rive.id) {
+            rive_data.events.extend(rive.events.to_owned());
+        } else {
+            rive_elements.insert(rive.id.to_string(), rive.to_owned());
         }
+    }
+
+    let mut result = vec![];
+    for rive in rive_elements.values() {
         result.push(get_rive_html(rive, id, doc)?);
     }
+
     Ok(format!(
         "<script src=\"https://unpkg.com/@rive-app/canvas@1.0.98\"></script><script>{}</script>",
         result.join("\n")
