@@ -1,3 +1,5 @@
+use sha2::digest::FixedOutput;
+
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
     fn values_of_(&self, name: &str) -> Vec<String>;
@@ -585,6 +587,8 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_external_children__", "{}")
+        .replace("__hashed_default_css__", hashed_default_css_name().as_str())
+        .replace("__hashed_default_js__", hashed_default_js_name().as_str())
         .replace(
             "__ftd__",
             format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
@@ -794,6 +798,23 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .query_pairs()
             .into_owned()
             .collect_vec(),
+    )
+}
+pub fn generate_hash(content: &str) -> String {
+    use sha2::Digest;
+    let mut hasher = sha2::Sha256::new();
+    hasher.update(content);
+    format!("{:X}", hasher.finalize_fixed())
+}
+
+pub fn hashed_default_css_name() -> String {
+    format!("default-{}.css", generate_hash(ftd::css()))
+}
+
+pub fn hashed_default_js_name() -> String {
+    format!(
+        "default-{}.js",
+        generate_hash(format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js()).as_str())
     )
 }
 

@@ -197,22 +197,19 @@ pub async fn build(
 }
 
 pub async fn default_build_files(base_path: camino::Utf8PathBuf) -> fastn_core::Result<()> {
-    let ftd_css = ftd::css();
-    let ftd_js = ftd::build_js();
-    let fastn_js = fastn_core::fastn_2022_js();
-
-    let save_default_css = base_path.join("default.css");
-    fastn_core::utils::update(save_default_css, ftd_css.as_bytes())
+    let default_css_content = ftd::css();
+    let hashed_css_name = fastn_core::utils::hashed_default_css_name();
+    let save_default_css = base_path.join(hashed_css_name.as_str());
+    fastn_core::utils::update(save_default_css, default_css_content.as_bytes())
         .await
         .ok();
 
-    let save_default_js = base_path.join("default.js");
-    fastn_core::utils::update(
-        save_default_js,
-        format!("{}\n\n{}", ftd_js, fastn_js).as_bytes(),
-    )
-    .await
-    .ok();
+    let default_js_content = format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js());
+    let hashed_js_name = fastn_core::utils::hashed_default_js_name();
+    let save_default_js = base_path.join(hashed_js_name.as_str());
+    fastn_core::utils::update(save_default_js, default_js_content.as_bytes())
+        .await
+        .ok();
 
     Ok(())
 }
