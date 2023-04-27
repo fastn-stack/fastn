@@ -4,12 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# ariadne.workspace = true
-async-trait.workspace = true
-camino.workspace = true
+async-trait = "0.1"
+camino = "1"
 fastn-issues = { path = "../fastn-issues" }
 ftd = { path = "../ftd" }
-futures.workspace = true
-rusqlite.workspace = true
-serde.workspace = true
-tokio.workspace = true
+futures = "0.3"
+rusqlite = "0.29.0"
+serde = "1"
+tokio = "1.27.0"

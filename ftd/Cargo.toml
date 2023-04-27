@@ -17,33 +17,31 @@ default = []
 terminal = ["rink", "dioxus-native-core", "dioxus-native-core-macro", "dioxus-html", "futures", "tokio", "rustc-hash"]
 
 [dependencies]
-css-color-parser.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-thiserror.workspace = true
-once_cell.workspace = true
-regex.workspace = true
-format_num.workspace = true
-slug.workspace = true
-include_dir.workspace = true
-indoc.workspace = true
-itertools.workspace = true
-tracing.workspace = true
-syntect.workspace = true
-comrak.workspace = true
-rink = { workspace = true, optional = true }
-dioxus-html = { workspace = true, optional = true }
-dioxus-native-core = { workspace = true, optional = true }
-dioxus-native-core-macro = { workspace = true, optional = true }
-futures = { workspace = true, optional = true }
-tokio = { workspace = true, optional = true }
-rustc-hash = { workspace = true, optional = true }
+comrak = "0.18"
+css-color-parser = "0.1"
+dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev ="1adccc057357fa11c21327d18298f442bc6528e4", optional = true }
+dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev ="1adccc057357fa11c21327d18298f442bc6528e4", optional = true }
+dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4", optional = true }
+format_num = "0.1"
+futures = { version = "0.3", optional = true }
+include_dir = "0.7"
+indoc = "2"
+itertools = "0.10"
+regex = "1"
+rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4", optional = true }
+rustc-hash = { version = "1", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+slug = "0.1"
+syntect = "5"
+thiserror = "1"
+tokio = { version = "1.27.0", features = ["full"], optional = true }
+tracing = "0.1"
 
 [dev-dependencies]
-diffy.workspace = true
-pretty_assertions.workspace = true
-ron.workspace = true
-rand.workspace = true
-rand_pcg.workspace = true
-rusty-hook.workspace = true
-
+diffy = "0.3"
+pretty_assertions = "1"
+ron = "0.8"
+rand = "0.8"
+rand_pcg = "0.3"
+rusty-hook = "^0.11.2"
