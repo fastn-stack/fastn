@@ -1,2 +1,148 @@
--- ftd.text: hello world
-color: red
+-- ftd.column:
+width: fill-container
+height: fill-container
+background.solid: white
+overflow: auto
+
+
+-- ftd.row:
+width: fill-container
+color: black
+spacing: space-between
+padding-horizontal.px: 4
+padding-vertical.px: 1
+height.fixed.px: 3
+
+-- ftd.text: fastn
+link: https://fastn.com/
+
+-- ftd.text: On Terminal
+
+-- end: ftd.row
+
+
+-- ftd.row:
+width: fill-container
+color: black
+background.solid: #fdfaf1
+spacing: space-between
+padding-horizontal.px: 2
+padding-vertical.px: 1
+height.fixed.px: 1
+
+-- end: ftd.row
+
+
+
+-- ftd.row:
+width: fill-container
+color: black
+spacing: space-between
+padding-horizontal.px: 2
+padding-vertical.px: 1
+height: fill-container
+
+
+
+-- ftd.column:
+background.solid: #fdfaf1
+spacing.fixed.px: 1
+padding-horizontal.px: 2
+padding-vertical.px: 1
+height: fill-container
+
+-- ftd.text: Overview
+-- ftd.text: Getting Started
+
+-- end: ftd.column
+
+
+-- ftd.column:
+spacing.fixed.px: 1
+padding-horizontal.px: 2
+padding-vertical.px: 1
+height: fill-container
+width.fixed.percent: 60
+align-content: left
+
+-- ftd.text: Welcome to fastn
+color: #ef8435
+style: underline
+margin-bottom.px: 1
+
+-- ftd.text:
+
+ftd is a programming language for building user interfaces and content centric
+
+-- ftd.text:
+
+websites. ftd is easy to learn, especially for non programmers, but does not
+
+-- ftd.text:
+margin-bottom.px: 1
+
+compromise on what you can build with it.
+
+
+-- ftd.text:
+
+fastn is a web-framework, a content management system, and an integrated
+
+-- ftd.text:
+
+development environment for ftd. fastn is a webserver, and compiles ftd to
+
+-- ftd.text:
+margin-bottom.px: 1
+
+HTML/CSS/JS, and can be deployed on your server, or on fastn cloud by FifthTry.
+
+
+
+-- end: ftd.column
+
+
+
+
+-- ftd.column:
+spacing.fixed.px: 1
+padding-horizontal.px: 2
+padding-vertical.px: 1
+height: fill-container
+background.solid: #fdfaf1
+
+-- ftd.text: Support fastn!
+color: #ef8435
+margin-bottom.px: 1
+
+-- ftd.text: Enjoying fastn?
+-- ftd.text: Please consider
+-- ftd.text: giving us a star
+-- ftd.text: on GitHub to show
+-- ftd.text: your support!
+
+-- end: ftd.column
+
+
+-- end: ftd.row
+
+
+-- end: ftd.column
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.type dtype:
+size.px: 4
+weight: 700
+font-family: cursive
