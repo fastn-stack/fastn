@@ -24,10 +24,10 @@ members = [
 actix-web = "4"
 antidote = "1"
 # ariadne = "0.14"
-rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
-dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
-dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
-dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "1adccc057357fa11c21327d18298f442bc6528e4" }
+rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 rustc-hash = "1"
 async-lock = "2"
 async-recursion = "1"
