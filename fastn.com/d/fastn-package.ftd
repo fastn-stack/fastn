@@ -1,36 +1,28 @@
 -- import: fastn.io/assets
 
--- my-ds.page: `fastn-package` crate
+-- my-ds.page: `fastn-package` crate overview and motivation
 
 `fastn-package` is responsible for providing access to any fastn package content
 to `fastn-serve`, `fastn-build` etc.
 
--- ds.h1: `fastn_package::CurrentPackage`
+The specs for the crate are in the spec document.
 
-`fastn_package::CurrentPackage` is the main struct that captures the content of fastn
-package.
-
--- ds.code:
-lang: rs
-
-struct Package {
-    main: fastn_package::Package,
-}
-
-
--- ds.h1: Controlled IO
+-- ds.h1: In Memory Data
 
 We want `fastn` to be fast, and it is hard to do it if IO operations are
 scattered all over the code. So we are going to create an in memory
-representation of the fastn package, including dependencies, and ensure all
+representation of the fastn package, including dependencies, and ensure most
 operations use the in memory structures instead of doing file IO.
 
--- ds.h2: In memory representation
+-- ds.h2: How We Store The Data?
 
-The in-memory representation need not store the content of non ftd files.
+We are using `sqlite` for storing the data in memory. The tables are described
+below. We will also use a HashMap to store the ParsedData corresponding to each
+ftd file.
 
+The in-memory representation should not store the content of non ftd files, eg
 image files, as ideally images should be only read when we are serving the
-request or when we are copying the file during fastn build.
+request or when we are copying the file during `fastn build`.
 
 `.ftd` files are special as they may be read more than once, say if a file is a
 dependency of many files in the package. So all ftd files are kept in p1 parsed
@@ -155,7 +147,7 @@ class MainPackage():
 -- ds.code:
 lang: py
 
-class Dependency():
+class Dependency():  # DAG with single source
     # name of the package that is a dependency
     name = models.TextField()
     # what package depended on this.
@@ -174,6 +166,20 @@ class Document():
     name = models.TextField(primary_key=True)
     # the name of the package this is part of
     package = models.TextField()
+
+
+-- ds.h2: Auto Imports
+
+-- ds.code:
+lang: py
+
+class AutoImport():
+    document = models.ForeignKey(Document)
+    # if alias is not specified, we compute the alias using the standard rules
+    alias = models.TextField()
+    # alias specified by the user, if specied, it will be used instead
+    alias_specified = models.TextField(null=True)
+
 
 -- ds.h2: File Table
 
@@ -249,6 +255,46 @@ the some path has been requested or not.
 When we are creating static site, the discovered URLs are note stored in this
 table, but is stored in some in-memory structure in build process.
 
+
+-- ds.h2: Sitemap table
+
+-- ds.code:
+lang: py
+
+class Section():
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+class SubSection():
+    section = models.ForeignKey(Section)
+    # name can be empty if no sub-section was specified.
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+# how best to represent tree?
+class Toc():
+    sub_section = models.ForeignKey(SubSection)
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+-- ds.h2: Dynamic URls Table
+
+-- ds.code:
+lang: py
+
+class DynamicURL():
+    name = models.TextField(null=True)
+    pattern = models.TextField()
+    document = models.TextField()
 
 -- ds.h1: How Would Incremental Compilation Work
 
