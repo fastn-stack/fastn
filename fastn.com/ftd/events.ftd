@@ -1,6 +1,6 @@
 -- my-ds.page: Events in `ftd`
 
-The change in the state of an object is known as an Event. In `ftd`, there are
+The change in the state of an object is known as an Event. In `fastn`, there are
 various events which represents that some activity is performed by the user. A
 function reacts over these events and allow the execution. This process of
 reacting over the events is called Event Handling.
@@ -8,7 +8,7 @@ reacting over the events is called Event Handling.
 We can create [our own function](/functions/) or use [`built-in
 function`](/built-in-functions/).
 
-Here is the list of the events present in `ftd`
+Here is the list of the events present in `fastn`
 
 -- ds.h1: `on-click`
 

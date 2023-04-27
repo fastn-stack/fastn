@@ -158,12 +158,16 @@ favicon: /-/fastn.io/images/favicon.svg
   document: ftd-host/import.ftd
 - Functions: /functions/
   document: ftd/functions/
-- Built-in Functions 🚧: /built-in-functions/
+- Built-in Functions: /built-in-functions/
   document: ftd/built-in-functions.ftd
+- Built-in Rive Functions: /built-in-rive-functions/
+  document: ftd/built-in-rive-functions.ftd
 - Built-in Variables: /built-in-variables/
   document: ftd/built-in-variables.ftd
 - `ftd` Events: /events/
   document: ftd/events.ftd
+- Rive Events: /rive-events/
+  document: ftd/rive-events.ftd
 - Use color scheme package: /use-cs/
   document: cs/use-color-package.ftd
 - `processor`: /processor/

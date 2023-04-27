@@ -80,7 +80,7 @@ artboard](https://help.rive.app/editor/fundamentals/artboards) to use.
 -- ds.h1: Rive functions
 
 `fastn` language has various rive related [built-in
-functions](built-in-functions/#rive-functions). These functions help to interact
+functions](/built-in-rive-functions/). These functions help to interact
 with rive on various events.
 
 -- ds.youtube:
@@ -108,6 +108,14 @@ $on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = fals
 
 
 -- end: ds.rendered
+
+
+
+-- ds.h1: Rive Events
+
+`fastn` language has various rive related [events](/rive-events/).
+These events can be attached to rive component. They fire the callback when any
+event occurs in rive component.
 
 
 
