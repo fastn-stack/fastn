@@ -555,7 +555,6 @@ fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> S
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html::HtmlUI,
-    ftd_js: &str,
     config: &mut fastn_core::Config,
     main_id: &str,
     font_style: &str,
