@@ -291,7 +291,7 @@ favicon: /-/fastn.io/images/favicon.svg
   document: backend/custom-urls.ftd
 - Request Data Processor: /request-data/
   document: ftd-host/request-data.ftd
-- SQL Processor: /package-query/
+- SQL Processor: /sql/
   document: ftd-host/package-query.ftd
 - Reading JSON: /get-data/
   document: ftd-host/get-data.ftd
@@ -390,3 +390,4 @@ favicon: /-/fastn.io/images/favicon.svg
 /ftd/kernel/: /kernel/
 /ftd/list/: /list/
 /discord/: https://discord.gg/eNXVBMq4xt
+/package-query/: /sql/
