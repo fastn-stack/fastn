@@ -61,6 +61,33 @@ impl Document {
 impl ftd::node::Node {
     fn to_terminal_node(self, rdom: &mut RealDom) -> NodeMut {
         let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> = Default::default();
+
+        for class in &self.classes {
+            if class == "ft_column" {
+                attributes.insert(("display", "style").into(), "flex".to_string().into());
+                attributes.insert(("align-items", "style").into(), "start".to_string().into());
+                attributes.insert(("justify-content", "style").into(), "start".to_string().into());
+                attributes.insert(("flex-direction", "style").into(), "column".to_string().into());
+            } else if class == "ft_row" {
+                attributes.insert(("display", "style").into(), "flex".to_string().into());
+                attributes.insert(("align-items", "style").into(), "start".to_string().into());
+                attributes.insert(("justify-content", "style").into(), "start".to_string().into());
+                attributes.insert(("flex-direction", "style").into(), "row".to_string().into());
+            }
+            /*if class == "ft_common" {
+                attributes.insert(("text-decoration", "style").into(), "none".to_string().into());
+                attributes.insert(("box-sizing", "style").into(), "border-box".to_string().into());
+                attributes.insert(("border-top-width", "style").into(), "0px".to_string().into());
+                attributes.insert(("border-bottom-width", "style").into(), "0px".to_string().into());
+                attributes.insert(("border-left-width", "style").into(), "0px".to_string().into());
+                attributes.insert(("border-right-width", "style").into(), "0px".to_string().into());
+                attributes.insert(("border-style", "style").into(), "solid".to_string().into());
+                attributes.insert(("height", "style").into(), "auto".to_string().into());
+                attributes.insert(("width", "style").into(), "auto".to_string().into());
+            } */
+        }
+
+
         for (k, v) in &self.attrs {
             dbg!(&k, &v);
             if let Some(ref v) = v.value {
