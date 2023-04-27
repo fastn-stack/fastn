@@ -13,6 +13,9 @@ pub async fn build(
     // No need to build static files when file is passed during fastn_core build (no-static behaviour)
     let no_static: bool = file.is_some();
 
+    // Default css and js
+    default_build_files(config.root.join(".build")).await?;
+
     // All redirect html files under .build
     let redirects = config.package.redirects.clone();
     if let Some(r) = redirects {
@@ -190,6 +193,29 @@ pub async fn build(
     if !no_static {
         config.download_fonts().await?;
     }
+    Ok(())
+}
+
+pub async fn default_build_files(base_path: camino::Utf8PathBuf) -> fastn_core::Result<()> {
+    let ftd_css = ftd::css();
+    let ftd_js = ftd::build_js();
+    let fastn_js = fastn_core::fastn_2022_js();
+
+    let save_ftd_css = base_path.join("ftd.css");
+    fastn_core::utils::update(save_ftd_css, ftd_css.as_bytes())
+        .await
+        .ok();
+
+    let save_ftd_js = base_path.join("ftd.js");
+    fastn_core::utils::update(save_ftd_js, ftd_js.as_bytes())
+        .await
+        .ok();
+
+    let save_fastn_js = base_path.join("fastn.js");
+    fastn_core::utils::update(save_fastn_js, fastn_js.as_bytes())
+        .await
+        .ok();
+
     Ok(())
 }
 
