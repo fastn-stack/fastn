@@ -38,6 +38,10 @@ pub fn css() -> &'static str {
     include_str!("../ftd.css")
 }
 
+pub fn terminal() -> &'static str {
+    include_str!("../terminal.ftd")
+}
+
 pub fn build_js() -> &'static str {
     include_str!("../build.js")
 }

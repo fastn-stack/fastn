@@ -1,5 +1,6 @@
 use dioxus_html::EventData;
-use dioxus_native_core::{node::TextNode, prelude::*, real_dom::NodeImmutable, NodeId};
+use dioxus_native_core::{node::TextNode, node::OwnedAttributeDiscription, node::OwnedAttributeValue, prelude::*,
+                         real_dom::NodeImmutable, NodeId};
 use rink::{render, Config, Driver};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
@@ -8,7 +9,7 @@ struct Document {}
 
 impl Document {
     fn parse_ftd_document() -> ftd::node::Node {
-        let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", "-- ftd.text: hello world")
+        let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", ftd::terminal())
             .unwrap_or_else(|e| panic!("{:?}", e));
         let executor =
             ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
@@ -18,19 +19,84 @@ impl Document {
     fn create(mut root: NodeMut, node: ftd::node::Node) -> Self {
         let myself = Document {};
 
-        dbg!(node);
+        /*let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> = Default::default();
+        for (k, v) in &node.attrs {
+            dbg!(&k, &v);
+            if let Some(ref v) = v.value {
+                attributes.insert(k.to_string().into(), v.to_string().into());
+            }
+        }
+
+        for (k, v) in &node.style {
+            dbg!(&k, &v);
+            if let Some(ref v) = v.value {
+                attributes.insert((k.as_str(), "style").into(), v.to_string().into());
+            }
+        }
+        let nn= rdom.create_node(NodeType::Element(ElementNode {
+            tag: node.node,
+            attributes,
+            ..Default::default()
+        }));
+*/
+
+
+        dbg!(&node);
 
         let root_id = root.id();
         let rdom = root.real_dom_mut();
 
-        let id = rdom
-            .create_node(NodeType::Text(TextNode::new("count.to_string(), this is a long long long text, lets see if they know how to wrap text etc.".to_string())))
-            .id();
-        rdom.get_mut(root_id).unwrap().add_child(id);
+        let terminal_node = dbg!(node.to_terminal_node(rdom).id());
+        // let id = rdom
+        //     .create_node(NodeType::Text(TextNode::new("count.to_string(), this is a long long long text, lets see if they know how to wrap text etc.".to_string())))
+        //     .id();
+
+        rdom.get_mut(root_id).unwrap().add_child(terminal_node);
 
         myself
     }
 }
+
+
+impl ftd::node::Node {
+    fn to_terminal_node(self, rdom: &mut RealDom) -> NodeMut {
+        let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> = Default::default();
+        for (k, v) in &self.attrs {
+            dbg!(&k, &v);
+            if let Some(ref v) = v.value {
+                attributes.insert(k.to_string().into(), v.to_string().into());
+            }
+        }
+
+        for (k, v) in &self.style {
+            dbg!(&k, &v);
+            if let Some(ref v) = v.value {
+                attributes.insert((k.as_str(), "style").into(), v.to_string().into());
+            }
+        }
+
+        let mut ele_id = vec![];
+        for c in self.children {
+            ele_id.push(c.to_terminal_node(rdom).id());
+        }
+
+        if let Some(text) = self.text.value {
+            ele_id.push(rdom.create_node(NodeType::Text(TextNode::new(text))).id());
+        }
+        let mut nn= rdom.create_node(NodeType::Element(ElementNode {
+            tag: self.node,
+            attributes,
+            ..Default::default()
+        }));
+
+
+        for id in ele_id {
+            nn.add_child(id);
+        }
+        nn
+    }
+}
+
 
 impl Driver for Document {
     fn update(&mut self, _: &Arc<RwLock<RealDom>>) {
