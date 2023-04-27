@@ -596,6 +596,28 @@ struct AppData {
     inline_css: Vec<String>,
 }
 
+fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http::Response> {
+    if req.path().ends_with("default.css") {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_CSS)
+                .body(ftd::css()),
+        );
+    } else if req.path().ends_with("default.js") {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(format!(
+                    "{}\n\n{}",
+                    ftd::build_js(),
+                    fastn_core::fastn_2022_js()
+                )),
+        );
+    }
+
+    None
+}
+
 #[tracing::instrument(skip_all)]
 async fn route(
     req: actix_web::HttpRequest,
@@ -603,6 +625,11 @@ async fn route(
     app_data: actix_web::web::Data<AppData>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
+
+    if let Some(default_response) = handle_default_route(&req) {
+        return Ok(default_response);
+    }
+
     if req.path().starts_with("/auth/") {
         return fastn_core::auth::routes::handle_auth(
             req,
