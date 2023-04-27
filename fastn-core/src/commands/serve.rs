@@ -597,23 +597,21 @@ struct AppData {
 }
 
 fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http::Response> {
-    if req.path().ends_with("ftd.css") {
+    if req.path().ends_with("default.css") {
         return Some(
             actix_web::HttpResponse::Ok()
-                .content_type("text/plain")
+                .content_type(mime_guess::mime::TEXT_CSS)
                 .body(ftd::css()),
         );
-    } else if req.path().ends_with("ftd.js") {
+    } else if req.path().ends_with("default.js") {
         return Some(
             actix_web::HttpResponse::Ok()
-                .content_type("text/plain")
-                .body(ftd::build_js()),
-        );
-    } else if req.path().ends_with("fastn.js") {
-        return Some(
-            actix_web::HttpResponse::Ok()
-                .content_type("text/plain")
-                .body(fastn_core::fastn_2022_js()),
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(format!(
+                    "{}\n\n{}",
+                    ftd::build_js(),
+                    fastn_core::fastn_2022_js()
+                )),
         );
     }
 

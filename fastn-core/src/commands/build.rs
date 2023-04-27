@@ -201,20 +201,18 @@ pub async fn default_build_files(base_path: camino::Utf8PathBuf) -> fastn_core::
     let ftd_js = ftd::build_js();
     let fastn_js = fastn_core::fastn_2022_js();
 
-    let save_ftd_css = base_path.join("ftd.css");
-    fastn_core::utils::update(save_ftd_css, ftd_css.as_bytes())
+    let save_default_css = base_path.join("default.css");
+    fastn_core::utils::update(save_default_css, ftd_css.as_bytes())
         .await
         .ok();
 
-    let save_ftd_js = base_path.join("ftd.js");
-    fastn_core::utils::update(save_ftd_js, ftd_js.as_bytes())
-        .await
-        .ok();
-
-    let save_fastn_js = base_path.join("fastn.js");
-    fastn_core::utils::update(save_fastn_js, fastn_js.as_bytes())
-        .await
-        .ok();
+    let save_default_js = base_path.join("default.js");
+    fastn_core::utils::update(
+        save_default_js,
+        format!("{}\n\n{}", ftd_js, fastn_js).as_bytes(),
+    )
+    .await
+    .ok();
 
     Ok(())
 }

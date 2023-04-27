@@ -591,15 +591,6 @@ pub fn replace_markers_2022(
             format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
         )
         .replace(
-            "__ftd_js__",
-            format!(
-                "{}{}",
-                fastn_core::build_js(ftd_js),
-                fastn_core::fastn_2022_js()
-            )
-            .as_str(),
-        )
-        .replace(
             "__extra_js__",
             get_extra_js(
                 config.ftd_external_js.as_slice(),
@@ -633,7 +624,6 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-        .replace("__ftd_css__", fastn_core::ftd_css(ftd::css()))
         .replace("__ftd_element_css__", "")
         .replace("__base_url__", base_url)
         .as_str(),
