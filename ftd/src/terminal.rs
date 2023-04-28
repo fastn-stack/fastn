@@ -1,6 +1,8 @@
 use dioxus_html::EventData;
-use dioxus_native_core::{node::TextNode, node::OwnedAttributeDiscription, node::OwnedAttributeValue, prelude::*,
-                         real_dom::NodeImmutable, NodeId};
+use dioxus_native_core::{
+    node::OwnedAttributeDiscription, node::OwnedAttributeValue, node::TextNode, prelude::*,
+    real_dom::NodeImmutable, NodeId,
+};
 use rink::{render, Config, Driver};
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
@@ -20,26 +22,25 @@ impl Document {
         let myself = Document {};
 
         /*let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> = Default::default();
-        for (k, v) in &node.attrs {
-            dbg!(&k, &v);
-            if let Some(ref v) = v.value {
-                attributes.insert(k.to_string().into(), v.to_string().into());
-            }
-        }
+                for (k, v) in &node.attrs {
+                    dbg!(&k, &v);
+                    if let Some(ref v) = v.value {
+                        attributes.insert(k.to_string().into(), v.to_string().into());
+                    }
+                }
 
-        for (k, v) in &node.style {
-            dbg!(&k, &v);
-            if let Some(ref v) = v.value {
-                attributes.insert((k.as_str(), "style").into(), v.to_string().into());
-            }
-        }
-        let nn= rdom.create_node(NodeType::Element(ElementNode {
-            tag: node.node,
-            attributes,
-            ..Default::default()
-        }));
-*/
-
+                for (k, v) in &node.style {
+                    dbg!(&k, &v);
+                    if let Some(ref v) = v.value {
+                        attributes.insert((k.as_str(), "style").into(), v.to_string().into());
+                    }
+                }
+                let nn= rdom.create_node(NodeType::Element(ElementNode {
+                    tag: node.node,
+                    attributes,
+                    ..Default::default()
+                }));
+        */
 
         dbg!(&node);
 
@@ -57,21 +58,30 @@ impl Document {
     }
 }
 
-
 impl ftd::node::Node {
     fn to_terminal_node(self, rdom: &mut RealDom) -> NodeMut {
-        let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> = Default::default();
+        let mut attributes: rustc_hash::FxHashMap<OwnedAttributeDiscription, OwnedAttributeValue> =
+            Default::default();
 
         for class in &self.classes {
             if class == "ft_column" {
                 attributes.insert(("display", "style").into(), "flex".to_string().into());
                 attributes.insert(("align-items", "style").into(), "start".to_string().into());
-                attributes.insert(("justify-content", "style").into(), "start".to_string().into());
-                attributes.insert(("flex-direction", "style").into(), "column".to_string().into());
+                attributes.insert(
+                    ("justify-content", "style").into(),
+                    "start".to_string().into(),
+                );
+                attributes.insert(
+                    ("flex-direction", "style").into(),
+                    "column".to_string().into(),
+                );
             } else if class == "ft_row" {
                 attributes.insert(("display", "style").into(), "flex".to_string().into());
                 attributes.insert(("align-items", "style").into(), "start".to_string().into());
-                attributes.insert(("justify-content", "style").into(), "start".to_string().into());
+                attributes.insert(
+                    ("justify-content", "style").into(),
+                    "start".to_string().into(),
+                );
                 attributes.insert(("flex-direction", "style").into(), "row".to_string().into());
             }
             /*if class == "ft_common" {
@@ -86,7 +96,6 @@ impl ftd::node::Node {
                 attributes.insert(("width", "style").into(), "auto".to_string().into());
             } */
         }
-
 
         for (k, v) in &self.attrs {
             dbg!(&k, &v);
@@ -110,12 +119,11 @@ impl ftd::node::Node {
         if let Some(text) = self.text.value {
             ele_id.push(rdom.create_node(NodeType::Text(TextNode::new(text))).id());
         }
-        let mut nn= rdom.create_node(NodeType::Element(ElementNode {
+        let mut nn = rdom.create_node(NodeType::Element(ElementNode {
             tag: self.node,
             attributes,
             ..Default::default()
         }));
-
 
         for id in ele_id {
             nn.add_child(id);
@@ -123,7 +131,6 @@ impl ftd::node::Node {
         nn
     }
 }
-
 
 impl Driver for Document {
     fn update(&mut self, _: &Arc<RwLock<RealDom>>) {
