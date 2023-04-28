@@ -1,0 +1,92 @@
+-- my-ds.page: Postcard 🚧
+
+Video Title: Let's create a postcard using `fastn`
+
+Owner: Ajit
+
+Audience: Frontend developer, designer
+
+Goal: To help `fastn` users learn how to create a postcard.
+
+Assumption: Have already installed `fastn` and create a fastn package.
+Understanding of datatypes, components.
+
+
+-- ds.h1: Intro Clip
+
+**Screen**: Introduction slide
+
+
+**Script**
+
+Hey Guys, my name is Ajit and I am back with another video on `fastn`.
+In this video we will learn how to create a post-card using `fastn language`. 
+
+We will create a component for the post-card.
+Apply various properties to it. 
+We will also give an image or gif to the psot-card
+We will create add a button to the post card as well.
+
+
+
+-- ds.h2: **Project build-up**
+
+\;; Show a demo page with the psot card that we are going to create
+
+**Script:**
+
+Let's show you what we are creating. This is the post-card we will create using
+`fastn language`.
+
+There's an image on the left side and a title and sub-title and some
+description
+
+We have given a button to it. I have imported this button from a different
+package I created. If you want to learn how to create a button you can checkout
+that video as well.
+
+Let's build the post-card now.
+
+Create a component
+
+-- ds.code:
+lang:ftd
+
+\-- component post-card:
+
+\-- end: post-card
+
+
+-- ds.markdown:
+
+Now let's give some title, subtitle, description and also image to it.
+
+-- ds.code:
+lang:ftd
+
+\-- component post-card:
+caption title:
+optional string subtitle:
+optional body description:
+optional ftd.image-src image:
+
+\-- end: post-card
+
+-- ds.markdown:
+
+There can be a post card which only takes a caption. So we can make other's
+optional.
+
+Now, in this component we will create a row, with following properties
+
+\-- ftd.row:
+width.fixed.px: 680
+color: $inherited.colors.text
+border-width.px: 2
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.background.step-1
+
+
+-- end: my-ds.page
+
+

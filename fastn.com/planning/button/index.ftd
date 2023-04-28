@@ -12,11 +12,7 @@ Assumption: Have already installed `fastn` and create a fastn package.
 Understanding of datatypes, components.
 
 
--- ds.h1: Part 1 - Create Button
-
-In this part we will create simple UI for button.
-
--- ds.h2: Intro Clip
+-- ds.h1: Intro Clip
 
 **Screen**: Introduction slide
 
