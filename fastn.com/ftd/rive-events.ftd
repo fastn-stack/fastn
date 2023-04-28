@@ -4,6 +4,9 @@ These events are specific to [rive](/rive/) component and can be added to rive
 components only. These fire callback at various events in rive component. To
 know more about other events in fastn, checkout [events](/events/) page.
 
+-- ds.youtube:
+v: qOB3dX0dWvk
+
 -- ds.h1: `on-rive-play[<timeline>]`
 
 The `on-rive-play[<timeline>]` event gets fired when the animation starts
