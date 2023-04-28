@@ -414,7 +414,6 @@ pub(crate) async fn read_ftd_2022(
     let file_content = fastn_core::utils::replace_markers_2022(
         fastn_core::ftd_html(),
         html_ui,
-        ftd::build_js(),
         config,
         main.id_to_path().as_str(),
         font_style.as_str(),

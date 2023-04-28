@@ -24,7 +24,7 @@ impl Document {
         let root_id = root.id();
         let rdom = root.real_dom_mut();
 
-        let terminal_node = dbg!(node.to_terminal_node(rdom).id());
+        let terminal_node = node.to_terminal_node(rdom).id();
 
         rdom.get_mut(root_id).unwrap().add_child(terminal_node);
 

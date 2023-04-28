@@ -555,7 +555,6 @@ fn get_extra_css(external_css: &[String], inline_css: &[String], css: &str) -> S
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html::HtmlUI,
-    ftd_js: &str,
     config: &mut fastn_core::Config,
     main_id: &str,
     font_style: &str,
@@ -586,18 +585,11 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_external_children__", "{}")
+        .replace("__hashed_default_css__", hashed_default_css_name().as_str())
+        .replace("__hashed_default_js__", hashed_default_js_name().as_str())
         .replace(
             "__ftd__",
             format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
-        )
-        .replace(
-            "__ftd_js__",
-            format!(
-                "{}{}",
-                fastn_core::build_js(ftd_js),
-                fastn_core::fastn_2022_js()
-            )
-            .as_str(),
         )
         .replace(
             "__extra_js__",
@@ -633,7 +625,6 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-        .replace("__ftd_css__", fastn_core::ftd_css(ftd::css()))
         .replace("__ftd_element_css__", "")
         .replace("__base_url__", base_url)
         .as_str(),
@@ -805,6 +796,24 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .query_pairs()
             .into_owned()
             .collect_vec(),
+    )
+}
+pub fn generate_hash(content: &str) -> String {
+    use sha2::digest::FixedOutput;
+    use sha2::Digest;
+    let mut hasher = sha2::Sha256::new();
+    hasher.update(content);
+    format!("{:X}", hasher.finalize_fixed())
+}
+
+pub fn hashed_default_css_name() -> String {
+    format!("default-{}.css", generate_hash(ftd::css()))
+}
+
+pub fn hashed_default_js_name() -> String {
+    format!(
+        "default-{}.js",
+        generate_hash(format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js()).as_str())
     )
 }
 
