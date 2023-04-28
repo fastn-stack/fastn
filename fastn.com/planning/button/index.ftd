@@ -30,13 +30,12 @@ In this video we are going to create buttons using `fastn language`.
 
 
 We will start off by creating a button with basic UI then we will
-recreate these buttons as you see on the screen in the later stages of this 
+recreate this button as you see on the screen in the later stages of this 
 video.
 
 
 This UI is just an inspiration we took from Vercel. We will make it look like
-this using `fastn` but will do some of our own stuffs like giving it a shadow on
-hover because in Vercel it is a continous shadow.
+this using `fastn`.
 
 
 To make the button we will use the concepts like: 
@@ -62,6 +61,11 @@ in the description below.
 
 **Script:**
 
+On a quick note, I have created a `fastn package` on my machine. If you have
+gone through the Expander Course, i have mentioned that a `fastn package`
+primarily needs two files. `FASTN.ftd` and `index.ftd`.
+
+In the `index.ftd` file.
 
 Let's start by creating a `component` and we will call it `button`.
 The syntax is:
@@ -109,6 +113,10 @@ border-width.px: 2
 
 -- ds.markdown:
 
+The dollars used here is for reference that the value in the caption of 
+`ftd.text` will come from component button's title and same for link.
+
+This will do. We can use this component to show the button.
 We have a basic button ready.
 
 
@@ -117,25 +125,10 @@ We have a basic button ready.
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-with-shadow.png
 
-Let's start with the second part where we start putting things together to make
-these two buttons. As you can see the two buttons are in a row so we will use
-`ftd.row` container component. There are various style properties applied with
-differnt background color as well as the first button has a icon, so will will
-add that too. Later on we will add shadow to the second button.
-
-I also want you to understand the concept of inheritence and why we use it? How
-we use it? Why it is the best practice to use concept of inheritence while
-giving a `role` or `color`. So for that I will use a package called `doc-site`
-which is a template built using `fastn language`. For the purpose to stick to
-the concept we are learning, we will skip that part i.e. how to use another
-package in your project? If you want to learn about it, you can checkout the
-the Expander course video. Link is shared in the description.
-
-
-
 -- ds.markdown:
 
-Given some styling properties to the row.
+Let's move to the second part where we start putting things together to make
+this UI. Let's start applying some styling properties to the `ftd.text`
 
 -- ds.code:
 lang: ftd
@@ -143,18 +136,23 @@ lang: ftd
 \-- ftd.text: $button.title
 link: $button.link
 border-width.px: 2
-border-radius.px: 6        ;; <hl>
 padding.px: 10             ;; <hl>
+border-radius.px: 6        ;; <hl>
 min-width.fixed.px: 175    ;; <hl>
 style: bold                ;; <hl>
-
+text-align: center         ;; <hl>
 
 
 -- ds.markdown:
 
-After that, add the color and role to the text. 
+After that, we will give `color` and `role` to the text. 
 
-For that, in the component definition we have added a `text-color`: 
+For that, in the component definition we have added a variable `text-color` of 
+type `ftd.color`. 
+
+We can give a default value using `$inherited.colors` to this variable. In
+case, the user doesn't pass any text-color, while calling this component, it
+will take the inherited color from the color-scheme.
 
 -- ds.code:
 lang: ftd
@@ -169,7 +167,9 @@ ftd.color text-color: $inherited.colors.text-strong 	  ;; <hl>
 
 -- ds.markdown:
 
-In the `ftd.text`, we will use these component properties.
+And in the `ftd.text`, we will pass the reference of text-color to the color.
+And for the `role` we have passed as `$inherited.type.copy-regular`
+
 
 -- ds.code:
 lang: ftd
@@ -180,13 +180,18 @@ border-width.px: 2
 border-radius.px: 6        
 padding.px: 10             
 min-width.fixed.px: 175    
-style: bold                           
+style: bold    
+color: $button.text-color             ;; <hl>                       
 role: $inherited.types.copy-regular		;; <hl>
-color: $button.text-color 	          ;; <hl>
 
 
 
 -- ds.markdown: 
+
+`role` is a font specification which defines several font-related properties
+like `font-weight`, `line-height`, `letter-spacing` etc. If you want to read
+about roles you can checkout the `ftd.responsive-type` under `built-in types`.
+The URL provided in the description below.
 
 Let's keep improving it. We need background color and border color as well.
 
@@ -199,8 +204,23 @@ optional string link:
 ftd.color text-color: $inherited.colors.text-strong
 ftd.color bg-color: $inherited.colors.background.base				;; <hl>
 ftd.color border-color: $inherited.colors.border-strong			;; <hl>
-    
 
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $button.title
+link: $button.link
+border-width.px: 2
+border-radius.px: 6        
+padding.px: 10             
+min-width.fixed.px: 175  
+text-align: center  
+style: bold    
+color: $button.text-color                                    
+role: $inherited.types.copy-regular   
+background.solid: $button.bg-color    ;; <hl>
+border-color: $button.border-color    ;; <hl>
 
 
 -- ds.markdown:
@@ -227,8 +247,12 @@ dark: #e4b0ac
 
 -- ds.markdown:
 
+These variables are of record type `ftd.color`. You can check the URL of 
+records to read about them. 
+
+
 Let's add the shadow to the button. First we will create a variable of 
-type `ftd.shadow`, which is a record.
+type `ftd.shadow`, which is also a record.
 
 -- ds.code:
 lang: ftd
@@ -274,13 +298,15 @@ padding.px: 10
 min-width.fixed.px: 175    
 style: bold                           
 role: $inherited.types.copy-regular   
-color: $button.text-color            
+color: $button.text-color      
+background.solid: $button.bg-color   
+border-color: $button.border-color     
 shadow: $button.hover-shadow           ;; <hl>
 
 
 -- ds.markdown:
 
-Now we can create events which on-hover shows the shadow. So we will create a
+Now we can create events which `on-hover` shows the shadow. So we will create a
 boolean variable to component definition and create two events of
 `on-mouse-enter` and `on-mouse-leave`.
 
@@ -349,8 +375,8 @@ link: https://fastn.io/expander
 
 There you go, we have polished the UI and it looks similar to our original UI
 with our own touch to it. I hope you have learnt with me and found this video
-easy to follow. You can share your feedbacks if you wish to in comments or on
-our official Discord server.
+easy to follow. If you like us, you can give us a ✨ on 
+[GitHub](https://github.com/fastn-stack/fastn).
 
 Also, we would love to see your package which you will create following this
 video. You can share it on the dicord's "show-and-tell" channel. Thank you
