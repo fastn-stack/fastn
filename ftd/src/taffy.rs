@@ -1,3 +1,5 @@
+use itertools::Itertools;
+use taffy::prelude::{points, zero};
 type Color = String;
 
 enum Element {
@@ -26,6 +28,7 @@ struct Image {
     src: String,
 }
 
+#[derive(Default)]
 pub struct Borders {
     top: BorderEdge,
     right: BorderEdge,
@@ -37,12 +40,14 @@ pub struct Borders {
     bottom_right_radius: Dimension,
 }
 
+#[derive(Default)]
 pub struct BorderEdge {
     color: Option<Color>,
     style: BorderStyle,
     width: Dimension,
 }
 
+#[derive(Default)]
 pub enum BorderStyle {
     Dotted,
     Dashed,
@@ -53,24 +58,17 @@ pub enum BorderStyle {
     Inset,
     Outset,
     Hidden,
+    #[default]
     None,
 }
 
+#[derive(Default)]
 pub enum Dimension {
     Undefined,
+    #[default]
     Auto,
     Px(u32),
     Percent(f32),
-}
-
-fn ftd() -> ftd::executor::Element {
-    let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", ftd::terminal())
-        .unwrap_or_else(|e| panic!("{:?}", e));
-    ftd::executor::Element::Column(
-        ftd::executor::ExecuteDoc::from_interpreter(doc)
-            .unwrap_or_else(|e| panic!("{:?}", e))
-            .main,
-    )
 }
 
 impl ftd::executor::Element {
@@ -98,9 +96,79 @@ impl ftd::executor::Element {
     }
 }
 
+impl ftd::executor::Length {
+    fn to_dimension(&self) -> taffy::prelude::Dimension {
+        match self {
+            ftd::executor::Length::Px(v) => taffy::prelude::Dimension::Points(*v as f32),
+            _ => todo!(),
+        }
+    }
+}
+
+impl ftd::executor::Resizing {
+    fn to_dimension(&self) -> taffy::prelude::Dimension {
+        dbg!(match { self } {
+            ftd::executor::Resizing::Fixed(f) => f.to_dimension(),
+            _ => taffy::prelude::Dimension::Auto,
+        })
+    }
+}
 impl ftd::executor::Column {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
-        todo!()
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+        let s = taffy::style::Style {
+            display: Default::default(),
+            position: Default::default(),
+            inset: zero(),
+            size: taffy::prelude::Size {
+                width: self
+                    .common
+                    .width
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_dimension())
+                    .unwrap_or(taffy::prelude::auto()),
+                height: taffy::prelude::auto(),
+            },
+            min_size: zero(),
+            max_size: zero(),
+            aspect_ratio: None,
+            margin: zero(),
+            padding: zero(),
+            border: zero(),
+            align_items: None,
+            align_self: None,
+            justify_items: None,
+            justify_self: None,
+            align_content: None,
+            justify_content: None,
+            gap: zero(),
+            flex_direction: Default::default(),
+            flex_wrap: Default::default(),
+            flex_basis: taffy::prelude::Dimension::Auto,
+            flex_grow: 0.0,
+            flex_shrink: 0.0,
+            grid_template_rows: vec![],
+            grid_template_columns: vec![],
+            grid_auto_rows: vec![],
+            grid_auto_columns: vec![],
+            grid_auto_flow: Default::default(),
+            grid_row: Default::default(),
+            grid_column: Default::default(),
+        };
+
+        let children = self
+            .container
+            .children
+            .iter()
+            .map(|c| c.to_taffy(t))
+            .collect_vec();
+
+        Element::Container(Container {
+            taffy: t.new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec()).unwrap(),
+            border: Default::default(),
+            background_color: None,
+            children,
+        })
     }
 }
 impl ftd::executor::Row {
@@ -182,16 +250,33 @@ impl Element {
     }
 }
 
+fn ftd() -> ftd::executor::Element {
+    let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", ftd::taffy())
+        .unwrap_or_else(|e| panic!("{:?}", e));
+    ftd::executor::Element::Column(
+        ftd::executor::ExecuteDoc::from_interpreter(doc)
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .main,
+    )
+}
+
 pub fn run() {
     t2();
 
     let mut taffy = taffy::Taffy::new();
     let f = ftd().to_taffy(&mut taffy);
-    use taffy::prelude::TaffyMaxContent;
 
     taffy
-        .compute_layout(f.root_taffy(), taffy::prelude::Size::MAX_CONTENT)
+        .compute_layout(
+            f.root_taffy(),
+            taffy::prelude::Size {
+                width: points(100.0),
+                height: points(100.0),
+            },
+        )
         .unwrap();
+
+    dbg!(taffy.layout(f.root_taffy()));
     f.render(&taffy)
 }
 
@@ -217,7 +302,7 @@ fn t2() {
     let body_node = taffy
         .new_leaf(Style {
             size: Size {
-                width: points(800.0),
+                width: points(600.0),
                 height: auto(),
             },
             flex_grow: 1.0,
@@ -231,7 +316,7 @@ fn t2() {
                 flex_direction: FlexDirection::Column,
                 size: Size {
                     width: points(800.0),
-                    height: points(500.0),
+                    height: points(700.0),
                 },
                 ..Default::default()
             },
