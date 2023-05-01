@@ -22,6 +22,8 @@ members = [
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan.
 actix-web = "4"
+taffy = "0.3"
+crossterm = "0.26"
 antidote = "1"
 # ariadne = "0.14"
 rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
