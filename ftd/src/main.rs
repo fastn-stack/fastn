@@ -37,10 +37,16 @@ fn t() {
 }
 
 pub fn main() {
-    // cargo run --features terminal -- --terminal
+    // cargo run --features terminal
     #[cfg(feature = "terminal")]
-    if std::env::args().any(|e| e == "--terminal") {
+    if true {
         ftd::terminal::run();
+        return;
+    }
+    // cargo run --features native-rendering
+    #[cfg(feature = "native-rendering")]
+    if true {
+        ftd::taffy::run();
         return;
     }
     // t();

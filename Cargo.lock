@@ -909,6 +909,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "crossterm"
+version = "0.26.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a84cda67535339806297f1b331d6dd6320470d2a0fe65381e79ee9e156dd3d13"
+dependencies = [
+ "bitflags 1.3.2",
+ "crossterm_winapi",
+ "libc",
+ "mio 0.8.6",
+ "parking_lot 0.12.1",
+ "signal-hook",
+ "signal-hook-mio",
+ "winapi",
+]
+
+[[package]]
 name = "crossterm_winapi"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1200,7 +1216,7 @@ dependencies = [
  "shipyard",
  "slab",
  "smallvec",
- "taffy",
+ "taffy 0.2.2",
 ]
 
 [[package]]
@@ -1654,6 +1670,7 @@ name = "ftd"
 version = "0.2.0"
 dependencies = [
  "comrak 0.18.0",
+ "crossterm 0.26.1",
  "css-color-parser",
  "diffy",
  "dioxus-html",
@@ -1677,6 +1694,7 @@ dependencies = [
  "serde_json",
  "slug",
  "syntect",
+ "taffy 0.3.12",
  "thiserror",
  "tokio",
  "tracing",
@@ -1843,6 +1861,15 @@ dependencies = [
  "fnv",
  "log",
  "regex",
+]
+
+[[package]]
+name = "grid"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0634107a3a005070dd73e27e74ecb691a94e9e5ba7829f434db7fbf73a6b5c47"
+dependencies = [
+ "no-std-compat",
 ]
 
 [[package]]
@@ -2529,6 +2556,12 @@ name = "nias"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab250442c86f1850815b5d268639dff018c0627022bc1940eb2d642ca1ce12f0"
+
+[[package]]
+name = "no-std-compat"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b93853da6d84c2e3c7d730d6473e8817692dd89be387eb01b94d7f108ecb5b8c"
 
 [[package]]
 name = "notify"
@@ -3229,7 +3262,7 @@ dependencies = [
  "rustc-hash",
  "shipyard",
  "smallvec",
- "taffy",
+ "taffy 0.2.2",
  "tokio",
  "tui",
 ]
@@ -3755,6 +3788,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c13e87d38366d3cadcf282165b6ba51d5422ed846459997f55a347fe98242f61"
 dependencies = [
  "arrayvec",
+ "num-traits",
+ "slotmap",
+]
+
+[[package]]
+name = "taffy"
+version = "0.3.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3540ec65df399929a04a485feb50144475735920cc47eaf8eba09c70b1df4055"
+dependencies = [
+ "arrayvec",
+ "grid",
  "num-traits",
  "slotmap",
 ]
