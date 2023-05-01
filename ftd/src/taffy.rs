@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use taffy::prelude::{points, zero};
+use taffy::prelude::{points};
 type Color = String;
 
 enum Element {
@@ -116,9 +116,6 @@ impl ftd::executor::Resizing {
 impl ftd::executor::Column {
     fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
         let s = taffy::style::Style {
-            display: Default::default(),
-            position: Default::default(),
-            inset: zero(),
             size: taffy::prelude::Size {
                 width: self
                     .common
@@ -129,31 +126,7 @@ impl ftd::executor::Column {
                     .unwrap_or(taffy::prelude::auto()),
                 height: taffy::prelude::auto(),
             },
-            min_size: zero(),
-            max_size: zero(),
-            aspect_ratio: None,
-            margin: zero(),
-            padding: zero(),
-            border: zero(),
-            align_items: None,
-            align_self: None,
-            justify_items: None,
-            justify_self: None,
-            align_content: None,
-            justify_content: None,
-            gap: zero(),
-            flex_direction: Default::default(),
-            flex_wrap: Default::default(),
-            flex_basis: taffy::prelude::Dimension::Auto,
-            flex_grow: 0.0,
-            flex_shrink: 0.0,
-            grid_template_rows: vec![],
-            grid_template_columns: vec![],
-            grid_auto_rows: vec![],
-            grid_auto_columns: vec![],
-            grid_auto_flow: Default::default(),
-            grid_row: Default::default(),
-            grid_column: Default::default(),
+            ..Default::default()
         };
 
         let children = self
