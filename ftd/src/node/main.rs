@@ -362,7 +362,7 @@ impl ftd::executor::Row {
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            jc.properties.extend(spacing_value.properties.to_owned());
+            jc.properties.extend(spacing_value.properties);
         } else {
             n.style.check_and_insert("justify-content", spacing_value);
         }
@@ -423,7 +423,7 @@ impl ftd::executor::Column {
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            jc.properties.extend(spacing_value.properties.to_owned());
+            jc.properties.extend(spacing_value.properties);
         } else {
             n.style.check_and_insert("justify-content", spacing_value);
         }

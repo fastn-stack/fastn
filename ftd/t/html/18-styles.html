@@ -2041,16 +2041,12 @@ null
 }
 `.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.left" || {0} == "ftd#align.bottom-left") {
-"start"
-} else if ({0} == "ftd#align.top-center" || {0} == "ftd#align.center" || {0} == "ftd#align.bottom-center") {
-"center"
-} else if ({0} == "ftd#align.top-right" || {0} == "ftd#align.right" || {0} == "ftd#align.bottom-right") {
-"end"
+else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
-null
+"start"
 }
-`.format(JSON.stringify("ftd#align.top-center")));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20)))));}
 }
 window.node_change_main["5:main__align-items"] = function(data) {
 if(function(){
@@ -2094,16 +2090,12 @@ null
 }
 `.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ({0} == "ftd#align.top-left" || {0} == "ftd#align.top-center" || {0} == "ftd#align.top-right") {
-"start"
-} else if ({0} == "ftd#align.left" || {0} == "ftd#align.center" || {0} == "ftd#align.right") {
-"center"
-} else if ({0} == "ftd#align.bottom-left" || {0} == "ftd#align.bottom-center" || {0} == "ftd#align.bottom-right") {
-"end"
+else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
-null
+"start"
 }
-`.format(JSON.stringify("ftd#align.top-center")));}
+`.format(JSON.stringify(`{0}px`.format(JSON.stringify(2)))));}
 }
 window.node_change_main["6:main__height"] = function(data) {
 if(function(){
