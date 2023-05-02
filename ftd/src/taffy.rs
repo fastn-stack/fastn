@@ -1,5 +1,6 @@
 use itertools::Itertools;
-use taffy::prelude::{points};
+use taffy::prelude::points;
+
 type Color = String;
 
 enum Element {
@@ -97,113 +98,195 @@ impl ftd::executor::Element {
 }
 
 impl ftd::executor::Length {
-    fn to_dimension(&self) -> taffy::prelude::Dimension {
+    fn dim(&self) -> taffy::prelude::Dimension {
         match self {
             ftd::executor::Length::Px(v) => taffy::prelude::Dimension::Points(*v as f32),
+            _ => todo!(),
+        }
+    }
+    fn lpa(&self) -> taffy::prelude::LengthPercentageAuto {
+        match self {
+            ftd::executor::Length::Px(v) => taffy::prelude::LengthPercentageAuto::Points(*v as f32),
+            _ => todo!(),
+        }
+    }
+    fn lp(&self) -> taffy::prelude::LengthPercentage {
+        match self {
+            ftd::executor::Length::Px(v) => taffy::prelude::LengthPercentage::Points(*v as f32),
             _ => todo!(),
         }
     }
 }
 
 impl ftd::executor::Resizing {
-    fn to_dimension(&self) -> taffy::prelude::Dimension {
-        dbg!(match { self } {
-            ftd::executor::Resizing::Fixed(f) => f.to_dimension(),
+    fn dim(&self) -> taffy::prelude::Dimension {
+        match self {
+            ftd::executor::Resizing::Fixed(f) => f.dim(),
             _ => taffy::prelude::Dimension::Auto,
-        })
+        }
     }
 }
-impl ftd::executor::Column {
-    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
-        let s = taffy::style::Style {
+
+impl ftd::executor::Value<Option<ftd::executor::Resizing>> {
+    fn dim(&self) -> taffy::prelude::Dimension {
+        self.value
+            .as_ref()
+            .map(|v| v.dim())
+            .unwrap_or(taffy::prelude::auto())
+    }
+}
+
+impl ftd::executor::Value<Option<ftd::executor::Length>> {
+    fn lpa(&self, f1: &Self, f2: &Self) -> taffy::prelude::LengthPercentageAuto {
+        self.value
+            .as_ref()
+            .or(f1.value.as_ref().or(f2.value.as_ref()))
+            .map(|v| v.lpa())
+            .unwrap_or(taffy::prelude::auto())
+    }
+
+    fn lp(&self, f1: &Self, f2: &Self) -> taffy::prelude::LengthPercentage {
+        self.value
+            .as_ref()
+            .or(f1.value.as_ref().or(f2.value.as_ref()))
+            .map(|v| v.lp())
+            .unwrap_or(taffy::prelude::LengthPercentage::Points(0.0))
+    }
+}
+
+impl ftd::executor::Common {
+    fn to_style(&self) -> taffy::style::Style {
+        taffy::style::Style {
+            display: taffy::prelude::Display::Flex,
             size: taffy::prelude::Size {
-                width: self
-                    .common
-                    .width
-                    .value
-                    .as_ref()
-                    .map(|v| v.to_dimension())
-                    .unwrap_or(taffy::prelude::auto()),
-                height: taffy::prelude::auto(),
+                width: self.width.dim(),
+                height: self.height.dim(),
+            },
+            margin: taffy::prelude::Rect {
+                left: self.margin_left.lpa(&self.margin_vertical, &self.margin),
+                right: self.margin_right.lpa(&self.margin_vertical, &self.margin),
+                top: self.margin_top.lpa(&self.margin_horizontal, &self.margin),
+                bottom: self
+                    .margin_bottom
+                    .lpa(&self.margin_horizontal, &self.margin),
+            },
+            padding: taffy::prelude::Rect {
+                left: self.padding_left.lp(&self.padding_vertical, &self.padding),
+                right: self.padding_right.lp(&self.padding_vertical, &self.padding),
+                top: self.padding_top.lp(&self.padding_horizontal, &self.padding),
+                bottom: self
+                    .padding_bottom
+                    .lp(&self.padding_horizontal, &self.padding),
             },
             ..Default::default()
-        };
+        }
+    }
+}
 
-        let children = self
-            .container
-            .children
-            .iter()
-            .map(|c| c.to_taffy(t))
-            .collect_vec();
+impl ftd::executor::Container {
+    fn child_elements(&self, t: &mut taffy::Taffy) -> Vec<Element> {
+        self.children.iter().map(|c| c.to_taffy(t)).collect_vec()
+    }
+}
+
+impl ftd::executor::Column {
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+        let s = self.common.to_style();
+        let children = self.container.child_elements(t);
 
         Element::Container(Container {
-            taffy: t.new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec()).unwrap(),
+            taffy: t
+                .new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec())
+                .unwrap(),
             border: Default::default(),
             background_color: None,
             children,
         })
     }
 }
+
 impl ftd::executor::Row {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
-        todo!()
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+        let s = self.common.to_style();
+        let children = self.container.child_elements(t);
+
+        Element::Container(Container {
+            taffy: t
+                .new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec())
+                .unwrap(),
+            border: Default::default(),
+            background_color: None,
+            children,
+        })
     }
 }
+
 impl ftd::executor::ContainerElement {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Document {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Text {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Image {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Code {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Iframe {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::TextInput {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::RawElement {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::IterativeElement {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::CheckBox {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::WebComponent {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()
     }
 }
+
 impl ftd::executor::Rive {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
         todo!()

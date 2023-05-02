@@ -1,4 +1,5 @@
 -- ftd.column:
 width.fixed.px: 20
+height.fixed.px: 200
 
 -- end: ftd.column
