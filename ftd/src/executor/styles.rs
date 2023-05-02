@@ -1739,8 +1739,8 @@ impl Spacing {
     pub fn justify_content_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
-                if (\"{0}\" == \"space-between\" || \"{0}\" == \"space-around\" || \"{0}\" == \"space-evenly\") {
-                    \"{0}\"
+                if ({0} == \"space-between\" || {0} == \"space-around\" || {0} == \"space-evenly\") {
+                    {0}
                 } else {
                     \"start\"
                 }
@@ -1753,8 +1753,8 @@ impl Spacing {
     pub fn fixed_content_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
-                if (\"{0}\" != \"space-between\" && \"{0}\" != \"space_around\" && \"{0}\" != \"space-evenly\") {
-                    \"{0}\"
+                if ({0} != \"space-between\" && {0} != \"space_around\" && {0} != \"space-evenly\") {
+                    {0}
                 } else {
                     null
                 }

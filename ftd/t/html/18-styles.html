@@ -1966,15 +1966,15 @@ window.node_change_main["3:main__gap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
@@ -1985,15 +1985,15 @@ window.node_change_main["3:main__justify-content"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
