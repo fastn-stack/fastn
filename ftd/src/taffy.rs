@@ -1,69 +1,72 @@
 use itertools::Itertools;
 use taffy::prelude::points;
 
-type Color = String;
-
+#[derive(Debug)]
 enum Element {
     Container(Container),
     Text(Text),
     Image(Image),
 }
 
+#[derive(Debug)]
 struct Container {
     taffy: taffy::node::Node,
-    border: Borders,
-    background_color: Option<String>,
+    // border: Borders,
+    background_color: Option<ftd::executor::Color>,
     children: Vec<Element>,
 }
 
+#[derive(Debug)]
 struct Text {
     taffy: taffy::node::Node,
-    border: Borders,
+    // border: Borders,
     text: String,
-    color: Color,
+    style: Option<ftd::executor::TextStyle>,
+    color: Option<ftd::executor::Color>,
 }
 
+#[derive(Debug)]
 struct Image {
     taffy: taffy::node::Node,
-    border: Borders,
+    // border: Borders,
     src: String,
 }
 
-#[derive(Default)]
-pub struct Borders {
-    top: BorderEdge,
-    right: BorderEdge,
-    bottom: BorderEdge,
-    left: BorderEdge,
-    top_left_radius: Dimension,
-    top_right_radius: Dimension,
-    bottom_left_radius: Dimension,
-    bottom_right_radius: Dimension,
-}
+// #[derive(Default, Debug)]
+// pub struct Borders {
+//     top: BorderEdge,
+//     right: BorderEdge,
+//     bottom: BorderEdge,
+//     left: BorderEdge,
+//     top_left_radius: Dimension,
+//     top_right_radius: Dimension,
+//     bottom_left_radius: Dimension,
+//     bottom_right_radius: Dimension,
+// }
+//
+// #[derive(Default, Debug)]
+// pub struct BorderEdge {
+//     color: Option<ftd::executor::Color>,
+//     style: BorderStyle,
+//     width: Dimension,
+// }
+//
+// #[derive(Default, Debug)]
+// pub enum BorderStyle {
+//     Dotted,
+//     Dashed,
+//     Solid,
+//     Double,
+//     Groove,
+//     Ridge,
+//     Inset,
+//     Outset,
+//     Hidden,
+//     #[default]
+//     None,
+// }
 
-#[derive(Default)]
-pub struct BorderEdge {
-    color: Option<Color>,
-    style: BorderStyle,
-    width: Dimension,
-}
-
-#[derive(Default)]
-pub enum BorderStyle {
-    Dotted,
-    Dashed,
-    Solid,
-    Double,
-    Groove,
-    Ridge,
-    Inset,
-    Outset,
-    Hidden,
-    #[default]
-    None,
-}
-
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub enum Dimension {
     Undefined,
     #[default]
@@ -183,41 +186,60 @@ impl ftd::executor::Common {
     }
 }
 
+impl ftd::executor::Value<Option<ftd::executor::Background>> {
+    fn to_color(&self) -> Option<ftd::executor::Color> {
+        self.value.as_ref().map(|v| match v {
+            ftd::executor::Background::Solid(c) => c.to_owned(),
+            _ => todo!(),
+        })
+    }
+}
+
 impl ftd::executor::Container {
     fn child_elements(&self, t: &mut taffy::Taffy) -> Vec<Element> {
         self.children.iter().map(|c| c.to_taffy(t)).collect_vec()
     }
 }
 
+fn element_from_container(
+    direction: taffy::prelude::FlexDirection,
+    common: &ftd::executor::Common,
+    container: &ftd::executor::Container,
+    t: &mut taffy::Taffy,
+) -> Element {
+    let mut s = common.to_style();
+    s.flex_direction = direction;
+    let children = container.child_elements(t);
+
+    Element::Container(Container {
+        taffy: t
+            .new_with_children(s, &children.iter().map(|v| v.taffy()).collect_vec())
+            .unwrap(),
+        // border: Default::default(), // TODO
+        background_color: common.background.to_color(),
+        children,
+    })
+}
+
 impl ftd::executor::Column {
     fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
-        let s = self.common.to_style();
-        let children = self.container.child_elements(t);
-
-        Element::Container(Container {
-            taffy: t
-                .new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec())
-                .unwrap(),
-            border: Default::default(),
-            background_color: None,
-            children,
-        })
+        element_from_container(
+            taffy::prelude::FlexDirection::Column,
+            &self.common,
+            &self.container,
+            t,
+        )
     }
 }
 
 impl ftd::executor::Row {
     fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
-        let s = self.common.to_style();
-        let children = self.container.child_elements(t);
-
-        Element::Container(Container {
-            taffy: t
-                .new_with_children(s, &children.iter().map(|v| v.root_taffy()).collect_vec())
-                .unwrap(),
-            border: Default::default(),
-            background_color: None,
-            children,
-        })
+        element_from_container(
+            taffy::prelude::FlexDirection::Row,
+            &self.common,
+            &self.container,
+            t,
+        )
     }
 }
 
@@ -234,8 +256,14 @@ impl ftd::executor::Document {
 }
 
 impl ftd::executor::Text {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
-        todo!()
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+        Element::Text(Text {
+            taffy: t.new_leaf(self.common.to_style()).unwrap(),
+            // border: Default::default(),
+            text: self.text.value.original.clone(),
+            style: self.style.value.clone(),
+            color: self.common.color.value.clone(),
+        })
     }
 }
 
@@ -294,14 +322,29 @@ impl ftd::executor::Rive {
 }
 
 impl Element {
-    fn render(&self, _t: &taffy::Taffy) {
-        todo!()
+    fn render(&self, t: &taffy::Taffy) {
+        dbg!(self);
+        match self {
+            Element::Container(c) => {
+                dbg!(t.layout(c.taffy).unwrap());
+                for child in c.children.iter() {
+                    child.render(t);
+                }
+            }
+            Element::Text(c) => {
+                dbg!(t.layout(c.taffy).unwrap());
+            }
+            Element::Image(c) => {
+                dbg!(t.layout(c.taffy).unwrap());
+            }
+        };
     }
 
-    fn root_taffy(&self) -> taffy::node::Node {
+    fn taffy(&self) -> taffy::node::Node {
         match self {
             Element::Container(c) => c.taffy,
-            _ => unreachable!(),
+            Element::Text(t) => t.taffy,
+            Element::Image(i) => i.taffy,
         }
     }
 }
@@ -324,7 +367,7 @@ pub fn run() {
 
     taffy
         .compute_layout(
-            f.root_taffy(),
+            f.taffy(),
             taffy::prelude::Size {
                 width: points(100.0),
                 height: points(100.0),
@@ -332,7 +375,6 @@ pub fn run() {
         )
         .unwrap();
 
-    dbg!(taffy.layout(f.root_taffy()));
     f.render(&taffy)
 }
 
