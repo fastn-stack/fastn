@@ -350,19 +350,21 @@ impl ftd::executor::Row {
             ),
         );
 
-        n.style.check_and_insert(
-            "justify-content",
-            ftd::node::Value::from_executor_value(
-                self.container
-                    .spacing
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                    .value,
-                self.container.spacing.to_owned(),
-                Some(ftd::executor::Spacing::justify_content_pattern()),
-                doc_id,
-            ),
-        );
+        if !n.style.contains_key("justify-content") {
+            n.style.check_and_insert(
+                "justify-content",
+                ftd::node::Value::from_executor_value(
+                    self.container
+                        .spacing
+                        .to_owned()
+                        .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                        .value,
+                    self.container.spacing.to_owned(),
+                    Some(ftd::executor::Spacing::justify_content_pattern()),
+                    doc_id,
+                ),
+            );
+        }
 
         n.style.check_and_insert(
             "align-items",
@@ -408,19 +410,21 @@ impl ftd::executor::Column {
             ),
         );
 
-        n.style.check_and_insert(
-            "justify-content",
-            ftd::node::Value::from_executor_value(
-                self.container
-                    .spacing
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
-                    .value,
-                self.container.spacing.to_owned(),
-                Some(ftd::executor::Spacing::justify_content_pattern()),
-                doc_id,
-            ),
-        );
+        if !n.style.contains_key("justify-content") {
+            n.style.check_and_insert(
+                "justify-content",
+                ftd::node::Value::from_executor_value(
+                    self.container
+                        .spacing
+                        .to_owned()
+                        .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                        .value,
+                    self.container.spacing.to_owned(),
+                    Some(ftd::executor::Spacing::justify_content_pattern()),
+                    doc_id,
+                ),
+            );
+        }
 
         n.style.check_and_insert(
             "align-items",
