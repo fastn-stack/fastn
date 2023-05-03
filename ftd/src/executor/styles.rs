@@ -1732,7 +1732,7 @@ impl Spacing {
             Spacing::SpaceBetween => "space-between".to_string(),
             Spacing::SpaceEvenly => "space-evenly".to_string(),
             Spacing::SpaceAround => "space-around".to_string(),
-            Spacing::Fixed(_) => "start".to_string(),
+            Spacing::Fixed(_) => "unset".to_string(),
         }
     }
 
