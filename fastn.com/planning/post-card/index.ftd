@@ -1,4 +1,4 @@
--- my-ds.page: Postcard 🚧
+-- my-ds.page: Postcard
 
 Video Title: Let's create a postcard using `fastn`
 
@@ -15,7 +15,6 @@ Understanding of datatypes, components.
 -- ds.h1: Intro Clip
 
 **Screen**: Introduction slide
-
 
 **Script**
 
