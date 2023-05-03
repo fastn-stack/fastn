@@ -30,7 +30,7 @@ if: { show-grid }
 templates: $bling
 more-link: /featured/components-library/
 
-/-- grid-view: Color Schemes:
+-- grid-view: Color Schemes:
 if: { show-grid }
 templates: $schemes
 more-link: /featured/cs/
@@ -347,50 +347,39 @@ of `fifthtry.github.io/doc-site/`
 
 -- template list schemes:
 
--- template: Color Doc
-template-url: https://fifthtry.github.io/color-doc/
-screenshot: $fastn-assets.files.images.featured.color-doc.png
-licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
-github-url: https://github.com/FifthTry/color-doc/
+-- template: Winter CS
+template-url: https://fastn-community.github.io/winter-cs/
+screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
+licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/winter-cs
 
-`fifthtry.github.io/color-doc` is a grey color scheme. Our web site,
-[`fastn.io`](/) is using this color scheme.
+Add warmth and energy to your designs with the `winter-cs`.
 
--- template: Forest CS
-template-url: https://fifthtry.github.io/forest-cs/
-screenshot: $fastn-assets.files.images.featured.forest-cs.png
-licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
-github-url: https://github.com/FifthTry/forest-cs/
+-- template: Dark Flame CS
+template-url: https://fastn-community.github.io/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+licence-url: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/dark-flame-cs/
 
-`fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
+Add warmth and energy to your designs with the `dark-flame-cs`.
 
 
 -- template: Saturated Sunset CS
-template-url: https://fifthtry.github.io/saturated-sunset-cs/
-screenshot: $fastn-assets.files.images.featured.saturated-sunset-cs.png
-licence-url: https://github.com/FifthTry/saturated-sunset-cs/blob/main/LICENSE
-github-url: https://github.com/FifthTry/saturated-sunset-cs/
+template-url: https://fastn-community.github.io/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+licence-url: https://github.com/fastn-community/saturated-sunset-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/saturated-sunset-cs
 
-`fifthtry.github.io/saturated-sunset-cs` is a saturated sunset color scheme.
-
-
--- template: Winter CS
-template-url: https://fifthtry.github.io/winter-cs/
-screenshot: $fastn-assets.files.images.featured.winter-cs.png
-licence-url: https://github.com/FifthTry/ds-set1-cs/blob/main/LICENSE
-github-url: https://github.com/FifthTry/ds-set1-cs/
-
-`fifthtry.github.io/winter-cs` is a winter color scheme.
+Add warmth and energy to your designs with the `saturated-sunset-cs`.
 
 
--- template: Dark Flame CS
-template-url: https://fifthtry.github.io/dark-flame-cs/
-screenshot: $fastn-assets.files.images.featured.dark-flame-cs.png
-licence-url: https://github.com/FifthTry/fastn-cs/blob/main/LICENSE
-github-url: https://github.com/FifthTry/fastn-cs/
+-- template: Forest CS
+template-url: https://fastn-community.github.io/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/forest-cs
 
-`fifthtry.github.io/dark-flame-cs` is a dark flame color scheme. Our web site,
-[`fastn.io`](https://fastn.io/) is using this color scheme.
+Add warmth and energy to your designs with the `forest-cs`.
 
 -- end: schemes
 
