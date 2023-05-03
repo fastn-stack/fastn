@@ -362,6 +362,11 @@ impl ftd::executor::Row {
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
+            if let Some(old_value) = jc.value.as_ref() {
+                if old_value.eq("unset") {
+                    jc.value = align_content_value.value;
+                }
+            }
             jc.properties.extend(align_content_value.properties);
         } else {
             n.style
