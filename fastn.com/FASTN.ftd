@@ -267,20 +267,22 @@ favicon: /-/fastn.io/images/favicon.svg
 
 ## Video Course: /expander/
 
-- Overview: /expander/
-- Part 1. Hello World: /expander/hello-world/
-  - Install `fastn`: /install/-/expander/
-    document: author/how-to/install.ftd
-    - On Windows: /windows/-/expander/
-      document: author/setup/windows.ftd
-    - On MacOS/Linux: /macos/-/expander/
-      document: author/setup/macos.ftd
-- Part 2. Basic UI: /expander/basic-ui/
-- Part 3. Components: /expander/components/
-- Part 4. Event Handling: /expander/events/
-- Part 5. Publish a package: /expander/publish/
-- Part 6. Polishing UI: /expander/polish/
-
+- Expander Crash Course: /expander/   
+  - Overview: /expander/
+  - Part 1. Hello World: /expander/hello-world/
+    - Install `fastn`: /install/-/expander/
+      document: author/how-to/install.ftd
+      - On Windows: /windows/-/expander/
+        document: author/setup/windows.ftd
+      - On MacOS/Linux: /macos/-/expander/
+        document: author/setup/macos.ftd
+  - Part 2. Basic UI: /expander/basic-ui/
+  - Part 3. Components: /expander/components/
+  - Part 4. Event Handling: /expander/events/
+  - Part 5. Publish a package: /expander/publish/
+  - Part 6. Polishing UI: /expander/polish/
+- Button: /button-using-fastn/
+  document: /expander/button.ftd
 
 # Fullstack: /backend/
 

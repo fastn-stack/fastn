@@ -1,34 +1,16 @@
+-- import: fifthtry.github.io/bling/note
+
 -- my-ds.page: Button using `fastn`
 
-Video Title: How to create a button using `fastn`
+-- ds.youtube:
+v: UzAC8aOf2is
 
-Owner: Ajit
+-- ds.h1: Introduction
 
-Audience: Frontend developer, designer
-
-Goal: To help users to create button using `fastn`
-
-Assumption: Have already installed `fastn` and create a fastn package.
-Understanding of datatypes, components.
-
-
--- ds.h1: Intro Clip
-
-**Screen**: Introduction slide
+Hey Guys, in this video we are going to create buttons using `fastn language`. 
 
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-using-fastn.jpg
-
-**Script**
-
-Hey Guys, my name is Ajit and I am back with another video on `fastn`.
-In this video we are going to create buttons using `fastn language`. 
-
-
-We will start off by creating a button with basic UI then we will
-recreate this button as you see on the screen in the later stages of this 
-video.
-
 
 This UI is just an inspiration we took from Vercel. We will make it look like
 this using `fastn`.
@@ -46,22 +28,8 @@ To make the button we will use the concepts like:
 - We will do `event handling` that gives **shadow** to the button `on-hover`.
 
 
-You can find all the URLs of the concepts which we will discuss in this video
-in the description below. 
 
-
-
--- ds.h2: **Project build-up**
-
-\;; Open button.ftd file
-
-**Script:**
-
-On a quick note, I have created a `fastn package` on my machine. If you have
-gone through the Expander Course, i have mentioned that a `fastn package`
-primarily needs two files. `FASTN.ftd` and `index.ftd`.
-
-In the `index.ftd` file.
+-- ds.h1: **Project buildup**
 
 Let's start by creating a `component` and we will call it `button`.
 The syntax is:
@@ -72,6 +40,8 @@ lang: ftd
 \-- component button:
 
 \-- end: button
+
+
 
 -- ds.markdown:
 
@@ -92,6 +62,7 @@ optional string link:
 \-- end: button
 
 
+
 -- ds.markdown:
 
 First, let's create one basic button.
@@ -107,6 +78,7 @@ link: $button.link
 border-width.px: 2
 
 
+
 -- ds.markdown:
 
 The dollars used here is for reference that the value in the caption of 
@@ -116,10 +88,10 @@ This will do. We can use this component to show the button.
 We have a basic button ready.
 
 
-\;; Show the UI
-
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-with-shadow.png
+
+
 
 -- ds.markdown:
 
@@ -139,6 +111,7 @@ style: bold                ;; <hl>
 text-align: center         ;; <hl>
 
 
+
 -- ds.markdown:
 
 After that, we will give `color` and `role` to the text. 
@@ -150,6 +123,7 @@ We can give a default value using `$inherited.colors` to this variable. In
 case, the user doesn't pass any text-color, while calling this component, it
 will take the inherited color from the color-scheme.
 
+
 -- ds.code:
 lang: ftd
 
@@ -160,6 +134,8 @@ ftd.color text-color: $inherited.colors.text-strong 	  ;; <hl>
 
 
 \-- end: button
+
+
 
 -- ds.markdown:
 
@@ -198,7 +174,7 @@ lang: ftd
 caption title:
 optional string link:
 ftd.color text-color: $inherited.colors.text-strong
-ftd.color bg-color: $inherited.colors.background.base				;; <hl>
+ftd.color bg-color: $inherited.colors.background.base			;; <hl>
 ftd.color border-color: $inherited.colors.border-strong			;; <hl>
 
 
@@ -217,6 +193,7 @@ color: $button.text-color
 role: $inherited.types.copy-regular   
 background.solid: $button.bg-color    ;; <hl>
 border-color: $button.border-color    ;; <hl>
+
 
 
 -- ds.markdown:
@@ -261,6 +238,7 @@ blur.px: 50
 spread.px: 7
 
 
+
 -- ds.markdown:
 
 Now we will add the component property of type `ftd.shadow` and make it 
@@ -300,6 +278,7 @@ border-color: $button.border-color
 shadow: $button.hover-shadow           ;; <hl>
 
 
+
 -- ds.markdown:
 
 Now we can create events which `on-hover` shows the shadow. So we will create a
@@ -320,6 +299,7 @@ optional ftd.shadow hover-shadow:
 boolean $is-hover: false 
 
 
+
 -- ds.markdown:
 
 And then in the button we will add the events.                
@@ -329,6 +309,7 @@ lang: ftd
 
 \$on-mouse-enter$: $ftd.set-bool($a = $button.is-hover, v = true)
 \$on-mouse-leave$: $ftd.set-bool($a = $button.is-hover, v = false)
+
 
 
 -- ds.markdown:
@@ -341,9 +322,10 @@ lang: ftd
 shadow if { button.is-hover }: $button.hover-shadow
 
 
--- ds.markdown:
 
-The button component where it is called.
+-- ds.h2: Component calling
+
+The button component is called inside a column container component.
 
 
 -- ds.code:
@@ -367,6 +349,7 @@ link: https://fastn.io/expander
 \-- end: ftd.column
 
 
+
 -- ds.h2: Closing remarks
 
 There you go, we have polished the UI and it looks similar to our original UI
@@ -375,13 +358,7 @@ easy to follow. If you like us, you can give us a ✨ on
 [GitHub](https://github.com/fastn-stack/fastn).
 
 Also, we would love to see your package which you will create following this
-video. You can share it on the dicord's "show-and-tell" channel. Thank you
-guys.
-
-
--- ds.h1: Video
-
--- ds.youtube:
-v: UzAC8aOf2is
+video. You can share it on the dicord's 
+[show-and-tell](https://discord.gg/kTxKjpNK6v) channel. Thank you guys.
 
 -- end: my-ds.page
