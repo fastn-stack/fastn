@@ -3226,6 +3226,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         value: None,
                         line_number: 0,
                     },
+                    ftd::interpreter::Field {
+                        name: "text-disabled".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
                 ],
                 line_number: 0,
             }),
@@ -6851,6 +6859,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     is_mutable: false,
                                                     line_number: 0,
                                                 },
+                                            ),
+                                            (
+                                                "text-disabled".to_string(),
+                                                ftd::interpreter::PropertyValue::Value {
+                                                    value: ftd::interpreter::Value::Record {
+                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        ), (
+                                                            "dark".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
                                             )
                                         ]).collect()
                                     },
@@ -7057,6 +7094,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                             ftd::interpreter::PropertyValue::Value {
                                                                 value: ftd::interpreter::Value::String {
                                                                     text: "#ffffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text-disabled".to_string(),
+                                                ftd::interpreter::PropertyValue::Value {
+                                                    value: ftd::interpreter::Value::Record {
+                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        ), (
+                                                            "dark".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
                                                                 },
                                                                 is_mutable: false,
                                                                 line_number: 0,
@@ -7281,6 +7347,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     is_mutable: false,
                                                     line_number: 0,
                                                 },
+                                            ),
+                                            (
+                                                "text-disabled".to_string(),
+                                                ftd::interpreter::PropertyValue::Value {
+                                                    value: ftd::interpreter::Value::Record {
+                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        ), (
+                                                            "dark".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#65b693".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
                                             )
                                         ]).collect()
                                     },
@@ -7494,6 +7589,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                                 }
                                                             )
                                                         ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text-disabled".to_string(),
+                                                ftd::interpreter::PropertyValue::Value {
+                                                    value: ftd::interpreter::Value::Record {
+                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#feffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        ), (
+                                                            "dark".to_string(),
+                                                            ftd::interpreter::PropertyValue::Value {
+                                                                value: ftd::interpreter::Value::String {
+                                                                    text: "#feffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
                                                     },
                                                     is_mutable: false,
                                                     line_number: 0,
