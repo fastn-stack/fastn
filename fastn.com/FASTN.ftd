@@ -281,7 +281,7 @@ favicon: /-/fastn.io/images/favicon.svg
   - Part 4. Event Handling: /expander/events/
   - Part 5. Publish a package: /expander/publish/
   - Part 6. Polishing UI: /expander/polish/
-- Button: /button-using-fastn/
+- Button using `fastn`: /button-using-fastn/
   document: /expander/button.ftd
 
 # Fullstack: /backend/
