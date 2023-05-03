@@ -97,6 +97,14 @@ github-url: https://github.com/fastn-community/pragati-narrow-font
 `fastn-community.github.io/pragati-narrow-font` font is available and can be
 used inside `ftd` web packages.
 
+-- ft-ui.template: Roboto
+template-url: https://fastn-community.github.io/roboto-font/
+licence-url: https://github.com/fastn-community/roboto-font/blob/main/LICENSE
+github-url: https://github.com/fastn-community/roboto-font
+
+`fastn-community.github.io/roboto-font` font is available and can be used
+inside `ftd` web packages.
+
 -- ft-ui.template: Roboto Mono
 template-url: https://fastn-community.github.io/roboto-mono-font/
 licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
