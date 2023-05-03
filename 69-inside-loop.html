@@ -84,6 +84,10 @@
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
 },
+"border-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
+},
 "disabled": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
@@ -103,6 +107,10 @@
 "text": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
+},
+"text-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
 }
 },
 "cta-primary": {
@@ -113,6 +121,10 @@
 "border": {
 "dark": "#2b8074",
 "light": "#2b8074"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(44, 201, 181, 0.1)",
@@ -133,6 +145,10 @@
 "text": {
 "dark": "#feffff",
 "light": "#feffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-secondary": {
@@ -143,6 +159,10 @@
 "border": {
 "dark": "#209fdb",
 "light": "#209fdb"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(79, 178, 223, 0.1)",
@@ -163,6 +183,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#584b42"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-tertiary": {
@@ -173,6 +197,10 @@
 "border": {
 "dark": "#e2e4e7",
 "light": "#e2e4e7"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(85, 99, 117, 0.1)",
@@ -193,6 +221,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#ffffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "custom": {
@@ -1931,15 +1963,15 @@ window.ftd.utils.set_value_helper(data, "foo#names", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#names", "main");
 window.ftd.call_immutable_value_changes("foo#names", "main");
-window.ftd.utils.node_change_call("main","0,8,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,7,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,4,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,3,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,5,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,1,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,2,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,4,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,7,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,5,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,6,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,3,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,8,0:main__text", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -1947,60 +1979,60 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,3:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,6:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,6:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,8:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,8:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,7:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,6:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,0:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,8:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,6:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,5:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,7:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-repeat", data);
 };
 
 

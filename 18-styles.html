@@ -66,6 +66,10 @@
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
 },
+"border-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
+},
 "disabled": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
@@ -85,6 +89,10 @@
 "text": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
+},
+"text-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
 }
 },
 "cta-primary": {
@@ -95,6 +103,10 @@
 "border": {
 "dark": "#2b8074",
 "light": "#2b8074"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(44, 201, 181, 0.1)",
@@ -115,6 +127,10 @@
 "text": {
 "dark": "#feffff",
 "light": "#feffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-secondary": {
@@ -125,6 +141,10 @@
 "border": {
 "dark": "#209fdb",
 "light": "#209fdb"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(79, 178, 223, 0.1)",
@@ -145,6 +165,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#584b42"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-tertiary": {
@@ -155,6 +179,10 @@
 "border": {
 "dark": "#e2e4e7",
 "light": "#e2e4e7"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(85, 99, 117, 0.1)",
@@ -175,6 +203,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#ffffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "custom": {
@@ -725,7 +757,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me</div><div data-id="1:main" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-left-radius: 18%; border-top-width: 2px; padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; z-index: -5" class="ft_common ft_md">Hello</div><div data-id="2:main" style="padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px" class="ft_common ft_md">Hello</div><div data-id="3:main" style="border-bottom-width: 2px; border-left-width: 2px; border-radius: 18%; border-right-width: 2px; border-top-width: 2px; flex-wrap: nowrap; gap: 40px; justify-content: start" class="ft_common ft_row"><div data-id="3,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="3,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="4:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 20px; height: 100px; justify-content: start; width: 400px" class="ft_common ft_row"><div data-id="4,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="4,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="5:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 2px; height: 100px; justify-content: start; width: 400px" class="ft_common ft_column"><div data-id="5,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="5,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="6:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 20px; height: 100%; justify-content: start; width: fit-content" class="ft_common ft_row"><div data-id="6,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="6,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="7:main" style="background-color: rgba(255,255,0,1); max-width: 20px; min-height: 60px" class="ft_common ft_md">Hello World</div><div data-id="8:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(255,0,0,1); cursor: pointer; width: 20px" class="ft_common ft_md">Data</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me</div><div data-id="1:main" style="border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-top-left-radius: 18%; border-top-width: 2px; padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; z-index: -5" class="ft_common ft_md">Hello</div><div data-id="2:main" style="padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px" class="ft_common ft_md">Hello</div><div data-id="3:main" style="border-bottom-width: 2px; border-left-width: 2px; border-radius: 18%; border-right-width: 2px; border-top-width: 2px; flex-wrap: nowrap; gap: 40px; justify-content: start" class="ft_common ft_row"><div data-id="3,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="3,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="4:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 20px; height: 100px; justify-content: start; width: 400px" class="ft_common ft_row"><div data-id="4,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="4,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="5:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 2px; height: 100px; justify-content: start; width: 400px" class="ft_common ft_column"><div data-id="5,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="5,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="6:main" style="align-items: start; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; gap: 20px; height: 100%; justify-content: center; width: fit-content" class="ft_common ft_row"><div data-id="6,0:main" style="" class="ft_common ft_md">Hello</div><div data-id="6,1:main" style="" class="ft_common ft_md">World</div></div><div data-id="7:main" style="background-color: rgba(255,255,0,1); max-width: 20px; min-height: 60px" class="ft_common ft_md">Hello World</div><div data-id="8:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(255,0,0,1); cursor: pointer; width: 20px" class="ft_common ft_md">Data</div></div>
 
 
 <script>
@@ -1966,15 +1998,15 @@ window.node_change_main["3:main__gap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
@@ -1985,15 +2017,15 @@ window.node_change_main["3:main__justify-content"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
 `.format(JSON.stringify(`{0}px`.format(JSON.stringify(40)))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="3:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -2041,8 +2073,8 @@ null
 }
 `.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="4:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -2090,8 +2122,8 @@ null
 }
 `.format(JSON.stringify("ftd#align.top-left")));
 }
-else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="5:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -2158,21 +2190,21 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","3:main__justify-content", data);
 window.ftd.utils.node_change_call("main","4:main__align-items", data);
+window.ftd.utils.node_change_call("main","2:main__padding-right", data);
+window.ftd.utils.node_change_call("main","3:main__border-bottom-width", data);
+window.ftd.utils.node_change_call("main","3:main__justify-content", data);
+window.ftd.utils.node_change_call("main","3:main__border-top-width", data);
+window.ftd.utils.node_change_call("main","3:main__border-left-width", data);
+window.ftd.utils.node_change_call("main","3:main__flex-wrap", data);
+window.ftd.utils.node_change_call("main","5:main__justify-content", data);
+window.ftd.utils.node_change_call("main","3:main__gap", data);
+window.ftd.utils.node_change_call("main","4:main__justify-content", data);
+window.ftd.utils.node_change_call("main","3:main__border-right-width", data);
+window.ftd.utils.node_change_call("main","6:main__width", data);
 window.ftd.utils.node_change_call("main","5:main__align-items", data);
 window.ftd.utils.node_change_call("main","6:main__height", data);
-window.ftd.utils.node_change_call("main","3:main__flex-wrap", data);
-window.ftd.utils.node_change_call("main","3:main__border-bottom-width", data);
-window.ftd.utils.node_change_call("main","4:main__justify-content", data);
-window.ftd.utils.node_change_call("main","5:main__justify-content", data);
-window.ftd.utils.node_change_call("main","3:main__border-left-width", data);
-window.ftd.utils.node_change_call("main","3:main__border-right-width", data);
 window.ftd.utils.node_change_call("main","2:main__padding-left", data);
-window.ftd.utils.node_change_call("main","3:main__gap", data);
-window.ftd.utils.node_change_call("main","6:main__width", data);
-window.ftd.utils.node_change_call("main","2:main__padding-right", data);
-window.ftd.utils.node_change_call("main","3:main__border-top-width", data);
 window.ftd.utils.node_change_call("main","1:main__border-top-left-radius", data);
 };
 
@@ -2189,21 +2221,21 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","8:main__background-size", data);
-window.ftd.utils.node_change_call("main","4:main__background-size", data);
-window.ftd.utils.node_change_call("main","4:main__background-position", data);
-window.ftd.utils.node_change_call("main","8:main__background-position", data);
-window.ftd.utils.node_change_call("main","8:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","4:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","7:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","7:main__background-size", data);
-window.ftd.utils.node_change_call("main","8:main__background-color", data);
-window.ftd.utils.node_change_call("main","4:main__background-color", data);
 window.ftd.utils.node_change_call("main","8:main__background-image", data);
-window.ftd.utils.node_change_call("main","4:main__background-image", data);
+window.ftd.utils.node_change_call("main","4:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","8:main__background-position", data);
 window.ftd.utils.node_change_call("main","7:main__background-position", data);
-window.ftd.utils.node_change_call("main","7:main__background-image", data);
+window.ftd.utils.node_change_call("main","7:main__background-size", data);
+window.ftd.utils.node_change_call("main","4:main__background-color", data);
+window.ftd.utils.node_change_call("main","4:main__background-position", data);
+window.ftd.utils.node_change_call("main","4:main__background-size", data);
+window.ftd.utils.node_change_call("main","8:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","4:main__background-image", data);
+window.ftd.utils.node_change_call("main","8:main__background-color", data);
 window.ftd.utils.node_change_call("main","7:main__background-color", data);
+window.ftd.utils.node_change_call("main","7:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","8:main__background-size", data);
+window.ftd.utils.node_change_call("main","7:main__background-image", data);
 };
 
 

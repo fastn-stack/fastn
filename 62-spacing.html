@@ -69,6 +69,10 @@
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
 },
+"border-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
+},
 "disabled": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
@@ -88,6 +92,10 @@
 "text": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
+},
+"text-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
 }
 },
 "cta-primary": {
@@ -98,6 +106,10 @@
 "border": {
 "dark": "#2b8074",
 "light": "#2b8074"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(44, 201, 181, 0.1)",
@@ -118,6 +130,10 @@
 "text": {
 "dark": "#feffff",
 "light": "#feffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-secondary": {
@@ -128,6 +144,10 @@
 "border": {
 "dark": "#209fdb",
 "light": "#209fdb"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(79, 178, 223, 0.1)",
@@ -148,6 +168,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#584b42"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-tertiary": {
@@ -158,6 +182,10 @@
 "border": {
 "dark": "#e2e4e7",
 "light": "#e2e4e7"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(85, 99, 117, 0.1)",
@@ -178,6 +206,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#ffffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "custom": {
@@ -1925,8 +1957,8 @@ window.node_change_main["1:main__gap"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)%4==1);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
@@ -1935,8 +1967,8 @@ null
 else if(function(){
 return (resolve_reference("foo#num", data)%4==2);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
@@ -1945,15 +1977,15 @@ null
 else if(function(){
 return (resolve_reference("foo#num", data)%4==3);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
 `.format(JSON.stringify("space-evenly")));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="1:main"]`).style["gap"] = eval(`if ({0} != "space-between" && {0} != "space_around" && {0} != "space-evenly") {
+{0}
 } else {
 null
 }
@@ -1964,8 +1996,8 @@ window.node_change_main["1:main__justify-content"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)%4==1);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -1974,8 +2006,8 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 else if(function(){
 return (resolve_reference("foo#num", data)%4==2);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -1984,15 +2016,15 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 else if(function(){
 return (resolve_reference("foo#num", data)%4==3);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
 `.format(JSON.stringify("space-evenly")));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
-"{0}"
+else {document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ({0} == "space-between" || {0} == "space-around" || {0} == "space-evenly") {
+{0}
 } else {
 "start"
 }
@@ -2005,8 +2037,8 @@ window.ftd.utils.set_value_helper(data, "foo#num", remaining, new_value);
 window.ftd.call_mutable_value_changes("foo#num", "main");
 window.ftd.call_immutable_value_changes("foo#num", "main");
 window.ftd.utils.node_change_call("main","0:main__text", data);
-window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 window.ftd.utils.node_change_call("main","1:main__gap", data);
+window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2014,9 +2046,9 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+window.ftd.utils.node_change_call("main","1:main__background-color", data);
 window.ftd.utils.node_change_call("main","1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1:main__background-image", data);
-window.ftd.utils.node_change_call("main","1:main__background-color", data);
 window.ftd.utils.node_change_call("main","1:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1:main__background-size", data);
 };

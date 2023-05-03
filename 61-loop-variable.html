@@ -79,6 +79,10 @@
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
 },
+"border-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
+},
 "disabled": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
@@ -98,6 +102,10 @@
 "text": {
 "dark": "#1C1B1F",
 "light": "#1C1B1F"
+},
+"text-disabled": {
+"dark": "#feffff",
+"light": "#feffff"
 }
 },
 "cta-primary": {
@@ -108,6 +116,10 @@
 "border": {
 "dark": "#2b8074",
 "light": "#2b8074"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(44, 201, 181, 0.1)",
@@ -128,6 +140,10 @@
 "text": {
 "dark": "#feffff",
 "light": "#feffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-secondary": {
@@ -138,6 +154,10 @@
 "border": {
 "dark": "#209fdb",
 "light": "#209fdb"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(79, 178, 223, 0.1)",
@@ -158,6 +178,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#584b42"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "cta-tertiary": {
@@ -168,6 +192,10 @@
 "border": {
 "dark": "#e2e4e7",
 "light": "#e2e4e7"
+},
+"border-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 },
 "disabled": {
 "dark": "rgba(85, 99, 117, 0.1)",
@@ -188,6 +216,10 @@
 "text": {
 "dark": "#ffffff",
 "light": "#ffffff"
+},
+"text-disabled": {
+"dark": "#65b693",
+"light": "#65b693"
 }
 },
 "custom": {
@@ -738,7 +770,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="align-items: center; align-self: center; gap: 50px; justify-content: start; padding: 60px; width: 70%" class="ft_common ft_column"><div data-id="0,0:main" style="gap: 10px; justify-content: start" class="ft_common ft_row"><div data-id="0,0,0:main" style="" class="ft_common ft_md">Current value:</div><div data-id="0,0,1:main" style="color: rgba(212,43,212,1)" class="ft_common ft_md">Fifthtry</div></div><div data-id="0,1:main" style="align-items: center; gap: 20px; justify-content: start" class="ft_common ft_row"><div data-id="0,1,0:main" style="align-self: center" class="ft_common ft_md">Create a card:</div><input data-id="0,1,1:main" placeholder="Type any text ..." type="text" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-color: rgba(65,125,239,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; padding: 10px; width: 300px" class="ft_common ft_md"></input><div data-id="0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value&quot;}]]}]', this)" style="background-color: rgba(122,203,122,1); cursor: pointer; padding: 10px" class="ft_common ft_md">Append</div><div data-id="0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__clear___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}]]}]', this)" style="background-color: rgba(241,148,148,1); cursor: pointer; padding: 10px" class="ft_common ft_md">Clear</div><div data-id="0,1,4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__set_list___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#our-names&quot;}]]}]', this)" style="background-color: rgba(148,158,241,1); cursor: pointer; padding: 10px" class="ft_common ft_md">ft-zens</div><div data-id="0,1,5:main" style="align-items: center; background-color: rgba(217,242,217,1); border-bottom-width: 2px; border-color: rgba(0,128,0,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; gap: 5px; justify-content: start; padding: 4px" class="ft_common ft_row"><div data-id="0,1,5,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment_by___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}],[&quot;v&quot;,-1]]}]', this)" style="cursor: pointer" class="ft_common ft_md">◀️</div><div data-id="0,1,5,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert_at___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;num&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}]]}]', this)" style="background-color: rgba(122,203,122,1); cursor: pointer; padding: 6px" class="ft_common ft_md">0</div><div data-id="0,1,5,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">▶️</div></div><div data-id="0,1,6:main" style="align-items: center; background-color: rgba(244,206,206,1); border-bottom-width: 2px; border-color: rgba(255,0,0,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; gap: 5px; justify-content: start; padding: 4px" class="ft_common ft_row"><div data-id="0,1,6,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment_by___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}],[&quot;v&quot;,-1]]}]', this)" style="cursor: pointer" class="ft_common ft_md">◀️</div><div data-id="0,1,6,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__delete_at___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;num&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}]]}]', this)" style="background-color: rgba(241,148,148,1); cursor: pointer; padding: 6px" class="ft_common ft_md">0</div><div data-id="0,1,6,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">▶️</div></div></div><div data-id="0,2:main" style="flex-wrap: wrap" class="ft_common ft_row"></div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="align-items: center; align-self: center; gap: 50px; justify-content: center; padding: 60px; width: 70%" class="ft_common ft_column"><div data-id="0,0:main" style="gap: 10px; justify-content: start" class="ft_common ft_row"><div data-id="0,0,0:main" style="" class="ft_common ft_md">Current value:</div><div data-id="0,0,1:main" style="color: rgba(212,43,212,1)" class="ft_common ft_md">Fifthtry</div></div><div data-id="0,1:main" style="align-items: center; gap: 20px; justify-content: center" class="ft_common ft_row"><div data-id="0,1,0:main" style="align-self: center" class="ft_common ft_md">Create a card:</div><input data-id="0,1,1:main" placeholder="Type any text ..." type="text" oninput="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_string___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;VALUE&quot;}]]}]', this)" style="border-bottom-width: 2px; border-color: rgba(65,125,239,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; padding: 10px; width: 300px" class="ft_common ft_md"></input><div data-id="0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value&quot;}]]}]', this)" style="background-color: rgba(122,203,122,1); cursor: pointer; padding: 10px" class="ft_common ft_md">Append</div><div data-id="0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__clear___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}]]}]', this)" style="background-color: rgba(241,148,148,1); cursor: pointer; padding: 10px" class="ft_common ft_md">Clear</div><div data-id="0,1,4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__set_list___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#our-names&quot;}]]}]', this)" style="background-color: rgba(148,158,241,1); cursor: pointer; padding: 10px" class="ft_common ft_md">ft-zens</div><div data-id="0,1,5:main" style="align-items: center; background-color: rgba(217,242,217,1); border-bottom-width: 2px; border-color: rgba(0,128,0,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; gap: 5px; justify-content: center; padding: 4px" class="ft_common ft_row"><div data-id="0,1,5,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment_by___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}],[&quot;v&quot;,-1]]}]', this)" style="cursor: pointer" class="ft_common ft_md">◀️</div><div data-id="0,1,5,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__insert_at___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;num&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}]]}]', this)" style="background-color: rgba(122,203,122,1); cursor: pointer; padding: 6px" class="ft_common ft_md">0</div><div data-id="0,1,5,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter:num:0,1,5&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">▶️</div></div><div data-id="0,1,6:main" style="align-items: center; background-color: rgba(244,206,206,1); border-bottom-width: 2px; border-color: rgba(255,0,0,1); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; gap: 5px; justify-content: center; padding: 4px" class="ft_common ft_row"><div data-id="0,1,6,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment_by___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}],[&quot;v&quot;,-1]]}]', this)" style="cursor: pointer" class="ft_common ft_md">◀️</div><div data-id="0,1,6,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__delete_at___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#names&quot;}],[&quot;num&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}]]}]', this)" style="background-color: rgba(241,148,148,1); cursor: pointer; padding: 6px" class="ft_common ft_md">0</div><div data-id="0,1,6,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#delete-counter:num:0,1,6&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">▶️</div></div></div><div data-id="0,2:main" style="flex-wrap: wrap" class="ft_common ft_row"></div></div></div>
 
 
 <script>
@@ -1962,45 +1994,45 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,1,2:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,0,1:main__color", data);
-window.ftd.utils.node_change_call("main","0,1,3:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,5:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,4:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,5,1:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1,5,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,6:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,6:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,5,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,5:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,1,1:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1,3:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1,3:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,6,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,1,6,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,3:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,1,4:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1,6:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,1,4:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,6:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","0,1,6,1:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1,4:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,5:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,4:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,1,5,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,3:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,2:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,1,2:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,1,6:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,5:main__background-size", data);
 window.ftd.utils.node_change_call("main","0,1,2:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1,5,1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1,2:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1,5:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1,4:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,1,5,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1,3:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,5:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,2:main__background-color", data);
 window.ftd.utils.node_change_call("main","0,1,5,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,1,5:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1,6:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,3:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,1,5,1:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,2:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,3:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1,3:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,4:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1,5:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1,3:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1,2:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,1,6:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1,6,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1,5:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,1,4:main__background-image", data);
 window.ftd.utils.node_change_call("main","0,1,6:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,1,6,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,5:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1,6:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,6:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,1,4:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,1,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,4:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,6,1:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1,1:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1,5:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,1,6,1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,0,1:main__color", data);
+window.ftd.utils.node_change_call("main","0,1,5,1:main__background-color", data);
 };
 
 window.dummy_data_main = {};
