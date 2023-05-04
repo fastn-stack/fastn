@@ -26,9 +26,6 @@ The postcard I will be creating looks like this:
 -- ds.image: 
 src: $fastn-assets.files.planning.post-card.postcard.png
 
-To create this we will use the concepts of `components`, to which we will apply 
-apply various properties that are required.  
-We will add a call-to-action button.
 
 
 -- ds.h2: **Project build-up**
