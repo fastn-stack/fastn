@@ -120,7 +120,7 @@ cargo install fastn
 -- ds.code:
 lang: sh
 
-git clone git@github.com:ftd-lang/fastn.git
+git clone git@github.com:fastn-stack/fastn.git
 
 
 -- ds.markdown:
