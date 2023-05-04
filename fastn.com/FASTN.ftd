@@ -283,6 +283,8 @@ favicon: /-/fastn.io/images/favicon.svg
   - Part 6. Polishing UI: /expander/polish/
 - Button using `fastn`: /button-using-fastn/
   document: /expander/button.ftd
+- border-radius in `fastn`: /border-radius-in-fastn/
+  document: /expander/border-radius.ftd
 
 # Fullstack: /backend/
 

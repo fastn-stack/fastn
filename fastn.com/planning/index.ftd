@@ -14,6 +14,8 @@ the scripts etc here.
 - R: understanding fonts
 - R: github pages (templates, publishing, domain mapping? etc)
 - R: installing
+- R: using `key-value` pair to show-hide content in a single doc   
+- R: why we always use .px, what else can we do?
 
 -- ds.h1: Design A FastN Compatible Site
 
@@ -40,7 +42,7 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
-    - R: button 🚧
+    - R: button 
     - R: post card 🚧
 - R: creating various page layouts
 - R: event handling
