@@ -282,7 +282,16 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
         else {
             return null;
         }
-    } else {
+    } else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+       var colors = bg.colors;
+       var direction = "to bottom";
+
+       if ("direction" in bg) {
+           direction = bg.direction;
+       }
+       return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
+   }
+    else {
         return null;
     }
 }
