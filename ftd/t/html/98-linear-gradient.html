@@ -7,6 +7,10 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#counter": 0,
+"foo#green-blue": {
+"dark": "blue",
+"light": "green"
+},
 "foo#lg": {
 "colors": [
 "red",
@@ -1722,6 +1726,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1938,45 +1957,85 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#
 }
 window.node_change_main["1:main__background-color"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#lg2", data);
+document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg2", data))));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#lg", data);}
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#green-blue", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#green-blue", data).dark)));}
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-image"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#green-blue", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#green-blue", data).dark)));}
 }
 else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-position"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).dark)));}
 }
 else {document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-repeat"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).dark)));}
 }
 else {document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-size"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg2", data))));
+}
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).light)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#green-blue", data).dark)));}
 }
 else {document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
@@ -1999,7 +2058,11 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+window.ftd.utils.node_change_call("main","1:main__background-color", data);
 window.ftd.utils.node_change_call("main","1:main__background-image", data);
+window.ftd.utils.node_change_call("main","1:main__background-position", data);
+window.ftd.utils.node_change_call("main","1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1:main__background-size", data);
 };
 
 

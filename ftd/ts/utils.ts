@@ -270,6 +270,22 @@ window.ftd.dependencies.eval_background_repeat = function(bg: any) {
     }
 }
 
+window.ftd.dependencies.eval_background_color = function(bg: any, data: any) {
+    let img_src = bg;
+    if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+        return img_src.light;
+    }
+    else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
+        return img_src.dark;
+    }
+    else if(typeof img_src === 'string' && !!img_src) {
+        return img_src;
+    }
+    else {
+        return null;
+    }
+}
+
 window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
     if (typeof bg === 'object' && !!bg && "src" in bg) {
         let img_src = bg.src;

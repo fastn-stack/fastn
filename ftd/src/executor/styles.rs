@@ -1179,22 +1179,6 @@ impl Background {
         }
     }
 
-    pub fn to_linear_gradient_css(&self) -> String {
-        match self {
-            ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::Image(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::LinearGradient(l) => l.to_css_string(),
-        }
-    }
-
-    pub fn to_css_string(&self) -> String {
-        match self {
-            ftd::executor::Background::Solid(c) => c.light.value.to_css_string(),
-            ftd::executor::Background::Image(i) => i.to_image_src_css_string(),
-            ftd::executor::Background::LinearGradient(l) => l.to_css_string(),
-        }
-    }
-
     pub fn background_image_pattern() -> (String, bool) {
         (
             "window.ftd.dependencies.eval_background_image({0}, data)".to_string(),
@@ -1205,6 +1189,13 @@ impl Background {
     pub fn background_repeat_pattern() -> (String, bool) {
         (
             "window.ftd.dependencies.eval_background_repeat({0})".to_string(),
+            true,
+        )
+    }
+
+    pub fn background_color_pattern() -> (String, bool) {
+        (
+            "window.ftd.dependencies.eval_background_color({0}, data)".to_string(),
             true,
         )
     }

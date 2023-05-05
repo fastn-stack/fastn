@@ -20,9 +20,9 @@ dark: blue
 -- ftd.row:
 width: fill-container
 background.linear-gradient: $lg
-background.linear-gradient if { counter % 2 == 1 }: $lg2
+background.linear-gradient if { counter % 3 == 1 }: $lg2
 /background.solid: $red-yellow
-/background.solid if { counter % 2 == 1 }: $green-blue
+background.solid if { counter % 3 == 2 }: $green-blue
 $on-click$: $ftd.increment($a = $counter)
 
 -- ftd.text: HELLO THERE
