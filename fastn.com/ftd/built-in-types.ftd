@@ -33,6 +33,8 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.align-self`](ftd/built-in-types/#ftd-align-self)
   - [`ftd.align`](ftd/built-in-types/#ftd-align)
   - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
+  - [`ftd.linear-gradient`](ftd/built-in-types/#ftd-linear-gradient)
+  - [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
   - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
   - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
   - [`ftd.background-repeat`](ftd/built-in-types/#ftd-background-repeat)
@@ -435,6 +437,83 @@ derived types. Derived types comes in two types: [`record`](ftd/record/) and
 
 
 
+-- ds.h2: `ftd.linear-gradient`
+
+`ftd.linear-gradient` is a record. It accepts two values as fields: `direction`
+of type [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
+and `colors` as list of `string` type.
+
+-- ds.code: `ftd.linear-gradient`
+lang: ftd
+
+\-- record linear-gradient:
+ftd.linear-gradient-directions direction: bottom
+string list colors:
+
+-- ds.markdown:
+
+- `direction`: This field defines the direction of gradient line. It takes
+value of type [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
+and is optional. By default, it takes `bottom`.
+
+- `colors`: This field takes a list of `string` which define the colors used
+in the gradient.
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.linear-gradient-directions`
+
+`ftd.linear-gradient-directions` is an or-type. It can be angle, turn or any
+directional constant as shown below.
+
+-- ds.code: `ftd.linear-gradient-directions`
+lang: ftd
+
+\-- or-type linear-gradient-directions:
+
+\-- ftd.decimal angle:
+\-- ftd.decimal turn:
+\-- constant string left: left
+\-- constant string right: right
+\-- constant string top: top
+\-- constant string bottom: bottom
+\-- constant string top-left: top-left
+\-- constant string top-right: top-right
+\-- constant string bottom-left: bottom-left
+\-- constant string bottom-right: bottom-right
+
+\-- end: linear-gradient-directions
+
+-- ds.markdown:
+
+As shown above, the `ftd.linear-gradient-directions` has following variants:
+
+- `angle`: This value will set the gradient direction to the specified angle.
+It takes value of type `ftd.decimal`.
+
+- `turn`: This value sets the gradient direction by turning the gradient line
+to the value specified. It takes value of type `ftd.decimal`.
+
+- `left`: This value sets the gradient direction to left.
+
+- `right`: This value sets the gradient direction to right.
+
+- `top`: This value sets the gradient direction to top.
+
+- `bottom`: This value sets the gradient direction to bottom.
+
+- `top-left`: This value sets the gradient direction to top-left.
+
+- `bottom-left`: This value sets the gradient direction to bottom-left.
+
+- `top-right`: This value sets the gradient direction to top-right.
+
+- `top-left`: This value sets the gradient direction to top-left.
 
 
 
@@ -450,6 +529,7 @@ lang: ftd
 
 \-- ftd.color solid:
 \-- ftd.background-image image:
+\-- ftd.linear-gradient linear-gradient:
 
 \-- end: background
 
@@ -463,8 +543,8 @@ It takes value of type `ftd.color`.
 - `image`: This value will set the specified image as the background image
 It takes value of type `ftd.background-image`.
 
-
-
+- `linear-gradient`: This value will set the specified linear gradient as the
+background. It takes value of type `ftd.linear-gradient`.
 
 
 

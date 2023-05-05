@@ -1009,6 +1009,71 @@ background.image: $bg-image ;; <hl>
 
 
 
+
+
+
+-- ds.h2: `background.linear-gradient: ftd.linear-gradient`
+
+The `background.linear-gradient` property sets a linear gradient to the
+background of an element. It takes input of
+[`ftd.linear-gradient`](ftd/built-in-types/#ftd-linear-gradient)
+type and is optional.
+
+-- ds.rendered: Specifying linear gradient as background
+
+-- ds.rendered.input:
+
+\-- ftd.linear-gradient lg: ;; <hl>
+direction: top-left ;; <hl>
+colors: red, green, blue ;; <hl>
+
+\-- ftd.linear-gradient lg: ;; <hl>
+direction.angle: 180 ;; <hl>
+colors: violet, indigo, blue, green, yellow, orange, red ;; <hl>
+
+\-- ftd.linear-gradient lg: ;; <hl>
+direction.turn: 0.25 ;; <hl>
+colors: blue, red ;; <hl>
+
+\-- ftd.row:
+width: fill-container
+spacing: space-between
+
+\-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg ;; <hl>
+
+\-- end: ftd.column
+
+\-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg-2 ;; <hl>
+
+\-- end: ftd.column
+
+\-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg-3 ;; <hl>
+
+\-- end: ftd.column
+
+\-- end: ftd.row
+
+-- ds.rendered.output:
+
+-- render-gradient:
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
 -- ds.h1: `border-width: optional ftd.length`
 id: border-width
 
@@ -4625,6 +4690,53 @@ background.image: $bg-image
 -- end: ftd.row
 
 -- end: render-bg
+
+
+
+-- component render-gradient:
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg-2
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.linear-gradient: $lg-3
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: render-gradient
+
+
+-- ftd.linear-gradient lg:
+direction: top-left
+colors: red, green, blue
+
+-- ftd.linear-gradient lg-2:
+direction.angle: 180
+colors: violet, indigo, blue, green, yellow, orange, red
+
+-- ftd.linear-gradient lg-3:
+direction.turn: 0.25
+colors: blue, red
+
 
 -- ftd.shadow s:
 color: $yellow-red
