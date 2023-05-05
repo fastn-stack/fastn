@@ -42,15 +42,15 @@ and database driven websites.
 
 
 
--- chakra: Build anything, faster.
+-- two-column-layout: Build anything, faster.
 
--- chakra.subtitle:
+-- two-column-layout.subtitle:
 
 fastn language is designed for building user interfaces and content centric
 websites.
 
 
--- chakra.right-side-ui:
+-- two-column-layout.right-side-ui:
 
 -- code:
 
@@ -70,7 +70,7 @@ you can also write multiline messages easily!
 
 no quotes. and **markdown** is *supported*.
 
--- end: chakra.right-side-ui
+-- end: two-column-layout.right-side-ui
 
 
 -- ftd.text: **1**. Everything in one place
@@ -100,7 +100,7 @@ margin-bottom.em: 0.5
 fastn language is easy to learn, especially for non programmers, but does not
 compromise on what you can build with it.
 
--- end: chakra
+-- end: two-column-layout
 
 
 
@@ -300,7 +300,7 @@ color: $inherited.colors.text
 
 
 
--- component chakra:
+-- component two-column-layout:
 caption title:
 body subtitle:
 children ui-data:
@@ -309,24 +309,24 @@ ftd.ui list right-side-ui:
 -- ftd.column:
 width: fill-container
 
--- chakra-desktop:
-title: $chakra.title
-subtitle: $chakra.subtitle
-ui-data: $chakra.ui-data
-right-side-ui: $chakra.right-side-ui
+-- two-column-layout-desktop:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
 if: { ftd.device != "mobile" }
 
 
--- chakra-mobile:
-title: $chakra.title
-subtitle: $chakra.subtitle
-ui-data: $chakra.ui-data
-right-side-ui: $chakra.right-side-ui
+-- two-column-layout-mobile:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
 if: { ftd.device == "mobile" }
 
 -- end: ftd.column
 
--- end: chakra
+-- end: two-column-layout
 
 
 
@@ -337,7 +337,7 @@ if: { ftd.device == "mobile" }
 
 
 
--- component chakra-desktop:
+-- component two-column-layout-desktop:
 caption title:
 body subtitle:
 children ui-data:
@@ -365,17 +365,17 @@ color: $inherited.colors.text
 -- ftd.column:
 width: fill-container
 
--- ftd.text: $chakra-desktop.title
+-- ftd.text: $two-column-layout-desktop.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text: $chakra-desktop.subtitle
+-- ftd.text: $two-column-layout-desktop.subtitle
 margin-bottom.em: 1.5
 
 -- ftd.column:
 width: fill-container
-children: $chakra-desktop.ui-data
+children: $two-column-layout-desktop.ui-data
 
 -- end: ftd.column
 
@@ -384,7 +384,7 @@ children: $chakra-desktop.ui-data
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-children: $chakra-desktop.right-side-ui
+children: $two-column-layout-desktop.right-side-ui
 
 -- end: ftd.column
 
@@ -392,7 +392,7 @@ children: $chakra-desktop.right-side-ui
 
 -- end: ftd.column
 
--- end: chakra-desktop
+-- end: two-column-layout-desktop
 
 
 
@@ -403,7 +403,7 @@ children: $chakra-desktop.right-side-ui
 
 
 
--- component chakra-mobile:
+-- component two-column-layout-mobile:
 caption title:
 body subtitle:
 children ui-data:
@@ -428,17 +428,17 @@ color: $inherited.colors.text
 -- ftd.column:
 width: fill-container
 
--- ftd.text: $chakra-mobile.title
+-- ftd.text: $two-column-layout-mobile.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text: $chakra-mobile.subtitle
+-- ftd.text: $two-column-layout-mobile.subtitle
 margin-bottom.em: 1.5
 
 -- ftd.column:
 width: fill-container
-children: $chakra-mobile.ui-data
+children: $two-column-layout-mobile.ui-data
 
 -- end: ftd.column
 
@@ -447,7 +447,7 @@ children: $chakra-mobile.ui-data
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-children: $chakra-mobile.right-side-ui
+children: $two-column-layout-mobile.right-side-ui
 
 -- end: ftd.column
 
@@ -455,7 +455,7 @@ children: $chakra-mobile.right-side-ui
 
 -- end: ftd.column
 
--- end: chakra-mobile
+-- end: two-column-layout-mobile
 
 
 
