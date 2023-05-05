@@ -1680,6 +1680,32 @@ impl Value {
         }
     }
 
+    pub fn string_list(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<Vec<String>> {
+        match self {
+            ftd::interpreter::Value::List { data, kind } if kind.is_string() => {
+                let mut values = vec![];
+                for item in data.iter() {
+                    let line_number = item.line_number();
+                    values.push(
+                        item.to_owned()
+                            .resolve(doc, line_number)?
+                            .string(doc.name, line_number)?,
+                    );
+                }
+                Ok(values)
+            }
+            t => ftd::interpreter::utils::e2(
+                format!("Expected String list, found: `{:?}`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
     pub fn ui(
         &self,
         doc_id: &str,

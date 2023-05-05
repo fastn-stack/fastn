@@ -1,0 +1,30 @@
+-- integer $counter: 0
+
+-- ftd.integer: $counter
+padding.px: 15
+
+-- ftd.linear-gradient lg:
+direction.turn: 0.5
+colors: red, green
+
+-- ftd.linear-gradient lg2:
+direction: top
+colors: green, red
+
+-- ftd.color red-yellow: red
+dark: yellow
+
+-- ftd.color green-blue: green
+dark: blue
+
+-- ftd.row:
+width: fill-container
+background.linear-gradient: $lg
+background.linear-gradient if { counter % 3 == 1 }: $lg2
+/background.solid: $red-yellow
+background.solid if { counter % 3 == 2 }: $green-blue
+$on-click$: $ftd.increment($a = $counter)
+
+-- ftd.text: HELLO THERE
+
+-- end: ftd.row

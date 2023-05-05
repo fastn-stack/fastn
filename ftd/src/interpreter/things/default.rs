@@ -1135,6 +1135,153 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+            ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
+                name: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+                variants: vec![
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TURN,
+                        ftd::interpreter::Kind::decimal()
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("left")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_RIGHT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("right")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("top")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("bottom")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_LEFT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("top-left")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_LEFT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("bottom-left")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_RIGHT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("top-right")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::new_constant(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_RIGHT,
+                        ftd::interpreter::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter::Value::new_string("bottom-right")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter::FTD_LINEAR_GRADIENT.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_LINEAR_GRADIENT.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "direction".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::OrType {
+                                name: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+                                variant: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM
+                                    .to_string(),
+                                full_variant: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM.to_string(),
+                                value: Box::new
+                                    (ftd::interpreter::PropertyValue::Value {
+                                        value: ftd::interpreter::Value::String {
+                                            text: "bottom".to_string(),
+                                        },
+                                        is_mutable: false,
+                                        line_number: 0
+                                    }),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "colors".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_list()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_BACKGROUND.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_BACKGROUND.to_string(),
@@ -1151,6 +1298,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                     ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
                         ftd::interpreter::FTD_BACKGROUND_IMAGE,
                         ftd::interpreter::Kind::record(ftd::interpreter::FTD_BG_IMAGE)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter::OrTypeVariant::Regular(ftd::interpreter::Field::new(
+                        ftd::interpreter::FTD_BACKGROUND_LINEAR_GRADIENT,
+                        ftd::interpreter::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
                             .into_kind_data(),
                         false,
                         None,

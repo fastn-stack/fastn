@@ -1390,7 +1390,7 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_solid_css_string()))
                     .value,
                 self.background.to_owned(),
-                None,
+                Some(ftd::executor::Background::background_color_pattern()),
                 doc_id,
             ),
         );

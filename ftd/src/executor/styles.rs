@@ -872,9 +872,194 @@ impl BackgroundImage {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum LinearGradientDirection {
+    Angle(f64),
+    Turn(f64),
+    Left,
+    Right,
+    Top,
+    Bottom,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+}
+
+impl LinearGradientDirection {
+    fn from_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LinearGradientDirection> {
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        LinearGradientDirection::from_values(value, doc, line_number)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT => {
+                Ok(LinearGradientDirection::Left)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_RIGHT => {
+                Ok(LinearGradientDirection::Right)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP => {
+                Ok(LinearGradientDirection::Top)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM => {
+                Ok(LinearGradientDirection::Bottom)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_LEFT => {
+                Ok(LinearGradientDirection::TopLeft)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_LEFT => {
+                Ok(LinearGradientDirection::BottomLeft)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_RIGHT => {
+                Ok(LinearGradientDirection::TopRight)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_RIGHT => {
+                Ok(LinearGradientDirection::BottomRight)
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE => {
+                Ok(LinearGradientDirection::Angle(
+                    or_type_value
+                        .1
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .decimal(doc.name, line_number)?,
+                ))
+            }
+            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TURN => {
+                Ok(LinearGradientDirection::Turn(
+                    or_type_value
+                        .1
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .decimal(doc.name, line_number)?,
+                ))
+            }
+            t => ftd::executor::utils::parse_error(
+                format!(
+                    "Unknown variant `{}` for or-type `ftd.linear-gradient-directions`",
+                    t
+                ),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+    // Top, Bottom, Left, Right angles
+    // 0deg, 180deg, 270deg, and 90deg
+    pub fn to_css_string(&self) -> String {
+        match self {
+            LinearGradientDirection::Top => "0deg".to_string(),
+            LinearGradientDirection::Bottom => "180deg".to_string(),
+            LinearGradientDirection::Left => "270deg".to_string(),
+            LinearGradientDirection::Right => "90deg".to_string(),
+            LinearGradientDirection::TopLeft => "315deg".to_string(),
+            LinearGradientDirection::BottomLeft => "225deg".to_string(),
+            LinearGradientDirection::TopRight => "45deg".to_string(),
+            LinearGradientDirection::BottomRight => "135deg".to_string(),
+            LinearGradientDirection::Angle(a) => format!("{}deg", a),
+            LinearGradientDirection::Turn(t) => format!("{}turn", t),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct LinearGradient {
+    pub direction: ftd::executor::Value<LinearGradientDirection>,
+    pub colors: ftd::executor::Value<Vec<String>>,
+}
+
+impl LinearGradient {
+    fn from_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter::Value::Record { name, fields })
+                if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter::FTD_LINEAR_GRADIENT,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        ftd::executor::LinearGradient::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!("`{}` field in ftd.linear-gradient not found", field_name),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })
+        };
+
+        let direction = ftd::executor::Value::new(
+            ftd::executor::LinearGradientDirection::from_value(
+                get_property_value("direction")?.clone(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("direction")?
+                .into_property(ftd::interpreter::PropertySource::header("direction"))],
+        );
+
+        let colors = ftd::executor::Value::new(
+            get_property_value("colors")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .string_list(&doc.itdoc(), line_number)?,
+            Some(line_number),
+            vec![get_property_value("colors")?
+                .into_property(ftd::interpreter::PropertySource::header("colors"))],
+        );
+
+        Ok(ftd::executor::LinearGradient { direction, colors })
+    }
+
+    pub fn to_css_string(&self) -> String {
+        format!(
+            "linear-gradient({}, {})",
+            self.direction.value.to_css_string(),
+            self.colors.value.join(", ")
+        )
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(ftd::executor::Color),
     Image(ftd::executor::BackgroundImage),
+    LinearGradient(ftd::executor::LinearGradient),
 }
 
 impl Background {
@@ -906,8 +1091,13 @@ impl Background {
             ftd::interpreter::FTD_BACKGROUND_IMAGE => Ok(ftd::executor::Background::Image(
                 ftd::executor::BackgroundImage::from_value(or_type_value.1, doc, line_number)?,
             )),
+            ftd::interpreter::FTD_BACKGROUND_LINEAR_GRADIENT => {
+                Ok(ftd::executor::Background::LinearGradient(
+                    ftd::executor::LinearGradient::from_value(or_type_value.1, doc, line_number)?,
+                ))
+            }
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.length`", t),
+                format!("Unknown variant `{}` for or-type `ftd.background`", t),
                 doc.name,
                 line_number,
             ),
@@ -945,6 +1135,9 @@ impl Background {
         match self {
             ftd::executor::Background::Solid(c) => c.light.value.to_css_string(),
             ftd::executor::Background::Image(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
+            ftd::executor::Background::LinearGradient(_) => {
+                ftd::interpreter::FTD_IGNORE_KEY.to_string()
+            }
         }
     }
 
@@ -952,6 +1145,7 @@ impl Background {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
             ftd::executor::Background::Image(i) => i.to_image_src_css_string(),
+            ftd::executor::Background::LinearGradient(l) => l.to_css_string(),
         }
     }
 
@@ -959,6 +1153,9 @@ impl Background {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
             ftd::executor::Background::Image(i) => i.to_repeat_css_string(),
+            ftd::executor::Background::LinearGradient(_) => {
+                ftd::interpreter::FTD_IGNORE_KEY.to_string()
+            }
         }
     }
 
@@ -966,6 +1163,9 @@ impl Background {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
             ftd::executor::Background::Image(i) => i.to_size_css_string(),
+            ftd::executor::Background::LinearGradient(_) => {
+                ftd::interpreter::FTD_IGNORE_KEY.to_string()
+            }
         }
     }
 
@@ -973,13 +1173,9 @@ impl Background {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
             ftd::executor::Background::Image(i) => i.to_position_css_string(),
-        }
-    }
-
-    pub fn to_css_string(&self) -> String {
-        match self {
-            ftd::executor::Background::Solid(c) => c.light.value.to_css_string(),
-            ftd::executor::Background::Image(i) => i.to_image_src_css_string(),
+            ftd::executor::Background::LinearGradient(_) => {
+                ftd::interpreter::FTD_IGNORE_KEY.to_string()
+            }
         }
     }
 
@@ -993,6 +1189,13 @@ impl Background {
     pub fn background_repeat_pattern() -> (String, bool) {
         (
             "window.ftd.dependencies.eval_background_repeat({0})".to_string(),
+            true,
+        )
+    }
+
+    pub fn background_color_pattern() -> (String, bool) {
+        (
+            "window.ftd.dependencies.eval_background_color({0}, data)".to_string(),
             true,
         )
     }

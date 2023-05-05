@@ -946,6 +946,21 @@ window.ftd.dependencies.eval_background_repeat = function (bg) {
         return null;
     }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+    let img_src = bg;
+    if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+        return img_src.light;
+    }
+    else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+        return img_src.dark;
+    }
+    else if (typeof img_src === 'string' && !!img_src) {
+        return img_src;
+    }
+    else {
+        return null;
+    }
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
     if (typeof bg === 'object' && !!bg && "src" in bg) {
         let img_src = bg.src;
@@ -958,6 +973,14 @@ window.ftd.dependencies.eval_background_image = function (bg, data) {
         else {
             return null;
         }
+    }
+    else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+        var colors = bg.colors;
+        var direction = "to bottom";
+        if ("direction" in bg) {
+            direction = bg.direction;
+        }
+        return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
     }
     else {
         return null;

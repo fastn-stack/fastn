@@ -45,6 +45,7 @@ pub const FTD_COLOR_LIGHT: &str = "ftd#color.light";
 pub const FTD_BACKGROUND: &str = "ftd#background";
 pub const FTD_BACKGROUND_SOLID: &str = "ftd#background.solid";
 pub const FTD_BACKGROUND_IMAGE: &str = "ftd#background.image";
+pub const FTD_BACKGROUND_LINEAR_GRADIENT: &str = "ftd#background.linear-gradient";
 
 pub const FTD_LENGTH_PAIR: &str = "ftd#length-pair";
 pub const FTD_LENGTH_PAIR_X: &str = "ftd#length-pair.x";
@@ -53,6 +54,25 @@ pub const FTD_LENGTH_PAIR_Y: &str = "ftd#length-pair.y";
 pub const FTD_BG_IMAGE: &str = "ftd#background-image";
 pub const FTD_BG_IMAGE_SRC: &str = "ftd#background-image.src";
 pub const FTD_BG_IMAGE_REPEAT: &str = "ftd#background-image.repeat";
+
+pub const FTD_LINEAR_GRADIENT: &str = "ftd#linear-gradient";
+pub const FTD_LINEAR_GRADIENT_DIRECTION: &str = "ftd#linear-gradient.direction";
+pub const FTD_LINEAR_GRADIENT_COLORS: &str = "ftd#linear-gradient.colors";
+
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS: &str = "ftd#linear-gradient-directions";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE: &str = "ftd#linear-gradient-directions.angle";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_TURN: &str = "ftd#linear-gradient-directions.turn";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT: &str = "ftd#linear-gradient-directions.left";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_RIGHT: &str = "ftd#linear-gradient-directions.right";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_TOP: &str = "ftd#linear-gradient-directions.top";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM: &str = "ftd#linear-gradient-directions.bottom";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_LEFT: &str = "ftd#linear-gradient-directions.top-left";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_RIGHT: &str =
+    "ftd#linear-gradient-directions.top-right";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_LEFT: &str =
+    "ftd#linear-gradient-directions.bottom-left";
+pub const FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_RIGHT: &str =
+    "ftd#linear-gradient-directions.bottom-right";
 
 pub const FTD_BACKGROUND_REPEAT: &str = "ftd#background-repeat";
 pub const FTD_BACKGROUND_REPEAT_BOTH_REPEAT: &str = "ftd#background-repeat.repeat";
@@ -250,6 +270,7 @@ pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
 
+pub const FTD_EMPTY_STR: &str = "";
 pub const FTD_VALUE_UNCHANGED: &str = "unchanged";
 pub const FTD_TEXT_STYLE: &str = "ftd#text-style";
 pub const FTD_TEXT_STYLE_ITALIC: &str = "ftd#text-style.italic";
