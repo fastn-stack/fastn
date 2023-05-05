@@ -1,0 +1,61 @@
+-- my-ds.page: Sitemap feature: document
+
+Video Title: Sitemap feature: document
+
+Owner: Ajit
+
+Audience: Common
+
+Goal: To make understand Why and How of this feature
+
+-- ds.h1: Intro Clip
+
+Today we will learn about the `document feature` of Sitemap
+
+-- ds.image:
+src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
+
+-- ds.h1: Sitemap
+
+Sitemap let's you structure your website by allowing you to organize your files 
+in separate sections and subsections hence
+it allows you to put all your links in a hierarchy.
+
+Generally the url in sitemap is based on the structure of the package ie the 
+Url of the page is corresponding to the location of that page in the package. 
+
+In sitemap you can use documents feature to organize your urls better.
+
+-- ds.h1: Document
+
+In sitemap you can use documents feature to organize your urls better.
+
+-- ds.h2: Why document?
+
+1. it helps to decouple the package organization and corresponding URLs.
+So you can keep files as you wish in the package but URL still does not depend 
+on the path of the file.
+  
+2. It empowers the user to give a custom URL to the page
+
+3. And That also helps to give a clean URL
+
+4. Not only this, you can include a file more than once in the sitemap with 
+different URLs.
+
+-- ds.h2: How?
+
+
+-- ds.h1: Closing Remarks 
+
+Thank you guys, keep watching these videos to learn more about fastn.
+Support us by giving a star on GitHub and connect our fastn community on 
+Discord.
+
+
+/-- ds.h1: Final Video
+
+/-- ds.youtube:
+v: 6naTh8u_uOM
+
+-- end: my-ds.page
