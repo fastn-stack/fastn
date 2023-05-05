@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -872,6 +874,62 @@ impl BackgroundImage {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct LinearGradientColorType {
+    pub color: Color,
+    pub start: Option<Length>,
+    pub end: Option<Length>,
+}
+
+impl LinearGradientColorType {
+    pub fn to_css_string(&self) -> String {
+        let mut result = format!("{}", self.color.light.value.to_css_string());
+        if let Some(start) = self.start.as_ref() {
+            result.push_str(format!(" {}", start.to_css_string()).as_str());
+        }
+        if let Some(end) = self.end.as_ref() {
+            result.push_str(format!(" {}", end.to_css_string()).as_str());
+        }
+        result
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum LinearGradientColor {
+    Color(LinearGradientColorType),
+    Length(Length),
+}
+
+impl LinearGradientColor {
+    fn from_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
+        dbg!(&value);
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        LinearGradientColor::from_values(value, doc, line_number)
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Vec<Self>> {
+        let result = vec![];
+        Ok(result)
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            LinearGradientColor::Color(c) => c.to_css_string(),
+            LinearGradientColor::Length(l) => l.to_css_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum LinearGradientDirection {
     Angle(f64),
     Turn(f64),
@@ -976,7 +1034,7 @@ impl LinearGradientDirection {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct LinearGradient {
     pub direction: ftd::executor::Value<LinearGradientDirection>,
-    pub colors: ftd::executor::Value<Vec<String>>,
+    pub colors: ftd::executor::Value<Vec<LinearGradientColor>>,
 }
 
 impl LinearGradient {
@@ -1033,11 +1091,14 @@ impl LinearGradient {
                 .into_property(ftd::interpreter::PropertySource::header("direction"))],
         );
 
+        println!("HELLO");
+
         let colors = ftd::executor::Value::new(
-            get_property_value("colors")?
-                .clone()
-                .resolve(&doc.itdoc(), line_number)?
-                .string_list(&doc.itdoc(), line_number)?,
+            ftd::executor::LinearGradientColor::from_value(
+                get_property_value("colors")?.clone(),
+                doc,
+                line_number,
+            )?,
             Some(line_number),
             vec![get_property_value("colors")?
                 .into_property(ftd::interpreter::PropertySource::header("colors"))],
@@ -1050,7 +1111,11 @@ impl LinearGradient {
         format!(
             "linear-gradient({}, {})",
             self.direction.value.to_css_string(),
-            self.colors.value.join(", ")
+            self.colors
+                .value
+                .iter()
+                .map(|lc| lc.to_css_string())
+                .join(", ")
         )
     }
 }

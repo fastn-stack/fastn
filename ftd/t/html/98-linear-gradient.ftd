@@ -5,11 +5,15 @@ padding.px: 15
 
 -- ftd.linear-gradient lg:
 direction.turn: 0.5
-colors: red, green
+colors: $color-values
 
--- ftd.linear-gradient lg2:
-direction: top
-colors: green, red
+-- ftd.linear-gradient-color color-values:
+
+-- ftd.linear-gradient-color.value: red
+-- ftd.linear-gradient-color.value: green
+-- ftd.linear-gradient-color.value: blue
+
+-- end: color-values
 
 -- ftd.color red-yellow: red
 dark: yellow
