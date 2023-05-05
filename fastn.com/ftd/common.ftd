@@ -1027,11 +1027,11 @@ type and is optional.
 direction: top-left ;; <hl>
 colors: red, green, blue ;; <hl>
 
-\-- ftd.linear-gradient lg: ;; <hl>
+\-- ftd.linear-gradient lg-2: ;; <hl>
 direction.angle: 180 ;; <hl>
 colors: violet, indigo, blue, green, yellow, orange, red ;; <hl>
 
-\-- ftd.linear-gradient lg: ;; <hl>
+\-- ftd.linear-gradient lg-3: ;; <hl>
 direction.turn: 0.25 ;; <hl>
 colors: blue, red ;; <hl>
 
