@@ -36,7 +36,74 @@ and database driven websites.
 -- end: hero-section
 
 
--- chakra:
+
+
+
+
+
+
+-- chakra: Build anything, faster.
+
+-- chakra.subtitle:
+
+fastn language is designed for building user interfaces and content centric
+websites.
+
+
+-- chakra.right-side-ui:
+
+-- code:
+
+\-- chat-female-avatar: Hello World! 😀
+
+\-- chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ftd-index.chat-female-avatar: Hello World! 😀
+
+-- ftd-index.chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- end: chakra.right-side-ui
+
+
+-- ftd.text: **1**. Everything in one place
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 0.5
+
+;; With `fastn` you can build anything starting from designing to full web app
+;; creation.
+
+With `fastn` you can design your website, create the frontend, integrate with
+backend, write content, and deploy your websites.
+
+-- ftd.text: This website is made using fastn!
+role: $inherited.types.heading-tiny
+color: $inherited.colors.cta-primary.base
+margin-bottom.em: 1.5
+
+-- ftd.text: **2**. Easy to learn
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+
+fastn language is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
+
+-- end: chakra
+
+
+
 
 -- design-chakra:
 
@@ -234,14 +301,27 @@ color: $inherited.colors.text
 
 
 -- component chakra:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
 
 -- chakra-desktop:
+title: $chakra.title
+subtitle: $chakra.subtitle
+ui-data: $chakra.ui-data
+right-side-ui: $chakra.right-side-ui
 if: { ftd.device != "mobile" }
 
+
 -- chakra-mobile:
+title: $chakra.title
+subtitle: $chakra.subtitle
+ui-data: $chakra.ui-data
+right-side-ui: $chakra.right-side-ui
 if: { ftd.device == "mobile" }
 
 -- end: ftd.column
@@ -258,6 +338,10 @@ if: { ftd.device == "mobile" }
 
 
 -- component chakra-desktop:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
@@ -281,67 +365,26 @@ color: $inherited.colors.text
 -- ftd.column:
 width: fill-container
 
--- ftd.text: Build anything, faster.
+-- ftd.text: $chakra-desktop.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text:
+-- ftd.text: $chakra-desktop.subtitle
 margin-bottom.em: 1.5
 
-fastn language is designed for building user interfaces and content centric
-websites.
+-- ftd.column:
+width: fill-container
+children: $chakra-desktop.ui-data
 
--- ftd.text: **1**. Everything in one place
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-margin-bottom.em: 0.5
-
-;; With `fastn` you can build anything starting from designing to full web app
-;; creation.
-
-With `fastn` you can design your website, create the frontend, integrate with
-backend, write content, and deploy your websites.
-
--- ftd.text: This website is made using fastn!
-role: $inherited.types.heading-tiny
-color: $inherited.colors.cta-primary.base
-margin-bottom.em: 1.5
-
--- ftd.text: **2**. Easy to learn
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-
-fastn language is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+-- end: ftd.column
 
 -- end: ftd.column
 
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-
--- code:
-
-\-- chat-female-avatar: Hello World! 😀
-
-\-- chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
-
--- ftd-index.chat-female-avatar: Hello World! 😀
-
--- ftd-index.chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+children: $chakra-desktop.right-side-ui
 
 -- end: ftd.column
 
@@ -361,6 +404,10 @@ no quotes. and **markdown** is *supported*.
 
 
 -- component chakra-mobile:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
@@ -381,67 +428,26 @@ color: $inherited.colors.text
 -- ftd.column:
 width: fill-container
 
--- ftd.text: Build anything, faster.
+-- ftd.text: $chakra-mobile.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text:
+-- ftd.text: $chakra-mobile.subtitle
 margin-bottom.em: 1.5
 
-fastn language is designed for building user interfaces and content centric
-websites.
+-- ftd.column:
+width: fill-container
+children: $chakra-mobile.ui-data
 
--- ftd.text: **1**. Everything in one place
-role: $inherited.types.heading-small
-margin-bottom.em: 1.5
-
--- ftd.text:
-margin-bottom.em: 1
-
-;; With `fastn` you can build anything starting from designing to full web app
-;; creation.
-
-With `fastn` you can design your website, create the frontend, integrate with
-backend, write content, and deploy your websites.
-
--- ftd.text: This website is made using fastn!
-role: $inherited.types.heading-tiny
-color: $inherited.colors.cta-primary.base
-margin-bottom.em: 2
-
--- ftd.text: **2**. Easy to learn
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-
-fastn language is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+-- end: ftd.column
 
 -- end: ftd.column
 
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-
--- code:
-
-\-- chat-female-avatar: Hello World! 😀
-
-\-- chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
-
--- ftd-index.chat-female-avatar: Hello World! 😀
-
--- ftd-index.chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+children: $chakra-mobile.right-side-ui
 
 -- end: ftd.column
 
