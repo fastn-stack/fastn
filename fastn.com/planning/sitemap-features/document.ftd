@@ -10,17 +10,21 @@ Goal: To make understand Why and How of this feature
 
 -- ds.h1: Intro Clip
 
+-- ds.image:
+src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
+
+
 How To Create a Clean URL?
 
 Generally the URL of the page is corresponding to the location of that page in 
 the package. 
 
-This makes the URL more complex. Sitemap
+This makes the URL more complex.
 Now let's learn how to create the clean URL.
 
 
 -- ds.image:
-src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
+src: $fastn-assets.files.planning.sitemap-features.img.benefits.jpg
 
 -- ds.h1: Sitemap
 
