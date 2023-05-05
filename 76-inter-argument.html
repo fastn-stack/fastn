@@ -761,7 +761,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="gap: 20px; justify-content: start; padding: 20px" class="ft_common ft_row"><div data-id="0,0:main" style="" class="ft_common ft_md">Hi there!</div><div data-id="0,1:main" style="" class="ft_common ft_md">Hi there!</div><div data-id="0,2:main" style="" class="ft_common ft_md">Hi there!</div></div><div data-id="1:main" style="gap: 20px; justify-content: start; padding: 20px" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">Hi there 1!</div><div data-id="1,1:main" style="" class="ft_common ft_md">Hi there 1!</div><div data-id="1,2:main" style="" class="ft_common ft_md">Description here</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; gap: 20px; justify-content: start; padding: 20px" class="ft_common ft_row"><div data-id="2,0:main" style="" class="ft_common ft_md">Hi there 2!</div><div data-id="2,1:main" style="" class="ft_common ft_md">Hi there 2!</div><div data-id="2,2:main" style="" class="ft_common ft_md">Hi there 2!</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="gap: 20px; padding: 20px" class="ft_common ft_row"><div data-id="0,0:main" style="" class="ft_common ft_md">Hi there!</div><div data-id="0,1:main" style="" class="ft_common ft_md">Hi there!</div><div data-id="0,2:main" style="" class="ft_common ft_md">Hi there!</div></div><div data-id="1:main" style="gap: 20px; padding: 20px" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">Hi there 1!</div><div data-id="1,1:main" style="" class="ft_common ft_md">Hi there 1!</div><div data-id="1,2:main" style="" class="ft_common ft_md">Description here</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; gap: 20px; padding: 20px" class="ft_common ft_row"><div data-id="2,0:main" style="" class="ft_common ft_md">Hi there 2!</div><div data-id="2,1:main" style="" class="ft_common ft_md">Hi there 2!</div><div data-id="2,2:main" style="" class="ft_common ft_md">Hi there 2!</div></div></div>
 
 
 <script>
@@ -1713,6 +1713,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1725,6 +1740,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;
@@ -1965,8 +1988,8 @@ window.ftd.utils.set_value_helper(data, "foo#code:title:0", remaining, new_value
 
 window.ftd.call_mutable_value_changes("foo#code:title:0", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:0", "main");
-window.ftd.utils.node_change_call("main","0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,2:main__text", data);
 };
 
@@ -1975,8 +1998,8 @@ window.ftd.utils.set_value_helper(data, "foo#code:title:1", remaining, new_value
 
 window.ftd.call_mutable_value_changes("foo#code:title:1", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:1", "main");
-window.ftd.utils.node_change_call("main","1,0:main__text", data);
 window.ftd.utils.node_change_call("main","1,1:main__text", data);
+window.ftd.utils.node_change_call("main","1,0:main__text", data);
 };
 
 window.set_value_main["foo#code:title:2"] = function (data, new_value, remaining) {
@@ -1989,8 +2012,8 @@ set_data_value(data, "foo#code:description:2", value);
 window.ftd.call_mutable_value_changes("foo#code:title:2", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:2", "main");
 window.ftd.utils.node_change_call("main","2,0:main__text", data);
-window.ftd.utils.node_change_call("main","2,2:main__text", data);
 window.ftd.utils.node_change_call("main","2,1:main__text", data);
+window.ftd.utils.node_change_call("main","2,2:main__text", data);
 };
 
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {

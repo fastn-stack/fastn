@@ -773,7 +773,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(245,189,187,1); border-color: rgba(223,43,43,1); border-left-width: 5px; border-radius: 4px; color: rgba(198,42,33,1); gap: 24px; justify-content: start; padding-bottom: 16px; padding-left: 16px; padding-right: 16px; padding-top: 16px; width: 100%" class="ft_common ft_row"><div data-id="0,0:main" style="font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; width: 100%" class="ft_common ft_md">Beep Beep! I am an error !</div><div data-id="0,1:main" style="font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px" class="ft_common ft_md">close</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(245,189,187,1); border-color: rgba(223,43,43,1); border-left-width: 5px; border-radius: 4px; color: rgba(198,42,33,1); gap: 24px; padding-bottom: 16px; padding-left: 16px; padding-right: 16px; padding-top: 16px; width: 100%" class="ft_common ft_row"><div data-id="0,0:main" style="font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; width: 100%" class="ft_common ft_md">Beep Beep! I am an error !</div><div data-id="0,1:main" style="font-family: sans-serif; font-size: 14px; font-weight: 400; line-height: 19px" class="ft_common ft_md">close</div></div></div>
 
 
 <script>
@@ -1725,6 +1725,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1737,6 +1752,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;
@@ -1930,9 +1953,9 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 window.node_change_main = {};
 window.node_change_main["0:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#toast.0.cta-bg", data).light;
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#toast.0.cta-bg", data).light)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#toast.0.cta-bg", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#toast.0.cta-bg", data).dark)));}
 }
 
 window.node_change_main["0:main__background-image"] = function(data) {
@@ -2059,9 +2082,9 @@ window.ftd.utils.set_value_helper(data, "foo#toast", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#toast", "main");
 window.ftd.call_immutable_value_changes("foo#toast", "main");
-window.ftd.utils.node_change_call("main","0:main__color", data);
-window.ftd.utils.node_change_call("main","0:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0:main__color", data);
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
 };
 
@@ -2070,13 +2093,13 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
-window.ftd.utils.node_change_call("main","0:main__color", data);
+window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0:main__background-color", data);
+window.ftd.utils.node_change_call("main","0:main__color", data);
+window.ftd.utils.node_change_call("main","0:main__background-image", data);
 window.ftd.utils.node_change_call("main","0:main__background-size", data);
+window.ftd.utils.node_change_call("main","0:main__background-color", data);
 };
 
 window.set_value_main["ftd#default-types"] = function (data, new_value, remaining) {
@@ -2084,16 +2107,16 @@ window.ftd.utils.set_value_helper(data, "ftd#default-types", remaining, new_valu
 
 window.ftd.call_mutable_value_changes("ftd#default-types", "main");
 window.ftd.call_immutable_value_changes("ftd#default-types", "main");
+window.ftd.utils.node_change_call("main","0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,1:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0:main__font-size", data);
 window.ftd.utils.node_change_call("main","0,1:main__font-family", data);
-window.ftd.utils.node_change_call("main","0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,1:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,1:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0:main__font-family", data);
-window.ftd.utils.node_change_call("main","0,1:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,0:main__line-height", data);
 window.ftd.utils.node_change_call("main","0,1:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,1:main__line-height", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2101,16 +2124,16 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,1:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,1:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,1:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,1:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,1:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,1:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,1:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,1:main__font-size", data);
 };
 
 

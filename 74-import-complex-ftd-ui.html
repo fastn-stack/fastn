@@ -1718,6 +1718,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1730,6 +1745,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;
@@ -1984,10 +2007,10 @@ window.ftd.utils.set_value_helper(data, "73-complex-ftd-ui#switcher:is-active:0"
 
 window.ftd.call_mutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
 window.ftd.call_immutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
-window.ftd.utils.node_change_call("main","0,3:main__display", data);
-window.ftd.utils.node_change_call("main","0,2:main__display", data);
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
+window.ftd.utils.node_change_call("main","0,2:main__display", data);
+window.ftd.utils.node_change_call("main","0,3:main__display", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2004,8 +2027,8 @@ window.ftd.utils.set_value_helper(data, "ftd#default-colors", remaining, new_val
 
 window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
 window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
 };
 
 
