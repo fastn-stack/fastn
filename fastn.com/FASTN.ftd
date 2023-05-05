@@ -388,6 +388,8 @@ favicon: /-/fastn.io/images/favicon.svg
   skip: true
 
 - Overview: /planning/
+- sitemap - document: /planning/sitemap-document/
+  document: /planning/sitemap-features/document.ftd
 - border-radius video: /planning/border-radius/
 - Postcard Video: /planning/post-card/
   skip: true

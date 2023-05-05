@@ -1,0 +1,69 @@
+-- my-ds.page: Sitemap feature: document
+
+Video Title: How to create clean URL in `fastn`
+
+Owner: Ajit
+
+Audience: Common
+
+Goal: To make understand Why and How of this feature
+
+-- ds.h1: Intro Clip
+
+-- ds.image:
+src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
+
+
+How To Create a Clean URL?
+
+Generally the URL of the page is corresponding to the location of that page in 
+the package. 
+
+This makes the URL more complex.
+
+
+-- ds.image:
+src: $fastn-assets.files.planning.sitemap-features.img.benefits.jpg
+
+-- ds.h1: Sitemap
+
+To create the clean URL, we will learn about the `document feature` of Sitemap
+
+Sitemap let's you structure your website by allowing you to organize your files 
+in hierarchical manner ie. separate sections, subsections and TOC.
+
+In sitemap you can use documents feature to organize your urls better.
+
+-- ds.h1: Document
+
+In sitemap you can use documents feature to organize your urls better.
+
+-- ds.h2: Why document?
+
+1. it helps to decouple the package organization and corresponding URLs.
+So you can keep files as you wish in the package but URL still does not depend 
+on the path of the file.
+  
+2. It empowers the user to give a custom URL to the page
+
+3. And That also helps to give a clean URL
+
+4. Not only this, you can include a file more than once in the sitemap with 
+different URLs.
+
+-- ds.h2: How?
+
+
+-- ds.h1: Closing Remarks 
+
+Thank you guys, keep watching these videos to learn more about fastn.
+Support us by giving a star on GitHub and connect our fastn community on 
+Discord.
+
+
+/-- ds.h1: Final Video
+
+/-- ds.youtube:
+v: 6naTh8u_uOM
+
+-- end: my-ds.page
