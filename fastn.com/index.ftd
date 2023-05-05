@@ -412,21 +412,14 @@ ftd.ui list right-side-ui:
 -- ftd.column:
 width: fill-container
 padding-top.em: 6
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
 -- ftd.image:
 src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 width.fixed.em: 4
 height.fixed.em: 4
 margin-bottom.em: 1
-
--- ftd.column:
-width: fill-container
-spacing.fixed.em: 2
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
--- ftd.column:
-width: fill-container
 
 -- ftd.text: $two-column-layout-mobile.title
 role: $inherited.types.heading-medium
@@ -442,14 +435,11 @@ children: $two-column-layout-mobile.ui-data
 
 -- end: ftd.column
 
--- end: ftd.column
-
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
 children: $two-column-layout-mobile.right-side-ui
-
--- end: ftd.column
+margin-top.em: 2
 
 -- end: ftd.column
 
