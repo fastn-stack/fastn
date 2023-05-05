@@ -1097,7 +1097,7 @@ impl Background {
                 ))
             }
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.length`", t),
+                format!("Unknown variant `{}` for or-type `ftd.background`", t),
                 doc.name,
                 line_number,
             ),
