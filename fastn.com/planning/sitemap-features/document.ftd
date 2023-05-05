@@ -1,6 +1,6 @@
 -- my-ds.page: Sitemap feature: document
 
-Video Title: Sitemap feature: document
+Video Title: How to create clean URL in `fastn`
 
 Owner: Ajit
 
@@ -10,19 +10,24 @@ Goal: To make understand Why and How of this feature
 
 -- ds.h1: Intro Clip
 
-Today we will learn about the `document feature` of Sitemap
+How To Create a Clean URL?
+
+Generally the URL of the page is corresponding to the location of that page in 
+the package. 
+
+This makes the URL more complex. Sitemap
+Now let's learn how to create the clean URL.
+
 
 -- ds.image:
 src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
 
 -- ds.h1: Sitemap
 
-Sitemap let's you structure your website by allowing you to organize your files 
-in separate sections and subsections hence
-it allows you to put all your links in a hierarchy.
+Today we will learn about the `document feature` of Sitemap
 
-Generally the url in sitemap is based on the structure of the package ie the 
-Url of the page is corresponding to the location of that page in the package. 
+Sitemap let's you structure your website by allowing you to organize your files 
+in hierarchical manner ie. separate sections, subsections and TOC.
 
 In sitemap you can use documents feature to organize your urls better.
 
