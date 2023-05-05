@@ -14,7 +14,9 @@ Goal: To make understand Why and How of this feature
 src: $fastn-assets.files.planning.sitemap-features.img.document-intro.jpg
 
 
-How To Create a Clean URL?
+Welcome to the video!
+
+Today, we will learn how To Create a Clean URL in `fastn`
 
 Generally the URL of the page is corresponding to the location of that page in 
 the package. 
@@ -52,6 +54,42 @@ on the path of the file.
 different URLs.
 
 -- ds.h2: How?
+
+Now to access these files my URL becomes the path of the file in this package.
+
+So the URLs are long and complex.
+
+And if I want to use the file of summer season as my current season, It limits
+me to use the same path name as URL. So I cannot modify it.
+
+Let me show it in the browser also.
+
+
+Now, if I make use of document feature to modify the url and make it clean. 
+I will write 
+
+-- ds.code:
+lang: ftd
+
+\# Season: /current-season/
+
+
+-- ds.markdown:
+
+and just below it i will write:
+
+-- ds.code:
+lang: ftd
+
+   document: /seasons/summer.ftd
+
+
+-- ds.markdown:
+
+Now let's check in browser. There you go. 
+
+Similarly we will use document feature for others too.
+
 
 
 -- ds.h1: Closing Remarks 
