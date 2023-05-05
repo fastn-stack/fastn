@@ -20,7 +20,6 @@ Generally the URL of the page is corresponding to the location of that page in
 the package. 
 
 This makes the URL more complex.
-Now let's learn how to create the clean URL.
 
 
 -- ds.image:
@@ -28,7 +27,7 @@ src: $fastn-assets.files.planning.sitemap-features.img.benefits.jpg
 
 -- ds.h1: Sitemap
 
-Today we will learn about the `document feature` of Sitemap
+To create the clean URL, we will learn about the `document feature` of Sitemap
 
 Sitemap let's you structure your website by allowing you to organize your files 
 in hierarchical manner ie. separate sections, subsections and TOC.
