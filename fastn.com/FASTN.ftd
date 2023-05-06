@@ -144,6 +144,8 @@ favicon: /-/fastn.io/images/favicon.svg
   - `ftd.boolean`: /ftd/boolean/
   - `ftd.code`: /ftd/code/
   - `ftd.text-input`: /ftd/text-input/
+  - `ftd.checkbox`: /checkbox/
+    document: ftd/checkbox.ftd
 - Attributes: /attributes/
   document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/

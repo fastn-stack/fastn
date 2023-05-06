@@ -117,7 +117,7 @@ children: $page.wrapper
 
 
 -- component star-component:
-boolean $show: true
+boolean $show: false
 
 -- ftd.column:
 width: fill-container
@@ -134,8 +134,8 @@ margin-top.px: 10
 width: fill-container
 anchor: parent
 z-index: -1
-top.px: -110
-if: { star-component.show }
+top.px if { star-component.show }: -110
+top.px: -900
 
 -- ftd.rive:
 id: star
@@ -169,8 +169,9 @@ state-machine: Driving
 width.fixed.px: 200
 height.fixed.px: 150
 anchor: parent
-top.px: 0
-left.px: 120
+top.px: -30
+top.px if { ftd.device == "mobile" }: -190
+left.px: 125
 $on-click$: $http-call()
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = car, input = drive, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = car, input = drive, value = false)
@@ -202,7 +203,7 @@ width: fill-container
 anchor: parent
 z-index: -1
 top.px if { chronica-component.show }: -160
-top.px: -590
+top.px: -900
 
 -- ftd.rive:
 id: chronica

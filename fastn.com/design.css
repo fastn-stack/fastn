@@ -24,3 +24,8 @@
     color: transparent;
     -webkit-background-clip: text;
 }
+
+
+.text-align-center {
+    text-align: center;
+}

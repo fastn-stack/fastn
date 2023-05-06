@@ -7,25 +7,102 @@
 -- import: fifthtry.github.io/footer
 -- import: fastn/processors as pr
 
--- home-page:
-
-;; build your next website "without developers"
-
-;; programming language for non developers -
-
-;; -- hero-section: build your next website without developers
-
--- hero-section: Build your next landing page, blog, or webapp
-
-_Easy to learn_ full-stack framework designed for creating **good looking
-content centric** or API and database driven websites.
-
 ;; Create rich user interfaces, integrate with
-
 ;; Domain specific language for writing content and creating rich user interfaces,
 ;; integrate with APIs and databases.
+;; build your next website "without developers"
+;; programming language for non developers -
+;; -- hero-section: build your next website without developers
 
--- chakra:
+
+-- home-page:
+
+
+-- hero-section: Build your next landing page, blog, or webapp
+preposition: with
+
+-- ftd.text: Easy to learn
+display: inline
+margin-right.em: 0.25
+color: $inherited.colors.custom.ten
+
+-- ftd.text:
+display: inline
+margin-right.em: 0.25
+
+full-stack framework designed for creating good looking content centric or API
+and database driven websites.
+
+-- end: hero-section
+
+
+
+
+;; ------------------------ Build anything, faster ----------------------------
+
+
+
+-- two-column-layout: Build anything, faster.
+
+-- two-column-layout.subtitle:
+
+fastn language is designed for building user interfaces and content centric
+websites.
+
+
+-- two-column-layout.right-side-ui:
+
+-- code:
+
+\-- chat-female-avatar: Hello World! 😀
+
+\-- chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ftd-index.chat-female-avatar: Hello World! 😀
+
+-- ftd-index.chat-female-avatar:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- end: two-column-layout.right-side-ui
+
+
+-- ftd.text: **1**. Everything in one place
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+margin-bottom.em: 0.5
+
+;; With `fastn` you can build anything starting from designing to full web app
+;; creation.
+
+With `fastn` you can design your website, create the frontend, integrate with
+backend, write content, and deploy your websites.
+
+-- ftd.text: This website is made using fastn!
+role: $inherited.types.heading-tiny
+color: $inherited.colors.cta-primary.base
+margin-bottom.em: 1.5
+
+-- ftd.text: **2**. Easy to learn
+role: $inherited.types.heading-small
+margin-bottom.em: 0.5
+
+-- ftd.text:
+
+fastn language is easy to learn, especially for non programmers, but does not
+compromise on what you can build with it.
+
+-- end: two-column-layout
+
+
 
 -- design-chakra:
 
@@ -35,7 +112,13 @@ content centric** or API and database driven websites.
 
 -- deploy-chakra:
 
--- install:
+-- install: Get Started with fastn
+code-lang: sh
+code: curl -fsSL https://fastn.io/install.sh | bash
+cta-text: Learn More
+cta-link: /install/
+
+Install fastn with a Single Command
 
 -- footer.social-sideline-footer:
 social: true
@@ -91,37 +174,16 @@ children: $home-page.wrapper
 
 
 
+
+
+
+
+
+
 -- component hero-section:
 caption title:
-body subtitle:
-
--- ftd.column:
-width: fill-container
-
--- hero-section-desktop: $hero-section.title
-if: { ftd.device != "mobile" }
-subtitle: $hero-section.subtitle
-
--- hero-section-mobile: $hero-section.title
-if: { ftd.device == "mobile" }
-subtitle: $hero-section.subtitle
-
--- end: ftd.column
-
--- end: hero-section
-
-
-
-
-
-
-
-
-
-
--- component hero-section-desktop:
-caption title:
-body subtitle:
+optional string preposition:
+children subtitle:
 
 -- ftd.column:
 width: fill-container
@@ -132,22 +194,27 @@ background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn
 -- ftd.column:
 width: fill-container
 max-width.fixed.px: 600
-padding-vertical.em: 7
+padding-top.em: 7
+padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
 
--- ftd.text: $hero-section-desktop.title
+-- ftd.text: $hero-section.title
 text-align: center
 role: $inherited.types.heading-hero
+role if { ftd.device == "mobile" }: $inherited.types.heading-medium
 
--- ftd.text: with
+-- ftd.text: $hero-section.preposition
+if: { hero-section.preposition != NULL }
 text-align: center
 color: $inherited.colors.text
 role: $inherited.types.heading-medium
+role if { ftd.device == "mobile" }: $inherited.types.copy-large
 
 -- ftd.text: fastn
 text-align: center
 role: $inherited.types.heading-hero
+role if { ftd.device == "mobile" }: $inherited.types.heading-large
 classes: fastn, text-color
 
 -- ftd.text.css:
@@ -156,17 +223,19 @@ classes: fastn, text-color
 
 -- end: ftd.text.css
 
--- ftd.text: $hero-section-desktop.subtitle
+-- ftd.container:
 role: $inherited.types.heading-tiny
-text-align: center
 margin-top.em: 2
 color: $inherited.colors.text
+children: $hero-section.subtitle
+display: inline
+classes: text-align-center
 
 -- end: ftd.column
 
 -- end: ftd.column
 
--- end: hero-section-desktop
+-- end: hero-section
 
 
 
@@ -236,20 +305,33 @@ color: $inherited.colors.text
 
 
 
--- component chakra:
+-- component two-column-layout:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
 
--- chakra-desktop:
+-- two-column-layout-desktop:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
 if: { ftd.device != "mobile" }
 
--- chakra-mobile:
+
+-- two-column-layout-mobile:
+title: $two-column-layout.title
+subtitle: $two-column-layout.subtitle
+ui-data: $two-column-layout.ui-data
+right-side-ui: $two-column-layout.right-side-ui
 if: { ftd.device == "mobile" }
 
 -- end: ftd.column
 
--- end: chakra
+-- end: two-column-layout
 
 
 
@@ -260,7 +342,11 @@ if: { ftd.device == "mobile" }
 
 
 
--- component chakra-desktop:
+-- component two-column-layout-desktop:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
@@ -284,67 +370,26 @@ color: $inherited.colors.text
 -- ftd.column:
 width: fill-container
 
--- ftd.text: Build anything, faster.
+-- ftd.text: $two-column-layout-desktop.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text:
+-- ftd.text: $two-column-layout-desktop.subtitle
 margin-bottom.em: 1.5
 
-fastn language is designed for building user interfaces and content centric
-websites.
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-desktop.ui-data
 
--- ftd.text: **1**. Everything in one place
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-margin-bottom.em: 0.5
-
-;; With `fastn` you can build anything starting from designing to full web app
-;; creation.
-
-With `fastn` you can design your website, create the frontend, integrate with
-backend, write content, and deploy your websites.
-
--- ftd.text: This website is made using fastn!
-role: $inherited.types.heading-tiny
-color: $inherited.colors.cta-primary.base
-margin-bottom.em: 1.5
-
--- ftd.text: **2**. Easy to learn
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-
-fastn language is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+-- end: ftd.column
 
 -- end: ftd.column
 
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-
--- code:
-
-\-- chat-female-avatar: Hello World! 😀
-
-\-- chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
-
--- ftd-index.chat-female-avatar: Hello World! 😀
-
--- ftd-index.chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+children: $two-column-layout-desktop.right-side-ui
 
 -- end: ftd.column
 
@@ -352,7 +397,7 @@ no quotes. and **markdown** is *supported*.
 
 -- end: ftd.column
 
--- end: chakra-desktop
+-- end: two-column-layout-desktop
 
 
 
@@ -363,11 +408,17 @@ no quotes. and **markdown** is *supported*.
 
 
 
--- component chakra-mobile:
+-- component two-column-layout-mobile:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
 padding-top.em: 6
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
 
 -- ftd.image:
 src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
@@ -375,84 +426,39 @@ width.fixed.em: 4
 height.fixed.em: 4
 margin-bottom.em: 1
 
--- ftd.column:
-width: fill-container
-spacing.fixed.em: 2
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
--- ftd.column:
-width: fill-container
-
--- ftd.text: Build anything, faster.
+-- ftd.text: $two-column-layout-mobile.title
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
 
--- ftd.text:
+-- ftd.text: $two-column-layout-mobile.subtitle
 margin-bottom.em: 1.5
 
-fastn language is designed for building user interfaces and content centric
-websites.
-
--- ftd.text: **1**. Everything in one place
-role: $inherited.types.heading-small
-margin-bottom.em: 1.5
-
--- ftd.text:
-margin-bottom.em: 1
-
-;; With `fastn` you can build anything starting from designing to full web app
-;; creation.
-
-With `fastn` you can design your website, create the frontend, integrate with
-backend, write content, and deploy your websites.
-
--- ftd.text: This website is made using fastn!
-role: $inherited.types.heading-tiny
-color: $inherited.colors.cta-primary.base
-margin-bottom.em: 2
-
--- ftd.text: **2**. Easy to learn
-role: $inherited.types.heading-small
-margin-bottom.em: 0.5
-
--- ftd.text:
-
-fastn language is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+-- ftd.column:
+width: fill-container
+children: $two-column-layout-mobile.ui-data
 
 -- end: ftd.column
 
 -- ftd.column:
 width: fill-container
 spacing.fixed.em: 1.5
-
--- code:
-
-\-- chat-female-avatar: Hello World! 😀
-
-\-- chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
-
--- ftd-index.chat-female-avatar: Hello World! 😀
-
--- ftd-index.chat-female-avatar:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+children: $two-column-layout-mobile.right-side-ui
+margin-top.em: 2
 
 -- end: ftd.column
 
 -- end: ftd.column
 
--- end: ftd.column
+-- end: two-column-layout-mobile
 
--- end: chakra-mobile
+
+
+
+
+
+
+
 
 
 
@@ -475,25 +481,53 @@ string list title-css:
 
 -- ftd.column:
 width: fill-container
+align-content: center
+padding-horizontal.em if { ftd.device == "desktop" }: 3
+padding-vertical.em: 2
+margin-top.em if { ftd.device == "desktop" }: 2.5
+margin-top.em: 2.5
+margin-bottom.em if { ftd.device == "desktop" }: 5
+spacing.fixed.em: 0.5
+color: $inherited.colors.text-strong
+background if { ftd.device == "desktop" }: $summary-cards.bg-color
 
--- summary-cards-desktop: $summary-cards.title
-if: { ftd.device != "mobile" }
-number: $summary-cards.number
-subtitle: $summary-cards.subtitle
-description: $summary-cards.description
-cards: $summary-cards.cards
-bg-color: $summary-cards.bg-color
-color-css: $summary-cards.color-css
-title-css: $summary-cards.title-css
+-- ftd.text: $summary-cards.number
+height.fixed.em: 2
+width.fixed.em: 2
+border-radius.percent: 50
+padding-top.em: 0.3
+text-align: center
+role: $inherited.types.heading-medium
+color: white
+classes: $summary-cards.color-css
 
--- summary-cards-mobile: $summary-cards.title
-if: { ftd.device == "mobile" }
-number: $summary-cards.number
-subtitle: $summary-cards.subtitle
-description: $summary-cards.description
-cards: $summary-cards.cards
-color-css: $summary-cards.color-css
-title-css: $summary-cards.title-css
+-- ftd.text.css:
+
+-- string: $fastn-assets.files.design.css
+
+-- end: ftd.text.css
+
+-- ftd.text: $summary-cards.title
+role: $inherited.types.heading-large
+classes: $summary-cards.title-css
+
+-- ftd.text: $summary-cards.subtitle
+role: $inherited.types.heading-large
+text-align: center
+
+-- ftd.text: $summary-cards.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+text-align: center
+
+-- ftd.row:
+width: fill-container
+wrap: true
+spacing.fixed.em: 2
+padding-vertical.em: 2
+children: $summary-cards.cards
+
+-- end: ftd.row
 
 -- end: ftd.column
 
@@ -508,135 +542,9 @@ title-css: $summary-cards.title-css
 
 
 
--- component summary-cards-desktop:
-caption title:
-string number:
-string subtitle:
-body description:
-children cards:
-optional ftd.background bg-color:
-string list color-css:
-string list title-css:
-
--- ftd.column:
-width: fill-container
-align-content: center
-padding-horizontal.em: 3
-padding-vertical.em: 2
-margin-vertical.em: 5
-spacing.fixed.em: 0.5
-color: $inherited.colors.text-strong
-background: $summary-cards-desktop.bg-color
-
--- ftd.text: $summary-cards-desktop.number
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: $summary-cards-desktop.color-css
-
--- ftd.text.css:
-
--- string: $fastn-assets.files.design.css
-
--- end: ftd.text.css
-
--- ftd.text: $summary-cards-desktop.title
-role: $inherited.types.heading-large
-classes: $summary-cards-desktop.title-css
-
--- ftd.text: $summary-cards-desktop.subtitle
-role: $inherited.types.heading-large
-text-align: center
-
--- ftd.text: $summary-cards-desktop.description
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: center
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-vertical.em: 2
-children: $summary-cards-desktop.cards
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: summary-cards-desktop
 
 
 
-
-
-
-
-
-
-
--- component summary-cards-mobile:
-caption title:
-string number:
-string subtitle:
-body description:
-children cards:
-string list color-css:
-string list title-css:
-
--- ftd.column:
-width: fill-container
-align-content: center
-padding-vertical.em: 2
-margin-top.em: 2.5
-spacing.fixed.em: 1.5
-color: $inherited.colors.text-strong
-
--- ftd.text: $summary-cards-mobile.number
-height.fixed.em: 2
-width.fixed.em: 2
-border-radius.percent: 50
-padding-top.em: 0.3
-text-align: center
-role: $inherited.types.heading-medium
-color: white
-classes: $summary-cards-mobile.color-css
-
--- ftd.text.css:
-
--- string: $fastn-assets.files.design.css
-
--- end: ftd.text.css
-
--- ftd.text: $summary-cards-mobile.title
-role: $inherited.types.heading-large
-classes: $summary-cards-mobile.title-css
-
--- ftd.text: $summary-cards-mobile.subtitle
-role: $inherited.types.heading-large
-text-align: start
-
--- ftd.text: $summary-cards-mobile.description
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-text-align: start
-
--- ftd.row:
-width: fill-container
-wrap: true
-spacing.fixed.em: 2
-padding-top.em: 2
-children: $summary-cards-mobile.cards
-
--- end: ftd.row
-
--- end: ftd.column
-
--- end: summary-cards-mobile
 
 
 
@@ -678,10 +586,6 @@ fastn color scheme from figma json.
 -- end: summary-cards
 
 -- end: design-chakra
-
-
-
-
 
 
 
@@ -848,16 +752,61 @@ Linux, Windows and Mac.
 
 
 
+
+
+
+
+
+
 -- component install:
+caption title:
+body subtitle:
+string cta-text:
+string cta-link:
+string code-lang:
+string code:
 
 -- ftd.column:
 width: fill-container
+padding-vertical.em if { ftd.device == "desktop" }: 8
+padding-vertical.em: 4
+padding-horizontal.em if { ftd.device == "desktop" }: 10
+background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
 
--- install-desktop:
-if: { ftd.device != "mobile" }
+-- ftd.column:
+background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+width: fill-container
+align-content: center
 
--- install-mobile:
-if: { ftd.device == "mobile" }
+-- ftd.text: $install.title
+role if { ftd.device == "desktop" }: $inherited.types.heading-medium
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- ftd.text: $install.subtitle
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+margin-bottom.em if { ftd.device == "desktop" }: 4
+margin-bottom.em: 1.5
+
+-- code:
+lang: $install.code-lang
+width: hug-content
+width if { ftd.device == "mobile" }: fill-container
+role: $inherited.types.copy-large
+
+$install.code
+
+-- ftd.text: $install.cta-text
+link: $install.cta-link
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-radius.em: 0.375
+padding-vertical.em: 1
+padding-horizontal.em: 2
+margin-top.em: 2
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -871,99 +820,6 @@ if: { ftd.device == "mobile" }
 
 
 
-
--- component install-desktop:
-
--- ftd.column:
-width: fill-container
-padding-vertical.em: 8
-padding-horizontal.em: 10
-background.solid: $inherited.colors.background.step-2
-
--- ftd.column:
-;; background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/event-background.svg
-background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
-width: fill-container
-align-content: center
-
--- ftd.text: Get Started with fastn
-role: $inherited.types.heading-medium
-color: $inherited.colors.text-strong
-
--- ftd.text: Install fastn with a Single Command
-role: $inherited.types.copy-large
-color: $inherited.colors.text
-margin-bottom.em: 4
-
--- code:
-width: hug-content
-role: $inherited.types.copy-large
-
-curl -fsSL https://fastn.io/install.sh | bash
-
--- ftd.text: Learn More
-link: /install/
-background.solid: $inherited.colors.cta-primary.base
-color: $inherited.colors.cta-primary.text
-border-radius.em: 0.375
-padding-vertical.em: 1
-padding-horizontal.em: 2
-margin-top.em: 2
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: install-desktop
-
-
-
-
-
-
-
-
-
-
--- component install-mobile:
-
--- ftd.column:
-width: fill-container
-padding-vertical.em: 4
-
--- ftd.column:
-width: fill-container
-spacing.fixed.em: 2
-
--- ftd.text: Get Started with fastn
-role: $inherited.types.heading-large
-color: $inherited.colors.text-strong
-
--- ftd.text: Install fastn with a Single Command
-role: $inherited.types.copy-large
-color: $inherited.colors.text
-margin-bottom.em: 1.5
-
--- code:
-width: hug-content
-role: $inherited.types.copy-large
-
-curl -fsSL https://fastn.io/install.sh | bash
-
--- ftd.text: Learn More
-link: /install/
-background.solid: $inherited.colors.cta-primary.base
-color: $inherited.colors.cta-primary.text
-border-radius.em: 0.375
-padding-vertical.em: 1
-padding-horizontal.em: 2
-margin-top.em: 2
-
--- end: ftd.column
-
--- end: ftd.column
-
--- end: install-mobile
 
 
 
@@ -1039,10 +895,19 @@ blur.px: 8
 light: #00000026
 dark: #f6f5f557
 
+
+
+
+
+
+
+
+
 -- component code:
 body text:
 optional ftd.resizing width:
 optional ftd.responsive-type role:
+string lang: ftd
 
 -- ftd.column:
 width if { code.width == NULL }: fill-container
@@ -1051,7 +916,7 @@ role if { code.role == NULL }: $inherited.types.source-code
 role: $code.role
 
 -- ftd.code:
-lang: ftd
+lang: $code.lang
 shadow: $s
 width: fill-container
 background.solid: $inherited.colors.background.base
@@ -1060,7 +925,7 @@ if: { ftd.dark-mode }
 $code.text
 
 -- ftd.code:
-lang: ftd
+lang: $code.lang
 shadow: $s
 width: fill-container
 background.solid: $inherited.colors.background.base
