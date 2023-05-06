@@ -34,7 +34,6 @@ To create the clean URL, we will learn about the `document feature` of Sitemap
 Sitemap let's you structure your website by allowing you to organize your files 
 in hierarchical manner ie. separate sections, subsections and TOC.
 
-In sitemap you can use documents feature to organize your urls better.
 
 -- ds.h1: Document
 
@@ -91,7 +90,7 @@ lang: ftd
 
 -- ds.markdown:
 
-and just below it I will write, `document` followed by colon and give the path
+And just below it I will write, `document` followed by colon and give the path
 of the file.
 
 -- ds.code:
@@ -124,9 +123,9 @@ Support us by giving a star on GitHub and connect with our fastn community on
 Discord.
 
 
-/-- ds.h1: Final Video
+-- ds.h1: Final Video
 
-/-- ds.youtube:
-v: 6naTh8u_uOM
+-- ds.youtube:
+v: 4ke75MpOEks
 
 -- end: my-ds.page

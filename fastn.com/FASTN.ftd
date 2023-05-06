@@ -287,6 +287,8 @@ favicon: /-/fastn.io/images/favicon.svg
   document: /expander/button.ftd
 - border-radius in `fastn`: /border-radius-in-fastn/
   document: /expander/border-radius.ftd
+- Create clean URL in `fastn`: /clean-url-in-fastn/
+  document: /expander/sitemap-document.ftd
 
 # Fullstack: /backend/
 
