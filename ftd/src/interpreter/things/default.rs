@@ -162,6 +162,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Component(container_function()),
         ),
         (
+            "ftd#desktop".to_string(),
+            ftd::interpreter::Thing::Component(desktop_function()),
+        ),
+        (
+            "ftd#mobile".to_string(),
+            ftd::interpreter::Thing::Component(mobile_function()),
+        ),
+        (
             "ftd#code".to_string(),
             ftd::interpreter::Thing::Component(code_function()),
         ),
@@ -9218,6 +9226,26 @@ pub fn container_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn desktop_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#desktop".to_string(),
+        arguments: [container_root_arguments()].concat().into_iter().collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn mobile_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#mobile".to_string(),
+        arguments: [container_root_arguments()].concat().into_iter().collect(),
         definition: ftd::interpreter::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,

@@ -1,0 +1,199 @@
+{
+  "data": {},
+  "name": "foo",
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Desktop"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 1
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 1
+        }
+      ],
+      "iteration": null,
+      "condition": {
+        "expression": {
+          "operator": "RootNode",
+          "children": [
+            {
+              "operator": "Eq",
+              "children": [
+                {
+                  "operator": {
+                    "VariableIdentifierRead": {
+                      "identifier": "ftd.device"
+                    }
+                  },
+                  "children": []
+                },
+                {
+                  "operator": {
+                    "Const": {
+                      "value": {
+                        "String": "desktop"
+                      }
+                    }
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        "references": {
+          "ftd.device": {
+            "Reference": {
+              "name": "ftd#device",
+              "kind": {
+                "kind": {
+                  "Record": {
+                    "name": "ftd#device-data"
+                  }
+                },
+                "caption": false,
+                "body": false
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 2
+            }
+          }
+        },
+        "line_number": 2
+      },
+      "events": [],
+      "children": [],
+      "source": "Declaration",
+      "line_number": 1
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Mobile"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 4
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 4
+        }
+      ],
+      "iteration": null,
+      "condition": {
+        "expression": {
+          "operator": "RootNode",
+          "children": [
+            {
+              "operator": "And",
+              "children": [
+                {
+                  "operator": "Eq",
+                  "children": [
+                    {
+                      "operator": {
+                        "VariableIdentifierRead": {
+                          "identifier": "ftd.device"
+                        }
+                      },
+                      "children": []
+                    },
+                    {
+                      "operator": {
+                        "Const": {
+                          "value": {
+                            "String": "mobile"
+                          }
+                        }
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "operator": "RootNode",
+                  "children": [
+                    {
+                      "operator": "Eq",
+                      "children": [
+                        {
+                          "operator": {
+                            "Const": {
+                              "value": {
+                                "Int": 2
+                              }
+                            }
+                          },
+                          "children": []
+                        },
+                        {
+                          "operator": {
+                            "Const": {
+                              "value": {
+                                "Int": 3
+                              }
+                            }
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "references": {
+          "ftd.device": {
+            "Reference": {
+              "name": "ftd#device",
+              "kind": {
+                "kind": {
+                  "Record": {
+                    "name": "ftd#device-data"
+                  }
+                },
+                "caption": false,
+                "body": false
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 5
+            }
+          }
+        },
+        "line_number": 5
+      },
+      "events": [],
+      "children": [],
+      "source": "Declaration",
+      "line_number": 4
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd",
+    "inherited": "inherited"
+  },
+  "js": [],
+  "css": []
+}
