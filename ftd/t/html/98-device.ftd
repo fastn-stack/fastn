@@ -6,12 +6,11 @@
 -- ftd.column:
 
 -- ftd.desktop:
-;; -- ftd.text: Hello desktop
 -- print-desktop-title:
+if: { 2 < 3 }
 -- end: ftd.desktop
 
 -- ftd.mobile:
-;; -- ftd.text: Hello mobile
 -- print-mobile-title:
 -- end: ftd.mobile
 
