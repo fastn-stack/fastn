@@ -1,82 +1,8 @@
 use itertools::Itertools;
 use taffy::prelude::points;
 
-#[derive(Debug)]
-enum Element {
-    Container(Container),
-    Text(Text),
-    Image(Image),
-}
-
-#[derive(Debug)]
-struct Container {
-    taffy: taffy::node::Node,
-    // border: Borders,
-    background_color: Option<ftd::executor::Color>,
-    children: Vec<Element>,
-}
-
-#[derive(Debug)]
-struct Text {
-    taffy: taffy::node::Node,
-    // border: Borders,
-    text: String,
-    style: Option<ftd::executor::TextStyle>,
-    color: Option<ftd::executor::Color>,
-}
-
-#[derive(Debug)]
-struct Image {
-    taffy: taffy::node::Node,
-    // border: Borders,
-    src: String,
-}
-
-// #[derive(Default, Debug)]
-// pub struct Borders {
-//     top: BorderEdge,
-//     right: BorderEdge,
-//     bottom: BorderEdge,
-//     left: BorderEdge,
-//     top_left_radius: Dimension,
-//     top_right_radius: Dimension,
-//     bottom_left_radius: Dimension,
-//     bottom_right_radius: Dimension,
-// }
-//
-// #[derive(Default, Debug)]
-// pub struct BorderEdge {
-//     color: Option<ftd::executor::Color>,
-//     style: BorderStyle,
-//     width: Dimension,
-// }
-//
-// #[derive(Default, Debug)]
-// pub enum BorderStyle {
-//     Dotted,
-//     Dashed,
-//     Solid,
-//     Double,
-//     Groove,
-//     Ridge,
-//     Inset,
-//     Outset,
-//     Hidden,
-//     #[default]
-//     None,
-// }
-
-#[derive(Default, Debug)]
-pub enum Dimension {
-    Undefined,
-    #[default]
-    Auto,
-    Px(u32),
-    Percent(f32),
-}
-
 impl ftd::executor::Element {
-    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> fastn_surface::Element {
         match self {
             ftd::executor::Element::Column(c) => c.to_taffy(t),
             ftd::executor::Element::Row(c) => c.to_taffy(t),
@@ -187,16 +113,16 @@ impl ftd::executor::Common {
 }
 
 impl ftd::executor::Value<Option<ftd::executor::Background>> {
-    fn to_color(&self) -> Option<ftd::executor::Color> {
+    fn to_color(&self) -> Option<fastn_surface::Color> {
         self.value.as_ref().map(|v| match v {
-            ftd::executor::Background::Solid(c) => c.to_owned(),
+            ftd::executor::Background::Solid(c) => c.to_surface_color(),
             _ => todo!(),
         })
     }
 }
 
 impl ftd::executor::Container {
-    fn child_elements(&self, t: &mut taffy::Taffy) -> Vec<Element> {
+    fn child_elements(&self, t: &mut taffy::Taffy) -> Vec<fastn_surface::Element> {
         self.children.iter().map(|c| c.to_taffy(t)).collect_vec()
     }
 }
@@ -206,12 +132,12 @@ fn element_from_container(
     common: &ftd::executor::Common,
     container: &ftd::executor::Container,
     t: &mut taffy::Taffy,
-) -> Element {
+) -> fastn_surface::Element {
     let mut s = common.to_style();
     s.flex_direction = direction;
     let children = container.child_elements(t);
 
-    Element::Container(Container {
+    fastn_surface::Element::Container(fastn_surface::Container {
         taffy: t
             .new_with_children(s, &children.iter().map(|v| v.taffy()).collect_vec())
             .unwrap(),
@@ -222,7 +148,7 @@ fn element_from_container(
 }
 
 impl ftd::executor::Column {
-    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> fastn_surface::Element {
         element_from_container(
             taffy::prelude::FlexDirection::Column,
             &self.common,
@@ -233,7 +159,7 @@ impl ftd::executor::Column {
 }
 
 impl ftd::executor::Row {
-    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> fastn_surface::Element {
         element_from_container(
             taffy::prelude::FlexDirection::Row,
             &self.common,
@@ -244,110 +170,96 @@ impl ftd::executor::Row {
 }
 
 impl ftd::executor::ContainerElement {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::Document {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::Text {
-    fn to_taffy(&self, t: &mut taffy::Taffy) -> Element {
-        Element::Text(Text {
+    fn to_taffy(&self, t: &mut taffy::Taffy) -> fastn_surface::Element {
+        fastn_surface::Element::Text(fastn_surface::Text {
             taffy: t.new_leaf(self.common.to_style()).unwrap(),
             // border: Default::default(),
             text: self.text.value.original.clone(),
-            style: self.style.value.clone(),
-            color: self.common.color.value.clone(),
+            style: self.style.value.as_ref().map(|v| v.to_surface_style()),
+            color: self.common.color.value.as_ref().map(|v| v.to_surface_color()),
         })
     }
 }
 
+impl ftd::executor::TextStyle {
+    fn to_surface_style(&self) -> fastn_surface::TextStyle {
+        todo!()
+    }
+}
+
+impl ftd::executor::Color {
+    fn to_surface_color(&self) -> fastn_surface::Color {
+        todo!()
+    }
+}
+
+
 impl ftd::executor::Image {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::Code {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::Iframe {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::TextInput {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::RawElement {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::IterativeElement {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::CheckBox {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::WebComponent {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
 impl ftd::executor::Rive {
-    fn to_taffy(&self, _t: &mut taffy::Taffy) -> Element {
+    fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
         todo!()
     }
 }
 
-impl Element {
-    fn render(&self, t: &taffy::Taffy) {
-        dbg!(self);
-        match self {
-            Element::Container(c) => {
-                dbg!(t.layout(c.taffy).unwrap());
-                for child in c.children.iter() {
-                    child.render(t);
-                }
-            }
-            Element::Text(c) => {
-                dbg!(t.layout(c.taffy).unwrap());
-            }
-            Element::Image(c) => {
-                dbg!(t.layout(c.taffy).unwrap());
-            }
-        };
-    }
-
-    fn taffy(&self) -> taffy::node::Node {
-        match self {
-            Element::Container(c) => c.taffy,
-            Element::Text(t) => t.taffy,
-            Element::Image(i) => i.taffy,
-        }
-    }
-}
 
 fn ftd() -> ftd::executor::Element {
     let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", ftd::taffy())

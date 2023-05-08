@@ -11,3 +11,44 @@ extern crate self as fastn_surface;
 /// event includes data about the event.
 #[cfg(feature = "native")]
 pub mod native;
+
+mod element;
+
+pub use element::{Text, Element, Container, Image, Dimension};
+
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct ColorValue {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub alpha: f32,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Color {
+    pub light: ColorValue,
+    pub dark: ColorValue,
+}
+
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct TextStyle {
+    pub underline: bool,
+    pub italic: bool,
+    pub strike: bool,
+    pub weight: Option<TextWeight>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum TextWeight {
+    EXTRABOLD,
+    BOLD,
+    SEMIBOLD,
+    HEAVY,
+    MEDIUM,
+    REGULAR,
+    LIGHT,
+    EXTRALIGHT,
+    HAIRLINE,
+}

@@ -1719,6 +1719,8 @@ version = "0.1.0"
 dependencies = [
  "env_logger",
  "log",
+ "serde",
+ "taffy 0.3.12",
  "wgpu",
  "winit",
 ]
@@ -1876,6 +1878,7 @@ dependencies = [
  "dioxus-html",
  "dioxus-native-core",
  "dioxus-native-core-macro",
+ "fastn-surface",
  "format_num",
  "futures",
  "include_dir",
