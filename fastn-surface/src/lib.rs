@@ -13,9 +13,12 @@ extern crate self as fastn_surface;
 pub mod native;
 
 mod element;
+mod window;
+mod node;
 
 pub use element::{Text, Element, Container, Image, Dimension};
-
+pub use window::Window;
+pub use node::NodeKey;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct ColorValue {
