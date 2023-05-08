@@ -1935,7 +1935,7 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 window.node_change_main = {};
 window.node_change_main["0,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("ftd#device", data)=="desktop");
+return (resolve_reference("ftd#device", data)=="desktop"&&(2<3));
 }()){
 document.querySelector(`[data-id="0,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0:main");
 }
@@ -1955,8 +1955,8 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,1:main__display", data);
 window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1:main__display", data);
 };
 
 
