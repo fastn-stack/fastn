@@ -14,7 +14,7 @@ Welcome to the video!
 
 Today, we will learn how To create layout in fastn.
 
--- ds.image:
+/-- ds.image:
 src: $fastn-assets.files.expander.layout.intro.jpeg
 
 
