@@ -1,0 +1,277 @@
+-- my-ds.page: Create `holy-grail` layout
+
+Video Title: How to create holy-grail layout
+
+Owner: Ajit
+
+Audience: Common
+
+Goal: understanding of holy-grail layout 
+
+-- ds.h1: Intro Clip
+
+Welcome to the video!
+
+Today, we will learn how To create layout in fastn.
+
+-- ds.image:
+src: $fastn-assets.files.expander.layout.intro.jpeg
+
+
+-- ds.h2: Holy-grail layout
+;; if: { source == "default" }
+
+
+Holy Grail is a layout pattern that’s very common on the web. 
+
+It consists of:
+
+- a header
+- main content area, which has three parts
+	- navigation or left-sidebar
+	- content in the middle
+	- right-sidebar
+- a footer.
+
+-- ds.image:
+src: $fastn-assets.files.expander.layout.layout.png
+
+
+-- ds.h1: `home-page` component
+
+So we have three parts of the home-page, the header, the main part and the 
+footer part, aligned in a column.
+
+So, inside the component `home-page` we will use `ftd.column`.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component home-page:
+
+
+\-- ftd.column:
+width: fill-container
+height: fill-container
+
+\-- header:
+
+\-- main:
+
+\-- footer:
+
+\-- end: ftd.column
+
+
+\-- end: home-page
+
+
+
+-- ds.h1: Header component
+
+Let's take the header first and create the component for the header. 
+
+-- ds.code: 
+lang: ftd
+
+\-- component header:
+
+
+\-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+padding.px: 35
+
+\-- ftd.text: LOGO
+role: $inherited.types.copy-regular
+
+\-- end: ftd.row
+
+
+\-- end: header
+
+
+-- ds.markdown:
+
+Before we move ahead, let's comment others (main and footer) and display header 
+by calling the component `home-page`. To call it we will ust write:
+
+-- ds.code:
+lang: ftd
+
+\-- home-page:
+
+-- ds.markdown:
+
+So we have the header in our page.
+
+-- ds.h1: Main component
+
+Now we will build the main area.
+
+As I have mentioned, in the `holy-grail` layout main area has three parts, 
+which is in left-to-right manner therefore we will put them in a row.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component main:
+
+
+\-- ftd.row:
+width: fill-container
+height: fill-container
+background.solid: $inherited.colors.background.base
+
+\-- left-sidebar:
+
+\-- content:
+
+\-- right-sidebar:
+
+\-- end: ftd.row
+
+
+\-- end: main
+
+
+-- ds.markdown: 
+
+Now we will create 3 separate components for left-sidebar, content and 
+right-sidebar.
+
+-- ds.h2: left-sidebar component
+
+-- ds.code:
+lang: ftd
+
+\-- component left-sidebar:
+
+
+\-- ftd.column:
+width.fixed.percent: 25
+height: fill-container
+background.solid: $inherited.colors.background.step-1
+align-content: center
+border-width.px: 2
+border-color: $inherited.colors.border
+
+\-- ftd.text: left-sidebar
+role: $inherited.types.copy-regular
+
+\-- end: ftd.column
+
+
+\-- end: left-sidebar
+
+
+
+
+-- ds.h2: content component
+
+-- ds.code:
+lang: ftd
+
+\-- component content:
+
+
+\-- ftd.column:
+height: fill-container
+width: fill-container
+background.solid: $inherited.colors.background.base
+align-content: center
+border-top-width.px: 2
+border-bottom-width.px: 2
+border-color: $inherited.colors.border
+
+\-- ftd.text: main content
+role: $inherited.types.copy-regular
+
+\-- end: ftd.column
+
+
+\-- end: content
+
+
+-- ds.h2: right-sidebar component
+
+-- ds.code:
+lang: ftd
+
+\-- component right-sidebar:
+
+
+\-- ftd.column:
+width.fixed.percent: 25
+height: fill-container
+background.solid: $inherited.colors.background.step-1
+align-content: center
+border-width.px: 2
+border-color: $inherited.colors.border
+
+\-- ftd.text: right-sidebar
+role: $inherited.types.copy-regular
+
+\-- end: ftd.column
+
+
+\-- end: right-sidebar
+
+-- ds.markdown:
+
+Let's see the main area in the browser. So we will remove the comment where 
+the main component is called.
+
+
+-- ds.h1: footer component
+
+Last but not the least, let's create the component for footer.
+
+-- ds.code:
+lang: ftd
+
+\-- component footer:
+
+
+\-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.accent.tertiary
+padding.px: 20
+
+\-- ftd.text: FOOTER
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+\-- end: ftd.row
+
+
+\-- end: footer
+
+
+-- ds.markdown:
+
+Save and refresh the browser.
+
+Now we have the complete `holy-grail` layout for the home-page. I hope you have 
+understood the layouting in `fastn`.
+
+
+-- ds.h1: Closing Remarks 
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+Checkout the `fastn` website.
+Support us by giving a star on GitHub and connect with our fastn community on 
+Discord.
+
+
+
+-- end: my-ds.page
+
+
+
+/-- string source: default
+$processor$: pr.get-data
+key: source
+
