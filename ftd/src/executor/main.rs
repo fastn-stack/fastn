@@ -729,7 +729,7 @@ impl<'a> ExecuteDoc<'a> {
     ) -> ftd::executor::Result<()> {
         use itertools::Itertools;
 
-        Ok(match component_definition.name.as_str() {
+        match component_definition.name.as_str() {
             "ftd#row" | "ftd#column" | "ftd#container" | "ftd#document" | "ftd#desktop"
             | "ftd#mobile" => {
                 doc.insert_local_variables(
@@ -749,7 +749,8 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
             }
             _ => {}
-        })
+        };
+        Ok(())
     }
 
     pub(crate) fn execute_kernel_components(
