@@ -1004,7 +1004,7 @@ impl Device {
         if let Some(condition) = instruction.condition.as_mut() {
             let expression = ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
                 .add_children(vec![ftd::evalexpr::ExprNode::new(
-                    ftd::evalexpr::Operator::Add,
+                    ftd::evalexpr::Operator::And,
                 )
                 .add_children(vec![expression, condition.expression.to_owned()])]);
 
