@@ -5,7 +5,8 @@ members = [
     "fastn-core",
     "fastn-cloud",
     "fastn-package",
-    "fastn-issues"
+    "fastn-issues",
+    "fastn-surface"
 ]
 
 [workspace.dependencies]
@@ -21,14 +22,9 @@ members = [
 # If you are not using the latest version intentionally, please do not list it in this section
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan.
+# ariadne = "0.14"
 actix-web = "4"
 antidote = "1"
-# ariadne = "0.14"
-rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-rustc-hash = "1"
 async-lock = "2"
 async-recursion = "1"
 async-trait = "0.1"
@@ -37,6 +33,9 @@ clap = "4"
 colored = "2"
 css-color-parser = "0.1"
 diffy = "0.3"
+dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
+dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 edit = "0.1"
 env_logger = "0.10"
 fluent = "0.16"
@@ -49,6 +48,7 @@ include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.10"
+log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
 oauth2 = { version = "4" }
@@ -59,7 +59,9 @@ rand_pcg = "0.3"
 realm-lang = "0.1"
 regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
+rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
+rustc-hash = "1"
 rusty-hook = "^0.11.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -72,6 +74,8 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 url = "2"
 walkdir = "2"
+wgpu = "0.16"
+winit = "0.28"
 zip = "0.6"
 
 

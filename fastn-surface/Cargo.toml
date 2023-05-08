@@ -1,0 +1,14 @@
+[package]
+name = "fastn-surface"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = []
+native = ["winit", "env_logger", "log", "wgpu"]
+
+[dependencies]
+winit = { workspace = true, optional = true }
+env_logger = { workspace = true, optional = true }
+log = { workspace = true, optional = true }
+wgpu = { workspace = true, optional = true }
