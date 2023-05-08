@@ -27,8 +27,9 @@ pub use rive::RiveData;
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BackgroundImage, BackgroundPosition,
     BackgroundRepeat, BackgroundSize, BorderStyle, Color, ColorValue, Cursor, Display, FontSize,
-    Length, LineClamp, Loading, Overflow, Region, Resize, Resizing, ResponsiveType, Shadow,
-    Spacing, TextAlign, TextInputType, TextStyle, TextTransform, TextWeight, WhiteSpace,
+    Length, LineClamp, LinearGradient, LinearGradientDirection, Loading, Overflow, Region, Resize,
+    Resizing, ResponsiveType, Shadow, Spacing, TextAlign, TextInputType, TextStyle, TextTransform,
+    TextWeight, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;

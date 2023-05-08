@@ -24,6 +24,8 @@ members = [
 # using the latest dependency, and what is the plan.
 # ariadne = "0.14"
 actix-web = "4"
+taffy = "0.3"
+crossterm = "0.26"
 antidote = "1"
 async-lock = "2"
 async-recursion = "1"

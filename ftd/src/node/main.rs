@@ -336,14 +336,14 @@ impl ftd::executor::Row {
             "ft_row",
         );
 
-        let spacing_value = ftd::node::Value::from_executor_value(
+        let align_content_value = ftd::node::Value::from_executor_value(
             self.container
-                .spacing
+                .align_content
                 .to_owned()
-                .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                .map(|v| v.map(|a| a.to_css_justify_content(true)))
                 .value,
-            self.container.spacing.to_owned(),
-            Some(ftd::executor::Spacing::justify_content_pattern()),
+            self.container.align_content.to_owned(),
+            Some(ftd::executor::Alignment::justify_content_pattern(true)),
             doc_id,
         );
 
@@ -351,20 +351,26 @@ impl ftd::executor::Row {
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .align_content
+                    .spacing
                     .to_owned()
-                    .map(|v| v.map(|a| a.to_css_justify_content(true)))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
-                self.container.align_content.to_owned(),
-                Some(ftd::executor::Alignment::justify_content_pattern(true)),
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            jc.properties.extend(spacing_value.properties);
+            if let Some(old_value) = jc.value.as_ref() {
+                if old_value.eq("unset") {
+                    jc.value = align_content_value.value;
+                }
+            }
+            jc.properties.extend(align_content_value.properties);
         } else {
-            n.style.check_and_insert("justify-content", spacing_value);
+            n.style
+                .check_and_insert("justify-content", align_content_value);
         }
 
         n.style.check_and_insert(
@@ -397,14 +403,14 @@ impl ftd::executor::Column {
             "ft_column",
         );
 
-        let spacing_value = ftd::node::Value::from_executor_value(
+        let align_content_value = ftd::node::Value::from_executor_value(
             self.container
-                .spacing
+                .align_content
                 .to_owned()
-                .map(|v| v.map(|v| v.to_justify_content_css_string()))
+                .map(|v| v.map(|a| a.to_css_justify_content(false)))
                 .value,
-            self.container.spacing.to_owned(),
-            Some(ftd::executor::Spacing::justify_content_pattern()),
+            self.container.align_content.to_owned(),
+            Some(ftd::executor::Alignment::justify_content_pattern(false)),
             doc_id,
         );
 
@@ -412,20 +418,26 @@ impl ftd::executor::Column {
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .align_content
+                    .spacing
                     .to_owned()
-                    .map(|v| v.map(|a| a.to_css_justify_content(false)))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
-                self.container.align_content.to_owned(),
-                Some(ftd::executor::Alignment::justify_content_pattern(false)),
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            jc.properties.extend(spacing_value.properties);
+            if let Some(old_value) = jc.value.as_ref() {
+                if old_value.eq("unset") {
+                    jc.value = align_content_value.value;
+                }
+            }
+            jc.properties.extend(align_content_value.properties);
         } else {
-            n.style.check_and_insert("justify-content", spacing_value);
+            n.style
+                .check_and_insert("justify-content", align_content_value);
         }
 
         n.style.check_and_insert(
@@ -1378,7 +1390,7 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_solid_css_string()))
                     .value,
                 self.background.to_owned(),
-                None,
+                Some(ftd::executor::Background::background_color_pattern()),
                 doc_id,
             ),
         );

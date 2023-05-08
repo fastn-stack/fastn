@@ -760,7 +760,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(0,128,0,1); cursor: pointer; gap: 50px; height: 40px; justify-content: start; margin-bottom: 20px; margin-top: 20px; padding-bottom: 20px; padding-top: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">hello 1</div><div data-id="1,1:main" style="" class="ft_common ft_md">hello 2</div><div data-id="1,2:main" style="" class="ft_common ft_md">hello 3</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="background-color: rgba(0,128,0,1); cursor: pointer; gap: 50px; height: 40px; margin-bottom: 20px; margin-top: 20px; padding-bottom: 20px; padding-top: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">hello 1</div><div data-id="1,1:main" style="" class="ft_common ft_md">hello 2</div><div data-id="1,2:main" style="" class="ft_common ft_md">hello 3</div></div></div>
 
 
 <script>
@@ -1712,6 +1712,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1724,6 +1739,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;
@@ -1920,9 +1943,9 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#
 }
 window.node_change_main["1:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#green", data).light;
+document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#green", data).light)));
 }
-else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#green", data).dark;}
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#green", data).dark)));}
 }
 
 window.node_change_main["1:main__background-image"] = function(data) {

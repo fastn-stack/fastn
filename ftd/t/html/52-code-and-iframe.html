@@ -780,7 +780,7 @@ margin-block-end: 1em;
 </span><span style="color:#4f5b66;">
 </span><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">end</span><span style="color:#696b70;">: </span><span style="color:#1c7d4d;">toggle-ui
 </span></pre>
-</div></div><div data-id="1:main" style="gap: 20px; justify-content: start; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
+</div></div><div data-id="1:main" style="gap: 20px; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="background-color: rgba(245,245,245,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#696b70;">-- </span><span style="color:#3f6ec6;">component toggle-ui</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">caption title</span><span style="color:#696b70;">:
 </span><span style="color:#a846b9;">body description</span><span style="color:#696b70;">:
 </span><span style="background-color:#e4eaf6; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #4387ff inset"><span style="color:#a846b9;">boolean $open</span><span style="color:#696b70;">: </span><span style="color:#36464e;">true
@@ -843,7 +843,7 @@ margin-block-end: 1em;
 </span><span style="background-color:#eff1f5;color:#4f5b66;">
 </span><span style="background-color:#eff1f5;color:#a7adba;">-- </span><span style="background-color:#eff1f5;color:#d08770;">end</span><span style="background-color:#eff1f5;color:#a7adba;">: </span><span style="background-color:#eff1f5;color:#a3be8c;">toggle-ui
 </span></pre>
-</div></div><div data-id="2:main" style="gap: 20px; justify-content: start; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
+</div></div><div data-id="2:main" style="gap: 20px; padding: 20px; width: 100%" class="ft_common ft_row"><div data-id="2,0:main" style="background-color: rgba(33,34,44,1); border-bottom-width: 1px; border-left-width: 1px; border-radius: 4px; border-right-width: 1px; border-top-width: 1px; font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">component toggle-ui</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">caption title</span><span style="color:#cecfd2;">:
 </span><span style="color:#c973d9;">body description</span><span style="color:#cecfd2;">:
 </span><span style="background-color:#222b42; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #2a77ff inset"><span style="color:#c973d9;">boolean $open</span><span style="color:#cecfd2;">: </span><span style="color:#d5d7e2;">true
@@ -1864,6 +1864,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1876,6 +1891,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;

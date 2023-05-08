@@ -1,0 +1,9 @@
+-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+padding.px: 10
+margin.px: 10
+
+-- ftd.text: hello
+
+-- end: ftd.column

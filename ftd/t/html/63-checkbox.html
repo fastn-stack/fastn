@@ -757,7 +757,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 20px" class="ft_common ft_md">true</div><div data-id="1:main" style="display: none; padding: 20px" class="ft_common ft_md">Checkbox not selected</div><div data-id="2:main" style="padding: 20px" class="ft_common ft_md">Checkbox is selected now</div><div data-id="3:main" style="gap: 10px; justify-content: start; padding-left: 20px; padding-right: 20px" class="ft_common ft_row"><div data-id="3,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#a&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">This is a checkbox</div><input checked data-id="3,1:main"  type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md"></input></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 20px" class="ft_common ft_md">true</div><div data-id="1:main" style="display: none; padding: 20px" class="ft_common ft_md">Checkbox not selected</div><div data-id="2:main" style="padding: 20px" class="ft_common ft_md">Checkbox is selected now</div><div data-id="3:main" style="gap: 10px; padding-left: 20px; padding-right: 20px" class="ft_common ft_row"><div data-id="3,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#a&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">This is a checkbox</div><input checked data-id="3,1:main"  type="checkbox" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,{&quot;mutable&quot;:false,&quot;reference&quot;:&quot;CHECKED&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md"></input></div></div>
 
 
 <script>
@@ -1709,6 +1709,21 @@ else {
 return null;
 }
 };
+window.ftd.dependencies.eval_background_color = function (bg, data) {
+let img_src = bg;
+if (!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
+return img_src.light;
+}
+else if (data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src) {
+return img_src.dark;
+}
+else if (typeof img_src === 'string' && !!img_src) {
+return img_src;
+}
+else {
+return null;
+}
+};
 window.ftd.dependencies.eval_background_image = function (bg, data) {
 if (typeof bg === 'object' && !!bg && "src" in bg) {
 let img_src = bg.src;
@@ -1721,6 +1736,14 @@ return "url(" + img_src.dark + ")";
 else {
 return null;
 }
+}
+else if (typeof bg === 'object' && !!bg && "colors" in bg) {
+var colors = bg.colors;
+var direction = "to bottom";
+if ("direction" in bg) {
+direction = bg.direction;
+}
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;

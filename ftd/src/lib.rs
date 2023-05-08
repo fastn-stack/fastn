@@ -24,6 +24,8 @@ pub mod html;
 pub mod interpreter;
 pub mod node;
 pub mod p1;
+#[cfg(feature = "taffy")]
+pub mod taffy;
 #[cfg(feature = "terminal")]
 pub mod terminal;
 pub mod test_helper;
@@ -40,6 +42,9 @@ pub fn css() -> &'static str {
 
 pub fn terminal() -> &'static str {
     include_str!("../terminal.ftd")
+}
+pub fn taffy() -> &'static str {
+    include_str!("../taffy.ftd")
 }
 
 pub fn build_js() -> &'static str {
