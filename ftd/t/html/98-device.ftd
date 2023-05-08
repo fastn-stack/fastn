@@ -1,0 +1,90 @@
+-- page:
+
+
+-- component page:
+
+-- ftd.column:
+
+-- ftd.desktop:
+;; -- ftd.text: Hello desktop
+-- print-desktop-title:
+-- end: ftd.desktop
+
+-- ftd.mobile:
+;; -- ftd.text: Hello mobile
+-- print-mobile-title:
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: page
+
+
+-- component print-desktop-title:
+
+-- ftd.column:
+-- ftd.text: From desktop
+-- print-title:
+-- end: ftd.column
+
+-- end: print-desktop-title
+
+
+-- component print-mobile-title:
+
+-- ftd.column:
+-- ftd.text: From mobile
+-- print-title:
+-- end: ftd.column
+
+-- end: print-mobile-title
+
+
+
+
+
+-- component print-title:
+
+-- ftd.column:
+
+-- ftd.desktop:
+-- ftd.column:
+-- ftd.text: Desktop print-title
+-- print-subtitle:
+-- end: ftd.column
+-- end: ftd.desktop
+
+-- ftd.mobile:
+-- ftd.column:
+-- ftd.text: Mobile print-title
+-- print-subtitle:
+-- end: ftd.column
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: print-title
+
+
+
+
+
+-- component print-subtitle:
+
+-- ftd.column:
+
+-- ftd.desktop:
+-- ftd.column:
+-- ftd.text: Desktop print-subtitle
+-- end: ftd.column
+-- end: ftd.desktop
+
+-- ftd.mobile:
+-- ftd.column:
+-- ftd.text: Mobile print-subtitle
+-- end: ftd.column
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: print-subtitle

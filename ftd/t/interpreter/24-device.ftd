@@ -1,0 +1,5 @@
+-- ftd.text: Desktop
+if: { ftd.device == "desktop" }
+
+-- ftd.text: Mobile
+if: { ftd.device == "mobile" && ( 2 == 3 ) }

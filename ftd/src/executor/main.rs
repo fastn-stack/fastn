@@ -1,5 +1,3 @@
-use std::option::Option::Some;
-
 #[derive(Debug, PartialEq)]
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
@@ -123,7 +121,16 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, ftd::interpreter::Component)>> {
+        device: Option<Device>,
+    ) -> ftd::executor::Result<
+        Vec<(
+            Option<String>,
+            Vec<usize>,
+            ftd::interpreter::Component,
+            Option<Device>,
+        )>,
+    > {
+        use itertools::Itertools;
         let mut elements = vec![];
         let mut count = 0;
         for instruction in instructions.iter() {
@@ -133,8 +140,14 @@ impl<'a> ExecuteDoc<'a> {
                 parent_container,
                 count,
                 inherited_variables,
-            )?;
-            count += instructions.iter().filter(|(v, _, _)| v.is_none()).count();
+            )?
+            .into_iter()
+            .map(|v| (v.0, v.1, v.2, device.clone()))
+            .collect_vec();
+            count += instructions
+                .iter()
+                .filter(|(v, _, _, _)| v.is_none())
+                .count();
             elements.extend(instructions)
         }
         Ok(elements)
@@ -389,9 +402,10 @@ impl<'a> ExecuteDoc<'a> {
             doc,
             &[],
             &mut inherited_variables,
+            None,
         )?;
         while !instructions.is_empty() {
-            let (dummy_reference, container, mut instruction) = instructions.remove(0);
+            let (dummy_reference, container, mut instruction, mut device) = instructions.remove(0);
             loop {
                 if let Some(dummy_reference) = dummy_reference {
                     // TODO: Throw error when dummy is ready
@@ -461,6 +475,47 @@ impl<'a> ExecuteDoc<'a> {
                         container.as_slice(),
                         doc,
                     );
+                    if let Some(found_device) =
+                        Device::from_component_name(component_definition.name.as_str())
+                    {
+                        if device.is_some() && device.as_ref().unwrap().ne(&found_device) {
+                            ExecuteDoc::insert_element(
+                                &mut elements,
+                                container.as_slice(),
+                                ftd::executor::Element::Null {
+                                    line_number: instruction.line_number,
+                                },
+                            );
+                            break;
+                        }
+
+                        ftd::executor::ExecuteDoc::add_colors_and_types_local_variable(
+                            &instruction,
+                            doc,
+                            container.as_slice(),
+                            &component_definition,
+                            &mut inherited_variables,
+                        )?;
+                        let children_instructions = instruction.get_children(&doc.itdoc())?;
+                        if children_instructions.len().ne(&1) {
+                            return ftd::executor::utils::parse_error(
+                                format!(
+                                    "Expected one child for {}",
+                                    component_definition.name.replace('#', ".")
+                                ),
+                                doc.name,
+                                component_definition.line_number,
+                            );
+                        }
+                        let line_number = instruction.line_number;
+                        instruction = children_instructions[0].clone();
+                        if device.is_none() {
+                            found_device.add_condition(&mut instruction, line_number);
+                            device = Some(found_device);
+                        }
+                        continue;
+                    }
+
                     ExecuteDoc::insert_element(
                         &mut elements,
                         container.as_slice(),
@@ -478,6 +533,7 @@ impl<'a> ExecuteDoc<'a> {
                         doc,
                         container.as_slice(),
                         &mut inherited_variables,
+                        device,
                     )?;
                     instructions.extend(children_instructions);
 
@@ -664,6 +720,38 @@ impl<'a> ExecuteDoc<'a> {
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
     }*/
 
+    pub(crate) fn add_colors_and_types_local_variable(
+        instruction: &ftd::interpreter::Component,
+        doc: &mut ftd::executor::TDoc,
+        local_container: &[usize],
+        component_definition: &ftd::interpreter::ComponentDefinition,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::executor::Result<()> {
+        use itertools::Itertools;
+
+        Ok(match component_definition.name.as_str() {
+            "ftd#row" | "ftd#column" | "ftd#container" | "ftd#document" | "ftd#desktop"
+            | "ftd#mobile" => {
+                doc.insert_local_variables(
+                    component_definition.name.as_str(),
+                    instruction.properties.as_slice(),
+                    component_definition
+                        .arguments
+                        .iter()
+                        .cloned()
+                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
+                        .collect_vec()
+                        .as_slice(),
+                    local_container,
+                    instruction.line_number,
+                    inherited_variables,
+                    false,
+                )?;
+            }
+            _ => {}
+        })
+    }
+
     pub(crate) fn execute_kernel_components(
         instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
@@ -672,7 +760,13 @@ impl<'a> ExecuteDoc<'a> {
         is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        use itertools::Itertools;
+        ftd::executor::ExecuteDoc::add_colors_and_types_local_variable(
+            instruction,
+            doc,
+            local_container,
+            component_definition,
+            inherited_variables,
+        )?;
 
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
@@ -738,52 +832,18 @@ impl<'a> ExecuteDoc<'a> {
                     inherited_variables,
                 )?)
             }
-            "ftd#row" => {
-                doc.insert_local_variables(
-                    component_definition.name.as_str(),
-                    instruction.properties.as_slice(),
-                    component_definition
-                        .arguments
-                        .iter()
-                        .cloned()
-                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
-                        .collect_vec()
-                        .as_slice(),
-                    local_container,
-                    instruction.line_number,
-                    inherited_variables,
-                    false,
-                )?;
-
-                ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
-                    instruction.properties.as_slice(),
-                    instruction.events.as_slice(),
-                    component_definition.arguments.as_slice(),
-                    instruction.condition.as_ref(),
-                    doc,
-                    local_container,
-                    instruction.line_number,
-                    vec![],
-                    inherited_variables,
-                )?)
-            }
+            "ftd#row" => ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
+                instruction.properties.as_slice(),
+                instruction.events.as_slice(),
+                component_definition.arguments.as_slice(),
+                instruction.condition.as_ref(),
+                doc,
+                local_container,
+                instruction.line_number,
+                vec![],
+                inherited_variables,
+            )?),
             "ftd#column" => {
-                doc.insert_local_variables(
-                    component_definition.name.as_str(),
-                    instruction.properties.as_slice(),
-                    component_definition
-                        .arguments
-                        .iter()
-                        .cloned()
-                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
-                        .collect_vec()
-                        .as_slice(),
-                    local_container,
-                    instruction.line_number,
-                    inherited_variables,
-                    false,
-                )?;
-
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
@@ -796,54 +856,20 @@ impl<'a> ExecuteDoc<'a> {
                     inherited_variables,
                 )?)
             }
-            "ftd#container" => {
-                doc.insert_local_variables(
-                    component_definition.name.as_str(),
+            "ftd#container" => ftd::executor::Element::Container(
+                ftd::executor::element::container_element_from_properties(
                     instruction.properties.as_slice(),
-                    component_definition
-                        .arguments
-                        .iter()
-                        .cloned()
-                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
-                        .collect_vec()
-                        .as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
                     local_container,
                     instruction.line_number,
+                    vec![],
                     inherited_variables,
-                    false,
-                )?;
-
-                ftd::executor::Element::Container(
-                    ftd::executor::element::container_element_from_properties(
-                        instruction.properties.as_slice(),
-                        instruction.events.as_slice(),
-                        component_definition.arguments.as_slice(),
-                        instruction.condition.as_ref(),
-                        doc,
-                        local_container,
-                        instruction.line_number,
-                        vec![],
-                        inherited_variables,
-                    )?,
-                )
-            }
+                )?,
+            ),
             "ftd#document" => {
-                doc.insert_local_variables(
-                    component_definition.name.as_str(),
-                    instruction.properties.as_slice(),
-                    component_definition
-                        .arguments
-                        .iter()
-                        .cloned()
-                        .filter(|k| k.name.eq("colors") || k.name.eq("types"))
-                        .collect_vec()
-                        .as_slice(),
-                    local_container,
-                    instruction.line_number,
-                    inherited_variables,
-                    false,
-                )?;
-
                 if !instruction.events.is_empty() {
                     return ftd::executor::utils::parse_error(
                         "Events are not expected for ftd.document type",
@@ -938,5 +964,82 @@ impl<'a> ExecuteDoc<'a> {
             }
             _ => unimplemented!(),
         })
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum Device {
+    Desktop,
+    Mobile,
+}
+
+impl Device {
+    fn from_component_name(name: &str) -> Option<Device> {
+        match name {
+            "ftd#desktop" => Some(Device::Desktop),
+            "ftd#mobile" => Some(Device::Mobile),
+            _ => None,
+        }
+    }
+
+    fn to_str(&self) -> &'static str {
+        match self {
+            Device::Desktop => "desktop",
+            Device::Mobile => "mobile",
+        }
+    }
+
+    fn add_condition(&self, instruction: &mut ftd::interpreter::Component, line_number: usize) {
+        let expression =
+            ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::Eq).add_children(vec![
+                ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::VariableIdentifierRead {
+                    identifier: "ftd.device".to_string(),
+                }),
+                ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::Const {
+                    value: ftd::evalexpr::Value::String(self.to_str().to_string()),
+                }),
+            ]);
+
+        if let Some(condition) = instruction.condition.as_mut() {
+            let expression = ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
+                .add_children(vec![ftd::evalexpr::ExprNode::new(
+                    ftd::evalexpr::Operator::Add,
+                )
+                .add_children(vec![expression, condition.expression.to_owned()])]);
+
+            condition.expression = expression;
+
+            condition.references.insert(
+                "ftd.device".to_string(),
+                ftd::interpreter::PropertyValue::Reference {
+                    name: "ftd#device".to_string(),
+                    kind: ftd::interpreter::Kind::record("ftd#device-data").into_kind_data(),
+                    source: ftd::interpreter::PropertyValueSource::Global,
+                    is_mutable: false,
+                    line_number,
+                },
+            );
+        } else {
+            let expression = ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
+                .add_children(vec![expression]);
+
+            let condition = ftd::interpreter::Expression {
+                expression,
+                references: std::iter::IntoIterator::into_iter([(
+                    "ftd.device".to_string(),
+                    ftd::interpreter::PropertyValue::Reference {
+                        name: "ftd#device".to_string(),
+                        kind: ftd::interpreter::Kind::record("ftd#device-data").into_kind_data(),
+                        source: ftd::interpreter::PropertyValueSource::Global,
+                        is_mutable: false,
+                        line_number,
+                    },
+                )])
+                .collect(),
+                line_number,
+            };
+
+            instruction.condition = Box::new(Some(condition));
+        }
     }
 }
