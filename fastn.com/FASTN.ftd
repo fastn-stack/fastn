@@ -344,15 +344,17 @@ favicon: /-/fastn.io/images/favicon.svg
 
 ## Crash Course: /expander/hello-world/-/build/
 
-- Part 1. Hello World: /expander/hello-world/-/build/
+- Hello World: /expander/hello-world/-/build/
   - Install `fastn`: /build-install/-/expander/
     document: author/how-to/install.ftd
     - On Windows: /build-windows/-/expander/
       document: author/setup/windows.ftd
     - On MacOS/Linux: /build-macos/-/expander/
       document: author/setup/macos.ftd
-- Part 2. Basic UI: /expander/basic-ui/-/build/
-- Part 3. Publish a package: /expander/publish/-/build/
+- Basic UI: /expander/basic-ui/-/build/
+- Publish a package: /expander/publish/-/build/
+- Create clean URLs: /clean-urls/-/build/
+  document: /expander/sitemap-document.ftd 
 
 
 # Blog: /trizwitlabs/
