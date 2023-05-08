@@ -2015,9 +2015,9 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0:main__-webkit-line-clamp", data);
-window.ftd.utils.node_change_call("main","0:main__display", data);
 window.ftd.utils.node_change_call("main","0:main__overflow", data);
+window.ftd.utils.node_change_call("main","0:main__display", data);
+window.ftd.utils.node_change_call("main","0:main__-webkit-line-clamp", data);
 window.ftd.utils.node_change_call("main","0:main__-webkit-box-orient", data);
 };
 
@@ -2037,9 +2037,9 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1:main__background-size", data);
+window.ftd.utils.node_change_call("main","1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1:main__background-color", data);
 window.ftd.utils.node_change_call("main","1:main__background-image", data);
 };
