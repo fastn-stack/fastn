@@ -1,3 +1,5 @@
+-- import: fastn/processors as pr
+
 -- my-ds.page: Publishing a package
 
 
@@ -7,7 +9,7 @@ v: pmxHC-Vmmx4
 -- ds.h3: Why to publish a package?
 
 Your project is in local machine, and you want to share the
-exciting components which you create with the world, you would want it to be 
+it with the world, you would want it to be 
 published on GitHub.
 
 -- ds.h3: How to publish a package?
@@ -25,7 +27,17 @@ This way, you have moved your project into a package that anyone can use in
 their projects.
 
 -- ds.markdown:
+if: { source == "default" }
 
 Continue with the [part 6 now](/expander/polish/).
 
+
 -- end: my-ds.page
+
+
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source
+
