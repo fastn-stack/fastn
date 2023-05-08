@@ -237,7 +237,7 @@ lang: ftd
 
 \-- ftd.row:
 width: fill-container
-background.solid: $inherited.colors.accent.tertiary
+background.solid: $inherited.colors.background.step-2
 padding.px: 20
 
 \-- ftd.text: FOOTER
