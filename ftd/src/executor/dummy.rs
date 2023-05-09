@@ -92,6 +92,7 @@ impl DummyElement {
                 &component_definition,
                 true,
                 &mut Default::default(),
+                None,
             )?
         } else {
             found_elements.insert(instruction.name.to_string());

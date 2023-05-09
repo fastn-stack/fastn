@@ -102,6 +102,7 @@ pub struct IterativeElement {
 pub struct WebComponent {
     pub name: String,
     pub properties: ftd::Map<ftd::interpreter::PropertyValue>,
+    pub device: Option<ftd::executor::Device>,
     pub line_number: usize,
 }
 
@@ -429,6 +430,7 @@ pub fn code_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Code> {
     // TODO: `text`, `lang` and `theme` cannot have condition
 
@@ -490,6 +492,7 @@ pub fn code_from_properties(
         line_number,
         inherited_variables,
         "ftd#code",
+        device,
     )?;
 
     Ok(Code {
@@ -535,6 +538,7 @@ pub fn iframe_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Iframe> {
     // TODO: `youtube` should not be conditional
     let srcdoc = ftd::executor::value::optional_string(
@@ -620,6 +624,7 @@ pub fn iframe_from_properties(
         line_number,
         inherited_variables,
         "ftd#iframe",
+        device,
     )?;
 
     Ok(Iframe {
@@ -662,6 +667,7 @@ pub struct Container {
     pub align_content: ftd::executor::Value<Option<ftd::executor::Alignment>>,
     pub spacing: ftd::executor::Value<Option<ftd::executor::Spacing>>,
     pub children: Vec<Element>,
+    pub device: Option<ftd::executor::Device>,
 }
 
 pub type Event = ftd::interpreter::Event;
@@ -741,6 +747,7 @@ pub struct Common {
     pub border_style_top: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
     pub border_style_bottom: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
     pub shadow: ftd::executor::Value<Option<ftd::executor::Shadow>>,
+    pub device: Option<ftd::executor::Device>,
 }
 
 pub fn default_column() -> Column {
@@ -773,6 +780,7 @@ pub fn text_from_properties(
     is_dummy: bool,
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Text> {
     let text = ftd::executor::value::dummy_optional_string(
         "text",
@@ -803,6 +811,7 @@ pub fn text_from_properties(
         line_number,
         inherited_variables,
         "ftd#text",
+        device,
     )?;
     Ok(Text {
         text,
@@ -865,6 +874,7 @@ pub fn integer_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::i64(
         "value",
@@ -900,6 +910,7 @@ pub fn integer_from_properties(
         line_number,
         inherited_variables,
         "ftd#integer",
+        device,
     )?;
     Ok(Text {
         text,
@@ -962,6 +973,7 @@ pub fn decimal_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::f64(
         "value",
@@ -997,6 +1009,7 @@ pub fn decimal_from_properties(
         line_number,
         inherited_variables,
         "ftd#decimal",
+        device,
     )?;
     Ok(Text {
         text,
@@ -1059,6 +1072,7 @@ pub fn boolean_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::bool(
         "value",
@@ -1079,6 +1093,7 @@ pub fn boolean_from_properties(
         line_number,
         inherited_variables,
         "ftd#boolean",
+        device,
     )?;
     Ok(Text {
         text,
@@ -1141,6 +1156,7 @@ pub fn image_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Image> {
     let src = {
         let src = ftd::executor::value::record(
@@ -1178,6 +1194,7 @@ pub fn image_from_properties(
         line_number,
         inherited_variables,
         "ftd#image",
+        device,
     )?;
     Ok(Image { src, alt, common })
 }
@@ -1193,6 +1210,7 @@ pub fn row_from_properties(
     line_number: usize,
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Row> {
     let common = common_from_properties(
         properties,
@@ -1204,6 +1222,7 @@ pub fn row_from_properties(
         line_number,
         inherited_variables,
         "ftd#row",
+        device.clone(),
     )?;
     let container = container_from_properties(
         properties,
@@ -1213,6 +1232,7 @@ pub fn row_from_properties(
         children,
         inherited_variables,
         "ftd#row",
+        device,
     )?;
     Ok(Row { container, common })
 }
@@ -1228,6 +1248,7 @@ pub fn column_from_properties(
     line_number: usize,
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Column> {
     let common = common_from_properties(
         properties,
@@ -1239,6 +1260,7 @@ pub fn column_from_properties(
         line_number,
         inherited_variables,
         "ftd#column",
+        device.clone(),
     )?;
     let container = container_from_properties(
         properties,
@@ -1248,6 +1270,7 @@ pub fn column_from_properties(
         children,
         inherited_variables,
         "ftd#column",
+        device,
     )?;
     Ok(Column { container, common })
 }
@@ -1263,6 +1286,7 @@ pub fn container_element_from_properties(
     line_number: usize,
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<ContainerElement> {
     let common = common_from_properties(
         properties,
@@ -1274,6 +1298,7 @@ pub fn container_element_from_properties(
         line_number,
         inherited_variables,
         "ftd#container",
+        device,
     )?;
     Ok(ContainerElement {
         common,
@@ -1300,6 +1325,7 @@ pub fn rive_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Rive> {
     let component_name = "ftd#rive";
     let common = common_from_properties(
@@ -1312,6 +1338,7 @@ pub fn rive_from_properties(
         line_number,
         inherited_variables,
         component_name,
+        device,
     )?;
     let rive = Rive {
         src: ftd::executor::value::string(
@@ -1503,6 +1530,7 @@ pub fn common_from_properties(
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     component_name: &str,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Common> {
     let is_visible = if let Some(condition) = condition {
         condition.eval(&doc.itdoc())?
@@ -1548,6 +1576,7 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        device,
         sticky: ftd::executor::value::optional_bool(
             "sticky",
             component_name,
@@ -2154,6 +2183,7 @@ pub fn container_from_properties(
     children: Vec<Element>,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     component_name: &str,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<Container> {
     Ok(Container {
         wrap: ftd::executor::value::optional_bool(
@@ -2184,6 +2214,7 @@ pub fn container_from_properties(
             component_name,
         )?,
         children,
+        device,
     })
 }
 
@@ -2226,6 +2257,7 @@ pub fn text_input_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<TextInput> {
     // TODO: `youtube` should not be conditional
     let placeholder = ftd::executor::value::optional_string(
@@ -2295,6 +2327,7 @@ pub fn text_input_from_properties(
         line_number,
         inherited_variables,
         "ftd#text-input",
+        device,
     )?;
 
     Ok(TextInput {
@@ -2359,6 +2392,7 @@ pub fn checkbox_from_properties(
     local_container: &[usize],
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    device: Option<ftd::executor::Device>,
 ) -> ftd::executor::Result<CheckBox> {
     let checked = ftd::executor::value::optional_bool(
         "checked",
@@ -2390,6 +2424,7 @@ pub fn checkbox_from_properties(
         line_number,
         inherited_variables,
         "ftd#checkbox",
+        device,
     )?;
 
     Ok(CheckBox {
