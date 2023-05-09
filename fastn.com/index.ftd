@@ -980,6 +980,7 @@ border-radius.px: 80
 text: $github-star-cta.body
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong.dark
+text-align: center
 
 -- end: ftd.row
 
