@@ -64,8 +64,7 @@ impl State {
             .formats
             .iter()
             .copied()
-            .filter(|f| f.is_srgb())
-            .next()
+            .find(|f| f.is_srgb())
             .unwrap_or(surface_caps.formats[0]);
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -154,10 +153,6 @@ impl State {
         }
     }
 
-    fn input(&mut self, _event: &winit::event::WindowEvent) -> bool {
-        false
-    }
-
     fn update(&mut self) {}
 
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
@@ -197,8 +192,8 @@ impl State {
 
     fn set_color(&mut self, position: &winit::dpi::PhysicalPosition<f64>) {
         self.clear_color = wgpu::Color {
-            r: position.x as f64 / self.size.width as f64,
-            g: position.y as f64 / self.size.height as f64,
+            r: position.x / self.size.width as f64,
+            g: position.y / self.size.height as f64,
             b: 1.0,
             a: 1.0,
         };
