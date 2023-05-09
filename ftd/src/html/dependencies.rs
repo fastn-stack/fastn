@@ -251,6 +251,8 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), key);
+            let just_one_property_without_condition = attribute.properties.len().eq(&1)
+                && attribute.properties[0].property.condition.is_none();
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -263,6 +265,9 @@ impl<'a> DependencyGenerator<'a> {
                 }
 
                 if ftd::html::utils::is_device_dependent(&property.value, self.doc)? {
+                    if self.node.device.is_some() && just_one_property_without_condition {
+                        continue;
+                    }
                     let mut desktop_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html::utils::get_formatted_dep_string_from_property_value(
@@ -290,7 +295,26 @@ impl<'a> DependencyGenerator<'a> {
                     {
                         mobile_value_string = value_string;
                     }
-                    if desktop_value_string.ne(&mobile_value_string) {
+
+                    if self
+                        .node
+                        .device
+                        .as_ref()
+                        .map(|v| v.is_mobile())
+                        .unwrap_or(false)
+                    {
+                        expressions
+                            .push((condition, format!("{} = {};", key, mobile_value_string)));
+                    } else if self
+                        .node
+                        .device
+                        .as_ref()
+                        .map(|v| v.is_desktop())
+                        .unwrap_or(false)
+                    {
+                        expressions
+                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                    } else if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
                         let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
@@ -528,6 +552,9 @@ impl<'a> DependencyGenerator<'a> {
                 node_data_id, key
             );
 
+            let just_one_property_without_condition = attribute.properties.len().eq(&1)
+                && attribute.properties[0].property.condition.is_none();
+
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -540,6 +567,9 @@ impl<'a> DependencyGenerator<'a> {
                 }
 
                 if ftd::html::utils::is_device_dependent(&property.value, self.doc)? {
+                    if self.node.device.is_some() && just_one_property_without_condition {
+                        continue;
+                    }
                     let mut desktop_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html::utils::get_formatted_dep_string_from_property_value(
@@ -567,7 +597,26 @@ impl<'a> DependencyGenerator<'a> {
                     {
                         mobile_value_string = value_string;
                     }
-                    if desktop_value_string.ne(&mobile_value_string) {
+
+                    if self
+                        .node
+                        .device
+                        .as_ref()
+                        .map(|v| v.is_mobile())
+                        .unwrap_or(false)
+                    {
+                        expressions
+                            .push((condition, format!("{} = {};", key, mobile_value_string)));
+                    } else if self
+                        .node
+                        .device
+                        .as_ref()
+                        .map(|v| v.is_desktop())
+                        .unwrap_or(false)
+                    {
+                        expressions
+                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                    } else if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
                         let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([

@@ -7,7 +7,6 @@
 
 -- ftd.desktop:
 -- print-desktop-title:
-if: { 2 < 3 }
 -- end: ftd.desktop
 
 -- ftd.mobile:
@@ -75,15 +74,47 @@ if: { 2 < 3 }
 -- ftd.desktop:
 -- ftd.column:
 -- ftd.text: Desktop print-subtitle
+role: $rtype
+role if { flag }: $rrtype
+$on-click$: $ftd.toggle($a = $flag)
+
 -- end: ftd.column
 -- end: ftd.desktop
 
 -- ftd.mobile:
 -- ftd.column:
 -- ftd.text: Mobile print-subtitle
+role: $rtype
+
 -- end: ftd.column
 -- end: ftd.mobile
 
 -- end: ftd.column
 
 -- end: print-subtitle
+
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- boolean $flag: true
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
+
+-- ftd.responsive-type rrtype:
+desktop: $mtype
+mobile: $dtype
