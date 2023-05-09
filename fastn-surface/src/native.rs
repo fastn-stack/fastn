@@ -4,10 +4,15 @@ use winit::{
     window::WindowBuilder,
 };
 
-pub fn render(_w: fastn_surface::Window) {
+pub fn render(mut w: fastn_surface::Window) {
     env_logger::init();
+
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let window_size = window.inner_size();
+
+    w.layout(window_size.width, window_size.height);
+
 
     event_loop.run(move |event, _, control_flow| match event {
         Event::WindowEvent {
@@ -27,5 +32,5 @@ pub fn render(_w: fastn_surface::Window) {
             _ => {}
         },
         _ => {}
-    });
+    })
 }
