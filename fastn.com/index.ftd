@@ -314,20 +314,26 @@ ftd.ui list right-side-ui:
 -- ftd.column:
 width: fill-container
 
+-- ftd.desktop:
+
 -- two-column-layout-desktop:
 title: $two-column-layout.title
 subtitle: $two-column-layout.subtitle
 ui-data: $two-column-layout.ui-data
 right-side-ui: $two-column-layout.right-side-ui
-if: { ftd.device != "mobile" }
 
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
 
 -- two-column-layout-mobile:
 title: $two-column-layout.title
 subtitle: $two-column-layout.subtitle
 ui-data: $two-column-layout.ui-data
 right-side-ui: $two-column-layout.right-side-ui
-if: { ftd.device == "mobile" }
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 

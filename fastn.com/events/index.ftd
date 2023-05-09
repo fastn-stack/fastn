@@ -810,8 +810,9 @@ boolean slides: false
 -- ftd.column:
 width: fill-container
 
+-- ftd.desktop:
+
 -- row-container-desktop: $row-container.title
-if: { ftd.device != "mobile" }
 spacing: $row-container.desktop-spacing
 margin-bottom: $row-container.margin-bottom
 margin-top: $row-container.margin-top
@@ -825,8 +826,11 @@ align-left: $row-container.align-left
 title-medium: $row-container.title-medium
 slides: $row-container.slides
 
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
 -- row-container-mobile: $row-container.title
-if: { ftd.device == "mobile" }
 spacing: $row-container.mobile-spacing
 row-wrap: $row-container.row-wrap
 width: $row-container.width
@@ -838,6 +842,8 @@ switch-to-column: $row-container.switch-to-column
 title-medium: $row-container.title-medium
 align-left: $row-container.align-left
 slides: $row-container.slides
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 
@@ -1020,8 +1026,9 @@ optional string link:
 -- ftd.column:
 align-content: center
 
+-- ftd.desktop:
+
 -- ftd.column:
-if: { ftd.device != "mobile" }
 width.fixed.px: 102
 spacing.fixed.px: 40
 align-content: center
@@ -1041,9 +1048,12 @@ color: $inherited.colors.text
 
 -- end: ftd.column
 
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
 
 -- ftd.column:
-if: { ftd.device == "mobile" }
 spacing.fixed.px: 10
 align-content: center
 
@@ -1061,6 +1071,8 @@ role: $inherited.types.heading-tiny
 color: $inherited.colors.text
 
 -- end: ftd.column
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 

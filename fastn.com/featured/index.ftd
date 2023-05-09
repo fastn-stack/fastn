@@ -69,19 +69,26 @@ margin-top.px: 16
 -- ftd.row:
 width: fill-container
 
+-- ftd.desktop:
+
 -- ftd.text: $grid-view.title
-if: { ftd.device != "mobile" }
 role: $inherited.types.heading-small
 color: $inherited.colors.text
 width: fill-container
 margin-top.px: 12
 
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
 -- ftd.text: $grid-view.title
-if: { ftd.device == "mobile" }
 role: $inherited.types.copy-large
 color: $inherited.colors.text
 width: fill-container
 margin-top.px: 12
+
+-- end: ftd.mobile
 
 -- ftd.row:
 align-self: end
@@ -106,8 +113,9 @@ color if { grid-view.hover }: $inherited.colors.cta-primary.base
 
 -- end: ftd.row
 
+-- ftd.desktop:
+
 -- ftd.row:
-if: { ftd.device != "mobile" }
 width: fill-container
 wrap: true
 spacing.fixed.px: 46
@@ -123,8 +131,12 @@ is-last: $obj.is-last
 
 -- end: ftd.row
 
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
 -- ftd.column:
-if: { ftd.device == "mobile" }
 width.fixed.percent: 100
 
 -- grid-of-items: $obj.title
@@ -137,6 +149,8 @@ body: $obj.body
 is-last: $obj.is-last
 
 -- end: ftd.column
+
+-- end: ftd.mobile
 
 -- end: ftd.column
 
