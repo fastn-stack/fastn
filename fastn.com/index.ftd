@@ -2,7 +2,6 @@
 -- import: fifthtry.github.io/fastn-typography/inter as typo
 -- import: fifthtry.github.io/fastn-io-typography as doc-typo
 -- import: fastn.io/ftd as ftd-index
--- import: fifthtry.github.io/banner
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
 -- import: fifthtry.github.io/footer
 -- import: fastn/processors as pr
@@ -128,11 +127,6 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
--- banner.floating-banner:
-link: https://github.com/fastn-stack/fastn/
-
-Star on GitHub ⭐
-
 -- end: home-page
 
 
@@ -194,15 +188,21 @@ background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn
 -- ftd.column:
 width: fill-container
 max-width.fixed.px: 600
-padding-top.em: 7
+padding-top.em: 3
+padding-top.em if { ftd.device == "mobile" }: 7
 padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
 
+-- github-star-cta:
+link: https://github.com/fastn-stack/fastn/
+
+Support us by becoming a stargazer! 🚀
+
 -- ftd.text: $hero-section.title
-text-align: center
 role: $inherited.types.heading-hero
 role if { ftd.device == "mobile" }: $inherited.types.heading-medium
+text-align: center
 
 -- ftd.text: $hero-section.preposition
 if: { hero-section.preposition != NULL }
@@ -937,3 +937,56 @@ $code.text
 -- end: ftd.column
 
 -- end: code
+
+
+
+
+
+
+
+
+
+
+-- component github-star-cta:
+body body:
+string link: 
+boolean $hide: false
+boolean $mousein: false
+boolean $btn-mousein: false
+
+-- ftd.column:
+if: { !github-star-cta.hide }
+align-self: center
+margin-bottom.px: 34
+
+-- ftd.column:
+align-self: center
+
+-- ftd.row:
+
+-- ftd.row:
+border-width.px: 2
+border-color: $inherited.colors.custom.one
+background.solid if { github-star-cta.mousein }: $inherited.colors.custom.one
+$on-mouse-enter$: $ftd.set-bool($a = $github-star-cta.mousein, v = true )
+$on-mouse-leave$: $ftd.set-bool($a = $github-star-cta.mousein, v = false )
+link: $github-star-cta.link
+align-content: center
+padding-horizontal.px: 36
+padding-vertical.px: 10
+border-radius.px: 80
+
+-- ftd.text:
+text: $github-star-cta.body
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong.dark
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: github-star-cta
