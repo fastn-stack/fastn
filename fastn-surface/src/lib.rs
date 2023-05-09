@@ -14,11 +14,11 @@ pub mod native;
 
 mod element;
 mod window;
-mod node;
 
-pub use element::{Text, Element, Container, Image, Dimension};
+pub use element::{Container, Dimension, Element, Image, Text};
 pub use window::Window;
-pub use node::NodeKey;
+
+slotmap::new_key_type! { pub struct NodeKey; }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct ColorValue {
@@ -33,7 +33,6 @@ pub struct Color {
     pub light: ColorValue,
     pub dark: ColorValue,
 }
-
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct TextStyle {

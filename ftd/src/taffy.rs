@@ -188,7 +188,12 @@ impl ftd::executor::Text {
             // border: Default::default(),
             text: self.text.value.original.clone(),
             style: self.style.value.as_ref().map(|v| v.to_surface_style()),
-            color: self.common.color.value.as_ref().map(|v| v.to_surface_color()),
+            color: self
+                .common
+                .color
+                .value
+                .as_ref()
+                .map(|v| v.to_surface_color()),
         })
     }
 }
@@ -204,7 +209,6 @@ impl ftd::executor::Color {
         todo!()
     }
 }
-
 
 impl ftd::executor::Image {
     fn to_taffy(&self, _t: &mut taffy::Taffy) -> fastn_surface::Element {
@@ -259,7 +263,6 @@ impl ftd::executor::Rive {
         todo!()
     }
 }
-
 
 fn ftd() -> ftd::executor::Element {
     let doc = ftd::test_helper::ftd_v2_interpret_helper("foo", ftd::taffy())

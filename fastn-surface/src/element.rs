@@ -6,11 +6,28 @@ pub enum Element {
 }
 
 #[derive(Debug)]
+pub struct CommonStyleMinusTaffy {
+    pub background_color: Option<fastn_surface::Color>,
+    // border: Borders,
+}
+
+#[derive(Debug)]
 pub struct Container {
     pub taffy: taffy::node::Node,
-    // border: Borders,
-    pub background_color: Option<fastn_surface::Color>,
-    pub children: Vec<Element>,
+    pub style: CommonStyleMinusTaffy,
+}
+
+impl Container {
+    pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
+        Element::Container(Container {
+            taffy: taffy
+                .new_leaf(taffy::style::Style::default())
+                .expect("this should never fail"),
+            style: CommonStyleMinusTaffy {
+                background_color: None,
+            },
+        })
+    }
 }
 
 #[derive(Debug)]
@@ -28,7 +45,6 @@ pub struct Image {
     // border: Borders,
     pub src: String,
 }
-
 
 // #[derive(Default, Debug)]
 // pub struct Borders {
@@ -73,16 +89,15 @@ pub enum Dimension {
     Percent(f32),
 }
 
-
 impl fastn_surface::Element {
     pub fn render(&self, t: &taffy::Taffy) {
         dbg!(self);
         match self {
             fastn_surface::Element::Container(c) => {
                 dbg!(t.layout(c.taffy).unwrap());
-                for child in c.children.iter() {
-                    child.render(t);
-                }
+                // for child in c.children.iter() {
+                //     child.render(t);
+                // }
             }
             fastn_surface::Element::Text(c) => {
                 dbg!(t.layout(c.taffy).unwrap());

@@ -17,11 +17,11 @@ pub fn render(_w: fastn_surface::Window) {
             WindowEvent::CloseRequested
             | WindowEvent::KeyboardInput {
                 input:
-                KeyboardInput {
-                    state: ElementState::Pressed,
-                    virtual_keycode: Some(VirtualKeyCode::Escape),
-                    ..
-                },
+                    KeyboardInput {
+                        state: ElementState::Pressed,
+                        virtual_keycode: Some(VirtualKeyCode::Escape),
+                        ..
+                    },
                 ..
             } => *control_flow = ControlFlow::Exit,
             _ => {}
