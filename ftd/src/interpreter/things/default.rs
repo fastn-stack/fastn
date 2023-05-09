@@ -1172,7 +1172,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
-                        name: "mid".to_string(),
+                        name: "stop-position".to_string(),
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,

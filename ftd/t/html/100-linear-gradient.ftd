@@ -11,9 +11,45 @@ colors: $color-values
 direction: top-right
 colors: $color-values-2
 
+-- ftd.linear-gradient lg-3:
+direction: right
+colors: $rainbow-values
+
+-- ftd.linear-gradient-color list rainbow-values:
+
+-- ftd.linear-gradient-color: violet
+end.percent: 14.28
+
+-- ftd.linear-gradient-color: indigo
+start.percent: 14.28
+end.percent: 28.57
+
+-- ftd.linear-gradient-color: blue
+start.percent: 28.57
+end.percent: 42.85
+
+-- ftd.linear-gradient-color: green
+start.percent: 42.85
+end.percent: 57.14
+
+-- ftd.linear-gradient-color: yellow
+start.percent: 57.14
+end.percent: 71.42
+
+-- ftd.linear-gradient-color: orange
+start.percent: 71.42
+end.percent: 85.71
+
+-- ftd.linear-gradient-color: red
+start.percent: 85.71
+
+-- end: rainbow-values
+
 -- ftd.linear-gradient-color list color-values:
 
 -- ftd.linear-gradient-color: red
+stop-position.percent: 40
+
 -- ftd.linear-gradient-color: yellow
 
 -- end: color-values
@@ -32,9 +68,11 @@ dark: yellow
 dark: blue
 
 -- ftd.row:
-width: fill-container
+width.fixed.px: 400
+height.fixed.px: 200
 background.linear-gradient: $lg
-background.linear-gradient if { counter % 2 == 1 }: $lg-2
+background.linear-gradient if { counter % 3 == 1 }: $lg-2
+background.linear-gradient if { counter % 3 == 2 }: $lg-3
 $on-click$: $ftd.increment($a = $counter)
 
 -- ftd.text: HELLO THERE

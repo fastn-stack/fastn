@@ -321,7 +321,7 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
 
                     if ("start" in c) colors = `${colors} ${c.start}`;
                     if ("end" in c) colors = `${colors} ${c.end}`;
-                    if ("mid" in c) colors = `${colors}, ${c.mid}`;
+                    if ("stop-position" in c) colors = `${colors}, ${c["stop-position"]}`;
 
                 }
             }

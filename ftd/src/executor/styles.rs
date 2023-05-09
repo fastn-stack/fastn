@@ -895,7 +895,7 @@ pub struct LinearGradientColor {
     pub color: Color,
     pub start: ftd::executor::Value<Option<Length>>,
     pub end: ftd::executor::Value<Option<Length>>,
-    pub mid: ftd::executor::Value<Option<Length>>,
+    pub stop_position: ftd::executor::Value<Option<Length>>,
 }
 
 impl LinearGradientColor {
@@ -1010,22 +1010,22 @@ impl LinearGradientColor {
                 .into_property(ftd::interpreter::PropertySource::header("end"))],
         );
 
-        let mid = ftd::executor::Value::new(
+        let stop_position = ftd::executor::Value::new(
             ftd::executor::Length::from_optional_value(
-                values.get("mid").cloned(),
+                values.get("stop-position").cloned(),
                 doc,
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("mid")?
-                .into_property(ftd::interpreter::PropertySource::header("mid"))],
+            vec![get_property_value("stop-position")?
+                .into_property(ftd::interpreter::PropertySource::header("stop-position"))],
         );
 
         Ok(ftd::executor::LinearGradientColor {
             color,
             start,
             end,
-            mid,
+            stop_position,
         })
     }
 
@@ -1037,8 +1037,8 @@ impl LinearGradientColor {
         if let Some(end) = self.end.value.as_ref() {
             result.push_str(format!(" {}", end.to_css_string()).as_str());
         }
-        if let Some(mid) = self.mid.value.as_ref() {
-            result.push_str(format!(", {}", mid.to_css_string()).as_str());
+        if let Some(stop) = self.stop_position.value.as_ref() {
+            result.push_str(format!(", {}", stop.to_css_string()).as_str());
         }
         result
     }
