@@ -1036,16 +1036,16 @@ impl LinearGradientColor {
         })
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         let mut result = self.color.light.value.to_css_string();
         if let Some(start) = self.start.value.as_ref() {
-            result.push_str(format!(" {}", start.to_css_string()).as_str());
+            result.push_str(format!(" {}", start.to_css_string(device)).as_str());
         }
         if let Some(end) = self.end.value.as_ref() {
-            result.push_str(format!(" {}", end.to_css_string()).as_str());
+            result.push_str(format!(" {}", end.to_css_string(device)).as_str());
         }
         if let Some(mid) = self.mid.value.as_ref() {
-            result.push_str(format!(", {}", mid.to_css_string()).as_str());
+            result.push_str(format!(", {}", mid.to_css_string(device)).as_str());
         }
         result
     }
@@ -1227,14 +1227,14 @@ impl LinearGradient {
         Ok(ftd::executor::LinearGradient { direction, colors })
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         format!(
             "linear-gradient({}, {})",
             self.direction.value.to_css_string(),
             self.colors
                 .value
                 .iter()
-                .map(|lc| lc.to_css_string())
+                .map(|lc| lc.to_css_string(device))
                 .join(", ")
         )
     }
@@ -1326,11 +1326,11 @@ impl Background {
         }
     }
 
-    pub fn to_image_src_css_string(&self) -> String {
+    pub fn to_image_src_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
             ftd::executor::Background::Image(i) => i.to_image_src_css_string(),
-            ftd::executor::Background::LinearGradient(l) => l.to_css_string(),
+            ftd::executor::Background::LinearGradient(l) => l.to_css_string(device),
         }
     }
 

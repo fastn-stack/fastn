@@ -1366,7 +1366,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_src_css_string()))
+                    .map(|v| v.map(|v| v.to_image_src_css_string(&self.device)))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_image_pattern()),
