@@ -1009,6 +1009,14 @@ impl Device {
         }
     }
 
+    pub(crate) fn is_mobile(&self) -> bool {
+        matches!(self, Device::Mobile)
+    }
+
+    pub(crate) fn is_desktop(&self) -> bool {
+        matches!(self, Device::Desktop)
+    }
+
     fn add_condition(&self, instruction: &mut ftd::interpreter::Component, line_number: usize) {
         let expression =
             ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::Eq).add_children(vec![
