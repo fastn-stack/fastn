@@ -47,7 +47,6 @@ impl Length {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
-        dbg!(&or_type_value);
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
             if let ftd::interpreter::Value::Optional { data, .. } = &binding {
@@ -907,7 +906,6 @@ impl LinearGradientColor {
     ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
         let mut result = vec![];
         let value = value.resolve(&doc.itdoc(), line_number)?;
-        dbg!(&value.inner());
         match value.inner() {
             Some(ftd::interpreter::Value::List { data, kind })
                 if kind
@@ -949,13 +947,13 @@ impl LinearGradientColor {
             Some(ftd::interpreter::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
             {
-                dbg!(fields)
+                fields
             }
             t => {
                 return ftd::executor::utils::parse_error(
                     format!(
                         "Expected value of type record `{}`, found: {:?}",
-                        ftd::interpreter::FTD_LINEAR_GRADIENT,
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR,
                         t
                     ),
                     doc.name,
@@ -975,7 +973,10 @@ impl LinearGradientColor {
             values
                 .get(field_name)
                 .ok_or_else(|| ftd::executor::Error::ParseError {
-                    message: format!("`{}` field in ftd.linear-gradient not found", field_name),
+                    message: format!(
+                        "`{}` field in ftd.linear-gradient-color not found",
+                        field_name
+                    ),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })
