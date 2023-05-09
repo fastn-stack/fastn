@@ -1,4 +1,4 @@
--- my-ds.page: How to create clean URL in `fastn`
+-- my-ds.page: How to create clean URL
 
 Generally the URL of the page is corresponding to the location of that page in 
 the package. 

@@ -394,7 +394,8 @@ favicon: /-/fastn.io/images/favicon.svg
   skip: true
 
 - Overview: /planning/
-- Holy grail layout: /expander/layout/
+- Holy grail layout: /layout-planning/
+  document: /expander/layout/index.ftd
 - sitemap - document: /planning/sitemap-document/
   document: /planning/sitemap-features/document.ftd
 - border-radius video: /planning/border-radius/
