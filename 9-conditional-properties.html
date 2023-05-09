@@ -1737,12 +1737,32 @@ return null;
 }
 }
 else if (typeof bg === 'object' && !!bg && "colors" in bg) {
-var colors = bg.colors;
+var colors = "";
 var direction = "to bottom";
 if ("direction" in bg) {
 direction = bg.direction;
 }
-return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
+var colors_vec = bg.colors;
+for (var c of colors_vec) {
+if (typeof c === 'object' && !!c && "color" in c) {
+let color_value = c.color;
+if (typeof color_value === 'object' && !!color_value && "light" in color_value && "dark" in color_value) {
+if (colors) {
+colors = data["ftd#dark-mode"] ? `${colors}, ${color_value.dark}` : `${colors}, ${color_value.light}`;
+}
+else {
+colors = data["ftd#dark-mode"] ? `${color_value.dark}` : `${color_value.light}`;
+}
+if ("start" in c)
+colors = `${colors} ${c.start}`;
+if ("end" in c)
+colors = `${colors} ${c.end}`;
+if ("mid" in c)
+colors = `${colors}, ${c.mid}`;
+}
+}
+}
+return "linear-gradient(" + direction + ", " + colors + ")";
 }
 else {
 return null;
@@ -1974,8 +1994,8 @@ window.ftd.utils.set_value_helper(data, "foo#g", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#g", "main");
 window.ftd.call_immutable_value_changes("foo#g", "main");
-window.ftd.utils.node_change_call("main","1:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__padding", data);
 };
 
 

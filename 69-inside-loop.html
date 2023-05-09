@@ -1756,12 +1756,32 @@ return null;
 }
 }
 else if (typeof bg === 'object' && !!bg && "colors" in bg) {
-var colors = bg.colors;
+var colors = "";
 var direction = "to bottom";
 if ("direction" in bg) {
 direction = bg.direction;
 }
-return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
+var colors_vec = bg.colors;
+for (var c of colors_vec) {
+if (typeof c === 'object' && !!c && "color" in c) {
+let color_value = c.color;
+if (typeof color_value === 'object' && !!color_value && "light" in color_value && "dark" in color_value) {
+if (colors) {
+colors = data["ftd#dark-mode"] ? `${colors}, ${color_value.dark}` : `${colors}, ${color_value.light}`;
+}
+else {
+colors = data["ftd#dark-mode"] ? `${color_value.dark}` : `${color_value.light}`;
+}
+if ("start" in c)
+colors = `${colors} ${c.start}`;
+if ("end" in c)
+colors = `${colors} ${c.end}`;
+if ("mid" in c)
+colors = `${colors}, ${c.mid}`;
+}
+}
+}
+return "linear-gradient(" + direction + ", " + colors + ")";
 }
 else {
 return null;
@@ -1986,15 +2006,15 @@ window.ftd.utils.set_value_helper(data, "foo#names", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#names", "main");
 window.ftd.call_immutable_value_changes("foo#names", "main");
-window.ftd.utils.node_change_call("main","0,5,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,6,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,2,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,3,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,1,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,8,0:main__text", data);
-window.ftd.utils.node_change_call("main","0,4,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,2,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,1,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,3,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,5,0:main__text", data);
 window.ftd.utils.node_change_call("main","0,7,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,6,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,4,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0:main__text", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2002,60 +2022,60 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,6:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,7:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-image", data);
 window.ftd.utils.node_change_call("main","0,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,5:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,8:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,8:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-image", data);
-window.ftd.utils.node_change_call("main","0,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","0,8:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,3:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,2:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,6:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,6:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,5:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0,4:main__background-position", data);
-window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,0:main__background-size", data);
 window.ftd.utils.node_change_call("main","0,6:main__background-size", data);
-window.ftd.utils.node_change_call("main","0,7:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-image", data);
 window.ftd.utils.node_change_call("main","0,7:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,6:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,7:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,8:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,3:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","0,6:main__background-position", data);
+window.ftd.utils.node_change_call("main","0,2:main__background-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,8:main__background-size", data);
+window.ftd.utils.node_change_call("main","0,5:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0,7:main__background-repeat", data);
 };
 
 
