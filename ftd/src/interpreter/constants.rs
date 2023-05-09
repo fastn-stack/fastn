@@ -59,6 +59,12 @@ pub const FTD_LINEAR_GRADIENT: &str = "ftd#linear-gradient";
 pub const FTD_LINEAR_GRADIENT_DIRECTION: &str = "ftd#linear-gradient.direction";
 pub const FTD_LINEAR_GRADIENT_COLORS: &str = "ftd#linear-gradient.colors";
 
+pub const FTD_LINEAR_GRADIENT_COLOR: &str = "ftd#linear-gradient-color";
+pub const FTD_LINEAR_GRADIENT_COLOR_NAME: &str = "ftd#linear-gradient-color.color";
+pub const FTD_LINEAR_GRADIENT_COLOR_START: &str = "ftd#linear-gradient-color.start";
+pub const FTD_LINEAR_GRADIENT_COLOR_END: &str = "ftd#linear-gradient-color.end";
+pub const FTD_LINEAR_GRADIENT_COLOR_MID: &str = "ftd#linear-gradient-color.mid";
+
 pub const FTD_LINEAR_GRADIENT_DIRECTIONS: &str = "ftd#linear-gradient-directions";
 pub const FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE: &str = "ftd#linear-gradient-directions.angle";
 pub const FTD_LINEAR_GRADIENT_DIRECTIONS_TURN: &str = "ftd#linear-gradient-directions.turn";

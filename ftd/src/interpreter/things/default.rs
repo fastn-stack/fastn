@@ -1143,6 +1143,47 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
             }),
         ),
         (
+            ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR.to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "color".to_string(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
+                            .into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "start".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "end".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "mid".to_string(),
+                        kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                            .into_kind_data().into_optional(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
@@ -1279,8 +1320,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                     },
                     ftd::interpreter::Field {
                         name: "colors".to_string(),
-                        kind: ftd::interpreter::Kind::string().into_list()
-                            .into_kind_data(),
+                        kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR)
+                            .into_list().into_kind_data(),
                         mutable: false,
                         value: None,
                         line_number: 0,

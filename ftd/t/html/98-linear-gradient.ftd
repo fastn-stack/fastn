@@ -4,12 +4,26 @@
 padding.px: 15
 
 -- ftd.linear-gradient lg:
-direction.turn: 0.5
-colors: red, green
+direction: right
+colors: $color-values
 
--- ftd.linear-gradient lg2:
-direction: top
-colors: green, red
+-- ftd.linear-gradient lg-2:
+direction: top-right
+colors: $color-values-2
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: red
+-- ftd.linear-gradient-color: yellow
+
+-- end: color-values
+
+-- ftd.linear-gradient-color list color-values-2:
+
+-- ftd.linear-gradient-color: blue
+-- ftd.linear-gradient-color: green
+
+-- end: color-values-2
 
 -- ftd.color red-yellow: red
 dark: yellow
@@ -19,10 +33,8 @@ dark: blue
 
 -- ftd.row:
 width: fill-container
-background.linear-gradient: $lg
-background.linear-gradient if { counter % 3 == 1 }: $lg2
-/background.solid: $red-yellow
-background.solid if { counter % 3 == 2 }: $green-blue
+background.linear-gradient if { counter % 2 == 0 }: $lg
+background.linear-gradient if { counter % 2 == 1 }: $lg-2
 $on-click$: $ftd.increment($a = $counter)
 
 -- ftd.text: HELLO THERE

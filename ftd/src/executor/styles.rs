@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -38,6 +40,23 @@ impl Length {
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
         Length::from_values(value, doc, line_number)
+    }
+
+    fn from_optional_value(
+        or_type_value: Option<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Length>> {
+        if let Some(value) = or_type_value {
+            let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
+            if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+                if data.is_none() {
+                    return Ok(None);
+                }
+            }
+            return Ok(Some(Length::from_value(value, doc, line_number)?));
+        }
+        Ok(None)
     }
 
     fn from_values(
@@ -872,6 +891,160 @@ impl BackgroundImage {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct LinearGradientColor {
+    pub color: Color,
+    pub start: ftd::executor::Value<Option<Length>>,
+    pub end: ftd::executor::Value<Option<Length>>,
+    pub mid: ftd::executor::Value<Option<Length>>,
+}
+
+impl LinearGradientColor {
+    fn from_vec_values(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
+        let mut result = vec![];
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        match value.inner() {
+            Some(ftd::interpreter::Value::List { data, kind })
+                if kind
+                    .kind
+                    .get_name()
+                    .eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
+            {
+                for element in data.iter() {
+                    let ln = element.line_number();
+                    result.push(LinearGradientColor::from_value(
+                        element.to_owned(),
+                        doc,
+                        ln,
+                    )?)
+                }
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected list value of type `{}`, found: {:?}",
+                        ftd::interpreter::FTD_LINEAR_GRADIENT,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Ok(result)
+    }
+
+    fn from_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LinearGradientColor> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter::Value::Record { name, fields })
+                if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        ftd::executor::LinearGradientColor::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LinearGradientColor> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!(
+                        "`{}` field in ftd.linear-gradient-color not found",
+                        field_name
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })
+        };
+
+        let color = ftd::executor::Color::from_value(
+            get_property_value("color")?.clone(),
+            doc,
+            line_number,
+        )?;
+
+        let start = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("start").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("start")?
+                .into_property(ftd::interpreter::PropertySource::header("start"))],
+        );
+
+        let end = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("end").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("end")?
+                .into_property(ftd::interpreter::PropertySource::header("end"))],
+        );
+
+        let mid = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("mid").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("mid")?
+                .into_property(ftd::interpreter::PropertySource::header("mid"))],
+        );
+
+        Ok(ftd::executor::LinearGradientColor {
+            color,
+            start,
+            end,
+            mid,
+        })
+    }
+
+    pub fn to_css_string(&self) -> String {
+        let mut result = self.color.light.value.to_css_string();
+        if let Some(start) = self.start.value.as_ref() {
+            result.push_str(format!(" {}", start.to_css_string()).as_str());
+        }
+        if let Some(end) = self.end.value.as_ref() {
+            result.push_str(format!(" {}", end.to_css_string()).as_str());
+        }
+        if let Some(mid) = self.mid.value.as_ref() {
+            result.push_str(format!(", {}", mid.to_css_string()).as_str());
+        }
+        result
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum LinearGradientDirection {
     Angle(f64),
     Turn(f64),
@@ -976,7 +1149,7 @@ impl LinearGradientDirection {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct LinearGradient {
     pub direction: ftd::executor::Value<LinearGradientDirection>,
-    pub colors: ftd::executor::Value<Vec<String>>,
+    pub colors: ftd::executor::Value<Vec<LinearGradientColor>>,
 }
 
 impl LinearGradient {
@@ -1034,10 +1207,11 @@ impl LinearGradient {
         );
 
         let colors = ftd::executor::Value::new(
-            get_property_value("colors")?
-                .clone()
-                .resolve(&doc.itdoc(), line_number)?
-                .string_list(&doc.itdoc(), line_number)?,
+            ftd::executor::LinearGradientColor::from_vec_values(
+                get_property_value("colors")?.clone(),
+                doc,
+                line_number,
+            )?,
             Some(line_number),
             vec![get_property_value("colors")?
                 .into_property(ftd::interpreter::PropertySource::header("colors"))],
@@ -1050,7 +1224,11 @@ impl LinearGradient {
         format!(
             "linear-gradient({}, {})",
             self.direction.value.to_css_string(),
-            self.colors.value.join(", ")
+            self.colors
+                .value
+                .iter()
+                .map(|lc| lc.to_css_string())
+                .join(", ")
         )
     }
 }
