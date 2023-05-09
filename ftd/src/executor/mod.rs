@@ -22,7 +22,7 @@ pub use element::{
     HTMLData, Iframe, Image, ImageSrc, IterativeElement, RawElement, RawImage, Rive, Row, Text,
     TextInput, WebComponent,
 };
-pub use main::{ExecuteDoc, RT};
+pub use main::{Device, ExecuteDoc, RT};
 pub use rive::RiveData;
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BackgroundImage, BackgroundPosition,

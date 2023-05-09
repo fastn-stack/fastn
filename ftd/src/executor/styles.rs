@@ -133,7 +133,7 @@ impl Length {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             Length::Px(px) => format!("{}px", px),
             Length::Percent(p) => format!("{}%", p),
@@ -142,7 +142,10 @@ impl Length {
             Length::Vw(vw) => format!("{}vw", vw),
             Length::Em(em) => format!("{}em", em),
             Length::Rem(rem) => format!("{}rem", rem),
-            Length::Responsive(r) => r.desktop.to_css_string(),
+            Length::Responsive(r) => match device {
+                Some(ftd::executor::Device::Mobile) => r.mobile.to_css_string(device),
+                _ => r.desktop.to_css_string(device),
+            },
         }
     }
 
@@ -273,8 +276,12 @@ impl LengthPair {
         Ok(LengthPair { x, y })
     }
 
-    pub fn to_css_string(&self) -> String {
-        format!("{} {}", self.x.to_css_string(), self.y.to_css_string())
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
+        format!(
+            "{} {}",
+            self.x.to_css_string(device),
+            self.y.to_css_string(device)
+        )
     }
 }
 
@@ -654,11 +661,11 @@ impl Resizing {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             Resizing::HugContent => "fit-content".to_string(),
             Resizing::FillContainer => "100%".to_string(),
-            Resizing::Fixed(l) => l.to_css_string(),
+            Resizing::Fixed(l) => l.to_css_string(device),
             Resizing::Auto => "auto".to_string(),
         }
     }
@@ -856,16 +863,16 @@ impl BackgroundImage {
         }
     }
 
-    pub fn to_size_css_string(&self) -> String {
+    pub fn to_size_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self.size.value.as_ref() {
-            Some(s) => s.to_css_string(),
+            Some(s) => s.to_css_string(device),
             None => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
         }
     }
 
-    pub fn to_position_css_string(&self) -> String {
+    pub fn to_position_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self.position.value.as_ref() {
-            Some(s) => s.to_css_string(),
+            Some(s) => s.to_css_string(device),
             None => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
         }
     }
@@ -1159,20 +1166,20 @@ impl Background {
         }
     }
 
-    pub fn to_image_size_css_string(&self) -> String {
+    pub fn to_image_size_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::Image(i) => i.to_size_css_string(),
+            ftd::executor::Background::Image(i) => i.to_size_css_string(device),
             ftd::executor::Background::LinearGradient(_) => {
                 ftd::interpreter::FTD_IGNORE_KEY.to_string()
             }
         }
     }
 
-    pub fn to_image_position_css_string(&self) -> String {
+    pub fn to_image_position_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::Image(i) => i.to_position_css_string(),
+            ftd::executor::Background::Image(i) => i.to_position_css_string(device),
             ftd::executor::Background::LinearGradient(_) => {
                 ftd::interpreter::FTD_IGNORE_KEY.to_string()
             }
@@ -1348,12 +1355,12 @@ impl BackgroundSize {
         }
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::BackgroundSize::Auto => "auto".to_string(),
             ftd::executor::BackgroundSize::Cover => "cover".to_string(),
             ftd::executor::BackgroundSize::Contain => "contain".to_string(),
-            ftd::executor::BackgroundSize::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundSize::Length(l) => l.to_css_string(device),
         }
     }
 }
@@ -1455,7 +1462,7 @@ impl BackgroundPosition {
         }
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::BackgroundPosition::Left => "left".to_string(),
             ftd::executor::BackgroundPosition::Center => "center".to_string(),
@@ -1469,7 +1476,7 @@ impl BackgroundPosition {
             ftd::executor::BackgroundPosition::RightTop => "right top".to_string(),
             ftd::executor::BackgroundPosition::RightCenter => "right center".to_string(),
             ftd::executor::BackgroundPosition::RightBottom => "right bottom".to_string(),
-            ftd::executor::BackgroundPosition::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundPosition::Length(l) => l.to_css_string(device),
         }
     }
 }
@@ -1598,11 +1605,11 @@ impl Shadow {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
-        let x_offset = self.x_offset.value.to_css_string();
-        let y_offset = self.y_offset.value.to_css_string();
-        let blur = self.blur.value.to_css_string();
-        let spread = self.spread.value.to_css_string();
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
+        let x_offset = self.x_offset.value.to_css_string(device);
+        let y_offset = self.y_offset.value.to_css_string(device);
+        let blur = self.blur.value.to_css_string(device);
+        let spread = self.spread.value.to_css_string(device);
         let inset = match self.inset.value {
             true => "inset".to_string(),
             false => "".to_string(),
@@ -1914,18 +1921,9 @@ impl Spacing {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_gap_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
-            Spacing::SpaceBetween => "space-between".to_string(),
-            Spacing::SpaceEvenly => "space-evenly".to_string(),
-            Spacing::SpaceAround => "space-around".to_string(),
-            Spacing::Fixed(f) => f.to_css_string(),
-        }
-    }
-
-    pub fn to_gap_css_string(&self) -> String {
-        match self {
-            Spacing::Fixed(f) => f.to_css_string(),
+            Spacing::Fixed(f) => f.to_css_string(device),
             _ => "0".to_string(),
         }
     }
@@ -2761,35 +2759,58 @@ impl ResponsiveType {
         ))
     }
 
-    pub fn to_css_font_size(&self) -> Option<String> {
-        self.desktop.size.as_ref().map(|v| v.to_css_string())
+    pub fn to_css_font_size(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.size.as_ref().map(|v| v.to_css_string())
+            }
+            _ => self.desktop.size.as_ref().map(|v| v.to_css_string()),
+        }
     }
 
     pub fn font_size_pattern() -> (String, bool) {
         ("({0})[\"size\"]".to_string(), true)
     }
 
-    pub fn to_css_line_height(&self) -> Option<String> {
-        self.desktop.line_height.as_ref().map(|v| v.to_css_string())
+    pub fn to_css_line_height(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.line_height.as_ref().map(|v| v.to_css_string())
+            }
+            _ => self.desktop.line_height.as_ref().map(|v| v.to_css_string()),
+        }
     }
 
     pub fn line_height_pattern() -> (String, bool) {
         ("({0})[\"line-height\"]".to_string(), true)
     }
 
-    pub fn to_css_letter_spacing(&self) -> Option<String> {
-        self.desktop
-            .letter_spacing
-            .as_ref()
-            .map(|v| v.to_css_string())
+    pub fn to_css_letter_spacing(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => self
+                .mobile
+                .letter_spacing
+                .as_ref()
+                .map(|v| v.to_css_string()),
+            _ => self
+                .desktop
+                .letter_spacing
+                .as_ref()
+                .map(|v| v.to_css_string()),
+        }
     }
 
     pub fn letter_spacing_pattern() -> (String, bool) {
         ("({0})[\"letter-spacing\"]".to_string(), true)
     }
 
-    pub fn to_css_weight(&self) -> Option<String> {
-        self.desktop.weight.as_ref().map(|v| v.to_string())
+    pub fn to_css_weight(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.weight.as_ref().map(|v| v.to_string())
+            }
+            _ => self.desktop.weight.as_ref().map(|v| v.to_string()),
+        }
     }
 
     pub fn weight_pattern() -> (String, bool) {
