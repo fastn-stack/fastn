@@ -975,12 +975,32 @@ window.ftd.dependencies.eval_background_image = function (bg, data) {
         }
     }
     else if (typeof bg === 'object' && !!bg && "colors" in bg) {
-        var colors = bg.colors;
+        var colors = "";
         var direction = "to bottom";
         if ("direction" in bg) {
             direction = bg.direction;
         }
-        return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
+        var colors_vec = bg.colors;
+        for (var c of colors_vec) {
+            if (typeof c === 'object' && !!c && "color" in c) {
+                let color_value = c.color;
+                if (typeof color_value === 'object' && !!color_value && "light" in color_value && "dark" in color_value) {
+                    if (colors) {
+                        colors = data["ftd#dark-mode"] ? `${colors}, ${color_value.dark}` : `${colors}, ${color_value.light}`;
+                    }
+                    else {
+                        colors = data["ftd#dark-mode"] ? `${color_value.dark}` : `${color_value.light}`;
+                    }
+                    if ("start" in c)
+                        colors = `${colors} ${c.start}`;
+                    if ("end" in c)
+                        colors = `${colors} ${c.end}`;
+                    if ("mid" in c)
+                        colors = `${colors}, ${c.mid}`;
+                }
+            }
+        }
+        return "linear-gradient(" + direction + ", " + colors + ")";
     }
     else {
         return null;
