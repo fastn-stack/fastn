@@ -89,20 +89,52 @@ impl State {
         &self.window
     }
 
-    fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
-        todo!()
+    pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
+        if new_size.width > 0 && new_size.height > 0 {
+            self.size = new_size;
+            self.config.width = new_size.width;
+            self.config.height = new_size.height;
+            self.surface.configure(&self.device, &self.config);
+        }
     }
 
-    fn input(&mut self, event: &winit::event::WindowEvent) -> bool {
-        todo!()
+    fn input(&mut self, _event: &winit::event::WindowEvent) -> bool {
+        false
     }
 
-    fn update(&mut self) {
-        todo!()
-    }
+    fn update(&mut self) {}
 
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
-        todo!()
+        let output = self.surface.get_current_texture()?;
+        let view = output.texture.create_view(&wgpu::TextureViewDescriptor::default());
+        let mut encoder = self.device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+            label: Some("Render Encoder"),
+        });
+
+        {
+            let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: Some("Render Pass"),
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(wgpu::Color {
+                            r: 0.1,
+                            g: 0.2,
+                            b: 0.3,
+                            a: 1.0,
+                        }),
+                        store: true,
+                    },
+                })],
+                depth_stencil_attachment: None,
+            });
+        }
+
+        self.queue.submit(std::iter::once(encoder.finish()));
+        output.present();
+
+        Ok(())
     }
 }
 
@@ -119,12 +151,12 @@ pub async fn render(mut w: fastn_surface::Document) {
 
     let mut state = State::new(window).await;
 
-    /*
+
     event_loop.run(move |event, _, control_flow| match event {
         winit::event::Event::WindowEvent {
             ref event,
             window_id,
-        } if window_id == window.id() => match event {
+        } if window_id == state.window().id() => match event {
             winit::event::WindowEvent::CloseRequested
             | winit::event::WindowEvent::KeyboardInput {
                 input:
@@ -135,10 +167,33 @@ pub async fn render(mut w: fastn_surface::Document) {
                     },
                 ..
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
+            winit::event::WindowEvent::Resized(physical_size) => {
+                state.resize(*physical_size);
+            }
+            winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
+                state.resize(**new_inner_size);
+            }
             _ => {
                 dbg!(event);
             }
         },
+        winit::event::Event::RedrawRequested(window_id) if window_id == state.window().id() => {
+            state.update();
+            match state.render() {
+                Ok(_) => {}
+                // Reconfigure the surface if lost
+                Err(wgpu::SurfaceError::Lost) => state.resize(state.size),
+                // The system is out of memory, we should probably quit
+                Err(wgpu::SurfaceError::OutOfMemory) => *control_flow = winit::event_loop::ControlFlow::Exit,
+                // All other errors (Outdated, Timeout) should be resolved by the next frame
+                Err(e) => eprintln!("{:?}", e),
+            }
+        }
+        winit::event::Event::MainEventsCleared => {
+            // RedrawRequested will only trigger once, unless we manually
+            // request it.
+            // state.window().request_redraw();
+        }
         _ => {
             // by default the event_loop keeps calling this function, we can set it to ::Wait
             // to wait till the next event occurs.
@@ -146,5 +201,5 @@ pub async fn render(mut w: fastn_surface::Document) {
             *control_flow = winit::event_loop::ControlFlow::Wait;
         }
     })
-     */
+
 }
