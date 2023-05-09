@@ -72,6 +72,7 @@ width: fill-container
 -- ftd.desktop:
 
 -- ftd.text: $grid-view.title
+if: { grid-view.title != NULL }
 role: $inherited.types.heading-small
 color: $inherited.colors.text
 width: fill-container
@@ -83,6 +84,7 @@ margin-top.px: 12
 -- ftd.mobile:
 
 -- ftd.text: $grid-view.title
+if: { grid-view.title != NULL }
 role: $inherited.types.copy-large
 color: $inherited.colors.text
 width: fill-container
