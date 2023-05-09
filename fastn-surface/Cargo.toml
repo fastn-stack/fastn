@@ -16,3 +16,4 @@ taffy.workspace = true
 serde.workspace = true
 slotmap.workspace = true
 once_cell.workspace = true
+tokio.workspace = true

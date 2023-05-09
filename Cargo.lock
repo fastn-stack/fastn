@@ -1723,6 +1723,7 @@ dependencies = [
  "serde",
  "slotmap",
  "taffy 0.3.12",
+ "tokio",
  "wgpu",
  "winit",
 ]

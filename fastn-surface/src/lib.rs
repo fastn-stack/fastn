@@ -12,11 +12,11 @@ extern crate self as fastn_surface;
 #[cfg(feature = "native")]
 pub mod wgpu;
 
-mod element;
 mod document;
+mod element;
 
-pub use element::{Container, Dimension, Element, Image, Text};
 pub use document::Document;
+pub use element::{Container, Dimension, Element, Image, Text};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 
