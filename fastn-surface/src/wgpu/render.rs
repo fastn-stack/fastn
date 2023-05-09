@@ -7,6 +7,7 @@ struct State {
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
     window: winit::window::Window,
+    clear_color: wgpu::Color,
 }
 impl State {
     // Creating some of the wgpu types requires async code
@@ -82,6 +83,12 @@ impl State {
             size,
             window,
             config,
+            clear_color: wgpu::Color {
+                r: 0.2,
+                g: 0.2,
+                b: 0.4,
+                a: 1.0,
+            }
         }
     }
 
@@ -118,12 +125,7 @@ impl State {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
-                        }),
+                        load: wgpu::LoadOp::Clear(self.clear_color),
                         store: true,
                     },
                 })],
@@ -135,6 +137,15 @@ impl State {
         output.present();
 
         Ok(())
+    }
+
+    fn set_color(&mut self, position: &winit::dpi::PhysicalPosition<f64>) {
+        self.clear_color = wgpu::Color {
+            r: position.x as f64 / self.size.width as f64,
+            g: position.y as f64 / self.size.height as f64,
+            b: 1.0,
+            a: 1.0,
+        };
     }
 }
 
@@ -169,12 +180,18 @@ pub async fn render(mut w: fastn_surface::Document) {
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
             winit::event::WindowEvent::Resized(physical_size) => {
                 state.resize(*physical_size);
+                state.window().request_redraw();
             }
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                 state.resize(**new_inner_size);
+                state.window().request_redraw();
+            }
+            winit::event::WindowEvent::CursorMoved {position, ..} => {
+                state.set_color(position);
+                state.window().request_redraw();
             }
             _ => {
-                dbg!(event);
+                // dbg!(event);
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window().id() => {
@@ -197,7 +214,7 @@ pub async fn render(mut w: fastn_surface::Document) {
         _ => {
             // by default the event_loop keeps calling this function, we can set it to ::Wait
             // to wait till the next event occurs.
-            dbg!(event, &control_flow);
+            // dbg!(event, &control_flow);
             *control_flow = winit::event_loop::ControlFlow::Wait;
         }
     })
