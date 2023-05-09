@@ -4,7 +4,7 @@
 padding.px: 15
 
 -- ftd.linear-gradient lg:
-direction: right
+direction: bottom-left
 colors: $color-values
 
 -- ftd.linear-gradient lg-2:
@@ -33,7 +33,7 @@ dark: blue
 
 -- ftd.row:
 width: fill-container
-background.linear-gradient if { counter % 2 == 0 }: $lg
+background.linear-gradient: $lg
 background.linear-gradient if { counter % 2 == 1 }: $lg-2
 $on-click$: $ftd.increment($a = $counter)
 

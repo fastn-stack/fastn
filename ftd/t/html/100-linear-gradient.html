@@ -50,7 +50,7 @@
 }
 }
 ],
-"direction": "right"
+"direction": "to bottom left"
 },
 "foo#lg-2": {
 "colors": [
@@ -67,7 +67,7 @@
 }
 }
 ],
-"direction": "top-right"
+"direction": "to top right"
 },
 "ftd#breakpoint-width": {
 "mobile": 768
@@ -818,7 +818,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 15px" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="background-image: linear-gradient(90deg, rgba(255,0,0,1), rgba(255,255,0,1)); cursor: pointer; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">HELLO THERE</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 15px" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="background-image: linear-gradient(225deg, rgba(255,0,0,1), rgba(255,255,0,1)); cursor: pointer; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">HELLO THERE</div></div></div>
 
 
 <script>
@@ -1824,7 +1824,8 @@ colors = `${colors}, ${c.mid}`;
 }
 }
 }
-return "linear-gradient(" + direction + ", " + colors + ")";
+var res = "linear-gradient(" + direction + ", " + colors + ")";
+return res;
 }
 else {
 return null;
@@ -2021,72 +2022,47 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#
 }
 window.node_change_main["1:main__background-color"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
 return (resolve_reference("foo#counter", data)%2==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-color"] = null }
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-image"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
 return (resolve_reference("foo#counter", data)%2==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-image"] = null }
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-position"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
 return (resolve_reference("foo#counter", data)%2==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-position"] = null }
+else {document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-repeat"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
 return (resolve_reference("foo#counter", data)%2==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = null }
+else {document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-size"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
 return (resolve_reference("foo#counter", data)%2==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-size"] = null }
+else {document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#counter"] = function (data, new_value, remaining) {
