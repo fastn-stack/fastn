@@ -972,7 +972,7 @@ $on-mouse-enter$: $ftd.set-bool($a = $github-star-cta.mousein, v = true )
 $on-mouse-leave$: $ftd.set-bool($a = $github-star-cta.mousein, v = false )
 link: $github-star-cta.link
 align-content: center
-padding-horizontal.px: 36
+padding-horizontal.px: 32
 padding-vertical.px: 10
 border-radius.px: 80
 
