@@ -22,14 +22,14 @@ pub use element::{
     HTMLData, Iframe, Image, ImageSrc, IterativeElement, RawElement, RawImage, Rive, Row, Text,
     TextInput, WebComponent,
 };
-pub use main::{ExecuteDoc, RT};
+pub use main::{Device, ExecuteDoc, RT};
 pub use rive::RiveData;
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, BackgroundImage, BackgroundPosition,
     BackgroundRepeat, BackgroundSize, BorderStyle, Color, ColorValue, Cursor, Display, FontSize,
-    Length, LineClamp, LinearGradient, LinearGradientDirection, Loading, Overflow, Region, Resize,
-    Resizing, ResponsiveType, Shadow, Spacing, TextAlign, TextInputType, TextStyle, TextTransform,
-    TextWeight, WhiteSpace,
+    Length, LineClamp, LinearGradient, LinearGradientColor, LinearGradientDirection, Loading,
+    Overflow, Region, Resize, Resizing, ResponsiveType, Shadow, Spacing, TextAlign, TextInputType,
+    TextStyle, TextTransform, TextWeight, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;

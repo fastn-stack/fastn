@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -38,6 +40,23 @@ impl Length {
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
         Length::from_values(value, doc, line_number)
+    }
+
+    fn from_optional_value(
+        or_type_value: Option<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Length>> {
+        if let Some(value) = or_type_value {
+            let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
+            if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+                if data.is_none() {
+                    return Ok(None);
+                }
+            }
+            return Ok(Some(Length::from_value(value, doc, line_number)?));
+        }
+        Ok(None)
     }
 
     fn from_values(
@@ -133,7 +152,7 @@ impl Length {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             Length::Px(px) => format!("{}px", px),
             Length::Percent(p) => format!("{}%", p),
@@ -142,7 +161,10 @@ impl Length {
             Length::Vw(vw) => format!("{}vw", vw),
             Length::Em(em) => format!("{}em", em),
             Length::Rem(rem) => format!("{}rem", rem),
-            Length::Responsive(r) => r.desktop.to_css_string(),
+            Length::Responsive(r) => match device {
+                Some(ftd::executor::Device::Mobile) => r.mobile.to_css_string(device),
+                _ => r.desktop.to_css_string(device),
+            },
         }
     }
 
@@ -273,8 +295,12 @@ impl LengthPair {
         Ok(LengthPair { x, y })
     }
 
-    pub fn to_css_string(&self) -> String {
-        format!("{} {}", self.x.to_css_string(), self.y.to_css_string())
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
+        format!(
+            "{} {}",
+            self.x.to_css_string(device),
+            self.y.to_css_string(device)
+        )
     }
 }
 
@@ -654,11 +680,11 @@ impl Resizing {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             Resizing::HugContent => "fit-content".to_string(),
             Resizing::FillContainer => "100%".to_string(),
-            Resizing::Fixed(l) => l.to_css_string(),
+            Resizing::Fixed(l) => l.to_css_string(device),
             Resizing::Auto => "auto".to_string(),
         }
     }
@@ -856,18 +882,172 @@ impl BackgroundImage {
         }
     }
 
-    pub fn to_size_css_string(&self) -> String {
+    pub fn to_size_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self.size.value.as_ref() {
-            Some(s) => s.to_css_string(),
+            Some(s) => s.to_css_string(device),
             None => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
         }
     }
 
-    pub fn to_position_css_string(&self) -> String {
+    pub fn to_position_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self.position.value.as_ref() {
-            Some(s) => s.to_css_string(),
+            Some(s) => s.to_css_string(device),
             None => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
         }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct LinearGradientColor {
+    pub color: Color,
+    pub start: ftd::executor::Value<Option<Length>>,
+    pub end: ftd::executor::Value<Option<Length>>,
+    pub mid: ftd::executor::Value<Option<Length>>,
+}
+
+impl LinearGradientColor {
+    fn from_vec_values(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
+        let mut result = vec![];
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        match value.inner() {
+            Some(ftd::interpreter::Value::List { data, kind })
+                if kind
+                    .kind
+                    .get_name()
+                    .eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
+            {
+                for element in data.iter() {
+                    let ln = element.line_number();
+                    result.push(LinearGradientColor::from_value(
+                        element.to_owned(),
+                        doc,
+                        ln,
+                    )?)
+                }
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected list value of type `{}`, found: {:?}",
+                        ftd::interpreter::FTD_LINEAR_GRADIENT,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Ok(result)
+    }
+
+    fn from_value(
+        value: ftd::interpreter::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LinearGradientColor> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter::Value::Record { name, fields })
+                if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        ftd::executor::LinearGradientColor::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<LinearGradientColor> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!(
+                        "`{}` field in ftd.linear-gradient-color not found",
+                        field_name
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })
+        };
+
+        let color = ftd::executor::Color::from_value(
+            get_property_value("color")?.clone(),
+            doc,
+            line_number,
+        )?;
+
+        let start = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("start").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("start")?
+                .into_property(ftd::interpreter::PropertySource::header("start"))],
+        );
+
+        let end = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("end").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("end")?
+                .into_property(ftd::interpreter::PropertySource::header("end"))],
+        );
+
+        let mid = ftd::executor::Value::new(
+            ftd::executor::Length::from_optional_value(
+                values.get("mid").cloned(),
+                doc,
+                line_number,
+            )?,
+            Some(line_number),
+            vec![get_property_value("mid")?
+                .into_property(ftd::interpreter::PropertySource::header("mid"))],
+        );
+
+        Ok(ftd::executor::LinearGradientColor {
+            color,
+            start,
+            end,
+            mid,
+        })
+    }
+
+    pub fn to_css_string(&self) -> String {
+        let mut result = self.color.light.value.to_css_string();
+        if let Some(start) = self.start.value.as_ref() {
+            result.push_str(format!(" {}", start.to_css_string()).as_str());
+        }
+        if let Some(end) = self.end.value.as_ref() {
+            result.push_str(format!(" {}", end.to_css_string()).as_str());
+        }
+        if let Some(mid) = self.mid.value.as_ref() {
+            result.push_str(format!(", {}", mid.to_css_string()).as_str());
+        }
+        result
     }
 }
 
@@ -976,7 +1156,7 @@ impl LinearGradientDirection {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct LinearGradient {
     pub direction: ftd::executor::Value<LinearGradientDirection>,
-    pub colors: ftd::executor::Value<Vec<String>>,
+    pub colors: ftd::executor::Value<Vec<LinearGradientColor>>,
 }
 
 impl LinearGradient {
@@ -1034,10 +1214,11 @@ impl LinearGradient {
         );
 
         let colors = ftd::executor::Value::new(
-            get_property_value("colors")?
-                .clone()
-                .resolve(&doc.itdoc(), line_number)?
-                .string_list(&doc.itdoc(), line_number)?,
+            ftd::executor::LinearGradientColor::from_vec_values(
+                get_property_value("colors")?.clone(),
+                doc,
+                line_number,
+            )?,
             Some(line_number),
             vec![get_property_value("colors")?
                 .into_property(ftd::interpreter::PropertySource::header("colors"))],
@@ -1050,7 +1231,11 @@ impl LinearGradient {
         format!(
             "linear-gradient({}, {})",
             self.direction.value.to_css_string(),
-            self.colors.value.join(", ")
+            self.colors
+                .value
+                .iter()
+                .map(|lc| lc.to_css_string())
+                .join(", ")
         )
     }
 }
@@ -1159,20 +1344,20 @@ impl Background {
         }
     }
 
-    pub fn to_image_size_css_string(&self) -> String {
+    pub fn to_image_size_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::Image(i) => i.to_size_css_string(),
+            ftd::executor::Background::Image(i) => i.to_size_css_string(device),
             ftd::executor::Background::LinearGradient(_) => {
                 ftd::interpreter::FTD_IGNORE_KEY.to_string()
             }
         }
     }
 
-    pub fn to_image_position_css_string(&self) -> String {
+    pub fn to_image_position_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::Background::Solid(_) => ftd::interpreter::FTD_IGNORE_KEY.to_string(),
-            ftd::executor::Background::Image(i) => i.to_position_css_string(),
+            ftd::executor::Background::Image(i) => i.to_position_css_string(device),
             ftd::executor::Background::LinearGradient(_) => {
                 ftd::interpreter::FTD_IGNORE_KEY.to_string()
             }
@@ -1348,12 +1533,12 @@ impl BackgroundSize {
         }
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::BackgroundSize::Auto => "auto".to_string(),
             ftd::executor::BackgroundSize::Cover => "cover".to_string(),
             ftd::executor::BackgroundSize::Contain => "contain".to_string(),
-            ftd::executor::BackgroundSize::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundSize::Length(l) => l.to_css_string(device),
         }
     }
 }
@@ -1455,7 +1640,7 @@ impl BackgroundPosition {
         }
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
             ftd::executor::BackgroundPosition::Left => "left".to_string(),
             ftd::executor::BackgroundPosition::Center => "center".to_string(),
@@ -1469,7 +1654,7 @@ impl BackgroundPosition {
             ftd::executor::BackgroundPosition::RightTop => "right top".to_string(),
             ftd::executor::BackgroundPosition::RightCenter => "right center".to_string(),
             ftd::executor::BackgroundPosition::RightBottom => "right bottom".to_string(),
-            ftd::executor::BackgroundPosition::Length(l) => l.to_css_string(),
+            ftd::executor::BackgroundPosition::Length(l) => l.to_css_string(device),
         }
     }
 }
@@ -1598,11 +1783,11 @@ impl Shadow {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
-        let x_offset = self.x_offset.value.to_css_string();
-        let y_offset = self.y_offset.value.to_css_string();
-        let blur = self.blur.value.to_css_string();
-        let spread = self.spread.value.to_css_string();
+    pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
+        let x_offset = self.x_offset.value.to_css_string(device);
+        let y_offset = self.y_offset.value.to_css_string(device);
+        let blur = self.blur.value.to_css_string(device);
+        let spread = self.spread.value.to_css_string(device);
         let inset = match self.inset.value {
             true => "inset".to_string(),
             false => "".to_string(),
@@ -1914,18 +2099,9 @@ impl Spacing {
         ))
     }
 
-    pub fn to_css_string(&self) -> String {
+    pub fn to_gap_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
-            Spacing::SpaceBetween => "space-between".to_string(),
-            Spacing::SpaceEvenly => "space-evenly".to_string(),
-            Spacing::SpaceAround => "space-around".to_string(),
-            Spacing::Fixed(f) => f.to_css_string(),
-        }
-    }
-
-    pub fn to_gap_css_string(&self) -> String {
-        match self {
-            Spacing::Fixed(f) => f.to_css_string(),
+            Spacing::Fixed(f) => f.to_css_string(device),
             _ => "0".to_string(),
         }
     }
@@ -2761,35 +2937,58 @@ impl ResponsiveType {
         ))
     }
 
-    pub fn to_css_font_size(&self) -> Option<String> {
-        self.desktop.size.as_ref().map(|v| v.to_css_string())
+    pub fn to_css_font_size(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.size.as_ref().map(|v| v.to_css_string())
+            }
+            _ => self.desktop.size.as_ref().map(|v| v.to_css_string()),
+        }
     }
 
     pub fn font_size_pattern() -> (String, bool) {
         ("({0})[\"size\"]".to_string(), true)
     }
 
-    pub fn to_css_line_height(&self) -> Option<String> {
-        self.desktop.line_height.as_ref().map(|v| v.to_css_string())
+    pub fn to_css_line_height(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.line_height.as_ref().map(|v| v.to_css_string())
+            }
+            _ => self.desktop.line_height.as_ref().map(|v| v.to_css_string()),
+        }
     }
 
     pub fn line_height_pattern() -> (String, bool) {
         ("({0})[\"line-height\"]".to_string(), true)
     }
 
-    pub fn to_css_letter_spacing(&self) -> Option<String> {
-        self.desktop
-            .letter_spacing
-            .as_ref()
-            .map(|v| v.to_css_string())
+    pub fn to_css_letter_spacing(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => self
+                .mobile
+                .letter_spacing
+                .as_ref()
+                .map(|v| v.to_css_string()),
+            _ => self
+                .desktop
+                .letter_spacing
+                .as_ref()
+                .map(|v| v.to_css_string()),
+        }
     }
 
     pub fn letter_spacing_pattern() -> (String, bool) {
         ("({0})[\"letter-spacing\"]".to_string(), true)
     }
 
-    pub fn to_css_weight(&self) -> Option<String> {
-        self.desktop.weight.as_ref().map(|v| v.to_string())
+    pub fn to_css_weight(&self, device: &Option<ftd::executor::Device>) -> Option<String> {
+        match device {
+            Some(ftd::executor::Device::Mobile) => {
+                self.mobile.weight.as_ref().map(|v| v.to_string())
+            }
+            _ => self.desktop.weight.as_ref().map(|v| v.to_string()),
+        }
     }
 
     pub fn weight_pattern() -> (String, bool) {

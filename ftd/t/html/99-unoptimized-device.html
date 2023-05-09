@@ -6,69 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#color-values": [
-{
-"color": {
-"dark": "red",
-"light": "red"
-}
-},
-{
-"color": {
-"dark": "yellow",
-"light": "yellow"
-}
-}
-],
-"foo#color-values-2": [
-{
-"color": {
-"dark": "blue",
-"light": "blue"
-}
-},
-{
-"color": {
-"dark": "green",
-"light": "green"
-}
-}
-],
-"foo#counter": 0,
-"foo#lg": {
-"colors": [
-{
-"color": {
-"dark": "red",
-"light": "red"
-}
-},
-{
-"color": {
-"dark": "yellow",
-"light": "yellow"
-}
-}
-],
-"direction": "right"
-},
-"foo#lg-2": {
-"colors": [
-{
-"color": {
-"dark": "blue",
-"light": "blue"
-}
-},
-{
-"color": {
-"dark": "green",
-"light": "green"
-}
-}
-],
-"direction": "top-right"
-},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -818,7 +755,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 15px" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="background-image: linear-gradient(90deg, rgba(255,0,0,1), rgba(255,255,0,1)); cursor: pointer; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">HELLO THERE</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_md">From desktop</div><div data-id="0,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,0,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-subtitle</div></div><div data-id="0,0,1,0,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,0,1,0,1,1,0:main" style="" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div><div data-id="0,0,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,0,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,0,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,1,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,1,1,0,0:main" style="" class="ft_common ft_md">Desktop print-subtitle</div></div><div data-id="0,0,1,1,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,0,1,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div><div data-id="0,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,0:main" style="" class="ft_common ft_md">From mobile</div><div data-id="0,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,0:main" style="" class="ft_common ft_column"><div data-id="0,1,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,1,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,1,1,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-subtitle</div></div><div data-id="0,1,1,0,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,1,0,1,1,0:main" style="" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div><div data-id="0,1,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,0:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,0,0:main" style="" class="ft_common ft_md">Desktop print-subtitle</div></div><div data-id="0,1,1,1,1,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,1,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div></div></div>
 
 
 <script>
@@ -1799,32 +1736,12 @@ return null;
 }
 }
 else if (typeof bg === 'object' && !!bg && "colors" in bg) {
-var colors = "";
+var colors = bg.colors;
 var direction = "to bottom";
 if ("direction" in bg) {
 direction = bg.direction;
 }
-var colors_vec = bg.colors;
-for (var c of colors_vec) {
-if (typeof c === 'object' && !!c && "color" in c) {
-let color_value = c.color;
-if (typeof color_value === 'object' && !!color_value && "light" in color_value && "dark" in color_value) {
-if (colors) {
-colors = data["ftd#dark-mode"] ? `${colors}, ${color_value.dark}` : `${colors}, ${color_value.light}`;
-}
-else {
-colors = data["ftd#dark-mode"] ? `${color_value.dark}` : `${color_value.light}`;
-}
-if ("start" in c)
-colors = `${colors} ${c.start}`;
-if ("end" in c)
-colors = `${colors} ${c.end}`;
-if ("mid" in c)
-colors = `${colors}, ${c.mid}`;
-}
-}
-}
-return "linear-gradient(" + direction + ", " + colors + ")";
+return "linear-gradient(" + direction + ", " + colors.join(", ") + ")";
 }
 else {
 return null;
@@ -2016,98 +1933,144 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#counter", data);
-}
-window.node_change_main["1:main__background-color"] = function(data) {
+window.node_change_main["0,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
+document.querySelector(`[data-id="0,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0:main");
 }
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
-}
-else { document.querySelector(`[data-id="1:main"]`).style["background-color"] = null }
+else {document.querySelector(`[data-id="0,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0:main");}
 }
 
-window.node_change_main["1:main__background-image"] = function(data) {
+window.node_change_main["0,0,1,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
+document.querySelector(`[data-id="0,0,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,0:main");
 }
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
-}
-else { document.querySelector(`[data-id="1:main"]`).style["background-image"] = null }
+else {document.querySelector(`[data-id="0,0,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,0:main");}
 }
 
-window.node_change_main["1:main__background-position"] = function(data) {
+window.node_change_main["0,0,1,0,1,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
+document.querySelector(`[data-id="0,0,1,0,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,0,1,0:main");
 }
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+else {document.querySelector(`[data-id="0,0,1,0,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,0,1,0:main");}
+}
+window.node_change_main["0,0,1,0,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
+document.querySelector(`[data-id="0,0,1,0,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,0,1,1:main");
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-position"] = null }
+else {document.querySelector(`[data-id="0,0,1,0,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,0,1,1:main");}
+}
+window.node_change_main["0,0,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="0,0,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,1:main");
+}
+else {document.querySelector(`[data-id="0,0,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,1:main");}
 }
 
-window.node_change_main["1:main__background-repeat"] = function(data) {
+window.node_change_main["0,0,1,1,1,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
+document.querySelector(`[data-id="0,0,1,1,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,1,1,0:main");
 }
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+else {document.querySelector(`[data-id="0,0,1,1,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,1,1,0:main");}
+}
+window.node_change_main["0,0,1,1,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
+document.querySelector(`[data-id="0,0,1,1,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0,1,1,1,1:main");
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = null }
+else {document.querySelector(`[data-id="0,0,1,1,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0,1,1,1,1:main");}
+}
+window.node_change_main["0,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="0,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1:main");
+}
+else {document.querySelector(`[data-id="0,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1:main");}
 }
 
-window.node_change_main["1:main__background-size"] = function(data) {
+window.node_change_main["0,1,1,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
+document.querySelector(`[data-id="0,1,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,0:main");
 }
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+else {document.querySelector(`[data-id="0,1,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,0:main");}
+}
+
+window.node_change_main["0,1,1,0,1,0:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
-document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
+document.querySelector(`[data-id="0,1,1,0,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,0,1,0:main");
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-size"] = null }
+else {document.querySelector(`[data-id="0,1,1,0,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,0,1,0:main");}
+}
+window.node_change_main["0,1,1,0,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="0,1,1,0,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,0,1,1:main");
+}
+else {document.querySelector(`[data-id="0,1,1,0,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,0,1,1:main");}
+}
+window.node_change_main["0,1,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="0,1,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,1:main");
+}
+else {document.querySelector(`[data-id="0,1,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,1:main");}
+}
+
+window.node_change_main["0,1,1,1,1,0:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="desktop");
+}()){
+document.querySelector(`[data-id="0,1,1,1,1,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,1,1,0:main");
+}
+else {document.querySelector(`[data-id="0,1,1,1,1,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,1,1,0:main");}
+}
+window.node_change_main["0,1,1,1,1,1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("ftd#device", data)=="mobile");
+}()){
+document.querySelector(`[data-id="0,1,1,1,1,1:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,1,1,1,1,1:main");
+}
+else {document.querySelector(`[data-id="0,1,1,1,1,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1,1,1,1,1:main");}
 }
 window.set_value_main = {};
-window.set_value_main["foo#counter"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#counter", remaining, new_value);
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#counter", "main");
-window.ftd.call_immutable_value_changes("foo#counter", "main");
-window.ftd.utils.node_change_call("main","0:main__text", data);
-window.ftd.utils.node_change_call("main","1:main__background-color", data);
-window.ftd.utils.node_change_call("main","1:main__background-image", data);
-window.ftd.utils.node_change_call("main","1:main__background-position", data);
-window.ftd.utils.node_change_call("main","1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1:main__background-size", data);
-};
-
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","1:main__background-image", data);
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,1,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,1,1,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1,1,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,1:main__display", data);
 };
 
 
