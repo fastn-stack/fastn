@@ -4,7 +4,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-pub fn render(mut w: fastn_surface::Window) {
+pub fn render(mut w: fastn_surface::Document) {
     env_logger::init();
 
     let event_loop = EventLoop::new();
@@ -22,11 +22,11 @@ pub fn render(mut w: fastn_surface::Window) {
             WindowEvent::CloseRequested
             | WindowEvent::KeyboardInput {
                 input:
-                    KeyboardInput {
-                        state: ElementState::Pressed,
-                        virtual_keycode: Some(VirtualKeyCode::Escape),
-                        ..
-                    },
+                KeyboardInput {
+                    state: ElementState::Pressed,
+                    virtual_keycode: Some(VirtualKeyCode::Escape),
+                    ..
+                },
                 ..
             } => *control_flow = ControlFlow::Exit,
             _ => {}

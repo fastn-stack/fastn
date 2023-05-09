@@ -10,13 +10,13 @@ extern crate self as fastn_surface;
 /// fastn-surface::UI also send UI events, like window resize, keyboard, mouse events etc. The
 /// event includes data about the event.
 #[cfg(feature = "native")]
-pub mod native;
+pub mod wgpu;
 
 mod element;
-mod window;
+mod document;
 
 pub use element::{Container, Dimension, Element, Image, Text};
-pub use window::Window;
+pub use document::Document;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 

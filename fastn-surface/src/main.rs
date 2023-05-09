@@ -1,8 +1,8 @@
 fn main() {
-    let window = fastn_surface::Window::default();
+    let doc = fastn_surface::Document::default();
 
     #[cfg(feature = "native")]
     {
-        fastn_surface::native::render(window);
+        fastn_surface::wgpu::render(doc);
     }
 }
