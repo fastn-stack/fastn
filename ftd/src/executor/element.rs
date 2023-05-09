@@ -2175,6 +2175,7 @@ pub fn common_from_properties(
     })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn container_from_properties(
     properties: &[ftd::interpreter::Property],
     arguments: &[ftd::interpreter::Argument],
