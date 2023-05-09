@@ -327,7 +327,8 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
             }
        }
 
-       return "linear-gradient(" + direction + ", " + colors + ")";
+       var res = "linear-gradient(" + direction + ", " + colors + ")";
+       return res;
    }
     else {
         return null;
