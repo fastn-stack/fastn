@@ -182,6 +182,7 @@ impl<'a> ExecuteDoc<'a> {
         local_container: &[usize],
         web_component_definition: ftd::interpreter::WebComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+        device: Option<ftd::executor::Device>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let local_variable_map = doc.insert_local_variables(
             web_component_definition.name.as_str(),
@@ -219,6 +220,7 @@ impl<'a> ExecuteDoc<'a> {
             name: instruction.name.to_string(),
             properties,
             line_number: instruction.line_number,
+            device,
         };
 
         Ok(ftd::executor::Element::WebComponent(web_component))
@@ -451,6 +453,7 @@ impl<'a> ExecuteDoc<'a> {
                             container.as_slice(),
                             web_component_definition,
                             &mut inherited_variables,
+                            device,
                         )?,
                     );
                     break;
@@ -526,6 +529,7 @@ impl<'a> ExecuteDoc<'a> {
                             &component_definition,
                             false,
                             &mut inherited_variables,
+                            device.clone(),
                         )?,
                     );
                     let children_instructions = ExecuteDoc::get_instructions_from_instructions(
@@ -760,6 +764,7 @@ impl<'a> ExecuteDoc<'a> {
         component_definition: &ftd::interpreter::ComponentDefinition,
         is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+        device: Option<ftd::executor::Device>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         ftd::executor::ExecuteDoc::add_colors_and_types_local_variable(
             instruction,
@@ -781,6 +786,7 @@ impl<'a> ExecuteDoc<'a> {
                     is_dummy,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?;
                 text.set_auto_id();
                 ftd::executor::Element::Text(text)
@@ -795,6 +801,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#boolean" => {
@@ -807,6 +814,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#decimal" => {
@@ -819,6 +827,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#rive" => {
@@ -831,6 +840,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#row" => ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
@@ -843,6 +853,7 @@ impl<'a> ExecuteDoc<'a> {
                 instruction.line_number,
                 vec![],
                 inherited_variables,
+                device,
             )?),
             "ftd#column" => {
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
@@ -855,6 +866,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                     vec![],
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#container" => ftd::executor::Element::Container(
@@ -868,6 +880,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                     vec![],
                     inherited_variables,
+                    device,
                 )?,
             ),
             "ftd#document" => {
@@ -913,6 +926,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#code" => {
@@ -925,6 +939,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#iframe" => {
@@ -937,6 +952,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             "ftd#text-input" => ftd::executor::Element::TextInput(
@@ -949,6 +965,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?,
             ),
             "ftd#checkbox" => {
@@ -961,6 +978,7 @@ impl<'a> ExecuteDoc<'a> {
                     local_container,
                     instruction.line_number,
                     inherited_variables,
+                    device,
                 )?)
             }
             _ => unimplemented!(),
@@ -968,8 +986,9 @@ impl<'a> ExecuteDoc<'a> {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Deserialize, Default, serde::Serialize)]
 pub enum Device {
+    #[default]
     Desktop,
     Mobile,
 }
@@ -988,6 +1007,14 @@ impl Device {
             Device::Desktop => "desktop",
             Device::Mobile => "mobile",
         }
+    }
+
+    pub(crate) fn is_mobile(&self) -> bool {
+        matches!(self, Device::Mobile)
+    }
+
+    pub(crate) fn is_desktop(&self) -> bool {
+        matches!(self, Device::Desktop)
     }
 
     fn add_condition(&self, instruction: &mut ftd::interpreter::Component, line_number: usize) {

@@ -14,6 +14,7 @@ pub struct Node {
     pub line_number: usize,
     pub raw_data: Option<RawNodeData>,
     pub web_component: Option<WebComponentData>,
+    pub device: Option<ftd::executor::Device>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
@@ -135,6 +136,7 @@ impl Node {
             line_number: common.line_number,
             raw_data: None,
             web_component: None,
+            device: common.device.to_owned(),
         }
     }
 
@@ -171,6 +173,7 @@ impl Node {
             display: s(display),
             raw_data: None,
             web_component: None,
+            device: common.device.to_owned(),
         }
     }
 
@@ -215,6 +218,7 @@ impl Node {
             display: s(display),
             raw_data: None,
             web_component: None,
+            device: common.device.to_owned(),
         }
     }
 
@@ -254,6 +258,7 @@ impl ftd::executor::Element {
                 line_number: *line_number,
                 raw_data: None,
                 web_component: None,
+                device: None,
             },
             ftd::executor::Element::RawElement(r) => r.to_node(doc_id, anchor_ids),
             ftd::executor::Element::IterativeElement(i) => i.to_node(doc_id, anchor_ids),
@@ -319,6 +324,7 @@ impl ftd::executor::RawElement {
                 iteration: None,
             }),
             web_component: None,
+            device: None,
         }
     }
 }
@@ -510,7 +516,7 @@ impl ftd::executor::Text {
             ftd::node::Value::from_executor_value(
                 self.text_indent
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_css_string(&self.common.device)))
                     .value,
                 self.text_indent.to_owned(),
                 None,
@@ -652,6 +658,7 @@ impl ftd::executor::Rive {
             line_number: self.common.line_number,
             raw_data: None,
             web_component: None,
+            device: self.common.device.to_owned(),
         }
     }
 
@@ -1172,7 +1179,10 @@ impl ftd::executor::Common {
                         self.sticky.to_owned(),
                         Some((s("if ({0}) {\"0px\"}"), true)),
                         doc_id,
-                        self.top.value.as_ref().map(|v| v.to_css_string()),
+                        self.top
+                            .value
+                            .as_ref()
+                            .map(|v| v.to_css_string(&self.device)),
                     ),
                 );
                 d.check_and_insert(
@@ -1182,7 +1192,10 @@ impl ftd::executor::Common {
                         self.sticky.to_owned(),
                         Some((s("if ({0}) {\"0px\"}"), true)),
                         doc_id,
-                        self.top.value.as_ref().map(|v| v.to_css_string()),
+                        self.top
+                            .value
+                            .as_ref()
+                            .map(|v| v.to_css_string(&self.device)),
                     ),
                 );
             }
@@ -1191,7 +1204,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "box-shadow",
             ftd::node::Value::from_executor_value(
-                self.shadow.value.as_ref().map(|v| v.to_css_string()),
+                self.shadow
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.shadow.to_owned(),
                 Some(ftd::executor::Shadow::box_shadow_pattern()),
                 doc_id,
@@ -1201,7 +1217,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "top",
             ftd::node::Value::from_executor_value(
-                self.top.value.as_ref().map(|v| v.to_css_string()),
+                self.top
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.top.to_owned(),
                 None,
                 doc_id,
@@ -1211,7 +1230,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "bottom",
             ftd::node::Value::from_executor_value(
-                self.bottom.value.as_ref().map(|v| v.to_css_string()),
+                self.bottom
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.bottom.to_owned(),
                 None,
                 doc_id,
@@ -1221,7 +1243,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "left",
             ftd::node::Value::from_executor_value(
-                self.left.value.as_ref().map(|v| v.to_css_string()),
+                self.left
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.left.to_owned(),
                 None,
                 doc_id,
@@ -1231,7 +1256,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "right",
             ftd::node::Value::from_executor_value(
-                self.right.value.as_ref().map(|v| v.to_css_string()),
+                self.right
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.right.to_owned(),
                 None,
                 doc_id,
@@ -1241,7 +1269,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                self.width.value.to_owned().map(|v| v.to_css_string()),
+                self.width
+                    .value
+                    .to_owned()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.width.to_owned(),
                 None,
                 doc_id,
@@ -1335,7 +1366,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_src_css_string()))
+                    .map(|v| v.map(|v| v.to_image_src_css_string(&self.device)))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_image_pattern()),
@@ -1361,7 +1392,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_size_css_string()))
+                    .map(|v| v.map(|v| v.to_image_size_css_string(&self.device)))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_size_pattern()),
@@ -1374,7 +1405,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.background
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_image_position_css_string()))
+                    .map(|v| v.map(|v| v.to_image_position_css_string(&self.device)))
                     .value,
                 self.background.to_owned(),
                 Some(ftd::executor::Background::background_position_pattern()),
@@ -1452,7 +1483,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.role
                     .to_owned()
-                    .map(|v| v.and_then(|v| v.to_css_font_size()))
+                    .map(|v| v.and_then(|v| v.to_css_font_size(&self.device)))
                     .value,
                 self.role.to_owned(),
                 Some(ftd::executor::ResponsiveType::font_size_pattern()),
@@ -1465,7 +1496,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.role
                     .to_owned()
-                    .map(|v| v.and_then(|v| v.to_css_line_height()))
+                    .map(|v| v.and_then(|v| v.to_css_line_height(&self.device)))
                     .value,
                 self.role.to_owned(),
                 Some(ftd::executor::ResponsiveType::line_height_pattern()),
@@ -1478,7 +1509,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.role
                     .to_owned()
-                    .map(|v| v.and_then(|v| v.to_css_letter_spacing()))
+                    .map(|v| v.and_then(|v| v.to_css_letter_spacing(&self.device)))
                     .value,
                 self.role.to_owned(),
                 Some(ftd::executor::ResponsiveType::letter_spacing_pattern()),
@@ -1491,7 +1522,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.role
                     .to_owned()
-                    .map(|v| v.and_then(|v| v.to_css_weight()))
+                    .map(|v| v.and_then(|v| v.to_css_weight(&self.device)))
                     .value,
                 self.role.to_owned(),
                 Some(ftd::executor::ResponsiveType::weight_pattern()),
@@ -1515,7 +1546,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                self.height.value.as_ref().map(|v| v.to_css_string()),
+                self.height
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.height.to_owned(),
                 None,
                 doc_id,
@@ -1525,7 +1559,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "padding",
             ftd::node::Value::from_executor_value(
-                self.padding.value.as_ref().map(|v| v.to_css_string()),
+                self.padding
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding.to_owned(),
                 None,
                 doc_id,
@@ -1538,7 +1575,7 @@ impl ftd::executor::Common {
                 self.padding_horizontal
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_horizontal.to_owned(),
                 None,
                 doc_id,
@@ -1551,7 +1588,7 @@ impl ftd::executor::Common {
                 self.padding_horizontal
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_horizontal.to_owned(),
                 None,
                 doc_id,
@@ -1564,7 +1601,7 @@ impl ftd::executor::Common {
                 self.padding_vertical
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_vertical.to_owned(),
                 None,
                 doc_id,
@@ -1577,7 +1614,7 @@ impl ftd::executor::Common {
                 self.padding_vertical
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_vertical.to_owned(),
                 None,
                 doc_id,
@@ -1587,7 +1624,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "padding-top",
             ftd::node::Value::from_executor_value(
-                self.padding_top.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_top
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_top.to_owned(),
                 None,
                 doc_id,
@@ -1600,7 +1640,7 @@ impl ftd::executor::Common {
                 self.padding_bottom
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_bottom.to_owned(),
                 None,
                 doc_id,
@@ -1610,7 +1650,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "padding-left",
             ftd::node::Value::from_executor_value(
-                self.padding_left.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_left
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_left.to_owned(),
                 None,
                 doc_id,
@@ -1620,7 +1663,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "padding-right",
             ftd::node::Value::from_executor_value(
-                self.padding_right.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_right
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.padding_right.to_owned(),
                 None,
                 doc_id,
@@ -1630,7 +1676,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "margin",
             ftd::node::Value::from_executor_value(
-                self.margin.value.as_ref().map(|v| v.to_css_string()),
+                self.margin
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin.to_owned(),
                 None,
                 doc_id,
@@ -1643,7 +1692,7 @@ impl ftd::executor::Common {
                 self.margin_horizontal
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_horizontal.to_owned(),
                 None,
                 doc_id,
@@ -1656,7 +1705,7 @@ impl ftd::executor::Common {
                 self.margin_horizontal
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_horizontal.to_owned(),
                 None,
                 doc_id,
@@ -1669,7 +1718,7 @@ impl ftd::executor::Common {
                 self.margin_vertical
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_vertical.to_owned(),
                 None,
                 doc_id,
@@ -1682,7 +1731,7 @@ impl ftd::executor::Common {
                 self.margin_vertical
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_vertical.to_owned(),
                 None,
                 doc_id,
@@ -1692,7 +1741,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "margin-top",
             ftd::node::Value::from_executor_value(
-                self.margin_top.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_top
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_top.to_owned(),
                 None,
                 doc_id,
@@ -1702,7 +1754,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "margin-bottom",
             ftd::node::Value::from_executor_value(
-                self.margin_bottom.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_bottom
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_bottom.to_owned(),
                 None,
                 doc_id,
@@ -1712,7 +1767,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "margin-left",
             ftd::node::Value::from_executor_value(
-                self.margin_left.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_left
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_left.to_owned(),
                 None,
                 doc_id,
@@ -1722,7 +1780,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "margin-right",
             ftd::node::Value::from_executor_value(
-                self.margin_right.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_right
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.margin_right.to_owned(),
                 None,
                 doc_id,
@@ -1732,7 +1793,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "min-width",
             ftd::node::Value::from_executor_value(
-                self.min_width.value.as_ref().map(|v| v.to_css_string()),
+                self.min_width
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.min_width.to_owned(),
                 None,
                 doc_id,
@@ -1742,7 +1806,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "max-width",
             ftd::node::Value::from_executor_value(
-                self.max_width.value.as_ref().map(|v| v.to_css_string()),
+                self.max_width
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.max_width.to_owned(),
                 None,
                 doc_id,
@@ -1752,7 +1819,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "min-height",
             ftd::node::Value::from_executor_value(
-                self.min_height.value.as_ref().map(|v| v.to_css_string()),
+                self.min_height
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.min_height.to_owned(),
                 None,
                 doc_id,
@@ -1762,7 +1832,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "max-height",
             ftd::node::Value::from_executor_value(
-                self.max_height.value.as_ref().map(|v| v.to_css_string()),
+                self.max_height
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.max_height.to_owned(),
                 None,
                 doc_id,
@@ -1888,7 +1961,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_width
                     .to_owned()
-                    .map(|v| v.map(|l| l.to_css_string()))
+                    .map(|v| v.map(|l| l.to_css_string(&self.device)))
                     .value,
                 self.border_width.to_owned(),
                 None,
@@ -1901,7 +1974,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_width
                     .to_owned()
-                    .map(|v| v.map(|l| l.to_css_string()))
+                    .map(|v| v.map(|l| l.to_css_string(&self.device)))
                     .value,
                 self.border_width.to_owned(),
                 None,
@@ -1914,7 +1987,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_width
                     .to_owned()
-                    .map(|v| v.map(|l| l.to_css_string()))
+                    .map(|v| v.map(|l| l.to_css_string(&self.device)))
                     .value,
                 self.border_width.to_owned(),
                 None,
@@ -1927,7 +2000,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_width
                     .to_owned()
-                    .map(|v| v.map(|l| l.to_css_string()))
+                    .map(|v| v.map(|l| l.to_css_string(&self.device)))
                     .value,
                 self.border_width.to_owned(),
                 None,
@@ -1940,7 +2013,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_bottom_width
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_css_string(&self.device)))
                     .value,
                 self.border_bottom_width.to_owned(),
                 None,
@@ -1966,7 +2039,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_top_width
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_css_string(&self.device)))
                     .value,
                 self.border_top_width.to_owned(),
                 None,
@@ -1992,7 +2065,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_left_width
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_css_string(&self.device)))
                     .value,
                 self.border_left_width.to_owned(),
                 None,
@@ -2018,7 +2091,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.border_right_width
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_css_string(&self.device)))
                     .value,
                 self.border_right_width.to_owned(),
                 None,
@@ -2042,7 +2115,10 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-radius",
             ftd::node::Value::from_executor_value(
-                self.border_radius.value.as_ref().map(|v| v.to_css_string()),
+                self.border_radius
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string(&self.device)),
                 self.border_radius.to_owned(),
                 None,
                 doc_id,
@@ -2055,7 +2131,7 @@ impl ftd::executor::Common {
                 self.border_top_left_radius
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.border_top_left_radius.to_owned(),
                 None,
                 doc_id,
@@ -2068,7 +2144,7 @@ impl ftd::executor::Common {
                 self.border_top_right_radius
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.border_top_right_radius.to_owned(),
                 None,
                 doc_id,
@@ -2081,7 +2157,7 @@ impl ftd::executor::Common {
                 self.border_bottom_left_radius
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.border_bottom_left_radius.to_owned(),
                 None,
                 doc_id,
@@ -2094,7 +2170,7 @@ impl ftd::executor::Common {
                 self.border_bottom_right_radius
                     .value
                     .as_ref()
-                    .map(|v| v.to_css_string()),
+                    .map(|v| v.to_css_string(&self.device)),
                 self.border_bottom_right_radius.to_owned(),
                 None,
                 doc_id,
@@ -2167,7 +2243,10 @@ impl ftd::executor::Container {
         d.check_and_insert(
             "gap",
             ftd::node::Value::from_executor_value(
-                self.spacing.value.as_ref().map(|v| v.to_gap_css_string()),
+                self.spacing
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_gap_css_string(&self.device)),
                 self.spacing.to_owned(),
                 Some(ftd::executor::Spacing::fixed_content_pattern()),
                 doc_id,
