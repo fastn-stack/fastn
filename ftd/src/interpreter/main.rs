@@ -686,8 +686,15 @@ pub struct ParsedDocument {
     pub ast: Vec<ftd::ast::AST>,
     pub processing_imports: bool,
     pub doc_aliases: ftd::Map<String>,
+    pub re_exports: ReExport,
     pub foreign_variable: Vec<String>,
     pub foreign_function: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ReExport {
+    pub module_things: ftd::Map<String>,
+    pub all_things: Vec<String>,
 }
 
 impl ParsedDocument {
@@ -705,20 +712,43 @@ impl ParsedDocument {
             ftd::p1::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
-        let doc_aliases = {
+        let (doc_aliases, re_exports) = {
             let mut doc_aliases = ftd::interpreter::default::default_aliases();
+            let mut re_exports = ReExport {
+                module_things: Default::default(),
+                all_things: vec![],
+            };
             for ast in ast.iter().filter(|v| v.is_import()) {
-                if let ftd::ast::AST::Import(ftd::ast::Import { module, alias, .. }) = ast {
+                if let ftd::ast::AST::Import(ftd::ast::Import {
+                    module,
+                    alias,
+                    export,
+                    ..
+                }) = ast
+                {
                     doc_aliases.insert(alias.to_string(), module.to_string());
+                    if let Some(export) = export {
+                        match export {
+                            ftd::ast::Export::All => re_exports.all_things.push(module.to_string()),
+                            ftd::ast::Export::Things(things) => {
+                                for thing in things {
+                                    re_exports
+                                        .module_things
+                                        .insert(module.to_string(), thing.to_string());
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            doc_aliases
+            (doc_aliases, re_exports)
         };
         Ok(ParsedDocument {
             name: id.to_string(),
             ast,
             processing_imports: true,
             doc_aliases,
+            re_exports,
             foreign_variable: vec![],
             foreign_function: vec![],
         })

@@ -1009,23 +1009,24 @@ impl<'a> TDoc<'a> {
         self.scan_initial_thing(name, line_number)
     }
 
-    pub fn scan_initial_thing(
+    pub fn scan_initial_thing_from_doc_name(
         &mut self,
-        name: &str,
+        doc_name: String,
+        thing_name: String,
+        remaining: Option<String>,
         line_number: usize,
     ) -> ftd::interpreter::Result<()> {
         use itertools::Itertools;
 
-        let name = name
-            .strip_prefix(ftd::interpreter::utils::REFERENCE)
-            .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
-            .unwrap_or(name);
-
-        if self.get_initial_thing(name, line_number).is_ok() {
-            return Ok(());
-        }
-
-        let name = self.resolve_name(name);
+        let name = format!(
+            "{}#{}{}",
+            doc_name,
+            thing_name,
+            remaining
+                .as_ref()
+                .map(|v| format!(".{}", v))
+                .unwrap_or_default()
+        );
 
         let state = if let Some(state) = {
             match &mut self.bag {
@@ -1037,13 +1038,6 @@ impl<'a> TDoc<'a> {
         } else {
             return self.err("not found", name, "search_thing", line_number);
         };
-
-        let (doc_name, thing_name, _remaining) = // Todo: use remaining
-            ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
-                name.as_str(),
-                self.name,
-                line_number,
-            );
 
         if doc_name.eq(ftd::interpreter::FTD_INHERITED) {
             return Ok(());
@@ -1086,7 +1080,7 @@ impl<'a> TDoc<'a> {
                 .iter()
                 .filter(|v| {
                     !v.is_component()
-                        && (v.name().eq(&thing_name)
+                        && (v.name().eq(thing_name.as_str())
                             || v.name().starts_with(format!("{}.", thing_name).as_str()))
                 })
                 .map(|v| (0, v.to_owned()))
@@ -1108,6 +1102,31 @@ impl<'a> TDoc<'a> {
                         .pending_imports
                         .contains
                         .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                }
+
+                if let Some(module) = parsed_document
+                    .re_exports
+                    .module_things
+                    .get(thing_name.as_str())
+                    .cloned()
+                {
+                    return self.scan_initial_thing_from_doc_name(
+                        module,
+                        thing_name.to_string(),
+                        remaining,
+                        line_number,
+                    );
+                }
+
+                for module in parsed_document.re_exports.all_things.clone() {
+                    if let Ok(()) = self.scan_initial_thing_from_doc_name(
+                        module,
+                        thing_name.to_string(),
+                        remaining.clone(),
+                        line_number,
+                    ) {
+                        return Ok(());
+                    }
                 }
 
                 return Ok(());
@@ -1144,6 +1163,32 @@ impl<'a> TDoc<'a> {
         }
 
         Ok(())
+    }
+
+    pub fn scan_initial_thing(
+        &mut self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<()> {
+        let name = name
+            .strip_prefix(ftd::interpreter::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
+            .unwrap_or(name);
+
+        if self.get_initial_thing(name, line_number).is_ok() {
+            return Ok(());
+        }
+
+        let name = self.resolve_name(name);
+
+        let (doc_name, thing_name, remaining) = // Todo: use remaining
+            ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
+                name.as_str(),
+                self.name,
+                line_number,
+            );
+
+        self.scan_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number)
     }
 
     pub fn search_thing(
@@ -1329,25 +1374,26 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn search_initial_thing(
+    pub fn search_initial_thing_from_doc_name(
         &mut self,
-        name: &str,
+        doc_name: String,
+        thing_name: String,
+        remaining: Option<String>,
         line_number: usize,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(ftd::interpreter::Thing, Option<String>)>,
     > {
         use itertools::Itertools;
 
-        let name = name
-            .strip_prefix(ftd::interpreter::utils::REFERENCE)
-            .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
-            .unwrap_or(name);
-
-        if let Ok(thing) = self.get_initial_thing(name, line_number) {
-            return Ok(ftd::interpreter::StateWithThing::new_thing(thing));
-        }
-
-        let name = self.resolve_name(name);
+        let name = format!(
+            "{}#{}{}",
+            doc_name,
+            thing_name,
+            remaining
+                .as_ref()
+                .map(|v| format!(".{}", v))
+                .unwrap_or_default()
+        );
 
         let state = if let Some(state) = {
             match &mut self.bag {
@@ -1359,13 +1405,6 @@ impl<'a> TDoc<'a> {
         } else {
             return self.err("not found", name, "search_thing", line_number);
         };
-
-        let (doc_name, thing_name, remaining) = // Todo: use remaining
-            ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
-                name.as_str(),
-                self.name,
-                line_number,
-            );
 
         let current_parsed_document = state.parsed_libs.get(state.id.as_str()).unwrap();
 
@@ -1427,13 +1466,38 @@ impl<'a> TDoc<'a> {
                 {
                     return Ok(ftd::interpreter::StateWithThing::new_state(
                         ftd::interpreter::InterpreterWithoutState::StuckOnForeignVariable {
-                            module: doc_name,
+                            module: doc_name.to_string(),
                             variable: remaining
                                 .map(|v| format!("{}.{}", thing_name, v))
-                                .unwrap_or(thing_name),
+                                .unwrap_or(thing_name.to_string()),
                             caller_module: self.name.to_string(),
                         },
                     ));
+                }
+
+                if let Some(module) = parsed_document
+                    .re_exports
+                    .module_things
+                    .get(thing_name.as_str())
+                    .cloned()
+                {
+                    return self.search_initial_thing_from_doc_name(
+                        module,
+                        thing_name.to_string(),
+                        remaining,
+                        line_number,
+                    );
+                }
+
+                for module in parsed_document.re_exports.all_things.clone() {
+                    if let Ok(thing) = self.search_initial_thing_from_doc_name(
+                        module,
+                        thing_name.clone(),
+                        remaining.clone(),
+                        line_number,
+                    ) {
+                        return Ok(thing);
+                    }
                 }
 
                 return self.err("not found", name, "search_thing", line_number);
@@ -1470,10 +1534,38 @@ impl<'a> TDoc<'a> {
 
         Ok(ftd::interpreter::StateWithThing::new_state(
             ftd::interpreter::InterpreterWithoutState::StuckOnImport {
-                module: doc_name,
+                module: doc_name.to_string(),
                 caller_module: self.name.to_string(),
             },
         ))
+    }
+
+    pub fn search_initial_thing(
+        &mut self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<(ftd::interpreter::Thing, Option<String>)>,
+    > {
+        let name = name
+            .strip_prefix(ftd::interpreter::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
+            .unwrap_or(name);
+
+        if let Ok(thing) = self.get_initial_thing(name, line_number) {
+            return Ok(ftd::interpreter::StateWithThing::new_thing(thing));
+        }
+
+        let name = self.resolve_name(name);
+
+        let (doc_name, thing_name, remaining) = // Todo: use remaining
+            ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
+                name.as_str(),
+                self.name,
+                line_number,
+            );
+
+        self.search_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number)
     }
 
     pub fn get_initial_thing(
