@@ -94,7 +94,7 @@ src: $assets.files.images.<image-file-name-with-extension>
 
 -- ds.markdown:
 
-$ is used for reference, then assets.
+\$ is used for reference, then assets.
 
 `files` here is used to access the files present in the package.
 
