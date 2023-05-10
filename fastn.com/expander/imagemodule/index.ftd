@@ -1,0 +1,146 @@
+-- import: fastn/processors as pr
+-- import: fastn.io/expander/lib
+
+
+-- my-ds.page: Adding Images to Modules
+
+-- ds.markdown:
+if: { source == "default" }
+
+In this video we will learn how to add images in fastn modules.
+
+
+-- lib.video-audience: How to add images in modules
+if: { source == "planning" }
+owner: Ajit
+aud: Common
+
+To show how to add the images by importing assets.
+
+
+/-- ds.youtube:
+if: { source == "default" }
+v:
+
+
+-- ds.h1: Intro Clip
+if: { source == "planning" }
+
+In this video we will learn how to add images in the modules.
+
+/-- ds.image:
+src:
+
+Hi, I am Ajit, welcome to fastn video series, fastn helps you build website 
+and web apps faster.
+
+Let's continue. 
+
+-- ds.h1: Supported Image Formats
+
+`fastn` supports bunch of image file formats, checkout 
+[supported-image-formats](https://fastn.com/ftd/built-in-types/#supported-image-formats) 
+to read about it.
+
+-- ds.h1: What is module?
+
+-- ds.markdown:
+if: { source == "planning" }
+
+The video title says how to include image in a module. So, what is a module?
+
+-- ds.markdown:
+if: { source == "default" }
+
+The title says how to include image in a module. So, what is a module?
+
+-- ds.markdown:
+
+The `.ftd` files in your package are called `module`. `index.ftd` is one module 
+`foo.ftd` is another module. So you can have n number of modules in your 
+package.
+
+I have this package, so all the `.ftd` files you see are modules.
+
+-- ds.h1: Rendering image in the browser
+
+In my package, I have put all the images in the folder called `images`. 
+
+Now to add these images to the modules, we need to import the assets of this 
+package.
+
+
+-- ds.h2: What is `assets`? 
+
+Every package has `assets` as a foreign variable provided by `fastn` and this 
+variable can be used to access the images or other files in the package.
+
+-- ds.code:
+lang: ftd
+
+\-- import: <package-name>/assets
+
+-- ds.h2: Section `ftd.image`
+
+Now we can display the image by using the component `ftd.image` and passing the 
+file path in `src`. So we will write:
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: $assets.files.images.<image-file-name-with-extension>
+
+-- ds.markdown:
+
+$ is used for reference, then assets.
+
+`files` here is used to access the files present in the package.
+
+And anything after `files` it is the path to the file.
+
+
+Now, we can display this in the browser. Let's save the file and refresh the 
+browser.
+
+\;; dot seperated folder names
+
+
+We will do the same for all the modules where we want to add images.
+
+This way we can add images in our modules.
+
+-- ds.h1: Closing Remarks 
+if: { source == "planning" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+Checkout the `fastn` website.
+Support us by clicking on this link and give us a star on GitHub and join our 
+fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { source == "default" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/) 
+and join our fastn community on [Discord](/discord/).
+
+
+/-- ds.h1: Final Video
+if: { source == "planning" }
+
+/-- ds.youtube:
+if: { source == "planning" }
+v:
+
+-- end: my-ds.page 
+
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source
+

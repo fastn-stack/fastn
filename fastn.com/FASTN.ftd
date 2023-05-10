@@ -268,9 +268,8 @@ favicon: /-/fastn.io/images/favicon.svg
     document: book/appendix/g-hosting.ftd
 
 ## Video Course: /expander/
-
-- Expander Crash Course: /expander/   
-  - Overview: /expander/
+   
+- Expander Crash Course: /expander/
   - Part 1. Hello World: /expander/hello-world/
     - Install `fastn`: /install/-/expander/
       document: author/how-to/install.ftd
@@ -291,6 +290,9 @@ favicon: /-/fastn.io/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Create holy-grail layout: /holy-grail/
   document: /expander/layout/index.ftd
+- Add Images in modules: /images-in-modules/
+  document: /expander/imagemodule/index.ftd
+  skip: true
 
 # Fullstack: /backend/
 
@@ -397,6 +399,8 @@ favicon: /-/fastn.io/images/favicon.svg
   source: planning
 
 - Overview: /planning/
+- Images in modules: /images-in-modules/-/planning
+  document: /expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
   document: /expander/layout/index.ftd
 - sitemap - document: /planning/sitemap-document/
