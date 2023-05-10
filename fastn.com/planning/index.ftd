@@ -19,6 +19,11 @@ the scripts etc here.
 - How to pass components to a container component 
   - Understanding of ftd.ui and children
 
+-- ds.h2: Note
+
+- P means Planning document ready
+- F means Final document ready 
+
 
 -- ds.h1: Common
 
@@ -26,21 +31,21 @@ the scripts etc here.
 - R: what is a fastn package?
   - dependencies, auto import, sitemap, dynamic-urls, redirects, 404
 - R: fastn document, variables, etc
-- [x] R: creating a component (basics) [[F]](/expander/components/)
+- ✅ R: creating a component (basics) [[F]](/expander/components/)
 - R: understanding colors
 - R: understanding fonts
 - R: github pages (templates, publishing, domain mapping? etc)
-- [x] R: installing fastn  [[F]](/install/) 
+- ✅ R: installing fastn  [[F]](/install/) 
 - R: using `key-value` pair to show-hide content in a single doc   
 - R: why we always use .px, what else can we do?
 
--- ds.h1: Design A FastN Compatible Site
+-- ds.h1: Design A Fastn Compatible Site
 
 - R: what is a fastn package?
 - P: creating a font
 - R: creating a color scheme
-- R: importing colors to figma [[F]](/figma/)
-- R: exporting colors from figma  [[F]](/figma-to-fastn-cs/)
+- ✅ R: importing colors to figma [[F]](/figma/)
+- ✅ R: exporting colors from figma  [[F]](/figma-to-fastn-cs/)
 - D: importing typography to figma
 - D: exporting types from figma
 - R: rapid prototyping using fastn
@@ -59,15 +64,15 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
-    - R: button   [[F]](/button-using-fastn/)
+    - ✅ R: button   [[P]](https://fastn.com/planning) [[F]](/button-using-fastn/)
     - R: post card 
 - R: creating various page layouts
-    - [x] R: holy-grail   [[F]](/holy-grail/)
-- R: event handling (basic)   [[F]](/expander/events/)
+    - ✅ R: holy-grail   [[P]](https://fastn.com/holy-grail/-/planning/) [[F]](/holy-grail/)
+- ✅ R: event handling (basic)   [[F]](/expander/events/)
 - R: creating docs pages
 - D: using module system to create interchangable packages
 - D: translation crosslinks
-- R: rive [[P]](/planning/rive/)   [[F]](/rive/)
+- ✅ R: rive [[P]](/planning/rive/)   [[F]](/rive/)
 - R: embedding youtube or iframes
 - R: add images in documents
 - R: mobile responsive site
