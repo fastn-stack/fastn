@@ -1,19 +1,36 @@
 -- my-ds.page: Planning Overview
 
-We are using fastn.io for planning fastn related official course. You will find
+We are using fastn.com for planning fastn related official course. You will find
 the scripts etc here.
+
+-- ds.h1: Upcoming Videos
+
+- How to add images in documents
+- How to embed youtube or iframes
+- How to add color (in text, border, background)
+  - create color record type variable
+  - light and dark mode
+- How to create dark mode switcher 
+- How to create color-scheme 
+- How to customize fonts (or add font-style)
+  - create responsive-type variable (font)
+- Understanding caption (this is not a video title)
+- Understanding body (this is not a video title)
+- How to pass components to a container component 
+  - Understanding of ftd.ui and children
+
 
 -- ds.h1: Common
 
-- R: why (5 videos)
+- R: why fastn (5 videos)
 - R: what is a fastn package?
   - dependencies, auto import, sitemap, dynamic-urls, redirects, 404
 - R: fastn document, variables, etc
-- R: creating a component (basics)
+- [x] R: creating a component (basics) [[F]](/expander/components/)
 - R: understanding colors
 - R: understanding fonts
 - R: github pages (templates, publishing, domain mapping? etc)
-- R: installing
+- [x] R: installing fastn  [[F]](/install/) 
 - R: using `key-value` pair to show-hide content in a single doc   
 - R: why we always use .px, what else can we do?
 
@@ -22,8 +39,8 @@ the scripts etc here.
 - R: what is a fastn package?
 - P: creating a font
 - R: creating a color scheme
-- R: importing colors to figma
-- R: exporting colors from figma
+- R: importing colors to figma [[F]](/figma/)
+- R: exporting colors from figma  [[F]](/figma-to-fastn-cs/)
 - D: importing typography to figma
 - D: exporting types from figma
 - R: rapid prototyping using fastn
@@ -42,15 +59,17 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
-    - R: button 
-    - R: post card 🚧
+    - R: button   [[F]](/button-using-fastn/)
+    - R: post card 
 - R: creating various page layouts
-- R: event handling
+    - [x] R: holy-grail   [[F]](/holy-grail/)
+- R: event handling (basic)   [[F]](/expander/events/)
 - R: creating docs pages
 - D: using module system to create interchangable packages
 - D: translation crosslinks
-- R: [using rive](/planning/rive/)
+- R: rive [[P]](/planning/rive/)   [[F]](/rive/)
 - R: embedding youtube or iframes
+- R: add images in documents
 - R: mobile responsive site
 - R: using css for things fastn is lacking
 - R: integration with JS
