@@ -34,6 +34,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.align`](ftd/built-in-types/#ftd-align)
   - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
   - [`ftd.linear-gradient`](ftd/built-in-types/#ftd-linear-gradient)
+  - [`ftd.linear-gradient-color`](ftd/built-in-types/#ftd-linear-gradient-color)
   - [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
   - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
   - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
@@ -448,7 +449,7 @@ lang: ftd
 
 \-- record linear-gradient:
 ftd.linear-gradient-directions direction: bottom
-string list colors:
+ftd.linear-gradient-color list colors:
 
 -- ds.markdown:
 
@@ -456,8 +457,50 @@ string list colors:
 value of type [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
 and is optional. By default, it takes `bottom`.
 
-- `colors`: This field takes a list of `string` which define the colors used
-in the gradient.
+- `colors`: This field takes a list of
+[`ftd.linear-gradient-color`](ftd/built-in-types/#ftd-linear-gradient-color)
+which defines the colors used in the gradient.
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.linear-gradient-color`
+
+`ftd.linear-gradient-color` is a record. It accepts several values as fields
+as mentioned below.
+
+-- ds.code: `ftd.linear-gradient-color`
+lang: ftd
+
+\-- record linear-gradient-color:
+caption ftd.color color:
+optional ftd.length start:
+optional ftd.length end:
+optional ftd.length stop-position:
+
+-- ds.markdown:
+
+- `color`: This field takes the color value of type
+[`ftd.color`](ftd/built-in-types/#ftd-color) and is of caption type.
+
+- `start`: This field defines start position of the color and takes value
+of type [`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+
+- `end`: This field defines the color end position and takes value
+of type [`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+
+- `stop-position`: This field defines the color stop position from where the
+gradient mid occurs and takes value of type
+[`ftd.length`](ftd/built-in-types/#ftd-length) and is optional.
+
+
+
 
 
 

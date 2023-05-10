@@ -1023,42 +1023,77 @@ type and is optional.
 
 -- ds.rendered.input:
 
+\-- integer $gradient-counter: 0
+
 \-- ftd.linear-gradient lg: ;; <hl>
-direction: top-left ;; <hl>
-colors: red, green, blue ;; <hl>
+direction: bottom-left ;; <hl>
+colors: $color-values ;; <hl>
 
 \-- ftd.linear-gradient lg-2: ;; <hl>
-direction.angle: 180 ;; <hl>
-colors: violet, indigo, blue, green, yellow, orange, red ;; <hl>
+direction: top-right ;; <hl>
+colors: $color-values-2 ;; <hl>
 
 \-- ftd.linear-gradient lg-3: ;; <hl>
-direction.turn: 0.25 ;; <hl>
-colors: blue, red ;; <hl>
+direction: right ;; <hl>
+colors: $rainbow-values ;; <hl>
+
+\-- ftd.linear-gradient-color list rainbow-values:
+
+\-- ftd.linear-gradient-color: violet
+end.percent: 14.28
+
+\-- ftd.linear-gradient-color: indigo
+start.percent: 14.28
+end.percent: 28.57
+
+\-- ftd.linear-gradient-color: blue
+start.percent: 28.57
+end.percent: 42.85
+
+\-- ftd.linear-gradient-color: green
+start.percent: 42.85
+end.percent: 57.14
+
+\-- ftd.linear-gradient-color: yellow
+start.percent: 57.14
+end.percent: 71.42
+
+\-- ftd.linear-gradient-color: orange
+start.percent: 71.42
+end.percent: 85.71
+
+\-- ftd.linear-gradient-color: red
+start.percent: 85.71
+
+\-- end: rainbow-values
+
+\-- ftd.linear-gradient-color list color-values:
+
+\-- ftd.linear-gradient-color: red
+stop-position.percent: 20
+
+\-- ftd.linear-gradient-color: yellow
+
+\-- end: color-values
+
+\-- ftd.linear-gradient-color list color-values-2:
+
+\-- ftd.linear-gradient-color: blue
+\-- ftd.linear-gradient-color: green
+
+\-- end: color-values-2
 
 \-- ftd.row:
-width: fill-container
-spacing: space-between
-
-\-- ftd.column:
-width.fixed.px: 200
+width.fixed.px: 400
 height.fixed.px: 200
 background.linear-gradient: $lg ;; <hl>
+background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2 ;; <hl>
+background.linear-gradient if { gradient-counter % 3 == 2 }: $lg-3 ;; <hl>
+$on-click$: $ftd.increment($a = $gradient-counter)
+align-content: center
 
-\-- end: ftd.column
-
-\-- ftd.column:
-width.fixed.px: 200
-height.fixed.px: 200
-background.linear-gradient: $lg-2 ;; <hl>
-
-\-- end: ftd.column
-
-\-- ftd.column:
-width.fixed.px: 200
-height.fixed.px: 200
-background.linear-gradient: $lg-3 ;; <hl>
-
-\-- end: ftd.column
+\-- ftd.text: This is linear gradient (click to change)
+color: $inherited.colors.text-strong
 
 \-- end: ftd.row
 
@@ -4678,6 +4713,74 @@ src: $fastn-assets.files.images.logo-fifthtry.svg
 repeat: no-repeat
 position: center
 
+
+-- integer $gradient-counter: 0
+
+-- ftd.linear-gradient lg:
+direction: bottom-left
+colors: $color-values
+
+-- ftd.linear-gradient lg-2:
+direction: top-right
+colors: $color-values-2
+
+-- ftd.linear-gradient lg-3:
+direction: right
+colors: $rainbow-values
+
+-- ftd.linear-gradient-color list rainbow-values:
+
+-- ftd.linear-gradient-color: violet
+end.percent: 14.28
+
+-- ftd.linear-gradient-color: indigo
+start.percent: 14.28
+end.percent: 28.57
+
+-- ftd.linear-gradient-color: blue
+start.percent: 28.57
+end.percent: 42.85
+
+-- ftd.linear-gradient-color: green
+start.percent: 42.85
+end.percent: 57.14
+
+-- ftd.linear-gradient-color: yellow
+start.percent: 57.14
+end.percent: 71.42
+
+-- ftd.linear-gradient-color: orange
+start.percent: 71.42
+end.percent: 85.71
+
+-- ftd.linear-gradient-color: red
+start.percent: 85.71
+
+-- end: rainbow-values
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: red
+stop-position.percent: 20
+
+-- ftd.linear-gradient-color: yellow
+
+-- end: color-values
+
+-- ftd.linear-gradient-color list color-values-2:
+
+-- ftd.linear-gradient-color: blue
+-- ftd.linear-gradient-color: green
+
+-- end: color-values-2
+
+
+
+
+
+
+
+
 -- component render-bg:
 
 -- ftd.row:
@@ -4693,32 +4796,23 @@ background.image: $bg-image
 
 
 
+
+
+
+
 -- component render-gradient:
 
 -- ftd.row:
-width: fill-container
-spacing: space-between
-
--- ftd.column:
-width.fixed.px: 200
+width.fixed.px: 400
 height.fixed.px: 200
 background.linear-gradient: $lg
+background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2
+background.linear-gradient if { gradient-counter % 3 == 2 }: $lg-3
+$on-click$: $ftd.increment($a = $gradient-counter)
+align-content: center
 
--- end: ftd.column
-
--- ftd.column:
-width.fixed.px: 200
-height.fixed.px: 200
-background.linear-gradient: $lg-2
-
--- end: ftd.column
-
--- ftd.column:
-width.fixed.px: 200
-height.fixed.px: 200
-background.linear-gradient: $lg-3
-
--- end: ftd.column
+-- ftd.text: This is linear gradient (click to change)
+color: $inherited.colors.text-strong
 
 -- end: ftd.row
 
