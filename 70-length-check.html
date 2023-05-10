@@ -1757,12 +1757,13 @@ if ("start" in c)
 colors = `${colors} ${c.start}`;
 if ("end" in c)
 colors = `${colors} ${c.end}`;
-if ("mid" in c)
-colors = `${colors}, ${c.mid}`;
+if ("stop-position" in c)
+colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-return "linear-gradient(" + direction + ", " + colors + ")";
+var res = "linear-gradient(" + direction + ", " + colors + ")";
+return res;
 }
 else {
 return null;
@@ -1988,8 +1989,8 @@ window.ftd.utils.set_value_helper(data, "foo#names", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#names", "main");
 window.ftd.call_immutable_value_changes("foo#names", "main");
-window.ftd.utils.node_change_call("main","1:main__display", data);
 window.ftd.utils.node_change_call("main","0:main__display", data);
+window.ftd.utils.node_change_call("main","1:main__display", data);
 };
 
 window.dummy_data_main = {};

@@ -1759,12 +1759,13 @@ if ("start" in c)
 colors = `${colors} ${c.start}`;
 if ("end" in c)
 colors = `${colors} ${c.end}`;
-if ("mid" in c)
-colors = `${colors}, ${c.mid}`;
+if ("stop-position" in c)
+colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-return "linear-gradient(" + direction + ", " + colors + ")";
+var res = "linear-gradient(" + direction + ", " + colors + ")";
+return res;
 }
 else {
 return null;
@@ -1997,10 +1998,10 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#foo:fv:0", "main");
 window.ftd.call_immutable_value_changes("foo#foo:fv:0", "main");
-window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 window.ftd.utils.node_change_call("main","0,2:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 };
 
 window.set_value_main["foo#moo:mv:0,0"] = function (data, new_value, remaining) {
@@ -2012,8 +2013,8 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#moo:mv:0,0", "main");
 window.ftd.call_immutable_value_changes("foo#moo:mv:0,0", "main");
-window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 };
 
 window.resolve_value_main = {};

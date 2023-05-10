@@ -6,6 +6,53 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#dtype": {
+"font-family": "cursive",
+"letter-spacing": "5px",
+"line-height": "65px",
+"size": "40px",
+"weight": 900
+},
+"foo#flag": true,
+"foo#mtype": {
+"font-family": "fantasy",
+"letter-spacing": "3px",
+"line-height": "35px",
+"size": "20px",
+"weight": 100
+},
+"foo#rrtype": {
+"desktop": {
+"font-family": "fantasy",
+"letter-spacing": "3px",
+"line-height": "35px",
+"size": "20px",
+"weight": 100
+},
+"mobile": {
+"font-family": "cursive",
+"letter-spacing": "5px",
+"line-height": "65px",
+"size": "40px",
+"weight": 900
+}
+},
+"foo#rtype": {
+"desktop": {
+"font-family": "cursive",
+"letter-spacing": "5px",
+"line-height": "65px",
+"size": "40px",
+"weight": 900
+},
+"mobile": {
+"font-family": "fantasy",
+"letter-spacing": "3px",
+"line-height": "35px",
+"size": "20px",
+"weight": 100
+}
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -755,7 +802,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_md">From desktop</div><div data-id="0,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,0,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-subtitle</div></div></div></div></div></div><div data-id="0,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,0:main" style="" class="ft_common ft_md">From mobile</div><div data-id="0,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_md">From desktop</div><div data-id="0,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,0,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; font-family: fantasy; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Desktop print-subtitle</div></div></div></div></div></div><div data-id="0,1:main" style="display: none" class="ft_common ft_column"><div data-id="0,1,0:main" style="" class="ft_common ft_md">From mobile</div><div data-id="0,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1,0:main" style="font-family: cursive; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div></div></div>
 
 
 <script>
@@ -1756,12 +1803,13 @@ if ("start" in c)
 colors = `${colors} ${c.start}`;
 if ("end" in c)
 colors = `${colors} ${c.end}`;
-if ("mid" in c)
-colors = `${colors}, ${c.mid}`;
+if ("stop-position" in c)
+colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-return "linear-gradient(" + direction + ", " + colors + ")";
+var res = "linear-gradient(" + direction + ", " + colors + ")";
+return res;
 }
 else {
 return null;
@@ -1955,11 +2003,56 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 window.node_change_main = {};
 window.node_change_main["0,0:main__display"] = function(data) {
 if(function(){
-return (resolve_reference("ftd#device", data)=="desktop"&&(2<3));
+return (resolve_reference("ftd#device", data)=="desktop");
 }()){
 document.querySelector(`[data-id="0,0:main"]`).style["display"] = "flex";window.ftd.utils.remove_extra_from_id("0,0:main");
 }
 else {document.querySelector(`[data-id="0,0:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,0:main");}
+}
+
+window.node_change_main["0,0,1,0,1,0,0:main__font-family"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#rrtype", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("foo#rtype", data).desktop)));}
+}
+
+window.node_change_main["0,0,1,0,1,0,0:main__font-size"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#rrtype", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("foo#rtype", data).desktop)));}
+}
+
+window.node_change_main["0,0,1,0,1,0,0:main__font-weight"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#rrtype", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("foo#rtype", data).desktop)));}
+}
+
+window.node_change_main["0,0,1,0,1,0,0:main__letter-spacing"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#rrtype", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("foo#rtype", data).desktop)));}
+}
+
+window.node_change_main["0,0,1,0,1,0,0:main__line-height"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#rrtype", data).desktop)));
+}
+else {document.querySelector(`[data-id="0,0,1,0,1,0,0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("foo#rtype", data).desktop)));}
 }
 window.node_change_main["0,1:main__display"] = function(data) {
 if(function(){
@@ -1970,13 +2063,54 @@ document.querySelector(`[data-id="0,1:main"]`).style["display"] = "flex";window.
 else {document.querySelector(`[data-id="0,1:main"]`).style["display"] = "none";window.ftd.utils.add_extra_in_id("0,1:main");}
 }
 window.set_value_main = {};
+window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#flag", "main");
+window.ftd.call_immutable_value_changes("foo#flag", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+};
+
+window.set_value_main["foo#rrtype"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#rrtype", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#rrtype", "main");
+window.ftd.call_immutable_value_changes("foo#rrtype", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+};
+
+window.set_value_main["foo#rtype"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#rtype", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#rtype", "main");
+window.ftd.call_immutable_value_changes("foo#rtype", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+};
+
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 };
 
 
