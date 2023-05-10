@@ -148,6 +148,8 @@ favicon: /-/fastn.io/images/favicon.svg
     document: ftd/checkbox.ftd
   - `ftd.desktop`: /desktop/
     document: ftd/desktop.ftd
+  - `ftd.mobile`: /mobile/
+    document: ftd/mobile.ftd
 - Attributes: /attributes/
   document: ftd/attributes.ftd
   - Common Attributes: /common-attributes/
