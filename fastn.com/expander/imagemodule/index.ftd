@@ -2,15 +2,15 @@
 -- import: fastn.io/expander/lib
 
 
--- my-ds.page: Adding Images to Modules
+-- my-ds.page: Adding Images in documents
 
 -- ds.markdown:
 if: { source == "default" }
 
-In this video we will learn how to add images in fastn modules.
+In this video we will learn how to add images in fastn documents.
 
 
--- lib.video-audience: How to add images in modules
+-- lib.video-audience: How to add images in documents
 if: { source == "planning" }
 owner: Ajit
 aud: Common
@@ -26,7 +26,7 @@ v:
 -- ds.h1: Intro Clip
 if: { source == "planning" }
 
-In this video we will learn how to add images in the modules.
+In this video we will learn how to add images in the documents.
 
 /-- ds.image:
 src:
@@ -42,31 +42,31 @@ Let's continue.
 [supported-image-formats](https://fastn.com/ftd/built-in-types/#supported-image-formats) 
 to read about it.
 
--- ds.h1: What is module?
+-- ds.h1: What is document?
 
 -- ds.markdown:
 if: { source == "planning" }
 
-The video title says how to include image in a module. So, what is a module?
+The video title says how to include image in a document. So, what is a document?
 
 -- ds.markdown:
 if: { source == "default" }
 
-The title says how to include image in a module. So, what is a module?
+The title says how to include image in a document. So, what is a document?
 
 -- ds.markdown:
 
-The `.ftd` files in your package are called `module`. `index.ftd` is one module 
-`foo.ftd` is another module. So you can have n number of modules in your 
+The `.ftd` files in your package are called `document`. `index.ftd` is one document 
+`foo.ftd` is another document. So you can have n number of documents in your 
 package.
 
-I have this package, so all the `.ftd` files you see are modules.
+I have this package, so all the `.ftd` files you see are documents.
 
 -- ds.h1: Rendering image in the browser
 
 In my package, I have put all the images in the folder called `images`. 
 
-Now to add these images to the modules, we need to import the assets of this 
+Now to add these images to the documents, we need to import the assets of this 
 package.
 
 
@@ -107,9 +107,9 @@ browser.
 \;; dot seperated folder names
 
 
-We will do the same for all the modules where we want to add images.
+We will do the same for all the documents where we want to add images.
 
-This way we can add images in our modules.
+This way we can add images in our documents.
 
 -- ds.h1: Closing Remarks 
 if: { source == "planning" }
