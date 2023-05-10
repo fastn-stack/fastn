@@ -97,7 +97,7 @@ padding: $res
 
 -- ds.h2: Component Optimization
 
-Once a component is specified for the desktop device using `ftd.desktop`, IT
+Once a component is specified for the desktop device using `ftd.desktop`, It
 will continue to take up or accepts the desktop-specified components or generic
 components as descendants, ignoring the mobile-specified components
 declared using `ftd.mobile`. This reduces the size of the component tree.
