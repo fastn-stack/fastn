@@ -203,6 +203,8 @@ favicon: /-/fastn.io/images/favicon.svg
     document: /best-practices/import-at-top.ftd
   - Auto-import: /auto-import/
     document: /best-practices/auto-import.ftd
+  - Device: /device-guidelines/
+    document: /best-practices/device.ftd
   - Conditions: /how-to-use-conditions/
     document: /best-practices/use-conditions.ftd
   - Container: /container-guidelines/
