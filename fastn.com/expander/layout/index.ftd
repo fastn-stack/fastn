@@ -1,26 +1,44 @@
+-- import: fastn/processors as pr
+
+
 -- my-ds.page: Create `holy-grail` layout
 
-Video Title: How to create holy-grail layout
+-- ds.markdown:
+if: { source == "default" }
 
-Owner: Ajit
+In this video we will learn how to create a `holy-grail` layout.
 
-Audience: Common
 
-Goal: understanding of holy-grail layout 
+-- video-audience: How to create holy-grail layout
+if: { source == "planning" }
+owner: Ajit
+aud: Common
+
+
+understanding of holy-grail layout
+
+
+-- ds.youtube:
+if: { source == "default" }
+v: https://youtu.be/tSX0io_zw18
+
+
+
 
 -- ds.h1: Intro Clip
+if: { source == "planning" }
 
 Welcome to the video!
 
-Today, we will learn how To create layout in fastn.
+Today, we will learn how To create `holy-grail` layout using `fastn language`
 
-/-- ds.image:
-src: $fastn-assets.files.expander.layout.intro.jpeg
+-- ds.image:
+if: { source == "planning" }
+src: $fastn-assets.files.expander.layout.intro.jpg
+
 
 
 -- ds.h2: Holy-grail layout
-;; if: { source == "default" }
-
 
 Holy Grail is a layout pattern that’s very common on the web. 
 
@@ -33,14 +51,24 @@ It consists of:
 	- right-sidebar
 - a footer.
 
+The header and footer has padding of 35 and 20 pixel respectively.
+To the two sidebars we will apply width of 25% so the remaining 50% will be for 
+the main content. 
+
 -- ds.image:
 src: $fastn-assets.files.expander.layout.layout.png
+
+-- ds.markdown:
+
+Let's learn how to create this layout.
 
 
 -- ds.h1: `home-page` component
 
-So we have three parts of the home-page, the header, the main part and the 
-footer part, aligned in a column.
+We will start by creating a component that will be for the entire page.
+
+The three parts of the home-page, ie the header, the main part and the 
+footer part, are aligned in from top to down manner.
 
 So, inside the component `home-page` we will use `ftd.column`.
 
@@ -94,8 +122,16 @@ role: $inherited.types.copy-regular
 
 -- ds.markdown:
 
-Before we move ahead, let's comment others (main and footer) and display header 
-by calling the component `home-page`. To call it we will ust write:
+We have given some properties width, padding, and background color to the row, 
+note, we are using `$inherited` for background color so that if we use any  
+color-scheme, it will take the background-color defined in that color-scheme.
+
+And for now, I have given a child to the row as ftd.text with it's inherited 
+role.  
+
+We have one component header ready, we can display it. So before we move ahead, 
+let's comment others (main and footer) and display header 
+by calling the component `home-page`. To call it we will write:
 
 -- ds.code:
 lang: ftd
@@ -108,7 +144,7 @@ So we have the header in our page.
 
 -- ds.h1: Main component
 
-Now we will build the main area.
+Now, similarly, we will build the main area.
 
 As I have mentioned, in the `holy-grail` layout main area has three parts, 
 which is in left-to-right manner therefore we will put them in a row.
@@ -117,7 +153,7 @@ which is in left-to-right manner therefore we will put them in a row.
 -- ds.code:
 lang: ftd
 
-\-- component main:
+\-- component main-area:
 
 
 \-- ftd.row:
@@ -134,7 +170,7 @@ background.solid: $inherited.colors.background.base
 \-- end: ftd.row
 
 
-\-- end: main
+\-- end: main-area
 
 
 -- ds.markdown: 
@@ -166,7 +202,14 @@ role: $inherited.types.copy-regular
 
 \-- end: left-sidebar
 
+-- ds.markdown:
 
+This is the left-sidebar component. Inside the container component column of 
+width of 25% has a child `ftd.text`.
+
+
+Similarly, I have created the two components, one for the content, the other 
+for the right-sidebar.
 
 
 -- ds.h2: content component
@@ -221,6 +264,7 @@ role: $inherited.types.copy-regular
 
 -- ds.markdown:
 
+Since we have already called them in the main-area component.
 Let's see the main area in the browser. So we will remove the comment where 
 the main component is called.
 
@@ -228,6 +272,8 @@ the main component is called.
 -- ds.h1: footer component
 
 Last but not the least, let's create the component for footer.
+In this component, just like header, we have a row, which has a text. Just the 
+padding value is different. 
 
 -- ds.code:
 lang: ftd
@@ -252,18 +298,76 @@ color: $inherited.colors.text
 
 -- ds.markdown:
 
+Our footer is also ready, so we can remove the comment in the home-page and
 Save and refresh the browser.
 
-Now we have the complete `holy-grail` layout for the home-page. I hope you have 
-understood the layouting in `fastn`.
+Now we have the complete `holy-grail` layout for the home-page. 
 
+
+I hope you have found this layouting using `fastn` language easy.
+
+Before we close this, let's see the basic way to add the header links.
+
+In the package, I have created 3 dummy files that will repesent the sections. 
+
+And, inside the row of the header component, we will add another row and 
+to this row we will give three sections as text.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.row:
+spacing.fixed.px: 50
+;; role: $inherited.types.copy-regular
+
+\-- ftd.text: Section 1
+link: /section-1/
+color: $inherited.colors.text
+
+
+\-- ftd.text: Section 2
+link: /section-2/
+color: $inherited.colors.text
+
+
+\-- ftd.text: Section 3
+link: /section-3/
+color: $inherited.colors.text
+
+
+\-- end: ftd.row 
+
+-- ds.markdown:
+
+And for formatting, to the parent row, I have added spacing between these two 
+sections, `ftd.text` and `ftd.row`.
 
 -- ds.h1: Closing Remarks 
+if: { source == "planning" }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 Checkout the `fastn` website.
-Support us by giving a star on GitHub and connect with our fastn community on 
-Discord.
+Support us by clicking on this link and give us a star on GitHub and join our 
+fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { source == "default" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/) 
+and join our fastn community on [Discord](/discord/).
+
+
+
+-- ds.h1: Final Video
+if: { source == "planning" }
+
+-- ds.youtube:
+if: { source == "planning" }
+v: https://youtu.be/tSX0io_zw18
 
 
 
@@ -271,7 +375,65 @@ Discord.
 
 
 
-/-- string source: default
+-- string source: default
 $processor$: pr.get-data
 key: source
 
+
+
+
+
+-- component video-audience:
+caption title:
+string owner:
+string aud:
+body goal:
+
+-- ftd.column:
+spacing.fixed.em: 0.5
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.em: 0.25
+
+-- ftd.text: Video Title:
+style: bold
+
+-- ftd.text: $video-audience.title
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.em: 0.25
+
+-- ftd.text: Owner:
+style: bold
+
+-- ftd.text: $video-audience.owner
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.em: 0.25
+
+-- ftd.text: Audience:
+style: bold
+
+-- ftd.text: $video-audience.aud
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.em: 0.25
+
+-- ftd.text: Goal:
+style: bold
+
+-- ftd.text: $video-audience.goal
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: video-audience

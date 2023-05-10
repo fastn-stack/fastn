@@ -289,6 +289,8 @@ favicon: /-/fastn.io/images/favicon.svg
   document: /expander/border-radius.ftd
 - Create clean URLs: /clean-urls/
   document: /expander/sitemap-document.ftd
+- Create holy-grail layout: /holy-grail-layout/
+  document: /expander/layout/index.ftd
 
 # Fullstack: /backend/
 
@@ -392,9 +394,10 @@ favicon: /-/fastn.io/images/favicon.svg
 
 # Content Planning: /planning/
   skip: true
+  source: planning
 
 - Overview: /planning/
-- Holy grail layout: /layout-planning/
+- Holy grail layout: /holy-grail-layout/-/planning/
   document: /expander/layout/index.ftd
 - sitemap - document: /planning/sitemap-document/
   document: /planning/sitemap-features/document.ftd
