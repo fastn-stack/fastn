@@ -11,7 +11,8 @@
 "color": {
 "dark": "red",
 "light": "red"
-}
+},
+"stop-position": "40.0%"
 },
 {
 "color": {
@@ -41,7 +42,8 @@
 "color": {
 "dark": "red",
 "light": "red"
-}
+},
+"stop-position": "40.0%"
 },
 {
 "color": {
@@ -50,7 +52,7 @@
 }
 }
 ],
-"direction": "right"
+"direction": "to bottom left"
 },
 "foo#lg-2": {
 "colors": [
@@ -67,8 +69,123 @@
 }
 }
 ],
-"direction": "top-right"
+"direction": "to top right"
 },
+"foo#lg-3": {
+"colors": [
+{
+"color": {
+"dark": "violet",
+"light": "violet"
+},
+"end": "14.28%"
+},
+{
+"color": {
+"dark": "indigo",
+"light": "indigo"
+},
+"end": "28.57%",
+"start": "14.28%"
+},
+{
+"color": {
+"dark": "blue",
+"light": "blue"
+},
+"end": "42.85%",
+"start": "28.57%"
+},
+{
+"color": {
+"dark": "green",
+"light": "green"
+},
+"end": "57.14%",
+"start": "42.85%"
+},
+{
+"color": {
+"dark": "yellow",
+"light": "yellow"
+},
+"end": "71.42%",
+"start": "57.14%"
+},
+{
+"color": {
+"dark": "orange",
+"light": "orange"
+},
+"end": "85.71%",
+"start": "71.42%"
+},
+{
+"color": {
+"dark": "red",
+"light": "red"
+},
+"start": "85.71%"
+}
+],
+"direction": "to right"
+},
+"foo#rainbow-values": [
+{
+"color": {
+"dark": "violet",
+"light": "violet"
+},
+"end": "14.28%"
+},
+{
+"color": {
+"dark": "indigo",
+"light": "indigo"
+},
+"end": "28.57%",
+"start": "14.28%"
+},
+{
+"color": {
+"dark": "blue",
+"light": "blue"
+},
+"end": "42.85%",
+"start": "28.57%"
+},
+{
+"color": {
+"dark": "green",
+"light": "green"
+},
+"end": "57.14%",
+"start": "42.85%"
+},
+{
+"color": {
+"dark": "yellow",
+"light": "yellow"
+},
+"end": "71.42%",
+"start": "57.14%"
+},
+{
+"color": {
+"dark": "orange",
+"light": "orange"
+},
+"end": "85.71%",
+"start": "71.42%"
+},
+{
+"color": {
+"dark": "red",
+"light": "red"
+},
+"start": "85.71%"
+}
+],
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -818,7 +935,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 15px" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="background-image: linear-gradient(90deg, rgba(255,0,0,1), rgba(255,255,0,1)); cursor: pointer; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">HELLO THERE</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 15px" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="background-image: linear-gradient(225deg, rgba(255,0,0,1), 40%, rgba(255,255,0,1)); cursor: pointer; height: 200px; width: 400px" class="ft_common ft_row"><div data-id="1,0:main" style="" class="ft_common ft_md">HELLO THERE</div></div></div>
 
 
 <script>
@@ -1819,12 +1936,13 @@ if ("start" in c)
 colors = `${colors} ${c.start}`;
 if ("end" in c)
 colors = `${colors} ${c.end}`;
-if ("mid" in c)
-colors = `${colors}, ${c.mid}`;
+if ("stop-position" in c)
+colors = `${colors}, ${c["stop-position"]}`;
 }
 }
 }
-return "linear-gradient(" + direction + ", " + colors + ")";
+var res = "linear-gradient(" + direction + ", " + colors + ")";
+return res;
 }
 else {
 return null;
@@ -2021,72 +2139,72 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#
 }
 window.node_change_main["1:main__background-color"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-color"] = null }
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-3", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-image"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-image"] = null }
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg-3", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-position"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-position"] = null }
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg-3", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-repeat"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = null }
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg-3", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 
 window.node_change_main["1:main__background-size"] = function(data) {
 if(function(){
-return (resolve_reference("foo#counter", data)%2==0);
-}()){
-document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%2==1);
+return (resolve_reference("foo#counter", data)%3==1);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg-2", data))));
 }
-else { document.querySelector(`[data-id="1:main"]`).style["background-size"] = null }
+else if(function(){
+return (resolve_reference("foo#counter", data)%3==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg-3", data))));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#lg", data))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#counter"] = function (data, new_value, remaining) {
