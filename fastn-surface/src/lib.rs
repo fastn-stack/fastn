@@ -12,11 +12,13 @@ extern crate self as fastn_surface;
 #[cfg(feature = "native")]
 pub mod wgpu;
 
+mod control;
 mod document;
 mod element;
 mod event;
 mod operation;
 
+pub use control::ControlFlow;
 pub use document::Document;
 pub use element::{Container, Dimension, Element, Image, Text};
 pub use event::Event;
