@@ -309,14 +309,14 @@ boolean is-last: false
 -- template list doc-sites:
 
 -- template: Doc-site
-template-url: http://fifthtry.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.png
-licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
-github-url: https://github.com/FifthTry/doc-site/
+template-url: https://fastn-community.github.io/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+github-url: https://github.com/fastn-community/doc-site
 
-`fifthtry.github.io/doc-site/` is a grey color theme. Most of our websites are
-using `doc-site` as base theme. Click on image OR package name to view it's working 
-demo. 
+`fastn-community.github.io/doc-site` uses fastn default color theme. Most of our
+websites are using `doc-site` as base theme. Click on image OR package name to
+view it's working demo and documentation. 
 
 
 -- end: doc-sites
