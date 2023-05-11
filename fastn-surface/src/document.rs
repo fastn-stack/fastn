@@ -38,6 +38,9 @@ impl Document {
         &mut self,
         _e: fastn_surface::Event,
     ) -> (fastn_surface::ControlFlow, Vec<fastn_surface::Operation>) {
+        // find the event target based on current layout and event coordinates
+        // handle event, which will update the dom tree
+        // compute layout
         (fastn_surface::ControlFlow::Wait, vec![])
     }
 }
