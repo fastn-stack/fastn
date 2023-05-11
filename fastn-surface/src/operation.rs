@@ -1,5 +1,7 @@
 pub enum Operation {
     DrawRectangle(Rectangle),
+    // DrawImage(Image),
+    // DrawGlyphCluster(Glyph),
 }
 
 pub struct Rectangle {

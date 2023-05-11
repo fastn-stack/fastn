@@ -4,4 +4,7 @@ async fn main() {
 
     #[cfg(feature = "native")]
     fastn_surface::wgpu::draw(doc).await;
+
+    // #[cfg(feature = "terminal")]
+    // fastn_surface::terminal::draw(doc).await;
 }
