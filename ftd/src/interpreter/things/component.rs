@@ -56,7 +56,6 @@ impl ComponentDefinition {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
-        // dbg!(&component_definition);
         let name = doc.resolve_name(component_definition.name.as_str());
 
         let css = if let Some(ref css) = component_definition.css {
@@ -208,9 +207,6 @@ impl Component {
         definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
-        println!("Scanning");
-        // dbg!(&ast_component.name, definition_name_with_arguments);
-
         Property::scan_ast_children(ast_component.children, definition_name_with_arguments, doc)?;
         match definition_name_with_arguments {
             Some((definition, _)) if ast_component.name.eq(definition) => {}
@@ -254,7 +250,6 @@ impl Component {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
-        // dbg!(&component_invocation);
         Component::from_ast_component(component_invocation, &mut None, doc)
     }
 
@@ -264,8 +259,6 @@ impl Component {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
         let name = doc.resolve_name(ast_component.name.as_str());
-        // dbg!(&ast_component);
-        // dbg!(&name, &definition_name_with_arguments);
 
         // If the component is from `module` type argument
         ftd::interpreter::utils::insert_module_thing(
@@ -394,8 +387,6 @@ impl Component {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<Component>>> {
         let name = doc.resolve_name(name);
-        // dbg!(&name);
-        // dbg!(&ast_properties);
 
         if definition_name_with_arguments.is_none()
             || doc
