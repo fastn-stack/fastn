@@ -2,10 +2,12 @@ pub struct Document {
     pub taffy: taffy::Taffy,
     pub nodes: slotmap::SlotMap<fastn_surface::NodeKey, fastn_surface::Element>,
     pub root: fastn_surface::NodeKey,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl Document {
-    pub fn layout(&mut self, width: u32, height: u32) {
+    pub fn initial_layout(&mut self, width: u32, height: u32) -> Vec<fastn_surface::Operation> {
         let taffy_root = self.nodes[self.root].taffy();
         self.taffy
             .compute_layout(
@@ -16,10 +18,13 @@ impl Document {
                 },
             )
             .unwrap();
+        self.width = width;
+        self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
+        vec![]
     }
 
-    pub async fn render(&self) -> Vec<fastn_surface::Operation> {
+    pub async fn event(&mut self, _e: fastn_surface::Event) -> Vec<fastn_surface::Operation> {
         vec![]
     }
 }
@@ -29,6 +34,12 @@ impl Default for Document {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
         let root = nodes.insert(fastn_surface::Container::outer_column(&mut taffy));
-        Document { root, taffy, nodes }
+        Document {
+            root,
+            taffy,
+            nodes,
+            width: 0,
+            height: 0,
+        }
     }
 }

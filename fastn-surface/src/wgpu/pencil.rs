@@ -1,4 +1,4 @@
-pub async fn draw(ops: &[fastn_surface::pencil::Operation]) {
+pub async fn draw(mut doc: fastn_surface::Document) {
     let event_loop = winit::event_loop::EventLoop::new();
     let window = winit::window::WindowBuilder::new()
         .build(&event_loop)
@@ -6,8 +6,8 @@ pub async fn draw(ops: &[fastn_surface::pencil::Operation]) {
 
     let mut state = State::new(window).await;
 
-    for op in ops {
-        state.draw(op);
+    for op in doc.initial_layout(state.size.width, state.size.height) {
+        state.draw(&op);
     }
 
     event_loop.run(move |event, _, control_flow| match event {
@@ -18,11 +18,11 @@ pub async fn draw(ops: &[fastn_surface::pencil::Operation]) {
             winit::event::WindowEvent::CloseRequested
             | winit::event::WindowEvent::KeyboardInput {
                 input:
-                winit::event::KeyboardInput {
-                    state: winit::event::ElementState::Pressed,
-                    virtual_keycode: Some(winit::event::VirtualKeyCode::Escape),
-                    ..
-                },
+                    winit::event::KeyboardInput {
+                        state: winit::event::ElementState::Pressed,
+                        virtual_keycode: Some(winit::event::VirtualKeyCode::Escape),
+                        ..
+                    },
                 ..
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
             winit::event::WindowEvent::Resized(physical_size) => {
@@ -75,8 +75,7 @@ struct State {
 }
 
 impl State {
-    fn draw(&self, _op: &fastn_surface::Operation) {
-    }
+    fn draw(&self, _op: &fastn_surface::Operation) {}
 
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         Ok(())
@@ -167,5 +166,4 @@ impl State {
     }
 
     fn update(&mut self) {}
-
 }
