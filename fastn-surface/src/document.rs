@@ -7,7 +7,11 @@ pub struct Document {
 }
 
 impl Document {
-    pub fn initial_layout(&mut self, width: u32, height: u32) -> Vec<fastn_surface::Operation> {
+    pub fn initial_layout(
+        &mut self,
+        width: u32,
+        height: u32,
+    ) -> (fastn_surface::ControlFlow, Vec<fastn_surface::Operation>) {
         let taffy_root = self.nodes[self.root].taffy();
         self.taffy
             .compute_layout(
@@ -21,11 +25,14 @@ impl Document {
         self.width = width;
         self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
-        vec![]
+        (fastn_surface::ControlFlow::Wait, vec![])
     }
 
-    pub async fn event(&mut self, _e: fastn_surface::Event) -> Vec<fastn_surface::Operation> {
-        vec![]
+    pub async fn event(
+        &mut self,
+        _e: fastn_surface::Event,
+    ) -> (fastn_surface::ControlFlow, Vec<fastn_surface::Operation>) {
+        (fastn_surface::ControlFlow::Wait, vec![])
     }
 }
 

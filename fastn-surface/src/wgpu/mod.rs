@@ -1,5 +1,7 @@
-mod pencil;
-mod render;
+mod control;
+mod event;
+mod experiment;
+mod surface;
 
-pub use pencil::draw;
-pub use render::render;
+pub use experiment::render;
+pub use surface::draw;

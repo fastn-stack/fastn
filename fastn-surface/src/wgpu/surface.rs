@@ -6,9 +6,8 @@ pub async fn draw(mut doc: fastn_surface::Document) {
 
     let mut state = State::new(window).await;
 
-    for op in doc.initial_layout(state.size.width, state.size.height) {
-        state.draw(&op);
-    }
+    let (_ctrl, ops) = doc.initial_layout(state.size.width, state.size.height);
+    state.draw(&ops);
 
     event_loop.run(move |event, _, control_flow| match event {
         winit::event::Event::WindowEvent {
@@ -68,6 +67,7 @@ pub async fn draw(mut doc: fastn_surface::Document) {
 struct State {
     surface: wgpu::Surface,
     device: wgpu::Device,
+    #[allow(dead_code)]
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
@@ -75,7 +75,7 @@ struct State {
 }
 
 impl State {
-    fn draw(&self, _op: &fastn_surface::Operation) {}
+    fn draw(&self, _ops: &[fastn_surface::Operation]) {}
 
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         Ok(())
