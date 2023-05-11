@@ -13,6 +13,7 @@ pub struct CommonStyleMinusTaffy {
 
 #[derive(Debug)]
 pub struct Container {
+    // if not wasm
     pub taffy: taffy::node::Node,
     pub style: CommonStyleMinusTaffy,
 }
