@@ -588,7 +588,8 @@ impl<'a> TDoc<'a> {
                             .caption_or_body(),
                         false,
                     ),
-                    ftd::interpreter::Thing::Function(_) => todo!(),
+                    ftd::interpreter::Thing::Function(f) => (f.return_kind, false),
+                    ftd::interpreter::Thing::Export { .. } => unreachable!(),
                 };
 
                 (
@@ -1015,6 +1016,7 @@ impl<'a> TDoc<'a> {
         thing_name: String,
         remaining: Option<String>,
         line_number: usize,
+        exports: Vec<String>,
     ) -> ftd::interpreter::Result<()> {
         use itertools::Itertools;
 
@@ -1092,33 +1094,38 @@ impl<'a> TDoc<'a> {
                     .iter()
                     .any(|v| thing_name.eq(v))
                 {
-                    state.pending_imports.stack.push((
-                        doc_name.to_string(),
-                        name,
-                        line_number,
-                        self.name.to_string(),
-                    ));
+                    state
+                        .pending_imports
+                        .stack
+                        .push(ftd::interpreter::PendingImportItem {
+                            module: doc_name.to_string(),
+                            thing_name: name,
+                            line_number,
+                            caller: self.name.to_string(),
+                            exports,
+                        });
                     state
                         .pending_imports
                         .contains
                         .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                }
-
-                if let Some(module) = parsed_document
+                } else if let Some(module) = parsed_document
                     .re_exports
                     .module_things
                     .get(thing_name.as_str())
                     .cloned()
                 {
+                    let mut exports = exports;
+                    exports.push(name);
                     return self.scan_initial_thing_from_doc_name(
                         module,
                         thing_name.to_string(),
                         remaining,
                         line_number,
+                        exports,
                     );
                 }
 
-                for module in parsed_document.re_exports.all_things.clone() {
+                /*for module in parsed_document.re_exports.all_things.clone() {
                     if let Ok(()) = self.scan_initial_thing_from_doc_name(
                         module,
                         thing_name.to_string(),
@@ -1127,7 +1134,7 @@ impl<'a> TDoc<'a> {
                     ) {
                         return Ok(());
                     }
-                }
+                }*/
 
                 return Ok(());
             }
@@ -1142,20 +1149,28 @@ impl<'a> TDoc<'a> {
                     .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
 
-                state.pending_imports.stack.push((
-                    doc_name.to_string(),
-                    name,
-                    line_number,
-                    self.name.to_string(),
-                ));
+                state
+                    .pending_imports
+                    .stack
+                    .push(ftd::interpreter::PendingImportItem {
+                        module: doc_name.to_string(),
+                        thing_name: name,
+                        line_number,
+                        caller: self.name.to_string(),
+                        exports,
+                    });
             }
         } else {
-            state.pending_imports.stack.push((
-                doc_name.to_string(),
-                name,
-                line_number,
-                self.name.to_string(),
-            ));
+            state
+                .pending_imports
+                .stack
+                .push(ftd::interpreter::PendingImportItem {
+                    module: doc_name.to_string(),
+                    thing_name: name,
+                    line_number,
+                    caller: self.name.to_string(),
+                    exports,
+                });
             state
                 .pending_imports
                 .contains
@@ -1188,7 +1203,7 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        self.scan_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number)
+        self.scan_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number, vec![])
     }
 
     pub fn search_thing(
@@ -1380,6 +1395,7 @@ impl<'a> TDoc<'a> {
         thing_name: String,
         remaining: Option<String>,
         line_number: usize,
+        exports: Vec<String>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(ftd::interpreter::Thing, Option<String>)>,
     > {
@@ -1422,7 +1438,11 @@ impl<'a> TDoc<'a> {
                         && (name.eq(&format!("{}#{}", doc_name, thing_name))
                             || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
-                .map(|v| (0, v.to_owned()))
+                .map(|v| ftd::interpreter::ToProcessItem {
+                    number_of_scan: 0,
+                    ast: v.to_owned(),
+                    exports: exports.clone(),
+                })
                 .collect_vec();
             if !current_doc_contains_thing.is_empty() {
                 state
@@ -1455,7 +1475,11 @@ impl<'a> TDoc<'a> {
                         && (v.name().eq(&thing_name)
                             || v.name().starts_with(format!("{}.", thing_name).as_str()))
                 })
-                .map(|v| (0, v.to_owned()))
+                .map(|v| ftd::interpreter::ToProcessItem {
+                    number_of_scan: 0,
+                    ast: v.to_owned(),
+                    exports: exports.clone(),
+                })
                 .collect_vec();
 
             if ast_for_thing.is_empty() {
@@ -1481,15 +1505,18 @@ impl<'a> TDoc<'a> {
                     .get(thing_name.as_str())
                     .cloned()
                 {
+                    let mut exports = exports;
+                    exports.push(name);
                     return self.search_initial_thing_from_doc_name(
                         module,
                         thing_name.to_string(),
                         remaining,
                         line_number,
+                        exports,
                     );
                 }
 
-                for module in parsed_document.re_exports.all_things.clone() {
+                /*for module in parsed_document.re_exports.all_things.clone() {
                     if let Ok(thing) = self.search_initial_thing_from_doc_name(
                         module,
                         thing_name.clone(),
@@ -1498,7 +1525,7 @@ impl<'a> TDoc<'a> {
                     ) {
                         return Ok(thing);
                     }
-                }
+                }*/
 
                 return self.err("not found", name, "search_thing", line_number);
             }
@@ -1525,12 +1552,16 @@ impl<'a> TDoc<'a> {
             return self.err("not found", name, "search_thing", line_number);
         }
 
-        state.pending_imports.stack.push((
-            doc_name.to_string(),
-            name,
-            line_number,
-            self.name.to_string(),
-        ));
+        state
+            .pending_imports
+            .stack
+            .push(ftd::interpreter::PendingImportItem {
+                module: doc_name.to_string(),
+                thing_name: name,
+                line_number,
+                caller: self.name.to_string(),
+                exports,
+            });
 
         Ok(ftd::interpreter::StateWithThing::new_state(
             ftd::interpreter::InterpreterWithoutState::StuckOnImport {
@@ -1565,7 +1596,13 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        self.search_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number)
+        self.search_initial_thing_from_doc_name(
+            doc_name,
+            thing_name,
+            remaining,
+            line_number,
+            vec![],
+        )
     }
 
     pub fn get_initial_thing(

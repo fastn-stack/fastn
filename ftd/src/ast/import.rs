@@ -101,7 +101,7 @@ impl Export {
             if value.eq(ftd::ast::constants::EVERYTHING) {
                 return Ok(Some(Export::All));
             } else {
-                exports.push(value);
+                exports.extend(value.split(',').map(|v| v.trim().to_string()));
             }
         }
         Ok(if exports.is_empty() {

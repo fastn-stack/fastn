@@ -21,6 +21,11 @@ pub enum Thing {
     Component(ftd::interpreter::ComponentDefinition),
     WebComponent(ftd::interpreter::WebComponentDefinition),
     Function(ftd::interpreter::Function),
+    Export {
+        from: String,
+        to: String,
+        line_number: usize,
+    },
 }
 
 impl Thing {
@@ -33,6 +38,7 @@ impl Thing {
             ftd::interpreter::Thing::Component(c) => c.name.to_string(),
             ftd::interpreter::Thing::Function(f) => f.name.to_string(),
             ftd::interpreter::Thing::WebComponent(w) => w.name.to_string(),
+            ftd::interpreter::Thing::Export { to, .. } => to.to_string(),
         }
     }
     pub fn line_number(&self) -> usize {
@@ -44,6 +50,7 @@ impl Thing {
             Thing::OrType(o) => o.line_number,
             Thing::OrTypeWithVariant { variant, .. } => variant.line_number(),
             Thing::WebComponent(w) => w.line_number,
+            Thing::Export { line_number, .. } => *line_number,
         }
     }
 
