@@ -50,6 +50,7 @@ pub struct Field {
     pub mutable: bool,
     pub value: Option<ftd::ast::VariableValue>,
     pub line_number: usize,
+    pub access_modifier: ftd::p1::header::AccessModifier,
 }
 
 impl Field {
@@ -68,6 +69,7 @@ impl Field {
 
         let kind = ftd::ast::VariableKind::get_kind(
             header.get_kind().as_ref().unwrap().as_str(),
+            header.get_access_modifier(),
             doc_id,
             header.get_line_number(),
         )?;
@@ -83,6 +85,7 @@ impl Field {
             ftd::ast::utils::is_variable_mutable(name.as_str()),
             value,
             header.get_line_number(),
+            header.get_access_modifier(),
         ))
     }
 
@@ -92,6 +95,7 @@ impl Field {
         mutable: bool,
         value: Option<ftd::ast::VariableValue>,
         line_number: usize,
+        access_modifier: ftd::p1::header::AccessModifier,
     ) -> Field {
         Field {
             name: name.to_string(),
@@ -99,6 +103,7 @@ impl Field {
             mutable,
             value,
             line_number,
+            access_modifier,
         }
     }
 }

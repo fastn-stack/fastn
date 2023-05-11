@@ -63,6 +63,7 @@ impl ftd::ast::Field {
 
         let kind = ftd::ast::VariableKind::get_kind(
             section.kind.as_ref().unwrap().as_str(),
+            ftd::p1::header::AccessModifier::PUBLIC,
             doc_id,
             section.line_number,
         )?;
@@ -75,6 +76,7 @@ impl ftd::ast::Field {
             ftd::ast::utils::is_variable_mutable(section.name.as_str()),
             value,
             section.line_number,
+            Default::default(),
         ))
     }
 }

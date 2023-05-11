@@ -2,6 +2,7 @@
 pub struct VariableKind {
     pub modifier: Option<VariableModifier>,
     pub kind: String,
+    pub access_modifier: ftd::p1::header::AccessModifier,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -44,15 +45,21 @@ impl VariableModifier {
 }
 
 impl VariableKind {
-    fn new(kind: &str, modifier: Option<VariableModifier>) -> VariableKind {
+    fn new(
+        kind: &str,
+        modifier: Option<VariableModifier>,
+        access_modifier: ftd::p1::header::AccessModifier,
+    ) -> VariableKind {
         VariableKind {
             modifier,
             kind: kind.to_string(),
+            access_modifier,
         }
     }
 
     pub(crate) fn get_kind(
         kind: &str,
+        access_modifier: ftd::p1::header::AccessModifier,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::ast::Result<VariableKind> {
@@ -79,7 +86,7 @@ impl VariableKind {
             }
         };
 
-        Ok(VariableKind::new(kind.as_str(), modifier))
+        Ok(VariableKind::new(kind.as_str(), modifier, access_modifier))
     }
 }
 

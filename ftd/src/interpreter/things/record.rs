@@ -113,6 +113,7 @@ pub struct Field {
     pub mutable: bool,
     pub value: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
+    pub access_modifier: ftd::p1::header::AccessModifier,
 }
 
 impl Field {
@@ -129,6 +130,7 @@ impl Field {
             mutable,
             value,
             line_number,
+            access_modifier: ftd::p1::header::AccessModifier::PUBLIC,
         }
     }
 
@@ -159,6 +161,7 @@ impl Field {
             mutable: false,
             value: None,
             line_number: 0,
+            access_modifier: Default::default(),
         }
     }
 
@@ -295,6 +298,7 @@ impl Field {
             mutable: field.mutable,
             value,
             line_number: field.line_number,
+            access_modifier: field.access_modifier,
         }))
     }
 
@@ -319,6 +323,7 @@ impl Field {
                 mutable: field.mutable,
                 value: None,
                 line_number: field.line_number,
+                access_modifier: field.access_modifier,
             },
             field.value,
         )))

@@ -13,23 +13,93 @@ pub struct KV {
     pub kind: Option<String>,
     pub value: Option<String>,
     pub condition: Option<String>,
+    pub access_modifier: AccessModifier,
 }
 
 impl KV {
     pub fn new(
         key: &str,
-        kind: Option<String>,
+        mut kind: Option<String>,
         value: Option<String>,
         line_number: usize,
         condition: Option<String>,
     ) -> KV {
+        let mut access_modifier = AccessModifier::PUBLIC;
+        if let Some(k) = kind.as_ref() {
+            let (rest_kind, access) = AccessModifier::get_kind_and_modifier(k.as_str());
+            kind = Some(rest_kind);
+            access_modifier = access.unwrap_or(AccessModifier::PUBLIC);
+        }
+
         KV {
             line_number,
             key: key.to_string(),
             kind,
             value,
             condition,
+            access_modifier,
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+pub enum AccessModifier {
+    PUBLIC,
+    PRIVATE,
+}
+
+impl Default for AccessModifier {
+    fn default() -> Self {
+        AccessModifier::PUBLIC
+    }
+}
+
+impl AccessModifier {
+    pub fn is_public(&self) -> bool {
+        matches!(self, AccessModifier::PUBLIC)
+    }
+
+    pub fn remove_modifiers(name: &str) -> String {
+        let mut result = vec![];
+        for part in name.split(' ') {
+            if !AccessModifier::is_modifier(part) {
+                result.push(part)
+            }
+        }
+        result.join(" ").to_string()
+    }
+
+    pub fn is_modifier(s: &str) -> bool {
+        matches!(s, "public" | "private")
+    }
+
+    pub fn get_modifier_from_string(modifier: &str) -> Option<AccessModifier> {
+        match modifier {
+            "public" => Some(AccessModifier::PUBLIC),
+            "private" => Some(AccessModifier::PRIVATE),
+            _ => None,
+        }
+    }
+
+    pub fn to_string(&self) -> String {
+        match self {
+            AccessModifier::PUBLIC => "public".to_string(),
+            AccessModifier::PRIVATE => "private".to_string(),
+        }
+    }
+
+    pub fn get_kind_and_modifier(kind: &str) -> (String, Option<AccessModifier>) {
+        let mut access_modifier: Option<AccessModifier> = None;
+
+        let mut rest_kind = vec![];
+        for part in kind.split(' ') {
+            if !AccessModifier::is_modifier(part) {
+                rest_kind.push(part);
+                continue;
+            }
+            access_modifier = AccessModifier::get_modifier_from_string(part)
+        }
+        (rest_kind.join(" ").to_string(), access_modifier)
     }
 }
 
@@ -106,6 +176,15 @@ impl Header {
         match self {
             Header::KV(ftd::p1::header::KV { key, .. })
             | Header::Section(ftd::p1::header::Section { key, .. }) => key.to_string(),
+        }
+    }
+
+    pub(crate) fn get_access_modifier(&self) -> AccessModifier {
+        match self {
+            Header::KV(ftd::p1::header::KV {
+                access_modifier, ..
+            }) => access_modifier.clone(),
+            Header::Section(ftd::p1::header::Section { .. }) => AccessModifier::PUBLIC,
         }
     }
 

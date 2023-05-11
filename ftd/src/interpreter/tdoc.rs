@@ -530,10 +530,11 @@ impl<'a> TDoc<'a> {
             bool,
         )>,
     > {
+        let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
-            .unwrap_or(name);
+            .unwrap_or(name.as_str());
 
         let initial_kind_with_remaining_and_source =
             ftd::interpreter::utils::get_argument_for_reference_and_remaining(
@@ -975,7 +976,8 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
-        let initial_thing = try_ok_state!(self.search_initial_thing(name, line_number)?).0;
+        let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
+        let initial_thing = try_ok_state!(self.search_initial_thing(name.as_str(), line_number)?).0;
         Ok(ftd::interpreter::StateWithThing::new_thing(
             initial_thing.function(self.name, line_number)?,
         ))
@@ -1151,10 +1153,11 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Thing>> {
+        let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
-            .unwrap_or(name);
+            .unwrap_or(name.as_str());
 
         let (initial_thing, remaining) =
             try_ok_state!(self.search_initial_thing(name, line_number)?);
@@ -1267,8 +1270,10 @@ impl<'a> TDoc<'a> {
                         }),
                         Some(ftd::interpreter::PropertyValue::Reference { name, .. })
                         | Some(ftd::interpreter::PropertyValue::Clone { name, .. }) => {
-                            let (initial_thing, name) =
-                                try_ok_state!(doc.search_initial_thing(name, line_number)?);
+                            let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
+                            let (initial_thing, name) = try_ok_state!(
+                                doc.search_initial_thing(name.as_str(), line_number)?
+                            );
 
                             if let Some(remaining) = name {
                                 try_ok_state!(search_thing_(
@@ -1338,10 +1343,12 @@ impl<'a> TDoc<'a> {
     > {
         use itertools::Itertools;
 
+        let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
+
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
-            .unwrap_or(name);
+            .unwrap_or(name.as_str());
 
         if let Ok(thing) = self.get_initial_thing(name, line_number) {
             return Ok(ftd::interpreter::StateWithThing::new_thing(thing));
