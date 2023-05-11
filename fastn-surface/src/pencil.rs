@@ -9,4 +9,3 @@ pub trait Pencil: Sized {
     async fn draw_rect(&self, w: u32, h: u32, fill: Option<fastn_surface::ColorValue>);
     fn run(&self);
 }
-

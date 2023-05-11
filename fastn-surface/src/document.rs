@@ -19,8 +19,7 @@ impl Document {
         dbg!(self.taffy.layout(taffy_root).unwrap());
     }
 
-    pub async fn render(&self) {
-    }
+    pub async fn render(&self) {}
 }
 
 impl Default for Document {

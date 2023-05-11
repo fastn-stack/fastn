@@ -8,7 +8,6 @@ async fn main() {
 
     let d = pencil();
     d.init().await.unwrap();
-
 }
 
 #[cfg(feature = "native")]

@@ -1,7 +1,7 @@
 use crate::ColorValue;
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error{}
+pub enum Error {}
 
 pub struct Pencil {}
 
@@ -21,4 +21,3 @@ impl fastn_surface::Pencil for Pencil {
         // fastn_surface::wgpu::render().await
     }
 }
-
