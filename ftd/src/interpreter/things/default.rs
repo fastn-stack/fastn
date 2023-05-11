@@ -1172,7 +1172,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
-                        name: "mid".to_string(),
+                        name: "stop-position".to_string(),
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
@@ -1209,7 +1209,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("left")
+                            ftd::interpreter::Value::new_string("to left")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1219,7 +1219,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("right")
+                            ftd::interpreter::Value::new_string("to right")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1229,7 +1229,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("top")
+                            ftd::interpreter::Value::new_string("to top")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1239,7 +1239,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("bottom")
+                            ftd::interpreter::Value::new_string("to bottom")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1249,7 +1249,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("top-left")
+                            ftd::interpreter::Value::new_string("to top left")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1259,7 +1259,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("bottom-left")
+                            ftd::interpreter::Value::new_string("to bottom left")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1269,7 +1269,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("top-right")
+                            ftd::interpreter::Value::new_string("to top right")
                                 .into_property_value(false, 0),
                         ),
                         0,
@@ -1279,7 +1279,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         ftd::interpreter::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter::Value::new_string("bottom-right")
+                            ftd::interpreter::Value::new_string("to bottom right")
                                 .into_property_value(false, 0),
                         ),
                         0,
