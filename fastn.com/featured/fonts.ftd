@@ -37,56 +37,49 @@ template-url: https://fastn-community.github.io/arya-font/
 licence-url: https://github.com/fastn-community/arya-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/arya-font
 
-`fastn-community.github.io/arya-font` font is available and can be used inside
-`ftd` web packages.
+`arya-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Blaka
 template-url: https://fastn-community.github.io/blaka-font/
 licence-url: https://github.com/fastn-community/blaka-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/blaka-font
 
-`fastn-community.github.io/blaka-font` font is available and can be used inside
-`ftd` web packages.
+`blaka-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Karma
 template-url: https://fastn-community.github.io/karma-font/
 licence-url: https://github.com/fastn-community/karma-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/karma-font
 
-`fastn-community.github.io/karma-font` font is available and can be used inside
-`ftd` web packages.
+`karma-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Khand
 template-url: https://fastn-community.github.io/khand-font/
 licence-url: https://github.com/fastn-community/khand-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/khand-font
 
-`fastn-community.github.io/khand-font` font is available and can be used inside
-`ftd` web packages.
+`khand-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Lato
 template-url: https://fastn-community.github.io/lato-font/
 licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lato-font
 
-`fastn-community.github.io/lato-font` font is available and can be used inside
-`ftd` web packages.
+`lato-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Lobster
 template-url: https://fastn-community.github.io/lobster-font/
 licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lobster-font
 
-`fastn-community.github.io/lobster-font` font is available and can be used
-inside `ftd` web packages.
+`lobster-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Opensans
 template-url: https://fastn-community.github.io/opensans-font/
 licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/opensans-font
 
-`fastn-community.github.io/opensans-font` font is available and can be used
-inside `ftd` web packages.
+`opensans-font` font is available and can be used inside `fastn` web packages.
 
 
 -- ft-ui.template: Pragati Narrow
@@ -94,31 +87,29 @@ template-url: https://fastn-community.github.io/pragati-narrow-font/
 licence-url: https://github.com/fastn-community/pragati-narrow-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/pragati-narrow-font
 
-`fastn-community.github.io/pragati-narrow-font` font is available and can be
-used inside `ftd` web packages.
+`pragati-narrow-font` font is available and can be used inside `fastn` web
+packages.
 
 -- ft-ui.template: Roboto
 template-url: https://fastn-community.github.io/roboto-font/
 licence-url: https://github.com/fastn-community/roboto-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-font
 
-`fastn-community.github.io/roboto-font` font is available and can be used
-inside `ftd` web packages.
+`roboto-font` font is available and can be used inside `fastn` web packages.
 
 -- ft-ui.template: Roboto Mono
 template-url: https://fastn-community.github.io/roboto-mono-font/
 licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-mono-font
 
-`fastn-community.github.io/roboto-mono-font` font is available and can be used
-inside `ftd` web packages.
+`roboto-mono-font` font is available and can be used inside `fastn` web
+packages.
 
 -- ft-ui.template: Tiro
 template-url: https://fastn-community.github.io/tiro-font/
 licence-url: https://github.com/fastn-community/tiro-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/tiro-font
 
-`fastn-community.github.io/tiro-font` font is available and can be used inside
-`ftd` web packages.
+`tiro-font` font is available and can be used inside `fastn` web packages.
 
 -- end: font

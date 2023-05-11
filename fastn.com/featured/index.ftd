@@ -41,6 +41,13 @@ templates: $font
 more-link-text: View all
 more-link: /featured/fonts/
 
+
+-- grid-view: Font Typography:
+if: { show-grid }
+templates: $fonts-typography
+more-link-text: View all
+more-link: /featured/fonts-typography/
+
 -- end: my-ds.page
 
 
@@ -314,9 +321,8 @@ screenshot: $fastn-assets.files.images.featured.doc-site.jpg
 licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
 github-url: https://github.com/fastn-community/doc-site
 
-`fastn-community.github.io/doc-site` uses fastn default color theme. Most of our
-websites are using `doc-site` as base theme. Click on image OR package name to
-view it's working demo and documentation. 
+`doc-site` uses fastn default color theme. Most of our websites are using
+`doc-site` as base theme.
 
 
 -- end: doc-sites
@@ -411,13 +417,13 @@ Add warmth and energy to your designs with the `forest-cs`.
 -- template list bling:
 
 -- template: Bling
-template-url: https://fifthtry.github.io/bling/
+template-url: https://fastn-community.github.io/bling/
 screenshot: $fastn-assets.files.images.featured.bling-components.png
-licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
-github-url: https://github.com/FifthTry/bling/
+licence-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+github-url: https://github.com/fastn-community/bling
 
-`fifthtry.github.io/bling` is develoed and designed with various components which 
-can be used inside `ftd` web packages.
+`bling` is developed and designed with various components which can be used
+inside `fastn` web packages.
 
 -- end: bling
 
@@ -437,34 +443,71 @@ template-url: https://fastn-community.github.io/opensans-font/
 licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/opensans-font
 
-`fastn-community.github.io/opensans-font` font is available and can be used
-inside `ftd` web packages.
+`opensans-font` font is available and can be used inside `fastn` web packages.
 
 -- template: Lato
 template-url: https://fastn-community.github.io/lato-font/
 licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lato-font
 
-`fastn-community.github.io/lato-font` font is available and can be used inside
-`ftd` web packages.
+`lato-font` font is available and can be used inside `fastn` web packages.
 
 -- template: Roboto Mono
 template-url: https://fastn-community.github.io/roboto-mono-font/
 licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-mono-font
 
-`fastn-community.github.io/roboto-mono-font` font is available and can be used
-inside `ftd` web packages.
+`roboto-mono-font` font is available and can be used inside `fastn` web packages.
 
 -- template: Lobster
 template-url: https://fastn-community.github.io/lobster-font/
 licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lobster-font
 
-`fastn-community.github.io/lobster-font` font is available and can be used
-inside `ftd` web packages.
+`lobster-font` font is available and can be used inside `fastn` web packages.
 
 -- end: font
+
+
+
+
+
+
+-- template list fonts-typography:
+
+-- template: Opensans Typography
+template-url: https://fastn-community.github.io/opensans-typography/
+licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/opensans-typography
+
+`opensans-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Lato Typography
+template-url: https://fastn-community.github.io/lato-typography/
+licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/lato-typography
+
+`lato-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Roboto Mono Typography
+template-url: https://fastn-community.github.io/roboto-mono-typography/
+licence-url: https://github.com/fastn-community/roboto-mono-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/roboto-mono-typography
+
+`roboto-mono-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Lobster Typography
+template-url: https://fastn-community.github.io/lobster-typography/
+licence-url: https://github.com/fastn-community/lobster-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/lobster-typography
+
+`lobster-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- end: fonts-typography
 
 
 
