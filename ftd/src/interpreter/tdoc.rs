@@ -1493,7 +1493,7 @@ impl<'a> TDoc<'a> {
                             module: doc_name.to_string(),
                             variable: remaining
                                 .map(|v| format!("{}.{}", thing_name, v))
-                                .unwrap_or(thing_name.to_string()),
+                                .unwrap_or(thing_name),
                             caller_module: self.name.to_string(),
                         },
                     ));
@@ -1565,7 +1565,7 @@ impl<'a> TDoc<'a> {
 
         Ok(ftd::interpreter::StateWithThing::new_state(
             ftd::interpreter::InterpreterWithoutState::StuckOnImport {
-                module: doc_name.to_string(),
+                module: doc_name,
                 caller_module: self.name.to_string(),
             },
         ))
@@ -1636,7 +1636,7 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        return get_reexport_thing(&self, &name, line_number);
+        return get_reexport_thing(self, &name, line_number);
 
         fn get_reexport_thing(
             tdoc: &TDoc,
