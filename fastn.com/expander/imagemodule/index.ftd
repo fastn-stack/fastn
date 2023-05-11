@@ -2,7 +2,7 @@
 -- import: fastn.com/expander/lib
 
 
--- my-ds.page: Adding Images in documents
+-- my-ds.page: Adding Images to documents
 
 -- ds.markdown:
 if: { source == "default" }
@@ -18,9 +18,9 @@ aud: Common
 To show how to add the images by importing assets.
 
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { source == "default" }
-v:
+v: HPVQFjVrncU
 
 
 -- ds.h1: Intro Clip
@@ -31,6 +31,9 @@ In this video we will learn how to add images in the documents.
 /-- ds.image:
 src:
 
+-- ds.markdown:
+if: { source == "planning" }
+
 Hi, I am Ajit, welcome to fastn video series, fastn helps you build website 
 and web apps faster.
 
@@ -40,31 +43,21 @@ Let's continue.
 
 `fastn` supports bunch of image file formats, checkout 
 [supported-image-formats](https://fastn.com/ftd/built-in-types/#supported-image-formats) 
-to read about it.
+to read about it. The link is shared in the discription.
 
--- ds.h1: What is document?
 
--- ds.markdown:
-if: { source == "planning" }
 
-The video title says how to include image in a document. So, what is a document?
+-- ds.h1: What are documents?
 
--- ds.markdown:
-if: { source == "default" }
 
-The title says how to include image in a document. So, what is a document?
+All the files with `.ftd` extensions in your package are called `documents`. 
+FASTN.ftd and index.ftd documents makes for a complete package.
+But a package can have `n` number of other documents as well.
 
--- ds.markdown:
-
-The `.ftd` files in your package are called `document`. `index.ftd` is one document 
-`foo.ftd` is another document. So you can have n number of documents in your 
-package.
-
-I have this package, so all the `.ftd` files you see are documents.
 
 -- ds.h1: Rendering image in the browser
 
-In my package, I have put all the images in the folder called `images`. 
+In this package, I have put all the images in the folder called `images`. 
 
 Now to add these images to the documents, we need to import the assets of this 
 package.
@@ -93,21 +86,98 @@ lang: ftd
 src: $assets.files.images.<image-file-name-with-extension>
 
 -- ds.markdown:
+if: { source == "planning" }
 
-\$ is used for reference, then assets.
+After colon we start with `$`. $ is used for reference, then assets.
+
+-- ds.markdown:
+if: { source == "default" }
+
+After colon we start with `$`. $ is used for reference to assets.
+
+-- ds.markdown:
 
 `files` here is used to access the files present in the package.
 
-And anything after `files` it is the path to the file.
+And anything after `files`, it is the path to the file.
 
+`ftd.image` does not take any body so to avoid throwing error, so we will 
+wrap this text in the markdown component provided by doc-site.
+
+-- ds.markdown:
+if: { source == "planning" }
 
 Now, we can display this in the browser. Let's save the file and refresh the 
 browser.
 
-\;; dot seperated folder names
+The image is added. 
 
+-- ds.markdown:
+
+We can apply various properties to this image, like 
+`width`, border, shadow, etc. 
+
+-- ds.markdown:
+if: { source == "planning" }
+
+So, if we give width as fill-container, the image will take the width of the 
+container.
+
+-- ds.markdown:
+
+If you have watched the video where I have explained 
+how to round the corners by using the border-property, 
+[border-radius](https://fastn.com/border-radius-in-fastn/), you know 
+that we can apply it to image also. If not, you can checkout out that video as 
+well. You can find the link in description.
+
+-- ds.markdown:
+if: { source == "planning" }
+
+Let's say if we add another folder, and put this home.png inside it. Then we 
+need to change the path as
+
+-- ds.code:
+lang: ftd
+if: { source == "planning" }
+
+\-- ftd.image:
+src: $assets.files.images.temp.home.png
+
+-- ds.markdown:
+if: { source == "default" }
+
+Let's say if we add another folder `temp` inside the images folder, and put 
+this image file we are using inside it. Then we need to change the path as
+
+-- ds.code:
+lang: ftd
+if: { source == "default" }
+
+\-- ftd.image:
+src: $assets.files.images.temp.<image-file-name-with-extension>
+
+-- ds.markdown:
+
+We can use two separate images for light and dark mode. For that, we just need 
+to add the image with same file name followed by `-dark` at the same location.
+
+Also, we can give URLs in the `src`. But it is recommended to download the 
+image and import it through assets.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: https://upload.wikimedia.org/wikipedia/commons/c/ca/A_Beautiful_Scenery.jpg
+
+
+-- ds.markdown:
+if: { source == "planning" }
 
 We will do the same for all the documents where we want to add images.
+
+-- ds.markdown:
 
 This way we can add images in our documents.
 
@@ -129,12 +199,12 @@ Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/)
 and join our fastn community on [Discord](/discord/).
 
 
-/-- ds.h1: Final Video
+-- ds.h1: Final Video
 if: { source == "planning" }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { source == "planning" }
-v:
+v: HPVQFjVrncU
 
 -- end: my-ds.page 
 

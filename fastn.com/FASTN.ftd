@@ -295,9 +295,9 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Create holy-grail layout: /holy-grail/
   document: /expander/layout/index.ftd
-- Add Images in documents: /images-in-documents/
+- Add Images to documents: /images-in-documents/
   document: /expander/imagemodule/index.ftd
-  skip: true
+
 
 # Fullstack: /backend/
 
