@@ -544,6 +544,8 @@ impl InterpreterState {
     ) -> ftd::interpreter::Result<StateWithThing<T>> {
         use itertools::Itertools;
 
+        dbg!(&module, current_module, name, &exports);
+
         let document = if let Some(document) = self.parsed_libs.get(module) {
             document
         } else {
@@ -633,7 +635,7 @@ impl InterpreterState {
                     },
                 ));
             } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
-            } else if let Some(module) = document
+            } else if let Some(export_module) = document
                 .re_exports
                 .module_things
                 .get(thing_name.as_str())
@@ -643,10 +645,10 @@ impl InterpreterState {
                 exports.push(name.to_string());
 
                 return self.resolve_import_things(
-                    module.as_str(),
+                    export_module.as_str(),
                     format!(
                         "{}#{}{}",
-                        module,
+                        export_module,
                         thing_name,
                         remaining
                             .as_ref()
@@ -655,7 +657,7 @@ impl InterpreterState {
                     )
                     .as_str(),
                     line_number,
-                    current_module,
+                    module,
                     exports.as_slice(),
                 );
             } else if !found_foreign_variable {

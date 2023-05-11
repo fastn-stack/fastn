@@ -1395,6 +1395,7 @@ impl<'a> TDoc<'a> {
         thing_name: String,
         remaining: Option<String>,
         line_number: usize,
+        caller: &str,
         exports: Vec<String>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(ftd::interpreter::Thing, Option<String>)>,
@@ -1512,6 +1513,7 @@ impl<'a> TDoc<'a> {
                         thing_name.to_string(),
                         remaining,
                         line_number,
+                        doc_name.as_str(),
                         exports,
                     );
                 }
@@ -1566,7 +1568,7 @@ impl<'a> TDoc<'a> {
         Ok(ftd::interpreter::StateWithThing::new_state(
             ftd::interpreter::InterpreterWithoutState::StuckOnImport {
                 module: doc_name,
-                caller_module: self.name.to_string(),
+                caller_module: caller.to_string(),
             },
         ))
     }
@@ -1601,6 +1603,7 @@ impl<'a> TDoc<'a> {
             thing_name,
             remaining,
             line_number,
+            self.name,
             vec![],
         )
     }
