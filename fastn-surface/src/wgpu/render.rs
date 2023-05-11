@@ -244,17 +244,13 @@ impl State {
     }
 }
 
-pub async fn render(mut w: fastn_surface::Document) {
+pub async fn render() {
     env_logger::init();
 
     let event_loop = winit::event_loop::EventLoop::new();
     let window = winit::window::WindowBuilder::new()
         .build(&event_loop)
         .unwrap();
-    let window_size = window.inner_size();
-
-    w.layout(window_size.width, window_size.height);
-
     let mut state = State::new(window).await;
 
     event_loop.run(move |event, _, control_flow| match event {

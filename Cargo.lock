@@ -1717,12 +1717,14 @@ dependencies = [
 name = "fastn-surface"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "env_logger",
  "log",
  "once_cell",
  "serde",
  "slotmap",
  "taffy 0.3.12",
+ "thiserror",
  "tokio",
  "wgpu",
  "winit",
