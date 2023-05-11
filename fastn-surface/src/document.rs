@@ -4,9 +4,15 @@ pub struct Document {
     pub root: fastn_surface::NodeKey,
     pub width: u32,
     pub height: u32,
+    // variables, bindings
 }
 
 impl Document {
+    // initial_html() -> server side HTML
+    // hydrate() -> client side
+    // event_with_target() -> Vec<DomMutation>
+
+    // if not wasm
     pub fn initial_layout(
         &mut self,
         width: u32,
