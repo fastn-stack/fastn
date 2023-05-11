@@ -7,5 +7,3 @@ async fn main() {
         fastn_surface::wgpu::render(doc).await
     }
 }
-
-
