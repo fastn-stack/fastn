@@ -19,7 +19,9 @@ impl Document {
         dbg!(self.taffy.layout(taffy_root).unwrap());
     }
 
-    pub async fn render(&self) {}
+    pub async fn render(&self) -> Vec<fastn_surface::Operation> {
+        vec![]
+    }
 }
 
 impl Default for Document {

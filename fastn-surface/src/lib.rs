@@ -18,7 +18,7 @@ mod pencil;
 
 pub use document::Document;
 pub use element::{Container, Dimension, Element, Image, Text};
-pub use pencil::Pencil;
+pub use pencil::{Operation};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 
