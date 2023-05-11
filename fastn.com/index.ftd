@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-typography/inter as typo
 -- import: fifthtry.github.io/fastn-io-typography as doc-typo
--- import: fastn.io/ftd as ftd-index
+-- import: fastn.com/ftd as ftd-index
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
 -- import: fifthtry.github.io/footer
 -- import: fastn/processors as pr
@@ -113,7 +113,7 @@ compromise on what you can build with it.
 
 -- install: Get Started with fastn
 code-lang: sh
-code: curl -fsSL https://fastn.io/install.sh | bash
+code: curl -fsSL https://fastn.com/install.sh | bash
 cta-text: Learn More
 cta-link: /install/
 

@@ -1,4 +1,4 @@
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: Witty-Hacks!
 
@@ -41,7 +41,7 @@ you can start packaging some dynamic websites and web components also.
 -- ds.h2: How to Learn `fastn`?
 
 The quickest way is to follow the [short video course we have created:
-expander](https://fastn.io/expander/), it takes you through the basics.
+expander](https://fastn.com/expander/), it takes you through the basics.
 
 Then checkout the [fontend](/frontend/) and [backend](/backend/) sections of
 our documentation.

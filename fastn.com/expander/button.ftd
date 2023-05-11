@@ -343,7 +343,7 @@ hover-shadow: $s
 border-color: $shadow-color
 text-color: $monochrome-dark
 bg-color: $monochrome-light
-link: https://fastn.io/expander
+link: https://fastn.com/expander
 
 
 \-- end: ftd.column

@@ -1,4 +1,4 @@
--- import: fastn.io/planning/creators-series as c
+-- import: fastn.com/planning/creators-series as c
 
 -- my-ds.page: Rive Video Planning
 
@@ -82,7 +82,7 @@ contact the animator, and ask them to customise the animation for your need.
 
 -- ds.h1: Rive and `fastn`
 
-Screen: https://fastn.io/rive/
+Screen: https://fastn.com/rive/
 
 Rive can with `fastn` with easy! You add a few lines of code and animation is
 working!
@@ -92,7 +92,7 @@ rest.
 
 -- ds.h1: Interactive Animations
 
-Screen: https://fastn.io/rive/#functions
+Screen: https://fastn.com/rive/#functions
 
 We can easily make animations respond to events.
 

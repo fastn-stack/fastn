@@ -67,7 +67,7 @@ lang: sh
 width: 412
 show-double: false
 
-curl -fsSL https://fastn.io/install.sh | bash
+curl -fsSL https://fastn.com/install.sh | bash
 
 -- end: ft.row-container
 

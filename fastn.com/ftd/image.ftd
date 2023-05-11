@@ -1,4 +1,4 @@
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: `ftd.image`
 
@@ -8,7 +8,7 @@
 
 -- ds.rendered.input:
 
-\-- import: fastn.io/assets
+\-- import: fastn.com/assets
 
 \-- ftd.image:
 src: $assets.files.images.cs.show-cs-1.jpg
@@ -46,8 +46,8 @@ Consider the following example:
 lang: ftd
 
 \-- ftd.image-src my-images:
-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
-dark: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+dark: https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg
 
 \-- ftd.image:
 src: $my-images
@@ -69,8 +69,8 @@ Switch your color mode (light/dark) using the floating toolbar icon on the
 bottom right and see the image changing.
 
 In this example, the image URL
-`https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg` is used in the light
-mode, and `https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg` is used in
+`https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg` is used in the light
+mode, and `https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg` is used in
 dark mode.
 
 It is also possible to use `ftd.image-src` with only one field. For example:
@@ -79,11 +79,11 @@ It is also possible to use `ftd.image-src` with only one field. For example:
 lang: ftd
 
 \-- ftd.image-src just-light:
-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
 
 \;; or
 
-\-- ftd.image-src just-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+\-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
 
 \-- ftd.image:
 src: $just-light
@@ -103,7 +103,7 @@ height.fixed.px: 115
 -- ds.markdown:
 
 In this case, the same image URL
-https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg is returned in both light
+https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg is returned in both light
 and dark modes.
 
 -- ds.h3: Example Using assets Foreign Variable
@@ -119,7 +119,7 @@ To use the `assets` variable, import the package as shown below:
 -- ds.code: Image using assets
 lang: ftd
 
-\-- import: fastn.io/assets
+\-- import: fastn.com/assets
 
 -- ds.markdown:
 
@@ -129,7 +129,7 @@ package. For example:
 -- ds.code: Image using assets
 lang: ftd
 
-\-- import: fastn.io/assets
+\-- import: fastn.com/assets
 
 \-- ftd.image:
 src: $assets.files.images.cs.show-cs-1.jpg
@@ -152,7 +152,7 @@ height.fixed.px: 115
 -- ds.markdown:
 
 In this example, the `src` attribute of `ftd.image` component will be set to the
-URL of `show-cs-1.jpg` file present in the `images/cs` folder of the `fastn.io`
+URL of `show-cs-1.jpg` file present in the `images/cs` folder of the `fastn.com`
 package. i.e. URL of `<path-to-package>/images/cs/show-cs-1.jpg`.
 
 Now, you must be wondering how does it get two different value of image for
@@ -184,7 +184,7 @@ image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt).
 
 -- ds.rendered.input:
 
-\-- import: fastn.io/assets
+\-- import: fastn.com/assets
 
 \-- ftd.image: foo.jpg
 alt: Image can't be displayed ;; <hl>
@@ -211,9 +211,9 @@ padding.px: 10
 
 
 -- ftd.image-src my-images:
-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
-dark: https://fastn.io/-/fastn.io/images/cs/show-cs-1-dark.jpg
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+dark: https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg
 
 
 
--- ftd.image-src just-light: https://fastn.io/-/fastn.io/images/cs/show-cs-1.jpg
+-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg

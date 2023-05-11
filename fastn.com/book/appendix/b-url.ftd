@@ -3,7 +3,7 @@
 Before we create the repository let't take a look the URL I mentioned in the
 previous para: `https://github.com/fastn-stack/fastn-template`. These things
 are called URL, which is short of Uniform Resource Locator. Look at another
-URL, URL of this book `https://fastn.io/book/`. You should start paying
+URL, URL of this book `https://fastn.com/book/`. You should start paying
 attention to the URL, it's "structure", as we are going to be building web
 applications and websites in this book, and they are all about creating such
 URLs.

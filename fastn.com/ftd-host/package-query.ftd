@@ -1,4 +1,4 @@
--- import: fastn.io/ftd/built-in-variables as v
+-- import: fastn.com/ftd/built-in-variables as v
 -- import: fastn/processors as pr
 
 -- record person:
@@ -102,7 +102,7 @@ The name of `sqlite` database file is provided by the key `db`.
 
 -- ds.h1: Output
 
-[View Source](https://github.com/fastn-stack/fastn.io/blob/main/ftd-host/package-query.ftd)
+[View Source](https://github.com/fastn-stack/fastn.com/blob/main/ftd-host/package-query.ftd)
 
 -- show-person: $p
 $loop$: $people as $p

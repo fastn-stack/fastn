@@ -13,12 +13,12 @@ lang: ftd
 
 \-- import: fastn
 
-\-- fastn.package: fastn.io
-download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.io/main
+\-- fastn.package: fastn.com
+download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.com/main
 
 -- ds.markdown:
 
-We have created a package named `fastn.io`. Packages in `fastn` are named after
+We have created a package named `fastn.com`. Packages in `fastn` are named after
 the domain where they would be published. **Every FASTN package is a website.**
 
 
@@ -34,14 +34,14 @@ lang: ftd
 
 \-- import: fastn
 
-\-- fastn.package: fastn.io
-download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.io/main
+\-- fastn.package: fastn.com
+download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.com/main
 
 \-- fastn.dependency: fifthtry.github.io/doc-site as ds
 
 -- ds.markdown:
 
-Here `fastn.io` has a dependency on
+Here `fastn.com` has a dependency on
 [`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
 
 We have also used "alias" feature to bind the name of this dependency to `ds`,

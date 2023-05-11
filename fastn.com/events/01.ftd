@@ -1,5 +1,5 @@
--- import: fastn.io/events as event
--- import: fastn.io/assets
+-- import: fastn.com/events as event
+-- import: fastn.com/assets
 
 
 -- common.host fifthtry: FifthTry Inc.
@@ -38,14 +38,14 @@ The team at FifthTry would love to host our second FTD meet-up at 91Springboard,
 
 In this meetup, we will cover everything about fastn and ftd  by answering the following questions:
 
-- What [fastn](https://fastn.io/) and [FTD](https://fastn.io/ftd/) is all about? 
+- What [fastn](https://fastn.com/) and [FTD](https://fastn.com/ftd/) is all about?
 - Why did we think of building a new language?
 - What it takes to develop a language from the FTD development team?
 - What we have been up to of late?
 
-Also, you will hear from a few people who have learned and used [FTD](https://fastn.io/ftd/). They will share their experience, and show what they have built.
+Also, you will hear from a few people who have learned and used [FTD](https://fastn.com/ftd/). They will share their experience, and show what they have built.
 
-There will be a hands-on session where you will learn [FTD](https://fastn.io/ftd/).
+There will be a hands-on session where you will learn [FTD](https://fastn.com/ftd/).
 
 We will appreciate if you can share this meet-up with your team. 
 
@@ -54,18 +54,18 @@ We will appreciate if you can share this meet-up with your team.
 
 Fastn is a universal new-age web-development platform, consciously structured to have a low learning curve on par with Microsoft Excel basics. It has been built specifically to make workflows across design, development & deployment simple and consistent. 
 
-Fastn is powered by three important elements - an indigenous design system, a curated list of UI components / templates and a powerful tailor-made programming language - [FTD](https://fastn.io/ftd/). 
+Fastn is powered by three important elements - an indigenous design system, a curated list of UI components / templates and a powerful tailor-made programming language - [FTD](https://fastn.com/ftd/).
 
 
 -- ds.h3: What is FTD?
 
 `FTD` is designed for everyone, not just programmers. It is a new open-source, front-end, programming language.
 
-[FTD](https://fastn.io/ftd/) can be used for building UI and is optimised for content centric websites, like: home pages, marketing landing pages, documentation pages and so on. For non-programmers, learning FTD for authoring websites takes a day or so.
+[FTD](https://fastn.com/ftd/) can be used for building UI and is optimised for content centric websites, like: home pages, marketing landing pages, documentation pages and so on. For non-programmers, learning FTD for authoring websites takes a day or so.
 
-[FTD](https://fastn.io/ftd/) can also be used as a general purpose UI language. A team in Kerala is using it right now to build a web3 application and it’s coming along quite nicely (though there are still many paper cuts and partially implemented features that we do not yet recommend for general purpose JS replacement. These will be ironed out maybe in another month or two).
+[FTD](https://fastn.com/ftd/) can also be used as a general purpose UI language. A team in Kerala is using it right now to build a web3 application and it’s coming along quite nicely (though there are still many paper cuts and partially implemented features that we do not yet recommend for general purpose JS replacement. These will be ironed out maybe in another month or two).
 
-Checkout our mini course - https://fastn.io/expander/. 
+Checkout our mini course - https://fastn.com/expander/.
 We have also built a full-stack framework on top of it: https://github.com/fastn-stack/fastn.
 
 Join us to learn more!

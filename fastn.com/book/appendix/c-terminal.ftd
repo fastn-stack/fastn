@@ -1,4 +1,4 @@
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: Terminal, Your New Best Friend
 
@@ -45,7 +45,7 @@ Writing command line applications are easier than building user interfaces so
 you will find a lot of functionalities are distributed as command line programs
 only, and not as GUI software you may be been used to so far.
 
-We have written a mini [guide on command commands: `fastn.io/cmds/`](/cmds/)
+We have written a mini [guide on command commands: `fastn.com/cmds/`](/cmds/)
 you would want to use on a day to day basis which going through this book.
 Familiarise yourself with them, and come back to them on need basis. But do not
 bother too much about not knowing these commands or memorising them, they are

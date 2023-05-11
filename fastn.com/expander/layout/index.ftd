@@ -1,5 +1,5 @@
 -- import: fastn/processors as pr
--- import: fastn.io/expander/lib
+-- import: fastn.com/expander/lib
 
 
 -- my-ds.page: Create `holy-grail` layout

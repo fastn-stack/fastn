@@ -27,8 +27,8 @@ classes: yo
 -- ds.markdown:
 
 Most of the time we want to add a single attribute. We use singular name for
-plural even for [text style](https://fastn.io/ftd/text-attributes/#style) and
-[css](https://fastn.io/ftd/common/#css) etc.
+plural even for [text style](https://fastn.com/ftd/text-attributes/#style) and
+[css](https://fastn.com/ftd/common/#css) etc.
 
 We can not remove `classes` as it would break existing code, so we have to it on
 next edition.

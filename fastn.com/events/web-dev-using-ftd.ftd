@@ -1,5 +1,5 @@
--- import: fastn.io/events as event
--- import: fastn.io/assets
+-- import: fastn.com/events as event
+-- import: fastn.com/assets
 
 -- common.host trizwit: Trizwit Labs, Zindot Innovations and IEEE SB Toc H
 
@@ -31,7 +31,7 @@ session on web development using `ftd`! 🌐💻
 
 -- ds.h3: What is `ftd`?
 
-[`ftd`](https://fastn.io/ftd/) is an innovative programming language for 
+[`ftd`](https://fastn.com/ftd/) is an innovative programming language for
 writing prose, developed by the team at `FifthTry`.
 
  `ftd` is designed for everyone, not just programmers. that's designed to
@@ -40,7 +40,7 @@ efficiently than ever before. Say goodbye to the complexities of traditional
 programming languages and hello to a simplified and intuitive experience.
 
 `ftd` is a part of the new full stack web development, 
-[`fastn`](https://fastn.io/) also developed at `FifthTry`.
+[`fastn`](https://fastn.com/) also developed at `FifthTry`.
 
 -- ds.h3: Trizwit Labs
 

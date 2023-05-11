@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/bling/quote
--- import: fastn.io/ftd as ftd-index
+-- import: fastn.com/ftd as ftd-index
 
 -- my-ds.page: `fastn` - Full-stack Web Development Made Easy
 
@@ -18,7 +18,7 @@ FifthTry.
 ;; Language](/first/).
 
 The quickest way to learn `fastn` is the [short video course we have created:
-expander](https://fastn.io/expander/), it takes you through the basics.
+expander](https://fastn.com/expander/), it takes you through the basics.
 
 Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
 our documentation.
@@ -129,7 +129,7 @@ We ship pre built binaries for Linux, Mac and Windows.
 lang: sh
 copy: false
 
-curl -fsSL https://fastn.io/install.sh | bash
+curl -fsSL https://fastn.com/install.sh | bash
 
 -- ds.image:
 width: fill-container
@@ -152,14 +152,14 @@ for building websites.
 
 `fastn` websites can be compiled into static html, js, css etc, and can be
 deployed on any static hosting providers eg [Github
-Pages](https://fastn.io/how-to/github-pages/),
-[Vercel](https://fastn.io/how-to/vercel/) etc.
+Pages](https://fastn.com/how-to/github-pages/),
+[Vercel](https://fastn.com/how-to/vercel/) etc.
 
 -- ds.code: `ftd` source code of the page you are reading
 lang: ftd
 
 \-- import: fifthtry.github.io/bling/quote
-\-- import: fastn.io/ftd as ftd-index
+\-- import: fastn.com/ftd as ftd-index
 
 \-- my-ds.page: Overview of `fastn` and `ftd`
 

@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/bling/quote
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: Publish Your Site
 
@@ -15,7 +15,7 @@ In this section we will use Github Pages to host your website.
 
 A website or a web-application is a software application, which runs on some
 hardware. Like you install an app on your iPhone or Android, or you install
-software on your Laptop or Desktop. When you visit `fastn.io/book/`, your
+software on your Laptop or Desktop. When you visit `fastn.com/book/`, your
 browser is contacting a software running somewhere. In general during the
 course of the book we will evaluate different options for hosting. For now to
 get started we are going to talk about a special kind of hosting, called static

@@ -24,7 +24,7 @@ installing it on your local system.
 -- ds.code: Installer Script
 lang: sh
 
-curl -fsSL https://fastn.io/install.sh | bash
+curl -fsSL https://fastn.com/install.sh | bash
 
 
 -- ds.markdown: 

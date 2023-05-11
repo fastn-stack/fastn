@@ -16,8 +16,8 @@ Introducing Fastn, a powerful command line tool written in Rust that offers a
 seamless experience for [`ftd`](https://ftd.dev) package management and static 
 site generation. With Fastn, you can easily convert your `.ftd` files 
 into `.html` files that can be ship on popular platforms such as 
-[Github Pages](https://fastn.io/how-to/github-pages/), 
-[Vercel](https://fastn.io/how-to/vercel/) etc.
+[Github Pages](https://fastn.com/how-to/github-pages/), 
+[Vercel](https://fastn.com/how-to/vercel/) etc.
 
 
 [`ftd`](https://ftd.dev) is a revolutionary language designed for creating web 
@@ -27,15 +27,15 @@ layouts, reusable `"ftd components"`, and first-class support for data modeling.
 This makes `ftd` a replacement for traditional data exchange formats like JSON, 
 CSV etc.
 
-Here are some key [features of `fastn`](https://fastn.io/features/) that makes it 
+Here are some key [features of `fastn`](https://fastn.com/features/) that makes it 
 a must-have tool:
 
 
 - Supports [ftd](https://ftd.dev)
-- [`ftd` package manager](https://fastn.io/package-manager/)
-- [Static site generator](https://fastn.io/static/)
-- [`fastn` Server](https://fastn.io/server/)
-- [Customizable color schemes](https://fastn.io/cs/)
+- [`ftd` package manager](https://fastn.com/package-manager/)
+- [Static site generator](https://fastn.com/static/)
+- [`fastn` Server](https://fastn.com/server/)
+- [Customizable color schemes](https://fastn.com/cs/)
 
 
 ## How to install `fastn`?
@@ -43,7 +43,7 @@ a must-have tool:
 So, how do you get started with Fastn? 
 
 Installing `fastn` is easy and can be done on multiple operating systems.
-Check out the ["How to Install"](https://fastn.io/install/) section for more 
+Check out the ["How to Install"](https://fastn.com/install/) section for more 
 information. Additionally, an editor is required to use `fastn`, and we 
 recommend using [Sublime Text](https://www.sublimetext.com/3).
 

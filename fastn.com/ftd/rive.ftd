@@ -1,4 +1,4 @@
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: `ftd.rive` - Rive Animations
 
@@ -12,7 +12,7 @@ v: cZI2dVTIOHM
 
 -- ds.rendered.input:
 
-\-- import: fastn.io/assets
+\-- import: fastn.com/assets
 
 \-- ftd.rive:
 id: panda

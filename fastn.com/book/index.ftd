@@ -8,8 +8,8 @@ This version of the text assumes you are using the lastest version of `fastn`.
 See the [installation section](/install/) to install or update `fastn`.
 
 The online version of the book is available at
-[`fastn.io/book`](https://fastn.io/book/). You can get the book offline by
-cloning [`github.com/fastn-stack/fastn.io`](https://github.com/fastn-stack/fastn.io)
+[`fastn.com/book`](https://fastn.com/book/). You can get the book offline by
+cloning [`github.com/fastn-stack/fastn.com`](https://github.com/fastn-stack/fastn.com)
 and, running `fastn serve` and visiting `http://127.0.0.1:8000/book/`.
 
 While reading this book you will invariably come across questions, things may
@@ -23,7 +23,7 @@ Your contribution is most welcome to help us write and translate it. Please
 reach us out on [`fastn Contributors` -> `#book-and-docs` channel of
 `fastn-stack` server on Discord](https://discord.gg/BMtam65dbK). If you find
 any mistakes in the book you can report it as a [#issues in our Github
-Repository](https://github.com/fastn-stack/fastn.io/issues).
+Repository](https://github.com/fastn-stack/fastn.com/issues).
 
 Prefer 📺 video medium of learning? Checkout our [video course](/expander/).
 

@@ -796,7 +796,7 @@ and use it as template and create their own color schemes by changing the
 values inside `colors.ftd`.
 
 The variables that are defined in the `colors.ftd` are of record types as 
-shown [here](https://fastn.io/ftd/built-in-types/#ftd-color-scheme). 
+shown [here](https://fastn.com/ftd/built-in-types/#ftd-color-scheme).
 
 
 
@@ -893,7 +893,7 @@ string status: Pending
 -- project list glenn-projects:
 
 -- project: Expander
-project-url: https://fastn.io/expander
+project-url: https://fastn.com/expander
 
 - Go through the Expander Course
 - Recreate the component
@@ -906,7 +906,7 @@ project-url: https://fastn.io/expander
 -- project list hadrian-projects:
 
 -- project: Expander
-project-url: https://fastn.io/expander
+project-url: https://fastn.com/expander
 
 - Go through the Expander Course
 - Recreate the component
@@ -921,7 +921,7 @@ project-url: https://fastn.io/expander
 -- project list nicole-projects:
 
 -- project: Expander
-project-url: https://fastn.io/expander
+project-url: https://fastn.com/expander
 
 - Go through the Expander Course
 - Recreate the component
@@ -936,7 +936,7 @@ project-url: https://fastn.io/expander
 -- project list mark-projects:
 
 -- project: Expander
-project-url: https://fastn.io/expander
+project-url: https://fastn.com/expander
 
 - Go through the Expander Course
 - Recreate the component
@@ -951,7 +951,7 @@ project-url: https://fastn.io/expander
 -- project list zyle-projects:
 
 -- project: Expander
-project-url: https://fastn.io/expander
+project-url: https://fastn.com/expander
 
 - Go through the Expander Course
 - Recreate the component

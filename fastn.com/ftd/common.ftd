@@ -39,7 +39,7 @@ color: $inherited.colors.text
 
 In the above example we have an `ftd.text` element that points to the id name
 `fifthtry`. This element can be accessed with `#fifthtry` appended after the
-current document url: http://fastn.io/ftd/common/#fifthtry
+current document url: http://fastn.com/ftd/common/#fifthtry
 
 
 

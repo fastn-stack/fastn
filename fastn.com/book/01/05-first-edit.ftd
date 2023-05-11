@@ -1,4 +1,4 @@
--- import: fastn.io/assets
+-- import: fastn.com/assets
 
 -- my-ds.page: Edit Your Site 🚧
 
@@ -33,7 +33,7 @@ but do give it a read, and try to find correspondence between what you see in
 -- ds.code: line number 5 of `index.ftd`
 lang: ftd
 
-\-- ds.page: Welcome to your [FASTN site](https://fastn.io/)
+\-- ds.page: Welcome to your [FASTN site](https://fastn.com/)
 
 -- ds.markdown:
 

@@ -26,7 +26,7 @@ In `ftd`, you can create your own color-scheme package from
 the exported fastn color-scheme json generated from figma.
 If you have come here, you might be already familiar
 with using fastn color-scheme json in Figma using `Token Studio for Figma` plugin.
-If not, then [visit this guide](https://fastn.io/figma).
+If not, then [visit this guide](https://fastn.com/figma).
 
 Let's say we want to modify forest-cs colors and create our own dark-forest-cs
 
@@ -47,7 +47,7 @@ width: fill-container
 -- ds.markdown:
 
 In this tutorial, I will be using the same figma file which I used in this
-[tutorial guide](https://fastn.io/figma)
+[tutorial guide](https://fastn.com/figma)
 
 -- ds.h1: Download forest-cs.json file
 

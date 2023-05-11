@@ -31,7 +31,7 @@ blog-posts or create exciting UIs.
 
 -- ds.markdown:
 
-If you check the [`featured page`](https://fastn.io/featured) you will come
+If you check the [`featured page`](https://fastn.com/featured) you will come
 across some amazing components. We are going to use few of them to show. For
 our convenience I am going to use these components in a new file `demo.ftd` and
 leave `index.ftd` file as it is, so that we can continue our learning there.
@@ -207,7 +207,7 @@ lang: ftd
 -- ds.markdown:
 if: { source == "default" }
 
-`ftd.column` documentation: [read more](https://fastn.io/ftd/column/)
+`ftd.column` documentation: [read more](https://fastn.com/ftd/column/)
 
 -- ds.markdown:
 if: { source == "default" }
@@ -232,7 +232,7 @@ lang: ftd
 -- ds.markdown:
 if: { source == "default" }
 
-`ftd.row` documentation: [read more](https://fastn.io/ftd/row/)
+`ftd.row` documentation: [read more](https://fastn.com/ftd/row/)
 
 
 

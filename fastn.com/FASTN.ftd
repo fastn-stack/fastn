@@ -1,8 +1,7 @@
 -- import: fastn
 
--- fastn.package: fastn.io
-download-base-url: https://raw.githubusercontent.com/fifthtry/fastn.io/main
-favicon: /-/fastn.io/images/favicon.svg
+-- fastn.package: fastn.com
+favicon: /-/fastn.com/images/favicon.svg
 
 -- fastn.dependency: fastn-stack.github.io/fastn-js
 -- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
@@ -28,8 +27,8 @@ favicon: /-/fastn.io/images/favicon.svg
 -- fastn.dependency: fifthtry.github.io/footer
 
 -- fastn.auto-import: ds
--- fastn.auto-import: fastn.io/FASTN/my-ds as my-ds
--- fastn.auto-import: fastn.io/assets as fastn-assets
+-- fastn.auto-import: fastn.com/FASTN/my-ds as my-ds
+-- fastn.auto-import: fastn.com/assets as fastn-assets
 -- fastn.auto-import: fifthtry.github.io/common as common
 
 

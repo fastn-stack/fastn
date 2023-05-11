@@ -1,5 +1,5 @@
--- import: fastn.io/assets
--- import: fastn.io/book
+-- import: fastn.com/assets
+-- import: fastn.com/book
 
 -- my-ds.page: Github's Online Editor
 
@@ -139,7 +139,7 @@ To install `fastn` you have to run the following command:
 -- ds.code:
 lang: ftd
 
-curl -fsSL https://fastn.io/install.sh | bash
+curl -fsSL https://fastn.com/install.sh | bash
 
 -- ds.markdown:
 

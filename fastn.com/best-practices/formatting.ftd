@@ -1,5 +1,5 @@
--- import: fastn.io/assets
--- import: fastn.io/utils
+-- import: fastn.com/assets
+-- import: fastn.com/utils
 
 
 -- my-ds.page: Formatting guidelines

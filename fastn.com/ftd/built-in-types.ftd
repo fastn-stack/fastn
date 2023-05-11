@@ -917,13 +917,13 @@ Consider the following example:
 lang: ftd
 
 \-- ftd.image-src my-images:
-light: https://fastn.io/-/fastn.io/images/fastn.svg
-dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
 
 -- ds.markdown:
 
-In this example, the image URL `https://fastn.io/-/fastn.io/images/fastn.svg` is
-returned in light mode, while `https://fastn.io/-/fastn.io/images/fastn-dark.svg`
+In this example, the image URL `https://fastn.com/-/fastn.com/images/fastn.svg` is
+returned in light mode, while `https://fastn.com/-/fastn.com/images/fastn-dark.svg`
 is returned in dark mode.
 
 It is also possible to use `ftd.image-src` with only one field. For example:
@@ -932,15 +932,15 @@ It is also possible to use `ftd.image-src` with only one field. For example:
 lang: ftd
 
 \-- ftd.image-src just-light:
-light: https://fastn.io/-/fastn.io/images/fastn.svg
+light: https://fastn.com/-/fastn.com/images/fastn.svg
 
 \;; or
 
-\-- ftd.image-src just-light: https://fastn.io/-/fastn.io/images/fastn.svg
+\-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/fastn.svg
 
 -- ds.markdown:
 
-In this case, the same image URL `https://fastn.io/-/fastn.io/images/fastn.svg`
+In this case, the same image URL `https://fastn.com/-/fastn.com/images/fastn.svg`
 is returned in both light and dark modes.
 
 
