@@ -14,9 +14,11 @@ pub mod wgpu;
 
 mod document;
 mod element;
+mod pencil;
 
 pub use document::Document;
 pub use element::{Container, Dimension, Element, Image, Text};
+pub use pencil::Pencil;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 
