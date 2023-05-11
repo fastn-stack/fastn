@@ -14,11 +14,13 @@ pub mod wgpu;
 
 mod document;
 mod element;
-mod pencil;
+mod event;
+mod operation;
 
 pub use document::Document;
 pub use element::{Container, Dimension, Element, Image, Text};
-pub use pencil::{Operation};
+pub use event::Event;
+pub use operation::Operation;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 
