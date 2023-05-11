@@ -544,8 +544,6 @@ impl InterpreterState {
     ) -> ftd::interpreter::Result<StateWithThing<T>> {
         use itertools::Itertools;
 
-        dbg!(&module, current_module, name, &exports);
-
         let document = if let Some(document) = self.parsed_libs.get(module) {
             document
         } else {
