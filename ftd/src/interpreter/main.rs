@@ -544,7 +544,16 @@ impl InterpreterState {
     ) -> ftd::interpreter::Result<StateWithThing<T>> {
         use itertools::Itertools;
 
-        let document = self.parsed_libs.get(module).unwrap();
+        let document = if let Some(document) = self.parsed_libs.get(module) {
+            document
+        } else {
+            return Ok(ftd::interpreter::StateWithThing::new_state(
+                ftd::interpreter::InterpreterWithoutState::StuckOnImport {
+                    module: module.to_string(),
+                    caller_module: current_module.to_string(),
+                },
+            ));
+        };
 
         let (doc_name, thing_name, remaining) = // Todo: use remaining
             ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
@@ -624,6 +633,31 @@ impl InterpreterState {
                     },
                 ));
             } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
+            } else if let Some(module) = document
+                .re_exports
+                .module_things
+                .get(thing_name.as_str())
+                .cloned()
+            {
+                let mut exports = exports.to_vec();
+                exports.push(name.to_string());
+
+                return self.resolve_import_things(
+                    module.as_str(),
+                    format!(
+                        "{}#{}{}",
+                        module,
+                        thing_name,
+                        remaining
+                            .as_ref()
+                            .map(|v| format!(".{}", v))
+                            .unwrap_or_default()
+                    )
+                    .as_str(),
+                    line_number,
+                    current_module,
+                    exports.as_slice(),
+                );
             } else if !found_foreign_variable {
                 return ftd::interpreter::utils::e2(
                     format!("`{}` not found", name),
@@ -836,6 +870,7 @@ impl ParsedDocument {
             }
             (doc_aliases, re_exports)
         };
+
         Ok(ParsedDocument {
             name: id.to_string(),
             ast,

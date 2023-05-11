@@ -1636,9 +1636,9 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        return get_thing(&self, &name, line_number);
+        return get_reexport_thing(&self, &name, line_number);
 
-        fn get_thing(
+        fn get_reexport_thing(
             tdoc: &TDoc,
             name: &str,
             line_number: usize,
@@ -1667,8 +1667,8 @@ impl<'a> TDoc<'a> {
                     },
                 };
 
-            if let ftd::interpreter::Thing::Export { from, .. } = thing_name {
-                let thing_name = get_thing(tdoc, from.as_str(), line_number)?.0;
+            if let ftd::interpreter::Thing::Export { ref from, .. } = thing_name {
+                let thing_name = get_reexport_thing(tdoc, from, line_number)?.0;
                 return Ok((thing_name, remaining));
             }
 
