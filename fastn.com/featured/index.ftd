@@ -317,7 +317,7 @@ boolean is-last: false
 
 -- template: Doc-site
 template-url: https://fastn-community.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.png
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
 licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
 github-url: https://github.com/fastn-community/doc-site
 
