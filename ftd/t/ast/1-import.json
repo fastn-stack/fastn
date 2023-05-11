@@ -3,7 +3,8 @@
     "import": {
       "module": "foo",
       "alias": "foo",
-      "line-number": 1
+      "line-number": 1,
+      "export": null
     }
   }
 ]
