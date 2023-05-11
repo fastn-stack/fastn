@@ -1,5 +1,6 @@
 mod pencil;
 mod render;
 
-pub use pencil::{Error, Pencil};
+pub use pencil::draw;
 pub use render::render;
+

@@ -1,16 +1,8 @@
-use fastn_surface::Pencil;
-
 #[tokio::main]
 async fn main() {
     let doc = fastn_surface::Document::default();
-    doc.render().await;
-    // w.layout(window_size.width, window_size.height);
+    let ops = doc.render().await;
 
-    let d = pencil();
-    d.init().await.unwrap();
-}
-
-#[cfg(feature = "native")]
-fn pencil() -> impl fastn_surface::Pencil {
-    fastn_surface::wgpu::Pencil {}
+    #[cfg(feature = "native")]
+    fastn_surface::wgpu::draw(&ops).await;
 }
