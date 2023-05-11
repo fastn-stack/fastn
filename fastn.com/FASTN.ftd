@@ -404,7 +404,7 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
-- Add images in documents: /images-in-documents/-/planning
+- Add images to documents: /images-in-documents/-/planning
   document: /expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
   document: /expander/layout/index.ftd
