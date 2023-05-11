@@ -1,4 +1,4 @@
 -- import: 6-function
-export: *
+export: append
 
 -- ftd.text: $append(a = FifthTry, b = Click here)

@@ -733,3 +733,28 @@ pub(crate) fn validate_properties_and_set_default(
     }
     Ok(())
 }
+
+pub(crate) fn insert_export_thing(
+    exports: &[String],
+    thing_name: &str,
+    bag: &mut ftd::Map<ftd::interpreter::Thing>,
+    doc_id: &str,
+    line_number: usize,
+) {
+    for export in exports.iter() {
+        let to = ftd::interpreter::utils::get_doc_name_and_remaining(
+            export.as_str(),
+            doc_id,
+            line_number,
+        )
+        .0;
+        bag.insert(
+            to.to_string(),
+            ftd::interpreter::Thing::Export {
+                from: thing_name.to_string(),
+                to,
+                line_number,
+            },
+        );
+    }
+}

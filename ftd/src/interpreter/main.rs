@@ -174,6 +174,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(record) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    record.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    record.line_number,
+                                );
                                 self.bag.insert(
                                     record.name.to_string(),
                                     ftd::interpreter::Thing::Record(record),
@@ -194,6 +201,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(or_type) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    or_type.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    or_type.line_number,
+                                );
                                 self.bag.insert(
                                     or_type.name.to_string(),
                                     ftd::interpreter::Thing::OrType(or_type),
@@ -221,6 +235,13 @@ impl InterpreterState {
                                         .string(doc.name, function.line_number)?;
                                     self.js.insert(js);
                                 }
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    function.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    function.line_number,
+                                );
                                 self.bag.insert(
                                     function.name.to_string(),
                                     ftd::interpreter::Thing::Function(function),
@@ -241,6 +262,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(variable) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    variable.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    variable.line_number,
+                                );
                                 self.bag.insert(
                                     variable.name.to_string(),
                                     ftd::interpreter::Thing::Variable(variable),
@@ -287,6 +315,14 @@ impl InterpreterState {
                                     self.css.insert(css);
                                 }
 
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    component.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    component.line_number,
+                                );
+
                                 self.bag.insert(
                                     component.name.to_string(),
                                     ftd::interpreter::Thing::Component(component),
@@ -307,6 +343,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(web_component) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    web_component.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    web_component.line_number,
+                                );
                                 self.bag.insert(
                                     web_component.name.to_string(),
                                     ftd::interpreter::Thing::WebComponent(web_component),
@@ -784,7 +827,7 @@ impl ParsedDocument {
                                 for thing in things {
                                     re_exports
                                         .module_things
-                                        .insert(module.to_string(), thing.to_string());
+                                        .insert(thing.to_string(), module.to_string());
                                 }
                             }
                         }

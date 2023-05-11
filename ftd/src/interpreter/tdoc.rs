@@ -1636,24 +1636,43 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        let (splited_name, remaining_value) = if let Ok(function_name) =
-            ftd::interpreter::utils::get_function_name(name.as_str(), self.name, line_number)
-        {
-            (function_name, None)
-        } else {
-            ftd::interpreter::utils::get_doc_name_and_remaining(
-                name.as_str(),
-                self.name,
-                line_number,
-            )
-        };
+        return get_thing(&self, &name, line_number);
 
-        match self.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
-            Some(a) => Ok((a, remaining_value)),
-            None => match self.bag().get(name.as_str()).map(|v| (v.to_owned(), None)) {
-                Some(a) => Ok(a),
-                None => self.err("not found", splited_name, "get_initial_thing", line_number),
-            },
+        fn get_thing(
+            tdoc: &TDoc,
+            name: &str,
+            line_number: usize,
+        ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
+            let (splited_name, remaining_value) = if let Ok(function_name) =
+                ftd::interpreter::utils::get_function_name(name, tdoc.name, line_number)
+            {
+                (function_name, None)
+            } else {
+                ftd::interpreter::utils::get_doc_name_and_remaining(name, tdoc.name, line_number)
+            };
+
+            let (thing_name, remaining) =
+                match tdoc.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
+                    Some(a) => (a, remaining_value),
+                    None => match tdoc.bag().get(name).map(|v| (v.to_owned(), None)) {
+                        Some(a) => a,
+                        None => {
+                            return tdoc.err(
+                                "not found",
+                                splited_name,
+                                "get_initial_thing",
+                                line_number,
+                            );
+                        }
+                    },
+                };
+
+            if let ftd::interpreter::Thing::Export { from, .. } = thing_name {
+                let thing_name = get_thing(tdoc, from.as_str(), line_number)?.0;
+                return Ok((thing_name, remaining));
+            }
+
+            Ok((thing_name, remaining))
         }
     }
 

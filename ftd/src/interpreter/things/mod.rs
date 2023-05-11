@@ -41,6 +41,7 @@ impl Thing {
             ftd::interpreter::Thing::Export { to, .. } => to.to_string(),
         }
     }
+
     pub fn line_number(&self) -> usize {
         match self {
             Thing::Record(r) => r.line_number,
