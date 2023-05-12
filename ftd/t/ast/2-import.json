@@ -4,7 +4,8 @@
       "module": "foo",
       "alias": "f",
       "line-number": 1,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   }
 ]
