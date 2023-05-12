@@ -22,14 +22,19 @@ To show how to add the images by importing assets.
 if: { source == "default" }
 v: _yM7y_Suaio
 
+-- ds.image:
+if: { source == "planning" }
+src: $fastn-assets.files.expander.imagemodule.intro.jpg
+
 
 -- ds.h1: Intro Clip
 if: { source == "planning" }
 
 In this video we will learn how to add images in the documents.
 
-/-- ds.image:
-src:
+-- ds.image:
+if: { source == "planning" }
+src: $fastn-assets.files.expander.imagemodule.adding-image.gif
 
 -- ds.markdown:
 if: { source == "planning" }
@@ -37,7 +42,8 @@ if: { source == "planning" }
 Hi, I am Ajit, welcome to fastn video series, fastn helps you build website 
 and web apps faster.
 
-Let's continue. 
+
+
 
 -- ds.h1: Supported Image Formats
 
@@ -112,7 +118,12 @@ browser.
 
 The image is added. 
 
--- ds.markdown:
+-- ds.image:
+if: { source == "default" }
+src: $fastn-assets.files.expander.imagemodule.adding-image.gif
+
+
+-- ds.h3: Properties to image
 
 We can apply various properties to this image, like 
 `width`, border, shadow, etc. 
@@ -186,7 +197,7 @@ if: { source == "planning" }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 Checkout the `fastn` website.
-Support us by clicking on this link and give us a star on GitHub and join our 
+Support us by clicking on this link and give us a star ⭐ on GitHub and join our 
 fastn community on Discord.
 
 
@@ -195,7 +206,7 @@ if: { source == "default" }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
-Support us by giving a star on [GitHub](https://github.com/fastn-stack/fastn/) 
+Support us by giving a star ⭐ on [GitHub](https://github.com/fastn-stack/fastn/) 
 and join our fastn community on [Discord](/discord/).
 
 
@@ -213,4 +224,7 @@ v: _yM7y_Suaio
 -- string source: default
 $processor$: pr.get-data
 key: source
+
+
+
 
