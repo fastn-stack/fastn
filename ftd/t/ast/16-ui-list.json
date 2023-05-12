@@ -4,7 +4,8 @@
       "module": "fifthtry.github.io/workshop-page/assets",
       "alias": "assets",
       "line-number": 1,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   },
   {
@@ -12,7 +13,8 @@
       "module": "fifthtry.github.io/workshop-page/header",
       "alias": "h",
       "line-number": 3,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   },
   {
@@ -20,7 +22,8 @@
       "module": "fifthtry.github.io/workshop-page/typo",
       "alias": "ds",
       "line-number": 4,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   },
   {
@@ -28,7 +31,8 @@
       "module": "fpm",
       "alias": "fpm",
       "line-number": 5,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   },
   {
@@ -36,7 +40,8 @@
       "module": "fpm/processors",
       "alias": "pr",
       "line-number": 6,
-      "export": null
+      "exports": null,
+      "exposing": null
     }
   },
   {

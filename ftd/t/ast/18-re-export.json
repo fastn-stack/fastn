@@ -4,7 +4,8 @@
       "module": "14-function",
       "alias": "14-function",
       "line-number": 1,
-      "export": "All"
+      "exports": "All",
+      "exposing": null
     }
   },
   {
@@ -12,12 +13,13 @@
       "module": "3-record",
       "alias": "3-record",
       "line-number": 4,
-      "export": {
+      "exports": {
         "Things": [
           "foo",
           "bar"
         ]
-      }
+      },
+      "exposing": null
     }
   }
 ]
