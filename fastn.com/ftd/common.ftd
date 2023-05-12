@@ -1084,7 +1084,7 @@ stop-position.percent: 20
 \-- end: color-values-2
 
 \-- ftd.row:
-width.fixed.px: 400
+width: fill-container
 height.fixed.px: 200
 background.linear-gradient: $lg ;; <hl>
 background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2 ;; <hl>
@@ -4803,7 +4803,7 @@ background.image: $bg-image
 -- component render-gradient:
 
 -- ftd.row:
-width.fixed.px: 400
+width: fill-container
 height.fixed.px: 200
 background.linear-gradient: $lg
 background.linear-gradient if { gradient-counter % 3 == 1 }: $lg-2
@@ -4819,17 +4819,7 @@ color: $inherited.colors.text-strong
 -- end: render-gradient
 
 
--- ftd.linear-gradient lg:
-direction: top-left
-colors: red, green, blue
 
--- ftd.linear-gradient lg-2:
-direction.angle: 180
-colors: violet, indigo, blue, green, yellow, orange, red
-
--- ftd.linear-gradient lg-3:
-direction.turn: 0.25
-colors: blue, red
 
 
 -- ftd.shadow s:
