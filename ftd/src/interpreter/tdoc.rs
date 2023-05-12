@@ -1125,7 +1125,7 @@ impl<'a> TDoc<'a> {
                     exports.push(name);
                     return self.scan_initial_thing_from_doc_name(
                         module,
-                        thing_name.to_string(),
+                        thing_name,
                         remaining,
                         line_number,
                         exports,
@@ -1143,7 +1143,7 @@ impl<'a> TDoc<'a> {
                     exports.push(name);
                     return self.scan_initial_thing_from_doc_name(
                         module,
-                        thing_name.to_string(),
+                        thing_name,
                         remaining,
                         line_number,
                         exports,
@@ -1549,7 +1549,7 @@ impl<'a> TDoc<'a> {
                     exports.push(name);
                     return self.search_initial_thing_from_doc_name(
                         module,
-                        thing_name.to_string(),
+                        thing_name,
                         remaining,
                         line_number,
                         doc_name.as_str(),
@@ -1567,7 +1567,7 @@ impl<'a> TDoc<'a> {
                     exports.push(name);
                     return self.search_initial_thing_from_doc_name(
                         module,
-                        thing_name.to_string(),
+                        thing_name,
                         remaining,
                         line_number,
                         doc_name.as_str(),
