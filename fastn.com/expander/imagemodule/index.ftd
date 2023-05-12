@@ -20,7 +20,7 @@ To show how to add the images by importing assets.
 
 -- ds.youtube:
 if: { source == "default" }
-v: HPVQFjVrncU
+v: _yM7y_Suaio
 
 
 -- ds.h1: Intro Clip
@@ -204,7 +204,7 @@ if: { source == "planning" }
 
 -- ds.youtube:
 if: { source == "planning" }
-v: HPVQFjVrncU
+v: _yM7y_Suaio
 
 -- end: my-ds.page 
 
