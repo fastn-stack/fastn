@@ -1,5 +1,5 @@
 -- import: 100-re-export as h
-export: append
+exposing: append
 
 -- ftd.text: $append(a = FifthTry, b = Click here)
 

@@ -633,12 +633,45 @@ impl InterpreterState {
                     },
                 ));
             } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
-            } else if let Some(export_module) = document
-                .re_exports
-                .module_things
-                .get(thing_name.as_str())
-                .cloned()
+            } else if module.ne(current_module)
+                && document
+                    .re_exports
+                    .module_things
+                    .contains_key(thing_name.as_str())
             {
+                let export_module = document
+                    .re_exports
+                    .module_things
+                    .get(thing_name.as_str())
+                    .cloned()
+                    .unwrap();
+                let mut exports = exports.to_vec();
+                exports.push(name.to_string());
+
+                return self.resolve_import_things(
+                    export_module.as_str(),
+                    format!(
+                        "{}#{}{}",
+                        export_module,
+                        thing_name,
+                        remaining
+                            .as_ref()
+                            .map(|v| format!(".{}", v))
+                            .unwrap_or_default()
+                    )
+                    .as_str(),
+                    line_number,
+                    module,
+                    exports.as_slice(),
+                );
+            } else if module.eq(current_module)
+                && document.exposings.contains_key(thing_name.as_str())
+            {
+                let export_module = document
+                    .exposings
+                    .get(thing_name.as_str())
+                    .cloned()
+                    .unwrap();
                 let mut exports = exports.to_vec();
                 exports.push(name.to_string());
 
@@ -814,6 +847,7 @@ pub struct ParsedDocument {
     pub processing_imports: bool,
     pub doc_aliases: ftd::Map<String>,
     pub re_exports: ReExport,
+    pub exposings: ftd::Map<String>,
     pub foreign_variable: Vec<String>,
     pub foreign_function: Vec<String>,
 }
@@ -839,22 +873,25 @@ impl ParsedDocument {
             ftd::p1::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
-        let (doc_aliases, re_exports) = {
+        let (doc_aliases, re_exports, exposings) = {
             let mut doc_aliases = ftd::interpreter::default::default_aliases();
             let mut re_exports = ReExport {
                 module_things: Default::default(),
                 all_things: vec![],
             };
+
+            let mut exposings: ftd::Map<String> = Default::default();
             for ast in ast.iter().filter(|v| v.is_import()) {
                 if let ftd::ast::AST::Import(ftd::ast::Import {
                     module,
                     alias,
-                    export,
+                    exports,
+                    exposing,
                     ..
                 }) = ast
                 {
                     doc_aliases.insert(alias.to_string(), module.to_string());
-                    if let Some(export) = export {
+                    if let Some(export) = exports {
                         match export {
                             ftd::ast::Export::All => re_exports.all_things.push(module.to_string()),
                             ftd::ast::Export::Things(things) => {
@@ -866,9 +903,14 @@ impl ParsedDocument {
                             }
                         }
                     }
+                    if let Some(ftd::ast::Exposing::Things(things)) = exposing {
+                        for thing in things {
+                            exposings.insert(thing.to_string(), module.to_string());
+                        }
+                    }
                 }
             }
-            (doc_aliases, re_exports)
+            (doc_aliases, re_exports, exposings)
         };
 
         Ok(ParsedDocument {
@@ -877,6 +919,7 @@ impl ParsedDocument {
             processing_imports: true,
             doc_aliases,
             re_exports,
+            exposings,
             foreign_variable: vec![],
             foreign_function: vec![],
         })

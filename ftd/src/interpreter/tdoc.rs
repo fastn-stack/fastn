@@ -1017,6 +1017,7 @@ impl<'a> TDoc<'a> {
         remaining: Option<String>,
         line_number: usize,
         exports: Vec<String>,
+        caller: String,
     ) -> ftd::interpreter::Result<()> {
         use itertools::Itertools;
 
@@ -1108,12 +1109,18 @@ impl<'a> TDoc<'a> {
                         .pending_imports
                         .contains
                         .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                } else if let Some(module) = parsed_document
-                    .re_exports
-                    .module_things
-                    .get(thing_name.as_str())
-                    .cloned()
+                } else if doc_name.ne(&caller)
+                    && parsed_document
+                        .re_exports
+                        .module_things
+                        .contains_key(thing_name.as_str())
                 {
+                    let module = parsed_document
+                        .re_exports
+                        .module_things
+                        .get(thing_name.as_str())
+                        .cloned()
+                        .unwrap();
                     let mut exports = exports;
                     exports.push(name);
                     return self.scan_initial_thing_from_doc_name(
@@ -1122,6 +1129,25 @@ impl<'a> TDoc<'a> {
                         remaining,
                         line_number,
                         exports,
+                        doc_name,
+                    );
+                } else if doc_name.eq(&caller)
+                    && parsed_document.exposings.contains_key(thing_name.as_str())
+                {
+                    let module = parsed_document
+                        .exposings
+                        .get(thing_name.as_str())
+                        .cloned()
+                        .unwrap();
+                    let mut exports = exports;
+                    exports.push(name);
+                    return self.scan_initial_thing_from_doc_name(
+                        module,
+                        thing_name.to_string(),
+                        remaining,
+                        line_number,
+                        exports,
+                        doc_name,
                     );
                 }
 
@@ -1203,7 +1229,14 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        self.scan_initial_thing_from_doc_name(doc_name, thing_name, remaining, line_number, vec![])
+        self.scan_initial_thing_from_doc_name(
+            doc_name,
+            thing_name,
+            remaining,
+            line_number,
+            vec![],
+            self.name.to_string(),
+        )
     }
 
     pub fn search_thing(
@@ -1500,12 +1533,36 @@ impl<'a> TDoc<'a> {
                     ));
                 }
 
-                if let Some(module) = parsed_document
-                    .re_exports
-                    .module_things
-                    .get(thing_name.as_str())
-                    .cloned()
+                if doc_name.ne(&caller)
+                    && parsed_document
+                        .re_exports
+                        .module_things
+                        .contains_key(thing_name.as_str())
                 {
+                    let module = parsed_document
+                        .re_exports
+                        .module_things
+                        .get(thing_name.as_str())
+                        .cloned()
+                        .unwrap();
+                    let mut exports = exports;
+                    exports.push(name);
+                    return self.search_initial_thing_from_doc_name(
+                        module,
+                        thing_name.to_string(),
+                        remaining,
+                        line_number,
+                        doc_name.as_str(),
+                        exports,
+                    );
+                } else if doc_name.eq(&caller)
+                    && parsed_document.exposings.contains_key(thing_name.as_str())
+                {
+                    let module = parsed_document
+                        .exposings
+                        .get(thing_name.as_str())
+                        .cloned()
+                        .unwrap();
                     let mut exports = exports;
                     exports.push(name);
                     return self.search_initial_thing_from_doc_name(
