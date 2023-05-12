@@ -34,8 +34,17 @@ pub struct InterpreterState {
 
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct PendingImports {
-    pub stack: Vec<(String, String, usize, String)>,
+    pub stack: Vec<PendingImportItem>,
     pub contains: std::collections::HashSet<(String, String)>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct PendingImportItem {
+    pub module: String,
+    pub thing_name: String,
+    pub line_number: usize,
+    pub caller: String,
+    pub exports: Vec<String>,
 }
 
 /**
@@ -53,8 +62,15 @@ pub struct PendingImports {
  */
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ToProcess {
-    pub stack: Vec<(String, Vec<(usize, ftd::ast::AST)>)>,
+    pub stack: Vec<(String, Vec<ToProcessItem>)>,
     pub contains: std::collections::HashSet<(String, String)>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ToProcessItem {
+    pub number_of_scan: usize,
+    pub ast: ftd::ast::AST,
+    pub exports: Vec<String>,
 }
 
 impl InterpreterState {
@@ -112,15 +128,15 @@ impl InterpreterState {
     /// AST stack of the `to_process` field of `InterpreterState` instance.
     pub fn increase_scan_count(&mut self) {
         if let Some((_, ast_list)) = self.to_process.stack.last_mut() {
-            if let Some(ast) = ast_list.first_mut() {
-                ast.0 += 1;
+            if let Some(item) = ast_list.first_mut() {
+                item.number_of_scan += 1;
             }
         }
     }
 
     #[tracing::instrument(name = "continue_processing", skip_all)]
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
-        while let Some((doc_name, number_of_scan, ast)) = self.get_next_ast() {
+        while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
                 match interpreter {
                     ftd::interpreter::StateWithThing::State(s) => {
@@ -158,6 +174,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(record) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    record.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    record.line_number,
+                                );
                                 self.bag.insert(
                                     record.name.to_string(),
                                     ftd::interpreter::Thing::Record(record),
@@ -178,6 +201,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(or_type) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    or_type.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    or_type.line_number,
+                                );
                                 self.bag.insert(
                                     or_type.name.to_string(),
                                     ftd::interpreter::Thing::OrType(or_type),
@@ -205,6 +235,13 @@ impl InterpreterState {
                                         .string(doc.name, function.line_number)?;
                                     self.js.insert(js);
                                 }
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    function.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    function.line_number,
+                                );
                                 self.bag.insert(
                                     function.name.to_string(),
                                     ftd::interpreter::Thing::Function(function),
@@ -225,6 +262,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(variable) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    variable.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    variable.line_number,
+                                );
                                 self.bag.insert(
                                     variable.name.to_string(),
                                     ftd::interpreter::Thing::Variable(variable),
@@ -271,6 +315,14 @@ impl InterpreterState {
                                     self.css.insert(css);
                                 }
 
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    component.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    component.line_number,
+                                );
+
                                 self.bag.insert(
                                     component.name.to_string(),
                                     ftd::interpreter::Thing::Component(component),
@@ -291,6 +343,13 @@ impl InterpreterState {
                                 return Ok(s.into_interpreter(self))
                             }
                             ftd::interpreter::StateWithThing::Thing(web_component) => {
+                                ftd::interpreter::utils::insert_export_thing(
+                                    exports.as_slice(),
+                                    web_component.name.as_str(),
+                                    &mut self.bag,
+                                    doc_name.as_str(),
+                                    web_component.line_number,
+                                );
                                 self.bag.insert(
                                     web_component.name.to_string(),
                                     ftd::interpreter::Thing::WebComponent(web_component),
@@ -354,7 +413,12 @@ impl InterpreterState {
     /// stack or the first element of the ast_list field do not exist, the method returns None.
     pub fn peek_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
         if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
-            if let Some((number_of_scan, ast)) = ast_list.first() {
+            if let Some(ftd::interpreter::ToProcessItem {
+                number_of_scan,
+                ast,
+                ..
+            }) = ast_list.first()
+            {
                 return Some((doc_name.to_string(), *number_of_scan, ast));
             }
         }
@@ -369,11 +433,21 @@ impl InterpreterState {
     /// in the ast_list vector. If there are no ASTs remaining in the current stack element, it
     /// checks if the stack element is empty. If it is, it removes it from the stack and
     /// continues the loop. If the stack is empty, it returns None.
-    pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd::ast::AST)> {
+    pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd::ast::AST, Vec<String>)> {
         loop {
             if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
-                if let Some((number_of_scan, ast)) = ast_list.first() {
-                    return Some((doc_name.to_string(), *number_of_scan, ast.clone()));
+                if let Some(ftd::interpreter::ToProcessItem {
+                    number_of_scan,
+                    ast,
+                    exports: export,
+                }) = ast_list.first()
+                {
+                    return Some((
+                        doc_name.to_string(),
+                        *number_of_scan,
+                        ast.clone(),
+                        export.clone(),
+                    ));
                 }
             }
 
@@ -397,7 +471,7 @@ impl InterpreterState {
         let mut pop_last = false;
         if let Some((doc_name, asts)) = self.to_process.stack.last_mut() {
             if !asts.is_empty() {
-                let (_, ast) = asts.remove(0);
+                let ast = asts.remove(0).ast;
                 let document = self.parsed_libs.get(doc_name).unwrap();
                 let ast_full_name = ftd::interpreter::utils::resolve_name(
                     ast.name().as_str(),
@@ -427,8 +501,13 @@ impl InterpreterState {
     pub fn resolve_pending_imports<T>(
         &mut self,
     ) -> ftd::interpreter::Result<Option<StateWithThing<T>>> {
-        while let Some((module, thing_name, line_number, caller)) =
-            self.pending_imports.stack.iter().next_back().cloned()
+        while let Some(ftd::interpreter::PendingImportItem {
+            module,
+            thing_name,
+            line_number,
+            caller,
+            exports,
+        }) = self.pending_imports.stack.iter().next_back().cloned()
         {
             if self.parsed_libs.contains_key(module.as_str()) {
                 let state = self.resolve_import_things(
@@ -436,6 +515,7 @@ impl InterpreterState {
                     thing_name.as_str(),
                     line_number,
                     caller.as_str(),
+                    exports.as_slice(),
                 )?;
                 if state.is_continue() {
                     continue;
@@ -460,10 +540,20 @@ impl InterpreterState {
         name: &str,
         line_number: usize,
         current_module: &str,
+        exports: &[String],
     ) -> ftd::interpreter::Result<StateWithThing<T>> {
         use itertools::Itertools;
 
-        let document = self.parsed_libs.get(module).unwrap();
+        let document = if let Some(document) = self.parsed_libs.get(module) {
+            document
+        } else {
+            return Ok(ftd::interpreter::StateWithThing::new_state(
+                ftd::interpreter::InterpreterWithoutState::StuckOnImport {
+                    module: module.to_string(),
+                    caller_module: current_module.to_string(),
+                },
+            ));
+        };
 
         let (doc_name, thing_name, remaining) = // Todo: use remaining
             ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
@@ -487,7 +577,11 @@ impl InterpreterState {
                         && (name.eq(&format!("{}#{}", doc_name, thing_name))
                             || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
-                .map(|v| (0, v.to_owned()))
+                .map(|v| ftd::interpreter::ToProcessItem {
+                    number_of_scan: 0,
+                    ast: v.to_owned(),
+                    exports: exports.to_vec(),
+                })
                 .collect_vec();
             if !current_doc_contains_thing.is_empty()
                 && !self
@@ -512,7 +606,11 @@ impl InterpreterState {
                     && (v.name().eq(&thing_name)
                         || v.name().starts_with(format!("{}.", thing_name).as_str()))
             })
-            .map(|v| (0, v.to_owned()))
+            .map(|v| ftd::interpreter::ToProcessItem {
+                number_of_scan: 0,
+                ast: v.to_owned(),
+                exports: exports.to_vec(),
+            })
             .collect_vec();
 
         if !ast_for_thing.is_empty() {
@@ -535,6 +633,31 @@ impl InterpreterState {
                     },
                 ));
             } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
+            } else if let Some(export_module) = document
+                .re_exports
+                .module_things
+                .get(thing_name.as_str())
+                .cloned()
+            {
+                let mut exports = exports.to_vec();
+                exports.push(name.to_string());
+
+                return self.resolve_import_things(
+                    export_module.as_str(),
+                    format!(
+                        "{}#{}{}",
+                        export_module,
+                        thing_name,
+                        remaining
+                            .as_ref()
+                            .map(|v| format!(".{}", v))
+                            .unwrap_or_default()
+                    )
+                    .as_str(),
+                    line_number,
+                    module,
+                    exports.as_slice(),
+                );
             } else if !found_foreign_variable {
                 return ftd::interpreter::utils::e2(
                     format!("`{}` not found", name),
@@ -669,7 +792,11 @@ pub fn interpret_with_line_number(
             .iter()
             .filter_map(|v| {
                 if v.is_component() {
-                    Some((0, v.to_owned()))
+                    Some(ftd::interpreter::ToProcessItem {
+                        number_of_scan: 0,
+                        ast: v.to_owned(),
+                        exports: vec![],
+                    })
                 } else {
                     None
                 }
@@ -686,8 +813,15 @@ pub struct ParsedDocument {
     pub ast: Vec<ftd::ast::AST>,
     pub processing_imports: bool,
     pub doc_aliases: ftd::Map<String>,
+    pub re_exports: ReExport,
     pub foreign_variable: Vec<String>,
     pub foreign_function: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ReExport {
+    pub module_things: ftd::Map<String>,
+    pub all_things: Vec<String>,
 }
 
 impl ParsedDocument {
@@ -705,20 +839,44 @@ impl ParsedDocument {
             ftd::p1::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
-        let doc_aliases = {
+        let (doc_aliases, re_exports) = {
             let mut doc_aliases = ftd::interpreter::default::default_aliases();
+            let mut re_exports = ReExport {
+                module_things: Default::default(),
+                all_things: vec![],
+            };
             for ast in ast.iter().filter(|v| v.is_import()) {
-                if let ftd::ast::AST::Import(ftd::ast::Import { module, alias, .. }) = ast {
+                if let ftd::ast::AST::Import(ftd::ast::Import {
+                    module,
+                    alias,
+                    export,
+                    ..
+                }) = ast
+                {
                     doc_aliases.insert(alias.to_string(), module.to_string());
+                    if let Some(export) = export {
+                        match export {
+                            ftd::ast::Export::All => re_exports.all_things.push(module.to_string()),
+                            ftd::ast::Export::Things(things) => {
+                                for thing in things {
+                                    re_exports
+                                        .module_things
+                                        .insert(thing.to_string(), module.to_string());
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            doc_aliases
+            (doc_aliases, re_exports)
         };
+
         Ok(ParsedDocument {
             name: id.to_string(),
             ast,
             processing_imports: true,
             doc_aliases,
+            re_exports,
             foreign_variable: vec![],
             foreign_function: vec![],
         })

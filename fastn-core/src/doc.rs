@@ -13,6 +13,7 @@ fn cached_parse(
     }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
+
     if fastn_core::utils::parse_caching_enabled() {
         if let Ok(mut l) = PARSED_DOC_CACHE.write() {
             l.insert(id.to_string(), doc.clone());

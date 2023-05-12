@@ -1,0 +1,6 @@
+-- import: 14-function
+export: *
+
+-- import: 3-record
+export: foo
+export: bar

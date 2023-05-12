@@ -18,7 +18,7 @@ pub use component::{
     Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
 };
 pub use function::Function;
-pub use import::Import;
+pub use import::{Export, Import};
 pub use kind::{
     Condition, HeaderValues, ValueSource, VariableKind, VariableModifier, VariableValue, NULL,
 };

@@ -48,12 +48,16 @@ impl Variable {
                 );
 
             if !state.parsed_libs.contains_key(doc_name.as_str()) {
-                state.pending_imports.stack.push((
-                    doc_name.to_string(),
-                    name,
-                    ast.line_number(),
-                    doc.name.to_string(),
-                ));
+                state
+                    .pending_imports
+                    .stack
+                    .push(ftd::interpreter::PendingImportItem {
+                        module: doc_name.to_string(),
+                        thing_name: name,
+                        line_number: ast.line_number(),
+                        caller: doc.name.to_string(),
+                        exports: vec![],
+                    });
                 state
                     .pending_imports
                     .contains

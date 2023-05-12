@@ -1,0 +1,6 @@
+-- import: 100-re-export as h
+export: append
+
+-- ftd.text: $append(a = FifthTry, b = Click here)
+
+-- ftd.integer: $h.sum(a = 10, b = 4)

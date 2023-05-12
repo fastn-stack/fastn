@@ -3,35 +3,40 @@
     "import": {
       "module": "fifthtry.github.io/workshop-page/assets",
       "alias": "assets",
-      "line-number": 1
+      "line-number": 1,
+      "export": null
     }
   },
   {
     "import": {
       "module": "fifthtry.github.io/workshop-page/header",
       "alias": "h",
-      "line-number": 3
+      "line-number": 3,
+      "export": null
     }
   },
   {
     "import": {
       "module": "fifthtry.github.io/workshop-page/typo",
       "alias": "ds",
-      "line-number": 4
+      "line-number": 4,
+      "export": null
     }
   },
   {
     "import": {
       "module": "fpm",
       "alias": "fpm",
-      "line-number": 5
+      "line-number": 5,
+      "export": null
     }
   },
   {
     "import": {
       "module": "fpm/processors",
       "alias": "pr",
-      "line-number": 6
+      "line-number": 6,
+      "export": null
     }
   },
   {
