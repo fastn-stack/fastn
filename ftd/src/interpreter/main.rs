@@ -160,6 +160,17 @@ impl InterpreterState {
                 &parsed_document.doc_aliases,
             );
             let is_in_bag = self.bag.contains_key(&ast_full_name);
+
+            if is_in_bag {
+                let line_number = self.bag.get(&ast_full_name).unwrap().line_number();
+                ftd::interpreter::utils::insert_export_thing(
+                    exports.as_slice(),
+                    ast_full_name.as_str(),
+                    &mut self.bag,
+                    doc_name.as_str(),
+                    line_number,
+                );
+            }
             let state = &mut self;
 
             let mut doc = ftd::interpreter::TDoc::new_state(&name, &aliases, state);

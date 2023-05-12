@@ -115,7 +115,7 @@ impl Variable {
                             module: doc_name,
                             caller_module: doc.name.to_string(),
                         },
-                    ))
+                    ));
                 }
             };
 

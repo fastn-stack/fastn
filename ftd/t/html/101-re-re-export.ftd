@@ -1,6 +1,10 @@
 -- import: 100-re-export as h
 exposing: append
 
+-- h.h1: Text
+
+-- h.markdown: Text again
+
 -- ftd.text: $append(a = FifthTry, b = Click here)
 
 -- ftd.integer: $h.sum(a = 10, b = 4)

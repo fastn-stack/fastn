@@ -1102,7 +1102,7 @@ impl<'a> TDoc<'a> {
                             module: doc_name.to_string(),
                             thing_name: name,
                             line_number,
-                            caller: self.name.to_string(),
+                            caller,
                             exports,
                         });
                     state
@@ -1182,7 +1182,7 @@ impl<'a> TDoc<'a> {
                         module: doc_name.to_string(),
                         thing_name: name,
                         line_number,
-                        caller: self.name.to_string(),
+                        caller,
                         exports,
                     });
             }
@@ -1194,7 +1194,7 @@ impl<'a> TDoc<'a> {
                     module: doc_name.to_string(),
                     thing_name: name,
                     line_number,
-                    caller: self.name.to_string(),
+                    caller,
                     exports,
                 });
             state
@@ -1618,7 +1618,7 @@ impl<'a> TDoc<'a> {
                 module: doc_name.to_string(),
                 thing_name: name,
                 line_number,
-                caller: self.name.to_string(),
+                caller: caller.to_string(),
                 exports,
             });
 
