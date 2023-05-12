@@ -1,7 +1,7 @@
 pub struct Document {
     pub taffy: taffy::Taffy,
-    pub nodes: slotmap::SlotMap<fastn_surface::NodeKey, fastn_surface::Element>,
-    pub root: fastn_surface::NodeKey,
+    pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
+    pub root: fastn_runtime::NodeKey,
     pub width: u32,
     pub height: u32,
     // variables, bindings
@@ -17,7 +17,7 @@ impl Document {
         &mut self,
         width: u32,
         height: u32,
-    ) -> (fastn_surface::ControlFlow, Vec<fastn_surface::Operation>) {
+    ) -> (fastn_runtime::ControlFlow, Vec<fastn_runtime::Operation>) {
         let taffy_root = self.nodes[self.root].taffy();
         self.taffy
             .compute_layout(
@@ -31,17 +31,17 @@ impl Document {
         self.width = width;
         self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
-        (fastn_surface::ControlFlow::Wait, vec![])
+        (fastn_runtime::ControlFlow::Wait, vec![])
     }
 
     pub async fn event(
         &mut self,
-        _e: fastn_surface::Event,
-    ) -> (fastn_surface::ControlFlow, Vec<fastn_surface::Operation>) {
+        _e: fastn_runtime::Event,
+    ) -> (fastn_runtime::ControlFlow, Vec<fastn_runtime::Operation>) {
         // find the event target based on current layout and event coordinates
         // handle event, which will update the dom tree
         // compute layout
-        (fastn_surface::ControlFlow::Wait, vec![])
+        (fastn_runtime::ControlFlow::Wait, vec![])
     }
 }
 
@@ -49,7 +49,7 @@ impl Default for Document {
     fn default() -> Document {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
-        let root = nodes.insert(fastn_surface::Container::outer_column(&mut taffy));
+        let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
         Document {
             root,
             taffy,

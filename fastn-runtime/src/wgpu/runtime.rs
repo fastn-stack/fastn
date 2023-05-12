@@ -1,4 +1,4 @@
-pub async fn render_document(document: fastn_surface::Document) {
+pub async fn render_document(document: fastn_runtime::Document) {
     let event_loop = winit::event_loop::EventLoop::new();
     let window = winit::window::WindowBuilder::new()
         .build(&event_loop)
@@ -61,7 +61,7 @@ pub async fn render_document(document: fastn_surface::Document) {
 }
 
 struct State {
-    document: fastn_surface::Document,
+    document: fastn_runtime::Document,
     surface: wgpu::Surface,
     device: wgpu::Device,
     #[allow(dead_code)]
@@ -72,14 +72,14 @@ struct State {
 }
 
 impl State {
-    fn draw(&self, _ops: &[fastn_surface::Operation]) {}
+    fn draw(&self, _ops: &[fastn_runtime::Operation]) {}
 
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         Ok(())
     }
 
     // Creating some of the wgpu types requires async code
-    async fn new(window: winit::window::Window, document: fastn_surface::Document) -> Self {
+    async fn new(window: winit::window::Window, document: fastn_runtime::Document) -> Self {
         let size = window.inner_size();
 
         // The instance is a handle to our GPU

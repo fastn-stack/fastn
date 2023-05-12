@@ -1,4 +1,4 @@
-extern crate self as fastn_surface;
+extern crate self as fastn_runtime;
 
 /// fastn-surface is a way to describe UI in platform independent way
 ///

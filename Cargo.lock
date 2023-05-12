@@ -1714,7 +1714,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-surface"
+name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -1883,7 +1883,7 @@ dependencies = [
  "dioxus-html",
  "dioxus-native-core",
  "dioxus-native-core-macro",
- "fastn-surface",
+ "fastn-runtime",
  "format_num",
  "futures",
  "include_dir",

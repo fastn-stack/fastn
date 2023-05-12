@@ -7,7 +7,7 @@ pub enum Element {
 
 #[derive(Debug)]
 pub struct CommonStyleMinusTaffy {
-    pub background_color: Option<fastn_surface::Color>,
+    pub background_color: Option<fastn_runtime::Color>,
     // border: Borders,
 }
 
@@ -36,8 +36,8 @@ pub struct Text {
     pub taffy: taffy::node::Node,
     // border: Borders,
     pub text: String,
-    pub style: Option<fastn_surface::TextStyle>,
-    pub color: Option<fastn_surface::Color>,
+    pub style: Option<fastn_runtime::TextStyle>,
+    pub color: Option<fastn_runtime::Color>,
 }
 
 #[derive(Debug)]
@@ -90,20 +90,20 @@ pub enum Dimension {
     Percent(f32),
 }
 
-impl fastn_surface::Element {
+impl fastn_runtime::Element {
     pub fn render(&self, t: &taffy::Taffy) {
         dbg!(self);
         match self {
-            fastn_surface::Element::Container(c) => {
+            fastn_runtime::Element::Container(c) => {
                 dbg!(t.layout(c.taffy).unwrap());
                 // for child in c.children.iter() {
                 //     child.render(t);
                 // }
             }
-            fastn_surface::Element::Text(c) => {
+            fastn_runtime::Element::Text(c) => {
                 dbg!(t.layout(c.taffy).unwrap());
             }
-            fastn_surface::Element::Image(c) => {
+            fastn_runtime::Element::Image(c) => {
                 dbg!(t.layout(c.taffy).unwrap());
             }
         };
@@ -111,9 +111,9 @@ impl fastn_surface::Element {
 
     pub fn taffy(&self) -> taffy::node::Node {
         match self {
-            fastn_surface::Element::Container(c) => c.taffy,
-            fastn_surface::Element::Text(t) => t.taffy,
-            fastn_surface::Element::Image(i) => i.taffy,
+            fastn_runtime::Element::Container(c) => c.taffy,
+            fastn_runtime::Element::Text(t) => t.taffy,
+            fastn_runtime::Element::Image(i) => i.taffy,
         }
     }
 }
