@@ -1,13 +1,10 @@
-pub async fn draw(mut doc: fastn_surface::Document) {
+pub async fn render_document(document: fastn_surface::Document) {
     let event_loop = winit::event_loop::EventLoop::new();
     let window = winit::window::WindowBuilder::new()
         .build(&event_loop)
         .unwrap();
 
-    let mut state = State::new(window).await;
-
-    let (_ctrl, ops) = doc.initial_layout(state.size.width, state.size.height);
-    state.draw(&ops);
+    let mut state = State::new(window, document).await;
 
     event_loop.run(move |event, _, control_flow| match event {
         winit::event::Event::WindowEvent {
@@ -37,7 +34,6 @@ pub async fn draw(mut doc: fastn_surface::Document) {
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window.id() => {
-            state.update();
             match state.render() {
                 Ok(_) => {}
                 // Reconfigure the surface if lost
@@ -65,6 +61,7 @@ pub async fn draw(mut doc: fastn_surface::Document) {
 }
 
 struct State {
+    document: fastn_surface::Document,
     surface: wgpu::Surface,
     device: wgpu::Device,
     #[allow(dead_code)]
@@ -82,7 +79,7 @@ impl State {
     }
 
     // Creating some of the wgpu types requires async code
-    async fn new(window: winit::window::Window) -> Self {
+    async fn new(window: winit::window::Window, document: fastn_surface::Document) -> Self {
         let size = window.inner_size();
 
         // The instance is a handle to our GPU
@@ -146,14 +143,23 @@ impl State {
         };
         surface.configure(&device, &config);
 
-        State {
+        let mut s = State {
             surface,
             device,
             queue,
             size,
             window,
             config,
-        }
+            document,
+        };
+
+        s.initialise();
+        s
+    }
+
+    fn initialise(&mut self) {
+        let (_ctrl, ops) = self.document.initial_layout(self.size.width, self.size.height);
+        self.draw(&ops);
     }
 
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
@@ -164,6 +170,4 @@ impl State {
             self.surface.configure(&self.device, &self.config);
         }
     }
-
-    fn update(&mut self) {}
 }
