@@ -13,7 +13,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 8
+            "line_number": 8,
+            "access_modifier": "Public"
           },
           {
             "name": "people",
@@ -122,7 +123,8 @@
                 "line_number": 18
               }
             },
-            "line_number": 18
+            "line_number": 18,
+            "access_modifier": "Public"
           },
           {
             "name": "locations",
@@ -175,7 +177,8 @@
                 "line_number": 25
               }
             },
-            "line_number": 25
+            "line_number": 25,
+            "access_modifier": "Public"
           }
         ],
         "line_number": 7
@@ -272,7 +275,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "age",
@@ -283,7 +287,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           }
         ],
         "line_number": 1

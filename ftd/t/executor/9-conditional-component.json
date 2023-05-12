@@ -211,7 +211,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 17
+            "line_number": 17,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -267,7 +268,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 23
+            "line_number": 23,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -930,7 +932,8 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             },
             "style": {
               "value": null,
@@ -944,7 +947,8 @@
             }
           }
         }
-      ]
+      ],
+      "device": null
     },
     "common": {
       "id": {
@@ -1287,7 +1291,8 @@
         "value": null,
         "line_number": null,
         "properties": []
-      }
+      },
+      "device": null
     }
   },
   "html_data": {

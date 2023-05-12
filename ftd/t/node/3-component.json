@@ -275,7 +275,8 @@
             "data_id": "0,0",
             "line_number": 6,
             "raw_data": null,
-            "web_component": null
+            "web_component": null,
+            "device": null
           },
           {
             "classes": [
@@ -449,7 +450,8 @@
             "data_id": "0,1",
             "line_number": 10,
             "raw_data": null,
-            "web_component": null
+            "web_component": null,
+            "device": null
           }
         ],
         "text": {
@@ -462,7 +464,8 @@
         "data_id": "0",
         "line_number": 3,
         "raw_data": null,
-        "web_component": null
+        "web_component": null,
+        "device": null
       }
     ],
     "text": {
@@ -475,7 +478,8 @@
     "data_id": "",
     "line_number": 0,
     "raw_data": null,
-    "web_component": null
+    "web_component": null,
+    "device": null
   },
   "html_data": {
     "title": {

@@ -645,7 +645,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 133
+          "line_number": 133,
+          "access_modifier": "Public"
         },
         {
           "name": "body",
@@ -655,7 +656,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 134
+          "line_number": 134,
+          "access_modifier": "Public"
         },
         {
           "name": "toc",
@@ -671,7 +673,8 @@
               "source": "Default"
             }
           },
-          "line_number": 135
+          "line_number": 135,
+          "access_modifier": "Public"
         },
         {
           "name": "sections",
@@ -687,7 +690,8 @@
               "source": "Default"
             }
           },
-          "line_number": 136
+          "line_number": 136,
+          "access_modifier": "Public"
         },
         {
           "name": "sub-sections",
@@ -703,7 +707,8 @@
               "source": "Default"
             }
           },
-          "line_number": 137
+          "line_number": 137,
+          "access_modifier": "Public"
         },
         {
           "name": "current-section",
@@ -719,7 +724,8 @@
               "source": "Default"
             }
           },
-          "line_number": 138
+          "line_number": 138,
+          "access_modifier": "Public"
         },
         {
           "name": "current-subsection",
@@ -735,7 +741,8 @@
               "source": "Default"
             }
           },
-          "line_number": 139
+          "line_number": 139,
+          "access_modifier": "Public"
         },
         {
           "name": "current-page",
@@ -751,7 +758,8 @@
               "source": "Default"
             }
           },
-          "line_number": 140
+          "line_number": 140,
+          "access_modifier": "Public"
         },
         {
           "name": "show-chapter-button",
@@ -767,7 +775,8 @@
               "source": "Default"
             }
           },
-          "line_number": 141
+          "line_number": 141,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -777,7 +786,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 142
+          "line_number": 142,
+          "access_modifier": "Public"
         },
         {
           "name": "sidebar",
@@ -793,7 +803,8 @@
               "source": "Default"
             }
           },
-          "line_number": 143
+          "line_number": 143,
+          "access_modifier": "Public"
         },
         {
           "name": "container",
@@ -803,7 +814,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 144
+          "line_number": 144,
+          "access_modifier": "Public"
         },
         {
           "name": "button",
@@ -828,7 +840,8 @@
               "line_number": 148
             }
           },
-          "line_number": 148
+          "line_number": 148,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -1121,7 +1134,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 185
+          "line_number": 185,
+          "access_modifier": "Public"
         },
         {
           "name": "body",
@@ -1131,7 +1145,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 186
+          "line_number": 186,
+          "access_modifier": "Public"
         },
         {
           "name": "toc",
@@ -1146,7 +1161,8 @@
               "line_number": 187
             }
           },
-          "line_number": 187
+          "line_number": 187,
+          "access_modifier": "Public"
         },
         {
           "name": "sections",
@@ -1161,7 +1177,8 @@
               "line_number": 188
             }
           },
-          "line_number": 188
+          "line_number": 188,
+          "access_modifier": "Public"
         },
         {
           "name": "sub-sections",
@@ -1176,7 +1193,8 @@
               "line_number": 189
             }
           },
-          "line_number": 189
+          "line_number": 189,
+          "access_modifier": "Public"
         },
         {
           "name": "current-section",
@@ -1186,7 +1204,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 190
+          "line_number": 190,
+          "access_modifier": "Public"
         },
         {
           "name": "current-page",
@@ -1196,7 +1215,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 191
+          "line_number": 191,
+          "access_modifier": "Public"
         },
         {
           "name": "current-subsection",
@@ -1206,7 +1226,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 192
+          "line_number": 192,
+          "access_modifier": "Public"
         },
         {
           "name": "show-chapter-button",
@@ -1216,7 +1237,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 193
+          "line_number": 193,
+          "access_modifier": "Public"
         },
         {
           "name": "button",
@@ -1231,7 +1253,8 @@
               "line_number": 194
             }
           },
-          "line_number": 194
+          "line_number": 194,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -1241,7 +1264,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 195
+          "line_number": 195,
+          "access_modifier": "Public"
         },
         {
           "name": "right-sidebar",
@@ -1257,7 +1281,8 @@
               "source": "Default"
             }
           },
-          "line_number": 196
+          "line_number": 196,
+          "access_modifier": "Public"
         },
         {
           "name": "container",
@@ -1267,7 +1292,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 197
+          "line_number": 197,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -2282,7 +2308,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 322
+          "line_number": 322,
+          "access_modifier": "Public"
         },
         {
           "name": "body",
@@ -2292,7 +2319,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 323
+          "line_number": 323,
+          "access_modifier": "Public"
         },
         {
           "name": "toc",
@@ -2307,7 +2335,8 @@
               "line_number": 324
             }
           },
-          "line_number": 324
+          "line_number": 324,
+          "access_modifier": "Public"
         },
         {
           "name": "sections",
@@ -2322,7 +2351,8 @@
               "line_number": 325
             }
           },
-          "line_number": 325
+          "line_number": 325,
+          "access_modifier": "Public"
         },
         {
           "name": "sub-sections",
@@ -2337,7 +2367,8 @@
               "line_number": 326
             }
           },
-          "line_number": 326
+          "line_number": 326,
+          "access_modifier": "Public"
         },
         {
           "name": "current-section",
@@ -2347,7 +2378,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 327
+          "line_number": 327,
+          "access_modifier": "Public"
         },
         {
           "name": "current-page",
@@ -2357,7 +2389,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 328
+          "line_number": 328,
+          "access_modifier": "Public"
         },
         {
           "name": "current-subsection",
@@ -2367,7 +2400,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 329
+          "line_number": 329,
+          "access_modifier": "Public"
         },
         {
           "name": "show-chapter-button",
@@ -2377,7 +2411,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 330
+          "line_number": 330,
+          "access_modifier": "Public"
         },
         {
           "name": "button",
@@ -2387,7 +2422,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 331
+          "line_number": 331,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -2397,7 +2433,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 332
+          "line_number": 332,
+          "access_modifier": "Public"
         },
         {
           "name": "page-wrap",
@@ -2407,7 +2444,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 333
+          "line_number": 333,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -2417,7 +2455,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 334
+          "line_number": 334,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -3532,7 +3571,8 @@
               "line_number": 457
             }
           },
-          "line_number": 457
+          "line_number": 457,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -3542,7 +3582,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 458
+          "line_number": 458,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -3858,7 +3899,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 496
+          "line_number": 496,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -3868,7 +3910,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 497
+          "line_number": 497,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -4424,7 +4467,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 569
+          "line_number": 569,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -4935,7 +4979,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 633
+          "line_number": 633,
+          "access_modifier": "Public"
         },
         {
           "name": "body",
@@ -4945,7 +4990,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 634
+          "line_number": 634,
+          "access_modifier": "Public"
         },
         {
           "name": "button",
@@ -4961,7 +5007,8 @@
               "source": "Default"
             }
           },
-          "line_number": 635
+          "line_number": 635,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -4977,7 +5024,8 @@
               "source": "Default"
             }
           },
-          "line_number": 636
+          "line_number": 636,
+          "access_modifier": "Public"
         },
         {
           "name": "task-wrap",
@@ -4987,7 +5035,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 637
+          "line_number": 637,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -5580,7 +5629,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 705
+          "line_number": 705,
+          "access_modifier": "Public"
         },
         {
           "name": "body",
@@ -5590,7 +5640,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 706
+          "line_number": 706,
+          "access_modifier": "Public"
         },
         {
           "name": "button",
@@ -5606,7 +5657,8 @@
               "source": "Default"
             }
           },
-          "line_number": 707
+          "line_number": 707,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -5622,7 +5674,8 @@
               "source": "Default"
             }
           },
-          "line_number": 708
+          "line_number": 708,
+          "access_modifier": "Public"
         },
         {
           "name": "lesson-wrap",
@@ -5632,7 +5685,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 709
+          "line_number": 709,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -6225,7 +6279,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 781
+          "line_number": 781,
+          "access_modifier": "Public"
         },
         {
           "name": "lesson-status",
@@ -6235,7 +6290,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 782
+          "line_number": 782,
+          "access_modifier": "Public"
         },
         {
           "name": "task-status",
@@ -6245,7 +6301,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 783
+          "line_number": 783,
+          "access_modifier": "Public"
         },
         {
           "name": "chapter-status",
@@ -6255,7 +6312,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 784
+          "line_number": 784,
+          "access_modifier": "Public"
         }
       ],
       "definition": {
@@ -6505,7 +6563,8 @@
               "line_number": 811
             }
           },
-          "line_number": 811
+          "line_number": 811,
+          "access_modifier": "Public"
         },
         {
           "name": "status",
@@ -6515,7 +6574,8 @@
           },
           "mutable": true,
           "value": null,
-          "line_number": 812
+          "line_number": 812,
+          "access_modifier": "Public"
         }
       ],
       "definition": {

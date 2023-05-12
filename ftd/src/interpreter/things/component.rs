@@ -329,8 +329,13 @@ impl Component {
             ast_component.line_number,
         )?);
 
-        let definition = doc.get_component(name.as_str(), ast_component.line_number)?;
-        Self::assert_no_private_properties_while_invocation(&properties, &definition.arguments)?;
+        if let Some((name, arguments)) = definition_name_with_arguments {
+            Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
+        } else if let ftd::interpreter::Thing::Component(c) =
+            doc.get_thing(name.as_str(), ast_component.line_number)?
+        {
+            Self::assert_no_private_properties_while_invocation(&properties, &c.arguments)?;
+        }
 
         Ok(ftd::interpreter::StateWithThing::new_thing(Component {
             name,
@@ -348,17 +353,17 @@ impl Component {
         properties: &[Property],
         arguments: &[Argument],
     ) -> ftd::interpreter::Result<()> {
-        let mut public_arguments: std::collections::HashSet<String> =
+        let mut private_arguments: std::collections::HashSet<String> =
             std::collections::HashSet::new();
         for arg in arguments.iter() {
-            if arg.access_modifier.is_public() {
-                public_arguments.insert(arg.name.clone());
+            if !arg.access_modifier.is_public() {
+                private_arguments.insert(arg.name.clone());
             }
         }
 
         for property in properties.iter() {
             if let PropertySource::Header { name, .. } = &property.source {
-                if !public_arguments.contains(name.as_str()) {
+                if private_arguments.contains(name.as_str()) {
                     return Err(ftd::interpreter::Error::InvalidAccessError {
                         key: name.clone(),
                         line_number: property.line_number,
