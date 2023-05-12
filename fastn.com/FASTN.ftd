@@ -295,7 +295,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Create holy-grail layout: /holy-grail/
   document: /expander/layout/index.ftd
-- Add Images to documents: /images-in-documents/
+- Using images in documents: /using-images/
   document: /expander/imagemodule/index.ftd
 
 
@@ -404,7 +404,7 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
-- Add images to documents: /images-in-documents/-/planning
+- Using images in documents: /using-images/-/planning
   document: /expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
   document: /expander/layout/index.ftd
