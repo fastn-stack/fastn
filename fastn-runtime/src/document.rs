@@ -31,9 +31,10 @@ impl Document {
         self.width = width;
         self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
-        (fastn_runtime::ControlFlow::Wait, vec![])
+        (fastn_runtime::ControlFlow::WaitForEvent, vec![])
     }
 
+    // if not wasm
     pub async fn event(
         &mut self,
         _e: fastn_runtime::Event,
@@ -41,7 +42,7 @@ impl Document {
         // find the event target based on current layout and event coordinates
         // handle event, which will update the dom tree
         // compute layout
-        (fastn_runtime::ControlFlow::Wait, vec![])
+        (fastn_runtime::ControlFlow::WaitForEvent, vec![])
     }
 }
 

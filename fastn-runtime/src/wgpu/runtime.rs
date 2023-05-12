@@ -60,6 +60,13 @@ pub async fn render_document(document: fastn_runtime::Document) {
     })
 }
 
+#[allow(dead_code)]
+struct Triangle {
+    a: [f32; 2],
+    b: [f32; 2],
+    c: [f32; 2],
+}
+
 struct State {
     document: fastn_runtime::Document,
     surface: wgpu::Surface,
@@ -69,10 +76,15 @@ struct State {
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
     window: winit::window::Window,
+    // vertices: Vec<Triangle>,
+    // textures: Vec<Image>,
+    // glyphs: Vec<Glyph>,
 }
 
 impl State {
-    fn draw(&self, _ops: &[fastn_runtime::Operation]) {}
+    fn draw(&self, _ops: &[fastn_runtime::Operation]) {
+        //
+    }
 
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         Ok(())

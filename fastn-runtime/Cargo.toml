@@ -6,6 +6,8 @@ edition = "2021"
 [features]
 default = ["native"]
 native = ["winit", "env_logger", "log", "wgpu"]
+# terminal = ["crossterm"]
+# web = ["wasm-bindgen", "web-sys"]
 
 [dependencies]
 winit = { workspace = true, optional = true }
