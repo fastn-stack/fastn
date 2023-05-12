@@ -34,6 +34,36 @@ impl Dependency {
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
+pub(crate) struct AutoImportTemp {
+    pub name: String,
+    pub exposing: Vec<String>,
+}
+
+impl AutoImportTemp {
+    pub(crate) fn into_auto_import(self) -> fastn_core::AutoImport {
+        let exposing = {
+            let mut exposing = vec![];
+            for item in self.exposing {
+                exposing.extend(item.split(',').map(|v| v.trim().to_string()));
+            }
+            exposing
+        };
+        match self.name.split_once(" as ") {
+            Some((package, alias)) => fastn_core::AutoImport {
+                path: package.trim().to_string(),
+                alias: Some(alias.trim().to_string()),
+                exposing,
+            },
+            None => fastn_core::AutoImport {
+                path: self.name.trim().to_string(),
+                alias: None,
+                exposing,
+            },
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct DependencyTemp {
     pub name: String,
     pub version: Option<String>,
@@ -509,10 +539,10 @@ impl fastn_core::Package {
                 .collect::<fastn_core::Result<Vec<Dependency>>>()?
         };
 
-        let auto_imports: Vec<String> = ftd_document.get("fastn#auto-import")?;
+        let auto_imports: Vec<AutoImportTemp> = ftd_document.get("fastn#auto-import")?;
         let auto_import = auto_imports
-            .iter()
-            .map(|f| fastn_core::AutoImport::from_string(f.as_str()))
+            .into_iter()
+            .map(|f| f.into_auto_import())
             .collect();
         package.auto_import = auto_import;
         package.fonts = ftd_document.get("fastn#font")?;
@@ -628,10 +658,10 @@ impl fastn_core::Package {
                 .collect::<fastn_core::Result<Vec<Dependency>>>()?
         };
 
-        let auto_imports: Vec<String> = ftd_document.get("fastn#auto-import")?;
+        let auto_imports: Vec<AutoImportTemp> = ftd_document.get("fastn#auto-import")?;
         let auto_import = auto_imports
-            .iter()
-            .map(|f| fastn_core::AutoImport::from_string(f.as_str()))
+            .into_iter()
+            .map(|f| f.into_auto_import())
             .collect();
         package.auto_import = auto_import;
         package.fonts = ftd_document.get("fastn#font")?;
