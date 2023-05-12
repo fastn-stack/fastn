@@ -15,3 +15,47 @@ name: Hello
 
 -- print:
 name: Hello Again
+
+
+
+
+
+
+
+
+
+-- component h1:
+caption title:
+optional body content:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h1.title
+role: $inherited.types.heading-hero
+color: $inherited.colors.text-strong
+
+-- markdown: $h1.content
+if: { h1.content != NULL }
+
+-- end: ftd.column
+
+-- end: h1
+
+
+
+
+
+
+
+
+
+
+-- component markdown:
+caption or body content:
+
+-- ftd.text: $markdown.content
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: markdown
