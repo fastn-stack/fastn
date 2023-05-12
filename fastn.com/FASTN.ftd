@@ -127,6 +127,9 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/list.ftd
 - `component`: /components/
   document: /ftd/components.ftd
+- Access Modifiers: /access-modifiers/
+  document: /ftd/access-modifiers.ftd
+  skip: true
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /ftd/document/
