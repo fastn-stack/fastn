@@ -130,7 +130,7 @@ impl Field {
             mutable,
             value,
             line_number,
-            access_modifier: ftd::p1::header::AccessModifier::PUBLIC,
+            access_modifier: ftd::p1::header::AccessModifier::Public,
         }
     }
 

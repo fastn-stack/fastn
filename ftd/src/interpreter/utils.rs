@@ -65,7 +65,7 @@ pub(crate) fn kind_eq(
 ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<bool>> {
     let var_kind = ftd::ast::VariableKind::get_kind(
         key,
-        ftd::p1::header::AccessModifier::PUBLIC,
+        ftd::p1::header::AccessModifier::Public,
         doc.name,
         line_number,
     )?;

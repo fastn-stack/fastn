@@ -24,11 +24,11 @@ impl KV {
         line_number: usize,
         condition: Option<String>,
     ) -> KV {
-        let mut access_modifier = AccessModifier::PUBLIC;
+        let mut access_modifier = AccessModifier::Public;
         if let Some(k) = kind.as_ref() {
             let (rest_kind, access) = AccessModifier::get_kind_and_modifier(k.as_str());
             kind = Some(rest_kind);
-            access_modifier = access.unwrap_or(AccessModifier::PUBLIC);
+            access_modifier = access.unwrap_or(AccessModifier::Public);
         }
 
         KV {
@@ -42,21 +42,16 @@ impl KV {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum AccessModifier {
-    PUBLIC,
-    PRIVATE,
-}
-
-impl Default for AccessModifier {
-    fn default() -> Self {
-        AccessModifier::PUBLIC
-    }
+    #[default]
+    Public,
+    Private,
 }
 
 impl AccessModifier {
     pub fn is_public(&self) -> bool {
-        matches!(self, AccessModifier::PUBLIC)
+        matches!(self, AccessModifier::Public)
     }
 
     pub fn remove_modifiers(name: &str) -> String {
@@ -66,7 +61,7 @@ impl AccessModifier {
                 result.push(part)
             }
         }
-        result.join(" ").to_string()
+        result.join(" ")
     }
 
     pub fn is_modifier(s: &str) -> bool {
@@ -75,16 +70,9 @@ impl AccessModifier {
 
     pub fn get_modifier_from_string(modifier: &str) -> Option<AccessModifier> {
         match modifier {
-            "public" => Some(AccessModifier::PUBLIC),
-            "private" => Some(AccessModifier::PRIVATE),
+            "public" => Some(AccessModifier::Public),
+            "private" => Some(AccessModifier::Private),
             _ => None,
-        }
-    }
-
-    pub fn to_string(&self) -> String {
-        match self {
-            AccessModifier::PUBLIC => "public".to_string(),
-            AccessModifier::PRIVATE => "private".to_string(),
         }
     }
 
@@ -99,7 +87,7 @@ impl AccessModifier {
             }
             access_modifier = AccessModifier::get_modifier_from_string(part)
         }
-        (rest_kind.join(" ").to_string(), access_modifier)
+        (rest_kind.join(" "), access_modifier)
     }
 }
 
@@ -184,7 +172,7 @@ impl Header {
             Header::KV(ftd::p1::header::KV {
                 access_modifier, ..
             }) => access_modifier.clone(),
-            Header::Section(ftd::p1::header::Section { .. }) => AccessModifier::PUBLIC,
+            Header::Section(ftd::p1::header::Section { .. }) => AccessModifier::Public,
         }
     }
 

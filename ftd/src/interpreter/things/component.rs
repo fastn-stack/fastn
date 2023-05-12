@@ -345,8 +345,8 @@ impl Component {
     }
 
     pub fn assert_no_private_properties_while_invocation(
-        properties: &Vec<Property>,
-        arguments: &Vec<Argument>,
+        properties: &[Property],
+        arguments: &[Argument],
     ) -> ftd::interpreter::Result<()> {
         let mut public_arguments: std::collections::HashSet<String> =
             std::collections::HashSet::new();
