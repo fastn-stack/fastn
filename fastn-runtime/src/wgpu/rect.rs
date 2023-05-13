@@ -2,6 +2,13 @@ pub struct RectData {
     pub rects: Vec<fastn_runtime::operation::Rectangle>,
 }
 
+#[allow(dead_code)]
+struct Triangle {
+    a: [f32; 2],
+    b: [f32; 2],
+    c: [f32; 2],
+}
+
 impl RectData {
     pub fn new() -> Self {
         Self { rects: Vec::new() }
