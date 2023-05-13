@@ -127,6 +127,9 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/list.ftd
 - `component`: /components/
   document: /ftd/components.ftd
+- Access Modifiers: /access-modifiers/
+  document: /ftd/access-modifiers.ftd
+  skip: true
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /ftd/document/
@@ -295,7 +298,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Create holy-grail layout: /holy-grail/
   document: /expander/layout/index.ftd
-- Add Images to documents: /images-in-documents/
+- Using images in documents: /using-images/
   document: /expander/imagemodule/index.ftd
 
 
@@ -405,7 +408,7 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
-- Add images to documents: /images-in-documents/-/planning
+- Using images in documents: /using-images/-/planning
   document: /expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
   document: /expander/layout/index.ftd
@@ -425,3 +428,5 @@ favicon: /-/fastn.com/images/favicon.svg
 /ftd/list/: /list/
 /discord/: https://discord.gg/eNXVBMq4xt
 /package-query/: /sql/
+/images-in-modules/: https://fastn.com/using-images/
+/images-in-modules/-/planning/: https://fastn.com/using-images/-/planning/
