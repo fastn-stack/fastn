@@ -68,6 +68,7 @@ struct State {
     window: winit::window::Window,
     #[allow(dead_code)]
     operation_data: fastn_runtime::wgpu::operations::OperationData,
+    pub render_pipeline: wgpu::RenderPipeline,
 }
 
 impl State {
@@ -81,7 +82,9 @@ impl State {
         let wgpu = fastn_runtime::wgpu::boilerplate::Wgpu::new(&window, &size).await;
 
         let operation_data =
-            fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &wgpu.device);
+            fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &wgpu);
+
+        let render_pipeline = fastn_runtime::wgpu::rectangles::render_pipeline(&wgpu);
 
         State {
             size,
@@ -89,6 +92,7 @@ impl State {
             wgpu,
             document,
             operation_data,
+            render_pipeline,
         }
     }
 }

@@ -2,7 +2,7 @@ mod boilerplate;
 mod control;
 mod event;
 mod operations;
-mod rect;
+mod rectangles;
 mod runtime;
 
 pub use runtime::render_document;
