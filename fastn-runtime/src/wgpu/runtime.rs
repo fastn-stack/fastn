@@ -151,7 +151,7 @@ impl State {
         };
         surface.configure(&device, &config);
 
-        let operation_data = fastn_runtime::wgpu::operations::OperationData::new(size, &mut document);
+        let operation_data = fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &device);
 
         State {
             surface,

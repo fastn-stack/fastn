@@ -4,6 +4,8 @@ pub enum Operation {
     // DrawGlyphCluster(Glyph),
 }
 
+#[repr(C)]
+#[derive(bytemuck::Pod, bytemuck::Zeroable, Copy, Clone, Debug)]
 pub struct Rectangle {
     pub top: u32,
     pub left: u32,

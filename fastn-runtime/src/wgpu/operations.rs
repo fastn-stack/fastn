@@ -6,22 +6,23 @@ pub struct OperationData {
 }
 
 impl OperationData {
-    pub fn new(size: winit::dpi::PhysicalSize<u32>, document: &mut fastn_runtime::Document,) -> OperationData {
+    pub fn new(size: winit::dpi::PhysicalSize<u32>, document: &mut fastn_runtime::Document, device: &wgpu::Device,) -> OperationData {
           let (_ctrl, ops) = document.initial_layout(size.width, size.height);
-        OperationData::draw(ops)
+        OperationData::draw(ops, device)
     }
 
-    pub fn draw(ops: Vec<fastn_runtime::Operation>) -> OperationData {
+    pub fn draw(ops: Vec<fastn_runtime::Operation>, device: &wgpu::Device,) -> OperationData {
         let mut rects = fastn_runtime::wgpu::rect::RectData::new();
         for op in ops.into_iter() {
             match op {
                 fastn_runtime::Operation::DrawRectangle(rect) => {
-                    rects.rects.push(rect);
+                    rects.add(rect);
                 }
             }
         }
+
         OperationData {
-            rects_buffer: rects.upload(),
+            rects_buffer: rects.upload(device),
         }
     }
 }

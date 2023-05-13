@@ -20,4 +20,5 @@ slotmap.workspace = true
 once_cell.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
+bytemuck.workspace = true
 async-trait.workspace = true
