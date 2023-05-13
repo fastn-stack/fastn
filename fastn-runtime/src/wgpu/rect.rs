@@ -11,15 +11,13 @@ impl RectData {
         self.rects.push(rect);
     }
 
-    pub fn upload(self, device: &wgpu::Device,) -> wgpu::Buffer {
+    pub fn upload(self, device: &wgpu::Device) -> wgpu::Buffer {
         use wgpu::util::DeviceExt;
 
-        device.create_buffer_init(
-            &wgpu::util::BufferInitDescriptor {
-                label: Some("Vertex Buffer"),
-                contents: bytemuck::cast_slice(&self.rects),
-                usage: wgpu::BufferUsages::VERTEX,
-            }
-        )
+        device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Vertex Buffer"),
+            contents: bytemuck::cast_slice(&self.rects),
+            usage: wgpu::BufferUsages::VERTEX,
+        })
     }
 }

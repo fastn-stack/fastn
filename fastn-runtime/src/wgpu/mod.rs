@@ -1,7 +1,7 @@
 mod control;
 mod event;
-mod runtime;
-mod rect;
 mod operations;
+mod rect;
+mod runtime;
 
 pub use runtime::render_document;
