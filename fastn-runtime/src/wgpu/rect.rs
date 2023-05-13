@@ -7,7 +7,19 @@ impl RectData {
         Self { rects: Vec::new() }
     }
 
-    pub fn upload(&self) -> wgpu::Buffer {
-        todo!()
+    pub fn add(&mut self, rect: fastn_runtime::operation::Rectangle) {
+        self.rects.push(rect);
+    }
+
+    pub fn upload(self, device: &wgpu::Device,) -> wgpu::Buffer {
+        use wgpu::util::DeviceExt;
+
+        device.create_buffer_init(
+            &wgpu::util::BufferInitDescriptor {
+                label: Some("Vertex Buffer"),
+                contents: bytemuck::cast_slice(&self.rects),
+                usage: wgpu::BufferUsages::VERTEX,
+            }
+        )
     }
 }
