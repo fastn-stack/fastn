@@ -151,7 +151,8 @@ impl State {
         };
         surface.configure(&device, &config);
 
-        let operation_data = fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &device);
+        let operation_data =
+            fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &device);
 
         State {
             surface,
@@ -164,7 +165,6 @@ impl State {
             operation_data,
         }
     }
-
 
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
         if new_size.width > 0 && new_size.height > 0 {
