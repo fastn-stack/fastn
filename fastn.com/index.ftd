@@ -15,7 +15,9 @@
 
 
 -- home-page:
-
+seo-title: Build your next landing page, blog, or webapp with fastn | Easy to learn | fastn.com
+seo-description: Easy to learnfull-stack framework designed for creating good looking content centric or API and database driven websites.
+seo-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 
 -- hero-section: Build your next landing page, blog, or webapp
 preposition: with
@@ -140,12 +142,18 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- component home-page:
 children wrapper:
+optional string seo-title:
+optional string seo-description:
+optional ftd.raw-image-src seo-image:
 
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
 colors: $dark-flame-cs.main
 $widthfill: true
 types: $doc-typo.types
+document-title: $home-page.seo-title
+document-description: $home-page.seo-description
+document-image: $home-page.seo-image
 
 -- ftd.column:
 width: fill-container
