@@ -98,8 +98,13 @@ string value:
 -- ftd.row:
 spacing.fixed.px: 10
 
--- ds.markdown: $label-text.name
--- ds.markdown: $label-text.value
+-- ds.markdown: 
+
+$label-text.name
+
+-- ds.markdown: 
+
+$label-text.value
 
 -- end: ftd.row
 
