@@ -964,31 +964,37 @@ boolean $btn-mousein: false
 if: { !github-star-cta.hide }
 align-self: center
 margin-bottom.px: 34
-background.linear-gradient: $share-gradient
+background.linear-gradient: $star-gradient
 border-radius.px: 80
 padding.px: 2
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.column:
-align-self: center
+align-content: center
 background.solid: $inherited.colors.background.base
 border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.row:
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.row:
-background.linear-gradient if { github-star-cta.mousein }: $share-gradient
+background.linear-gradient if { github-star-cta.mousein }: $star-gradient
 $on-mouse-enter$: $ftd.set-bool($a = $github-star-cta.mousein, v = true )
 $on-mouse-leave$: $ftd.set-bool($a = $github-star-cta.mousein, v = false )
 link: $github-star-cta.link
 align-content: center
-padding-horizontal.px: 30
+padding-horizontal.px if { $ftd.device == "mobile" }: 16
+padding-horizontal.px if { $ftd.device == "desktop" }: 30
 padding-vertical.px: 10
 border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.text:
 text: $github-star-cta.body
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong
+color if { github-star-cta.mousein }: #000000
 text-align: center
 
 -- end: ftd.row
@@ -1011,7 +1017,7 @@ text-align: center
 
 
 
--- ftd.linear-gradient share-gradient:
+-- ftd.linear-gradient star-gradient:
 direction: right
 colors: $color-values
 
