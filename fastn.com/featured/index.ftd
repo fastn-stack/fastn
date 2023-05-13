@@ -20,7 +20,9 @@ if: { show-grid }
 templates: $doc-sites
 more-link: /featured/doc-sites/
 
-Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
+officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
+nostrud amet.
 
 /-- grid-view: Resumes:
 if: { show-grid }
@@ -32,10 +34,18 @@ if: { show-grid }
 templates: $bling
 more-link: /featured/components-library/
 
+Fastn components library is typically includes a variety of components such as
+buttons, input fields, dropdown menus, modals, tabs, and more, each with their
+own styles, behavior, and functionality. 
+
 -- grid-view: Color Schemes:
 if: { show-grid }
 templates: $schemes
 more-link: /featured/cs/
+
+Add warmth and energy to your fastn web site designs with our fastn Color
+Schemes.
+
 
 /-- grid-view: Fonts:
 if: { show-grid }
