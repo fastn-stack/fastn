@@ -20,6 +20,8 @@ The `on-rive-pause[<timeline>]` event gets fired when the animation pauses.
 
 -- ds.rendered:
 
+-- ds.rendered.input:
+
 \-- string $idle: Unknown Idle State
 
 \-- ftd.text: $idle
@@ -36,8 +38,11 @@ $on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
 \-- ftd.text: Idle/Run
 $on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
 
+-- ds.rendered.output:
 
 -- on-rive-play-pause-event:
+
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -50,6 +55,8 @@ occurs.
 
 
 -- ds.rendered:
+
+-- ds.rendered.input:
 
 \-- integer $bounce: 0
 
@@ -70,8 +77,11 @@ $on-rive-state-change[bounce]$: $ftd.increment($a = $bounce)
 \-- ftd.text: Click to Bump
 $on-click$: $ftd.fire-rive(rive = van, input = bump)
 
+-- ds.rendered.output:
 
 -- on-rive-state-machine-event:
+
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 

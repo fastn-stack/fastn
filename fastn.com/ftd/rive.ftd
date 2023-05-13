@@ -89,6 +89,8 @@ v: H6PH8-fuCNs
 
 -- ds.rendered: Sample code
 
+-- ds.rendered.input:
+
 \-- ftd.rive:
 id: fastn
 src: $fastn-assets.files.assets.fastn.riv
@@ -97,6 +99,7 @@ state-machine: Together
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
 
+-- ds.rendered.output:
 
 -- ftd.rive:
 id: fastn
@@ -106,6 +109,7 @@ state-machine: Together
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
 
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 
