@@ -68,6 +68,7 @@ struct Triangle {
 }
 
 struct State {
+    #[allow(dead_code)]
     document: fastn_runtime::Document,
     surface: wgpu::Surface,
     device: wgpu::Device,
@@ -76,22 +77,17 @@ struct State {
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
     window: winit::window::Window,
-    // vertices: Vec<Triangle>,
-    // textures: Vec<Image>,
-    // glyphs: Vec<Glyph>,
+    #[allow(dead_code)]
+    operation_data: fastn_runtime::wgpu::operations::OperationData,
 }
 
 impl State {
-    fn draw(&self, _ops: &[fastn_runtime::Operation]) {
-        //
-    }
-
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         Ok(())
     }
 
     // Creating some of the wgpu types requires async code
-    async fn new(window: winit::window::Window, document: fastn_runtime::Document) -> Self {
+    async fn new(window: winit::window::Window, mut document: fastn_runtime::Document) -> Self {
         let size = window.inner_size();
 
         // The instance is a handle to our GPU
@@ -155,7 +151,9 @@ impl State {
         };
         surface.configure(&device, &config);
 
-        let mut s = State {
+        let operation_data = fastn_runtime::wgpu::operations::OperationData::new(size, &mut document);
+
+        State {
             surface,
             device,
             queue,
@@ -163,18 +161,10 @@ impl State {
             window,
             config,
             document,
-        };
-
-        s.initialise();
-        s
+            operation_data,
+        }
     }
 
-    fn initialise(&mut self) {
-        let (_ctrl, ops) = self
-            .document
-            .initial_layout(self.size.width, self.size.height);
-        self.draw(&ops);
-    }
 
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
         if new_size.width > 0 && new_size.height > 0 {
