@@ -170,7 +170,9 @@ impl State {
     }
 
     fn initialise(&mut self) {
-        let (_ctrl, ops) = self.document.initial_layout(self.size.width, self.size.height);
+        let (_ctrl, ops) = self
+            .document
+            .initial_layout(self.size.width, self.size.height);
         self.draw(&ops);
     }
 
