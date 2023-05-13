@@ -8,8 +8,6 @@
 widthfill: true
 sidebar: false
 
--- ds.markdown:
-
 We have designed and developed below components using `ftd` and `fastn` package.
  
 Use them for writing e-books, blogs, web technical documentation etc. 
@@ -266,7 +264,7 @@ caption title:
 string template-url: 
 ftd.image-src screenshot:
 optional string licence-url: 
-string github-url:
+optional string github-url:
 optional body body: 
 boolean is-last: false
 
@@ -274,9 +272,8 @@ boolean is-last: false
 
 -- template: Doc-site
 template-url: https://fastn-community.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.png
-licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
-github-url: https://github.com/fastn-community/doc-site
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
 
 -- end: doc-sites
 
