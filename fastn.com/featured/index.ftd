@@ -5,6 +5,8 @@
 
 
 -- my-ds.page: Featured components
+widthfill: true
+sidebar: false
 
 -- ds.markdown:
 
@@ -19,6 +21,8 @@ web sites developed using `fastn` package.
 if: { show-grid }
 templates: $doc-sites
 more-link: /featured/doc-sites/
+
+Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
 
 /-- grid-view: Resumes:
 if: { show-grid }
@@ -35,18 +39,11 @@ if: { show-grid }
 templates: $schemes
 more-link: /featured/cs/
 
--- grid-view: Fonts:
+/-- grid-view: Fonts:
 if: { show-grid }
 templates: $font
 more-link-text: View all
 more-link: /featured/fonts/
-
-
--- grid-view: Font Typography:
-if: { show-grid }
-templates: $fonts-typography
-more-link-text: View all
-more-link: /featured/fonts-typography/
 
 -- end: my-ds.page
 
@@ -63,27 +60,26 @@ more-link: /featured/fonts-typography/
 optional caption title:
 template list templates:
 optional string more-link: 
-optional string more-link-text: View all 
+string more-link-text: View More 
 boolean $hover: false
+optional body body:
 
 -- ftd.column:
 width: fill-container
-border-top-width.px: 1
-border-color: $inherited.colors.border
 padding-top.px: 8
-margin-top.px: 16
+align-content: center
 
 -- ftd.row:
 width: fill-container
+align-content: center
 
 -- ftd.desktop:
 
 -- ftd.text: $grid-view.title
 if: { grid-view.title != NULL }
-role: $inherited.types.heading-small
-color: $inherited.colors.text
+role: $inherited.types.heading-medium
+color: $inherited.colors.accent.primary
 width: fill-container
-margin-top.px: 12
 
 -- end: ftd.desktop
 
@@ -100,16 +96,16 @@ margin-top.px: 12
 -- end: ftd.mobile
 
 -- ftd.row:
-align-self: end
-margin-top.px: 20
+align-content: center
 padding-right.px: 20
 padding-right.px if { ftd.device != "mobile" }: 0
+spacing.fixed.px: 6
+link: $grid-view.more-link
 
 -- ftd.text: $grid-view.more-link-text
 if: { grid-view.more-link != NULL}
-link: $grid-view.more-link
-role: $inherited.types.fine-print
-color: $inherited.colors.text
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
 $on-mouse-enter$: $ftd.set-bool($a=$grid-view.hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-view.hover, v = false)
 white-space: nowrap
@@ -118,16 +114,29 @@ border-color: $inherited.colors.background.step-1
 border-color if { grid-view.hover }: $inherited.colors.cta-primary.base
 color if { grid-view.hover }: $inherited.colors.cta-primary.base
 
+-- ftd.image:
+src: $fastn-assets.files.images.featured.arrow.svg
+width: auto
+
 -- end: ftd.row
 
 -- end: ftd.row
+
+-- ftd.text:
+if: { grid-view.body != NULL }
+text: $grid-view.body
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+margin-top.px: 16
 
 -- ftd.desktop:
 
 -- ftd.row:
 width: fill-container
 wrap: true
-spacing.fixed.px: 46
+spacing.fixed.px: 13
+margin-top.px: 60
+margin-bottom.px: 40
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -147,6 +156,7 @@ is-last: $obj.is-last
 
 -- ftd.column:
 width.fixed.percent: 100
+
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -177,119 +187,66 @@ is-last: $obj.is-last
 -- component grid-of-items:
 caption title: 
 string template-url:
-string licence-url:
+optional string licence-url:
 string github-url:
 boolean is-last:
 boolean $github-hover: false
 boolean $mit-hover: false
-body body:
-optional ftd.image-src screenshot:
+optional body body:
+ftd.image-src screenshot:
 
 -- ftd.column:
-width.fixed.percent if { ftd.device != "mobile" }: 46
+width.fixed.percent if { ftd.device != "mobile" }: 31.58
 width if { ftd.device == "mobile" }: fill-container
-margin-top.px: 24
-margin-bottom.px: 24
-
--- ftd.column:
-width: fill-container
-margin-left.px if { ftd.device == "mobile" }: 0
+margin-bottom.px: 60
 spacing.fixed.px: 16
-
--- ftd.row:
-width: fill-container
-
--- ftd.text: $grid-of-items.title
-role: $inherited.types.copy-large
-color: $inherited.colors.text-strong
 link: $grid-of-items.template-url
 open-in-new-tab: true
-border-bottom-width.px: 1
+
+-- ftd.image:
+src: $grid-of-items.screenshot
 width: fill-container
-border-color: $inherited.colors.background.step-1
+height: auto
+border-radius.px: 10
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 
 -- ftd.row:
 align-content: right
 spacing.fixed.px: 12
 padding-top.px: 8
+anchor: parent
+right.px: 16
+bottom.px: 52
+z-index: 99
 
 -- ftd.row:
-link: $grid-of-items.github-url
-open-in-new-tab: true
 
 -- ftd.image:
-if: { !grid-of-items.github-hover }
+if: { grid-of-items.github-url != NULL  }
 src: $fastn-assets.files.images.icon-github.svg
 width.fixed.px: 16
 height.fixed.px: 16
 align-self: center
 margin-right.px: 8
-$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 
 -- ftd.image:
-if: { $grid-of-items.github-hover }
-src: $fastn-assets.files.images.icon-github-grey.svg
+if: { grid-of-items.licence-url != NULL }
+src: $fastn-assets.files.images.mit-icon.svg
 width.fixed.px: 16
 height.fixed.px: 16
 align-self: center
-margin-right.px: 8
-$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 
--- end: ftd.row
-
--- ftd.row:
-link: $grid-of-items.licence-url
-open-in-new-tab: true
-
--- ftd.image:
-src if { !grid-of-items.mit-hover }: $fastn-assets.files.images.mit-icon.svg
-src: $fastn-assets.files.images.mit-icon-grey.svg
-width.fixed.px: 16
-height.fixed.px: 16
-align-self: center
-$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = true)
-$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = false)
 
 -- end: ftd.row
 
 -- end: ftd.row
 
--- end: ftd.row
-
--- ftd.column:
-if: { grid-of-items.screenshot != NULL }
+-- ftd.text: $grid-of-items.title
+role: $inherited.types.label-large
+color: $inherited.colors.text-strong
 width: fill-container
-border-width.px: 1
-border-color: $inherited.colors.text
-;;border-color if {grid-of-items.github-hover}: $inherited.colors.cta-primary.base
-border-radius.px: 12
-link: $grid-of-items.template-url
-open-in-new-tab: true
-
--- ftd.image:
-if: { grid-of-items.screenshot != NULL }
-src: $grid-of-items.screenshot
-width: fill-container
-height: auto
-border-radius.px: 12
-
--- end: ftd.column
-
--- end: ftd.column
-
--- ftd.column:
-width: fill-container
-margin-top.px:16
-spacing.fixed.px: 24
-
--- ftd.text:
-text: $grid-of-items.body
-role: $inherited.types.copy-small
-color: $inherited.colors.text
-
--- end: ftd.column
+text-align: center
 
 -- end: ftd.column
 
@@ -307,23 +264,19 @@ color: $inherited.colors.text
 -- record template:
 caption title:
 string template-url: 
-optional ftd.image-src screenshot:
-string licence-url: 
+ftd.image-src screenshot:
+optional string licence-url: 
 string github-url:
-body body: 
+optional body body: 
 boolean is-last: false
 
 -- template list doc-sites:
 
 -- template: Doc-site
 template-url: https://fastn-community.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+screenshot: $fastn-assets.files.images.featured.doc-site.png
 licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
 github-url: https://github.com/fastn-community/doc-site
-
-`doc-site` uses fastn default color theme. Most of our websites are using
-`doc-site` as base theme.
-
 
 -- end: doc-sites
 
@@ -417,13 +370,13 @@ Add warmth and energy to your designs with the `forest-cs`.
 -- template list bling:
 
 -- template: Bling
-template-url: https://fastn-community.github.io/bling/
+template-url: https://fifthtry.github.io/bling/
 screenshot: $fastn-assets.files.images.featured.bling-components.png
-licence-url: https://github.com/fastn-community/bling/blob/main/LICENSE
-github-url: https://github.com/fastn-community/bling
+licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
+github-url: https://github.com/FifthTry/bling/
 
-`bling` is developed and designed with various components which can be used
-inside `fastn` web packages.
+`fifthtry.github.io/bling` is develoed and designed with various components which 
+can be used inside `ftd` web packages.
 
 -- end: bling
 
@@ -443,71 +396,34 @@ template-url: https://fastn-community.github.io/opensans-font/
 licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/opensans-font
 
-`opensans-font` font is available and can be used inside `fastn` web packages.
+`fastn-community.github.io/opensans-font` font is available and can be used
+inside `ftd` web packages.
 
 -- template: Lato
 template-url: https://fastn-community.github.io/lato-font/
 licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lato-font
 
-`lato-font` font is available and can be used inside `fastn` web packages.
+`fastn-community.github.io/lato-font` font is available and can be used inside
+`ftd` web packages.
 
 -- template: Roboto Mono
 template-url: https://fastn-community.github.io/roboto-mono-font/
 licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-mono-font
 
-`roboto-mono-font` font is available and can be used inside `fastn` web packages.
+`fastn-community.github.io/roboto-mono-font` font is available and can be used
+inside `ftd` web packages.
 
 -- template: Lobster
 template-url: https://fastn-community.github.io/lobster-font/
 licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lobster-font
 
-`lobster-font` font is available and can be used inside `fastn` web packages.
+`fastn-community.github.io/lobster-font` font is available and can be used
+inside `ftd` web packages.
 
 -- end: font
-
-
-
-
-
-
--- template list fonts-typography:
-
--- template: Opensans Typography
-template-url: https://fastn-community.github.io/opensans-typography/
-licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/opensans-typography
-
-`opensans-font` typography is available and can be used inside `fastn` web
-packages.
-
--- template: Lato Typography
-template-url: https://fastn-community.github.io/lato-typography/
-licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/lato-typography
-
-`lato-font` typography is available and can be used inside `fastn` web
-packages.
-
--- template: Roboto Mono Typography
-template-url: https://fastn-community.github.io/roboto-mono-typography/
-licence-url: https://github.com/fastn-community/roboto-mono-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/roboto-mono-typography
-
-`roboto-mono-font` typography is available and can be used inside `fastn` web
-packages.
-
--- template: Lobster Typography
-template-url: https://fastn-community.github.io/lobster-typography/
-licence-url: https://github.com/fastn-community/lobster-typography/blob/main/LICENSE.md
-github-url: https://github.com/fastn-community/lobster-typography
-
-`lobster-font` typography is available and can be used inside `fastn` web
-packages.
-
--- end: fonts-typography
 
 
 
