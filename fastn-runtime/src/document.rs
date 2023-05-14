@@ -31,7 +31,17 @@ impl Document {
         self.width = width;
         self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
-        (fastn_runtime::ControlFlow::WaitForEvent, vec![])
+        (
+            fastn_runtime::ControlFlow::WaitForEvent,
+            vec![fastn_runtime::Operation::DrawRectangle(
+                fastn_runtime::Rectangle {
+                    top: 10,
+                    left: 10,
+                    width: 100,
+                    height: 100,
+                },
+            )],
+        )
     }
 
     // if not wasm

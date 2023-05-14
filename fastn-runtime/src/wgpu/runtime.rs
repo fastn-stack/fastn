@@ -101,9 +101,10 @@ impl State {
                 })],
                 depth_stencil_attachment: None,
             });
+
             render_pass.set_pipeline(&self.operation_data.rect_data.pipeline);
             render_pass.set_vertex_buffer(0, self.operation_data.rect_data.buffer.slice(..));
-            render_pass.draw(0..3, 0..1);
+            render_pass.draw(0..self.operation_data.rect_data.count, 0..1);
         }
 
         self.wgpu.queue.submit(std::iter::once(encoder.finish()));
