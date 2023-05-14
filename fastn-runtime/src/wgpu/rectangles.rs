@@ -1,6 +1,6 @@
 pub struct RectData {
-    buffer: wgpu::Buffer,
-    pipeline: wgpu::RenderPipeline,
+    pub buffer: wgpu::Buffer,
+    pub pipeline: wgpu::RenderPipeline,
 }
 
 #[repr(C)]
@@ -72,8 +72,20 @@ impl RectData {
     ) -> Self {
         use wgpu::util::DeviceExt;
 
-        let vertices: Vec<Vertex> = vec![];
-        // TODO: populate vertices
+        let vertices: Vec<Vertex> = vec![
+            Vertex {
+                position: [0.0, 0.5, 0.0],
+                color: [1.0, 0.0, 0.0],
+            },
+            Vertex {
+                position: [-0.5, -0.5, 0.0],
+                color: [0.0, 1.0, 0.0],
+            },
+            Vertex {
+                position: [0.5, -0.5, 0.0],
+                color: [0.0, 0.0, 1.0],
+            },
+        ];
 
         let buffer = w
             .device
