@@ -1,7 +1,6 @@
 pub struct Wgpu {
     pub surface: wgpu::Surface,
     pub device: wgpu::Device,
-    #[allow(dead_code)]
     pub queue: wgpu::Queue,
     pub config: wgpu::SurfaceConfiguration,
 }
