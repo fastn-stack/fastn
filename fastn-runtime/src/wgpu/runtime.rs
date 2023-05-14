@@ -64,15 +64,48 @@ struct State {
     #[allow(dead_code)]
     document: fastn_runtime::Document,
     size: winit::dpi::PhysicalSize<u32>,
-    wgpu: fastn_runtime::wgpu::boilerplate::Wgpu,
+    wgpu: fastn_runtime::wgpu::Wgpu,
     window: winit::window::Window,
     #[allow(dead_code)]
-    operation_data: fastn_runtime::wgpu::operations::OperationData,
-    pub render_pipeline: wgpu::RenderPipeline,
+    operation_data: fastn_runtime::wgpu::OperationData,
 }
 
 impl State {
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
+        let output = self.wgpu.surface.get_current_texture()?;
+        let view = output
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+        let mut encoder =
+            self.wgpu
+                .device
+                .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                    label: Some("Render Encoder"),
+                });
+
+        {
+            let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: Some("Render Pass"),
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(wgpu::Color {
+                            r: 0.1,
+                            g: 0.2,
+                            b: 0.3,
+                            a: 1.0,
+                        }),
+                        store: true,
+                    },
+                })],
+                depth_stencil_attachment: None,
+            });
+        }
+
+        self.wgpu.queue.submit(std::iter::once(encoder.finish()));
+        output.present();
+
         Ok(())
     }
 
@@ -81,10 +114,7 @@ impl State {
         let size = window.inner_size();
         let wgpu = fastn_runtime::wgpu::boilerplate::Wgpu::new(&window, &size).await;
 
-        let operation_data =
-            fastn_runtime::wgpu::operations::OperationData::new(size, &mut document, &wgpu);
-
-        let render_pipeline = fastn_runtime::wgpu::rectangles::render_pipeline(&wgpu);
+        let operation_data = fastn_runtime::wgpu::OperationData::new(size, &mut document, &wgpu);
 
         State {
             size,
@@ -92,7 +122,6 @@ impl State {
             wgpu,
             document,
             operation_data,
-            render_pipeline,
         }
     }
 }
