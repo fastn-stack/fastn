@@ -23,37 +23,54 @@ impl fastn_runtime::Rectangle {
         ]
     }
 
-    pub fn to_vertex(self, _size: winit::dpi::PhysicalSize<u32>) -> Vec<Vertex> {
+    pub fn to_vertex(self, size: winit::dpi::PhysicalSize<u32>) -> Vec<Vertex> {
         /*                     Window
         ┌───────────┬────────────────────────────────────────────────▲──┐
         │           │                                                │  │
         │◄── left ─►│                                               top │
         │           │          Rectangle                             │  │
         │           ┌──────────────────────────────────────┬──▲──────▼──│
-        │           │ a                                  b │  │         │
-        │           │                                      │  │         │
-        │           │◄───────────── width ────────────────►│  │         │
-        │           │                                      │height      │
-        │           │                                      │  │         │
-        │           │                                      │  │         │
+        y           │ a                                  b │  │         │
+                    │                                      │  │         │
+        a           │◄───────────── width ────────────────►│  │         │
+        x           │                                      │height      │
+        i           │                                      │  │         │
+        s           │                                      │  │         │
         │           │ d                                 c  │  │         │
         │           └──────────────────────────────────────┴──▼──       │
         │                                                               │
-        └───────────────────────────────────────────────────────────────┘
+        └────────────────────────── x axis ─────────────────────────────┘
         */
+        // center of the window is (0, 0)
+        // top left corner of the window is (-0.5, 0.5)
+        // bottom right corner of the window is (0.5, -0.5)
+        let a_x = self.left as f32 / size.width as f32 + 0.5;
+        let a_y = self.top as f32 / size.height as f32 - 0.5;
+        let b_x = (self.left + self.width) as f32 / size.width as f32 + 0.5;
+        let d_y = (self.top + self.height) as f32 / size.height as f32 - 0.5;
+
+        let a = Vertex {
+            position: [a_x, a_y, 0.0],
+            color: self.wasm_color(),
+        };
+        let b = Vertex {
+            position: [b_x, a_y, 0.0],
+            color: self.wasm_color(),
+        };
+        let c = Vertex {
+            position: [b_x, d_y, 0.0],
+            color: self.wasm_color(),
+        };
+        let d = Vertex {
+            position: [a_x, d_y, 0.0],
+            color: self.wasm_color(),
+        };
+
+        #[rustfmt::skip]
         let vertices: Vec<Vertex> = vec![
-            Vertex {
-                position: [0.5, -0.5, 0.0],
-                color: self.wasm_color(),
-            },
-            Vertex {
-                position: [0.0, 0.5, 0.0],
-                color: self.wasm_color(),
-            },
-            Vertex {
-                position: [-0.5, -0.5, 0.0],
-                color: self.wasm_color(),
-            },
+            // vertices have to be counter clock wise
+            a, d, b,
+            b, d, c,
         ];
 
         vertices
@@ -129,7 +146,7 @@ pub fn render_pipeline(wgpu: &fastn_runtime::wgpu::boilerplate::Wgpu) -> wgpu::R
             primitive: wgpu::PrimitiveState {
                 topology: wgpu::PrimitiveTopology::TriangleList,
                 strip_index_format: None,
-                front_face: wgpu::FrontFace::Ccw,
+                front_face: wgpu::FrontFace::Cw,
                 cull_mode: Some(wgpu::Face::Back),
                 // Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE
                 polygon_mode: wgpu::PolygonMode::Fill,

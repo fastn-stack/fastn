@@ -37,8 +37,8 @@ impl Document {
                 fastn_runtime::Rectangle {
                     top: 10,
                     left: 10,
-                    width: 100,
-                    height: 100,
+                    width: 200,
+                    height: 200,
                     color: fastn_runtime::ColorValue {
                         red: 200,
                         green: 0,
