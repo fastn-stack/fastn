@@ -22,11 +22,11 @@ pub async fn render_document(document: fastn_runtime::Document) {
                 ..
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
             winit::event::WindowEvent::Resized(physical_size) => {
-                state.wgpu.resize(*physical_size);
+                state.resize(*physical_size);
                 state.window.request_redraw();
             }
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
-                state.wgpu.resize(**new_inner_size);
+                state.resize(**new_inner_size);
                 state.window.request_redraw();
             }
             _ => {
@@ -37,7 +37,7 @@ pub async fn render_document(document: fastn_runtime::Document) {
             match state.render() {
                 Ok(_) => {}
                 // Reconfigure the surface if lost
-                Err(wgpu::SurfaceError::Lost) => state.wgpu.resize(state.size),
+                Err(wgpu::SurfaceError::Lost) => state.resize(state.size),
                 // The system is out of memory, we should probably quit
                 Err(wgpu::SurfaceError::OutOfMemory) => {
                     *control_flow = winit::event_loop::ControlFlow::Exit
@@ -71,6 +71,13 @@ struct State {
 }
 
 impl State {
+    pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
+        self.size = new_size;
+        self.operation_data =
+            fastn_runtime::wgpu::OperationData::new(new_size, &mut self.document, &self.wgpu);
+        self.wgpu.resize(new_size);
+    }
+
     fn render(&self) -> Result<(), wgpu::SurfaceError> {
         let output = self.wgpu.surface.get_current_texture()?;
         let view = output

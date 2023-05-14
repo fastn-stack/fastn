@@ -25,7 +25,7 @@ impl fastn_runtime::Rectangle {
 
     pub fn to_vertex(self, size: winit::dpi::PhysicalSize<u32>) -> Vec<Vertex> {
         /*
-                             Window
+                                     Window                             (1, 1)
         ┌───────────┬────────────────────────────────────────────────▲──┐
         │           │                                                │  │
         │◄── left ─►│                                               top │
@@ -41,10 +41,11 @@ impl fastn_runtime::Rectangle {
         │           └──────────────────────────────────────┴──▼──       │
         │                                                               │
         └────────────────────────── X axis ─► ──────────────────────────┘
+        (-1, -1)
 
-        Note: X goes from -1 to +1, left to right.
+        Note: X goes from -1 to +1, left to right (in GPU coordinates).
               Y goes from +1 to -1, top to bottom.
-              Center of the window is (0, 0)
+              Center of the window is (0, 0).
         */
         let pixel_width = 2.0 / size.width as f32;
         let pixel_height = 2.0 / size.height as f32;
