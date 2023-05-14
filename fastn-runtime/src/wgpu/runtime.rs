@@ -84,7 +84,7 @@ impl State {
                 });
 
         {
-            let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+            let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("Render Pass"),
                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                     view: &view,
@@ -101,6 +101,9 @@ impl State {
                 })],
                 depth_stencil_attachment: None,
             });
+            render_pass.set_pipeline(&self.operation_data.rect_data.pipeline);
+            render_pass.set_vertex_buffer(0, self.operation_data.rect_data.buffer.slice(..));
+            render_pass.draw(0..3, 0..1);
         }
 
         self.wgpu.queue.submit(std::iter::once(encoder.finish()));
