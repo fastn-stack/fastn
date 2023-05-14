@@ -11,7 +11,7 @@ pub struct Rectangle {
     pub left: u32,
     pub width: u32,
     pub height: u32,
-    pub scroll_x: u32,
+    // pub scroll_x: u32,
     // border
     // fill
 }

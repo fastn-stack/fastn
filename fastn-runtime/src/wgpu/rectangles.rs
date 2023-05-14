@@ -1,4 +1,5 @@
 pub struct RectData {
+    pub count: u32,
     pub buffer: wgpu::Buffer,
     pub pipeline: wgpu::RenderPipeline,
 }
@@ -6,13 +7,70 @@ pub struct RectData {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 #[allow(dead_code)]
-struct Vertex {
+pub struct Vertex {
     position: [f32; 3],
     color: [f32; 3],
 }
 
 const ATTRIBS: [wgpu::VertexAttribute; 2] =
     wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3];
+
+impl fastn_runtime::Rectangle {
+    pub fn to_vertex(self) -> Vec<Vertex> {
+        let vertices: Vec<Vertex> = vec![
+            Vertex {
+                position: [0.5, -0.5, 0.0],
+                color: [0.0, 0.0, 1.0],
+            },
+            Vertex {
+                position: [0.0, 0.5, 0.0],
+                color: [1.0, 0.0, 0.0],
+            },
+            Vertex {
+                position: [-0.5, -0.5, 0.0],
+                color: [0.0, 1.0, 0.0],
+            },
+        ];
+
+        vertices
+    }
+}
+
+fn vertices(v: Vec<fastn_runtime::Rectangle>) -> Vec<Vertex> {
+    v.into_iter().flat_map(|r| r.to_vertex()).collect()
+}
+
+impl RectData {
+    pub fn new(
+        v: Vec<fastn_runtime::operation::Rectangle>,
+        w: &fastn_runtime::wgpu::boilerplate::Wgpu,
+    ) -> Self {
+        use wgpu::util::DeviceExt;
+        let vertices = vertices(v);
+        let buffer = w
+            .device
+            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                label: Some("Vertex Buffer"),
+                contents: bytemuck::cast_slice(&vertices),
+                usage: wgpu::BufferUsages::VERTEX,
+            });
+
+        let pipeline = render_pipeline(w);
+        RectData {
+            buffer,
+            pipeline,
+            count: vertices.len() as u32,
+        }
+    }
+}
+
+fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
+    wgpu::VertexBufferLayout {
+        array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+        step_mode: wgpu::VertexStepMode::Vertex,
+        attributes: &ATTRIBS,
+    }
+}
 
 pub fn render_pipeline(wgpu: &fastn_runtime::wgpu::boilerplate::Wgpu) -> wgpu::RenderPipeline {
     let shader = wgpu
@@ -32,7 +90,7 @@ pub fn render_pipeline(wgpu: &fastn_runtime::wgpu::boilerplate::Wgpu) -> wgpu::R
             vertex: wgpu::VertexState {
                 module: &shader,
                 entry_point: "vs_main",
-                buffers: &[RectData::desc()],
+                buffers: &[desc()],
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader,
@@ -63,48 +121,4 @@ pub fn render_pipeline(wgpu: &fastn_runtime::wgpu::boilerplate::Wgpu) -> wgpu::R
             },
             multiview: None,
         })
-}
-
-impl RectData {
-    pub fn new(
-        _v: Vec<fastn_runtime::operation::Rectangle>,
-        w: &fastn_runtime::wgpu::boilerplate::Wgpu,
-    ) -> Self {
-        use wgpu::util::DeviceExt;
-
-        let vertices: Vec<Vertex> = vec![
-            Vertex {
-                position: [0.0, 0.5, 0.0],
-                color: [1.0, 0.0, 0.0],
-            },
-            Vertex {
-                position: [-0.5, -0.5, 0.0],
-                color: [0.0, 1.0, 0.0],
-            },
-            Vertex {
-                position: [0.5, -0.5, 0.0],
-                color: [0.0, 0.0, 1.0],
-            },
-        ];
-
-        let buffer = w
-            .device
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("Vertex Buffer"),
-                contents: bytemuck::cast_slice(&vertices),
-                usage: wgpu::BufferUsages::VERTEX,
-            });
-
-        let pipeline = render_pipeline(w);
-
-        RectData { buffer, pipeline }
-    }
-
-    fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
-        wgpu::VertexBufferLayout {
-            array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
-            step_mode: wgpu::VertexStepMode::Vertex,
-            attributes: &ATTRIBS,
-        }
-    }
 }
