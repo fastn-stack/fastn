@@ -26,21 +26,22 @@ pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+#[repr(C)]
+#[derive(Copy, Clone, Default, Debug)]
 pub struct ColorValue {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8,
     pub alpha: f32,
 }
 
-#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, Default, Clone)]
 pub struct Color {
     pub light: ColorValue,
     pub dark: ColorValue,
 }
 
-#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, Default, Clone)]
 pub struct TextStyle {
     pub underline: bool,
     pub italic: bool,
@@ -48,7 +49,7 @@ pub struct TextStyle {
     pub weight: Option<TextWeight>,
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, Clone)]
 pub enum TextWeight {
     EXTRABOLD,
     BOLD,

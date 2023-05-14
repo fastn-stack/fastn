@@ -6,7 +6,6 @@ pub struct RectData {
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
-#[allow(dead_code)]
 pub struct Vertex {
     position: [f32; 3],
     color: [f32; 3],
@@ -16,19 +15,27 @@ const ATTRIBS: [wgpu::VertexAttribute; 2] =
     wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3];
 
 impl fastn_runtime::Rectangle {
-    pub fn to_vertex(self) -> Vec<Vertex> {
+    fn wasm_color(&self) -> [f32; 3] {
+        [
+            fastn_runtime::wgpu::color_u8_to_f32(self.color.red),
+            fastn_runtime::wgpu::color_u8_to_f32(self.color.blue),
+            fastn_runtime::wgpu::color_u8_to_f32(self.color.green),
+        ]
+    }
+
+    pub fn to_vertex(self, _size: winit::dpi::PhysicalSize<u32>) -> Vec<Vertex> {
         let vertices: Vec<Vertex> = vec![
             Vertex {
                 position: [0.5, -0.5, 0.0],
-                color: [0.0, 0.0, 1.0],
+                color: self.wasm_color(),
             },
             Vertex {
                 position: [0.0, 0.5, 0.0],
-                color: [1.0, 0.0, 0.0],
+                color: self.wasm_color(),
             },
             Vertex {
                 position: [-0.5, -0.5, 0.0],
-                color: [0.0, 1.0, 0.0],
+                color: self.wasm_color(),
             },
         ];
 
@@ -36,17 +43,18 @@ impl fastn_runtime::Rectangle {
     }
 }
 
-fn vertices(v: Vec<fastn_runtime::Rectangle>) -> Vec<Vertex> {
-    v.into_iter().flat_map(|r| r.to_vertex()).collect()
+fn vertices(size: winit::dpi::PhysicalSize<u32>, v: Vec<fastn_runtime::Rectangle>) -> Vec<Vertex> {
+    v.into_iter().flat_map(|r| r.to_vertex(size)).collect()
 }
 
 impl RectData {
     pub fn new(
+        size: winit::dpi::PhysicalSize<u32>,
         v: Vec<fastn_runtime::operation::Rectangle>,
         w: &fastn_runtime::wgpu::boilerplate::Wgpu,
     ) -> Self {
         use wgpu::util::DeviceExt;
-        let vertices = vertices(v);
+        let vertices = vertices(size, v);
         let buffer = w
             .device
             .create_buffer_init(&wgpu::util::BufferInitDescriptor {

@@ -39,6 +39,12 @@ impl Document {
                     left: 10,
                     width: 100,
                     height: 100,
+                    color: fastn_runtime::ColorValue {
+                        red: 200,
+                        green: 0,
+                        blue: 0,
+                        alpha: 1.0,
+                    },
                 },
             )],
         )
