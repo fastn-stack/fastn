@@ -4,8 +4,14 @@ pub async fn render_document(document: fastn_runtime::Document) {
         .build(&event_loop)
         .unwrap();
 
+    dbg!(window.theme());
+
     let mut state = State::new(window, document).await;
 
+    // one or more events can come together, so we need to handle them all before we re-render
+    // or re-compute the layout. winit::event::Event::MainEventsCleared is fired after all events
+    // are handled.
+    // https://docs.rs/winit/0.28.5/winit/event/enum.Event.html#variant.MainEventsCleared
     event_loop.run(move |event, _, control_flow| match event {
         winit::event::Event::WindowEvent {
             ref event,
@@ -23,17 +29,19 @@ pub async fn render_document(document: fastn_runtime::Document) {
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
             winit::event::WindowEvent::Resized(physical_size) => {
                 state.resize(*physical_size);
-                state.window.request_redraw();
             }
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                 state.resize(**new_inner_size);
-                state.window.request_redraw();
+            }
+            winit::event::WindowEvent::ThemeChanged(theme) => {
+                dbg!("theme changed", theme);
             }
             _ => {
                 // dbg!(event);
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window.id() => {
+            // we should re-compute taffy layout here.
             match state.render() {
                 Ok(_) => {}
                 // Reconfigure the surface if lost
@@ -45,28 +53,30 @@ pub async fn render_document(document: fastn_runtime::Document) {
                 // All other errors (Outdated, Timeout) should be resolved by the next frame
                 Err(e) => eprintln!("{:?}", e),
             }
-        }
-        winit::event::Event::MainEventsCleared => {
-            // RedrawRequested will only trigger once, unless we manually
-            // request it.
-            // state.window().request_redraw();
-        }
-        _ => {
-            // by default the event_loop keeps calling this function, we can set it to ::Wait
-            // to wait till the next event occurs.
-            // dbg!(event, &control_flow);
             *control_flow = winit::event_loop::ControlFlow::Wait;
         }
+        winit::event::Event::MainEventsCleared => {
+            // all events have been processed, we can request a redraw now. This causes
+            // winit::event::Event::RedrawRequested to be emitted.
+            state.window.request_redraw();
+        }
+        winit::event::Event::NewEvents(_) => {}
+        winit::event::Event::WindowEvent { .. } => {}
+        winit::event::Event::DeviceEvent { .. } => {}
+        winit::event::Event::UserEvent(_) => {}
+        winit::event::Event::Suspended => {}
+        winit::event::Event::Resumed => {}
+        winit::event::Event::RedrawRequested(_) => {}
+        winit::event::Event::RedrawEventsCleared => {}
+        winit::event::Event::LoopDestroyed => {}
     })
 }
 
 struct State {
-    #[allow(dead_code)]
     document: fastn_runtime::Document,
     size: winit::dpi::PhysicalSize<u32>,
     wgpu: fastn_runtime::wgpu::Wgpu,
     window: winit::window::Window,
-    #[allow(dead_code)]
     operation_data: fastn_runtime::wgpu::OperationData,
 }
 
