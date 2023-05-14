@@ -30,7 +30,7 @@ impl fastn_runtime::Rectangle {
         │           │                                                │  │
         │◄── left ─►│                                               top │
         │           │          Rectangle                             │  │
-        Y           ┌──────────────────────────────────────┬──▲──────▼──│
+        Y           ┌──────────────────────────────────────┬--▲------▼--│
                     │ a                                  b │  │         │
         a           │                                      │  │         │
         x           │◄───────────── width ────────────────►│  │         │
@@ -47,6 +47,7 @@ impl fastn_runtime::Rectangle {
               Y goes from +1 to -1, top to bottom.
               Center of the window is (0, 0).
         */
+
         let pixel_width = 2.0 / size.width as f32;
         let pixel_height = 2.0 / size.height as f32;
 
@@ -57,31 +58,30 @@ impl fastn_runtime::Rectangle {
         let b_x = (self.left + self.width) as f32 * pixel_width - 1.0;
         let d_y = 1.0 - (self.top + self.height) as f32 * pixel_height;
 
+        let color = self.wasm_color();
+
         let a = Vertex {
             position: [a_x, a_y, 0.0],
-            color: self.wasm_color(),
+            color,
         };
         let b = Vertex {
             position: [b_x, a_y, 0.0],
-            color: self.wasm_color(),
+            color,
         };
         let c = Vertex {
             position: [b_x, d_y, 0.0],
-            color: self.wasm_color(),
+            color,
         };
         let d = Vertex {
             position: [a_x, d_y, 0.0],
-            color: self.wasm_color(),
+            color,
         };
 
         #[rustfmt::skip]
-        let vertices: Vec<Vertex> = vec![
-            // vertices have to be counter clock wise
+        vec![ // vertices have to be counter clock wise
             a, d, b,
             b, d, c,
-        ];
-
-        vertices
+        ]
     }
 }
 
