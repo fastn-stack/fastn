@@ -33,8 +33,8 @@ impl Document {
         dbg!(self.taffy.layout(taffy_root).unwrap());
         (
             fastn_runtime::ControlFlow::WaitForEvent,
-            vec![fastn_runtime::Operation::DrawRectangle(
-                fastn_runtime::Rectangle {
+            vec![
+                fastn_runtime::Operation::DrawRectangle(fastn_runtime::Rectangle {
                     top: 10,
                     left: 10,
                     width: 200,
@@ -45,8 +45,20 @@ impl Document {
                         blue: 0,
                         alpha: 1.0,
                     },
-                },
-            )],
+                }),
+                fastn_runtime::Operation::DrawRectangle(fastn_runtime::Rectangle {
+                    top: 300,
+                    left: 200,
+                    width: 300,
+                    height: 200,
+                    color: fastn_runtime::ColorValue {
+                        red: 00,
+                        green: 200,
+                        blue: 0,
+                        alpha: 1.0,
+                    },
+                }),
+            ],
         )
     }
 
