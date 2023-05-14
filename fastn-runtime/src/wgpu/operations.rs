@@ -21,7 +21,7 @@ impl OperationData {
             }
         }
         OperationData {
-            rect_data: fastn_runtime::wgpu::rectangles::RectData::new(rects, w),
+            rect_data: fastn_runtime::wgpu::rectangles::RectData::new(size, rects, w),
         }
     }
 }
