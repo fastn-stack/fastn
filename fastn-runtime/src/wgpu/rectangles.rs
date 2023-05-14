@@ -32,7 +32,7 @@ pub fn render_pipeline(wgpu: &fastn_runtime::wgpu::boilerplate::Wgpu) -> wgpu::R
             vertex: wgpu::VertexState {
                 module: &shader,
                 entry_point: "vs_main",
-                buffers: &[],
+                buffers: &[RectData::desc()],
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader,
