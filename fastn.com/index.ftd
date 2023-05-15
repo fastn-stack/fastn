@@ -154,6 +154,10 @@ types: $doc-typo.types
 document-title: $home-page.seo-title
 document-description: $home-page.seo-description
 document-image: $home-page.seo-image
+site-name: NULL
+logo-height: 38
+logo-width: 120
+
 
 -- ftd.column:
 width: fill-container

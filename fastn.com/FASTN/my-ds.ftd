@@ -22,6 +22,8 @@ types: $typo.types
 show-banner: true
 show-footer: true
 site-name: NULL
+logo-height: 38
+logo-width: 120
 
 -- ds.page.footer:
 
