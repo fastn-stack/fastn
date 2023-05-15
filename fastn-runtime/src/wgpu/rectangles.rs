@@ -78,10 +78,12 @@ impl fastn_runtime::Rectangle {
         };
 
         #[rustfmt::skip]
-        vec![ // vertices have to be counter clock wise
+        let vertices = vec![ // vertices have to be counter clock wise
             a, d, b,
             b, d, c,
-        ]
+        ];
+
+        vertices
     }
 }
 
