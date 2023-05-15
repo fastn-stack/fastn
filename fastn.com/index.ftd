@@ -3,7 +3,7 @@
 -- import: fifthtry.github.io/fastn-io-typography as doc-typo
 -- import: fastn.com/ftd as ftd-index
 -- import: fifthtry.github.io/fastn-ui/assets as fastn-ui-assets
--- import: fifthtry.github.io/footer
+-- import: fastn-community.github.io/footer
 -- import: fastn/processors as pr
 
 ;; Create rich user interfaces, integrate with
