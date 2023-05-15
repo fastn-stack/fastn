@@ -5,6 +5,23 @@ the scripts etc here.
 
 -- ds.h1: Upcoming Videos
 
+- Video series on doc-site
+  - Introduction
+  - Publish a package
+  - Add favicon
+  - changing color-scheme
+  - changing typography
+  - create a page
+  - adding assets
+  - adding an image
+  - embedding youtube and iframe
+  - markdown primer
+  - adding code-block
+  - understanding sitemap
+  - adding right-sidebar
+  - adding footer
+  - SEO
+
 - How to add images in documents
 - How to embed youtube or iframes
 - How to add color (in text, border, background)

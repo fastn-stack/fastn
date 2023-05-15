@@ -15,7 +15,9 @@
 
 
 -- home-page:
-
+seo-title: Build your next landing page, blog, or webapp with fastn | Easy to learn | fastn.com
+seo-description: Easy to learnfull-stack framework designed for creating good looking content centric or API and database driven websites.
+seo-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 
 -- hero-section: Build your next landing page, blog, or webapp
 preposition: with
@@ -140,12 +142,18 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- component home-page:
 children wrapper:
+optional string seo-title:
+optional string seo-description:
+optional ftd.raw-image-src seo-image:
 
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
 colors: $dark-flame-cs.main
 $widthfill: true
 types: $doc-typo.types
+document-title: $home-page.seo-title
+document-description: $home-page.seo-description
+document-image: $home-page.seo-image
 
 -- ftd.column:
 width: fill-container
@@ -964,28 +972,37 @@ boolean $btn-mousein: false
 if: { !github-star-cta.hide }
 align-self: center
 margin-bottom.px: 34
+background.linear-gradient: $star-gradient
+border-radius.px: 80
+padding.px: 2
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.column:
-align-self: center
+align-content: center
+background.solid: $inherited.colors.background.base
+border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.row:
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.row:
-border-width.px: 2
-border-color: $inherited.colors.custom.one
-background.solid if { github-star-cta.mousein }: $inherited.colors.custom.one
+background.linear-gradient if { github-star-cta.mousein }: $star-gradient
 $on-mouse-enter$: $ftd.set-bool($a = $github-star-cta.mousein, v = true )
 $on-mouse-leave$: $ftd.set-bool($a = $github-star-cta.mousein, v = false )
 link: $github-star-cta.link
 align-content: center
-padding-horizontal.px: 30
+padding-horizontal.px if { $ftd.device == "mobile" }: 16
+padding-horizontal.px if { $ftd.device == "desktop" }: 30
 padding-vertical.px: 10
 border-radius.px: 80
+width if { $ftd.device == "mobile" }: fill-container
 
 -- ftd.text:
 text: $github-star-cta.body
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong
+color if { github-star-cta.mousein }: #000000
 text-align: center
 
 -- end: ftd.row
@@ -997,3 +1014,27 @@ text-align: center
 -- end: ftd.column
 
 -- end: github-star-cta
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.linear-gradient star-gradient:
+direction: right
+colors: $color-values
+
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: red
+stop-position.percent: 20
+
+-- ftd.linear-gradient-color: yellow
+
+-- end: color-values

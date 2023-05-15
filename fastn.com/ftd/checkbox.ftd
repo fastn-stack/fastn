@@ -9,6 +9,8 @@ one or more options from a set of choices.
 
 -- ds.rendered: Sample usage
 
+-- ds.rendered.input:
+
 \-- ftd.row:
 spacing.fixed.px: 5
 color: $inherited.colors.text
@@ -19,6 +21,8 @@ align-content: center
 \-- ftd.text: FifthTry
 
 \-- end: ftd.row
+
+-- ds.rendered.output:
 
 -- ftd.row:
 spacing.fixed.px: 5
@@ -31,6 +35,8 @@ align-content: center
 
 -- end: ftd.row
 
+-- end: ds.rendered.output
+
 -- end: ds.rendered
 
 
@@ -40,6 +46,8 @@ There is a special variable `$CHECKED` which can be used to access the current
 checked state of `ftd.checkbox`.
 
 -- ds.rendered: Sample usage
+
+-- ds.rendered.input:
 
 \-- boolean $is-checked: false
 
@@ -60,7 +68,11 @@ if: { !is-checked }
 
 \-- end: ftd.row
 
+-- ds.rendered.output:
+
 -- example-2:
+
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -81,6 +93,8 @@ a checkbox component should be pre-selected (checked) when the page loads.
 
 -- ds.rendered: `checked`
 
+-- ds.rendered.input:
+
 \-- ftd.row:
 spacing.fixed.px: 5
 align-content: center
@@ -93,6 +107,8 @@ checked: true
 
 \-- end: ftd.row
 
+-- ds.rendered.output:
+
 -- ftd.row:
 spacing.fixed.px: 5
 align-content: center
@@ -104,6 +120,8 @@ checked: true
 -- ftd.text: This checkbox is checked when page loads
 
 -- end: ftd.row
+
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 
@@ -119,6 +137,8 @@ browsers.
 
 -- ds.rendered: `checked`
 
+-- ds.rendered.input:
+
 \-- ftd.row:
 spacing.fixed.px: 5
 align-content: center
@@ -132,6 +152,8 @@ checked: true
 
 \-- end: ftd.row
 
+-- ds.rendered.output:
+
 -- ftd.row:
 spacing.fixed.px: 5
 align-content: center
@@ -144,6 +166,8 @@ checked: true
 -- ftd.text: This checkbox is disabled and is checked
 
 -- end: ftd.row
+
+-- end: ds.rendered.output
 
 -- end: ds.rendered
 
