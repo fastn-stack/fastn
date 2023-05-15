@@ -136,7 +136,8 @@ favicon: /-/fastn.com/images/favicon.svg
   skip: true
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
-  - `ftd.document` 🚧: /ftd/document/
+  - `ftd.document` 🚧: /document/
+    document: /ftd/document.ftd
   - `ftd.row`: /row/
     document: /ftd/row.ftd
   - `ftd.column`: /column/
@@ -464,3 +465,4 @@ favicon: /-/fastn.com/images/favicon.svg
 /ftd/boolean/: /boolean/
 /ftd/text-input/: /text-input/
 /blog/web-components/: /web-components/
+/ftd/document/: /document/
