@@ -13,7 +13,7 @@
 
 -- my-ds.page: List of fonts
 
-We have created some Google Fonts listed below:
+We have converted some Google Fonts to fastn package:
 
 -- ft-ui.grid-view:
 if: { show-grid }
