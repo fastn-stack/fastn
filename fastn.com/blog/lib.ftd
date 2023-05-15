@@ -796,7 +796,7 @@ and use it as template and create their own color schemes by changing the
 values inside `colors.ftd`.
 
 The variables that are defined in the `colors.ftd` are of record types as 
-shown [here](https://fastn.com/ftd/built-in-types/#ftd-color-scheme).
+shown [here](/built-in-types/#ftd-color-scheme).
 
 
 

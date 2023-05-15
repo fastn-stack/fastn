@@ -82,7 +82,7 @@ lang: ftd
 
 -- ds.h2: `index.ftd`
 
-To print Hello World, we are using [`ftd.text`](https://fastn.com/ftd/row/)
+To print Hello World, we are using [`ftd.text`](/row/)
 section
 
 -- ds.code: Code

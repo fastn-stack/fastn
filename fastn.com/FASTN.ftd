@@ -119,10 +119,14 @@ favicon: /-/fastn.com/images/favicon.svg
 - Getting Started: /setup/
   document: ftd/setup.ftd
 - Data Modelling: /ftd/data-modelling/
-  - Variables: /ftd/variables/
-  - Built-in Types: /ftd/built-in-types/
-  - `record`: /ftd/record/
-  - `or-type`: /ftd/or-type/
+  - Variables: /variables/
+    document: /ftd/variables.ftd
+  - Built-in Types: /built-in-types/
+    document: /ftd/built-in-types.ftd
+  - `record`: /record/
+    document: /ftd/record.ftd
+  - `or-type`: /or-type/
+    document: /ftd/or-type.ftd
   - `list`: /list/
     document: /ftd/list.ftd
 - `component`: /components/
@@ -133,19 +137,30 @@ favicon: /-/fastn.com/images/favicon.svg
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /ftd/document/
-  - `ftd.row`: /ftd/row/
-  - `ftd.column`: /ftd/column/
-  - `ftd.container`: /ftd/container/
-  - `ftd.text`: /ftd/text/
-  - `ftd.image`: /ftd/image/
+  - `ftd.row`: /row/
+    document: /ftd/row.ftd
+  - `ftd.column`: /column/
+    document: /ftd/column.ftd
+  - `ftd.container`: /container/
+    document: /ftd/container.ftd
+  - `ftd.text`: /text/
+    document: /ftd/text.ftd
+  - `ftd.image`: /image/
+    document: /ftd/image.ftd
   - `ftd.rive`: /rive/
     document: ftd/rive.ftd
-  - `ftd.iframe`: /ftd/iframe/
-  - `ftd.integer`: /ftd/integer/
-  - `ftd.decimal`: /ftd/decimal/
-  - `ftd.boolean`: /ftd/boolean/
-  - `ftd.code`: /ftd/code/
-  - `ftd.text-input`: /ftd/text-input/
+  - `ftd.iframe`: /iframe/
+    document: /ftd/iframe.ftd
+  - `ftd.integer`: /integer/
+    document: /ftd/integer.ftd
+  - `ftd.decimal`: /decimal/
+    document: /ftd/decimal.ftd
+  - `ftd.boolean`: /boolean/
+    document: /ftd/boolean.ftd
+  - `ftd.code`: /code/
+    document: /ftd/code.ftd
+  - `ftd.text-input`: /text-input/
+    document: /ftd/text-input.ftd
   - `ftd.checkbox`: /checkbox/
     document: ftd/checkbox.ftd
   - `ftd.desktop`: /desktop/
@@ -198,7 +213,7 @@ favicon: /-/fastn.com/images/favicon.svg
     document: ftd/web-component.ftd
 - Create `fastn` package: /create-fastn-package/
   document: author/how-to/create-fastn-package.ftd
-- Best Practices 🚧: /best-practices/
+- Best Practices: /best-practices/
   - Formatting: /formatting/
     document: /best-practices/formatting.ftd
   - Import: /import-at-top/
@@ -290,9 +305,9 @@ favicon: /-/fastn.com/images/favicon.svg
   - Part 4. Event Handling: /expander/events/
   - Part 5. Publish a package: /expander/publish/
   - Part 6. Polishing UI: /expander/polish/
-- Button with shadow: /button-using-fastn/
+- Button with shadow: /button/
   document: /expander/button.ftd
-- Create rounded border: /border-radius-in-fastn/
+- Create rounded border: /rounded-border/
   document: /expander/border-radius.ftd
 - Create clean URLs: /clean-urls/
   document: /expander/sitemap-document.ftd
@@ -367,6 +382,10 @@ favicon: /-/fastn.com/images/favicon.svg
 - Publish a package: /expander/publish/-/build/
 - Create clean URLs: /clean-urls/-/build/
   document: /expander/sitemap-document.ftd 
+- Create rounded border: /rounded-border/-/build/
+  document: /expander/border-radius.ftd
+- Using images in documents: /using-images/-/build/
+  document: /expander/imagemodule/index.ftd
 
 
 # Blog: /trizwitlabs/
@@ -378,7 +397,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: blog/philippines.ftd
 - Witty Hacks!: /wittyhacks/
   document: blog/wittyhacks.ftd
-- Ahoy, Web Components!: /blog/web-components/
+- Ahoy, Web Components!: /web-components/
+  document: /blog/web-components.ftd
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
 
@@ -427,5 +447,20 @@ favicon: /-/fastn.com/images/favicon.svg
 /ftd/list/: /list/
 /discord/: https://discord.gg/eNXVBMq4xt
 /package-query/: /sql/
-/images-in-modules/: https://fastn.com/using-images/
-/images-in-modules/-/planning/: https://fastn.com/using-images/-/planning/
+/images-in-modules/: /using-images/
+/images-in-modules/-/planning/: `/using-images/-/planning/
+/ftd/variables/: /variables/
+/ftd/built-in-types/: /built-in-types/
+/ftd/record/: /record/
+/ftd/or-type/: /or-type/
+/ftd/row/: /row/
+/ftd/column/: /column/
+/ftd/container/: /container/
+/ftd/text/: /text/
+/ftd/image/: /image/
+/ftd/iframe/: /iframe/
+/ftd/integer/: /integer/
+/ftd/decimal/: /decimal/
+/ftd/boolean/: /boolean/
+/ftd/text-input/: /text-input/
+/blog/web-components/: /web-components/

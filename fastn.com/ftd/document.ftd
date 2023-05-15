@@ -127,7 +127,7 @@ attributes](/ftd/container-root-attributes/).
 
 -- ds.h2: `title`
 
-Type: : `optional` [`caption`](/ftd/built-in-types/#caption)
+Type: : `optional` [`caption`](/built-in-types/#caption)
 
 The `title` attribute specifies the title of the document. It is displayed in
 the browser's title bar or tab. The content within the title tag is crucial for

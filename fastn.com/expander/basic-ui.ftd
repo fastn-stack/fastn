@@ -207,7 +207,7 @@ lang: ftd
 -- ds.markdown:
 if: { source == "default" }
 
-`ftd.column` documentation: [read more](https://fastn.com/ftd/column/)
+`ftd.column` documentation: [read more](/column/)
 
 -- ds.markdown:
 if: { source == "default" }
@@ -232,7 +232,7 @@ lang: ftd
 -- ds.markdown:
 if: { source == "default" }
 
-`ftd.row` documentation: [read more](https://fastn.com/ftd/row/)
+`ftd.row` documentation: [read more](/row/)
 
 
 

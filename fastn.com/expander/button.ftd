@@ -19,10 +19,10 @@ this using `fastn`.
 To make the button we will use the concepts like: 
 - [`components`](https://fastn.com/components). 
 - To the component we will apply various properties with their respective
-  [`built-in types`](https://fastn.com/ftd/built-in-types/). 
+  [`built-in types`](/built-in-types/). 
   Some of the `Primitive Types` like `caption`, `string`, `boolean` while 
   others of the `Derived Types` like `ftd.color`, `ftd.shadow`.
-- We will use [`records`](https://fastn.com/ftd/record/) as well to 
+- We will use [`records`](/record/) as well to 
   define colors for both light and dark mode as well as shadow-color similar to 
   what we have in second button.
 - We will do `event handling` that gives **shadow** to the button `on-hover`.

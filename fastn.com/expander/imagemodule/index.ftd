@@ -5,7 +5,7 @@
 -- my-ds.page: How to use images in documents
 
 -- ds.markdown:
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 
 In this video we will learn how to add images in fastn documents.
 
@@ -19,8 +19,9 @@ To show how to add the images by importing assets.
 
 
 -- ds.youtube:
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 v: _yM7y_Suaio
+
 
 -- ds.image:
 if: { source == "planning" }
@@ -48,7 +49,7 @@ and web apps faster.
 -- ds.h1: Supported Image Formats
 
 `fastn` supports bunch of image file formats, checkout 
-[supported-image-formats](https://fastn.com/ftd/built-in-types/#supported-image-formats) 
+[supported-image-formats](/built-in-types/#supported-image-formats) 
 to read about it. The link is shared in the discription.
 
 
@@ -97,7 +98,7 @@ if: { source == "planning" }
 After colon we start with `$`. $ is used for reference, then assets.
 
 -- ds.markdown:
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 
 After colon we start with `$`. $ is used for reference to assets.
 
@@ -119,7 +120,7 @@ browser.
 The image is added. 
 
 -- ds.image:
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 src: $fastn-assets.files.expander.imagemodule.adding-image.gif
 
 
@@ -136,11 +137,11 @@ container.
 
 -- ds.markdown:
 
-If you have watched the video where I have explained 
-how to round the corners by using the border-property, 
-[border-radius](https://fastn.com/border-radius-in-fastn/), you know 
-that we can apply it to image also. If not, you can checkout out that video as 
-well. You can find the link in description.
+If you have watched the video where I have explained how to round the corners 
+by using the border-property, [border-radius](/rounded-border/), you know that 
+we can apply it to image also. 
+If not, you can checkout out that video as well. You can find the link in 
+description.
 
 -- ds.markdown:
 if: { source == "planning" }
@@ -156,14 +157,14 @@ if: { source == "planning" }
 src: $assets.files.images.temp.home.png
 
 -- ds.markdown:
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 
 Let's say if we add another folder `temp` inside the images folder, and put 
 this image file we are using inside it. Then we need to change the path as
 
 -- ds.code:
 lang: ftd
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 
 \-- ftd.image:
 src: $assets.files.images.temp.<image-file-name-with-extension>
@@ -202,7 +203,7 @@ fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" }
+if: { source == "default" || source == "build" }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
