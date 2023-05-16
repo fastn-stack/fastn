@@ -17,7 +17,7 @@ the scripts etc here.
   - embedding youtube and iframe
   - markdown primer
   - adding code-block
-  - understanding sitemap
+  - understanding sitemap   [[Planning]](/understanding-sitemap/-/planning/)
   - adding right-sidebar
   - adding footer
   - SEO
@@ -48,11 +48,11 @@ the scripts etc here.
 - R: what is a fastn package?
   - dependencies, auto import, sitemap, dynamic-urls, redirects, 404
 - R: fastn document, variables, etc
-- ✅ R: creating a component (basics) [[F]](/expander/components/)
+- ✅ R: [creating a component](/expander/components/) (basics)
 - R: understanding colors
 - R: understanding fonts
 - R: github pages (templates, publishing, domain mapping? etc)
-- ✅ R: installing fastn  [[F]](/install/) 
+- ✅ R: [installing fastn](/install/) 
 - R: using `key-value` pair to show-hide content in a single doc   
 - R: why we always use .px, what else can we do?
 
@@ -61,8 +61,8 @@ the scripts etc here.
 - R: what is a fastn package?
 - P: creating a font
 - R: creating a color scheme
-- ✅ R: importing colors to figma [[F]](/figma/)
-- ✅ R: exporting colors from figma  [[F]](/figma-to-fastn-cs/)
+- ✅ R: [importing colors to figma](/figma/)
+- ✅ R: [exporting colors from figma](/figma-to-fastn-cs/)
 - D: importing typography to figma
 - D: exporting types from figma
 - R: rapid prototyping using fastn
@@ -81,15 +81,15 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
-    - ✅ R: button   [[P]](https://fastn.com/planning) [[F]](/button-using-fastn/)
+    - ✅ R: [button](/button-using-fastn/)   [[Planning]](https://fastn.com/planning)
     - R: post card 
 - R: creating various page layouts
-    - ✅ R: holy-grail   [[P]](https://fastn.com/holy-grail/-/planning/) [[F]](/holy-grail/)
-- ✅ R: event handling (basic)   [[F]](/expander/events/)
+    - ✅ R: [holy-grail](/holy-grail/)     [[Planning]](/holy-grail/-/planning/) 
+- ✅ R: [event handling](/expander/events/) (basic) 
 - R: creating docs pages
 - D: using module system to create interchangable packages
 - D: translation crosslinks
-- ✅ R: rive [[P]](/planning/rive/)   [[F]](/rive/)
+- ✅ R: [rive](/rive/)     [[Planning]](/planning/rive/)  
 - R: embedding youtube or iframes
 - R: add images in documents
 - R: mobile responsive site
