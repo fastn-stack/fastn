@@ -107,8 +107,9 @@ $on-input$: $ftd.set-string($a = $week, v = $VALUE)
 
 
 
--- string $color: color
+-- string $color: red
 -- ftd.text: $color
+color: $color
 
 -- ftd.text-input:
 type: color
@@ -129,3 +130,9 @@ placeholder: Type your file here...
 width.fixed.px: 400
 border-width.px: 2
 $on-input$: $ftd.set-string($a = $file, v = $VALUE)
+
+
+-- string $url1: https://fastn.com/-/fastn.com/images/fastn.svg
+
+-- ftd.image:
+src: $url1
