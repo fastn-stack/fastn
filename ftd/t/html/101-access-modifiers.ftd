@@ -1,0 +1,14 @@
+-- component foo:
+caption name:
+private boolean $mouse-hovered: false
+
+-- ftd.text: $foo.name
+color: red
+color if { foo.mouse-hovered }: green
+$on-mouse-enter$: $ftd.set-bool($a = $foo.mouse-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $foo.mouse-hovered, v = false)
+
+-- end: foo
+
+
+-- foo: Rithik

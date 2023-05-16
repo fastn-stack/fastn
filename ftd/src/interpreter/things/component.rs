@@ -329,7 +329,7 @@ impl Component {
             ast_component.line_number,
         )?);
 
-        if let Some((name, arguments)) = definition_name_with_arguments {
+        if let Some((_name, arguments)) = definition_name_with_arguments {
             Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
         } else if let ftd::interpreter::Thing::Component(c) =
             doc.get_thing(name.as_str(), ast_component.line_number)?
@@ -365,7 +365,11 @@ impl Component {
             if let PropertySource::Header { name, .. } = &property.source {
                 if private_arguments.contains(name.as_str()) {
                     return Err(ftd::interpreter::Error::InvalidAccessError {
-                        key: name.clone(),
+                        message: format!(
+                            "{} argument is private and can't be accessed on \
+                        invocation",
+                            name
+                        ),
                         line_number: property.line_number,
                     });
                 }

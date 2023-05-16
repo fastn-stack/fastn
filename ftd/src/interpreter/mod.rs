@@ -91,8 +91,8 @@ pub enum Error {
         source: serde_json::Error,
     },
 
-    #[error("Invalid access: {key} has a private access, line_number: {line_number}")]
-    InvalidAccessError { key: String, line_number: usize },
+    #[error("Invalid access: {message}, line_number: {line_number}")]
+    InvalidAccessError { message: String, line_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
