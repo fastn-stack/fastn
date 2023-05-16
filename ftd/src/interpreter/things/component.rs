@@ -1095,7 +1095,7 @@ impl Loop {
             mutable: self.on.is_mutable(),
             value: Some(self.on.to_owned()),
             line_number: self.on.line_number(),
-            access_modifier: std::default::Default::default(),
+            access_modifier: Default::default(),
         })
     }
 

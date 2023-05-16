@@ -140,7 +140,16 @@ fn di_import() {
             -- end: import
             "
         ),
-        r#"ASTParseError: foo:1 -> Subsection not expected for import statement `Section { name: "import", kind: None, caption: Some(KV(KV { line_number: 1, key: "$caption$", kind: None, value: Some("foo"), condition: None, access_modifier: Public })), headers: Headers([]), body: None, sub_sections: [Section { name: "ftd.text", kind: None, caption: Some(KV(KV { line_number: 3, key: "$caption$", kind: None, value: Some("Hello"), condition: None, access_modifier: Public })), headers: Headers([]), body: None, sub_sections: [], is_commented: false, line_number: 3, block_body: false }], is_commented: false, line_number: 1, block_body: false }`"#,
+        "ASTParseError: foo:1 -> Subsection not expected for import \
+        statement `Section { name: \"import\", kind: None, caption: \
+        Some(KV(KV { line_number: 1, key: \"$caption$\", kind: None, value: \
+        Some(\"foo\"), condition: None, access_modifier: Public })), headers: \
+        Headers([]), body: None, sub_sections: [Section { name: \"ftd.text\", \
+        kind: None, caption: Some(KV(KV { line_number: 3, key: \"$caption$\", \
+        kind: None, value: Some(\"Hello\"), condition: None, access_modifier: \
+        Public })), headers: Headers([]), body: None, sub_sections: [], \
+        is_commented: false, line_number: 3, block_body: false }], \
+        is_commented: false, line_number: 1, block_body: false }`",
     )
 }
 
