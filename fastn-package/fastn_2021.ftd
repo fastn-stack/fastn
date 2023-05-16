@@ -32,8 +32,12 @@ optional string mount-point:
 -- dependency-data list dependency:
 
 
+-- record auto-import-data:
+caption name:
+string list exposing:
 
--- string list auto-import:
+
+-- auto-import-data list auto-import:
 
 
 -- record sitemap-rec:

@@ -202,12 +202,17 @@ impl Package {
                 }
             }
             Some(format!(
-                "{}\n-- import: {}{}",
+                "{}\n-- import: {}{}{}",
                 pre.unwrap_or_default(),
                 &import_doc_path,
                 match &ai.alias {
                     Some(a) => format!(" as {}", a),
                     None => String::new(),
+                },
+                if ai.exposing.is_empty() {
+                    "".to_string()
+                } else {
+                    format!("\nexposing: {}\n", ai.exposing.join(","))
                 }
             ))
         })
@@ -511,9 +516,9 @@ impl Package {
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
         package.groups = groups;
         package.auto_import = fastn_document
-            .get::<Vec<String>>("fastn#auto-import")?
-            .iter()
-            .map(|f| fastn_core::AutoImport::from_string(f.as_str()))
+            .get::<Vec<fastn_core::package::dependency::AutoImportTemp>>("fastn#auto-import")?
+            .into_iter()
+            .map(|f| f.into_auto_import())
             .collect();
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
@@ -597,9 +602,9 @@ impl Package {
         };
 
         package.auto_import = fastn_doc
-            .get::<Vec<String>>("fastn#auto-import")?
-            .iter()
-            .map(|f| fastn_core::AutoImport::from_string(f.as_str()))
+            .get::<Vec<fastn_core::package::dependency::AutoImportTemp>>("fastn#auto-import")?
+            .into_iter()
+            .map(|f| f.into_auto_import())
             .collect();
 
         package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;

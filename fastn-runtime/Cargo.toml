@@ -1,11 +1,13 @@
 [package]
-name = "fastn-surface"
+name = "fastn-runtime"
 version = "0.1.0"
 edition = "2021"
 
 [features]
 default = ["native"]
 native = ["winit", "env_logger", "log", "wgpu"]
+# terminal = ["crossterm"]
+# web = ["wasm-bindgen", "web-sys"]
 
 [dependencies]
 winit = { workspace = true, optional = true }
@@ -16,4 +18,7 @@ taffy.workspace = true
 serde.workspace = true
 slotmap.workspace = true
 once_cell.workspace = true
+thiserror.workspace = true
 tokio.workspace = true
+bytemuck.workspace = true
+async-trait.workspace = true

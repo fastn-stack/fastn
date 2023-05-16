@@ -1,0 +1,9 @@
+-- import: 6-function
+export: append, sum
+exposing: append
+
+-- import: 4-component
+export: h1, markdown
+exposing: h1, markdown
+
+-- ftd.text: $append(a = FifthTry, b = Click here)

@@ -677,6 +677,20 @@ name = "bytemuck"
 version = "1.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "17febce684fd15d89027105661fec94afb475cb995fbc59d2865198446ba2eea"
+dependencies = [
+ "bytemuck_derive",
+]
+
+[[package]]
+name = "bytemuck_derive"
+version = "1.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fdde5c9cd29ebd706ce1b35600920a33550e402fc998a2e53ad3b42c3c47a192"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+]
 
 [[package]]
 name = "byteorder"
@@ -1714,15 +1728,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-surface"
+name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
+ "bytemuck",
  "env_logger",
  "log",
  "once_cell",
  "serde",
  "slotmap",
  "taffy 0.3.12",
+ "thiserror",
  "tokio",
  "wgpu",
  "winit",
@@ -1881,7 +1898,7 @@ dependencies = [
  "dioxus-html",
  "dioxus-native-core",
  "dioxus-native-core-macro",
- "fastn-surface",
+ "fastn-runtime",
  "format_num",
  "futures",
  "include_dir",
