@@ -43,10 +43,32 @@ pub struct Color {
 
 #[derive(Debug, Default, Clone)]
 pub struct TextStyle {
-    pub underline: bool,
-    pub italic: bool,
-    pub strike: bool,
-    pub weight: Option<TextWeight>,
+    // border: Borders,
+    pub underline: Callable<bool>,
+    pub italic: Callable<bool>,
+    pub strike: Callable<bool>,
+    pub weight: Callable<Option<TextWeight>>,
+    pub color: Callable<Option<fastn_runtime::Color>>,
+}
+
+impl TextStyle {
+    pub fn taffy(&self) -> taffy::style::Style {
+        todo!()
+    }
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct Ref;
+
+#[derive(Debug, Default, Clone)]
+pub struct Mut;
+
+#[derive(Debug, Default, Clone)]
+pub struct Callable<T> {
+    pub wat: String,
+    pub refs: Vec<Ref>,
+    pub muts: Vec<Mut>,
+    _t: std::marker::PhantomData<T>,
 }
 
 #[derive(Debug, Clone)]

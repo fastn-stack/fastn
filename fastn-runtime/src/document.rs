@@ -7,10 +7,73 @@ pub struct Document {
     // variables, bindings
 }
 
+/*
+
+// global doc
+
+fn add_wrapper(a: Ref, b: Ref) -> Ref {
+    let a = doc.get(a);
+    let b = doc.get(b);
+    let c = add(a, b);
+    Ref::new(c)
+}
+
+fn add(a: u32, b: u32) -> u32 {
+    a + b
+}
+
+fn handle_event_wrapper(a: Ref, b: Ref) {
+    let a = doc.get(a);
+    handle_event(a, b);
+}
+
+fn handle_event(a: u32, b: Mut<u32>) {
+    b.set(a + 1)
+}
+
+-- boolean f: true
+-- boolean g: hello(v=$f)
+
+-- boolean hello(v):
+boolean v:
+
+!v
+
+-- ftd.boolean: $g
+
+
+
+let rt = Runtime::new();
+
+let f = rt.create_boolean_id_ref(true);
+let hello = rt.create_function(boolean, [Ref::new(boolean)], [], "return !$0");
+let g = rt.create_boolean_ref(hello, [f]); // internally update dependency graph
+
+rt.create_boolean_kernel(g); // internally update dependency graph
+
+rt.show();
+
+ */
+
 impl Document {
     // initial_html() -> server side HTML
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>
+
+    // pub fn create_string_ref(&mut self) -> fastn_runtime::Ref {
+    //     todo!()
+    // }
+    //
+    // pub fn add_text(&mut self, text: fastn_runtime::Callable<String>) -> fastn_runtime::NodeKey {
+    //     let text_style = fastn_runtime::TextStyle::default();
+    //     let taffy = self.taffy.new_leaf(text_style.taffy()).unwrap();
+    //     let t = fastn_runtime::Text {
+    //         taffy,
+    //         text,
+    //         style: text_style,
+    //     };
+    //     self.nodes.insert(fastn_runtime::Element::Text(t))
+    // }
 
     // if not wasm
     pub fn initial_layout(

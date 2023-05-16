@@ -34,11 +34,12 @@ impl Container {
 #[derive(Debug)]
 pub struct Text {
     pub taffy: taffy::node::Node,
-    // border: Borders,
-    pub text: String,
-    pub style: Option<fastn_runtime::TextStyle>,
-    pub color: Option<fastn_runtime::Color>,
+    pub text: fastn_runtime::Callable<String>,
+    pub style: fastn_runtime::TextStyle,
 }
+
+
+
 
 #[derive(Debug)]
 pub struct Image {
