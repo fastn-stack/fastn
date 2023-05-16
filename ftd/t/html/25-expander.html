@@ -2141,14 +2141,6 @@ window.ftd.call_immutable_value_changes("foo#box:title:0,2", "main");
 window.ftd.utils.node_change_call("main","0,2,0,0:main__text", data);
 };
 
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
-};
-
 
 
 

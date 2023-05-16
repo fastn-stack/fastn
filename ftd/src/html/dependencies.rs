@@ -554,9 +554,6 @@ impl<'a> DependencyGenerator<'a> {
             let mut is_static = true;
             let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), key);
             let style_key = key.clone();
-            if matches!(key.as_str(), "background-image" | "box-shadow") {
-                var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
-            }
             let key = format!(
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
@@ -854,6 +851,11 @@ impl<'a> DependencyGenerator<'a> {
                 )
                 .as_str(),
             );
+
+            if matches!(key.as_str(), "background-image" | "box-shadow") && !value.trim().is_empty()
+            {
+                var_dependencies.insert("ftd#dark-mode".to_string(), node_change_id.clone());
+            }
 
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
