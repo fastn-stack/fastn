@@ -17,7 +17,7 @@ the scripts etc here.
   - embedding youtube and iframe
   - markdown primer
   - adding code-block
-  - understanding sitemap   [[Planning]](/understanding-sitemap/-/planning/)
+  - understanding sitemap   [[🗎Planning]](/understanding-sitemap/-/planning/)
   - adding right-sidebar
   - adding footer
   - SEO
@@ -36,10 +36,11 @@ the scripts etc here.
 - How to pass components to a container component 
   - Understanding of ftd.ui and children
 
--- ds.h2: Note
+-- ds.h2: Abbreviations
 
-- P means Planning document ready
-- F means Final document ready 
+- R stands for Ready for the Videos
+- D stands for Development required
+- P stands for Preparation needed
 
 
 -- ds.h1: Common
@@ -81,15 +82,15 @@ the scripts etc here.
     - R: form
     - R: tabs
     - R: dropdown
-    - ✅ R: [button](/button-using-fastn/)   [[Planning]](https://fastn.com/planning)
+    - ✅ R: [button](/button-using-fastn/)   [[🗎Planning]](https://fastn.com/planning)
     - R: post card 
 - R: creating various page layouts
-    - ✅ R: [holy-grail](/holy-grail/)     [[Planning]](/holy-grail/-/planning/) 
+    - ✅ R: [holy-grail](/holy-grail/)     [[🗎Planning]](/holy-grail/-/planning/) 
 - ✅ R: [event handling](/expander/events/) (basic) 
 - R: creating docs pages
 - D: using module system to create interchangable packages
 - D: translation crosslinks
-- ✅ R: [rive](/rive/)     [[Planning]](/planning/rive/)  
+- ✅ R: [rive](/rive/)     [[🗎Planning]](/planning/rive/)  
 - R: embedding youtube or iframes
 - R: add images in documents
 - R: mobile responsive site
