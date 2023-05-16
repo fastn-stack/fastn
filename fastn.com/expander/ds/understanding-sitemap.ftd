@@ -1,0 +1,243 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+
+-- my-ds.page: Understanding Sitemap
+
+-- lib.video-audience: Understanding Sitemap
+if: { source == "planning" }
+owner: Ajit
+aud: Common
+
+Helps learners to understand how to structure their websites
+
+/-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+In this video we learn about sitemap
+
+/-- ds.youtube:
+if: { source == "default" || source == "build" }
+v: 
+
+-- ds.markdown:
+
+A sitemap is a data-structure where information is provided about the files on 
+website. This structure is created over a layout.
+
+-- ds.h1: Sitemap
+if: { source == "planning" }
+
+A sitemap is a data-structure where information is provided about the files on 
+website. This structure is created over a layout.
+
+
+-- ds.h2: Sitemap with holy-grail layout
+
+The most common layout used for websites is 
+[`holy-grail`](/expander/layout/) layout. Our website uses the same. 
+You can check that out the video to understand how to create holy-grail layout, 
+later.
+
+-- ds.markdown:
+if: { source == "planning" }
+
+The link is shared in the description box.
+
+-- ds.image:
+src: $fastn-assets.files.images.sitemap.index.png
+width: fill-container
+
+-- ds.markdown:
+
+A site can have sections on top level. Each such section should ideally be 
+listed in the header of the site.
+
+Each section may have one or more subsections.
+Subsections should be listed as second level navigation in the header itself.
+
+Each subsection has one or more documents organised in a Table-of-Content.
+
+-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+In this video we will learn about `sitemap`.
+
+
+-- ds.h2: Why `sitemap`?
+
+`doc-site` is like a college libary and every library needs to oraganise 
+shelves, books, in an order.
+Just like that in a package, we want to organise the documents in diffrent 
+sections, subsections and tocs.
+
+
+-- ds.h2: How To Configure Sitemap For Your Site
+
+`fastn.ftd` contains the sitemap of your site. In `fastn.ftd` we write:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.sitemap:
+
+-- ds.markdown:
+
+We use markdown syntax for creating the structure of website in sitemap. 
+So, 
+
+- for `sections` we use `#`
+- for `subsections` we use `##`, and
+- for `toc items` we use `-`
+
+So after a one line space.
+
+-- ds.h3: First section
+
+We put our first section like:
+
+-- ds.code:
+lang: ftd
+
+\# Home: /
+
+-- ds.markdown:
+
+In all three cases, whatever written before colon is displayed as the title 
+on webpage and whatever is written after colon, becomes the URL to access it. 
+
+Here in the header a section `Home` will be displayed on the webpage. And this 
+section is served using `/` which is a special character used to serve the 
+`index.ftd`. 
+
+If you have followed the [expander course](https://fastn.com/expander), I have 
+mentioned that other than `index.ftd` file we need write something after `/`. 
+For example, there is a file `foo.ftd` other than `index.ftd` then to access 
+the foo document, we need to write, `/foo`.
+
+Now based how do you want to structure your website, this section can have one 
+or more subsections or not.
+
+-- ds.h3: Second section
+
+Let's give another section to it.
+
+-- ds.code:
+lang: ftd
+
+\# Season: /current-season/
+   document: /seasons/summer.ftd
+
+-- ds.markdown:
+
+The URLs can be cleaned, customized and one document can be used multiple times 
+with different URLs using the document feature of sitemap.
+
+To know all about this feature checkout the dedicated video about
+[`How to create clean URLs'](/expander/sitemap-document).
+
+-- ds.markdown:
+if: { source == "planning" }
+
+Link is shared in the description.
+
+-- ds.h3: Subsections
+
+To give this section `season` some subsections we write:
+
+-- ds.code:
+lang: ftd
+
+\## Autumn: /autumn/
+    document: /seasons/autumn.ftd 
+
+\## Spring: /spring/
+    document: /seasons/spring.ftd 
+
+\## Summer: /summer/
+    document: /seasons/summer.ftd 
+
+\## Winter: /winter/
+    document: /seasons/winter.ftd
+
+-- ds.h3: TOCs
+
+Similarly, we can add TOCs, the only change will be we are going to start with 
+`-`
+
+-- ds.code:
+lang: ftd
+
+- Sunrise: /sunrise-in-autumn/
+  document: /seasons/day-events/sunrise.ftd
+- Sunset: /sunset-in-autumn/
+  document: /seasons/day-events/sunset.ftd
+
+-- ds.markdown: 
+
+and so on.
+
+
+
+
+/-- ds.h2:  
+
+
+
+
+/-- ds.markdown:
+if: { source == "planning" }
+
+
+/-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+
+
+/-- ds.code:
+lang: ftd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: Closing Remarks 
+if: { source == "planning" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+Checkout the `fastn` website.
+Support us by clicking on this link and give us a star ⭐ on GitHub and join our 
+fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { source == "default" || source == "build" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star ⭐ on [GitHub](https://github.com/fastn-stack/fastn/) 
+and join our fastn community on [Discord](/discord/).
+
+
+/-- ds.h1: Final Video
+if: { source == "planning" }
+
+/-- ds.youtube:
+if: { source == "planning" }
+v: 
+
+-- end: my-ds.page 
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source
