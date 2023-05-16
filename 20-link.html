@@ -1963,14 +1963,6 @@ window.node_change_main = {};
 window.node_change_main["3:main__text"] = function(data) {
 document.querySelector(`[data-id="3:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"_6_function__append___main","values":[["a","FifthTry"],["b","Click here"]]}', this);
 }
-window.set_value_main = {};
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","1:main__src", data);
-};
 
 
 

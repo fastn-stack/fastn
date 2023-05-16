@@ -1984,6 +1984,13 @@ if (document.querySelector(`[data-id="1:main"]`).getAttribute("src") == "REMOVE-
 document.querySelector(`[data-id="1:main"]`).removeAttribute("src");
 }
 }
+window.node_change_main["3:main__src"] = function(data) {
+document.querySelector(`[data-id="3:main"]`).setAttribute("src", resolve_reference("foo#new-src", data));
+
+if (document.querySelector(`[data-id="3:main"]`).getAttribute("src") == "REMOVE-KEY"){
+document.querySelector(`[data-id="3:main"]`).removeAttribute("src");
+}
+}
 window.node_change_main["4:main__src"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -2012,13 +2019,21 @@ window.ftd.call_immutable_value_changes("foo#flag", "main");
 window.ftd.utils.node_change_call("main","4:main__src", data);
 };
 
+window.set_value_main["foo#new-src"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#new-src", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#new-src", "main");
+window.ftd.call_immutable_value_changes("foo#new-src", "main");
+window.ftd.utils.node_change_call("main","3:main__src", data);
+};
+
 window.set_value_main["foo#src"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "foo#src", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#src", "main");
 window.ftd.call_immutable_value_changes("foo#src", "main");
-window.ftd.utils.node_change_call("main","1:main__src", data);
 window.ftd.utils.node_change_call("main","4:main__src", data);
+window.ftd.utils.node_change_call("main","1:main__src", data);
 };
 
 window.set_value_main["foo#tom-and-jerry"] = function (data, new_value, remaining) {
@@ -2034,11 +2049,9 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__src", data);
-window.ftd.utils.node_change_call("main","2:main__src", data);
+window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","4:main__src", data);
-window.ftd.utils.node_change_call("main","3:main__src", data);
 };
 
 
