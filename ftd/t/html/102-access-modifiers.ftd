@@ -12,3 +12,4 @@ $on-mouse-leave$: $ftd.set-bool($a = $foo.mouse-hovered, v = false)
 
 
 -- foo: Rithik
+/$mouse-hovered: false

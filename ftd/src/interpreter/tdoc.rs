@@ -1440,7 +1440,7 @@ impl<'a> TDoc<'a> {
     > {
         use itertools::Itertools;
 
-        let name = ftd::p1::header::AccessModifier::remove_modifiers(name);
+        let thing_name = ftd::p1::header::AccessModifier::remove_modifiers(thing_name.as_str());
         let name = format!(
             "{}#{}{}",
             doc_name,

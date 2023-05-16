@@ -69,7 +69,6 @@ impl Field {
 
         let kind = ftd::ast::VariableKind::get_kind(
             header.get_kind().as_ref().unwrap().as_str(),
-            header.get_access_modifier(),
             doc_id,
             header.get_line_number(),
         )?;

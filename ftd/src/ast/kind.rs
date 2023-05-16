@@ -53,7 +53,6 @@ impl VariableKind {
 
     pub(crate) fn get_kind(
         kind: &str,
-        access_modifier: ftd::p1::header::AccessModifier,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::ast::Result<VariableKind> {

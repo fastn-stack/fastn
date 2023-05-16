@@ -57,7 +57,6 @@ impl Function {
         })?;
         let kind = ftd::ast::VariableKind::get_kind(
             section.kind.as_ref().unwrap().as_str(),
-            ftd::p1::header::AccessModifier::Public,
             doc_id,
             section.line_number,
         )?;
