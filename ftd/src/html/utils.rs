@@ -209,6 +209,21 @@ pub(crate) fn dependencies_from_property_value(
         } else {
             vec![]
         }
+    } else if property_value.is_value()
+        && (property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color())
+    {
+        let value = property_value.value("", 0).unwrap();
+        let property_value = value
+            .record_fields(doc.name, property_value.line_number())
+            .unwrap();
+        let mut v = vec![];
+        if let Some(pv) = property_value.get("light") {
+            v.extend(dependencies_from_property_value(pv, doc));
+        }
+        if let Some(pv) = property_value.get("dark") {
+            v.extend(dependencies_from_property_value(pv, doc));
+        }
+        v
     } else if property_value.is_value() && property_value.kind().is_ftd_responsive_type() {
         let value = property_value
             .value("", 0)

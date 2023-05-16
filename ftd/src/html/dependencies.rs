@@ -259,7 +259,6 @@ impl<'a> DependencyGenerator<'a> {
                     .condition
                     .as_ref()
                     .map(|c| ftd::html::utils::get_condition_string_(c, false));
-
                 if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
@@ -351,7 +350,10 @@ impl<'a> DependencyGenerator<'a> {
                         expressions.push((condition, value));
                     } else {
                         expressions
-                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                            .push((condition, format!(
+                                "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                node_data_id, key, desktop_value_string
+                            )));
                     }
 
                     if !desktop_value_string.is_empty() {
@@ -438,7 +440,13 @@ impl<'a> DependencyGenerator<'a> {
                         );
                         expressions.push((condition, value));
                     } else {
-                        expressions.push((condition, format!("{} = {};", key, light_value_string)));
+                        expressions.push((
+                            condition,
+                            format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                            node_data_id, key, light_value_string
+                        ),
+                        ));
                     }
 
                     if !light_value_string.is_empty() {
@@ -454,8 +462,10 @@ impl<'a> DependencyGenerator<'a> {
                             node_change_id.as_str(),
                             self.doc,
                         );
-                        var_dependencies
-                            .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+                        if light_value_string.ne(&dark_value_string) {
+                            var_dependencies
+                                .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+                        }
                     }
                     continue;
                 }
@@ -732,8 +742,11 @@ impl<'a> DependencyGenerator<'a> {
                             node_change_id.as_str(),
                             self.doc,
                         );
-                        var_dependencies
-                            .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+
+                        if light_value_string.ne(&dark_value_string) {
+                            var_dependencies
+                                .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+                        }
                     }
 
                     /*let mut light_value_string = "".to_string();
@@ -1024,6 +1037,21 @@ fn is_static_expression(
                         return false;
                     }
                 }
+            }
+        }
+    }
+
+    if property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color() {
+        if let ftd::interpreter::PropertyValue::Value {
+            value, line_number, ..
+        } = property_value
+        {
+            if !value
+                .record_fields(doc.name, *line_number)
+                .map(|v| v.get("dark").unwrap().is_value() && v.get("light").unwrap().is_value())
+                .unwrap_or(false)
+            {
+                return false;
             }
         }
     }
