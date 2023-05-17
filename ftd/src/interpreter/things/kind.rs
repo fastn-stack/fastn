@@ -236,6 +236,14 @@ impl Kind {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH))
     }
 
+    pub fn is_ftd_image_src(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_IMAGE_SRC))
+    }
+
+    pub fn is_ftd_color(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter::FTD_COLOR))
+    }
+
     pub fn is_ftd_resizing(&self) -> bool {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_RESIZING))
     }
