@@ -16,7 +16,7 @@ async fn main() {
                 )
             )
 
-            (func (export "main") (result i32)
+            (func (export "main")
                 (call $create_column
                     (i32.const 100)
                     (i32.const 100)
@@ -26,7 +26,7 @@ async fn main() {
                     (i32.const 0)
                     (i32.const 0)
                 )
-                drop
+                (drop)
                 (call $create_column
                     (i32.const 500)
                     (i32.const 100)
@@ -36,6 +36,7 @@ async fn main() {
                     (i32.const 200)
                     (i32.const 0)
                 )
+                (drop)
 
             )
         )
