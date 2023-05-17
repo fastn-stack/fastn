@@ -17,27 +17,29 @@ async fn main() {
             )
 
             (func (export "main")
+                ;; -- ftd.column:
                 (call $create_column
                     (i32.const 100)
                     (i32.const 100)
                     (i32.const 200)
                     (i32.const 300)
-                    (i32.const 200)
+                    (i32.const 50)
                     (i32.const 0)
-                    (i32.const 0)
-                )
-                (drop)
-                (call $create_column
-                    (i32.const 500)
-                    (i32.const 100)
-                    (i32.const 200)
-                    (i32.const 300)
-                    (i32.const 00)
-                    (i32.const 200)
                     (i32.const 0)
                 )
                 (drop)
 
+                ;; -- ftd.column:
+                (call $create_column
+                    (i32.const 500)
+                    (i32.const 300)
+                    (i32.const 200)
+                    (i32.const 100)
+                    (i32.const 00)
+                    (i32.const 50)
+                    (i32.const 0)
+                )
+                (drop)
             )
         )
     "#,

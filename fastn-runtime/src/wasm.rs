@@ -1,51 +1,7 @@
-pub struct Wasm {
-    store: wasmtime::Store<Vec<fastn_runtime::operation::Operation>>,
-    instance: wasmtime::Instance,
-}
+pub struct Wasm {}
 
 impl Wasm {
-    pub fn new(wat: impl AsRef<[u8]>) -> Wasm {
-        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
-            .expect("cant create engine");
-        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
-        let mut store = wasmtime::Store::new(&engine, Vec::new());
-
-        let create_column = wasmtime::Func::wrap(
-            &mut store,
-            |mut caller: wasmtime::Caller<'_, Vec<fastn_runtime::operation::Operation>>,
-             top: i32,
-             left: i32,
-             width: i32,
-             height: i32,
-             red: i32,
-             blue: i32,
-             green: i32|
-             -> i32 {
-                caller
-                    .data_mut()
-                    .push(fastn_runtime::operation::Operation::DrawRectangle(
-                        fastn_runtime::Rectangle {
-                            top: top as u32,
-                            left: left as u32,
-                            width: width as u32,
-                            height: height as u32,
-                            color: fastn_runtime::ColorValue {
-                                red: red as u8,
-                                blue: blue as u8,
-                                green: green as u8,
-                                alpha: 1.0,
-                            },
-                        },
-                    ));
-
-                1
-            },
-        );
-
-        let instance = wasmtime::Instance::new(&mut store, &module, &[create_column.into()])
-            .expect("cant create instance");
-        Wasm { store, instance }
-    }
+    pub fn new(wat: impl AsRef<[u8]>) -> Wasm {}
 
     pub fn run(&mut self) -> Vec<fastn_runtime::operation::Operation> {
         let wasm_main = self
