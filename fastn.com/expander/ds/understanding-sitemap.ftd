@@ -98,7 +98,7 @@ We put our first section like:
 -- ds.code:
 lang: ftd
 
-\# Home: /
+# Home: /
 
 -- ds.markdown:
 
@@ -124,7 +124,7 @@ Let's give another section to it.
 -- ds.code:
 lang: ftd
 
-\# Season: /current-season/
+# Season: /current-season/
    document: /seasons/summer.ftd
 
 -- ds.markdown:
@@ -147,16 +147,16 @@ To give this section `season` some subsections we write:
 -- ds.code:
 lang: ftd
 
-\## Autumn: /autumn/
+## Autumn: /autumn/
     document: /seasons/autumn.ftd 
 
-\## Spring: /spring/
+## Spring: /spring/
     document: /seasons/spring.ftd 
 
-\## Summer: /summer/
+## Summer: /summer/
     document: /seasons/summer.ftd 
 
-\## Winter: /winter/
+## Winter: /winter/
     document: /seasons/winter.ftd
 
 -- ds.h3: TOCs
