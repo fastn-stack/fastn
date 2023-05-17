@@ -20,23 +20,62 @@ if: { source == "default" || source == "build" }
 v: 
 
 -- ds.markdown:
+if: { source == "default" || source == "build" }
 
-A sitemap is a data-structure where information is provided about the files on 
-website. This structure is created over a layout.
+**S1:** 
+
+A sitemap is a data-structure where information is provided about the 
+files on website. This structure is created over a layout.
+
+**S2:** 
+
+A sitemap is a structured representation of the files and pages that make 
+up a website. It serves as a blueprint or roadmap, providing information about 
+the organization and hierarchy of content on the site. This structure is 
+created over a layout which we will talk about in a bit.
+
+By creating a comprehensive sitemap, website owners and visitors can gain a
+clear understanding of the website's structure and easily navigate through its
+content. It serves as a valuable tool for information architecture and user
+experience design, ensuring that visitors can find the information they need
+efficiently.
 
 -- ds.h1: Sitemap
 if: { source == "planning" }
 
-A sitemap is a data-structure where information is provided about the files on 
-website. This structure is created over a layout.
+**S1:** 
 
+A sitemap is a data-structure where information is provided about the 
+files on website. This structure is created over a layout. 
+
+**S2:** 
+
+A sitemap is a structured representation of the files and pages that make 
+up a website. It serves as a blueprint or roadmap, providing information about 
+the organization and hierarchy of content on the site. This structure is 
+created over a layout which we will talk about in a bit.
+
+By creating a comprehensive sitemap, website owners and visitors can gain a
+clear understanding of the website's structure and easily navigate through its
+content. It serves as a valuable tool for information architecture and user
+experience design, ensuring that visitors can find the information they need
+efficiently.
 
 -- ds.h2: Sitemap with holy-grail layout
 
+**S1:** 
+
 The most common layout used for websites is 
 [`holy-grail`](/expander/layout/) layout. Our website uses the same. 
-You can check that out the video to understand how to create holy-grail layout, 
+You can check out the video to understand how to create holy-grail layout, 
 later.
+
+**S2:** 
+
+When creating a sitemap, the most commonly used layout for websites is the
+holy-grail layout. This layout is designed to optimize the use of screen space
+by dividing the webpage into three main sections: a header at the top, a main
+content area in the center, along with sidebars on both sides, and a footer.
 
 -- ds.markdown:
 if: { source == "planning" }
@@ -49,6 +88,8 @@ width: fill-container
 
 -- ds.markdown:
 
+**S1:**
+
 A site can have sections on top level. Each such section should ideally be 
 listed in the header of the site.
 
@@ -56,6 +97,27 @@ Each section may have one or more subsections.
 Subsections should be listed as second level navigation in the header itself.
 
 Each subsection has one or more documents organised in a Table-of-Content.
+
+
+**S2:**
+
+In the header of the website, the top-level sections or categories of the
+site should ideally be listed. These sections represent the main divisions of
+content on the website and provide an overview of the different topics or areas
+covered.
+
+Each top-level section can then be further divided into one or more 
+subsections.
+These subsections act as subcategories or subtopics within the larger sections.
+To enhance navigation, the subsections should be listed as a second-level
+navigation within the header itself. This allows users to easily access
+specific areas of interest within each section.
+
+Within each subsection, there are one or more documents or pages organized in a
+Table of Contents (TOC) format. The TOC provides a hierarchical structure,
+outlining the various pages or documents within the subsection. It helps users
+understand the organization of content within a specific topic or area.
+
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -129,11 +191,11 @@ lang: ftd
 
 -- ds.markdown:
 
-The URLs can be cleaned, customized and one document can be used multiple times 
+The URLs can be cleaned, customized and one document can be used multiple times
 with different URLs using the document feature of sitemap.
 
 To know all about this feature checkout the dedicated video about
-[`How to create clean URLs'](/expander/sitemap-document).
+[`How to create clean URLs`](/expander/sitemap-document).
 
 -- ds.markdown:
 if: { source == "planning" }
@@ -172,9 +234,16 @@ lang: ftd
 - Sunset: /sunset-in-autumn/
   document: /seasons/day-events/sunset.ftd
 
--- ds.markdown: 
+-- ds.markdown:
+if: { source == "planning" } 
 
 and so on.
+
+-- ds.markdown:
+if: { source == "default" || source == "build" } 
+
+and so on, you can give any number of TOCs and even sub-tocs to the sections 
+or subsections.
 
 
 
@@ -213,10 +282,11 @@ lang: ftd
 -- ds.h1: Closing Remarks 
 if: { source == "planning" }
 
-Thank you guys, keep watching these videos to learn more about fastn. 
-Checkout the `fastn` website.
-Support us by clicking on this link and give us a star ⭐ on GitHub and join our 
-fastn community on Discord.
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website. 
+
+Support us by clicking on this link and give us a star ⭐
+on GitHub and join our fastn community on Discord.
 
 
 -- ds.markdown: 
@@ -224,8 +294,9 @@ if: { source == "default" || source == "build" }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
-Support us by giving a star ⭐ on [GitHub](https://github.com/fastn-stack/fastn/) 
-and join our fastn community on [Discord](/discord/).
+Support us by giving a star ⭐ on 
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+on [Discord](/discord/).
 
 
 /-- ds.h1: Final Video
