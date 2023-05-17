@@ -22,12 +22,6 @@ v:
 -- ds.markdown:
 if: { source == "default" || source == "build" }
 
-**S1:** 
-
-A sitemap is a data-structure where information is provided about the 
-files on website. This structure is created over a layout.
-
-**S2:** 
 
 A sitemap is a structured representation of the files and pages that make 
 up a website. It serves as a blueprint or roadmap, providing information about 
@@ -43,12 +37,6 @@ efficiently.
 -- ds.h1: Sitemap
 if: { source == "planning" }
 
-**S1:** 
-
-A sitemap is a data-structure where information is provided about the 
-files on website. This structure is created over a layout. 
-
-**S2:** 
 
 A sitemap is a structured representation of the files and pages that make 
 up a website. It serves as a blueprint or roadmap, providing information about 
@@ -63,19 +51,11 @@ efficiently.
 
 -- ds.h2: Sitemap with holy-grail layout
 
-**S1:** 
-
 The most common layout used for websites is 
-[`holy-grail`](/expander/layout/) layout. Our website uses the same. 
+[`holy-grail`](/holy-grail/) layout. Our website uses the same. 
 You can check out the video to understand how to create holy-grail layout, 
 later.
 
-**S2:** 
-
-When creating a sitemap, the most commonly used layout for websites is the
-holy-grail layout. This layout is designed to optimize the use of screen space
-by dividing the webpage into three main sections: a header at the top, a main
-content area in the center, along with sidebars on both sides, and a footer.
 
 -- ds.markdown:
 if: { source == "planning" }
@@ -87,19 +67,6 @@ src: $fastn-assets.files.images.sitemap.index.png
 width: fill-container
 
 -- ds.markdown:
-
-**S1:**
-
-A site can have sections on top level. Each such section should ideally be 
-listed in the header of the site.
-
-Each section may have one or more subsections.
-Subsections should be listed as second level navigation in the header itself.
-
-Each subsection has one or more documents organised in a Table-of-Content.
-
-
-**S2:**
 
 In the header of the website, the top-level sections or categories of the
 site should ideally be listed. These sections represent the main divisions of
@@ -127,7 +94,7 @@ In this video we will learn about `sitemap`.
 
 -- ds.h2: Why `sitemap`?
 
-`doc-site` is like a college libary and every library needs to oraganise 
+`doc-site` is like a college library and every library needs to organise 
 shelves, books, in an order.
 Just like that in a package, we want to organise the documents in diffrent 
 sections, subsections and tocs.
@@ -135,12 +102,15 @@ sections, subsections and tocs.
 
 -- ds.h2: How To Configure Sitemap For Your Site
 
-`fastn.ftd` contains the sitemap of your site. In `fastn.ftd` we write:
+We create the sitemap in the `FASTN.ftd`. So, we write:
 
 -- ds.code:
 lang: ftd
 
 \-- fastn.sitemap:
+
+# Section: <url>
+...
 
 -- ds.markdown:
 
@@ -149,9 +119,9 @@ So,
 
 - for `sections` we use `#`
 - for `subsections` we use `##`, and
-- for `toc items` we use `-`
+- for `TOCs` and `sub-TOCs` we use `-`
 
-So after a one line space.
+And after one line space.
 
 -- ds.h3: First section
 
@@ -172,12 +142,13 @@ section is served using `/` which is a special character used to serve the
 `index.ftd`. 
 
 If you have followed the [expander course](https://fastn.com/expander), I have 
-mentioned that other than `index.ftd` file we need write something after `/`. 
+mentioned that other than `index.ftd` file we need to write something after 
+`/`. 
 For example, there is a file `foo.ftd` other than `index.ftd` then to access 
-the foo document, we need to write, `/foo`.
+the foo document, we need to write, `/foo/`.
 
-Now based how do you want to structure your website, this section can have one 
-or more subsections or not.
+Now, based on how you want to structure your website, this section can have 
+one or more subsections or not.
 
 -- ds.h3: Second section
 
@@ -187,7 +158,7 @@ Let's give another section to it.
 lang: ftd
 
 # Season: /current-season/
-   document: /seasons/summer.ftd
+  document: /seasons/summer.ftd
 
 -- ds.markdown:
 
@@ -204,27 +175,26 @@ Link is shared in the description.
 
 -- ds.h3: Subsections
 
-To give this section `season` some subsections we write:
+Let's give some subsections to this section `season`.
 
 -- ds.code:
 lang: ftd
 
 ## Autumn: /autumn/
-    document: /seasons/autumn.ftd 
+   document: /seasons/autumn.ftd 
 
 ## Spring: /spring/
-    document: /seasons/spring.ftd 
+   document: /seasons/spring.ftd 
 
 ## Summer: /summer/
-    document: /seasons/summer.ftd 
+   document: /seasons/summer.ftd 
 
 ## Winter: /winter/
-    document: /seasons/winter.ftd
+   document: /seasons/winter.ftd
 
 -- ds.h3: TOCs
 
-Similarly, we can add TOCs, the only change will be we are going to start with 
-`-`
+Similarly, we can add TOCs.
 
 -- ds.code:
 lang: ftd
@@ -235,14 +205,8 @@ lang: ftd
   document: /seasons/day-events/sunset.ftd
 
 -- ds.markdown:
-if: { source == "planning" } 
 
-and so on.
-
--- ds.markdown:
-if: { source == "default" || source == "build" } 
-
-and so on, you can give any number of TOCs and even sub-tocs to the sections 
+and so on, you can give any number of TOCs and even sub-TOCs to the sections 
 or subsections.
 
 
