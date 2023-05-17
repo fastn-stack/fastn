@@ -2,14 +2,28 @@
 caption name:
 private boolean $mouse-hovered: false
 
+-- ftd.column:
+
 -- ftd.text: $foo.name
 color: red
 color if { foo.mouse-hovered }: green
 $on-mouse-enter$: $ftd.set-bool($a = $foo.mouse-hovered, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $foo.mouse-hovered, v = false)
 
+-- bar:
+$b: $foo.mouse-hovered
+
+-- end: ftd.column
+
 -- end: foo
 
+-- component bar:
+caption boolean $b:
+
+-- ftd.boolean: $bar.b
+$on-click$: $ftd.toggle($a = $bar.b)
+
+-- end: bar
 
 -- foo: Rithik
 /$mouse-hovered: false
