@@ -38,9 +38,6 @@ pub struct Text {
     pub style: fastn_runtime::TextStyle,
 }
 
-
-
-
 #[derive(Debug)]
 pub struct Image {
     pub taffy: taffy::node::Node,
