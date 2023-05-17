@@ -8,7 +8,6 @@ pub struct Document {
     pub wasm: fastn_runtime::wasm::Wasm,
 }
 
-
 /*
 
 // global doc
@@ -126,6 +125,3 @@ impl Document {
         (fastn_runtime::ControlFlow::WaitForEvent, vec![])
     }
 }
-
-
-

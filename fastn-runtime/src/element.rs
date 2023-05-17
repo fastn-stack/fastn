@@ -1,7 +1,7 @@
 #[derive(Debug)]
 pub enum Element {
     Container(Container),
-    Text(Text),
+    Text(Box<Text>),
     Image(Image),
 }
 
