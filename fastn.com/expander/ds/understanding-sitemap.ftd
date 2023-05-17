@@ -196,9 +196,9 @@ Similarly, we can add TOCs.
 -- ds.code:
 lang: ftd
 
-- Sunrise: /season/day-events/sunrise/
+- Sunrise: /season/day-event/sunrise/
 
-- Sunset: /season/day-events/sunset/
+- Sunset: /season/day-event/sunset/
 
 -- ds.markdown:
 
@@ -221,8 +221,7 @@ lang: ftd
   - Sunrise: /season/day-event/sunrise/
   - Sunset: /season/day-event/sunset/
 
-## Spring Season: /spring/
-  document: /seasons/spring.ftd 
+## Spring Season: /season/spring/
 
   - Sunrise: /season/day-event/sunrise/
   - Sunset: /season/day-event/sunset/
@@ -253,24 +252,24 @@ lang: ftd
 # Home: /
 
 # Season: /current-season/
-  document: /seasons/summer.ftd
+  document: /season/summer.ftd
 
 
 ## Autumn Season: /autumn/
-  document: /seasons/autumn.ftd 
+  document: /season/autumn.ftd 
 
   - Sunrise: /sunrise-in-autumn/
-    document: /seasons/day-event/sunrise.ftd
+    document: /season/day-event/sunrise.ftd
   - Sunset: /sunset-in-autumn/
-    document: /seasons/day-event/sunset.ftd
+    document: /season/day-event/sunset.ftd
 
 ## Spring Season: /spring/
   document: /seasons/spring.ftd 
 
   - Sunrise: /sunrise-in-spring/
-    document: /seasons/day-event/sunrise.ftd
+    document: /season/day-event/sunrise.ftd
   - Sunset: /sunset-in-spring/
-    document: /seasons/day-event/sunset.ftd
+    document: /season/day-event/sunset.ftd
 
 ## Summer Season: /summer/
   document: /season/summer.ftd 
@@ -291,11 +290,11 @@ lang: ftd
 
 -- ds.markdown:
 
-To know all about this feature checkout the dedicated video about
+To know all about this feature you can checkout the video about
 [`How to create clean URLs`](/expander/sitemap-document).
 
-
-
+I hope this video will help you to create the structure of your website. You
+can share your feedback on comments and/or our discord channel.
 
 
 -- ds.h1: Closing Remarks 
@@ -304,8 +303,8 @@ if: { source == "planning" }
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
 
-Support us by clicking on this link and give us a star ⭐
-on GitHub and join our fastn community on Discord.
+Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+our fastn community on Discord.
 
 
 -- ds.markdown: 
