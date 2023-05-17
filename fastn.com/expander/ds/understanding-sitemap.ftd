@@ -55,7 +55,7 @@ efficiently.
 
 The most common layout used for websites is `holy-grail` layout. Our website
 uses the same. You can check out the video to understand
-[`how to create holy-grail layout](/holy-grail/), later.
+[`how to create holy-grail layout`](/holy-grail/), later.
 
  
 -- ds.markdown:
@@ -330,3 +330,4 @@ v:
 -- string source: default
 $processor$: pr.get-data
 key: source
+    
