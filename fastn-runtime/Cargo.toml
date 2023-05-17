@@ -21,4 +21,5 @@ once_cell.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 bytemuck.workspace = true
+wasmtime.workspace = true
 async-trait.workspace = true

@@ -17,6 +17,7 @@ mod document;
 mod element;
 mod event;
 mod operation;
+pub mod wasm;
 
 pub use control::ControlFlow;
 pub use document::Document;

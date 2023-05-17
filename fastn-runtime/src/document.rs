@@ -5,7 +5,9 @@ pub struct Document {
     pub width: u32,
     pub height: u32,
     // variables, bindings
+    pub wasm: fastn_runtime::wasm::Wasm,
 }
+
 
 /*
 
@@ -56,6 +58,21 @@ rt.show();
  */
 
 impl Document {
+    pub fn new(wat: impl AsRef<[u8]>) -> Document {
+        let mut nodes = slotmap::SlotMap::with_key();
+        let mut taffy = taffy::Taffy::new();
+        let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
+
+        Document {
+            root,
+            taffy,
+            nodes,
+            width: 0,
+            height: 0,
+            wasm: fastn_runtime::wasm::Wasm::new(wat),
+        }
+    }
+
     // initial_html() -> server side HTML
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>
@@ -94,35 +111,8 @@ impl Document {
         self.width = width;
         self.height = height;
         dbg!(self.taffy.layout(taffy_root).unwrap());
-        (
-            fastn_runtime::ControlFlow::WaitForEvent,
-            vec![
-                fastn_runtime::Operation::DrawRectangle(fastn_runtime::Rectangle {
-                    top: 10,
-                    left: 10,
-                    width: 200,
-                    height: 200,
-                    color: fastn_runtime::ColorValue {
-                        red: 200,
-                        green: 0,
-                        blue: 0,
-                        alpha: 1.0,
-                    },
-                }),
-                fastn_runtime::Operation::DrawRectangle(fastn_runtime::Rectangle {
-                    top: 300,
-                    left: 200,
-                    width: 300,
-                    height: 200,
-                    color: fastn_runtime::ColorValue {
-                        red: 00,
-                        green: 200,
-                        blue: 0,
-                        alpha: 1.0,
-                    },
-                }),
-            ],
-        )
+
+        (fastn_runtime::ControlFlow::WaitForEvent, self.wasm.run())
     }
 
     // if not wasm
@@ -137,17 +127,5 @@ impl Document {
     }
 }
 
-impl Default for Document {
-    fn default() -> Document {
-        let mut nodes = slotmap::SlotMap::with_key();
-        let mut taffy = taffy::Taffy::new();
-        let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
-        Document {
-            root,
-            taffy,
-            nodes,
-            width: 0,
-            height: 0,
-        }
-    }
-}
+
+
