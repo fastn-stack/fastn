@@ -12,9 +12,6 @@ We are going to create button using `fastn language`.
 -- ds.image:
 src: $fastn-assets.files.planning.button.button-using-fastn.jpg
 
-This UI is just an inspiration we took from Vercel. We will make it look like
-this using `fastn`.
-
 
 To make the button we will use the concepts like: 
 - [`components`](https://fastn.com/components). 
