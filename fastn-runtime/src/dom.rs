@@ -62,12 +62,6 @@ impl Dom {
         let taffy_key = self
             .taffy
             .new_leaf(taffy::style::Style {
-                margin: taffy::prelude::Rect {
-                    top: taffy::prelude::points(30.0),
-                    bottom: taffy::prelude::points(10.0),
-                    right: taffy::prelude::points(30.0),
-                    left: taffy::prelude::points(30.0),
-                },
                 ..Default::default()
             })
             .expect("this should never fail");
