@@ -15,16 +15,31 @@ async fn main() {
                 (local.set $root_container_ (call $root_container))
 
                 ;; -- ftd.column:
-                (local.set $column (call $create_column))
-                (call $add_child (local.get $root_container_) (local.get $column))
-                (call $set_column_width_px (local.get $column) (i32.const 600))
-                (call $set_column_height_px (local.get $column) (i32.const 400))
+                (call $foo (local.get $root_container_) (i32.const 100) (i32.const 100))
+                drop
 
-                ;; -- ftd.column:
+                (call $foo (local.get $root_container_) (i32.const 200) (i32.const 300))
+                drop
+            )
+
+            (func $foo
+                (param $root externref)
+                (param $width i32)
+                (param $height i32)
+
+                (result externref)
+
+                (local $column externref)
+
+                ;; body
+
                 (local.set $column (call $create_column))
-                (call $add_child (local.get $root_container_) (local.get $column))
-                (call $set_column_width_px (local.get $column) (i32.const 300))
-                (call $set_column_height_px (local.get $column) (i32.const 700))
+
+                (call $add_child (local.get $root) (local.get $column))
+                (call $set_column_width_px (local.get $column) (local.get $width))
+                (call $set_column_height_px (local.get $column) (local.get $height))
+
+                (local.get $column)
             )
         )
     "#,
