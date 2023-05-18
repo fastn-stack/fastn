@@ -11,8 +11,8 @@ async fn main() {
 
             (func (export "main")
                 ;; -- ftd.column:
-                (call $create_column)
                 (call $root_container)
+                (call $create_column)
                 (call $add_child)
             )
         )
