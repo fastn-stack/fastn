@@ -14,18 +14,29 @@ pub struct CommonStyleMinusTaffy {
 #[derive(Debug)]
 pub struct Container {
     // if not wasm
-    pub taffy: taffy::node::Node,
+    pub taffy_key: taffy::node::Node,
     pub style: CommonStyleMinusTaffy,
 }
 
 impl Container {
     pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
         Element::Container(Container {
-            taffy: taffy
-                .new_leaf(taffy::style::Style::default())
+            taffy_key: taffy
+                .new_leaf(taffy::style::Style {
+                    size: taffy::prelude::Size {
+                        width: taffy::prelude::percent(100.0),
+                        height: taffy::prelude::percent(100.0),
+                    },
+                    ..Default::default()
+                })
                 .expect("this should never fail"),
             style: CommonStyleMinusTaffy {
-                background_color: None,
+                background_color: Some(fastn_runtime::ColorValue {
+                    red: 20,
+                    green: 0,
+                    blue: 0,
+                    alpha: 1.0,
+                }),
             },
         })
     }
@@ -93,7 +104,7 @@ impl fastn_runtime::Element {
         dbg!(self);
         match self {
             fastn_runtime::Element::Container(c) => {
-                dbg!(t.layout(c.taffy).unwrap());
+                dbg!(t.layout(c.taffy_key).unwrap());
                 // for child in c.children.iter() {
                 //     child.render(t);
                 // }
@@ -109,7 +120,7 @@ impl fastn_runtime::Element {
 
     pub fn taffy(&self) -> taffy::node::Node {
         match self {
-            fastn_runtime::Element::Container(c) => c.taffy,
+            fastn_runtime::Element::Container(c) => c.taffy_key,
             fastn_runtime::Element::Text(t) => t.taffy,
             fastn_runtime::Element::Image(i) => i.taffy,
         }

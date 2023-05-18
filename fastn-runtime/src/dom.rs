@@ -1,16 +1,18 @@
 pub struct Dom {
     pub taffy: taffy::Taffy,
-    pub nodes: slotmap::SlotMap<slotmap::DefaultKey, fastn_runtime::Element>,
-    pub root: slotmap::DefaultKey,
+    pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
+    pub children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
+    pub root: fastn_runtime::NodeKey,
 }
 
 impl Dom {
     pub fn new() -> Dom {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
+        let children = slotmap::SecondaryMap::new();
         let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
 
-        Dom { taffy, nodes, root }
+        Dom { taffy, nodes, root, children }
     }
 
     pub fn compute_layout(&mut self, width: u32, height: u32) -> Vec<fastn_runtime::Operation> {
@@ -19,16 +21,16 @@ impl Dom {
             .compute_layout(
                 taffy_root,
                 taffy::prelude::Size {
-                    width: taffy::prelude::points(width as f32),
-                    height: taffy::prelude::points(height as f32),
+                    width: taffy::prelude::points(dbg!(width) as f32),
+                    height: taffy::prelude::points(dbg!(height) as f32),
                 },
             )
             .unwrap();
 
-        self.layout_to_operations(self.root)
+        dbg!(self.layout_to_operations(self.root))
     }
 
-    fn layout_to_operations(&self, key: slotmap::DefaultKey) -> Vec<fastn_runtime::Operation> {
+    fn layout_to_operations(&self, key: fastn_runtime::NodeKey) -> Vec<fastn_runtime::Operation> {
         let node = self.nodes.get(key).unwrap();
         match node {
             fastn_runtime::Element::Container(c) => {
@@ -39,9 +41,9 @@ impl Dom {
                     operations.push(o);
                 }
 
-
-                for child in self.taffy.children(c.taffy).unwrap() {
-                    operations.extend(self.layout_to_operations(child.into()));
+                for child in self.children.get(key).unwrap() {
+                    dbg!(&child);
+                    operations.extend(self.layout_to_operations(*child));
                 }
                 operations
             }
@@ -50,15 +52,47 @@ impl Dom {
         }
     }
 
-    pub fn create_column(&mut self) -> slotmap::DefaultKey {
-        self.nodes
-            .insert(fastn_runtime::Container::outer_column(&mut self.taffy))
+    pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
+        let taffy_key = self
+            .taffy
+            .new_leaf(taffy::style::Style {
+                size: taffy::prelude::Size {
+                    width: taffy::prelude::points(100.0),
+                    height: taffy::prelude::points(100.0),
+                },
+                margin: taffy::prelude::Rect {
+                    top: taffy::prelude::points(10.0),
+                    right: taffy::prelude::points(10.0),
+                    bottom: taffy::prelude::points(10.0),
+                    left: taffy::prelude::points(10.0),
+                },
+                ..Default::default()
+            })
+            .expect("this should never fail");
+
+        let c = fastn_runtime::Element::Container(fastn_runtime::Container {
+            taffy_key: taffy_key,
+            style: fastn_runtime::CommonStyleMinusTaffy {
+                background_color: Some(fastn_runtime::ColorValue {
+                    red: 0,
+                    green: 20,
+                    blue: 0,
+                    alpha: 1.0,
+                }),
+            },
+        });
+
+        let key = self.nodes.insert(c);
+        self.children.insert(key, vec![]);
+        key
     }
 
-    pub fn add_child(&mut self, parent: slotmap::DefaultKey, child: slotmap::DefaultKey) {
-        self.taffy
-            .add_child(self.nodes[parent].taffy(), self.nodes[child].taffy())
-            .unwrap();
+    pub fn add_child(&mut self, parent_key: fastn_runtime::NodeKey, child_key: fastn_runtime::NodeKey) {
+        let parent = self.nodes.get(parent_key).unwrap();
+        let child = self.nodes.get(child_key).unwrap();
+        self.taffy.add_child(parent.taffy(), child.taffy()).unwrap();
+        self.children
+            .entry(parent_key).unwrap().or_default().push(child_key);
     }
 
     pub fn create_instance(
