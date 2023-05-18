@@ -9,10 +9,17 @@ impl Dom {
     pub fn new() -> Dom {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
-        let children = slotmap::SecondaryMap::new();
+        let mut children = slotmap::SecondaryMap::new();
         let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
+        children.insert(root, vec![]);
+        println!("root: {:?}", &root);
 
-        Dom { taffy, nodes, root, children }
+        Dom {
+            taffy,
+            nodes,
+            root,
+            children,
+        }
     }
 
     pub fn compute_layout(&mut self, width: u32, height: u32) -> Vec<fastn_runtime::Operation> {
@@ -57,25 +64,25 @@ impl Dom {
             .taffy
             .new_leaf(taffy::style::Style {
                 size: taffy::prelude::Size {
-                    width: taffy::prelude::points(100.0),
-                    height: taffy::prelude::points(100.0),
+                    width: taffy::prelude::points(200.0),
+                    height: taffy::prelude::points(200.0),
                 },
                 margin: taffy::prelude::Rect {
-                    top: taffy::prelude::points(10.0),
-                    right: taffy::prelude::points(10.0),
+                    top: taffy::prelude::points(30.0),
+                    right: taffy::prelude::points(30.0),
                     bottom: taffy::prelude::points(10.0),
-                    left: taffy::prelude::points(10.0),
+                    left: taffy::prelude::points(30.0),
                 },
                 ..Default::default()
             })
             .expect("this should never fail");
 
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
-            taffy_key: taffy_key,
+            taffy_key,
             style: fastn_runtime::CommonStyleMinusTaffy {
                 background_color: Some(fastn_runtime::ColorValue {
                     red: 0,
-                    green: 20,
+                    green: 100,
                     blue: 0,
                     alpha: 1.0,
                 }),
@@ -84,15 +91,24 @@ impl Dom {
 
         let key = self.nodes.insert(c);
         self.children.insert(key, vec![]);
+        println!("column: {:?}", &key);
         key
     }
 
-    pub fn add_child(&mut self, parent_key: fastn_runtime::NodeKey, child_key: fastn_runtime::NodeKey) {
+    pub fn add_child(
+        &mut self,
+        parent_key: fastn_runtime::NodeKey,
+        child_key: fastn_runtime::NodeKey,
+    ) {
         let parent = self.nodes.get(parent_key).unwrap();
         let child = self.nodes.get(child_key).unwrap();
         self.taffy.add_child(parent.taffy(), child.taffy()).unwrap();
         self.children
-            .entry(parent_key).unwrap().or_default().push(child_key);
+            .entry(parent_key)
+            .unwrap()
+            .or_default()
+            .push(child_key);
+        println!("add_child: {:?} -> {:?}", &parent_key, &child_key);
     }
 
     pub fn create_instance(
@@ -182,6 +198,12 @@ impl Dom {
         let instance = linker
             .instantiate(&mut store, &module)
             .expect("cant create instance");
+
+        let wasm_main = instance
+            .get_typed_func::<(), ()>(&mut store, "main")
+            .unwrap();
+
+        wasm_main.call(&mut store, ()).unwrap();
 
         (store, instance)
     }
