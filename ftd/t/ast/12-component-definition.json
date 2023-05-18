@@ -17,7 +17,8 @@
               "source": "Default"
             }
           },
-          "line_number": 3
+          "line_number": 3,
+          "access_modifier": "Public"
         },
         {
           "name": "description",
@@ -33,7 +34,8 @@
               "source": "Default"
             }
           },
-          "line_number": 8
+          "line_number": 8,
+          "access_modifier": "Public"
         },
         {
           "name": "locations",
@@ -79,7 +81,8 @@
               "line_number": 13
             }
           },
-          "line_number": 13
+          "line_number": 13,
+          "access_modifier": "Public"
         }
       ],
       "definition": {

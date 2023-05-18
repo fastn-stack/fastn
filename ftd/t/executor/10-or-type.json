@@ -538,7 +538,8 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             },
             "style": {
               "value": null,
@@ -974,7 +975,8 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             },
             "style": {
               "value": null,
@@ -1403,7 +1405,8 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             },
             "style": {
               "value": null,
@@ -1901,7 +1904,8 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             },
             "style": {
               "value": null,
@@ -1915,7 +1919,8 @@
             }
           }
         }
-      ]
+      ],
+      "device": null
     },
     "common": {
       "id": {
@@ -2258,7 +2263,8 @@
         "value": null,
         "line_number": null,
         "properties": []
-      }
+      },
+      "device": null
     }
   },
   "html_data": {

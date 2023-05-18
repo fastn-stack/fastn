@@ -65,6 +65,7 @@ impl Field {
                 kind,
                 value,
                 condition,
+                ..
             }) => {
                 if condition.is_some() {
                     return ftd::ftd2021::di::parse_error(

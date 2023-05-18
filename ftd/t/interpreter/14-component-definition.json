@@ -88,7 +88,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "default",
@@ -99,7 +100,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           },
           {
             "name": "padding",
@@ -110,7 +112,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 4
+            "line_number": 4,
+            "access_modifier": "Public"
           },
           {
             "name": "flag",
@@ -121,7 +124,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 5
+            "line_number": 5,
+            "access_modifier": "Public"
           }
         ],
         "definition": {

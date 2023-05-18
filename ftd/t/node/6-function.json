@@ -222,7 +222,8 @@
         "data_id": "0",
         "line_number": 38,
         "raw_data": null,
-        "web_component": null
+        "web_component": null,
+        "device": null
       },
       {
         "classes": [
@@ -386,7 +387,8 @@
         "data_id": "1",
         "line_number": 41,
         "raw_data": null,
-        "web_component": null
+        "web_component": null,
+        "device": null
       },
       {
         "classes": [
@@ -509,7 +511,8 @@
         "data_id": "2",
         "line_number": 44,
         "raw_data": null,
-        "web_component": null
+        "web_component": null,
+        "device": null
       }
     ],
     "text": {
@@ -522,7 +525,8 @@
     "data_id": "",
     "line_number": 0,
     "raw_data": null,
-    "web_component": null
+    "web_component": null,
+    "device": null
   },
   "html_data": {
     "title": {
@@ -599,7 +603,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "b",
@@ -610,7 +615,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -641,7 +647,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 16
+            "line_number": 16,
+            "access_modifier": "Public"
           },
           {
             "name": "b",
@@ -652,7 +659,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 17
+            "line_number": 17,
+            "access_modifier": "Public"
           },
           {
             "name": "c",
@@ -663,7 +671,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 18
+            "line_number": 18,
+            "access_modifier": "Public"
           },
           {
             "name": "d",
@@ -674,7 +683,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 19
+            "line_number": 19,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -705,7 +715,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 27
+            "line_number": 27,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -842,7 +853,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 9
+            "line_number": 9,
+            "access_modifier": "Public"
           },
           {
             "name": "b",
@@ -853,7 +865,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 10
+            "line_number": 10,
+            "access_modifier": "Public"
           }
         ],
         "expression": [

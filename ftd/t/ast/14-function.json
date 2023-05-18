@@ -15,7 +15,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 2
+          "line_number": 2,
+          "access_modifier": "Public"
         },
         {
           "name": "b",
@@ -25,7 +26,8 @@
           },
           "mutable": false,
           "value": null,
-          "line_number": 3
+          "line_number": 3,
+          "access_modifier": "Public"
         }
       ],
       "line_number": 1,

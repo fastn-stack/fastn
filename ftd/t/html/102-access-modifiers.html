@@ -6,8 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#counter": 0,
-"foo#sample-text": "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.",
+"foo#foo:mouse-hovered:0": false,
+"foo#foo:name:0": "Rithik",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -757,7 +757,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(150,55,112,1); opacity: 1; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" style="color: rgba(255,255,255,1); padding: 10px" class="ft_common ft_md">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#counter&quot;}]]}]', this)" style="align-self: center; border-bottom-width: 1px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; cursor: pointer; margin-bottom: 10px; margin-top: 10px; text-align: center" class="ft_common ft_md">Change opacity</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:mouse-hovered:0&quot;}],[&quot;v&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:mouse-hovered:0&quot;}],[&quot;v&quot;,false]]}]', this)" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Rithik</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:mouse-hovered:0&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">false</div></div></div>
 
 
 <script>
@@ -1956,42 +1956,36 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__opacity"] = function(data) {
-if(function(){
-return (resolve_reference("foo#counter", data)%4==1);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["opacity"] = 0.7;
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%4==2);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["opacity"] = 0.5;
-}
-else if(function(){
-return (resolve_reference("foo#counter", data)%4==3);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["opacity"] = 0.2;
-}
-else {document.querySelector(`[data-id="0:main"]`).style["opacity"] = 1;}
+window.node_change_main["0,0:main__text"] = function(data) {
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#foo:name:0", data);
 }
 
-window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+window.node_change_main["0,0:main__color"] = function(data) {
+if(function(){
+return resolve_reference("foo#foo:mouse-hovered:0", data);
+}()){
+document.querySelector(`[data-id="0,0:main"]`).style["color"] = "green";
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["color"] = "red";}
+}
+window.node_change_main["0,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#foo:mouse-hovered:0", data);
 }
 window.set_value_main = {};
-window.set_value_main["foo#counter"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#counter", remaining, new_value);
+window.set_value_main["foo#foo:mouse-hovered:0"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:mouse-hovered:0", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#counter", "main");
-window.ftd.call_immutable_value_changes("foo#counter", "main");
-window.ftd.utils.node_change_call("main","0:main__opacity", data);
+window.ftd.call_mutable_value_changes("foo#foo:mouse-hovered:0", "main");
+window.ftd.call_immutable_value_changes("foo#foo:mouse-hovered:0", "main");
+window.ftd.utils.node_change_call("main","0,0:main__color", data);
+window.ftd.utils.node_change_call("main","0,1:main__text", data);
 };
 
-window.set_value_main["foo#sample-text"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#sample-text", remaining, new_value);
+window.set_value_main["foo#foo:name:0"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:name:0", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#sample-text", "main");
-window.ftd.call_immutable_value_changes("foo#sample-text", "main");
+window.ftd.call_mutable_value_changes("foo#foo:name:0", "main");
+window.ftd.call_immutable_value_changes("foo#foo:name:0", "main");
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
 };
 
