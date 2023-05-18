@@ -11,16 +11,18 @@ async fn main() {
             ;; fastn.add_child(parent: NodeKey, child: NodeKey)
             (import "fastn" "add_child" (func $add_child (param externref externref)))
 
-            (func (export "main") (local $column externref)
+            (func (export "main") (local $column externref) (local $root_container_ externref)
+                (local.set $root_container_ (call $root_container))
+
                 ;; -- ftd.column:
                 (local.set $column (call $create_column))
-                (call $add_child (call $root_container) (local.get $column))
+                (call $add_child (local.get $root_container_) (local.get $column))
                 (call $set_column_width_px (local.get $column) (i32.const 600))
                 (call $set_column_height_px (local.get $column) (i32.const 400))
 
                 ;; -- ftd.column:
                 (local.set $column (call $create_column))
-                (call $add_child (call $root_container) (local.get $column))
+                (call $add_child (local.get $root_container_) (local.get $column))
                 (call $set_column_width_px (local.get $column) (i32.const 300))
                 (call $set_column_height_px (local.get $column) (i32.const 700))
             )
