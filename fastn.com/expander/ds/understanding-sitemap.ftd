@@ -18,7 +18,7 @@ In this video we learn about sitemap
 
 -- ds.youtube:
 if: { source == "default" || source == "build" }
-v: K0kxYqRVGkY
+v: IIBk8zmspkA
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -354,7 +354,7 @@ if: { source == "planning" }
 
 -- ds.youtube:
 if: { source == "planning" }
-v: K0kxYqRVGkY
+v: IIBk8zmspkA
 
 -- end: my-ds.page 
 
