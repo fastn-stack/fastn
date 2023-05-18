@@ -286,8 +286,6 @@ impl State {
             self.doc_id.as_str(),
         )?;
 
-        // dbg!(&key, &self.line_number, section.line_number);
-
         if is_caption(key) && kind.is_none() && section.caption.is_some() {
             return Err(ftd::p1::Error::MoreThanOneCaption {
                 doc_id: self.doc_id.to_string(),
@@ -333,7 +331,6 @@ impl State {
         header_condition: Option<String>,
         header_line_number: usize,
     ) -> ftd::p1::Result<()> {
-        // dbg!(&header_key, &header_kind, &header_condition);
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value = vec![];
             let mut header_values: ftd::Map<(String, usize)> = ftd::Map::new();
@@ -362,8 +359,6 @@ impl State {
                     first_line = false;
                 }
 
-                // dbg!(&line, &inline_header_found);
-
                 if inline_header_found {
                     if let Some((key, value)) = line.split_once(':') {
                         header_values.insert(
@@ -380,7 +375,6 @@ impl State {
                     }
                 }
             }
-            // dbg!(&header_values, &value);
             self.content = content_index(self.content.as_str(), new_line_number);
             let doc_id = self.doc_id.to_string();
             let line_number = self.line_number;
@@ -392,7 +386,6 @@ impl State {
                 })?
                 .0;
 
-            dbg!(&section);
             let value = value.join("\n").trim().to_string();
             if !header_values.is_empty() {
                 let fields = header_values
@@ -410,7 +403,6 @@ impl State {
                     header_condition,
                     header_line_number,
                 );
-                dbg!(&block_record_header);
                 section.headers.push(block_record_header);
             } else {
                 section.headers.push(ftd::p1::Header::kv(
