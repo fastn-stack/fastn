@@ -5,19 +5,25 @@ pub struct Dom {
 }
 
 impl Dom {
-    pub fn register_funcs(mut store: wasmtime::Store<fastn_runtime::Dom>, module: &wasmtime::Module) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
-        let create_column_type = wasmtime::FuncType::new(
-            [].iter().cloned(),
-            [wasmtime::ValType::ExternRef].iter().cloned(),
+    pub fn register_funcs(
+        mut store: wasmtime::Store<fastn_runtime::Dom>,
+        module: &wasmtime::Module,
+    ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
+        let create_column = wasmtime::Func::new(
+            &mut store,
+            wasmtime::FuncType::new(
+                [].iter().cloned(),
+                [wasmtime::ValType::ExternRef].iter().cloned(),
+            ),
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+                results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                    caller.data_mut().create_column(),
+                )));
+                Ok(())
+            },
         );
 
-        let create_column = wasmtime::Func::new(&mut store, create_column_type, |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-            // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())))
-            results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())));
-            Ok(())
-        });
-
-        let instance = wasmtime::Instance::new(&mut store, &module, &[create_column.into()])
+        let instance = wasmtime::Instance::new(&mut store, module, &[create_column.into()])
             .expect("cant create instance");
 
         (store, instance)
@@ -36,6 +42,7 @@ impl Dom {
     }
 
     pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
-        self.nodes.insert(fastn_runtime::Container::outer_column(&mut self.taffy))
+        self.nodes
+            .insert(fastn_runtime::Container::outer_column(&mut self.taffy))
     }
 }
