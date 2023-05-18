@@ -16,4 +16,8 @@ impl Dom {
     pub fn to_operations(&self) -> Vec<fastn_runtime::Operation> {
         vec![]
     }
+
+    pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
+        self.nodes.insert(fastn_runtime::Container::outer_column(&mut self.taffy))
+    }
 }

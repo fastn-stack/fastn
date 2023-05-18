@@ -13,18 +13,15 @@ impl Document {
 
         let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
 
-        let create_column = wasmtime::Func::wrap(
-            &mut store,
-            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
-             top: i32,
-             left: i32,
-             width: i32,
-             height: i32,
-             red: i32,
-             blue: i32,
-             green: i32|
-             -> i32 { 1 },
+        let create_column_type = wasmtime::FuncType::new(
+            [].iter().cloned(),
+            [wasmtime::ValType::ExternRef].iter().cloned(),
         );
+        let create_column = wasmtime::Func::new(&mut store, create_column_type, |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+            // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())))
+            results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())));
+            Ok(())
+        });
 
         let instance = wasmtime::Instance::new(&mut store, &module, &[create_column.into()])
             .expect("cant create instance");
@@ -61,7 +58,10 @@ impl Document {
         // self.height = height;
         // dbg!(self.taffy.layout(taffy_root).unwrap());
 
-        (fastn_runtime::ControlFlow::WaitForEvent, self.store.data().to_operations())
+        (
+            fastn_runtime::ControlFlow::WaitForEvent,
+            self.store.data().to_operations(),
+        )
     }
 
     // if not wasm
@@ -75,3 +75,4 @@ impl Document {
         (fastn_runtime::ControlFlow::WaitForEvent, vec![])
     }
 }
+
