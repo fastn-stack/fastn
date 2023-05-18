@@ -1,6 +1,5 @@
 (module
     (import "fastn" "create_column" (func $create_column (result externref)))
-    (import "fastn" "root_container" (func $root_container (result externref)))
     (import "fastn" "set_column_width_px" (func $set_column_width_px (param externref i32)))
     (import "fastn" "set_column_height_px" (func $set_column_height_px (param externref i32)))
 
@@ -9,37 +8,29 @@
 
     ;; fastn.add_child(parent: NodeKey, child: NodeKey)
     (import "fastn" "add_child" (func $add_child (param externref externref)))
-    ;; we send the pointer to Vec<UIData>
-    (import "fastn" "ui_changed" (func $notify_host_of_ui_change (param i32)))
 
-    (func malloc (param $size i32) (result i32)
+    (func $malloc (param $size i32) (result i32)
         (global.set 0 (i32.add (global.get 0) (local.get $size)))
         (i32.add (global.get 0) (local.get $size))
     )
 
     (func (export "main")
-        (local $column externref)
-        (local $root_container_ externref)
+        (param $root externref)
         (local $x_ptr i32)
 
         ;; body
-        (local.set $root_container_ (call $root_container))
-
         (local.set $x_ptr (call create_var (i32.const 10))
 
-        ;; -- ftd.column:
-        (call $foo (local.get $root_container_) (i32.const 100) (i32.const 100) (local $x_ptr))
-        drop
+        ;; -- foo:
+        (call $foo (local.get $root) (i32.const 100) (i32.const 100) (local $x_ptr))
 
-        (call $foo (local.get $root_container_) (i32.const 200) (i32.const 300) (local $x_ptr))
-        drop
+        ;; -- foo:
+        (call $foo (local.get $root) (i32.const 200) (i32.const 300) (local $x_ptr))
     )
 
     ;; $on-click$: { $i = $i + 1 }
     (func $foo_click
-
         (param $arr i32)
-
         (local $i_ptr i32)
         ;; body
 
@@ -84,6 +75,7 @@
         )
     )
 
+    ;; private integer z: { $i * $j }
     (func $foo_z (param $i_ptr i32) (param $j_ptr i32) (result i32)
         (i32.mul (global.get $i_ptr) (global.get $j_ptr))
     )
@@ -123,21 +115,18 @@
     ;; struct Var {
     ;;    value: i32,
     ;;    ui_deps: Vec<UIData>, // function pointer, element, variables used by that function
-    ;;    data_deps: Vec<VarKey>,
+    ;;    data_deps: Vec<Ref<VarData>>,
     ;; }
-
-    ;; Map<UIKey, UIData>
-    ;; Map<VarKey, VarData>
 
     ;; struct UIData {
     ;;     func: i32,
     ;;     elem: ExternRef,
-    ;;     vars: Vec<VarKey>,
+    ;;     vars: Vec<Ref<Var>>,
     ;; }
 
     ;; struct VarData {
     ;;     func: i32,
-    ;;     vars: Vec<VarKey>,
+    ;;     vars: Vec<Ref<Var>>,
     ;; }
 
 
@@ -146,8 +135,6 @@
         (param $width i32)
         (param $height i32)
         (param $x_ptr)
-
-        (result externref)
 
         (local $column externref)
         (local $i_ptr i32)
@@ -226,8 +213,6 @@
         (call $set_column_height_px (local.get $column) (local.get $height))
 
         (call $add_on_click (local.get $column) (i32.const 0) (local.get $i_ptr))
-
-        (local.get $column)
     )
 
     (type $call_func_with_array_type (func (param i32)))
