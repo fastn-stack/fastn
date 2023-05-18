@@ -17,6 +17,12 @@ async fn main() {
                 (call $add_child (call $root_container) (local.get $column))
                 (call $set_column_width_px (local.get $column) (i32.const 600))
                 (call $set_column_height_px (local.get $column) (i32.const 400))
+
+                ;; -- ftd.column:
+                (local.set $column (call $create_column))
+                (call $add_child (call $root_container) (local.get $column))
+                (call $set_column_width_px (local.get $column) (i32.const 300))
+                (call $set_column_height_px (local.get $column) (i32.const 700))
             )
         )
     "#,
