@@ -7,13 +7,7 @@ pub struct Document {
 
 impl Document {
     pub fn new(wat: impl AsRef<[u8]>) -> Document {
-        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
-            .expect("cant create engine");
-        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
-        let (store, instance) = fastn_runtime::Dom::register_funcs(
-            wasmtime::Store::new(&engine, fastn_runtime::Dom::new()),
-            &module,
-        );
+        let (store, instance) = fastn_runtime::Dom::create_instance(wat);
 
         Document {
             width: 0,
