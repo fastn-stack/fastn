@@ -7,7 +7,7 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#counter": 0,
-"foo#sample-text": "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\n in Bookmarksgrove right at the coast of the Semantics, a large language\n ocean. A small river named Duden flows by their place and supplies it\n with the necessary regelialia. It is a paradisematic country, in which\n roasted parts of sentences fly into your mouth. Even the all-powerful\n Pointing has no control about the blind texts it is an almost unorthographic\n life One day however a small line of blind text by the name of Lorem\n Ipsum decided to leave for the far World of Grammar.",
+"foo#sample-text": "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -1993,14 +1993,6 @@ window.ftd.utils.set_value_helper(data, "foo#sample-text", remaining, new_value)
 window.ftd.call_mutable_value_changes("foo#sample-text", "main");
 window.ftd.call_immutable_value_changes("foo#sample-text", "main");
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
-};
-
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
 };
 
 
