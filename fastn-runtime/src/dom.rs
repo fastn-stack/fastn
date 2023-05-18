@@ -62,14 +62,10 @@ impl Dom {
         let taffy_key = self
             .taffy
             .new_leaf(taffy::style::Style {
-                size: taffy::prelude::Size {
-                    width: taffy::prelude::points(200.0),
-                    height: taffy::prelude::points(200.0),
-                },
                 margin: taffy::prelude::Rect {
                     top: taffy::prelude::points(30.0),
-                    right: taffy::prelude::points(30.0),
                     bottom: taffy::prelude::points(10.0),
+                    right: taffy::prelude::points(30.0),
                     left: taffy::prelude::points(30.0),
                 },
                 ..Default::default()
