@@ -13,18 +13,7 @@ impl Document {
 
         let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
 
-        let create_column_type = wasmtime::FuncType::new(
-            [].iter().cloned(),
-            [wasmtime::ValType::ExternRef].iter().cloned(),
-        );
-        let create_column = wasmtime::Func::new(&mut store, create_column_type, |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-            // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())))
-            results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(caller.data_mut().create_column())));
-            Ok(())
-        });
-
-        let instance = wasmtime::Instance::new(&mut store, &module, &[create_column.into()])
-            .expect("cant create instance");
+        let (store, instance) = fastn_runtime::Dom::register_funcs(store, &module);
 
         Document {
             width: 0,
