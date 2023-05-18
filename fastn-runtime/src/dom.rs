@@ -49,7 +49,6 @@ impl Dom {
                 }
 
                 for child in self.children.get(key).unwrap() {
-                    dbg!(&child);
                     operations.extend(self.layout_to_operations(*child));
                 }
                 operations
@@ -109,6 +108,20 @@ impl Dom {
             .or_default()
             .push(child_key);
         println!("add_child: {:?} -> {:?}", &parent_key, &child_key);
+    }
+
+    fn set_column_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
+        let taffy_key = self.nodes[key].taffy();
+        let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        style.size.width = taffy::prelude::points(width as f32);
+        self.taffy.set_style(taffy_key, style).unwrap();
+    }
+
+    fn set_column_height_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
+        let taffy_key = self.nodes[key].taffy();
+        let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        style.size.height = taffy::prelude::points(width as f32);
+        self.taffy.set_style(taffy_key, style).unwrap();
     }
 
     pub fn create_instance(
@@ -173,27 +186,49 @@ impl Dom {
                     // ExternRef is a reference-counted pointer to a host-defined object. We mut not
                     // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
                     // affects us yet.
-                    caller.data_mut().add_child(
-                        *params[0]
-                            .externref()
-                            .unwrap()
-                            .expect("externref gone?")
-                            .data()
-                            .downcast_ref()
-                            .unwrap(),
-                        *params[1]
-                            .externref()
-                            .unwrap()
-                            .expect("externref gone?")
-                            .data()
-                            .downcast_ref()
-                            .unwrap(),
-                    );
+                    caller.data_mut().add_child(params.key(0), params.key(1));
                     Ok(())
                 },
             )
             .unwrap();
-
+        linker
+            .func_new(
+                "fastn",
+                "set_column_width_px",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
+                        .iter()
+                        .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    caller.data_mut().set_column_width_px(p.key(0), p.i32(1));
+                    Ok(())
+                },
+            )
+            .unwrap();
+        linker
+            .func_new(
+                "fastn",
+                "set_column_height_px",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
+                        .iter()
+                        .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    caller.data_mut().set_column_height_px(p.key(0), p.i32(1));
+                    Ok(())
+                },
+            )
+            .unwrap();
         let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
         let instance = linker
             .instantiate(&mut store, &module)
@@ -206,6 +241,27 @@ impl Dom {
         wasm_main.call(&mut store, ()).unwrap();
 
         (store, instance)
+    }
+}
+
+trait Params {
+    fn i32(&self, idx: usize) -> i32;
+    fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
+}
+
+impl Params for [wasmtime::Val] {
+    fn i32(&self, idx: usize) -> i32 {
+        self[idx].i32().unwrap()
+    }
+
+    fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
+        *self[idx]
+            .externref()
+            .unwrap()
+            .expect("externref gone?")
+            .data()
+            .downcast_ref()
+            .unwrap()
     }
 }
 
@@ -225,5 +281,7 @@ mod test {
         assert_import("create_column", "(result externref)");
         assert_import("root_container", "(result externref)");
         assert_import("add_child", "(param externref externref)");
+        assert_import("set_column_width_px", "(param externref i32)");
+        assert_import("set_column_height_px", "(param externref i32)");
     }
 }
