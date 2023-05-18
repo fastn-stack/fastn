@@ -24,26 +24,12 @@ impl Document {
     // if not wasm
     pub fn initial_layout(
         &mut self,
-        _width: u32,
-        _height: u32,
+        width: u32,
+        height: u32,
     ) -> (fastn_runtime::ControlFlow, Vec<fastn_runtime::Operation>) {
-        // let taffy_root = self.nodes[self.root].taffy();
-        // self.taffy
-        //     .compute_layout(
-        //         taffy_root,
-        //         taffy::prelude::Size {
-        //             width: taffy::prelude::points(width as f32),
-        //             height: taffy::prelude::points(height as f32),
-        //         },
-        //     )
-        //     .unwrap();
-        // self.width = width;
-        // self.height = height;
-        // dbg!(self.taffy.layout(taffy_root).unwrap());
-
         (
             fastn_runtime::ControlFlow::WaitForEvent,
-            self.store.data().to_operations(),
+            self.store.data_mut().compute_layout(width, height),
         )
     }
 

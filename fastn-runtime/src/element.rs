@@ -7,7 +7,7 @@ pub enum Element {
 
 #[derive(Debug)]
 pub struct CommonStyleMinusTaffy {
-    pub background_color: Option<fastn_runtime::Color>,
+    pub background_color: Option<fastn_runtime::ColorValue>,
     // border: Borders,
 }
 

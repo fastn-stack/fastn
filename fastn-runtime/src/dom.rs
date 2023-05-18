@@ -1,7 +1,7 @@
 pub struct Dom {
     pub taffy: taffy::Taffy,
-    pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
-    pub root: fastn_runtime::NodeKey,
+    pub nodes: slotmap::SlotMap<slotmap::DefaultKey, fastn_runtime::Element>,
+    pub root: slotmap::DefaultKey,
 }
 
 impl Dom {
@@ -13,20 +13,52 @@ impl Dom {
         Dom { taffy, nodes, root }
     }
 
-    pub fn to_operations(&self) -> Vec<fastn_runtime::Operation> {
-        vec![]
+    pub fn compute_layout(&mut self, width: u32, height: u32) -> Vec<fastn_runtime::Operation> {
+        let taffy_root = self.nodes[self.root].taffy();
+        self.taffy
+            .compute_layout(
+                taffy_root,
+                taffy::prelude::Size {
+                    width: taffy::prelude::points(width as f32),
+                    height: taffy::prelude::points(height as f32),
+                },
+            )
+            .unwrap();
+
+        self.layout_to_operations(self.root)
     }
 
-    pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
+    fn layout_to_operations(&self, key: slotmap::DefaultKey) -> Vec<fastn_runtime::Operation> {
+        let node = self.nodes.get(key).unwrap();
+        match node {
+            fastn_runtime::Element::Container(c) => {
+                let mut operations = vec![];
+
+                // no need to draw a rectangle if there is no color or border
+                if let Some(o) = c.operation(&self.taffy) {
+                    operations.push(o);
+                }
+
+
+                for child in self.taffy.children(c.taffy).unwrap() {
+                    operations.extend(self.layout_to_operations(child.into()));
+                }
+                operations
+            }
+            fastn_runtime::Element::Text(_t) => todo!(),
+            fastn_runtime::Element::Image(_i) => todo!(),
+        }
+    }
+
+    pub fn create_column(&mut self) -> slotmap::DefaultKey {
         self.nodes
             .insert(fastn_runtime::Container::outer_column(&mut self.taffy))
     }
 
-    pub fn add_child(&mut self, parent: fastn_runtime::NodeKey, child: fastn_runtime::NodeKey) {
-        self.taffy.add_child(
-            self.nodes[parent].taffy(),
-            self.nodes[child].taffy(),
-        ).unwrap();
+    pub fn add_child(&mut self, parent: slotmap::DefaultKey, child: slotmap::DefaultKey) {
+        self.taffy
+            .add_child(self.nodes[parent].taffy(), self.nodes[child].taffy())
+            .unwrap();
     }
 
     pub fn create_instance(
@@ -39,58 +71,83 @@ impl Dom {
         let mut linker = wasmtime::Linker::new(&engine);
 
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
-        linker.func_new(
-            "fastn", "create_column",
-            wasmtime::FuncType::new(
-                [].iter().cloned(),
-                [wasmtime::ValType::ExternRef].iter().cloned(),
-            ),
-            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-                // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                // affects us yet.
-                results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                    caller.data_mut().create_column(),
-                )));
-                Ok(())
-            },
-        ).unwrap();
-        linker.func_new(
-            "fastn", "root_container",
-            wasmtime::FuncType::new(
-                [].iter().cloned(),
-                [wasmtime::ValType::ExternRef].iter().cloned(),
-            ),
-            |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-                // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                // affects us yet.
-                results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                    caller.data().root,
-                )));
-                Ok(())
-            },
-        ).unwrap();
-        linker.func_new(
-            "fastn", "add_child",
-            wasmtime::FuncType::new(
-                [wasmtime::ValType::ExternRef, wasmtime::ValType::ExternRef].iter().cloned(),
-                [].iter().cloned(),
-            ),
-            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                // affects us yet.
-                caller.data_mut().add_child(
-                    *params[0].externref().unwrap().expect("externref gone?").data().downcast_ref().unwrap(),
-                    *params[1].externref().unwrap().expect("externref gone?").data().downcast_ref().unwrap(),
-                );
-                Ok(())
-            },
-        ).unwrap();
+        linker
+            .func_new(
+                "fastn",
+                "create_column",
+                wasmtime::FuncType::new(
+                    [].iter().cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().create_column(),
+                    )));
+                    Ok(())
+                },
+            )
+            .unwrap();
+        linker
+            .func_new(
+                "fastn",
+                "root_container",
+                wasmtime::FuncType::new(
+                    [].iter().cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data().root,
+                    )));
+                    Ok(())
+                },
+            )
+            .unwrap();
+        linker
+            .func_new(
+                "fastn",
+                "add_child",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::ExternRef, wasmtime::ValType::ExternRef]
+                        .iter()
+                        .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    caller.data_mut().add_child(
+                        *params[0]
+                            .externref()
+                            .unwrap()
+                            .expect("externref gone?")
+                            .data()
+                            .downcast_ref()
+                            .unwrap(),
+                        *params[1]
+                            .externref()
+                            .unwrap()
+                            .expect("externref gone?")
+                            .data()
+                            .downcast_ref()
+                            .unwrap(),
+                    );
+                    Ok(())
+                },
+            )
+            .unwrap();
 
         let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
-        let instance = linker.instantiate(&mut store, &module).expect("cant create instance");
+        let instance = linker
+            .instantiate(&mut store, &module)
+            .expect("cant create instance");
 
         (store, instance)
     }
