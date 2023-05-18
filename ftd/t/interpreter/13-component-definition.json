@@ -38,7 +38,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 4
+            "line_number": 4,
+            "access_modifier": "Public"
           }
         ],
         "definition": {

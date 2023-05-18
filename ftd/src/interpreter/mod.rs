@@ -90,6 +90,9 @@ pub enum Error {
         #[from]
         source: serde_json::Error,
     },
+
+    #[error("Invalid access: {message}, line_number: {line_number}")]
+    InvalidAccessError { message: String, line_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

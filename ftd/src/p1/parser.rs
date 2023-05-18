@@ -696,7 +696,7 @@ fn valid_line(line: &str) -> bool {
 }
 
 fn is_caption(s: &str) -> bool {
-    s.eq("caption")
+    s.contains("caption")
 }
 
 fn is_body(s: &str) -> bool {

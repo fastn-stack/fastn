@@ -18,7 +18,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 34
+            "line_number": 34,
+            "access_modifier": "Public"
           },
           {
             "name": "b",
@@ -29,7 +30,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 35
+            "line_number": 35,
+            "access_modifier": "Public"
           }
         ],
         "expression": [
@@ -155,7 +157,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "middle-name",
@@ -170,7 +173,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           },
           {
             "name": "last-name",
@@ -185,7 +189,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 4
+            "line_number": 4,
+            "access_modifier": "Public"
           }
         ],
         "line_number": 1
@@ -233,7 +238,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 8
+            "line_number": 8,
+            "access_modifier": "Public"
           },
           {
             "name": "age",
@@ -244,7 +250,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 9
+            "line_number": 9,
+            "access_modifier": "Public"
           }
         ],
         "line_number": 7

@@ -75,6 +75,7 @@ impl ftd::ast::Field {
             ftd::ast::utils::is_variable_mutable(section.name.as_str()),
             value,
             section.line_number,
+            Default::default(),
         ))
     }
 }
