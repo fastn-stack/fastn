@@ -23,9 +23,11 @@ mod operation;
 pub use control::ControlFlow;
 pub use document::Document;
 pub(crate) use dom::Dom;
-pub use element::{Container, Dimension, Element, Image, Text};
+pub use element::{Container, Dimension, Element, Image, Text, CommonStyleMinusTaffy};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
+
+slotmap::new_key_type! { pub struct NodeKey; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]
