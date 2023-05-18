@@ -22,6 +22,13 @@ impl Dom {
             .insert(fastn_runtime::Container::outer_column(&mut self.taffy))
     }
 
+    pub fn add_child(&mut self, parent: fastn_runtime::NodeKey, child: fastn_runtime::NodeKey) {
+        self.taffy.add_child(
+            self.nodes[parent].taffy(),
+            self.nodes[child].taffy(),
+        ).unwrap();
+    }
+
     pub fn create_instance(
         wat: impl AsRef<[u8]>,
     ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
@@ -48,6 +55,39 @@ impl Dom {
                 Ok(())
             },
         ).unwrap();
+        linker.func_new(
+            "fastn", "root_container",
+            wasmtime::FuncType::new(
+                [].iter().cloned(),
+                [wasmtime::ValType::ExternRef].iter().cloned(),
+            ),
+            |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+                // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                // affects us yet.
+                results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                    caller.data().root,
+                )));
+                Ok(())
+            },
+        ).unwrap();
+        linker.func_new(
+            "fastn", "add_child",
+            wasmtime::FuncType::new(
+                [wasmtime::ValType::ExternRef, wasmtime::ValType::ExternRef].iter().cloned(),
+                [].iter().cloned(),
+            ),
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                // affects us yet.
+                caller.data_mut().add_child(
+                    *params[0].externref().unwrap().expect("externref gone?").data().downcast_ref().unwrap(),
+                    *params[1].externref().unwrap().expect("externref gone?").data().downcast_ref().unwrap(),
+                );
+                Ok(())
+            },
+        ).unwrap();
 
         let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
         let instance = linker.instantiate(&mut store, &module).expect("cant create instance");
@@ -70,5 +110,7 @@ mod test {
     #[test]
     fn test() {
         assert_import("create_column", "(result externref)");
+        assert_import("root_container", "(result externref)");
+        assert_import("add_child", "(param externref externref)");
     }
 }
