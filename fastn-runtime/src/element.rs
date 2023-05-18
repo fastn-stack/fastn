@@ -27,6 +27,7 @@ impl Container {
                         width: taffy::prelude::percent(100.0),
                         height: taffy::prelude::percent(100.0),
                     },
+                    gap: taffy::prelude::points(100.0),
                     ..Default::default()
                 })
                 .expect("this should never fail"),
