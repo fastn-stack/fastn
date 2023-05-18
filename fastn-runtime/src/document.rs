@@ -2,7 +2,7 @@ pub struct Document {
     pub width: u32,
     pub height: u32,
     store: wasmtime::Store<fastn_runtime::Dom>,
-    instance: wasmtime::Instance,
+    pub instance: wasmtime::Instance,
 }
 
 impl Document {
@@ -10,10 +10,10 @@ impl Document {
         let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
             .expect("cant create engine");
         let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
-
-        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
-
-        let (store, instance) = fastn_runtime::Dom::register_funcs(store, &module);
+        let (store, instance) = fastn_runtime::Dom::register_funcs(
+            wasmtime::Store::new(&engine, fastn_runtime::Dom::new()),
+            &module,
+        );
 
         Document {
             width: 0,
@@ -30,8 +30,8 @@ impl Document {
     // if not wasm
     pub fn initial_layout(
         &mut self,
-        width: u32,
-        height: u32,
+        _width: u32,
+        _height: u32,
     ) -> (fastn_runtime::ControlFlow, Vec<fastn_runtime::Operation>) {
         // let taffy_root = self.nodes[self.root].taffy();
         // self.taffy
@@ -64,4 +64,3 @@ impl Document {
         (fastn_runtime::ControlFlow::WaitForEvent, vec![])
     }
 }
-
