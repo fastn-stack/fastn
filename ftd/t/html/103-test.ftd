@@ -1,0 +1,11 @@
+-- ftd.text: Hello there
+
+-- ftd.text.color: red
+dark: green
+
+-- ftd.row:
+
+-- ftd.text: Yo there
+color: blue
+
+-- end: ftd.row

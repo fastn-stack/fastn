@@ -91,6 +91,7 @@ impl Field {
                 }
             }
             ftd::p1::Header::Section(_) => unimplemented!(),
+            ftd::p1::Header::BlockRecordHeader(_) => unimplemented!(),
         }
     }
 

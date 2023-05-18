@@ -184,6 +184,13 @@ impl VariableFlags {
                     header.get_line_number(),
                 )
             }
+            ftd::p1::Header::BlockRecordHeader(b) => {
+                return ftd::ast::parse_error(
+                    format!("Expected the boolean value for flag, found: `{:?}`", b),
+                    doc_id,
+                    header.get_line_number(),
+                )
+            }
         };
 
         match kv.key.as_str() {

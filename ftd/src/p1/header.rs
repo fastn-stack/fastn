@@ -3,6 +3,41 @@
 pub enum Header {
     KV(ftd::p1::header::KV),
     Section(ftd::p1::header::Section),
+    BlockRecordHeader(ftd::p1::header::BlockRecordHeader),
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
+#[serde(default)]
+pub struct BlockRecordHeader {
+    pub key: String,
+    pub kind: Option<String>,
+    pub caption: Option<String>,
+    pub body: Option<String>,
+    pub fields: Vec<Header>,
+    pub condition: Option<String>,
+    pub line_number: usize,
+}
+
+impl BlockRecordHeader {
+    pub fn new(
+        key: String,
+        kind: Option<String>,
+        caption: Option<String>,
+        body: Option<String>,
+        fields: Vec<Header>,
+        condition: Option<String>,
+        line_number: usize,
+    ) -> BlockRecordHeader {
+        BlockRecordHeader {
+            key,
+            kind,
+            caption,
+            body,
+            fields,
+            condition,
+            line_number,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
@@ -80,6 +115,26 @@ impl Header {
         })
     }
 
+    pub(crate) fn block_record_header(
+        key: &str,
+        kind: Option<String>,
+        caption: Option<String>,
+        body: Option<String>,
+        fields: Vec<Header>,
+        condition: Option<String>,
+        line_number: usize,
+    ) -> Header {
+        Header::BlockRecordHeader(BlockRecordHeader::new(
+            key.to_string(),
+            kind,
+            caption,
+            body,
+            fields,
+            condition,
+            line_number,
+        ))
+    }
+
     pub fn without_line_number(&self) -> Self {
         use itertools::Itertools;
 
@@ -99,20 +154,29 @@ impl Header {
                     .collect_vec();
                 Header::Section(s)
             }
+            Header::BlockRecordHeader(b) => {
+                let mut blockrecord = (*b).clone();
+                blockrecord.line_number = 0;
+                Header::BlockRecordHeader(blockrecord)
+            }
         }
     }
 
     pub(crate) fn get_key(&self) -> String {
         match self {
             Header::KV(ftd::p1::header::KV { key, .. })
-            | Header::Section(ftd::p1::header::Section { key, .. }) => key.to_string(),
+            | Header::Section(ftd::p1::header::Section { key, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { key, .. }) => {
+                key.to_string()
+            }
         }
     }
 
     pub(crate) fn set_key(&mut self, value: &str) {
         match self {
             Header::KV(ftd::p1::header::KV { key, .. })
-            | Header::Section(ftd::p1::header::Section { key, .. }) => {
+            | Header::Section(ftd::p1::header::Section { key, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { key, .. }) => {
                 *key = value.to_string();
             }
         }
@@ -125,6 +189,10 @@ impl Header {
             })
             | Header::Section(ftd::p1::header::Section {
                 kind: Some(kind), ..
+            })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader {
+                kind: Some(kind),
+                ..
             }) => {
                 *kind = value.to_string();
             }
@@ -143,12 +211,20 @@ impl Header {
                 doc_id: doc_id.to_string(),
                 line_number: self.get_line_number(),
             }),
+            Header::BlockRecordHeader(_) => Err(ftd::p1::Error::ParseError {
+                message: format!(
+                    "Expected Header of type: KV, found: BlockRecordHeader {}",
+                    self.get_key()
+                ),
+                doc_id: doc_id.to_string(),
+                line_number: self.get_line_number(),
+            }),
         }
     }
 
     pub(crate) fn get_sections(&self, doc_id: &str) -> ftd::p1::Result<&Vec<ftd::p1::Section>> {
         match self {
-            Header::KV(_) => Err(ftd::p1::Error::ParseError {
+            Header::KV(_) | Header::BlockRecordHeader(_) => Err(ftd::p1::Error::ParseError {
                 message: format!(
                     "Expected Header of type: Sections, found: KV {}",
                     self.get_key()
@@ -163,21 +239,30 @@ impl Header {
     pub(crate) fn get_line_number(&self) -> usize {
         match self {
             Header::KV(ftd::p1::header::KV { line_number, .. })
-            | Header::Section(ftd::p1::header::Section { line_number, .. }) => *line_number,
+            | Header::Section(ftd::p1::header::Section { line_number, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader {
+                line_number, ..
+            }) => *line_number,
         }
     }
 
     pub(crate) fn get_kind(&self) -> Option<String> {
         match self {
             Header::KV(ftd::p1::header::KV { kind, .. })
-            | Header::Section(ftd::p1::header::Section { kind, .. }) => kind.to_owned(),
+            | Header::Section(ftd::p1::header::Section { kind, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { kind, .. }) => {
+                kind.to_owned()
+            }
         }
     }
 
     pub(crate) fn get_condition(&self) -> Option<String> {
         match self {
             Header::KV(ftd::p1::header::KV { condition, .. })
-            | Header::Section(ftd::p1::header::Section { condition, .. }) => condition.to_owned(),
+            | Header::Section(ftd::p1::header::Section { condition, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { condition, .. }) => {
+                condition.to_owned()
+            }
         }
     }
 
@@ -185,6 +270,9 @@ impl Header {
         match self {
             Header::KV(ftd::p1::header::KV { value, .. }) => value.is_none(),
             Header::Section(ftd::p1::header::Section { section, .. }) => section.is_empty(),
+            Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { fields, .. }) => {
+                fields.is_empty()
+            }
         }
     }
 
@@ -209,7 +297,8 @@ impl Header {
         }
 
         match &mut header {
-            Header::KV(ftd::p1::header::KV { .. }) => {}
+            Header::KV(ftd::p1::header::KV { .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { .. }) => {}
             Header::Section(ftd::p1::header::Section { section, .. }) => {
                 *section = section
                     .iter_mut()
