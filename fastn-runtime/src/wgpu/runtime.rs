@@ -30,6 +30,8 @@ pub async fn render_document(document: fastn_runtime::Document) {
             winit::event::WindowEvent::Resized(physical_size) => {
                 state.resize(*physical_size);
             }
+            // display resolution changed (e.g. changing the resolution in the settings or switching
+            // to monitor with different resolution)
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                 state.resize(**new_inner_size);
             }
