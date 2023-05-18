@@ -15,64 +15,60 @@ if: { source == "default" || source == "build" }
 
 In this video we learn about sitemap
 
+
+-- ds.youtube:
+if: { source == "default" || source == "build" }
+v: K0kxYqRVGkY
+
+-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+
+`Sitemap` is used to create a structured representation of the files and pages
+that make up a website. This structure is created over a layout which we will
+talk about in a bit.
+
+By creating a comprehensive sitemap, website owners and visitors can gain a
+clear understanding of the website's structure and easily navigate through its
+content. It ensures that visitors can find the information they need
+efficiently.
+
+-- ds.h1: What is `sitemap`
+if: { source == "planning" }
+
+`Sitemap` is used to create a structured representation of the files and pages
+that make up a website.
+
+-- ds.image:
+src: $fastn-assets.files.images.sitemap.index.png
+width: fill-container
+
+Welcome to the video. I am Ajit. Today we will learn 
+
+- what is `sitemap`
+- why sitemap is used, and
+- how to configure it.
+
 -- ds.image:
 if: { source == "planning" }
 src: $fastn-assets.files.expander.ds.img.sitemap-intro.jpg
 width: fill-container
 
 
-/-- ds.youtube:
-if: { source == "default" || source == "build" }
-v: 
+
 
 -- ds.markdown:
-if: { source == "default" || source == "build" }
-
-
-A `sitemap` is a structured representation of the files and pages that make up 
-a website. This structure is created over a layout which we will talk about in 
-a bit.
+if: { source == "planning" }
 
 By creating a comprehensive sitemap, website owners and visitors can gain a
 clear understanding of the website's structure and easily navigate through its
 content. It ensures that visitors can find the information they need
 efficiently.
 
--- ds.h1: Sitemap
-if: { source == "planning" }
 
-
-A `sitemap` is a structured representation of the files and pages that make up 
-a website. This structure is created over a layout which we will talk about in 
-a bit.
-
-By creating a comprehensive sitemap, website owners and visitors can gain a
-clear understanding of the website's structure and easily navigate through its
-content. It ensures that visitors can find the information they need
-efficiently.
-
--- ds.h2: Sitemap with holy-grail layout
-
-The most common layout used for websites is `holy-grail` layout. Our website
-uses the same. You can check out the video to understand
-[`how to create holy-grail layout`](/holy-grail/), later.
-
- 
--- ds.markdown:
-if: { source == "planning" }
-
-The link is shared in the description box.
-
--- ds.image:
-src: $fastn-assets.files.images.sitemap.index.png
-width: fill-container
-
--- ds.markdown:
-
-In the header of the website, the top-level `sections` or categories of the
-site should ideally be listed. These sections represent the main divisions of
-content on the website and provide an overview of the different topics or areas
-covered.
+In the header of the website, there are `sections`. These sections represent 
+the main divisions of content on the website and provide an overview of the
+different topics or areas covered.
 
 Each top-level section can then be further divided into one or more
 `subsections`. These subsections act as subcategories or subtopics within the
@@ -93,19 +89,29 @@ In this video we will learn about `sitemap`.
 
 -- ds.h1: Why `sitemap`?
 
-`doc-site` is like a college library and every library needs to organise their 
-shelves, books, in an order.
-
-Just like that in a package, we want to organise the documents in different 
+Just like a college library needs to organise their shelves, books in an
+order based on cateogry or genre.
+Similarly, in a package, we want to organise the documents in different 
 sections, subsections and TOCs.
 
 `Sitemap` serves as a blueprint or roadmap, providing information about the 
 organization and hierarchy of content on the website.
 
 
--- ds.h1: How To Configure Sitemap For Your Site
+-- ds.h1: How to configure `sitemap` for your site
+
+-- ds.markdown:
+if: { source == "default" || source == "build" }
 
 We create the sitemap in the `FASTN.ftd`. So, we write:
+
+-- ds.markdown:
+if: { source == "planning" }
+
+Now, let's see how to configure the `sitemap` for a website.
+
+We create the sitemap in the `FASTN.ftd` document. So, we write:
+
 
 -- ds.code:
 lang: ftd
@@ -113,21 +119,33 @@ lang: ftd
 \-- fastn.sitemap:
 
 # Section: <url>
+
+## SubSection: <url>
+
+- TOC-1: <url>
+- TOC-2: <url>
+  - SubTOC-2-1: <url>
+  - SubTOC-2-2: <url>
+
 ...
 
 -- ds.markdown:
 
-In sitemap,  
-
+and after a line space
+ 
 - for `sections` we use `#`
 - for `subsections` we use `##`, and
 - for `TOCs` and `sub-TOCs` we use `-`
 
-And after one line space.
+-- ds.markdown:
+
+In all the three cases, whatever written before colon is displayed as the title
+on webpage and whatever is written after colon, becomes the URL to access it. 
+
 
 -- ds.h3: First section
 
-We put our first section like:
+We put our first section like, hash for section, home as section name and URL:
 
 -- ds.code:
 lang: ftd
@@ -136,42 +154,35 @@ lang: ftd
 
 -- ds.markdown:
 
-In all the three cases, whatever written before colon is displayed as the title
-on webpage and whatever is written after colon, becomes the URL to access it. 
+Section `Home` is displayed on the webpage, which displays the content of
+`index.ftd` document. The URL `/` corresponds to `index.ftd` document. 
 
-Here, in the header a section `Home` will be displayed on the webpage. And this
-section is served using `/` which corresponds to `index.ftd` document. 
-
-If you have followed the [expander course](https://fastn.com/expander), you
-might recall that any document other than `index.ftd` file we need to write
-something after `/`. For example, there is a file `foo.ftd` other than
-`index.ftd` then to access the foo document, we need to write, `/foo/`.
-
-Now, based on how you want to structure your website, this section can have 
-one or more subsections or not.
+Whereas, any document other than `index.ftd` file we need to write something
+after `/`. For example, there is a file `foo.ftd`, then to access the foo
+document, we need to write, `/foo/`.
 
 -- ds.h3: Second section
 
-Let's add another section to it.
+Let's add another section.
 
 -- ds.code:
 lang: ftd
 
 # Season: /season/summer/
 
-
 -- ds.markdown:
 
-The URLs can be cleaned and customized by using the `document feature` of
-sitemap.
-
-To know all about this feature checkout the dedicated video about
-[`How to create clean URLs`](/expander/sitemap-document).
+The URL is the path of the document. Inside folder season, there is a document
+called `summer.ftd`.
 
 -- ds.markdown:
 if: { source == "planning" }
 
-Link is shared in the description.
+Let's check in the browser.
+
+We will see how to clean and customize this URL later. For now.
+
+
 
 -- ds.h3: Subsections
 
@@ -189,23 +200,30 @@ lang: ftd
 ## Winter: /season/winter/
 
 
+-- ds.markdown:
+if: { source == "planning" }
+
+and each subsection points to their respective documents.
+
 -- ds.h3: TOCs
 
 Similarly, we can add TOCs.
+
+TOCs start with single dash or hyphen `-`, followed by TOC title before colon
+and after the colon, as usual, the URL.
+
+Also note, between TOCs we do not give a line space.
 
 -- ds.code:
 lang: ftd
 
 - Sunrise: /season/day-event/sunrise/
-
 - Sunset: /season/day-event/sunset/
 
 -- ds.markdown:
 
 and so on, you can give any number of TOCs and even sub-TOCs to the sections 
 or subsections.
-
-
 
 
 -- ds.code:
@@ -218,27 +236,31 @@ lang: ftd
 
 ## Autumn Season: /season/autumn/
 
-  - Sunrise: /season/day-event/sunrise/
-  - Sunset: /season/day-event/sunset/
+- Sunrise: /season/day-event/sunrise/
+- Sunset: /season/day-event/sunset/
 
 ## Spring Season: /season/spring/
 
-  - Sunrise: /season/day-event/sunrise/
-  - Sunset: /season/day-event/sunset/
+- Sunrise: /season/day-event/sunrise/
+  - Today's News: /season/day-event/news/rained/
+- Sunset: /season/day-event/sunset/
 
 ## Summer Season: /season/summer/
 
-  - Sunrise: /season/day-event/sunrise/
-  - Sunset: /season/day-event/sunset/
+- Sunrise: /season/day-event/sunrise/
+- Sunset: /season/day-event/sunset/
     
 ## Winter Season: /season/winter/
 
-  - Sunrise: /season/day-event/sunrise/
-  - Sunset: /season/day-event/sunset/
+- Sunrise: /season/day-event/sunrise/
+- Sunset: /season/day-event/sunset/
 
 
 
+-- ds.markdown:
+if: { source == "planning" }
 
+This way we have learnt how to configure the sitemap in `FASTN.ftd` document.
 
 -- ds.markdown:
 
@@ -255,43 +277,53 @@ lang: ftd
   document: /season/summer.ftd
 
 
-## Autumn Season: /autumn/
-  document: /season/autumn.ftd 
+## Autumn: /autumn/
+   document: /season/autumn.ftd 
 
-  - Sunrise: /sunrise-in-autumn/
-    document: /season/day-event/sunrise.ftd
-  - Sunset: /sunset-in-autumn/
-    document: /season/day-event/sunset.ftd
+- Sunrise: /sunrise-in-autumn/
+  document: /season/day-event/sunrise.ftd
+- Sunset: /sunset-in-autumn/
+  document: /season/day-event/sunset.ftd
 
-## Spring Season: /spring/
+## Spring: /spring/
   document: /seasons/spring.ftd 
 
-  - Sunrise: /sunrise-in-spring/
-    document: /season/day-event/sunrise.ftd
-  - Sunset: /sunset-in-spring/
-    document: /season/day-event/sunset.ftd
+- Sunrise: /sunrise-in-spring/
+  document: /season/day-event/sunrise.ftd
+  - Today's News: /news-of-the-day/
+    document: /season/day-event/news/rained.ftd
+- Sunset: /sunset-in-spring/
+  document: /season/day-event/sunset.ftd
 
-## Summer Season: /summer/
+## Summer: /summer/
   document: /season/summer.ftd 
 
-  - Sunrise: /sunrise-in-summer/
-    document: /season/day-event/sunrise.ftd
-  - Sunset: /sunset-in-summer/
-    document: /season/day-event/sunset.ftd
+- Sunrise: /sunrise-in-summer/
+  document: /season/day-event/sunrise.ftd
+- Sunset: /sunset-in-summer/
+  document: /season/day-event/sunset.ftd
     
-## Winter Season: /winter/
+## Winter: /winter/
   document: /season/winter.ftd 
 
-  - Sunrise: /sunrise-in-winter/
-    document: /season/day-event/sunrise.ftd
-  - Sunset: /sunset-in-winter/
-    document: /season/day-event/sunset.ftd
-    
+- Sunrise: /sunrise-in-winter/
+  document: /season/day-event/sunrise.ftd
+- Sunset: /sunset-in-winter/
+  document: /season/day-event/sunset.ftd
+
 
 -- ds.markdown:
 
 To know all about this feature you can checkout the video about
 [`How to create clean URLs`](/expander/sitemap-document).
+
+-- ds.markdown:
+if: { source == "planning" }
+
+Link is shared in the description.
+
+-- ds.markdown:
+if: { source == "planning" }
 
 I hope this video will help you to create the structure of your website. You
 can share your feedback on comments and/or our discord channel.
@@ -317,12 +349,12 @@ Support us by giving a star ⭐ on
 on [Discord](/discord/).
 
 
-/-- ds.h1: Final Video
+-- ds.h1: Final Video
 if: { source == "planning" }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { source == "planning" }
-v: 
+v: K0kxYqRVGkY
 
 -- end: my-ds.page 
 
