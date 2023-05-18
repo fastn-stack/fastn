@@ -22,13 +22,18 @@ impl Dom {
             .insert(fastn_runtime::Container::outer_column(&mut self.taffy))
     }
 
-    pub fn register_funcs(
-        mut store: wasmtime::Store<fastn_runtime::Dom>,
-        module: &wasmtime::Module,
+    pub fn create_instance(
+        wat: impl AsRef<[u8]>,
     ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
+        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
+            .expect("cant create engine");
+        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
+
+        let mut linker = wasmtime::Linker::new(&engine);
+
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
-        let create_column = wasmtime::Func::new(
-            &mut store,
+        linker.func_new(
+            "fastn", "create_column",
             wasmtime::FuncType::new(
                 [].iter().cloned(),
                 [wasmtime::ValType::ExternRef].iter().cloned(),
@@ -42,10 +47,10 @@ impl Dom {
                 )));
                 Ok(())
             },
-        );
+        ).unwrap();
 
-        let instance = wasmtime::Instance::new(&mut store, module, &[create_column.into()])
-            .expect("cant create instance");
+        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
+        let instance = linker.instantiate(&mut store, &module).expect("cant create instance");
 
         (store, instance)
     }
@@ -53,24 +58,17 @@ impl Dom {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn test_create_column() {
-        let test_wat = r#"
-        (module
-            (import "fastn" "create_column" (func $create_column (result externref)))
-        )
-        "#;
-        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
-            .expect("cant create engine");
-        let module = wasmtime::Module::new(
-            &engine,
-            test_wat,
-        )
-        .expect("cant parse module");
+    fn assert_import(name: &str, type_: &str) {
+        fastn_runtime::Dom::create_instance(format!(
+            r#"
+                (module (import "fastn" "{}" (func {})))
+            "#,
+            name, type_
+        ));
+    }
 
-        fastn_runtime::Dom::register_funcs(
-            wasmtime::Store::new(&engine, fastn_runtime::Dom::new()),
-            &module,
-        );
+    #[test]
+    fn test() {
+        assert_import("create_column", "(result externref)");
     }
 }
