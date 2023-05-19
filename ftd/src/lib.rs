@@ -29,6 +29,7 @@ pub mod taffy;
 #[cfg(feature = "terminal")]
 pub mod terminal;
 pub mod test_helper;
+mod wasm;
 
 pub const PROCESSOR_MARKER: &str = "$processor$";
 

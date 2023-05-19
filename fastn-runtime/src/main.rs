@@ -1,6 +1,13 @@
 #[tokio::main]
 async fn main() {
-    let document = fastn_runtime::Document::new(
+    // check if --wasm is passed on cli
+    let wat = if std::env::args().any(|arg| arg == "--stdin") {
+        use std::io::Read;
+
+        let mut buffer = String::new();
+        std::io::stdin().read_to_string(&mut buffer).unwrap();
+        buffer
+    } else {
         r#"
         (module
             (import "fastn" "create_column" (func $create_column (result externref)))
@@ -42,8 +49,10 @@ async fn main() {
                 (local.get $column)
             )
         )
-    "#,
-    );
+    "#.to_string()
+    };
+
+    let document = fastn_runtime::Document::new(wat);
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;
