@@ -24,11 +24,11 @@
           "value": {
             "string-value": {
               "value": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type.",
-              "line-number": 8,
+              "line-number": 4,
               "source": "Default"
             }
           },
-          "line_number": 8,
+          "line_number": 4,
           "access_modifier": "Public"
         }
       ],

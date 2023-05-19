@@ -30,11 +30,11 @@
           "value": {
             "string-value": {
               "value": "This is description of display component",
-              "line-number": 8,
+              "line-number": 5,
               "source": "Default"
             }
           },
-          "line_number": 8,
+          "line_number": 5,
           "access_modifier": "Public"
         },
         {

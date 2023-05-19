@@ -332,10 +332,9 @@ impl State {
         header_line_number: usize,
     ) -> ftd::p1::Result<()> {
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
-            let mut value = vec![];
+            let mut value: (Vec<String>, Option<usize>) = (vec![], None);
             let mut header_values: ftd::Map<(String, usize)> = ftd::Map::new();
             let mut new_line_number = None;
-            let mut inline_header_found;
             let mut first_line = true;
             let split_content = self.content.as_str().split('\n');
             for (line_number, line) in split_content.enumerate() {
@@ -347,11 +346,11 @@ impl State {
                 if !valid_line(line) {
                     continue;
                 }
-                inline_header_found = line.contains(':');
+                let inline_header_found = line.contains(':');
                 if first_line {
                     if !line.trim().is_empty() && !inline_header_found {
                         return Err(ftd::p1::Error::ParseError {
-                            message: format!("start section header '{}' after a newline!!", line),
+                            message: format!("start section body '{}' after a newline!!", line),
                             doc_id: self.doc_id.to_string(),
                             line_number: ftd::p1::utils::i32_to_usize(self.line_number),
                         });
@@ -360,56 +359,64 @@ impl State {
                 }
 
                 if inline_header_found {
-                    if let Some((key, value)) = line.split_once(':') {
+                    if let Some((key, val)) = line.split_once(':') {
                         header_values.insert(
                             key.trim().to_string(),
                             (
-                                value.trim().to_string(),
+                                val.trim().to_string(),
                                 ftd::p1::utils::i32_to_usize(self.line_number),
                             ),
                         );
                     }
-                } else {
-                    if !line.is_empty() {
-                        value.push(clean_line(line));
+                } else if !line.is_empty() {
+                    value.0.push(clean_line(line));
+                    if value.1.is_none() {
+                        value.1 = Some(ftd::p1::utils::i32_to_usize(self.line_number));
                     }
                 }
             }
             self.content = content_index(self.content.as_str(), new_line_number);
             let doc_id = self.doc_id.to_string();
-            let line_number = self.line_number;
+            let _line_number = self.line_number;
             let section = self
                 .remove_latest_state()
                 .ok_or(ftd::p1::Error::SectionNotFound {
                     doc_id,
-                    line_number: ftd::p1::utils::i32_to_usize(line_number),
+                    line_number: header_line_number,
                 })?
                 .0;
 
-            let value = value.join("\n").trim().to_string();
-            if !header_values.is_empty() {
+            let value = (value.0.join("\n").trim().to_string(), value.1);
+            if !header_values.is_empty() || (header_caption.is_some() && !value.0.is_empty()) {
                 let fields = header_values
                     .iter()
                     .map(|(key, (value, ln))| {
                         ftd::p1::Header::kv(*ln, key, None, Some(value.to_string()), None)
                     })
                     .collect();
-                let block_record_header = ftd::p1::Header::block_record_header(
+                section.headers.push(ftd::p1::Header::block_record_header(
                     header_key,
                     header_kind,
                     header_caption,
-                    if value.is_empty() { None } else { Some(value) },
+                    if value.0.is_empty() {
+                        (None, None)
+                    } else {
+                        (Some(value.0), value.1)
+                    },
                     fields,
                     header_condition,
                     header_line_number,
-                );
-                section.headers.push(block_record_header);
+                ));
             } else {
                 section.headers.push(ftd::p1::Header::kv(
-                    ftd::p1::utils::i32_to_usize(line_number),
+                    header_line_number,
                     header_key,
                     header_kind,
-                    if value.is_empty() { None } else { Some(value) },
+                    if value.0.is_empty() {
+                        header_caption
+                    } else {
+                        Some(value.0)
+                    },
                     header_condition,
                 ));
             }

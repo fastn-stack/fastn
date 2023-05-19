@@ -619,7 +619,10 @@ impl VariableValue {
                     }
                     HeaderValues(headers)
                 },
-                body: body.as_ref().map(|b| BodyValue::new(b.as_str(), 0)),
+                body: body
+                    .0
+                    .as_ref()
+                    .map(|b| BodyValue::new(b.as_str(), body.1.unwrap_or(0))),
                 values: vec![],
                 line_number: *line_number,
             },

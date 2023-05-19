@@ -12,7 +12,7 @@ pub struct BlockRecordHeader {
     pub key: String,
     pub kind: Option<String>,
     pub caption: Option<String>,
-    pub body: Option<String>,
+    pub body: (Option<String>, Option<usize>),
     pub fields: Vec<Header>,
     pub condition: Option<String>,
     pub line_number: usize,
@@ -23,7 +23,7 @@ impl BlockRecordHeader {
         key: String,
         kind: Option<String>,
         caption: Option<String>,
-        body: Option<String>,
+        body: (Option<String>, Option<usize>),
         fields: Vec<Header>,
         condition: Option<String>,
         line_number: usize,
@@ -177,7 +177,7 @@ impl Header {
         key: &str,
         kind: Option<String>,
         caption: Option<String>,
-        body: Option<String>,
+        body: (Option<String>, Option<usize>),
         fields: Vec<Header>,
         condition: Option<String>,
         line_number: usize,
@@ -235,7 +235,10 @@ impl Header {
             Header::KV(ftd::p1::header::KV {
                 access_modifier, ..
             }) => access_modifier.clone(),
-            Header::Section(ftd::p1::header::Section { .. }) => AccessModifier::Public,
+            Header::Section(ftd::p1::header::Section { .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { .. }) => {
+                AccessModifier::Public
+            }
         }
     }
 
