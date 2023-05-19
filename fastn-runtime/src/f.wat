@@ -1,3 +1,23 @@
+-- component _main:
+
+-- ftd.column:
+
+-- string message: hello
+-- ftd.text: $message
+
+-- end: ftd.column
+-- end: _main
+
+-- _main:
+
+
+
+
+-- string message: hello
+-- ftd.text: $message
+
+
+
 (module
     (import "fastn" "create_column" (func $create_column (result externref)))
     (import "fastn" "set_column_width_px" (func $set_column_width_px (param externref i32)))
@@ -46,6 +66,11 @@
 
     (func $set_var_value_i32 (param $var_ptr i32) (param $value i32)
         (global.set (local.get $var_ptr) (local.get $value))
+        ;; update data
+        (call $update_data_for_var
+            (global.get (i32.add (local.get $var_ptr) (i32.const 2)))
+        )
+
         ;; notify host that ui has changed
         (call $update_ui_for_var
             (global.get (i32.add (local.get $var_ptr) (i32.const 1)))

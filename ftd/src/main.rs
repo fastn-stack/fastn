@@ -36,7 +36,30 @@ fn t() {
     });
 }
 
+pub fn wasm() {
+    let f = if let Some(f) = std::env::args().find(|arg| arg.ends_with(".ftd")) {
+        f
+    } else {
+        panic!("Please provide a .ftd file");
+    };
+
+    let source = std::fs::read_to_string(&f).expect("Cannot read file");
+    let mut doc =
+        ftd::test_helper::ftd_v2_interpret_helper("foo", source.as_str()).unwrap_or_else(|e| panic!("{:?}", e));
+
+    for thing in ftd::interpreter::default::default_bag().keys() {
+        doc.data.remove(thing);
+    }
+    dbg!(&doc);
+    dbg!(doc.generate_wasm());
+    // generate wasm
+}
+
 pub fn main() {
+    if std::env::args().any(|arg| arg == "--wasm") {
+        return wasm();
+    }
+
     // cargo run --features terminal
     #[cfg(feature = "terminal")]
     if true {
