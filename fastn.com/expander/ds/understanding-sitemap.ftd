@@ -40,6 +40,7 @@ if: { source == "planning" }
 that make up a website.
 
 -- ds.image:
+if: { source == "planning" }
 src: $fastn-assets.files.images.sitemap.index.png
 width: fill-container
 
