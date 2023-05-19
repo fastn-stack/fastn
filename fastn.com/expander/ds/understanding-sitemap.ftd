@@ -10,10 +10,10 @@ aud: Common
 
 Helps learners to understand how to structure their websites
 
-/-- ds.markdown:
+-- ds.markdown:
 if: { source == "default" || source == "build" }
 
-In this video we learn about sitemap
+In this video we learn about `sitemap`
 
 
 -- ds.youtube:
@@ -40,9 +40,11 @@ if: { source == "planning" }
 that make up a website.
 
 -- ds.image:
-if: { source == "planning" }
 src: $fastn-assets.files.images.sitemap.index.png
 width: fill-container
+
+-- ds.markdown:
+if: { source == "planning" }
 
 Welcome to the video. I am Ajit. Today we will learn 
 
@@ -81,11 +83,6 @@ Within each subsection, there are one or more documents or pages organized in a
 `Table of Contents` (TOC) format. The TOC provides a hierarchical structure,
 outlining the various pages or documents within the section or subsection. 
 
-
--- ds.markdown:
-if: { source == "default" || source == "build" }
-
-In this video we will learn about `sitemap`.
 
 
 -- ds.h1: Why `sitemap`?
