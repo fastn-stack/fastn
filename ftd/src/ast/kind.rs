@@ -599,11 +599,11 @@ impl VariableValue {
                 ..
             }) => VariableValue::Record {
                 name: key.to_string(),
-                caption: Box::new(caption.as_ref().map(|c| VariableValue::String {
-                    value: c.to_string(),
-                    line_number: *line_number,
-                    source: ValueSource::Caption,
-                })),
+                caption: Box::new(Some(VariableValue::from_value(
+                    caption,
+                    ftd::ast::ValueSource::Caption,
+                    *line_number,
+                ))),
                 headers: {
                     let mut headers = vec![];
                     for header in fields.iter() {

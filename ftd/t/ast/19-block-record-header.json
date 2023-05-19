@@ -1,0 +1,43 @@
+[
+  {
+    "component-invocation": {
+      "name": "ftd.text",
+      "properties": [
+        {
+          "value": {
+            "string-value": {
+              "value": "red",
+              "line-number": 3,
+              "source": "Default"
+            }
+          },
+          "source": {
+            "header": {
+              "name": "color",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line-number": 3
+        },
+        {
+          "value": {
+            "string-value": {
+              "value": "Hello there",
+              "line-number": 1,
+              "source": "Default"
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line-number": 1
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line-number": 1
+    }
+  }
+]

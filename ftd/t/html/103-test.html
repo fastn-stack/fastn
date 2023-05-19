@@ -6,6 +6,10 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#s": {
+"dark": "yellow",
+"light": "red"
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -755,7 +759,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Hello there</div><div data-id="1:main" style="" class="ft_common ft_row"><div data-id="1,0:main" style="color: rgba(0,0,255,1)" class="ft_common ft_md">Yo there</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">Hello there</div><div data-id="1:main" style="margin: 20px" class="ft_common ft_row"><div data-id="1,0:main" style="box-shadow:  rgba(255,0,0,1) 5px -10px 0px 2px; color: rgba(0,0,255,1)" class="ft_common ft_md">Yo there</div></div></div>
 
 
 <script>
@@ -1953,21 +1957,7 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 
-window.node_change_main = {};
-window.node_change_main["0:main__color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = "red";
-}
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = "green";}
-}
-window.set_value_main = {};
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__color", data);
-};
 
 
 
