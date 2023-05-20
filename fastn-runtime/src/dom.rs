@@ -3,7 +3,10 @@ pub struct Dom {
     pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
     pub children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
     pub root: fastn_runtime::NodeKey,
+    pub store: fastn_runtime::runtime_store::Store,
 }
+
+
 
 impl Dom {
     pub fn new() -> Dom {
@@ -19,6 +22,7 @@ impl Dom {
             nodes,
             root,
             children,
+            store: fastn_runtime::runtime_store::Store::new(),
         }
     }
 
@@ -120,8 +124,11 @@ impl Dom {
         let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
             .expect("cant create engine");
         let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
+        let dom = fastn_runtime::Dom::new();
 
         let mut linker = wasmtime::Linker::new(&engine);
+
+        dom.store.register(&mut linker);
 
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
         linker
@@ -234,9 +241,11 @@ impl Dom {
     }
 }
 
-trait Params {
+pub trait Params {
     fn i32(&self, idx: usize) -> i32;
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
+    fn ptr(&self, idx: usize) -> usize;
+    fn boolean(&self, idx: usize) -> bool;
 }
 
 impl Params for [wasmtime::Val] {
@@ -252,6 +261,21 @@ impl Params for [wasmtime::Val] {
             .data()
             .downcast_ref()
             .unwrap()
+
+    }
+    fn ptr(&self, idx: usize) -> usize {
+        *self[idx]
+            .externref()
+            .unwrap()
+            .expect("externref gone?")
+            .data()
+            .downcast_ref()
+            .unwrap()
+
+    }
+
+    fn boolean(&self, idx: usize) -> bool {
+        self.i32(idx) != 0
     }
 }
 
