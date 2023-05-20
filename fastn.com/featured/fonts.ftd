@@ -1,5 +1,5 @@
 -- import: fastn.com/featured as ft-ui
-
+-- import: fastn-community.github.io/spectrum-ds as ds
 
 
 
@@ -11,7 +11,7 @@
 
 
 
--- my-ds.page: List of fonts
+-- ds.page: List of fonts
 
 We have converted some Google Fonts to fastn package:
 
@@ -19,7 +19,7 @@ We have converted some Google Fonts to fastn package:
 if: { show-grid }
 templates: $font
 
--- end: my-ds.page
+-- end: ds.page
 
 
 
@@ -36,6 +36,7 @@ templates: $font
 template-url: https://fastn-community.github.io/arya-font/
 licence-url: https://github.com/fastn-community/arya-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/arya-font
+screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
 
 `arya-font` font is available and can be used inside `fastn` web packages.
 
@@ -43,6 +44,7 @@ github-url: https://github.com/fastn-community/arya-font
 template-url: https://fastn-community.github.io/blaka-font/
 licence-url: https://github.com/fastn-community/blaka-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/blaka-font
+screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
 
 `blaka-font` font is available and can be used inside `fastn` web packages.
 
@@ -50,6 +52,7 @@ github-url: https://github.com/fastn-community/blaka-font
 template-url: https://fastn-community.github.io/karma-font/
 licence-url: https://github.com/fastn-community/karma-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/karma-font
+screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
 
 `karma-font` font is available and can be used inside `fastn` web packages.
 
@@ -57,6 +60,7 @@ github-url: https://github.com/fastn-community/karma-font
 template-url: https://fastn-community.github.io/khand-font/
 licence-url: https://github.com/fastn-community/khand-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/khand-font
+screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
 
 `khand-font` font is available and can be used inside `fastn` web packages.
 
@@ -64,6 +68,7 @@ github-url: https://github.com/fastn-community/khand-font
 template-url: https://fastn-community.github.io/lato-font/
 licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lato-font
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
 `lato-font` font is available and can be used inside `fastn` web packages.
 
@@ -71,6 +76,7 @@ github-url: https://github.com/fastn-community/lato-font
 template-url: https://fastn-community.github.io/lobster-font/
 licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/lobster-font
+screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
 
 `lobster-font` font is available and can be used inside `fastn` web packages.
 
@@ -78,6 +84,7 @@ github-url: https://github.com/fastn-community/lobster-font
 template-url: https://fastn-community.github.io/opensans-font/
 licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/opensans-font
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
 `opensans-font` font is available and can be used inside `fastn` web packages.
 
@@ -86,6 +93,7 @@ github-url: https://github.com/fastn-community/opensans-font
 template-url: https://fastn-community.github.io/pragati-narrow-font/
 licence-url: https://github.com/fastn-community/pragati-narrow-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/pragati-narrow-font
+screenshot: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
 
 `pragati-narrow-font` font is available and can be used inside `fastn` web
 packages.
@@ -94,6 +102,7 @@ packages.
 template-url: https://fastn-community.github.io/roboto-font/
 licence-url: https://github.com/fastn-community/roboto-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-font
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
 `roboto-font` font is available and can be used inside `fastn` web packages.
 
@@ -101,6 +110,7 @@ github-url: https://github.com/fastn-community/roboto-font
 template-url: https://fastn-community.github.io/roboto-mono-font/
 licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/roboto-mono-font
+screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
 
 `roboto-mono-font` font is available and can be used inside `fastn` web
 packages.
@@ -109,6 +119,7 @@ packages.
 template-url: https://fastn-community.github.io/tiro-font/
 licence-url: https://github.com/fastn-community/tiro-font/blob/main/LICENSE
 github-url: https://github.com/fastn-community/tiro-font
+screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
 
 `tiro-font` font is available and can be used inside `fastn` web packages.
 

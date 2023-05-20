@@ -1,10 +1,10 @@
 -- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds as ds
 
 
 
 
-
--- my-ds.page: Components Library
+-- ds.page: Components Library
 
 We haver developed many components using our `FTD` language. You can use these
 components on your `FASTN` package. Click on each component to see how to use it.
@@ -12,7 +12,7 @@ components on your `FASTN` package. Click on each component to see how to use it
 -- ft-ui.grid-view:
 templates: $bling
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

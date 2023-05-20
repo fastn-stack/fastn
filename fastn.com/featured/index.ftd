@@ -1,16 +1,15 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+
+
 -- boolean show-grid: true
 -- boolean show-list: false
 
 
 
 
--- my-ds.page: Featured components
-widthfill: true
-sidebar: false
+-- ds.page: Featured components
 
-We have designed and developed below components using `ftd` and `fastn` package.
- 
-Use them for writing e-books, blogs, web technical documentation etc. 
+We have designed and developed below components using `fastn`. 
 
 These components can be used inside your personal web sites or organizational static 
 web sites developed using `fastn` package.
@@ -18,11 +17,15 @@ web sites developed using `fastn` package.
 -- grid-view: Documentation Sites:
 if: { show-grid }
 templates: $doc-sites
+more-link-text: View all
 more-link: /featured/doc-sites/
 
-Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
-officia consequat duis enim velit mollit. Exercitation veniam consequat sunt
-nostrud amet.
+`doc-site` will help you create a beautiful documentation site in no time. 
+
+It
+provides out-of-the-box documentation features that can be used to create any
+kind of site(personal website, blog, etc).
+
 
 /-- grid-view: Resumes:
 if: { show-grid }
@@ -32,6 +35,7 @@ more-link: /featured/resumes/
 -- grid-view: Component Libraries:
 if: { show-grid }
 templates: $bling
+more-link-text: View all
 more-link: /featured/components-library/
 
 Fastn components library is typically includes a variety of components such as
@@ -41,19 +45,25 @@ own styles, behavior, and functionality.
 -- grid-view: Color Schemes:
 if: { show-grid }
 templates: $schemes
+more-link-text: View all
 more-link: /featured/cs/
 
 Add warmth and energy to your fastn web site designs with our fastn Color
 Schemes.
 
 
-/-- grid-view: Fonts:
+-- grid-view: Font Typographies:
 if: { show-grid }
-templates: $font
-more-link-text: View all
-more-link: /featured/fonts/
+templates: $fonts
+more-link-text: View all 
+more-link: /featured/fonts-typography/
 
--- end: my-ds.page
+We have converted few Google Fonts to fastn typography packages, which are ready
+to use as our fastn default inherited-types for your fastn web projects.
+
+
+
+-- end: ds.page
 
 
 
@@ -68,18 +78,16 @@ more-link: /featured/fonts/
 optional caption title:
 template list templates:
 optional string more-link: 
-string more-link-text: View More 
+optional string more-link-text: 
 boolean $hover: false
 optional body body:
 
 -- ftd.column:
 width: fill-container
 padding-top.px: 8
-align-content: center
 
 -- ftd.row:
 width: fill-container
-align-content: center
 
 -- ftd.desktop:
 
@@ -104,6 +112,7 @@ margin-top.px: 12
 -- end: ftd.mobile
 
 -- ftd.row:
+if: { grid-view.more-link-text != NULL}
 align-content: center
 padding-right.px: 20
 padding-right.px if { ftd.device != "mobile" }: 0
@@ -111,7 +120,6 @@ spacing.fixed.px: 6
 link: $grid-view.more-link
 
 -- ftd.text: $grid-view.more-link-text
-if: { grid-view.more-link != NULL}
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong
 $on-mouse-enter$: $ftd.set-bool($a=$grid-view.hover, v = true)
@@ -132,10 +140,11 @@ width: auto
 
 -- ftd.text:
 if: { grid-view.body != NULL }
-text: $grid-view.body
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 margin-top.px: 16
+
+$grid-view.body
 
 -- ftd.desktop:
 
@@ -201,7 +210,7 @@ boolean is-last:
 boolean $github-hover: false
 boolean $mit-hover: false
 optional body body:
-ftd.image-src screenshot:
+optional ftd.image-src screenshot:
 
 -- ftd.column:
 width.fixed.percent if { ftd.device != "mobile" }: 31.58
@@ -212,6 +221,7 @@ link: $grid-of-items.template-url
 open-in-new-tab: true
 
 -- ftd.image:
+if: { $grid-of-items.screenshot != NULL }
 src: $grid-of-items.screenshot
 width: fill-container
 height: auto
@@ -272,7 +282,7 @@ text-align: center
 -- record template:
 caption title:
 string template-url: 
-ftd.image-src screenshot:
+optional ftd.image-src screenshot:
 optional string licence-url: 
 optional string github-url:
 optional body body: 
@@ -396,41 +406,55 @@ can be used inside `ftd` web packages.
 
 
 
--- template list font:
+-- template list fonts:
 
--- template: Opensans
-template-url: https://fastn-community.github.io/opensans-font/
-licence-url: https://github.com/fastn-community/opensans-font/blob/main/LICENSE
-github-url: https://github.com/fastn-community/opensans-font
+-- template: Inter Typography
+template-url: https://fastn-community.github.io/inter-typography/
+licence-url: https://github.com/fastn-community/inter-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/inter-typography
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
-`fastn-community.github.io/opensans-font` font is available and can be used
-inside `ftd` web packages.
+`inter-font` typography is available and can be used inside `fastn` web
+packages.
 
--- template: Lato
-template-url: https://fastn-community.github.io/lato-font/
-licence-url: https://github.com/fastn-community/lato-font/blob/main/LICENSE
-github-url: https://github.com/fastn-community/lato-font
+-- template: Lato Typography
+template-url: https://fastn-community.github.io/lato-typography/
+licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/lato-typography
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 
-`fastn-community.github.io/lato-font` font is available and can be used inside
-`ftd` web packages.
+`lato-font` typography is available and can be used inside `fastn` web
+packages.
 
--- template: Roboto Mono
-template-url: https://fastn-community.github.io/roboto-mono-font/
-licence-url: https://github.com/fastn-community/roboto-mono-font/blob/main/LICENSE
-github-url: https://github.com/fastn-community/roboto-mono-font
+-- template: Opensans Typography
+template-url: https://fastn-community.github.io/opensans-typography/
+licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/opensans-typography
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
-`fastn-community.github.io/roboto-mono-font` font is available and can be used
-inside `ftd` web packages.
+`opensans-font` typography is available and can be used inside `fastn` web
+packages.
 
--- template: Lobster
-template-url: https://fastn-community.github.io/lobster-font/
-licence-url: https://github.com/fastn-community/lobster-font/blob/main/LICENSE
-github-url: https://github.com/fastn-community/lobster-font
 
-`fastn-community.github.io/lobster-font` font is available and can be used
-inside `ftd` web packages.
+-- template: Roboto Typography
+template-url: https://fastn-community.github.io/roboto-typography/
+licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/roboto-typography
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
--- end: font
+`roboto-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- template: Roboto Mono Typography
+template-url: https://fastn-community.github.io/roboto-mono-typography/
+licence-url: https://github.com/fastn-community/roboto-mono-typography/blob/main/LICENSE.md
+github-url: https://github.com/fastn-community/roboto-mono-typography
+screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
+
+`roboto-mono-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- end: fonts
 
 
 

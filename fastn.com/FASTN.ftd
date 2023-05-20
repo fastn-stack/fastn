@@ -25,6 +25,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/banner
 -- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/spectrum-ds
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.com/FASTN/my-ds as my-ds
@@ -359,7 +360,7 @@ favicon: /-/fastn.com/images/favicon.svg
 - Documentation Sites: /featured/doc-sites/
 - Color Schemes: /featured/cs/
 - Component Libraries: /featured/components-library/
-- Fonts: /featured/fonts/
+;; - Fonts: /featured/fonts/
 - Font Typographies: /featured/fonts-typography/
 
 ## Deploy: /deploy/
