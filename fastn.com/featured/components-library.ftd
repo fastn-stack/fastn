@@ -1,10 +1,27 @@
 -- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/footer
 
 
 
 
 -- ds.page: Components Library
+show-footer: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+
+-- end: ds.page.footer
+
+-- ds.page.body:
 
 We haver developed many components using our `FTD` language. You can use these
 components on your `FASTN` package. Click on each component to see how to use it.

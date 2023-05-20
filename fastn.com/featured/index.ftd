@@ -1,4 +1,5 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/footer
 
 
 -- boolean show-grid: true
@@ -8,6 +9,22 @@
 
 
 -- ds.page: Featured components
+show-footer: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+
+-- end: ds.page.footer
+
+-- ds.page.body:
 
 We have designed and developed below components using `fastn`. 
 
