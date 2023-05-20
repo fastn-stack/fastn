@@ -158,7 +158,6 @@ site-name: NULL
 logo-height: 38
 logo-width: 120
 
-
 -- ftd.column:
 width: fill-container
 height: fill-container

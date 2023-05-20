@@ -1,10 +1,11 @@
 -- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds as ds
 
 
 
 
 
--- my-ds.page: Color schemes
+-- ds.page: Color schemes
 
 We have designed and developed below color schemes. You can use them
 to change your `FTD` web site color scheme. 
@@ -12,7 +13,7 @@ to change your `FTD` web site color scheme.
 -- ft-ui.grid-view:
 templates: $schemes
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

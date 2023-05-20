@@ -1,4 +1,5 @@
 -- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds as ds
 
 
 
@@ -11,7 +12,7 @@
 
 
 
--- my-ds.page: Documentation site themes
+-- ds.page: Documentation site themes
 
 We have designed and developed below documentation site themes. You can use them
 for writing books, blog, technical documentation etc. These themes can be used 
@@ -21,7 +22,7 @@ as personal web sites or organizational static web sites.
 if: { show-grid }
 templates: $doc-sites
 
--- end: my-ds.page
+-- end: ds.page
 
 
 
@@ -35,14 +36,13 @@ templates: $doc-sites
 -- ft-ui.template list doc-sites:
 
 -- ft-ui.template: Doc-site
-template-url: http://fifthtry.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.png
-licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
-github-url: https://github.com/FifthTry/doc-site/
+template-url: https://fastn-community.github.io/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+github-url: https://github.com/fastn-community/doc-site
 
-`fifthtry.github.io/doc-site/` is a grey color theme. Most of our websites are
-using `doc-site` as base theme. Click on image OR package name to view it's working
-demo.
+`doc-site` uses fastn default color theme. Most of our websites are using
+`doc-site` as base theme.
 
 /-- ft-ui.template: Blue Sapphire
 template-url: https://fifthtry.github.io/Blue-Sapphire-Template/

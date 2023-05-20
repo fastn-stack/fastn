@@ -1,10 +1,10 @@
 -- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds as ds
 
 
 
 
-
--- my-ds.page: Components Library
+-- ds.page: Components Library
 
 We haver developed many components using our `FTD` language. You can use these
 components on your `FASTN` package. Click on each component to see how to use it.
@@ -12,7 +12,7 @@ components on your `FASTN` package. Click on each component to see how to use it
 -- ft-ui.grid-view:
 templates: $bling
 
--- end: my-ds.page
+-- end: ds.page
 
 
 
@@ -26,13 +26,13 @@ templates: $bling
 -- ft-ui.template list bling:
 
 -- ft-ui.template: Bling
-template-url: https://fifthtry.github.io/bling/
+template-url: https://fastn-community.github.io/bling/
 screenshot: $fastn-assets.files.images.featured.bling-components.png
-licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
-github-url: https://github.com/FifthTry/bling/
+licence-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+github-url: https://github.com/fastn-community/bling
 
-`fifthtry.github.io/bling` is develoed and designed with various components which 
-can be used inside `FTD` web packages.
+`bling` is developed and designed with various components which can be used
+inside `fastn` web packages.
 
 /-- ft-ui.template: Image Gallery
 template-url: https://fifthtry.github.io/imago-gallery-ig/
