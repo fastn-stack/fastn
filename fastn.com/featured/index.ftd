@@ -19,7 +19,6 @@ logo-width: 120
 colors: $dark-flame-cs.main
 types: $typo.types
 
-
 -- ds.page.footer:
 
 -- footer.social-sideline-footer:
@@ -29,7 +28,6 @@ site-url: /
 twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
-
 
 -- end: ds.page.footer
 
@@ -48,8 +46,7 @@ more-link: /featured/doc-sites/
 
 `doc-site` will help you create a beautiful documentation site in no time. 
 
-It
-provides out-of-the-box documentation features that can be used to create any
+It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
 
 
@@ -86,8 +83,6 @@ more-link: /featured/fonts-typography/
 
 We have converted few Google Fonts to fastn typography packages, which are ready
 to use as our fastn default inherited-types for your fastn web projects.
-
-
 
 -- end: ds.page
 
