@@ -7,6 +7,10 @@
 
 -- ds.page: Components Library
 show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
 
 -- ds.page.footer:
 
