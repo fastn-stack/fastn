@@ -18,6 +18,7 @@ mod dom;
 mod element;
 mod event;
 mod operation;
+mod runtime_store;
 // pub mod wasm;
 
 pub use control::ControlFlow;
