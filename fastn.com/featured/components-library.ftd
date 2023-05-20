@@ -1,6 +1,8 @@
 -- import: fastn.com/featured as ft-ui
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/footer
+-- import: fifthtry.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
 
 
 
@@ -11,6 +13,8 @@ site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
 logo-height: 38
 logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
 
 -- ds.page.footer:
 
