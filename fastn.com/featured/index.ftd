@@ -109,6 +109,8 @@ padding-top.px: 8
 
 -- ftd.row:
 width: fill-container
+align-content: center
+margin-top.px if { ftd.device == "mobile" }: 24
 
 -- ftd.desktop:
 
@@ -128,15 +130,13 @@ if: { grid-view.title != NULL }
 role: $inherited.types.copy-large
 color: $inherited.colors.text
 width: fill-container
-margin-top.px: 12
+align-self: center
 
 -- end: ftd.mobile
 
 -- ftd.row:
 if: { grid-view.more-link-text != NULL}
 align-content: center
-padding-right.px: 20
-padding-right.px if { ftd.device != "mobile" }: 0
 spacing.fixed.px: 6
 link: $grid-view.more-link
 
