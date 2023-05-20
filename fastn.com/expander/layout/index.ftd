@@ -40,6 +40,7 @@ src: $fastn-assets.files.expander.layout.intro.jpg
 
 
 -- ds.h2: Holy-grail layout
+if: { source == "planning" }
 
 Holy Grail is a layout pattern that’s very common on the web. 
 
@@ -55,6 +56,19 @@ It consists of:
 The header and footer has padding of 35 and 20 pixel respectively.
 To the two sidebars we will apply width of 25% so the remaining 50% will be for 
 the main content. 
+
+-- ds.h2: Holy-grail layout
+if: { source == "default" }
+
+The most commonly used layout for websites is the `holy-grail` layout. This
+layout is designed to optimize the use of screen space by dividing the webpage
+into three main sections: 
+
+- a header at the top 
+- a main content area in the
+center, and sidebars on both sides.
+- a footer
+
 
 -- ds.image:
 src: $fastn-assets.files.expander.layout.layout.png

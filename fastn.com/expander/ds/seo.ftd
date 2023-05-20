@@ -1,0 +1,296 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+
+-- my-ds.page: SEO
+
+-- lib.video-audience: How to optimize your website
+if: { source == "planning" }
+owner: Ajit
+aud: Common
+
+Helps learners to optimize their websites
+
+
+-- ds.h1: Search Engine Optimization (SEO)
+if: { source == "default" || source == "build" }
+
+In this video we will see how to implement SEO features to improve a website's 
+visibility.
+
+/-- ds.youtube:
+if: { source == "default" || source == "build" }
+v: 
+
+-- ds.h1: Search Engine Optimization (SEO)
+if: { source == "planning" }
+
+-- ds.markdown:
+
+SEO is the practice of improving a website's visibility and ranking in search
+engine results pages.
+
+It involves optimizing various aspects of a website to make it more appealing
+to search engines and users.
+
+
+-- ds.h3: Introduction
+if: { source == "planning" }
+
+Welcome to the video, this video will give you a comprehensive overview of
+SEO, including
+- what it is
+- why it's important
+- it's benefits
+- how to use it, to optimize your website
+
+
+
+
+-- ds.h1: SEO through `page` component of `doc-site`
+
+SEO is the practice of improving a website's visibility and ranking in search
+engine results pages.
+
+It involves optimizing various aspects of a website to make it more appealing
+to search engines and users.
+
+
+In the `doc-site`, we can do SEO by 
+
+- modifying the document title
+- by adding a page description
+- as well as, by adding the document-image
+
+
+-- ds.h2: How to customize document title
+
+The `page` component's title by default becomes the document title unless we
+modify the title by using  the `document-title` property to the page component.
+
+
+-- ds.code: document title same as page title
+lang: ftd
+
+\-- ds.page: This is page title
+
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.basic-og-title.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+
+-- ds.markdown:
+
+When we give add `document-title` property, the page title can have custom
+title, which is better for SEO.
+
+The custom title given in this property is added into the meta tag  called 
+`og-title`.
+
+-- ds.code: custom document title
+lang: ftd
+
+\-- ds.page: This is page title
+document-title: Welcome!	 		;;<hl>
+
+
+-- ds.markdown:
+
+**Output:**
+
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.customized-og-title.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.h2: How to add page description
+
+`title` is one way to do SEO. In the `page` component if we add another 
+property called `document-description` then that description will be added 
+into meta-tag called `og-description`. Also, the same description adds to the 
+`twitter-description` tag.
+
+If you notice, other than `og-title` there is no `og-description` or 
+`twitter-description` for social media.
+
+
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.no-og-descp.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.markdown:
+
+To give a short and eye-catching description for social media, we write:
+
+-- ds.code: to give a social media description
+lang: ftd
+
+\-- ds.page: This is page title
+document-title: Welcome!
+document-description: Learn how to do SEO!	 		;;<hl>
+
+-- ds.markdown:
+
+**Output:**
+
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.og-descp.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.h2: How to add page document-image
+
+Similarly, we can give a specific image that we want to share when the URL is
+shared in the social media platforms.
+
+For the same, in the `page` component of doc-site, we add another property 
+called `document-image`.
+
+The image provided to this property will be added into the meta tag called 
+`og-image` as well as `twitter-image`.
+
+**Note:** By design, you can pick only one image for social media preview.
+  Therefore if you want to use a file using `assets` then after the file
+  extension, we need to suffix it with `.light`.
+
+So it goes like this:
+
+-- ds.code: to give a social media image
+lang: ftd
+
+\-- ds.page: This is page title
+document-title: Welcome!
+document-description: Learn how to do SEO!
+document-image: $assets.files.images.seo-meta.png.light  			;;<hl>
+
+
+-- ds.markdown:
+
+**Output:**
+
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.og-image.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.markdown:
+
+Now if you publish this package and share the URL on social media it will take
+these custom title, description and image.
+
+
+-- ds.h3: Examples
+
+-- ds.markdown:
+
+**LinkedIn**:
+
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.social-1.png
+border-width.px: 2
+border-radius.px: 10
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.markdown:
+
+**Twitter**:
+
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.social-2.png
+border-width.px: 2
+border-radius.px: 10
+width: fill-container
+border-color: $inherited.colors.border
+
+
+-- ds.markdown:
+
+**Slack**:
+
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.social-3.png
+border-width.px: 2
+border-radius.px: 10
+width: fill-container
+border-color: $inherited.colors.border
+
+
+
+
+
+
+
+
+/-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+
+
+
+/-- ds.markdown:
+if: { source == "planning" }
+
+
+
+
+/-- ds.code:
+lang: ftd
+
+
+
+
+/-- ds.markdown:
+
+
+
+/-- ds.markdown:
+if: { source == "planning" }
+
+
+
+-- ds.h1: Closing Remarks 
+if: { source == "planning" }
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website. 
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+our fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { source == "default" || source == "build" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star ⭐ on 
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+on [Discord](/discord/).
+
+
+-- ds.h1: Final Video
+if: { source == "planning" }
+
+/-- ds.youtube:
+if: { source == "planning" }
+v: 
+
+-- end: my-ds.page 
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source
+    
+

@@ -8,8 +8,8 @@ v: Hf7XZDP-64M
 
 -- ds.markdown:
 
-- Create a [mutable](https://fastn.com/ftd/variables/#mutable) `boolean
-variable` inside the component.
+- Create a [mutable](/variables/#mutable) `boolean variable` inside the 
+component.
 
 -- ds.code: Boolean variable
 lang: ftd

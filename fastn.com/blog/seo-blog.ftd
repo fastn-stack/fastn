@@ -1,0 +1,95 @@
+-- my-ds.page: Search Engine Optimization (SEO)
+
+If you want that your website or the information you put on your webpage gets a 
+larger audience and it comes up in search engine results pages you need some 
+level of Search Engine optimization(SEO). 
+
+-- ds.h1: What is SEO
+
+SEO is used to enhance a website's organic (non-paid) visibility in search
+engine results. It involves optimizing both on-page elements (content, HTML,
+structure) and off-page factors(backlinks, social signals) to improve rankings
+and drive targeted traffic to a website.
+
+
+-- ds.h1: Why is SEO important
+
+SEO is crucial because search engines are the primary method people use to find
+information, products, and services online. Higher rankings lead to increased
+visibility, more organic traffic, and potential conversions. By optimizing your
+website for search engines, you can reach a wider audience and compete
+effectively with other websites.
+
+
+-- ds.h1: Benefits of SEO:
+
+SEO encompasses a range of techniques that helps in following ways:
+
+- **Increased organic traffic**: SEO helps improve your website's visibility,
+    leading to higher organic traffic from search engines.
+
+- **Better user experience**: SEO involves optimizing website elements that
+    enhance user experience, such as page speed, mobile-friendliness, and easy
+    navigation.
+
+- **Enhanced credibility and trust**: Higher search engine rankings instill
+    confidence and trust in users, as they often perceive top-ranked websites
+    as more reputable.
+
+- **Cost-effective**: SEO is a long-term strategy that yields sustainable
+    results without requiring continuous investment in paid advertising.
+
+
+-- ds.h1: How to use SEO
+
+There are various SEO techniques to improve the ranking of the page, like:
+
+- **Keyword research**: Identify various keywords and phrases that users are
+    likely to search for when looking for information related to your website.
+
+- **On-page optimization**: Optimize your website's content, Open-graph(og) 
+    meta tags, headings, URLs and inernal linking structure to align with 
+    targeted keywords.
+
+- **Off-page optimization**: Build high-quality backlinks from reputable
+    websites, engage in social media promotion, and encourage user-generated
+    content.
+
+- **Technical SEO**: Ensure proper website indexing, sitemaps, website speed
+    optimization, mobile-friendliness etc.
+
+- **Content creation**: Create high-quality, informative, and engaging content
+    that incorporates targeted keywords and addresses user intent.
+
+- **Optimizing User-experience**: Improve website usability, page loading 
+	speed, mobile responsiveness, and navigation to enhance user experience. 
+
+
+-- ds.markdown:
+
+SEO is a on-going process instead of one-time optimization. With duration
+URLs are changed, meta tags get outdated or data needs to be updated.
+Therefore, conducting regular SEO audits to identify areas that can be improved
+must be a practice to keep up the changing world.
+
+
+-- ds.h1: How to buzz on Social Media
+
+`Open-graph meta tags` (og-tags) is key to make your content more clickable,
+shareable, and noticeable on social-media.
+
+-- ds.h2: Open-graph Meta tags
+
+`og-tags` take over the control of how URLs are displayed when shared on
+social-media.
+
+They are part of [Open Graph protocol](https://ogp.me/) that are used by social
+media sites like Facebook, LinkedIn and Twitter (unless there is a dedicated
+twitter tag).
+
+
+
+
+
+
+-- end: my-ds.page

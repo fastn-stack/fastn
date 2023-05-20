@@ -9,7 +9,7 @@ id: self-ref-validity
 While assigning values to self-referencing properties, avoid assigning the same
 value to both the self-referencing property and the referred property. 
 
-For example: [`ftd.color`](https://fastn.com/ftd/built-in-types/#ftd-color)
+For example: [`ftd.color`](/built-in-types/#ftd-color)
 
 -- ds.code: Not recommended
 lang: ftd
