@@ -3,7 +3,7 @@ pub struct Dom {
     pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
     pub children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
     pub root: fastn_runtime::NodeKey,
-    pub store: fastn_runtime::runtime_store::Store,
+    pub store: fastn_runtime::runtime_store::Memory,
 }
 
 
@@ -22,7 +22,7 @@ impl Dom {
             nodes,
             root,
             children,
-            store: fastn_runtime::runtime_store::Store::new(),
+            store: fastn_runtime::runtime_store::Memory::new(),
         }
     }
 
