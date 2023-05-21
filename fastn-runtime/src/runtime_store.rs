@@ -1,12 +1,44 @@
-pub struct Store {
-    booleans: Vec<bool>,
-
+pub struct Memory {
+    stack: Vec<Frame>,
+    booleans: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
+    boolean_vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<fastn_runtime::PointerKey>>,
+    pointer_deps: slotmap::SecondaryMap<fastn_runtime::PointerKey, Vec<SDep>>,
+    dom_pointers: slotmap::SecondaryMap<fastn_runtime::PointerKey, bool>,
 }
 
-impl Store {
-    pub fn new() -> Store {
-        Store {
-            booleans: Vec::new(),
+pub struct SDep {
+    stable: fastn_runtime::PointerKey,
+    first_link: fastn_runtime::PointerKey,
+    source: fastn_runtime::PointerKey,
+}
+
+
+struct S {}
+
+pub struct Frame {
+    booleans: Vec<fastn_runtime::PointerKey>,
+    boolean_vec: Vec<fastn_runtime::PointerKey>,
+}
+
+impl Memory {
+    pub fn attach_to_dom(&mut self, _dom: fastn_runtime::PointerKey, _ptr: fastn_runtime::PointerKey) {
+        todo!()
+    }
+
+    pub fn attach(&mut self, _a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
+        let _a_deps = match self.s_deps.get(a) {
+            None => return,
+            Some(v) => v,
+        };
+
+        todo!()
+    }
+
+    pub fn new() -> Memory {
+        Memory {
+            booleans: slotmap::SlotMap::with_key(),
+            stack: Vec::new(),
+            boolean_vec: slotmap::SlotMap::with_key(),
         }
     }
 

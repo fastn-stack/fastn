@@ -29,6 +29,7 @@ pub use event::Event;
 pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
+slotmap::new_key_type! { pub struct PointerKey; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]
