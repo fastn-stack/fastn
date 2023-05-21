@@ -1,5 +1,9 @@
 pub struct Memory {
     stack: Vec<Frame>,
+    r_2: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 2]>,
+    o_2: slotmap::SlotMap<fastn_runtime::PointerKey, (u8, [fastn_runtime; 2])>,
+    a_3: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 3]>,
+    a_20: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 20]>,
     booleans: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
     boolean_vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<fastn_runtime::PointerKey>>,
     pointer_deps: slotmap::SecondaryMap<fastn_runtime::PointerKey, Vec<SDep>>,
