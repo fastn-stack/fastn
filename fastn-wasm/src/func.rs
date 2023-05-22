@@ -39,6 +39,10 @@ impl Func {
             s.push_str(&ast.to_wat());
         }
         s.push_str(")");
+        #[cfg(test)]
+        {
+            s = wasmfmt::fmt(&s, wasmfmt::Options {resolve_names: false}).replace("\t", "    ");
+        }
         s
     }
 }
@@ -47,14 +51,25 @@ impl Func {
 mod test {
     #[test]
     fn test() {
-        assert_eq!(fastn_wasm::Func::default().to_wat(), "(func)");
+        assert_eq!(
+            fastn_wasm::Func::default().to_wat(),
+            indoc::indoc!(r#"
+                (module
+                    (func)
+                )
+            "#)
+        );
         assert_eq!(
             fastn_wasm::Func {
                 name: Some("foo".to_string()),
                 ..Default::default()
             }
             .to_wat(),
-            "(func $foo)"
+            indoc::indoc!(r#"
+                (module
+                    (func $foo)
+                )
+            "#)
         );
         assert_eq!(
             fastn_wasm::Func {
@@ -62,7 +77,11 @@ mod test {
                 ..Default::default()
             }
             .to_wat(),
-            r#"(func (export "foo"))"#
+            indoc::indoc!(r#"
+                (module
+                    (func (export "foo"))
+                )
+            "#)
         );
         assert_eq!(
             fastn_wasm::Func {
@@ -71,7 +90,11 @@ mod test {
                 ..Default::default()
             }
             .to_wat(),
-            r#"(func $foo (export "foo"))"#
+            indoc::indoc!(r#"
+                (module
+                    (func $foo (export "foo"))
+                )
+            "#)
         );
         assert_eq!(
             fastn_wasm::Func {
@@ -79,7 +102,11 @@ mod test {
                 ..Default::default()
             }
             .to_wat(),
-            "(func (param i32))"
+            indoc::indoc!(r#"
+                (module
+                    (func (param i32))
+                )
+            "#)
         );
         assert_eq!(
             fastn_wasm::Func {
@@ -87,7 +114,11 @@ mod test {
                 ..Default::default()
             }
             .to_wat(),
-            "(func (param i32) (param i64))"
+            indoc::indoc!(r#"
+                (module
+                    (func (param i32 i64))
+                )
+            "#)
         );
         assert_eq!(
             fastn_wasm::Func {
