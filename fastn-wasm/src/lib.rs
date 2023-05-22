@@ -4,12 +4,14 @@ mod ast;
 // mod encoder;
 mod expression;
 mod func;
+mod import;
 mod pl;
 mod ty;
 
 pub use ast::*;
 pub use expression::Expression;
-pub use func::Func;
+pub use func::{Func, FuncDecl};
+pub use import::{Import, ImportDesc};
 pub use pl::PL;
 pub use ty::Type;
 

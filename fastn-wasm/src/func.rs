@@ -39,17 +39,38 @@ impl Func {
             s.push_str(&ast.to_wat());
         }
         s.push_str(")");
-        #[cfg(test)]
-        {
-            s = wasmfmt::fmt(
-                &s,
-                wasmfmt::Options {
-                    resolve_names: false,
-                },
-            )
-            .replace("\t", "    ");
-        }
+
         s
+    }
+
+    #[cfg(test)]
+    pub fn to_wat_formatted(&self) -> String {
+        wasmfmt::fmt(
+            &self.to_wat(),
+            wasmfmt::Options {
+                resolve_names: false,
+            },
+        )
+        .replace("\t", "    ")
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct FuncDecl {
+    pub name: Option<String>,
+    pub params: Vec<fastn_wasm::PL>,
+    pub result: Option<fastn_wasm::Type>,
+}
+
+impl FuncDecl {
+    pub fn to_wat(&self) -> String {
+        fastn_wasm::Func {
+            name: self.name.to_owned(),
+            params: self.params.to_owned(),
+            result: self.result.to_owned(),
+            ..Default::default()
+        }
+        .to_wat()
     }
 }
 
@@ -58,7 +79,7 @@ mod test {
     #[test]
     fn test() {
         assert_eq!(
-            fastn_wasm::Func::default().to_wat(),
+            fastn_wasm::Func::default().to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -72,7 +93,7 @@ mod test {
                 name: Some("foo".to_string()),
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -86,7 +107,7 @@ mod test {
                 export: Some("foo".to_string()),
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -101,7 +122,7 @@ mod test {
                 export: Some("foo".to_string()),
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -115,7 +136,7 @@ mod test {
                 params: vec![fastn_wasm::Type::I32.into()],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -129,7 +150,7 @@ mod test {
                 params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I64.into()],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -152,7 +173,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -175,7 +196,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -199,7 +220,7 @@ mod test {
                 },],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -215,7 +236,7 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -239,7 +260,7 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![],
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -263,7 +284,7 @@ mod test {
                 }],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -302,7 +323,7 @@ mod test {
                 }],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
@@ -362,7 +383,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat(),
+            .to_wat_formatted(),
             indoc::indoc!(
                 r#"
                 (module
