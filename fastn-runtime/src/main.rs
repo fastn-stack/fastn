@@ -60,5 +60,5 @@ fn create_module() -> Vec<u8> {
         result: None,
         body: vec![],
     })];
-    fastn_wasm::encode(m)
+    fastn_wasm::encode(&m).into_bytes()
 }
