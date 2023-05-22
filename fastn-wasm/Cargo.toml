@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 indoc.workspace = true
+
+[dev-dependencies]
+wasmfmt.workspace = true

@@ -48,6 +48,7 @@ ftd = { path = "../ftd" }
 futures = "0.3"
 home = "0.5"
 ignore = "0.4"
+wasmfmt = "0.2"
 include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
