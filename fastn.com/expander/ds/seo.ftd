@@ -45,7 +45,6 @@ SEO, including
 
 
 
-
 -- ds.h1: SEO through `page` component of `doc-site`
 
 SEO is the practice of improving a website's visibility and ranking in search
@@ -84,8 +83,8 @@ border-color: $inherited.colors.border
 When we give add `document-title` property, the page title can have custom
 title, which is better for SEO.
 
-The custom title given in this property is added into the meta tag  called 
-`og-title`.
+The custom title given in this property is added into the meta tag called 
+`og-title` as well as the `<title>` tag.
 
 -- ds.code: custom document title
 lang: ftd
@@ -109,8 +108,8 @@ border-color: $inherited.colors.border
 
 `title` is one way to do SEO. In the `page` component if we add another 
 property called `document-description` then that description will be added 
-into meta-tag called `og-description`. Also, the same description adds to the 
-`twitter-description` tag.
+into meta-tag called `og-description` as well as the `description` tag. Also, 
+the same description adds to the `twitter-description` tag.
 
 If you notice, other than `og-title` there is no `og-description` or 
 `twitter-description` for social media.
@@ -154,7 +153,7 @@ For the same, in the `page` component of doc-site, we add another property
 called `document-image`.
 
 The image provided to this property will be added into the meta tag called 
-`og-image` as well as `twitter-image`.
+`og-image` tag and `twitter-image`.
 
 **Note:** By design, you can pick only one image for social media preview.
   Therefore if you want to use a file using `assets` then after the file
