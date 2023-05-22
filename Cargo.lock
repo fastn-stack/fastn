@@ -1862,6 +1862,7 @@ dependencies = [
  "async-trait",
  "bytemuck",
  "env_logger",
+ "fastn-wasm",
  "log",
  "once_cell",
  "serde",
@@ -1869,10 +1870,16 @@ dependencies = [
  "taffy 0.3.12",
  "thiserror",
  "tokio",
- "wasm-encoder",
  "wasmtime",
  "wgpu",
  "winit",
+]
+
+[[package]]
+name = "fastn-wasm"
+version = "0.1.0"
+dependencies = [
+ "wasm-encoder",
 ]
 
 [[package]]
@@ -2039,6 +2046,7 @@ dependencies = [
  "dioxus-native-core",
  "dioxus-native-core-macro",
  "fastn-runtime",
+ "fastn-wasm",
  "format_num",
  "futures",
  "include_dir",

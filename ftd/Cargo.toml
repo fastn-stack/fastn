@@ -14,7 +14,7 @@ homepage = "https://fastn.io/ftd/"
 
 [features]
 default = []
-native-rendering = ["taffy", "crossterm", "fastn-runtime"]
+native-rendering = ["taffy", "crossterm", "fastn-runtime", "fastn-wasm"]
 terminal = ["rink", "dioxus-native-core", "dioxus-native-core-macro", "dioxus-html", "futures", "tokio", "rustc-hash"]
 
 [dependencies]
@@ -28,6 +28,7 @@ once_cell.workspace = true
 regex.workspace = true
 format_num.workspace = true
 fastn-runtime = { path = "../fastn-runtime", optional = true }
+fastn-wasm = { path = "../fastn-wasm", optional = true }
 slug.workspace = true
 include_dir.workspace = true
 indoc.workspace = true

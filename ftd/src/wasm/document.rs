@@ -1,10 +1,10 @@
 impl ftd::interpreter::Document {
-    pub fn generate_wasm(&self) -> Vec<ftd::wasm::Ast> {
+    pub fn generate_wasm(&self) -> Vec<fastn_wasm::Ast> {
         let mut globals = std::collections::HashMap::new();
 
         let mut wasm = vec![];
         // handle all global variables
-        let mut main = ftd::wasm::Func {
+        let mut main = fastn_wasm::Func {
             name: Some("main".to_string()),
             export: Some("main".to_string()),
             params: vec![],
