@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 extern crate self as fastn_runtime;
 
 /// fastn-surface is a way to describe UI in platform independent way
@@ -11,6 +13,7 @@ extern crate self as fastn_runtime;
 /// event includes data about the event.
 #[cfg(feature = "native")]
 pub mod wgpu;
+
 
 mod control;
 mod document;

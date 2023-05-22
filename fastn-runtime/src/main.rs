@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
     // check if --wasm is passed on cli
-    let wat = if std::env::args().any(|arg| arg == "--stdin") {
+    let _wat = if std::env::args().any(|arg| arg == "--stdin") {
         use std::io::Read;
 
         let mut buffer = String::new();
@@ -48,19 +48,17 @@ async fn main() {
     // fastn_runtime::terminal::draw(doc).await;
 }
 
-
 // (module
 //   (func (export "main"))
 // )
 fn create_module() -> Vec<u8> {
-    let mut m: Vec<fastn_wasm::Ast> = vec![];
-    m.push(fastn_wasm::Ast::Func(fastn_wasm::Func {
+    let m: Vec<fastn_wasm::Ast> = vec![fastn_wasm::Ast::Func(fastn_wasm::Func {
         name: None,
         export: Some("main".to_string()),
         params: vec![],
         locals: vec![],
         result: None,
         body: vec![],
-    }));
+    })];
     fastn_wasm::encode(m)
 }

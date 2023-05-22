@@ -13,7 +13,6 @@ pub struct Func {
     pub body: Vec<Expression>,
 }
 
-
 /// PL can be used for either Param or Local
 #[derive(Debug)]
 pub struct PL {
@@ -21,11 +20,19 @@ pub struct PL {
     pub ty: wasm_encoder::ValType,
 }
 
-
 #[derive(Debug)]
 pub enum Expression {
-    GlobalSet { index: Box<Expression>, value: Box<Expression> },
+    GlobalSet {
+        index: Box<Expression>,
+        value: Box<Expression>,
+    },
     I32Const(i32),
-    Call { name: String, params: Vec<Expression> },
-    Data { offset: i32, data: Vec<u8> },
+    Call {
+        name: String,
+        params: Vec<Expression>,
+    },
+    Data {
+        offset: i32,
+        data: Vec<u8>,
+    },
 }

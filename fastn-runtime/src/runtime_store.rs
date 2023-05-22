@@ -34,11 +34,15 @@ pub struct Frame {
 }
 
 impl Memory {
-    pub fn attach_to_dom(&mut self, _dom: fastn_runtime::PointerKey, _ptr: fastn_runtime::PointerKey) {
+    pub fn _attach_to_dom(
+        &mut self,
+        _dom: fastn_runtime::PointerKey,
+        _ptr: fastn_runtime::PointerKey,
+    ) {
         todo!()
     }
 
-    pub fn attach(&mut self, a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
+    pub fn _attach(&mut self, a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
         let _a_deps = match self.pointer_deps.get(&a) {
             None => return,
             Some(v) => v,
@@ -85,9 +89,7 @@ impl Memory {
                 |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
                     let s = &caller.data().store;
 
-                    results[0] = wasmtime::Val::I32(
-                        s.booleans[params.ptr(0)] as i32,
-                    );
+                    results[0] = wasmtime::Val::I32(s.booleans[params.ptr(0)] as i32);
                     Ok(())
                 },
             )

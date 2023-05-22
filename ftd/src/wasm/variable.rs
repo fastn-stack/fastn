@@ -7,15 +7,13 @@ impl ftd::interpreter::Variable {
     // )
     pub fn global_expression(&self, idx: usize) -> fastn_wasm::Expression {
         let create = match &self.value {
-            ftd::interpreter::PropertyValue::Value {value, ..} => {
-                value.create()
-            }
+            ftd::interpreter::PropertyValue::Value { value, .. } => value.create(),
             _ => panic!("Not implemented: {:?}", self),
         };
 
         fastn_wasm::Expression::GlobalSet {
             index: Box::new(fastn_wasm::Expression::I32Const(idx as i32)),
-            value: Box::new(create)
+            value: Box::new(create),
         }
     }
 }
