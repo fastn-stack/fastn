@@ -321,9 +321,10 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
     ids.extend([
         format!("{}.ftd", id),
         format!("{}/index.ftd", id),
-        format!("{}.md", id),
-        format!("{}/README.md", id),
-        format!("{}/index.md", id),
+        // Todo: removing `md` file support for now
+        // format!("{}.md", id),
+        // format!("{}/README.md", id),
+        // format!("{}/index.md", id),
     ]);
     ids
 }
