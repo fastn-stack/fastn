@@ -250,5 +250,70 @@ mod test {
             "#
             )
         );
+        assert_eq!(
+            fastn_wasm::Func {
+                params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I32.into()],
+                result: Some(fastn_wasm::Type::I32),
+                body: vec![fastn_wasm::Expression::Operations {
+                    name: "i32.add".to_string(),
+                    values: vec![
+                        fastn_wasm::Expression::LocalGet { index: 0.into() },
+                        fastn_wasm::Expression::LocalGet { index: 1.into() },
+                    ],
+                }],
+                ..Default::default()
+            }
+            .to_wat(),
+            indoc::indoc!(
+                r#"
+                (module
+                    (func (param i32 i32) (result i32)
+                        (local.get 0)
+                        (local.get 1)
+                        i32.add
+                    )
+                )
+            "#
+            )
+        );
+        assert_eq!(
+            fastn_wasm::Func {
+                params: vec![
+                    fastn_wasm::PL {
+                        name: Some("lhs".to_string()),
+                        ty: fastn_wasm::Type::I32
+                    },
+                    fastn_wasm::PL {
+                        name: Some("rhs".to_string()),
+                        ty: fastn_wasm::Type::I32
+                    },
+                ],
+                result: Some(fastn_wasm::Type::I32),
+                body: vec![fastn_wasm::Expression::Operations {
+                    name: "i32.add".to_string(),
+                    values: vec![
+                        fastn_wasm::Expression::LocalGet {
+                            index: "lhs".into(),
+                        },
+                        fastn_wasm::Expression::LocalGet {
+                            index: "rhs".into(),
+                        },
+                    ],
+                }],
+                ..Default::default()
+            }
+            .to_wat(),
+            indoc::indoc!(
+                r#"
+                (module
+                    (func (param $lhs i32) (param $rhs i32) (result i32)
+                        (local.get $lhs)
+                        (local.get $rhs)
+                        i32.add
+                    )
+                )
+            "#
+            )
+        );
     }
 }
