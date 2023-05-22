@@ -7,6 +7,7 @@ mod expression;
 mod func;
 mod import;
 mod pl;
+mod table;
 mod ty;
 
 pub use ast::*;
@@ -15,6 +16,7 @@ pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
 pub use import::{Import, ImportDesc};
 pub use pl::PL;
+pub use table::{Limits, RefType, Table};
 pub use ty::Type;
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
