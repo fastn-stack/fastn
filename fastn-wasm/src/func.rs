@@ -315,5 +315,76 @@ mod test {
             "#
             )
         );
+        assert_eq!(
+            fastn_wasm::Func {
+                export: Some("main".to_string()),
+                locals: vec![
+                    fastn_wasm::PL {
+                        name: Some("column".to_string()),
+                        ty: fastn_wasm::Type::I32
+                    },
+                    fastn_wasm::PL {
+                        name: Some("root".to_string()),
+                        ty: fastn_wasm::Type::I32
+                    },
+                ],
+                result: Some(fastn_wasm::Type::I32),
+                body: vec![
+                    fastn_wasm::Expression::LocalSet {
+                        index: "root".into(),
+                        value: Box::new(fastn_wasm::Expression::Call {
+                            name: "root_container".to_string(),
+                            params: vec![]
+                        }),
+                    },
+                    fastn_wasm::Expression::Call {
+                        name: "foo".to_string(),
+                        params: vec![
+                            fastn_wasm::Expression::LocalGet {
+                                index: "root".into()
+                            },
+                            fastn_wasm::Expression::I32Const(100),
+                            fastn_wasm::Expression::I32Const(100)
+                        ]
+                    },
+                    fastn_wasm::Expression::Drop,
+                    fastn_wasm::Expression::Call {
+                        name: "foo".to_string(),
+                        params: vec![
+                            fastn_wasm::Expression::LocalGet {
+                                index: "root".into()
+                            },
+                            fastn_wasm::Expression::I32Const(200),
+                            fastn_wasm::Expression::I32Const(300)
+                        ]
+                    },
+                    fastn_wasm::Expression::Drop,
+                ],
+                ..Default::default()
+            }
+            .to_wat(),
+            indoc::indoc!(
+                r#"
+                (module
+                    (func (export "main") (result i32)
+                        (local $column i32)
+                        (local $root i32)
+                        (call $root_container)
+                        (local.set $root)
+                        (local.get $root)
+                        (i32.const 100)
+                        (i32.const 100)
+                        (call $foo)
+                        drop
+                        (local.get $root)
+                        (i32.const 200)
+                        (i32.const 300)
+                        (call $foo)
+                        drop
+                    )
+                )
+            "#
+            )
+        );
     }
 }

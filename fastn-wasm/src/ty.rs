@@ -4,6 +4,10 @@ pub enum Type {
     I64,
     F32,
     F64,
+    ExternRef,
+    Void,
+    FuncRef,
+    EmptyBlockType,
 }
 
 impl Type {
@@ -13,6 +17,10 @@ impl Type {
             Type::I64 => "i64",
             Type::F32 => "f32",
             Type::F64 => "f64",
+            Type::ExternRef => "externref",
+            Type::Void => "void",
+            Type::FuncRef => "funcref",
+            Type::EmptyBlockType => "empty_block_type",
         }
     }
 }
