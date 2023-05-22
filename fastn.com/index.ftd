@@ -13,11 +13,36 @@
 ;; programming language for non developers -
 ;; -- hero-section: build your next website without developers
 
+-- integer width: 1220
+
 
 -- home-page:
 seo-title: fastn | The Beginner-Friendly Full-Stack Framework
 seo-description: Design, develop, and deploy stunning websites and web apps effortlessly. Easy-to-learn full-stack framework. No coding knowledge required. Start now!
 seo-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
+
+-- home-page.footer:
+
+-- install: Get Started with fastn
+code-lang: sh
+code: curl -fsSL https://fastn.com/install.sh | bash
+cta-text: Learn More
+cta-link: /install/
+
+Install fastn with a Single Command
+
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: home-page.footer
+
+-- home-page.wrapper:
 
 -- hero-section: Build your next landing page, blog, or webapp
 preposition: with
@@ -113,21 +138,7 @@ compromise on what you can build with it.
 
 -- deploy-chakra:
 
--- install: Get Started with fastn
-code-lang: sh
-code: curl -fsSL https://fastn.com/install.sh | bash
-cta-text: Learn More
-cta-link: /install/
-
-Install fastn with a Single Command
-
--- footer.social-sideline-footer:
-social: true
-site-logo: $fastn-assets.files.images.fastn.svg
-site-url: /
-twitter-url: https://twitter.com/FifthTryHQ
-discord-url: https://discord.gg/bucrdvptYd
-copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+-- end: home-page.wrapper
 
 -- end: home-page
 
@@ -145,6 +156,7 @@ children wrapper:
 optional string seo-title:
 optional string seo-description:
 optional ftd.raw-image-src seo-image:
+ftd.ui list footer:
 
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
@@ -156,7 +168,9 @@ document-description: $home-page.seo-description
 document-image: $home-page.seo-image
 site-name: NULL
 logo-height: 38
-logo-width: 120
+logo-width: 120 
+
+-- ds.page.wrapper:
 
 -- ftd.column:
 width: fill-container
@@ -165,6 +179,20 @@ types: $typo.types
 children: $home-page.wrapper
 
 -- end: ftd.column
+
+-- end: ds.page.wrapper
+
+-- ds.page.footer:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+types: $typo.types
+children: $home-page.footer
+
+-- end: ftd.column
+
+-- end: ds.page.footer
 
 -- end: ds.page
 
@@ -200,7 +228,7 @@ background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn
 width: fill-container
 max-width.fixed.px: 600
 padding-top.em: 3
-padding-top.em if { ftd.device == "mobile" }: 7
+padding-top.em if { ftd.device == "mobile" }: 0
 padding-bottom.em if { ftd.device == "desktop" }: 7
 align-self: center
 align-content: center
@@ -236,7 +264,8 @@ classes: fastn, text-color
 
 -- ftd.container:
 role: $inherited.types.heading-tiny
-margin-top.em: 2
+margin-top.em if { ftd.device == "desktop"}: 2
+margin-top.em: 0.5
 color: $inherited.colors.text
 children: $hero-section.subtitle
 display: inline
@@ -372,6 +401,11 @@ padding-top.em: 2
 padding-bottom.em: 5
 background.solid: $inherited.colors.background.step-1
 
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-self: center
+
 -- ftd.image:
 src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 width.fixed.em: 4
@@ -414,6 +448,8 @@ children: $two-column-layout-desktop.right-side-ui
 
 -- end: ftd.column
 
+-- end: ftd.column
+
 -- end: two-column-layout-desktop
 
 
@@ -433,7 +469,7 @@ ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
-padding-top.em: 6
+padding-top.em: 2
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 
@@ -447,6 +483,7 @@ margin-bottom.em: 1
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
+text-align : center
 
 -- ftd.text: $two-column-layout-mobile.subtitle
 margin-bottom.em: 1.5
@@ -502,11 +539,15 @@ align-content: center
 padding-horizontal.em if { ftd.device == "desktop" }: 3
 padding-vertical.em: 2
 margin-top.em if { ftd.device == "desktop" }: 2.5
-margin-top.em: 2.5
 margin-bottom.em if { ftd.device == "desktop" }: 5
-spacing.fixed.em: 0.5
 color: $inherited.colors.text-strong
 background if { ftd.device == "desktop" }: $summary-cards.bg-color
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+spacing.fixed.em: 0.5
 
 -- ftd.text: $summary-cards.number
 height.fixed.em: 2
@@ -548,20 +589,9 @@ children: $summary-cards.cards
 
 -- end: ftd.column
 
+-- end: ftd.column
+
 -- end: summary-cards
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -706,6 +736,8 @@ min-height.fixed.em: 20
 
 Read data in JSON files and create data visualisation websites.
 
+-- end: card
+
 -- card: Upcoming WASM Support
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/uses/image1.svg
 min-height.fixed.em: 20
@@ -788,6 +820,7 @@ width: fill-container
 padding-vertical.em if { ftd.device == "desktop" }: 8
 padding-vertical.em: 4
 padding-horizontal.em if { ftd.device == "desktop" }: 10
+padding-horizontal.em if { ftd.device == "mobile" }: 1
 background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
 
 -- ftd.column:
@@ -795,16 +828,23 @@ background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fast
 width: fill-container
 align-content: center
 
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: $width
+align-content: center
+
 -- ftd.text: $install.title
 role if { ftd.device == "desktop" }: $inherited.types.heading-medium
 role: $inherited.types.heading-large
 color: $inherited.colors.text-strong
+text-align: center
 
 -- ftd.text: $install.subtitle
 role: $inherited.types.copy-large
 color: $inherited.colors.text
 margin-bottom.em if { ftd.device == "desktop" }: 4
 margin-bottom.em: 1.5
+text-align: center
 
 -- ftd.column:
 align-content: center
@@ -825,6 +865,9 @@ border-radius.em: 0.375
 padding-vertical.em: 1
 padding-horizontal.em: 2
 margin-top.em: 2
+role: $inherited.types.button-medium
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -860,10 +903,9 @@ optional ftd.resizing width:
 optional ftd.resizing min-height:
 
 -- ftd.column:
-min-height.fixed.em if { card.width == NULL && card.min-height == NULL }: 25
-min-height: $card.min-height
-padding.em: 2
-height if { ftd.device != "mobile" }: fill-container
+min-height.fixed.em if { card.width == NULL && card.min-height == NULL && ftd.device == "desktop" }: 25
+min-height if { ftd.device == "desktop" }: $card.min-height
+padding.em if { ftd.device == "desktop" }: 2
 spacing.fixed.em: 1
 shadow: $s
 border-radius.em: 1
@@ -871,6 +913,7 @@ width.fixed.percent: 48
 width if { ftd.device == "mobile" }: fill-container
 width if { card.width != NULL }: $card.width
 background.solid: $inherited.colors.background.base
+align-content if { ftd.device == "mobile" }: center
 
 -- ftd.image:
 src: $card.image
@@ -882,15 +925,18 @@ max-width: fill-container
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 padding-bottom.em: 0.5
+text-align if { ftd.device == "mobile" }: center
 
 -- ftd.text: $card.description
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
+text-align if { ftd.device == "mobile" }: center
 
 -- ftd.text: $card.cta-text
 if: { card.cta-text != NULL }
 role: $inherited.types.copy-regular
 link: $card.cta-link
+text-align if { ftd.device == "mobile" }: center
 
 -- end: ftd.column
 
