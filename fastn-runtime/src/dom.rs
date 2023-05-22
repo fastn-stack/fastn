@@ -6,8 +6,6 @@ pub struct Dom {
     pub store: fastn_runtime::runtime_store::Memory,
 }
 
-
-
 impl Dom {
     pub fn new() -> Dom {
         let mut nodes = slotmap::SlotMap::with_key();
@@ -259,7 +257,6 @@ impl Params for [wasmtime::Val] {
             .data()
             .downcast_ref()
             .unwrap()
-
     }
     fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey {
         *self[idx]
@@ -269,7 +266,6 @@ impl Params for [wasmtime::Val] {
             .data()
             .downcast_ref()
             .unwrap()
-
     }
 
     fn boolean(&self, idx: usize) -> bool {
