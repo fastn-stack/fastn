@@ -125,18 +125,7 @@ impl fastn_core::Package {
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(document = id);
-        let package_root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let package_root = self.package_root_with_default(package_root)?;
 
         let (file_path, data) = self.http_fetch_by_id(id).await?;
         fastn_core::utils::write(
@@ -155,18 +144,7 @@ impl fastn_core::Package {
         file_path: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fastn_core::Result<Vec<u8>> {
-        let package_root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let package_root = self.package_root_with_default(package_root)?;
 
         let data = self.http_fetch_by_file_name(file_path).await?;
         fastn_core::utils::write(&package_root, file_path, data.as_slice()).await?;
@@ -219,18 +197,7 @@ impl fastn_core::Package {
             }
         };
 
-        let root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let root = self.package_root_with_default(package_root)?;
 
         if let Ok(response) = self
             .fs_fetch_by_file_name(new_file_path.as_str(), package_root)
