@@ -295,7 +295,10 @@ impl Library2 {
                 return None;
             }
             let new_name = name.replacen(package.name.as_str(), "", 1);
-            let (file_path, data) = package.resolve_by_id(new_name.as_str(), None).await.ok()?;
+            let (file_path, data) = package
+                .resolve_by_id(new_name.as_str(), None, lib.config.package.name.as_str())
+                .await
+                .ok()?;
             if !file_path.ends_with(".ftd") {
                 return None;
             }
