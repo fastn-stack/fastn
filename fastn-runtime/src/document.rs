@@ -17,6 +17,17 @@ impl Document {
         }
     }
 
+    pub fn new_with_module(m: wasm_encoder::Module) -> Document {
+        let (store, instance) = fastn_runtime::Dom::create_instance(m.finish());
+
+        Document {
+            width: 0,
+            height: 0,
+            store,
+            instance,
+        }
+    }
+
     // initial_html() -> server side HTML
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>
