@@ -27,6 +27,7 @@ pub enum Expression {
         offset: i32,
         data: Vec<u8>,
     },
+    Drop,
 }
 
 impl Expression {
@@ -46,22 +47,23 @@ impl Expression {
                 let index_wat = index;
                 format!("(local.get {})", index_wat.to_wat())
             }
-            Expression::I32Const(value) => format!("i32.const {}", value),
-            Expression::I64Const(value) => format!("i64.const {}", value),
-            Expression::F32Const(value) => format!("f32.const {}", value),
-            Expression::F64Const(value) => format!("f64.const {}", value),
+            Expression::I32Const(value) => format!("(i32.const {})", value),
+            Expression::I64Const(value) => format!("(i64.const {})", value),
+            Expression::F32Const(value) => format!("(f32.const {})", value),
+            Expression::F64Const(value) => format!("(f64.const {})", value),
             Expression::Operations { name, values } => {
                 let values_wat: Vec<String> = values.iter().map(|v| v.to_wat()).collect();
                 format!("({} {})", name, values_wat.join(" "))
             }
             Expression::Call { name, params } => {
                 let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
-                format!("(call {} {})", name, params_wat.join(" "))
+                format!("(call ${} {})", name, params_wat.join(" "))
             }
             Expression::Data { offset, data } => {
                 let data_hex: Vec<String> = data.iter().map(|b| format!("{:02X}", b)).collect();
                 format!("(data (i32.const {}) \"{}\")", offset, data_hex.join(""))
             }
+            Expression::Drop => "(drop)".to_string(),
         }
     }
 }
