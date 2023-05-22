@@ -23,3 +23,4 @@ tokio.workspace = true
 bytemuck.workspace = true
 wasmtime.workspace = true
 async-trait.workspace = true
+wasm-encoder.workspace = true

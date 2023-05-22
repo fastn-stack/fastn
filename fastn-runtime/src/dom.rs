@@ -22,7 +22,7 @@ impl Dom {
             nodes,
             root,
             children,
-            store: fastn_runtime::runtime_store::Memory::new(),
+            store: Default::default(),
         }
     }
 
@@ -65,9 +65,7 @@ impl Dom {
     pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
         let taffy_key = self
             .taffy
-            .new_leaf(taffy::style::Style {
-                ..Default::default()
-            })
+            .new_leaf(taffy::style::Style::default())
             .expect("this should never fail");
 
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
@@ -244,7 +242,7 @@ impl Dom {
 pub trait Params {
     fn i32(&self, idx: usize) -> i32;
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
-    fn ptr(&self, idx: usize) -> usize;
+    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey;
     fn boolean(&self, idx: usize) -> bool;
 }
 
@@ -263,7 +261,7 @@ impl Params for [wasmtime::Val] {
             .unwrap()
 
     }
-    fn ptr(&self, idx: usize) -> usize {
+    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey {
         *self[idx]
             .externref()
             .unwrap()

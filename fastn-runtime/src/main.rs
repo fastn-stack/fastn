@@ -37,11 +37,18 @@ async fn main() {
     "#.to_string()
     };
 
-    let document = fastn_runtime::Document::new(wat);
+    // let document = fastn_runtime::Document::new(wat);
+
+    let document = fastn_runtime::Document::new_with_module(create_module());
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;
 
     // #[cfg(feature = "terminal")]
     // fastn_runtime::terminal::draw(doc).await;
+}
+
+fn create_module() -> wasm_encoder::Module {
+    let m = wasm_encoder::Module::new();
+    m
 }

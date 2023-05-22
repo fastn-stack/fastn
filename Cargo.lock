@@ -1869,6 +1869,7 @@ dependencies = [
  "taffy 0.3.12",
  "thiserror",
  "tokio",
+ "wasm-encoder",
  "wasmtime",
  "wgpu",
  "winit",

@@ -1,27 +1,36 @@
+#[derive(Debug, Default)]
 pub struct Memory {
     stack: Vec<Frame>,
-    r_2: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 2]>,
-    o_2: slotmap::SlotMap<fastn_runtime::PointerKey, (u8, [fastn_runtime; 2])>,
-    a_3: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 3]>,
-    a_20: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime; 20]>,
+    r_2: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 2]>,
+    o_2: slotmap::SlotMap<fastn_runtime::PointerKey, (u8, [fastn_runtime::PointerKey; 2])>,
+    a_3: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 3]>,
+    a_20: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 20]>,
     booleans: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
     boolean_vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<fastn_runtime::PointerKey>>,
-    pointer_deps: slotmap::SecondaryMap<fastn_runtime::PointerKey, Vec<SDep>>,
-    dom_pointers: slotmap::SecondaryMap<fastn_runtime::PointerKey, bool>,
+    pointer_deps: std::collections::HashMap<fastn_runtime::PointerKey, Vec<SDep>>,
 }
 
+#[derive(Debug, Default)]
 pub struct SDep {
-    stable: fastn_runtime::PointerKey,
-    first_link: fastn_runtime::PointerKey,
+    // this is the dom element we are directly or indirectly connected with
+    element: fastn_runtime::PointerKey,
+    // who gave us this link
     source: fastn_runtime::PointerKey,
 }
 
+#[derive(Debug)]
+enum Kind {
+    Boolean,
+    BooleanVec,
+    Integer,
+    Record2,
+    Record3,
+    OrType2,
+}
 
-struct S {}
-
+#[derive(Debug, Default)]
 pub struct Frame {
-    booleans: Vec<fastn_runtime::PointerKey>,
-    boolean_vec: Vec<fastn_runtime::PointerKey>,
+    pointers: Vec<(Kind, fastn_runtime::PointerKey)>,
 }
 
 impl Memory {
@@ -29,21 +38,13 @@ impl Memory {
         todo!()
     }
 
-    pub fn attach(&mut self, _a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
-        let _a_deps = match self.s_deps.get(a) {
+    pub fn attach(&mut self, a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
+        let _a_deps = match self.pointer_deps.get(&a) {
             None => return,
             Some(v) => v,
         };
 
         todo!()
-    }
-
-    pub fn new() -> Memory {
-        Memory {
-            booleans: slotmap::SlotMap::with_key(),
-            stack: Vec::new(),
-            boolean_vec: slotmap::SlotMap::with_key(),
-        }
     }
 
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
@@ -63,7 +64,7 @@ impl Memory {
                     // affects us yet.
 
                     let s = &mut caller.data_mut().store;
-                    s.booleans.push(params.boolean(0));
+                    s.booleans.insert(params.boolean(0));
 
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
                         s.booleans.len() - 1,
