@@ -854,7 +854,10 @@ impl Config {
         Ok(format!(
             "{}{}",
             add_packages,
-            package.resolve_by_id(id, None).await?.0
+            package
+                .resolve_by_id(id, None, self.package.name.as_str())
+                .await?
+                .0
         ))
     }
 
@@ -894,7 +897,9 @@ impl Config {
             id
         };
 
-        let (file_name, content) = package.resolve_by_id(id, None).await?;
+        let (file_name, content) = package
+            .resolve_by_id(id, None, self.package.name.as_str())
+            .await?;
         Ok((format!("{}{}", add_packages, file_name), content))
     }
 
@@ -955,7 +960,9 @@ impl Config {
             ));
         }
 
-        let (file_name, content) = package.resolve_by_id(id.as_str(), None).await?;
+        let (file_name, content) = package
+            .resolve_by_id(id.as_str(), None, self.package.name.as_str())
+            .await?;
 
         Ok((format!("{}{}", add_packages, file_name), content))
     }
