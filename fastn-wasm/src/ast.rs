@@ -2,7 +2,7 @@
 pub enum Ast {
     Func(fastn_wasm::Func),
     Import(fastn_wasm::Import),
-    // Export(fastn_wasm::Export),
+    Export(fastn_wasm::Export),
     // Table(fastn_wasm::Table),
     // Memory(fastn_wasm::Memory),
     // Global(fastn_wasm::Global),
@@ -15,6 +15,7 @@ impl Ast {
         match self {
             Ast::Func(f) => f.to_wat(),
             Ast::Import(i) => i.to_wat(),
+            Ast::Export(e) => e.to_wat(),
         }
     }
 }

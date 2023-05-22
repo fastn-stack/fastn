@@ -2,6 +2,7 @@ extern crate self as fastn_wasm;
 
 mod ast;
 // mod encoder;
+mod export;
 mod expression;
 mod func;
 mod import;
@@ -9,7 +10,8 @@ mod pl;
 mod ty;
 
 pub use ast::*;
-pub use expression::Expression;
+pub use export::{Export, ExportDesc};
+pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
 pub use import::{Import, ImportDesc};
 pub use pl::PL;
