@@ -7,32 +7,20 @@ pub enum Ast {
 pub struct Func {
     pub name: Option<String>,
     pub export: Option<String>,
-    pub params: Vec<Param>,
-    pub locals: Vec<Local>,
+    pub params: Vec<PL>,
+    pub locals: Vec<PL>,
+    pub result: Option<wasm_encoder::ValType>,
     pub body: Vec<Expression>,
 }
 
+
+/// PL can be used for either Param or Local
 #[derive(Debug)]
-pub enum Type {
-    I32,
-    I64,
-    F32,
-    F64,
-    ExternRef,
-    FuncRef,
+pub struct PL {
+    pub name: Option<String>,
+    pub ty: wasm_encoder::ValType,
 }
 
-#[derive(Debug)]
-pub struct Param {
-    pub name: Option<String>,
-    pub ty: Type,
-}
-
-#[derive(Debug)]
-pub struct Local {
-    pub name: Option<String>,
-    pub ty: Type,
-}
 
 #[derive(Debug)]
 pub enum Expression {

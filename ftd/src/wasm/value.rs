@@ -1,14 +1,14 @@
 impl ftd::interpreter::Value {
-    pub fn create(&self) -> ftd::wasm::Expression {
+    pub fn create(&self) -> fastn_wasm::Expression {
         match self {
             ftd::interpreter::Value::String {text} => {
                 let data = text.as_bytes().to_vec();
 
-                ftd::wasm::Expression::Call {
+                fastn_wasm::Expression::Call {
                     name: "string_new".to_string(),
                     params: vec![
-                        ftd::wasm::Expression::I32Const(data.len() as i32),
-                        ftd::wasm::Expression::Data {
+                        fastn_wasm::Expression::I32Const(data.len() as i32),
+                        fastn_wasm::Expression::Data {
                             offset: 0,
                             data
                         },

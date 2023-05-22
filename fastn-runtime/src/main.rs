@@ -39,7 +39,7 @@ async fn main() {
 
     // let document = fastn_runtime::Document::new(wat);
 
-    let document = fastn_runtime::Document::new_with_module(create_module());
+    let document = fastn_runtime::Document::new(create_module());
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;
@@ -48,7 +48,19 @@ async fn main() {
     // fastn_runtime::terminal::draw(doc).await;
 }
 
-fn create_module() -> wasm_encoder::Module {
-    let m = wasm_encoder::Module::new();
-    m
+
+// (module
+//   (func (export "main"))
+// )
+fn create_module() -> Vec<u8> {
+    let mut m: Vec<fastn_wasm::Ast> = vec![];
+    m.push(fastn_wasm::Ast::Func(fastn_wasm::Func {
+        name: None,
+        export: Some("main".to_string()),
+        params: vec![],
+        locals: vec![],
+        result: None,
+        body: vec![],
+    }));
+    fastn_wasm::encode(m)
 }
