@@ -806,13 +806,16 @@ color: $inherited.colors.text
 margin-bottom.em if { ftd.device == "desktop" }: 4
 margin-bottom.em: 1.5
 
--- code:
-lang: $install.code-lang
-width: hug-content
-width if { ftd.device == "mobile" }: fill-container
+-- ftd.column:
+align-content: center
 role: $inherited.types.copy-large
 
+-- ds.code:
+lang: $install.code-lang
+
 $install.code
+
+-- end: ftd.column
 
 -- ftd.text: $install.cta-text
 link: $install.cta-link
