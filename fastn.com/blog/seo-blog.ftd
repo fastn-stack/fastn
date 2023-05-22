@@ -1,8 +1,12 @@
 -- my-ds.page: Search Engine Optimization (SEO)
 
-If you want that your website or the information you put on your webpage gets 
-a larger audience and it comes up in search engine results pages you need some 
-level of Search Engine optimization(SEO). 
+Ajit Garg, 22 May 2023
+
+In today's digital landscape, where online presence plays a pivotal role in
+reaching a wider audience, ensuring that your website or webpage attracts
+attention and appears prominently on search engine results pages is crucial.
+This is where the power of Search Engine Optimization (SEO) comes into play.
+
 
 -- ds.h1: What is SEO
 
@@ -87,9 +91,69 @@ They are part of [Open Graph protocol](https://ogp.me/) that are used by social
 media sites like Facebook, LinkedIn and Twitter (unless there is a dedicated
 twitter tag).
 
+You can find these tags in the `<head>` section of your website.
 
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.og-seo-blog.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+shadow: $s
+
+
+-- ds.h2: Why are Open Graph tags important
+
+In the midst of content flooded on the social media, your website needs to 
+standout. People are more likely to see and click shared content with optimized 
+OG tags because:
+
+1. They make the content more eye-catching in the feeds
+2. They tell people what the content is about at a glance
+3. These tags help social media sites understand what the content is about, 
+which can help increase your brand visibility through search.
+
+-- ds.h3: Example
+
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.amitu-fb.png
+border-width.px: 2
+width: fill-container
+border-color: $inherited.colors.border
+shadow: $s
+
+
+-- ds.h2: Conclusion
+
+By implementing effective SEO strategies, you can enhance the visibility,
+discoverability, and overall performance of your online content, ultimately
+driving increased traffic and engagement. Whether you're aiming to expand your
+online reach, boost your brand's visibility, or simply connect with more
+potential users or customers, harnessing the potential of SEO is an essential
+step toward achieving your goals.
+
+
+At `FifthTry` we have a package called 
+[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
+out-of-the-box documentation features that can be used to create any kind of 
+site.
+
+Any website that uses `doc-site` can very easily add their customized meta 
+data using properties like `document-title`, `document-description` and 
+`document-image` in the `page` component of this package.
+
+You can learn [`How to do SEO`](/seo/) and improve your website's search 
+ranking and traffic through social media.
 
 
 
 
 -- end: my-ds.page
+
+
+
+-- ftd.shadow s:
+color: $inherited.colors.background.step-2
+x-offset.px: 7
+y-offset.px: 10
+blur.px: 10
+spread.px: 1
