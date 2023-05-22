@@ -1,5 +1,5 @@
 /// PL can be used for either Param or Local
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PL {
     pub name: Option<String>,
     pub ty: fastn_wasm::Type,
