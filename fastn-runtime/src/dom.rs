@@ -278,7 +278,9 @@ mod test {
     fn assert_import(name: &str, type_: &str) {
         fastn_runtime::Dom::create_instance(format!(
             r#"
-                (module (import "fastn" "{}" (func {})))
+                (module (import "fastn" "{}" (func {}))
+                    (func (export "main"))
+                )
             "#,
             name, type_
         ));

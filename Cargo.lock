@@ -1879,7 +1879,7 @@ dependencies = [
 name = "fastn-wasm"
 version = "0.1.0"
 dependencies = [
- "wasm-encoder",
+ "indoc 2.0.1",
 ]
 
 [[package]]

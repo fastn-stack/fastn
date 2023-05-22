@@ -35,7 +35,6 @@ camino = "1"
 clap = "4"
 colored = "2"
 css-color-parser = "0.1"
-wasm-encoder = "0.27"
 diffy = "0.3"
 slotmap = "1"
 dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
