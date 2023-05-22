@@ -2,14 +2,14 @@ extern crate self as fastn_wasm;
 
 mod ast;
 // mod encoder;
-mod func;
 mod expression;
+mod func;
 mod pl;
 mod ty;
 
 pub use ast::*;
-pub use func::{Func};
 pub use expression::Expression;
+pub use func::Func;
 pub use pl::PL;
 pub use ty::Type;
 

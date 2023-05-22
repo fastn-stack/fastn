@@ -7,10 +7,7 @@ pub struct PL {
 
 impl From<fastn_wasm::Type> for PL {
     fn from(ty: fastn_wasm::Type) -> Self {
-        PL {
-            name: None,
-            ty,
-        }
+        PL { name: None, ty }
     }
 }
 
@@ -34,7 +31,6 @@ impl PL {
     }
 }
 
-
 #[cfg(test)]
 mod test {
     #[test]
@@ -43,28 +39,32 @@ mod test {
             fastn_wasm::PL {
                 name: None,
                 ty: fastn_wasm::Type::I32,
-            }.to_wat(true),
+            }
+            .to_wat(true),
             "(param i32)"
         );
         assert_eq!(
             fastn_wasm::PL {
                 name: None,
                 ty: fastn_wasm::Type::I32,
-            }.to_wat(false),
+            }
+            .to_wat(false),
             "(local i32)"
         );
         assert_eq!(
             fastn_wasm::PL {
                 name: Some("foo".to_string()),
                 ty: fastn_wasm::Type::I32,
-            }.to_wat(true),
+            }
+            .to_wat(true),
             "(param $foo i32)"
         );
         assert_eq!(
             fastn_wasm::PL {
                 name: Some("foo".to_string()),
                 ty: fastn_wasm::Type::I32,
-            }.to_wat(false),
+            }
+            .to_wat(false),
             "(local $foo i32)"
         );
     }
