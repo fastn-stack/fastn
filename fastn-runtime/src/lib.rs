@@ -14,7 +14,6 @@ extern crate self as fastn_runtime;
 #[cfg(feature = "native")]
 pub mod wgpu;
 
-
 mod control;
 mod document;
 mod dom;
