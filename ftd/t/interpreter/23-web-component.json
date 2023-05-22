@@ -13,7 +13,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "start",
@@ -34,7 +35,8 @@
                 "line_number": 3
               }
             },
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           },
           {
             "name": "count",
@@ -45,7 +47,8 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 4
+            "line_number": 4,
+            "access_modifier": "Public"
           },
           {
             "name": "separator",
@@ -66,7 +69,8 @@
                 "line_number": 5
               }
             },
-            "line_number": 5
+            "line_number": 5,
+            "access_modifier": "Public"
           }
         ],
         "js": {

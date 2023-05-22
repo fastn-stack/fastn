@@ -329,6 +329,14 @@ impl Component {
             ast_component.line_number,
         )?);
 
+        if let Some((_name, arguments)) = definition_name_with_arguments {
+            Self::assert_no_private_properties_while_invocation(&properties, arguments)?;
+        } else if let ftd::interpreter::Thing::Component(c) =
+            doc.get_thing(name.as_str(), ast_component.line_number)?
+        {
+            Self::assert_no_private_properties_while_invocation(&properties, &c.arguments)?;
+        }
+
         Ok(ftd::interpreter::StateWithThing::new_thing(Component {
             name,
             properties,
@@ -339,6 +347,36 @@ impl Component {
             source: Default::default(),
             line_number: ast_component.line_number,
         }))
+    }
+
+    pub fn assert_no_private_properties_while_invocation(
+        properties: &[Property],
+        arguments: &[Argument],
+    ) -> ftd::interpreter::Result<()> {
+        let mut private_arguments: std::collections::HashSet<String> =
+            std::collections::HashSet::new();
+        for arg in arguments.iter() {
+            if !arg.access_modifier.is_public() {
+                private_arguments.insert(arg.name.clone());
+            }
+        }
+
+        for property in properties.iter() {
+            if let PropertySource::Header { name, .. } = &property.source {
+                if private_arguments.contains(name.as_str()) {
+                    return Err(ftd::interpreter::Error::InvalidAccessError {
+                        message: format!(
+                            "{} argument is private and can't be accessed on \
+                        invocation",
+                            name
+                        ),
+                        line_number: property.line_number,
+                    });
+                }
+            }
+        }
+
+        Ok(())
     }
 
     /// Component which is a variable
@@ -1057,6 +1095,7 @@ impl Loop {
             mutable: self.on.is_mutable(),
             value: Some(self.on.to_owned()),
             line_number: self.on.line_number(),
+            access_modifier: Default::default(),
         })
     }
 

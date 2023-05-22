@@ -228,6 +228,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -235,6 +236,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -242,6 +244,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::boolean().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -270,6 +273,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -277,6 +281,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -305,6 +310,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -312,6 +318,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -319,6 +326,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::integer().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -347,6 +355,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -354,6 +363,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -382,6 +392,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -389,6 +400,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -417,6 +429,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -424,6 +437,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -452,6 +466,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -459,6 +474,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -491,6 +507,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -523,6 +540,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -555,6 +573,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -566,6 +585,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -661,6 +681,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -672,6 +693,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -704,6 +726,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -736,6 +759,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -747,6 +771,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -779,6 +804,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -790,6 +816,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -822,6 +849,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: true,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
@@ -833,6 +861,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         },
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -856,6 +885,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -871,6 +901,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ])
@@ -888,6 +919,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ])
@@ -905,6 +937,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -920,6 +953,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ])
@@ -954,6 +988,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -978,6 +1013,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1002,6 +1038,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1026,6 +1063,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1033,6 +1071,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
+                        access_modifier: Default::default(),
                         value: Some(ftd::interpreter::PropertyValue::Value {
                             value: ftd::interpreter::Value::Record {
                                 name: ftd::interpreter::FTD_COLOR.to_string(),
@@ -1065,6 +1104,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::boolean()
                             .into_kind_data(),
                         mutable: false,
+                        access_modifier: Default::default(),
                         value: Some(ftd::interpreter::PropertyValue::Value {
                             value: ftd::interpreter::Value::Boolean { value: false },
                             is_mutable: false,
@@ -1087,6 +1127,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1095,6 +1136,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ]).collect(),
@@ -1112,6 +1154,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1120,6 +1163,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1128,6 +1172,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1136,6 +1181,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ]).collect(),
@@ -1153,6 +1199,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1161,6 +1208,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1169,6 +1217,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1177,6 +1226,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ]).collect(),
@@ -1316,6 +1366,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             is_mutable: false,
                             line_number: 0,
                         }),
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -1324,6 +1375,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_list().into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ]).collect(),
@@ -1477,6 +1529,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
+                                access_modifier: Default::default(),
                                 line_number: 0,
                             },
                             ftd::interpreter::Field {
@@ -1485,6 +1538,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
+                                access_modifier: Default::default(),
                                 line_number: 0,
                             },
                         ]).collect(),
@@ -1628,6 +1682,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
+                                access_modifier: Default::default(),
                                 line_number: 0,
                             },
                             ftd::interpreter::Field {
@@ -1636,6 +1691,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
+                                access_modifier: Default::default(),
                                 line_number: 0,
                             },
                         ]).collect(),
@@ -2631,6 +2687,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -2638,6 +2695,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
+                        access_modifier: Default::default(),
                         value: Some(ftd::interpreter::PropertyValue::Reference {
                             name: ftd::interpreter::FTD_RESPONSIVE_LENGTH_DESKTOP.to_string(),
                             kind: ftd::interpreter::Kind::string().into_kind_data(),
@@ -3194,6 +3252,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3203,6 +3262,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3212,6 +3272,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3221,6 +3282,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3230,6 +3292,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ])
@@ -3248,6 +3311,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3255,6 +3319,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_TYPE)
                             .into_kind_data(),
                         mutable: false,
+                        access_modifier: Default::default(),
                         value: Some(ftd::interpreter::PropertyValue::Reference {
                             name: ftd::interpreter::FTD_RESPONSIVE_TYPE_DESKTOP.to_string(),
                             kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_TYPE)
@@ -3331,6 +3396,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3339,6 +3405,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3347,6 +3414,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3355,6 +3423,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3363,6 +3432,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3380,6 +3450,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3388,6 +3459,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3396,6 +3468,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3404,6 +3477,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3412,6 +3486,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3420,6 +3495,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3428,6 +3504,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3436,6 +3513,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3444,6 +3522,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3461,6 +3540,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3469,6 +3549,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3477,6 +3558,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3494,6 +3576,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3502,6 +3585,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3510,6 +3594,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3527,6 +3612,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3535,6 +3621,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3543,6 +3630,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3551,6 +3639,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3559,6 +3648,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3567,6 +3657,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3575,6 +3666,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3583,6 +3675,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3591,6 +3684,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3599,6 +3693,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3616,6 +3711,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3624,6 +3720,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3632,6 +3729,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3640,6 +3738,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                             .into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3649,6 +3748,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "shadow".to_string(),
@@ -3657,6 +3757,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "scrim".to_string(),
@@ -3665,6 +3766,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "cta-primary".to_string(),
@@ -3672,6 +3774,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "cta-secondary".to_string(),
@@ -3679,6 +3782,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "cta-tertiary".to_string(),
@@ -3686,6 +3790,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "cta-danger".to_string(),
@@ -3693,6 +3798,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "accent".to_string(),
@@ -3700,6 +3806,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "error".to_string(),
@@ -3707,12 +3814,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         mutable: false,
                         value: None,
                         line_number: 0,
+                        access_modifier: Default::default(),
                     },
                     ftd::interpreter::Field {
                         name: "success".to_string(),
                         kind: ftd::interpreter::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3720,6 +3829,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3727,6 +3837,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
@@ -3734,6 +3845,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         kind: ftd::interpreter::Kind::record("ftd#custom-colors").into_kind_data(),
                         mutable: false,
                         value: None,
+                        access_modifier: Default::default(),
                         line_number: 0,
                     },
                 ],
@@ -3750,6 +3862,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 }, ftd::interpreter::Field {
                     name: "heading-medium".to_string(),
@@ -3757,6 +3870,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 }, ftd::interpreter::Field {
                     name: "heading-small".to_string(),
@@ -3764,6 +3878,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "heading-hero".to_string(),
@@ -3771,6 +3886,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "heading-tiny".to_string(),
@@ -3778,6 +3894,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "copy-small".to_string(),
@@ -3785,6 +3902,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "copy-regular".to_string(),
@@ -3792,6 +3910,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "copy-large".to_string(),
@@ -3799,6 +3918,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "fine-print".to_string(),
@@ -3806,6 +3926,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "blockquote".to_string(),
@@ -3813,6 +3934,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "source-code".to_string(),
@@ -3820,6 +3942,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "button-small".to_string(),
@@ -3827,6 +3950,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "button-medium".to_string(),
@@ -3834,27 +3958,31 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
-                    line_number: 0
+                    access_modifier: Default::default(),
+                    line_number: 0,
                 },ftd::interpreter::Field {
                     name: "button-large".to_string(),
                     kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
-                    line_number: 0
+                    access_modifier: Default::default(),
+                    line_number: 0,
                 },ftd::interpreter::Field {
                     name: "link".to_string(),
                     kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
-                    line_number: 0
+                    access_modifier: Default::default(),
+                    line_number: 0,
                 },ftd::interpreter::Field {
                     name: "label-large".to_string(),
                     kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },ftd::interpreter::Field {
                     name: "label-small".to_string(),
@@ -3862,6 +3990,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                         .into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 },],
                 line_number: 0
@@ -8824,6 +8953,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                     kind: ftd::interpreter::Kind::integer().into_kind_data(),
                     mutable: false,
                     value: None,
+                    access_modifier: Default::default(),
                     line_number: 0
                 }],
                 line_number: 0
@@ -9232,6 +9362,7 @@ pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
                         is_mutable: false,
                         line_number: 0,
                     }),
+                    access_modifier: Default::default(),
                     line_number: 0,
                 },
                 ftd::interpreter::Argument::default(
@@ -9415,6 +9546,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     is_mutable: false,
                     line_number: 0,
                 }),
+                access_modifier: Default::default(),
                 line_number: 0,
             },
             ftd::interpreter::Argument {
@@ -9432,6 +9564,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     is_mutable: false,
                     line_number: 0,
                 }),
+                access_modifier: Default::default(),
                 line_number: 0,
             },
             ftd::interpreter::Argument::default(
@@ -9455,6 +9588,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     is_mutable: false,
                     line_number: 0,
                 }),
+                access_modifier: Default::default(),
                 line_number: 0,
             },
             ftd::interpreter::Argument {
@@ -9472,6 +9606,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     is_mutable: false,
                     line_number: 0,
                 }),
+                access_modifier: Default::default(),
                 line_number: 0,
             },
             ftd::interpreter::Argument::default(
@@ -9493,6 +9628,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
                     is_mutable: false,
                     line_number: 0,
                 }),
+                access_modifier: Default::default(),
                 line_number: 0,
             },
             ftd::interpreter::Argument::default(

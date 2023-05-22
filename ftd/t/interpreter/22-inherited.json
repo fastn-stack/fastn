@@ -50,7 +50,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 12
+            "line_number": 12,
+            "access_modifier": "Public"
           },
           {
             "name": "wrapper",
@@ -71,7 +72,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 13
+            "line_number": 13,
+            "access_modifier": "Public"
           }
         ],
         "definition": {

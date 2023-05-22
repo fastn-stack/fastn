@@ -22,7 +22,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 32
+            "line_number": 32,
+            "access_modifier": "Public"
           }
         ],
         "definition": {
@@ -418,7 +419,8 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 2,
+            "access_modifier": "Public"
           },
           {
             "name": "children",
@@ -456,7 +458,8 @@
                 "line_number": 3
               }
             },
-            "line_number": 3
+            "line_number": 3,
+            "access_modifier": "Public"
           }
         ],
         "line_number": 1
@@ -887,7 +890,8 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
-                      }
+                      },
+                      "device": null
                     },
                     "style": {
                       "value": null,
@@ -1307,7 +1311,8 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
-                              }
+                              },
+                              "device": null
                             },
                             "style": {
                               "value": null,
@@ -1321,7 +1326,8 @@
                             }
                           }
                         }
-                      ]
+                      ],
+                      "device": null
                     },
                     "common": {
                       "id": {
@@ -1664,7 +1670,8 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
-                      }
+                      },
+                      "device": null
                     }
                   }
                 },
@@ -2074,7 +2081,8 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
-                              }
+                              },
+                              "device": null
                             },
                             "style": {
                               "value": null,
@@ -2494,7 +2502,8 @@
                                         "value": null,
                                         "line_number": null,
                                         "properties": []
-                                      }
+                                      },
+                                      "device": null
                                     },
                                     "style": {
                                       "value": null,
@@ -2508,7 +2517,8 @@
                                     }
                                   }
                                 }
-                              ]
+                              ],
+                              "device": null
                             },
                             "common": {
                               "id": {
@@ -2851,11 +2861,13 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
-                              }
+                              },
+                              "device": null
                             }
                           }
                         }
-                      ]
+                      ],
+                      "device": null
                     },
                     "common": {
                       "id": {
@@ -3198,11 +3210,13 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
-                      }
+                      },
+                      "device": null
                     }
                   }
                 }
-              ]
+              ],
+              "device": null
             },
             "common": {
               "id": {
@@ -3545,11 +3559,13 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
-              }
+              },
+              "device": null
             }
           }
         }
-      ]
+      ],
+      "device": null
     },
     "common": {
       "id": {
@@ -3892,7 +3908,8 @@
         "value": null,
         "line_number": null,
         "properties": []
-      }
+      },
+      "device": null
     }
   },
   "html_data": {
