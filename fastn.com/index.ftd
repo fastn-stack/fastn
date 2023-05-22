@@ -149,7 +149,7 @@ optional ftd.raw-image-src seo-image:
 -- ds.page:
 site-logo: $fastn-assets.files.images.fastn.svg
 colors: $dark-flame-cs.main
-$widthfill: true
+full-width: true
 types: $doc-typo.types
 document-title: $home-page.seo-title
 document-description: $home-page.seo-description

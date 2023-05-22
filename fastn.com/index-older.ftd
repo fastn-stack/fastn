@@ -7,7 +7,7 @@
 
 -- my-ds.page:
 sidebar: false
-widthfill: true
+full-width: true
 
 -- ftd.column:
 types: $typo.types

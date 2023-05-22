@@ -9,7 +9,7 @@ link: http://bit.ly/3GQ3P5Y
 
 
 -- my-ds.page:
-widthfill: true
+full-width: true
 sidebar: false
 
 

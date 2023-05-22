@@ -3,7 +3,7 @@
 
 
 -- my-ds.page:
-widthfill: true
+full-width: true
 sidebar: false
 
 -- ftd.column:

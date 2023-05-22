@@ -9,7 +9,7 @@ link: https://lu.ma/ftdwebmace
 
 
 -- my-ds.page:
-widthfill: true
+full-width: true
 sidebar: false
 
 

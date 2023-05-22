@@ -10,14 +10,14 @@ children wrapper:
 optional caption title:
 optional body body:
 boolean sidebar: true
-optional boolean widthfill: false
+optional boolean full-width: false
 
 -- ds.page: $page.title
 site-logo: $fastn-assets.files.images.fastn.svg
 body: $page.body
 colors: $dark-flame-cs.main
-$sidebar: *$page.sidebar
-$widthfill: *$page.widthfill
+sidebar: $page.sidebar
+full-width: $page.full-width
 types: $typo.types
 show-banner: true
 show-footer: true
@@ -49,7 +49,7 @@ cta-link: /events/webdev-with-ftd/
 -- end: ds.page.banner
 
 
--- ds.page.extra-headers:
+-- ds.page.right-sidebar:
 
 
 -- utils.compact-text: Support `fastn`!
@@ -114,7 +114,7 @@ We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
 
 
--- end: ds.page.extra-headers
+-- end: ds.page.right-sidebar
 
 
 

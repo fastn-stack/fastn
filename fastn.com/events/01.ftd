@@ -20,7 +20,7 @@ link: https://discord.gg/3QZa96Xf?event=1080341689253765171
 
 
 -- my-ds.page:
-widthfill: true
+full-width: true
 sidebar: false
 
 -- event.event: FTD Remote Meet-up #2 
