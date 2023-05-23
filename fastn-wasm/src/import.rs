@@ -29,6 +29,7 @@ impl Import {
 pub enum ImportDesc {
     Func(fastn_wasm::FuncDecl),
     Table(fastn_wasm::Table),
+    Memory(fastn_wasm::Memory),
 }
 
 impl ImportDesc {
@@ -36,6 +37,7 @@ impl ImportDesc {
         match self {
             ImportDesc::Func(f) => f.to_wat(),
             ImportDesc::Table(t) => t.to_wat(),
+            ImportDesc::Memory(m) => m.to_wat(),
         }
     }
 }
