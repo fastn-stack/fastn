@@ -1,7 +1,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: SEO
+-- my-ds.page: Search Engine Optimization (SEO)
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -12,63 +12,114 @@ visibility.
 -- lib.video-audience: How to optimize your website
 if: { source == "planning" }
 owner: Ajit
-aud: Common
+aud: Website Builders
 
 Helps learners to optimize their websites
 
 
--- ds.h1: Search Engine Optimization (SEO)
+
+-- ds.youtube:
 if: { source == "default" || source == "build" }
+v: 72N7f9on8iw
 
 
-/-- ds.youtube:
-if: { source == "default" || source == "build" }
-v: 
-
--- ds.h1: Search Engine Optimization (SEO)
+-- ds.h1: Introduction
 if: { source == "planning" }
 
--- ds.markdown:
+Welcome!! My name is Ajit
 
-SEO is the practice of improving a website's visibility and ranking in search
+In this video we will see how to implement SEO features to improve a website's 
+visibility.
+
+Before that we will briefly learn, 
+- what is SEO
+- why it's important for website creators
+- along with it's benefits, and
+- how to use it to optimize your website
+
+-- ds.h1: What is SEO
+
+`SEO` is the practice of improving a website's visibility and ranking in search
 engine results pages.
 
 It involves optimizing various aspects of a website to make it more appealing
 to search engines and users.
 
-
--- ds.h3: Introduction
+-- ds.h1: Benefits of SEO
 if: { source == "planning" }
 
-Welcome to the video, this video will give you a comprehensive overview of
-SEO, including
-- what it is
-- why it's important
-- it's benefits
-- how to use it, to optimize your website
+1. SEO helps improve your website’s visibility, hence leading to higher 
+organic i.e. non-paid traffic from search engines.
 
+2. SEO involves optimizing website elements that enhance user experience, such
+as page speed, mobile-friendliness, and easy navigation
+
+3. Higher search engine rankings instill confidence and trust in users
+
+4. SEO is a long-term strategy that yields sustainable results without 
+requiring continuous investment in paid advertising.
+
+-- ds.h1: Benefits of SEO
+if: { source == "default" || source == "build" }
+
+SEO encompasses a range of techniques that helps in following ways:
+
+- **Increased organic traffic**: SEO helps improve your website's visibility,
+    leading to higher organic traffic from search engines.
+
+- **Better user experience**: SEO involves optimizing website elements that
+    enhance user experience, such as page speed, mobile-friendliness, and easy
+    navigation.
+
+- **Enhanced credibility and trust**: Higher search engine rankings instill
+    confidence and trust in users, as they often perceive top-ranked websites
+    as more reputable.
+
+- **Cost-effective**: SEO is a long-term strategy that yields sustainable
+    results without requiring continuous investment in paid advertising.
+
+-- ds.markdown:
+if: { source == "planning" } 
+
+To read about SEO in detail, you can checkout the blog. The URL is shared in 
+description
 
 
 -- ds.h1: SEO through `page` component of `doc-site`
 
-SEO is the practice of improving a website's visibility and ranking in search
-engine results pages.
+We can do SEO in the `doc-site`, by giving some properties to the `page` 
+component.
 
-It involves optimizing various aspects of a website to make it more appealing
-to search engines and users.
+The three properties are: 
 
-
-In the `doc-site`, we can do SEO by 
-
-- modifying the document title
-- by adding a page description
-- as well as, by adding the document-image
-
+- document-title
+- document-description
+- document-image
 
 -- ds.h2: How to customize document title
 
-The `page` component's title by default becomes the document title unless we
-modify the title by using  the `document-title` property to the page component.
+Before we modify the document title by using the first property, we will see
+that by default, the `page` component's title, becomes the document title.
+
+-- ds.markdown:
+if: { source == "planning" } 
+
+So the title of the component page is this.
+
+-- ds.markdown:
+
+So in the browser, the document title will be same. 
+
+-- ds.markdown:
+if: { source == "planning" } 
+
+As you can see, the document title is by default is same as the title of page
+component.
+
+If we inspect, in the `header` of the `html` code, we can see the title by
+default takes the page title.
+
+
 
 
 -- ds.code: document title same as page title
@@ -84,11 +135,11 @@ border-color: $inherited.colors.border
 
 -- ds.markdown:
 
-When we give add `document-title` property, the page title can have custom
+When we add `document-title` property, the page title can have custom
 title, which is better for SEO.
 
-The custom title given in this property is added into the meta tag called 
-`og-title` as well as the `<title>` tag.
+The custom title given in this property is added as the meta-data into the 
+tags `og-title` and `twitter-title` as well as the `<title>` tag.
 
 -- ds.code: custom document title
 lang: ftd
@@ -107,27 +158,22 @@ border-width.px: 2
 width: fill-container
 border-color: $inherited.colors.border
 
+-- ds.markdown:
+
+And if you notice, there is no meta data for description or image.
 
 -- ds.h2: How to add page description
 
-`title` is one way to do SEO. In the `page` component if we add another 
-property called `document-description` then that description will be added 
-into meta-tag called `og-description` as well as the `description` tag. Also, 
-the same description adds to the `twitter-description` tag.
-
-If you notice, other than `title` tags there is no tag for `description`.
-
-
--- ftd.image: 
-src: $fastn-assets.files.expander.ds.img.no-description.png
-border-width.px: 2
-width: fill-container
-border-color: $inherited.colors.border
-
+Therefore, `title` is one way to do SEO. Now we will add the second property
+`document-description` and give a short and eye-catching description then this
+description will be added as meta-data in the tags called `og-description` as
+well `twitter-description`, and in the `description` tag.
 
 -- ds.markdown:
+if: { source == "planning" } 
 
-To give a short and eye-catching description for social media, we write:
+Let's verify the same by refreshing the browser.
+
 
 -- ds.code: to give a social media description
 lang: ftd
@@ -149,18 +195,18 @@ border-color: $inherited.colors.border
 
 -- ds.h2: How to add page document-image
 
-Similarly, we can give a specific image that we want to share when the URL is
-shared in the social media platforms.
+Similarly, we can give a specific image that we want the users to see when
+the URL is shared in the social media platforms.
 
 For the same, in the `page` component of doc-site, we add another property 
 called `document-image`.
 
-The image provided to this property will be added into the meta tag called 
-`og-image` tag and `twitter-image`.
+The image provided to this property will be added as the meta-data.
 
-**Note:** By design, you can pick only one image for social media preview.
-  Therefore if you want to use a file using `assets` then after the file
-  extension, we need to suffix it with `.light`.
+You can give any link of an image.
+
+Or, if you want to add the image which is in your package, then in that case,
+give the `https://<package-name>/path to the image with extension`.
 
 So it goes like this:
 
@@ -170,7 +216,7 @@ lang: ftd
 \-- ds.page: This is page title
 document-title: Welcome!
 document-description: Learn how to do SEO!
-document-image: $assets.files.images.seo-meta.png.light  			;;<hl>
+document-image: https://gargajit.github.io/optimization/images/seo-meta.png 			;;<hl>
 
 
 -- ds.markdown:
@@ -186,7 +232,7 @@ border-color: $inherited.colors.border
 
 -- ds.markdown:
 
-Now if you publish this package and share the URL on social media it will take
+Now, if we publish this package and share the URL on social media it will take
 these custom title, description and image.
 
 
@@ -203,6 +249,11 @@ border-radius.px: 10
 width: fill-container
 border-color: $inherited.colors.border
 
+
+-- ds.markdown:
+
+This way we have used the SEO technique and managed to make the URL noticable
+and meaningful and will also improve the ranking in the search results.
 
 -- ds.h1: Closing Remarks 
 if: { source == "planning" }
@@ -227,9 +278,9 @@ on [Discord](/discord/).
 -- ds.h1: Final Video
 if: { source == "planning" }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { source == "planning" }
-v: 
+v: 72N7f9on8iw
 
 -- end: my-ds.page 
 
