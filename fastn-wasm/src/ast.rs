@@ -3,7 +3,7 @@ pub enum Ast {
     Func(fastn_wasm::Func),
     Import(fastn_wasm::Import),
     Export(fastn_wasm::Export),
-    // Table(fastn_wasm::Table),
+    Table(fastn_wasm::Table),
     // Memory(fastn_wasm::Memory),
     // Global(fastn_wasm::Global),
     // Type(fastn_wasm::Type),
@@ -16,6 +16,7 @@ impl Ast {
             Ast::Func(f) => f.to_wat(),
             Ast::Import(i) => i.to_wat(),
             Ast::Export(e) => e.to_wat(),
+            Ast::Table(t) => t.to_wat(),
         }
     }
 }
