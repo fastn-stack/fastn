@@ -58,8 +58,16 @@ impl Memory {
         todo!()
     }
 
+    fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: Kind) {
+        if let Some(frame) = self.stack.last_mut() {
+            frame.pointers.push(Key { key: pointer, kind });
+        }
+    }
+
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
-        self.boolean.insert(value)
+        let pointer = self.boolean.insert(value);
+        self.insert_in_frame(pointer, Kind::Boolean);
+        pointer
     }
 
     pub fn create_frame(&mut self) {
@@ -106,10 +114,7 @@ impl Memory {
             .func_new(
                 "fastn",
                 "create_frame",
-                wasmtime::FuncType::new(
-                    [].iter().cloned(),
-                    [].iter().cloned(),
-                ),
+                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
                 |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
                     caller.data_mut().store.create_frame();
                     Ok(())
@@ -121,10 +126,7 @@ impl Memory {
             .func_new(
                 "fastn",
                 "end_frame",
-                wasmtime::FuncType::new(
-                    [].iter().cloned(),
-                    [].iter().cloned(),
-                ),
+                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
                 |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
                     caller.data_mut().store.end_frame();
                     Ok(())
