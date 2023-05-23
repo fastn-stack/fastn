@@ -190,75 +190,18 @@ Now if you publish this package and share the URL on social media it will take
 these custom title, description and image.
 
 
--- ds.h3: Examples
+-- ds.h3: Example
 
 -- ds.markdown:
 
 **LinkedIn**:
 
-/-- ftd.image:
-src: $fastn-assets.files.expander.ds.img.social-1.png
+-- ftd.image:
+src: $fastn-assets.files.expander.ds.img.seo-post.png
 border-width.px: 2
 border-radius.px: 10
 width: fill-container
 border-color: $inherited.colors.border
-
-
--- ds.markdown:
-
-**Twitter**:
-
-/-- ftd.image:
-src: $fastn-assets.files.expander.ds.img.social-2.png
-border-width.px: 2
-border-radius.px: 10
-width: fill-container
-border-color: $inherited.colors.border
-
-
--- ds.markdown:
-
-**Slack**:
-
-/-- ftd.image:
-src: $fastn-assets.files.expander.ds.img.social-3.png
-border-width.px: 2
-border-radius.px: 10
-width: fill-container
-border-color: $inherited.colors.border
-
-
-
-
-
-
-
-
-/-- ds.markdown:
-if: { source == "default" || source == "build" }
-
-
-
-
-/-- ds.markdown:
-if: { source == "planning" }
-
-
-
-
-/-- ds.code:
-lang: ftd
-
-
-
-
-/-- ds.markdown:
-
-
-
-/-- ds.markdown:
-if: { source == "planning" }
-
 
 
 -- ds.h1: Closing Remarks 

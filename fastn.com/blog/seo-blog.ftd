@@ -114,9 +114,10 @@ which can help increase your brand visibility through search.
 
 -- ds.h3: Example
 
-/-- ftd.image: 
-src: $fastn-assets.files.expander.ds.img.amitu-fb.png
+-- ftd.image: 
+src: $fastn-assets.files.expander.ds.img.seo-post.png
 border-width.px: 2
+border-radius.px: 10
 width: fill-container
 border-color: $inherited.colors.border
 shadow: $s
