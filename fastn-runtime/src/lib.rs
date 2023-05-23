@@ -25,10 +25,13 @@ mod runtime_store;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub(crate) use dom::{Dom, assert_import};
+pub(crate) use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
+
+#[cfg(test)]
+pub(crate) use dom::assert_import;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
