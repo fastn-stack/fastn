@@ -232,7 +232,7 @@ impl Dom {
         let wasm_main = instance
             .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
             .unwrap();
-        wasm_main.call(&mut store, (root, )).unwrap();
+        wasm_main.call(&mut store, (root,)).unwrap();
 
         (store, instance)
     }
