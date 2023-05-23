@@ -6,6 +6,35 @@ pub struct Dom {
     pub store: fastn_runtime::runtime_store::Memory,
 }
 
+pub enum ElementKind {
+    Column,
+    Row,
+    Text,
+    Image,
+    Container,
+    IFrame,
+    Integer,
+    Decimal,
+    Boolean,
+}
+
+impl From<i32> for ElementKind {
+    fn from(i: i32) -> ElementKind {
+        match i {
+            0 => ElementKind::Column,
+            1 => ElementKind::Row,
+            2 => ElementKind::Text,
+            3 => ElementKind::Image,
+            4 => ElementKind::Container,
+            5 => ElementKind::IFrame,
+            6 => ElementKind::Integer,
+            7 => ElementKind::Decimal,
+            8 => ElementKind::Boolean,
+            _ => panic!("Unknown element kind: {}", i),
+        }
+    }
+}
+
 impl Dom {
     pub fn new() -> Dom {
         let mut nodes = slotmap::SlotMap::with_key();
@@ -60,12 +89,17 @@ impl Dom {
         }
     }
 
-    pub fn create_column(&mut self) -> fastn_runtime::NodeKey {
+    pub fn create_kernel(
+        &mut self,
+        _k: ElementKind,
+        parent: fastn_runtime::NodeKey,
+    ) -> fastn_runtime::NodeKey {
         let taffy_key = self
             .taffy
             .new_leaf(taffy::style::Style::default())
             .expect("this should never fail");
 
+        // TOOD: based on k, create different elements
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
             taffy_key,
             style: fastn_runtime::CommonStyleMinusTaffy {
@@ -80,7 +114,9 @@ impl Dom {
 
         let key = self.nodes.insert(c);
         self.children.insert(key, vec![]);
+        self.add_child(parent, key);
         println!("column: {:?}", &key);
+
         key
     }
 
@@ -130,17 +166,21 @@ impl Dom {
         linker
             .func_new(
                 "fastn",
-                "create_column",
+                "create_kernel",
                 wasmtime::FuncType::new(
-                    [].iter().cloned(),
+                    [wasmtime::ValType::I32, wasmtime::ValType::ExternRef]
+                        .iter()
+                        .cloned(),
                     [wasmtime::ValType::ExternRef].iter().cloned(),
                 ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
                     // ExternRef is a reference-counted pointer to a host-defined object. We mut not
                     // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
                     // affects us yet.
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().create_column(),
+                        caller
+                            .data_mut()
+                            .create_kernel(params.i32(0).into(), params.key(1)),
                     )));
                     Ok(())
                 },
@@ -289,10 +329,6 @@ mod test {
 
     #[test]
     fn test() {
-        assert_import("create_column", "(result externref)");
-        assert_import("root_container", "(result externref)");
-        assert_import("add_child", "(param externref externref)");
-        assert_import("set_column_width_px", "(param externref i32)");
-        assert_import("set_column_height_px", "(param externref i32)");
+        assert_import("create_kernel", "(param i32 externref) (result externref)");
     }
 }

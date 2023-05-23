@@ -1,5 +1,5 @@
 (module
-    (import "fastn" "create_column" (func $create_column (param externref) (result externref)))
+    (import "fastn" "create_kernel" (func $create_kernel (param i32 externref) (result externref)))
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
     (import "fastn" "create_rgb_color" (func $create_boolean (param i32 i32 i32) (result externref)))
     (import "fastn" "create_boolean_with_root" (func $create_boolean_with_root (param externref externref i32) (result externref)))
@@ -44,7 +44,7 @@
         )
 
         ;; -- ftd.column:
-        (local.set $column (call $create_column (local.get $root)))
+        (local.set $column (call $create_kernel (i32.const 0) (local.get $root)))
 
         ;; width.fixed.px: $product(a=10, b=$x)
         (call $set_i32_prop_func
@@ -85,7 +85,7 @@
         (local.set $on-hover (call $create_boolean (i32.const 0)))
 
         ;; -- ftd.column:
-        (local.set $column (call $create_column (local.get $parent)))
+        (local.set $column (call $create_kernel (i32.const 0) (local.get $parent)))
 
         ;; $on-mouse-enter$: {
         ;;     $ftd.set-bool($a=$any-hover, v=true)

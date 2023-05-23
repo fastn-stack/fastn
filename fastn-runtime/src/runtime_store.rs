@@ -1,17 +1,17 @@
 #[derive(Debug, Default)]
 pub struct Memory {
     stack: Vec<Frame>,
-    r_2: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 2]>,
-    o_2: slotmap::SlotMap<fastn_runtime::PointerKey, (u8, [fastn_runtime::PointerKey; 2])>,
-    a_3: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 3]>,
-    a_20: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 20]>,
-    booleans: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
-    boolean_vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<fastn_runtime::PointerKey>>,
+
+    boolean: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
+    i32: slotmap::SlotMap<fastn_runtime::PointerKey, i32>,
+    f32: slotmap::SlotMap<fastn_runtime::PointerKey, f32>,
+    vec: slotmap::SlotMap<fastn_runtime::PointerKey, (i32, Vec<fastn_runtime::PointerKey>)>,
+
     pointer_deps: std::collections::HashMap<Key, Vec<SDep>>,
     ui_deps: std::collections::HashMap<Key, Vec<fastn_runtime::PointerKey>>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct SDep {
     // this is the dom element we are directly or indirectly connected with
     element: fastn_runtime::PointerKey,
@@ -50,10 +50,10 @@ impl Memory {
     }
 
     pub fn _attach(&mut self, a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
-        let _a_deps = match self.pointer_deps.get(&a) {
-            None => return,
-            Some(v) => v,
-        };
+        // let _a_deps = match self.pointer_deps.get(&a) {
+        //     None => return,
+        //     Some(v) => v,
+        // };
 
         todo!()
     }
@@ -63,7 +63,7 @@ impl Memory {
 
         linker
             .func_new(
-                "runtime_store",
+                "fastn",
                 "create_boolean",
                 wasmtime::FuncType::new(
                     [wasmtime::ValType::I32].iter().cloned(),
@@ -74,11 +74,8 @@ impl Memory {
                     // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
                     // affects us yet.
 
-                    let s = &mut caller.data_mut().store;
-                    s.booleans.insert(params.boolean(0));
-
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        s.booleans.len() - 1,
+                        caller.data_mut().store.boolean.insert(params.boolean(0)),
                     )));
                     Ok(())
                 },
@@ -87,7 +84,7 @@ impl Memory {
 
         linker
             .func_new(
-                "runtime_store",
+                "fastn",
                 "get_boolean",
                 wasmtime::FuncType::new(
                     [wasmtime::ValType::ExternRef].iter().cloned(),
@@ -96,7 +93,7 @@ impl Memory {
                 |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
                     let s = &caller.data().store;
 
-                    results[0] = wasmtime::Val::I32(s.booleans[params.ptr(0)] as i32);
+                    results[0] = wasmtime::Val::I32(s.boolean[params.ptr(0)] as i32);
                     Ok(())
                 },
             )
