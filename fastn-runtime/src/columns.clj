@@ -127,22 +127,20 @@
         ;; background.solid if { any-hover }: blue
         (call $set_i32_3_prop_func
                 (local.get $column)
-                (i32.const 0) ;; 2 = background.solid
-                (i32.const 0) ;; index in the table
+                (i32.const 3) ;; 3 = background.solid
+                (i32.const 3) ;; index in the table
                 (call $array_2 (local.get $on-hover) (global.get $main#any-hover))
         )
 
     )
 
     (func $foo#background (param $func-data externref) (result externref)
-       (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
-       (if
+       (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
           (then
             (call $create_rgba (i32.const 0) (i32.const 20) (i32.const 0))
           )
           (else
-             (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
-             (if
+             (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
                  (then
                     (call $create_rgba (i32.const 0) (i32.const 0) (i32.const 20))
                  )
@@ -152,10 +150,6 @@
               )
            )
        )
-       (i32.mul
-        (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
-        (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
-        )
     )
 
     (func $foo#on_mouse_enter (param $func-data externref) (result externref)
