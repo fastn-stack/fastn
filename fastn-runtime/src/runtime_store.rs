@@ -8,14 +8,13 @@ pub struct Memory {
     vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<Key>>,
 
     pointer_deps: std::collections::HashMap<Key, Vec<SDep>>,
-    ui_deps: std::collections::HashMap<Key, Vec<fastn_runtime::PointerKey>>,
 }
 
 #[derive(Debug)]
 pub struct SDep {
     // this is the dom element we are directly or indirectly connected with
-    element: fastn_runtime::PointerKey,
-    // who gave us this link
+    element: fastn_runtime::NodeKey,
+    // who told we us about this connection
     source: Key,
 }
 
