@@ -26,9 +26,9 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     s.push_str("(module\n");
     for node in module {
         s.push_str(&node.to_wat());
-        s.push_str("\n");
+        s.push('\n');
     }
-    s.push_str(")");
+    s.push(')');
     s
 }
 

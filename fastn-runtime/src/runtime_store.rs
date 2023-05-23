@@ -49,7 +49,7 @@ impl Memory {
         todo!()
     }
 
-    pub fn _attach(&mut self, a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
+    pub fn _attach(&mut self, _a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
         // let _a_deps = match self.pointer_deps.get(&a) {
         //     None => return,
         //     Some(v) => v,

@@ -24,9 +24,9 @@ impl PL {
             s.push_str(" $");
             s.push_str(name);
         }
-        s.push_str(" ");
-        s.push_str(&self.ty.to_wat());
-        s.push_str(")");
+        s.push(' ');
+        s.push_str(self.ty.to_wat());
+        s.push(')');
         s
     }
 }

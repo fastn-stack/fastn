@@ -140,6 +140,6 @@ fn create_module() -> Vec<u8> {
 }
 
 // source: fastn-runtime/columns.ftd
-fn create_columns() -> Vec<u8> {
-    todo!()
-}
+// fn create_columns() -> Vec<u8> {
+//     todo!()
+// }
