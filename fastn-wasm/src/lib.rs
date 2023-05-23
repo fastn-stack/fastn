@@ -32,15 +32,63 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     s
 }
 
-pub fn local_named_get(name: &str) -> fastn_wasm::Expression {
+pub fn local(name: &str) -> fastn_wasm::Expression {
     fastn_wasm::Expression::LocalGet {
         index: name.into(),
     }
 }
 
-pub fn local_named_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
+pub fn local_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
     fastn_wasm::Expression::LocalSet {
         index: name.into(),
         value: Box::new(e),
     }
+}
+
+pub fn i32(i: i32) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::I32Const(i)
+}
+
+pub fn import_func00(name: &str) -> fastn_wasm::Ast {
+    import_func(name, vec![], None)
+}
+
+pub fn call3(name: &str, e0: fastn_wasm::Expression, e1: fastn_wasm::Expression, e2: fastn_wasm::Expression) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![e0, e1, e2],
+    }
+}
+
+pub fn exported_func1(name: &str, arg0: fastn_wasm::PL, body: Vec<fastn_wasm::Expression>) -> fastn_wasm::Ast {
+    fastn_wasm::Ast::Func(fastn_wasm::Func {
+        export: Some(name.to_string()),
+        params: vec![arg0],
+        body,
+        ..Default::default()
+    })
+}
+
+pub fn import_func0(name: &str, result: fastn_wasm::Type) -> fastn_wasm::Ast {
+    import_func(name, vec![], Some(result))
+}
+
+pub fn import_func1(name: &str, arg0: fastn_wasm::PL) -> fastn_wasm::Ast {
+    import_func(name, vec![arg0], None)
+}
+
+pub fn import_func2(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL) -> fastn_wasm::Ast {
+    import_func(name, vec![arg0, arg1], None)
+}
+
+pub fn import_func(name: &str, params: Vec<fastn_wasm::PL>, result: Option<fastn_wasm::Type>) -> fastn_wasm::Ast {
+    fastn_wasm::Ast::Import(fastn_wasm::Import {
+        module: "fastn".to_string(),
+        name: name.to_string(),
+        desc: fastn_wasm::ImportDesc::Func(fastn_wasm::FuncDecl {
+            name: Some(name.to_string()),
+            params,
+            result,
+        }),
+    })
 }
