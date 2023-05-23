@@ -52,13 +52,28 @@ async fn main() {
 //   (func (export "main"))
 // )
 fn create_module() -> Vec<u8> {
-    let m: Vec<fastn_wasm::Ast> = vec![fastn_wasm::Ast::Func(fastn_wasm::Func {
+    let m: Vec<fastn_wasm::Ast> = vec![
+        fastn_wasm::Ast::Import(fastn_wasm::Import {
+            module: "fastn".to_string(),
+            name: "create_column".to_string(),
+            desc: fastn_wasm::ImportDesc::Func(fastn_wasm::FuncDecl {
+                    name: Some("create_column".to_string()),
+                    params: vec![],
+                    result: Some(fastn_wasm::Type::ExternRef),
+                },
+            ),
+        }),
+        fastn_wasm::Ast::Func(fastn_wasm::Func {
         name: None,
         export: Some("main".to_string()),
-        params: vec![],
+        params: vec![fastn_wasm::Type::ExternRef.into()],
         locals: vec![],
         result: None,
-        body: vec![],
+        body: vec![
+            // fastn_wasm::Instr::LocalGet(0),
+        ],
     })];
-    fastn_wasm::encode(&m).into_bytes()
+    let wat = fastn_wasm::encode(&m);
+    println!("{}", wat);
+    wat.into_bytes()
 }
