@@ -7,7 +7,8 @@ pub struct Memory {
     a_20: slotmap::SlotMap<fastn_runtime::PointerKey, [fastn_runtime::PointerKey; 20]>,
     booleans: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
     boolean_vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<fastn_runtime::PointerKey>>,
-    pointer_deps: std::collections::HashMap<fastn_runtime::PointerKey, Vec<SDep>>,
+    pointer_deps: std::collections::HashMap<Key, Vec<SDep>>,
+    ui_deps: std::collections::HashMap<Key, Vec<fastn_runtime::PointerKey>>,
 }
 
 #[derive(Debug, Default)]
@@ -15,7 +16,13 @@ pub struct SDep {
     // this is the dom element we are directly or indirectly connected with
     element: fastn_runtime::PointerKey,
     // who gave us this link
-    source: fastn_runtime::PointerKey,
+    source: Key,
+}
+
+#[derive(Debug)]
+struct Key {
+    key: fastn_runtime::PointerKey,
+    kind: Kind,
 }
 
 #[derive(Debug)]
@@ -30,7 +37,7 @@ enum Kind {
 
 #[derive(Debug, Default)]
 pub struct Frame {
-    pointers: Vec<(Kind, fastn_runtime::PointerKey)>,
+    pointers: Vec<Key>,
 }
 
 impl Memory {

@@ -1,0 +1,40 @@
+-- boolean $any-hover: false
+-- integer x: 10
+
+-- integer product(a,b):
+integer a:
+integer b:
+
+a * b
+
+-- ftd.column:
+width.fixed.px: $product(a=10, b=$x)
+height.fixed.px: 500
+spacing.fixed.px: 100
+margin.px: 100
+
+-- foo:
+-- foo:
+
+-- end: ftd.column
+
+-- component foo:
+boolean $on-hover: false
+
+-- ftd.column:
+$on-mouse-enter$: {
+    $ftd.set-bool($a=$any-hover, v=true)
+    $ftd.set-bool($a=$foo.on-hover, v=true)
+}
+$on-mouse-leave$: $ftd.set-bool($a=$any-hover, v=false)
+$on-mouse-leave$: $ftd.set-bool($a=$foo.on-hover, v=false)
+width.fixed.px: 400
+height.fixed.percent: 30
+background.solid: red
+background.solid if { foo.on-hover }: green
+background.solid if { any-hover }: blue
+
+-- end: ftd.column
+
+
+-- end: foo
