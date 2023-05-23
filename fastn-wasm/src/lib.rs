@@ -33,9 +33,7 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
 }
 
 pub fn local(name: &str) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::LocalGet {
-        index: name.into(),
-    }
+    fastn_wasm::Expression::LocalGet { index: name.into() }
 }
 
 pub fn local_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
@@ -53,14 +51,23 @@ pub fn import_func00(name: &str) -> fastn_wasm::Ast {
     import_func(name, vec![], None)
 }
 
-pub fn call3(name: &str, e0: fastn_wasm::Expression, e1: fastn_wasm::Expression, e2: fastn_wasm::Expression) -> fastn_wasm::Expression {
+pub fn call3(
+    name: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+    e2: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
     fastn_wasm::Expression::Call {
         name: name.into(),
         params: vec![e0, e1, e2],
     }
 }
 
-pub fn exported_func1(name: &str, arg0: fastn_wasm::PL, body: Vec<fastn_wasm::Expression>) -> fastn_wasm::Ast {
+pub fn exported_func1(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    body: Vec<fastn_wasm::Expression>,
+) -> fastn_wasm::Ast {
     fastn_wasm::Ast::Func(fastn_wasm::Func {
         export: Some(name.to_string()),
         params: vec![arg0],
@@ -81,7 +88,11 @@ pub fn import_func2(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL) -> f
     import_func(name, vec![arg0, arg1], None)
 }
 
-pub fn import_func(name: &str, params: Vec<fastn_wasm::PL>, result: Option<fastn_wasm::Type>) -> fastn_wasm::Ast {
+pub fn import_func(
+    name: &str,
+    params: Vec<fastn_wasm::PL>,
+    result: Option<fastn_wasm::Type>,
+) -> fastn_wasm::Ast {
     fastn_wasm::Ast::Import(fastn_wasm::Import {
         module: "fastn".to_string(),
         name: name.to_string(),
