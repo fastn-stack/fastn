@@ -397,10 +397,10 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/imagemodule/index.ftd
 
 
-# Blog: /website-optimization/
+# Blog: /blog/seo/
   document: blog/seo-blog.ftd
 
-- Optimize your website 🚧: /website-optimization/
+- Optimize your website: /blog/seo/
   document: blog/seo-blog.ftd
 - trizwitlabs web event: /trizwitlabs/
   document: blog/trizwitlabs.ftd
@@ -412,6 +412,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /blog/web-components.ftd
 - Color Scheme: /colors/
   document: blog/show-cs.ftd
+
 
 
 # dev: /d/
@@ -480,3 +481,4 @@ favicon: /-/fastn.com/images/favicon.svg
 /ftd/text-input/: /text-input/
 /blog/web-components/: /web-components/
 /ftd/document/: /document/
+/website-optimization/: /blog/seo/
