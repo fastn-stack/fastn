@@ -3,6 +3,12 @@
 
 -- my-ds.page: SEO
 
+-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+In this video we will see how to implement SEO features to improve a website's 
+visibility.
+
 -- lib.video-audience: How to optimize your website
 if: { source == "planning" }
 owner: Ajit
@@ -14,8 +20,6 @@ Helps learners to optimize their websites
 -- ds.h1: Search Engine Optimization (SEO)
 if: { source == "default" || source == "build" }
 
-In this video we will see how to implement SEO features to improve a website's 
-visibility.
 
 /-- ds.youtube:
 if: { source == "default" || source == "build" }
@@ -73,7 +77,7 @@ lang: ftd
 \-- ds.page: This is page title
 
 -- ftd.image:
-src: $fastn-assets.files.expander.ds.img.basic-og-title.png
+src: $fastn-assets.files.expander.ds.img.basic-title.png
 border-width.px: 2
 width: fill-container
 border-color: $inherited.colors.border
@@ -98,7 +102,7 @@ document-title: Welcome!	 		;;<hl>
 **Output:**
 
 -- ftd.image:
-src: $fastn-assets.files.expander.ds.img.customized-og-title.png
+src: $fastn-assets.files.expander.ds.img.customized-title.png
 border-width.px: 2
 width: fill-container
 border-color: $inherited.colors.border
@@ -111,12 +115,11 @@ property called `document-description` then that description will be added
 into meta-tag called `og-description` as well as the `description` tag. Also, 
 the same description adds to the `twitter-description` tag.
 
-If you notice, other than `og-title` there is no `og-description` or 
-`twitter-description` for social media.
+If you notice, other than `title` tags there is no tag for `description`.
 
 
 -- ftd.image: 
-src: $fastn-assets.files.expander.ds.img.no-og-descp.png
+src: $fastn-assets.files.expander.ds.img.no-description.png
 border-width.px: 2
 width: fill-container
 border-color: $inherited.colors.border
@@ -138,7 +141,7 @@ document-description: Learn how to do SEO!	 		;;<hl>
 **Output:**
 
 -- ftd.image: 
-src: $fastn-assets.files.expander.ds.img.og-descp.png
+src: $fastn-assets.files.expander.ds.img.description.png
 border-width.px: 2
 width: fill-container
 border-color: $inherited.colors.border
@@ -193,7 +196,7 @@ these custom title, description and image.
 
 **LinkedIn**:
 
--- ftd.image:
+/-- ftd.image:
 src: $fastn-assets.files.expander.ds.img.social-1.png
 border-width.px: 2
 border-radius.px: 10
@@ -205,7 +208,7 @@ border-color: $inherited.colors.border
 
 **Twitter**:
 
--- ftd.image:
+/-- ftd.image:
 src: $fastn-assets.files.expander.ds.img.social-2.png
 border-width.px: 2
 border-radius.px: 10
@@ -217,7 +220,7 @@ border-color: $inherited.colors.border
 
 **Slack**:
 
--- ftd.image:
+/-- ftd.image:
 src: $fastn-assets.files.expander.ds.img.social-3.png
 border-width.px: 2
 border-radius.px: 10
