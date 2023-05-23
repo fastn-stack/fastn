@@ -28,12 +28,14 @@ impl Import {
 #[derive(Debug)]
 pub enum ImportDesc {
     Func(fastn_wasm::FuncDecl),
+    Table(fastn_wasm::Table),
 }
 
 impl ImportDesc {
     pub fn to_wat(&self) -> String {
         match self {
             ImportDesc::Func(f) => f.to_wat(),
+            ImportDesc::Table(t) => t.to_wat(),
         }
     }
 }
@@ -57,6 +59,24 @@ mod test {
                 r#"
                 (module
                     (import "fastn" "create_column" (func $create_column (result i32)))
+                )
+            "#
+            )
+        );
+        assert_eq!(
+            fastn_wasm::Import {
+                module: "js".to_string(),
+                name: "table".to_string(),
+                desc: fastn_wasm::ImportDesc::Table(fastn_wasm::Table {
+                    ref_type: fastn_wasm::RefType::FuncRef,
+                    limits: fastn_wasm::Limits { min: 1, max: None },
+                }),
+            }
+            .to_wat_formatted(),
+            indoc::indoc!(
+                r#"
+                (module
+                    (import "js" "table" (table 1 funcref))
                 )
             "#
             )
