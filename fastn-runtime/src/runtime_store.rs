@@ -19,13 +19,13 @@ pub struct SDep {
     source: Key,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 struct Key {
     key: fastn_runtime::PointerKey,
     kind: Kind,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 enum Kind {
     Boolean,
     BooleanVec,
@@ -109,8 +109,19 @@ impl Memory {
         }
     }
 
-    fn gc(&mut self, _frame: Frame) {
+    fn gc(&mut self, frame: Frame) {
         // todo!()
+        for key in frame.pointers {
+            let deps = match self.pointer_deps.get(&key) {
+                None => continue,
+                Some(v) => v,
+            };
+
+            for _dep in deps {
+                // dep.element
+                // dep.source
+            }
+        }
     }
 
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
@@ -211,9 +222,21 @@ impl Memory {
 
 #[cfg(test)]
 mod test {
-
     #[test]
     fn test() {
-        fastn_runtime::assert_import("create_kernel", "(param i32 externref) (result externref)");
+        fastn_runtime::assert_import("create_boolean", "(param i32) (result externref)");
+        fastn_runtime::assert_import("create_frame", "");
+        fastn_runtime::assert_import("end_frame", "");
+    }
+
+    #[test]
+    fn gc(){
+        let mut m = super::Memory::default();
+        println!("{:#?}", m);
+        m.create_frame();
+        m.create_boolean(true);
+        m.end_frame();
+        println!("{:#?}", m);
+        // panic!("yo");
     }
 }
