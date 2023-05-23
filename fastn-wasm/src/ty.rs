@@ -11,6 +11,13 @@ pub enum Type {
 }
 
 impl Type {
+    pub fn to_pl(self, name: &str) -> fastn_wasm::PL {
+        fastn_wasm::PL {
+            name: Some(name.to_string()),
+            ty: self,
+        }
+    }
+
     pub fn to_wat(&self) -> &'static str {
         match self {
             Type::I32 => "i32",

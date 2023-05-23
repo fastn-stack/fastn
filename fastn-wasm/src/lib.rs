@@ -31,3 +31,16 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     s.push_str(")");
     s
 }
+
+pub fn local_named_get(name: &str) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::LocalGet {
+        index: name.into(),
+    }
+}
+
+pub fn local_named_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::LocalSet {
+        index: name.into(),
+        value: Box::new(e),
+    }
+}
