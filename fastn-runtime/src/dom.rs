@@ -227,11 +227,12 @@ impl Dom {
             .instantiate(&mut store, &module)
             .expect("cant create instance");
 
-        let wasm_main = instance
-            .get_typed_func::<(), ()>(&mut store, "main")
-            .unwrap();
+        let root = Some(wasmtime::ExternRef::new(store.data().root));
 
-        wasm_main.call(&mut store, ()).unwrap();
+        let wasm_main = instance
+            .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
+            .unwrap();
+        wasm_main.call(&mut store, (root, )).unwrap();
 
         (store, instance)
     }
