@@ -169,6 +169,8 @@ document-image: $home-page.seo-image
 site-name: NULL
 logo-height: 38
 logo-width: 120 
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
 
 -- ds.page.wrapper:
 

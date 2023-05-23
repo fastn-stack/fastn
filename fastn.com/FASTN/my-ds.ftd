@@ -24,6 +24,8 @@ show-footer: true
 site-name: NULL
 logo-height: 38
 logo-width: 120
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
 
 -- ds.page.footer:
 
@@ -185,17 +187,24 @@ canvas-width: 100
 canvas-height: 100
 state-machine: Driving
 width.fixed.px: 200
+width.fixed.px if { ftd.device == "mobile" }: 170
 height.fixed.px: 150
+height.fixed.px if { ftd.device == "mobile" }: 75
 anchor: parent
 top.px: -30
-top.px if { ftd.device == "mobile" }: -190
+top.px if { ftd.device == "mobile" }: -152
 left.px: 125
+left.px if { ftd.device == "mobile" }: 139
 $on-click$: $http-call()
 $on-mouse-enter$: $ftd.set-rive-boolean(rive = car, input = drive, value = true)
 $on-mouse-leave$: $ftd.set-rive-boolean(rive = car, input = drive, value = false)
-
+z-index: 0
 
 -- end: car-component
+
+
+
+
 
 
 

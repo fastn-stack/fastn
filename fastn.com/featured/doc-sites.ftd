@@ -23,6 +23,8 @@ logo-height: 38
 logo-width: 120
 colors: $dark-flame-cs.main
 types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
 
 -- ds.page.footer:
 
