@@ -314,21 +314,22 @@ impl Params for [wasmtime::Val] {
     }
 }
 
-#[cfg(test)]
-mod test {
-    fn assert_import(name: &str, type_: &str) {
-        fastn_runtime::Dom::create_instance(format!(
-            r#"
+pub fn assert_import(name: &str, type_: &str) {
+    fastn_runtime::Dom::create_instance(format!(
+        r#"
                 (module (import "fastn" "{}" (func {}))
                     (func (export "main"))
                 )
             "#,
-            name, type_
-        ));
-    }
+        name, type_
+    ));
+}
+
+#[cfg(test)]
+mod test {
 
     #[test]
     fn test() {
-        assert_import("create_kernel", "(param i32 externref) (result externref)");
+        fastn_runtime::assert_import("create_kernel", "(param i32 externref) (result externref)");
     }
 }

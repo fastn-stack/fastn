@@ -58,6 +58,26 @@ impl Memory {
         todo!()
     }
 
+    pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
+        self.boolean.insert(value)
+    }
+
+    pub fn create_frame(&mut self) {
+        self.stack.push(Frame::default());
+    }
+
+    pub fn end_frame(&mut self) {
+        if let Some(frame) = self.stack.pop() {
+            self.gc(frame);
+        } else {
+            panic!("end_frame called without create_frame");
+        }
+    }
+
+    fn gc(&mut self, _frame: Frame) {
+        // todo!()
+    }
+
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::dom::Params;
 
@@ -75,8 +95,38 @@ impl Memory {
                     // affects us yet.
 
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().store.boolean.insert(params.boolean(0)),
+                        caller.data_mut().store.create_boolean(params.boolean(0)),
                     )));
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "create_frame",
+                wasmtime::FuncType::new(
+                    [].iter().cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    caller.data_mut().store.create_frame();
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "end_frame",
+                wasmtime::FuncType::new(
+                    [].iter().cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    caller.data_mut().store.end_frame();
                     Ok(())
                 },
             )
@@ -98,5 +148,14 @@ impl Memory {
                 },
             )
             .unwrap();
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    #[test]
+    fn test() {
+        fastn_runtime::assert_import("create_kernel", "(param i32 externref) (result externref)");
     }
 }

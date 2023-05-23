@@ -1,7 +1,9 @@
 (module
+    (import "fastn" "create_frame" (func $create_frame))
+    (import "fastn" "end_frame" (func $end_frame))
     (import "fastn" "create_kernel" (func $create_kernel (param i32 externref) (result externref)))
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
-    (import "fastn" "create_rgb_color" (func $create_boolean (param i32 i32 i32) (result externref)))
+    (import "fastn" "create_rgba" (func $create_rgba (param i32 i32 i32 f32) (result externref)))
     (import "fastn" "create_boolean_with_root" (func $create_boolean_with_root (param externref externref i32) (result externref)))
     (import "fastn" "attach_to_ui" (func $attach_to_ui (param externref externref externref) (result externref)))
     (import "fastn" "set_i32_prop" (func $set_i32_prop (param externref i32 i32)))
@@ -24,6 +26,8 @@
 
     (func (export "main") (param $root externref)
         (local $column externref)
+
+        (call $create_frame)
 
         ;; -- boolean $any-hover: false
         (global.set $main#any-hover
@@ -76,11 +80,16 @@
         )
 
         (call $foo (local.get $column))
+        (call $foo (local.get $column))
+
+        (call $end_frame)
     )
 
     (func $foo (param $parent externref)
         (local $column externref)
         (local $on-hover externref)
+
+        (call $create_frame)
 
         (local.set $on-hover (call $create_boolean (i32.const 0)))
 
@@ -132,27 +141,31 @@
                 (call $array_2 (local.get $on-hover) (global.get $main#any-hover))
         )
 
+        (call $end_frame)
     )
 
     (func $foo#background (param $func-data externref) (result externref)
-       (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
-          (then
-            (call $create_rgba (i32.const 0) (i32.const 20) (i32.const 0))
-          )
-          (else
-             (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
-                 (then
-                    (call $create_rgba (i32.const 0) (i32.const 0) (i32.const 20))
-                 )
-                 (else
-                    (call $create_rgba (i32.const 20) (i32.const 0) (i32.const 0))
-                 )
-              )
-           )
-       )
+        (call $create_frame)
+        (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
+            (then
+                (call $create_rgba (i32.const 0) (i32.const 20) (i32.const 0) (f32.const 1.0))
+            )
+        (else
+            (if (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
+                (then
+                    (call $create_rgba (i32.const 0) (i32.const 0) (i32.const 20) (f32.const 1.0))
+                )
+                (else
+                    (call $create_rgba (i32.const 20) (i32.const 0) (i32.const 0) (f32.const 1.0))
+                    )
+                )
+            )
+        )
+        (call $end_frame)
     )
 
     (func $foo#on_mouse_enter (param $func-data externref) (result externref)
+        (call $create_frame)
         ;;     $ftd.set-bool($a=$any-hover, v=true)
         (call $set_boolean
             (call $get_arg_ref (local.get $func-data) (i32.const 0))
@@ -163,9 +176,11 @@
             (call $get_arg_ref (local.get $func-data) (i32.const 1))
              (i32.const 1)
         )
+        (call $end_frame)
     )
 
     (func $foo#on_mouse_leave (param $func-data externref) (result externref)
+        (call $create_frame)
        ;;     $ftd.set-bool($a=$any-hover, v=false)
        (call $set_boolean
              (call $get_arg_ref (local.get $func-data) (i32.const 0))
@@ -176,12 +191,15 @@
              (call $get_arg_ref (local.get $func-data) (i32.const 1))
              (i32.const 0)
        )
+        (call $end_frame)
     )
 
     (func $product (param $func-data externref) (result externref)
+        (call $create_frame)
         (i32.mul
             (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
             (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
         )
+        (call $end_frame)
     )
 )
