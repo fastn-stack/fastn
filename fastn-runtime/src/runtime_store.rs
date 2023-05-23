@@ -25,6 +25,11 @@ struct Key {
     kind: Kind,
 }
 
+#[derive(Debug, Default)]
+pub struct Frame {
+    pointers: Vec<Key>,
+}
+
 #[derive(Debug, Hash, PartialEq, Eq)]
 enum Kind {
     Boolean,
@@ -33,11 +38,6 @@ enum Kind {
     Record,
     OrType2,
     Decimal,
-}
-
-#[derive(Debug, Default)]
-pub struct Frame {
-    pointers: Vec<Key>,
 }
 
 impl Memory {
@@ -110,7 +110,6 @@ impl Memory {
     }
 
     fn gc(&mut self, frame: Frame) {
-        // todo!()
         for key in frame.pointers {
             let deps = match self.pointer_deps.get(&key) {
                 None => continue,
@@ -227,6 +226,7 @@ mod test {
         fastn_runtime::assert_import("create_boolean", "(param i32) (result externref)");
         fastn_runtime::assert_import("create_frame", "");
         fastn_runtime::assert_import("end_frame", "");
+        fastn_runtime::assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
     }
 
     #[test]
