@@ -412,6 +412,23 @@ impl Headers {
         Ok(header)
     }
 
+    pub fn find_once_mut(
+        &mut self,
+        key: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<&mut ftd::p1::Header> {
+        self.0
+            .iter_mut()
+            .filter(|v| v.get_key().eq(key))
+            .next()
+            .ok_or(ftd::p1::Error::HeaderNotFound {
+                key: key.to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
+            })
+    }
+
     pub fn push(&mut self, item: ftd::p1::Header) {
         self.0.push(item)
     }

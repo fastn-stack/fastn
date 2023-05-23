@@ -1,5 +1,0 @@
--- integer sum(a,b):
-integer a:
-integer b:
-
-a + b

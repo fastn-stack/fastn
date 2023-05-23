@@ -294,17 +294,73 @@ impl State {
         }
 
         let (next_line, _) = new_line_split(self.content.as_str());
-        let no_next_inline_header = !next_line.contains(':')
-            && !next_line.starts_with("-- ")
-            && !next_line.starts_with("/-- ");
-        if let (Some(value), true) = (value.clone(), no_next_inline_header) {
-            section.headers.push(ftd::p1::Header::kv(
-                ftd::p1::utils::i32_to_usize(self.line_number),
-                key,
-                kind,
-                Some(value),
-                condition,
-            ))
+        let next_line = next_line.trim_start();
+        let next_inline_header = next_line.contains(':') && !next_line.starts_with("-- ");
+
+        if let (Some(value), true) = (value.clone(), !next_inline_header) {
+            if let Some((header, field)) = key.split_once(".") {
+                if let Ok(existing) = section.headers.find_once_mut(
+                    header,
+                    self.doc_id.as_str(),
+                    ftd::p1::utils::i32_to_usize(self.line_number),
+                ) {
+                    match existing {
+                        ftd::p1::Header::BlockRecordHeader(br_header) => {
+                            let current_field = ftd::p1::Header::kv(
+                                ftd::p1::utils::i32_to_usize(self.line_number),
+                                field,
+                                kind,
+                                Some(value),
+                                condition,
+                            );
+                            br_header.fields.push(current_field);
+                        }
+                        ftd::p1::Header::KV(kv) => {
+                            let block_record_header = ftd::p1::Header::block_record_header(
+                                header,
+                                kv.kind.to_owned(),
+                                kv.value.to_owned(),
+                                (None, None),
+                                vec![ftd::p1::Header::kv(
+                                    ftd::p1::utils::i32_to_usize(self.line_number),
+                                    field,
+                                    kind,
+                                    Some(value),
+                                    condition.clone(),
+                                )],
+                                kv.condition.to_owned(),
+                                ftd::p1::utils::i32_to_usize(self.line_number),
+                            );
+                            *existing = block_record_header;
+                        }
+                        _ => unimplemented!(),
+                    }
+                } else {
+                    section.headers.push(ftd::p1::Header::block_record_header(
+                        header,
+                        kind.clone(),
+                        None,
+                        (None, None),
+                        vec![ftd::p1::Header::kv(
+                            ftd::p1::utils::i32_to_usize(self.line_number),
+                            field,
+                            kind,
+                            Some(value),
+                            condition.clone(),
+                        )],
+                        condition,
+                        ftd::p1::utils::i32_to_usize(self.line_number),
+                    ));
+                }
+            } else {
+                section.headers.push(ftd::p1::Header::kv(
+                    ftd::p1::utils::i32_to_usize(self.line_number),
+                    key,
+                    kind,
+                    Some(value),
+                    condition,
+                ));
+            }
         } else {
             parsing_states.push(if is_caption(key) {
                 ParsingStateReading::Caption

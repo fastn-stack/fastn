@@ -1,6 +1,0 @@
--- boolean flag: true
-
--- $score: 40
-
--- $score: 50
-if: not $flag

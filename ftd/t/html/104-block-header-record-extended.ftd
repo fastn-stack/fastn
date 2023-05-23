@@ -1,0 +1,114 @@
+-- ftd.text: First Text
+margin-vertical.px: 10
+
+-- ftd.text.color:
+light: red
+dark: blue
+
+;; ----------------------------
+
+-- ftd.text: Second Text
+margin-vertical.px: 10
+
+-- ftd.text.color: red
+dark: blue
+
+;; ----------------------------
+
+-- ftd.text: Third Text
+margin-vertical.px: 10
+
+-- ftd.text.color: red
+-- ftd.text.color.dark: blue
+
+;; ----------------------------
+
+-- ftd.text: Fourth Text
+margin-vertical.px: 10
+
+-- ftd.text.color.light: red
+-- ftd.text.color.dark: blue
+
+;; ----------------------------
+
+-- ftd.text: Fifth Text
+margin-vertical.px: 10
+
+-- ftd.text.color.light: red
+-- ftd.text.color.dark: $d-color
+
+;; ----------------------------
+
+-- ftd.text: Sixth Text
+margin-vertical.px: 10
+
+-- ftd.text.color: $c
+
+;; ----------------------------
+
+-- foo: Text 1 from component
+
+-- foo.text-color: $c
+
+;; ----------------------------
+
+-- foo: Text 2 from component
+
+-- foo.text-color:
+light: red
+dark: blue
+
+;; ----------------------------
+
+-- foo: Text 3 from component
+
+-- foo.text-color: red
+dark: blue
+
+;; ----------------------------
+
+-- foo: Text 4 from component
+
+-- foo.text-color: red
+-- foo.text-color.dark: blue
+
+;; ----------------------------
+
+-- foo: Text 5 from component
+
+-- foo.text-color.light: red
+-- foo.text-color.dark: blue
+
+;; ----------------------------
+
+-- foo: Text 6 from component
+
+-- foo.text-color.light: red
+-- foo.text-color.dark: $d-color
+
+;; ----------------------------
+;;          VARIABLES
+;; ----------------------------
+
+-- ftd.color c: red
+dark: blue
+
+-- string d-color: green
+
+
+;; ----------------------------
+;;     COMPONENT DEFINITION
+;; ----------------------------
+
+-- component foo:
+caption text:
+ftd.color text-color:
+
+-- ftd.text: $foo.text
+color: $foo.text-color
+margin-vertical.px: 10
+
+-- end: foo
+
+
+
