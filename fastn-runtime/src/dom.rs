@@ -280,6 +280,7 @@ impl Dom {
 
 pub trait Params {
     fn i32(&self, idx: usize) -> i32;
+    fn f32(&self, idx: usize) -> f32;
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
     fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey;
     fn boolean(&self, idx: usize) -> bool;
@@ -288,6 +289,10 @@ pub trait Params {
 impl Params for [wasmtime::Val] {
     fn i32(&self, idx: usize) -> i32 {
         self[idx].i32().unwrap()
+    }
+
+    fn f32(&self, idx: usize) -> f32 {
+        self[idx].f32().unwrap()
     }
 
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
