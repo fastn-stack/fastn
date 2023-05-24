@@ -150,6 +150,20 @@ impl Dom {
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
+    fn set_property(
+        &mut self,
+        key: fastn_runtime::NodeKey,
+        property_kind: fastn_runtime::PropertyKind,
+        value: Value,
+    ) {
+        match property_kind {
+            fastn_runtime::PropertyKind::WidthFixedPx => self.set_column_width_px(key, value.i32()),
+            fastn_runtime::PropertyKind::HeightFixedPx => {
+                self.set_column_height_px(key, value.i32())
+            }
+        }
+    }
+
     pub fn create_instance(
         wat: impl AsRef<[u8]>,
     ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
@@ -186,6 +200,35 @@ impl Dom {
                 },
             )
             .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "set_i32_prop",
+                wasmtime::FuncType::new(
+                    [
+                        wasmtime::ValType::ExternRef,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::I32,
+                    ]
+                    .iter()
+                    .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().set_property(
+                            params.key(0),
+                            params.i32(0).into(),
+                            params.i32(0).into(),
+                        ),
+                    )));
+
+                    Ok(())
+                },
+            )
+            .unwrap();
+
         linker
             .func_new(
                 "fastn",
@@ -259,6 +302,27 @@ impl Params for [wasmtime::Val] {
 
     fn boolean(&self, idx: usize) -> bool {
         self.i32(idx) != 0
+    }
+}
+
+pub enum Value {
+    I32(i32),
+    F32(f32),
+}
+
+impl From<i32> for Value {
+    fn from(i: i32) -> Value {
+        Value::I32(i)
+    }
+}
+
+impl Value {
+    fn i32(&self) -> i32 {
+        if let Value::I32(i) = self {
+            *i
+        } else {
+            panic!("Expected i32 value")
+        }
     }
 }
 

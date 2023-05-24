@@ -127,3 +127,18 @@ impl fastn_runtime::Element {
         }
     }
 }
+
+pub enum PropertyKind {
+    WidthFixedPx,
+    HeightFixedPx,
+}
+
+impl From<i32> for PropertyKind {
+    fn from(i: i32) -> PropertyKind {
+        match i {
+            0 => PropertyKind::WidthFixedPx,
+            1 => PropertyKind::HeightFixedPx,
+            _ => panic!("Unknown element kind: {}", i),
+        }
+    }
+}

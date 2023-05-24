@@ -26,7 +26,9 @@ mod runtime_store;
 pub use control::ControlFlow;
 pub use document::Document;
 pub(crate) use dom::Dom;
-pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
+pub use element::{
+    CommonStyleMinusTaffy, Container, Dimension, Element, Image, PropertyKind, Text,
+};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
 

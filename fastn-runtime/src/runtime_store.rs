@@ -215,9 +215,6 @@ impl Memory {
                     [wasmtime::ValType::ExternRef].iter().cloned(),
                 ),
                 |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
                         caller.data_mut().store.create_i32(params.i32(0)),
                     )));
