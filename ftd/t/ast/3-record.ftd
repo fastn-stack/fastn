@@ -1,0 +1,3 @@
+-- record foo:
+string name:
+integer age: 40

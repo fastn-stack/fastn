@@ -432,9 +432,15 @@ impl State {
         header_condition: Option<String>,
         header_line_number: usize,
     ) -> ftd::p1::Result<()> {
+        dbg!(&header_key, &header_caption, &header_line_number);
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value: (Vec<String>, Option<usize>) = (vec![], None);
-            let mut header_values: ftd::Map<(String, usize)> = ftd::Map::new();
+            let mut header_values: ftd::Map<(
+                Option<String>,
+                Option<String>,
+                Option<String>,
+                usize,
+            )> = ftd::Map::new();
             let mut new_line_number = None;
             let mut first_line = true;
             let split_content = self.content.as_str().split('\n');
@@ -460,16 +466,26 @@ impl State {
                 }
 
                 if inline_header_found {
-                    if let Some((key, val)) = line.split_once(':') {
+                    if let Ok((name_with_kind, caption)) = colon_separated_values(
+                        ftd::p1::utils::i32_to_usize(self.line_number),
+                        line,
+                        self.doc_id.as_str(),
+                    ) {
+                        // Caption, kind, condition, line_number
+                        let (header_key, kind, condition) =
+                            get_name_kind_and_condition(name_with_kind.as_str());
                         header_values.insert(
-                            key.trim().to_string(),
+                            header_key,
                             (
-                                val.trim().to_string(),
+                                caption,
+                                kind,
+                                condition,
                                 ftd::p1::utils::i32_to_usize(self.line_number),
                             ),
                         );
                     }
                 } else if !line.is_empty() {
+                    // value(body) = (vec![string], line_number)
                     value.0.push(clean_line(line));
                     if value.1.is_none() {
                         value.1 = Some(ftd::p1::utils::i32_to_usize(self.line_number));
@@ -486,18 +502,18 @@ impl State {
                     line_number: header_line_number,
                 })?
                 .0;
-
+            dbg!(&header_values);
             let value = (value.0.join("\n").trim().to_string(), value.1);
             if !header_values.is_empty() || (header_caption.is_some() && !value.0.is_empty()) {
                 let fields = header_values
                     .iter()
-                    .map(|(key, (value, ln))| {
+                    .map(|(key, (value, kind, condition, ln))| {
                         ftd::p1::Header::kv(
                             *ln,
                             key,
-                            None,
-                            Some(value.to_string()),
-                            None,
+                            kind.to_owned(),
+                            value.to_owned(),
+                            condition.to_owned(),
                             Default::default(),
                         )
                     })

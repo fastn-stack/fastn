@@ -1,0 +1,92 @@
+[
+  {
+    "or-type": {
+      "name": "entity",
+      "variants": [
+        {
+          "AnonymousRecord": {
+            "name": "person",
+            "fields": [
+              {
+                "name": "name",
+                "kind": {
+                  "modifier": null,
+                  "kind": "caption"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 4,
+                "access_modifier": "Public"
+              },
+              {
+                "name": "address",
+                "kind": {
+                  "modifier": null,
+                  "kind": "string"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 5,
+                "access_modifier": "Public"
+              },
+              {
+                "name": "bio",
+                "kind": {
+                  "modifier": null,
+                  "kind": "body"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 6,
+                "access_modifier": "Public"
+              },
+              {
+                "name": "age",
+                "kind": {
+                  "modifier": null,
+                  "kind": "integer"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 7,
+                "access_modifier": "Public"
+              }
+            ],
+            "line_number": 3
+          }
+        },
+        {
+          "AnonymousRecord": {
+            "name": "company",
+            "fields": [
+              {
+                "name": "name",
+                "kind": {
+                  "modifier": null,
+                  "kind": "caption"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 10,
+                "access_modifier": "Public"
+              },
+              {
+                "name": "industry",
+                "kind": {
+                  "modifier": null,
+                  "kind": "string"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 11,
+                "access_modifier": "Public"
+              }
+            ],
+            "line_number": 9
+          }
+        }
+      ],
+      "line_number": 1
+    }
+  }
+]

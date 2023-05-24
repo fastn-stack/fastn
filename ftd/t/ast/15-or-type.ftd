@@ -1,0 +1,13 @@
+-- or-type entity:
+
+-- record person:
+caption name:
+string address:
+body bio:
+integer age:
+
+-- record company:
+caption name:
+string industry:
+
+-- end: entity

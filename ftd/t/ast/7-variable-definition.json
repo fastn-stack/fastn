@@ -1,0 +1,102 @@
+[
+  {
+    "record": {
+      "name": "person",
+      "fields": [
+        {
+          "name": "name",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 2,
+          "access_modifier": "Public"
+        },
+        {
+          "name": "age",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
+          "value": {
+            "string-value": {
+              "value": "12",
+              "line-number": 3,
+              "source": "Default"
+            }
+          },
+          "line_number": 3,
+          "access_modifier": "Public"
+        }
+      ],
+      "line_number": 1
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "people",
+      "kind": {
+        "modifier": "List",
+        "kind": "person"
+      },
+      "mutable": false,
+      "value": {
+        "List": {
+          "value": [
+            {
+              "key": "person",
+              "value": {
+                "Record": {
+                  "name": "person",
+                  "caption": null,
+                  "headers": [
+                    {
+                      "key": "name",
+                      "mutable": false,
+                      "value": {
+                        "string-value": {
+                          "value": "Arpita",
+                          "line-number": 8,
+                          "source": "Default"
+                        }
+                      },
+                      "line-number": 8,
+                      "kind": null,
+                      "condition": null
+                    },
+                    {
+                      "key": "age",
+                      "mutable": false,
+                      "value": {
+                        "string-value": {
+                          "value": "10",
+                          "line-number": 9,
+                          "source": "Default"
+                        }
+                      },
+                      "line-number": 9,
+                      "kind": null,
+                      "condition": null
+                    }
+                  ],
+                  "body": null,
+                  "values": [],
+                  "line_number": 7
+                }
+              }
+            }
+          ],
+          "line_number": 5
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 5
+    }
+  }
+]

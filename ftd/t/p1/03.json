@@ -10,7 +10,9 @@
         "key": "k",
         "kind": null,
         "value": "v",
-        "condition": null
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Header"
       }
     ],
     "body": null,

@@ -19,7 +19,9 @@
               "key": "$caption$",
               "kind": null,
               "value": "Heading 2 title",
-              "condition": null
+              "condition": null,
+              "access_modifier": "Public",
+              "source": "Caption"
             },
             "headers": [],
             "body": {
@@ -40,7 +42,9 @@
         "key": "description",
         "kind": null,
         "value": "We have made provision of adding `right-sidebar` for additional components to",
-        "condition": null
+        "condition": null,
+        "access_modifier": "Public",
+        "source": "Body"
       }
     ],
     "body": null,

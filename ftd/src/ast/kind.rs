@@ -599,15 +599,25 @@ impl VariableValue {
                 ..
             }) => VariableValue::Record {
                 name: key.to_string(),
-                caption: Box::new(caption.as_ref().map(|c| VariableValue::String {
-                    value: c.to_string(),
-                    line_number: *line_number,
-                    source: ValueSource::Caption,
+                caption: Box::new(caption.as_ref().map(|c| {
+                    return if !c.is_empty() {
+                        VariableValue::String {
+                            value: c.to_string(),
+                            line_number: *line_number,
+                            source: ValueSource::Caption,
+                        }
+                    } else {
+                        VariableValue::Optional {
+                            value: Box::new(None),
+                            line_number: *line_number,
+                        }
+                    };
                 })),
                 headers: {
                     let mut headers = vec![];
                     for header in fields.iter() {
                         let key = header.get_key();
+                        dbg!(&key);
                         headers.push(HeaderValue::new(
                             key.trim_start_matches(ftd::ast::utils::REFERENCE),
                             ftd::ast::utils::is_variable_mutable(key.as_str()),

@@ -1,0 +1,167 @@
+[
+  {
+    "VariableDefinition": {
+      "name": "locations",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "List": {
+          "value": [
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "Varanasi",
+                  "line-number": 3,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "Prayagraj",
+                  "line-number": 4,
+                  "source": "Default"
+                }
+              }
+            },
+            {
+              "key": "string",
+              "value": {
+                "string-value": {
+                  "value": "Bengaluru",
+                  "line-number": 5,
+                  "source": "Default"
+                }
+              }
+            }
+          ],
+          "line_number": 1
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 1
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "flag",
+      "kind": {
+        "modifier": null,
+        "kind": "boolean"
+      },
+      "mutable": false,
+      "value": {
+        "string-value": {
+          "value": "true",
+          "line-number": 9,
+          "source": "Default"
+        }
+      },
+      "processor": null,
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 9
+    }
+  },
+  {
+    "component-invocation": {
+      "name": "ftd.column",
+      "properties": [],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "string-value": {
+                  "value": "$obj",
+                  "line-number": 13,
+                  "source": "Default"
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line-number": 13
+            }
+          ],
+          "iteration": {
+            "on": "$locations",
+            "alias": "obj",
+            "line-number": 14
+          },
+          "condition": null,
+          "events": [],
+          "children": [],
+          "line-number": 13
+        },
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "string-value": {
+                  "value": "$description",
+                  "line-number": 16,
+                  "source": "Default"
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line-number": 16
+            }
+          ],
+          "iteration": null,
+          "condition": {
+            "expression": "$flag",
+            "line-number": 17
+          },
+          "events": [],
+          "children": [],
+          "line-number": 16
+        },
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "string-value": {
+                  "value": "Click Here",
+                  "line-number": 19,
+                  "source": "Default"
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line-number": 19
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [
+            {
+              "name": "click",
+              "action": "toggle $flag",
+              "line-number": 20
+            }
+          ],
+          "children": [],
+          "line-number": 19
+        }
+      ],
+      "line-number": 11
+    }
+  }
+]

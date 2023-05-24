@@ -1,0 +1,8 @@
+-- component display:
+string name:
+
+-- ftd.text:
+
+$name
+
+-- end: display

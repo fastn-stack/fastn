@@ -1,0 +1,28 @@
+-- component display:
+
+-- boolean display.flag: true
+
+-- string display.description:
+
+This is description of display component
+
+-- string list display.locations:
+
+-- string: Varanasi
+-- string: Prayagraj
+-- string: Bengaluru
+
+-- end: display.locations
+
+-- ftd.column:
+
+-- ftd.text: $obj
+$loop$: $locations as $obj
+
+-- ftd.text: $description
+$on-click$: toggle $flag
+color if $flag: red
+
+-- end: ftd.column
+
+-- end: display

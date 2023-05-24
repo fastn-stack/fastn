@@ -1,0 +1,20 @@
+-- record person:
+string name:
+integer age:
+
+-- person list $people:
+
+-- person:
+name: Arpita
+age: 10
+
+-- end: $people
+
+
+-- $people:
+
+-- person:
+name: Ayushi
+age: 9
+
+-- end: $people

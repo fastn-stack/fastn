@@ -1,0 +1,41 @@
+[
+  {
+    "FunctionDefinition": {
+      "name": "sum",
+      "kind": {
+        "modifier": null,
+        "kind": "integer"
+      },
+      "arguments": [
+        {
+          "name": "a",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 2,
+          "access_modifier": "Public"
+        },
+        {
+          "name": "b",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
+          "value": null,
+          "line_number": 3,
+          "access_modifier": "Public"
+        }
+      ],
+      "line_number": 1,
+      "definition": {
+        "line_number": 5,
+        "value": "a + b"
+      },
+      "js": null
+    }
+  }
+]

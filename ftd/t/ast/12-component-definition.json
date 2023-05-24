@@ -1,0 +1,173 @@
+[
+  {
+    "ComponentDefinition": {
+      "name": "display",
+      "arguments": [
+        {
+          "name": "flag",
+          "kind": {
+            "modifier": null,
+            "kind": "boolean"
+          },
+          "mutable": false,
+          "value": {
+            "string-value": {
+              "value": "true",
+              "line-number": 3,
+              "source": "Default"
+            }
+          },
+          "line_number": 3,
+          "access_modifier": "Public"
+        },
+        {
+          "name": "description",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "string-value": {
+              "value": "This is description of display component",
+              "line-number": 7,
+              "source": "Default"
+            }
+          },
+          "line_number": 7,
+          "access_modifier": "Public"
+        },
+        {
+          "name": "locations",
+          "kind": {
+            "modifier": "List",
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "List": {
+              "value": [
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
+                      "value": "Varanasi",
+                      "line-number": 11,
+                      "source": "Default"
+                    }
+                  }
+                },
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
+                      "value": "Prayagraj",
+                      "line-number": 12,
+                      "source": "Default"
+                    }
+                  }
+                },
+                {
+                  "key": "string",
+                  "value": {
+                    "string-value": {
+                      "value": "Bengaluru",
+                      "line-number": 13,
+                      "source": "Default"
+                    }
+                  }
+                }
+              ],
+              "line_number": 13
+            }
+          },
+          "line_number": 13,
+          "access_modifier": "Public"
+        }
+      ],
+      "definition": {
+        "name": "ftd.column",
+        "properties": [],
+        "iteration": null,
+        "condition": null,
+        "events": [],
+        "children": [
+          {
+            "name": "ftd.text",
+            "properties": [
+              {
+                "value": {
+                  "string-value": {
+                    "value": "$obj",
+                    "line-number": 19,
+                    "source": "Default"
+                  }
+                },
+                "source": "Caption",
+                "condition": null,
+                "line-number": 19
+              }
+            ],
+            "iteration": {
+              "on": "$locations",
+              "alias": "obj",
+              "line-number": 20
+            },
+            "condition": null,
+            "events": [],
+            "children": [],
+            "line-number": 19
+          },
+          {
+            "name": "ftd.text",
+            "properties": [
+              {
+                "value": {
+                  "string-value": {
+                    "value": "red",
+                    "line-number": 24,
+                    "source": "Default"
+                  }
+                },
+                "source": {
+                  "header": {
+                    "name": "color",
+                    "mutable": false
+                  }
+                },
+                "condition": "$flag",
+                "line-number": 24
+              },
+              {
+                "value": {
+                  "string-value": {
+                    "value": "$description",
+                    "line-number": 22,
+                    "source": "Default"
+                  }
+                },
+                "source": "Caption",
+                "condition": null,
+                "line-number": 22
+              }
+            ],
+            "iteration": null,
+            "condition": null,
+            "events": [
+              {
+                "name": "click",
+                "action": "toggle $flag",
+                "line-number": 23
+              }
+            ],
+            "children": [],
+            "line-number": 22
+          }
+        ],
+        "line-number": 17
+      },
+      "css": null,
+      "line_number": 1
+    }
+  }
+]
