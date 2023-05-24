@@ -438,12 +438,7 @@ impl State {
     ) -> ftd::p1::Result<()> {
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value: (Vec<String>, Option<usize>) = (vec![], None);
-            let mut header_values: ftd::Map<(
-                Option<String>,
-                Option<String>,
-                Option<String>,
-                usize,
-            )> = ftd::Map::new();
+            let mut inline_record_headers: ftd::Map<HeaderData> = ftd::Map::new();
             let mut new_line_number = None;
             let mut first_line = true;
             let split_content = self.content.as_str().split('\n');
@@ -456,9 +451,9 @@ impl State {
                 if !valid_line(line) {
                     continue;
                 }
-                let inline_header_found = line.contains(':');
+                let inline_record_header_found = line.contains(':');
                 if first_line {
-                    if !line.trim().is_empty() && !inline_header_found {
+                    if !line.trim().is_empty() && !inline_record_header_found {
                         return Err(ftd::p1::Error::ParseError {
                             message: format!("start section body '{}' after a newline!!", line),
                             doc_id: self.doc_id.to_string(),
@@ -468,7 +463,7 @@ impl State {
                     first_line = false;
                 }
 
-                if inline_header_found {
+                if inline_record_header_found {
                     if let Ok((name_with_kind, caption)) = colon_separated_values(
                         ftd::p1::utils::i32_to_usize(self.line_number),
                         line,
@@ -477,14 +472,15 @@ impl State {
                         // Caption, kind, condition, line_number
                         let (header_key, kind, condition) =
                             get_name_kind_and_condition(name_with_kind.as_str());
-                        header_values.insert(
+                        inline_record_headers.insert(
                             header_key,
-                            (
-                                caption,
+                            HeaderData {
+                                value: caption,
                                 kind,
                                 condition,
-                                ftd::p1::utils::i32_to_usize(self.line_number),
-                            ),
+                                source: Some(Default::default()),
+                                line_number: ftd::p1::utils::i32_to_usize(self.line_number),
+                            },
                         );
                     }
                 } else if !line.is_empty() || !value.0.is_empty() {
@@ -506,17 +502,19 @@ impl State {
                 })?
                 .0;
             let value = (value.0.join("\n").trim().to_string(), value.1);
-            if !header_values.is_empty() || (header_caption.is_some() && !value.0.is_empty()) {
-                let fields = header_values
+            if !inline_record_headers.is_empty()
+                || (header_caption.is_some() && !value.0.is_empty())
+            {
+                let fields = inline_record_headers
                     .iter()
-                    .map(|(key, (value, kind, condition, ln))| {
+                    .map(|(key, data)| {
                         ftd::p1::Header::kv(
-                            *ln,
+                            data.line_number,
                             key,
-                            kind.to_owned(),
-                            value.to_owned(),
-                            condition.to_owned(),
-                            Default::default(),
+                            data.kind.to_owned(),
+                            data.value.to_owned(),
+                            data.condition.to_owned(),
+                            data.source.to_owned(),
                         )
                     })
                     .collect();
@@ -734,6 +732,15 @@ impl State {
         }
         None
     }
+}
+
+#[derive(Debug)]
+pub struct HeaderData {
+    value: Option<String>,
+    kind: Option<String>,
+    condition: Option<String>,
+    source: Option<ftd::p1::header::KvSource>,
+    line_number: usize,
 }
 
 pub fn parse(content: &str, doc_id: &str) -> ftd::p1::Result<Vec<ftd::p1::Section>> {

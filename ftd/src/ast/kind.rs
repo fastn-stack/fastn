@@ -599,19 +599,10 @@ impl VariableValue {
                 ..
             }) => VariableValue::Record {
                 name: key.to_string(),
-                caption: Box::new(caption.as_ref().map(|c| {
-                    return if !c.is_empty() {
-                        VariableValue::String {
-                            value: c.to_string(),
-                            line_number: *line_number,
-                            source: ValueSource::Caption,
-                        }
-                    } else {
-                        VariableValue::Optional {
-                            value: Box::new(None),
-                            line_number: *line_number,
-                        }
-                    };
+                caption: Box::new(caption.as_ref().map(|c| VariableValue::String {
+                    value: c.to_string(),
+                    line_number: *line_number,
+                    source: ValueSource::Caption,
                 })),
                 headers: {
                     let mut headers = vec![];
