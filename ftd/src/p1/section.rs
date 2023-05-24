@@ -95,6 +95,7 @@ impl Section {
                 Some(value.to_string())
             },
             None,
+            Default::default(),
         ));
         self
     }

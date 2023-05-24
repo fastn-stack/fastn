@@ -40,6 +40,14 @@ impl BlockRecordHeader {
     }
 }
 
+#[derive(Debug, Default, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+pub enum KvSource {
+    Caption,
+    Body,
+    #[default]
+    Header,
+}
+
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
 #[serde(default)]
 pub struct KV {
@@ -49,6 +57,7 @@ pub struct KV {
     pub value: Option<String>,
     pub condition: Option<String>,
     pub access_modifier: AccessModifier,
+    pub source: KvSource,
 }
 
 impl KV {
@@ -58,6 +67,7 @@ impl KV {
         value: Option<String>,
         line_number: usize,
         condition: Option<String>,
+        source: Option<KvSource>,
     ) -> KV {
         let mut access_modifier = AccessModifier::Public;
         if let Some(k) = kind.as_ref() {
@@ -73,6 +83,7 @@ impl KV {
             value,
             condition,
             access_modifier,
+            source: source.unwrap_or_default(),
         }
     }
 }
@@ -144,6 +155,7 @@ impl Header {
             None,
             Some(value.to_string()),
             None,
+            Some(KvSource::Caption),
         )
     }
 
@@ -153,8 +165,9 @@ impl Header {
         kind: Option<String>,
         value: Option<String>,
         condition: Option<String>,
+        source: Option<KvSource>,
     ) -> Header {
-        Header::KV(KV::new(key, kind, value, line_number, condition))
+        Header::KV(KV::new(key, kind, value, line_number, condition, source))
     }
 
     pub(crate) fn section(

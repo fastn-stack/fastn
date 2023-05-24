@@ -87,6 +87,25 @@ dark: blue
 -- foo.text-color.dark: $d-color
 
 ;; ----------------------------
+
+-- bar:
+
+-- bar.text:
+
+Hello This is some text
+
+-- bar.d: Rithik
+
+-- bar.d.description:
+
+This is body
+
+-- bar.d.age: 23
+
+-- bar.text-color: red
+dark: blue
+
+;; ----------------------------
 ;;          VARIABLES
 ;; ----------------------------
 
@@ -109,6 +128,36 @@ color: $foo.text-color
 margin-vertical.px: 10
 
 -- end: foo
+
+-- component bar:
+data d:
+string text: abc
+ftd.color text-color: black
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $bar.text
+color: $bar.text-color
+
+-- ftd.text: $bar.d.name
+color: $bar.text-color
+
+-- ftd.text: $bar.d.description
+color: $bar.text-color
+
+-- ftd.integer: $bar.d.age
+if: { bar.d.age != NULL }
+color: $bar.text-color
+
+-- end: ftd.column
+
+-- end: bar
+
+-- record data:
+caption name:
+body description:
+optional integer age:
 
 
 
