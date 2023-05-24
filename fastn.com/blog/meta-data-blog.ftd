@@ -1,4 +1,4 @@
--- my-ds.page: Search Engine Optimization (SEO)
+-- my-ds.page: Optimizing website through meta-data
 
 Ajit Garg, 22 May 2023
 
@@ -6,6 +6,9 @@ In today's digital landscape, where online presence plays a pivotal role in
 reaching a wider audience, ensuring that your website or webpage attracts
 attention and appears prominently on search engine results pages is crucial.
 This is where the power of Search Engine Optimization (SEO) comes into play.
+
+Optimizing website by adding meta data is one way to do SEO, but let's first 
+understand what SEO is?
 
 
 -- ds.h1: What is SEO
@@ -77,8 +80,9 @@ Therefore, conducting regular SEO audits to identify areas that can be improved
 must be a practice to keep up the changing world.
 
 
--- ds.h1: How to buzz on Social Media
+-- ds.h1: Optimizing SEO with meta data for doc-site
 
+Out of many other ways,
 `Open-graph meta tags` (og-tags) is key to make your content more clickable,
 shareable, and noticeable on social-media.
 
@@ -100,6 +104,19 @@ width: fill-container
 border-color: $inherited.colors.border
 shadow: $s
 
+-- ds.markdown:
+
+In `fastn-community` we have a package called 
+[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
+out-of-the-box documentation features that can be used to create any kind of 
+site.
+
+Any website that uses `doc-site` can very easily add their customized meta 
+data using properties like `document-title`, `document-description` and 
+`document-image` in the `page` component of this package.
+
+You can learn [`How to add meta data for better website optimization`](/seo/) 
+and improve your website's search ranking and traffic through social media.
 
 -- ds.h2: Why are Open Graph tags important
 
@@ -131,21 +148,6 @@ driving increased traffic and engagement. Whether you're aiming to expand your
 online reach, boost your brand's visibility, or simply connect with more
 potential users or customers, harnessing the potential of SEO is an essential
 step toward achieving your goals.
-
-
-At `FifthTry` we have a package called 
-[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
-out-of-the-box documentation features that can be used to create any kind of 
-site.
-
-Any website that uses `doc-site` can very easily add their customized meta 
-data using properties like `document-title`, `document-description` and 
-`document-image` in the `page` component of this package.
-
-You can learn [`How to do SEO`](/seo/) and improve your website's search 
-ranking and traffic through social media.
-
-
 
 
 -- end: my-ds.page

@@ -318,8 +318,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Using images in documents: /using-images/
   document: /expander/imagemodule/index.ftd
-- Optimize a website: /seo/-/frontend/
-  document: /expander/ds/seo.ftd
+- Add meta data: /seo-meta-data/-/frontend/
+  document: /expander/ds/meta-data.ftd
 
 
 
@@ -395,15 +395,15 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/border-radius.ftd
 - Using images in documents: /using-images/-/build/
   document: /expander/imagemodule/index.ftd
-- Optimize a website: /seo/
-  document: /expander/ds/seo.ftd
+- Add meta-data: /seo-meta-data/
+  document: /expander/ds/meta-data.ftd
 
 
-# Blog: /blog/seo/
-  document: blog/seo-blog.ftd
+# Blog: /blog/
+  document: blog/meta-data-blog.ftd
 
-- Optimize your website: /blog/seo/
-  document: blog/seo-blog.ftd
+- Optimize your website: /blog/seo-meta-data/
+  document: blog/meta-data-blog.ftd
 - trizwitlabs web event: /trizwitlabs/
   document: blog/trizwitlabs.ftd
 - `fastn` goes to Philippines: /namaste-philippines/
@@ -441,8 +441,8 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
-- SEO: /seo/-/planning/
-  document: expander/ds/seo.ftd
+- SEO: /seo-meta-data/-/planning/
+  document: expander/ds/meta-data.ftd
 - Understanding sitemap: /understanding-sitemap/-/planning/
   document: /expander/ds/understanding-sitemap.ftd
 - Using images in documents: /using-images/-/planning/

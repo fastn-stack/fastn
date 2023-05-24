@@ -1,7 +1,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: Search Engine Optimization (SEO)
+-- my-ds.page: Optimizing SEO with meta data for `doc-site`
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -9,7 +9,7 @@ if: { source == "default" || source == "build" }
 In this video we will see how to implement SEO features to improve a website's 
 visibility.
 
--- lib.video-audience: How to optimize your website
+-- lib.video-audience: How to add meta data for better website optimization
 if: { source == "planning" }
 owner: Ajit
 aud: Website Builders
