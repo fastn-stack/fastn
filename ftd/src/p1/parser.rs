@@ -232,29 +232,29 @@ impl State {
     #[allow(clippy::too_many_arguments)]
     fn eval_from_kv_header(
         header_key: &str,
-        header_value: String,
-        header_kind: Option<String>,
-        header_condition: Option<String>,
-        header_source: ftd::p1::header::KvSource,
+        header_data: HeaderData,
         section: &mut ftd::p1::Section,
-        line_number: usize,
         doc_id: &str,
     ) -> ftd::p1::Result<()> {
         if let Some((header, field)) = header_key.split_once('.') {
             // Record Field syntax
-            if let Ok(existing) = section.headers.find_once_mut(header, doc_id, line_number) {
+            if let Ok(existing_header) =
+                section
+                    .headers
+                    .find_once_mut(header, doc_id, header_data.line_number)
+            {
                 // Existing header found with same name
-                match existing {
+                match existing_header {
                     ftd::p1::Header::BlockRecordHeader(br_header) => {
                         // Existing header is of block record type
                         // So update its fields
                         let current_field = ftd::p1::Header::kv(
-                            line_number,
+                            header_data.line_number,
                             field,
-                            header_kind,
-                            Some(header_value),
-                            header_condition,
-                            Some(ftd::p1::header::KvSource::Header),
+                            header_data.kind,
+                            header_data.value,
+                            header_data.condition,
+                            header_data.source,
                         );
                         br_header.fields.push(current_field);
                     }
@@ -279,17 +279,17 @@ impl State {
                             existing_header_caption,
                             existing_header_body,
                             vec![ftd::p1::Header::kv(
-                                line_number,
+                                header_data.line_number,
                                 field,
-                                header_kind,
-                                Some(header_value),
-                                header_condition,
-                                Some(header_source),
+                                header_data.kind,
+                                header_data.value,
+                                header_data.condition,
+                                header_data.source,
                             )],
                             kv.condition.to_owned(),
                             kv.line_number,
                         );
-                        *existing = block_record_header;
+                        *existing_header = block_record_header;
                     }
                     _ => unimplemented!(),
                 }
@@ -297,34 +297,30 @@ impl State {
                 // No existing block record header found under section.headers
                 section.headers.push(ftd::p1::Header::block_record_header(
                     header,
-                    header_kind.clone(),
+                    header_data.kind.clone(),
                     None,
                     (None, None),
                     vec![ftd::p1::Header::kv(
-                        line_number,
+                        header_data.line_number,
                         field,
-                        header_kind,
-                        Some(header_value),
-                        header_condition.clone(),
-                        Some(header_source),
+                        header_data.kind,
+                        header_data.value,
+                        header_data.condition.clone(),
+                        header_data.source,
                     )],
-                    header_condition,
-                    line_number,
+                    header_data.condition,
+                    header_data.line_number,
                 ));
             }
         } else {
             // Normal header
             section.headers.push(ftd::p1::Header::kv(
-                line_number,
+                header_data.line_number,
                 header_key,
-                header_kind,
-                if !header_value.is_empty() {
-                    Some(header_value)
-                } else {
-                    None
-                },
-                header_condition,
-                Some(header_source),
+                header_data.kind,
+                header_data.value,
+                header_data.condition,
+                header_data.source,
             ));
         }
         Ok(())
@@ -400,16 +396,14 @@ impl State {
         let next_inline_header = next_line.contains(':') && !next_line.starts_with("-- ");
 
         if let (Some(value), true) = (value.clone(), !next_inline_header) {
-            Self::eval_from_kv_header(
-                key,
-                value,
+            let header_data = HeaderData::new(
+                Some(value),
                 kind,
                 condition,
-                ftd::p1::header::KvSource::Caption,
-                section,
+                Some(ftd::p1::header::KvSource::Caption),
                 ftd::p1::utils::i32_to_usize(self.line_number),
-                doc_id.as_str(),
-            )?;
+            );
+            Self::eval_from_kv_header(key, header_data, section, doc_id.as_str())?;
         } else {
             parsing_states.push(if is_caption(key) {
                 ParsingStateReading::Caption
@@ -474,13 +468,13 @@ impl State {
                             get_name_kind_and_condition(name_with_kind.as_str());
                         inline_record_headers.insert(
                             header_key,
-                            HeaderData {
-                                value: caption,
+                            HeaderData::new(
+                                caption,
                                 kind,
                                 condition,
-                                source: Some(Default::default()),
-                                line_number: ftd::p1::utils::i32_to_usize(self.line_number),
-                            },
+                                Some(Default::default()),
+                                ftd::p1::utils::i32_to_usize(self.line_number),
+                            ),
                         );
                     }
                 } else if !line.is_empty() || !value.0.is_empty() {
@@ -532,16 +526,19 @@ impl State {
                     header_line_number,
                 ));
             } else {
-                Self::eval_from_kv_header(
-                    header_key,
-                    value.0,
-                    header_kind,
-                    header_condition,
-                    ftd::p1::header::KvSource::Body,
-                    section,
-                    value.1.unwrap_or(header_line_number),
-                    doc_id.as_str(),
-                )?;
+                let header_data = HeaderData {
+                    value: if !value.0.is_empty() {
+                        Some(value.0)
+                    } else {
+                        None
+                    },
+                    kind: header_kind,
+                    condition: header_condition,
+                    source: Some(ftd::p1::header::KvSource::Body),
+                    line_number: value.1.unwrap_or(header_line_number),
+                };
+                dbg!(&header_data);
+                Self::eval_from_kv_header(header_key, header_data, section, doc_id.as_str())?;
             }
         }
         Ok(())
@@ -741,6 +738,24 @@ pub struct HeaderData {
     condition: Option<String>,
     source: Option<ftd::p1::header::KvSource>,
     line_number: usize,
+}
+
+impl HeaderData {
+    pub fn new(
+        value: Option<String>,
+        kind: Option<String>,
+        condition: Option<String>,
+        source: Option<ftd::p1::header::KvSource>,
+        line_number: usize,
+    ) -> Self {
+        HeaderData {
+            value,
+            kind,
+            condition,
+            source,
+            line_number,
+        }
+    }
 }
 
 pub fn parse(content: &str, doc_id: &str) -> ftd::p1::Result<Vec<ftd::p1::Section>> {
