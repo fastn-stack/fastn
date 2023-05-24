@@ -136,17 +136,24 @@ impl Dom {
         println!("add_child: {:?} -> {:?}", &parent_key, &child_key);
     }
 
-    fn set_column_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
+    fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
         style.size.width = taffy::prelude::points(width as f32);
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
-    fn set_column_height_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
+    fn set_element_height_px(&mut self, key: fastn_runtime::NodeKey, height: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
-        style.size.height = taffy::prelude::points(width as f32);
+        style.size.height = taffy::prelude::points(height as f32);
+        self.taffy.set_style(taffy_key, style).unwrap();
+    }
+
+    fn set_element_height_percent(&mut self, key: fastn_runtime::NodeKey, height: f32) {
+        let taffy_key = self.nodes[key].taffy();
+        let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        style.size.height = taffy::prelude::points(height as f32);
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
@@ -157,9 +164,14 @@ impl Dom {
         value: Value,
     ) {
         match property_kind {
-            fastn_runtime::PropertyKind::WidthFixedPx => self.set_column_width_px(key, value.i32()),
+            fastn_runtime::PropertyKind::WidthFixedPx => {
+                self.set_element_width_px(key, value.i32())
+            }
             fastn_runtime::PropertyKind::HeightFixedPx => {
-                self.set_column_height_px(key, value.i32())
+                self.set_element_height_px(key, value.i32())
+            }
+            fastn_runtime::PropertyKind::HeightFixedPercentage => {
+                self.set_element_height_percent(key, value.f32())
             }
         }
     }
@@ -232,6 +244,34 @@ impl Dom {
         linker
             .func_new(
                 "fastn",
+                "set_f32_prop",
+                wasmtime::FuncType::new(
+                    [
+                        wasmtime::ValType::ExternRef,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::F32,
+                    ]
+                    .iter()
+                    .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().set_property(
+                            params.key(0),
+                            params.i32(0).into(),
+                            params.f32(0).into(),
+                        ),
+                    )));
+
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
                 "set_column_width_px",
                 wasmtime::FuncType::new(
                     [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
@@ -243,7 +283,7 @@ impl Dom {
                     // ExternRef is a reference-counted pointer to a host-defined object. We mut not
                     // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
                     // affects us yet.
-                    caller.data_mut().set_column_width_px(p.key(0), p.i32(1));
+                    caller.data_mut().set_element_width_px(p.key(0), p.i32(1));
                     Ok(())
                 },
             )
@@ -316,12 +356,26 @@ impl From<i32> for Value {
     }
 }
 
+impl From<f32> for Value {
+    fn from(i: f32) -> Value {
+        Value::F32(i)
+    }
+}
+
 impl Value {
     fn i32(&self) -> i32 {
         if let Value::I32(i) = self {
             *i
         } else {
             panic!("Expected i32 value")
+        }
+    }
+
+    fn f32(&self) -> f32 {
+        if let Value::F32(i) = self {
+            *i
+        } else {
+            panic!("Expected f32 value")
         }
     }
 }
