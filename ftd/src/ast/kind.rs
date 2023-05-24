@@ -617,7 +617,6 @@ impl VariableValue {
                     let mut headers = vec![];
                     for header in fields.iter() {
                         let key = header.get_key();
-                        dbg!(&key);
                         headers.push(HeaderValue::new(
                             key.trim_start_matches(ftd::ast::utils::REFERENCE),
                             ftd::ast::utils::is_variable_mutable(key.as_str()),
@@ -645,7 +644,7 @@ impl VariableValue {
         line_number: usize,
     ) -> VariableValue {
         match value {
-            Some(value) if value.ne(NULL) => VariableValue::String {
+            Some(value) if value.ne(NULL) && !value.is_empty() => VariableValue::String {
                 value: value.to_string(),
                 line_number,
                 source,

@@ -318,7 +318,11 @@ impl State {
                 line_number,
                 header_key,
                 header_kind,
-                Some(header_value),
+                if !header_value.is_empty() {
+                    Some(header_value)
+                } else {
+                    None
+                },
                 header_condition,
                 Some(header_source),
             ));
@@ -432,7 +436,6 @@ impl State {
         header_condition: Option<String>,
         header_line_number: usize,
     ) -> ftd::p1::Result<()> {
-        dbg!(&header_key, &header_caption, &header_line_number);
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value: (Vec<String>, Option<usize>) = (vec![], None);
             let mut header_values: ftd::Map<(
@@ -484,7 +487,7 @@ impl State {
                             ),
                         );
                     }
-                } else if !line.is_empty() {
+                } else if !line.is_empty() || !value.0.is_empty() {
                     // value(body) = (vec![string], line_number)
                     value.0.push(clean_line(line));
                     if value.1.is_none() {
@@ -502,7 +505,6 @@ impl State {
                     line_number: header_line_number,
                 })?
                 .0;
-            dbg!(&header_values);
             let value = (value.0.join("\n").trim().to_string(), value.1);
             if !header_values.is_empty() || (header_caption.is_some() && !value.0.is_empty()) {
                 let fields = header_values
