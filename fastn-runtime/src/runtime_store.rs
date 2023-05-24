@@ -144,6 +144,12 @@ impl Memory {
         pointer
     }
 
+    pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
+        let pointer = self.i32.insert((value, vec![]));
+        self.insert_in_frame(pointer, Kind::Integer);
+        pointer
+    }
+
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
         let r_pointer = self.i32.insert((r, vec![]));
         let g_pointer = self.i32.insert((g, vec![]));
@@ -193,6 +199,27 @@ impl Memory {
                     // affects us yet.
                     results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
                         caller.data_mut().store.create_boolean(params.boolean(0)),
+                    )));
+
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "create_i32",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::I32].iter().cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().store.create_i32(params.i32(0)),
                     )));
 
                     Ok(())
