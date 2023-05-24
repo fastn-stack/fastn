@@ -3,11 +3,10 @@
     (import "fastn" "end_frame" (func $end_frame))
     (import "fastn" "create_kernel" (func $create_kernel (param i32 externref) (result externref)))
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
+    (import "fastn" "create_i32" (func $create_i32 (param i32) (result externref)))
     (import "fastn" "create_rgba" (func $create_rgba (param i32 i32 i32 f32) (result externref)))
-    (import "fastn" "create_boolean_with_root" (func $create_boolean_with_root (param externref externref i32) (result externref)))
-    (import "fastn" "attach_to_ui" (func $attach_to_ui (param externref externref externref) (result externref)))
     (import "fastn" "set_i32_prop" (func $set_i32_prop (param externref i32 i32)))
-    (import "fastn" "set_f32_prop" (func $set_i32_prop (param externref i32 f32)))
+    (import "fastn" "set_f32_prop" (func $set_f32_prop (param externref i32 f32)))
     ;; set_i32_prop_func(element, prop, func, variables)
     ;; prop = 0 = fixed width in pixels etc
     ;; func = function to call, index in the table, func must return i32
@@ -30,21 +29,11 @@
         (call $create_frame)
 
         ;; -- boolean $any-hover: false
-        (global.set $main#any-hover
-            (call $create_boolean_with_root
-                (local.get $root)
-                (local.get $root)
-                (i32.const 0)
-            )
-        )
+        (global.set $main#any-hover (call $create_boolean (i32.const 0)))
 
         ;; -- integer x: 10
         (global.set $main#x
-            (call $create_i32_with_root
-                (local.get $root)
-                (local.get $root)
-                (i32.const 10)
-            )
+            (call $create_i32 (i32.const 10))
         )
 
         ;; -- ftd.column:

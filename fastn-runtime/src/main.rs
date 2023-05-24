@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
     // check if --wasm is passed on cli
-    let _wat = if std::env::args().any(|arg| arg == "--stdin") {
+    let wat = if std::env::args().any(|arg| arg == "--stdin") {
         use std::io::Read;
 
         let mut buffer = String::new();
@@ -55,9 +55,9 @@ async fn main() {
     "#.to_string()
     };
 
-    // let document = fastn_runtime::Document::new(wat);
+    let document = fastn_runtime::Document::new(wat);
 
-    let document = fastn_runtime::Document::new(create_module());
+    // let document = fastn_runtime::Document::new(create_module());
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;

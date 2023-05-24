@@ -189,44 +189,6 @@ impl Dom {
         linker
             .func_new(
                 "fastn",
-                "root_container",
-                wasmtime::FuncType::new(
-                    [].iter().cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data().root,
-                    )));
-                    Ok(())
-                },
-            )
-            .unwrap();
-        linker
-            .func_new(
-                "fastn",
-                "add_child",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef, wasmtime::ValType::ExternRef]
-                        .iter()
-                        .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    caller.data_mut().add_child(params.key(0), params.key(1));
-                    Ok(())
-                },
-            )
-            .unwrap();
-        linker
-            .func_new(
-                "fastn",
                 "set_column_width_px",
                 wasmtime::FuncType::new(
                     [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
@@ -239,25 +201,6 @@ impl Dom {
                     // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
                     // affects us yet.
                     caller.data_mut().set_column_width_px(p.key(0), p.i32(1));
-                    Ok(())
-                },
-            )
-            .unwrap();
-        linker
-            .func_new(
-                "fastn",
-                "set_column_height_px",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
-                        .iter()
-                        .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    caller.data_mut().set_column_height_px(p.key(0), p.i32(1));
                     Ok(())
                 },
             )
