@@ -229,6 +229,7 @@ impl State {
         Ok(())
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn eval_from_kv_header(
         header_key: &str,
         header_value: String,
@@ -239,7 +240,7 @@ impl State {
         line_number: usize,
         doc_id: &str,
     ) -> ftd::p1::Result<()> {
-        if let Some((header, field)) = header_key.split_once(".") {
+        if let Some((header, field)) = header_key.split_once('.') {
             // Record Field syntax
             if let Ok(existing) = section.headers.find_once_mut(header, doc_id, line_number) {
                 // Existing header found with same name
@@ -282,7 +283,7 @@ impl State {
                                 field,
                                 header_kind,
                                 Some(header_value),
-                                header_condition.clone(),
+                                header_condition,
                                 Some(header_source),
                             )],
                             kv.condition.to_owned(),

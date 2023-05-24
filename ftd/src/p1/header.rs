@@ -433,8 +433,7 @@ impl Headers {
     ) -> ftd::p1::Result<&mut ftd::p1::Header> {
         self.0
             .iter_mut()
-            .filter(|v| v.get_key().eq(key))
-            .next()
+            .find(|v| v.get_key().eq(key))
             .ok_or(ftd::p1::Error::HeaderNotFound {
                 key: key.to_string(),
                 doc_id: doc_id.to_string(),
