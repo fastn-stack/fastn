@@ -5,9 +5,12 @@ pub struct Memory {
     boolean: slotmap::SlotMap<fastn_runtime::PointerKey, bool>,
     i32: slotmap::SlotMap<fastn_runtime::PointerKey, i32>,
     f32: slotmap::SlotMap<fastn_runtime::PointerKey, f32>,
-    vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<Key>>,
+    // vec can store both vecs, and structs
+    vec: slotmap::SlotMap<fastn_runtime::PointerKey, Vec<Pointer>>,
+    r#enum: slotmap::SlotMap<fastn_runtime::PointerKey, (u8, Vec<Pointer>)>,
 
-    pointer_deps: std::collections::HashMap<Key, Vec<SDep>>,
+    attachment: std::collections::HashMap<Pointer, Vec<SDep>>,
+    ui_deps: std::collections::HashMap<fastn_runtime::NodeKey, Vec<Pointer>>,
 }
 
 #[derive(Debug)]
@@ -15,18 +18,18 @@ pub struct SDep {
     // this is the dom element we are directly or indirectly connected with
     element: fastn_runtime::NodeKey,
     // who told we us about this connection
-    source: Key,
+    source: Pointer,
 }
 
 #[derive(Debug, Hash, PartialEq, Eq)]
-struct Key {
+struct Pointer {
     key: fastn_runtime::PointerKey,
     kind: Kind,
 }
 
 #[derive(Debug, Default)]
 pub struct Frame {
-    pointers: Vec<Key>,
+    pointers: Vec<Pointer>,
 }
 
 #[derive(Debug, Hash, PartialEq, Eq)]
@@ -40,26 +43,53 @@ enum Kind {
 }
 
 impl Memory {
-    pub fn _attach_to_dom(
+    pub fn detach_dom(&mut self, dom: fastn_runtime::NodeKey) {
+        for pointer in self.ui_deps.remove(&dom).unwrap_or_default() {
+            self.drop_pointer(&pointer);
+        }
+    }
+
+    pub fn attach_to_dom(
         &mut self,
-        _dom: fastn_runtime::PointerKey,
-        _ptr: fastn_runtime::PointerKey,
+        _dom: fastn_runtime::NodeKey,
+        _ptr: Pointer,
     ) {
+        // add a new dependency to ptr, and recursively add it to all its dependencies
         todo!()
     }
 
-    pub fn _attach(&mut self, _a: fastn_runtime::PointerKey, _b: fastn_runtime::PointerKey) {
-        // let _a_deps = match self.pointer_deps.get(&a) {
-        //     None => return,
-        //     Some(v) => v,
-        // };
-
-        todo!()
+    pub fn attach(&mut self, parent: Pointer, child: Pointer) {
+        let parent_attachments = self.attachment.get(&parent).or_default();
+        let child_attachments = self.attachment.entry(child).or_default();
+        for parent_attachment in parent_attachments.iter() {
+            // if parent has not already given the attachment to the child, add it
+            child_attachments.push(parent_attachment.clone());
+        }
+        // TODO: pass all attachments from parent to child
+        self.drop_from_frame(&child.key);
     }
 
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: Kind) {
-        if let Some(frame) = self.stack.last_mut() {
-            frame.pointers.push(Key { key: pointer, kind });
+        // using .unwrap() so we crash on a bug instead of silently ignoring it
+        self.stack
+            .last_mut()
+            .unwrap()
+            .pointers
+            .push(Pointer { key: pointer, kind });
+    }
+
+    pub fn create_frame(&mut self) {
+        self.stack.push(Frame::default());
+    }
+
+    fn drop_pointer(&mut self, _pointer: &Pointer) {
+        todo!()
+    }
+
+    pub fn end_frame(&mut self) {
+        // using .unwrap() so we crash on a bug instead of silently ignoring it
+        for pointer in self.stack.pop().unwrap().pointers.iter() {
+            self.drop_pointer(pointer);
         }
     }
 
@@ -74,52 +104,28 @@ impl Memory {
         let g_pointer = self.i32.insert(g);
         let b_pointer = self.i32.insert(b);
         let a_pointer = self.f32.insert(a);
+
         let vec = self.vec.insert(vec![
-            Key {
+            Pointer {
                 key: r_pointer,
                 kind: Kind::Integer,
             },
-            Key {
+            Pointer {
                 key: g_pointer,
                 kind: Kind::Integer,
             },
-            Key {
+            Pointer {
                 key: b_pointer,
                 kind: Kind::Integer,
             },
-            Key {
+            Pointer {
                 key: a_pointer,
                 kind: Kind::Decimal,
             },
         ]);
+
         self.insert_in_frame(vec, Kind::Record);
         vec
-    }
-
-    pub fn create_frame(&mut self) {
-        self.stack.push(Frame::default());
-    }
-
-    pub fn end_frame(&mut self) {
-        if let Some(frame) = self.stack.pop() {
-            self.gc(frame);
-        } else {
-            panic!("end_frame called without create_frame");
-        }
-    }
-
-    fn gc(&mut self, frame: Frame) {
-        for key in frame.pointers {
-            let deps = match self.pointer_deps.get(&key) {
-                None => continue,
-                Some(v) => v,
-            };
-
-            for _dep in deps {
-                // dep.element
-                // dep.source
-            }
-        }
     }
 
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
@@ -229,7 +235,7 @@ mod test {
     }
 
     #[test]
-    fn gc(){
+    fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
         m.create_frame();
