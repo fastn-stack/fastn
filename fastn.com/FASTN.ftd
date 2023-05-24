@@ -484,3 +484,6 @@ favicon: /-/fastn.com/images/favicon.svg
 /blog/web-components/: /web-components/
 /ftd/document/: /document/
 /website-optimization/: /blog/seo/
+/seo/: /seo-meta-data/
+/seo/-/planning: /seo-meta-data/-/planning/
+/blog/seo/: /blog/seo-meta-data/
