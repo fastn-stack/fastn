@@ -161,3 +161,15 @@ optional integer age:
 
 
 
+
+
+
+-- ftd.text: World
+
+-- ftd.text.padding.responsive:
+desktop.percent: 40
+mobile.px: 70
+
+-- ftd.text.width.fixed.responsive:
+desktop.percent: 40
+mobile.px: 70
