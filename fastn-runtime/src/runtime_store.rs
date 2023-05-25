@@ -52,15 +52,6 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<KindPointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
-
-    /// Anything not attached with one of the elements is cleaned off at the end of the frame.
-    /// For all nodes in the entire graph, we keep track of which all ui elements is that node
-    /// connected with.
-    ///
-    /// Since nodes in graph may be connected to same element via multiple nodes, or multiple
-    /// elements via one or more nodes, we keep track of which element we are connected with and
-    /// how are we connected to them (via which immediate parent).
-    attachment: std::collections::HashMap<KindPointer, std::collections::HashSet<Attachment>>,
 }
 
 type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
