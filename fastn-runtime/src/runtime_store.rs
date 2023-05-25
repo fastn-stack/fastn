@@ -25,8 +25,6 @@ use std::fmt::Pointer;
 /// "pointer getting attached to the UI". Any pointer that is not attached to UI gets de-allocated
 /// at first opportunity.
 ///
-/// We store all attachments in `.attachment`. W
-///
 /// When a pointer is created, we also create a `Vec<Attachment>`, and store it next to it. So if
 /// a boolean is created we create a store both the boolean and `Vec<Attachment>` for that boolean
 /// in the `.boolean`. We have a type `PointerData<T>` which keeps track of the value and the
@@ -52,6 +50,12 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<KindPointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
+
+    /// if we have:
+    /// -- ftd.text: hello
+    ///
+    /// a string containing hello will be created, and then passed to Rust as text properties, and
+    /// original wasm value would get dropped.
 }
 
 type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
@@ -60,9 +64,11 @@ type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
 struct HeapData<T> {
     /// The inner value being stored in ftd
     value: HeapValue<T>,
-    /// the list of "formulas" that depend on this.
+    /// the list of values that depend on this, eg if we add x to a list l, we also do a
+    /// x.dependents.add(l)
     dependents: Vec<KindPointer>,
-    ui_properties: Vec<UIDependendent>
+    /// whenever a dom node is added or deleted, it is added or removed from this list.
+    ui_properties: Vec<UIDependendent>,
 }
 
 /// This is the data we store in the heap for any value.
@@ -82,7 +88,7 @@ enum HeapValue<T> {
 struct UIDependent {
     property: UIProperty,
     node: fastn_runtime::NodeKey,
-    closure: fastn_runtime::ClosureKey,
+    closure: Option<fastn_runtime::ClosureKey>,
 }
 
 #[derive(Debug)]
