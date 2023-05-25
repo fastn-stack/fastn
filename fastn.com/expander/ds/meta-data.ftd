@@ -23,7 +23,7 @@ if: { source == "default" || source == "build" }
 In this video we will see how to implement SEO features to improve a website's 
 visibility.
 
--- lib.video-audience: How to add meta data for better website optimization
+-- lib.video-audience: How to add meta-data for better website optimization
 if: { source == "planning" }
 owner: Ajit
 aud: Website Builders
@@ -42,13 +42,13 @@ if: { source == "planning" }
 
 Welcome!! My name is Ajit
 
-In this video we will see how to implement SEO features to improve a website's 
+In this video, we will see how to implement SEO features to improve a website's 
 visibility.
 
-Before that we will briefly learn, 
+Before that, we will briefly learn, 
 - what is SEO
 - why it's important for website creators
-- along with it's benefits, and
+- along with its benefits, and
 - how to use it to optimize your website
 
 -- ds.h1: What is SEO
@@ -76,7 +76,7 @@ requiring continuous investment in paid advertising.
 -- ds.h1: Benefits of SEO
 if: { source == "default" || source == "build" }
 
-SEO encompasses a range of techniques that helps in following ways:
+SEO encompasses a range of techniques that helps in the following ways:
 
 - **Increased organic traffic**: SEO helps improve your website's visibility,
     leading to higher organic traffic from search engines.
@@ -95,11 +95,11 @@ SEO encompasses a range of techniques that helps in following ways:
 -- ds.markdown:
 if: { source == "planning" } 
 
-To read about SEO in detail, you can checkout the blog. The URL is shared in 
+To read about SEO in detail, you can check out the blog. The URL is shared in 
 description
 
 
--- ds.h1: SEO through `page` component of `doc-site`
+-- ds.h1: SEO through the `page` component of `doc-site`
 
 We can do SEO in the `doc-site`, by giving some properties to the `page` 
 component.
@@ -122,15 +122,15 @@ So the title of the component page is this.
 
 -- ds.markdown:
 
-So in the browser, the document title will be same. 
+So in the browser, the document title will be the same. 
 
 -- ds.markdown:
 if: { source == "planning" } 
 
-As you can see, the document title is by default is same as the title of page
-component.
+As you can see, the document title is by default is same as the title of the 
+page component.
 
-If we inspect, in the `header` of the `html` code, we can see the title by
+If we inspect, the `header` of the `html` code, we can see the title by
 default takes the page title.
 
 
@@ -149,7 +149,7 @@ border-color: $inherited.colors.border
 
 -- ds.markdown:
 
-When we add `document-title` property, the page title can have custom
+When we add the `document-title` property, the page title can have custom
 title, which is better for SEO.
 
 The custom title given in this property is added as the meta-data into the 
@@ -174,7 +174,7 @@ border-color: $inherited.colors.border
 
 -- ds.markdown:
 
-And if you notice, there is no meta data for description or image.
+And if you notice, there is no meta-data for description or image.
 
 -- ds.h2: How to add page description
 
@@ -210,9 +210,9 @@ border-color: $inherited.colors.border
 -- ds.h2: How to add page document-image
 
 Similarly, we can give a specific image that we want the users to see when
-the URL is shared in the social media platforms.
+the URL is shared on social media platforms.
 
-For the same, in the `page` component of doc-site, we add another property 
+For the same, in the `page` component of the doc-site, we add another property 
 called `document-image`.
 
 The image provided to this property will be added as the meta-data.
@@ -247,7 +247,7 @@ border-color: $inherited.colors.border
 -- ds.markdown:
 
 Now, if we publish this package and share the URL on social media it will take
-these custom title, description and image.
+the custom title, description, and image.
 
 
 -- ds.h3: Example
@@ -266,7 +266,7 @@ border-color: $inherited.colors.border
 
 -- ds.markdown:
 
-This way we have used the SEO technique and managed to make the URL noticable
+This way we have used the SEO technique and managed to make the URL noticeable
 and meaningful and will also improve the ranking in the search results.
 
 -- ds.h1: Closing Remarks 
