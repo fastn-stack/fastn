@@ -7,8 +7,8 @@ reaching a wider audience, ensuring that your website or webpage attracts
 attention and appears prominently on search engine results pages is crucial.
 This is where the power of Search Engine Optimization (SEO) comes into play.
 
-Optimizing website by adding meta data is one way to do SEO, but let's first 
-understand what SEO is?
+Optimizing a website by adding meta-data is one way to do SEO, but let's first 
+understand what SEO is.
 
 
 -- ds.h1: What is SEO
@@ -30,7 +30,7 @@ effectively with other websites.
 
 -- ds.h1: Benefits of SEO:
 
-SEO encompasses a range of techniques that helps in following ways:
+SEO encompasses a range of techniques that helps in the following ways:
 
 - **Increased organic traffic**: SEO helps improve your website's visibility,
     leading to higher organic traffic from search engines.
@@ -55,15 +55,15 @@ There are various SEO techniques to improve the ranking of the page, like:
     likely to search for when looking for information related to your website.
 
 - **On-page optimization**: Optimize your website's content, Open-graph(og) 
-    meta tags, headings, URLs and inernal linking structure to align with 
+    meta tags, headings, URLs and, internal linking structure to align with 
     targeted keywords.
 
 - **Off-page optimization**: Build high-quality backlinks from reputable
-    websites, engage in social media promotion, and encourage user-generated
+    websites, engage in social media promotion and encourage user-generated
     content.
 
 - **Technical SEO**: Ensure proper website indexing, sitemaps, website speed
-    optimization, mobile-friendliness etc.
+    optimization, mobile-friendliness, etc.
 
 - **Content creation**: Create high-quality, informative, and engaging content
     that incorporates targeted keywords and addresses user intent.
@@ -74,26 +74,26 @@ There are various SEO techniques to improve the ranking of the page, like:
 
 -- ds.markdown:
 
-SEO is a on-going process instead of one-time optimization. With duration
+SEO is an ongoing process instead of one-time optimization. With duration
 URLs are changed, meta tags get outdated or data needs to be updated.
 Therefore, conducting regular SEO audits to identify areas that can be improved
-must be a practice to keep up the changing world.
+must be a practice to keep up with the changing world.
 
 
--- ds.h1: Optimizing SEO with meta data for doc-site
+-- ds.h1: Optimizing SEO with meta-data for doc-site
 
 Out of many other ways,
-`Open-graph meta tags` (og-tags) is key to make your content more clickable,
-shareable, and noticeable on social-media.
+`Open-graph meta tags` (og-tags) are key to making your content more clickable,
+shareable, and noticeable on social media.
 
 -- ds.h2: Open-graph Meta tags
 
 `og-tags` take over the control of how URLs are displayed when shared on
 social-media.
 
-They are part of [Open Graph protocol](https://ogp.me/) that are used by social
-media sites like Facebook, LinkedIn and Twitter (unless there is a dedicated
-twitter tag).
+They are part of [Open Graph protocol](https://ogp.me/) that is used by social
+media sites like Facebook, LinkedIn, and Twitter (unless there is a dedicated
+Twitter tag).
 
 You can find these tags in the `<head>` section of your website.
 
@@ -107,8 +107,8 @@ shadow: $s
 
 -- ds.h2: Why are Open Graph tags important
 
-In the midst of content flooded on the social media, your website needs to 
-standout. People are more likely to see and click shared content with optimized 
+In the midst of content flooding on social media, your website needs to 
+stand out. People are more likely to see and click shared content with optimized 
 OG tags because:
 
 1. They make the content more eye-catching in the feeds
@@ -127,8 +127,10 @@ Any website that uses `doc-site` can very easily add their customized meta
 data using properties like `document-title`, `document-description` and 
 `document-image` in the `page` component of this package.
 
-You can learn [`How to add meta data for better website optimization`](/seo/) 
-and improve your website's search ranking and traffic through social media.
+You can learn 
+[`How to add meta-data for better website optimization`](/seo-meta/) and 
+improve your website's search ranking and traffic through social media.
+
 -- ds.h3: Example
 
 -- ftd.image: 
@@ -145,7 +147,7 @@ shadow: $s
 By implementing effective SEO strategies, you can enhance the visibility,
 discoverability, and overall performance of your online content, ultimately
 driving increased traffic and engagement. Whether you're aiming to expand your
-online reach, boost your brand's visibility, or simply connect with more
+online reach, boost your brand's visibility or simply connect with more
 potential users or customers, harnessing the potential of SEO is an essential
 step toward achieving your goals.
 
