@@ -10,7 +10,9 @@
         "key": "c",
         "kind": null,
         "value": "The C",
-        "condition": "flagC"
+        "condition": "flagC",
+        "access_modifier": "Public",
+        "source": "Header"
       },
       {
         "type": "KV",
@@ -18,7 +20,9 @@
         "key": "a",
         "kind": null,
         "value": "The A",
-        "condition": "flagA"
+        "condition": "flagA",
+        "access_modifier": "Public",
+        "source": "Caption"
       },
       {
         "type": "KV",
@@ -26,7 +30,9 @@
         "key": "b",
         "kind": null,
         "value": "The B",
-        "condition": "flagB"
+        "condition": "flagB",
+        "access_modifier": "Public",
+        "source": "Body"
       }
     ],
     "body": null,

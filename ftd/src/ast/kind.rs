@@ -590,6 +590,42 @@ impl VariableValue {
                     .collect_vec(),
                 line_number: *line_number,
             },
+            ftd::p1::Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader {
+                key,
+                caption,
+                body,
+                fields,
+                line_number,
+                ..
+            }) => VariableValue::Record {
+                name: key.to_string(),
+                caption: Box::new(caption.as_ref().map(|c| VariableValue::String {
+                    value: c.to_string(),
+                    line_number: *line_number,
+                    source: ValueSource::Caption,
+                })),
+                headers: {
+                    let mut headers = vec![];
+                    for header in fields.iter() {
+                        let key = header.get_key();
+                        headers.push(HeaderValue::new(
+                            key.trim_start_matches(ftd::ast::utils::REFERENCE),
+                            ftd::ast::utils::is_variable_mutable(key.as_str()),
+                            VariableValue::from_p1_header(header, doc_id),
+                            header.get_line_number(),
+                            header.get_kind(),
+                            header.get_condition(),
+                        ));
+                    }
+                    HeaderValues(headers)
+                },
+                body: body
+                    .0
+                    .as_ref()
+                    .map(|b| BodyValue::new(b.as_str(), body.1.unwrap_or(0))),
+                values: vec![],
+                line_number: *line_number,
+            },
         }
     }
 
@@ -599,7 +635,7 @@ impl VariableValue {
         line_number: usize,
     ) -> VariableValue {
         match value {
-            Some(value) if value.ne(NULL) => VariableValue::String {
+            Some(value) if value.ne(NULL) && !value.is_empty() => VariableValue::String {
                 value: value.to_string(),
                 line_number,
                 source,

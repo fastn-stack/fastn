@@ -1,0 +1,21 @@
+-- ftd.text: Hello there
+
+-- ftd.text.color: red
+
+-- ftd.row:
+margin.px: 20
+
+-- ftd.text: Yo there
+color: blue
+
+-- ftd.text.shadow:
+color: red
+y-offset.px: -10
+x-offset.px: 5
+spread.px: 2
+
+-- end: ftd.row
+
+
+-- ftd.color s: red
+dark: yellow
