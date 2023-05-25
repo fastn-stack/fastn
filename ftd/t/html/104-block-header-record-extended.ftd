@@ -106,6 +106,20 @@ This is body
 dark: blue
 
 ;; ----------------------------
+
+-- ftd.text: Hello World
+/padding.responsive: $rl
+/width.fixed.responsive: $rl
+
+-- ftd.text.padding.responsive:
+desktop.percent: 33
+mobile.px: 44
+
+-- ftd.text.width.fixed.responsive:
+desktop.percent: 55
+mobile.px: 66
+
+;; ----------------------------
 ;;          VARIABLES
 ;; ----------------------------
 
@@ -113,6 +127,10 @@ dark: blue
 dark: blue
 
 -- string d-color: green
+
+-- ftd.responsive-length rl:
+desktop.percent: 60
+mobile.px: 40
 
 
 ;; ----------------------------
@@ -158,18 +176,3 @@ color: $bar.text-color
 caption name:
 body description:
 optional integer age:
-
-
-
-
-
-
--- ftd.text: World
-
--- ftd.text.padding.responsive:
-desktop.percent: 40
-mobile.px: 70
-
--- ftd.text.width.fixed.responsive:
-desktop.percent: 40
-mobile.px: 70

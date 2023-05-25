@@ -536,7 +536,6 @@ impl State {
                     source: Some(ftd::p1::header::KVSource::Body),
                     line_number: value.1.unwrap_or(header_line_number),
                 };
-                dbg!(&header_data);
                 Self::eval_from_kv_header(header_key, header_data, section, doc_id.as_str())?;
             }
         }

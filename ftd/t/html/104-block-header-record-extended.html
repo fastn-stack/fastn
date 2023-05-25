@@ -796,7 +796,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">First Text</div><div data-id="1:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Second Text</div><div data-id="2:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Third Text</div><div data-id="3:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fourth Text</div><div data-id="4:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fifth Text</div><div data-id="5:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Sixth Text</div><div data-id="6:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 1 from component</div><div data-id="7:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 2 from component</div><div data-id="8:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 3 from component</div><div data-id="9:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 4 from component</div><div data-id="10:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 5 from component</div><div data-id="11:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 6 from component</div><div data-id="12:main" style="width: 100%" class="ft_common ft_column"><div data-id="12,0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Hello This is some text</div><div data-id="12,1:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Rithik</div><div data-id="12,2:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">This is body</div><div data-id="12,3:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">23</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">First Text</div><div data-id="1:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Second Text</div><div data-id="2:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Third Text</div><div data-id="3:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fourth Text</div><div data-id="4:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fifth Text</div><div data-id="5:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Sixth Text</div><div data-id="6:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 1 from component</div><div data-id="7:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 2 from component</div><div data-id="8:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 3 from component</div><div data-id="9:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 4 from component</div><div data-id="10:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 5 from component</div><div data-id="11:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 6 from component</div><div data-id="12:main" style="width: 100%" class="ft_common ft_column"><div data-id="12,0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Hello This is some text</div><div data-id="12,1:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Rithik</div><div data-id="12,2:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">This is body</div><div data-id="12,3:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">23</div></div><div data-id="13:main" style="padding: 33%; width: 55%" class="ft_common ft_md">Hello World</div></div>
 
 
 <script>
@@ -2140,6 +2140,19 @@ document.querySelector(`[data-id="12,3:main"]`).style["color"] = resolve_referen
 }
 else {document.querySelector(`[data-id="12,3:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).dark;}
 }
+window.node_change_main["13:main__padding"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="13:main"]`).style["padding"] = `{0}%`.format(JSON.stringify(33));
+}
+else {document.querySelector(`[data-id="13:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(44));}
+}
+
+window.node_change_main["13:main__width"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="13:main"]`).style["width"] = `{0}%`.format(JSON.stringify(55));
+}
+else {document.querySelector(`[data-id="13:main"]`).style["width"] = `{0}px`.format(JSON.stringify(66));}
+}
 window.set_value_main = {};
 window.set_value_main["foo#bar:d:12"] = function (data, new_value, remaining) {
 window.ftd.utils.set_value_helper(data, "foo#bar:d:12", remaining, new_value);
@@ -2302,6 +2315,15 @@ window.ftd.utils.node_change_call("main","6:main__color", data);
 window.ftd.utils.node_change_call("main","7:main__color", data);
 window.ftd.utils.node_change_call("main","8:main__color", data);
 window.ftd.utils.node_change_call("main","9:main__color", data);
+};
+
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("ftd#device", "main");
+window.ftd.call_immutable_value_changes("ftd#device", "main");
+window.ftd.utils.node_change_call("main","13:main__padding", data);
+window.ftd.utils.node_change_call("main","13:main__width", data);
 };
 
 
