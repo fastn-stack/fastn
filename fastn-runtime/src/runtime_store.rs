@@ -101,9 +101,9 @@ struct Closure {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Attachment {
-    // this is the dom element we are directly or indirectly connected with
+    /// this is the dom element we are directly or indirectly connected with
     element: fastn_runtime::NodeKey,
-    // who told we us about this element
+    /// who told we us about this element
     source: KindPointer,
 }
 
