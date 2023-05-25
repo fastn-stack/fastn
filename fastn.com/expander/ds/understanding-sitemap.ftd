@@ -1,7 +1,22 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: Understanding Sitemap
+-- my-ds.page: 
+
+-- show-sm: 
+
+-- end: my-ds.page
+
+-- component show-sm: 
+
+/-- my-ds.page: Understanding Sitemap
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+-- ds.h0: Understanding Sitemap
+
 
 -- lib.video-audience: Understanding Sitemap
 if: { source == "planning" }
@@ -354,8 +369,11 @@ if: { source == "planning" }
 if: { source == "planning" }
 v: IIBk8zmspkA
 
--- end: my-ds.page 
+/-- end: my-ds.page
 
+-- end: ftd.column
+
+-- end: show-sm
 
 -- string source: default
 $processor$: pr.get-data

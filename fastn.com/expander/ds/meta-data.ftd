@@ -1,7 +1,21 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: Add meta-data to `doc-site`
+-- my-ds.page: 
+
+-- show-md: 
+
+-- end: my-ds.page
+
+-- component show-md:
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+-- ds.h0: Add meta-data to `doc-site`
+
+/-- my-ds.page: Add meta-data to `doc-site`
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -282,8 +296,11 @@ if: { source == "planning" }
 if: { source == "planning" }
 v: 72N7f9on8iw
 
--- end: my-ds.page 
+/-- end: my-ds.page 
 
+-- end: ftd.column
+
+-- end: show-md
 
 -- string source: default
 $processor$: pr.get-data
