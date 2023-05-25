@@ -1,5 +1,3 @@
-use std::fmt::Pointer;
-
 /// Memory contains all the data created by our runtime.
 ///
 /// When say a boolean is created in ftd world, we add an entry in the `.boolean` here, and return
@@ -74,6 +72,7 @@ struct HeapData<T> {
 /// This is the data we store in the heap for any value.
 enum HeapValue<T> {
     Value(T),
+
     /// If a value is defined in terms of a function, we store the last computed value and the
     /// closure. We cached the last computed value so if the data is not changing we do not have
     /// to re-compute the closure.
@@ -407,3 +406,76 @@ mod test {
         // panic!("yo");
     }
 }
+
+
+// -- record x:
+// y list y:
+//
+// -- record y:
+// string z:
+//
+// -- x $x:
+// -- x.y:
+// z: hello
+
+// -- foo: $x.y
+// -- ftd.text: $x.y.z
+
+// -- ftd.text: yo
+// $on-click$: $x = new_x(x, "bye")
+// $on-click$: $x.y = new_y("bye")
+
+
+// -- l: $o
+// $loop$: $x.y
+
+
+
+// x.y.z = "hello"
+// x.y.z changed
+
+
+
+
+
+// (attach_dom (create_l) $x [0, 0])
+
+
+// (attach_dom (create_l) $x [0, 0])
+
+
+// x.y.insert_at(0, new_y)
+
+// (attach_dom (create_text) $x [0, 0])
+
+
+
+// -- foo:
+// person: $person
+
+
+// -- foo:
+// $person: $person
+
+
+
+// -- show-student: $student
+// $loop$: $students as $student
+// rank: calculate_rank($students, idx)
+
+
+// -- ftd.text:
+// $on-click$: $x = new_x(x, "bye")
+// $on-click$: $x.y = new_y("bye")
+//
+// x new_x(v):
+// string v:
+//
+// {
+//    y: {
+//        z: v
+//    }
+// }
+
+
+
