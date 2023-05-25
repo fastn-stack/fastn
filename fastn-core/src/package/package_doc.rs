@@ -6,23 +6,7 @@ impl fastn_core::Package {
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fastn_core::Result<Vec<u8>> {
         tracing::info!(document = name);
-        let package_root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    tracing::error!(
-                        msg = "package root not found. Package: {}",
-                        package = self.name,
-                        document = name,
-                    );
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    });
-                }
-            }
-        };
+        let package_root = self.package_root_with_default(package_root)?;
 
         let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
@@ -34,6 +18,29 @@ impl fastn_core::Package {
                     path = file_path.as_str()
                 );
                 Err(Err(err)?)
+            }
+        }
+    }
+
+    pub(crate) fn package_root_with_default(
+        &self,
+        package_root: Option<&camino::Utf8PathBuf>,
+    ) -> fastn_core::Result<camino::Utf8PathBuf> {
+        tracing::info!(package = self.name);
+        if let Some(package_root) = package_root {
+            Ok(package_root.to_owned())
+        } else {
+            match self.fastn_path.as_ref() {
+                Some(path) if path.parent().is_some() => Ok(path.parent().unwrap().to_path_buf()),
+                _ => {
+                    tracing::error!(
+                        msg = "package root not found. Package: {}",
+                        package = self.name,
+                    );
+                    Err(fastn_core::Error::PackageError {
+                        message: format!("package root not found. Package: {}", &self.name),
+                    })
+                }
             }
         }
     }
@@ -118,18 +125,7 @@ impl fastn_core::Package {
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(document = id);
-        let package_root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let package_root = self.package_root_with_default(package_root)?;
 
         let (file_path, data) = self.http_fetch_by_id(id).await?;
         fastn_core::utils::write(
@@ -148,18 +144,7 @@ impl fastn_core::Package {
         file_path: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fastn_core::Result<Vec<u8>> {
-        let package_root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let package_root = self.package_root_with_default(package_root)?;
 
         let data = self.http_fetch_by_file_name(file_path).await?;
         fastn_core::utils::write(&package_root, file_path, data.as_slice()).await?;
@@ -212,18 +197,7 @@ impl fastn_core::Package {
             }
         };
 
-        let root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fastn_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
+        let root = self.package_root_with_default(package_root)?;
 
         if let Ok(response) = self
             .fs_fetch_by_file_name(new_file_path.as_str(), package_root)
@@ -250,14 +224,17 @@ impl fastn_core::Package {
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
+        config_package_name: &str,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         tracing::info!(id = id);
         if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
             return Ok(response);
         }
 
-        if let Ok(response) = self.http_download_by_id(id, package_root).await {
-            return Ok(response);
+        if config_package_name.ne(&self.name) {
+            if let Ok(response) = self.http_download_by_id(id, package_root).await {
+                return Ok(response);
+            }
         }
 
         let new_id = match id.rsplit_once('.') {
@@ -288,9 +265,23 @@ impl fastn_core::Package {
             }
         };
 
+        let root = self.package_root_with_default(package_root)?;
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
-            // fastn_core::utils::copy(&root.join(new_id), &root.join(id)).await?;
+            if config_package_name.ne(&self.name) {
+                fastn_core::utils::write(&root, id.trim_start_matches('/'), response.1.as_slice())
+                    .await?;
+            }
             return Ok(response);
+        }
+
+        if config_package_name.eq(&self.name) {
+            tracing::error!(id = id, msg = "id error: can not get the dark");
+            return Err(fastn_core::Error::PackageError {
+                message: format!(
+                    "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                    id, &self.name
+                ),
+            });
         }
 
         match self
@@ -298,7 +289,14 @@ impl fastn_core::Package {
             .await
         {
             Ok(response) => {
-                // fastn_core::utils::copy(&root.join(new_id), &root.join(id)).await?;
+                if config_package_name.ne(&self.name) {
+                    fastn_core::utils::write(
+                        &root,
+                        id.trim_start_matches('/'),
+                        response.1.as_slice(),
+                    )
+                    .await?;
+                }
                 Ok(response)
             }
             Err(e) => Err(e),
@@ -323,9 +321,10 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
     ids.extend([
         format!("{}.ftd", id),
         format!("{}/index.ftd", id),
-        format!("{}.md", id),
-        format!("{}/README.md", id),
-        format!("{}/index.md", id),
+        // Todo: removing `md` file support for now
+        // format!("{}.md", id),
+        // format!("{}/README.md", id),
+        // format!("{}/index.md", id),
     ]);
     ids
 }

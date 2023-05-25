@@ -24,11 +24,13 @@ pub mod html;
 pub mod interpreter;
 pub mod node;
 pub mod p1;
-#[cfg(feature = "taffy")]
+#[cfg(feature = "native-rendering")]
 pub mod taffy;
 #[cfg(feature = "terminal")]
 pub mod terminal;
 pub mod test_helper;
+#[cfg(feature = "native-rendering")]
+mod wasm;
 
 pub const PROCESSOR_MARKER: &str = "$processor$";
 

@@ -18,8 +18,8 @@ impl fastn_runtime::Rectangle {
     fn wasm_color(&self) -> [f32; 3] {
         [
             fastn_runtime::wgpu::color_u8_to_f32(self.color.red),
-            fastn_runtime::wgpu::color_u8_to_f32(self.color.blue),
             fastn_runtime::wgpu::color_u8_to_f32(self.color.green),
+            fastn_runtime::wgpu::color_u8_to_f32(self.color.blue),
         ]
     }
 

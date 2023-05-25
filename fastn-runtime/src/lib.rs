@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 extern crate self as fastn_runtime;
 
 /// fastn-surface is a way to describe UI in platform independent way
@@ -14,18 +16,22 @@ pub mod wgpu;
 
 mod control;
 mod document;
+mod dom;
 mod element;
 mod event;
 mod operation;
-pub mod wasm;
+mod runtime_store;
+// pub mod wasm;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use element::{Container, Dimension, Element, Image, Text};
+pub(crate) use dom::Dom;
+pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
+slotmap::new_key_type! { pub struct PointerKey; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]

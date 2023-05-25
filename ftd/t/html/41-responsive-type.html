@@ -764,7 +764,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 70px" class="ft_common ft_md">Hello</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; padding: 40%" class="ft_common ft_md">World</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 40%; margin-bottom: 10px; width: 70px" class="ft_common ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(255,255,0,1); padding: 70px" class="ft_common ft_md">Hello</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; padding: 40%" class="ft_common ft_md">World</div></div>
 
 
 <script>
@@ -1969,25 +1969,38 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__padding"] = function(data) {
+window.node_change_main["0:main__height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
+document.querySelector(`[data-id="0:main"]`).style["height"] = resolve_reference("foo#res", data).desktop;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+else {document.querySelector(`[data-id="0:main"]`).style["height"] = resolve_reference("foo#res", data).mobile;}
+}
+
+window.node_change_main["0:main__width"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["width"] = resolve_reference("foo#p", data).desktop;
+}
+else {document.querySelector(`[data-id="0:main"]`).style["width"] = resolve_reference("foo#p", data).mobile;}
 }
 window.node_change_main["1:main__padding"] = function(data) {
-if(function(){
-return (!resolve_reference("foo#flag", data));
-}()){
 if(data["ftd#device"] == "desktop"){
 document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
 }
 else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
 }
-else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).desktop;
+window.node_change_main["2:main__padding"] = function(data) {
+if(function(){
+return (!resolve_reference("foo#flag", data));
+}()){
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
 }
-else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).mobile;}
+else {document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+}
+else {if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#res", data).desktop;
+}
+else {document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#res", data).mobile;}
 }
 }
 window.set_value_main = {};
@@ -1996,7 +2009,7 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 
 window.set_value_main["foo#p"] = function (data, new_value, remaining) {
@@ -2004,8 +2017,9 @@ window.ftd.utils.set_value_helper(data, "foo#p", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#p", "main");
 window.ftd.call_immutable_value_changes("foo#p", "main");
-window.ftd.utils.node_change_call("main","0:main__padding", data);
+window.ftd.utils.node_change_call("main","0:main__width", data);
 window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 
 window.set_value_main["foo#res"] = function (data, new_value, remaining) {
@@ -2013,7 +2027,7 @@ window.ftd.utils.set_value_helper(data, "foo#res", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#res", "main");
 window.ftd.call_immutable_value_changes("foo#res", "main");
-window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2021,8 +2035,10 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0:main__padding", data);
+window.ftd.utils.node_change_call("main","0:main__height", data);
+window.ftd.utils.node_change_call("main","0:main__width", data);
 window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 
 

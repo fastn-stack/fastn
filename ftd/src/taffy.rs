@@ -138,7 +138,7 @@ fn element_from_container(
     let children = container.child_elements(t);
 
     fastn_runtime::Element::Container(fastn_runtime::Container {
-        taffy: t
+        taffy_key: t
             .new_with_children(s, &children.iter().map(|v| v.taffy()).collect_vec())
             .unwrap(),
         // border: Default::default(), // TODO
@@ -299,7 +299,7 @@ fn t2() {
 
     let (width, height) = crossterm::terminal::size().unwrap();
 
-    // Create a tree of nodes using `taffy.new_leaf` and `taffy.new_with_children`.
+    // Create a tree of nodes using `taffy_node.new_leaf` and `taffy_node.new_with_children`.
     // These functions both return a node id which can be used to refer to that node
     // The Style struct is used to specify styling information
     let header_node = taffy

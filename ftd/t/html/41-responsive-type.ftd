@@ -3,7 +3,14 @@
 -- boolean $flag: true
 
 -- ftd.text: Hello
+width.fixed.responsive: $p
+height.fixed: $res
+background.solid: yellow
+margin-bottom.px: 10
+
+-- ftd.text: Hello
 padding.responsive: $p
+background.solid: yellow
 
 
 -- ftd.text: World

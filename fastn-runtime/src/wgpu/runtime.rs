@@ -30,6 +30,8 @@ pub async fn render_document(document: fastn_runtime::Document) {
             winit::event::WindowEvent::Resized(physical_size) => {
                 state.resize(*physical_size);
             }
+            // display resolution changed (e.g. changing the resolution in the settings or switching
+            // to monitor with different resolution)
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                 state.resize(**new_inner_size);
             }
@@ -41,7 +43,7 @@ pub async fn render_document(document: fastn_runtime::Document) {
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window.id() => {
-            // we should re-compute taffy layout here.
+            // we should re-compute taffy_node layout here.
             match state.render() {
                 Ok(_) => {}
                 // Reconfigure the surface if lost
