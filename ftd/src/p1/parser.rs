@@ -229,7 +229,6 @@ impl State {
         Ok(())
     }
 
-    #[allow(clippy::too_many_arguments)]
     fn eval_from_kv_header(
         header_key: &str,
         header_data: HeaderData,
@@ -264,10 +263,10 @@ impl State {
                         let mut existing_header_body = (None, None);
 
                         match kv.source {
-                            ftd::p1::header::KvSource::Caption => {
+                            ftd::p1::header::KVSource::Caption => {
                                 existing_header_caption = kv.value.to_owned()
                             }
-                            ftd::p1::header::KvSource::Body => {
+                            ftd::p1::header::KVSource::Body => {
                                 existing_header_body = (kv.value.to_owned(), Some(kv.line_number))
                             }
                             _ => unimplemented!(),
@@ -400,7 +399,7 @@ impl State {
                 Some(value),
                 kind,
                 condition,
-                Some(ftd::p1::header::KvSource::Caption),
+                Some(ftd::p1::header::KVSource::Caption),
                 ftd::p1::utils::i32_to_usize(self.line_number),
             );
             Self::eval_from_kv_header(key, header_data, section, doc_id.as_str())?;
@@ -534,7 +533,7 @@ impl State {
                     },
                     kind: header_kind,
                     condition: header_condition,
-                    source: Some(ftd::p1::header::KvSource::Body),
+                    source: Some(ftd::p1::header::KVSource::Body),
                     line_number: value.1.unwrap_or(header_line_number),
                 };
                 dbg!(&header_data);
@@ -668,7 +667,7 @@ impl State {
                     kind,
                     caption,
                     condition,
-                    Some(ftd::p1::header::KvSource::Header),
+                    Some(ftd::p1::header::KVSource::Header),
                 ));
             } else {
                 new_line_number = Some(line_number);
@@ -736,7 +735,7 @@ pub struct HeaderData {
     value: Option<String>,
     kind: Option<String>,
     condition: Option<String>,
-    source: Option<ftd::p1::header::KvSource>,
+    source: Option<ftd::p1::header::KVSource>,
     line_number: usize,
 }
 
@@ -745,7 +744,7 @@ impl HeaderData {
         value: Option<String>,
         kind: Option<String>,
         condition: Option<String>,
-        source: Option<ftd::p1::header::KvSource>,
+        source: Option<ftd::p1::header::KVSource>,
         line_number: usize,
     ) -> Self {
         HeaderData {

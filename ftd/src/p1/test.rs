@@ -242,7 +242,7 @@ fn sub_section() {
                 .add_header_str_with_source(
                     "cat",
                     "bar body",
-                    Some(ftd::p1::header::KvSource::Body),
+                    Some(ftd::p1::header::KVSource::Body),
                 )
                 .add_sub_section(ftd::p1::Section::with_name("dodo"))
                 .add_sub_section(ftd::p1::Section::with_name("rat")),
@@ -754,7 +754,7 @@ fn header_section() {
                     .add_header_str_with_source(
                         "k2",
                         "This is value of section k2",
-                        Some(ftd::p1::header::KvSource::Body),
+                        Some(ftd::p1::header::KVSource::Body),
                     )
                     .list(),
                 None,
@@ -812,7 +812,7 @@ fn kind() {
                     .add_header_str_with_source(
                         "k2",
                         "This is value of section k2",
-                        Some(ftd::p1::header::KvSource::Body),
+                        Some(ftd::p1::header::KVSource::Body),
                     )
                     .list(),
                 None,
@@ -870,7 +870,7 @@ fn kind() {
                     .add_header_str_with_source(
                         "k2",
                         "This is value of section k2",
-                        Some(ftd::p1::header::KvSource::Body),
+                        Some(ftd::p1::header::KVSource::Body),
                     )
                     .list(),
                 None,
@@ -929,7 +929,7 @@ fn kind() {
                     .add_header_str_with_source(
                         "k2",
                         "This is value of section k2",
-                        Some(ftd::p1::header::KvSource::Body),
+                        Some(ftd::p1::header::KVSource::Body),
                     )
                     .list(),
                 None,

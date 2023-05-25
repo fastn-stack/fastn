@@ -104,7 +104,7 @@ impl Section {
         mut self,
         key: &str,
         value: &str,
-        source: Option<ftd::p1::header::KvSource>,
+        source: Option<ftd::p1::header::KVSource>,
     ) -> Self {
         self.headers.push(ftd::p1::Header::kv(
             0,
