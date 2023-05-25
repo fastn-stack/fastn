@@ -1,8 +1,349 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: markdown
+-- my-ds.page: markdown in `doc-site`
 
+-- ds.markdown:
+if: { source == "default" || source == "build" }
+
+In this video we will see how to use markdown in `doc-site`.
+
+/-- ds.youtube:
+if: { source == "default" || source == "build" }
+v: 
+
+-- lib.video-audience: How to use markdown in `doc-site`
+if: { source == "planning" }
+owner: Ajit
+aud: Website Builders
+
+Gives the idea about the markdown syntax allowed in `fastn`
+
+-- ds.h1: Straight to the point
+if: { source == "planning" }
+
+By importing the `doc-site` package and using the `ds.markdown` component, you
+gain access to a powerful tool for creating documentation and content in
+`fastn` projects.
+
+The `ds.markdown` component not only supports the basic Markdown
+syntax provided by the `ftd.text` kernel component but also offers additional
+properties such as `color` and `role`.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component markdown:
+body body:
+optional boolean collapsed:
+optional caption title:
+optional boolean two_columns:
+optional string id:
+
+\-- ftd.column:
+width: fill-container
+id if { $markdown.id != NULL }: $markdown.id
+
+\-- ftd.text: 
+text: $markdown.body
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+classes: markdown
+
+\-- end: ftd.column
+
+\-- end: markdown
+
+-- ds.markdown:
+
+Let's see what all we can do using this component of `doc-site`.
+
+-- ds.h1: Introduction
+if: { source == "planning" }
+
+Welcome!! My name is Ajit
+
+In this video we will see what all we can do with the markdown.
+
+
+-- ds.h1: Markdown
+
+`Markdown` is a way to write the content for the web. Markdown provides a way 
+to style text elements such as headings, lists, links, and more, using plain 
+text and minimal special characters.
+
+Markdown's simplicity, readibility, and portability as plain texts can be 
+easily shared and opened on any platform. Hence, makes it a valuable tool for 
+content creators and developers alike.
+
+Markdown is widely used in blogging, instant messaging, online forums,
+collaborative software, documentation pages, and readme files.
+
+-- ds.h1: Markdown and doc-site
+
+`doc-site` includes support for Markdown through the use of the `markdown`
+component.
+
+Here are some reasons why it is advantageous to use the `ds.markdown`
+component instead of the `ftd.text` kernel component:
+
+- **Rich Styling**:  With ds.markdown, you can easily apply typographies and
+    color schemes to your website's content. By utilizing the "color"
+    and "role" properties, you can achieve consistent and visually appealing
+    designs without the need to specify these properties every time you use
+    ftd.text.
+
+- **Simplified Syntax**: Using ds.markdown simplifies the syntax required to
+    render Markdown content. Instead of manually creating `ftd.text` sections
+    and providing the necessary properties, you can encapsulate the Markdown
+    content by one line syntax, resulting in cleaner and more concise code. 
+
+
+
+-- ds.rendered: plain text
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Inline styles
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+  incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+  incididunt.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.rendered: Inline links
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+Lorem ipsum [inline link](/docs/markup-support/) amet, consectetur adipiscing
+elit, sed do eiusmod tempor incididunt.
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+Lorem ipsum [inline link](/docs/markup-support/) amet, consectetur adipiscing
+elit, sed do eiusmod tempor incididunt, [fastn](/) .
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.rendered: turning a URL into a link
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+https://fastn.com/
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+https://fastn.com/
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Markdown List
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+**Bullet list:**
+
+- List item 1
+- List item 2
+- List item 3
+  - Sub List item 1
+  - Sub List item 1
+
+**Odered list:**
+
+1. List item 
+2. List item 
+3. List item
+   1. Sub List Item
+   2. Sub List Item
+   3. Sub List Item
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+**Bullet list:**
+
+- List item 1
+- List item 2
+- List item 3
+  - Sub List item 1
+  - Sub List item 1
+
+**Odered list:**
+
+1. List item 
+2. List item 
+3. List item
+   1. Sub List Item
+   2. Sub List Item
+   3. Sub List Item
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Strikethrough
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+~~The world is flat.~~
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+~~The world is flat.~~
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Superscript
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+X^2^
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+X^2^
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.rendered: Horizontal Rule
+
+-- ds.rendered.input:
+
+\-- ds.markdown:
+
+To create a Horizontal Rule we write
+
+***
+
+-- ds.rendered.output:
+
+-- ds.markdown:
+
+To create a Horizontal Rule we write
+
+***
+
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h1: Closing Remarks 
+if: { source == "planning" }
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website. 
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+our fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { source == "default" || source == "build" }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star ⭐ on 
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+on [Discord](/discord/).
+
+
+-- ds.h1: Final Video
+if: { source == "planning" }
+
+/-- ds.youtube:
+if: { source == "planning" }
+v: 
 
 
 -- end: my-ds.page
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source

@@ -441,6 +441,8 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
+- Markdown: /markdown-in-doc-site/-/planning
+  document: /expander/ds/markdown.ftd
 - SEO: /seo-meta-data/-/planning/
   document: expander/ds/meta-data.ftd
 - Understanding sitemap: /understanding-sitemap/-/planning/
@@ -487,3 +489,6 @@ favicon: /-/fastn.com/images/favicon.svg
 /seo/: /seo-meta-data/
 /seo/-/planning: /seo-meta-data/-/planning/
 /blog/seo/: /blog/seo-meta-data/
+/seo-meta-data/: /seo-meta/
+/seo-meta-data/-/planning/: /seo-meta/-/planning/
+/blog/seo-meta-data/: /blog/seo-meta/
