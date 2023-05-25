@@ -1,7 +1,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: Optimizing SEO with meta data for `doc-site`
+-- my-ds.page: Add meta-data to `doc-site`
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }

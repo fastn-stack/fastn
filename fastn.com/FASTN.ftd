@@ -318,7 +318,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/sitemap-document.ftd
 - Using images in documents: /using-images/
   document: /expander/imagemodule/index.ftd
-- Add meta data: /seo-meta-data/-/frontend/
+- Add meta data: /seo-meta/-/frontend/
   document: /expander/ds/meta-data.ftd
 
 
@@ -395,14 +395,14 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/border-radius.ftd
 - Using images in documents: /using-images/-/build/
   document: /expander/imagemodule/index.ftd
-- Add meta-data: /seo-meta-data/
+- Add meta-data: /seo-meta/
   document: /expander/ds/meta-data.ftd
 
 
 # Blog: /blog/
   document: blog/meta-data-blog.ftd
 
-- Optimize your website: /blog/seo-meta-data/
+- Optimize your website: /blog/seo-meta/
   document: blog/meta-data-blog.ftd
 - trizwitlabs web event: /trizwitlabs/
   document: blog/trizwitlabs.ftd

@@ -104,19 +104,6 @@ width: fill-container
 border-color: $inherited.colors.border
 shadow: $s
 
--- ds.markdown:
-
-In `fastn-community` we have a package called 
-[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
-out-of-the-box documentation features that can be used to create any kind of 
-site.
-
-Any website that uses `doc-site` can very easily add their customized meta 
-data using properties like `document-title`, `document-description` and 
-`document-image` in the `page` component of this package.
-
-You can learn [`How to add meta data for better website optimization`](/seo/) 
-and improve your website's search ranking and traffic through social media.
 
 -- ds.h2: Why are Open Graph tags important
 
@@ -129,6 +116,19 @@ OG tags because:
 3. These tags help social media sites understand what the content is about, 
 which can help increase your brand visibility through search.
 
+-- ds.h3: og-tags in `doc-site`
+
+In `fastn-community` we have a package called 
+[`doc-site`](https://fastn-community.github.io/doc-site/). It provides 
+out-of-the-box documentation features that can be used to create any kind of 
+site.
+
+Any website that uses `doc-site` can very easily add their customized meta 
+data using properties like `document-title`, `document-description` and 
+`document-image` in the `page` component of this package.
+
+You can learn [`How to add meta data for better website optimization`](/seo/) 
+and improve your website's search ranking and traffic through social media.
 -- ds.h3: Example
 
 -- ftd.image: 
