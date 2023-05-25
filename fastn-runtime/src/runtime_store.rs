@@ -61,14 +61,17 @@ pub struct Memory {
     /// elements via one or more nodes, we keep track of which element we are connected with and
     /// how are we connected to them (via which immediate parent).
     attachment: std::collections::HashMap<KindPointer, std::collections::HashSet<Attachment>>,
-    ui_deps: std::collections::HashMap<fastn_runtime::NodeKey, Vec<KindPointer>>,
 }
 
 type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
 
+/// For every ftd value we have one such entry
 struct HeapData<T> {
+    /// The inner value being stored in ftd
     value: HeapValue<T>,
-    closures: Vec<fastn_runtime::ClosureKey>,
+    /// the list of "formulas" that depend on this.
+    dependents: Vec<KindPointer>,
+    ui_properties: Vec<UIDependendent>
 }
 
 /// This is the data we store in the heap for any value.
@@ -77,7 +80,18 @@ enum HeapValue<T> {
     /// If a value is defined in terms of a function, we store the last computed value and the
     /// closure. We cached the last computed value so if the data is not changing we do not have
     /// to re-compute the closure.
-    Closure { cached_value: T, closure: fastn_runtime::ClosureKey },
+    ///
+    /// -- integer x: 10 (stored as HeapValue::Value(10))
+    /// -- integer y: 20 (stored as HeapValue::Value(10))
+    /// -- integer z = { x + y } (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
+    Formula { cached_value: T, closure: fastn_runtime::ClosureKey },
+}
+
+#[derive(Debug)]
+struct UIDependent {
+    property: UIProperty,
+    node: fastn_runtime::NodeKey,
+    closure: fastn_runtime::ClosureKey,
 }
 
 #[derive(Debug)]
@@ -107,6 +121,12 @@ pub struct KindPointer {
 #[derive(Debug, Default)]
 pub struct Frame {
     pointers: Vec<KindPointer>,
+}
+
+#[derive(Debug)]
+enum UIProperty {
+    WidthPx,
+    WidthPercent,
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
