@@ -180,8 +180,22 @@ pub(crate) fn is_device_dependent(
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
-    Ok(value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
-        || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE))
+    if value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+        || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE)
+    {
+        return Ok(true);
+    }
+
+    if value.is_or_type_variant(ftd::interpreter::FTD_RESIZING_FIXED) {
+        let property_value = value.get_or_type(doc.name, 0)?.2;
+        let value = property_value
+            .clone()
+            .resolve(doc, property_value.line_number())?;
+        return Ok(value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+            || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE));
+    }
+
+    Ok(false)
 }
 
 pub(crate) fn dependencies_from_property_value(
