@@ -432,6 +432,7 @@ impl State {
         if let Err(ftd::p1::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value: (Vec<String>, Option<usize>) = (vec![], None);
             let mut inline_record_headers: ftd::Map<HeaderData> = ftd::Map::new();
+            let mut reading_value = false;
             let mut new_line_number = None;
             let mut first_line = true;
             let split_content = self.content.as_str().split('\n');
@@ -444,7 +445,7 @@ impl State {
                 if !valid_line(line) {
                     continue;
                 }
-                let inline_record_header_found = line.contains(':');
+                let inline_record_header_found = line.contains(':') && !line.starts_with("\\");
                 if first_line {
                     if !line.trim().is_empty() && !inline_record_header_found {
                         return Err(ftd::p1::Error::ParseError {
@@ -456,7 +457,7 @@ impl State {
                     first_line = false;
                 }
 
-                if inline_record_header_found {
+                if inline_record_header_found && !reading_value {
                     if let Ok((name_with_kind, caption)) = colon_separated_values(
                         ftd::p1::utils::i32_to_usize(self.line_number),
                         line,
@@ -478,6 +479,7 @@ impl State {
                     }
                 } else if !line.is_empty() || !value.0.is_empty() {
                     // value(body) = (vec![string], line_number)
+                    reading_value = true;
                     value.0.push(clean_line(line));
                     if value.1.is_none() {
                         value.1 = Some(ftd::p1::utils::i32_to_usize(self.line_number));
