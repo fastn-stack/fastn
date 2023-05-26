@@ -23,12 +23,13 @@ Gives the idea about the markdown syntax allowed in `fastn`
 if: { source == "planning" }
 
 By importing the `doc-site` package and using the `ds.markdown` component, you
-gain access to a powerful tool for creating documentation and content in
-`fastn` projects.
+gain access to a versatile language called Markdown, for creating documentation
+and content in `fastn` projects.
 
 The `ds.markdown` component not only supports the basic Markdown
 syntax provided by the `ftd.text` kernel component but also offers additional
-properties such as `color` and `role`.
+properties such as `color` and `role`, that saves giving these properties to 
+the `ftd.text` while content creation.
 
 
 -- ds.code:
