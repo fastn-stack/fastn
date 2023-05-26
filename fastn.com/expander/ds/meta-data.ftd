@@ -18,13 +18,13 @@ width: fill-container
 /-- my-ds.page: Add meta-data to `doc-site`
 
 -- ds.markdown:
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 
 In this video we will see how to implement SEO features to improve a website's 
 visibility.
 
 -- lib.video-audience: How to add meta-data for better website optimization
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 owner: Ajit
 aud: Website Builders
 
@@ -33,12 +33,12 @@ Helps learners to optimize their websites
 
 
 -- ds.youtube:
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 v: 72N7f9on8iw
 
 
 -- ds.h1: Introduction
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 Welcome!! My name is Ajit
 
@@ -60,7 +60,7 @@ It involves optimizing various aspects of a website to make it more appealing
 to search engines and users.
 
 -- ds.h1: Benefits of SEO
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 1. SEO helps improve your website’s visibility, hence leading to higher 
 organic i.e. non-paid traffic from search engines.
@@ -74,7 +74,7 @@ as page speed, mobile-friendliness, and easy navigation
 requiring continuous investment in paid advertising.
 
 -- ds.h1: Benefits of SEO
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 
 SEO encompasses a range of techniques that helps in the following ways:
 
@@ -93,13 +93,14 @@ SEO encompasses a range of techniques that helps in the following ways:
     results without requiring continuous investment in paid advertising.
 
 -- ds.markdown:
-if: { source == "planning" } 
+if: { source == "planning" || show-planning } 
 
 To read about SEO in detail, you can check out the blog. The URL is shared in 
 description
 
 
 -- ds.h1: SEO through the `page` component of `doc-site`
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 We can do SEO in the `doc-site`, by giving some properties to the `page` 
 component.
@@ -116,7 +117,7 @@ Before we modify the document title by using the first property, we will see
 that by default, the `page` component's title, becomes the document title.
 
 -- ds.markdown:
-if: { source == "planning" } 
+if: { source == "planning" || show-planning } 
 
 So the title of the component page is this.
 
@@ -125,7 +126,7 @@ So the title of the component page is this.
 So in the browser, the document title will be the same. 
 
 -- ds.markdown:
-if: { source == "planning" } 
+if: { source == "planning" || show-planning } 
 
 As you can see, the document title is by default is same as the title of the 
 page component.
@@ -184,7 +185,7 @@ description will be added as meta-data in the tags called `og-description` as
 well `twitter-description`, and in the `description` tag.
 
 -- ds.markdown:
-if: { source == "planning" } 
+if: { source == "planning" || show-planning } 
 
 Let's verify the same by refreshing the browser.
 
@@ -270,7 +271,7 @@ This way we have used the SEO technique and managed to make the URL noticeable
 and meaningful and will also improve the ranking in the search results.
 
 -- ds.h1: Closing Remarks 
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
@@ -280,7 +281,7 @@ our fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
@@ -290,10 +291,10 @@ on [Discord](/discord/).
 
 
 -- ds.h1: Final Video
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 -- ds.youtube:
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 v: 72N7f9on8iw
 
 /-- end: my-ds.page 
@@ -307,3 +308,4 @@ $processor$: pr.get-data
 key: source
     
 
+-- boolean $show-planning: false

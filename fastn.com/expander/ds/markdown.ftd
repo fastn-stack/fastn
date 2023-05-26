@@ -13,18 +13,25 @@ if: { source == "default" || source == "build" }
 v: 
 
 -- lib.video-audience: How to use markdown in `doc-site`
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 owner: Ajit
 aud: Website Builders
 
 Gives the idea about the markdown syntax allowed in `fastn`
 
 -- ds.h1: Straight to the point
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
-By importing the `doc-site` package and using the `ds.markdown` component, you
-gain access to a versatile language called **Markdown**, for creating 
-documentation and content in `fastn` projects.
+`fastn` supports `Markdown`. Hence, instead of learning tags, one can still
+create content-heavy and powerful website using plain text without missing out 
+on formatting. 
+
+Supporting `Markdown` makes `fastn` versatile as it also supports the
+conversion of the marked-up text into various output formats such as HTML.
+
+By importing the `doc-site` package in your fastn projects and using
+any of the component like `ds.markdown` component, you gain access to 
+Markdown's intuitive and readable text formatting syntax. 
 
 
 -- ds.code: Importing doc-site
@@ -37,13 +44,7 @@ lang: ftd
 
 \-- ds.markdown: 
 
--- ds.markdown:
-if: { source == "planning" }
 
-The `ds.markdown` component not only supports the basic Markdown
-syntax provided by the `ftd.text` kernel component but also offers additional
-properties such as `color` and `role`, that saves giving these properties to 
-the `ftd.text` while content creation.
 
 
 -- ds.code: markdown component definition
@@ -51,7 +52,6 @@ lang: ftd
 
 \-- component markdown:
 body body:
-
 optional string id:
 
 \-- ftd.column:
@@ -72,7 +72,7 @@ color: $inherited.colors.text
 Let's see what all we can do using this component of `doc-site`.
 
 -- ds.h1: Introduction
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 Welcome!! My name is Ajit
 
@@ -92,23 +92,14 @@ content creators and developers alike.
 Markdown is widely used in blogging, instant messaging, online forums,
 collaborative software, documentation pages, and readme files.
 
--- ds.h1: Markdown and doc-site
-
-`doc-site` supports Markdown through it's `markdown`component.
-
-`ds.markdown` component has added benefits over using only`ftd.text` kernel
-component. The two advantages of using `ds.markdown` are:
+-- ds.h2: Benefits
 
 - **Rich Styling**:  With `ds.markdown`, you can easily apply typographies and
     color schemes to your website's content. By utilizing the `color` and
     `role` properties given in the component definition, you can achieve
-    consistent and visually appealing designs without the need to specify these
-    properties every time you use ftd.text.
+    consistent and visually appealing designs.
 
-- **Simplified Syntax**: Using `ds.markdown` simplifies the syntax required to
-    render Markdown content. Instead of manually creating `ftd.text` sections
-    and providing the necessary properties, you can encapsulate the Markdown
-    content by one line syntax, resulting in cleaner and more concise code. 
+- **Simplified Syntax**: one line syntax. 
 
 
 -- ds.h1: Markdown syntax in doc-site
@@ -326,7 +317,7 @@ To create a Horizontal Rule we write
 
 
 -- ds.h1: Closing Remarks 
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
@@ -336,7 +327,7 @@ our fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
@@ -346,10 +337,10 @@ on [Discord](/discord/).
 
 
 -- ds.h1: Final Video
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 
 /-- ds.youtube:
-if: { source == "planning" }
+if: { source == "planning" || show-planning }
 v: 
 
 
@@ -359,3 +350,6 @@ v:
 -- string source: default
 $processor$: pr.get-data
 key: source
+
+-- boolean $show-planning: false
+
