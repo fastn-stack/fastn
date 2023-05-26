@@ -397,6 +397,8 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/imagemodule/index.ftd
 - Add meta-data: /seo-meta/
   document: /expander/ds/meta-data.ftd
+- Markdown in doc-site: /markdown/
+  document: /expander/ds/markdown.ftd
 
 
 # Blog: /blog/
@@ -441,7 +443,7 @@ favicon: /-/fastn.com/images/favicon.svg
   source: planning
 
 - Overview: /planning/
-- Markdown: /markdown-in-doc-site/-/planning
+- Markdown: /markdown/-/planning
   document: /expander/ds/markdown.ftd
 - SEO: /seo-meta-data/-/planning/
   document: expander/ds/meta-data.ftd

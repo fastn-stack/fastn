@@ -36,9 +36,7 @@ lang: ftd
 
 \-- component markdown:
 body body:
-optional boolean collapsed:
-optional caption title:
-optional boolean two_columns:
+
 optional string id:
 
 \-- ftd.column:
@@ -81,15 +79,14 @@ collaborative software, documentation pages, and readme files.
 
 -- ds.h1: Markdown and doc-site
 
-`doc-site` includes support for Markdown through the use of the `markdown`
-component.
+`doc-site` supports Markdown through it's `markdown`component.
 
 Here are some reasons why it is advantageous to use the `ds.markdown`
 component instead of the `ftd.text` kernel component:
 
 - **Rich Styling**:  With ds.markdown, you can easily apply typographies and
-    color schemes to your website's content. By utilizing the "color"
-    and "role" properties, you can achieve consistent and visually appealing
+    color schemes to your website's content. By utilizing the `color`
+    and `role` properties, you can achieve consistent and visually appealing
     designs without the need to specify these properties every time you use
     ftd.text.
 
@@ -99,8 +96,9 @@ component instead of the `ftd.text` kernel component:
     content by one line syntax, resulting in cleaner and more concise code. 
 
 
+-- ds.h1: Markdown syntax in doc-site
 
--- ds.rendered: plain text
+-- ds.rendered: Plain text
 
 -- ds.rendered.input:
 
@@ -171,7 +169,7 @@ elit, sed do eiusmod tempor incididunt, [fastn](/) .
 
 
 
--- ds.rendered: turning a URL into a link
+-- ds.rendered: Turning a URL into a link
 
 -- ds.rendered.input:
 
@@ -211,7 +209,7 @@ https://fastn.com/
   - Sub List item 1
   - Sub List item 1
 
-**Odered list:**
+**Ordered list:**
 
 1. List item 
 2. List item 
@@ -232,7 +230,7 @@ https://fastn.com/
   - Sub List item 1
   - Sub List item 1
 
-**Odered list:**
+**Ordered list:**
 
 1. List item 
 2. List item 
