@@ -49,7 +49,6 @@ id if { $markdown.id != NULL }: $markdown.id
 text: $markdown.body
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
-classes: markdown
 
 \-- end: ftd.column
 
