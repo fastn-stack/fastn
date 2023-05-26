@@ -23,8 +23,22 @@ Gives the idea about the markdown syntax allowed in `fastn`
 if: { source == "planning" }
 
 By importing the `doc-site` package and using the `ds.markdown` component, you
-gain access to a versatile language called Markdown, for creating documentation
-and content in `fastn` projects.
+gain access to a versatile language called **Markdown**, for creating 
+documentation and content in `fastn` projects.
+
+
+-- ds.code: Importing doc-site
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+
+-- ds.code: Syntax
+lang: ftd
+
+\-- ds.markdown: 
+
+-- ds.markdown:
+if: { source == "planning" }
 
 The `ds.markdown` component not only supports the basic Markdown
 syntax provided by the `ftd.text` kernel component but also offers additional
@@ -32,7 +46,7 @@ properties such as `color` and `role`, that saves giving these properties to
 the `ftd.text` while content creation.
 
 
--- ds.code:
+-- ds.code: markdown component definition
 lang: ftd
 
 \-- component markdown:
@@ -82,16 +96,16 @@ collaborative software, documentation pages, and readme files.
 
 `doc-site` supports Markdown through it's `markdown`component.
 
-Here are some reasons why it is advantageous to use the `ds.markdown`
-component instead of the `ftd.text` kernel component:
+`ds.markdown` component has added benefits over using only`ftd.text` kernel
+component. The two advantages of using `ds.markdown` are:
 
-- **Rich Styling**:  With ds.markdown, you can easily apply typographies and
-    color schemes to your website's content. By utilizing the `color`
-    and `role` properties, you can achieve consistent and visually appealing
-    designs without the need to specify these properties every time you use
-    ftd.text.
+- **Rich Styling**:  With `ds.markdown`, you can easily apply typographies and
+    color schemes to your website's content. By utilizing the `color` and
+    `role` properties given in the component definition, you can achieve
+    consistent and visually appealing designs without the need to specify these
+    properties every time you use ftd.text.
 
-- **Simplified Syntax**: Using ds.markdown simplifies the syntax required to
+- **Simplified Syntax**: Using `ds.markdown` simplifies the syntax required to
     render Markdown content. Instead of manually creating `ftd.text` sections
     and providing the necessary properties, you can encapsulate the Markdown
     content by one line syntax, resulting in cleaner and more concise code. 
