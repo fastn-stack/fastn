@@ -8,7 +8,7 @@ impl Memory {
     pub fn to_wat(&self) -> String {
         let limits_wat = self.limits.to_wat();
         let shared = if self.shared {
-            format!(" shared")
+            " shared".to_string()
         } else {
             String::new()
         };

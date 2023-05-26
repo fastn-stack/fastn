@@ -94,6 +94,10 @@ impl<'a> ftd::html::main::HtmlGenerator<'a> {
         &self,
         evts: &[ftd::node::Event],
     ) -> ftd::html::Result<ftd::Map<String>> {
+        pub fn clean_string(s: String) -> String {
+            s.replace("\\\\", "/").replace('\\', "/")
+        }
+
         // key: onclick
         // value: after group by for onclick find all actions, and call to_js_event()
         let mut events: ftd::Map<Vec<ftd::html::Action>> = Default::default();
@@ -118,7 +122,7 @@ impl<'a> ftd::html::main::HtmlGenerator<'a> {
         }
         let mut string_events: ftd::Map<String> = Default::default();
         for (k, v) in events {
-            string_events.insert(k, serde_json::to_string(&v).expect(""));
+            string_events.insert(k, clean_string(serde_json::to_string(&v).expect("")));
         }
         Ok(string_events)
     }
