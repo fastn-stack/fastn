@@ -32,6 +32,7 @@ impl fastn_runtime::Dom {
         self.register_memory_functions(linker);
 
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
+        // linker.func2ret("create_kernel", |mem, parent, kind| );
         linker
             .func_new(
                 "fastn",
@@ -138,16 +139,13 @@ impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::LinkerExt;
 
-        linker.func0("create_frame", |mem| mem.create_frame());
-        linker.func0("end_frame", |mem| mem.end_frame());
-
-        linker.func1ret("create_boolean", |mem, v| mem.create_boolean(v));
-        linker.func1ret("get_boolean", |mem, ptr| mem.get_boolean(ptr));
-
-        linker.func1ret("create_i32", |mem, v| mem.create_i32(v));
-        linker.func1ret("get_i32", |mem, v| mem.get_i32(v));
-
-        linker.func4ret("create_rgba", |mem, r, g, b, a| mem.create_rgba(r, g, b, a));
+        linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| mem.create_frame());
+        linker.func0("end_frame", |mem: &mut fastn_runtime::Memory| mem.end_frame());
+        linker.func1ret("create_boolean", |mem: &mut fastn_runtime::Memory, v| mem.create_boolean(v));
+        linker.func1ret("get_boolean", |mem: &mut fastn_runtime::Memory, ptr| mem.get_boolean(ptr));
+        linker.func1ret("create_i32", |mem: &mut fastn_runtime::Memory, v| mem.create_i32(v));
+        linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, v| mem.get_i32(v));
+        linker.func4ret("create_rgba", |mem: &mut fastn_runtime::Memory, r, g, b, a| mem.create_rgba(r, g, b, a));
     }
 }
 

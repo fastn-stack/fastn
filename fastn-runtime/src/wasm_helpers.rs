@@ -1,3 +1,19 @@
+pub trait StoreExtractor {
+    fn extract<'a>(store: &'a mut wasmtime::Caller<fastn_runtime::Dom>) -> &'a mut Self;
+}
+
+impl StoreExtractor for fastn_runtime::Memory {
+    fn extract<'a>(store: &'a mut wasmtime::Caller<fastn_runtime::Dom>) -> &'a mut Self {
+        store.data_mut().memory_mut()
+    }
+}
+
+impl StoreExtractor for fastn_runtime::Dom {
+    fn extract<'a>(store: &'a mut wasmtime::Caller<fastn_runtime::Dom>) -> &'a mut Self {
+        store.data_mut()
+    }
+}
+
 pub trait WasmType {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self;
     fn the_type() -> wasmtime::ValType;
@@ -106,10 +122,10 @@ impl Params for [wasmtime::Val] {
 }
 
 pub trait LinkerExt {
-    fn func0(
+    fn func0<T: StoreExtractor>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory) + Send + Sync + 'static,
+        func: impl Fn(&mut T) + Send + Sync + 'static,
     );
     // fn func1<T: ParamExtractor<T>>(&mut self, name: &str, func: impl Fn(&mut fastn_runtime::Memory, T) + Send + Sync + 'static);
     fn func1(
@@ -151,17 +167,17 @@ pub trait LinkerExt {
 }
 
 impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
-    fn func0(
+    fn func0<T: StoreExtractor>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory) + Send + Sync + 'static,
+        func: impl Fn(&mut T) + Send + Sync + 'static,
     ) {
         self.func_new(
             "fastn",
             name,
             wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                func(caller.memory_mut());
+                func(T::extract(&mut caller));
                 Ok(())
             },
         )
