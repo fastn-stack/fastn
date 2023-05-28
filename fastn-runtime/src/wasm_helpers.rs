@@ -72,26 +72,26 @@ pub trait LinkerExt {
         + Sync
         + 'static,
     );
-    fn func0ret(
+    fn func0ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory) -> wasmtime::Val + Send + Sync + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory) -> O + Send + Sync + 'static,
     );
-    fn func1ret(
+    fn func1ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
         arg: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> wasmtime::Val
+        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> O
         + Send
         + Sync
         + 'static,
     );
-    fn func2ret(
+    fn func2ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
         arg1: wasmtime::ValType,
         arg2: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val) -> wasmtime::Val
+        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val) -> O
         + Send
         + Sync
         + 'static,
@@ -153,27 +153,27 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         )
             .unwrap();
     }
-    fn func0ret(
+    fn func0ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory) -> wasmtime::Val + Send + Sync + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory) -> O + Send + Sync + 'static,
     ) {
         self.func_new(
             "fastn",
             name,
             wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-                results[0] = func(caller.memory_mut());
+                results[0] = func(caller.memory_mut()).into();
                 Ok(())
             },
         )
             .unwrap();
     }
-    fn func1ret(
+    fn func1ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
         arg: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> wasmtime::Val
+        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> O
         + Send
         + Sync
         + 'static,
@@ -183,18 +183,18 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
             name,
             wasmtime::FuncType::new([arg].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                results[0] = func(caller.memory_mut(), &params[0]);
+                results[0] = func(caller.memory_mut(), &params[0]).into();
                 Ok(())
             },
         )
             .unwrap();
     }
-    fn func2ret(
+    fn func2ret<O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
         arg1: wasmtime::ValType,
         arg2: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val) -> wasmtime::Val
+        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val) -> O
         + Send
         + Sync
         + 'static,
@@ -204,7 +204,7 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
             name,
             wasmtime::FuncType::new([arg1, arg2].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                results[0] = func(caller.memory_mut(), &params[0], &params[1]);
+                results[0] = func(caller.memory_mut(), &params[0], &params[1]).into();
                 Ok(())
             },
         )
