@@ -241,7 +241,21 @@ impl Memory {
         todo!()
     }
 
+    pub fn get_boolean(&mut self, _ptr: fastn_runtime::PointerKey) -> bool {
+        // let pointer = self.boolean.insert((value, vec![]));
+        // self.insert_in_frame(pointer, Kind::Boolean);
+        // pointer
+        todo!()
+    }
+
     pub fn create_i32(&mut self, _value: i32) -> fastn_runtime::PointerKey {
+        // let pointer = self.i32.insert((value, vec![]));
+        // self.insert_in_frame(pointer, Kind::Integer);
+        // pointer
+        todo!()
+    }
+
+    pub fn get_i32(&mut self, _ptr: fastn_runtime::PointerKey) -> i32 {
         // let pointer = self.i32.insert((value, vec![]));
         // self.insert_in_frame(pointer, Kind::Integer);
         // pointer

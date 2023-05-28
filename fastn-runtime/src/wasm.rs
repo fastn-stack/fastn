@@ -136,61 +136,18 @@ impl fastn_runtime::Dom {
 
 impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
-        use fastn_runtime::{CallerExt, LinkerExt, Params};
-
-        linker.func1ret("create_boolean", |mem, v| mem.create_boolean(v));
-
-        linker.func1ret("create_i32", |mem, v| mem.create_i32(v));
-
-        linker
-            .func_new(
-                "fastn",
-                "create_rgba",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::F32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.memory_mut().create_rgba(
-                            params.i32(0),
-                            params.i32(1),
-                            params.i32(2),
-                            params.f32(3),
-                        ),
-                    )));
-                    Ok(())
-                },
-            )
-            .unwrap();
+        use fastn_runtime::LinkerExt;
 
         linker.func0("create_frame", |mem| mem.create_frame());
         linker.func0("end_frame", |mem| mem.end_frame());
 
-        // linker.func1ret("get_boolean", |mem, fastn_runtime::PointerKey| )
-        linker
-            .func_new(
-                "fastn",
-                "get_boolean",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                    [wasmtime::ValType::I32].iter().cloned(),
-                ),
-                |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                    let _s = &caller.memory();
+        linker.func1ret("create_boolean", |mem, v| mem.create_boolean(v));
+        linker.func1ret("get_boolean", |mem, ptr| mem.get_boolean(ptr));
 
-                    // results[0] = wasmtime::Val::I32(s.boolean[params.ptr(0)].0 as i32);
-                    Ok(())
-                },
-            )
-            .unwrap();
+        linker.func1ret("create_i32", |mem, v| mem.create_i32(v));
+        linker.func1ret("get_i32", |mem, v| mem.get_i32(v));
+
+        linker.func4ret("create_rgba", |mem, r, g, b, a| mem.create_rgba(r, g, b, a));
     }
 }
 

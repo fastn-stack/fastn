@@ -12,7 +12,19 @@ impl WasmType for i32 {
         wasmtime::ValType::I32
     }
     fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32(*self)
+        (*self).into()
+    }
+}
+
+impl WasmType for f32 {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> f32 {
+        vals.f32(idx)
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::F32
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        (*self).into()
     }
 }
 
@@ -131,6 +143,11 @@ pub trait LinkerExt {
         name: &str,
         func: impl Fn(&mut fastn_runtime::Memory, T1, T2) -> O + Send + Sync + 'static,
     );
+    fn func4ret<T1: WasmType, T2: WasmType, T3: WasmType, T4: WasmType, O: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut fastn_runtime::Memory, T1, T2, T3, T4) -> O + Send + Sync + 'static,
+    );
 }
 
 impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
@@ -244,11 +261,38 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         )
         .unwrap();
     }
-}
-
-impl From<fastn_runtime::PointerKey> for wasmtime::Val {
-    fn from(value: fastn_runtime::PointerKey) -> Self {
-        wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(value)))
+    fn func4ret<T1: WasmType, T2: WasmType, T3: WasmType, T4: WasmType, O: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut fastn_runtime::Memory, T1, T2, T3, T4) -> O + Send + Sync + 'static,
+    ) {
+        self.func_new(
+            "fastn",
+            name,
+            wasmtime::FuncType::new(
+                [
+                    T1::the_type(),
+                    T2::the_type(),
+                    T3::the_type(),
+                    T4::the_type(),
+                ]
+                .iter()
+                .cloned(),
+                [].iter().cloned(),
+            ),
+            move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                results[0] = func(
+                    caller.memory_mut(),
+                    T1::extract(0, params),
+                    T2::extract(1, params),
+                    T3::extract(2, params),
+                    T4::extract(3, params),
+                )
+                .to_wasm();
+                Ok(())
+            },
+        )
+        .unwrap();
     }
 }
 
