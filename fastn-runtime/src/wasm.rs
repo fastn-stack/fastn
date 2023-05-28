@@ -9,7 +9,25 @@ impl fastn_runtime::Dom {
 
         let mut linker = wasmtime::Linker::new(&engine);
 
-        dom.register_memory_functions(&mut linker);
+        dom.register_functions(&mut linker);
+
+        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::default());
+        let instance = linker
+            .instantiate(&mut store, &module)
+            .expect("cant create instance");
+
+        let root = Some(wasmtime::ExternRef::new(store.data().root()));
+
+        let wasm_main = instance
+            .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
+            .unwrap();
+        wasm_main.call(&mut store, (root,)).unwrap();
+
+        (store, instance)
+    }
+
+    fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        self.register_memory_functions(linker);
 
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
         linker
@@ -46,8 +64,8 @@ impl fastn_runtime::Dom {
                         wasmtime::ValType::I32,
                         wasmtime::ValType::I32,
                     ]
-                    .iter()
-                    .cloned(),
+                        .iter()
+                        .cloned(),
                     [].iter().cloned(),
                 ),
                 |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
@@ -74,8 +92,8 @@ impl fastn_runtime::Dom {
                         wasmtime::ValType::I32,
                         wasmtime::ValType::F32,
                     ]
-                    .iter()
-                    .cloned(),
+                        .iter()
+                        .cloned(),
                     [].iter().cloned(),
                 ),
                 |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
@@ -111,19 +129,6 @@ impl fastn_runtime::Dom {
                 },
             )
             .unwrap();
-        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::default());
-        let instance = linker
-            .instantiate(&mut store, &module)
-            .expect("cant create instance");
-
-        let root = Some(wasmtime::ExternRef::new(store.data().root()));
-
-        let wasm_main = instance
-            .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
-            .unwrap();
-        wasm_main.call(&mut store, (root,)).unwrap();
-
-        (store, instance)
     }
 }
 
