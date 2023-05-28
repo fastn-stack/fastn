@@ -280,3 +280,31 @@ impl fastn_runtime::Memory {
             .unwrap();
     }
 }
+
+
+#[cfg(test)]
+mod test {
+    pub fn assert_import(name: &str, type_: &str) {
+        fastn_runtime::Dom::create_instance(format!(
+            r#"
+            (module (import "fastn" "{}" (func {}))
+                (func (export "main")  (param externref))
+            )
+        "#,
+            name, type_
+        ));
+    }
+
+    #[test]
+    fn dom() {
+        assert_import("create_kernel", "(param i32 externref) (result externref)");
+    }
+
+    #[test]
+    fn memory() {
+        assert_import("create_boolean", "(param i32) (result externref)");
+        assert_import("create_frame", "");
+        assert_import("end_frame", "");
+        assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
+    }
+}

@@ -33,9 +33,6 @@ pub use event::Event;
 pub use operation::{Operation, Rectangle};
 pub use runtime_store::Memory;
 
-#[cfg(test)]
-pub(crate) use dom::assert_import;
-
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
 slotmap::new_key_type! { pub struct ClosureKey; }

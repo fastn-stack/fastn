@@ -214,23 +214,3 @@ impl Value {
     }
 }
 
-#[cfg(test)]
-pub fn assert_import(name: &str, type_: &str) {
-    fastn_runtime::Dom::create_instance(format!(
-        r#"
-            (module (import "fastn" "{}" (func {}))
-                (func (export "main")  (param externref))
-            )
-        "#,
-        name, type_
-    ));
-}
-
-#[cfg(test)]
-mod test {
-
-    #[test]
-    fn test() {
-        fastn_runtime::assert_import("create_kernel", "(param i32 externref) (result externref)");
-    }
-}

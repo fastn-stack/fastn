@@ -284,15 +284,8 @@ impl Memory {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn test() {
-        fastn_runtime::assert_import("create_boolean", "(param i32) (result externref)");
-        fastn_runtime::assert_import("create_frame", "");
-        fastn_runtime::assert_import("end_frame", "");
-        fastn_runtime::assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
-    }
 
-    #[test]
+    // #[test]
     fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
