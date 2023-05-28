@@ -1,23 +1,54 @@
-pub trait ParamExtractor {
+pub trait WasmType {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self;
     fn the_type() -> wasmtime::ValType;
+    fn to_wasm(&self) -> wasmtime::Val;
 }
 
-impl ParamExtractor for i32 {
+impl WasmType for i32 {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> i32 {
         vals.i32(idx)
     }
     fn the_type() -> wasmtime::ValType {
         wasmtime::ValType::I32
     }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::I32(*self)
+    }
 }
 
-impl ParamExtractor for bool {
+impl WasmType for bool {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> bool {
         vals.boolean(idx)
     }
     fn the_type() -> wasmtime::ValType {
         wasmtime::ValType::I32
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::I32(*self as i32)
+    }
+}
+
+impl WasmType for fastn_runtime::NodeKey {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
+        vals.key(idx)
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::ExternRef
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(*self)))
+    }
+}
+
+impl WasmType for fastn_runtime::PointerKey {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
+        vals.ptr(idx)
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::ExternRef
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(*self)))
     }
 }
 
@@ -81,32 +112,24 @@ pub trait LinkerExt {
         arg1: wasmtime::ValType,
         arg2: wasmtime::ValType,
         func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val)
-        + Send
-        + Sync
-        + 'static,
+            + Send
+            + Sync
+            + 'static,
     );
-    fn func0ret<O: Into<wasmtime::Val>>(
+    fn func0ret<O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut fastn_runtime::Memory) -> O + Send + Sync + 'static,
     );
-    fn func1ret<T: ParamExtractor, O: Into<wasmtime::Val>>(
+    fn func1ret<T: WasmType, O: WasmType>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory, T) -> O
-        + Send
-        + Sync
-        + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory, T) -> O + Send + Sync + 'static,
     );
-    fn func2ret<T1: ParamExtractor, T2: ParamExtractor, O: Into<wasmtime::Val>>(
+    fn func2ret<T1: WasmType, T2: WasmType, O: WasmType>(
         &mut self,
         name: &str,
-        arg1: wasmtime::ValType,
-        arg2: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, T1, T2) -> O
-        + Send
-        + Sync
-        + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory, T1, T2) -> O + Send + Sync + 'static,
     );
 }
 
@@ -125,7 +148,7 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func1(
         &mut self,
@@ -142,7 +165,7 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func2(
         &mut self,
@@ -150,9 +173,9 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         arg1: wasmtime::ValType,
         arg2: wasmtime::ValType,
         func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val, &wasmtime::Val)
-        + Send
-        + Sync
-        + 'static,
+            + Send
+            + Sync
+            + 'static,
     ) {
         self.func_new(
             "fastn",
@@ -163,9 +186,9 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
-    fn func0ret<O: Into<wasmtime::Val>>(
+    fn func0ret<O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut fastn_runtime::Memory) -> O + Send + Sync + 'static,
@@ -175,51 +198,51 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
             name,
             wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, results| {
-                results[0] = func(caller.memory_mut()).into();
+                results[0] = func(caller.memory_mut()).to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
-    fn func1ret<T: ParamExtractor, O: Into<wasmtime::Val>>(
+    fn func1ret<T: WasmType, O: WasmType>(
         &mut self,
         name: &str,
-        func: impl Fn(&mut fastn_runtime::Memory, T) -> O
-        + Send
-        + Sync
-        + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory, T) -> O + Send + Sync + 'static,
     ) {
         self.func_new(
             "fastn",
             name,
             wasmtime::FuncType::new([T::the_type()].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                results[0] = func(caller.memory_mut(), T::extract(0, params)).into();
+                results[0] = func(caller.memory_mut(), T::extract(0, params)).to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
-    fn func2ret<T1: ParamExtractor, T2: ParamExtractor, O: Into<wasmtime::Val>>(
+    fn func2ret<T1: WasmType, T2: WasmType, O: WasmType>(
         &mut self,
         name: &str,
-        arg1: wasmtime::ValType,
-        arg2: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, T1, T2) -> O
-        + Send
-        + Sync
-        + 'static,
+        func: impl Fn(&mut fastn_runtime::Memory, T1, T2) -> O + Send + Sync + 'static,
     ) {
         self.func_new(
             "fastn",
             name,
-            wasmtime::FuncType::new([arg1, arg2].iter().cloned(), [].iter().cloned()),
+            wasmtime::FuncType::new(
+                [T1::the_type(), T2::the_type()].iter().cloned(),
+                [].iter().cloned(),
+            ),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                results[0] = func(caller.memory_mut(), T1::extract(0, params), T2::extract(1, params)).into();
+                results[0] = func(
+                    caller.memory_mut(),
+                    T1::extract(0, params),
+                    T2::extract(1, params),
+                )
+                .to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
 }
 

@@ -136,15 +136,11 @@ impl fastn_runtime::Dom {
 
 impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
-        use fastn_runtime::{Params, CallerExt, LinkerExt};
+        use fastn_runtime::{CallerExt, LinkerExt, Params};
 
-        linker.func1ret("create_boolean", |mem, v| {
-            mem.create_boolean(v)
-        });
+        linker.func1ret("create_boolean", |mem, v| mem.create_boolean(v));
 
-        linker.func1ret("create_i32", |mem, v| {
-            mem.create_i32(v)
-        });
+        linker.func1ret("create_i32", |mem, v| mem.create_i32(v));
 
         linker
             .func_new(
@@ -178,6 +174,7 @@ impl fastn_runtime::Memory {
         linker.func0("create_frame", |mem| mem.create_frame());
         linker.func0("end_frame", |mem| mem.end_frame());
 
+        // linker.func1ret("get_boolean", |mem, fastn_runtime::PointerKey| )
         linker
             .func_new(
                 "fastn",
@@ -196,8 +193,6 @@ impl fastn_runtime::Memory {
             .unwrap();
     }
 }
-
-
 
 #[cfg(test)]
 mod test {
