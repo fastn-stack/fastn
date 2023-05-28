@@ -1,9 +1,9 @@
 pub struct Dom {
-    pub taffy: taffy::Taffy,
-    pub nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
-    pub children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
-    pub root: fastn_runtime::NodeKey,
-    pub store: fastn_runtime::runtime_store::Memory,
+    taffy: taffy::Taffy,
+    nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
+    children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
+    root: fastn_runtime::NodeKey,
+    memory: fastn_runtime::runtime_store::Memory,
 }
 
 pub enum ElementKind {
@@ -49,12 +49,28 @@ impl Default for Dom {
             nodes,
             root,
             children,
-            store: Default::default(),
+            memory: Default::default(),
         }
     }
 }
 
 impl Dom {
+    pub fn register_memory_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        self.memory.register(linker)
+    }
+
+    pub fn root(&self) -> fastn_runtime::NodeKey {
+        self.root
+    }
+
+    pub fn memory(&self) -> &fastn_runtime::Memory {
+        &self.memory
+    }
+
+    pub fn memory_mut(&mut self) -> &mut fastn_runtime::Memory {
+        &mut self.memory
+    }
+
     pub fn compute_layout(&mut self, width: u32, height: u32) -> Vec<fastn_runtime::Operation> {
         let taffy_root = self.nodes[self.root].taffy();
         self.taffy
@@ -90,11 +106,14 @@ impl Dom {
             fastn_runtime::Element::Image(_i) => todo!(),
         }
     }
+}
 
+// functions used by wasm
+impl Dom {
     pub fn create_kernel(
         &mut self,
-        _k: ElementKind,
         parent: fastn_runtime::NodeKey,
+        _k: ElementKind,
     ) -> fastn_runtime::NodeKey {
         let taffy_key = self
             .taffy
@@ -213,4 +232,3 @@ impl Value {
         }
     }
 }
-
