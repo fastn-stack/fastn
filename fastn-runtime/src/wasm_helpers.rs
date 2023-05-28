@@ -1,10 +1,14 @@
-pub trait ParamExtractor<T> {
-    fn extract(&self, idx: usize) -> T;
+pub trait ParamExtractor {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self;
+    fn the_type() -> wasmtime::ValType;
 }
 
-impl ParamExtractor<i32> for [wasmtime::Val] {
-    fn extract(&self, idx: usize) -> i32 {
-        self.i32(idx)
+impl ParamExtractor for i32 {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> i32 {
+        vals.i32(idx)
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::I32
     }
 }
 
@@ -77,11 +81,10 @@ pub trait LinkerExt {
         name: &str,
         func: impl Fn(&mut fastn_runtime::Memory) -> O + Send + Sync + 'static,
     );
-    fn func1ret<O: Into<wasmtime::Val>>(
+    fn func1ret<T: ParamExtractor, O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
-        arg: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> O
+        func: impl Fn(&mut fastn_runtime::Memory, T) -> O
         + Send
         + Sync
         + 'static,
@@ -169,11 +172,10 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         )
             .unwrap();
     }
-    fn func1ret<O: Into<wasmtime::Val>>(
+    fn func1ret<T: ParamExtractor, O: Into<wasmtime::Val>>(
         &mut self,
         name: &str,
-        arg: wasmtime::ValType,
-        func: impl Fn(&mut fastn_runtime::Memory, &wasmtime::Val) -> O
+        func: impl Fn(&mut fastn_runtime::Memory, T) -> O
         + Send
         + Sync
         + 'static,
@@ -181,9 +183,9 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         self.func_new(
             "fastn",
             name,
-            wasmtime::FuncType::new([arg].iter().cloned(), [].iter().cloned()),
+            wasmtime::FuncType::new([T::the_type()].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                results[0] = func(caller.memory_mut(), &params[0]).into();
+                results[0] = func(caller.memory_mut(), T::extract(0, params)).into();
                 Ok(())
             },
         )

@@ -158,8 +158,8 @@ impl fastn_runtime::Memory {
             )
             .unwrap();
 
-        linker.func1ret("create_i32", wasmtime::ValType::I32, |mem, v| {
-            mem.create_i32(v.i32().unwrap())
+        linker.func1ret("create_i32", |mem, v| {
+            mem.create_i32(v)
         });
 
         linker
