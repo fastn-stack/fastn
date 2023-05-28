@@ -27,35 +27,16 @@ impl fastn_runtime::Dom {
     }
 
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        use fastn_runtime::LinkerExt;
         use fastn_runtime::Params;
 
         self.register_memory_functions(linker);
 
         // this is quite tedious boilerplate, maybe we can write some macro to generate it
-        // linker.func2ret("create_kernel", |mem, parent, kind| );
-        linker
-            .func_new(
-                "fastn",
-                "create_kernel",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
-                        .iter()
-                        .cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller
-                            .data_mut()
-                            .create_kernel(params.key(0), params.i32(1).into()),
-                    )));
-                    Ok(())
-                },
-            )
-            .unwrap();
+        linker.func2ret(
+            "create_kernel",
+            |dom: &mut fastn_runtime::Dom, parent, kind| dom.create_kernel(parent, kind),
+        );
 
         linker
             .func_new(
@@ -139,13 +120,28 @@ impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::LinkerExt;
 
-        linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| mem.create_frame());
-        linker.func0("end_frame", |mem: &mut fastn_runtime::Memory| mem.end_frame());
-        linker.func1ret("create_boolean", |mem: &mut fastn_runtime::Memory, v| mem.create_boolean(v));
-        linker.func1ret("get_boolean", |mem: &mut fastn_runtime::Memory, ptr| mem.get_boolean(ptr));
-        linker.func1ret("create_i32", |mem: &mut fastn_runtime::Memory, v| mem.create_i32(v));
-        linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, v| mem.get_i32(v));
-        linker.func4ret("create_rgba", |mem: &mut fastn_runtime::Memory, r, g, b, a| mem.create_rgba(r, g, b, a));
+        linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| {
+            mem.create_frame()
+        });
+        linker.func0("end_frame", |mem: &mut fastn_runtime::Memory| {
+            mem.end_frame()
+        });
+        linker.func1ret("create_boolean", |mem: &mut fastn_runtime::Memory, v| {
+            mem.create_boolean(v)
+        });
+        linker.func1ret("get_boolean", |mem: &mut fastn_runtime::Memory, ptr| {
+            mem.get_boolean(ptr)
+        });
+        linker.func1ret("create_i32", |mem: &mut fastn_runtime::Memory, v| {
+            mem.create_i32(v)
+        });
+        linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, v| {
+            mem.get_i32(v)
+        });
+        linker.func4ret(
+            "create_rgba",
+            |mem: &mut fastn_runtime::Memory, r, g, b, a| mem.create_rgba(r, g, b, a),
+        );
     }
 }
 

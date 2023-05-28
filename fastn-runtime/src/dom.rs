@@ -6,6 +6,7 @@ pub struct Dom {
     memory: fastn_runtime::runtime_store::Memory,
 }
 
+#[derive(Copy, Clone)]
 pub enum ElementKind {
     Column,
     Row,
@@ -31,6 +32,22 @@ impl From<i32> for ElementKind {
             7 => ElementKind::Decimal,
             8 => ElementKind::Boolean,
             _ => panic!("Unknown element kind: {}", i),
+        }
+    }
+}
+
+impl From<ElementKind> for i32 {
+    fn from(s: ElementKind) -> i32 {
+        match s {
+            ElementKind::Column => 0,
+            ElementKind::Row => 1,
+            ElementKind::Text => 2,
+            ElementKind::Image => 3,
+            ElementKind::Container => 4,
+            ElementKind::IFrame => 5,
+            ElementKind::Integer => 6,
+            ElementKind::Decimal => 7,
+            ElementKind::Boolean => 8,
         }
     }
 }
