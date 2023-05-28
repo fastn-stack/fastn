@@ -22,6 +22,7 @@ mod event;
 mod operation;
 mod runtime_store;
 pub mod wasm;
+mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
@@ -32,6 +33,7 @@ pub use element::{
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
 pub use runtime_store::Memory;
+pub (crate) use wasm_helpers::*;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
