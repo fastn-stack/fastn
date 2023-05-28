@@ -137,26 +137,10 @@ impl fastn_runtime::Dom {
 impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::{Params, CallerExt, LinkerExt};
-        linker
-            .func_new(
-                "fastn",
-                "create_boolean",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::I32].iter().cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.memory_mut().create_boolean(params.boolean(0)),
-                    )));
 
-                    Ok(())
-                },
-            )
-            .unwrap();
+        linker.func1ret("create_boolean", |mem, v| {
+            mem.create_boolean(v)
+        });
 
         linker.func1ret("create_i32", |mem, v| {
             mem.create_i32(v)
