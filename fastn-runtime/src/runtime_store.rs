@@ -29,6 +29,12 @@
 /// attachments.
 ///
 /// When `.attach_to_dom()` is called, we find all the dependencies.
+///
+/// if we have:
+/// -- ftd.text: hello
+///
+/// a string containing hello will be created, and then passed to Rust as text properties, and
+/// original wasm value would get dropped.
 #[derive(Debug, Default)]
 pub struct Memory {
     /// when a function starts in wasm side, a new `Frame` is created and added here. Each new
@@ -48,17 +54,12 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<KindPointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
-
-    /// if we have:
-    /// -- ftd.text: hello
-    ///
-    /// a string containing hello will be created, and then passed to Rust as text properties, and
-    /// original wasm value would get dropped.
 }
 
 type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
 
 /// For every ftd value we have one such entry
+#[derive(Debug)]
 struct HeapData<T> {
     /// The inner value being stored in ftd
     value: HeapValue<T>,
@@ -66,10 +67,11 @@ struct HeapData<T> {
     /// x.dependents.add(l)
     dependents: Vec<KindPointer>,
     /// whenever a dom node is added or deleted, it is added or removed from this list.
-    ui_properties: Vec<UIDependendent>,
+    ui_properties: Vec<UIDependent>,
 }
 
 /// This is the data we store in the heap for any value.
+#[derive(Debug)]
 enum HeapValue<T> {
     Value(T),
 
@@ -80,7 +82,10 @@ enum HeapValue<T> {
     /// -- integer x: 10 (stored as HeapValue::Value(10))
     /// -- integer y: 20 (stored as HeapValue::Value(10))
     /// -- integer z = { x + y } (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
-    Formula { cached_value: T, closure: fastn_runtime::ClosureKey },
+    Formula {
+        cached_value: T,
+        closure: fastn_runtime::ClosureKey,
+    },
 }
 
 #[derive(Debug)]
@@ -135,10 +140,10 @@ enum Kind {
 }
 
 impl Memory {
-    pub fn detach_dom(&mut self, dom: fastn_runtime::NodeKey) {
-        for pointer in self.ui_deps.remove(&dom).unwrap_or_default() {
-            self.drop_pointer(&pointer);
-        }
+    pub fn detach_dom(&mut self, _dom: fastn_runtime::NodeKey) {
+        // for pointer in self.ui_deps.remove(&dom).unwrap_or_default() {
+        //     self.drop_pointer(&pointer);
+        // }
     }
 
     pub fn attach_to_dom(&mut self, _dom: fastn_runtime::NodeKey, _ptr: KindPointer) {
@@ -146,57 +151,59 @@ impl Memory {
         todo!()
     }
 
-    fn get_pointer_dep_children(&self, pointer: &KindPointer) -> Option<Vec<KindPointer>> {
-        match &pointer.kind {
-            Kind::Boolean => self.boolean.get(pointer.key).map(|v| v.1.clone()),
-            Kind::Integer => self.boolean.get(pointer.key).map(|v| v.1.clone()),
-            Kind::Record => self
-                .vec
-                .get(pointer.key)
-                .map(|v| [v.0.clone(), v.1.clone()].concat().into_iter().collect()),
-            Kind::OrType => self.or_type.get(pointer.key).map(|v| v.1.clone()),
-            Kind::Decimal => self.f32.get(pointer.key).map(|v| v.1.clone()),
-        }
+    fn get_pointer_dep_children(&self, _pointer: &KindPointer) -> Option<Vec<KindPointer>> {
+        // match &pointer.kind {
+        //     Kind::Boolean => self.boolean.get(pointer.key).map(|v| v.value.clone()),
+        //     Kind::Integer => self.boolean.get(pointer.key).map(|v| v.1.clone()),
+        //     Kind::Record => self
+        //         .vec
+        //         .get(pointer.key)
+        //         .map(|v| [v.0.clone(), v.1.clone()].concat().into_iter().collect()),
+        //     Kind::OrType => self.or_type.get(pointer.key).map(|v| v.1.clone()),
+        //     Kind::Decimal => self.f32.get(pointer.key).map(|v| v.1.clone()),
+        // }
+        todo!()
     }
 
-    fn add_dep_child(&mut self, pointer: &KindPointer, child: KindPointer) {
-        if let Some(dep_children) = match &pointer.kind {
-            Kind::Boolean => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-            Kind::Integer => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-            Kind::Record => self.vec.get_mut(pointer.key).map(|v| &mut v.1),
-            Kind::OrType => self.or_type.get_mut(pointer.key).map(|v| &mut v.1),
-            Kind::Decimal => self.f32.get_mut(pointer.key).map(|v| &mut v.1),
-        } {
-            dep_children.push(child);
-        }
+    fn add_dep_child(&mut self, _pointer: &KindPointer, _child: KindPointer) {
+        // if let Some(dep_children) = match &pointer.kind {
+        //     Kind::Boolean => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
+        //     Kind::Integer => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
+        //     Kind::Record => self.vec.get_mut(pointer.key).map(|v| &mut v.1),
+        //     Kind::OrType => self.or_type.get_mut(pointer.key).map(|v| &mut v.1),
+        //     Kind::Decimal => self.f32.get_mut(pointer.key).map(|v| &mut v.1),
+        // } {
+        //     dep_children.push(child);
+        // }
+        todo!()
     }
 
-    pub fn attach(&mut self, parent: KindPointer, child: KindPointer) {
-        let parent_attachments = if let Some(attachment) = self.attachment.get(&parent) {
-            attachment.clone()
-        } else {
-            return;
-        };
-        let mut child_attachments = self.attachment.entry(child.clone()).or_default().clone();
-        for parent_attachment in parent_attachments {
-            // if parent has not already given the attachment to the child, add it
-            let attachment = Attachment {
-                element: parent_attachment.element,
-                source: parent.clone(),
-            };
-            let is_attached = child_attachments.insert(attachment);
-            if is_attached {
-                let dep_children = self.get_pointer_dep_children(&child).unwrap();
-                for dep in dep_children {
-                    self.attach(child.clone(), dep)
-                }
-            }
-        }
-
-        *self.attachment.get_mut(&child).unwrap() = child_attachments;
-        self.add_dep_child(&parent, child.clone());
-        // TODO: pass all attachments from parent to child
-        self.drop_from_frame(&child);
+    pub fn attach(&mut self, _parent: KindPointer, _child: KindPointer) {
+        // let parent_attachments = if let Some(attachment) = self.attachment.get(&parent) {
+        //     attachment.clone()
+        // } else {
+        //     return;
+        // };
+        // let mut child_attachments = self.attachment.entry(child.clone()).or_default().clone();
+        // for parent_attachment in parent_attachments {
+        //     // if parent has not already given the attachment to the child, add it
+        //     let attachment = Attachment {
+        //         element: parent_attachment.element,
+        //         source: parent.clone(),
+        //     };
+        //     let is_attached = child_attachments.insert(attachment);
+        //     if is_attached {
+        //         let dep_children = self.get_pointer_dep_children(&child).unwrap();
+        //         for dep in dep_children {
+        //             self.attach(child.clone(), dep)
+        //         }
+        //     }
+        // }
+        //
+        // *self.attachment.get_mut(&child).unwrap() = child_attachments;
+        // self.add_dep_child(&parent, child.clone());
+        // // TODO: pass all attachments from parent to child
+        // self.drop_from_frame(&child);
     }
 
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: Kind) {
@@ -227,161 +234,51 @@ impl Memory {
         }
     }
 
-    pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
-        let pointer = self.boolean.insert((value, vec![]));
-        self.insert_in_frame(pointer, Kind::Boolean);
-        pointer
+    pub fn create_boolean(&mut self, _value: bool) -> fastn_runtime::PointerKey {
+        // let pointer = self.boolean.insert((value, vec![]));
+        // self.insert_in_frame(pointer, Kind::Boolean);
+        // pointer
+        todo!()
     }
 
-    pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
-        let pointer = self.i32.insert((value, vec![]));
-        self.insert_in_frame(pointer, Kind::Integer);
-        pointer
+    pub fn create_i32(&mut self, _value: i32) -> fastn_runtime::PointerKey {
+        // let pointer = self.i32.insert((value, vec![]));
+        // self.insert_in_frame(pointer, Kind::Integer);
+        // pointer
+        todo!()
     }
 
-    pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
-        let r_pointer = self.i32.insert((r, vec![]));
-        let g_pointer = self.i32.insert((g, vec![]));
-        let b_pointer = self.i32.insert((b, vec![]));
-        let a_pointer = self.f32.insert((a, vec![]));
-
-        let vec = self.vec.insert((
-            vec![
-                KindPointer {
-                    key: r_pointer,
-                    kind: Kind::Integer,
-                },
-                KindPointer {
-                    key: g_pointer,
-                    kind: Kind::Integer,
-                },
-                KindPointer {
-                    key: b_pointer,
-                    kind: Kind::Integer,
-                },
-                KindPointer {
-                    key: a_pointer,
-                    kind: Kind::Decimal,
-                },
-            ],
-            vec![],
-        ));
-
-        self.insert_in_frame(vec, Kind::Record);
-        vec
-    }
-
-    pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
-        use fastn_runtime::dom::Params;
-
-        linker
-            .func_new(
-                "fastn",
-                "create_boolean",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::I32].iter().cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().store.create_boolean(params.boolean(0)),
-                    )));
-
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "create_i32",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::I32].iter().cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().store.create_i32(params.i32(0)),
-                    )));
-
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "create_rgba",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::F32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().store.create_rgba(
-                            params.i32(0),
-                            params.i32(1),
-                            params.i32(2),
-                            params.f32(3),
-                        ),
-                    )));
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "create_frame",
-                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                    caller.data_mut().store.create_frame();
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "end_frame",
-                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                    caller.data_mut().store.end_frame();
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "get_boolean",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                    [wasmtime::ValType::I32].iter().cloned(),
-                ),
-                |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    let s = &caller.data().store;
-
-                    results[0] = wasmtime::Val::I32(s.boolean[params.ptr(0)].0 as i32);
-                    Ok(())
-                },
-            )
-            .unwrap();
+    pub fn create_rgba(&mut self, _r: i32, _g: i32, _b: i32, _a: f32) -> fastn_runtime::PointerKey {
+        // let r_pointer = self.i32.insert((r, vec![]));
+        // let g_pointer = self.i32.insert((g, vec![]));
+        // let b_pointer = self.i32.insert((b, vec![]));
+        // let a_pointer = self.f32.insert((a, vec![]));
+        //
+        // let vec = self.vec.insert((
+        //     vec![
+        //         KindPointer {
+        //             key: r_pointer,
+        //             kind: Kind::Integer,
+        //         },
+        //         KindPointer {
+        //             key: g_pointer,
+        //             kind: Kind::Integer,
+        //         },
+        //         KindPointer {
+        //             key: b_pointer,
+        //             kind: Kind::Integer,
+        //         },
+        //         KindPointer {
+        //             key: a_pointer,
+        //             kind: Kind::Decimal,
+        //         },
+        //     ],
+        //     vec![],
+        // ));
+        //
+        // self.insert_in_frame(vec, Kind::Record);
+        // vec
+        todo!()
     }
 }
 
@@ -407,7 +304,6 @@ mod test {
     }
 }
 
-
 // -- record x:
 // y list y:
 //
@@ -425,44 +321,29 @@ mod test {
 // $on-click$: $x = new_x(x, "bye")
 // $on-click$: $x.y = new_y("bye")
 
-
 // -- l: $o
 // $loop$: $x.y
-
-
 
 // x.y.z = "hello"
 // x.y.z changed
 
-
-
-
-
 // (attach_dom (create_l) $x [0, 0])
 
-
 // (attach_dom (create_l) $x [0, 0])
-
 
 // x.y.insert_at(0, new_y)
 
 // (attach_dom (create_text) $x [0, 0])
 
-
-
 // -- foo:
 // person: $person
-
 
 // -- foo:
 // $person: $person
 
-
-
 // -- show-student: $student
 // $loop$: $students as $student
 // rank: calculate_rank($students, idx)
-
 
 // -- ftd.text:
 // $on-click$: $x = new_x(x, "bye")
@@ -476,6 +357,3 @@ mod test {
 //        z: v
 //    }
 // }
-
-
-

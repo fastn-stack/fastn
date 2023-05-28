@@ -35,8 +35,8 @@ impl From<i32> for ElementKind {
     }
 }
 
-impl Dom {
-    pub fn new() -> Dom {
+impl Default for Dom {
+    fn default() -> Self {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
         let mut children = slotmap::SecondaryMap::new();
@@ -52,7 +52,9 @@ impl Dom {
             store: Default::default(),
         }
     }
+}
 
+impl Dom {
     pub fn compute_layout(&mut self, width: u32, height: u32) -> Vec<fastn_runtime::Operation> {
         let taffy_root = self.nodes[self.root].taffy();
         self.taffy
@@ -136,14 +138,14 @@ impl Dom {
         println!("add_child: {:?} -> {:?}", &parent_key, &child_key);
     }
 
-    fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
+    pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
         style.size.width = taffy::prelude::points(width as f32);
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
-    fn set_element_height_px(&mut self, key: fastn_runtime::NodeKey, height: i32) {
+    pub fn set_element_height_px(&mut self, key: fastn_runtime::NodeKey, height: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
         style.size.height = taffy::prelude::points(height as f32);
@@ -153,11 +155,11 @@ impl Dom {
     fn set_element_height_percent(&mut self, key: fastn_runtime::NodeKey, height: f32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
-        style.size.height = taffy::prelude::points(height as f32);
+        style.size.height = taffy::prelude::points(height);
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
-    fn set_property(
+    pub fn set_property(
         &mut self,
         key: fastn_runtime::NodeKey,
         property_kind: fastn_runtime::PropertyKind,
@@ -174,174 +176,6 @@ impl Dom {
                 self.set_element_height_percent(key, value.f32())
             }
         }
-    }
-
-    pub fn create_instance(
-        wat: impl AsRef<[u8]>,
-    ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
-        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
-            .expect("cant create engine");
-        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
-        let dom = fastn_runtime::Dom::new();
-
-        let mut linker = wasmtime::Linker::new(&engine);
-
-        dom.store.register(&mut linker);
-
-        // this is quite tedious boilerplate, maybe we can write some macro to generate it
-        linker
-            .func_new(
-                "fastn",
-                "create_kernel",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::I32, wasmtime::ValType::ExternRef]
-                        .iter()
-                        .cloned(),
-                    [wasmtime::ValType::ExternRef].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller
-                            .data_mut()
-                            .create_kernel(params.i32(0).into(), params.key(1)),
-                    )));
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "set_i32_prop",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::ExternRef,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().set_property(
-                            params.key(0),
-                            params.i32(0).into(),
-                            params.i32(0).into(),
-                        ),
-                    )));
-
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "set_f32_prop",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::ExternRef,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::F32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                        caller.data_mut().set_property(
-                            params.key(0),
-                            params.i32(0).into(),
-                            params.f32(0).into(),
-                        ),
-                    )));
-
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "set_column_width_px",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
-                        .iter()
-                        .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    caller.data_mut().set_element_width_px(p.key(0), p.i32(1));
-                    Ok(())
-                },
-            )
-            .unwrap();
-        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::new());
-        let instance = linker
-            .instantiate(&mut store, &module)
-            .expect("cant create instance");
-
-        let root = Some(wasmtime::ExternRef::new(store.data().root));
-
-        let wasm_main = instance
-            .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
-            .unwrap();
-        wasm_main.call(&mut store, (root,)).unwrap();
-
-        (store, instance)
-    }
-}
-
-pub trait Params {
-    fn i32(&self, idx: usize) -> i32;
-    fn f32(&self, idx: usize) -> f32;
-    fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
-    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey;
-    fn boolean(&self, idx: usize) -> bool;
-}
-
-impl Params for [wasmtime::Val] {
-    fn i32(&self, idx: usize) -> i32 {
-        self[idx].i32().unwrap()
-    }
-
-    fn f32(&self, idx: usize) -> f32 {
-        self[idx].f32().unwrap()
-    }
-
-    fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
-        *self[idx]
-            .externref()
-            .unwrap()
-            .expect("externref gone?")
-            .data()
-            .downcast_ref()
-            .unwrap()
-    }
-    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey {
-        *self[idx]
-            .externref()
-            .unwrap()
-            .expect("externref gone?")
-            .data()
-            .downcast_ref()
-            .unwrap()
-    }
-
-    fn boolean(&self, idx: usize) -> bool {
-        self.i32(idx) != 0
     }
 }
 
@@ -384,10 +218,10 @@ impl Value {
 pub fn assert_import(name: &str, type_: &str) {
     fastn_runtime::Dom::create_instance(format!(
         r#"
-                (module (import "fastn" "{}" (func {}))
-                    (func (export "main")  (param externref))
-                )
-            "#,
+            (module (import "fastn" "{}" (func {}))
+                (func (export "main")  (param externref))
+            )
+        "#,
         name, type_
     ));
 }

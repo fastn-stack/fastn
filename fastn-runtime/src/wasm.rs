@@ -1,82 +1,282 @@
-pub struct Wasm {}
+impl fastn_runtime::Dom {
+    pub fn create_instance(
+        wat: impl AsRef<[u8]>,
+    ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
+        let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
+            .expect("cant create engine");
+        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
+        let dom = fastn_runtime::Dom::default();
 
-impl Wasm {
-    pub fn new(wat: impl AsRef<[u8]>) -> Wasm {}
+        let mut linker = wasmtime::Linker::new(&engine);
 
-    pub fn run(&mut self) -> Vec<fastn_runtime::operation::Operation> {
-        let wasm_main = self
-            .instance
-            .get_typed_func::<(), ()>(&mut self.store, "main")
+        dom.store.register(&mut linker);
+
+        // this is quite tedious boilerplate, maybe we can write some macro to generate it
+        linker
+            .func_new(
+                "fastn",
+                "create_kernel",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::I32, wasmtime::ValType::ExternRef]
+                        .iter()
+                        .cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller
+                            .data_mut()
+                            .create_kernel(params.i32(0).into(), params.key(1)),
+                    )));
+                    Ok(())
+                },
+            )
             .unwrap();
 
-        wasm_main.call(&mut self.store, ()).unwrap();
-        self.store.data().to_owned()
+        linker
+            .func_new(
+                "fastn",
+                "set_i32_prop",
+                wasmtime::FuncType::new(
+                    [
+                        wasmtime::ValType::ExternRef,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::I32,
+                    ]
+                    .iter()
+                    .cloned(),
+                    [].iter().cloned(),
+                ),
+                |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                    //     caller.data_mut().set_property(
+                    //         params.key(0),
+                    //         params.i32(0).into(),
+                    //         params.i32(0).into(),
+                    //     ),
+                    // )));
+
+                    todo!()
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "set_f32_prop",
+                wasmtime::FuncType::new(
+                    [
+                        wasmtime::ValType::ExternRef,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::F32,
+                    ]
+                    .iter()
+                    .cloned(),
+                    [].iter().cloned(),
+                ),
+                |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                    //     caller.data_mut().set_property(
+                    //         params.key(0),
+                    //         params.i32(0).into(),
+                    //         params.f32(0).into(),
+                    //     ),
+                    // )));
+
+                    todo!()
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "set_column_width_px",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
+                        .iter()
+                        .cloned(),
+                    [].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    caller.data_mut().set_element_width_px(p.key(0), p.i32(1));
+                    Ok(())
+                },
+            )
+            .unwrap();
+        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::default());
+        let instance = linker
+            .instantiate(&mut store, &module)
+            .expect("cant create instance");
+
+        let root = Some(wasmtime::ExternRef::new(store.data().root));
+
+        let wasm_main = instance
+            .get_typed_func::<(Option<wasmtime::ExternRef>,), ()>(&mut store, "main")
+            .unwrap();
+        wasm_main.call(&mut store, (root,)).unwrap();
+
+        (store, instance)
     }
 }
 
-pub fn t() {
-    let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false)).unwrap();
-    // Next we can hook that up to a wasm module which uses it.
-    let module = wasmtime::Module::new(
-        &engine,
-        r#"
-        (module
-            (import "ftd" "create_container" (func create_container (result externref)))
-            (table 2 funcref)
-            (elem (i32.const 0) $f1)
+pub trait Params {
+    fn i32(&self, idx: usize) -> i32;
+    fn f32(&self, idx: usize) -> f32;
+    fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
+    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey;
+    fn boolean(&self, idx: usize) -> bool;
+}
 
-            (import "ftd" "add_padding_to_container" (func create_container (param externref i32) (result i32)))
-            (func (export "container_padding") $f1 (result i32)
-              i32.const 10
+impl Params for [wasmtime::Val] {
+    fn i32(&self, idx: usize) -> i32 {
+        self[idx].i32().unwrap()
+    }
+
+    fn f32(&self, idx: usize) -> f32 {
+        self[idx].f32().unwrap()
+    }
+
+    fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
+        *self[idx]
+            .externref()
+            .unwrap()
+            .expect("externref gone?")
+            .data()
+            .downcast_ref()
+            .unwrap()
+    }
+    fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey {
+        *self[idx]
+            .externref()
+            .unwrap()
+            .expect("externref gone?")
+            .data()
+            .downcast_ref()
+            .unwrap()
+    }
+
+    fn boolean(&self, idx: usize) -> bool {
+        self.i32(idx) != 0
+    }
+}
+
+impl fastn_runtime::Memory {
+    pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        linker
+            .func_new(
+                "fastn",
+                "create_boolean",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::I32].iter().cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
+                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
+                    // affects us yet.
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().store.create_boolean(params.boolean(0)),
+                    )));
+
+                    Ok(())
+                },
             )
-            (func padding_from_x (param i32) (result i32)
-              local.get 0
-            )
-            (func (export "document_main")
-              id = ($create_container);
-              (add_padding_to_container id 1)
-              id2 = ($create_text);
-              mut_x = (allocate_mut_integer); ;; local integer created (type: i32, location in memory)
-              (add_constant_padding_to_text id2 (i32.const 0))
-              (add_padding_fn_to_text_i32 id2 mut_x padding_from_x)
-            )
-            (func (export "callIntFunc_i32") (param $i i32) (param $x i32) (result i32)
-                call_indirect (type $takes_i32_returns_i32))  (global.get $x) (local.get $i)
-            (func (export "callBoolFunc") (param $i i32) (result i32)
-                local.get $i
-                call_indirect (type $return_i32))
-
-        )
-    "#,
-    )
-        .unwrap();
-
-    let mut store = wasmtime::Store::new(&engine, ());
-
-    // Create a custom `Func` which can execute arbitrary code inside of the
-    // closure.
-    // map
-
-    let get_value1 = wasmtime::Func::wrap(&mut store, |a: i32| -> i32 {
-        // let mut store = wasmtime::Store::<()>::default();
-        // dbg!(&store);
-
-        dbg!("get_value1", a);
-        a
-    });
-
-    let get_value2 = wasmtime::Func::wrap(&mut store, |a: i32| -> i32 {
-        dbg!("get_value2", a);
-        a
-    });
-
-    let instance =
-        wasmtime::Instance::new(&mut store, &module, &[get_value1.into(), get_value2.into()])
             .unwrap();
 
-    let call_add_twice = instance
-        .get_typed_func::<(), i32>(&mut store, "call_add_twice")
-        .unwrap();
+        linker
+            .func_new(
+                "fastn",
+                "create_i32",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::I32].iter().cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().store.create_i32(params.i32(0)),
+                    )));
 
-    dbg!(call_add_twice.call(&mut store, ()).unwrap(), 10);
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "create_rgba",
+                wasmtime::FuncType::new(
+                    [
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::I32,
+                        wasmtime::ValType::F32,
+                    ]
+                    .iter()
+                    .cloned(),
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                ),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, results| {
+                    results[0] = wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                        caller.data_mut().store.create_rgba(
+                            params.i32(0),
+                            params.i32(1),
+                            params.i32(2),
+                            params.f32(3),
+                        ),
+                    )));
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "create_frame",
+                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    caller.data_mut().store.create_frame();
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "end_frame",
+                wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    caller.data_mut().store.end_frame();
+                    Ok(())
+                },
+            )
+            .unwrap();
+
+        linker
+            .func_new(
+                "fastn",
+                "get_boolean",
+                wasmtime::FuncType::new(
+                    [wasmtime::ValType::ExternRef].iter().cloned(),
+                    [wasmtime::ValType::I32].iter().cloned(),
+                ),
+                |caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
+                    let _s = &caller.data().store;
+
+                    // results[0] = wasmtime::Val::I32(s.boolean[params.ptr(0)].0 as i32);
+                    Ok(())
+                },
+            )
+            .unwrap();
+    }
 }

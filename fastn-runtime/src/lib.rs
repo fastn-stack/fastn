@@ -21,7 +21,7 @@ mod element;
 mod event;
 mod operation;
 mod runtime_store;
-// pub mod wasm;
+pub mod wasm;
 
 pub use control::ControlFlow;
 pub use document::Document;
@@ -31,6 +31,7 @@ pub use element::{
 };
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
+pub use runtime_store::Memory;
 
 #[cfg(test)]
 pub(crate) use dom::assert_import;

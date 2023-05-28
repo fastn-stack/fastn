@@ -66,7 +66,7 @@ async fn main() {
     // fastn_runtime::terminal::draw(doc).await;
 }
 
-fn create_module() -> Vec<u8> {
+pub fn create_module() -> Vec<u8> {
     let m: Vec<fastn_wasm::Ast> = vec![
         fastn_wasm::import_func0("create_column", fastn_wasm::Type::ExternRef),
         fastn_wasm::import_func2(
