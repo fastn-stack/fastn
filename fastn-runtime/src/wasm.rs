@@ -45,51 +45,12 @@ impl fastn_runtime::Dom {
             },
         );
 
-        linker
-            .func_new(
-                "fastn",
-                "set_f32_prop",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::ExternRef,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::F32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                    caller.data_mut().set_property(
-                        params.key(0),
-                        params.i32(0).into(),
-                        params.f32(0).into(),
-                    );
-
-                    Ok(())
-                },
-            )
-            .unwrap();
-
-        linker
-            .func_new(
-                "fastn",
-                "set_column_width_px",
-                wasmtime::FuncType::new(
-                    [wasmtime::ValType::ExternRef, wasmtime::ValType::I32]
-                        .iter()
-                        .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, p, _results| {
-                    // ExternRef is a reference-counted pointer to a host-defined object. We mut not
-                    // deallocate it on Rust side unless it's .strong_count() is 0. Not sure how it
-                    // affects us yet.
-                    caller.data_mut().set_element_width_px(p.key(0), p.i32(1));
-                    Ok(())
-                },
-            )
-            .unwrap();
+        linker.func3(
+            "set_f32_prop",
+            |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
+                dom.set_property(key, property_kind, fastn_runtime::dom::Value::F32(value))
+            },
+        );
     }
 }
 
