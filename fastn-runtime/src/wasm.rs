@@ -52,16 +52,13 @@ impl fastn_runtime::Dom {
                     .cloned(),
                     [].iter().cloned(),
                 ),
-                |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                    // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                    //     caller.data_mut().set_property(
-                    //         params.key(0),
-                    //         params.i32(0).into(),
-                    //         params.i32(0).into(),
-                    //     ),
-                    // )));
-
-                    todo!()
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                    caller.data_mut().set_property(
+                        params.key(0),
+                        params.i32(0).into(),
+                        params.i32(0).into(),
+                    );
+                    Ok(())
                 },
             )
             .unwrap();
@@ -80,16 +77,14 @@ impl fastn_runtime::Dom {
                     .cloned(),
                     [].iter().cloned(),
                 ),
-                |_caller: wasmtime::Caller<'_, fastn_runtime::Dom>, _params, _results| {
-                    // wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                    //     caller.data_mut().set_property(
-                    //         params.key(0),
-                    //         params.i32(0).into(),
-                    //         params.f32(0).into(),
-                    //     ),
-                    // )));
+                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                    caller.data_mut().set_property(
+                        params.key(0),
+                        params.i32(0).into(),
+                        params.f32(0).into(),
+                    );
 
-                    todo!()
+                    Ok(())
                 },
             )
             .unwrap();

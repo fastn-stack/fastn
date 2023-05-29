@@ -198,17 +198,15 @@ impl Dom {
     pub fn set_property(
         &mut self,
         key: fastn_runtime::NodeKey,
-        property_kind: fastn_runtime::PropertyKind,
+        property_kind: fastn_runtime::UIProperty,
         value: Value,
     ) {
         match property_kind {
-            fastn_runtime::PropertyKind::WidthFixedPx => {
-                self.set_element_width_px(key, value.i32())
-            }
-            fastn_runtime::PropertyKind::HeightFixedPx => {
+            fastn_runtime::UIProperty::WidthFixedPx => self.set_element_width_px(key, value.i32()),
+            fastn_runtime::UIProperty::HeightFixedPx => {
                 self.set_element_height_px(key, value.i32())
             }
-            fastn_runtime::PropertyKind::HeightFixedPercentage => {
+            fastn_runtime::UIProperty::HeightFixedPercentage => {
                 self.set_element_height_percent(key, value.f32())
             }
         }

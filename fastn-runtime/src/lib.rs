@@ -27,12 +27,10 @@ mod wasm_helpers;
 pub use control::ControlFlow;
 pub use document::Document;
 pub(crate) use dom::Dom;
-pub use element::{
-    CommonStyleMinusTaffy, Container, Dimension, Element, Image, PropertyKind, Text,
-};
+pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
-pub use runtime_store::Memory;
+pub use runtime_store::{Memory, UIProperty};
 pub(crate) use wasm_helpers::*;
 
 slotmap::new_key_type! { pub struct NodeKey; }

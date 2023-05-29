@@ -95,7 +95,7 @@ enum HeapValue<T> {
 
 #[derive(Debug)]
 struct UIDependent {
-    property: UIProperty,
+    property: fastn_runtime::UIProperty,
     node: fastn_runtime::NodeKey,
     closure: Option<fastn_runtime::ClosureKey>,
 }
@@ -130,9 +130,21 @@ pub struct Frame {
 }
 
 #[derive(Debug)]
-enum UIProperty {
-    WidthPx,
-    WidthPercent,
+pub enum UIProperty {
+    WidthFixedPx,
+    HeightFixedPx,
+    HeightFixedPercentage,
+}
+
+impl From<i32> for UIProperty {
+    fn from(i: i32) -> UIProperty {
+        match i {
+            0 => UIProperty::WidthFixedPx,
+            1 => UIProperty::HeightFixedPx,
+            2 => UIProperty::HeightFixedPercentage,
+            _ => panic!("Unknown element kind: {}", i),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
