@@ -22,6 +22,7 @@
 
     (table 3 func)
     (elem (i32.const 0) $product $foo#on_mouse_enter, $foo#on_mouse_leave, $foo#background)
+    (type $return_externref (func (param $func-data externref) (result externref)))
 
     (func (export "main") (param $root externref)
         (local $column externref)
@@ -190,5 +191,9 @@
             (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
         )
         (call $end_frame)
+    )
+
+    (func (export "callByIndex") (param i32 externref) (result externref)
+       call_indirect (type $return_externref) (local.get 0) (local.get 1)
     )
 )

@@ -27,7 +27,10 @@ impl fastn_runtime::Dom {
     }
 
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        use fastn_runtime::wasm_helpers::Params;
         use fastn_wasm::LinkerExt;
+        use wasmtime::AsContextMut;
+
         self.register_memory_functions(linker);
 
         linker.func2ret(
@@ -44,6 +47,34 @@ impl fastn_runtime::Dom {
             "set_f32_prop",
             |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
                 dom.set_property(key, property_kind, fastn_runtime::dom::Value::F32(value))
+            },
+        );
+
+        linker.func4caller(
+            "set_i32_prop_func",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
+             node_key,
+             ui_property,
+             table_index: i32,
+             func_arg: wasmtime::ExternRef| {
+                let mut value = vec![];
+                caller
+                    .get_export("callByIndex")
+                    .unwrap()
+                    .into_func()
+                    .expect("callByIndex not a func")
+                    .call(
+                        caller.as_context_mut(),
+                        &[
+                            wasmtime::Val::I32(table_index),
+                            wasmtime::Val::ExternRef(Some(func_arg)),
+                        ],
+                        &mut value,
+                    )
+                    .expect("call failed");
+                caller
+                    .data_mut()
+                    .set_property(node_key, ui_property, value.i32(0).into());
             },
         );
     }

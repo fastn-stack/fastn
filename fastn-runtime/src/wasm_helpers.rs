@@ -50,6 +50,7 @@ impl fastn_wasm::WasmType for fastn_runtime::PointerKey {
 pub trait Params {
     fn i32(&self, idx: usize) -> i32;
     fn f32(&self, idx: usize) -> f32;
+    fn externref(&self, idx: usize) -> Option<wasmtime::ExternRef>;
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey;
     fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey;
     fn boolean(&self, idx: usize) -> bool;
@@ -59,9 +60,15 @@ impl Params for [wasmtime::Val] {
     fn i32(&self, idx: usize) -> i32 {
         self[idx].i32().unwrap()
     }
+
     fn f32(&self, idx: usize) -> f32 {
         self[idx].f32().unwrap()
     }
+
+    fn externref(&self, idx: usize) -> Option<wasmtime::ExternRef> {
+        self[idx].externref().unwrap()
+    }
+
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
         *self[idx]
             .externref()
@@ -71,6 +78,7 @@ impl Params for [wasmtime::Val] {
             .downcast_ref()
             .unwrap()
     }
+
     fn ptr(&self, idx: usize) -> fastn_runtime::PointerKey {
         *self[idx]
             .externref()

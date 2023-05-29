@@ -40,7 +40,19 @@ impl fastn_wasm::WasmType for i32 {
         wasmtime::ValType::I32
     }
     fn to_wasm(&self) -> wasmtime::Val {
-        (*self).into()
+        wasmtime::Val::I32(*self as i32)
+    }
+}
+
+impl fastn_wasm::WasmType for wasmtime::ExternRef {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> wasmtime::ExternRef {
+        vals[idx].externref().unwrap().unwrap()
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::ExternRef
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::ExternRef(Some(self.to_owned()))
     }
 }
 
@@ -65,6 +77,11 @@ pub trait LinkerExt<S> {
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
+    );
+    fn func4caller<T1: WasmType, T2: WasmType, T3: WasmType, T4: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(wasmtime::Caller<'_, S>, T1, T2, T3, T4) + Send + Sync + 'static,
     );
     fn func0ret<SE: StoreExtractor<S>, O: WasmType>(
         &mut self,
@@ -169,6 +186,31 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     T1::extract(0, params),
                     T2::extract(1, params),
                     T3::extract(2, params),
+                );
+                Ok(())
+            },
+        )
+        .unwrap();
+    }
+    fn func4caller<T1: WasmType, T2: WasmType, T3: WasmType, T4: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(wasmtime::Caller<'_, S>, T1, T2, T3, T4) + Send + Sync + 'static,
+    ) {
+        self.func_new(
+            "fastn",
+            name,
+            wasmtime::FuncType::new(
+                [T1::the_type(), T2::the_type()].iter().cloned(),
+                [].iter().cloned(),
+            ),
+            move |caller: wasmtime::Caller<'_, S>, params, _results| {
+                func(
+                    caller,
+                    T1::extract(0, params),
+                    T2::extract(1, params),
+                    T3::extract(2, params),
+                    T4::extract(3, params),
                 );
                 Ok(())
             },
