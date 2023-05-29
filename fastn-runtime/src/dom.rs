@@ -174,6 +174,22 @@ impl Dom {
         println!("add_child: {:?} -> {:?}", &parent_key, &child_key);
     }
 
+    pub fn set_element_background_solid(
+        &mut self,
+        key: fastn_runtime::NodeKey,
+        color_pointer: fastn_runtime::PointerKey,
+    ) {
+        let (red, green, blue, alpha) = self.memory.get_colors(color_pointer);
+        let common_styles = self.nodes[key].common_styles();
+
+        common_styles.background_color = Some(fastn_runtime::ColorValue {
+            red: red as u8,
+            green: green as u8,
+            blue: blue as u8,
+            alpha,
+        });
+    }
+
     pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
@@ -209,6 +225,9 @@ impl Dom {
             fastn_runtime::UIProperty::HeightFixedPercentage => {
                 self.set_element_height_percent(key, value.f32())
             }
+            fastn_runtime::UIProperty::BackgroundSolid => {
+                self.set_element_background_solid(key, value.pointer_key())
+            }
         }
     }
 }
@@ -216,6 +235,7 @@ impl Dom {
 pub enum Value {
     I32(i32),
     F32(f32),
+    PointerKey(fastn_runtime::PointerKey),
 }
 
 impl From<i32> for Value {
@@ -227,6 +247,12 @@ impl From<i32> for Value {
 impl From<f32> for Value {
     fn from(i: f32) -> Value {
         Value::F32(i)
+    }
+}
+
+impl From<fastn_runtime::PointerKey> for Value {
+    fn from(i: fastn_runtime::PointerKey) -> Value {
+        Value::PointerKey(i)
     }
 }
 
@@ -244,6 +270,14 @@ impl Value {
             *i
         } else {
             panic!("Expected f32 value")
+        }
+    }
+
+    fn pointer_key(&self) -> fastn_runtime::PointerKey {
+        if let Value::PointerKey(i) = self {
+            *i
+        } else {
+            panic!("Expected PointerKey value")
         }
     }
 }

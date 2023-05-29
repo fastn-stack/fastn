@@ -93,6 +93,15 @@ enum HeapValue<T> {
     },
 }
 
+impl<T> HeapValue<T> {
+    pub(crate) fn value(&self) -> &T {
+        match self {
+            HeapValue::Value(v) => v,
+            _ => unimplemented!(),
+        }
+    }
+}
+
 #[derive(Debug)]
 struct UIDependent {
     property: fastn_runtime::UIProperty,
@@ -164,6 +173,7 @@ pub enum UIProperty {
     WidthFixedPx,
     HeightFixedPx,
     HeightFixedPercentage,
+    BackgroundSolid,
 }
 
 impl From<i32> for UIProperty {
@@ -172,7 +182,8 @@ impl From<i32> for UIProperty {
             0 => UIProperty::WidthFixedPx,
             1 => UIProperty::HeightFixedPx,
             2 => UIProperty::HeightFixedPercentage,
-            _ => panic!("Unknown element kind: {}", i),
+            3 => UIProperty::BackgroundSolid,
+            _ => panic!("Unknown UIProperty: {}", i),
         }
     }
 }
@@ -183,6 +194,7 @@ impl From<UIProperty> for i32 {
             UIProperty::WidthFixedPx => 0,
             UIProperty::HeightFixedPx => 1,
             UIProperty::HeightFixedPercentage => 2,
+            UIProperty::BackgroundSolid => 3,
         }
     }
 }
@@ -218,6 +230,48 @@ impl<T> HeapValue<T> {
 }
 
 impl Memory {
+    pub fn get_colors(&self, color_pointer: fastn_runtime::PointerKey) -> (i32, i32, i32, f32) {
+        let vec_value = self
+            .vec
+            .get(color_pointer)
+            .expect("Expected color vec")
+            .value
+            .value();
+        let r_pointer = vec_value.get(0).expect("Expected r pointer");
+        let r_value = self
+            .i32
+            .get(r_pointer.key)
+            .expect("Expected r value")
+            .value
+            .value();
+
+        let g_pointer = vec_value.get(0).expect("Expected g pointer");
+        let g_value = self
+            .i32
+            .get(g_pointer.key)
+            .expect("Expected g value")
+            .value
+            .value();
+
+        let b_pointer = vec_value.get(0).expect("Expected b pointer");
+        let b_value = self
+            .i32
+            .get(b_pointer.key)
+            .expect("Expected b value")
+            .value
+            .value();
+
+        let a_pointer = vec_value.get(0).expect("Expected a pointer");
+        let a_value = self
+            .f32
+            .get(a_pointer.key)
+            .expect("Expected a value")
+            .value
+            .value();
+
+        (*r_value, *g_value, *b_value, *a_value)
+    }
+
     pub fn detach_dom(&mut self, _dom: fastn_runtime::NodeKey) {
         // for pointer in self.ui_deps.remove(&dom).unwrap_or_default() {
         //     self.drop_pointer(&pointer);

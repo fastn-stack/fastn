@@ -77,6 +77,34 @@ impl fastn_runtime::Dom {
                     .set_property(node_key, ui_property, value.i32(0).into());
             },
         );
+
+        linker.func4caller(
+            "set_i32_3_prop_func",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
+             node_key,
+             ui_property,
+             table_index,
+             func_arg| {
+                let mut value = vec![];
+                caller
+                    .get_export("callByIndex")
+                    .unwrap()
+                    .into_func()
+                    .expect("callByIndex not a func")
+                    .call(
+                        caller.as_context_mut(),
+                        &[
+                            wasmtime::Val::I32(table_index),
+                            wasmtime::Val::ExternRef(Some(func_arg)),
+                        ],
+                        &mut value,
+                    )
+                    .expect("call failed");
+                caller
+                    .data_mut()
+                    .set_property(node_key, ui_property, value.ptr(0).into());
+            },
+        );
     }
 }
 
