@@ -171,7 +171,7 @@ impl<T> HeapValue<T> {
         HeapValue::Value(value)
     }
 
-    pub(crate) fn to_heap_data(self) -> HeapData<T> {
+    pub(crate) fn into_heap_data(self) -> HeapData<T> {
         HeapData::new(self)
     }
 }
@@ -272,7 +272,7 @@ impl Memory {
     }
 
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
-        let pointer = self.boolean.insert(HeapValue::new(value).to_heap_data());
+        let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, Kind::Boolean);
         pointer
     }
@@ -285,7 +285,7 @@ impl Memory {
     }
 
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
-        let pointer = self.i32.insert(HeapValue::new(value).to_heap_data());
+        let pointer = self.i32.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, Kind::Integer);
         pointer
     }
@@ -298,10 +298,10 @@ impl Memory {
     }
 
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
-        let r_pointer = self.i32.insert(HeapValue::new(r).to_heap_data());
-        let g_pointer = self.i32.insert(HeapValue::new(g).to_heap_data());
-        let b_pointer = self.i32.insert(HeapValue::new(b).to_heap_data());
-        let a_pointer = self.f32.insert(HeapValue::new(a).to_heap_data());
+        let r_pointer = self.i32.insert(HeapValue::new(r).into_heap_data());
+        let g_pointer = self.i32.insert(HeapValue::new(g).into_heap_data());
+        let b_pointer = self.i32.insert(HeapValue::new(b).into_heap_data());
+        let a_pointer = self.f32.insert(HeapValue::new(a).into_heap_data());
 
         let vec = self.vec.insert(
             HeapValue::new(vec![
@@ -322,7 +322,7 @@ impl Memory {
                     kind: Kind::Decimal,
                 },
             ])
-            .to_heap_data(),
+            .into_heap_data(),
         );
 
         self.insert_in_frame(vec, Kind::Record);
