@@ -59,11 +59,9 @@ impl Params for [wasmtime::Val] {
     fn i32(&self, idx: usize) -> i32 {
         self[idx].i32().unwrap()
     }
-
     fn f32(&self, idx: usize) -> f32 {
         self[idx].f32().unwrap()
     }
-
     fn key(&self, idx: usize) -> fastn_runtime::NodeKey {
         *self[idx]
             .externref()
@@ -82,26 +80,23 @@ impl Params for [wasmtime::Val] {
             .downcast_ref()
             .unwrap()
     }
-
     fn boolean(&self, idx: usize) -> bool {
         self.i32(idx) != 0
     }
 }
 
-
 impl fastn_wasm::WasmType for fastn_runtime::UIProperty {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
         vals.i32(idx).into()
     }
-
     fn the_type() -> wasmtime::ValType {
         wasmtime::ValType::I32
     }
-
     fn to_wasm(&self) -> wasmtime::Val {
         wasmtime::Val::I32((*self).into())
     }
 }
+
 pub trait CallerExt {
     fn memory(&self) -> &fastn_runtime::Memory;
     fn memory_mut(&mut self) -> &mut fastn_runtime::Memory;

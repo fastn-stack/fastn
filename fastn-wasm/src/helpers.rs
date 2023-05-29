@@ -110,7 +110,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func1<SE: StoreExtractor<S>, T: WasmType>(
         &mut self,
@@ -126,7 +126,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func2<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType>(
         &mut self,
@@ -149,7 +149,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func3<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, T3: WasmType>(
         &mut self,
@@ -173,7 +173,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func0ret<SE: StoreExtractor<S>, O: WasmType>(
         &mut self,
@@ -183,13 +183,13 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         self.func_new(
             "fastn",
             name,
-            wasmtime::FuncType::new([].iter().cloned(), [].iter().cloned()),
+            wasmtime::FuncType::new([O::the_type()].iter().cloned(), [].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, S>, _params, results| {
                 results[0] = func(SE::extract(&mut caller)).to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func1ret<SE: StoreExtractor<S>, T: WasmType, O: WasmType>(
         &mut self,
@@ -199,13 +199,16 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         self.func_new(
             "fastn",
             name,
-            wasmtime::FuncType::new([T::the_type()].iter().cloned(), [].iter().cloned()),
+            wasmtime::FuncType::new(
+                [T::the_type()].iter().cloned(),
+                [O::the_type()].iter().cloned(),
+            ),
             move |mut caller: wasmtime::Caller<'_, S>, params, results| {
                 results[0] = func(SE::extract(&mut caller), T::extract(0, params)).to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func2ret<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, O: WasmType>(
         &mut self,
@@ -217,7 +220,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
             name,
             wasmtime::FuncType::new(
                 [T1::the_type(), T2::the_type()].iter().cloned(),
-                [].iter().cloned(),
+                [O::the_type()].iter().cloned(),
             ),
             move |mut caller: wasmtime::Caller<'_, S>, params, results| {
                 results[0] = func(
@@ -225,11 +228,11 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     T1::extract(0, params),
                     T2::extract(1, params),
                 )
-                    .to_wasm();
+                .to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
     fn func4ret<
         SE: StoreExtractor<S>,
@@ -253,9 +256,9 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     T3::the_type(),
                     T4::the_type(),
                 ]
-                    .iter()
-                    .cloned(),
-                [].iter().cloned(),
+                .iter()
+                .cloned(),
+                [O::the_type()].iter().cloned(),
             ),
             move |mut caller: wasmtime::Caller<'_, S>, params, results| {
                 results[0] = func(
@@ -265,10 +268,10 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     T3::extract(2, params),
                     T4::extract(3, params),
                 )
-                    .to_wasm();
+                .to_wasm();
                 Ok(())
             },
         )
-            .unwrap();
+        .unwrap();
     }
 }

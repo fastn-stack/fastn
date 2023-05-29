@@ -5,23 +5,23 @@ mod ast;
 mod export;
 mod expression;
 mod func;
+mod helpers;
 mod import;
 mod memory;
 mod pl;
 mod table;
 mod ty;
-mod helpers;
 
 pub use ast::*;
 pub use export::{Export, ExportDesc};
 pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
+pub use helpers::{LinkerExt, StoreExtractor, WasmType};
 pub use import::{Import, ImportDesc};
 pub use memory::Memory;
 pub use pl::PL;
 pub use table::{Limits, RefType, Table};
 pub use ty::Type;
-pub use helpers::{StoreExtractor, LinkerExt, WasmType};
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let mut s = String::new();

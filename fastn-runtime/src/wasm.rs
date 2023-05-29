@@ -28,22 +28,18 @@ impl fastn_runtime::Dom {
 
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_wasm::LinkerExt;
-
         self.register_memory_functions(linker);
 
-        // this is quite tedious boilerplate, maybe we can write some macro to generate it
         linker.func2ret(
             "create_kernel",
             |dom: &mut fastn_runtime::Dom, parent, kind| dom.create_kernel(parent, kind),
         );
-
         linker.func3(
             "set_i32_prop",
             |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
                 dom.set_property(key, property_kind, fastn_runtime::dom::Value::I32(value))
             },
         );
-
         linker.func3(
             "set_f32_prop",
             |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
@@ -98,6 +94,9 @@ mod test {
             name, type_
         ));
     }
+    pub fn assert_import0(name: &str) {
+        assert_import(name, "")
+    }
 
     #[test]
     fn dom() {
@@ -106,9 +105,16 @@ mod test {
 
     #[test]
     fn memory() {
+        assert_import0("create_frame");
+        assert_import0("end_frame");
         assert_import("create_boolean", "(param i32) (result externref)");
-        assert_import("create_frame", "");
-        assert_import("end_frame", "");
+        assert_import("get_boolean", "(param externref) (result i32)");
+        assert_import("create_i32", "(param i32) (result externref)");
+        assert_import("get_i32", "(param externref) (result i32)");
         assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
+        assert_import(
+            "array_i32_2",
+            "(param externref externref) (result externref)",
+        )
     }
 }
