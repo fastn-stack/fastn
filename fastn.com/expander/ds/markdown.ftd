@@ -4,23 +4,23 @@
 -- my-ds.page: markdown in `doc-site`
 
 -- ds.markdown:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 In this video we will see how to use markdown in `doc-site`.
 
 /-- ds.youtube:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 v: 
 
 -- lib.video-audience: How to use markdown in `doc-site`
-if: { source == "planning" || show-planning }
+if: { show-planning }
 owner: Ajit
 aud: Website Builders
 
 Gives the idea about the markdown syntax allowed in `fastn`
 
 -- ds.h1: Straight to the point
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 `fastn` supports `Markdown`. Hence, instead of learning tags, one can still
 create content-heavy and powerful website using plain text without missing out 
@@ -34,7 +34,7 @@ any of the component like `ds.markdown` component, you gain access to
 Markdown's intuitive and readable text formatting syntax. 
 
 -- ds.h1: Introduction
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 `fastn` supports `Markdown`. Hence, instead of learning tags, one can still
 create content-heavy and powerful website using plain text without missing out 
@@ -86,7 +86,7 @@ color: $inherited.colors.text
 Let's see what all we can do using this component of `doc-site`.
 
 -- ds.h1: Introduction
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Welcome!! My name is Ajit
 
@@ -117,6 +117,7 @@ collaborative software, documentation pages, and readme files.
 
 
 -- ds.h1: Markdown syntax in doc-site
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 -- ds.rendered: Plain text
 
@@ -331,7 +332,7 @@ To create a Horizontal Rule we write
 
 
 -- ds.h1: Closing Remarks 
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
@@ -341,7 +342,7 @@ our fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
@@ -351,19 +352,16 @@ on [Discord](/discord/).
 
 
 -- ds.h1: Final Video
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 /-- ds.youtube:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 v: 
 
 
 -- end: my-ds.page
 
 
--- string source: default
-$processor$: pr.get-data
-key: source
-
 -- boolean $show-planning: false
-
+$processor$: pr.get-data
+key: show-planning

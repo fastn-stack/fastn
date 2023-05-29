@@ -15,28 +15,30 @@
 spacing.fixed.em: 0.8
 width: fill-container
 
+
+
 -- ds.h0: Understanding Sitemap
 
 
 -- lib.video-audience: Understanding Sitemap
-if: { source == "planning" || show-planning }
+if: { show-planning }
 owner: Ajit
 aud: Common
 
 Helps learners to understand how to structure their websites
 
 -- ds.markdown:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 In this video we learn about `sitemap`
 
 
 -- ds.youtube:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 v: IIBk8zmspkA
 
 -- ds.markdown:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 
 `Sitemap` is used to create a structured representation of the files and pages
@@ -49,7 +51,7 @@ content. It ensures that visitors can find the information they need
 efficiently.
 
 -- ds.h1: What is `sitemap`
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 `Sitemap` is used to create a structured representation of the files and pages
 that make up a website.
@@ -59,7 +61,7 @@ src: $fastn-assets.files.images.sitemap.index.png
 width: fill-container
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Welcome to the video. I am Ajit. Today we will learn 
 
@@ -68,7 +70,7 @@ Welcome to the video. I am Ajit. Today we will learn
 - how to configure it.
 
 -- ds.image:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 src: $fastn-assets.files.expander.ds.img.sitemap-intro.jpg
 width: fill-container
 
@@ -76,7 +78,7 @@ width: fill-container
 
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 By creating a comprehensive sitemap, website owners and visitors can gain a
 clear understanding of the website's structure and easily navigate through its
@@ -115,12 +117,12 @@ organization and hierarchy of content on the website.
 -- ds.h1: How to configure `sitemap` for your site
 
 -- ds.markdown:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 We create the sitemap in the `FASTN.ftd`. So, we write:
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Now, let's see how to configure the `sitemap` for a website.
 
@@ -190,7 +192,7 @@ The URL is the path of the document. Inside folder season, there is a document
 called `summer.ftd`.
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Let's check in the browser.
 
@@ -215,7 +217,7 @@ lang: ftd
 
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 and each subsection points to their respective documents.
 
@@ -272,7 +274,7 @@ lang: ftd
 
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 This way we have learnt how to configure the sitemap in `FASTN.ftd` document.
 
@@ -332,19 +334,19 @@ To know all about this feature you can checkout the video about
 [`How to create clean URLs`](/expander/sitemap-document).
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Link is shared in the description.
 
 -- ds.markdown:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 I hope this video will help you to create the structure of your website. You
 can share your feedback on comments and/or our discord channel.
 
 
 -- ds.h1: Closing Remarks 
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
@@ -354,7 +356,7 @@ our fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
@@ -364,10 +366,10 @@ on [Discord](/discord/).
 
 
 -- ds.h1: Final Video
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 -- ds.youtube:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 v: IIBk8zmspkA
 
 /-- end: my-ds.page
@@ -376,8 +378,6 @@ v: IIBk8zmspkA
 
 -- end: show-sm
 
--- string source: default
-$processor$: pr.get-data
-key: source
-    
 -- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning

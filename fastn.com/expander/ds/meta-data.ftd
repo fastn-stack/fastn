@@ -13,18 +13,19 @@
 spacing.fixed.em: 0.8
 width: fill-container
 
+
 -- ds.h0: Add meta-data to `doc-site`
 
 /-- my-ds.page: Add meta-data to `doc-site`
 
 -- ds.markdown:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 In this video we will see how to implement SEO features to improve a website's 
 visibility.
 
 -- lib.video-audience: How to add meta-data for better website optimization
-if: { source == "planning" || show-planning }
+if: { show-planning }
 owner: Ajit
 aud: Website Builders
 
@@ -33,12 +34,12 @@ Helps learners to optimize their websites
 
 
 -- ds.youtube:
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 v: 72N7f9on8iw
 
 
 -- ds.h1: Introduction
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Welcome!! My name is Ajit
 
@@ -60,7 +61,7 @@ It involves optimizing various aspects of a website to make it more appealing
 to search engines and users.
 
 -- ds.h1: Benefits of SEO
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 1. SEO helps improve your website’s visibility, hence leading to higher 
 organic i.e. non-paid traffic from search engines.
@@ -74,7 +75,7 @@ as page speed, mobile-friendliness, and easy navigation
 requiring continuous investment in paid advertising.
 
 -- ds.h1: Benefits of SEO
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 SEO encompasses a range of techniques that helps in the following ways:
 
@@ -93,7 +94,7 @@ SEO encompasses a range of techniques that helps in the following ways:
     results without requiring continuous investment in paid advertising.
 
 -- ds.markdown:
-if: { source == "planning" || show-planning } 
+if: { show-planning } 
 
 To read about SEO in detail, you can check out the blog. The URL is shared in 
 description
@@ -117,7 +118,7 @@ Before we modify the document title by using the first property, we will see
 that by default, the `page` component's title, becomes the document title.
 
 -- ds.markdown:
-if: { source == "planning" || show-planning } 
+if: { show-planning } 
 
 So the title of the component page is this.
 
@@ -126,7 +127,7 @@ So the title of the component page is this.
 So in the browser, the document title will be the same. 
 
 -- ds.markdown:
-if: { source == "planning" || show-planning } 
+if: { show-planning } 
 
 As you can see, the document title is by default is same as the title of the 
 page component.
@@ -185,7 +186,7 @@ description will be added as meta-data in the tags called `og-description` as
 well `twitter-description`, and in the `description` tag.
 
 -- ds.markdown:
-if: { source == "planning" || show-planning } 
+if: { show-planning } 
 
 Let's verify the same by refreshing the browser.
 
@@ -271,7 +272,7 @@ This way we have used the SEO technique and managed to make the URL noticeable
 and meaningful and will also improve the ranking in the search results.
 
 -- ds.h1: Closing Remarks 
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. Checkout
 the `fastn` website. 
@@ -281,7 +282,7 @@ our fastn community on Discord.
 
 
 -- ds.markdown: 
-if: { source == "default" || source == "build" || !show-planning }
+if: { !show-planning }
 
 Thank you guys, keep watching these videos to learn more about fastn. 
 
@@ -291,10 +292,10 @@ on [Discord](/discord/).
 
 
 -- ds.h1: Final Video
-if: { source == "planning" || show-planning }
+if: { show-planning }
 
 -- ds.youtube:
-if: { source == "planning" || show-planning }
+if: { show-planning }
 v: 72N7f9on8iw
 
 /-- end: my-ds.page 
@@ -303,9 +304,7 @@ v: 72N7f9on8iw
 
 -- end: show-md
 
--- string source: default
-$processor$: pr.get-data
-key: source
-    
 
 -- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning

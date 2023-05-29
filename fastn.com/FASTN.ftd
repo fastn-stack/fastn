@@ -444,16 +444,17 @@ favicon: /-/fastn.com/images/favicon.svg
 # Content Planning: /planning/
   skip: true
   source: planning
+  show-planning: true
 
 - Overview: /planning/
-- Markdown: /markdown/-/planning
+- Markdown: /markdown/-/planning/
   document: /expander/ds/markdown.ftd
-- SEO: /seo-meta-data/-/planning/
-  document: expander/ds/meta-data.ftd
+- SEO: /seo-meta/-/planning/
+  document: /expander/ds/meta-data.ftd
 - Understanding sitemap: /understanding-sitemap/-/planning/
   document: /expander/ds/understanding-sitemap.ftd
 - Using images in documents: /using-images/-/planning/
-  document: /expander/imagemodule/index.ftd
+  document: expander/imagemodule/index.ftd
 - Holy grail layout: /holy-grail/-/planning/
   document: /expander/layout/index.ftd
 - sitemap - document: /planning/sitemap-document/
@@ -496,5 +497,6 @@ favicon: /-/fastn.com/images/favicon.svg
 /blog/seo/: /blog/seo-meta-data/
 /seo-meta-data/: /seo-meta/
 /seo-meta-data/-/planning/: /seo-meta/-/planning/
+/seo-meta-data/-/frontend/: /seo-meta/-/frontend/
 /blog/seo-meta-data/: /blog/seo-meta/
 /markdown-in-doc-site/-/planning/: /markdown/-/planning/
