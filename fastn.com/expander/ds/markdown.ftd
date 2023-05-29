@@ -33,10 +33,12 @@ By importing the `doc-site` package in your fastn projects and using
 any of the component like `ds.markdown` component, you gain access to 
 Markdown's intuitive and readable text formatting syntax. 
 
+Let's see what all we can do using this component of `doc-site`.
+
 -- ds.h1: Introduction
 if: { !show-planning }
 
-`fastn` supports `Markdown`. Hence, instead of learning tags, one can still
+`fastn` supports the `Markdown`. Hence, instead of learning tags, one can still
 create content-heavy and powerful website using plain text without missing out 
 on formatting. 
 
@@ -47,6 +49,53 @@ By importing the `doc-site` package in your fastn projects and using
 any of the component like `ds.markdown` component, you gain access to 
 Markdown's intuitive and readable text formatting syntax. 
 
+
+
+-- ds.h1: Introduction
+if: { show-planning }
+
+Welcome!! My name is Ajit
+
+In this video we will see what all we can do with the markdown.
+
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.makrdown-intro.png
+
+-- ds.h1: Markdown
+
+`Markdown` is a way to write the content for the web. 
+
+Markdown provides a way to style text elements such as headings, lists, links,
+and more, using plain text and minimal special characters.
+
+
+
+-- ds.h2: Benefits
+
+- Markdown's simplicity, readibility, and portability as plain texts can be 
+easily shared and opened on any platform. Hence, using it in `doc-site` makes 
+it a valuable tool for content creators and developers alike.
+
+- Markdown is widely used in blogging, instant messaging, online forums,
+  collaborative software, documentation pages, and readme files.
+
+- **Rich Styling**:  It gives rich styling to the text.
+
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.markdown-benefits.png
+
+-- ds.h1: Markdown syntax in doc-site
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+
+To use the *Markdown Syntax* in your fastn projects using components of 
+`doc-site`. The first thing is to add doc-site in your package.
+
+-- ds.code: Dependency
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/doc-site
 
 -- ds.code: Importing doc-site
 lang: ftd
@@ -59,65 +108,6 @@ lang: ftd
 \-- ds.markdown: 
 
 
-
-
--- ds.code: markdown component definition
-lang: ftd
-
-\-- component markdown:
-body body:
-optional string id:
-
-\-- ftd.column:
-width: fill-container
-id if { $markdown.id != NULL }: $markdown.id
-
-\-- ftd.text: 
-text: $markdown.body
-role: $inherited.types.copy-regular
-color: $inherited.colors.text
-
-\-- end: ftd.column
-
-\-- end: markdown
-
--- ds.markdown:
-
-Let's see what all we can do using this component of `doc-site`.
-
--- ds.h1: Introduction
-if: { show-planning }
-
-Welcome!! My name is Ajit
-
-In this video we will see what all we can do with the markdown.
-
-
--- ds.h1: Markdown
-
-`Markdown` is a way to write the content for the web. Markdown provides a way 
-to style text elements such as headings, lists, links, and more, using plain 
-text and minimal special characters.
-
-Markdown's simplicity, readibility, and portability as plain texts can be 
-easily shared and opened on any platform. Hence, makes it a valuable tool for 
-content creators and developers alike.
-
-Markdown is widely used in blogging, instant messaging, online forums,
-collaborative software, documentation pages, and readme files.
-
--- ds.h2: Benefits
-
-- **Rich Styling**:  With `ds.markdown`, you can easily apply typographies and
-    color schemes to your website's content. By utilizing the `color` and
-    `role` properties given in the component definition, you can achieve
-    consistent and visually appealing designs.
-
-- **Simplified Syntax**: one line syntax. 
-
-
--- ds.h1: Markdown syntax in doc-site
-$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 -- ds.rendered: Plain text
 
