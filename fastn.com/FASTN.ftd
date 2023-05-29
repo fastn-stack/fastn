@@ -114,6 +114,9 @@ favicon: /-/fastn.com/images/favicon.svg
 ## Docs: /frontend/
 
 - Overview 🚧: /frontend/
+- Passing data through headers: /headers/
+  document: ftd/headers.ftd
+  skip: true
 - Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
 - Design System 🚧: /design-system/
   document: frontend/design-system.ftd
