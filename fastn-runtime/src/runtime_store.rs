@@ -159,7 +159,7 @@ pub struct Frame {
     pointers: Vec<KindPointer>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum UIProperty {
     WidthFixedPx,
     HeightFixedPx,
@@ -174,6 +174,32 @@ impl From<i32> for UIProperty {
             2 => UIProperty::HeightFixedPercentage,
             _ => panic!("Unknown element kind: {}", i),
         }
+    }
+}
+
+impl From<UIProperty> for i32 {
+    fn from(v: UIProperty) -> i32 {
+        match v {
+            UIProperty::WidthFixedPx => 0,
+            UIProperty::HeightFixedPx => 1,
+            UIProperty::HeightFixedPercentage => 2,
+        }
+    }
+}
+
+impl fastn_runtime::WasmType for UIProperty {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
+        use fastn_runtime::Params;
+
+        vals.i32(idx).into()
+    }
+
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::I32
+    }
+
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::I32((*self).into())
     }
 }
 

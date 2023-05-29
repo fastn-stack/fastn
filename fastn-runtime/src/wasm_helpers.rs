@@ -151,6 +151,11 @@ pub trait LinkerExt {
         name: &str,
         func: impl Fn(&mut SE, T1, T2) + Send + Sync + 'static,
     );
+    fn func3<SE: StoreExtractor, T1: WasmType, T2: WasmType, T3: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
+    );
     fn func0ret<SE: StoreExtractor, O: WasmType>(
         &mut self,
         name: &str,
@@ -213,15 +218,6 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
         )
         .unwrap();
     }
-    // fn func2<SE: StoreExtractor, T1: WasmType, T2: WasmType>(
-    //     &mut self,
-    //     name: &str,
-    //     func: impl Fn(&mut SE, &wasmtime::Val, &wasmtime::Val)
-    //     + Send
-    //     + Sync
-    //     + 'static,
-    // );
-
     fn func2<SE: StoreExtractor, T1: WasmType, T2: WasmType>(
         &mut self,
         name: &str,
@@ -239,6 +235,30 @@ impl LinkerExt for wasmtime::Linker<fastn_runtime::Dom> {
                     SE::extract(&mut caller),
                     T1::extract(0, params),
                     T2::extract(1, params),
+                );
+                Ok(())
+            },
+        )
+        .unwrap();
+    }
+    fn func3<SE: StoreExtractor, T1: WasmType, T2: WasmType, T3: WasmType>(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
+    ) {
+        self.func_new(
+            "fastn",
+            name,
+            wasmtime::FuncType::new(
+                [T1::the_type(), T2::the_type()].iter().cloned(),
+                [].iter().cloned(),
+            ),
+            move |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
+                func(
+                    SE::extract(&mut caller),
+                    T1::extract(0, params),
+                    T2::extract(1, params),
+                    T3::extract(2, params),
                 );
                 Ok(())
             },

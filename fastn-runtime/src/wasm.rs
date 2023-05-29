@@ -38,30 +38,12 @@ impl fastn_runtime::Dom {
             |dom: &mut fastn_runtime::Dom, parent, kind| dom.create_kernel(parent, kind),
         );
 
-        linker
-            .func_new(
-                "fastn",
-                "set_i32_prop",
-                wasmtime::FuncType::new(
-                    [
-                        wasmtime::ValType::ExternRef,
-                        wasmtime::ValType::I32,
-                        wasmtime::ValType::I32,
-                    ]
-                    .iter()
-                    .cloned(),
-                    [].iter().cloned(),
-                ),
-                |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, params, _results| {
-                    caller.data_mut().set_property(
-                        params.key(0),
-                        params.i32(0).into(),
-                        params.i32(0).into(),
-                    );
-                    Ok(())
-                },
-            )
-            .unwrap();
+        linker.func3(
+            "set_i32_prop",
+            |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
+                dom.set_property(key, property_kind, fastn_runtime::dom::Value::I32(value))
+            },
+        );
 
         linker
             .func_new(
