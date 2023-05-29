@@ -54,6 +54,11 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<KindPointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
+    // if we have:
+    // -- ftd.text: hello
+    //
+    // a string containing hello will be created, and then passed to Rust as text properties, and
+    // original wasm value would get dropped.
 }
 
 type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
@@ -137,6 +142,26 @@ enum Kind {
     Record,
     OrType,
     Decimal,
+}
+
+impl<T> HeapData<T> {
+    pub(crate) fn new(value: HeapValue<T>) -> HeapData<T> {
+        HeapData {
+            value,
+            dependents: vec![],
+            ui_properties: vec![],
+        }
+    }
+}
+
+impl<T> HeapValue<T> {
+    pub(crate) fn new(value: T) -> HeapValue<T> {
+        HeapValue::Value(value)
+    }
+
+    pub(crate) fn to_heap_data(self) -> HeapData<T> {
+        HeapData::new(self)
+    }
 }
 
 impl Memory {
@@ -234,11 +259,10 @@ impl Memory {
         }
     }
 
-    pub fn create_boolean(&mut self, _value: bool) -> fastn_runtime::PointerKey {
-        // let pointer = self.boolean.insert((value, vec![]));
-        // self.insert_in_frame(pointer, Kind::Boolean);
-        // pointer
-        todo!()
+    pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
+        let pointer = self.boolean.insert(HeapValue::new(value).to_heap_data());
+        self.insert_in_frame(pointer, Kind::Boolean);
+        pointer
     }
 
     pub fn get_boolean(&mut self, _ptr: fastn_runtime::PointerKey) -> bool {
@@ -248,11 +272,10 @@ impl Memory {
         todo!()
     }
 
-    pub fn create_i32(&mut self, _value: i32) -> fastn_runtime::PointerKey {
-        // let pointer = self.i32.insert((value, vec![]));
-        // self.insert_in_frame(pointer, Kind::Integer);
-        // pointer
-        todo!()
+    pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
+        let pointer = self.i32.insert(HeapValue::new(value).to_heap_data());
+        self.insert_in_frame(pointer, Kind::Integer);
+        pointer
     }
 
     pub fn get_i32(&mut self, _ptr: fastn_runtime::PointerKey) -> i32 {
@@ -262,37 +285,36 @@ impl Memory {
         todo!()
     }
 
-    pub fn create_rgba(&mut self, _r: i32, _g: i32, _b: i32, _a: f32) -> fastn_runtime::PointerKey {
-        // let r_pointer = self.i32.insert((r, vec![]));
-        // let g_pointer = self.i32.insert((g, vec![]));
-        // let b_pointer = self.i32.insert((b, vec![]));
-        // let a_pointer = self.f32.insert((a, vec![]));
-        //
-        // let vec = self.vec.insert((
-        //     vec![
-        //         KindPointer {
-        //             key: r_pointer,
-        //             kind: Kind::Integer,
-        //         },
-        //         KindPointer {
-        //             key: g_pointer,
-        //             kind: Kind::Integer,
-        //         },
-        //         KindPointer {
-        //             key: b_pointer,
-        //             kind: Kind::Integer,
-        //         },
-        //         KindPointer {
-        //             key: a_pointer,
-        //             kind: Kind::Decimal,
-        //         },
-        //     ],
-        //     vec![],
-        // ));
-        //
-        // self.insert_in_frame(vec, Kind::Record);
-        // vec
-        todo!()
+    pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
+        let r_pointer = self.i32.insert(HeapValue::new(r).to_heap_data());
+        let g_pointer = self.i32.insert(HeapValue::new(g).to_heap_data());
+        let b_pointer = self.i32.insert(HeapValue::new(b).to_heap_data());
+        let a_pointer = self.f32.insert(HeapValue::new(a).to_heap_data());
+
+        let vec = self.vec.insert(
+            HeapValue::new(vec![
+                KindPointer {
+                    key: r_pointer,
+                    kind: Kind::Integer,
+                },
+                KindPointer {
+                    key: g_pointer,
+                    kind: Kind::Integer,
+                },
+                KindPointer {
+                    key: b_pointer,
+                    kind: Kind::Integer,
+                },
+                KindPointer {
+                    key: a_pointer,
+                    kind: Kind::Decimal,
+                },
+            ])
+            .to_heap_data(),
+        );
+
+        self.insert_in_frame(vec, Kind::Record);
+        vec
     }
 }
 
