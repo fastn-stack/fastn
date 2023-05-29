@@ -4,12 +4,12 @@
 -- my-ds.page: markdown in `doc-site`
 
 -- ds.markdown:
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 
 In this video we will see how to use markdown in `doc-site`.
 
 /-- ds.youtube:
-if: { source == "default" || source == "build" }
+if: { source == "default" || source == "build" || !show-planning }
 v: 
 
 -- lib.video-audience: How to use markdown in `doc-site`
@@ -21,6 +21,20 @@ Gives the idea about the markdown syntax allowed in `fastn`
 
 -- ds.h1: Straight to the point
 if: { source == "planning" || show-planning }
+
+`fastn` supports `Markdown`. Hence, instead of learning tags, one can still
+create content-heavy and powerful website using plain text without missing out 
+on formatting. 
+
+Supporting `Markdown` makes `fastn` versatile as it also supports the
+conversion of the marked-up text into various output formats such as HTML.
+
+By importing the `doc-site` package in your fastn projects and using
+any of the component like `ds.markdown` component, you gain access to 
+Markdown's intuitive and readable text formatting syntax. 
+
+-- ds.h1: Introduction
+if: { source == "default" || source == "build" || !show-planning }
 
 `fastn` supports `Markdown`. Hence, instead of learning tags, one can still
 create content-heavy and powerful website using plain text without missing out 
