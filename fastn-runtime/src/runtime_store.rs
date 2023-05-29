@@ -124,6 +124,36 @@ pub struct KindPointer {
     kind: Kind,
 }
 
+impl fastn_runtime::PointerKey {
+    pub(crate) fn into_integer_pointer(self) -> KindPointer {
+        KindPointer {
+            key: self,
+            kind: Kind::Integer,
+        }
+    }
+
+    pub(crate) fn into_decimal_pointer(self) -> KindPointer {
+        KindPointer {
+            key: self,
+            kind: Kind::Decimal,
+        }
+    }
+
+    pub(crate) fn into_list_pointer(self) -> KindPointer {
+        KindPointer {
+            key: self,
+            kind: Kind::List,
+        }
+    }
+
+    pub(crate) fn into_record_pointer(self) -> KindPointer {
+        KindPointer {
+            key: self,
+            kind: Kind::Record,
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 pub struct Frame {
     pointers: Vec<KindPointer>,
@@ -154,6 +184,7 @@ enum Kind {
     Record,
     OrType,
     Decimal,
+    List,
 }
 
 impl<T> HeapData<T> {
@@ -297,6 +328,42 @@ impl Memory {
         todo!()
     }
 
+    pub fn array_i32_2(
+        &mut self,
+        ptr1: fastn_runtime::PointerKey,
+        ptr2: fastn_runtime::PointerKey,
+    ) -> fastn_runtime::PointerKey {
+        let vec = self.vec.insert(
+            HeapValue::new(vec![
+                KindPointer {
+                    key: ptr1,
+                    kind: Kind::Integer,
+                },
+                KindPointer {
+                    key: ptr2,
+                    kind: Kind::Integer,
+                },
+            ])
+            .into_heap_data(),
+        );
+        self.add_dependent(ptr1.into_integer_pointer(), vec.into_list_pointer());
+        self.add_dependent(ptr2.into_integer_pointer(), vec.into_list_pointer());
+        vec
+    }
+
+    pub fn add_dependent(&mut self, target: KindPointer, dependent: KindPointer) {
+        let dependents = match target.kind {
+            Kind::Integer => &mut self.i32.get_mut(target.key).unwrap().dependents,
+            Kind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().dependents,
+            Kind::Decimal => &mut self.f32.get_mut(target.key).unwrap().dependents,
+            Kind::List | Kind::Record | Kind::OrType => {
+                &mut self.vec.get_mut(target.key).unwrap().dependents
+            }
+        };
+
+        dependents.push(dependent);
+    }
+
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
         let r_pointer = self.i32.insert(HeapValue::new(r).into_heap_data());
         let g_pointer = self.i32.insert(HeapValue::new(g).into_heap_data());
@@ -324,6 +391,11 @@ impl Memory {
             ])
             .into_heap_data(),
         );
+
+        self.add_dependent(r_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_dependent(g_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_dependent(b_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_dependent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
 
         self.insert_in_frame(vec, Kind::Record);
         vec

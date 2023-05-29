@@ -14,7 +14,7 @@
     (import "fastn" "set_i32_prop_func" (func $set_i32_prop_func (param externref i32 i32 externref)))
     (import "fastn" "set_i32_3_prop_func" (func $set_i32_3_prop_func (param externref i32 i32 externref)))
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
-    (import "fastn" "array_2" (func $array_i32_2 (param externref externref) (result externref)))
+    (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
 
 
     (global $main#any-hover externref)
@@ -44,7 +44,7 @@
             (local.get $column)
             (i32.const 0) ;; 0 = fixed width in pixels
             (i32.const 0) ;; index in the table
-            (call $array_2 (global.set $main#x) (call $create_integer (i32.const 10)))
+            (call $array_i32_2 (global.set $main#x) (call $create_integer (i32.const 10)))
         )
 
         ;; height.fixed.px: 500
@@ -93,7 +93,7 @@
             (local.get $column)
             (i32.const 0) ;; 0 = on mouse enter
             (i32.const 1) ;; index in the table
-            (call $array_2 (global.get $main#any-hover) (local.get $on-hover))
+            (call $array_i32_2 (global.get $main#any-hover) (local.get $on-hover))
         )
         ;; $on-mouse-leave$: {
         ;;     $ftd.set-bool($a=$any-hover, v=false)
@@ -103,7 +103,7 @@
               (local.get $column)
               (i32.const 0) ;; 0 = on mouse enter
               (i32.const 2) ;; index in the table
-              (call $array_2 (global.get $main#any-hover) (local.get $on-hover))
+              (call $array_i32_2 (global.get $main#any-hover) (local.get $on-hover))
         )
 
         ;; width.fixed.px: 500
@@ -127,7 +127,7 @@
                 (local.get $column)
                 (i32.const 3) ;; 3 = background.solid
                 (i32.const 3) ;; index in the table
-                (call $array_2 (local.get $on-hover) (global.get $main#any-hover))
+                (call $array_i32_2 (local.get $on-hover) (global.get $main#any-hover))
         )
 
         (call $end_frame)

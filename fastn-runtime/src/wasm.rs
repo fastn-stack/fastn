@@ -137,6 +137,10 @@ impl fastn_runtime::Memory {
             "create_rgba",
             |mem: &mut fastn_runtime::Memory, r, g, b, a| mem.create_rgba(r, g, b, a),
         );
+        linker.func2ret(
+            "array_i32_2",
+            |mem: &mut fastn_runtime::Memory, ptr1, ptr2| mem.array_i32_2(ptr1, ptr2),
+        );
     }
 }
 
