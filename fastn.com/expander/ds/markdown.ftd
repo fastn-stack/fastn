@@ -8,9 +8,9 @@ if: { !show-planning }
 
 In this video we will see how to use markdown in `doc-site`.
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { !show-planning }
-v: 
+v: 91NNB8VzG34
 
 -- lib.video-audience: How to use markdown in `doc-site`
 if: { show-planning }
@@ -33,7 +33,6 @@ By importing the `doc-site` package in your fastn projects and using
 any of the component like `ds.markdown` component, you gain access to 
 Markdown's intuitive and readable text formatting syntax. 
 
-Let's see what all we can do using this component of `doc-site`.
 
 -- ds.h1: Introduction
 if: { !show-planning }
@@ -56,7 +55,9 @@ if: { show-planning }
 
 Welcome!! My name is Ajit
 
-In this video we will see what all we can do with the markdown.
+In this video we will see how to use markdown in your fastn projects 
+using doc-site.
+
 
 -- ds.image:
 if: { show-planning }
@@ -73,14 +74,17 @@ and more, using plain text and minimal special characters.
 
 -- ds.h2: Benefits
 
-- Markdown's simplicity, readibility, and portability as plain texts can be 
-easily shared and opened on any platform. Hence, using it in `doc-site` makes 
-it a valuable tool for content creators and developers alike.
+- Markdown's simplicity, readibility, and portability as plain texts can be
+  easily shared and opened on any platform. Hence, using it in `doc-site` makes
+  it a valuable tool for content creators and developers alike.
 
 - Markdown is widely used in blogging, instant messaging, online forums,
   collaborative software, documentation pages, and readme files.
 
-- **Rich Styling**:  It gives rich styling to the text.
+- It gives rich styling to the text.
+
+
+Let's see what all we can do by using Markdown in `doc-site`.
 
 -- ds.image:
 if: { show-planning }
@@ -90,17 +94,29 @@ src: $fastn-assets.files.expander.ds.img.markdown-benefits.png
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
 To use the *Markdown Syntax* in your fastn projects using components of 
-`doc-site`. The first thing is to add doc-site in your package.
+`doc-site`. The first thing is to add doc-site in your package and then use 
+the components of `doc-site` package.
+
+To add `doc-site` in your package. 
+Add it as the `fastn.dependency` in your `FASTN.ftd` document.
 
 -- ds.code: Dependency
 lang: ftd
 
 \-- fastn.dependency: fastn-community.github.io/doc-site
 
+-- ds.markdown:
+
+Then, import the `doc-site` package in your documents like `index.ftd`
+
 -- ds.code: Importing doc-site
 lang: ftd
 
 \-- import: fastn-community.github.io/doc-site as ds
+
+-- ds.markdown:
+
+Now, start using the components like ds.page, ds.markdown, ds.h1 etc.
 
 -- ds.code: Syntax
 lang: ftd
@@ -162,15 +178,15 @@ tempor incididunt.
 
 \-- ds.markdown:
 
-Lorem ipsum [inline link](/docs/markup-support/) amet, consectetur adipiscing
-elit, sed do eiusmod tempor incididunt.
+Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+elit, sed do eiusmod tempor incididunt. 
 
 -- ds.rendered.output:
 
 -- ds.markdown:
 
-Lorem ipsum [inline link](/docs/markup-support/) amet, consectetur adipiscing
-elit, sed do eiusmod tempor incididunt, [fastn](/) .
+Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+elit, sed do eiusmod tempor incididunt. 
 
 -- end: ds.rendered.output
 
@@ -255,7 +271,9 @@ https://fastn.com/
 -- end: ds.rendered
 
 
+-- ds.markdown: 
 
+We can strikethrough a word or a sentence using single `~` symbol
 
 -- ds.rendered: Strikethrough
 
@@ -263,20 +281,23 @@ https://fastn.com/
 
 \-- ds.markdown:
 
-~~The world is flat.~~
+~The world is flat.~
 
 -- ds.rendered.output:
 
 -- ds.markdown:
 
-~~The world is flat.~~
+~The world is flat.~
 
 -- end: ds.rendered.output
 
 -- end: ds.rendered
 
 
+-- ds.markdown:
 
+To create a superscript, use one caret symbol (^) before and after the 
+characters.
 
 -- ds.rendered: Superscript
 
@@ -321,6 +342,11 @@ To create a Horizontal Rule we write
 -- end: ds.rendered
 
 
+-- ds.markdown:
+
+This way you can make use of Markdown in your fastn projects.
+
+
 -- ds.h1: Closing Remarks 
 if: { show-planning }
 
@@ -344,9 +370,9 @@ on [Discord](/discord/).
 -- ds.h1: Final Video
 if: { show-planning }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { show-planning }
-v: 
+v: 91NNB8VzG34
 
 
 -- end: my-ds.page
