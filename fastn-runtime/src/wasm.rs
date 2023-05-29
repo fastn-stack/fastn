@@ -55,8 +55,8 @@ impl fastn_runtime::Dom {
             |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
              node_key,
              ui_property,
-             table_index: i32,
-             func_arg: wasmtime::ExternRef| {
+             table_index,
+             func_arg| {
                 let mut value = vec![];
                 caller
                     .get_export("callByIndex")
