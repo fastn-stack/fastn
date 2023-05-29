@@ -28,7 +28,6 @@ impl fastn_runtime::Dom {
 
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::LinkerExt;
-        use fastn_runtime::Params;
 
         self.register_memory_functions(linker);
 
