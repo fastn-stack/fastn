@@ -10,6 +10,7 @@ mod memory;
 mod pl;
 mod table;
 mod ty;
+mod helpers;
 
 pub use ast::*;
 pub use export::{Export, ExportDesc};
@@ -20,6 +21,7 @@ pub use memory::Memory;
 pub use pl::PL;
 pub use table::{Limits, RefType, Table};
 pub use ty::Type;
+pub use helpers::{StoreExtractor, LinkerExt, WasmType};
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let mut s = String::new();

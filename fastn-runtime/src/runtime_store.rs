@@ -187,22 +187,6 @@ impl From<UIProperty> for i32 {
     }
 }
 
-impl fastn_runtime::WasmType for UIProperty {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
-        use fastn_runtime::Params;
-
-        vals.i32(idx).into()
-    }
-
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-
-    fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32((*self).into())
-    }
-}
-
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 enum Kind {
     Boolean,

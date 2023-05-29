@@ -1896,6 +1896,7 @@ version = "0.1.0"
 dependencies = [
  "indoc 2.0.1",
  "wasmfmt",
+ "wasmtime",
 ]
 
 [[package]]

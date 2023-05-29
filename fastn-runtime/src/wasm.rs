@@ -27,7 +27,7 @@ impl fastn_runtime::Dom {
     }
 
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
-        use fastn_runtime::LinkerExt;
+        use fastn_wasm::LinkerExt;
 
         self.register_memory_functions(linker);
 
@@ -55,7 +55,7 @@ impl fastn_runtime::Dom {
 
 impl fastn_runtime::Memory {
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
-        use fastn_runtime::LinkerExt;
+        use fastn_wasm::LinkerExt;
 
         linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| {
             mem.create_frame()

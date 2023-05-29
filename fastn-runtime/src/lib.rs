@@ -31,7 +31,6 @@ pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, T
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
 pub use runtime_store::{Memory, UIProperty};
-pub(crate) use wasm_helpers::*;
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
