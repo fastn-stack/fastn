@@ -32,7 +32,7 @@ preferences of if the user prefers to set this value.
 -- variable: `ftd.device`
 type: `string`
 
-This value is either `mobile`, `desktop` or `xl`. `ftd.device` is automatically
+This value is either `mobile` or `desktop`. `ftd.device` is automatically
 updated when the browser resizes and device width crosses
 `ftd.mobile-breakpoint` and `ftd.desktop-breakpoint` thresholds.
 
@@ -42,13 +42,6 @@ default: 768
 
 `ftd.mobile-breakpoint` is the width in pixels below which `fastn` assumes that
 the device is a mobile device, and sets `ftd.device` to `mobile`.
-
--- variable: `ftd.desktop-breakpoint`
-type: `integer`
-default: 1440
-
-`ftd.desktop-breakpoint` is the width in pixels below which `fastn` assumes that
-the device is a desktop device, and sets `ftd.device` to `desktop`.
 
 
 
