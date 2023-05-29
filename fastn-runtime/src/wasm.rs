@@ -138,6 +138,10 @@ impl fastn_runtime::Memory {
             "array_i32_2",
             |mem: &mut fastn_runtime::Memory, ptr1, ptr2| mem.array_i32_2(ptr1, ptr2),
         );
+        linker.func2ret(
+            "get_func_arg_i32",
+            |mem: &mut fastn_runtime::Memory, ptr, idx| mem.get_func_arg_i32(ptr, idx),
+        );
     }
 }
 

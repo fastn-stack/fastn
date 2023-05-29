@@ -392,6 +392,18 @@ impl Memory {
         todo!()
     }
 
+    pub fn get_func_arg_i32(&self, ptr: fastn_runtime::PointerKey, idx: i32) -> i32 {
+        let ptr = self
+            .vec
+            .get(ptr)
+            .unwrap()
+            .value
+            .value()
+            .get(idx as usize)
+            .unwrap();
+        *self.i32.get(ptr.key).unwrap().value.value()
+    }
+
     pub fn array_i32_2(
         &mut self,
         ptr1: fastn_runtime::PointerKey,
