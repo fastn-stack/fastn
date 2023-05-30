@@ -30,7 +30,7 @@ pub(crate) use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
-pub use runtime_store::{Memory, UIProperty};
+pub use runtime_store::{Closure, Kind, KindPointer, Memory, UIProperty};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }

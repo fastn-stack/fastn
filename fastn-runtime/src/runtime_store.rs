@@ -110,11 +110,11 @@ struct UIDependent {
 }
 
 #[derive(Debug)]
-struct Closure {
+pub struct Closure {
     /// functions are defined in wasm, and this is the index in the function table.
-    function: i32, // entry in the function table
+    pub function: i32, // entry in the function table
     /// function_data is the data passed to the function.
-    function_data: KindPointer,
+    pub function_data: KindPointer,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -129,8 +129,8 @@ pub struct Attachment {
 /// to keep track of Kind so we know where this pointer came from
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct KindPointer {
-    key: fastn_runtime::PointerKey,
-    kind: Kind,
+    pub key: fastn_runtime::PointerKey,
+    pub kind: Kind,
 }
 
 impl fastn_runtime::PointerKey {
@@ -200,7 +200,7 @@ impl From<UIProperty> for i32 {
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-enum Kind {
+pub enum Kind {
     Boolean,
     Integer,
     Record,
@@ -222,6 +222,16 @@ impl<T> HeapData<T> {
 impl<T> HeapValue<T> {
     pub(crate) fn new(value: T) -> HeapValue<T> {
         HeapValue::Value(value)
+    }
+
+    pub(crate) fn new_with_formula(
+        cached_value: T,
+        closure: fastn_runtime::ClosureKey,
+    ) -> HeapValue<T> {
+        HeapValue::Formula {
+            cached_value,
+            closure,
+        }
     }
 
     pub(crate) fn into_heap_data(self) -> HeapData<T> {
@@ -381,6 +391,19 @@ impl Memory {
 
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
         let pointer = self.i32.insert(HeapValue::new(value).into_heap_data());
+        self.insert_in_frame(pointer, Kind::Integer);
+        pointer
+    }
+
+    pub fn create_i32_func(
+        &mut self,
+        cached_value: i32,
+        closure: Closure,
+    ) -> fastn_runtime::PointerKey {
+        let closure_key = self.closures.insert(closure);
+        let pointer = self
+            .i32
+            .insert(HeapValue::new_with_formula(cached_value, closure_key).into_heap_data());
         self.insert_in_frame(pointer, Kind::Integer);
         pointer
     }
