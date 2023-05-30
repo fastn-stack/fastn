@@ -26,17 +26,14 @@ if: { show-planning }
 The `page` component of the package `doc-site` allows to build an entire 
 web-page that wraps other components in it as it is a container component.
 
-This component can be used to create not just a standalone webpage but entire 
-website with various pages that may give a common theme to the website by 
-applying a color-scheme, typography, site name, site-logo etc.
+This component can be used to give uniformity to the entire 
+website by giving a common identity such as a color-scheme, typography, site 
+name, site logo etc.
 
-Whatever passed in the caption of this component becomes the title of the page. 
-This component has properties that can be used to customize how the page 
-should look.
 
 It also allows SEO stuff by allowing the user to add meta-data for website 
 optimization by using some properties. 
-There is a separate video dedicated to this, you can checkout out, the link is 
+There is a separate video dedicated to this, you can checkout the link
 in the description.
 
 
@@ -56,6 +53,7 @@ lang: ftd
 \-- end: ds.page
 
 -- ds.markdown:
+if: { !show-planning }
 
 This component can be used to create not just a standalone webpage but entire 
 website with various pages that may give a common theme to the website by 
@@ -80,7 +78,7 @@ In this video we learn everything we can do using page component of the
 -- ds.h1: Creating a standalone page
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
-Creating a standalone page or a complete website, to use this package, we 
+To create a standalone page or a complete website, you 
 need to add the doc-site package in your fastn project.
 
 To add the doc-site package, if you don't know it already, there are only two 
@@ -88,7 +86,6 @@ things that is needed to be done.
 
 **A:** Add it as dependency in `FASTN.ftd` document.
 
-**B:** Import it in the file or files you want to use.
 
 -- ds.code: Add as dependency
 lang: ftd
@@ -97,7 +94,7 @@ lang: ftd
 
 -- ds.markdown:
 
-Then, import the `doc-site` package in your documents like `index.ftd`
+**B:**  Then, import the `doc-site` package in your documents like `index.ftd`
 
 -- ds.code: Importing doc-site
 lang: ftd
@@ -187,8 +184,8 @@ site-url: https://fastn.com/
 
 -- ds.markdown:
 
-And we can also auto-import the doc-site package as well as this document as 
-we will be using these two in all the pages. 
+And we can also auto-import the doc-site package as well as `my-ds.ftd` 
+as we will be using these two in all the pages. 
 
 
 -- ds.code: my-ds
