@@ -449,6 +449,8 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
+- Creating a page: /page/-/planning/
+  document: /expander/ds/ds-page.ftd
 - Markdown: /markdown/-/planning/
   document: /expander/ds/markdown.ftd
 - SEO: /seo-meta/-/planning/

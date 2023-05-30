@@ -1,0 +1,184 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+
+-- my-ds.page: Creating a page
+
+-- ds.markdown:
+if: { !show-planning }
+
+In this video we will learn how to create a page.
+
+/-- ds.youtube:
+if: { !show-planning }
+v: 
+
+-- lib.video-audience: How to create a page
+if: { show-planning }
+owner: Ajit
+aud: Website Builders
+
+To explain what all can be done using page component.
+
+
+
+-- ds.h1: Introduction
+if: { show-planning }
+
+The `page` component of the package `doc-site` allows to build an entire 
+web-page that wraps other components in it as it is a container component.
+
+This component can be used to create not just a standalone webpage but entire 
+website with various pages that may give a common theme to the website by 
+applying a color-scheme, typography, site name, site-logo etc.
+
+Whatever passed in the caption of this component becomes the title of the page. 
+This component has properties that can be used to customize how the page 
+should look.
+
+It also allows SEO stuff by allowing the user to add meta-data for website 
+optimization by using some properties. 
+There is a separate video dedicated to this, you can checkout out, the link is 
+in the description.
+
+
+-- ds.h1: Introduction
+if: { !show-planning }
+
+The `page` component of the package `doc-site` is a container component that 
+allows a user to build an entire web-page that wraps other components in it. 
+
+This component can be used to create not just a standalone webpage but entire 
+website with various pages that may give a common theme to the website by 
+applying a color-scheme, typography, site name, site-logo etc.
+
+Whatever passed in the caption of this component becomes the title of the page. 
+This component has properties that 
+
+It also allows SEO stuff by adding meta-data. Checkout
+[How to add meta-data for website optimization](/seo-meta/) by using some of 
+it's properties. 
+
+
+
+
+-- ds.h1: Introduction
+if: { show-planning }
+
+Welcome!! My name is Ajit
+
+In this video we learn everything we can do using page component of the 
+`doc-site` package.
+
+
+-- ds.h1: Creating a standalone page
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+
+If there is one document, we can use `ds.page` and use the properties we need 
+to create that page.  
+
+
+-- ds.h1: Customized Page Component
+
+For a brand or company, there is a standard theme that we want to apply across 
+the documentation pages. For example, we might want to display the site-logo, 
+site-name across the website. Or apply a color-scheme that matches the 
+identity of the brand along with a specific typography. In such cases, we would 
+want to customize this page component by creating our custom page component 
+that wraps all the properties we want to give to the page.
+
+This way we do not have to repeat applying these properties to each page. 
+
+
+
+
+
+
+
+/-- ds.h1: Page Component
+
+
+
+
+
+
+;; =================== 
+;; Code block Template
+;; ===================
+
+
+/-- ds.code: Syntax
+lang: ftd
+
+
+
+
+;; ============== 
+;; Image Template
+;; ==============
+
+/-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.
+
+
+
+;; =================  
+;; Rendered Template
+;; =================
+
+
+/-- ds.rendered: Turning a URL into a link
+
+/-- ds.rendered.input:
+
+
+/-- ds.rendered.output:
+
+
+/-- end: ds.rendered.output
+
+/-- end: ds.rendered
+
+
+
+
+
+-- ds.markdown:
+
+Hence using `ds.page` component can offer a lot of things.
+
+
+-- ds.h1: Closing Remarks 
+if: { show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website. 
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join 
+our fastn community on Discord.
+
+
+-- ds.markdown: 
+if: { !show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn. 
+
+Support us by giving a star ⭐ on 
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community 
+on [Discord](/discord/).
+
+
+/-- ds.h1: Final Video
+if: { show-planning }
+
+/-- ds.youtube:
+if: { show-planning }
+v: 
+
+
+-- end: my-ds.page
+
+
+-- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning
