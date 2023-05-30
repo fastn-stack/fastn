@@ -19,8 +19,8 @@ mod document;
 mod dom;
 mod element;
 mod event;
-mod operation;
 mod memory;
+mod operation;
 pub mod wasm;
 mod wasm_helpers;
 
@@ -29,8 +29,8 @@ pub use document::Document;
 pub use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
+pub use memory::{Closure, Memory, Pointer, PointerKind, UIProperty};
 pub use operation::{Operation, Rectangle};
-pub use memory::{Closure, Kind, KindPointer, Memory, UIProperty};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }

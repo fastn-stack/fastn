@@ -14,7 +14,12 @@ pub fn func2(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL) -> fastn_wa
     func(name, vec![arg0, arg1], None)
 }
 
-pub fn func3(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL, arg2: fastn_wasm::PL) -> fastn_wasm::Ast {
+pub fn func3(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    arg2: fastn_wasm::PL,
+) -> fastn_wasm::Ast {
     func(name, vec![arg0, arg1, arg2], None)
 }
 
@@ -22,7 +27,12 @@ pub fn func1ret(name: &str, arg0: fastn_wasm::PL, ret: fastn_wasm::Type) -> fast
     func(name, vec![arg0], Some(ret))
 }
 
-pub fn func2ret(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL, ret: fastn_wasm::Type) -> fastn_wasm::Ast {
+pub fn func2ret(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    ret: fastn_wasm::Type,
+) -> fastn_wasm::Ast {
     func(name, vec![arg0, arg1], Some(ret))
 }
 

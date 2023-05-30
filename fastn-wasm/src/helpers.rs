@@ -40,7 +40,7 @@ impl fastn_wasm::WasmType for i32 {
         wasmtime::ValType::I32
     }
     fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32(*self as i32)
+        wasmtime::Val::I32(*self)
     }
 }
 

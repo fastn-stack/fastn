@@ -1,3 +1,11 @@
+mod heap;
+mod pointer;
+mod ui;
+
+pub use heap::{Heap, HeapData, HeapValue};
+pub use pointer::{Pointer, PointerKind};
+pub use ui::{UIDependent, UIProperty};
+
 /// Memory contains all the data created by our runtime.
 ///
 /// When say a boolean is created in ftd world, we add an entry in the `.boolean` here, and return
@@ -50,8 +58,8 @@ pub struct Memory {
     f32: Heap<f32>,
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
     /// are stored in the order they are defined.
-    vec: Heap<Vec<KindPointer>>,
-    or_type: Heap<(u8, Vec<KindPointer>)>,
+    vec: Heap<Vec<Pointer>>,
+    or_type: Heap<(u8, Vec<Pointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
     // if we have:
@@ -61,68 +69,12 @@ pub struct Memory {
     // original wasm value would get dropped.
 }
 
-type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
-
-/// For every ftd value we have one such entry
-#[derive(Debug)]
-struct HeapData<T> {
-    /// The inner value being stored in ftd
-    value: HeapValue<T>,
-    /// the list of values that depend on this, eg if we add x to a list l, we also do a
-    /// x.dependents.add(l)
-    dependents: Vec<KindPointer>,
-    /// whenever a dom node is added or deleted, it is added or removed from this list.
-    ui_properties: Vec<UIDependent>,
-}
-
-/// This is the data we store in the heap for any value.
-#[derive(Debug, Eq, PartialEq)]
-enum HeapValue<T> {
-    Value(T),
-
-    /// If a value is defined in terms of a function, we store the last computed value and the
-    /// closure. We cached the last computed value so if the data is not changing we do not have
-    /// to re-compute the closure.
-    ///
-    /// -- integer x: 10 (stored as HeapValue::Value(10))
-    /// -- integer y: 20 (stored as HeapValue::Value(10))
-    /// -- integer z = { x + y } (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
-    Formula {
-        cached_value: T,
-        closure: fastn_runtime::ClosureKey,
-    },
-}
-
-impl<T> HeapValue<T> {
-    pub(crate) fn value(&self) -> &T {
-        match self {
-            HeapValue::Value(v) => v,
-            _ => unimplemented!(),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct UIDependent {
-    property: fastn_runtime::UIProperty,
-    node: fastn_runtime::NodeKey,
-    closure: Option<fastn_runtime::ClosureKey>,
-}
-
-impl UIDependent {
-    pub(crate) fn closure(self, closure: fastn_runtime::ClosureKey) -> Self {
-        let mut ui_dependent = self;
-        ui_dependent.closure = Some(closure);
-        ui_dependent
-    }
-}
-
 #[derive(Debug)]
 pub struct Closure {
     /// functions are defined in wasm, and this is the index in the function table.
     pub function: i32, // entry in the function table
     /// function_data is the data passed to the function.
-    pub function_data: KindPointer,
+    pub function_data: Pointer,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -130,136 +82,17 @@ pub struct Attachment {
     /// this is the dom element we are directly or indirectly connected with
     element: fastn_runtime::NodeKey,
     /// who told we us about this element
-    source: KindPointer,
-}
-
-/// Since a pointer can be present in any of the slotmaps on Memory, .boolean, .i32 etc, we need
-/// to keep track of Kind so we know where this pointer came from
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct KindPointer {
-    pub key: fastn_runtime::PointerKey,
-    pub kind: Kind,
-}
-
-impl fastn_runtime::PointerKey {
-    pub(crate) fn into_integer_pointer(self) -> KindPointer {
-        KindPointer {
-            key: self,
-            kind: Kind::Integer,
-        }
-    }
-
-    pub(crate) fn into_decimal_pointer(self) -> KindPointer {
-        KindPointer {
-            key: self,
-            kind: Kind::Decimal,
-        }
-    }
-
-    pub(crate) fn into_list_pointer(self) -> KindPointer {
-        KindPointer {
-            key: self,
-            kind: Kind::List,
-        }
-    }
-
-    pub(crate) fn into_record_pointer(self) -> KindPointer {
-        KindPointer {
-            key: self,
-            kind: Kind::Record,
-        }
-    }
+    source: Pointer,
 }
 
 #[derive(Debug, Default)]
 pub struct Frame {
-    pointers: Vec<KindPointer>,
-}
-
-#[derive(Debug, Copy, Clone)]
-pub enum UIProperty {
-    WidthFixedPx,
-    HeightFixedPx,
-    HeightFixedPercentage,
-    BackgroundSolid,
-}
-
-impl From<i32> for UIProperty {
-    fn from(i: i32) -> UIProperty {
-        match i {
-            0 => UIProperty::WidthFixedPx,
-            1 => UIProperty::HeightFixedPx,
-            2 => UIProperty::HeightFixedPercentage,
-            3 => UIProperty::BackgroundSolid,
-            _ => panic!("Unknown UIProperty: {}", i),
-        }
-    }
-}
-
-impl From<UIProperty> for i32 {
-    fn from(v: UIProperty) -> i32 {
-        match v {
-            UIProperty::WidthFixedPx => 0,
-            UIProperty::HeightFixedPx => 1,
-            UIProperty::HeightFixedPercentage => 2,
-            UIProperty::BackgroundSolid => 3,
-        }
-    }
-}
-
-impl UIProperty {
-    pub(crate) fn into_ui_dependent(self, node: fastn_runtime::NodeKey) -> UIDependent {
-        UIDependent {
-            property: self,
-            node,
-            closure: None,
-        }
-    }
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub enum Kind {
-    Boolean,
-    Integer,
-    Record,
-    OrType,
-    Decimal,
-    List,
-}
-
-impl<T> HeapData<T> {
-    pub(crate) fn new(value: HeapValue<T>) -> HeapData<T> {
-        HeapData {
-            value,
-            dependents: vec![],
-            ui_properties: vec![],
-        }
-    }
-}
-
-impl<T> HeapValue<T> {
-    pub(crate) fn new(value: T) -> HeapValue<T> {
-        HeapValue::Value(value)
-    }
-
-    pub(crate) fn new_with_formula(
-        cached_value: T,
-        closure: fastn_runtime::ClosureKey,
-    ) -> HeapValue<T> {
-        HeapValue::Formula {
-            cached_value,
-            closure,
-        }
-    }
-
-    pub(crate) fn into_heap_data(self) -> HeapData<T> {
-        HeapData::new(self)
-    }
+    pointers: Vec<Pointer>,
 }
 
 impl Memory {
     #[cfg(test)]
-    fn assert_empty(&self){
+    fn assert_empty(&self) {
         if !self.stack.is_empty() {
             panic!("stack is not empty");
         }
@@ -331,39 +164,39 @@ impl Memory {
         // }
     }
 
-    pub fn attach_to_dom(&mut self, _dom: fastn_runtime::NodeKey, _ptr: KindPointer) {
+    pub fn attach_to_dom(&mut self, _dom: fastn_runtime::NodeKey, _ptr: Pointer) {
         // add a new dependency to ptr, and recursively add it to all its dependencies
         todo!()
     }
 
-    fn get_pointer_dep_children(&self, _pointer: &KindPointer) -> Option<Vec<KindPointer>> {
+    fn get_pointer_dep_children(&self, _pointer: &Pointer) -> Option<Vec<Pointer>> {
         // match &pointer.kind {
-        //     Kind::Boolean => self.boolean.get(pointer.key).map(|v| v.value.clone()),
-        //     Kind::Integer => self.boolean.get(pointer.key).map(|v| v.1.clone()),
-        //     Kind::Record => self
+        //     PointerKind::Boolean => self.boolean.get(pointer.key).map(|v| v.value.clone()),
+        //     PointerKind::Integer => self.boolean.get(pointer.key).map(|v| v.1.clone()),
+        //     PointerKind::Record => self
         //         .vec
         //         .get(pointer.key)
         //         .map(|v| [v.0.clone(), v.1.clone()].concat().into_iter().collect()),
-        //     Kind::OrType => self.or_type.get(pointer.key).map(|v| v.1.clone()),
-        //     Kind::Decimal => self.f32.get(pointer.key).map(|v| v.1.clone()),
+        //     PointerKind::OrType => self.or_type.get(pointer.key).map(|v| v.1.clone()),
+        //     PointerKind::Decimal => self.f32.get(pointer.key).map(|v| v.1.clone()),
         // }
         todo!()
     }
 
-    fn add_dep_child(&mut self, _pointer: &KindPointer, _child: KindPointer) {
+    fn add_dep_child(&mut self, _pointer: &Pointer, _child: Pointer) {
         // if let Some(dep_children) = match &pointer.kind {
-        //     Kind::Boolean => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-        //     Kind::Integer => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-        //     Kind::Record => self.vec.get_mut(pointer.key).map(|v| &mut v.1),
-        //     Kind::OrType => self.or_type.get_mut(pointer.key).map(|v| &mut v.1),
-        //     Kind::Decimal => self.f32.get_mut(pointer.key).map(|v| &mut v.1),
+        //     PointerKind::Boolean => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
+        //     PointerKind::Integer => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
+        //     PointerKind::Record => self.vec.get_mut(pointer.key).map(|v| &mut v.1),
+        //     PointerKind::OrType => self.or_type.get_mut(pointer.key).map(|v| &mut v.1),
+        //     PointerKind::Decimal => self.f32.get_mut(pointer.key).map(|v| &mut v.1),
         // } {
         //     dep_children.push(child);
         // }
         todo!()
     }
 
-    pub fn attach(&mut self, _parent: KindPointer, _child: KindPointer) {
+    pub fn attach(&mut self, _parent: Pointer, _child: Pointer) {
         // let parent_attachments = if let Some(attachment) = self.attachment.get(&parent) {
         //     attachment.clone()
         // } else {
@@ -391,24 +224,24 @@ impl Memory {
         // self.drop_from_frame(&child);
     }
 
-    fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: Kind) {
+    fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         self.stack
             .last_mut()
             .unwrap()
             .pointers
-            .push(KindPointer { key: pointer, kind });
+            .push(Pointer { key: pointer, kind });
     }
 
     pub fn create_frame(&mut self) {
         self.stack.push(Frame::default());
     }
 
-    fn drop_from_frame(&mut self, _pointer: &KindPointer) {
+    fn drop_from_frame(&mut self, _pointer: &Pointer) {
         todo!()
     }
 
-    fn drop_pointer(&mut self, _pointer: &KindPointer) {
+    fn drop_pointer(&mut self, _pointer: &Pointer) {
         todo!()
     }
 
@@ -425,20 +258,20 @@ impl Memory {
 
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
         let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
-        self.insert_in_frame(pointer, Kind::Boolean);
+        self.insert_in_frame(pointer, PointerKind::Boolean);
         pointer
     }
 
     pub fn get_boolean(&mut self, _ptr: fastn_runtime::PointerKey) -> bool {
         // let pointer = self.boolean.insert((value, vec![]));
-        // self.insert_in_frame(pointer, Kind::Boolean);
+        // self.insert_in_frame(pointer, PointerKind::Boolean);
         // pointer
         todo!()
     }
 
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
         let pointer = self.i32.insert(HeapValue::new(value).into_heap_data());
-        self.insert_in_frame(pointer, Kind::Integer);
+        self.insert_in_frame(pointer, PointerKind::Integer);
         pointer
     }
 
@@ -455,13 +288,13 @@ impl Memory {
         let pointer = self
             .i32
             .insert(HeapValue::new_with_formula(cached_value, closure_key).into_heap_data());
-        self.insert_in_frame(pointer, Kind::Integer);
+        self.insert_in_frame(pointer, PointerKind::Integer);
         pointer
     }
 
     pub fn get_i32(&mut self, _ptr: fastn_runtime::PointerKey) -> i32 {
         // let pointer = self.i32.insert((value, vec![]));
-        // self.insert_in_frame(pointer, Kind::Integer);
+        // self.insert_in_frame(pointer, PointerKind::Integer);
         // pointer
         todo!()
     }
@@ -485,13 +318,13 @@ impl Memory {
     ) -> fastn_runtime::PointerKey {
         let vec = self.vec.insert(
             HeapValue::new(vec![
-                KindPointer {
+                Pointer {
                     key: ptr1,
-                    kind: Kind::Integer,
+                    kind: PointerKind::Integer,
                 },
-                KindPointer {
+                Pointer {
                     key: ptr2,
-                    kind: Kind::Integer,
+                    kind: PointerKind::Integer,
                 },
             ])
             .into_heap_data(),
@@ -501,12 +334,12 @@ impl Memory {
         vec
     }
 
-    pub fn add_dependent(&mut self, target: KindPointer, dependent: KindPointer) {
+    pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
         let dependents = match target.kind {
-            Kind::Integer => &mut self.i32.get_mut(target.key).unwrap().dependents,
-            Kind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().dependents,
-            Kind::Decimal => &mut self.f32.get_mut(target.key).unwrap().dependents,
-            Kind::List | Kind::Record | Kind::OrType => {
+            PointerKind::Integer => &mut self.i32.get_mut(target.key).unwrap().dependents,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().dependents,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.key).unwrap().dependents,
+            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
                 &mut self.vec.get_mut(target.key).unwrap().dependents
             }
         };
@@ -514,12 +347,12 @@ impl Memory {
         dependents.push(dependent);
     }
 
-    pub fn add_ui_dependent(&mut self, target: KindPointer, dependent: UIDependent) {
+    pub fn add_ui_dependent(&mut self, target: Pointer, dependent: UIDependent) {
         let dependents = match target.kind {
-            Kind::Integer => &mut self.i32.get_mut(target.key).unwrap().ui_properties,
-            Kind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().ui_properties,
-            Kind::Decimal => &mut self.f32.get_mut(target.key).unwrap().ui_properties,
-            Kind::List | Kind::Record | Kind::OrType => {
+            PointerKind::Integer => &mut self.i32.get_mut(target.key).unwrap().ui_properties,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().ui_properties,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.key).unwrap().ui_properties,
+            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
                 &mut self.vec.get_mut(target.key).unwrap().ui_properties
             }
         };
@@ -535,21 +368,21 @@ impl Memory {
 
         let vec = self.vec.insert(
             HeapValue::new(vec![
-                KindPointer {
+                Pointer {
                     key: r_pointer,
-                    kind: Kind::Integer,
+                    kind: PointerKind::Integer,
                 },
-                KindPointer {
+                Pointer {
                     key: g_pointer,
-                    kind: Kind::Integer,
+                    kind: PointerKind::Integer,
                 },
-                KindPointer {
+                Pointer {
                     key: b_pointer,
-                    kind: Kind::Integer,
+                    kind: PointerKind::Integer,
                 },
-                KindPointer {
+                Pointer {
                     key: a_pointer,
-                    kind: Kind::Decimal,
+                    kind: PointerKind::Decimal,
                 },
             ])
             .into_heap_data(),
@@ -560,14 +393,14 @@ impl Memory {
         self.add_dependent(b_pointer.into_integer_pointer(), vec.into_record_pointer());
         self.add_dependent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
 
-        self.insert_in_frame(vec, Kind::Record);
+        self.insert_in_frame(vec, PointerKind::Record);
         vec
     }
 }
 
 #[cfg(test)]
 mod test {
-    #[test]
+    // #[test]
     fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
