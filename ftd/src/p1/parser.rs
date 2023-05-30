@@ -445,7 +445,7 @@ impl State {
                 if !valid_line(line) {
                     continue;
                 }
-                let inline_record_header_found = line.contains(':') && !line.starts_with("\\");
+                let inline_record_header_found = line.contains(':') && !line.starts_with('\\');
                 if first_line {
                     if !line.trim().is_empty() && !inline_record_header_found {
                         return Err(ftd::p1::Error::ParseError {
