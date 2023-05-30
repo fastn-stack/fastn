@@ -152,6 +152,7 @@ pub struct HTMLData {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Document {
     pub data: HTMLData,
+    pub breakpoint_width: ftd::executor::Value<Option<ftd::executor::BreakpointWidth>>,
     pub children: Vec<Element>,
     pub line_number: usize,
 }
@@ -1424,8 +1425,18 @@ pub fn document_from_properties(
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
+    inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<Document> {
     Ok(Document {
+        breakpoint_width: ftd::executor::BreakpointWidth::optional_breakpoint_width(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "breakpoint",
+            inherited_variables,
+            "ftd#document",
+        )?,
         data: html_data_from_properties(properties, arguments, doc, line_number, "ftd#document")?,
         children,
         line_number,

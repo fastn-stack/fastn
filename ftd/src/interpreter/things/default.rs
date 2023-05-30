@@ -8950,7 +8950,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                 name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                 fields: vec![ftd::interpreter::Field {
                     name: "mobile".to_string(),
-                    kind: ftd::interpreter::Kind::integer().into_kind_data(),
+                    kind: ftd::interpreter::Kind::integer().into_kind_data().caption(),
                     mutable: false,
                     value: None,
                     access_modifier: Default::default(),
@@ -9524,6 +9524,12 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
     ftd::interpreter::ComponentDefinition {
         name: "ftd#document".to_string(),
         arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "breakpoint",
+                ftd::interpreter::Kind::record(ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA)
+                    .into_optional()
+                    .into_kind_data(),
+            ),
             ftd::interpreter::Argument::default(
                 "title",
                 ftd::interpreter::Kind::string()
