@@ -131,7 +131,7 @@ impl Memory {
             .value
             .value();
 
-        let g_pointer = vec_value.get(0).expect("Expected g pointer");
+        let g_pointer = vec_value.get(1).expect("Expected g pointer");
         let g_value = self
             .i32
             .get(g_pointer.key)
@@ -139,7 +139,7 @@ impl Memory {
             .value
             .value();
 
-        let b_pointer = vec_value.get(0).expect("Expected b pointer");
+        let b_pointer = vec_value.get(2).expect("Expected b pointer");
         let b_value = self
             .i32
             .get(b_pointer.key)
@@ -147,7 +147,7 @@ impl Memory {
             .value
             .value();
 
-        let a_pointer = vec_value.get(0).expect("Expected a pointer");
+        let a_pointer = vec_value.get(3).expect("Expected a pointer");
         let a_value = self
             .f32
             .get(a_pointer.key)
