@@ -103,10 +103,18 @@ impl<T> HeapValue<T> {
 }
 
 #[derive(Debug)]
-struct UIDependent {
+pub struct UIDependent {
     property: fastn_runtime::UIProperty,
     node: fastn_runtime::NodeKey,
     closure: Option<fastn_runtime::ClosureKey>,
+}
+
+impl UIDependent {
+    pub(crate) fn closure(self, closure: fastn_runtime::ClosureKey) -> Self {
+        let mut ui_dependent = self;
+        ui_dependent.closure = Some(closure);
+        ui_dependent
+    }
 }
 
 #[derive(Debug)]
@@ -195,6 +203,16 @@ impl From<UIProperty> for i32 {
             UIProperty::HeightFixedPx => 1,
             UIProperty::HeightFixedPercentage => 2,
             UIProperty::BackgroundSolid => 3,
+        }
+    }
+}
+
+impl UIProperty {
+    pub(crate) fn into_ui_dependent(self, node: fastn_runtime::NodeKey) -> UIDependent {
+        UIDependent {
+            property: self,
+            node,
+            closure: None,
         }
     }
 }
@@ -395,12 +413,16 @@ impl Memory {
         pointer
     }
 
+    pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosureKey {
+        self.closures.insert(closure)
+    }
+
     pub fn create_i32_func(
         &mut self,
         cached_value: i32,
         closure: Closure,
     ) -> fastn_runtime::PointerKey {
-        let closure_key = self.closures.insert(closure);
+        let closure_key = self.create_closure(closure);
         let pointer = self
             .i32
             .insert(HeapValue::new_with_formula(cached_value, closure_key).into_heap_data());
@@ -457,6 +479,19 @@ impl Memory {
             Kind::Decimal => &mut self.f32.get_mut(target.key).unwrap().dependents,
             Kind::List | Kind::Record | Kind::OrType => {
                 &mut self.vec.get_mut(target.key).unwrap().dependents
+            }
+        };
+
+        dependents.push(dependent);
+    }
+
+    pub fn add_ui_dependent(&mut self, target: KindPointer, dependent: UIDependent) {
+        let dependents = match target.kind {
+            Kind::Integer => &mut self.i32.get_mut(target.key).unwrap().ui_properties,
+            Kind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().ui_properties,
+            Kind::Decimal => &mut self.f32.get_mut(target.key).unwrap().ui_properties,
+            Kind::List | Kind::Record | Kind::OrType => {
+                &mut self.vec.get_mut(target.key).unwrap().ui_properties
             }
         };
 

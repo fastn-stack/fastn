@@ -72,19 +72,20 @@ impl fastn_runtime::Dom {
                         &mut values,
                     )
                     .expect("call failed");
+
                 let value = values.i32(0);
                 let dom = caller.data_mut();
-                let _key = dom.memory_mut().create_i32_func(
-                    value,
-                    fastn_runtime::Closure {
-                        function: table_index,
-                        function_data: fastn_runtime::KindPointer {
-                            key: func_arg,
-                            kind: fastn_runtime::Kind::List,
-                        },
-                    },
-                );
                 dom.set_property(node_key, ui_property, value.into());
+
+                let mem = dom.memory_mut();
+                let closure_key = mem.create_closure(fastn_runtime::Closure {
+                    function: table_index,
+                    function_data: func_arg.into_list_pointer(),
+                });
+                mem.add_ui_dependent(
+                    func_arg.into_list_pointer(),
+                    ui_property.into_ui_dependent(node_key).closure(closure_key),
+                );
             },
         );
 
