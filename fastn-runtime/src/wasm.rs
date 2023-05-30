@@ -149,7 +149,11 @@ impl fastn_runtime::Memory {
         vec![
             fastn_wasm::import::func00("create_frame"),
             fastn_wasm::import::func00("end_frame"),
-            fastn_wasm::import::func1ret("return_frame", fastn_wasm::Type::ExternRef.into(), fastn_wasm::Type::ExternRef,),
+            fastn_wasm::import::func1ret(
+                "return_frame",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
             fastn_wasm::import::func1ret(
                 "create_boolean",
                 fastn_wasm::Type::I32.into(),

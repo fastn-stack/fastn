@@ -76,7 +76,7 @@ struct HeapData<T> {
 }
 
 /// This is the data we store in the heap for any value.
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 enum HeapValue<T> {
     Value(T),
 
@@ -258,6 +258,17 @@ impl<T> HeapValue<T> {
 }
 
 impl Memory {
+    #[cfg(test)]
+    fn is_empty(&self) -> bool {
+        self.stack.is_empty()
+            && self.boolean.is_empty()
+            && self.i32.is_empty()
+            && self.f32.is_empty()
+            && self.vec.is_empty()
+            && self.or_type.is_empty()
+            && self.closures.is_empty()
+    }
+
     pub fn get_colors(&self, color_pointer: fastn_runtime::PointerKey) -> (i32, i32, i32, f32) {
         let vec_value = self
             .vec
@@ -394,7 +405,7 @@ impl Memory {
         }
     }
 
-    pub fn return_frame(&mut self, _k: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey{
+    pub fn return_frame(&mut self, _k: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
         todo!()
     }
 
@@ -543,13 +554,15 @@ impl Memory {
 #[cfg(test)]
 mod test {
 
-    // #[test]
+    #[test]
     fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
+        assert!(m.is_empty());
         m.create_frame();
         m.create_boolean(true);
         m.end_frame();
+        assert!(m.is_empty());
         println!("{:#?}", m);
         // panic!("yo");
     }
