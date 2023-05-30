@@ -20,7 +20,6 @@ aud: Website Builders
 To explain what all can be done using page component.
 
 
-
 -- ds.h1: Introduction
 if: { show-planning }
 
@@ -47,21 +46,29 @@ if: { !show-planning }
 The `page` component of the package `doc-site` is a container component that 
 allows a user to build an entire web-page that wraps other components in it. 
 
+-- ds.code: Page component
+lang: ftd
+
+\-- ds.page:
+
+\;; content goes here
+
+\-- end: ds.page
+
+-- ds.markdown:
+
 This component can be used to create not just a standalone webpage but entire 
 website with various pages that may give a common theme to the website by 
 applying a color-scheme, typography, site name, site-logo etc.
 
-Whatever passed in the caption of this component becomes the title of the page. 
-This component has properties that 
-
-It also allows SEO stuff by adding meta-data. Checkout
-[How to add meta-data for website optimization](/seo-meta/) by using some of 
-it's properties. 
-
+Whatever passed in the caption of this component becomes the page title as 
+well as document title. But, by using some of it's properties we can customize 
+the document title to be different than page title. Therefore, it also allows 
+SEO stuff by adding meta-data. Checkout
+[How to add meta-data for website optimization](/seo-meta/).
 
 
-
--- ds.h1: Introduction
+-- ds.h1: Intro Slide
 if: { show-planning }
 
 Welcome!! My name is Ajit
@@ -73,28 +80,122 @@ In this video we learn everything we can do using page component of the
 -- ds.h1: Creating a standalone page
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
-If there is one document, we can use `ds.page` and use the properties we need 
-to create that page.  
+Creating a standalone page or a complete website, to use this package, we 
+need to add the doc-site package in your fastn project.
+
+To add the doc-site package, if you don't know it already, there are only two 
+things that is needed to be done.
+
+**A:** Add it as dependency in `FASTN.ftd` document.
+
+**B:** Import it in the file or files you want to use.
+
+-- ds.code: Add as dependency
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/doc-site
+
+-- ds.markdown:
+
+Then, import the `doc-site` package in your documents like `index.ftd`
+
+-- ds.code: Importing doc-site
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+
+-- ds.markdown:
+
+If there is one document, we can directly use `ds.page` and use the properties 
+we need to create that page.  
+
+-- ds.code: Syntax
+lang: ftd
+
+\-- ds.page: You meet me first because I am ~in~ en'titled 🤴
+
+Hello I am the body area 🖐. 
+
+And I am the second paragraph 🙆‍♂️. At vero eos et accusamus et iusto odio 
+dignissimos ducimus qui blanditiis molestias excepturi sint occaecati 
+cupiditate non provident.
+
+Sed ut perspiciatis sunt explicabo.
+
+\-- ds.h1: Tallest in my family 
+
+This is heading level 1 optional body content.
+
+\-- ds.h2: Damn! I just missed by few pixels
+
+This is heading level 2 optional body content.
+
+\-- ds.h3: I get bullied by the above two
+
+This is heading level 3 optional body content.
+
+\-- ds.markdown:
+
+I don't brag about myself but I am the convient one 😎.
+
+
+\-- end: ds.page
 
 
 -- ds.h1: Customized Page Component
 
-For a brand or company, there is a standard theme that we want to apply across 
-the documentation pages. For example, we might want to display the site-logo, 
-site-name across the website. Or apply a color-scheme that matches the 
-identity of the brand along with a specific typography. In such cases, we would 
-want to customize this page component by creating our custom page component 
-that wraps all the properties we want to give to the page.
+Now imagine, you have a dozen of such documents in your package. 
 
-This way we do not have to repeat applying these properties to each page. 
+On top of it, imagine displaying your distinctive site-logo and site-name 
+across the website, creating a unified visual identity that resonates with 
+your brand.
+
+It would be a tedious job applying the same properties to all the documents.
+Also, in the future, if you change one or more values of the properties, then 
+we would need to manually update it on all the pages.
+
+To maintain a consistent brand image across the pages throughout the website,
+and make it easy to update with a single change, we can create a custom page
+component. This component can include the site logo, site name, color scheme,
+typography, etc, sparing us the need to tediously apply them individually to
+each and every page.
+
+
+To do the same, we will move the component definition in a separate document, 
+let's call it `my-ds.ftd`.
 
 
 
+-- ds.code: my-ds
+lang: ftd
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+
+\-- ds.page: $page.title
+body: $page.body
+site-name: Ocean
+site-logo: $assets.files.images.anchor.svg
+site-url: https://fastn.com/
+
+\-- end: ds.page
+
+\-- end: page
 
 
+-- ds.markdown:
+
+And we can also auto-import the doc-site package as well as this document as 
+we will be using these two in all the pages. 
 
 
-/-- ds.h1: Page Component
+-- ds.code: my-ds
+lang: ftd
+
+\-- fastn.auto-import: fastn-community.github.io/doc-site as ds
+\-- fastn.auto-import: <package-name>/my-ds as my-ds
 
 
 
@@ -127,7 +228,7 @@ src: $fastn-assets.files.expander.ds.img.
 ;; =================
 
 
-/-- ds.rendered: Turning a URL into a link
+/-- ds.rendered: 
 
 /-- ds.rendered.input:
 
@@ -143,9 +244,9 @@ src: $fastn-assets.files.expander.ds.img.
 
 
 
--- ds.markdown:
+/-- ds.markdown:
 
-Hence using `ds.page` component can offer a lot of things.
+Hence using `page` component can offer a lot of things.
 
 
 -- ds.h1: Closing Remarks 
