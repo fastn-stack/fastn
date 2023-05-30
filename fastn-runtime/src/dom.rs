@@ -272,14 +272,6 @@ impl Value {
         }
     }
 
-    fn vec(&self) -> &[Value] {
-        if let Value::Vec(i) = self {
-            i
-        } else {
-            panic!("Expected vec value")
-        }
-    }
-
     fn rgba(&self) -> (i32, i32, i32, f32) {
         if let Value::Vec(i) = self {
             (i[0].i32(), i[1].i32(), i[2].i32(), i[3].f32())
