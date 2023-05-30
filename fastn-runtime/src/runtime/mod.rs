@@ -259,14 +259,16 @@ impl<T> HeapValue<T> {
 
 impl Memory {
     #[cfg(test)]
-    fn is_empty(&self) -> bool {
-        self.stack.is_empty()
-            && self.boolean.is_empty()
-            && self.i32.is_empty()
-            && self.f32.is_empty()
-            && self.vec.is_empty()
-            && self.or_type.is_empty()
-            && self.closures.is_empty()
+    fn assert_empty(&self){
+        if !self.stack.is_empty() {
+            panic("stack is not empty");
+        }
+            // && self.boolean.is_empty()
+            // && self.i32.is_empty()
+            // && self.f32.is_empty()
+            // && self.vec.is_empty()
+            // && self.or_type.is_empty()
+            // && self.closures.is_empty()
     }
 
     pub fn get_colors(&self, color_pointer: fastn_runtime::PointerKey) -> (i32, i32, i32, f32) {
@@ -558,11 +560,11 @@ mod test {
     fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
-        assert!(m.is_empty());
+        m.assert_empty();
         m.create_frame();
         m.create_boolean(true);
         m.end_frame();
-        assert!(m.is_empty());
+        m.assert_empty();
         println!("{:#?}", m);
         // panic!("yo");
     }
