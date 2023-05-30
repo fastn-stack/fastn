@@ -321,11 +321,8 @@ impl Memory {
         pointer
     }
 
-    pub fn get_boolean(&mut self, _ptr: fastn_runtime::PointerKey) -> bool {
-        // let pointer = self.boolean.insert((value, vec![]));
-        // self.insert_in_frame(pointer, PointerKind::Boolean);
-        // pointer
-        todo!()
+    pub fn get_boolean(&mut self, ptr: fastn_runtime::PointerKey) -> bool {
+        *self.boolean[ptr].value.value()
     }
 
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
@@ -351,11 +348,8 @@ impl Memory {
         pointer
     }
 
-    pub fn get_i32(&mut self, _ptr: fastn_runtime::PointerKey) -> i32 {
-        // let pointer = self.i32.insert((value, vec![]));
-        // self.insert_in_frame(pointer, PointerKind::Integer);
-        // pointer
-        todo!()
+    pub fn get_i32(&mut self, ptr: fastn_runtime::PointerKey) -> i32 {
+        *self.i32[ptr].value.value()
     }
 
     pub fn get_func_arg_i32(&self, ptr: fastn_runtime::PointerKey, idx: i32) -> i32 {
@@ -460,17 +454,21 @@ impl Memory {
 #[cfg(test)]
 mod test {
     #[test]
-    fn gc() {
+    fn create_and_get() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
         m.assert_empty();
         m.create_frame();
-        m.create_boolean(true);
+        let p = m.create_boolean(true);
+        assert!(m.get_boolean(p));
+        let p = m.create_boolean(false);
+        assert!(!m.get_boolean(p));
+        let p = m.create_i32(20);
+        assert_eq!(m.get_i32(p), 20);
         println!("{:#?}", m);
         m.end_frame();
         m.assert_empty();
         println!("3** {:#?}", m);
-        // panic!("yo");
     }
 }
 
