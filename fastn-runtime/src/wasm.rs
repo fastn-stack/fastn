@@ -26,6 +26,31 @@ impl fastn_runtime::Dom {
         (store, instance)
     }
 
+    pub fn imports() -> Vec<fastn_wasm::Ast> {
+        let mut e = fastn_runtime::Memory::exports();
+        e.extend([
+            fastn_wasm::import::func2ret(
+                "create_kernel",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func3(
+                "set_i32_prop",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+            ),
+            fastn_wasm::import::func3(
+                "set_f32_prop",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::F32.into(),
+            ),
+        ]);
+        e
+    }
+
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::wasm_helpers::Params;
         use fastn_wasm::LinkerExt;
@@ -120,6 +145,33 @@ impl fastn_runtime::Dom {
 }
 
 impl fastn_runtime::Memory {
+    pub fn exports() -> Vec<fastn_wasm::Ast> {
+        vec![
+            fastn_wasm::import::func00("create_frame"),
+            fastn_wasm::import::func00("end_frame"),
+            fastn_wasm::import::func1ret(
+                "create_boolean",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func1ret(
+                "get_boolean",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32,
+            ),
+            fastn_wasm::import::func1ret(
+                "create_i32",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func1ret(
+                "get_i32",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32,
+            ),
+        ]
+    }
+
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_wasm::LinkerExt;
 
