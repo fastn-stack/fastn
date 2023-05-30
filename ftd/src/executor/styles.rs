@@ -366,6 +366,92 @@ impl ResponsiveLength {
     }
 }
 
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct BreakpointWidth {
+    pub mobile: ftd::executor::Value<i64>,
+}
+
+impl BreakpointWidth {
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<ftd::executor::BreakpointWidth>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(ftd::executor::BreakpointWidth::from_values(
+                value,
+                doc,
+                line_number,
+            )?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    pub(crate) fn optional_breakpoint_width(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+        component_name: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::executor::BreakpointWidth>>> {
+        let record_values = ftd::executor::value::optional_record_inherited(
+            key,
+            component_name,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA,
+            inherited_variables,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ftd::executor::BreakpointWidth::from_optional_values(
+                record_values.value,
+                doc,
+                line_number,
+            )?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<BreakpointWidth> {
+        let get_property_value = |field_name: &str| {
+            values
+                .get(field_name)
+                .ok_or_else(|| ftd::executor::Error::ParseError {
+                    message: format!(
+                        "`{}` field in {} not found",
+                        field_name,
+                        ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })
+        };
+
+        let mobile = ftd::executor::Value::new(
+            get_property_value("mobile")?
+                .clone()
+                .resolve(&doc.itdoc(), line_number)?
+                .integer(doc.name, line_number)?,
+            Some(line_number),
+            vec![get_property_value("mobile")?
+                .into_property(ftd::interpreter::PropertySource::header("mobile"))],
+        );
+
+        Ok(BreakpointWidth { mobile })
+    }
+}
+
 #[derive(serde::Deserialize, Default, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Alignment {
     #[default]

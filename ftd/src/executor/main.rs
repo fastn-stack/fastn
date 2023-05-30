@@ -75,6 +75,14 @@ impl<'a> ExecuteDoc<'a> {
                 }
 
                 if let ftd::executor::Element::Document(d) = first {
+                    // setting document breakpoint here
+                    if let Some(breakpoint) = d.breakpoint_width.value.as_ref() {
+                        ExecuteDoc::set_document_breakpoint(
+                            &mut document.data,
+                            breakpoint.mobile.value,
+                            d.line_number,
+                        );
+                    }
                     (d.data.to_owned(), d.children.to_vec())
                 } else {
                     unreachable!()
@@ -113,6 +121,35 @@ impl<'a> ExecuteDoc<'a> {
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
+    }
+
+    pub fn set_document_breakpoint(
+        bag: &mut ftd::Map<ftd::interpreter::Thing>,
+        breakpoint_width: i64,
+        line_number: usize,
+    ) {
+        let breakpoint_width_from_bag = bag.get_mut(ftd::interpreter::FTD_BREAKPOINT_WIDTH);
+
+        if let Some(ftd::interpreter::Thing::Variable(v)) = breakpoint_width_from_bag {
+            v.value = ftd::interpreter::PropertyValue::Value {
+                value: ftd::interpreter::Value::Record {
+                    name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+                    fields: std::iter::IntoIterator::into_iter([(
+                        "mobile".to_string(),
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer {
+                                value: breakpoint_width,
+                            },
+                            is_mutable: false,
+                            line_number,
+                        },
+                    )])
+                    .collect(),
+                },
+                is_mutable: true,
+                line_number,
+            };
+        }
     }
 
     #[allow(clippy::type_complexity)]
@@ -914,6 +951,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     instruction.line_number,
                     vec![],
+                    inherited_variables,
                 )?)
             }
             "ftd#image" => {
