@@ -241,8 +241,67 @@ impl Memory {
         todo!()
     }
 
-    fn drop_pointer(&mut self, _pointer: &Pointer) {
-        todo!()
+    fn drop_pointer(&mut self, pointer: &Pointer) -> bool {
+        let (dependents, ui_properties) = match pointer.kind {
+            PointerKind::Boolean => {
+                let b = self.boolean.get(pointer.key).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
+            PointerKind::Integer => {
+                let b = self.i32.get(pointer.key).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
+            PointerKind::Record | PointerKind::List => {
+                let b = self.vec.get(pointer.key).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
+            PointerKind::OrType => {
+                let b = self.or_type.get(pointer.key).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
+            PointerKind::Decimal => {
+                let b = self.f32.get(pointer.key).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
+        };
+
+        if !ui_properties.is_empty() {
+            return false;
+        }
+
+        let mut drop = true;
+        for d in dependents.clone() {
+            if !self.drop_pointer(&d) {
+                drop = false;
+                break;
+            }
+        }
+
+        if drop {
+            self.delete_pointer(pointer);
+        }
+
+        drop
+    }
+
+    fn delete_pointer(&mut self, pointer: &Pointer) {
+        match pointer.kind {
+            PointerKind::Boolean => {
+                self.boolean.remove(pointer.key);
+            }
+            PointerKind::Integer => {
+                self.i32.remove(pointer.key);
+            }
+            PointerKind::Record | PointerKind::List => {
+                self.vec.remove(pointer.key);
+            }
+            PointerKind::OrType => {
+                self.or_type.remove(pointer.key);
+            }
+            PointerKind::Decimal => {
+                self.f32.remove(pointer.key);
+            }
+        };
     }
 
     pub fn end_frame(&mut self) {
@@ -400,16 +459,17 @@ impl Memory {
 
 #[cfg(test)]
 mod test {
-    // #[test]
+    #[test]
     fn gc() {
         let mut m = super::Memory::default();
         println!("{:#?}", m);
         m.assert_empty();
         m.create_frame();
         m.create_boolean(true);
+        println!("{:#?}", m);
         m.end_frame();
         m.assert_empty();
-        println!("{:#?}", m);
+        println!("3** {:#?}", m);
         // panic!("yo");
     }
 }
