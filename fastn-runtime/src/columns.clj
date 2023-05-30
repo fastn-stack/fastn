@@ -1,6 +1,7 @@
 (module
     (import "fastn" "create_frame" (func $create_frame))
     (import "fastn" "end_frame" (func $end_frame))
+    (import "fastn" "return_frame" (func return_frame (param externref) (result externref)))
     (import "fastn" "create_kernel" (func $create_kernel (param i32 externref) (result externref)))
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
     (import "fastn" "create_i32" (func $create_i32 (param i32) (result externref)))
@@ -15,7 +16,6 @@
     (import "fastn" "set_i32_3_prop_func" (func $set_i32_3_prop_func (param externref i32 i32 externref)))
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
     (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
-
 
     (global $main#any-hover externref)
     (global $main#x externref)
