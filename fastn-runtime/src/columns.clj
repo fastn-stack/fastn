@@ -8,6 +8,8 @@
     (import "fastn" "create_rgba" (func $create_rgba (param i32 i32 i32 f32) (result externref)))
     (import "fastn" "set_i32_prop" (func $set_i32_prop (param externref i32 i32)))
     (import "fastn" "set_f32_prop" (func $set_f32_prop (param externref i32 f32)))
+    (import "fastn" "set_boolean" (func $set_boolean (param externref i32) (result externref)))
+    (import "fastn" "attach_event_handler" (func $attach_event_handler (param externref i32 i32 externref)))
     ;; set_i32_prop_func(element, prop, func, variables)
     ;; prop = 0 = fixed width in pixels etc
     ;; func = function to call, index in the table, func must return i32

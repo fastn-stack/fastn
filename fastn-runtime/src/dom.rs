@@ -177,16 +177,15 @@ impl Dom {
     pub fn set_element_background_solid(
         &mut self,
         key: fastn_runtime::NodeKey,
-        color_pointer: fastn_runtime::PointerKey,
+        color_pointer: (i32, i32, i32, f32),
     ) {
-        let (red, green, blue, alpha) = self.memory.get_colors(color_pointer);
         let common_styles = self.nodes[key].common_styles();
 
         common_styles.background_color = Some(fastn_runtime::ColorValue {
-            red: red as u8,
-            green: green as u8,
-            blue: blue as u8,
-            alpha,
+            red: color_pointer.0 as u8,
+            green: color_pointer.1 as u8,
+            blue: color_pointer.2 as u8,
+            alpha: color_pointer.3,
         });
     }
 
@@ -226,7 +225,7 @@ impl Dom {
                 self.set_element_height_percent(key, value.f32())
             }
             fastn_runtime::UIProperty::BackgroundSolid => {
-                self.set_element_background_solid(key, value.pointer_key())
+                self.set_element_background_solid(key, value.rgba())
             }
         }
     }
@@ -235,7 +234,7 @@ impl Dom {
 pub enum Value {
     I32(i32),
     F32(f32),
-    PointerKey(fastn_runtime::PointerKey),
+    Vec(Vec<Value>),
 }
 
 impl From<i32> for Value {
@@ -250,9 +249,9 @@ impl From<f32> for Value {
     }
 }
 
-impl From<fastn_runtime::PointerKey> for Value {
-    fn from(i: fastn_runtime::PointerKey) -> Value {
-        Value::PointerKey(i)
+impl From<Vec<Value>> for Value {
+    fn from(i: Vec<Value>) -> Value {
+        Value::Vec(i)
     }
 }
 
@@ -273,11 +272,19 @@ impl Value {
         }
     }
 
-    fn pointer_key(&self) -> fastn_runtime::PointerKey {
-        if let Value::PointerKey(i) = self {
-            *i
+    fn vec(&self) -> &[Value] {
+        if let Value::Vec(i) = self {
+            i
         } else {
-            panic!("Expected PointerKey value")
+            panic!("Expected vec value")
+        }
+    }
+
+    fn rgba(&self) -> (i32, i32, i32, f32) {
+        if let Value::Vec(i) = self {
+            (i[0].i32(), i[1].i32(), i[2].i32(), i[3].f32())
+        } else {
+            panic!("Expected vec value")
         }
     }
 }

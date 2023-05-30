@@ -120,8 +120,8 @@ impl fastn_runtime::Dom {
              node_key,
              ui_property,
              table_index,
-             func_arg| {
-                let mut value = vec![];
+             func_arg: fastn_runtime::PointerKey| {
+                let mut values = vec![];
                 caller
                     .get_export("callByIndex")
                     .unwrap()
@@ -131,14 +131,28 @@ impl fastn_runtime::Dom {
                         caller.as_context_mut(),
                         &[
                             wasmtime::Val::I32(table_index),
-                            wasmtime::Val::ExternRef(Some(func_arg)),
+                            wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
                         ],
-                        &mut value,
+                        &mut values,
                     )
                     .expect("call failed");
-                caller
-                    .data_mut()
-                    .set_property(node_key, ui_property, value.ptr(0).into());
+
+                let value = values.ptr(0);
+                let dom = caller.data_mut();
+                let (r, g, b, a) = dom.memory().get_colors(value);
+                let v: Vec<fastn_runtime::dom::Value> =
+                    vec![r.into(), g.into(), b.into(), a.into()];
+                dom.set_property(node_key, ui_property, v.into());
+
+                let mem = dom.memory_mut();
+                let closure_key = mem.create_closure(fastn_runtime::Closure {
+                    function: table_index,
+                    function_data: func_arg.into_list_pointer(),
+                });
+                mem.add_ui_dependent(
+                    func_arg.into_list_pointer(),
+                    ui_property.into_ui_dependent(node_key).closure(closure_key),
+                );
             },
         );
     }
