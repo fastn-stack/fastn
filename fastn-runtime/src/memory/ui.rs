@@ -1,11 +1,11 @@
 #[derive(Debug)]
-pub struct UIDependent {
+pub struct DynamicProperty {
     pub property: fastn_runtime::UIProperty,
     pub node: fastn_runtime::NodeKey,
     pub closure: Option<fastn_runtime::ClosureKey>,
 }
 
-impl UIDependent {
+impl DynamicProperty {
     pub(crate) fn closure(self, closure: fastn_runtime::ClosureKey) -> Self {
         let mut ui_dependent = self;
         ui_dependent.closure = Some(closure);
@@ -45,8 +45,8 @@ impl From<UIProperty> for i32 {
 }
 
 impl UIProperty {
-    pub(crate) fn into_ui_dependent(self, node: fastn_runtime::NodeKey) -> UIDependent {
-        UIDependent {
+    pub(crate) fn into_ui_dependent(self, node: fastn_runtime::NodeKey) -> DynamicProperty {
+        DynamicProperty {
             property: self,
             node,
             closure: None,

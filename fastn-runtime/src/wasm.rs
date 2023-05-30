@@ -105,7 +105,7 @@ impl fastn_runtime::Dom {
                 let mem = dom.memory_mut();
                 let closure_key = mem.create_closure(fastn_runtime::Closure {
                     function: table_index,
-                    function_data: func_arg.into_list_pointer(),
+                    captured_variables: func_arg.into_list_pointer(),
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),
@@ -147,7 +147,7 @@ impl fastn_runtime::Dom {
                 let mem = dom.memory_mut();
                 let closure_key = mem.create_closure(fastn_runtime::Closure {
                     function: table_index,
-                    function_data: func_arg.into_list_pointer(),
+                    captured_variables: func_arg.into_list_pointer(),
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),

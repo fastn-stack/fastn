@@ -4,7 +4,7 @@ mod ui;
 
 pub use heap::{Heap, HeapData, HeapValue};
 pub use pointer::{Pointer, PointerKind};
-pub use ui::{UIDependent, UIProperty};
+pub use ui::{DynamicProperty, UIProperty};
 
 /// Memory contains all the data created by our runtime.
 ///
@@ -72,9 +72,17 @@ pub struct Memory {
 #[derive(Debug)]
 pub struct Closure {
     /// functions are defined in wasm, and this is the index in the function table.
-    pub function: i32, // entry in the function table
-    /// function_data is the data passed to the function.
-    pub function_data: Pointer,
+    pub function: i32,
+    /// function_data is the pointer to a vector that contains all the variables "captured" by this
+    /// closure.
+    pub captured_variables: Vec<Pointer>,
+
+    // in future we can this optimisation: Saves us from creating vectors unless needed. Most
+    // closures have two pointers (if most had three we can create a v3).
+
+    // pub v1: Pointer,
+    // pub v2: Option<Pointer>,
+    // pub rest: Option<Vec<Pointer>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -409,7 +417,7 @@ impl Memory {
         dependents.push(dependent);
     }
 
-    pub fn add_ui_dependent(&mut self, target: Pointer, dependent: UIDependent) {
+    pub fn add_ui_dependent(&mut self, target: Pointer, dependent: DynamicProperty) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.key).unwrap().ui_properties,
             PointerKind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().ui_properties,

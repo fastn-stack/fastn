@@ -7,7 +7,7 @@ pub struct HeapData<T> {
     /// x.dependents.add(l)
     pub dependents: Vec<fastn_runtime::memory::Pointer>,
     /// whenever a dom node is added or deleted, it is added or removed from this list.
-    pub ui_properties: Vec<fastn_runtime::memory::UIDependent>,
+    pub ui_properties: Vec<fastn_runtime::memory::DynamicProperty>,
 }
 
 impl<T> HeapData<T> {
