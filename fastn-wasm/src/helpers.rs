@@ -1,5 +1,7 @@
-pub trait StoreExtractor<T> {
-    fn extract<'a>(store: &'a mut wasmtime::Caller<T>) -> &'a mut Self;
+pub trait StoreExtractor {
+    type Parent;
+
+    fn extract<'a>(store: &'a mut wasmtime::Caller<Self::Parent>) -> &'a mut Self;
 }
 
 pub trait WasmType {
@@ -57,23 +59,22 @@ impl fastn_wasm::WasmType for wasmtime::ExternRef {
 }
 
 pub trait LinkerExt<S> {
-    fn func0<SE: StoreExtractor<S>>(
+    fn func0<SE: StoreExtractor<Parent=S>>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE) + Send + Sync + 'static,
     );
-    // fn func1<T: ParamExtractor>(&mut self, name: &str, func: impl Fn(&mut fastn_runtime::Memory, T) + Send + Sync + 'static);
-    fn func1<SE: StoreExtractor<S>, T: WasmType>(
+    fn func1<SE: StoreExtractor<Parent=S>, T: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T) + Send + Sync + 'static,
     );
-    fn func2<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType>(
+    fn func2<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2) + Send + Sync + 'static,
     );
-    fn func3<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, T3: WasmType>(
+    fn func3<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType, T3: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
@@ -83,23 +84,23 @@ pub trait LinkerExt<S> {
         name: &str,
         func: impl Fn(wasmtime::Caller<'_, S>, T1, T2, T3, T4) + Send + Sync + 'static,
     );
-    fn func0ret<SE: StoreExtractor<S>, O: WasmType>(
+    fn func0ret<SE: StoreExtractor<Parent=S>, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE) -> O + Send + Sync + 'static,
     );
-    fn func1ret<SE: StoreExtractor<S>, T: WasmType, O: WasmType>(
+    fn func1ret<SE: StoreExtractor<Parent=S>, T: WasmType, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T) -> O + Send + Sync + 'static,
     );
-    fn func2ret<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, O: WasmType>(
+    fn func2ret<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2) -> O + Send + Sync + 'static,
     );
     fn func4ret<
-        SE: StoreExtractor<S>,
+        SE: StoreExtractor<Parent=S>,
         T1: WasmType,
         T2: WasmType,
         T3: WasmType,
@@ -113,7 +114,7 @@ pub trait LinkerExt<S> {
 }
 
 impl<S> LinkerExt<S> for wasmtime::Linker<S> {
-    fn func0<SE: StoreExtractor<S>>(
+    fn func0<SE: StoreExtractor<Parent=S>>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE) + Send + Sync + 'static,
@@ -129,7 +130,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func1<SE: StoreExtractor<S>, T: WasmType>(
+    fn func1<SE: StoreExtractor<Parent=S>, T: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T) + Send + Sync + 'static,
@@ -145,7 +146,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func2<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType>(
+    fn func2<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2) + Send + Sync + 'static,
@@ -168,7 +169,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func3<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, T3: WasmType>(
+    fn func3<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType, T3: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
@@ -217,7 +218,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func0ret<SE: StoreExtractor<S>, O: WasmType>(
+    fn func0ret<SE: StoreExtractor<Parent=S>, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE) -> O + Send + Sync + 'static,
@@ -233,7 +234,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func1ret<SE: StoreExtractor<S>, T: WasmType, O: WasmType>(
+    fn func1ret<SE: StoreExtractor<Parent=S>, T: WasmType, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T) -> O + Send + Sync + 'static,
@@ -252,7 +253,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         )
         .unwrap();
     }
-    fn func2ret<SE: StoreExtractor<S>, T1: WasmType, T2: WasmType, O: WasmType>(
+    fn func2ret<SE: StoreExtractor<Parent=S>, T1: WasmType, T2: WasmType, O: WasmType>(
         &mut self,
         name: &str,
         func: impl Fn(&mut SE, T1, T2) -> O + Send + Sync + 'static,
@@ -277,7 +278,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         .unwrap();
     }
     fn func4ret<
-        SE: StoreExtractor<S>,
+        SE: StoreExtractor<Parent=S>,
         T1: WasmType,
         T2: WasmType,
         T3: WasmType,

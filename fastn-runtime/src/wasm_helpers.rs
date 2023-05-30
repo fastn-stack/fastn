@@ -1,10 +1,12 @@
-impl fastn_wasm::StoreExtractor<fastn_runtime::Dom> for fastn_runtime::Memory {
+impl fastn_wasm::StoreExtractor for fastn_runtime::Memory {
+    type Parent = fastn_runtime::Dom;
     fn extract<'a>(store: &'a mut wasmtime::Caller<fastn_runtime::Dom>) -> &'a mut Self {
         store.data_mut().memory_mut()
     }
 }
 
-impl fastn_wasm::StoreExtractor<fastn_runtime::Dom> for fastn_runtime::Dom {
+impl fastn_wasm::StoreExtractor for fastn_runtime::Dom {
+    type Parent = fastn_runtime::Dom;
     fn extract<'a>(store: &'a mut wasmtime::Caller<fastn_runtime::Dom>) -> &'a mut Self {
         store.data_mut()
     }
