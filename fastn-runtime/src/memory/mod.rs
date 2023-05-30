@@ -261,14 +261,26 @@ impl Memory {
     #[cfg(test)]
     fn assert_empty(&self){
         if !self.stack.is_empty() {
-            panic("stack is not empty");
+            panic!("stack is not empty");
         }
-            // && self.boolean.is_empty()
-            // && self.i32.is_empty()
-            // && self.f32.is_empty()
-            // && self.vec.is_empty()
-            // && self.or_type.is_empty()
-            // && self.closures.is_empty()
+        if !self.boolean.is_empty() {
+            panic!("boolean is not empty");
+        }
+        if !self.i32.is_empty() {
+            panic!("i32 is not empty");
+        }
+        if !self.f32.is_empty() {
+            panic!("f32 is not empty");
+        }
+        if !self.vec.is_empty() {
+            panic!("vec is not empty");
+        }
+        if !self.or_type.is_empty() {
+            panic!("or_type is not empty");
+        }
+        if !self.closures.is_empty() {
+            panic!("closures is not empty");
+        }
     }
 
     pub fn get_colors(&self, color_pointer: fastn_runtime::PointerKey) -> (i32, i32, i32, f32) {
@@ -555,7 +567,6 @@ impl Memory {
 
 #[cfg(test)]
 mod test {
-
     #[test]
     fn gc() {
         let mut m = super::Memory::default();

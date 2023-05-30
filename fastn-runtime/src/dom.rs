@@ -3,7 +3,7 @@ pub struct Dom {
     nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
     children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
     root: fastn_runtime::NodeKey,
-    memory: fastn_runtime::runtime::Memory,
+    memory: fastn_runtime::memory::Memory,
 }
 
 #[derive(Copy, Clone)]

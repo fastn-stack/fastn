@@ -20,7 +20,7 @@ mod dom;
 mod element;
 mod event;
 mod operation;
-mod runtime;
+mod memory;
 pub mod wasm;
 mod wasm_helpers;
 
@@ -30,7 +30,7 @@ pub use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use operation::{Operation, Rectangle};
-pub use runtime::{Closure, Kind, KindPointer, Memory, UIProperty};
+pub use memory::{Closure, Kind, KindPointer, Memory, UIProperty};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
