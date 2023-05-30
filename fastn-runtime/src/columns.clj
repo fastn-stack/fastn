@@ -186,11 +186,12 @@
 
     (func $product (param $func-data externref) (result externref)
         (call $create_frame)
-        (i32.mul
-            (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
-            (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
-        )
-        (call $end_frame)
+        (call $return_frame
+              (i32.mul
+                   (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
+                   (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
+              )
+          )
     )
 
     (func (export "callByIndex") (param i32 externref) (result externref)

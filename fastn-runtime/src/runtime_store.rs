@@ -394,6 +394,10 @@ impl Memory {
         }
     }
 
+    pub fn return_frame(&mut self, _k: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey{
+        todo!()
+    }
+
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
         let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, Kind::Boolean);
