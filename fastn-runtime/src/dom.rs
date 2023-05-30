@@ -280,3 +280,30 @@ impl Value {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn ui_dependency() {
+        let mut d = super::Dom::default();
+        println!("1** {:#?}", d.memory());
+        d.memory().assert_empty();
+        d.memory_mut().create_frame();
+        let i32_pointer = d.memory_mut().create_i32(200);
+        let column_node = d.create_kernel(d.root, super::ElementKind::Column);
+        let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
+            function: 0,
+            function_data: i32_pointer.into_integer_pointer(),
+        });
+        d.memory_mut().add_ui_dependent(
+            i32_pointer.into_integer_pointer(),
+            fastn_runtime::UIProperty::WidthFixedPx
+                .into_ui_dependent(column_node)
+                .closure(closure_key),
+        );
+        println!("2** {:#?}", d.memory());
+        d.memory_mut().end_frame();
+        println!("3** {:#?}", d.memory());
+        d.memory().assert_empty();
+    }
+}

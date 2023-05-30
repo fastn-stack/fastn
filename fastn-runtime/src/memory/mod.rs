@@ -92,7 +92,7 @@ pub struct Frame {
 
 impl Memory {
     #[cfg(test)]
-    fn assert_empty(&self) {
+    pub(crate) fn assert_empty(&self) {
         if !self.stack.is_empty() {
             panic!("stack is not empty");
         }
@@ -468,7 +468,7 @@ mod test {
         println!("{:#?}", m);
         m.end_frame();
         m.assert_empty();
-        println!("3** {:#?}", m);
+        println!("{:#?}", m);
     }
 }
 
