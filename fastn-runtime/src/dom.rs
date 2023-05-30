@@ -293,6 +293,8 @@ mod test {
         let column_node = d.create_kernel(d.root, super::ElementKind::Column);
         let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
             function: 0,
+            // AmitU: This is wrong, function_data should be an array with one integer pointer.
+            //        This also highlights th need to have more type safe pointers.
             function_data: i32_pointer.into_integer_pointer(),
         });
         d.memory_mut().add_ui_dependent(

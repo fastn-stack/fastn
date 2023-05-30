@@ -92,6 +92,7 @@ pub struct Frame {
 
 impl Memory {
     #[cfg(test)]
+    #[track_caller]
     pub(crate) fn assert_empty(&self) {
         if !self.stack.is_empty() {
             panic!("stack is not empty");
