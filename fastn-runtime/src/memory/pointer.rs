@@ -1,3 +1,6 @@
+slotmap::new_key_type! { pub struct PointerKey; }
+slotmap::new_key_type! { pub struct ClosurePointer; }
+
 /// Since a pointer can be present in any of the slotmaps on Memory, .boolean, .i32 etc, we need
 /// to keep track of Kind so we know where this pointer came from
 #[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]

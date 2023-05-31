@@ -29,12 +29,10 @@ pub use document::Document;
 pub use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
-pub use memory::{Closure, Memory, Pointer, PointerKind, UIProperty};
+pub use memory::{Closure, Memory, Pointer, PointerKind, UIProperty, ClosurePointer, PointerKey};
 pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
-slotmap::new_key_type! { pub struct PointerKey; }
-slotmap::new_key_type! { pub struct ClosurePointer; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]

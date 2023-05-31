@@ -3,7 +3,7 @@ mod pointer;
 mod ui;
 
 pub use heap::{Heap, HeapData, HeapValue};
-pub use pointer::{Pointer, PointerKind};
+pub use pointer::{Pointer, PointerKind, ClosurePointer, PointerKey};
 pub use ui::{DynamicProperty, UIProperty};
 
 /// Memory contains all the data created by our runtime.
