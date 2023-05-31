@@ -451,7 +451,7 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
-- Creating a page: /create-page/-/planning/
+- Creating a page: /ds-page/-/planning/
   document: /expander/ds/ds-page.ftd
 - Markdown: /markdown/-/planning/
   document: /expander/ds/markdown.ftd
@@ -506,3 +506,4 @@ favicon: /-/fastn.com/images/favicon.svg
 /seo-meta-data/-/frontend/: /seo-meta/-/frontend/
 /blog/seo-meta-data/: /blog/seo-meta/
 /markdown-in-doc-site/-/planning/: /markdown/-/planning/
+/create-page/-/planning/: /ds-page/-/planning/
