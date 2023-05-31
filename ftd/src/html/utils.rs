@@ -450,7 +450,8 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
     let mut keydown_seq_event = "".to_string();
     let mut keydown_events = indoc::indoc! {"
         document.addEventListener(\"keydown\", function(event) {
-            global_keys[event.key] = true;
+            let event_key =  window.ftd.utils.get_event_key(event);
+            global_keys[event_key] = true;
             const currentTime = Date.now();
             if (currentTime - lastKeyTime > 1000) {{
                 buffer = [];
@@ -459,7 +460,7 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
             if (event.target.nodeName === \"INPUT\" || event.target.nodeName === \"TEXTAREA\") {
                 return;
             }          
-            buffer.push(event.key);
+            buffer.push(event_key);
     "}
     .to_string();
 
@@ -481,7 +482,8 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
                 if (buffer.join(',').includes(\"{sequence}\")) {{
                    {actions}
                     buffer = [];
-                    global_keys[event.key] = false;
+                    let event_key =  window.ftd.utils.get_event_key(event);
+                    global_keys[event_key] = false;
                     return;
                 }}
             "},
@@ -491,9 +493,10 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
         );
     }
 
-    let keyup_events =
-        "document.addEventListener(\"keyup\", function(event) { global_keys[event.key] = false; })"
-            .to_string();
+    let keyup_events = r#"document.addEventListener("keyup", function(event) {
+        let event_key = window.ftd.utils.get_event_key(event);
+        global_keys[event_key] = false; })"#
+        .to_string();
 
     for (keys, actions) in events.iter().filter_map(|e| {
         if let Some(keys) = e.1.strip_prefix("onglobalkey[") {
@@ -517,7 +520,8 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
                         if ({all_keys} && buffer.join(',').includes(\"{sequence}\")) {{
                             {actions}
                             buffer = [];
-                            global_keys[event.key] = false;
+                            let event_key =  window.ftd.utils.get_event_key(event);
+                            global_keys[event_key] = false;
                             return;
                         }}
                     "},
