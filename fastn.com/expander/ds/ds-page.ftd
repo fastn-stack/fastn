@@ -8,9 +8,9 @@ if: { !show-planning }
 
 In this video we will learn how to create a page.
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { !show-planning }
-v: 
+v: IlW4M1WWc6w
 
 -- lib.video-audience: How to create a page
 if: { show-planning }
@@ -126,7 +126,8 @@ Let's view it in the browser. Since we are giving a `site-logo` that has a file
 from this package, let's first import assets.
 
 
-This is how the page looks with default color-scheme and typography. We have the
+This is how the page looks with default color-scheme and typography. We have 
+the
 site logo and site name at the top left along with the site-url which you can
 see at the bottom-left, when I hover the mouse pointer on logo.
 
@@ -161,9 +162,6 @@ To know about this, checkout
 
 
 
-
-
-
 -- ds.h1: Customized Page Component
 
 Now imagine, you have a dozen of such documents in your package. 
@@ -176,11 +174,8 @@ documents.
 Also, in the future, if you add new properties or change one or more values of
 the properties, then you would need to manually update it on all the pages.
 
-To maintain a consistent brand image across the pages throughout the website,
-and make it easy to update with a single change, we can create a custom page
-component. This component can include the site logo, site name, color scheme, 
-and typography, along with other properties, sparing us the need to apply 
-them individually to each and every page.
+To maintain the consistency and make it easy to update throughout the website
+with a single change, we can create a custom page component. 
 
 To do the same, we will move the component definition in a separate document, 
 let's call it `my-ds.ftd`.
@@ -189,6 +184,9 @@ And create our custom component:
 
 -- ds.code: my-ds
 lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+\-- import: ds-page/assets
 
 \-- component page:
 optional caption title:
@@ -199,80 +197,46 @@ children wrapper:
 body: $page.body
 site-name: Ajit
 site-logo: $assets.files.images.logo.svg
+logo-width: 50
 site-url: https://fastn.com/
+wrapper: $page.wrapper
 
 \-- end: ds.page
 
 \-- end: page
 
+-- ds.markdown:
+
+The `ds.page` component is wrapped inside this component page.
+
+So now in `index.ftd` document we can remove these properties and instead use
+the custom page of my-ds document i.e. `my-ds.page` 
+
+We are still making use of header and markdown components of `doc-site`, so we
+will import `doc-site` here. But, we are not importing assets here anymore so
+we can remove it. I have already used it in my-ds.
 
 -- ds.markdown:
 
-Now as we know we are going to use the `doc-site` package and `my-ds` in all 
-or most of the documents, therefore we can auto-import them. 
+Any changes in the values of the properties can be done here, sparing us the
+  need to apply them individually to each and every page.
+
+Now as we know we are going to use `my-ds` in almost all of the documents,
+therefore we can auto-import it.
 
 
 -- ds.code: my-ds
 lang: ftd
 
-\-- fastn.auto-import: fastn-community.github.io/doc-site as ds
 \-- fastn.auto-import: <package-name>/my-ds as my-ds
 
 
 -- ds.markdown:
 
 Now we can use the component in the my-ds document without worrying about
-missing out on any property. So we get the brand identity across our
-documentation.
+missing out on any property.
 
 
-
-;; =================== 
-;; Code block Template
-;; ===================
-
-
-/-- ds.code: Syntax
-lang: ftd
-
-
-
-
-;; ============== 
-;; Image Template
-;; ==============
-
-/-- ds.image:
-if: { show-planning }
-src: $fastn-assets.files.expander.ds.img.
-
-
-
-;; =================  
-;; Rendered Template
-;; =================
-
-
-/-- ds.rendered: 
-
-/-- ds.rendered.input:
-
-
-/-- ds.rendered.output:
-
-
-/-- end: ds.rendered.output
-
-/-- end: ds.rendered
-
-
-
-
-
-/-- ds.markdown:
-
-Therefore, we can safely say, the `page` component offers as a powerful tool 
-for all kind of documentation without restrictions.
 
 
 -- ds.h1: Closing Remarks 
@@ -295,12 +259,12 @@ Support us by giving a star ⭐ on
 on [Discord](/discord/).
 
 
-/-- ds.h1: Final Video
+-- ds.h1: Final Video
 if: { show-planning }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { show-planning }
-v: 
+v: IlW4M1WWc6w
 
 
 -- end: my-ds.page
