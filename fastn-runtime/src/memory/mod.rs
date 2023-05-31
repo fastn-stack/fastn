@@ -235,7 +235,7 @@ impl Memory {
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         self.stack.last_mut().unwrap().pointers.push(Pointer {
-            pointer: pointer,
+            pointer,
             kind,
         });
     }
@@ -360,13 +360,16 @@ impl Memory {
         v1_kind: fastn_runtime::PointerKind,
         v1_ptr: fastn_runtime::PointerKey,
     ) -> fastn_runtime::PointerKey {
-        let pointer = self.vec.insert(
-            HeapValue::new(vec![fastn_runtime::Pointer {
-                pointer: v1_ptr,
-                kind: v1_kind,
-            }])
-            .into_heap_data(),
-        );
+        let ptr1 = fastn_runtime::Pointer {
+            pointer: v1_ptr,
+            kind: v1_kind,
+        };
+
+        let pointer = self.vec.insert(HeapValue::new(vec![ptr1]).into_heap_data());
+
+        let list_pointer = pointer.into_list_pointer();
+        self.add_dependent(ptr1, list_pointer);
+
         self.insert_in_frame(pointer, PointerKind::List);
         pointer
     }
@@ -378,19 +381,23 @@ impl Memory {
         v2_kind: fastn_runtime::PointerKind,
         v2_ptr: fastn_runtime::PointerKey,
     ) -> fastn_runtime::PointerKey {
-        let pointer = self.vec.insert(
-            HeapValue::new(vec![
-                fastn_runtime::Pointer {
-                    pointer: v1_ptr,
-                    kind: v1_kind,
-                },
-                fastn_runtime::Pointer {
-                    pointer: v2_ptr,
-                    kind: v2_kind,
-                },
-            ])
-            .into_heap_data(),
-        );
+        let ptr1 = fastn_runtime::Pointer {
+            pointer: v1_ptr,
+            kind: v1_kind,
+        };
+        let ptr2 = fastn_runtime::Pointer {
+            pointer: v2_ptr,
+            kind: v2_kind,
+        };
+
+        let pointer = self
+            .vec
+            .insert(HeapValue::new(vec![ptr1, ptr2]).into_heap_data());
+
+        let list_pointer = pointer.into_list_pointer();
+        self.add_dependent(ptr1, list_pointer);
+        self.add_dependent(ptr2, list_pointer);
+
         self.insert_in_frame(pointer, PointerKind::List);
         pointer
     }
@@ -482,6 +489,8 @@ impl Memory {
         );
         self.add_dependent(ptr1.into_integer_pointer(), vec.into_list_pointer());
         self.add_dependent(ptr2.into_integer_pointer(), vec.into_list_pointer());
+
+        self.insert_in_frame(vec, PointerKind::List);
         vec
     }
 
