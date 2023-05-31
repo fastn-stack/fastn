@@ -178,11 +178,10 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32,
             ),
-            fastn_wasm::import::func2ret(
+            fastn_wasm::import::func2(
                 "set_boolean",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32.into(),
-                fastn_wasm::Type::I32,
             ),
             fastn_wasm::import::func1ret(
                 "create_i32",
@@ -194,11 +193,10 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32,
             ),
-            fastn_wasm::import::func2ret(
+            fastn_wasm::import::func2(
                 "set_i32",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32.into(),
-                fastn_wasm::Type::I32,
             ),
             fastn_wasm::import::func1ret(
                 "create_f32",
@@ -210,11 +208,10 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::F32,
             ),
-            fastn_wasm::import::func2ret(
+            fastn_wasm::import::func2(
                 "set_f32",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::F32.into(),
-                fastn_wasm::Type::F32,
             ),
         ]
     }
@@ -237,11 +234,26 @@ impl fastn_runtime::Memory {
         linker.func1ret("get_boolean", |mem: &mut fastn_runtime::Memory, ptr| {
             mem.get_boolean(ptr)
         });
+        linker.func2("set_boolean", |mem: &mut fastn_runtime::Memory, ptr, v| {
+            mem.set_boolean(ptr, v)
+        });
         linker.func1ret("create_i32", |mem: &mut fastn_runtime::Memory, v| {
             mem.create_i32(v)
         });
-        linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, v| {
-            mem.get_i32(v)
+        linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, ptr| {
+            mem.get_i32(ptr)
+        });
+        linker.func2("set_i32", |mem: &mut fastn_runtime::Memory, ptr, v| {
+            mem.set_i32(ptr, v)
+        });
+        linker.func1ret("create_f32", |mem: &mut fastn_runtime::Memory, v| {
+            mem.create_f32(v)
+        });
+        linker.func1ret("get_f32", |mem: &mut fastn_runtime::Memory, ptr| {
+            mem.get_f32(ptr)
+        });
+        linker.func2("set_f32", |mem: &mut fastn_runtime::Memory, ptr, v| {
+            mem.set_f32(ptr, v)
         });
         linker.func4ret(
             "create_rgba",
@@ -285,8 +297,13 @@ mod test {
         assert_import0("end_frame");
         assert_import("create_boolean", "(param i32) (result externref)");
         assert_import("get_boolean", "(param externref) (result i32)");
+        assert_import("set_boolean", "(param externref i32)");
         assert_import("create_i32", "(param i32) (result externref)");
         assert_import("get_i32", "(param externref) (result i32)");
+        assert_import("set_i32", "(param externref i32)");
+        assert_import("create_f32", "(param f32) (result externref)");
+        assert_import("get_f32", "(param externref) (result f32)");
+        assert_import("set_f32", "(param externref f32)");
         assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
         assert_import(
             "array_i32_2",
