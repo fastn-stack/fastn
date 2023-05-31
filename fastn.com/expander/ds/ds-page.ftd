@@ -101,7 +101,7 @@ $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 Now use the component `ds.page` and apply the properties you need, to create 
 a page.  
 
--- ds.code: Syntax
+-- ds.code: Page
 lang: ftd
 
 \-- ds.page: You meet me first because I am ~in~ en'titled 🤴
@@ -172,8 +172,8 @@ children wrapper:
 
 \-- ds.page: $page.title
 body: $page.body
-site-name: Ocean
-site-logo: $assets.files.images.anchor.svg
+site-name: Ajit
+site-logo: $assets.files.images.logo.svg
 site-url: https://fastn.com/
 
 \-- end: ds.page
