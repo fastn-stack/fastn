@@ -33,6 +33,7 @@ impl Property {
         match header {
             ftd::p1::Header::KV(kv) => Ok(Property::from_kv(kv, source)),
             ftd::p1::Header::Section(section) => Property::from_section(section, doc_id, source),
+            ftd::p1::Header::BlockRecordHeader(_) => todo!(),
         }
     }
 

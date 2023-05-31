@@ -239,7 +239,11 @@ fn sub_section() {
         &vec![
             ftd::p1::Section::with_name("foo").and_body("body ho"),
             ftd::p1::Section::with_name("bar")
-                .add_header_str("cat", "bar body")
+                .add_header_str_with_source(
+                    "cat",
+                    "bar body",
+                    Some(ftd::p1::header::KVSource::Body),
+                )
                 .add_sub_section(ftd::p1::Section::with_name("dodo"))
                 .add_sub_section(ftd::p1::Section::with_name("rat")),
         ],
@@ -747,7 +751,11 @@ fn header_section() {
                 None,
                 ftd::p1::Section::with_name("section")
                     .add_header_str("k1", "v1")
-                    .add_header_str("k2", "This is value of section k2")
+                    .add_header_str_with_source(
+                        "k2",
+                        "This is value of section k2",
+                        Some(ftd::p1::header::KVSource::Body),
+                    )
                     .list(),
                 None,
             )
@@ -801,7 +809,11 @@ fn kind() {
                 Some("too".to_string()),
                 ftd::p1::Section::with_name("section")
                     .add_header_str("k1", "v1")
-                    .add_header_str("k2", "This is value of section k2")
+                    .add_header_str_with_source(
+                        "k2",
+                        "This is value of section k2",
+                        Some(ftd::p1::header::KVSource::Body),
+                    )
                     .list(),
                 None,
             )
@@ -855,7 +867,11 @@ fn kind() {
                 Some("too".to_string()),
                 ftd::p1::Section::with_name("section")
                     .add_header_str("k1", "v1")
-                    .add_header_str("k2", "This is value of section k2")
+                    .add_header_str_with_source(
+                        "k2",
+                        "This is value of section k2",
+                        Some(ftd::p1::header::KVSource::Body),
+                    )
                     .list(),
                 None,
             )
@@ -910,7 +926,11 @@ fn kind() {
                 Some("too".to_string()),
                 ftd::p1::Section::with_name("section")
                     .add_header_str("k1", "v1")
-                    .add_header_str("k2", "This is value of section k2")
+                    .add_header_str_with_source(
+                        "k2",
+                        "This is value of section k2",
+                        Some(ftd::p1::header::KVSource::Body),
+                    )
                     .list(),
                 None,
             )

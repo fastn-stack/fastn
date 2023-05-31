@@ -38,7 +38,7 @@
                         }
                       },
                       "is_mutable": false,
-                      "line_number": 11
+                      "line_number": 6
                     }
                   }
                 }
@@ -85,10 +85,10 @@
                   }
                 },
                 "is_mutable": false,
-                "line_number": 11
+                "line_number": 6
               }
             },
-            "line_number": 11,
+            "line_number": 6,
             "access_modifier": "Public"
           }
         ],

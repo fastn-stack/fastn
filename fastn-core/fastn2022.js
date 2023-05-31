@@ -1,19 +1,3 @@
-(function () {
-    document.addEventListener('keypress', (event) => {
-        let key = event.key;
-        let url = window.location.href;
-        let source = document.baseURI.endsWith("/") ? "-/view-src/" : "/-/view-src/";
-        let new_url = document.baseURI + source + url.replace(document.baseURI, "");
-        if (url.includes("-/view-src/")) {
-            new_url = url.replace("-/view-src/", "");
-        }
-        if (key === '.' &&
-            ((event.target.nodeName !== "INPUT" && event.target.nodeName !== "TEXTAREA") || event.ctrlKey)) {
-                window.location.href = new_url;
-            }
-        }, false);
-})();
-
 (function() {
     /*! instant.page v5.1.0 - (C) 2019-2020 Alexandre Dieulot - https://instant.page/license */
     let t, e;

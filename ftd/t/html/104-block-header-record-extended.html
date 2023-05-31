@@ -6,15 +6,47 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
-"foo#p": {
-"desktop": "70px",
-"mobile": "40.0%"
+"foo#bar:d:12": {
+"age": 23,
+"description": "This is body",
+"name": "Rithik"
 },
-"foo#res": {
-"desktop": "40.0%",
-"mobile": "70px"
+"foo#bar:text-color:12": {
+"dark": "blue",
+"light": "red"
 },
+"foo#bar:text:12": "Hello This is some text",
+"foo#c": {
+"dark": "blue",
+"light": "red"
+},
+"foo#d-color": "green",
+"foo#foo:text-color:10": {
+"dark": "blue",
+"light": "red"
+},
+"foo#foo:text-color:11": {
+"dark": "green",
+"light": "red"
+},
+"foo#foo:text-color:7": {
+"dark": "blue",
+"light": "red"
+},
+"foo#foo:text-color:8": {
+"dark": "blue",
+"light": "red"
+},
+"foo#foo:text-color:9": {
+"dark": "blue",
+"light": "red"
+},
+"foo#foo:text:10": "Text 5 from component",
+"foo#foo:text:11": "Text 6 from component",
+"foo#foo:text:6": "Text 1 from component",
+"foo#foo:text:7": "Text 2 from component",
+"foo#foo:text:8": "Text 3 from component",
+"foo#foo:text:9": "Text 4 from component",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -764,7 +796,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 40%; margin-bottom: 10px; width: 70px" class="ft_common ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(255,255,0,1); padding: 70px" class="ft_common ft_md">Hello</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; padding: 40%" class="ft_common ft_md">World</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">First Text</div><div data-id="1:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Second Text</div><div data-id="2:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Third Text</div><div data-id="3:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fourth Text</div><div data-id="4:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Fifth Text</div><div data-id="5:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Sixth Text</div><div data-id="6:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 1 from component</div><div data-id="7:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 2 from component</div><div data-id="8:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 3 from component</div><div data-id="9:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 4 from component</div><div data-id="10:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 5 from component</div><div data-id="11:main" style="color: rgba(255,0,0,1); margin-bottom: 10px; margin-top: 10px" class="ft_common ft_md">Text 6 from component</div><div data-id="12:main" style="width: 100%" class="ft_common ft_column"><div data-id="12,0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Hello This is some text</div><div data-id="12,1:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Rithik</div><div data-id="12,2:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">This is body</div><div data-id="12,3:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">23</div></div><div data-id="13:main" style="padding: 33%; width: 55%" class="ft_common ft_md">Hello World</div></div>
 
 
 <script>
@@ -1962,72 +1994,327 @@ return (ftd.toggle_rive_boolean(rive,input,args,data,id));
 }
 
 
-
-function function__toggle___main(a,args,data,id){
-a.value = !a.value
-}
-
-
 window.node_change_main = {};
-window.node_change_main["0:main__height"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["height"] = resolve_reference("foo#res", data).desktop;
+window.node_change_main["0:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["color"] = "red";
 }
-else {document.querySelector(`[data-id="0:main"]`).style["height"] = resolve_reference("foo#res", data).mobile;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = "blue";}
+}
+window.node_change_main["1:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["color"] = "red";
+}
+else {document.querySelector(`[data-id="1:main"]`).style["color"] = "blue";}
+}
+window.node_change_main["2:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2:main"]`).style["color"] = "red";
+}
+else {document.querySelector(`[data-id="2:main"]`).style["color"] = "blue";}
+}
+window.node_change_main["3:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="3:main"]`).style["color"] = "red";
+}
+else {document.querySelector(`[data-id="3:main"]`).style["color"] = "blue";}
+}
+window.node_change_main["4:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="4:main"]`).style["color"] = "red";
+}
+else {document.querySelector(`[data-id="4:main"]`).style["color"] = resolve_reference("foo#d-color", data);}
+}
+window.node_change_main["5:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="5:main"]`).style["color"] = resolve_reference("foo#c", data).light;
+}
+else {document.querySelector(`[data-id="5:main"]`).style["color"] = resolve_reference("foo#c", data).dark;}
+}
+window.node_change_main["6:main__text"] = function(data) {
+document.querySelector(`[data-id="6:main"]`).innerHTML = resolve_reference("foo#foo:text:6", data);
 }
 
-window.node_change_main["0:main__width"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["width"] = resolve_reference("foo#p", data).desktop;
+window.node_change_main["6:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="6:main"]`).style["color"] = resolve_reference("foo#c", data).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["width"] = resolve_reference("foo#p", data).mobile;}
+else {document.querySelector(`[data-id="6:main"]`).style["color"] = resolve_reference("foo#c", data).dark;}
 }
-window.node_change_main["1:main__padding"] = function(data) {
-if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
+window.node_change_main["7:main__text"] = function(data) {
+document.querySelector(`[data-id="7:main"]`).innerHTML = resolve_reference("foo#foo:text:7", data);
 }
-else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+
+window.node_change_main["7:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="7:main"]`).style["color"] = resolve_reference("foo#foo:text-color:7", data).light;
 }
-window.node_change_main["2:main__padding"] = function(data) {
+else {document.querySelector(`[data-id="7:main"]`).style["color"] = resolve_reference("foo#foo:text-color:7", data).dark;}
+}
+window.node_change_main["8:main__text"] = function(data) {
+document.querySelector(`[data-id="8:main"]`).innerHTML = resolve_reference("foo#foo:text:8", data);
+}
+
+window.node_change_main["8:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="8:main"]`).style["color"] = resolve_reference("foo#foo:text-color:8", data).light;
+}
+else {document.querySelector(`[data-id="8:main"]`).style["color"] = resolve_reference("foo#foo:text-color:8", data).dark;}
+}
+window.node_change_main["9:main__text"] = function(data) {
+document.querySelector(`[data-id="9:main"]`).innerHTML = resolve_reference("foo#foo:text:9", data);
+}
+
+window.node_change_main["9:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="9:main"]`).style["color"] = resolve_reference("foo#foo:text-color:9", data).light;
+}
+else {document.querySelector(`[data-id="9:main"]`).style["color"] = resolve_reference("foo#foo:text-color:9", data).dark;}
+}
+window.node_change_main["10:main__text"] = function(data) {
+document.querySelector(`[data-id="10:main"]`).innerHTML = resolve_reference("foo#foo:text:10", data);
+}
+
+window.node_change_main["10:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="10:main"]`).style["color"] = resolve_reference("foo#foo:text-color:10", data).light;
+}
+else {document.querySelector(`[data-id="10:main"]`).style["color"] = resolve_reference("foo#foo:text-color:10", data).dark;}
+}
+window.node_change_main["11:main__text"] = function(data) {
+document.querySelector(`[data-id="11:main"]`).innerHTML = resolve_reference("foo#foo:text:11", data);
+}
+
+window.node_change_main["11:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="11:main"]`).style["color"] = resolve_reference("foo#foo:text-color:11", data).light;
+}
+else {document.querySelector(`[data-id="11:main"]`).style["color"] = resolve_reference("foo#foo:text-color:11", data).dark;}
+}
+window.node_change_main["12,0:main__text"] = function(data) {
+document.querySelector(`[data-id="12,0:main"]`).innerHTML = resolve_reference("foo#bar:text:12", data);
+}
+
+window.node_change_main["12,0:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="12,0:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).light;
+}
+else {document.querySelector(`[data-id="12,0:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).dark;}
+}
+window.node_change_main["12,1:main__text"] = function(data) {
+document.querySelector(`[data-id="12,1:main"]`).innerHTML = resolve_reference("foo#bar:d:12.name", data);
+}
+
+window.node_change_main["12,1:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="12,1:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).light;
+}
+else {document.querySelector(`[data-id="12,1:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).dark;}
+}
+window.node_change_main["12,2:main__text"] = function(data) {
+document.querySelector(`[data-id="12,2:main"]`).innerHTML = resolve_reference("foo#bar:d:12.description", data);
+}
+
+window.node_change_main["12,2:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="12,2:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).light;
+}
+else {document.querySelector(`[data-id="12,2:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).dark;}
+}
+window.node_change_main["12,3:main__display"] = function(data) {
 if(function(){
-return (!resolve_reference("foo#flag", data));
+return (resolve_reference("foo#bar:d:12.age", data)!=null);
 }()){
+document.querySelector(`[data-id="12,3:main"]`).style["display"] = "block";
+}
+else {document.querySelector(`[data-id="12,3:main"]`).style["display"] = "none";}
+}
+
+window.node_change_main["12,3:main__text"] = function(data) {
+document.querySelector(`[data-id="12,3:main"]`).innerHTML = resolve_reference("foo#bar:d:12.age", data);
+}
+
+window.node_change_main["12,3:main__color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="12,3:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).light;
+}
+else {document.querySelector(`[data-id="12,3:main"]`).style["color"] = resolve_reference("foo#bar:text-color:12", data).dark;}
+}
+window.node_change_main["13:main__padding"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
+document.querySelector(`[data-id="13:main"]`).style["padding"] = `{0}%`.format(JSON.stringify(33));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+else {document.querySelector(`[data-id="13:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(44));}
 }
-else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#res", data).desktop;
+
+window.node_change_main["13:main__width"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="13:main"]`).style["width"] = `{0}%`.format(JSON.stringify(55));
 }
-else {document.querySelector(`[data-id="2:main"]`).style["padding"] = resolve_reference("foo#res", data).mobile;}
-}
+else {document.querySelector(`[data-id="13:main"]`).style["width"] = `{0}px`.format(JSON.stringify(66));}
 }
 window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
+window.set_value_main["foo#bar:d:12"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#bar:d:12", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#flag", "main");
-window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","2:main__padding", data);
+window.ftd.call_mutable_value_changes("foo#bar:d:12", "main");
+window.ftd.call_immutable_value_changes("foo#bar:d:12", "main");
+window.ftd.utils.node_change_call("main","12,1:main__text", data);
+window.ftd.utils.node_change_call("main","12,2:main__text", data);
+window.ftd.utils.node_change_call("main","12,3:main__display", data);
+window.ftd.utils.node_change_call("main","12,3:main__text", data);
 };
 
-window.set_value_main["foo#p"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#p", remaining, new_value);
+window.set_value_main["foo#bar:text-color:12"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#bar:text-color:12", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#p", "main");
-window.ftd.call_immutable_value_changes("foo#p", "main");
-window.ftd.utils.node_change_call("main","0:main__width", data);
-window.ftd.utils.node_change_call("main","1:main__padding", data);
-window.ftd.utils.node_change_call("main","2:main__padding", data);
+window.ftd.call_mutable_value_changes("foo#bar:text-color:12", "main");
+window.ftd.call_immutable_value_changes("foo#bar:text-color:12", "main");
+window.ftd.utils.node_change_call("main","12,0:main__color", data);
+window.ftd.utils.node_change_call("main","12,1:main__color", data);
+window.ftd.utils.node_change_call("main","12,2:main__color", data);
+window.ftd.utils.node_change_call("main","12,3:main__color", data);
 };
 
-window.set_value_main["foo#res"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#res", remaining, new_value);
+window.set_value_main["foo#bar:text:12"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#bar:text:12", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("foo#res", "main");
-window.ftd.call_immutable_value_changes("foo#res", "main");
-window.ftd.utils.node_change_call("main","2:main__padding", data);
+window.ftd.call_mutable_value_changes("foo#bar:text:12", "main");
+window.ftd.call_immutable_value_changes("foo#bar:text:12", "main");
+window.ftd.utils.node_change_call("main","12,0:main__text", data);
+};
+
+window.set_value_main["foo#c"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#c", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#c", "main");
+window.ftd.call_immutable_value_changes("foo#c", "main");
+window.ftd.utils.node_change_call("main","5:main__color", data);
+window.ftd.utils.node_change_call("main","6:main__color", data);
+};
+
+window.set_value_main["foo#d-color"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#d-color", remaining, new_value);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:text-color:11"]){window["resolve_value_main"]["foo#foo:text-color:11"](data);
+} else {
+let value = resolve_reference("foo#d-color", data, null);
+set_data_value(data, "foo#foo:text-color:11", value);
+}
+window.ftd.call_mutable_value_changes("foo#d-color", "main");
+window.ftd.call_immutable_value_changes("foo#d-color", "main");
+window.ftd.utils.node_change_call("main","11:main__color", data);
+window.ftd.utils.node_change_call("main","4:main__color", data);
+};
+
+window.set_value_main["foo#foo:text-color:10"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text-color:10", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text-color:10", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text-color:10", "main");
+window.ftd.utils.node_change_call("main","10:main__color", data);
+};
+
+window.set_value_main["foo#foo:text-color:11"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text-color:11", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text-color:11", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text-color:11", "main");
+window.ftd.utils.node_change_call("main","11:main__color", data);
+};
+
+window.set_value_main["foo#foo:text-color:7"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text-color:7", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text-color:7", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text-color:7", "main");
+window.ftd.utils.node_change_call("main","7:main__color", data);
+};
+
+window.set_value_main["foo#foo:text-color:8"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text-color:8", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text-color:8", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text-color:8", "main");
+window.ftd.utils.node_change_call("main","8:main__color", data);
+};
+
+window.set_value_main["foo#foo:text-color:9"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text-color:9", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text-color:9", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text-color:9", "main");
+window.ftd.utils.node_change_call("main","9:main__color", data);
+};
+
+window.set_value_main["foo#foo:text:10"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:10", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:10", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:10", "main");
+window.ftd.utils.node_change_call("main","10:main__text", data);
+};
+
+window.set_value_main["foo#foo:text:11"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:11", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:11", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:11", "main");
+window.ftd.utils.node_change_call("main","11:main__text", data);
+};
+
+window.set_value_main["foo#foo:text:6"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:6", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:6", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:6", "main");
+window.ftd.utils.node_change_call("main","6:main__text", data);
+};
+
+window.set_value_main["foo#foo:text:7"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:7", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:7", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:7", "main");
+window.ftd.utils.node_change_call("main","7:main__text", data);
+};
+
+window.set_value_main["foo#foo:text:8"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:8", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:8", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:8", "main");
+window.ftd.utils.node_change_call("main","8:main__text", data);
+};
+
+window.set_value_main["foo#foo:text:9"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "foo#foo:text:9", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("foo#foo:text:9", "main");
+window.ftd.call_immutable_value_changes("foo#foo:text:9", "main");
+window.ftd.utils.node_change_call("main","9:main__text", data);
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
+
+window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
+window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
+window.ftd.utils.node_change_call("main","0:main__color", data);
+window.ftd.utils.node_change_call("main","10:main__color", data);
+window.ftd.utils.node_change_call("main","11:main__color", data);
+window.ftd.utils.node_change_call("main","12,0:main__color", data);
+window.ftd.utils.node_change_call("main","12,1:main__color", data);
+window.ftd.utils.node_change_call("main","12,2:main__color", data);
+window.ftd.utils.node_change_call("main","12,3:main__color", data);
+window.ftd.utils.node_change_call("main","1:main__color", data);
+window.ftd.utils.node_change_call("main","2:main__color", data);
+window.ftd.utils.node_change_call("main","3:main__color", data);
+window.ftd.utils.node_change_call("main","4:main__color", data);
+window.ftd.utils.node_change_call("main","5:main__color", data);
+window.ftd.utils.node_change_call("main","6:main__color", data);
+window.ftd.utils.node_change_call("main","7:main__color", data);
+window.ftd.utils.node_change_call("main","8:main__color", data);
+window.ftd.utils.node_change_call("main","9:main__color", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2035,10 +2322,8 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0:main__height", data);
-window.ftd.utils.node_change_call("main","0:main__width", data);
-window.ftd.utils.node_change_call("main","1:main__padding", data);
-window.ftd.utils.node_change_call("main","2:main__padding", data);
+window.ftd.utils.node_change_call("main","13:main__padding", data);
+window.ftd.utils.node_change_call("main","13:main__width", data);
 };
 
 

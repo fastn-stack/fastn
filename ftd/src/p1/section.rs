@@ -95,6 +95,28 @@ impl Section {
                 Some(value.to_string())
             },
             None,
+            Default::default(),
+        ));
+        self
+    }
+
+    pub fn add_header_str_with_source(
+        mut self,
+        key: &str,
+        value: &str,
+        source: Option<ftd::p1::header::KVSource>,
+    ) -> Self {
+        self.headers.push(ftd::p1::Header::kv(
+            0,
+            key,
+            None,
+            if value.trim().is_empty() {
+                None
+            } else {
+                Some(value.to_string())
+            },
+            None,
+            source,
         ));
         self
     }
