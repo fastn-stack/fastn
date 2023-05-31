@@ -29,7 +29,7 @@ pub use document::Document;
 pub use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
-pub use memory::{Closure, Memory, Pointer, PointerKind, UIProperty, ClosurePointer, PointerKey};
+pub use memory::{Closure, ClosurePointer, Memory, Pointer, PointerKey, PointerKind, UIProperty};
 pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }

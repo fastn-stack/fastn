@@ -49,6 +49,19 @@ impl fastn_wasm::WasmType for fastn_runtime::PointerKey {
     }
 }
 
+impl fastn_wasm::WasmType for fastn_runtime::PointerKind {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> fastn_runtime::PointerKind {
+        fastn_runtime::PointerKind::from(vals.i32(idx))
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::I32
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        let i: i32 = (*self).into();
+        i.into()
+    }
+}
+
 pub trait Params {
     fn i32(&self, idx: usize) -> i32;
     fn f32(&self, idx: usize) -> f32;

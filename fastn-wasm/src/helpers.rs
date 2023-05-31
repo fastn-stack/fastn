@@ -226,7 +226,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
         self.func_new(
             "fastn",
             name,
-            wasmtime::FuncType::new([O::the_type()].iter().cloned(), [].iter().cloned()),
+            wasmtime::FuncType::new([].iter().cloned(), [O::the_type()].iter().cloned()),
             move |mut caller: wasmtime::Caller<'_, S>, _params, results| {
                 results[0] = func(SE::extract(&mut caller)).to_wasm();
                 Ok(())

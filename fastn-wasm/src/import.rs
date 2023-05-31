@@ -36,6 +36,17 @@ pub fn func2ret(
     func(name, vec![arg0, arg1], Some(ret))
 }
 
+pub fn func4ret(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    arg2: fastn_wasm::PL,
+    arg3: fastn_wasm::PL,
+    ret: fastn_wasm::Type,
+) -> fastn_wasm::Ast {
+    func(name, vec![arg0, arg1, arg2, arg3], Some(ret))
+}
+
 pub fn func(
     name: &str,
     params: Vec<fastn_wasm::PL>,

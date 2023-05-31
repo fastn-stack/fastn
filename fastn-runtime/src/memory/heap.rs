@@ -40,7 +40,6 @@ impl<T> HeapData<T> {
     }
 }
 
-
 impl<T> HeapValue<T> {
     pub(crate) fn value(&self) -> &T {
         match self {

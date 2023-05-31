@@ -109,7 +109,9 @@ impl fastn_runtime::Dom {
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),
-                    ui_property.into_dynamic_property(node_key).closure(closure_key),
+                    ui_property
+                        .into_dynamic_property(node_key)
+                        .closure(closure_key),
                 );
             },
         );
@@ -151,7 +153,9 @@ impl fastn_runtime::Dom {
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),
-                    ui_property.into_dynamic_property(node_key).closure(closure_key),
+                    ui_property
+                        .into_dynamic_property(node_key)
+                        .closure(closure_key),
                 );
             },
         );
@@ -171,6 +175,24 @@ impl fastn_runtime::Memory {
             fastn_wasm::import::func1ret(
                 "create_boolean",
                 fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func0(
+                "create_list",
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func2ret(
+                "create_list_1",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func4ret(
+                "create_list_2",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::ExternRef,
             ),
             fastn_wasm::import::func1ret(
@@ -228,6 +250,15 @@ impl fastn_runtime::Memory {
         linker.func1ret("return_frame", |mem: &mut fastn_runtime::Memory, ret| {
             mem.return_frame(ret)
         });
+        linker.func0ret("create_list", |mem: &mut fastn_runtime::Memory| {
+            mem.create_list()
+        });
+        linker.func2ret("create_list_1", |mem: &mut fastn_runtime::Memory, v1_kind, v1_ptr| {
+            mem.create_list_1(v1_kind, v1_ptr)
+        });
+        linker.func4ret("create_list_2", |mem: &mut fastn_runtime::Memory, v1_kind, v1_ptr, v2_kind, v2_ptr| {
+            mem.create_list_2(v1_kind, v1_ptr, v2_kind, v2_ptr)
+        });
         linker.func1ret("create_boolean", |mem: &mut fastn_runtime::Memory, v| {
             mem.create_boolean(v)
         });
@@ -276,7 +307,7 @@ mod test {
         fastn_runtime::Dom::create_instance(format!(
             r#"
                 (module (import "fastn" "{}" (func {}))
-                    (func (export "main")  (param externref))
+                    (func (export "main") (param externref))
                 )
             "#,
             name, type_
@@ -295,6 +326,9 @@ mod test {
     fn memory() {
         assert_import0("create_frame");
         assert_import0("end_frame");
+        assert_import("create_list", "(result externref)");
+        assert_import("create_list_1", "(param i32 externref) (result externref)");
+        assert_import("create_list_2", "(param i32 externref i32 externref) (result externref)");
         assert_import("create_boolean", "(param i32) (result externref)");
         assert_import("get_boolean", "(param externref) (result i32)");
         assert_import("set_boolean", "(param externref i32)");

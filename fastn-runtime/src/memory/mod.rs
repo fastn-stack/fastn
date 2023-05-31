@@ -3,7 +3,7 @@ mod pointer;
 mod ui;
 
 pub use heap::{Heap, HeapData, HeapValue};
-pub use pointer::{Pointer, PointerKind, ClosurePointer, PointerKey};
+pub use pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
 pub use ui::{DynamicProperty, UIProperty};
 
 /// Memory contains all the data created by our runtime.
@@ -76,7 +76,6 @@ pub struct Closure {
     /// function_data is the pointer to a vector that contains all the variables "captured" by this
     /// closure.
     pub captured_variables: Pointer,
-
     // in future we can this optimisation: Saves us from creating vectors unless needed. Most
     // closures have two pointers (if most had three we can create a v3).
 
@@ -235,11 +234,10 @@ impl Memory {
 
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
-        self.stack
-            .last_mut()
-            .unwrap()
-            .pointers
-            .push(Pointer { pointer: pointer, kind });
+        self.stack.last_mut().unwrap().pointers.push(Pointer {
+            pointer: pointer,
+            kind,
+        });
     }
 
     pub fn create_frame(&mut self) {
@@ -330,7 +328,7 @@ impl Memory {
             }
         }
 
-        let t = self.stack.len()-1;
+        let t = self.stack.len() - 1;
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         self.stack[t].pointers.push(k.unwrap());
         keep
@@ -349,6 +347,52 @@ impl Memory {
             PointerKind::Decimal => self.f32.contains_key(ptr.pointer),
             PointerKind::List => self.vec.contains_key(ptr.pointer),
         }
+    }
+
+    pub fn create_list(&mut self) -> fastn_runtime::PointerKey {
+        let pointer = self.vec.insert(HeapValue::new(vec![]).into_heap_data());
+        self.insert_in_frame(pointer, PointerKind::List);
+        pointer
+    }
+
+    pub fn create_list_1(
+        &mut self,
+        v1_kind: fastn_runtime::PointerKind,
+        v1_ptr: fastn_runtime::PointerKey,
+    ) -> fastn_runtime::PointerKey {
+        let pointer = self.vec.insert(
+            HeapValue::new(vec![fastn_runtime::Pointer {
+                pointer: v1_ptr,
+                kind: v1_kind,
+            }])
+            .into_heap_data(),
+        );
+        self.insert_in_frame(pointer, PointerKind::List);
+        pointer
+    }
+
+    pub fn create_list_2(
+        &mut self,
+        v1_kind: fastn_runtime::PointerKind,
+        v1_ptr: fastn_runtime::PointerKey,
+        v2_kind: fastn_runtime::PointerKind,
+        v2_ptr: fastn_runtime::PointerKey,
+    ) -> fastn_runtime::PointerKey {
+        let pointer = self.vec.insert(
+            HeapValue::new(vec![
+                fastn_runtime::Pointer {
+                    pointer: v1_ptr,
+                    kind: v1_kind,
+                },
+                fastn_runtime::Pointer {
+                    pointer: v2_ptr,
+                    kind: v2_kind,
+                },
+            ])
+            .into_heap_data(),
+        );
+        self.insert_in_frame(pointer, PointerKind::List);
+        pointer
     }
 
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
@@ -457,7 +501,9 @@ impl Memory {
     pub fn add_ui_dependent(&mut self, target: Pointer, dependent: DynamicProperty) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().ui_properties,
+            PointerKind::Boolean => {
+                &mut self.boolean.get_mut(target.pointer).unwrap().ui_properties
+            }
             PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
                 &mut self.vec.get_mut(target.pointer).unwrap().ui_properties
@@ -618,7 +664,6 @@ mod test {
 
         m.assert_empty();
     }
-
 }
 
 // -- record x:

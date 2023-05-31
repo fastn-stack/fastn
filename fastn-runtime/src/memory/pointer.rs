@@ -55,3 +55,30 @@ pub enum PointerKind {
     Decimal,
     List,
 }
+
+impl From<i32> for PointerKind {
+    fn from(i: i32) -> PointerKind {
+        match i {
+            0 => PointerKind::Boolean,
+            1 => PointerKind::Integer,
+            2 => PointerKind::Record,
+            3 => PointerKind::OrType,
+            4 => PointerKind::Decimal,
+            5 => PointerKind::List,
+            _ => panic!("Unknown element kind: {}", i),
+        }
+    }
+}
+
+impl From<PointerKind> for i32 {
+    fn from(s: PointerKind) -> i32 {
+        match s {
+            PointerKind::Boolean => 0,
+            PointerKind::Integer => 1,
+            PointerKind::Record => 2,
+            PointerKind::OrType => 3,
+            PointerKind::Decimal => 4,
+            PointerKind::List => 5,
+        }
+    }
+}
