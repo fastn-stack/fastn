@@ -178,6 +178,12 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32,
             ),
+            fastn_wasm::import::func2ret(
+                "set_boolean",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32,
+            ),
             fastn_wasm::import::func1ret(
                 "create_i32",
                 fastn_wasm::Type::I32.into(),
@@ -187,6 +193,28 @@ impl fastn_runtime::Memory {
                 "get_i32",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32,
+            ),
+            fastn_wasm::import::func2ret(
+                "set_i32",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32,
+            ),
+            fastn_wasm::import::func1ret(
+                "create_f32",
+                fastn_wasm::Type::F32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func1ret(
+                "get_f32",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::F32,
+            ),
+            fastn_wasm::import::func2ret(
+                "set_f32",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::F32.into(),
+                fastn_wasm::Type::F32,
             ),
         ]
     }

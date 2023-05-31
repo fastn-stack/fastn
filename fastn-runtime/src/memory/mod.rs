@@ -340,18 +340,23 @@ impl Memory {
         self.closures.insert(closure)
     }
 
+    pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
+        match ptr.kind {
+            PointerKind::Boolean => self.boolean.contains_key(ptr.key),
+            PointerKind::Integer => self.i32.contains_key(ptr.key),
+            PointerKind::Record => self.vec.contains_key(ptr.key),
+            PointerKind::OrType => self.or_type.contains_key(ptr.key),
+            PointerKind::Decimal => self.f32.contains_key(ptr.key),
+            PointerKind::List => self.vec.contains_key(ptr.key),
+        }
+    }
+
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
         let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Boolean);
         pointer
     }
 
-    pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
-        match ptr.kind {
-            fastn_runtime::PointerKind::Boolean => self.boolean.contains_key(ptr.key),
-            _ => todo!()
-        }
-    }
     pub fn get_boolean(&mut self, ptr: fastn_runtime::PointerKey) -> bool {
         *self.boolean[ptr].value.value()
     }
@@ -372,6 +377,20 @@ impl Memory {
 
     pub fn set_i32(&mut self, ptr: fastn_runtime::PointerKey, value: i32) {
         self.i32[ptr].value.set_value(value)
+    }
+
+    pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
+        let pointer = self.f32.insert(HeapValue::new(value).into_heap_data());
+        self.insert_in_frame(pointer, PointerKind::Integer);
+        pointer
+    }
+
+    pub fn get_f32(&mut self, ptr: fastn_runtime::PointerKey) -> f32 {
+        *self.f32[ptr].value.value()
+    }
+
+    pub fn set_f32(&mut self, ptr: fastn_runtime::PointerKey, value: f32) {
+        self.f32[ptr].value.set_value(value)
     }
 
     pub fn create_i32_func(
