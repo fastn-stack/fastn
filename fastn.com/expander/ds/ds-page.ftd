@@ -27,6 +27,10 @@ Welcome!! My name is Ajit
 In this video we learn everything we can do using page component of the 
 `doc-site` package.
 
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.page-intro.png
+
 -- ds.h1: Introduction
 if: { show-planning }
 
