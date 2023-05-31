@@ -109,7 +109,7 @@ impl fastn_runtime::Dom {
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),
-                    ui_property.into_ui_dependent(node_key).closure(closure_key),
+                    ui_property.into_dynamic_property(node_key).closure(closure_key),
                 );
             },
         );
@@ -151,7 +151,7 @@ impl fastn_runtime::Dom {
                 });
                 mem.add_ui_dependent(
                     func_arg.into_list_pointer(),
-                    ui_property.into_ui_dependent(node_key).closure(closure_key),
+                    ui_property.into_dynamic_property(node_key).closure(closure_key),
                 );
             },
         );

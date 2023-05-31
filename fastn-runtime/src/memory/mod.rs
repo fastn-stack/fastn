@@ -61,7 +61,7 @@ pub struct Memory {
     pub vec: Heap<Vec<Pointer>>,
     or_type: Heap<(u8, Vec<Pointer>)>,
 
-    closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
+    closures: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
     // if we have:
     // -- ftd.text: hello
     //
@@ -135,7 +135,7 @@ impl Memory {
         let r_pointer = vec_value.get(0).expect("Expected r pointer");
         let r_value = self
             .i32
-            .get(r_pointer.key)
+            .get(r_pointer.pointer)
             .expect("Expected r value")
             .value
             .value();
@@ -143,7 +143,7 @@ impl Memory {
         let g_pointer = vec_value.get(1).expect("Expected g pointer");
         let g_value = self
             .i32
-            .get(g_pointer.key)
+            .get(g_pointer.pointer)
             .expect("Expected g value")
             .value
             .value();
@@ -151,7 +151,7 @@ impl Memory {
         let b_pointer = vec_value.get(2).expect("Expected b pointer");
         let b_value = self
             .i32
-            .get(b_pointer.key)
+            .get(b_pointer.pointer)
             .expect("Expected b value")
             .value
             .value();
@@ -159,7 +159,7 @@ impl Memory {
         let a_pointer = vec_value.get(3).expect("Expected a pointer");
         let a_value = self
             .f32
-            .get(a_pointer.key)
+            .get(a_pointer.pointer)
             .expect("Expected a value")
             .value
             .value();
@@ -239,7 +239,7 @@ impl Memory {
             .last_mut()
             .unwrap()
             .pointers
-            .push(Pointer { key: pointer, kind });
+            .push(Pointer { pointer: pointer, kind });
     }
 
     pub fn create_frame(&mut self) {
@@ -253,23 +253,23 @@ impl Memory {
     fn drop_pointer(&mut self, pointer: &Pointer) -> bool {
         let (dependents, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
-                let b = self.boolean.get(pointer.key).unwrap();
+                let b = self.boolean.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
             PointerKind::Integer => {
-                let b = self.i32.get(pointer.key).unwrap();
+                let b = self.i32.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
             PointerKind::Record | PointerKind::List => {
-                let b = self.vec.get(pointer.key).unwrap();
+                let b = self.vec.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
             PointerKind::OrType => {
-                let b = self.or_type.get(pointer.key).unwrap();
+                let b = self.or_type.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
             PointerKind::Decimal => {
-                let b = self.f32.get(pointer.key).unwrap();
+                let b = self.f32.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
         };
@@ -296,19 +296,19 @@ impl Memory {
     fn delete_pointer(&mut self, pointer: &Pointer) {
         match pointer.kind {
             PointerKind::Boolean => {
-                self.boolean.remove(pointer.key);
+                self.boolean.remove(pointer.pointer);
             }
             PointerKind::Integer => {
-                self.i32.remove(pointer.key);
+                self.i32.remove(pointer.pointer);
             }
             PointerKind::Record | PointerKind::List => {
-                self.vec.remove(pointer.key);
+                self.vec.remove(pointer.pointer);
             }
             PointerKind::OrType => {
-                self.or_type.remove(pointer.key);
+                self.or_type.remove(pointer.pointer);
             }
             PointerKind::Decimal => {
-                self.f32.remove(pointer.key);
+                self.f32.remove(pointer.pointer);
             }
         };
     }
@@ -323,7 +323,7 @@ impl Memory {
     pub fn return_frame(&mut self, keep: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
         let mut k: Option<fastn_runtime::Pointer> = None;
         for pointer in self.stack.pop().unwrap().pointers.iter() {
-            if pointer.key == keep {
+            if pointer.pointer == keep {
                 k = Some(pointer.to_owned());
             } else {
                 self.drop_pointer(pointer);
@@ -336,18 +336,18 @@ impl Memory {
         keep
     }
 
-    pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosureKey {
+    pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosurePointer {
         self.closures.insert(closure)
     }
 
     pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
         match ptr.kind {
-            PointerKind::Boolean => self.boolean.contains_key(ptr.key),
-            PointerKind::Integer => self.i32.contains_key(ptr.key),
-            PointerKind::Record => self.vec.contains_key(ptr.key),
-            PointerKind::OrType => self.or_type.contains_key(ptr.key),
-            PointerKind::Decimal => self.f32.contains_key(ptr.key),
-            PointerKind::List => self.vec.contains_key(ptr.key),
+            PointerKind::Boolean => self.boolean.contains_key(ptr.pointer),
+            PointerKind::Integer => self.i32.contains_key(ptr.pointer),
+            PointerKind::Record => self.vec.contains_key(ptr.pointer),
+            PointerKind::OrType => self.or_type.contains_key(ptr.pointer),
+            PointerKind::Decimal => self.f32.contains_key(ptr.pointer),
+            PointerKind::List => self.vec.contains_key(ptr.pointer),
         }
     }
 
@@ -415,7 +415,7 @@ impl Memory {
             .value()
             .get(idx as usize)
             .unwrap();
-        *self.i32.get(ptr.key).unwrap().value.value()
+        *self.i32.get(ptr.pointer).unwrap().value.value()
     }
 
     pub fn array_i32_2(
@@ -426,11 +426,11 @@ impl Memory {
         let vec = self.vec.insert(
             HeapValue::new(vec![
                 Pointer {
-                    key: ptr1,
+                    pointer: ptr1,
                     kind: PointerKind::Integer,
                 },
                 Pointer {
-                    key: ptr2,
+                    pointer: ptr2,
                     kind: PointerKind::Integer,
                 },
             ])
@@ -443,11 +443,11 @@ impl Memory {
 
     pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
         let dependents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.key).unwrap().dependents,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().dependents,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.key).unwrap().dependents,
+            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
-                &mut self.vec.get_mut(target.key).unwrap().dependents
+                &mut self.vec.get_mut(target.pointer).unwrap().dependents
             }
         };
 
@@ -456,11 +456,11 @@ impl Memory {
 
     pub fn add_ui_dependent(&mut self, target: Pointer, dependent: DynamicProperty) {
         let dependents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.key).unwrap().ui_properties,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.key).unwrap().ui_properties,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.key).unwrap().ui_properties,
+            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().ui_properties,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
-                &mut self.vec.get_mut(target.key).unwrap().ui_properties
+                &mut self.vec.get_mut(target.pointer).unwrap().ui_properties
             }
         };
 
@@ -476,19 +476,19 @@ impl Memory {
         let vec = self.vec.insert(
             HeapValue::new(vec![
                 Pointer {
-                    key: r_pointer,
+                    pointer: r_pointer,
                     kind: PointerKind::Integer,
                 },
                 Pointer {
-                    key: g_pointer,
+                    pointer: g_pointer,
                     kind: PointerKind::Integer,
                 },
                 Pointer {
-                    key: b_pointer,
+                    pointer: b_pointer,
                     kind: PointerKind::Integer,
                 },
                 Pointer {
-                    key: a_pointer,
+                    pointer: a_pointer,
                     kind: PointerKind::Decimal,
                 },
             ])
@@ -545,21 +545,21 @@ mod test {
             m.create_frame();
 
             let p = m.create_boolean(true).into_boolean_pointer();
-            assert!(m.get_boolean(p.key));
+            assert!(m.get_boolean(p.pointer));
 
             {
                 m.create_frame();
-                assert!(m.get_boolean(p.key));
+                assert!(m.get_boolean(p.pointer));
 
                 let p2 = m.create_boolean(false).into_boolean_pointer();
-                assert!(!m.get_boolean(p2.key));
+                assert!(!m.get_boolean(p2.pointer));
 
                 m.end_frame();
                 assert!(m.is_pointer_valid(p));
                 assert!(!m.is_pointer_valid(p2));
             }
 
-            assert!(m.get_boolean(p.key));
+            assert!(m.get_boolean(p.pointer));
             m.end_frame();
             assert!(!m.is_pointer_valid(p));
         }
@@ -575,10 +575,10 @@ mod test {
         m.create_frame();
 
         let p = m.create_boolean(true).into_boolean_pointer();
-        assert!(m.get_boolean(p.key));
+        assert!(m.get_boolean(p.pointer));
 
         m.end_frame();
-        m.get_boolean(p.key);
+        m.get_boolean(p.pointer);
     }
 
     #[test]
@@ -591,16 +591,16 @@ mod test {
             m.create_frame();
 
             let p = m.create_boolean(true).into_boolean_pointer();
-            assert!(m.get_boolean(p.key));
+            assert!(m.get_boolean(p.pointer));
 
             let p2 = {
                 m.create_frame();
-                assert!(m.get_boolean(p.key));
+                assert!(m.get_boolean(p.pointer));
 
                 let p2 = m.create_boolean(false).into_boolean_pointer();
-                assert!(!m.get_boolean(p2.key));
+                assert!(!m.get_boolean(p2.pointer));
 
-                m.return_frame(p2.key);
+                m.return_frame(p2.pointer);
 
                 assert!(m.is_pointer_valid(p));
                 assert!(m.is_pointer_valid(p2));
@@ -608,8 +608,8 @@ mod test {
                 p2
             };
 
-            assert!(m.get_boolean(p.key));
-            assert!(!m.get_boolean(p2.key));
+            assert!(m.get_boolean(p.pointer));
+            assert!(!m.get_boolean(p2.pointer));
 
             m.end_frame();
             assert!(!m.is_pointer_valid(p));

@@ -2,11 +2,11 @@
 pub struct DynamicProperty {
     pub property: fastn_runtime::UIProperty,
     pub node: fastn_runtime::NodeKey,
-    pub closure: Option<fastn_runtime::ClosureKey>,
+    pub closure: Option<fastn_runtime::ClosurePointer>,
 }
 
 impl DynamicProperty {
-    pub(crate) fn closure(self, closure: fastn_runtime::ClosureKey) -> Self {
+    pub(crate) fn closure(self, closure: fastn_runtime::ClosurePointer) -> Self {
         let mut ui_dependent = self;
         ui_dependent.closure = Some(closure);
         ui_dependent
@@ -45,7 +45,7 @@ impl From<UIProperty> for i32 {
 }
 
 impl UIProperty {
-    pub(crate) fn into_ui_dependent(self, node: fastn_runtime::NodeKey) -> DynamicProperty {
+    pub(crate) fn into_dynamic_property(self, node: fastn_runtime::NodeKey) -> DynamicProperty {
         DynamicProperty {
             property: self,
             node,

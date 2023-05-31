@@ -34,7 +34,7 @@ pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
 slotmap::new_key_type! { pub struct PointerKey; }
-slotmap::new_key_type! { pub struct ClosureKey; }
+slotmap::new_key_type! { pub struct ClosurePointer; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]

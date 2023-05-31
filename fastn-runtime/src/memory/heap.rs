@@ -26,7 +26,7 @@ pub enum HeapValue<T> {
     /// -- integer z = { x + y } (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
     Formula {
         cached_value: T,
-        closure: fastn_runtime::ClosureKey,
+        closure: fastn_runtime::ClosurePointer,
     },
 }
 
@@ -63,7 +63,7 @@ impl<T> HeapValue<T> {
 
     pub(crate) fn new_with_formula(
         cached_value: T,
-        closure: fastn_runtime::ClosureKey,
+        closure: fastn_runtime::ClosurePointer,
     ) -> HeapValue<T> {
         HeapValue::Formula {
             cached_value,

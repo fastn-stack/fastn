@@ -290,8 +290,11 @@ mod test {
         println!("1** {:#?}", d.memory());
         d.memory().assert_empty();
         d.memory_mut().create_frame();
+
         let i32_pointer = d.memory_mut().create_i32(200);
+
         let column_node = d.create_kernel(d.root, super::ElementKind::Column);
+
         let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
             function: 0,
             captured_variables: i32_pointer.into_integer_pointer(),
@@ -299,7 +302,7 @@ mod test {
         d.memory_mut().add_ui_dependent(
             i32_pointer.into_integer_pointer(),
             fastn_runtime::UIProperty::WidthFixedPx
-                .into_ui_dependent(column_node)
+                .into_dynamic_property(column_node)
                 .closure(closure_key),
         );
         println!("2** {:#?}", d.memory());
