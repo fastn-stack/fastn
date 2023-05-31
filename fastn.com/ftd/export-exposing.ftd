@@ -13,13 +13,14 @@ Exporting allows the use of component definitions, variables,
 and other elements that are not originally part of the same package
 but are made accessible for use in other packages or modules when it's imported
 elsewhere. By importing this package, users can utilize these exported
-definitions as if those were part of the same package. It is important to note
-that exporting can only be used with imports.
+definitions as if those were part of the same package.
+
+**Note**: `export` can only be used with `imports`.
 
 -- ds.code: Using export
 lang: ftd
 
-;; Inside doc-site
+\;; Inside doc-site
 \-- import: fastn-community.github.io/typography as tf
 export: markdown, h0, h1, h2, h3 ;; <hl>
 
@@ -35,10 +36,12 @@ can only be used within the same package. They are not made available when
 the package is imported by another package. This means that the visibility of
 exposed elements is limited to the package where they are defined.
 
+**Note**: `exposing` can be used with `imports` and `auto-imports`.
+
 -- ds.code: Using exposing
 lang: ftd
 
-;; Inside doc-site
+\;; Inside doc-site
 \-- import: fastn-community.github.io/typography as tf
 exposing: markdown, h0, h1, h2, h3 ;; <hl>
 
@@ -47,7 +50,7 @@ exposing: markdown, h0, h1, h2, h3 ;; <hl>
 Above code shows that certain components (markdown, h0, h1, h2, h3) from
 `typography` have been made available to use within `doc-site` package.
 
-`Note`: These components won't be available for external use wherever doc-site
+**Note**: These components won't be available for external use wherever doc-site
 is imported.
 
 -- end: my-ds.page
