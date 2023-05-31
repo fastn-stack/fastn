@@ -301,7 +301,7 @@ mod test {
             function: 0,
             captured_variables: arr_ptr.into_list_pointer(),
         });
-        d.memory_mut().add_dynamic_property(
+        d.memory_mut().add_dynamic_property_dependency(
             i32_pointer.into_integer_pointer(),
             fastn_runtime::UIProperty::WidthFixedPx
                 .into_dynamic_property(column_node)

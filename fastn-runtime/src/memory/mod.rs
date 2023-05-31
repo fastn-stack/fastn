@@ -507,7 +507,7 @@ impl Memory {
         dependents.push(dependent);
     }
 
-    pub fn add_dynamic_property(&mut self, target: Pointer, dependent: DynamicProperty) {
+    pub fn add_dynamic_property_dependency(&mut self, target: Pointer, dependency: DynamicProperty) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::Boolean => {
@@ -519,7 +519,7 @@ impl Memory {
             }
         };
 
-        dependents.push(dependent);
+        dependents.push(dependency);
     }
 
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {

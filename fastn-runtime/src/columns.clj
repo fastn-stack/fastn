@@ -10,11 +10,11 @@
     (import "fastn" "set_f32_prop" (func $set_f32_prop (param externref i32 f32)))
     (import "fastn" "set_boolean" (func $set_boolean (param externref i32) (result externref)))
     (import "fastn" "attach_event_handler" (func $attach_event_handler (param externref i32 i32 externref)))
-    ;; set_i32_prop_func(element, prop, func, variables)
+    ;; set_dynamic_property_i32(element, prop, func, variables)
     ;; prop = 0 = fixed width in pixels etc
     ;; func = function to call, index in the table, func must return i32
     ;; variables = array containing variables to pass to the function
-    (import "fastn" "set_i32_prop_func" (func $set_i32_prop_func (param externref i32 i32 externref)))
+    (import "fastn" "set_dynamic_property_i32" (func $set_dynamic_property_i32 (param externref i32 i32 externref)))
     (import "fastn" "set_i32_3_prop_func" (func $set_i32_3_prop_func (param externref i32 i32 externref)))
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
     (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
@@ -43,7 +43,7 @@
         (local.set $column (call $create_kernel (i32.const 0) (local.get $root)))
 
         ;; width.fixed.px: $product(a=10, b=$x)
-        (call $set_i32_prop_func
+        (call $set_dynamic_property_i32
             (local.get $column)
             (i32.const 0) ;; 0 = fixed width in pixels
             (i32.const 0) ;; index in the table

@@ -76,7 +76,7 @@ impl fastn_runtime::Dom {
         );
 
         linker.func4caller(
-            "set_i32_prop_func",
+            "set_dynamic_property_i32",
             |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
              node_key,
              ui_property,
@@ -107,7 +107,7 @@ impl fastn_runtime::Dom {
                     function: table_index,
                     captured_variables: func_arg.into_list_pointer(),
                 });
-                mem.add_dynamic_property(
+                mem.add_dynamic_property_dependency(
                     func_arg.into_list_pointer(),
                     ui_property
                         .into_dynamic_property(node_key)
@@ -151,7 +151,7 @@ impl fastn_runtime::Dom {
                     function: table_index,
                     captured_variables: func_arg.into_list_pointer(),
                 });
-                mem.add_dynamic_property(
+                mem.add_dynamic_property_dependency(
                     func_arg.into_list_pointer(),
                     ui_property
                         .into_dynamic_property(node_key)
