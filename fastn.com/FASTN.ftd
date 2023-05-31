@@ -183,6 +183,8 @@ favicon: /-/fastn.com/images/favicon.svg
     document: ftd/container-root-attributes.ftd
 - `import`: /import/
   document: ftd-host/import.ftd
+- Using export/exposing: /using-export-exposing/
+  document: ftd/export-exposing.ftd
 - Functions: /functions/
   document: ftd/functions/
 - Built-in Functions: /built-in-functions/
