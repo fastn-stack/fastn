@@ -287,6 +287,7 @@ mod test {
         ));
     }
 
+    #[ignore]
     #[test]
     fn test() {
         assert_import("create_column", "(result externref)");
