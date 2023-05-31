@@ -7,6 +7,13 @@ pub struct Pointer {
 }
 
 impl fastn_runtime::PointerKey {
+    pub(crate) fn into_boolean_pointer(self) -> Pointer {
+        Pointer {
+            key: self,
+            kind: PointerKind::Boolean,
+        }
+    }
+
     pub(crate) fn into_integer_pointer(self) -> Pointer {
         Pointer {
             key: self,

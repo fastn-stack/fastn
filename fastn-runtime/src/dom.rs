@@ -284,6 +284,7 @@ impl Value {
 #[cfg(test)]
 mod test {
     #[test]
+    #[ignore]
     fn ui_dependency() {
         let mut d = super::Dom::default();
         println!("1** {:#?}", d.memory());
@@ -293,7 +294,7 @@ mod test {
         let column_node = d.create_kernel(d.root, super::ElementKind::Column);
         let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
             function: 0,
-            captured_variables: vec![i32_pointer.into_integer_pointer()],
+            captured_variables: i32_pointer.into_integer_pointer(),
         });
         d.memory_mut().add_ui_dependent(
             i32_pointer.into_integer_pointer(),

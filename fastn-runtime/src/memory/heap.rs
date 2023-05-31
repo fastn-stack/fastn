@@ -1,3 +1,5 @@
+pub type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
+
 /// For every ftd value we have one such entry
 #[derive(Debug)]
 pub struct HeapData<T> {
@@ -9,18 +11,6 @@ pub struct HeapData<T> {
     /// whenever a dom node is added or deleted, it is added or removed from this list.
     pub ui_properties: Vec<fastn_runtime::memory::DynamicProperty>,
 }
-
-impl<T> HeapData<T> {
-    pub(crate) fn new(value: HeapValue<T>) -> HeapData<T> {
-        HeapData {
-            value,
-            dependents: vec![],
-            ui_properties: vec![],
-        }
-    }
-}
-
-pub type Heap<T> = slotmap::SlotMap<fastn_runtime::PointerKey, HeapData<T>>;
 
 /// This is the data we store in the heap for any value.
 #[derive(Debug, Eq, PartialEq)]
@@ -39,6 +29,17 @@ pub enum HeapValue<T> {
         closure: fastn_runtime::ClosureKey,
     },
 }
+
+impl<T> HeapData<T> {
+    pub(crate) fn new(value: HeapValue<T>) -> HeapData<T> {
+        HeapData {
+            value,
+            dependents: vec![],
+            ui_properties: vec![],
+        }
+    }
+}
+
 
 impl<T> HeapValue<T> {
     pub(crate) fn value(&self) -> &T {

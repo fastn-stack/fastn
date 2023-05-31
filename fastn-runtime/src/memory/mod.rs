@@ -58,7 +58,7 @@ pub struct Memory {
     f32: Heap<f32>,
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
     /// are stored in the order they are defined.
-    vec: Heap<Vec<Pointer>>,
+    pub vec: Heap<Vec<Pointer>>,
     or_type: Heap<(u8, Vec<Pointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosureKey, Closure>,
@@ -75,7 +75,7 @@ pub struct Closure {
     pub function: i32,
     /// function_data is the pointer to a vector that contains all the variables "captured" by this
     /// closure.
-    pub captured_variables: Vec<Pointer>,
+    pub captured_variables: Pointer,
 
     // in future we can this optimisation: Saves us from creating vectors unless needed. Most
     // closures have two pointers (if most had three we can create a v3).
@@ -334,6 +334,12 @@ impl Memory {
         pointer
     }
 
+    pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
+        match ptr.kind {
+            fastn_runtime::PointerKind::Boolean => self.boolean.contains_key(ptr.key),
+            _ => todo!()
+        }
+    }
     pub fn get_boolean(&mut self, ptr: fastn_runtime::PointerKey) -> bool {
         *self.boolean[ptr].value.value()
     }
@@ -496,6 +502,38 @@ mod test {
         m.end_frame();
         m.assert_empty();
         println!("{:#?}", m);
+    }
+
+    #[test]
+    fn stack() {
+        let mut m = super::Memory::default();
+        println!("{:#?}", m);
+        m.assert_empty();
+
+        {
+            m.create_frame();
+
+            let p = m.create_boolean(true);
+            assert!(m.get_boolean(p));
+
+            {
+                m.create_frame();
+                assert!(m.get_boolean(p));
+
+                let p2 = m.create_boolean(false);
+                assert!(!m.get_boolean(p2));
+
+                m.end_frame();
+                assert!(m.is_pointer_valid(p.into_boolean_pointer()));
+                assert!(!m.is_pointer_valid(p2.into_boolean_pointer()));
+            }
+
+            assert!(m.get_boolean(p));
+            m.end_frame();
+            assert!(!m.is_pointer_valid(p.into_boolean_pointer()));
+        }
+
+        m.assert_empty();
     }
 }
 
