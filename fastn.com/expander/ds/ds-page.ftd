@@ -107,6 +107,7 @@ lang: ftd
 \-- ds.page: You meet me first because I am ~in~ en'titled 🤴
 site-name: Ajit
 site-logo: $assets.files.images.logo.svg
+logo-width: 50
 site-url: https://fastn.com/
 
 
