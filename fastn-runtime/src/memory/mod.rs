@@ -234,10 +234,11 @@ impl Memory {
 
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
-        self.stack.last_mut().unwrap().pointers.push(Pointer {
-            pointer,
-            kind,
-        });
+        self.stack
+            .last_mut()
+            .unwrap()
+            .pointers
+            .push(Pointer { pointer, kind });
     }
 
     pub fn create_frame(&mut self) {
@@ -507,7 +508,11 @@ impl Memory {
         dependents.push(dependent);
     }
 
-    pub fn add_dynamic_property_dependency(&mut self, target: Pointer, dependency: DynamicProperty) {
+    pub fn add_dynamic_property_dependency(
+        &mut self,
+        target: Pointer,
+        dependency: DynamicProperty,
+    ) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::Boolean => {

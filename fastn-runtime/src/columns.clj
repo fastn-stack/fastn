@@ -46,7 +46,7 @@
         (call $set_dynamic_property_i32
             (local.get $column)
             (i32.const 0) ;; 0 = fixed width in pixels
-            (i32.const 0) ;; index in the table
+            (i32.const 0) ;; index in the table for $product function
             (call $array_i32_2 (global.set $main#x) (call $create_integer (i32.const 10)))
         )
 

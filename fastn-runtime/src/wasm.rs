@@ -82,33 +82,43 @@ impl fastn_runtime::Dom {
              ui_property,
              table_index,
              func_arg: fastn_runtime::PointerKey| {
-                let mut values = vec![];
-                caller
-                    .get_export("callByIndex")
-                    .unwrap()
-                    .into_func()
-                    .expect("callByIndex not a func")
-                    .call(
-                        caller.as_context_mut(),
-                        &[
-                            wasmtime::Val::I32(table_index),
-                            wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
-                        ],
-                        &mut values,
-                    )
-                    .expect("call failed");
+                let current_value_of_dynamic_property = {
+                    let mut values = vec![];
+                    caller
+                        .get_export("callByIndex")
+                        .unwrap()
+                        .into_func()
+                        .expect("callByIndex not a func")
+                        .call(
+                            caller.as_context_mut(),
+                            &[
+                                wasmtime::Val::I32(table_index),
+                                wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
+                            ],
+                            &mut values,
+                        )
+                        .expect("call failed");
 
-                let value = values.i32(0);
+                    values.i32(0)
+                };
+
                 let dom = caller.data_mut();
-                dom.set_property(node_key, ui_property, value.into());
+                dom.set_property(
+                    node_key,
+                    ui_property,
+                    current_value_of_dynamic_property.into(),
+                );
+
+                let func_arg = func_arg.into_list_pointer();
 
                 let mem = dom.memory_mut();
                 let closure_key = mem.create_closure(fastn_runtime::Closure {
                     function: table_index,
-                    captured_variables: func_arg.into_list_pointer(),
+                    captured_variables: func_arg,
                 });
+
                 mem.add_dynamic_property_dependency(
-                    func_arg.into_list_pointer(),
+                    func_arg,
                     ui_property
                         .into_dynamic_property(node_key)
                         .closure(closure_key),
