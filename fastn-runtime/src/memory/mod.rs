@@ -320,8 +320,19 @@ impl Memory {
         }
     }
 
-    pub fn return_frame(&mut self, _k: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
-        todo!()
+    pub fn return_frame(&mut self, keep: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
+        let mut k: Option<fastn_runtime::Pointer> = None;
+        for pointer in self.stack.pop().unwrap().pointers.iter() {
+            if pointer.key == keep {
+                k = Some(pointer.to_owned());
+            } else {
+                self.drop_pointer(pointer);
+            }
+        }
+
+        let t = self.stack.len()-1;
+        self.stack[t].pointers.push(k.unwrap()); // unwrap ok
+        keep
     }
 
     pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosureKey {
@@ -535,6 +546,44 @@ mod test {
 
         m.assert_empty();
     }
+
+    #[test]
+    fn return_frame() {
+        let mut m = super::Memory::default();
+        println!("{:#?}", m);
+        m.assert_empty();
+
+        {
+            m.create_frame();
+
+            let p = m.create_boolean(true);
+            let p2;
+            assert!(m.get_boolean(p));
+
+            {
+                m.create_frame();
+                assert!(m.get_boolean(p));
+
+                p2 = m.create_boolean(false);
+                assert!(!m.get_boolean(p2));
+
+                m.return_frame(p2);
+
+                assert!(m.is_pointer_valid(p.into_boolean_pointer()));
+                assert!(m.is_pointer_valid(p2.into_boolean_pointer()));
+            }
+
+            assert!(m.get_boolean(p));
+            assert!(!m.get_boolean(p2));
+
+            m.end_frame();
+            assert!(!m.is_pointer_valid(p.into_boolean_pointer()));
+            assert!(!m.is_pointer_valid(p2.into_boolean_pointer()));
+        }
+
+        m.assert_empty();
+    }
+
 }
 
 // -- record x:
