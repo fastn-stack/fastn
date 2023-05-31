@@ -591,21 +591,22 @@ mod test {
             m.create_frame();
 
             let p = m.create_boolean(true).into_boolean_pointer();
-            let p2;
             assert!(m.get_boolean(p.key));
 
-            {
+            let p2 = {
                 m.create_frame();
                 assert!(m.get_boolean(p.key));
 
-                p2 = m.create_boolean(false).into_boolean_pointer();
+                let p2 = m.create_boolean(false).into_boolean_pointer();
                 assert!(!m.get_boolean(p2.key));
 
                 m.return_frame(p2.key);
 
                 assert!(m.is_pointer_valid(p));
                 assert!(m.is_pointer_valid(p2));
-            }
+
+                p2
+            };
 
             assert!(m.get_boolean(p.key));
             assert!(!m.get_boolean(p2.key));
