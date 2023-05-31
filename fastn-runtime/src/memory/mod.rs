@@ -498,7 +498,7 @@ impl Memory {
         dependents.push(dependent);
     }
 
-    pub fn add_ui_dependent(&mut self, target: Pointer, dependent: DynamicProperty) {
+    pub fn add_dynamic_property(&mut self, target: Pointer, dependent: DynamicProperty) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::Boolean => {

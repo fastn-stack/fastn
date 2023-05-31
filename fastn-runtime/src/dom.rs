@@ -284,7 +284,6 @@ impl Value {
 #[cfg(test)]
 mod test {
     #[test]
-    #[ignore]
     fn ui_dependency() {
         let mut d = super::Dom::default();
         println!("1** {:#?}", d.memory());
@@ -292,22 +291,31 @@ mod test {
         d.memory_mut().create_frame();
 
         let i32_pointer = d.memory_mut().create_i32(200);
-
+        let i32_pointer2 = d.memory_mut().create_i32(100);
+        let arr_ptr = d
+            .memory_mut()
+            .create_list_1(fastn_runtime::PointerKind::Integer, i32_pointer);
         let column_node = d.create_kernel(d.root, super::ElementKind::Column);
 
         let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
             function: 0,
-            captured_variables: i32_pointer.into_integer_pointer(),
+            captured_variables: arr_ptr.into_list_pointer(),
         });
-        d.memory_mut().add_ui_dependent(
+        d.memory_mut().add_dynamic_property(
             i32_pointer.into_integer_pointer(),
             fastn_runtime::UIProperty::WidthFixedPx
                 .into_dynamic_property(column_node)
                 .closure(closure_key),
         );
-        println!("2** {:#?}", d.memory());
         d.memory_mut().end_frame();
-        println!("3** {:#?}", d.memory());
-        d.memory().assert_empty();
+
+        // i32_pointer should still be live as its attached as a dynamic property
+        assert!(d
+            .memory
+            .is_pointer_valid(i32_pointer.into_integer_pointer()));
+        // i32_pointer2 should go away as its not needed anywhere
+        assert!(!d
+            .memory
+            .is_pointer_valid(i32_pointer2.into_integer_pointer()));
     }
 }
