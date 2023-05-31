@@ -331,7 +331,8 @@ impl Memory {
         }
 
         let t = self.stack.len()-1;
-        self.stack[t].pointers.push(k.unwrap()); // unwrap ok
+        // using .unwrap() so we crash on a bug instead of silently ignoring it
+        self.stack[t].pointers.push(k.unwrap());
         keep
     }
 
@@ -524,27 +525,41 @@ mod test {
         {
             m.create_frame();
 
-            let p = m.create_boolean(true);
-            assert!(m.get_boolean(p));
+            let p = m.create_boolean(true).into_boolean_pointer();
+            assert!(m.get_boolean(p.key));
 
             {
                 m.create_frame();
-                assert!(m.get_boolean(p));
+                assert!(m.get_boolean(p.key));
 
-                let p2 = m.create_boolean(false);
-                assert!(!m.get_boolean(p2));
+                let p2 = m.create_boolean(false).into_boolean_pointer();
+                assert!(!m.get_boolean(p2.key));
 
                 m.end_frame();
-                assert!(m.is_pointer_valid(p.into_boolean_pointer()));
-                assert!(!m.is_pointer_valid(p2.into_boolean_pointer()));
+                assert!(m.is_pointer_valid(p));
+                assert!(!m.is_pointer_valid(p2));
             }
 
-            assert!(m.get_boolean(p));
+            assert!(m.get_boolean(p.key));
             m.end_frame();
-            assert!(!m.is_pointer_valid(p.into_boolean_pointer()));
+            assert!(!m.is_pointer_valid(p));
         }
 
         m.assert_empty();
+    }
+
+    #[test]
+    #[should_panic]
+    fn cleaned_up_pointer_access_should_panic() {
+        let mut m = super::Memory::default();
+
+        m.create_frame();
+
+        let p = m.create_boolean(true).into_boolean_pointer();
+        assert!(m.get_boolean(p.key));
+
+        m.end_frame();
+        m.get_boolean(p.key);
     }
 
     #[test]
@@ -556,29 +571,29 @@ mod test {
         {
             m.create_frame();
 
-            let p = m.create_boolean(true);
+            let p = m.create_boolean(true).into_boolean_pointer();
             let p2;
-            assert!(m.get_boolean(p));
+            assert!(m.get_boolean(p.key));
 
             {
                 m.create_frame();
-                assert!(m.get_boolean(p));
+                assert!(m.get_boolean(p.key));
 
-                p2 = m.create_boolean(false);
-                assert!(!m.get_boolean(p2));
+                p2 = m.create_boolean(false).into_boolean_pointer();
+                assert!(!m.get_boolean(p2.key));
 
-                m.return_frame(p2);
+                m.return_frame(p2.key);
 
-                assert!(m.is_pointer_valid(p.into_boolean_pointer()));
-                assert!(m.is_pointer_valid(p2.into_boolean_pointer()));
+                assert!(m.is_pointer_valid(p));
+                assert!(m.is_pointer_valid(p2));
             }
 
-            assert!(m.get_boolean(p));
-            assert!(!m.get_boolean(p2));
+            assert!(m.get_boolean(p.key));
+            assert!(!m.get_boolean(p2.key));
 
             m.end_frame();
-            assert!(!m.is_pointer_valid(p.into_boolean_pointer()));
-            assert!(!m.is_pointer_valid(p2.into_boolean_pointer()));
+            assert!(!m.is_pointer_valid(p));
+            assert!(!m.is_pointer_valid(p2));
         }
 
         m.assert_empty();

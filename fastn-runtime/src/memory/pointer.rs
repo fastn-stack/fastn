@@ -1,6 +1,6 @@
 /// Since a pointer can be present in any of the slotmaps on Memory, .boolean, .i32 etc, we need
 /// to keep track of Kind so we know where this pointer came from
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
 pub struct Pointer {
     pub key: fastn_runtime::PointerKey,
     pub kind: PointerKind,
@@ -43,7 +43,7 @@ impl fastn_runtime::PointerKey {
     }
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
 pub enum PointerKind {
     Boolean,
     Integer,
