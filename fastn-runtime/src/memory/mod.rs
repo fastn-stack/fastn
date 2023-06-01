@@ -468,6 +468,25 @@ impl Memory {
         self.i32[ptr].value.set_value(value)
     }
 
+    pub fn multiply_i32(
+        &mut self,
+        arr: fastn_runtime::PointerKey,
+        idx_1: i32,
+        idx_2: i32,
+    ) -> fastn_runtime::PointerKey {
+        let idx_1 = idx_1 as usize;
+        let idx_2 = idx_2 as usize;
+
+        let arr = self.vec[arr].value.mut_value();
+
+        let v1 = *self.i32[arr[idx_1].pointer].value.value();
+        let v2 = *self.i32[arr[idx_2].pointer].value.value();
+
+        let ptr = self.create_i32(v1 * v2);
+        self.insert_in_frame(ptr, PointerKind::Integer);
+        ptr
+    }
+
     pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
         let pointer = self.f32.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Integer);

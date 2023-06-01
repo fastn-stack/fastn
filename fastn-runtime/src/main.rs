@@ -145,24 +145,79 @@ pub fn create_module() -> Vec<u8> {
     wat.into_bytes()
 }
 
-// source: fastn-runtime/columns.ftd (derived from column.ftd)
+// source: columns.clj (derived from columns.ftd)
 fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
     // Note: can not add these till the functions are defined
-    // m.extend(fastn_wasm::table_4(
-    //     fastn_wasm::RefType::Func,
-    //     "product",
-    //     "foo#on_mouse_enter",
-    //     "foo#on_mouse_leave",
-    //     "foo#background",
-    // ));
+    m.extend(fastn_wasm::table_1(
+        fastn_wasm::RefType::Func,
+        "product",
+        // "foo#on_mouse_enter",
+        // "foo#on_mouse_leave",
+        // "foo#background",
+    ));
 
     m.push(fastn_wasm::func_def::func1ret(
         "return_externref",
         fastn_wasm::Type::ExternRef.into(),
         fastn_wasm::Type::ExternRef,
     ));
+
+    // (func (export "call_by_index") (param $idx i32) (param $arr externref) (result externref)
+    //    call_indirect (type $return_externref) (local.get 0) (local.get 1)
+    // )
+
+    // (type $return_externref (func (param externref) (result externref)))
+    // (func (export "call_by_index")
+    //      (param $idx i32)
+    //      (param $arr externref)
+    //      (result externref)
+    //
+    //      (call_indirect (type $return_externref) (local.get $idx) (local.get $arr))
+    // )
+
+    m.push(
+        fastn_wasm::Func {
+            name: None,
+            export: Some("call_by_index".to_string()),
+            params: vec![
+                fastn_wasm::Type::I32.to_pl("fn"),
+                fastn_wasm::Type::ExternRef.to_pl("arr"),
+            ],
+            locals: vec![],
+            result: Some(fastn_wasm::Type::ExternRef),
+            body: vec![fastn_wasm::expression::call_indirect2(
+                "return_externref",
+                fastn_wasm::expression::local("arr"),
+                fastn_wasm::expression::local("fn"),
+            )],
+        }
+            .to_ast(),
+    );
+
+    m.push(
+        fastn_wasm::Func {
+            name: Some("product".to_string()),
+            export: None,
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("func-data")],
+            locals: vec![],
+            result: Some(fastn_wasm::Type::ExternRef),
+            body: vec![
+                fastn_wasm::expression::call("create_frame"),
+                fastn_wasm::expression::call1(
+                    "return_frame",
+                    fastn_wasm::expression::call3(
+                        "multiply_i32",
+                        fastn_wasm::expression::local("func-data"),
+                        fastn_wasm::expression::i32(0),
+                        fastn_wasm::expression::i32(1),
+                    ),
+                ),
+            ],
+        }
+            .to_ast(),
+    );
 
     m.push(
         fastn_wasm::Func {
@@ -211,59 +266,6 @@ fn create_columns() -> Vec<u8> {
         .to_ast(),
     );
 
-    // (func (export "call_by_index") (param $idx i32) (param $arr externref) (result externref)
-    //    call_indirect (type $return_externref) (local.get 0) (local.get 1)
-    // )
-    m.push(
-        fastn_wasm::Func {
-            name: None,
-            export: Some("call_by_index".to_string()),
-            params: vec![
-                fastn_wasm::Type::I32.to_pl("idx"),
-                fastn_wasm::Type::ExternRef.to_pl("arr"),
-            ],
-            locals: vec![],
-            result: Some(fastn_wasm::Type::ExternRef),
-            body: vec![fastn_wasm::expression::call_indirect2(
-                "return_externref",
-                fastn_wasm::expression::local("idx"),
-                fastn_wasm::expression::local("arr"),
-            )],
-        }
-        .to_ast(),
-    );
-
-    // (func $product (param $func-data externref) (result externref)
-    //     (call $create_frame)
-    //     (call $return_frame
-    //         (i32.mul
-    //             (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
-    //             (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
-    //         )
-    //     )
-    // )
-
-    m.push(
-        fastn_wasm::Func {
-            name: Some("product".to_string()),
-            export: None,
-            params: vec![fastn_wasm::Type::ExternRef.to_pl("func-data")],
-            locals: vec![],
-            result: Some(fastn_wasm::Type::ExternRef),
-            body: vec![
-                fastn_wasm::expression::call("create_frame"),
-                fastn_wasm::expression::call1(
-                    "return_frame",
-                    fastn_wasm::expression::operation_2(
-                        "i32.mult",
-                        fastn_wasm::expression::call1("get_i32", fastn_wasm::expression::i32(0)),
-                        fastn_wasm::expression::call1("get_i32", fastn_wasm::expression::i32(1)),
-                    ),
-                ),
-            ],
-        }
-        .to_ast(),
-    );
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
