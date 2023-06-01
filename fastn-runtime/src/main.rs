@@ -143,8 +143,11 @@ pub fn create_module() -> Vec<u8> {
 fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
+    // wasmtime is giving error for these, will uncomment after adding main
     // m.push(fastn_wasm::global("main#any-hover", fastn_wasm::Type::ExternRef));
     // m.push(fastn_wasm::global("main#x", fastn_wasm::Type::ExternRef));
+
+    m.push(fastn_wasm::table(3, fastn_wasm::RefType::Func));
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);

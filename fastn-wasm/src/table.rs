@@ -4,6 +4,16 @@ pub struct Table {
     pub limits: fastn_wasm::Limits,
 }
 
+pub fn table(count: u32, ref_type: fastn_wasm::RefType) -> fastn_wasm::Ast {
+    fastn_wasm::Ast::Table(Table {
+        ref_type,
+        limits: fastn_wasm::Limits {
+            min: count,
+            max: None,
+        }
+    })
+}
+
 impl Table {
     pub fn to_wat(&self) -> String {
         let limits_wat = self.limits.to_wat();
@@ -42,15 +52,15 @@ impl Limits {
 
 #[derive(Debug)]
 pub enum RefType {
-    FuncRef,
-    ExternRef,
+    Func,
+    Extern,
 }
 
 impl RefType {
     pub fn to_wat(&self) -> &str {
         match self {
-            RefType::FuncRef => "funcref",
-            RefType::ExternRef => "externref",
+            RefType::Func => "funcref",
+            RefType::Extern => "externref",
         }
     }
 }
@@ -61,7 +71,7 @@ mod test {
     fn test() {
         assert_eq!(
             fastn_wasm::Table {
-                ref_type: fastn_wasm::RefType::FuncRef,
+                ref_type: fastn_wasm::RefType::Func,
                 limits: fastn_wasm::Limits { min: 2, max: None },
             }
             .to_wat_formatted(),
@@ -75,7 +85,7 @@ mod test {
         );
         assert_eq!(
             fastn_wasm::Table {
-                ref_type: fastn_wasm::RefType::FuncRef,
+                ref_type: fastn_wasm::RefType::Func,
                 limits: fastn_wasm::Limits {
                     min: 2,
                     max: Some(5)

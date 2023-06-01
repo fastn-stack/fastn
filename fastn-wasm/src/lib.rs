@@ -22,7 +22,7 @@ pub use helpers::{LinkerExt, StoreExtractor, WasmType};
 pub use import::{Import, ImportDesc};
 pub use memory::Memory;
 pub use pl::PL;
-pub use table::{Limits, RefType, Table};
+pub use table::{Limits, RefType, Table, table};
 pub use ty::Type;
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
