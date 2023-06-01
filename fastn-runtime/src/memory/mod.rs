@@ -446,7 +446,7 @@ impl Memory {
         pointer
     }
 
-    pub fn get_boolean(&mut self, ptr: fastn_runtime::PointerKey) -> bool {
+    pub fn get_boolean(&self, ptr: fastn_runtime::PointerKey) -> bool {
         *self.boolean[ptr].value.value()
     }
 
@@ -460,7 +460,7 @@ impl Memory {
         pointer
     }
 
-    pub fn get_i32(&mut self, ptr: fastn_runtime::PointerKey) -> i32 {
+    pub fn get_i32(&self, ptr: fastn_runtime::PointerKey) -> i32 {
         *self.i32[ptr].value.value()
     }
 
@@ -493,7 +493,7 @@ impl Memory {
         pointer
     }
 
-    pub fn get_f32(&mut self, ptr: fastn_runtime::PointerKey) -> f32 {
+    pub fn get_f32(&self, ptr: fastn_runtime::PointerKey) -> f32 {
         *self.f32[ptr].value.value()
     }
 
