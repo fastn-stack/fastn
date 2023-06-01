@@ -26,7 +26,7 @@ mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::Dom;
+pub use dom::{Dom, ElementKind};
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
 pub use memory::{Closure, ClosurePointer, Memory, Pointer, PointerKey, PointerKind, UIProperty};
