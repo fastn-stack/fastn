@@ -263,7 +263,7 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(1),
+                    fastn_wasm::expression::i32(1), // height
                     fastn_wasm::expression::i32(500),
                 ),
                 fastn_wasm::expression::call3(
@@ -278,6 +278,54 @@ fn create_columns() -> Vec<u8> {
                     fastn_wasm::expression::i32(5), // margin
                     fastn_wasm::expression::i32(140),
                 ),
+
+                fastn_wasm::expression::call1("foo", fastn_wasm::expression::local("column")),
+
+                fastn_wasm::expression::call("end_frame"),
+            ],
+        }
+        .to_ast(),
+    );
+
+    m.push(
+        fastn_wasm::Func {
+            name: Some("foo".to_string()),
+            export: None,
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("parent")],
+            locals: vec![
+                fastn_wasm::Type::ExternRef.to_pl("column"),
+                fastn_wasm::Type::ExternRef.to_pl("on-hover"),
+            ],
+            result: None,
+            body: vec![
+                fastn_wasm::expression::call("create_frame"),
+                fastn_wasm::expression::local_set(
+                    "on-hover",
+                    fastn_wasm::expression::call1("create_boolean", fastn_wasm::expression::i32(0)),
+                ),
+                fastn_wasm::expression::local_set(
+                    "column",
+                    fastn_wasm::expression::call2(
+                        "create_kernel",
+                        fastn_wasm::expression::local("parent"),
+                        fastn_wasm::expression::i32(0),
+                    ),
+                ),
+
+                fastn_wasm::expression::call3(
+                    "set_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(0), // width
+                    fastn_wasm::expression::i32(100),
+                ),
+
+                fastn_wasm::expression::call3(
+                    "set_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(1), // height
+                    fastn_wasm::expression::i32(80),
+                ),
+
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
