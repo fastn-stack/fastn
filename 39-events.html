@@ -575,7 +575,8 @@ let lastKeyTime = Date.now();
 
 
 document.addEventListener("keydown", function(event) {
-global_keys[event.key] = true;
+let event_key =  window.ftd.utils.get_event_key(event);
+global_keys[event_key] = true;
 const currentTime = Date.now();
 if (currentTime - lastKeyTime > 1000) {{
 buffer = [];
@@ -584,27 +585,31 @@ lastKeyTime = currentTime;
 if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
 return;
 }
-buffer.push(event.key);
+buffer.push(event_key);
 
 
 
 if (buffer.join(',').includes("Shift,Shift")) {
 window.ftd.handle_event(event, 'main', '[{"name":"function__toggle___main","values":[["a",{"mutable":true,"reference":"foo#flag4"}]]}]', this)
 buffer = [];
-global_keys[event.key] = false;
+let event_key =  window.ftd.utils.get_event_key(event);
+global_keys[event_key] = false;
 return;
 }
 
 if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
 window.ftd.handle_event(event, 'main', '[{"name":"function__toggle___main","values":[["a",{"mutable":true,"reference":"foo#flag3"}]]}]', this)
 buffer = [];
-global_keys[event.key] = false;
+let event_key =  window.ftd.utils.get_event_key(event);
+global_keys[event_key] = false;
 return;
 }
 });
 
 
-document.addEventListener("keyup", function(event) { global_keys[event.key] = false; })
+document.addEventListener("keyup", function(event) {
+let event_key = window.ftd.utils.get_event_key(event);
+global_keys[event_key] = false; })
 </script>
 <style>
 *, :after, :before {
@@ -1687,6 +1692,14 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 };
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
+};
+window.ftd.utils.get_event_key = function (event) {
+if (65 <= event.keyCode && event.keyCode <= 90) {
+return String.fromCharCode(event.keyCode).toLowerCase();
+}
+else {
+return event.key;
+}
 };
 window.ftd.utils.function_name_to_js_function = function (s) {
 let new_string = s;

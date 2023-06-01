@@ -1643,6 +1643,14 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
 };
+window.ftd.utils.get_event_key = function (event) {
+if (65 <= event.keyCode && event.keyCode <= 90) {
+return String.fromCharCode(event.keyCode).toLowerCase();
+}
+else {
+return event.key;
+}
+};
 window.ftd.utils.function_name_to_js_function = function (s) {
 let new_string = s;
 let startsWithDigit = /^\d/.test(s);
@@ -1976,8 +1984,8 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","2:main__disabled", data);
+window.ftd.utils.node_change_call("main","0:main__text", data);
 };
 
 

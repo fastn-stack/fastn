@@ -1643,6 +1643,14 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
 };
+window.ftd.utils.get_event_key = function (event) {
+if (65 <= event.keyCode && event.keyCode <= 90) {
+return String.fromCharCode(event.keyCode).toLowerCase();
+}
+else {
+return event.key;
+}
+};
 window.ftd.utils.function_name_to_js_function = function (s) {
 let new_string = s;
 let startsWithDigit = /^\d/.test(s);
@@ -3085,18 +3093,18 @@ window.ftd.utils.set_value_helper(data, "foo#num", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#num", "main");
 window.ftd.call_immutable_value_changes("foo#num", "main");
-window.ftd.utils.node_change_call("main","0,2,4,0:main__align-self", data);
-window.ftd.utils.node_change_call("main","0,2,0:main__justify-content", data);
-window.ftd.utils.node_change_call("main","0,2,1:main__justify-content", data);
-window.ftd.utils.node_change_call("main","0,2,3:main__align-items", data);
-window.ftd.utils.node_change_call("main","0,2,2:main__justify-content", data);
-window.ftd.utils.node_change_call("main","0,2,2:main__align-items", data);
-window.ftd.utils.node_change_call("main","0,2,3:main__justify-content", data);
-window.ftd.utils.node_change_call("main","0,1:main__text", data);
-window.ftd.utils.node_change_call("main","0,2,5,0:main__align-self", data);
-window.ftd.utils.node_change_call("main","0,2,0:main__align-items", data);
 window.ftd.utils.node_change_call("main","0,2,6,0:main__text-align", data);
+window.ftd.utils.node_change_call("main","0,2,3:main__justify-content", data);
+window.ftd.utils.node_change_call("main","0,2,1:main__justify-content", data);
+window.ftd.utils.node_change_call("main","0,2,5,0:main__align-self", data);
+window.ftd.utils.node_change_call("main","0,2,0:main__justify-content", data);
+window.ftd.utils.node_change_call("main","0,2,2:main__align-items", data);
+window.ftd.utils.node_change_call("main","0,2,3:main__align-items", data);
+window.ftd.utils.node_change_call("main","0,2,4,0:main__align-self", data);
+window.ftd.utils.node_change_call("main","0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,2,2:main__justify-content", data);
 window.ftd.utils.node_change_call("main","0,2,1:main__align-items", data);
+window.ftd.utils.node_change_call("main","0,2,0:main__align-items", data);
 };
 
 

@@ -1645,6 +1645,14 @@ document.body.style.height = `max(${document.documentElement.scrollHeight}px, 10
 window.ftd.utils.reset_full_height = function () {
 document.body.style.height = `100%`;
 };
+window.ftd.utils.get_event_key = function (event) {
+if (65 <= event.keyCode && event.keyCode <= 90) {
+return String.fromCharCode(event.keyCode).toLowerCase();
+}
+else {
+return event.key;
+}
+};
 window.ftd.utils.function_name_to_js_function = function (s) {
 let new_string = s;
 let startsWithDigit = /^\d/.test(s);
@@ -1998,9 +2006,9 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#foo:fv:0", "main");
 window.ftd.call_immutable_value_changes("foo#foo:fv:0", "main");
+window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 };
 
@@ -2013,8 +2021,8 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#moo:mv:0,0", "main");
 window.ftd.call_immutable_value_changes("foo#moo:mv:0,0", "main");
-window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 };
 
 window.resolve_value_main = {};
