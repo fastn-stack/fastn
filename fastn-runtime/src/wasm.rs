@@ -91,7 +91,7 @@ impl fastn_runtime::Dom {
              func_arg| {
                 // TODO: refactor this into a generic helper
                 let current_value_of_dynamic_property = {
-                    let mut values = vec![];
+                    let mut values = vec![wasmtime::Val::I32(0)];
                     caller
                         .get_export("call_by_index")
                         .expect("call_by_index is not defined")
@@ -107,7 +107,7 @@ impl fastn_runtime::Dom {
                         )
                         .expect("call failed");
 
-                    values.i32(0)
+                    caller.data().memory().get_i32(values.ptr(0))
                 };
 
                 caller.data_mut().set_dynamic_property(

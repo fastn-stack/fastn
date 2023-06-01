@@ -182,7 +182,7 @@ fn create_columns() -> Vec<u8> {
             name: None,
             export: Some("call_by_index".to_string()),
             params: vec![
-                fastn_wasm::Type::I32.to_pl("fn"),
+                fastn_wasm::Type::I32.to_pl("fn_idx"),
                 fastn_wasm::Type::ExternRef.to_pl("arr"),
             ],
             locals: vec![],
@@ -190,7 +190,7 @@ fn create_columns() -> Vec<u8> {
             body: vec![fastn_wasm::expression::call_indirect2(
                 "return_externref",
                 fastn_wasm::expression::local("arr"),
-                fastn_wasm::expression::local("fn"),
+                fastn_wasm::expression::local("fn_idx"),
             )],
         }
             .to_ast(),

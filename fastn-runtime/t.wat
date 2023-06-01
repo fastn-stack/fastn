@@ -33,6 +33,7 @@
     (func (export "call_by_index")
         (param $idx i32)
         (param $arr externref)
+
         (result externref)
 
         (call_indirect (type $return_externref) (local.get $arr) (local.get $idx))
