@@ -236,6 +236,13 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::F32.into(),
                 fastn_wasm::Type::ExternRef,
             ),
+            fastn_wasm::import::func3ret(
+                "multiply_i32",
+                /* func-data */ fastn_wasm::Type::ExternRef.into(),
+                /* idx_1 */ fastn_wasm::Type::I32.into(),
+                /* idx_2 */ fastn_wasm::Type::I32.into(),
+                /* func-data[idx_1] * func-data[idx_2] */ fastn_wasm::Type::ExternRef,
+            ),
             fastn_wasm::import::func1ret(
                 "get_f32",
                 fastn_wasm::Type::ExternRef.into(),
@@ -304,6 +311,12 @@ impl fastn_runtime::Memory {
         linker.func2("set_i32", |mem: &mut fastn_runtime::Memory, ptr, v| {
             mem.set_i32(ptr, v)
         });
+        linker.func3ret(
+            "multiply_i32",
+            |mem: &mut fastn_runtime::Memory, arr, idx_1, idx_2| {
+                mem.multiply_i32(arr, idx_1, idx_2)
+            },
+        );
         linker.func1ret("create_f32", |mem: &mut fastn_runtime::Memory, v| {
             mem.create_f32(v)
         });
@@ -374,6 +387,7 @@ mod test {
         assert_import("create_i32", "(param i32) (result externref)");
         assert_import("get_i32", "(param externref) (result i32)");
         assert_import("set_i32", "(param externref i32)");
+        assert_import("multiply_i32", "(param externref i32 i32) (result externref)");
         assert_import("create_f32", "(param f32) (result externref)");
         assert_import("get_f32", "(param externref) (result f32)");
         assert_import("set_f32", "(param externref f32)");

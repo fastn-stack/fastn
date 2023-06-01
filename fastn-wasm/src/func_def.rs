@@ -19,6 +19,10 @@ pub fn func_def(
     })
 }
 
+pub fn func1(name: &str, arg1: fastn_wasm::PL) -> fastn_wasm::Ast {
+    func_def(name, vec![arg1], None)
+}
+
 pub fn func1ret(name: &str, arg1: fastn_wasm::PL, ret: fastn_wasm::Type) -> fastn_wasm::Ast {
     func_def(name, vec![arg1], Some(ret))
 }

@@ -99,6 +99,17 @@ pub trait LinkerExt<S> {
         name: &str,
         func: impl Fn(&mut SE, T1, T2) -> O + Send + Sync + 'static,
     );
+    fn func3ret<
+        SE: StoreExtractor<Parent = S>,
+        T1: WasmType,
+        T2: WasmType,
+        T3: WasmType,
+        O: WasmType,
+    >(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut SE, T1, T2, T3) -> O + Send + Sync + 'static,
+    );
     fn func4ret<
         SE: StoreExtractor<Parent = S>,
         T1: WasmType,
@@ -279,6 +290,39 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     SE::extract(&mut caller),
                     T1::extract(0, params),
                     T2::extract(1, params),
+                )
+                .to_wasm();
+                Ok(())
+            },
+        )
+        .unwrap();
+    }
+    fn func3ret<
+        SE: StoreExtractor<Parent = S>,
+        T1: WasmType,
+        T2: WasmType,
+        T3: WasmType,
+        O: WasmType,
+    >(
+        &mut self,
+        name: &str,
+        func: impl Fn(&mut SE, T1, T2, T3) -> O + Send + Sync + 'static,
+    ) {
+        self.func_new(
+            "fastn",
+            name,
+            wasmtime::FuncType::new(
+                [T1::the_type(), T2::the_type(), T3::the_type()]
+                    .iter()
+                    .cloned(),
+                [O::the_type()].iter().cloned(),
+            ),
+            move |mut caller: wasmtime::Caller<'_, S>, params, results| {
+                results[0] = func(
+                    SE::extract(&mut caller),
+                    T1::extract(0, params),
+                    T2::extract(1, params),
+                    T3::extract(2, params),
                 )
                 .to_wasm();
                 Ok(())

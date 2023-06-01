@@ -41,6 +41,12 @@ impl<T> HeapData<T> {
 }
 
 impl<T> HeapValue<T> {
+    pub(crate) fn mut_value(&mut self) -> &mut T {
+        match self {
+            HeapValue::Value(v) => v,
+            _ => unimplemented!(),
+        }
+    }
     pub(crate) fn value(&self) -> &T {
         match self {
             HeapValue::Value(v) => v,
