@@ -269,8 +269,14 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(4),
+                    fastn_wasm::expression::i32(4), // spacing
                     fastn_wasm::expression::i32(100),
+                ),
+                fastn_wasm::expression::call3(
+                    "set_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(5), // margin
+                    fastn_wasm::expression::i32(140),
                 ),
                 fastn_wasm::expression::call("end_frame"),
             ],
