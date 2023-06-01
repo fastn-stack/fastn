@@ -211,6 +211,28 @@ fn create_columns() -> Vec<u8> {
         .to_ast(),
     );
 
+    // (func (export "call_by_index") (param $idx i32) (param $arr externref) (result externref)
+    //    call_indirect (type $return_externref) (local.get 0) (local.get 1)
+    // )
+    m.push(
+        fastn_wasm::Func {
+            name: None,
+            export: Some("call_by_index".to_string()),
+            params: vec![
+                fastn_wasm::Type::I32.to_pl("idx"),
+                fastn_wasm::Type::ExternRef.to_pl("arr"),
+            ],
+            locals: vec![],
+            result: Some(fastn_wasm::Type::ExternRef),
+            body: vec![fastn_wasm::expression::call_indirect2(
+                "return_externref",
+                fastn_wasm::expression::local("idx"),
+                fastn_wasm::expression::local("arr"),
+            )],
+        }
+        .to_ast(),
+    );
+
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
     wat.into_bytes()
