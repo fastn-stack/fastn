@@ -47,7 +47,13 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::F32.into(),
             ),
-            // fastn_wasm::import::fun,
+            fastn_wasm::import::func4(
+                "set_dynamic_property_i32",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+            )
         ]);
         e
     }
@@ -82,7 +88,7 @@ impl fastn_runtime::Dom {
              node_key,
              ui_property,
              table_index,
-             func_arg: fastn_runtime::PointerKey| {
+             func_arg| {
                 let current_value_of_dynamic_property = {
                     let mut values = vec![];
                     caller
@@ -334,6 +340,9 @@ mod test {
     #[test]
     fn dom() {
         assert_import("create_kernel", "(param externref i32) (result externref)");
+        assert_import("set_property_i32", "(param externref i32 i32)");
+        assert_import("set_property_f32", "(param externref i32 f32)");
+        assert_import("set_dynamic_property_i32", "(param externref i32 i32 externref)");
     }
 
     #[test]
