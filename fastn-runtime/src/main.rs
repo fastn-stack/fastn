@@ -193,7 +193,7 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::local("fn_idx"),
             )],
         }
-            .to_ast(),
+        .to_ast(),
     );
 
     m.push(
@@ -216,7 +216,7 @@ fn create_columns() -> Vec<u8> {
                 ),
             ],
         }
-            .to_ast(),
+        .to_ast(),
     );
 
     m.push(
@@ -236,7 +236,7 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call2(
                     "set_global",
                     fastn_wasm::expression::i32(1),
-                    fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(10)),
+                    fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(42)),
                 ),
                 fastn_wasm::expression::local_set(
                     "column",
@@ -260,12 +260,23 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::call1("get_global", fastn_wasm::expression::i32(1)),
                     ),
                 ),
+                fastn_wasm::expression::call3(
+                    "set_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(1),
+                    fastn_wasm::expression::i32(500),
+                ),
+                fastn_wasm::expression::call3(
+                    "set_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(4),
+                    fastn_wasm::expression::i32(100),
+                ),
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
         .to_ast(),
     );
-
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);

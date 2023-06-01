@@ -59,7 +59,6 @@ impl Default for Dom {
         let mut children = slotmap::SecondaryMap::new();
         let root = nodes.insert(fastn_runtime::Container::outer_column(&mut taffy));
         children.insert(root, vec![]);
-        println!("root: {:?}", &root);
 
         Dom {
             taffy,
@@ -203,6 +202,13 @@ impl Dom {
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
+    pub fn set_element_spacing_px(&mut self, key: fastn_runtime::NodeKey, spacing: i32) {
+        let taffy_key = self.nodes[key].taffy();
+        let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        style.gap.height = taffy::prelude::points(spacing as f32);
+        self.taffy.set_style(taffy_key, style).unwrap();
+    }
+
     fn set_element_height_percent(&mut self, key: fastn_runtime::NodeKey, height: f32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
@@ -226,6 +232,9 @@ impl Dom {
             }
             fastn_runtime::UIProperty::BackgroundSolid => {
                 self.set_element_background_solid(key, value.rgba())
+            }
+            fastn_runtime::UIProperty::SpacingFixedPx => {
+                self.set_element_spacing_px(key, value.i32())
             }
         }
     }

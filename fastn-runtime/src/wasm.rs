@@ -387,7 +387,10 @@ mod test {
         assert_import("create_i32", "(param i32) (result externref)");
         assert_import("get_i32", "(param externref) (result i32)");
         assert_import("set_i32", "(param externref i32)");
-        assert_import("multiply_i32", "(param externref i32 i32) (result externref)");
+        assert_import(
+            "multiply_i32",
+            "(param externref i32 i32) (result externref)",
+        );
         assert_import("create_f32", "(param f32) (result externref)");
         assert_import("get_f32", "(param externref) (result f32)");
         assert_import("set_f32", "(param externref f32)");
