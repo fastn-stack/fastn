@@ -24,7 +24,7 @@
 
     (table 3 func)
     (elem (i32.const 0) $product $foo#on_mouse_enter $foo#on_mouse_leave $foo#background)
-    (type $return_externref (func (param $func-data externref) (result externref)))
+    (type $return_externref (func (param externref) (result externref)))
 
     (func (export "main") (param $root externref)
         (local $column externref)

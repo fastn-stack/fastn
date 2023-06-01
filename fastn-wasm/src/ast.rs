@@ -7,8 +7,7 @@ pub enum Ast {
     Table(fastn_wasm::Table),
     Memory(fastn_wasm::Memory),
     Elem(fastn_wasm::Elem),
-    // Type(fastn_wasm::Type),
-    // Start(fastn_wasm::Start),
+    FuncDef(fastn_wasm::FuncDef),
 }
 
 impl Ast {
@@ -21,6 +20,7 @@ impl Ast {
             Ast::Memory(m) => m.to_wat(),
             Ast::Global(g) => g.to_wat(),
             Ast::Elem(g) => g.to_wat(),
+            Ast::FuncDef(g) => g.to_wat(),
         }
     }
 }
