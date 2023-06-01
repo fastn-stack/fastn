@@ -9,6 +9,10 @@ pub struct Func {
 }
 
 impl Func {
+    pub fn to_ast(self) -> fastn_wasm::Ast {
+        fastn_wasm::Ast::Func(self)
+    }
+
     pub fn to_wat(&self) -> String {
         let mut s = String::new();
         s.push_str("(func");
