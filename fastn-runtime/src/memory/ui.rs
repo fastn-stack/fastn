@@ -20,6 +20,7 @@ pub enum UIProperty {
     HeightFixedPercentage,
     BackgroundSolid,
     SpacingFixedPx,
+    MarginFixedPx,
 }
 
 impl From<i32> for UIProperty {
@@ -30,6 +31,7 @@ impl From<i32> for UIProperty {
             2 => UIProperty::HeightFixedPercentage,
             3 => UIProperty::BackgroundSolid,
             4 => UIProperty::SpacingFixedPx,
+            5 => UIProperty::MarginFixedPx,
             _ => panic!("Unknown UIProperty: {}", i),
         }
     }
@@ -43,6 +45,7 @@ impl From<UIProperty> for i32 {
             UIProperty::HeightFixedPercentage => 2,
             UIProperty::BackgroundSolid => 3,
             UIProperty::SpacingFixedPx => 4,
+            UIProperty::MarginFixedPx => 5,
         }
     }
 }

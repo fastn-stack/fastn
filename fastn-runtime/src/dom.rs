@@ -209,6 +209,13 @@ impl Dom {
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
+    pub fn set_element_margin_px(&mut self, key: fastn_runtime::NodeKey, margin: i32) {
+        let taffy_key = self.nodes[key].taffy();
+        let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        style.margin = taffy::prelude::points(margin as f32);
+        self.taffy.set_style(taffy_key, style).unwrap();
+    }
+
     fn set_element_height_percent(&mut self, key: fastn_runtime::NodeKey, height: f32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
@@ -235,6 +242,9 @@ impl Dom {
             }
             fastn_runtime::UIProperty::SpacingFixedPx => {
                 self.set_element_spacing_px(key, value.i32())
+            }
+            fastn_runtime::UIProperty::MarginFixedPx => {
+                self.set_element_margin_px(key, value.i32())
             }
         }
     }
