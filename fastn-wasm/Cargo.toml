@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 indoc.workspace = true
 wasmtime.workspace = true
+itertools.workspace = true
 
 [dev-dependencies]
 wasmfmt.workspace = true

@@ -135,7 +135,7 @@ mod test {
                 module: "js".to_string(),
                 name: "table".to_string(),
                 desc: fastn_wasm::ImportDesc::Table(fastn_wasm::Table {
-                    ref_type: fastn_wasm::RefType::FuncRef,
+                    ref_type: fastn_wasm::RefType::Func,
                     limits: fastn_wasm::Limits { min: 1, max: None },
                 }),
             }
