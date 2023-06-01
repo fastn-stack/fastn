@@ -10,8 +10,64 @@ pub fn table(count: u32, ref_type: fastn_wasm::RefType) -> fastn_wasm::Ast {
         limits: fastn_wasm::Limits {
             min: count,
             max: None,
-        }
+        },
     })
+}
+
+pub fn table_1(ref_type: fastn_wasm::RefType, fn1: &str) -> Vec<fastn_wasm::Ast> {
+    vec![
+        table(1, ref_type),
+        fastn_wasm::Ast::Elem(fastn_wasm::Elem {
+            start: 0,
+            fns: vec![fn1.to_string()],
+        }),
+    ]
+}
+
+pub fn table_2(ref_type: fastn_wasm::RefType, fn1: &str, fn2: &str) -> Vec<fastn_wasm::Ast> {
+    vec![
+        table(2, ref_type),
+        fastn_wasm::Ast::Elem(fastn_wasm::Elem {
+            start: 0,
+            fns: vec![fn1.to_string(), fn2.to_string()],
+        }),
+    ]
+}
+
+pub fn table_3(
+    ref_type: fastn_wasm::RefType,
+    fn1: &str,
+    fn2: &str,
+    fn3: &str,
+) -> Vec<fastn_wasm::Ast> {
+    vec![
+        table(3, ref_type),
+        fastn_wasm::Ast::Elem(fastn_wasm::Elem {
+            start: 0,
+            fns: vec![fn1.to_string(), fn2.to_string(), fn3.to_string()],
+        }),
+    ]
+}
+
+pub fn table_4(
+    ref_type: fastn_wasm::RefType,
+    fn1: &str,
+    fn2: &str,
+    fn3: &str,
+    fn4: &str,
+) -> Vec<fastn_wasm::Ast> {
+    vec![
+        table(4, ref_type),
+        fastn_wasm::Ast::Elem(fastn_wasm::Elem {
+            start: 0,
+            fns: vec![
+                fn1.to_string(),
+                fn2.to_string(),
+                fn3.to_string(),
+                fn4.to_string(),
+            ],
+        }),
+    ]
 }
 
 impl Table {

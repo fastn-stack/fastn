@@ -2,6 +2,7 @@ extern crate self as fastn_wasm;
 
 mod ast;
 // mod encoder;
+mod elem;
 mod export;
 mod expression;
 mod func;
@@ -14,6 +15,7 @@ mod table;
 mod ty;
 
 pub use ast::*;
+pub use elem::Elem;
 pub use export::{Export, ExportDesc};
 pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
@@ -22,7 +24,7 @@ pub use helpers::{LinkerExt, StoreExtractor, WasmType};
 pub use import::{Import, ImportDesc};
 pub use memory::Memory;
 pub use pl::PL;
-pub use table::{Limits, RefType, Table, table};
+pub use table::{table, table_1, table_2, table_3, table_4, Limits, RefType, Table};
 pub use ty::Type;
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {

@@ -147,7 +147,14 @@ fn create_columns() -> Vec<u8> {
     // m.push(fastn_wasm::global("main#any-hover", fastn_wasm::Type::ExternRef));
     // m.push(fastn_wasm::global("main#x", fastn_wasm::Type::ExternRef));
 
-    m.push(fastn_wasm::table(3, fastn_wasm::RefType::Func));
+    // Note: can not add these till the functions are defined
+    // m.extend(fastn_wasm::table_4(
+    //     fastn_wasm::RefType::Func,
+    //     "product",
+    //     "foo#on_mouse_enter",
+    //     "foo#on_mouse_leave",
+    //     "foo#background",
+    // ));
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
