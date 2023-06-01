@@ -82,7 +82,7 @@ url = "2"
 walkdir = "2"
 wgpu = "0.16"
 winit = "0.28"
-wasmtime = "8"
+wasmtime = "9"
 zip = "0.6"
 
 
