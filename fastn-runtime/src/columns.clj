@@ -203,7 +203,7 @@
           )
     )
 
-    (func (export "callByIndex") (param i32 externref) (result externref)
+    (func (export "call_by_index") (param i32 externref) (result externref)
        call_indirect (type $return_externref) (local.get 0) (local.get 1)
     )
 )

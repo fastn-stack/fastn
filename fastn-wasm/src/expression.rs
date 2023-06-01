@@ -82,6 +82,19 @@ pub fn call3(
     }
 }
 
+pub fn call4(
+    name: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+    e2: fastn_wasm::Expression,
+    e3: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![e0, e1, e2, e3],
+    }
+}
+
 impl Expression {
     pub fn to_wat(&self) -> String {
         match self {
