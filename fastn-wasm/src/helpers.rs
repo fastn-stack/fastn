@@ -178,7 +178,7 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
             "fastn",
             name,
             wasmtime::FuncType::new(
-                [T1::the_type(), T2::the_type()].iter().cloned(),
+                [T1::the_type(), T2::the_type(), T3::the_type()].iter().cloned(),
                 [].iter().cloned(),
             ),
             move |mut caller: wasmtime::Caller<'_, S>, params, _results| {

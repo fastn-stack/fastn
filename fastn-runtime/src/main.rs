@@ -141,7 +141,10 @@ pub fn create_module() -> Vec<u8> {
 
 // source: fastn-runtime/columns.ftd
 fn create_columns() -> Vec<u8> {
-    let m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
+    let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
+
+    // m.push(fastn_wasm::global("main#any-hover", fastn_wasm::Type::ExternRef));
+    // m.push(fastn_wasm::global("main#x", fastn_wasm::Type::ExternRef));
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
