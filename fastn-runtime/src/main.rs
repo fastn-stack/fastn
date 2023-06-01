@@ -243,14 +243,14 @@ fn create_columns() -> Vec<u8> {
                     fastn_wasm::expression::call2(
                         "create_kernel",
                         fastn_wasm::expression::local("root"),
-                        fastn_wasm::expression::i32(0),
+                        fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
                 fastn_wasm::expression::call4(
                     "set_dynamic_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(0),
-                    fastn_wasm::expression::i32(0),
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
+                    fastn_wasm::expression::i32(0), // table_index
                     fastn_wasm::expression::call2(
                         "array_i32_2",
                         fastn_wasm::expression::call1(
@@ -263,19 +263,19 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(1), // height
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::HeightFixedPx.into()),
                     fastn_wasm::expression::i32(500),
                 ),
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(4), // spacing
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::SpacingFixedPx.into()),
                     fastn_wasm::expression::i32(100),
                 ),
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(5), // margin
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::MarginFixedPx.into()),
                     fastn_wasm::expression::i32(140),
                 ),
 
@@ -308,21 +308,21 @@ fn create_columns() -> Vec<u8> {
                     fastn_wasm::expression::call2(
                         "create_kernel",
                         fastn_wasm::expression::local("parent"),
-                        fastn_wasm::expression::i32(0),
+                        fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
 
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(0), // width
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
                     fastn_wasm::expression::i32(100),
                 ),
 
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(1), // height
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::HeightFixedPx.into()),
                     fastn_wasm::expression::i32(80),
                 ),
 
