@@ -1,3 +1,68 @@
+pub fn func00(name: &str) -> fastn_wasm::Ast {
+    func(name, vec![], None)
+}
+
+pub fn func0(name: &str, result: fastn_wasm::Type) -> fastn_wasm::Ast {
+    func(name, vec![], Some(result))
+}
+
+pub fn func1(name: &str, arg0: fastn_wasm::PL) -> fastn_wasm::Ast {
+    func(name, vec![arg0], None)
+}
+
+pub fn func2(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL) -> fastn_wasm::Ast {
+    func(name, vec![arg0, arg1], None)
+}
+
+pub fn func3(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    arg2: fastn_wasm::PL,
+) -> fastn_wasm::Ast {
+    func(name, vec![arg0, arg1, arg2], None)
+}
+
+pub fn func1ret(name: &str, arg0: fastn_wasm::PL, ret: fastn_wasm::Type) -> fastn_wasm::Ast {
+    func(name, vec![arg0], Some(ret))
+}
+
+pub fn func2ret(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    ret: fastn_wasm::Type,
+) -> fastn_wasm::Ast {
+    func(name, vec![arg0, arg1], Some(ret))
+}
+
+pub fn func4ret(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    arg1: fastn_wasm::PL,
+    arg2: fastn_wasm::PL,
+    arg3: fastn_wasm::PL,
+    ret: fastn_wasm::Type,
+) -> fastn_wasm::Ast {
+    func(name, vec![arg0, arg1, arg2, arg3], Some(ret))
+}
+
+pub fn func(
+    name: &str,
+    params: Vec<fastn_wasm::PL>,
+    result: Option<fastn_wasm::Type>,
+) -> fastn_wasm::Ast {
+    fastn_wasm::Ast::Import(fastn_wasm::Import {
+        module: "fastn".to_string(),
+        name: name.to_string(),
+        desc: fastn_wasm::ImportDesc::Func(fastn_wasm::FuncDecl {
+            name: Some(name.to_string()),
+            params,
+            result,
+        }),
+    })
+}
+
 #[derive(Debug)]
 pub struct Import {
     pub module: String,

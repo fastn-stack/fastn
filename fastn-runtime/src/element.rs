@@ -126,4 +126,11 @@ impl fastn_runtime::Element {
             fastn_runtime::Element::Image(i) => i.taffy,
         }
     }
+
+    pub fn common_styles(&mut self) -> &mut CommonStyleMinusTaffy {
+        match self {
+            fastn_runtime::Element::Container(c) => &mut c.style,
+            t => unimplemented!("{:?}", t),
+        }
+    }
 }

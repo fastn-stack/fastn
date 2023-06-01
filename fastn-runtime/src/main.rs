@@ -57,7 +57,7 @@ async fn main() {
 
     // let document = fastn_runtime::Document::new(wat);
 
-    let document = fastn_runtime::Document::new(create_module());
+    let document = fastn_runtime::Document::new(create_columns());
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;
@@ -66,20 +66,20 @@ async fn main() {
     // fastn_runtime::terminal::draw(doc).await;
 }
 
-fn create_module() -> Vec<u8> {
+pub fn create_module() -> Vec<u8> {
     let m: Vec<fastn_wasm::Ast> = vec![
-        fastn_wasm::import_func0("create_column", fastn_wasm::Type::ExternRef),
-        fastn_wasm::import_func2(
+        fastn_wasm::import::func0("create_column", fastn_wasm::Type::ExternRef),
+        fastn_wasm::import::func2(
             "add_child",
             fastn_wasm::Type::ExternRef.into(),
             fastn_wasm::Type::ExternRef.into(),
         ),
-        fastn_wasm::import_func2(
+        fastn_wasm::import::func2(
             "set_column_width_px",
             fastn_wasm::Type::ExternRef.into(),
             fastn_wasm::Type::I32.into(),
         ),
-        fastn_wasm::import_func2(
+        fastn_wasm::import::func2(
             "set_column_height_px",
             fastn_wasm::Type::ExternRef.into(),
             fastn_wasm::Type::I32.into(),
@@ -134,6 +134,15 @@ fn create_module() -> Vec<u8> {
             ..Default::default()
         }),
     ];
+    let wat = fastn_wasm::encode(&m);
+    println!("{}", wat);
+    wat.into_bytes()
+}
+
+// source: fastn-runtime/columns.ftd
+fn create_columns() -> Vec<u8> {
+    let m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
+
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
     wat.into_bytes()
