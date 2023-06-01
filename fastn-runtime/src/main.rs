@@ -156,12 +156,26 @@ fn create_columns() -> Vec<u8> {
     //     "foo#background",
     // ));
 
-    // (type $return_externref (func (param $func-data externref) (result externref)))
     m.push(fastn_wasm::func_def::func1ret(
         "return_externref",
         fastn_wasm::Type::ExternRef.into(),
         fastn_wasm::Type::ExternRef,
     ));
+
+    m.push(
+        fastn_wasm::Func {
+            name: None,
+            export: Some("main".to_string()),
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("root")],
+            locals: vec![fastn_wasm::Type::ExternRef.to_pl("column")],
+            result: None,
+            body: vec![
+                fastn_wasm::call("create_frame"),
+                fastn_wasm::call("end_frame"),
+            ],
+        }
+        .to_ast(),
+    );
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);

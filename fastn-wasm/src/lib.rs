@@ -67,6 +67,13 @@ pub fn call3(
     }
 }
 
+pub fn call(name: &str) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![],
+    }
+}
+
 pub fn exported_func1(
     name: &str,
     arg0: fastn_wasm::PL,
