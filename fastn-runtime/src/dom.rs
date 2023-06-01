@@ -229,6 +229,32 @@ impl Dom {
             }
         }
     }
+
+    pub fn set_dynamic_property(
+        &mut self,
+        node_key: fastn_runtime::NodeKey,
+        ui_property: fastn_runtime::UIProperty,
+        table_index: i32,
+        func_arg: fastn_runtime::PointerKey,
+        current_value_of_dynamic_property: Value,
+    ) {
+        self.set_property(node_key, ui_property, current_value_of_dynamic_property);
+
+        let func_arg = func_arg.into_list_pointer();
+
+        let mem = self.memory_mut();
+        let closure_key = mem.create_closure(fastn_runtime::Closure {
+            function: table_index,
+            captured_variables: func_arg,
+        });
+
+        mem.add_dynamic_property_dependency(
+            func_arg,
+            ui_property
+                .into_dynamic_property(node_key)
+                .closure(closure_key),
+        );
+    }
 }
 
 pub enum Value {

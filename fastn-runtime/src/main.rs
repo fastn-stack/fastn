@@ -173,7 +173,6 @@ fn create_columns() -> Vec<u8> {
             result: None,
             body: vec![
                 fastn_wasm::expression::call("create_frame"),
-                // (global.set $main#any-hover (call $create_boolean (i32.const 0)))
                 fastn_wasm::expression::call2(
                     "set_global",
                     fastn_wasm::expression::i32(0),
@@ -183,6 +182,14 @@ fn create_columns() -> Vec<u8> {
                     "set_global",
                     fastn_wasm::expression::i32(1),
                     fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(10)),
+                ),
+                fastn_wasm::expression::local_set(
+                    "column",
+                    fastn_wasm::expression::call2(
+                        "create_kernel",
+                        fastn_wasm::expression::local("root"),
+                        fastn_wasm::expression::i32(0),
+                    ),
                 ),
                 fastn_wasm::expression::call("end_frame"),
             ],

@@ -36,17 +36,18 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::ExternRef,
             ),
             fastn_wasm::import::func3(
-                "set_i32_prop",
+                "set_property_i32",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::I32.into(),
             ),
             fastn_wasm::import::func3(
-                "set_f32_prop",
+                "set_property_f32",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::F32.into(),
             ),
+            // fastn_wasm::import::fun,
         ]);
         e
     }
@@ -63,13 +64,13 @@ impl fastn_runtime::Dom {
             |dom: &mut fastn_runtime::Dom, parent, kind| dom.create_kernel(parent, kind),
         );
         linker.func3(
-            "set_i32_prop",
+            "set_property_i32",
             |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
                 dom.set_property(key, property_kind, fastn_runtime::dom::Value::I32(value))
             },
         );
         linker.func3(
-            "set_f32_prop",
+            "set_property_f32",
             |dom: &mut fastn_runtime::Dom, key, property_kind, value| {
                 dom.set_property(key, property_kind, fastn_runtime::dom::Value::F32(value))
             },
@@ -102,27 +103,13 @@ impl fastn_runtime::Dom {
                     values.i32(0)
                 };
 
-                let dom = caller.data_mut();
-                dom.set_property(
+                caller.data_mut().set_dynamic_property(
                     node_key,
                     ui_property,
-                    current_value_of_dynamic_property.into(),
-                );
-
-                let func_arg = func_arg.into_list_pointer();
-
-                let mem = dom.memory_mut();
-                let closure_key = mem.create_closure(fastn_runtime::Closure {
-                    function: table_index,
-                    captured_variables: func_arg,
-                });
-
-                mem.add_dynamic_property_dependency(
+                    table_index,
                     func_arg,
-                    ui_property
-                        .into_dynamic_property(node_key)
-                        .closure(closure_key),
-                );
+                    current_value_of_dynamic_property.into(),
+                )
             },
         );
 

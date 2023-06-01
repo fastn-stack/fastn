@@ -364,7 +364,7 @@ impl Memory {
 
         if idx == self.globals.len() {
             self.globals.push(ptr);
-            return
+            return;
         }
 
         // the way things are either this global variables are sequentially initialised at the start
