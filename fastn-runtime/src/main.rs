@@ -191,6 +191,20 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::i32(0),
                     ),
                 ),
+                fastn_wasm::expression::call4(
+                    "set_dynamic_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(0),
+                    fastn_wasm::expression::i32(0),
+                    fastn_wasm::expression::call2(
+                        "array_i32_2",
+                        fastn_wasm::expression::call1(
+                            "create_i32",
+                            fastn_wasm::expression::i32(10),
+                        ),
+                        fastn_wasm::expression::call1("get_global", fastn_wasm::expression::i32(1)),
+                    ),
+                ),
                 fastn_wasm::expression::call("end_frame"),
             ],
         }

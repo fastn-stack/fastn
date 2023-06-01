@@ -53,7 +53,7 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::ExternRef.into(),
-            )
+            ),
         ]);
         e
     }
@@ -92,10 +92,10 @@ impl fastn_runtime::Dom {
                 let current_value_of_dynamic_property = {
                     let mut values = vec![];
                     caller
-                        .get_export("callByIndex")
+                        .get_export("call_by_index")
                         .unwrap()
                         .into_func()
-                        .expect("callByIndex not a func")
+                        .expect("call_by_index not a func")
                         .call(
                             caller.as_context_mut(),
                             &[
@@ -128,10 +128,10 @@ impl fastn_runtime::Dom {
              func_arg: fastn_runtime::PointerKey| {
                 let mut values = vec![];
                 caller
-                    .get_export("callByIndex")
+                    .get_export("call_by_index")
                     .unwrap()
                     .into_func()
-                    .expect("callByIndex not a func")
+                    .expect("call_by_index not a func")
                     .call(
                         caller.as_context_mut(),
                         &[
@@ -245,6 +245,12 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::F32.into(),
             ),
+            fastn_wasm::import::func2ret(
+                "array_i32_2",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
         ]
     }
 
@@ -342,7 +348,10 @@ mod test {
         assert_import("create_kernel", "(param externref i32) (result externref)");
         assert_import("set_property_i32", "(param externref i32 i32)");
         assert_import("set_property_f32", "(param externref i32 f32)");
-        assert_import("set_dynamic_property_i32", "(param externref i32 i32 externref)");
+        assert_import(
+            "set_dynamic_property_i32",
+            "(param externref i32 i32 externref)",
+        );
     }
 
     #[test]
@@ -367,6 +376,7 @@ mod test {
         assert_import("create_f32", "(param f32) (result externref)");
         assert_import("get_f32", "(param externref) (result f32)");
         assert_import("set_f32", "(param externref f32)");
+        assert_import("array_i32_2", "(param externref externref) (result externref)");
         assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
         assert_import(
             "array_i32_2",
