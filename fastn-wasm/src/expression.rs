@@ -30,6 +30,40 @@ pub enum Expression {
     Drop,
 }
 
+pub fn call(name: &str) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![],
+    }
+}
+
+pub fn local(name: &str) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::LocalGet { index: name.into() }
+}
+
+pub fn local_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::LocalSet {
+        index: name.into(),
+        value: Box::new(e),
+    }
+}
+
+pub fn i32(i: i32) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::I32Const(i)
+}
+
+pub fn call3(
+    name: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+    e2: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![e0, e1, e2],
+    }
+}
+
 impl Expression {
     pub fn to_wat(&self) -> String {
         match self {
