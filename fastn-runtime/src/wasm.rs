@@ -89,11 +89,12 @@ impl fastn_runtime::Dom {
              ui_property,
              table_index,
              func_arg| {
+                // TODO: refactor this into a generic helper
                 let current_value_of_dynamic_property = {
                     let mut values = vec![];
                     caller
                         .get_export("call_by_index")
-                        .unwrap()
+                        .expect("call_by_index is not defined")
                         .into_func()
                         .expect("call_by_index not a func")
                         .call(
@@ -376,7 +377,10 @@ mod test {
         assert_import("create_f32", "(param f32) (result externref)");
         assert_import("get_f32", "(param externref) (result f32)");
         assert_import("set_f32", "(param externref f32)");
-        assert_import("array_i32_2", "(param externref externref) (result externref)");
+        assert_import(
+            "array_i32_2",
+            "(param externref externref) (result externref)",
+        );
         assert_import("create_rgba", "(param i32 i32 i32 f32) (result externref)");
         assert_import(
             "array_i32_2",

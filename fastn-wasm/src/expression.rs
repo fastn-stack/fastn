@@ -23,6 +23,10 @@ pub enum Expression {
         name: String,
         params: Vec<Expression>,
     },
+    CallIndirect {
+        type_: String,
+        params: Vec<Expression>,
+    },
     Data {
         offset: i32,
         data: Vec<u8>,
@@ -50,6 +54,17 @@ pub fn local_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expressio
 
 pub fn i32(i: i32) -> fastn_wasm::Expression {
     fastn_wasm::Expression::I32Const(i)
+}
+
+pub fn call_indirect2(
+    type_: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::CallIndirect {
+        type_: type_.into(),
+        params: vec![e0, e1],
+    }
 }
 
 pub fn call1(
@@ -123,6 +138,10 @@ impl Expression {
             Expression::Call { name, params } => {
                 let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
                 format!("(call ${} {})", name, params_wat.join(" "))
+            }
+            Expression::CallIndirect { type_, params } => {
+                let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
+                format!("(call_indirect (type ${}) {})", type_, params_wat.join(" "))
             }
             Expression::Data { offset, data } => {
                 let data_hex: Vec<String> = data.iter().map(|b| format!("{:02X}", b)).collect();
