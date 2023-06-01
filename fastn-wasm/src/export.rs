@@ -4,6 +4,19 @@ pub struct Export {
     pub desc: fastn_wasm::ExportDesc,
 }
 
+pub fn func1(
+    name: &str,
+    arg0: fastn_wasm::PL,
+    body: Vec<fastn_wasm::Expression>,
+) -> fastn_wasm::Ast {
+    fastn_wasm::Ast::Func(fastn_wasm::Func {
+        export: Some(name.to_string()),
+        params: vec![arg0],
+        body,
+        ..Default::default()
+    })
+}
+
 impl Export {
     pub fn to_wat(&self) -> String {
         let desc_wat = self.desc.to_wat();

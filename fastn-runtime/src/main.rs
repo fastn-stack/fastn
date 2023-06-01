@@ -84,21 +84,21 @@ pub fn create_module() -> Vec<u8> {
             fastn_wasm::Type::ExternRef.into(),
             fastn_wasm::Type::I32.into(),
         ),
-        fastn_wasm::exported_func1(
+        fastn_wasm::export::func1(
             "main",
             fastn_wasm::Type::ExternRef.to_pl("root"),
             vec![
-                fastn_wasm::call3(
+                fastn_wasm::expression::call3(
                     "foo",
-                    fastn_wasm::local("root"),
-                    fastn_wasm::i32(100),
-                    fastn_wasm::i32(200),
+                    fastn_wasm::expression::local("root"),
+                    fastn_wasm::expression::i32(100),
+                    fastn_wasm::expression::i32(200),
                 ),
-                fastn_wasm::call3(
+                fastn_wasm::expression::call3(
                     "foo",
-                    fastn_wasm::local("root"),
-                    fastn_wasm::i32(400),
-                    fastn_wasm::i32(600),
+                    fastn_wasm::expression::local("root"),
+                    fastn_wasm::expression::i32(400),
+                    fastn_wasm::expression::i32(600),
                 ),
             ],
         ),
@@ -111,24 +111,30 @@ pub fn create_module() -> Vec<u8> {
             ],
             locals: vec![fastn_wasm::Type::ExternRef.to_pl("column")],
             body: vec![
-                fastn_wasm::local_set(
+                fastn_wasm::expression::local_set(
                     "column",
-                    fastn_wasm::Expression::Call {
-                        name: "create_column".to_string(),
-                        params: vec![],
-                    },
+                    fastn_wasm::expression::call("create_column"),
                 ),
                 fastn_wasm::Expression::Call {
                     name: "add_child".to_string(),
-                    params: vec![fastn_wasm::local("root"), fastn_wasm::local("column")],
+                    params: vec![
+                        fastn_wasm::expression::local("root"),
+                        fastn_wasm::expression::local("column"),
+                    ],
                 },
                 fastn_wasm::Expression::Call {
                     name: "set_column_width_px".to_string(),
-                    params: vec![fastn_wasm::local("column"), fastn_wasm::local("width")],
+                    params: vec![
+                        fastn_wasm::expression::local("column"),
+                        fastn_wasm::expression::local("width"),
+                    ],
                 },
                 fastn_wasm::Expression::Call {
                     name: "set_column_height_px".to_string(),
-                    params: vec![fastn_wasm::local("column"), fastn_wasm::local("height")],
+                    params: vec![
+                        fastn_wasm::expression::local("column"),
+                        fastn_wasm::expression::local("height"),
+                    ],
                 },
             ],
             ..Default::default()
@@ -170,8 +176,10 @@ fn create_columns() -> Vec<u8> {
             locals: vec![fastn_wasm::Type::ExternRef.to_pl("column")],
             result: None,
             body: vec![
-                fastn_wasm::call("create_frame"),
-                fastn_wasm::call("end_frame"),
+                fastn_wasm::expression::call("create_frame"),
+                // (global.set $main#any-hover (call $create_boolean (i32.const 0)))
+                // fastn_wasm::ex
+                fastn_wasm::expression::call("end_frame"),
             ],
         }
         .to_ast(),

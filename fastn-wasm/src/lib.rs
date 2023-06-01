@@ -3,8 +3,8 @@ extern crate self as fastn_wasm;
 mod ast;
 // mod encoder;
 mod elem;
-mod export;
-mod expression;
+pub mod export;
+pub mod expression;
 mod func;
 pub mod func_def;
 mod global;
@@ -38,51 +38,4 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     }
     s.push(')');
     s
-}
-
-pub fn local(name: &str) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::LocalGet { index: name.into() }
-}
-
-pub fn local_set(name: &str, e: fastn_wasm::Expression) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::LocalSet {
-        index: name.into(),
-        value: Box::new(e),
-    }
-}
-
-pub fn i32(i: i32) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::I32Const(i)
-}
-
-pub fn call3(
-    name: &str,
-    e0: fastn_wasm::Expression,
-    e1: fastn_wasm::Expression,
-    e2: fastn_wasm::Expression,
-) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::Call {
-        name: name.into(),
-        params: vec![e0, e1, e2],
-    }
-}
-
-pub fn call(name: &str) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::Call {
-        name: name.into(),
-        params: vec![],
-    }
-}
-
-pub fn exported_func1(
-    name: &str,
-    arg0: fastn_wasm::PL,
-    body: Vec<fastn_wasm::Expression>,
-) -> fastn_wasm::Ast {
-    fastn_wasm::Ast::Func(fastn_wasm::Func {
-        export: Some(name.to_string()),
-        params: vec![arg0],
-        body,
-        ..Default::default()
-    })
 }
