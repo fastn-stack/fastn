@@ -233,6 +233,38 @@ fn create_columns() -> Vec<u8> {
         .to_ast(),
     );
 
+    // (func $product (param $func-data externref) (result externref)
+    //     (call $create_frame)
+    //     (call $return_frame
+    //         (i32.mul
+    //             (call $get_func_arg_i32 (local.get $func-data) (i32.const 0))
+    //             (call $get_func_arg_i32 (local.get $func-data) (i32.const 1))
+    //         )
+    //     )
+    // )
+
+    m.push(
+        fastn_wasm::Func {
+            name: Some("product".to_string()),
+            export: None,
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("func-data")],
+            locals: vec![],
+            result: Some(fastn_wasm::Type::ExternRef),
+            body: vec![
+                fastn_wasm::expression::call("create_frame"),
+                fastn_wasm::expression::call1(
+                    "return_frame",
+                    fastn_wasm::expression::operation_2(
+                        "i32.mult",
+                        fastn_wasm::expression::call1("get_i32", fastn_wasm::expression::i32(0)),
+                        fastn_wasm::expression::call1("get_i32", fastn_wasm::expression::i32(1)),
+                    ),
+                ),
+            ],
+        }
+        .to_ast(),
+    );
+
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
     wat.into_bytes()

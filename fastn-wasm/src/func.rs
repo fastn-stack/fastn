@@ -279,7 +279,7 @@ mod test {
             fastn_wasm::Func {
                 params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I32.into()],
                 result: Some(fastn_wasm::Type::I32),
-                body: vec![fastn_wasm::Expression::Operations {
+                body: vec![fastn_wasm::Expression::Operation {
                     name: "i32.add".to_string(),
                     values: vec![
                         fastn_wasm::Expression::LocalGet { index: 0.into() },
@@ -314,7 +314,7 @@ mod test {
                     },
                 ],
                 result: Some(fastn_wasm::Type::I32),
-                body: vec![fastn_wasm::Expression::Operations {
+                body: vec![fastn_wasm::Expression::Operation {
                     name: "i32.add".to_string(),
                     values: vec![
                         fastn_wasm::Expression::LocalGet {
