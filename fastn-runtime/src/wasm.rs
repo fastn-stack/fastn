@@ -183,6 +183,16 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef,
             ),
             fastn_wasm::import::func1ret(
+                "get_global",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func2(
+                "set_global",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+            ),
+            fastn_wasm::import::func1ret(
                 "create_boolean",
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::ExternRef,
@@ -256,6 +266,12 @@ impl fastn_runtime::Memory {
         });
         linker.func1ret("return_frame", |mem: &mut fastn_runtime::Memory, ret| {
             mem.return_frame(ret)
+        });
+        linker.func1ret("get_global", |mem: &mut fastn_runtime::Memory, idx| {
+            mem.get_global(idx)
+        });
+        linker.func2("set_global", |mem: &mut fastn_runtime::Memory, idx, ptr| {
+            mem.set_global(idx, ptr)
         });
         linker.func0ret("create_list", |mem: &mut fastn_runtime::Memory| {
             mem.create_list()
@@ -337,6 +353,9 @@ mod test {
     fn memory() {
         assert_import0("create_frame");
         assert_import0("end_frame");
+        assert_import("return_frame", "(param externref) (result externref)");
+        assert_import("set_global", "(param i32 externref)");
+        assert_import("get_global", "(param i32) (result externref)");
         assert_import("create_list", "(result externref)");
         assert_import("create_list_1", "(param i32 externref) (result externref)");
         assert_import(

@@ -52,6 +52,24 @@ pub fn i32(i: i32) -> fastn_wasm::Expression {
     fastn_wasm::Expression::I32Const(i)
 }
 
+pub fn call1(
+    name: &str,
+    e0: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call { name: name.into(), params: vec![e0] }
+}
+
+pub fn call2(
+    name: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![e0, e1],
+    }
+}
+
 pub fn call3(
     name: &str,
     e0: fastn_wasm::Expression,

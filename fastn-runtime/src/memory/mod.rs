@@ -62,6 +62,21 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<Pointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
+    /// We need to store some global variables. For every top level variable defined in ftd files
+    /// we create a global variable. Since all values are stored in `Memory`, the globals contain
+    /// pointers.
+    ///
+    /// The number of type of global variable will depend on ftd files.
+    ///
+    /// Our first attempt was to use wasm global, create a wasm global for each
+    /// `(global $main#x externref)` but this does not work. When declaring global like that we have
+    /// to store a value in the global slot. Which is odd as `(local)` does not have this
+    /// requirement.
+    ///
+    /// For now we are going with the `get_global(idx: i32) -> externref`,
+    /// `set_global(idx: i32, value: externref)`, where each global will be identified by the
+    /// index (`idx`).
+    globals: Vec<fastn_runtime::PointerKey>,
     // if we have:
     // -- ftd.text: hello
     //
@@ -333,6 +348,28 @@ impl Memory {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         self.stack[t].pointers.push(k.unwrap());
         keep
+    }
+
+    pub fn get_global(&self, idx: i32) -> fastn_runtime::PointerKey {
+        self.globals[idx as usize]
+    }
+
+    pub fn set_global(&mut self, idx: i32, ptr: fastn_runtime::PointerKey) {
+        let idx = idx as usize;
+
+        if idx < self.globals.len() {
+            self.globals[idx] = ptr;
+            return;
+        }
+
+        if idx == self.globals.len() {
+            self.globals.push(ptr);
+            return
+        }
+
+        // the way things are either this global variables are sequentially initialised at the start
+        // of the program. If a jump happens it means our generated wasm file is incorrect.
+        unreachable!()
     }
 
     pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosurePointer {

@@ -149,10 +149,6 @@ pub fn create_module() -> Vec<u8> {
 fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
-    // wasmtime is giving error for these, will uncomment after adding main
-    // m.push(fastn_wasm::global("main#any-hover", fastn_wasm::Type::ExternRef));
-    // m.push(fastn_wasm::global("main#x", fastn_wasm::Type::ExternRef));
-
     // Note: can not add these till the functions are defined
     // m.extend(fastn_wasm::table_4(
     //     fastn_wasm::RefType::Func,
@@ -178,7 +174,11 @@ fn create_columns() -> Vec<u8> {
             body: vec![
                 fastn_wasm::expression::call("create_frame"),
                 // (global.set $main#any-hover (call $create_boolean (i32.const 0)))
-                // fastn_wasm::ex
+                fastn_wasm::expression::call2(
+                    "set_global",
+                    fastn_wasm::expression::i32(0),
+                    fastn_wasm::expression::call1("create_boolean", fastn_wasm::expression::i32(0)),
+                ),
                 fastn_wasm::expression::call("end_frame"),
             ],
         }

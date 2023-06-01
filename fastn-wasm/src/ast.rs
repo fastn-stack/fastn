@@ -1,7 +1,6 @@
 #[derive(Debug)]
 pub enum Ast {
     Func(fastn_wasm::Func),
-    Global(fastn_wasm::Global),
     Import(fastn_wasm::Import),
     Export(fastn_wasm::Export),
     Table(fastn_wasm::Table),
@@ -18,7 +17,6 @@ impl Ast {
             Ast::Export(e) => e.to_wat(),
             Ast::Table(t) => t.to_wat(),
             Ast::Memory(m) => m.to_wat(),
-            Ast::Global(g) => g.to_wat(),
             Ast::Elem(g) => g.to_wat(),
             Ast::FuncDef(g) => g.to_wat(),
         }
