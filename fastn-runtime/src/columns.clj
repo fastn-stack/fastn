@@ -8,8 +8,8 @@
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
     (import "fastn" "create_i32" (func $create_i32 (param i32) (result externref)))
     (import "fastn" "create_rgba" (func $create_rgba (param i32 i32 i32 f32) (result externref)))
-    (import "fastn" "set_i32_prop" (func $set_i32_prop (param externref i32 i32)))
-    (import "fastn" "set_f32_prop" (func $set_f32_prop (param externref i32 f32)))
+    (import "fastn" "set_property_i32" (func $set_property_i32 (param externref i32 i32)))
+    (import "fastn" "set_property_f32" (func $set_property_f32 (param externref i32 f32)))
     (import "fastn" "set_boolean" (func $set_boolean (param externref i32) (result externref)))
     (import "fastn" "attach_event_handler" (func $attach_event_handler (param externref i32 i32 externref)))
     ;; set_dynamic_property_i32(element, prop, func, variables)
@@ -58,21 +58,21 @@
         )
 
         ;; height.fixed.px: 500
-        (call $set_i32_prop
+        (call $set_property_i32
             (local.get $column)
             (i32.const 1) ;; 1 = fixed height in pixels
             (i32.const 500) ;; fixed value
         )
 
         ;; spacing.fixed.px: 100
-        (call $set_i32_prop
+        (call $set_property_i32
             (local.get $column)
             (i32.const 2) ;; 2 = fixed spacing in pixels
             (i32.const 100) ;; fixed value
         )
 
         ;; margin.px: 100
-        (call $set_i32_prop
+        (call $set_property_i32
             (local.get $column)
             (i32.const 2) ;; 3 = margin in px
             (i32.const 100) ;; fixed value
@@ -117,14 +117,14 @@
         )
 
         ;; width.fixed.px: 500
-        (call $set_i32_prop
+        (call $set_property_i32
               (local.get $column)
               (i32.const 0) ;; 1 = fixed height in pixels
               (i32.const 400) ;; fixed value
         )
 
         ;; width.fixed.px: 500
-        (call $set_f32_prop
+        (call $set_property_f32
               (local.get $column)
               (i32.const 2) ;; 2 = fixed height in percentage
               (f32.const 30) ;; fixed value
