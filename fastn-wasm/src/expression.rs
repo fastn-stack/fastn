@@ -15,7 +15,7 @@ pub enum Expression {
     I64Const(i64),
     F32Const(f32),
     F64Const(f64),
-    Operations {
+    Operation {
         name: String,
         values: Vec<Expression>,
     },
@@ -56,6 +56,17 @@ pub fn i32(i: i32) -> fastn_wasm::Expression {
     fastn_wasm::Expression::I32Const(i)
 }
 
+pub fn operation_2(
+    op: &str,
+    e0: fastn_wasm::Expression,
+    e1: fastn_wasm::Expression,
+) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Operation {
+        name: op.to_string(),
+        values: vec![e0, e1],
+    }
+}
+
 pub fn call_indirect2(
     type_: &str,
     e0: fastn_wasm::Expression,
@@ -67,11 +78,11 @@ pub fn call_indirect2(
     }
 }
 
-pub fn call1(
-    name: &str,
-    e0: fastn_wasm::Expression,
-) -> fastn_wasm::Expression {
-    fastn_wasm::Expression::Call { name: name.into(), params: vec![e0] }
+pub fn call1(name: &str, e0: fastn_wasm::Expression) -> fastn_wasm::Expression {
+    fastn_wasm::Expression::Call {
+        name: name.into(),
+        params: vec![e0],
+    }
 }
 
 pub fn call2(
@@ -131,7 +142,7 @@ impl Expression {
             Expression::I64Const(value) => format!("(i64.const {})", value),
             Expression::F32Const(value) => format!("(f32.const {})", value),
             Expression::F64Const(value) => format!("(f64.const {})", value),
-            Expression::Operations { name, values } => {
+            Expression::Operation { name, values } => {
                 let values_wat: Vec<String> = values.iter().map(|v| v.to_wat()).collect();
                 format!("({} {})", name, values_wat.join(" "))
             }
