@@ -1,7 +1,9 @@
 (module
     (import "fastn" "create_frame" (func $create_frame))
     (import "fastn" "end_frame" (func $end_frame))
-    (import "fastn" "return_frame" (func return_frame (param externref) (result externref)))
+    (import "fastn" "return_frame" (func $return_frame (param externref) (result externref)))
+    (import "fastn" "get_global" (func $get_global (param i32) (result externref)))
+    (import "fastn" "set_global" (func $get_global (param i32 externref)))
     (import "fastn" "create_kernel" (func $create_kernel (param i32 externref) (result externref)))
     (import "fastn" "create_boolean" (func $create_boolean (param i32) (result externref)))
     (import "fastn" "create_i32" (func $create_i32 (param i32) (result externref)))
@@ -19,9 +21,6 @@
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
     (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
 
-    (global $main#any-hover externref)
-    (global $main#x externref)
-
     (table 3 func)
     (elem (i32.const 0) $product $foo#on_mouse_enter $foo#on_mouse_leave $foo#background)
     (type $return_externref (func (param externref) (result externref)))
@@ -32,11 +31,15 @@
         (call $create_frame)
 
         ;; -- boolean $any-hover: false
-        (global.set $main#any-hover (call $create_boolean (i32.const 0)))
+        (call $global_set
+              (i32.const 0)  ;; $any-hover's index is 0
+              (call $create_boolean (i32.const 0))
+        )
 
         ;; -- integer x: 10
-        (global.set $main#x
-            (call $create_i32 (i32.const 10))
+        (call $global_set
+              (i32.const 1)  ;; $x's index is 1
+              (call $create_i32 (i32.const 10))
         )
 
         ;; -- ftd.column:
@@ -47,7 +50,11 @@
             (local.get $column)
             (i32.const 0) ;; 0 = fixed width in pixels
             (i32.const 0) ;; index in the table for $product function
-            (call $array_i32_2 (global.set $main#x) (call $create_integer (i32.const 10)))
+            (call $array_i32_2
+                  (call $create_integer (i32.const 10))
+                  ;; get global x (stored at global index 1)
+                  (call $global_get (i32.const 1))
+            )
         )
 
         ;; height.fixed.px: 500
@@ -96,7 +103,7 @@
             (local.get $column)
             (i32.const 0) ;; 0 = on mouse enter
             (i32.const 1) ;; index in the table
-            (call $array_i32_2 (global.get $main#any-hover) (local.get $on-hover))
+            (call $array_i32_2 (call global_get (i32.const 0)) (local.get $on-hover))
         )
         ;; $on-mouse-leave$: {
         ;;     $ftd.set-bool($a=$any-hover, v=false)
@@ -106,7 +113,7 @@
               (local.get $column)
               (i32.const 0) ;; 0 = on mouse enter
               (i32.const 2) ;; index in the table
-              (call $array_i32_2 (global.get $main#any-hover) (local.get $on-hover))
+              (call $array_i32_2 (call global_get (i32.const 0)) (local.get $on-hover))
         )
 
         ;; width.fixed.px: 500
@@ -130,7 +137,7 @@
                 (local.get $column)
                 (i32.const 3) ;; 3 = background.solid
                 (i32.const 3) ;; index in the table
-                (call $array_i32_2 (local.get $on-hover) (global.get $main#any-hover))
+                (call $array_i32_2 (local.get $on-hover) (call $get_global (i32.const 0)))
         )
 
         (call $end_frame)

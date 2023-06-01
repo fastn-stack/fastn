@@ -145,7 +145,7 @@ pub fn create_module() -> Vec<u8> {
     wat.into_bytes()
 }
 
-// source: fastn-runtime/columns.ftd
+// source: fastn-runtime/columns.ftd (derived from column.ftd)
 fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
@@ -178,6 +178,11 @@ fn create_columns() -> Vec<u8> {
                     "set_global",
                     fastn_wasm::expression::i32(0),
                     fastn_wasm::expression::call1("create_boolean", fastn_wasm::expression::i32(0)),
+                ),
+                fastn_wasm::expression::call2(
+                    "set_global",
+                    fastn_wasm::expression::i32(1),
+                    fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(10)),
                 ),
                 fastn_wasm::expression::call("end_frame"),
             ],
