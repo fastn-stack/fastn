@@ -19,19 +19,20 @@ mod document;
 mod dom;
 mod element;
 mod event;
+mod memory;
 mod operation;
-mod runtime_store;
-// pub mod wasm;
+pub mod wasm;
+mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub(crate) use dom::Dom;
+pub use dom::Dom;
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
 pub use event::Event;
+pub use memory::{Closure, ClosurePointer, Memory, Pointer, PointerKey, PointerKind, UIProperty};
 pub use operation::{Operation, Rectangle};
 
 slotmap::new_key_type! { pub struct NodeKey; }
-slotmap::new_key_type! { pub struct PointerKey; }
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]

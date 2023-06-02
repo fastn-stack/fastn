@@ -5,7 +5,8 @@ mod ast;
 mod export;
 mod expression;
 mod func;
-mod import;
+mod helpers;
+pub mod import;
 mod memory;
 mod pl;
 mod table;
@@ -15,6 +16,7 @@ pub use ast::*;
 pub use export::{Export, ExportDesc};
 pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
+pub use helpers::{LinkerExt, StoreExtractor, WasmType};
 pub use import::{Import, ImportDesc};
 pub use memory::Memory;
 pub use pl::PL;
@@ -47,10 +49,6 @@ pub fn i32(i: i32) -> fastn_wasm::Expression {
     fastn_wasm::Expression::I32Const(i)
 }
 
-pub fn import_func00(name: &str) -> fastn_wasm::Ast {
-    import_func(name, vec![], None)
-}
-
 pub fn call3(
     name: &str,
     e0: fastn_wasm::Expression,
@@ -73,33 +71,5 @@ pub fn exported_func1(
         params: vec![arg0],
         body,
         ..Default::default()
-    })
-}
-
-pub fn import_func0(name: &str, result: fastn_wasm::Type) -> fastn_wasm::Ast {
-    import_func(name, vec![], Some(result))
-}
-
-pub fn import_func1(name: &str, arg0: fastn_wasm::PL) -> fastn_wasm::Ast {
-    import_func(name, vec![arg0], None)
-}
-
-pub fn import_func2(name: &str, arg0: fastn_wasm::PL, arg1: fastn_wasm::PL) -> fastn_wasm::Ast {
-    import_func(name, vec![arg0, arg1], None)
-}
-
-pub fn import_func(
-    name: &str,
-    params: Vec<fastn_wasm::PL>,
-    result: Option<fastn_wasm::Type>,
-) -> fastn_wasm::Ast {
-    fastn_wasm::Ast::Import(fastn_wasm::Import {
-        module: "fastn".to_string(),
-        name: name.to_string(),
-        desc: fastn_wasm::ImportDesc::Func(fastn_wasm::FuncDecl {
-            name: Some(name.to_string()),
-            params,
-            result,
-        }),
     })
 }

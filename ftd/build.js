@@ -881,6 +881,14 @@ window.ftd.utils.set_full_height = function () {
 window.ftd.utils.reset_full_height = function () {
     document.body.style.height = `100%`;
 };
+window.ftd.utils.get_event_key = function (event) {
+    if (65 <= event.keyCode && event.keyCode <= 90) {
+        return String.fromCharCode(event.keyCode).toLowerCase();
+    }
+    else {
+        return event.key;
+    }
+};
 window.ftd.utils.function_name_to_js_function = function (s) {
     let new_string = s;
     let startsWithDigit = /^\d/.test(s);
