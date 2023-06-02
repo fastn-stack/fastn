@@ -244,7 +244,7 @@ impl Dom {
         );
     }
 
-    pub fn set_event(
+    pub fn attach_event_handler(
         &mut self,
         node_key: fastn_runtime::NodeKey,
         event: fastn_runtime::DomEventKind,
