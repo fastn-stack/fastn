@@ -584,7 +584,7 @@ impl Memory {
     }
 
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
-        let r_pointer = self.i32.insert(HeapValue::new(r).into_heap_data());
+        let r_pointer = self.create_i32(r);
         let g_pointer = self.i32.insert(HeapValue::new(g).into_heap_data());
         let b_pointer = self.i32.insert(HeapValue::new(b).into_heap_data());
         let a_pointer = self.f32.insert(HeapValue::new(a).into_heap_data());

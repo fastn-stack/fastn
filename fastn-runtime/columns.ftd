@@ -7,6 +7,10 @@ integer b:
 
 a * b
 
+-- color c:
+red: a + b
+
+
 -- ftd.column:
 width.fixed.px: $product(a=10, b=$x)
 height.fixed.px: 500
