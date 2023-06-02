@@ -5,6 +5,14 @@ pub enum Operation {
     // DrawGlyphCluster(Glyph),
 }
 
+impl Operation {
+    pub(crate) fn has_position(&self, pos_x: f64, pos_y: f64) -> bool {
+        match self {
+            Operation::DrawRectangle(r) => r.has_position(pos_x, pos_y),
+        }
+    }
+}
+
 #[derive(Copy, Clone, Debug)]
 pub struct Rectangle {
     pub top: u32,
@@ -16,6 +24,17 @@ pub struct Rectangle {
     // pub scroll_x: u32,
     // border
     // fill
+}
+
+impl Rectangle {
+    pub(crate) fn has_position(&self, pos_x: f64, pos_y: f64) -> bool {
+        let pos_x = pos_x as u32;
+        let pos_y = pos_y as u32;
+        pos_x >= self.top
+            && pos_x <= self.top + self.height
+            && pos_y >= self.left
+            && pos_y <= self.left + self.width
+    }
 }
 
 impl fastn_runtime::element::Container {

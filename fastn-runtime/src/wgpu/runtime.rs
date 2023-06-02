@@ -27,6 +27,14 @@ pub async fn render_document(document: fastn_runtime::Document) {
                     },
                 ..
             } => *control_flow = winit::event_loop::ControlFlow::Exit,
+            winit::event::WindowEvent::CursorMoved {
+                device_id,
+                position,
+                ..
+            } => {
+                dbg!("CursorMoved", &device_id, &position);
+                state.cursor_moved(position.x, position.y);
+            }
             winit::event::WindowEvent::Resized(physical_size) => {
                 state.resize(*physical_size);
             }
@@ -88,6 +96,10 @@ impl State {
         self.operation_data =
             fastn_runtime::wgpu::OperationData::new(new_size, &mut self.document, &self.wgpu);
         self.wgpu.resize(new_size);
+    }
+
+    fn cursor_moved(&mut self, pos_x: f64, pos_y: f64) {
+        self.document.cursor_moved(pos_x, pos_y)
     }
 
     fn render(&self) -> Result<(), wgpu::SurfaceError> {

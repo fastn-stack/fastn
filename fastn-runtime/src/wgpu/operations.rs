@@ -16,7 +16,7 @@ impl OperationData {
         for op in ops.into_iter() {
             match op {
                 fastn_runtime::Operation::DrawRectangle(rect) => {
-                    rects.push(rect);
+                    rects.push(dbg!(rect));
                 }
             }
         }
