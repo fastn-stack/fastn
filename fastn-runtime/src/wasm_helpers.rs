@@ -12,18 +12,10 @@ impl fastn_wasm::StoreExtractor for fastn_runtime::Dom {
     }
 }
 
-impl fastn_wasm::WasmType for fastn_runtime::dom::ElementKind {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> fastn_runtime::dom::ElementKind {
-        fastn_runtime::dom::ElementKind::from(vals.i32(idx))
-    }
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-    fn to_wasm(&self) -> wasmtime::Val {
-        let i: i32 = (*self).into();
-        i.into()
-    }
-}
+impl fastn_wasm::FromToI32 for fastn_runtime::DomEventKind {}
+impl fastn_wasm::FromToI32 for fastn_runtime::ElementKind {}
+impl fastn_wasm::FromToI32 for fastn_runtime::PointerKind {}
+impl fastn_wasm::FromToI32 for fastn_runtime::UIProperty {}
 
 impl fastn_wasm::WasmType for fastn_runtime::NodeKey {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
@@ -46,19 +38,6 @@ impl fastn_wasm::WasmType for fastn_runtime::PointerKey {
     }
     fn to_wasm(&self) -> wasmtime::Val {
         wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(*self)))
-    }
-}
-
-impl fastn_wasm::WasmType for fastn_runtime::PointerKind {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> fastn_runtime::PointerKind {
-        fastn_runtime::PointerKind::from(vals.i32(idx))
-    }
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-    fn to_wasm(&self) -> wasmtime::Val {
-        let i: i32 = (*self).into();
-        i.into()
     }
 }
 
@@ -108,18 +87,6 @@ impl Params for [wasmtime::Val] {
     }
 }
 
-impl fastn_wasm::WasmType for fastn_runtime::UIProperty {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
-        vals.i32(idx).into()
-    }
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-    fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32((*self).into())
-    }
-}
-
 pub trait CallerExt {
     fn memory(&self) -> &fastn_runtime::Memory;
     fn memory_mut(&mut self) -> &mut fastn_runtime::Memory;
@@ -131,17 +98,5 @@ impl CallerExt for wasmtime::Caller<'_, fastn_runtime::Dom> {
     }
     fn memory_mut(&mut self) -> &mut fastn_runtime::Memory {
         self.data_mut().memory_mut()
-    }
-}
-
-impl fastn_wasm::WasmType for fastn_runtime::EventKind {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
-        vals.i32(idx).into()
-    }
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-    fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32((*self).into())
     }
 }

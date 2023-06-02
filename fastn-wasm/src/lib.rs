@@ -20,7 +20,7 @@ pub use export::{Export, ExportDesc};
 pub use expression::{Expression, Index};
 pub use func::{Func, FuncDecl};
 pub use func_def::FuncDef;
-pub use helpers::{LinkerExt, StoreExtractor, WasmType};
+pub use helpers::{LinkerExt, StoreExtractor, WasmType, FromToI32};
 pub use import::{Import, ImportDesc};
 pub use memory::Memory;
 pub use pl::PL;

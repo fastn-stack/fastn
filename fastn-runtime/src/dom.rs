@@ -1,55 +1,18 @@
 pub struct Dom {
-    taffy: taffy::Taffy,
-    nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
-    children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
-    root: fastn_runtime::NodeKey,
-    memory: fastn_runtime::memory::Memory,
+    pub(crate) last_mouse: Mouse,
+    pub(crate) taffy: taffy::Taffy,
+    pub(crate) nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
+    pub(crate) children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
+    pub(crate) root: fastn_runtime::NodeKey,
+    pub(crate) memory: fastn_runtime::memory::Memory,
 }
 
-#[derive(Copy, Clone)]
-pub enum ElementKind {
-    Column,
-    Row,
-    Text,
-    Image,
-    Container,
-    IFrame,
-    Integer,
-    Decimal,
-    Boolean,
-}
-
-impl From<i32> for ElementKind {
-    fn from(i: i32) -> ElementKind {
-        match i {
-            0 => ElementKind::Column,
-            1 => ElementKind::Row,
-            2 => ElementKind::Text,
-            3 => ElementKind::Image,
-            4 => ElementKind::Container,
-            5 => ElementKind::IFrame,
-            6 => ElementKind::Integer,
-            7 => ElementKind::Decimal,
-            8 => ElementKind::Boolean,
-            _ => panic!("Unknown element kind: {}", i),
-        }
-    }
-}
-
-impl From<ElementKind> for i32 {
-    fn from(s: ElementKind) -> i32 {
-        match s {
-            ElementKind::Column => 0,
-            ElementKind::Row => 1,
-            ElementKind::Text => 2,
-            ElementKind::Image => 3,
-            ElementKind::Container => 4,
-            ElementKind::IFrame => 5,
-            ElementKind::Integer => 6,
-            ElementKind::Decimal => 7,
-            ElementKind::Boolean => 8,
-        }
-    }
+#[derive(Default)]
+pub(crate) struct Mouse {
+    pub(crate) x: f64,
+    pub(crate) y: f64,
+    pub(crate) left_down: bool,
+    pub(crate) right_down: bool,
 }
 
 impl Default for Dom {
@@ -66,6 +29,7 @@ impl Default for Dom {
             root,
             children,
             memory: Default::default(),
+            last_mouse: Default::default(),
         }
     }
 }
@@ -102,42 +66,16 @@ impl Dom {
         dbg!(self.layout_to_operations(self.root))
     }
 
-    pub fn handle_event(&mut self, evt: fastn_runtime::Event) {
+    pub fn handle_event(&mut self, evt: fastn_runtime::ExternalEvent) {
         match evt {
-            fastn_runtime::Event::CursorMoved {x, y} => self.cursor_moved(x, y),
-            _ => todo!()
+            fastn_runtime::ExternalEvent::CursorMoved { x, y } => self.cursor_moved(x, y),
+            _ => todo!(),
         }
     }
 
     fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
-        let _nodes = self.mouse_located(self.root, pos_x, pos_y);
+        let _nodes = self.nodes_under_mouse(self.root, pos_x, pos_y);
         // todo!()
-    }
-
-    fn mouse_located(
-        &self,
-        key: fastn_runtime::NodeKey,
-        pos_x: f64,
-        pos_y: f64,
-    ) -> Vec<fastn_runtime::NodeKey> {
-        let node = self.nodes.get(key).unwrap();
-        let mut node_keys = vec![];
-        match node {
-            fastn_runtime::Element::Container(c) => {
-                // no need to draw a rectangle if there is no color or border
-                if let Some(o) = c.operation(&self.taffy) {
-                    if o.has_position(pos_x, pos_y) {
-                        node_keys.push(key);
-                        for child in self.children.get(key).unwrap() {
-                            node_keys.extend(self.mouse_located(*child, pos_x, pos_y));
-                        }
-                    }
-                }
-            }
-            fastn_runtime::Element::Text(_t) => todo!(),
-            fastn_runtime::Element::Image(_i) => todo!(),
-        }
-        node_keys
     }
 
     fn layout_to_operations(&self, key: fastn_runtime::NodeKey) -> Vec<fastn_runtime::Operation> {
@@ -167,7 +105,7 @@ impl Dom {
     pub fn create_kernel(
         &mut self,
         parent: fastn_runtime::NodeKey,
-        _k: ElementKind,
+        _k: fastn_runtime::ElementKind,
     ) -> fastn_runtime::NodeKey {
         let taffy_key = self
             .taffy
@@ -317,7 +255,7 @@ impl Dom {
     pub fn set_event(
         &mut self,
         node_key: fastn_runtime::NodeKey,
-        event: fastn_runtime::EventKind,
+        event: fastn_runtime::DomEventKind,
         table_index: i32,
         func_arg: fastn_runtime::PointerKey,
     ) {

@@ -17,6 +17,7 @@ pub mod wgpu;
 mod control;
 mod document;
 mod dom;
+mod dom_helpers;
 mod element;
 mod event;
 mod memory;
@@ -26,9 +27,9 @@ mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::{Dom, ElementKind};
-pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, Image, Text};
-pub use event::{Event, EventKind};
+pub use dom::Dom;
+pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, ElementKind, Image, Text};
+pub use event::{DomEventKind, ExternalEvent};
 pub use memory::{Closure, ClosurePointer, Memory, Pointer, PointerKey, PointerKind, UIProperty};
 pub use operation::{Operation, Rectangle};
 

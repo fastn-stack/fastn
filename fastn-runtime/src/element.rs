@@ -5,6 +5,52 @@ pub enum Element {
     Image(Image),
 }
 
+#[derive(Copy, Clone)]
+pub enum ElementKind {
+    Column,
+    Row,
+    Text,
+    Image,
+    Container,
+    IFrame,
+    Integer,
+    Decimal,
+    Boolean,
+}
+
+impl From<i32> for ElementKind {
+    fn from(i: i32) -> ElementKind {
+        match i {
+            0 => ElementKind::Column,
+            1 => ElementKind::Row,
+            2 => ElementKind::Text,
+            3 => ElementKind::Image,
+            4 => ElementKind::Container,
+            5 => ElementKind::IFrame,
+            6 => ElementKind::Integer,
+            7 => ElementKind::Decimal,
+            8 => ElementKind::Boolean,
+            _ => panic!("Unknown element kind: {}", i),
+        }
+    }
+}
+
+impl From<ElementKind> for i32 {
+    fn from(s: ElementKind) -> i32 {
+        match s {
+            ElementKind::Column => 0,
+            ElementKind::Row => 1,
+            ElementKind::Text => 2,
+            ElementKind::Image => 3,
+            ElementKind::Container => 4,
+            ElementKind::IFrame => 5,
+            ElementKind::Integer => 6,
+            ElementKind::Decimal => 7,
+            ElementKind::Boolean => 8,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct CommonStyleMinusTaffy {
     pub background_color: Option<fastn_runtime::ColorValue>,
@@ -20,7 +66,7 @@ pub struct Container {
 }
 
 pub type ElementEvent =
-    std::collections::HashMap<fastn_runtime::EventKind, Vec<fastn_runtime::ClosurePointer>>;
+    std::collections::HashMap<fastn_runtime::DomEventKind, Vec<fastn_runtime::ClosurePointer>>;
 
 impl Container {
     pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
@@ -148,7 +194,7 @@ impl fastn_runtime::Element {
 
     pub fn add_events(
         &mut self,
-        event: fastn_runtime::EventKind,
+        event: fastn_runtime::DomEventKind,
         closure: fastn_runtime::ClosurePointer,
     ) {
         let events = self.events();
