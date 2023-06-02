@@ -120,18 +120,6 @@ impl fastn_wasm::WasmType for fastn_runtime::UIProperty {
     }
 }
 
-impl fastn_wasm::WasmType for fastn_runtime::Event {
-    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
-        vals.i32(idx).into()
-    }
-    fn the_type() -> wasmtime::ValType {
-        wasmtime::ValType::I32
-    }
-    fn to_wasm(&self) -> wasmtime::Val {
-        wasmtime::Val::I32((*self).into())
-    }
-}
-
 pub trait CallerExt {
     fn memory(&self) -> &fastn_runtime::Memory;
     fn memory_mut(&mut self) -> &mut fastn_runtime::Memory;
@@ -143,5 +131,17 @@ impl CallerExt for wasmtime::Caller<'_, fastn_runtime::Dom> {
     }
     fn memory_mut(&mut self) -> &mut fastn_runtime::Memory {
         self.data_mut().memory_mut()
+    }
+}
+
+impl fastn_wasm::WasmType for fastn_runtime::EventKind {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> Self {
+        vals.i32(idx).into()
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::I32
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        wasmtime::Val::I32((*self).into())
     }
 }

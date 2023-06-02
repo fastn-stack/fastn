@@ -17,12 +17,16 @@ impl Document {
         }
     }
 
+    pub fn handle_event(&mut self, event: fastn_runtime::Event) {
+        self.store.data_mut().handle_event(event)
+    }
+
     // initial_html() -> server side HTML
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>
 
     // if not wasm
-    pub fn initial_layout(
+    pub fn compute_layout(
         &mut self,
         width: u32,
         height: u32,
@@ -32,7 +36,6 @@ impl Document {
             self.store.data_mut().compute_layout(width, height),
         )
     }
-
     pub fn cursor_moved(&mut self, pos_x: f64, pos_y: f64) {
         self.store.data_mut().cursor_moved(pos_x, pos_y)
     }

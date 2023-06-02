@@ -1,5 +1,9 @@
 impl From<winit::event::Event<'_, ()>> for fastn_runtime::Event {
-    fn from(_value: winit::event::Event<()>) -> Self {
-        todo!()
+    fn from(evt: winit::event::Event<()>) -> Self {
+        dbg!(evt);
+        // match evt {
+        //
+        // }
+        fastn_runtime::Event::NoOp
     }
 }

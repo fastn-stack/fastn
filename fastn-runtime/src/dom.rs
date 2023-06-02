@@ -102,8 +102,8 @@ impl Dom {
         dbg!(self.layout_to_operations(self.root))
     }
 
-    fn handle_event(&mut self, _evt: fastn_runtime::Event) {
-        todo!()
+    pub fn handle_event(&mut self, evt: fastn_runtime::Event) {
+        dbg!(evt);
     }
 
     pub(crate) fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
@@ -314,7 +314,7 @@ impl Dom {
     pub fn set_event(
         &mut self,
         node_key: fastn_runtime::NodeKey,
-        event: fastn_runtime::Event,
+        event: fastn_runtime::EventKind,
         table_index: i32,
         func_arg: fastn_runtime::PointerKey,
     ) {

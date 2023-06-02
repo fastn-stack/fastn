@@ -10,6 +10,22 @@ pub trait WasmType {
     fn to_wasm(&self) -> wasmtime::Val;
 }
 
+trait FromToI32: From<i32> + Into<i32> + Copy {}
+
+impl<T: FromToI32> fastn_wasm::WasmType for T {
+    fn extract(idx: usize, vals: &[wasmtime::Val]) -> T {
+        vals[idx].i32().unwrap().into()
+    }
+    fn the_type() -> wasmtime::ValType {
+        wasmtime::ValType::I32
+    }
+    fn to_wasm(&self) -> wasmtime::Val {
+        let i: i32 = (*self).into();
+        i.into()
+    }
+}
+
+
 impl fastn_wasm::WasmType for f32 {
     fn extract(idx: usize, vals: &[wasmtime::Val]) -> f32 {
         vals[idx].f32().unwrap()

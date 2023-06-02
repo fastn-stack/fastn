@@ -20,7 +20,7 @@ pub struct Container {
 }
 
 pub type ElementEvent =
-    std::collections::HashMap<fastn_runtime::Event, Vec<fastn_runtime::ClosurePointer>>;
+    std::collections::HashMap<fastn_runtime::EventKind, Vec<fastn_runtime::ClosurePointer>>;
 
 impl Container {
     pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
@@ -148,7 +148,7 @@ impl fastn_runtime::Element {
 
     pub fn add_events(
         &mut self,
-        event: fastn_runtime::Event,
+        event: fastn_runtime::EventKind,
         closure: fastn_runtime::ClosurePointer,
     ) {
         let events = self.events();

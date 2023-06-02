@@ -11,7 +11,7 @@ impl OperationData {
         document: &mut fastn_runtime::Document,
         w: &fastn_runtime::wgpu::boilerplate::Wgpu,
     ) -> OperationData {
-        let (_ctrl, ops) = document.initial_layout(size.width, size.height);
+        let (_ctrl, ops) = document.compute_layout(size.width, size.height);
         let mut rects = vec![];
         for op in ops.into_iter() {
             match op {
