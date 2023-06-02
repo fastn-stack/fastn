@@ -278,9 +278,7 @@ fn create_columns() -> Vec<u8> {
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::MarginFixedPx.into()),
                     fastn_wasm::expression::i32(140),
                 ),
-
                 fastn_wasm::expression::call1("foo", fastn_wasm::expression::local("column")),
-
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
@@ -311,21 +309,18 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
-
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
                     fastn_wasm::expression::i32(100),
                 ),
-
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::HeightFixedPx.into()),
                     fastn_wasm::expression::i32(80),
                 ),
-
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
