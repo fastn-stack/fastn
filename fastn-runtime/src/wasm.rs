@@ -61,6 +61,13 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::ExternRef.into(),
             ),
+            fastn_wasm::import::func4(
+                "attach_event_handler",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+            ),
         ]);
         e
     }
@@ -162,6 +169,37 @@ impl fastn_runtime::Dom {
                     func_arg,
                     current_value_of_dynamic_property.into(),
                 )
+            },
+        );
+
+        linker.func4caller(
+            "attach_event_handler",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
+             node_key,
+             event,
+             table_index,
+             func_arg| {
+                // TODO: refactor this into a generic helper
+                {
+                    caller
+                        .get_export("call_by_index")
+                        .expect("call_by_index is not defined")
+                        .into_func()
+                        .expect("call_by_index not a func")
+                        .call(
+                            caller.as_context_mut(),
+                            &[
+                                wasmtime::Val::I32(table_index),
+                                wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
+                            ],
+                            &mut [],
+                        )
+                        .expect("call failed");
+                }
+
+                caller
+                    .data_mut()
+                    .set_event(node_key, event, table_index, func_arg)
             },
         );
     }
@@ -365,6 +403,14 @@ mod test {
         assert_import("set_property_f32", "(param externref i32 f32)");
         assert_import(
             "set_dynamic_property_i32",
+            "(param externref i32 i32 externref)",
+        );
+        assert_import(
+            "set_dynamic_property_color",
+            "(param externref i32 i32 externref)",
+        );
+        assert_import(
+            "attach_event_handler",
             "(param externref i32 i32 externref)",
         );
     }
