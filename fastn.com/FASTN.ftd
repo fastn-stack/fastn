@@ -114,9 +114,6 @@ favicon: /-/fastn.com/images/favicon.svg
 ## Docs: /frontend/
 
 - Overview 🚧: /frontend/
-- Passing data through headers: /headers/
-  document: ftd/headers.ftd
-  skip: true
 - Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
 - Design System 🚧: /design-system/
   document: frontend/design-system.ftd
@@ -135,6 +132,8 @@ favicon: /-/fastn.com/images/favicon.svg
     document: /ftd/list.ftd
 - `component`: /components/
   document: /ftd/components.ftd
+- Headers: /headers/
+  document: ftd/headers.ftd
 - Visibility: /visibility/
   document: /ftd/visibility.ftd
 - Kernel Components: /kernel/

@@ -8,29 +8,21 @@ several different ways to pass data through headers for various argument types.
 For simple (or caption only) arguments types, you can pass data through inline
 headers as key value pairs.
 
--- ds.rendered: For simple/caption only arguments
+-- rendered-with-definition: For simple/caption only arguments
 
--- ds.rendered.input:
+-- rendered-with-definition.raw-input:
 
 \-- foo-1: This is title
 title-color: $inherited.colors.text-strong
 
--- ds.rendered.output:
+-- rendered-with-definition.code:
 
 -- foo-1: This is title
 title-color: $inherited.colors.text-strong
 
--- end: ds.rendered.output
+-- end: rendered-with-definition.code
 
--- end: ds.rendered
-
-
-
-
-
-
--- ds.code: Definitions used above
-lang: ftd
+-- rendered-with-definition.definition:
 
 \-- component foo-1:
 caption title:
@@ -40,6 +32,8 @@ ftd.color title-color:
 color: $foo-1.title-color
 
 \-- end: foo-1
+
+-- end: rendered-with-definition
 
 
 
@@ -55,9 +49,9 @@ color: $foo-1.title-color
 
 For list type arguments, we use section headers to pass data to it.
 
--- ds.rendered: For list type arguments
+-- rendered-with-definition: For list type arguments
 
--- ds.rendered.input:
+-- rendered-with-definition.raw-input:
 
 \-- foo-2: This is title
 
@@ -74,7 +68,7 @@ color: red
 
 \-- end: foo-2.inner
 
--- ds.rendered.output:
+-- rendered-with-definition.code:
 
 -- foo-2: This is title
 
@@ -91,19 +85,9 @@ color: red
 
 -- end: foo-2.inner
 
--- end: ds.rendered.output
+-- end: rendered-with-definition.code
 
--- end: ds.rendered
-
-
-
-
-
-
-
-
--- ds.code: Definitions used above
-lang: ftd
+-- rendered-with-definition.definition:
 
 \-- component foo-2:
 caption title:
@@ -126,6 +110,7 @@ children: $foo-2.inner
 
 \-- end: foo-2
 
+-- end: rendered-with-definition
 
 
 
@@ -141,9 +126,9 @@ For record type arguments, we use block headers to pass data. Passing
 record field data can be done through its inline headers or by passing it
 individually through record field syntax.
 
--- ds.rendered: For record type arguments (for kernel components)
+-- rendered-with-definition: For record type arguments (for kernel components)
 
--- ds.rendered.input:
+-- rendered-with-definition.raw-input:
 
 \-- ftd.text: First Text
 margin-vertical.px: 10
@@ -152,7 +137,7 @@ margin-vertical.px: 10
 light: red
 dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- ftd.text: Second Text
 margin-vertical.px: 10
@@ -160,7 +145,7 @@ margin-vertical.px: 10
 \-- ftd.text.color: red
 dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- ftd.text: Third Text
 margin-vertical.px: 10
@@ -168,7 +153,7 @@ margin-vertical.px: 10
 \-- ftd.text.color: red
 \-- ftd.text.color.dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- ftd.text: Fourth Text
 margin-vertical.px: 10
@@ -176,7 +161,8 @@ margin-vertical.px: 10
 \-- ftd.text.color.light: red
 \-- ftd.text.color.dark: yellow
 
--- ds.rendered.output:
+
+-- rendered-with-definition.code:
 
 -- ftd.text: First Text
 margin-vertical.px: 10
@@ -209,11 +195,9 @@ margin-vertical.px: 10
 -- ftd.text.color.light: red
 -- ftd.text.color.dark: yellow
 
--- end: ds.rendered.output
+-- end: rendered-with-definition.code
 
--- end: ds.rendered
-
-
+-- end: rendered-with-definition
 
 
 
@@ -221,16 +205,15 @@ margin-vertical.px: 10
 
 
 
+-- rendered-with-definition: For record-type arguments ( user-defined components )
 
--- ds.rendered: For record-type arguments ( user-defined components )
-
--- ds.rendered.input:
+-- rendered-with-definition.raw-input:
 
 \-- foo: Text 1 from component
 
 \-- foo.text-color: $c
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- foo: Text 2 from component
 
@@ -238,35 +221,35 @@ margin-vertical.px: 10
 light: red
 dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- foo: Text 3 from component
 
 \-- foo.text-color: red
 dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- foo: Text 4 from component
 
 \-- foo.text-color: red
 \-- foo.text-color.dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- foo: Text 5 from component
 
 \-- foo.text-color.light: red
 \-- foo.text-color.dark: yellow
 
-\;; ----------------------------
+;; ----------------------------
 
 \-- foo: Text 6 from component
 
 \-- foo.text-color.light: red
 \-- foo.text-color.dark: $d-color
 
--- ds.rendered.output:
+-- rendered-with-definition.code:
 
 -- foo: Text 1 from component
 
@@ -308,16 +291,9 @@ dark: yellow
 -- foo.text-color.light: red
 -- foo.text-color.dark: $d-color
 
--- end: ds.rendered.output
+-- end: rendered-with-definition.code
 
--- end: ds.rendered
-
-
-
-
-
--- ds.code: Definitions used above
-lang: ftd
+-- rendered-with-definition.definition:
 
 \-- ftd.color c: red
 dark: yellow
@@ -334,6 +310,7 @@ margin-vertical.px: 10
 
 \-- end: foo
 
+-- end: rendered-with-definition
 
 
 
@@ -341,59 +318,52 @@ margin-vertical.px: 10
 
 
 
--- ds.rendered: More complex record type arguments (user-defined component)
 
--- ds.rendered.input:
+
+
+-- rendered-with-definition: More complex record type arguments (user-defined component)
+
+-- rendered-with-definition.raw-input:
 
 \-- bar:
 
 \-- bar.text:
 
-Hello This is some text
+Hello this is some text
 
 \-- bar.d: Rithik
 
 \-- bar.d.description:
 
-This is body
+This is some description
 
 \-- bar.d.age: 23
 
 \-- bar.text-color: red
 dark: yellow
 
--- ds.rendered.output:
+-- rendered-with-definition.code:
 
 -- bar:
 
 -- bar.text:
 
-Hello This is some text
+Hello this is some text
 
 -- bar.d: Rithik
 
 -- bar.d.description:
 
-This is body
+This is some description
 
 -- bar.d.age: 23
 
 -- bar.text-color: red
 dark: yellow
 
--- end: ds.rendered.output
+-- end: rendered-with-definition.code
 
--- end: ds.rendered
-
-
-
-
-
-
-
-
--- ds.code: Definitions used above
-lang: ftd
+-- rendered-with-definition.definition:
 
 \-- component bar:
 data d:
@@ -425,6 +395,8 @@ caption name:
 body description:
 optional integer age:
 
+-- end: rendered-with-definition
+
 -- end: my-ds.page
 
 
@@ -446,6 +418,68 @@ mobile.px: 40
 ;; ----------------------------
 ;;     COMPONENT DEFINITION
 ;; ----------------------------
+
+-- component rendered-with-definition:
+caption title:
+body raw-input:
+optional string definition:
+string definition-title: Definitions used
+string rendered-title: Sample usage
+string lang: ftd
+children code:
+private boolean $show-definition: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+-- ds.h2: $rendered-with-definition.title
+
+-- ds.rendered: $rendered-with-definition.rendered-title
+input: $rendered-with-definition.raw-input
+output: $rendered-with-definition.code
+
+-- ftd.row:
+if: { rendered-with-definition.definition != NULL }
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+spacing: space-between
+padding.px: 10
+align-content: center
+$on-click$: $ftd.toggle($a = $rendered-with-definition.show-definition)
+
+-- ftd.text: $rendered-with-definition.definition-title
+color: $inherited.colors.text
+role: $inherited.types.heading-tiny
+align-self: start
+
+/-- ftd.boolean: $rendered-with-definition.show-definition
+color: $inherited.colors.text
+
+-- ftd.image: $fastn-assets.files.images.up-arrow.svg
+if: { rendered-with-definition.show-definition }
+align-self: end
+width.fixed.px: 15
+margin-bottom.px: 5
+
+-- ftd.image: $fastn-assets.files.images.down-arrow.svg
+if: { !rendered-with-definition.show-definition }
+align-self: end
+width.fixed.px: 15
+margin-bottom.px: 5
+
+-- end: ftd.row
+
+;; Definition (if any)
+-- ds.code:
+if: { rendered-with-definition.definition != NULL && rendered-with-definition.show-definition }
+lang: $rendered-with-definition.lang
+body: $rendered-with-definition.definition
+
+-- end: ftd.column
+
+-- end: rendered-with-definition
+
 
 -- component foo:
 caption text:
