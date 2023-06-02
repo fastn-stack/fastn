@@ -237,4 +237,23 @@ twitter-title: My Page Twitter Title
 
 
 
+
+-- ds.h2: `breakpoint: optional ftd.breakpoint-width-data`
+
+This attribute specifies the breakpoint width below which the device would be
+considered mobile otherwise desktop. It takes value of type
+[`ftd.breakpoint-width-data`](ftd/built-in-types/#ftd-breakpoint-width-data)
+and is optional. If not specified, then the default breakpoint will be used
+which is `768px`.
+
+-- ds.code: Sample usage of breakpoint
+lang: ftd
+
+\-- ftd.document:
+title: My page title
+breakpoint: 800
+
+
+
+
 -- end: my-ds.page

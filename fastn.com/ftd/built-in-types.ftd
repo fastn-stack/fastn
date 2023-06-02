@@ -35,6 +35,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.anchor`](ftd/built-in-types/#ftd-anchor)
   - [`ftd.linear-gradient`](ftd/built-in-types/#ftd-linear-gradient)
   - [`ftd.linear-gradient-color`](ftd/built-in-types/#ftd-linear-gradient-color)
+  - [`ftd.breakpoint-width-data`](ftd/built-in-types/#ftd-breakpoint-width-data)
   - [`ftd.linear-gradient-directions`](ftd/built-in-types/#ftd-linear-gradient-directions)
   - [`ftd.background-image`](ftd/built-in-types/#ftd-background-image)
   - [`ftd.background-position`](ftd/built-in-types/#ftd-background-position)
@@ -462,6 +463,28 @@ and is optional. By default, it takes `bottom`.
 which defines the colors used in the gradient.
 
 
+
+
+
+
+
+
+
+-- ds.h2: `ftd.breakpoint-width-data`
+
+`ftd.breakpoint-width-data` is a record. It accepts one value as caption which
+is mobile breakpoint width.
+
+-- ds.code: `ftd.breakpoint-width-data`
+lang: ftd
+
+\-- record breakpoint-width-data:
+caption integer mobile:
+
+-- ds.markdown:
+
+- `mobile`: This field defines the mobile breakpoint width under which the
+device would be considered mobile otherwise desktop.
 
 
 
