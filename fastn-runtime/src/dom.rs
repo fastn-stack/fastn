@@ -102,6 +102,10 @@ impl Dom {
         dbg!(self.layout_to_operations(self.root))
     }
 
+    fn handle_event(&mut self, _evt: fastn_runtime::Event) {
+        todo!()
+    }
+
     fn layout_to_operations(&self, key: fastn_runtime::NodeKey) -> Vec<fastn_runtime::Operation> {
         let node = self.nodes.get(key).unwrap();
         match node {
@@ -280,6 +284,7 @@ pub enum Value {
     I32(i32),
     F32(f32),
     Vec(Vec<Value>),
+    Color(i32, i32, i32, f32),
 }
 
 impl From<i32> for Value {
