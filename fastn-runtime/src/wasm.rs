@@ -175,7 +175,7 @@ impl fastn_runtime::Dom {
         linker.func4(
             "attach_event_handler",
             |dom: &mut fastn_runtime::Dom, node_key, event, table_index, func_arg| {
-                dom.set_event(node_key, event, table_index, func_arg)
+                dom.attach_event_handler(node_key, event, table_index, func_arg)
             },
         );
     }

@@ -48,6 +48,12 @@ pub async fn render_document(document: fastn_runtime::Document) {
             }
             *control_flow = winit::event_loop::ControlFlow::Wait;
         }
+        winit::event::Event::RedrawEventsCleared => {
+            *control_flow = winit::event_loop::ControlFlow::Wait;
+        }
+        winit::event::Event::NewEvents(_) => {
+            *control_flow = winit::event_loop::ControlFlow::Wait;
+        }
         winit::event::Event::MainEventsCleared => {
             // one or more events can come together, so we need to handle them all before we
             // re-render or re-compute the layout. winit::event::Event::MainEventsCleared is fired
