@@ -70,13 +70,17 @@ struct State {
 }
 
 impl State {
-    pub fn handle_event(&mut self, event: winit::event::Event<()>) -> winit::event_loop::ControlFlow {
-        let event: fastn_runtime::Event = event.into();
+    pub fn handle_event(
+        &mut self,
+        event: winit::event::Event<()>,
+    ) -> winit::event_loop::ControlFlow {
+        let event: fastn_runtime::ExternalEvent = event.into();
         if event.is_nop() {
             return winit::event_loop::ControlFlow::Wait;
         }
         self.document.handle_event(event);
-        self.operation_data = fastn_runtime::wgpu::OperationData::new(self.size, &mut self.document, &self.wgpu);
+        self.operation_data =
+            fastn_runtime::wgpu::OperationData::new(self.size, &mut self.document, &self.wgpu);
         self.window.request_redraw();
         winit::event_loop::ControlFlow::Wait
     }

@@ -17,7 +17,7 @@ impl Document {
         }
     }
 
-    pub fn handle_event(&mut self, event: fastn_runtime::Event) {
+    pub fn handle_event(&mut self, event: fastn_runtime::ExternalEvent) {
         self.store.data_mut().handle_event(event)
     }
 
@@ -40,7 +40,7 @@ impl Document {
     // if not wasm
     pub async fn event(
         &mut self,
-        _e: fastn_runtime::Event,
+        _e: fastn_runtime::ExternalEvent,
     ) -> (fastn_runtime::ControlFlow, Vec<fastn_runtime::Operation>) {
         // find the event target based on current layout and event coordinates
         // handle event, which will update the dom tree

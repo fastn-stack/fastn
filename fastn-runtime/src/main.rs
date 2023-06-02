@@ -278,10 +278,8 @@ fn create_columns() -> Vec<u8> {
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::MarginFixedPx.into()),
                     fastn_wasm::expression::i32(140),
                 ),
-
                 fastn_wasm::expression::call1("foo", fastn_wasm::expression::local("column")),
                 fastn_wasm::expression::call1("foo", fastn_wasm::expression::local("column")),
-
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
