@@ -299,6 +299,12 @@ impl From<f32> for Value {
     }
 }
 
+impl From<(i32, i32, i32, f32)> for Value {
+    fn from(i: (i32, i32, i32, f32)) -> Value {
+        Value::Color(i.0, i.1, i.2, i.3)
+    }
+}
+
 impl From<Vec<Value>> for Value {
     fn from(i: Vec<Value>) -> Value {
         Value::Vec(i)
@@ -323,8 +329,8 @@ impl Value {
     }
 
     fn rgba(&self) -> (i32, i32, i32, f32) {
-        if let Value::Vec(i) = self {
-            (i[0].i32(), i[1].i32(), i[2].i32(), i[3].f32())
+        if let Value::Color(r, g, b, a) = self {
+            (*r, *g, *b, *a)
         } else {
             panic!("Expected vec value")
         }
