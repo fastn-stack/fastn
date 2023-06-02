@@ -9,6 +9,14 @@ pub enum ExternalEvent {
     NoOp,
 }
 
+#[derive(Default)]
+pub(crate) struct MouseState {
+    pub(crate) x: f64,
+    pub(crate) y: f64,
+    pub(crate) left_down: bool,
+    pub(crate) right_down: bool,
+}
+
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub enum DomEventKind {
     OnMouseEnter,
