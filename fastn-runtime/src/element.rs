@@ -16,6 +16,7 @@ pub struct Container {
     // if not wasm
     pub taffy_key: taffy::node::Node,
     pub style: CommonStyleMinusTaffy,
+
 }
 
 impl Container {

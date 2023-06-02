@@ -152,7 +152,7 @@ pub async fn get_missing_checksums(
 pub async fn tejar_create(
     root: &camino::Utf8Path,
 ) -> Result<(camino::Utf8PathBuf, camino::Utf8PathBuf), tejar::error::CreateError> {
-    let files: _ = fastn_cloud::utils::walkdir_util(root)
+    let files = fastn_cloud::utils::walkdir_util(root)
         .into_iter()
         .filter(|f| !f.path.to_string().ends_with(".tejar-list"))
         .filter(|f| !f.path.to_string().ends_with(".tejar-data"))

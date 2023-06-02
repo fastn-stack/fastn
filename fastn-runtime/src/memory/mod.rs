@@ -57,7 +57,7 @@ pub struct Memory {
     i32: Heap<i32>,
     f32: Heap<f32>,
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
-    /// are stored in the order they are defined.
+    /// are stored in the order they are defined. We also closure captured variables here.
     pub vec: Heap<Vec<Pointer>>,
     or_type: Heap<(u8, Vec<Pointer>)>,
 
