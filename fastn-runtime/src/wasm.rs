@@ -172,34 +172,10 @@ impl fastn_runtime::Dom {
             },
         );
 
-        linker.func4caller(
+        linker.func4(
             "attach_event_handler",
-            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
-             node_key,
-             event,
-             table_index,
-             func_arg| {
-                // TODO: refactor this into a generic helper
-                {
-                    caller
-                        .get_export("call_by_index")
-                        .expect("call_by_index is not defined")
-                        .into_func()
-                        .expect("call_by_index not a func")
-                        .call(
-                            caller.as_context_mut(),
-                            &[
-                                wasmtime::Val::I32(table_index),
-                                wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
-                            ],
-                            &mut [],
-                        )
-                        .expect("call failed");
-                }
-
-                caller
-                    .data_mut()
-                    .set_event(node_key, event, table_index, func_arg)
+            |dom: &mut fastn_runtime::Dom, node_key, event, table_index, func_arg| {
+                dom.set_event(node_key, event, table_index, func_arg)
             },
         );
     }
