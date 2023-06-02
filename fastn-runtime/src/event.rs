@@ -7,6 +7,10 @@ pub enum Event {
     // Resize(u16, u16),
     OnMouseEnter,
     OnMouseLeave,
+    CursorMoved {
+        x: f64,
+        y: f64,
+    },
     NoOp,
 }
 
@@ -14,6 +18,7 @@ pub enum Event {
 pub enum EventKind {
     OnMouseEnter,
     OnMouseLeave,
+    CursorMoved,
 }
 
 impl From<i32> for EventKind {
@@ -21,6 +26,7 @@ impl From<i32> for EventKind {
         match i {
             0 => EventKind::OnMouseEnter,
             1 => EventKind::OnMouseLeave,
+            2 => EventKind::CursorMoved,
             _ => panic!("Unknown UIProperty: {}", i),
         }
     }
@@ -31,6 +37,7 @@ impl From<EventKind> for i32 {
         match v {
             EventKind::OnMouseEnter => 0,
             EventKind::OnMouseLeave => 1,
+            EventKind::CursorMoved => 2,
         }
     }
 }

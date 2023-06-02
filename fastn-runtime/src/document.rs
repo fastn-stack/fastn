@@ -36,9 +36,6 @@ impl Document {
             self.store.data_mut().compute_layout(width, height),
         )
     }
-    pub fn cursor_moved(&mut self, pos_x: f64, pos_y: f64) {
-        self.store.data_mut().cursor_moved(pos_x, pos_y)
-    }
 
     // if not wasm
     pub async fn event(

@@ -103,10 +103,13 @@ impl Dom {
     }
 
     pub fn handle_event(&mut self, evt: fastn_runtime::Event) {
-        dbg!(evt);
+        match evt {
+            fastn_runtime::Event::CursorMoved {x, y} => self.cursor_moved(x, y),
+            _ => todo!()
+        }
     }
 
-    pub(crate) fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
+    fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
         let _nodes = self.mouse_located(self.root, pos_x, pos_y);
         // todo!()
     }
