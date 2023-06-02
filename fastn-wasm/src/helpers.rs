@@ -79,6 +79,17 @@ pub trait LinkerExt<S> {
         name: &'static str,
         func: impl Fn(&mut SE, T1, T2, T3) + Send + Sync + 'static,
     );
+    fn func4<
+        SE: StoreExtractor<Parent = S>,
+        T1: WasmType,
+        T2: WasmType,
+        T3: WasmType,
+        T4: WasmType,
+    >(
+        &mut self,
+        name: &'static str,
+        func: impl Fn(&mut SE, T1, T2, T3, T4) + Send + Sync + 'static,
+    );
     fn func4caller<T1: WasmType, T2: WasmType, T3: WasmType, T4: WasmType>(
         &mut self,
         name: &'static str,
