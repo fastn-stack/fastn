@@ -40,6 +40,10 @@ Welcome to the video.
 
 Today we learn how to add or change the color-scheme in doc-site
 
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.cs-intro.png
+
 
 -- ds.h1: Introduction
 if: { !show-planning }
@@ -72,9 +76,7 @@ The three steps to adding a color-scheme are:
   *Note:* For explanation, we have selected 
   [`winter-cs`](https://fastn-community.github.io/winter-cs/)
 
-/-- ds.image:
-if: { show-planning }
-src: $fastn-assets.files.expander.ds.img.
+
 
 -- ds.markdown:
 

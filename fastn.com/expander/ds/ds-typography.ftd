@@ -42,6 +42,10 @@ Welcome to the video.
 
 Today we learn how to add or change the typography in doc-site
 
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.typography-intro.png
+
 
 -- ds.h1: Introduction
 if: { !show-planning }
@@ -72,9 +76,6 @@ The three steps to adding a typography are:
   *Note:* For explanation, we have selected 
   [`lobster-typography`](https://fastn-community.github.io/lobster-typography/)
 
-/-- ds.image:
-if: { show-planning }
-src: $fastn-assets.files.expander.ds.img.
 
 -- ds.markdown:
 
