@@ -1142,7 +1142,7 @@ impl PropertyValue {
                         reference_full_name.as_str(),
                         definition_name_with_arguments,
                         value.line_number(),
-                        doc.name,
+                        doc,
                     )?;
                 }
 
@@ -1235,7 +1235,7 @@ impl PropertyValue {
                         reference_full_name.as_str(),
                         definition_name_with_arguments,
                         value.line_number(),
-                        doc.name,
+                        doc,
                     )?;
                 }
 
@@ -1346,7 +1346,7 @@ pub enum Value {
     },
     Module {
         name: String,
-        things: ftd::Map<ftd::interpreter::KindData>,
+        things: ftd::Map<ftd::interpreter::ModuleThing>,
     },
 }
 

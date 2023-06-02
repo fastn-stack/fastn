@@ -267,7 +267,7 @@ impl Component {
             name.as_str(),
             definition_name_with_arguments,
             ast_component.line_number(),
-            doc.name,
+            doc,
         )
         .ok();
 

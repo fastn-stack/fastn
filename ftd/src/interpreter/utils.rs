@@ -602,30 +602,57 @@ pub(crate) fn insert_module_thing(
     reference_full_name: &str,
     definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
     line_number: usize,
-    doc_name: &str,
+    doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     let arg = get_mut_argument_for_reference(
         reference,
-        doc_name,
+        doc.name,
         definition_name_with_arguments,
         line_number,
     )?
     .ok_or(ftd::interpreter::Error::ValueNotFound {
-        doc_id: doc_name.to_string(),
+        doc_id: doc.name.to_string(),
         line_number,
         message: format!("{} not found in component arguments.", reference,),
     })?;
-    if let ftd::interpreter::Value::Module { things, .. } = arg
+    if let ftd::interpreter::Value::Module {
+        things,
+        name: module_name,
+    } = arg
         .value
         .as_mut()
         .ok_or(ftd::interpreter::Error::ValueNotFound {
-            doc_id: doc_name.to_string(),
+            doc_id: doc.name.to_string(),
             line_number,
             message: format!("{} not found in component arguments.", reference),
         })?
-        .value_mut(doc_name, line_number)?
+        .value_mut(doc.name, line_number)?
     {
-        things.insert(reference_full_name.to_string(), kind.clone());
+        let mut reference_parts = reference.split('.');
+        if let (Some(_), Some(_), Some(third)) = (
+            reference_parts.next(),
+            reference_parts.next(),
+            reference_parts.next(),
+        ) {
+            let module_component_name = format!("{}#{}", module_name, third);
+            if let Ok(module_component_definition) =
+                doc.get_component(module_component_name.as_str(), 0)
+            {
+                let component_module_thing = ftd::interpreter::ModuleThing::component(
+                    reference_full_name.to_string(),
+                    ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
+                    module_component_definition.arguments.clone(),
+                );
+
+                things.insert(reference_full_name.to_string(), component_module_thing);
+            } else {
+                let variable_module_thing = ftd::interpreter::ModuleThing::variable(
+                    reference_full_name.to_string(),
+                    kind.clone(),
+                );
+                things.insert(reference_full_name.to_string(), variable_module_thing);
+            }
+        }
     }
 
     Ok(())
