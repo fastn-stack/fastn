@@ -54,6 +54,13 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::ExternRef.into(),
             ),
+            fastn_wasm::import::func4(
+                "set_dynamic_property_color",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+            ),
         ]);
         e
     }
@@ -145,7 +152,7 @@ impl fastn_runtime::Dom {
                         )
                         .expect("call failed");
 
-                    caller.data().memory().get_i32(values.ptr(0))
+                    caller.data().memory().get_colors(values.ptr(0))
                 };
 
                 caller.data_mut().set_dynamic_property(
@@ -155,47 +162,6 @@ impl fastn_runtime::Dom {
                     func_arg,
                     current_value_of_dynamic_property.into(),
                 )
-            },
-        );
-
-        linker.func4caller(
-            "set_i32_3_prop_func",
-            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
-             node_key,
-             ui_property,
-             table_index,
-             func_arg: fastn_runtime::PointerKey| {
-                let mut values = vec![];
-                caller
-                    .get_export("call_by_index")
-                    .unwrap()
-                    .into_func()
-                    .expect("call_by_index not a func")
-                    .call(
-                        caller.as_context_mut(),
-                        &[
-                            wasmtime::Val::I32(table_index),
-                            wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
-                        ],
-                        &mut values,
-                    )
-                    .expect("call failed");
-
-                let value = values.ptr(0);
-                let dom = caller.data_mut();
-                dom.set_property(node_key, ui_property, dom.memory().get_colors(value).into());
-
-                let mem = dom.memory_mut();
-                let closure_key = mem.create_closure(fastn_runtime::Closure {
-                    function: table_index,
-                    captured_variables: func_arg.into_list_pointer(),
-                });
-                mem.add_dynamic_property_dependency(
-                    func_arg.into_list_pointer(),
-                    ui_property
-                        .into_dynamic_property(node_key)
-                        .closure(closure_key),
-                );
             },
         );
     }

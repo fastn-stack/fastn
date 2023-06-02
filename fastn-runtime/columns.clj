@@ -17,7 +17,7 @@
     ;; func = function to call, index in the table, func must return i32
     ;; variables = array containing variables to pass to the function
     (import "fastn" "set_dynamic_property_i32" (func $set_dynamic_property_i32 (param externref i32 i32 externref)))
-    (import "fastn" "set_i32_3_prop_func" (func $set_i32_3_prop_func (param externref i32 i32 externref)))
+    (import "fastn" "set_dynamic_property_color" (func $set_dynamic_property_color (param externref i32 i32 externref)))
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
     (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
 
@@ -133,7 +133,7 @@
         ;; background.solid: red
         ;; background.solid if { foo.on-hover }: green
         ;; background.solid if { any-hover }: blue
-        (call $set_i32_3_prop_func
+        (call $set_dynamic_property_color
                 (local.get $column)
                 (i32.const 3) ;; 3 = background.solid
                 (i32.const 3) ;; index in the table
