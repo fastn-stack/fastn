@@ -111,7 +111,7 @@
         ;; }
         (call $attach_event_handler
               (local.get $column)
-              (i32.const 0) ;; 0 = on mouse enter
+              (i32.const 1) ;; 0 = on mouse enter
               (i32.const 2) ;; index in the table
               (call $array_i32_2 (call global_get (i32.const 0)) (local.get $on-hover))
         )
