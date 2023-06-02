@@ -1,18 +1,10 @@
 pub struct Dom {
-    pub(crate) last_mouse: Mouse,
+    pub(crate) last_mouse: fastn_runtime::MouseState,
     pub(crate) taffy: taffy::Taffy,
     pub(crate) nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
     pub(crate) children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
     pub(crate) root: fastn_runtime::NodeKey,
     pub(crate) memory: fastn_runtime::memory::Memory,
-}
-
-#[derive(Default)]
-pub(crate) struct Mouse {
-    pub(crate) x: f64,
-    pub(crate) y: f64,
-    pub(crate) left_down: bool,
-    pub(crate) right_down: bool,
 }
 
 impl Default for Dom {
