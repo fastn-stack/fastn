@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy)]
 pub enum Event {
     // FocusGained,
     // FocusLost,
@@ -7,23 +7,36 @@ pub enum Event {
     // Resize(u16, u16),
     OnMouseEnter,
     OnMouseLeave,
+    NoOp,
 }
 
-impl From<i32> for Event {
-    fn from(i: i32) -> Event {
+#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
+pub enum EventKind {
+    OnMouseEnter,
+    OnMouseLeave,
+}
+
+impl From<i32> for EventKind {
+    fn from(i: i32) -> EventKind {
         match i {
-            0 => Event::OnMouseEnter,
-            1 => Event::OnMouseLeave,
+            0 => EventKind::OnMouseEnter,
+            1 => EventKind::OnMouseLeave,
             _ => panic!("Unknown UIProperty: {}", i),
         }
     }
 }
 
-impl From<Event> for i32 {
-    fn from(v: Event) -> i32 {
+impl From<EventKind> for i32 {
+    fn from(v: EventKind) -> i32 {
         match v {
-            Event::OnMouseEnter => 0,
-            Event::OnMouseLeave => 1,
+            EventKind::OnMouseEnter => 0,
+            EventKind::OnMouseLeave => 1,
         }
+    }
+}
+
+impl Event {
+    pub fn is_nop(&self) -> bool {
+        matches!(self, Event::NoOp)
     }
 }

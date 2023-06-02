@@ -4,19 +4,13 @@ pub async fn render_document(document: fastn_runtime::Document) {
         .build(&event_loop)
         .unwrap();
 
-    dbg!(window.theme());
-
     let mut state = State::new(window, document).await;
 
-    // one or more events can come together, so we need to handle them all before we re-render
-    // or re-compute the layout. winit::event::Event::MainEventsCleared is fired after all events
-    // are handled.
-    // https://docs.rs/winit/0.28.5/winit/event/enum.Event.html#variant.MainEventsCleared
     event_loop.run(move |event, _, control_flow| match event {
         winit::event::Event::WindowEvent {
-            ref event,
+            event: ref window_event,
             window_id,
-        } if window_id == state.window.id() => match event {
+        } if window_id == state.window.id() => match window_event {
             winit::event::WindowEvent::CloseRequested
             | winit::event::WindowEvent::KeyboardInput {
                 input:
@@ -43,11 +37,8 @@ pub async fn render_document(document: fastn_runtime::Document) {
             winit::event::WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                 state.resize(**new_inner_size);
             }
-            winit::event::WindowEvent::ThemeChanged(theme) => {
-                dbg!("theme changed", theme);
-            }
             _ => {
-                // dbg!(event);
+                *control_flow = state.handle_event(event);
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window.id() => {
@@ -66,19 +57,15 @@ pub async fn render_document(document: fastn_runtime::Document) {
             *control_flow = winit::event_loop::ControlFlow::Wait;
         }
         winit::event::Event::MainEventsCleared => {
-            // all events have been processed, we can request a redraw now. This causes
-            // winit::event::Event::RedrawRequested to be emitted.
+            // one or more events can come together, so we need to handle them all before we
+            // re-render or re-compute the layout. winit::event::Event::MainEventsCleared is fired
+            // after all events are handled.
+            // https://docs.rs/winit/0.28.5/winit/event/enum.Event.html#variant.MainEventsCleared
             state.window.request_redraw();
         }
-        winit::event::Event::NewEvents(_) => {}
-        winit::event::Event::WindowEvent { .. } => {}
-        winit::event::Event::DeviceEvent { .. } => {}
-        winit::event::Event::UserEvent(_) => {}
-        winit::event::Event::Suspended => {}
-        winit::event::Event::Resumed => {}
-        winit::event::Event::RedrawRequested(_) => {}
-        winit::event::Event::RedrawEventsCleared => {}
-        winit::event::Event::LoopDestroyed => {}
+        _ => {
+            *control_flow = state.handle_event(event);
+        }
     })
 }
 
@@ -91,6 +78,17 @@ struct State {
 }
 
 impl State {
+    pub fn handle_event(&mut self, event: winit::event::Event<()>) -> winit::event_loop::ControlFlow {
+        let event: fastn_runtime::Event = event.into();
+        if event.is_nop() {
+            return winit::event_loop::ControlFlow::Wait;
+        }
+        self.document.handle_event(event);
+        self.operation_data = fastn_runtime::wgpu::OperationData::new(self.size, &mut self.document, &self.wgpu);
+        self.window.request_redraw();
+        winit::event_loop::ControlFlow::Wait
+    }
+
     pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
         self.size = new_size;
         self.operation_data =
