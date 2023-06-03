@@ -1900,6 +1900,7 @@ name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "bitflags 2.2.1",
  "bytemuck",
  "env_logger",
  "fastn-wasm",
