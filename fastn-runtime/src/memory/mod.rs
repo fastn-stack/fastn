@@ -62,6 +62,7 @@ pub struct Memory {
     or_type: Heap<(u8, Vec<Pointer>)>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
+    event_handlers: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
     /// We need to store some global variables. For every top level variable defined in ftd files
     /// we create a global variable. Since all values are stored in `Memory`, the globals contain
     /// pointers.
@@ -82,6 +83,12 @@ pub struct Memory {
     //
     // a string containing hello will be created, and then passed to Rust as text properties, and
     // original wasm value would get dropped.
+}
+
+#[derive(Debug)]
+pub struct EventHandler {
+    node: fastn_runtime::NodeKey,
+    closure: fastn_runtime::ClosurePointer,
 }
 
 #[derive(Debug)]
