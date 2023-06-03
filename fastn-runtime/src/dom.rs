@@ -1,5 +1,7 @@
 pub struct Dom {
     pub(crate) last_mouse: fastn_runtime::MouseState,
+    pub(crate) has_focus: bool,
+    pub(crate) modifiers: fastn_runtime::event::ModifiersState,
     pub(crate) taffy: taffy::Taffy,
     pub(crate) nodes: slotmap::SlotMap<fastn_runtime::NodeKey, fastn_runtime::Element>,
     pub(crate) children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
@@ -22,6 +24,8 @@ impl Default for Dom {
             children,
             memory: Default::default(),
             last_mouse: Default::default(),
+            has_focus: false,
+            modifiers: Default::default(),
         }
     }
 }
@@ -61,9 +65,14 @@ impl Dom {
     pub fn handle_event(&mut self, evt: fastn_runtime::ExternalEvent) {
         match evt {
             fastn_runtime::ExternalEvent::CursorMoved { x, y } => self.cursor_moved(x, y),
+            fastn_runtime::ExternalEvent::Focused(f) => self.has_focus = f,
+            fastn_runtime::ExternalEvent::ModifierChanged(m) => self.modifiers = m,
+            fastn_runtime::ExternalEvent::Key { code, pressed } => self.handle_key(code, pressed),
             _ => todo!(),
         }
     }
+
+    fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {}
 
     fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
         let _nodes = self.nodes_under_mouse(self.root, pos_x, pos_y);

@@ -34,7 +34,6 @@ pub async fn render_document(document: fastn_runtime::Document) {
             }
         },
         winit::event::Event::RedrawRequested(window_id) if window_id == state.window.id() => {
-            // we should re-compute taffy_node layout here.
             match state.render() {
                 Ok(_) => {}
                 // Reconfigure the surface if lost

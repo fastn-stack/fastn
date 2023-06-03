@@ -22,5 +22,6 @@ thiserror.workspace = true
 tokio.workspace = true
 bytemuck.workspace = true
 wasmtime.workspace = true
+bitflags.workspace = true
 async-trait.workspace = true
 fastn-wasm = { path = "../fastn-wasm" }
