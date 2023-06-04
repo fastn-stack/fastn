@@ -323,6 +323,7 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::local("on-hover"),
                     ),
                 ),
+
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
@@ -357,6 +358,24 @@ fn create_columns() -> Vec<u8> {
             ],
         }
         .to_ast(),
+    );
+
+    m.push(
+        fastn_wasm::Func {
+            name: Some("foo#on_mouse_leave".to_string()),
+            export: None,
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("func-data")],
+            locals: vec![],
+            result: None,
+            body: vec![
+                fastn_wasm::expression::call("create_frame"),
+                // fastn_wasm::expression::call2(
+                //     "set_boolean",
+                // ),
+                fastn_wasm::expression::call("end_frame"),
+            ],
+        }
+            .to_ast(),
     );
 
     let wat = fastn_wasm::encode(&m);
