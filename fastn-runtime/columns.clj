@@ -163,7 +163,7 @@
         (call $end_frame)
     )
 
-    (func $foo#on_mouse_enter (param $func-data externref) (result externref)
+    (func $foo#on_mouse_enter (param $func-data externref)
         (call $create_frame)
         ;;     $ftd.set-bool($a=$any-hover, v=true)
         (call $set_boolean
