@@ -360,7 +360,7 @@ mod test {
         let arr_ptr = d
             .memory_mut()
             .create_list_1(fastn_runtime::PointerKind::Integer, i32_pointer);
-        let column_node = d.create_kernel(d.root, super::ElementKind::Column);
+        let column_node = d.create_kernel(d.root, fastn_runtime::ElementKind::Column);
 
         let closure_key = d.memory_mut().create_closure(fastn_runtime::Closure {
             function: 0,

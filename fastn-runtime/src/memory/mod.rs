@@ -40,7 +40,7 @@ pub use ui::{DynamicProperty, UIProperty};
 ///
 /// if we have:
 ///
-/// ```
+/// ```ftd
 /// -- ftd.text: hello
 /// ```
 ///
