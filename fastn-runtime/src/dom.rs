@@ -1,3 +1,5 @@
+slotmap::new_key_type! { pub struct NodeKey; }
+
 pub struct Dom {
     pub(crate) last_mouse: fastn_runtime::MouseState,
     pub(crate) has_focus: bool,
@@ -7,6 +9,42 @@ pub struct Dom {
     pub(crate) children: slotmap::SecondaryMap<fastn_runtime::NodeKey, Vec<fastn_runtime::NodeKey>>,
     pub(crate) root: fastn_runtime::NodeKey,
     pub(crate) memory: fastn_runtime::memory::Memory,
+}
+
+#[derive(Debug)]
+pub struct ResponsiveProperty<T> {
+    desktop: T,
+    mobile: T,
+}
+
+#[derive(Debug)]
+pub struct TextRole {
+    font_size: fastn_runtime::PointerKey,
+    line_height: fastn_runtime::PointerKey,
+}
+
+#[derive(Debug)]
+pub struct LengthRole {}
+
+#[derive(Debug)]
+pub struct ImageSrc {
+    dark: fastn_runtime::PointerKey,
+    light: fastn_runtime::PointerKey,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Default, Debug)]
+pub struct ColorValue {
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8,
+    pub alpha: f32,
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct Color {
+    pub light: ColorValue,
+    pub dark: ColorValue,
 }
 
 impl Default for Dom {
