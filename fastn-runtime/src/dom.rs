@@ -247,8 +247,7 @@ impl Dom {
         mem.add_dynamic_property_dependency(
             func_arg,
             ui_property
-                .into_dynamic_property(node_key)
-                .closure(closure_key),
+                .into_dynamic_property(node_key, closure_key)
         );
     }
 }
@@ -333,8 +332,7 @@ mod test {
         d.memory_mut().add_dynamic_property_dependency(
             i32_pointer.into_integer_pointer(),
             fastn_runtime::UIProperty::WidthFixedPx
-                .into_dynamic_property(column_node)
-                .closure(closure_key),
+                .into_dynamic_property(column_node, closure_key)
         );
         d.memory_mut().end_frame();
 
