@@ -89,7 +89,7 @@ impl fastn_runtime::Dom {
             },
         );
 
-        linker.func4caller(
+        linker.func4_caller(
             "set_dynamic_property_i32",
             |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
              node_key,
@@ -127,7 +127,7 @@ impl fastn_runtime::Dom {
             },
         );
 
-        linker.func4caller(
+        linker.func4_caller(
             "set_dynamic_property_color",
             |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>,
              node_key,
@@ -255,6 +255,12 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::F32.into(),
             ),
             fastn_wasm::import::func2ret(
+                "create_string_constant",
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
+            fastn_wasm::import::func2ret(
                 "array_i32_2",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::ExternRef.into(),
@@ -272,7 +278,6 @@ impl fastn_runtime::Memory {
 
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_wasm::LinkerExt;
-
         linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| {
             mem.create_frame()
         });
@@ -299,6 +304,20 @@ impl fastn_runtime::Memory {
             "create_list_2",
             |mem: &mut fastn_runtime::Memory, v1_kind, v1_ptr, v2_kind, v2_ptr| {
                 mem.create_list_2(v1_kind, v1_ptr, v2_kind, v2_ptr)
+            },
+        );
+        linker.func2ret_caller(
+            "create_string_constant",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, start: i32, length: i32| {
+                let mut buffer = Vec::with_capacity(length as usize);
+                caller
+                    .get_export("memory")
+                    .unwrap()
+                    .into_memory()
+                    .unwrap()
+                    .read(&caller, start as usize, &mut buffer)
+                    .unwrap();
+                caller.data_mut().memory.create_string_constant(buffer)
             },
         );
         linker.func1ret("create_boolean", |mem: &mut fastn_runtime::Memory, v| {
