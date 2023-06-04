@@ -43,7 +43,11 @@ impl From<UIProperty> for i32 {
 }
 
 impl UIProperty {
-    pub(crate) fn into_dynamic_property(self, node: fastn_runtime::NodeKey, closure: fastn_runtime::ClosurePointer) -> DynamicProperty {
+    pub(crate) fn into_dynamic_property(
+        self,
+        node: fastn_runtime::NodeKey,
+        closure: fastn_runtime::ClosurePointer,
+    ) -> DynamicProperty {
         DynamicProperty {
             property: self,
             node,
