@@ -27,7 +27,7 @@ mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::Dom;
+pub use dom::{Color, ColorValue, Dom, LengthRole, NodeKey, ResponsiveProperty, TextRole};
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::{
@@ -35,52 +35,29 @@ pub use memory::{
 };
 pub use operation::{Operation, Rectangle};
 
-slotmap::new_key_type! { pub struct NodeKey; }
+// #[derive(Debug, Default, Clone)]
+// pub struct TextStyle {
+//     // border: Borders,
+//     pub underline: Callable<bool>,
+//     pub italic: Callable<bool>,
+//     pub strike: Callable<bool>,
+//     pub weight: Callable<Option<TextWeight>>,
+//     pub color: Callable<Option<fastn_runtime::Color>>,
+// }
+//
+// impl TextStyle {
+//     pub fn taffy(&self) -> taffy::style::Style {
+//         todo!()
+//     }
+// }
 
-#[repr(C)]
-#[derive(Copy, Clone, Default, Debug)]
-pub struct ColorValue {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8,
-    pub alpha: f32,
-}
-
-#[derive(Debug, Default, Clone)]
-pub struct Color {
-    pub light: ColorValue,
-    pub dark: ColorValue,
-}
-
-#[derive(Debug, Default, Clone)]
-pub struct TextStyle {
-    // border: Borders,
-    pub underline: Callable<bool>,
-    pub italic: Callable<bool>,
-    pub strike: Callable<bool>,
-    pub weight: Callable<Option<TextWeight>>,
-    pub color: Callable<Option<fastn_runtime::Color>>,
-}
-
-impl TextStyle {
-    pub fn taffy(&self) -> taffy::style::Style {
-        todo!()
-    }
-}
-
-#[derive(Debug, Default, Clone)]
-pub struct Ref;
-
-#[derive(Debug, Default, Clone)]
-pub struct Mut;
-
-#[derive(Debug, Default, Clone)]
-pub struct Callable<T> {
-    pub wat: String,
-    pub refs: Vec<Ref>,
-    pub muts: Vec<Mut>,
-    _t: std::marker::PhantomData<T>,
-}
+// #[derive(Debug, Default, Clone)]
+// pub struct Callable<T> {
+//     pub wat: String,
+//     pub refs: Vec<Ref>,
+//     pub muts: Vec<Mut>,
+//     _t: std::marker::PhantomData<T>,
+// }
 
 #[derive(Debug, Clone)]
 pub enum TextWeight {

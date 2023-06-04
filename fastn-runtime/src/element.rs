@@ -92,15 +92,15 @@ impl Container {
 #[derive(Debug)]
 pub struct Text {
     pub taffy: taffy::node::Node,
-    pub text: fastn_runtime::Callable<String>,
-    pub style: fastn_runtime::TextStyle,
+    pub text: fastn_runtime::PointerKey,
+    pub role: fastn_runtime::ResponsiveProperty<fastn_runtime::TextRole>,
 }
 
 #[derive(Debug)]
 pub struct Image {
     pub taffy: taffy::node::Node,
     // border: Borders,
-    pub src: String,
+    pub src: fastn_runtime::PointerKey,
 }
 
 // #[derive(Default, Debug)]

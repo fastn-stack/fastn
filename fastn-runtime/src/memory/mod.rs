@@ -39,7 +39,10 @@ pub use ui::{DynamicProperty, UIProperty};
 /// When `.attach_to_dom()` is called, we find all the dependencies.
 ///
 /// if we have:
+///
+/// ```
 /// -- ftd.text: hello
+/// ```
 ///
 /// a string containing hello will be created, and then passed to Rust as text properties, and
 /// original wasm value would get dropped.
@@ -60,6 +63,10 @@ pub struct Memory {
     /// are stored in the order they are defined. We also closure captured variables here.
     pub vec: Heap<Vec<Pointer>>,
     or_type: Heap<(u8, Vec<Pointer>)>,
+
+    text_roles: Heap<fastn_runtime::TextRole>,
+    color_roles: Heap<fastn_runtime::Color>,
+    length_roles: Heap<fastn_runtime::LengthRole>,
 
     closures: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
     event_handlers: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
