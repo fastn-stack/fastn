@@ -256,11 +256,14 @@ impl Memory {
 
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
-        self.stack
-            .last_mut()
-            .unwrap()
-            .pointers
-            .push(Pointer { pointer, kind });
+        let frame = self.stack.last_mut().unwrap();
+        let pointer = Pointer { pointer, kind };
+        for p in frame.pointers.iter() {
+            if p == &pointer {
+                panic!();
+            }
+        }
+        frame.pointers.push(pointer);
     }
 
     pub fn create_frame(&mut self) {
@@ -272,6 +275,7 @@ impl Memory {
     }
 
     fn drop_pointer(&mut self, pointer: &Pointer) -> bool {
+        println!("dropping {:?}", pointer);
         let (dependents, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
                 let b = self.boolean.get(pointer.pointer).unwrap();
@@ -336,9 +340,11 @@ impl Memory {
 
     pub fn end_frame(&mut self) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
+        println!("end_frame called");
         for pointer in self.stack.pop().unwrap().pointers.iter() {
             self.drop_pointer(pointer);
         }
+        println!("end_frame ended");
     }
 
     pub fn return_frame(&mut self, keep: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
@@ -351,9 +357,8 @@ impl Memory {
             }
         }
 
-        let t = self.stack.len() - 1;
-        // using .unwrap() so we crash on a bug instead of silently ignoring it
-        self.stack[t].pointers.push(k.unwrap());
+        let k = k.unwrap();
+        self.insert_in_frame(k.pointer, k.kind);
         keep
     }
 
@@ -512,7 +517,6 @@ impl Memory {
         let v2 = *self.i32[arr[idx_2].pointer].value.value();
 
         let ptr = self.create_i32(v1 * v2);
-        self.insert_in_frame(ptr, PointerKind::Integer);
         ptr
     }
 
