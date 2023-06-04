@@ -61,13 +61,6 @@ impl fastn_runtime::Dom {
                 fastn_wasm::Type::I32.into(),
                 fastn_wasm::Type::ExternRef.into(),
             ),
-            fastn_wasm::import::func4(
-                "attach_event_handler",
-                fastn_wasm::Type::ExternRef.into(),
-                fastn_wasm::Type::I32.into(),
-                fastn_wasm::Type::I32.into(),
-                fastn_wasm::Type::ExternRef.into(),
-            ),
         ]);
         e
     }
@@ -171,13 +164,6 @@ impl fastn_runtime::Dom {
                 )
             },
         );
-
-        linker.func4(
-            "attach_event_handler",
-            |dom: &mut fastn_runtime::Dom, node_key, event, table_index, func_arg| {
-                dom.attach_event_handler(node_key, event, table_index, func_arg)
-            },
-        );
     }
 }
 
@@ -274,6 +260,13 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::ExternRef,
             ),
+            fastn_wasm::import::func4(
+                "attach_event_handler",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef.into(),
+            ),
         ]
     }
 
@@ -352,6 +345,12 @@ impl fastn_runtime::Memory {
         linker.func2ret(
             "get_func_arg_i32",
             |mem: &mut fastn_runtime::Memory, ptr, idx| mem.get_func_arg_i32(ptr, idx),
+        );
+        linker.func4(
+            "attach_event_handler",
+            |mem: &mut fastn_runtime::Memory, node_key, event, table_index, func_arg| {
+                mem.attach_event_handler(node_key, event, table_index, func_arg)
+            },
         );
     }
 }

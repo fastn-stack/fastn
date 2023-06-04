@@ -62,11 +62,7 @@ pub struct Container {
     // if not wasm
     pub taffy_key: taffy::node::Node,
     pub style: CommonStyleMinusTaffy,
-    pub events: ElementEvent,
 }
-
-pub type ElementEvent =
-    std::collections::HashMap<fastn_runtime::DomEventKind, Vec<fastn_runtime::ClosurePointer>>;
 
 impl Container {
     pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
@@ -89,7 +85,6 @@ impl Container {
                     alpha: 1.0,
                 }),
             },
-            events: Default::default(),
         })
     }
 }
@@ -182,26 +177,6 @@ impl fastn_runtime::Element {
         match self {
             fastn_runtime::Element::Container(c) => &mut c.style,
             t => unimplemented!("{:?}", t),
-        }
-    }
-
-    pub fn events(&mut self) -> &mut ElementEvent {
-        match self {
-            fastn_runtime::Element::Container(c) => &mut c.events,
-            t => unimplemented!("{:?}", t),
-        }
-    }
-
-    pub fn add_events(
-        &mut self,
-        event: fastn_runtime::DomEventKind,
-        closure: fastn_runtime::ClosurePointer,
-    ) {
-        let events = self.events();
-        if let Some(closures) = events.get_mut(&event) {
-            closures.push(closure);
-        } else {
-            events.insert(event, vec![closure]);
         }
     }
 }

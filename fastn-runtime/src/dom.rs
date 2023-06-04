@@ -124,7 +124,6 @@ impl Dom {
                     alpha: 1.0,
                 }),
             },
-            events: Default::default(),
         });
 
         let key = self.nodes.insert(c);
@@ -251,24 +250,6 @@ impl Dom {
                 .into_dynamic_property(node_key)
                 .closure(closure_key),
         );
-    }
-
-    pub fn attach_event_handler(
-        &mut self,
-        node_key: fastn_runtime::NodeKey,
-        event: fastn_runtime::DomEventKind,
-        table_index: i32,
-        func_arg: fastn_runtime::PointerKey,
-    ) {
-        let func_arg = func_arg.into_list_pointer();
-
-        let mem = self.memory_mut();
-        let closure_key = mem.create_closure(fastn_runtime::Closure {
-            function: table_index,
-            captured_variables: func_arg,
-        });
-
-        self.nodes[node_key].add_events(event, closure_key);
     }
 }
 
