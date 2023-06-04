@@ -274,8 +274,33 @@ impl Memory {
         todo!()
     }
 
-    fn drop_pointer(&mut self, pointer: &Pointer) -> bool {
+    pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
+        let dependents = match target.kind {
+            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
+                &mut self.vec.get_mut(target.pointer).unwrap().dependents
+            }
+        };
+
+        println!(
+            "add_dependent, target: {:?}, dependent: {:?}",
+            target, &dependent
+        );
+        dependents.push(dependent);
+    }
+
+    fn drop_pointer(
+        &mut self,
+        pointer: Pointer,
+        dropped_so_far: &mut Vec<fastn_runtime::Pointer>,
+    ) -> bool {
         println!("dropping {:?}", pointer);
+        if dropped_so_far.contains(&pointer) {
+            println!("pointer already dropped, ignoring: {:?}", pointer);
+            return true;
+        }
         let (dependents, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
                 let b = self.boolean.get(pointer.pointer).unwrap();
@@ -305,20 +330,21 @@ impl Memory {
 
         let mut drop = true;
         for d in dependents.clone() {
-            if !self.drop_pointer(&d) {
+            if !self.drop_pointer(d, dropped_so_far) {
                 drop = false;
                 break;
             }
         }
 
         if drop {
+            dropped_so_far.push(pointer);
             self.delete_pointer(pointer);
         }
 
         drop
     }
 
-    fn delete_pointer(&mut self, pointer: &Pointer) {
+    fn delete_pointer(&mut self, pointer: Pointer) {
         match pointer.kind {
             PointerKind::Boolean => {
                 self.boolean.remove(pointer.pointer);
@@ -341,19 +367,22 @@ impl Memory {
     pub fn end_frame(&mut self) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         println!("end_frame called");
+        let mut v = vec![];
         for pointer in self.stack.pop().unwrap().pointers.iter() {
-            self.drop_pointer(pointer);
+            self.drop_pointer(*pointer, &mut v);
         }
         println!("end_frame ended");
     }
 
     pub fn return_frame(&mut self, keep: fastn_runtime::PointerKey) -> fastn_runtime::PointerKey {
         let mut k: Option<fastn_runtime::Pointer> = None;
+        let mut v = vec![];
+
         for pointer in self.stack.pop().unwrap().pointers.iter() {
             if pointer.pointer == keep {
                 k = Some(pointer.to_owned());
             } else {
-                self.drop_pointer(pointer);
+                self.drop_pointer(*pointer, &mut v);
             }
         }
 
@@ -370,11 +399,13 @@ impl Memory {
         let idx = idx as usize;
 
         if idx < self.globals.len() {
+            println!("updated global: idx={}, ptr={:?}", idx, ptr);
             self.globals[idx] = ptr;
             return;
         }
 
         if idx == self.globals.len() {
+            println!("created global: idx={}, ptr={:?}", idx, ptr);
             self.globals.push(ptr);
             return;
         }
@@ -385,7 +416,9 @@ impl Memory {
     }
 
     pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosurePointer {
-        self.closures.insert(closure)
+        let ptr = self.closures.insert(closure);
+        println!("{:?}", ptr);
+        ptr
     }
 
     pub fn attach_event_handler(
@@ -424,7 +457,7 @@ impl Memory {
     pub fn create_list(&mut self) -> fastn_runtime::PointerKey {
         let pointer = self.vec.insert(HeapValue::new(vec![]).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::List);
-        pointer
+        dbg!(pointer)
     }
 
     pub fn create_list_1(
@@ -471,12 +504,14 @@ impl Memory {
         self.add_dependent(ptr2, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
+        println!("{:?}", pointer);
         pointer
     }
 
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
         let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Boolean);
+        println!("{:?}", pointer);
         pointer
     }
 
@@ -491,6 +526,7 @@ impl Memory {
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
         let pointer = self.i32.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Integer);
+        println!("{:?}", pointer);
         pointer
     }
 
@@ -516,8 +552,7 @@ impl Memory {
         let v1 = *self.i32[arr[idx_1].pointer].value.value();
         let v2 = *self.i32[arr[idx_2].pointer].value.value();
 
-        let ptr = self.create_i32(v1 * v2);
-        ptr
+        self.create_i32(v1 * v2)
     }
 
     pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
@@ -581,20 +616,9 @@ impl Memory {
         self.add_dependent(ptr2.into_integer_pointer(), vec.into_list_pointer());
 
         self.insert_in_frame(vec, PointerKind::List);
+        println!("{:?}", vec);
+
         vec
-    }
-
-    pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
-        let dependents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
-                &mut self.vec.get_mut(target.pointer).unwrap().dependents
-            }
-        };
-
-        dependents.push(dependent);
     }
 
     pub fn add_dynamic_property_dependency(
