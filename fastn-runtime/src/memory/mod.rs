@@ -383,6 +383,26 @@ impl Memory {
         self.closures.insert(closure)
     }
 
+    pub fn attach_event_handler(
+        &mut self,
+        node: fastn_runtime::NodeKey,
+        event: fastn_runtime::DomEventKind,
+        table_index: i32,
+        func_arg: fastn_runtime::PointerKey,
+    ) {
+        let func_arg = func_arg.into_list_pointer();
+
+        let closure = self.create_closure(fastn_runtime::Closure {
+            function: table_index,
+            captured_variables: func_arg,
+        });
+
+        self.event_handlers.entry(event).or_default().push(fastn_runtime::EventHandler {
+            closure,
+            node,
+        });
+    }
+
     pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
         match ptr.kind {
             PointerKind::Boolean => self.boolean.contains_key(ptr.pointer),
