@@ -196,72 +196,6 @@ impl Memory {
         (*r_value, *g_value, *b_value, *a_value)
     }
 
-    pub fn detach_dom(&mut self, _dom: fastn_runtime::NodeKey) {
-        // for pointer in self.ui_deps.remove(&dom).unwrap_or_default() {
-        //     self.drop_pointer(&pointer);
-        // }
-    }
-
-    pub fn attach_to_dom(&mut self, _dom: fastn_runtime::NodeKey, _ptr: Pointer) {
-        // add a new dependency to ptr, and recursively add it to all its dependencies
-        todo!()
-    }
-
-    fn get_pointer_dep_children(&self, _pointer: &Pointer) -> Option<Vec<Pointer>> {
-        // match &pointer.kind {
-        //     PointerKind::Boolean => self.boolean.get(pointer.key).map(|v| v.value.clone()),
-        //     PointerKind::Integer => self.boolean.get(pointer.key).map(|v| v.1.clone()),
-        //     PointerKind::Record => self
-        //         .vec
-        //         .get(pointer.key)
-        //         .map(|v| [v.0.clone(), v.1.clone()].concat().into_iter().collect()),
-        //     PointerKind::OrType => self.or_type.get(pointer.key).map(|v| v.1.clone()),
-        //     PointerKind::Decimal => self.f32.get(pointer.key).map(|v| v.1.clone()),
-        // }
-        todo!()
-    }
-
-    fn add_dep_child(&mut self, _pointer: &Pointer, _child: Pointer) {
-        // if let Some(dep_children) = match &pointer.kind {
-        //     PointerKind::Boolean => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-        //     PointerKind::Integer => self.boolean.get_mut(pointer.key).map(|v| &mut v.1),
-        //     PointerKind::Record => self.vec.get_mut(pointer.key).map(|v| &mut v.1),
-        //     PointerKind::OrType => self.or_type.get_mut(pointer.key).map(|v| &mut v.1),
-        //     PointerKind::Decimal => self.f32.get_mut(pointer.key).map(|v| &mut v.1),
-        // } {
-        //     dep_children.push(child);
-        // }
-        todo!()
-    }
-
-    pub fn attach(&mut self, _parent: Pointer, _child: Pointer) {
-        // let parent_attachments = if let Some(attachment) = self.attachment.get(&parent) {
-        //     attachment.clone()
-        // } else {
-        //     return;
-        // };
-        // let mut child_attachments = self.attachment.entry(child.clone()).or_default().clone();
-        // for parent_attachment in parent_attachments {
-        //     // if parent has not already given the attachment to the child, add it
-        //     let attachment = Attachment {
-        //         element: parent_attachment.element,
-        //         source: parent.clone(),
-        //     };
-        //     let is_attached = child_attachments.insert(attachment);
-        //     if is_attached {
-        //         let dep_children = self.get_pointer_dep_children(&child).unwrap();
-        //         for dep in dep_children {
-        //             self.attach(child.clone(), dep)
-        //         }
-        //     }
-        // }
-        //
-        // *self.attachment.get_mut(&child).unwrap() = child_attachments;
-        // self.add_dep_child(&parent, child.clone());
-        // // TODO: pass all attachments from parent to child
-        // self.drop_from_frame(&child);
-    }
-
     fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         let frame = self.stack.last_mut().unwrap();
@@ -287,7 +221,7 @@ impl Memory {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
             PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
             PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::String =>  &mut self.string.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().dependents,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
                 &mut self.vec.get_mut(target.pointer).unwrap().dependents
             }
