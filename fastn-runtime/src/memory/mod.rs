@@ -386,21 +386,23 @@ impl Memory {
     pub fn attach_event_handler(
         &mut self,
         node: fastn_runtime::NodeKey,
-        event: fastn_runtime::DomEventKind,
+        event_kind: fastn_runtime::DomEventKind,
         table_index: i32,
         func_arg: fastn_runtime::PointerKey,
     ) {
-        let func_arg = func_arg.into_list_pointer();
-
-        let closure = self.create_closure(fastn_runtime::Closure {
-            function: table_index,
-            captured_variables: func_arg,
-        });
-
-        self.event_handlers.entry(event).or_default().push(fastn_runtime::EventHandler {
-            closure,
+        let eh = fastn_runtime::EventHandler {
             node,
-        });
+            closure: self.create_closure(fastn_runtime::Closure {
+                function: table_index,
+                captured_variables: func_arg.into_list_pointer(),
+            }),
+        };
+        match self.event_handlers.get_mut(&event_kind) {
+            Some(v) => v.push(eh),
+            None => {
+                self.event_handlers.insert(event_kind, vec![eh]);
+            }
+        }
     }
 
     pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
