@@ -54,6 +54,7 @@ pub enum PointerKind {
     OrType,
     Decimal,
     List,
+    String,
 }
 
 impl From<i32> for PointerKind {
@@ -65,6 +66,7 @@ impl From<i32> for PointerKind {
             3 => PointerKind::OrType,
             4 => PointerKind::Decimal,
             5 => PointerKind::List,
+            6 => PointerKind::String,
             _ => panic!("Unknown element kind: {}", i),
         }
     }
@@ -79,6 +81,7 @@ impl From<PointerKind> for i32 {
             PointerKind::OrType => 3,
             PointerKind::Decimal => 4,
             PointerKind::List => 5,
+            PointerKind::String => 6,
         }
     }
 }

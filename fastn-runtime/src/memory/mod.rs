@@ -62,14 +62,15 @@ pub struct Memory {
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
     /// are stored in the order they are defined. We also closure captured variables here.
     pub vec: Heap<Vec<Pointer>>,
+    pub string: Heap<String>,
     or_type: Heap<(u8, Vec<Pointer>)>,
 
-    text_roles: Heap<fastn_runtime::TextRole>,
-    color_roles: Heap<fastn_runtime::Color>,
-    length_roles: Heap<fastn_runtime::LengthRole>,
+    text_role: Heap<fastn_runtime::TextRole>,
+    color_role: Heap<fastn_runtime::Color>,
+    length_role: Heap<fastn_runtime::LengthRole>,
 
-    closures: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
-    event_handlers: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
+    closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
+    event_handler: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
     /// We need to store some global variables. For every top level variable defined in ftd files
     /// we create a global variable. Since all values are stored in `Memory`, the globals contain
     /// pointers.
@@ -84,7 +85,7 @@ pub struct Memory {
     /// For now we are going with the `get_global(idx: i32) -> externref`,
     /// `set_global(idx: i32, value: externref)`, where each global will be identified by the
     /// index (`idx`).
-    globals: Vec<fastn_runtime::PointerKey>,
+    global: Vec<fastn_runtime::PointerKey>,
     // if we have:
     // -- ftd.text: hello
     //
@@ -148,7 +149,7 @@ impl Memory {
         if !self.or_type.is_empty() {
             panic!("or_type is not empty");
         }
-        if !self.closures.is_empty() {
+        if !self.closure.is_empty() {
             panic!("closures is not empty");
         }
     }
@@ -286,6 +287,7 @@ impl Memory {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
             PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
             PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::String =>  &mut self.string.get_mut(target.pointer).unwrap().dependents,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
                 &mut self.vec.get_mut(target.pointer).unwrap().dependents
             }
@@ -329,6 +331,10 @@ impl Memory {
                 let b = self.f32.get(pointer.pointer).unwrap();
                 (&b.dependents, &b.ui_properties)
             }
+            PointerKind::String => {
+                let b = self.string.get(pointer.pointer).unwrap();
+                (&b.dependents, &b.ui_properties)
+            }
         };
 
         if !ui_properties.is_empty() {
@@ -368,6 +374,9 @@ impl Memory {
             PointerKind::Decimal => {
                 self.f32.remove(pointer.pointer);
             }
+            PointerKind::String => {
+                self.string.remove(pointer.pointer);
+            }
         };
     }
 
@@ -399,21 +408,21 @@ impl Memory {
     }
 
     pub fn get_global(&self, idx: i32) -> fastn_runtime::PointerKey {
-        self.globals[idx as usize]
+        self.global[idx as usize]
     }
 
     pub fn set_global(&mut self, idx: i32, ptr: fastn_runtime::PointerKey) {
         let idx = idx as usize;
 
-        if idx < self.globals.len() {
+        if idx < self.global.len() {
             println!("updated global: idx={}, ptr={:?}", idx, ptr);
-            self.globals[idx] = ptr;
+            self.global[idx] = ptr;
             return;
         }
 
-        if idx == self.globals.len() {
+        if idx == self.global.len() {
             println!("created global: idx={}, ptr={:?}", idx, ptr);
-            self.globals.push(ptr);
+            self.global.push(ptr);
             return;
         }
 
@@ -423,7 +432,7 @@ impl Memory {
     }
 
     pub(crate) fn create_closure(&mut self, closure: Closure) -> fastn_runtime::ClosurePointer {
-        let ptr = self.closures.insert(closure);
+        let ptr = self.closure.insert(closure);
         println!("{:?}", ptr);
         ptr
     }
@@ -442,10 +451,10 @@ impl Memory {
                 captured_variables: func_arg.into_list_pointer(),
             }),
         };
-        match self.event_handlers.get_mut(&event_kind) {
+        match self.event_handler.get_mut(&event_kind) {
             Some(v) => v.push(eh),
             None => {
-                self.event_handlers.insert(event_kind, vec![eh]);
+                self.event_handler.insert(event_kind, vec![eh]);
             }
         }
     }
@@ -458,7 +467,15 @@ impl Memory {
             PointerKind::OrType => self.or_type.contains_key(ptr.pointer),
             PointerKind::Decimal => self.f32.contains_key(ptr.pointer),
             PointerKind::List => self.vec.contains_key(ptr.pointer),
+            PointerKind::String => self.string.contains_key(ptr.pointer),
         }
+    }
+
+    pub fn create_string_constant(&mut self, buffer: Vec<u8>) -> fastn_runtime::PointerKey {
+        let s = String::from_utf8(buffer).unwrap();
+        let pointer = self.string.insert(HeapValue::new(s).into_heap_data());
+        self.insert_in_frame(pointer, PointerKind::String);
+        dbg!(pointer)
     }
 
     pub fn create_list(&mut self) -> fastn_runtime::PointerKey {
@@ -635,6 +652,7 @@ impl Memory {
     ) {
         let dependents = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
+            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::Boolean => {
                 &mut self.boolean.get_mut(target.pointer).unwrap().ui_properties
             }
