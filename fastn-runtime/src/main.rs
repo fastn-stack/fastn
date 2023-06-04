@@ -150,10 +150,10 @@ fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
     // Note: can not add these till the functions are defined
-    m.extend(fastn_wasm::table_1(
+    m.extend(fastn_wasm::table_2(
         fastn_wasm::RefType::Func,
         "product",
-        // "foo#on_mouse_enter",
+        "foo#on_mouse_enter",
         // "foo#on_mouse_leave",
         // "foo#background",
     ));
@@ -310,6 +310,21 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
+
+                fastn_wasm::expression::call4(
+                    "attach_event_handler",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(fastn_runtime::DomEventKind::OnMouseEnter.into()),
+                    fastn_wasm::expression::i32(1), // table index (on-mouse-enter)
+                    fastn_wasm::expression::call4(
+                        "create_list_2",
+                        fastn_wasm::expression::i32(fastn_runtime::PointerKind::Integer.into()),
+                        fastn_wasm::expression::call1("get_global", fastn_wasm::expression::i32(1)),
+                        fastn_wasm::expression::i32(fastn_runtime::PointerKind::Boolean.into()),
+                        fastn_wasm::expression::local("on-hover"),
+                    ),
+                ),
+
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
@@ -327,6 +342,25 @@ fn create_columns() -> Vec<u8> {
         }
         .to_ast(),
     );
+
+    m.push(
+        fastn_wasm::Func {
+            name: Some("foo#on_mouse_enter".to_string()),
+            export: None,
+            params: vec![fastn_wasm::Type::ExternRef.to_pl("func-data")],
+            locals: vec![],
+            result: None,
+            body: vec![
+                fastn_wasm::expression::call("create_frame"),
+                // fastn_wasm::expression::call2(
+                //     "set_boolean",
+                // ),
+                fastn_wasm::expression::call("end_frame"),
+            ],
+        }
+            .to_ast(),
+    );
+
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
