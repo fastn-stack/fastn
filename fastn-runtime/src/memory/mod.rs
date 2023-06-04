@@ -408,14 +408,17 @@ impl Memory {
     pub fn create_string_constant(&mut self, buffer: Vec<u8>) -> fastn_runtime::PointerKey {
         let s = String::from_utf8(buffer).unwrap();
         let pointer = self.string.insert(HeapValue::new(s).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::String);
-        dbg!(pointer)
+        // Note: intentionally not adding to the frame as constant strings are not to be GCed
+        // self.insert_in_frame(pointer, PointerKind::String);
+        println!("{:?}", pointer);
+        pointer
     }
 
     pub fn create_list(&mut self) -> fastn_runtime::PointerKey {
         let pointer = self.vec.insert(HeapValue::new(vec![]).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::List);
-        dbg!(pointer)
+        println!("{:?}", pointer);
+        pointer
     }
 
     pub fn create_list_1(
@@ -516,6 +519,7 @@ impl Memory {
     pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
         let pointer = self.f32.insert(HeapValue::new(value).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Integer);
+        println!("{:?}", pointer);
         pointer
     }
 
@@ -537,6 +541,7 @@ impl Memory {
             .i32
             .insert(HeapValue::new_with_formula(cached_value, closure_key).into_heap_data());
         self.insert_in_frame(pointer, PointerKind::Integer);
+        println!("{:?}", pointer);
         pointer
     }
 
@@ -633,6 +638,7 @@ impl Memory {
         self.add_dependent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
 
         self.insert_in_frame(vec, PointerKind::Record);
+        println!("{:?}", vec);
         vec
     }
 }
