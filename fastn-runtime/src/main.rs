@@ -310,7 +310,6 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
-
                 fastn_wasm::expression::call4(
                     "attach_event_handler",
                     fastn_wasm::expression::local("column"),
@@ -324,7 +323,6 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::local("on-hover"),
                     ),
                 ),
-
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
@@ -358,9 +356,8 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call("end_frame"),
             ],
         }
-            .to_ast(),
+        .to_ast(),
     );
-
 
     let wat = fastn_wasm::encode(&m);
     println!("{}", wat);
