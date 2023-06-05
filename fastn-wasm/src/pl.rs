@@ -12,25 +12,22 @@ impl From<fastn_wasm::Type> for PL {
 }
 
 impl PL {
-    pub fn to_doc(&self, _is_param: bool) -> pretty::RcDoc<()> {
-        // let mut s = String::new();
-        // if is_param {
-        //     s.push_str("(param");
-        // } else {
-        //     s.push_str("(local");
-        // }
-        //
-        // if let Some(name) = &self.name {
-        //     s.push_str(" $");
-        //     s.push_str(name);
-        // }
-        // s.push(' ');
-        // s.push_str(self.ty.to_wat());
-        // s.push(')');
-        // s
+    pub fn to_doc(&self, is_param: bool) -> pretty::RcDoc<()> {
+        let mut o = if is_param {
+            pretty::RcDoc::text("(param")
+        } else {
+            pretty::RcDoc::text("(local")
+        };
 
-        todo!()
+        if let Some(name) = &self.name {
+            o = o.append("$").append(name);
+        }
+
+        o.append(pretty::Doc::space())
+            .append(self.ty.to_doc())
+            .append(")")
     }
+
     pub fn to_wat(&self, is_param: bool) -> String {
         let mut s = String::new();
         if is_param {

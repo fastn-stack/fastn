@@ -34,9 +34,18 @@ impl Func {
             o = o.append(o2);
         }
 
-        // o = o.intersperse(self.params.iter().map(|x| x.to_doc(true)), pretty::RcDoc::space());
+        if !self.params.is_empty() {
+            o = o.append(pretty::RcDoc::space());
+        }
 
-        o.append(")")
+        o.append(
+            pretty::RcDoc::intersperse(
+                self.params.iter().map(|x| x.to_doc(true)),
+                pretty::RcDoc::space(),
+            )
+            .group(),
+        )
+        .append(")")
     }
 
     pub fn to_ast(self) -> fastn_wasm::Ast {
@@ -131,19 +140,12 @@ mod test {
             },
             r#"(module (func $foo (export "foo")))"#,
         );
-        assert_eq!(
+        e(
             fastn_wasm::Func {
                 params: vec![fastn_wasm::Type::I32.into()],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (param i32))
-                )
-            "#
-            )
+            },
+            "(module (func (param i32)))",
         );
         assert_eq!(
             fastn_wasm::Func {
@@ -156,7 +158,7 @@ mod test {
                 (module
                     (func (param i32 i64))
                 )
-            "#
+            "
             )
         );
         assert_eq!(
