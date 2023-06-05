@@ -110,7 +110,9 @@ impl Dom {
         }
     }
 
-    fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {}
+    fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
+        self.memory.handle_event(2.into(), None)
+    }
 
     fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
         let _nodes = self.nodes_under_mouse(self.root, pos_x, pos_y);
