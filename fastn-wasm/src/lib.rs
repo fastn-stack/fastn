@@ -28,12 +28,16 @@ pub use table::{table, table_1, table_2, table_3, table_4, Limits, RefType, Tabl
 pub use ty::Type;
 
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
-    let mut s = String::new();
-    s.push_str("(module\n");
-    for node in module {
-        s.push_str(&node.to_wat());
-        s.push('\n');
-    }
-    s.push(')');
-    s
+    let mut w = Vec::new();
+    pretty::RcDoc::text("(module")
+        .append(pretty::Doc::space())
+        .append(
+            pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
+                .group()
+                .nest(1),
+        )
+        .append(")")
+        .render(80, &mut w)
+        .unwrap();
+    String::from_utf8(w).unwrap()
 }

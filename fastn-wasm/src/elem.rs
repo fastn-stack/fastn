@@ -5,6 +5,10 @@ pub struct Elem {
 }
 
 impl Elem {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         use itertools::Itertools;
 

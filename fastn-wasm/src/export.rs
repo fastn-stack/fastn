@@ -18,6 +18,10 @@ pub fn func1(
 }
 
 impl Export {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         let desc_wat = self.desc.to_wat();
         format!("(export \"{}\" {})", self.name, desc_wat)

@@ -37,6 +37,10 @@ pub fn func2ret(
 }
 
 impl FuncDef {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         let mut s = String::new();
 

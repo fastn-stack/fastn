@@ -91,6 +91,10 @@ pub struct Import {
 }
 
 impl Import {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         let module_wat = &self.module;
         let name_wat = &self.name;

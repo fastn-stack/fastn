@@ -9,6 +9,36 @@ pub struct Func {
 }
 
 impl Func {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        let mut o = pretty::RcDoc::text("(");
+        o = o.append({
+            let mut func_name = pretty::RcDoc::text("func");
+            if let Some(name) = &self.name {
+                func_name = func_name
+                    .append(pretty::Doc::space())
+                    .append("$")
+                    .append(name);
+            }
+            func_name.group()
+        });
+
+        if let Some(export) = &self.export {
+            let o2 = pretty::RcDoc::space()
+                .append("(export")
+                .append(pretty::Doc::space())
+                .append("\"")
+                .append(export)
+                .append("\")")
+                .group()
+                .nest(1);
+            o = o.append(o2);
+        }
+
+        // o = o.intersperse(self.params.iter().map(|x| x.to_doc(true)), pretty::RcDoc::space());
+
+        o.append(")")
+    }
+
     pub fn to_ast(self) -> fastn_wasm::Ast {
         fastn_wasm::Ast::Func(self)
     }
@@ -46,17 +76,6 @@ impl Func {
 
         s
     }
-
-    #[cfg(test)]
-    pub fn to_wat_formatted(&self) -> String {
-        wasmfmt::fmt(
-            &self.to_wat(),
-            wasmfmt::Options {
-                resolve_names: false,
-            },
-        )
-        .replace("\t", "    ")
-    }
 }
 
 #[derive(Debug, Default)]
@@ -80,67 +99,44 @@ impl FuncDecl {
 
 #[cfg(test)]
 mod test {
+    use super::Func;
+
+    #[track_caller]
+    fn e(f: super::Func, s: &str) {
+        assert_eq!(fastn_wasm::encode(&vec![fastn_wasm::Ast::Func(f)]), s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
-            fastn_wasm::Func::default().to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func)
-                )
-            "#
-            )
-        );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(Func::default(), "(module (func))");
+        e(
+            Func {
                 name: Some("foo".to_string()),
                 ..Default::default()
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func $foo)
-                )
-            "#
-            )
+            },
+            "(module (func $foo))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 export: Some("foo".to_string()),
                 ..Default::default()
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (export "foo"))
-                )
-            "#
-            )
+            },
+            r#"(module (func (export "foo")))"#,
         );
-        assert_eq!(
+        e(
             fastn_wasm::Func {
                 name: Some("foo".to_string()),
                 export: Some("foo".to_string()),
                 ..Default::default()
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func $foo (export "foo"))
-                )
-            "#
-            )
+            },
+            r#"(module (func $foo (export "foo")))"#,
         );
         assert_eq!(
             fastn_wasm::Func {
                 params: vec![fastn_wasm::Type::I32.into()],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -154,7 +150,7 @@ mod test {
                 params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I64.into()],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -177,7 +173,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -200,7 +196,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -224,7 +220,7 @@ mod test {
                 },],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -240,7 +236,7 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -264,7 +260,7 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![],
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -288,7 +284,7 @@ mod test {
                 }],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -327,7 +323,7 @@ mod test {
                 }],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
@@ -387,7 +383,7 @@ mod test {
                 ],
                 ..Default::default()
             }
-            .to_wat_formatted(),
+            .to_wat(),
             indoc::indoc!(
                 r#"
                 (module
