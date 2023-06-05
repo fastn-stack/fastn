@@ -19,7 +19,7 @@
     (import "fastn" "set_dynamic_property_i32" (func $set_dynamic_property_i32 (param externref i32 i32 externref)))
     (import "fastn" "set_dynamic_property_color" (func $set_dynamic_property_color (param externref i32 i32 externref)))
     (import "fastn" "get_func_arg_i32" (func $get_func_arg_i32 (param externref i32) (result i32)))
-    (import "fastn" "array_i32_2" (func $array_i32_2 (param externref externref) (result externref)))
+    (import "fastn" "create_list_2" (func $create_list_2 (param externref externref) (result externref)))
 
     (table 3 func)
     (elem (i32.const 0) $product $foo#on_mouse_enter $foo#on_mouse_leave $foo#background)
@@ -50,7 +50,7 @@
             (local.get $column)
             (i32.const 0) ;; 0 = fixed width in pixels
             (i32.const 0) ;; index in the table for $product function
-            (call $array_i32_2
+            (call $create_list_2
                   (call $create_integer (i32.const 10))
                   ;; get global x (stored at global index 1)
                   (call $global_get (i32.const 1))
@@ -103,7 +103,7 @@
             (local.get $column)
             (i32.const 0) ;; 0 = on mouse enter
             (i32.const 1) ;; index in the table
-            (call $array_i32_2 (call global_get (i32.const 0)) (local.get $on-hover))
+            (call $create_list_2 (call global_get (i32.const 0)) (local.get $on-hover))
         )
         ;; $on-mouse-leave$: {
         ;;     $ftd.set-bool($a=$any-hover, v=false)
@@ -113,7 +113,7 @@
               (local.get $column)
               (i32.const 1) ;; 0 = on mouse enter
               (i32.const 2) ;; index in the table
-              (call $array_i32_2 (call global_get (i32.const 0)) (local.get $on-hover))
+              (call $create_list_2 (call global_get (i32.const 0)) (local.get $on-hover))
         )
 
         ;; width.fixed.px: 500
@@ -137,7 +137,7 @@
                 (local.get $column)
                 (i32.const 3) ;; 3 = background.solid
                 (i32.const 3) ;; index in the table
-                (call $array_i32_2 (local.get $on-hover) (call $get_global (i32.const 0)))
+                (call $create_list_2 (local.get $on-hover) (call $get_global (i32.const 0)))
         )
 
         (call $end_frame)

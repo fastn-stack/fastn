@@ -1,4 +1,5 @@
 mod heap;
+mod helper;
 mod pointer;
 mod ui;
 
@@ -640,6 +641,18 @@ impl Memory {
         self.insert_in_frame(vec, PointerKind::Record);
         println!("{:?}", vec);
         vec
+    }
+
+    pub(crate) fn handle_event(
+        &mut self,
+        event_kind: fastn_runtime::DomEventKind,
+        node: Option<fastn_runtime::NodeKey>,
+    ) {
+        if let Some(events) = self.get_event_handlers(event_kind, node) {
+            for event in events {
+                let _closure = self.closure.get(event.closure).unwrap();
+            }
+        }
     }
 }
 

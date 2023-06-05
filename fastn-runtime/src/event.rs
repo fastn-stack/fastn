@@ -23,6 +23,13 @@ pub struct MouseState {
 pub enum DomEventKind {
     OnMouseEnter,
     OnMouseLeave,
+    OnGlobalKey, /*(Vec<VirtualKeyCode>)*/
+}
+
+impl DomEventKind {
+    pub(crate) fn is_key(&self) -> bool {
+        matches!(self, DomEventKind::OnGlobalKey)
+    }
 }
 
 impl From<i32> for DomEventKind {
@@ -30,6 +37,7 @@ impl From<i32> for DomEventKind {
         match i {
             0 => DomEventKind::OnMouseEnter,
             1 => DomEventKind::OnMouseLeave,
+            2 => DomEventKind::OnGlobalKey,
             _ => panic!("Unknown UIProperty: {}", i),
         }
     }
@@ -40,6 +48,7 @@ impl From<DomEventKind> for i32 {
         match v {
             DomEventKind::OnMouseEnter => 0,
             DomEventKind::OnMouseLeave => 1,
+            DomEventKind::OnGlobalKey => 2,
         }
     }
 }
@@ -51,9 +60,8 @@ impl ExternalEvent {
 }
 
 // source:
-#[derive(Debug, Hash, Ord, PartialOrd, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 #[repr(u32)]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub enum VirtualKeyCode {
     /// The '1' key over the letters.
     Key1,
@@ -251,6 +259,66 @@ pub enum VirtualKeyCode {
     Copy,
     Paste,
     Cut,
+}
+
+fn char_to_virtual_key_code(c: char) -> Option<VirtualKeyCode> {
+    // We only translate keys that are affected by keyboard layout.
+    //
+    // Note that since keys are translated in a somewhat "dumb" way (reading character)
+    // there is a concern that some combination, i.e. Cmd+char, causes the wrong
+    // letter to be received, and so we receive the wrong key.
+    //
+    // Implementation reference: https://github.com/WebKit/webkit/blob/82bae82cf0f329dbe21059ef0986c4e92fea4ba6/Source/WebCore/platform/cocoa/KeyEventCocoa.mm#L626
+    Some(match c {
+        'a' | 'A' => VirtualKeyCode::A,
+        'b' | 'B' => VirtualKeyCode::B,
+        'c' | 'C' => VirtualKeyCode::C,
+        'd' | 'D' => VirtualKeyCode::D,
+        'e' | 'E' => VirtualKeyCode::E,
+        'f' | 'F' => VirtualKeyCode::F,
+        'g' | 'G' => VirtualKeyCode::G,
+        'h' | 'H' => VirtualKeyCode::H,
+        'i' | 'I' => VirtualKeyCode::I,
+        'j' | 'J' => VirtualKeyCode::J,
+        'k' | 'K' => VirtualKeyCode::K,
+        'l' | 'L' => VirtualKeyCode::L,
+        'm' | 'M' => VirtualKeyCode::M,
+        'n' | 'N' => VirtualKeyCode::N,
+        'o' | 'O' => VirtualKeyCode::O,
+        'p' | 'P' => VirtualKeyCode::P,
+        'q' | 'Q' => VirtualKeyCode::Q,
+        'r' | 'R' => VirtualKeyCode::R,
+        's' | 'S' => VirtualKeyCode::S,
+        't' | 'T' => VirtualKeyCode::T,
+        'u' | 'U' => VirtualKeyCode::U,
+        'v' | 'V' => VirtualKeyCode::V,
+        'w' | 'W' => VirtualKeyCode::W,
+        'x' | 'X' => VirtualKeyCode::X,
+        'y' | 'Y' => VirtualKeyCode::Y,
+        'z' | 'Z' => VirtualKeyCode::Z,
+        '1' | '!' => VirtualKeyCode::Key1,
+        '2' | '@' => VirtualKeyCode::Key2,
+        '3' | '#' => VirtualKeyCode::Key3,
+        '4' | '$' => VirtualKeyCode::Key4,
+        '5' | '%' => VirtualKeyCode::Key5,
+        '6' | '^' => VirtualKeyCode::Key6,
+        '7' | '&' => VirtualKeyCode::Key7,
+        '8' | '*' => VirtualKeyCode::Key8,
+        '9' | '(' => VirtualKeyCode::Key9,
+        '0' | ')' => VirtualKeyCode::Key0,
+        '=' | '+' => VirtualKeyCode::Equals,
+        '-' | '_' => VirtualKeyCode::Minus,
+        ']' | '}' => VirtualKeyCode::RBracket,
+        '[' | '{' => VirtualKeyCode::LBracket,
+        '\'' | '"' => VirtualKeyCode::Apostrophe,
+        ';' | ':' => VirtualKeyCode::Semicolon,
+        '\\' | '|' => VirtualKeyCode::Backslash,
+        ',' | '<' => VirtualKeyCode::Comma,
+        '/' | '?' => VirtualKeyCode::Slash,
+        '.' | '>' => VirtualKeyCode::Period,
+        '`' | '~' => VirtualKeyCode::Grave,
+        _ => return None,
+    })
 }
 
 bitflags::bitflags! {
