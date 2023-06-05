@@ -21,4 +21,15 @@ impl Ast {
             Ast::FuncDef(g) => g.to_wat(),
         }
     }
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        match self {
+            Ast::Func(f) => f.to_doc(),
+            Ast::Import(i) => i.to_doc(),
+            Ast::Export(e) => e.to_doc(),
+            Ast::Table(t) => t.to_doc(),
+            Ast::Memory(m) => m.to_doc(),
+            Ast::Elem(g) => g.to_doc(),
+            Ast::FuncDef(g) => g.to_doc(),
+        }
+    }
 }

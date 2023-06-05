@@ -100,24 +100,6 @@ impl Dom {
         dbg!(self.layout_to_operations(self.root))
     }
 
-    pub fn handle_event(&mut self, evt: fastn_runtime::ExternalEvent) {
-        match evt {
-            fastn_runtime::ExternalEvent::CursorMoved { x, y } => self.cursor_moved(x, y),
-            fastn_runtime::ExternalEvent::Focused(f) => self.has_focus = f,
-            fastn_runtime::ExternalEvent::ModifierChanged(m) => self.modifiers = m,
-            fastn_runtime::ExternalEvent::Key { code, pressed } => self.handle_key(code, pressed),
-            _ => todo!(),
-        }
-    }
-
-    fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
-        self.memory.handle_event(2.into(), None)
-    }
-
-    fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
-        let _nodes = self.nodes_under_mouse(self.root, pos_x, pos_y);
-        // todo!()
-    }
 
     fn layout_to_operations(&self, key: fastn_runtime::NodeKey) -> Vec<fastn_runtime::Operation> {
         let node = self.nodes.get(key).unwrap();

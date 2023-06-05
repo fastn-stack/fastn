@@ -71,6 +71,10 @@ pub fn table_4(
 }
 
 impl Table {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         let limits_wat = self.limits.to_wat();
         let ref_type_wat = self.ref_type.to_wat();

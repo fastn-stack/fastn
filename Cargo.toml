@@ -85,6 +85,7 @@ winit = "0.28"
 wasmtime = "9"
 zip = "0.6"
 bitflags = "2"
+pretty = "0.12"
 
 [workspace.dependencies.rusqlite]
 version = "0.29.0"

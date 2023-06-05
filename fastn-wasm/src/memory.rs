@@ -5,6 +5,10 @@ pub struct Memory {
 }
 
 impl Memory {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        todo!()
+    }
+
     pub fn to_wat(&self) -> String {
         let limits_wat = self.limits.to_wat();
         let shared = if self.shared {
