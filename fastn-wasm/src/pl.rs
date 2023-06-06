@@ -13,19 +13,13 @@ impl From<fastn_wasm::Type> for PL {
 
 impl PL {
     pub fn to_doc(&self, is_param: bool) -> pretty::RcDoc<()> {
-        let mut o = if is_param {
-            pretty::RcDoc::text("(param")
-        } else {
-            pretty::RcDoc::text("(local")
-        };
-
-        if let Some(name) = &self.name {
-            o = o.append(" $").append(name);
-        }
-
-        o.append(pretty::Doc::space())
-            .append(self.ty.to_doc())
-            .append(")")
+        fastn_wasm::group(
+            if is_param { "param" } else { "local" },
+            self.name
+                .clone()
+                .map(|v| pretty::RcDoc::text(format!("${}", v))),
+            self.ty.to_doc(),
+        )
     }
 
     pub fn to_wat(&self, is_param: bool) -> String {
