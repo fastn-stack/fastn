@@ -100,7 +100,6 @@ impl Dom {
         dbg!(self.layout_to_operations(self.root))
     }
 
-
     fn layout_to_operations(&self, key: fastn_runtime::NodeKey) -> Vec<fastn_runtime::Operation> {
         let node = self.nodes.get(key).unwrap();
         match node {

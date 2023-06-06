@@ -24,4 +24,5 @@ bytemuck.workspace = true
 wasmtime.workspace = true
 bitflags.workspace = true
 async-trait.workspace = true
+pretty.workspace = true
 fastn-wasm = { path = "../fastn-wasm" }

@@ -204,7 +204,7 @@ fn create_columns() -> Vec<u8> {
     m.push(
         fastn_wasm::Func {
             name: None,
-            export: Some("call_by_index_without_return".to_string()),
+            export: Some("void_by_index".to_string()),
             params: vec![
                 fastn_wasm::Type::I32.to_pl("fn_idx"),
                 fastn_wasm::Type::ExternRef.to_pl("arr"),
