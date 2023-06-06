@@ -34,7 +34,6 @@ It handles three events:
   area
 
 
-
 It also responds to the System modes. You can try it out using the
 `mode-switcher` button on this page at the bottom-right corner.
 
