@@ -174,41 +174,6 @@ impl Expression {
             Expression::Drop => pretty::RcDoc::text("(drop)"),
         }
     }
-
-    pub fn to_wat(&self) -> String {
-        match self {
-            Expression::GlobalSet { index, value } => {
-                format!("(global.set {} {})", index.to_wat(), value.to_wat())
-            }
-            Expression::LocalSet { index, value } => {
-                format!("(local.set {} {})", index.to_wat(), value.to_wat())
-            }
-            Expression::LocalGet { index } => {
-                format!("(local.get {})", index.to_wat())
-            }
-            Expression::I32Const(value) => format!("(i32.const {})", value),
-            Expression::I64Const(value) => format!("(i64.const {})", value),
-            Expression::F32Const(value) => format!("(f32.const {})", value),
-            Expression::F64Const(value) => format!("(f64.const {})", value),
-            Expression::Operation { name, values } => {
-                let values_wat: Vec<String> = values.iter().map(|v| v.to_wat()).collect();
-                format!("({} {})", name, values_wat.join(" "))
-            }
-            Expression::Call { name, params } => {
-                let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
-                format!("(call ${}{})", name, format!(" {}", params_wat.join(" ")))
-            }
-            Expression::CallIndirect { type_, params } => {
-                let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
-                format!("(call_indirect (type ${}) {})", type_, params_wat.join(" "))
-            }
-            // Expression::Data { offset, data } => {
-            //     let data_hex: Vec<String> = data.iter().map(|b| format!("{:02X}", b)).collect();
-            //     format!("(data (i32.const {}) \"{}\")", offset, data_hex.join(""))
-            // }
-            Expression::Drop => "(drop)".to_string(),
-        }
-    }
 }
 
 #[derive(Debug, Clone)]

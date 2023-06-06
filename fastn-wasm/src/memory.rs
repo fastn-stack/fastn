@@ -18,23 +18,13 @@ impl Memory {
             Some(pretty::RcDoc::text(format!("{}{}", limits_wat, shared))),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        let limits_wat = self.limits.to_wat();
-        let shared = if self.shared {
-            " shared".to_string()
-        } else {
-            String::new()
-        };
-        format!("(memory {}{})", limits_wat, shared)
-    }
 }
 
 #[cfg(test)]
 mod test {
     #[track_caller]
     fn e(f: fastn_wasm::Memory, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Memory(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Memory(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

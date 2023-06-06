@@ -101,13 +101,6 @@ impl Import {
             self.desc.to_doc(),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        let module_wat = &self.module;
-        let name_wat = &self.name;
-        let desc_wat = self.desc.to_wat();
-        format!("(import \"{}\" \"{}\" {})", module_wat, name_wat, desc_wat)
-    }
 }
 
 #[derive(Debug)]
@@ -125,14 +118,6 @@ impl ImportDesc {
             ImportDesc::Memory(m) => m.to_doc(),
         }
     }
-
-    pub fn to_wat(&self) -> String {
-        match self {
-            ImportDesc::Func(f) => f.to_wat(),
-            ImportDesc::Table(t) => t.to_wat(),
-            ImportDesc::Memory(m) => m.to_wat(),
-        }
-    }
 }
 
 #[cfg(test)]
@@ -141,7 +126,7 @@ mod test {
 
     #[track_caller]
     fn e(f: Import, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Import(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Import(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

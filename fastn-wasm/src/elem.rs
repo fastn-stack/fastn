@@ -17,23 +17,13 @@ impl Elem {
             ),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        use itertools::Itertools;
-
-        format!(
-            "(elem (i32.const {}) {})",
-            self.start,
-            self.fns.iter().map(|v| format!("${}", v)).join(" ")
-        )
-    }
 }
 
 #[cfg(test)]
 mod test {
     #[track_caller]
     fn e(f: super::Elem, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Elem(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Elem(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

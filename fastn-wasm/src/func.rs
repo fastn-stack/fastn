@@ -83,40 +83,6 @@ impl Func {
     pub fn to_ast(self) -> fastn_wasm::Ast {
         fastn_wasm::Ast::Func(self)
     }
-
-    pub fn to_wat(&self) -> String {
-        let mut s = String::new();
-        s.push_str("(func");
-        if let Some(name) = &self.name {
-            s.push_str(" $");
-            s.push_str(name);
-        }
-        if let Some(export) = &self.export {
-            s.push_str(" (export \"");
-            s.push_str(export);
-            s.push_str("\")");
-        }
-        for param in self.params.iter() {
-            s.push(' ');
-            s.push_str(param.to_wat(true).as_str());
-        }
-        if let Some(result) = &self.result {
-            s.push_str(" (result ");
-            s.push_str(result.to_wat());
-            s.push(')');
-        }
-        for local in self.locals.iter() {
-            s.push(' ');
-            s.push_str(local.to_wat(false).as_str());
-        }
-        for ast in &self.body {
-            s.push(' ');
-            s.push_str(&ast.to_wat());
-        }
-        s.push(')');
-
-        s
-    }
 }
 
 #[derive(Debug, Default)]
@@ -136,16 +102,6 @@ impl FuncDecl {
         }
         .to_doc()
     }
-
-    pub fn to_wat(&self) -> String {
-        fastn_wasm::Func {
-            name: self.name.to_owned(),
-            params: self.params.to_owned(),
-            result: self.result.to_owned(),
-            ..Default::default()
-        }
-        .to_wat()
-    }
 }
 
 #[cfg(test)]
@@ -154,7 +110,7 @@ mod test {
 
     #[track_caller]
     fn e(f: Func, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Func(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Func(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

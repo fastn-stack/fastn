@@ -25,11 +25,6 @@ impl Export {
             self.desc.to_doc(),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        let desc_wat = self.desc.to_wat();
-        format!("(export \"{}\" {})", self.name, desc_wat)
-    }
 }
 
 #[derive(Debug)]
@@ -43,18 +38,13 @@ impl ExportDesc {
             ExportDesc::Func { index } => fastn_wasm::named("func", Some(index.to_doc())),
         }
     }
-    pub fn to_wat(&self) -> String {
-        match self {
-            ExportDesc::Func { index } => format!("(func {})", index.to_wat()),
-        }
-    }
 }
 
 #[cfg(test)]
 mod test {
     #[track_caller]
     fn e(f: fastn_wasm::Export, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Export(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Export(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

@@ -44,25 +44,13 @@ impl FuncDef {
             self.decl.to_doc(),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        let mut s = String::new();
-
-        s.push_str("(type $");
-        s.push_str(self.name.as_str());
-        s.push(' ');
-        s.push_str(self.decl.to_wat().as_str());
-        s.push(')');
-
-        s
-    }
 }
 
 #[cfg(test)]
 mod test {
     #[track_caller]
     fn e(f: fastn_wasm::Ast, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![f]);
+        let g = fastn_wasm::encode(&vec![f]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);
