@@ -270,7 +270,7 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::i32(fastn_runtime::ElementKind::Column.into()),
                     ),
                 ),
-                fastn_wasm::expression::call4(
+                /* fastn_wasm::expression::call4(
                     "set_dynamic_property_i32",
                     fastn_wasm::expression::local("column"),
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
@@ -283,7 +283,7 @@ fn create_columns() -> Vec<u8> {
                         ),
                         fastn_wasm::expression::call1("get_global", fastn_wasm::expression::i32(1)),
                     ),
-                ),
+                ),*/
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
@@ -324,7 +324,7 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call("create_frame"),
                 fastn_wasm::expression::local_set(
                     "on-hover",
-                    fastn_wasm::expression::call1("create_boolean", fastn_wasm::expression::i32(0)),
+                    fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(42)),
                 ),
                 fastn_wasm::expression::local_set(
                     "column",
@@ -343,21 +343,26 @@ fn create_columns() -> Vec<u8> {
                         "create_list_2",
                         fastn_wasm::expression::i32(fastn_runtime::PointerKind::Integer.into()),
                         fastn_wasm::expression::call1("get_global", fastn_wasm::expression::i32(1)),
-                        fastn_wasm::expression::i32(fastn_runtime::PointerKind::Boolean.into()),
+                        fastn_wasm::expression::i32(fastn_runtime::PointerKind::Integer.into()),
                         fastn_wasm::expression::local("on-hover"),
                     ),
                 ),
                 fastn_wasm::expression::call3(
                     "set_property_i32",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
-                    fastn_wasm::expression::i32(100),
-                ),
-                fastn_wasm::expression::call3(
-                    "set_property_i32",
-                    fastn_wasm::expression::local("column"),
                     fastn_wasm::expression::i32(fastn_runtime::UIProperty::HeightFixedPx.into()),
                     fastn_wasm::expression::i32(80),
+                ),
+                fastn_wasm::expression::call4(
+                    "set_dynamic_property_i32",
+                    fastn_wasm::expression::local("column"),
+                    fastn_wasm::expression::i32(fastn_runtime::UIProperty::WidthFixedPx.into()),
+                    fastn_wasm::expression::i32(0), // table_index
+                    fastn_wasm::expression::call2(
+                        "array_i32_2",
+                        fastn_wasm::expression::call1("create_i32", fastn_wasm::expression::i32(2)),
+                        fastn_wasm::expression::local("on-hover"),
+                    ),
                 ),
                 fastn_wasm::expression::call("end_frame"),
             ],
@@ -375,7 +380,7 @@ fn create_columns() -> Vec<u8> {
             body: vec![
                 fastn_wasm::expression::call("create_frame"),
                 fastn_wasm::expression::call2(
-                    "set_boolean",
+                    "set_i32",
                     fastn_wasm::expression::call2(
                         "get_func_arg_ref",
                         fastn_wasm::expression::local("func-data"),

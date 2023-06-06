@@ -68,7 +68,6 @@ impl fastn_runtime::Dom {
     fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         use fastn_runtime::wasm_helpers::Params;
         use fastn_wasm::LinkerExt;
-        use wasmtime::AsContextMut;
 
         self.register_memory_functions(linker);
 
@@ -105,7 +104,7 @@ impl fastn_runtime::Dom {
                         .into_func()
                         .expect("call_by_index not a func")
                         .call(
-                            caller.as_context_mut(),
+                            &mut caller,
                             &[
                                 wasmtime::Val::I32(table_index),
                                 wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
@@ -143,7 +142,7 @@ impl fastn_runtime::Dom {
                         .into_func()
                         .expect("call_by_index not a func")
                         .call(
-                            caller.as_context_mut(),
+                            &mut caller,
                             &[
                                 wasmtime::Val::I32(table_index),
                                 wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
@@ -283,7 +282,9 @@ impl fastn_runtime::Memory {
     }
 
     pub fn register(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
+        use fastn_runtime::wasm_helpers::Params;
         use fastn_wasm::LinkerExt;
+
         linker.func0("create_frame", |mem: &mut fastn_runtime::Memory| {
             mem.create_frame()
         });
@@ -332,18 +333,112 @@ impl fastn_runtime::Memory {
         linker.func1ret("get_boolean", |mem: &mut fastn_runtime::Memory, ptr| {
             mem.get_boolean(ptr)
         });
-        linker.func2("set_boolean", |mem: &mut fastn_runtime::Memory, ptr, v| {
-            mem.set_boolean(ptr, v)
-        });
+        linker.func2_caller(
+            "set_boolean",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, ptr, value| {
+                caller.data_mut().memory.boolean[ptr].value.set_value(value);
+
+                for ui_property in caller.data().memory.boolean[ptr].ui_properties.clone() {
+                    let closure_pointer = caller
+                        .data()
+                        .memory
+                        .closure
+                        .get(ui_property.closure)
+                        .unwrap()
+                        .clone();
+                    let current_value_of_dynamic_property = {
+                        let mut values = vec![wasmtime::Val::I32(0)];
+                        caller
+                            .get_export("call_by_index")
+                            .expect("call_by_index is not defined")
+                            .into_func()
+                            .expect("call_by_index not a func")
+                            .call(
+                                &mut caller,
+                                &[
+                                    wasmtime::Val::I32(closure_pointer.function),
+                                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                                        closure_pointer.captured_variables.pointer,
+                                    ))),
+                                ],
+                                &mut values,
+                            )
+                            .expect("call failed");
+
+                        // Todo: check ui_property.property
+                        caller.data().memory.get_i32(values.ptr(0))
+                    };
+
+                    dbg!("set_boolean***", &current_value_of_dynamic_property);
+
+                    caller.data_mut().set_property(
+                        ui_property.node,
+                        ui_property.property,
+                        current_value_of_dynamic_property.into(),
+                    )
+                }
+            },
+        );
         linker.func1ret("create_i32", |mem: &mut fastn_runtime::Memory, v| {
             mem.create_i32(v)
         });
         linker.func1ret("get_i32", |mem: &mut fastn_runtime::Memory, ptr| {
             mem.get_i32(ptr)
         });
-        linker.func2("set_i32", |mem: &mut fastn_runtime::Memory, ptr, v| {
-            mem.set_i32(ptr, v)
-        });
+        linker.func2_caller(
+            "set_i32",
+            |mut caller: wasmtime::Caller<'_, fastn_runtime::Dom>, ptr, value| {
+                dbg!("set_i32", &ptr);
+                caller.data_mut().memory.i32[ptr].value.set_value(value);
+                dbg!(&caller.data().memory.i32[ptr]);
+
+                for dependent in caller.data().memory.i32[ptr].children.clone() {
+                    for ui_property in caller.data().memory.vec[dependent.pointer]
+                        .ui_properties
+                        .clone()
+                    {
+                        let closure_pointer = caller
+                            .data()
+                            .memory
+                            .closure
+                            .get(ui_property.closure)
+                            .unwrap()
+                            .clone();
+                        dbg!(&closure_pointer);
+                        let current_value_of_dynamic_property = {
+                            let mut values = vec![wasmtime::Val::I32(0)];
+                            caller
+                                .get_export("call_by_index")
+                                .expect("call_by_index is not defined")
+                                .into_func()
+                                .expect("call_by_index not a func")
+                                .call(
+                                    &mut caller,
+                                    &[
+                                        wasmtime::Val::I32(0), // TODO: arpita: closure_pointer.function
+                                        wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                                            closure_pointer.captured_variables.pointer,
+                                        ))),
+                                    ],
+                                    &mut values,
+                                )
+                                .expect("call failed");
+
+                            // Todo: check ui_property.property
+                            caller.data().memory.get_i32(values.ptr(0))
+                        };
+
+                        dbg!("set_i32***", &current_value_of_dynamic_property);
+
+                        caller.data_mut().set_property(
+                            ui_property.node,
+                            ui_property.property,
+                            current_value_of_dynamic_property.into(),
+                        )
+                    }
+                }
+            },
+        );
         linker.func3ret(
             "multiply_i32",
             |mem: &mut fastn_runtime::Memory, arr, idx_1, idx_2| {

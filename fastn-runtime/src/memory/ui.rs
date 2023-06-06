@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DynamicProperty {
     pub property: fastn_runtime::UIProperty,
     pub node: fastn_runtime::NodeKey,
@@ -13,6 +13,7 @@ pub enum UIProperty {
     BackgroundSolid,
     SpacingFixedPx,
     MarginFixedPx,
+    Event,
 }
 
 impl From<i32> for UIProperty {
@@ -24,6 +25,7 @@ impl From<i32> for UIProperty {
             3 => UIProperty::BackgroundSolid,
             4 => UIProperty::SpacingFixedPx,
             5 => UIProperty::MarginFixedPx,
+            6 => UIProperty::Event,
             _ => panic!("Unknown UIProperty: {}", i),
         }
     }
@@ -38,6 +40,7 @@ impl From<UIProperty> for i32 {
             UIProperty::BackgroundSolid => 3,
             UIProperty::SpacingFixedPx => 4,
             UIProperty::MarginFixedPx => 5,
+            UIProperty::Event => 6,
         }
     }
 }
@@ -46,12 +49,12 @@ impl UIProperty {
     pub(crate) fn into_dynamic_property(
         self,
         node: fastn_runtime::NodeKey,
-        closure: fastn_runtime::ClosurePointer,
+        closure_pointer: fastn_runtime::ClosurePointer,
     ) -> DynamicProperty {
         DynamicProperty {
             property: self,
             node,
-            closure,
+            closure: closure_pointer,
         }
     }
 }
