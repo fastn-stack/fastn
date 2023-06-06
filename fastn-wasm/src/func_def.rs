@@ -38,18 +38,10 @@ pub fn func2ret(
 
 impl FuncDef {
     pub fn to_doc(&self) -> pretty::RcDoc<'static> {
-        let d = fastn_wasm::Func {
-            name: self.decl.name.to_owned(),
-            params: self.decl.params.to_owned(),
-            result: self.decl.result.to_owned(),
-            ..Default::default()
-        }
-        .to_doc();
-
         fastn_wasm::group(
             "type".to_string(),
             Some(pretty::RcDoc::text(format!("${}", self.name))),
-            d,
+            self.decl.to_doc(),
         )
     }
 

@@ -72,7 +72,11 @@ pub fn table_4(
 
 impl Table {
     pub fn to_doc(&self) -> pretty::RcDoc<'static> {
-        todo!()
+        fastn_wasm::group(
+            "table".to_string(),
+            Some(self.limits.to_doc()),
+            self.ref_type.to_doc(),
+        )
     }
 
     pub fn to_wat(&self) -> String {
@@ -100,6 +104,10 @@ pub struct Limits {
 }
 
 impl Limits {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
+        pretty::RcDoc::text(self.to_wat())
+    }
+
     pub fn to_wat(&self) -> String {
         let min_wat = self.min.to_string();
         let max_wat = self
@@ -117,6 +125,10 @@ pub enum RefType {
 }
 
 impl RefType {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
+        pretty::RcDoc::text(self.to_wat().to_string())
+    }
+
     pub fn to_wat(&self) -> &str {
         match self {
             RefType::Func => "funcref",
