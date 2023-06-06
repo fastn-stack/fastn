@@ -82,12 +82,13 @@ The three steps to adding a color-scheme are:
 - **Add the color-scheme in your project**
 
 -- ds.code: **A:** Add it as a dependency in `FASTN.ftd` document
-
+lang: ftd
 
 \-- fastn.dependency: fastn-community.github.io/winter-cs as my-cs
 
 
 -- ds.code: **B:** Import `my-cs` 
+lang: ftd
 
 \-- import: my-cs
 
