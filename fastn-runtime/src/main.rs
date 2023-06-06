@@ -164,6 +164,11 @@ fn create_columns() -> Vec<u8> {
         fastn_wasm::Type::ExternRef,
     ));
 
+    m.push(fastn_wasm::func_def::func1(
+        "no_return",
+        fastn_wasm::Type::ExternRef.into(),
+    ));
+
     // (func (export "call_by_index") (param $idx i32) (param $arr externref) (result externref)
     //    call_indirect (type $return_externref) (local.get 0) (local.get 1)
     // )
@@ -189,6 +194,25 @@ fn create_columns() -> Vec<u8> {
             result: Some(fastn_wasm::Type::ExternRef),
             body: vec![fastn_wasm::expression::call_indirect2(
                 "return_externref",
+                fastn_wasm::expression::local("arr"),
+                fastn_wasm::expression::local("fn_idx"),
+            )],
+        }
+        .to_ast(),
+    );
+
+    m.push(
+        fastn_wasm::Func {
+            name: None,
+            export: Some("call_by_index_without_return".to_string()),
+            params: vec![
+                fastn_wasm::Type::I32.to_pl("fn_idx"),
+                fastn_wasm::Type::ExternRef.to_pl("arr"),
+            ],
+            locals: vec![],
+            result: None,
+            body: vec![fastn_wasm::expression::call_indirect2(
+                "no_return",
                 fastn_wasm::expression::local("arr"),
                 fastn_wasm::expression::local("fn_idx"),
             )],

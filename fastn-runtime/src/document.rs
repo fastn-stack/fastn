@@ -30,6 +30,8 @@ impl Document {
     fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
         use wasmtime::AsContextMut;
 
+        dbg!(&_code);
+
         let memory = &self.store.data().memory;
         let closures = memory.closure.clone();
 
@@ -37,13 +39,13 @@ impl Document {
             .get_event_handlers(2.into(), None)
             .map(|v| v.to_vec())
         {
-            for event in events {
+            for event in dbg!(events) {
                 let closure = closures.get(event.closure).unwrap();
 
                 // Create a temporary variable to hold the export
                 let call_by_index_export = self
                     .instance
-                    .get_export(self.store.as_context_mut(), "call_by_index")
+                    .get_export(self.store.as_context_mut(), "call_by_index_without_return")
                     .expect("call_by_index is not defined");
 
                 // Make the call using the temporary variable
@@ -97,7 +99,6 @@ impl Document {
             fastn_runtime::PointerKind::List => {}
             fastn_runtime::PointerKind::String => {}
         }*/
-        ()
     }
 
     fn resolve_heap_value<T>(
