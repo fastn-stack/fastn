@@ -14,7 +14,7 @@ impl From<fastn_wasm::Type> for PL {
 impl PL {
     pub fn to_doc(&self, is_param: bool) -> pretty::RcDoc<()> {
         fastn_wasm::group(
-            if is_param { "param" } else { "local" },
+            if is_param { "param" } else { "local" }.to_string(),
             self.name
                 .clone()
                 .map(|v| pretty::RcDoc::text(format!("${}", v))),

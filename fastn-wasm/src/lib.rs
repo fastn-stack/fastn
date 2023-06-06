@@ -36,7 +36,7 @@ pub fn named<'a>(kind: &'static str, name: Option<pretty::RcDoc<'a, ()>>) -> pre
 }
 
 pub fn group<'a>(
-    kind: &'static str,
+    kind: String,
     name: Option<pretty::RcDoc<'a, ()>>,
     body: pretty::RcDoc<'a, ()>,
 ) -> pretty::RcDoc<'a, ()> {
@@ -53,7 +53,7 @@ pub fn group<'a>(
 pub fn encode_new(module: &[fastn_wasm::Ast]) -> String {
     let mut w = Vec::new();
     let o = group(
-        "module",
+        "module".to_string(),
         None,
         pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
             .nest(1)

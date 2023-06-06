@@ -27,10 +27,6 @@ pub enum Expression {
         type_: String,
         params: Vec<Expression>,
     },
-    Data {
-        offset: i32,
-        data: Vec<u8>,
-    },
     Drop,
 }
 
@@ -122,21 +118,73 @@ pub fn call4(
 }
 
 impl Expression {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        match self {
+            Expression::GlobalSet { index, value } => fastn_wasm::group(
+                "global.set".to_string(),
+                Some(index.to_doc()),
+                value.to_doc(),
+            ),
+            Expression::LocalSet { index, value } => fastn_wasm::group(
+                "local.set".to_string(),
+                Some(index.to_doc()),
+                value.to_doc(),
+            ),
+            Expression::LocalGet { index } => fastn_wasm::named("local.get", Some(index.to_doc())),
+            Expression::I32Const(value) => fastn_wasm::named(
+                "i32.const",
+                Some(pretty::RcDoc::text(format!("${}", value))),
+            ),
+            Expression::I64Const(value) => fastn_wasm::named(
+                "i64.const",
+                Some(pretty::RcDoc::text(format!("${}", value))),
+            ),
+            Expression::F32Const(value) => fastn_wasm::named(
+                "f32.const",
+                Some(pretty::RcDoc::text(format!("${}", value))),
+            ),
+            Expression::F64Const(value) => fastn_wasm::named(
+                "f64.const",
+                Some(pretty::RcDoc::text(format!("${}", value))),
+            ),
+            Expression::Operation { name, values } => fastn_wasm::group(
+                name.to_string(),
+                None,
+                pretty::RcDoc::intersperse(
+                    values.iter().map(|v| v.to_doc()),
+                    pretty::RcDoc::space(),
+                ),
+            ),
+            Expression::Call { name, params } => fastn_wasm::group(
+                "call".to_string(),
+                Some(pretty::RcDoc::text(format!("${}", name))),
+                pretty::RcDoc::intersperse(
+                    params.iter().map(|v| v.to_doc()),
+                    pretty::RcDoc::line(),
+                ),
+            ),
+            Expression::CallIndirect { type_, params } => fastn_wasm::group(
+                "call_indirect".to_string(),
+                Some(pretty::RcDoc::text(format!("(type ${})", type_))),
+                pretty::RcDoc::intersperse(
+                    params.iter().map(|v| v.to_doc()),
+                    pretty::RcDoc::line(),
+                ),
+            ),
+            Expression::Drop => pretty::RcDoc::text("(drop)"),
+        }
+    }
+
     pub fn to_wat(&self) -> String {
         match self {
             Expression::GlobalSet { index, value } => {
-                let index_wat = index;
-                let value_wat = value.to_wat();
-                format!("(global.set {} {})", index_wat.to_wat(), value_wat)
+                format!("(global.set {} {})", index.to_wat(), value.to_wat())
             }
             Expression::LocalSet { index, value } => {
-                let index_wat = index;
-                let value_wat = value.to_wat();
-                format!("(local.set {} {})", index_wat.to_wat(), value_wat)
+                format!("(local.set {} {})", index.to_wat(), value.to_wat())
             }
             Expression::LocalGet { index } => {
-                let index_wat = index;
-                format!("(local.get {})", index_wat.to_wat())
+                format!("(local.get {})", index.to_wat())
             }
             Expression::I32Const(value) => format!("(i32.const {})", value),
             Expression::I64Const(value) => format!("(i64.const {})", value),
@@ -154,10 +202,10 @@ impl Expression {
                 let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
                 format!("(call_indirect (type ${}) {})", type_, params_wat.join(" "))
             }
-            Expression::Data { offset, data } => {
-                let data_hex: Vec<String> = data.iter().map(|b| format!("{:02X}", b)).collect();
-                format!("(data (i32.const {}) \"{}\")", offset, data_hex.join(""))
-            }
+            // Expression::Data { offset, data } => {
+            //     let data_hex: Vec<String> = data.iter().map(|b| format!("{:02X}", b)).collect();
+            //     format!("(data (i32.const {}) \"{}\")", offset, data_hex.join(""))
+            // }
             Expression::Drop => "(drop)".to_string(),
         }
     }
@@ -182,6 +230,10 @@ impl From<&str> for Index {
 }
 
 impl Index {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        pretty::RcDoc::text(self.to_wat())
+    }
+
     pub fn to_wat(&self) -> String {
         match self {
             Index::Index(i) => i.to_string(),
