@@ -44,20 +44,17 @@ impl<T> HeapValue<T> {
     pub(crate) fn mut_value(&mut self) -> &mut T {
         match self {
             HeapValue::Value(v) => v,
-            _ => unimplemented!(),
+            HeapValue::Formula { cached_value, .. } => cached_value,
         }
     }
     pub(crate) fn value(&self) -> &T {
         match self {
             HeapValue::Value(v) => v,
-            _ => unimplemented!(),
+            HeapValue::Formula { cached_value, .. } => cached_value,
         }
     }
     pub(crate) fn set_value(&mut self, v: T) {
-        match self {
-            HeapValue::Value(s) => *s = v,
-            _ => unimplemented!(),
-        }
+        *self = HeapValue::Value(v);
     }
 }
 

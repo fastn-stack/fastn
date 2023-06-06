@@ -125,6 +125,11 @@ pub trait LinkerExt<S> {
         name: &'static str,
         func: impl Fn(&mut SE, T1, T2) -> O + Send + Sync + 'static,
     );
+    fn func2_caller<T1: WasmType, T2: WasmType>(
+        &mut self,
+        name: &'static str,
+        func: impl Fn(wasmtime::Caller<'_, S>, T1, T2) + Send + Sync + 'static,
+    );
     fn func3ret<
         SE: StoreExtractor<Parent = S>,
         T1: WasmType,
@@ -308,6 +313,26 @@ impl<S> LinkerExt<S> for wasmtime::Linker<S> {
                     T3::extract(2, params),
                     T4::extract(3, params),
                 );
+                Ok(())
+            },
+        )
+        .unwrap();
+    }
+    fn func2_caller<T1: WasmType, T2: WasmType>(
+        &mut self,
+        name: &'static str,
+        func: impl Fn(wasmtime::Caller<'_, S>, T1, T2) + Send + Sync + 'static,
+    ) {
+        self.func_new(
+            "fastn",
+            name,
+            wasmtime::FuncType::new(
+                [T1::the_type(), T2::the_type()].iter().cloned(),
+                [].iter().cloned(),
+            ),
+            move |caller: wasmtime::Caller<'_, S>, params, _results| {
+                println!("fastn.{}", name);
+                func(caller, T1::extract(0, params), T2::extract(1, params));
                 Ok(())
             },
         )

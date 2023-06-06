@@ -239,36 +239,38 @@ impl Memory {
         &mut self,
         pointer: Pointer,
         dropped_so_far: &mut Vec<fastn_runtime::Pointer>,
+        parent_vec: Option<fastn_runtime::Pointer>,
     ) -> bool {
-        println!("dropping {:?}", pointer);
+        println!("consider dropping {:?} {:?}", pointer, parent_vec);
         if dropped_so_far.contains(&pointer) {
             println!("pointer already dropped, ignoring: {:?}", pointer);
             return true;
         }
-        let (dependents, ui_properties) = match pointer.kind {
+
+        let (dependents, values, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
-                let b = self.boolean.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.boolean.get(pointer.pointer.clone()).unwrap();
+                (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Integer => {
-                let b = self.i32.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.i32.get(pointer.pointer.clone()).unwrap();
+                (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Record | PointerKind::List => {
-                let b = self.vec.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.vec.get(pointer.pointer.clone()).unwrap();
+                (&b.children, b.value.value().to_vec(), &b.ui_properties)
             }
             PointerKind::OrType => {
-                let b = self.or_type.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.or_type.get(pointer.pointer.clone()).unwrap();
+                (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Decimal => {
-                let b = self.f32.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.f32.get(pointer.pointer.clone()).unwrap();
+                (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::String => {
-                let b = self.string.get(pointer.pointer).unwrap();
-                (&b.children, &b.ui_properties)
+                let b = self.string.get(pointer.pointer.clone()).unwrap();
+                (&b.children, vec![], &b.ui_properties)
             }
         };
 
@@ -277,14 +279,28 @@ impl Memory {
         }
 
         let mut drop = true;
+
         for d in dependents.clone() {
-            if !self.drop_pointer(d, dropped_so_far) {
+            if let Some(parent_vec) = parent_vec {
+                if d.eq(&parent_vec) {
+                    continue;
+                }
+            }
+            if !self.drop_pointer(d, dropped_so_far, None) {
+                drop = false;
+                break;
+            }
+        }
+
+        for d in values {
+            if !self.drop_pointer(d, dropped_so_far, Some(pointer)) {
                 drop = false;
                 break;
             }
         }
 
         if drop {
+            println!("dropping {:?} {:?}", pointer, parent_vec);
             dropped_so_far.push(pointer);
             self.delete_pointer(pointer);
         }
@@ -318,9 +334,8 @@ impl Memory {
     pub fn end_frame(&mut self) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         println!("end_frame called");
-        let mut v = vec![];
         for pointer in self.stack.pop().unwrap().pointers.iter() {
-            self.drop_pointer(*pointer, &mut v);
+            self.drop_pointer(*pointer, &mut vec![], None);
         }
         println!("end_frame ended");
     }
@@ -333,7 +348,7 @@ impl Memory {
             if pointer.pointer == keep {
                 k = Some(pointer.to_owned());
             } else {
-                self.drop_pointer(*pointer, &mut v);
+                self.drop_pointer(*pointer, &mut v, None);
             }
         }
 
@@ -379,13 +394,21 @@ impl Memory {
         table_index: i32,
         func_arg: fastn_runtime::PointerKey,
     ) {
+        let func_arg = func_arg.into_list_pointer();
+        let closure_pointer = self.create_closure(fastn_runtime::Closure {
+            function: table_index,
+            captured_variables: func_arg,
+        });
+
         let eh = fastn_runtime::EventHandler {
             node,
-            closure: self.create_closure(fastn_runtime::Closure {
-                function: table_index,
-                captured_variables: func_arg.into_list_pointer(),
-            }),
+            closure: closure_pointer,
         };
+
+        self.add_dynamic_property_dependency(
+            func_arg,
+            fastn_runtime::UIProperty::Event.into_dynamic_property(node, closure_pointer),
+        );
         match self.event_handler.get_mut(&event_kind) {
             Some(v) => v.push(eh),
             None => {
@@ -466,6 +489,7 @@ impl Memory {
         self.add_dependent(ptr2, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
+        dbg!("create_list_2", &pointer, &self.vec);
         pointer
     }
 
@@ -496,7 +520,8 @@ impl Memory {
     }
 
     pub fn set_i32(&mut self, ptr: fastn_runtime::PointerKey, value: i32) {
-        self.i32[ptr].value.set_value(value)
+        let h = &mut self.i32[ptr];
+        h.value.set_value(value);
     }
 
     pub fn multiply_i32(
@@ -507,13 +532,14 @@ impl Memory {
     ) -> fastn_runtime::PointerKey {
         let idx_1 = idx_1 as usize;
         let idx_2 = idx_2 as usize;
+        dbg!("multiply_i32", &idx_1, &idx_2);
 
         let arr = self.vec[arr].value.mut_value();
 
         let v1 = *self.i32[arr[idx_1].pointer].value.value();
         let v2 = *self.i32[arr[idx_2].pointer].value.value();
 
-        self.create_i32(v1 * v2)
+        self.create_i32(dbg!(dbg!(v1) * dbg!(v2)))
     }
 
     pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
@@ -550,6 +576,7 @@ impl Memory {
         ptr: fastn_runtime::PointerKey,
         idx: i32,
     ) -> fastn_runtime::PointerKey {
+        dbg!(&self.vec, &ptr);
         self.vec
             .get(ptr)
             .unwrap()
@@ -604,7 +631,7 @@ impl Memory {
         target: Pointer,
         dependency: DynamicProperty,
     ) {
-        let dependents = match target.kind {
+        let ui_properties = match target.kind {
             PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().ui_properties,
             PointerKind::Boolean => {
@@ -616,7 +643,7 @@ impl Memory {
             }
         };
 
-        dependents.push(dependency);
+        ui_properties.push(dependency);
     }
 
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {

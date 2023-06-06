@@ -189,7 +189,9 @@ impl Dom {
     pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
         let taffy_key = self.nodes[key].taffy();
         let mut style = self.taffy.style(taffy_key).unwrap().to_owned();
+        dbg!("start", &style.size.width);
         style.size.width = taffy::prelude::points(width as f32);
+        dbg!("end", &style.size.width);
         self.taffy.set_style(taffy_key, style).unwrap();
     }
 
@@ -244,6 +246,7 @@ impl Dom {
             fastn_runtime::UIProperty::MarginFixedPx => {
                 self.set_element_margin_px(key, value.i32())
             }
+            fastn_runtime::UIProperty::Event => {}
         }
     }
 
