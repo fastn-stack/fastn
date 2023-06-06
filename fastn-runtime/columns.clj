@@ -12,6 +12,7 @@
     (import "fastn" "set_property_f32" (func $set_property_f32 (param externref i32 f32)))
     (import "fastn" "set_boolean" (func $set_boolean (param externref i32) (result externref)))
     (import "fastn" "attach_event_handler" (func $attach_event_handler (param externref i32 i32 externref)))
+    (import "fastn" "get_func_arg_ref" (func $get_func_arg_ref (param externref i32) (result externref)))
     ;; set_dynamic_property_i32(element, prop, func, variables)
     ;; prop = 0 = fixed width in pixels etc
     ;; func = function to call, index in the table, func must return i32
@@ -167,12 +168,12 @@
         (call $create_frame)
         ;;     $ftd.set-bool($a=$any-hover, v=true)
         (call $set_boolean
-            (call $get_arg_ref (local.get $func-data) (i32.const 0))
+            (call $get_func_arg_ref (local.get $func-data) (i32.const 0))
              (i32.const 1)
         )
         ;;     $ftd.set-bool($a=$foo.on-hover, v=true)
         (call $set_boolean
-            (call $get_arg_ref (local.get $func-data) (i32.const 1))
+            (call $get_func_arg_ref (local.get $func-data) (i32.const 1))
              (i32.const 1)
         )
         (call $end_frame)
@@ -182,12 +183,12 @@
         (call $create_frame)
        ;;     $ftd.set-bool($a=$any-hover, v=false)
        (call $set_boolean
-             (call $get_arg_ref (local.get $func-data) (i32.const 0))
+             (call $get_func_arg_ref (local.get $func-data) (i32.const 0))
              (i32.const 0)
        )
        ;;     $ftd.set-bool($a=$foo.on-hover, v=false)
        (call $set_boolean
-             (call $get_arg_ref (local.get $func-data) (i32.const 1))
+             (call $get_func_arg_ref (local.get $func-data) (i32.const 1))
              (i32.const 0)
        )
         (call $end_frame)

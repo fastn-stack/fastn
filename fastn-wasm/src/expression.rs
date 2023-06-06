@@ -148,7 +148,7 @@ impl Expression {
             }
             Expression::Call { name, params } => {
                 let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();
-                format!("(call ${} {})", name, params_wat.join(" "))
+                format!("(call ${}{})", name, format!(" {}", params_wat.join(" ")))
             }
             Expression::CallIndirect { type_, params } => {
                 let params_wat: Vec<String> = params.iter().map(|p| p.to_wat()).collect();

@@ -374,9 +374,15 @@ fn create_columns() -> Vec<u8> {
             result: None,
             body: vec![
                 fastn_wasm::expression::call("create_frame"),
-                // fastn_wasm::expression::call2(
-                //     "set_boolean",
-                // ),
+                fastn_wasm::expression::call2(
+                    "set_boolean",
+                    fastn_wasm::expression::call2(
+                        "get_func_arg_ref",
+                        fastn_wasm::expression::local("func-data"),
+                        fastn_wasm::expression::i32(1),
+                    ),
+                    fastn_wasm::expression::i32(1),
+                ),
                 fastn_wasm::expression::call("end_frame"),
             ],
         }

@@ -466,7 +466,7 @@ impl Memory {
         self.add_dependent(ptr2, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
-        println!("{:?}", pointer);
+        println!("create_list_2 {:?}", pointer);
         pointer
     }
 
@@ -482,6 +482,7 @@ impl Memory {
     }
 
     pub fn set_boolean(&mut self, ptr: fastn_runtime::PointerKey, value: bool) {
+        dbg!("set_boolean", &value);
         self.boolean[ptr].value.set_value(value)
     }
 
@@ -544,6 +545,21 @@ impl Memory {
         self.insert_in_frame(pointer, PointerKind::Integer);
         println!("{:?}", pointer);
         pointer
+    }
+
+    pub fn get_func_arg_ref(
+        &self,
+        ptr: fastn_runtime::PointerKey,
+        idx: i32,
+    ) -> fastn_runtime::PointerKey {
+        self.vec
+            .get(ptr)
+            .unwrap()
+            .value
+            .value()
+            .get(idx as usize)
+            .unwrap()
+            .pointer
     }
 
     pub fn get_func_arg_i32(&self, ptr: fastn_runtime::PointerKey, idx: i32) -> i32 {
