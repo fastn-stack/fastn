@@ -942,7 +942,7 @@ impl Element {
                         .map(|(v, _)| v.variable.to_string())
                         .collect::<Vec<String>>();
                     parameters.insert(
-                        "dependents".to_string(),
+                        "children".to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
                                 value: serde_json::to_value(dependents).unwrap(),
