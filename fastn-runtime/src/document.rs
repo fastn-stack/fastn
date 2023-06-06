@@ -27,10 +27,10 @@ impl Document {
         }
     }
 
-    fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
+    fn handle_key(&mut self, code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
         use wasmtime::AsContextMut;
 
-        dbg!(&_code);
+        dbg!(&code);
 
         let memory = &self.store.data().memory;
         let closures = memory.closure.clone();
@@ -45,13 +45,13 @@ impl Document {
                 // Create a temporary variable to hold the export
                 let call_by_index_export = self
                     .instance
-                    .get_export(self.store.as_context_mut(), "call_by_index_without_return")
-                    .expect("call_by_index_without_return is not defined");
+                    .get_export(self.store.as_context_mut(), "void_by_index")
+                    .expect("void_by_index is not defined");
 
                 // Make the call using the temporary variable
                 call_by_index_export
                     .into_func()
-                    .expect("call_by_index_without_return not a func")
+                    .expect("void_by_index not a func")
                     .call(
                         self.store.as_context_mut(),
                         &[
@@ -62,7 +62,7 @@ impl Document {
                         ],
                         &mut [],
                     )
-                    .expect("call_by_index_without_return failed");
+                    .expect("void_by_index failed");
                 /*let pointer_vector = store
                     .memory
                     .vec
