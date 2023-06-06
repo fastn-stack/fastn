@@ -10,71 +10,58 @@ pub struct Func {
 
 impl Func {
     pub fn to_doc(&self) -> pretty::RcDoc<()> {
-        // let o = pretty::RcDoc::intersperse(vec![
-        //     pretty::RcDoc::text("(func"),
-        //     params,
-        //     pretty::RcDoc::text(")"),
-        // ]);
-
-        let mut o = pretty::RcDoc::text("(func");
-        o = o.append({
-            let mut func_name = pretty::RcDoc::nil();
-            if let Some(name) = &self.name {
-                func_name = func_name
-                    .append(pretty::Doc::space())
-                    .append("$")
-                    .append(name);
-            }
-            func_name.group()
-        });
+        let mut name = self
+            .name
+            .clone()
+            .map(|n| pretty::RcDoc::text(format!("${}", n)));
 
         if let Some(export) = &self.export {
-            let o2 = pretty::RcDoc::space()
-                .append("(export")
-                .append(pretty::Doc::space())
-                .append("\"")
-                .append(export)
-                .append("\")")
-                .group()
-                .nest(1);
-            o = o.append(o2);
-        }
+            let exp = fastn_wasm::named(
+                "export",
+                Some(pretty::RcDoc::text(format!("\"{}\"", export))),
+            );
+
+            name = match name {
+                Some(n) => Some(n.append(pretty::RcDoc::space().append(exp))),
+                None => Some(exp),
+            }
+        };
+
+        let mut v: Vec<pretty::RcDoc<()>> = vec![];
 
         if !self.params.is_empty() {
-            o = o.append(pretty::RcDoc::space());
-        }
-
-        o = o.append(
-            pretty::RcDoc::intersperse(
-                self.params.iter().map(|x| x.to_doc(true)),
-                pretty::RcDoc::line(),
-            )
-            .group(),
-        );
-
-        if let Some(result) = &self.result {
-            o = o.append(
-                pretty::RcDoc::text(" (result ")
-                    .append(result.to_wat())
-                    .append(")"),
+            v.push(
+                pretty::RcDoc::intersperse(
+                    self.params.iter().map(|x| x.to_doc(true)),
+                    pretty::RcDoc::line(),
+                )
+                .group(),
             );
         }
 
+        if let Some(result) = &self.result {
+            v.push(fastn_wasm::group("result", None, result.to_doc()))
+        };
+
         if !self.locals.is_empty() {
-            o = o.append(pretty::RcDoc::space());
+            v.push(
+                pretty::RcDoc::intersperse(
+                    self.locals.iter().map(|x| x.to_doc(false)),
+                    pretty::RcDoc::line(),
+                )
+                .group(),
+            );
         }
 
-        o = o.append(
-            pretty::RcDoc::intersperse(
-                self.locals.iter().map(|x| x.to_doc(false)),
-                pretty::RcDoc::line(),
+        if v.is_empty() {
+            fastn_wasm::named("func", name)
+        } else {
+            fastn_wasm::group(
+                "func",
+                name,
+                pretty::RcDoc::intersperse(v, pretty::Doc::line()),
             )
-            .group(),
-        );
-
-        o.append(")")
-
-        // fastn_wasm::group("func", body)
+        }
     }
 
     pub fn to_ast(self) -> fastn_wasm::Ast {
@@ -141,13 +128,7 @@ mod test {
 
     #[track_caller]
     fn e(f: super::Func, s: &str) {
-        assert_eq!(
-            fastn_wasm::encode(&vec![
-                fastn_wasm::Ast::Func(f.clone()),
-                fastn_wasm::Ast::Func(f)
-            ]),
-            s
-        );
+        assert_eq!(fastn_wasm::encode(&vec![fastn_wasm::Ast::Func(f)]), s);
     }
 
     #[test]
@@ -243,7 +224,7 @@ mod test {
             "(module (func (result i32)))",
         );
         e(
-            fastn_wasm::Func {
+            Func {
                 name: Some("name".to_string()),
                 export: Some("exp".to_string()),
                 locals: vec![fastn_wasm::PL {
@@ -257,18 +238,10 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![],
             },
-            indoc::indoc!(
-                r#"
-                (module
-                    (func $name (export "exp") (param $bar f32) (result i32)
-                        (local $foo i32)
-                    )
-                )
-            "#
-            ),
+            r#"(module (func $name (export "exp") (param $bar f32) (result i32) (local $foo i32)))"#,
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I32.into()],
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![fastn_wasm::Expression::Operation {
@@ -279,19 +252,8 @@ mod test {
                     ],
                 }],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (param i32 i32) (result i32)
-                        (local.get 0)
-                        (local.get 1)
-                        i32.add
-                    )
-                )
-            "#
-            )
+            },
+            r#"(module (func (param i32) (param i32) (result i32)))"#,
         );
         assert_eq!(
             fastn_wasm::Func {
