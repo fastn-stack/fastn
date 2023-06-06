@@ -40,7 +40,7 @@ impl Document {
             .map(|v| v.to_vec())
         {
             for event in dbg!(events) {
-                let closure = closures.get(event.closure).unwrap();
+                let closure = dbg!(closures.get(event.closure).unwrap());
 
                 // Create a temporary variable to hold the export
                 let call_by_index_export = self
@@ -57,7 +57,7 @@ impl Document {
                         &[
                             wasmtime::Val::I32(closure.function),
                             wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
-                                closure.captured_variables,
+                                closure.captured_variables.pointer,
                             ))),
                         ],
                         &mut [],
