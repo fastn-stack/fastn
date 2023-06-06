@@ -34,7 +34,7 @@ impl Document {
         let closures = memory.closure.clone();
 
         if let Some(events) = memory
-            .get_event_handlers(2.into(), None)
+            .get_event_handlers(fastn_runtime::DomEventKind::OnGlobalKey, None)
             .map(|v| v.to_vec())
         {
             for event in dbg!(events) {
