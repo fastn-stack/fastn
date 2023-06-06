@@ -6,7 +6,16 @@ pub struct Elem {
 
 impl Elem {
     pub fn to_doc(&self) -> pretty::RcDoc<()> {
-        todo!()
+        fastn_wasm::group(
+            "elem".to_string(),
+            Some(pretty::RcDoc::text(format!("(i32.const {})", self.start))),
+            pretty::RcDoc::intersperse(
+                self.fns
+                    .iter()
+                    .map(|v| pretty::RcDoc::text(format!("${}", v))),
+                pretty::RcDoc::space(),
+            ),
+        )
     }
 
     pub fn to_wat(&self) -> String {
@@ -22,15 +31,22 @@ impl Elem {
 
 #[cfg(test)]
 mod test {
+    #[track_caller]
+    fn e(f: super::Elem, s: &str) {
+        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Elem(f)]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             super::Elem {
                 start: 10,
-                fns: vec!["f1".to_string(), "foo".to_string()]
-            }
-            .to_wat(),
-            "(elem (i32.const 10) $f1 $foo)"
+                fns: vec!["f1".to_string(), "foo".to_string()],
+            },
+            "(module (elem (i32.const 10) $f1 $foo))",
         );
     }
 }
