@@ -62,6 +62,8 @@ impl Func {
                 pretty::RcDoc::intersperse(v, pretty::Doc::line()),
             )
         }
+        .group()
+        .nest(1)
     }
 
     pub fn to_ast(self) -> fastn_wasm::Ast {
@@ -238,7 +240,12 @@ mod test {
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![],
             },
-            r#"(module (func $name (export "exp") (param $bar f32) (result i32) (local $foo i32)))"#,
+            indoc::indoc!(
+                r#"
+                (module (func $name (export "exp") (param $bar f32)
+                  (result i32)
+                  (local $foo i32)))"#
+            ),
         );
         e(
             Func {
@@ -255,16 +262,19 @@ mod test {
             },
             r#"(module (func (param i32) (param i32) (result i32)))"#,
         );
-        assert_eq!(
-            fastn_wasm::Func {
+    }
+    #[test]
+    fn test2() {
+        e(
+            Func {
                 params: vec![
                     fastn_wasm::PL {
                         name: Some("lhs".to_string()),
-                        ty: fastn_wasm::Type::I32
+                        ty: fastn_wasm::Type::I32,
                     },
                     fastn_wasm::PL {
                         name: Some("rhs".to_string()),
-                        ty: fastn_wasm::Type::I32
+                        ty: fastn_wasm::Type::I32,
                     },
                 ],
                 result: Some(fastn_wasm::Type::I32),
@@ -280,8 +290,7 @@ mod test {
                     ],
                 }],
                 ..Default::default()
-            }
-            .to_wat(),
+            },
             indoc::indoc!(
                 r#"
                 (module
@@ -292,7 +301,7 @@ mod test {
                     )
                 )
             "#
-            )
+            ),
         );
         assert_eq!(
             fastn_wasm::Func {
