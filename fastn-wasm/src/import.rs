@@ -91,7 +91,7 @@ pub struct Import {
 }
 
 impl Import {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         todo!()
     }
 

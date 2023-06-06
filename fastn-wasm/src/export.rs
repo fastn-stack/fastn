@@ -18,7 +18,7 @@ pub fn func1(
 }
 
 impl Export {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         fastn_wasm::group(
             "export".to_string(),
             Some(pretty::RcDoc::text(format!("\"{}\"", self.name))),
@@ -49,7 +49,7 @@ pub enum ExportDesc {
 }
 
 impl ExportDesc {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         match self {
             ExportDesc::Func { index } => fastn_wasm::named("func", Some(index.to_doc())),
         }

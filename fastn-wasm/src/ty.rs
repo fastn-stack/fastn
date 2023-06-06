@@ -17,7 +17,7 @@ impl Type {
             ty: self,
         }
     }
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(match self {
             Type::I32 => "i32",
             Type::I64 => "i64",

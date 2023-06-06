@@ -5,7 +5,7 @@ pub struct Elem {
 }
 
 impl Elem {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         fastn_wasm::group(
             "elem".to_string(),
             Some(pretty::RcDoc::text(format!("(i32.const {})", self.start))),

@@ -9,7 +9,7 @@ pub struct Func {
 }
 
 impl Func {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         let mut name = self
             .name
             .clone()

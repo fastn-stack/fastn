@@ -21,7 +21,7 @@ impl Ast {
             Ast::FuncDef(g) => g.to_wat(),
         }
     }
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         match self {
             Ast::Func(f) => f.to_doc(),
             Ast::Import(i) => i.to_doc(),
