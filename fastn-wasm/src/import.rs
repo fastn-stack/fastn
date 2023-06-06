@@ -98,7 +98,7 @@ impl Import {
                 "\"{}\" \"{}\"",
                 self.module, self.name
             ))),
-            self.desc.to_doc(),
+            self.desc.to_doc().group().nest(4),
         )
     }
 }

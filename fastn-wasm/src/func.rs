@@ -77,7 +77,7 @@ impl Func {
             )
         }
         .group()
-        .nest(1)
+        .nest(4)
     }
 
     pub fn to_ast(self) -> fastn_wasm::Ast {
@@ -226,8 +226,8 @@ mod test {
             indoc::indoc!(
                 r#"
                 (module (func $name (export "exp") (param $bar f32)
-                  (result i32)
-                  (local $foo i32)))"#
+                        (result i32)
+                        (local $foo i32)))"#
             ),
         );
         e(
@@ -246,8 +246,8 @@ mod test {
             indoc::indoc!(
                 r#"
                     (module (func (param i32) (param i32)
-                      (result i32)
-                      (i32.add (local.get 0) (local.get 1))))"#,
+                            (result i32)
+                            (i32.add (local.get 0) (local.get 1))))"#,
             ),
         );
         e(
@@ -279,8 +279,8 @@ mod test {
             indoc::indoc!(
                 r#"
                 (module (func (param $lhs i32) (param $rhs i32)
-                  (result i32)
-                  (i32.add (local.get $lhs) (local.get $rhs))))"#
+                        (result i32)
+                        (i32.add (local.get $lhs) (local.get $rhs))))"#
             ),
         );
         e(
@@ -333,16 +333,16 @@ mod test {
             indoc::indoc!(
                 r#"
                 (module (func (export "main") (result i32)
-                  (local $column i32) (local $root i32)
-                  (local.set $root (call $root_container ))
-                  (call $foo (local.get $root)
-                  (i32.const $100)
-                  (i32.const $100))
-                  (drop)
-                  (call $foo (local.get $root)
-                  (i32.const $200)
-                  (i32.const $300))
-                  (drop)))"#
+                        (local $column i32) (local $root i32)
+                        (local.set $root (call $root_container))
+                        (call $foo (local.get $root)
+                            (i32.const 100)
+                            (i32.const 100))
+                        (drop)
+                        (call $foo (local.get $root)
+                            (i32.const 200)
+                            (i32.const 300))
+                        (drop)))"#
             ),
         );
     }

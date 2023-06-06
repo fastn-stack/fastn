@@ -151,22 +151,39 @@ impl Expression {
                     pretty::RcDoc::space(),
                 ),
             ),
-            Expression::Call { name, params } => fastn_wasm::group(
-                "call".to_string(),
-                Some(pretty::RcDoc::text(format!("${}", name))),
-                pretty::RcDoc::intersperse(
-                    params.iter().map(|v| v.to_doc()),
-                    pretty::RcDoc::line(),
-                ),
-            ),
-            Expression::CallIndirect { type_, params } => fastn_wasm::group(
-                "call_indirect".to_string(),
-                Some(pretty::RcDoc::text(format!("(type ${})", type_))),
-                pretty::RcDoc::intersperse(
-                    params.iter().map(|v| v.to_doc()),
-                    pretty::RcDoc::line(),
-                ),
-            ),
+            Expression::Call { name, params } => {
+                if params.is_empty() {
+                    fastn_wasm::named("call", Some(pretty::RcDoc::text(format!("${}", name))))
+                } else {
+                    fastn_wasm::group(
+                        "call".to_string(),
+                        Some(pretty::RcDoc::text(format!("${}", name))),
+                        pretty::RcDoc::intersperse(
+                            params.iter().map(|v| v.to_doc()),
+                            pretty::RcDoc::line(),
+                        ),
+                    )
+                    .nest(4)
+                }
+            }
+            Expression::CallIndirect { type_, params } => {
+                if params.is_empty() {
+                    fastn_wasm::named(
+                        "call_indirect",
+                        Some(pretty::RcDoc::text(format!("(type ${})", type_))),
+                    )
+                } else {
+                    fastn_wasm::group(
+                        "call_indirect".to_string(),
+                        Some(pretty::RcDoc::text(format!("(type ${})", type_))),
+                        pretty::RcDoc::intersperse(
+                            params.iter().map(|v| v.to_doc()),
+                            pretty::RcDoc::line(),
+                        )
+                        .nest(4),
+                    )
+                }
+            }
             Expression::Drop => pretty::RcDoc::text("(drop)"),
         }
     }

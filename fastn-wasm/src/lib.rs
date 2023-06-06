@@ -1,3 +1,4 @@
+extern crate core;
 extern crate self as fastn_wasm;
 
 mod ast;
@@ -54,7 +55,7 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
         "module".to_string(),
         None,
         pretty::RcDoc::intersperse(module.iter().map(|x| x.to_doc()), pretty::Doc::line())
-            .nest(1)
+            .nest(4)
             .group(),
     );
     o.render(80, &mut w).unwrap();
