@@ -5,7 +5,7 @@ pub struct Memory {
 }
 
 impl Memory {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         todo!()
     }
 

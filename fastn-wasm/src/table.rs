@@ -71,7 +71,7 @@ pub fn table_4(
 }
 
 impl Table {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         todo!()
     }
 

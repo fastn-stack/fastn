@@ -37,8 +37,20 @@ pub fn func2ret(
 }
 
 impl FuncDef {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
-        todo!()
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
+        let d = fastn_wasm::Func {
+            name: self.decl.name.to_owned(),
+            params: self.decl.params.to_owned(),
+            result: self.decl.result.to_owned(),
+            ..Default::default()
+        }
+        .to_doc();
+
+        fastn_wasm::group(
+            "type".to_string(),
+            Some(pretty::RcDoc::text(format!("${}", self.name))),
+            d,
+        )
     }
 
     pub fn to_wat(&self) -> String {
@@ -56,16 +68,23 @@ impl FuncDef {
 
 #[cfg(test)]
 mod test {
+    #[track_caller]
+    fn e(f: fastn_wasm::Ast, s: &str) {
+        let g = fastn_wasm::encode_new(&vec![f]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             super::func1ret(
                 "return_externref",
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::ExternRef,
-            )
-            .to_wat(),
-            "(type $return_externref (func (param externref) (result externref)))"
+            ),
+            "(module (type $return_externref (func (param externref) (result externref))))",
         );
     }
 }

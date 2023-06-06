@@ -118,7 +118,7 @@ pub fn call4(
 }
 
 impl Expression {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         match self {
             Expression::GlobalSet { index, value } => fastn_wasm::group(
                 "global.set".to_string(),
@@ -230,7 +230,7 @@ impl From<&str> for Index {
 }
 
 impl Index {
-    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(self.to_wat())
     }
 

@@ -35,11 +35,11 @@ pub fn named<'a>(kind: &'static str, name: Option<pretty::RcDoc<'a, ()>>) -> pre
     g1.append(")")
 }
 
-pub fn group<'a>(
+pub fn group(
     kind: String,
-    name: Option<pretty::RcDoc<'a, ()>>,
-    body: pretty::RcDoc<'a, ()>,
-) -> pretty::RcDoc<'a, ()> {
+    name: Option<pretty::RcDoc<'static>>,
+    body: pretty::RcDoc<'static>,
+) -> pretty::RcDoc<'static> {
     dbg!(&kind, &name, &body);
 
     let mut g1 = pretty::RcDoc::text("(").append(kind);
