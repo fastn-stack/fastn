@@ -40,7 +40,11 @@ impl Func {
         }
 
         if let Some(result) = &self.result {
-            v.push(fastn_wasm::group("result", None, result.to_doc()))
+            v.push(fastn_wasm::group(
+                "result".to_string(),
+                None,
+                result.to_doc(),
+            ))
         };
 
         if !self.locals.is_empty() {
@@ -53,11 +57,21 @@ impl Func {
             );
         }
 
+        if !self.body.is_empty() {
+            v.push(
+                pretty::RcDoc::intersperse(
+                    self.body.iter().map(|x| x.to_doc()),
+                    pretty::RcDoc::line(),
+                )
+                .group(),
+            );
+        }
+
         if v.is_empty() {
             fastn_wasm::named("func", name)
         } else {
             fastn_wasm::group(
-                "func",
+                "func".to_string(),
                 name,
                 pretty::RcDoc::intersperse(v, pretty::Doc::line()),
             )
@@ -130,7 +144,10 @@ mod test {
 
     #[track_caller]
     fn e(f: super::Func, s: &str) {
-        assert_eq!(fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Func(f)]), s);
+        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Func(f)]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
     }
 
     #[test]
@@ -260,11 +277,13 @@ mod test {
                 }],
                 ..Default::default()
             },
-            r#"(module (func (param i32) (param i32) (result i32)))"#,
+            indoc::indoc!(
+                r#"
+                    (module (func (param i32) (param i32)
+                      (result i32)
+                      (i32.add (local.get 0) (local.get 1))))"#,
+            ),
         );
-    }
-    #[test]
-    fn test2() {
         e(
             Func {
                 params: vec![
@@ -293,27 +312,22 @@ mod test {
             },
             indoc::indoc!(
                 r#"
-                (module
-                    (func (param $lhs i32) (param $rhs i32) (result i32)
-                        (local.get $lhs)
-                        (local.get $rhs)
-                        i32.add
-                    )
-                )
-            "#
+                (module (func (param $lhs i32) (param $rhs i32)
+                  (result i32)
+                  (i32.add (local.get $lhs) (local.get $rhs))))"#
             ),
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 export: Some("main".to_string()),
                 locals: vec![
                     fastn_wasm::PL {
                         name: Some("column".to_string()),
-                        ty: fastn_wasm::Type::I32
+                        ty: fastn_wasm::Type::I32,
                     },
                     fastn_wasm::PL {
                         name: Some("root".to_string()),
-                        ty: fastn_wasm::Type::I32
+                        ty: fastn_wasm::Type::I32,
                     },
                 ],
                 result: Some(fastn_wasm::Type::I32),
@@ -322,57 +336,48 @@ mod test {
                         index: "root".into(),
                         value: Box::new(fastn_wasm::Expression::Call {
                             name: "root_container".to_string(),
-                            params: vec![]
+                            params: vec![],
                         }),
                     },
                     fastn_wasm::Expression::Call {
                         name: "foo".to_string(),
                         params: vec![
                             fastn_wasm::Expression::LocalGet {
-                                index: "root".into()
+                                index: "root".into(),
                             },
                             fastn_wasm::Expression::I32Const(100),
-                            fastn_wasm::Expression::I32Const(100)
-                        ]
+                            fastn_wasm::Expression::I32Const(100),
+                        ],
                     },
                     fastn_wasm::Expression::Drop,
                     fastn_wasm::Expression::Call {
                         name: "foo".to_string(),
                         params: vec![
                             fastn_wasm::Expression::LocalGet {
-                                index: "root".into()
+                                index: "root".into(),
                             },
                             fastn_wasm::Expression::I32Const(200),
-                            fastn_wasm::Expression::I32Const(300)
-                        ]
+                            fastn_wasm::Expression::I32Const(300),
+                        ],
                     },
                     fastn_wasm::Expression::Drop,
                 ],
                 ..Default::default()
-            }
-            .to_wat(),
+            },
             indoc::indoc!(
                 r#"
-                (module
-                    (func (export "main") (result i32)
-                        (local $column i32)
-                        (local $root i32)
-                        (call $root_container)
-                        (local.set $root)
-                        (local.get $root)
-                        (i32.const 100)
-                        (i32.const 100)
-                        (call $foo)
-                        drop
-                        (local.get $root)
-                        (i32.const 200)
-                        (i32.const 300)
-                        (call $foo)
-                        drop
-                    )
-                )
-            "#
-            )
+                (module (func (export "main") (result i32)
+                  (local $column i32) (local $root i32)
+                  (local.set $root (call $root_container ))
+                  (call $foo (local.get $root)
+                  (i32.const $100)
+                  (i32.const $100))
+                  (drop)
+                  (call $foo (local.get $root)
+                  (i32.const $200)
+                  (i32.const $300))
+                  (drop)))"#
+            ),
         );
     }
 }
