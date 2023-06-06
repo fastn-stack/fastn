@@ -217,6 +217,12 @@ impl fastn_runtime::Memory {
                 fastn_wasm::Type::ExternRef.into(),
                 fastn_wasm::Type::I32.into(),
             ),
+            fastn_wasm::import::func2ret(
+                "get_func_arg_ref",
+                fastn_wasm::Type::ExternRef.into(),
+                fastn_wasm::Type::I32.into(),
+                fastn_wasm::Type::ExternRef,
+            ),
             fastn_wasm::import::func1ret(
                 "create_i32",
                 fastn_wasm::Type::I32.into(),
@@ -364,6 +370,10 @@ impl fastn_runtime::Memory {
         linker.func2ret(
             "get_func_arg_i32",
             |mem: &mut fastn_runtime::Memory, ptr, idx| mem.get_func_arg_i32(ptr, idx),
+        );
+        linker.func2ret(
+            "get_func_arg_ref",
+            |mem: &mut fastn_runtime::Memory, ptr, idx| mem.get_func_arg_ref(ptr, idx),
         );
         linker.func4(
             "attach_event_handler",

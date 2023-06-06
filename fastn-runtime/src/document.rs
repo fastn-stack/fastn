@@ -46,12 +46,12 @@ impl Document {
                 let call_by_index_export = self
                     .instance
                     .get_export(self.store.as_context_mut(), "call_by_index_without_return")
-                    .expect("call_by_index is not defined");
+                    .expect("call_by_index_without_return is not defined");
 
                 // Make the call using the temporary variable
                 call_by_index_export
                     .into_func()
-                    .expect("call_by_index not a func")
+                    .expect("call_by_index_without_return not a func")
                     .call(
                         self.store.as_context_mut(),
                         &[
@@ -62,7 +62,7 @@ impl Document {
                         ],
                         &mut [],
                     )
-                    .expect("call failed");
+                    .expect("call_by_index_without_return failed");
                 /*let pointer_vector = store
                     .memory
                     .vec
