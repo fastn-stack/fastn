@@ -13,7 +13,7 @@ pub struct HeapData<T> {
 }
 
 /// This is the data we store in the heap for any value.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum HeapValue<T> {
     Value(T),
 

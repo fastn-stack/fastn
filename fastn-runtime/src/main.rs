@@ -313,7 +313,7 @@ fn create_columns() -> Vec<u8> {
                 fastn_wasm::expression::call4(
                     "attach_event_handler",
                     fastn_wasm::expression::local("column"),
-                    fastn_wasm::expression::i32(fastn_runtime::DomEventKind::OnMouseEnter.into()),
+                    fastn_wasm::expression::i32(fastn_runtime::DomEventKind::OnGlobalKey.into()),
                     fastn_wasm::expression::i32(1), // table index (on-mouse-enter)
                     fastn_wasm::expression::call4(
                         "create_list_2",

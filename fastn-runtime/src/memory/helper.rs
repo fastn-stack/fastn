@@ -11,4 +11,16 @@ impl fastn_runtime::Memory {
         }
         None
     }
+
+    pub(crate) fn get_heapdata_from_pointer(&self, _pointer: fastn_runtime::Pointer) {
+        /* match pointer.kind {
+            fastn_runtime::PointerKind::Boolean => self.boolean.get()
+            fastn_runtime::PointerKind::Integer => {}
+            fastn_runtime::PointerKind::Record => {}
+            fastn_runtime::PointerKind::OrType => {}
+            fastn_runtime::PointerKind::Decimal => {}
+            fastn_runtime::PointerKind::List => {}
+            fastn_runtime::PointerKind::String => {}
+        }*/
+    }
 }
