@@ -386,7 +386,7 @@ fn create_columns() -> Vec<u8> {
                         fastn_wasm::expression::local("func-data"),
                         fastn_wasm::expression::i32(1),
                     ),
-                    fastn_wasm::expression::i32(1),
+                    fastn_wasm::expression::i32(20),
                 ),
                 fastn_wasm::expression::call("end_frame"),
             ],
