@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Expression {
     GlobalSet {
         index: Index,
@@ -163,7 +163,7 @@ impl Expression {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Index {
     Index(i32),
     Variable(String),
