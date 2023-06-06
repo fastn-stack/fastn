@@ -92,7 +92,14 @@ pub struct Import {
 
 impl Import {
     pub fn to_doc(&self) -> pretty::RcDoc<'static> {
-        todo!()
+        fastn_wasm::group(
+            "import".to_string(),
+            Some(pretty::RcDoc::text(format!(
+                "\"{}\" \"{}\"",
+                self.module, self.name
+            ))),
+            self.desc.to_doc(),
+        )
     }
 
     pub fn to_wat(&self) -> String {
@@ -122,6 +129,14 @@ pub enum ImportDesc {
 }
 
 impl ImportDesc {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
+        match self {
+            ImportDesc::Func(f) => f.to_doc(),
+            ImportDesc::Table(t) => t.to_doc(),
+            ImportDesc::Memory(m) => m.to_doc(),
+        }
+    }
+
     pub fn to_wat(&self) -> String {
         match self {
             ImportDesc::Func(f) => f.to_wat(),
@@ -133,9 +148,19 @@ impl ImportDesc {
 
 #[cfg(test)]
 mod test {
+    use fastn_wasm::Import;
+
+    #[track_caller]
+    fn e(f: Import, s: &str) {
+        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Import(f)]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             fastn_wasm::Import {
                 module: "fastn".to_string(),
                 name: "create_column".to_string(),
@@ -144,17 +169,10 @@ mod test {
                     params: vec![],
                     result: Some(fastn_wasm::Type::I32),
                 }),
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (import "fastn" "create_column" (func $create_column (result i32)))
-                )
-            "#
-            )
+            },
+            r#"(module (import "fastn" "create_column" (func $create_column (result i32))))"#,
         );
-        assert_eq!(
+        e(
             fastn_wasm::Import {
                 module: "js".to_string(),
                 name: "table".to_string(),
@@ -162,15 +180,8 @@ mod test {
                     ref_type: fastn_wasm::RefType::Func,
                     limits: fastn_wasm::Limits { min: 1, max: None },
                 }),
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (import "js" "table" (table 1 funcref))
-                )
-            "#
-            )
+            },
+            r#"(module (import "js" "table" (table 1 funcref)))"#,
         );
     }
 }

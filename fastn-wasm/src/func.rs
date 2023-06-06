@@ -127,6 +127,16 @@ pub struct FuncDecl {
 }
 
 impl FuncDecl {
+    pub fn to_doc(&self) -> pretty::RcDoc<'static> {
+        fastn_wasm::Func {
+            name: self.name.to_owned(),
+            params: self.params.to_owned(),
+            result: self.result.to_owned(),
+            ..Default::default()
+        }
+        .to_doc()
+    }
+
     pub fn to_wat(&self) -> String {
         fastn_wasm::Func {
             name: self.name.to_owned(),
@@ -143,7 +153,7 @@ mod test {
     use super::Func;
 
     #[track_caller]
-    fn e(f: super::Func, s: &str) {
+    fn e(f: Func, s: &str) {
         let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Func(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
