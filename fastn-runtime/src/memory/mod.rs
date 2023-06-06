@@ -219,12 +219,12 @@ impl Memory {
 
     pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
         let dependents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().dependents,
-            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().dependents,
+            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().children,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().children,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().children,
+            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().children,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
-                &mut self.vec.get_mut(target.pointer).unwrap().dependents
+                &mut self.vec.get_mut(target.pointer).unwrap().children
             }
         };
 
@@ -248,27 +248,27 @@ impl Memory {
         let (dependents, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
                 let b = self.boolean.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
             PointerKind::Integer => {
                 let b = self.i32.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
             PointerKind::Record | PointerKind::List => {
                 let b = self.vec.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
             PointerKind::OrType => {
                 let b = self.or_type.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
             PointerKind::Decimal => {
                 let b = self.f32.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
             PointerKind::String => {
                 let b = self.string.get(pointer.pointer).unwrap();
-                (&b.dependents, &b.ui_properties)
+                (&b.children, &b.ui_properties)
             }
         };
 

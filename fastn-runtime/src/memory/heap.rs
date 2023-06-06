@@ -6,8 +6,8 @@ pub struct HeapData<T> {
     /// The inner value being stored in ftd
     pub value: HeapValue<T>,
     /// the list of values that depend on this, eg if we add x to a list l, we also do a
-    /// x.dependents.add(l)
-    pub dependents: Vec<fastn_runtime::memory::Pointer>,
+    /// x.children.add(l)
+    pub children: Vec<fastn_runtime::memory::Pointer>,
     /// whenever a dom node is added or deleted, it is added or removed from this list.
     pub ui_properties: Vec<fastn_runtime::memory::DynamicProperty>,
 }
@@ -34,7 +34,7 @@ impl<T> HeapData<T> {
     pub(crate) fn new(value: HeapValue<T>) -> HeapData<T> {
         HeapData {
             value,
-            dependents: vec![],
+            children: vec![],
             ui_properties: vec![],
         }
     }
