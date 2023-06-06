@@ -8,4 +8,3 @@ indoc.workspace = true
 wasmtime.workspace = true
 itertools.workspace = true
 pretty.workspace = true
-wasmfmt.workspace = true
