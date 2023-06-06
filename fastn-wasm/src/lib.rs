@@ -27,25 +27,39 @@ pub use pl::PL;
 pub use table::{table, table_1, table_2, table_3, table_4, Limits, RefType, Table};
 pub use ty::Type;
 
-pub fn group<'a>(name: &'static str, body: pretty::RcDoc<'a, ()>) -> pretty::RcDoc<'a, ()> {
-    pretty::RcDoc::intersperse(
-        vec![
-            pretty::RcDoc::text("(").append(name),
-            body,
-            pretty::RcDoc::text(")"),
-        ],
-        pretty::Doc::line(),
-    )
+pub fn named<'a>(kind: &'static str, name: Option<pretty::RcDoc<'a, ()>>) -> pretty::RcDoc<'a, ()> {
+    let mut g1 = pretty::RcDoc::text("(").append(kind);
+    if let Some(name) = name {
+        g1 = g1.append(pretty::Doc::space()).append(name);
+    }
+    g1.append(")")
 }
+
+pub fn group<'a>(
+    kind: &'static str,
+    name: Option<pretty::RcDoc<'a, ()>>,
+    body: pretty::RcDoc<'a, ()>,
+) -> pretty::RcDoc<'a, ()> {
+    dbg!(&kind, &name, &body);
+
+    let mut g1 = pretty::RcDoc::text("(").append(kind);
+    if let Some(name) = name {
+        g1 = g1.append(pretty::Doc::space()).append(name);
+    }
+
+    pretty::RcDoc::intersperse(vec![g1, body], pretty::Doc::space()).append(")")
+}
+
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let mut w = Vec::new();
     let o = group(
         "module",
+        None,
         pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
             .nest(1)
             .group(),
     );
-    o.render(50, &mut w).unwrap();
+    o.render(80, &mut w).unwrap();
     let o = String::from_utf8(w).unwrap();
     println!("{}", o);
     o
