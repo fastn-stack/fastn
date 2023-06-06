@@ -466,7 +466,6 @@ impl Memory {
         self.add_dependent(ptr2, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
-        println!("create_list_2 {:?}", pointer);
         pointer
     }
 
@@ -482,7 +481,6 @@ impl Memory {
     }
 
     pub fn set_boolean(&mut self, ptr: fastn_runtime::PointerKey, value: bool) {
-        dbg!("set_boolean", &value);
         self.boolean[ptr].value.set_value(value)
     }
 
