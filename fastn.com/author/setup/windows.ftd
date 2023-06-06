@@ -84,6 +84,12 @@ If you see the Help text of the fastn command, it confirms that `fastn` is
 successfully installed.
 
 
+-- ds.h2: Common errors to avoid
+
+- While renaming the file name make sure to write `fastn` and not `fastn.exe`
+- Check that your machine has the latest version of `fastn`
+- Make sure to start a fresh session of command prompt, to verify the 
+  installation
 
 -- cbox.tip: Tip
 

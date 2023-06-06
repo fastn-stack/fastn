@@ -25,12 +25,7 @@ if: { show-planning }
 
 1. Select a color-scheme
 2. Add the package in your fastn project
-3. Use the property `colors` in the component page
-
-A well-chosen color scheme is a powerful tool in website creation. It enhances
-the visual appeal, reinforces branding, improves readability and accessibility,
-engages users, promotes navigation, and creates a cohesive and meaningful user
-experience.
+3. Use the `colors` property in the component page
 
 
 -- ds.h1: Introduction
@@ -44,10 +39,15 @@ Today we learn how to add or change the color-scheme in doc-site
 if: { show-planning }
 src: $fastn-assets.files.expander.ds.img.cs-intro.png
 
+-- ds.markdown:
+
+A well-chosen color scheme is a powerful tool in website creation. It enhances
+the visual appeal, reinforces branding, improves readability and accessibility,
+engages users, promotes navigation, and creates a cohesive and meaningful user
+experience.
 
 -- ds.h1: Introduction
 if: { !show-planning }
-
 
 A color scheme in website creation refers to the selection and arrangement of
 colors used in a design. It is important because it enhances visual appeal,
@@ -61,7 +61,6 @@ overstated as it significantly impacts the overall user experience and
 perception of the site.
 
 `color-scheme` is added through a property of page component of `doc-site`.
-
 
 -- ds.h1: Adding color-scheme
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
@@ -80,37 +79,36 @@ The three steps to adding a color-scheme are:
 
 -- ds.markdown:
 
-- **Add the package in your project**
+- **Add the color-scheme in your project**
 
 -- ds.code: **A:** Add it as a dependency in `FASTN.ftd` document
-lang: ftd
+
 
 \-- fastn.dependency: fastn-community.github.io/winter-cs as my-cs
 
 
 -- ds.code: **B:** Import `my-cs` 
-lang: ftd
 
 \-- import: my-cs
 
 -- ds.markdown:
 
-- **Use the property `colors` of the doc-site's page component**
+- **Use the `colors` property of the `ds.page` component**
 
+  In the previous video, we created a custom component page in the `my-ds`
+  document.
 
-  We have created the custom component page in the `my-ds` document in the
-  previous video. 
-
-  Just to highlight the benefit of this is, that we need not to add the
-  color-scheme individually in each and every page, instead adding the color-scheme
-  once and using the my-ds.page, we will have this color-scheme in all the pages
-  where we are using `my-ds.page`.
+  To highlight the benefit of this approach, there's no need to individually 
+  add the color-scheme to each page. 
+  Instead, by adding the color-scheme once and using `my-ds.page`, the 
+  color-scheme will be applied to all pages that utilize `my-ds.page`.
 
   And if one decides to go for another color-scheme, then changing it once in
   my-ds document will reflect the new color-scheme across the website.
 
--- ds.code: `colors` property
+-- ds.code: Using `colors` property
 lang: ftd
+download: my-ds.ftd
 
 \-- component page:
 optional caption title:
