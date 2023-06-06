@@ -128,7 +128,7 @@ mod test {
 
     #[track_caller]
     fn e(f: super::Func, s: &str) {
-        assert_eq!(fastn_wasm::encode(&vec![fastn_wasm::Ast::Func(f)]), s);
+        assert_eq!(fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Func(f)]), s);
     }
 
     #[test]

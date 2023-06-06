@@ -50,7 +50,7 @@ pub fn group<'a>(
     pretty::RcDoc::intersperse(vec![g1, body], pretty::Doc::space()).append(")")
 }
 
-pub fn encode(module: &[fastn_wasm::Ast]) -> String {
+pub fn encode_new(module: &[fastn_wasm::Ast]) -> String {
     let mut w = Vec::new();
     let o = group(
         "module",
@@ -63,4 +63,15 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let o = String::from_utf8(w).unwrap();
     println!("{}", o);
     o
+}
+
+pub fn encode(module: &[fastn_wasm::Ast]) -> String {
+    let mut s = String::new();
+    s.push_str("(module\n");
+    for node in module {
+        s.push_str(&node.to_wat());
+        s.push('\n');
+    }
+    s.push(')');
+    s
 }
