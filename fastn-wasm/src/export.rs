@@ -19,7 +19,11 @@ pub fn func1(
 
 impl Export {
     pub fn to_doc(&self) -> pretty::RcDoc<()> {
-        todo!()
+        fastn_wasm::group(
+            "export".to_string(),
+            Some(pretty::RcDoc::text(format!("\"{}\"", self.name))),
+            self.desc.to_doc(),
+        )
     }
 
     pub fn to_wat(&self) -> String {
@@ -45,6 +49,11 @@ pub enum ExportDesc {
 }
 
 impl ExportDesc {
+    pub fn to_doc(&self) -> pretty::RcDoc<()> {
+        match self {
+            ExportDesc::Func { index } => fastn_wasm::named("func", Some(index.to_doc())),
+        }
+    }
     pub fn to_wat(&self) -> String {
         match self {
             ExportDesc::Func { index } => format!("(func {})", index.to_wat()),
@@ -54,23 +63,24 @@ impl ExportDesc {
 
 #[cfg(test)]
 mod test {
+    #[track_caller]
+    fn e(f: fastn_wasm::Export, s: &str) {
+        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Export(f)]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             fastn_wasm::Export {
                 name: "add".to_string(),
                 desc: fastn_wasm::ExportDesc::Func {
-                    index: "add".into()
+                    index: "add".into(),
                 },
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (export "add" (func $add))
-                )
-            "#
-            )
+            },
+            r#"(module (export "add" (func $add)))"#,
         );
     }
 }
