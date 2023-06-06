@@ -28,8 +28,6 @@ impl Document {
     }
 
     fn handle_key(&mut self, code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
-        use wasmtime::AsContextMut;
-
         dbg!(&code);
 
         let memory = &self.store.data().memory;
@@ -45,7 +43,7 @@ impl Document {
                 // Create a temporary variable to hold the export
                 let call_by_index_export = self
                     .instance
-                    .get_export(self.store.as_context_mut(), "void_by_index")
+                    .get_export(&mut self.store, "void_by_index")
                     .expect("void_by_index is not defined");
 
                 // Make the call using the temporary variable
@@ -53,7 +51,7 @@ impl Document {
                     .into_func()
                     .expect("void_by_index not a func")
                     .call(
-                        self.store.as_context_mut(),
+                        &mut self.store,
                         &[
                             wasmtime::Val::I32(closure.function),
                             wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
