@@ -108,17 +108,6 @@ impl Import {
         let desc_wat = self.desc.to_wat();
         format!("(import \"{}\" \"{}\" {})", module_wat, name_wat, desc_wat)
     }
-
-    #[cfg(test)]
-    pub fn to_wat_formatted(&self) -> String {
-        wasmfmt::fmt(
-            &self.to_wat(),
-            wasmfmt::Options {
-                resolve_names: false,
-            },
-        )
-        .replace("\t", "    ")
-    }
 }
 
 #[derive(Debug)]

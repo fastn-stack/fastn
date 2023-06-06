@@ -84,17 +84,6 @@ impl Table {
         let ref_type_wat = self.ref_type.to_wat();
         format!("(table {} {})", limits_wat, ref_type_wat)
     }
-
-    #[cfg(test)]
-    pub fn to_wat_formatted(&self) -> String {
-        wasmfmt::fmt(
-            &self.to_wat(),
-            wasmfmt::Options {
-                resolve_names: false,
-            },
-        )
-        .replace("\t", "    ")
-    }
 }
 
 #[derive(Debug)]
@@ -139,38 +128,32 @@ impl RefType {
 
 #[cfg(test)]
 mod test {
+    #[track_caller]
+    fn e(f: fastn_wasm::Table, s: &str) {
+        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Table(f)]);
+        println!("got: {}", g);
+        println!("expected: {}", s);
+        assert_eq!(g, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             fastn_wasm::Table {
                 ref_type: fastn_wasm::RefType::Func,
                 limits: fastn_wasm::Limits { min: 2, max: None },
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (table 2 funcref)
-                )
-            "#
-            )
+            },
+            "(module (table 2 funcref))",
         );
-        assert_eq!(
+        e(
             fastn_wasm::Table {
                 ref_type: fastn_wasm::RefType::Func,
                 limits: fastn_wasm::Limits {
                     min: 2,
-                    max: Some(5)
+                    max: Some(5),
                 },
-            }
-            .to_wat_formatted(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (table 2 5 funcref)
-                )
-            "#
-            )
+            },
+            "(module (table 2 5 funcref))",
         );
     }
 }

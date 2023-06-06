@@ -30,17 +30,6 @@ impl Export {
         let desc_wat = self.desc.to_wat();
         format!("(export \"{}\" {})", self.name, desc_wat)
     }
-
-    #[cfg(test)]
-    pub fn to_wat_formatted(&self) -> String {
-        wasmfmt::fmt(
-            &self.to_wat(),
-            wasmfmt::Options {
-                resolve_names: false,
-            },
-        )
-        .replace("\t", "    ")
-    }
 }
 
 #[derive(Debug)]
