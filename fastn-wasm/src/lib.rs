@@ -40,8 +40,6 @@ pub fn group(
     name: Option<pretty::RcDoc<'static>>,
     body: pretty::RcDoc<'static>,
 ) -> pretty::RcDoc<'static> {
-    dbg!(&kind, &name, &body);
-
     let mut g1 = pretty::RcDoc::text("(").append(kind);
     if let Some(name) = name {
         g1 = g1.append(pretty::Doc::space()).append(name);
@@ -55,12 +53,10 @@ pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let o = group(
         "module".to_string(),
         None,
-        pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
+        pretty::RcDoc::intersperse(module.iter().map(|x| x.to_doc()), pretty::Doc::line())
             .nest(1)
             .group(),
     );
     o.render(80, &mut w).unwrap();
-    let o = String::from_utf8(w).unwrap();
-    println!("{}", o);
-    o
+    String::from_utf8(w).unwrap()
 }

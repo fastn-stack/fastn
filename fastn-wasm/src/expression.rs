@@ -131,22 +131,18 @@ impl Expression {
                 value.to_doc(),
             ),
             Expression::LocalGet { index } => fastn_wasm::named("local.get", Some(index.to_doc())),
-            Expression::I32Const(value) => fastn_wasm::named(
-                "i32.const",
-                Some(pretty::RcDoc::text(format!("${}", value))),
-            ),
-            Expression::I64Const(value) => fastn_wasm::named(
-                "i64.const",
-                Some(pretty::RcDoc::text(format!("${}", value))),
-            ),
-            Expression::F32Const(value) => fastn_wasm::named(
-                "f32.const",
-                Some(pretty::RcDoc::text(format!("${}", value))),
-            ),
-            Expression::F64Const(value) => fastn_wasm::named(
-                "f64.const",
-                Some(pretty::RcDoc::text(format!("${}", value))),
-            ),
+            Expression::I32Const(value) => {
+                fastn_wasm::named("i32.const", Some(pretty::RcDoc::text(value.to_string())))
+            }
+            Expression::I64Const(value) => {
+                fastn_wasm::named("i64.const", Some(pretty::RcDoc::text(value.to_string())))
+            }
+            Expression::F32Const(value) => {
+                fastn_wasm::named("f32.const", Some(pretty::RcDoc::text(value.to_string())))
+            }
+            Expression::F64Const(value) => {
+                fastn_wasm::named("f64.const", Some(pretty::RcDoc::text(value.to_string())))
+            }
             Expression::Operation { name, values } => fastn_wasm::group(
                 name.to_string(),
                 None,
