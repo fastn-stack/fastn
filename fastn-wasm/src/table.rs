@@ -78,12 +78,6 @@ impl Table {
             self.ref_type.to_doc(),
         )
     }
-
-    pub fn to_wat(&self) -> String {
-        let limits_wat = self.limits.to_wat();
-        let ref_type_wat = self.ref_type.to_wat();
-        format!("(table {} {})", limits_wat, ref_type_wat)
-    }
 }
 
 #[derive(Debug)]
@@ -115,14 +109,13 @@ pub enum RefType {
 
 impl RefType {
     pub fn to_doc(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text(self.to_wat().to_string())
-    }
-
-    pub fn to_wat(&self) -> &str {
-        match self {
-            RefType::Func => "funcref",
-            RefType::Extern => "externref",
-        }
+        pretty::RcDoc::text(
+            match self {
+                RefType::Func => "funcref",
+                RefType::Extern => "externref",
+            }
+            .to_string(),
+        )
     }
 }
 
@@ -130,7 +123,7 @@ impl RefType {
 mod test {
     #[track_caller]
     fn e(f: fastn_wasm::Table, s: &str) {
-        let g = fastn_wasm::encode_new(&vec![fastn_wasm::Ast::Table(f)]);
+        let g = fastn_wasm::encode(&vec![fastn_wasm::Ast::Table(f)]);
         println!("got: {}", g);
         println!("expected: {}", s);
         assert_eq!(g, s);

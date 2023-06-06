@@ -21,61 +21,56 @@ impl PL {
             self.ty.to_doc(),
         )
     }
-
-    pub fn to_wat(&self, is_param: bool) -> String {
-        let mut s = String::new();
-        if is_param {
-            s.push_str("(param");
-        } else {
-            s.push_str("(local");
-        }
-
-        if let Some(name) = &self.name {
-            s.push_str(" $");
-            s.push_str(name);
-        }
-        s.push(' ');
-        s.push_str(self.ty.to_wat());
-        s.push(')');
-        s
-    }
 }
 
 #[cfg(test)]
 mod test {
+    #[track_caller]
+    fn e(f: fastn_wasm::PL, is_param: bool, s: &str) {
+        let mut w = Vec::new();
+        let o = f.to_doc(is_param);
+        o.render(80, &mut w).unwrap();
+        let o = String::from_utf8(w).unwrap();
+        println!("{}", o);
+
+        println!("got: {}", o);
+        println!("expected: {}", s);
+        assert_eq!(o, s);
+    }
+
     #[test]
     fn test() {
-        assert_eq!(
+        e(
             fastn_wasm::PL {
                 name: None,
                 ty: fastn_wasm::Type::I32,
-            }
-            .to_wat(true),
-            "(param i32)"
+            },
+            true,
+            "(param i32)",
         );
-        assert_eq!(
+        e(
             fastn_wasm::PL {
                 name: None,
                 ty: fastn_wasm::Type::I32,
-            }
-            .to_wat(false),
-            "(local i32)"
+            },
+            false,
+            "(local i32)",
         );
-        assert_eq!(
+        e(
             fastn_wasm::PL {
                 name: Some("foo".to_string()),
                 ty: fastn_wasm::Type::I32,
-            }
-            .to_wat(true),
-            "(param $foo i32)"
+            },
+            true,
+            "(param $foo i32)",
         );
-        assert_eq!(
+        e(
             fastn_wasm::PL {
                 name: Some("foo".to_string()),
                 ty: fastn_wasm::Type::I32,
-            }
-            .to_wat(false),
-            "(local $foo i32)"
+            },
+            false,
+            "(local $foo i32)",
         );
     }
 }
