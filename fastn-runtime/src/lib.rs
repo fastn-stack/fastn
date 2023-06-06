@@ -31,7 +31,8 @@ pub use dom::{Color, ColorValue, Dom, LengthRole, NodeKey, ResponsiveProperty, T
 pub use element::{CommonStyleMinusTaffy, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::{
-    Closure, ClosurePointer, EventHandler, Memory, Pointer, PointerKey, PointerKind, UIProperty,
+    Closure, ClosurePointer, EventHandler, HeapValue, Memory, Pointer, PointerKey, PointerKind,
+    UIProperty,
 };
 pub use operation::{Operation, Rectangle};
 

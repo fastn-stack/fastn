@@ -57,9 +57,9 @@ pub struct Memory {
     /// anything else, we clear it up cleanly.
     stack: Vec<Frame>,
 
-    boolean: Heap<bool>,
-    i32: Heap<i32>,
-    f32: Heap<f32>,
+    pub(crate) boolean: Heap<bool>,
+    pub(crate) i32: Heap<i32>,
+    pub(crate) f32: Heap<f32>,
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
     /// are stored in the order they are defined. We also closure captured variables here.
     pub vec: Heap<Vec<Pointer>>,
@@ -70,7 +70,7 @@ pub struct Memory {
     color_role: Heap<fastn_runtime::Color>,
     length_role: Heap<fastn_runtime::LengthRole>,
 
-    closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
+    pub(crate) closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
     event_handler: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
     /// We need to store some global variables. For every top level variable defined in ftd files
     /// we create a global variable. Since all values are stored in `Memory`, the globals contain
@@ -94,13 +94,13 @@ pub struct Memory {
     // original wasm value would get dropped.
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EventHandler {
-    node: fastn_runtime::NodeKey,
-    closure: fastn_runtime::ClosurePointer,
+    pub(crate) node: fastn_runtime::NodeKey,
+    pub(crate) closure: fastn_runtime::ClosurePointer,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Closure {
     /// functions are defined in wasm, and this is the index in the function table.
     pub function: i32,
@@ -653,6 +653,14 @@ impl Memory {
                 let _closure = self.closure.get(event.closure).unwrap();
             }
         }
+    }
+
+    pub(crate) fn get_vec(&self, ptr: fastn_runtime::PointerKey) -> Vec<Pointer> {
+        self.vec[ptr].value.value().to_vec()
+    }
+
+    pub(crate) fn get_string(&self, ptr: fastn_runtime::PointerKey) -> String {
+        self.string[ptr].value.value().to_string()
     }
 }
 

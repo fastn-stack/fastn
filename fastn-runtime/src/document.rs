@@ -18,40 +18,151 @@ impl Document {
     }
 
     pub fn handle_event(&mut self, event: fastn_runtime::ExternalEvent) {
-        match evt {
+        match event {
             fastn_runtime::ExternalEvent::CursorMoved { x, y } => self.cursor_moved(x, y),
-            fastn_runtime::ExternalEvent::Focused(f) => self.has_focus = f,
-            fastn_runtime::ExternalEvent::ModifierChanged(m) => self.modifiers = m,
+            fastn_runtime::ExternalEvent::Focused(f) => self.store.data_mut().has_focus = f,
+            fastn_runtime::ExternalEvent::ModifierChanged(m) => self.store.data_mut().modifiers = m,
             fastn_runtime::ExternalEvent::Key { code, pressed } => self.handle_key(code, pressed),
             _ => todo!(),
         }
     }
 
     fn handle_key(&mut self, _code: fastn_runtime::event::VirtualKeyCode, _pressed: bool) {
-        self.store
-            .get_export("call_by_index")
-            .expect("call_by_index is not defined")
-            .into_func()
-            .expect("call_by_index not a func")
-            .call(
-                caller.as_context_mut(),
-                &[
-                    wasmtime::Val::I32(table_index),
-                    wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(func_arg))),
-                ],
-                &mut values,
-            )
-            .expect("call failed");
+        use wasmtime::AsContextMut;
 
+        let memory = &self.store.data().memory;
+        let closures = memory.closure.clone();
 
-        self.memory.handle_event(2.into(), None)
+        if let Some(events) = memory
+            .get_event_handlers(2.into(), None)
+            .map(|v| v.to_vec())
+        {
+            for event in events {
+                let closure = closures.get(event.closure).unwrap();
+
+                // Create a temporary variable to hold the export
+                let call_by_index_export = self
+                    .instance
+                    .get_export(self.store.as_context_mut(), "call_by_index")
+                    .expect("call_by_index is not defined");
+
+                // Make the call using the temporary variable
+                call_by_index_export
+                    .into_func()
+                    .expect("call_by_index not a func")
+                    .call(
+                        self.store.as_context_mut(),
+                        &[
+                            wasmtime::Val::I32(closure.function),
+                            wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                                closure.captured_variables,
+                            ))),
+                        ],
+                        &mut [],
+                    )
+                    .expect("call failed");
+                /*let pointer_vector = store
+                    .memory
+                    .vec
+                    .get(closure.captured_variables.pointer)
+                    .unwrap().value.value();
+                for pointer in pointer_vector {
+                    match pointer.kind {
+                        fastn_runtime::PointerKind::Boolean => store
+                            .memory.boolean.get(pointer.pointer)
+                        fastn_runtime::PointerKind::Integer => {}
+                        fastn_runtime::PointerKind::Record => {}
+                        fastn_runtime::PointerKind::OrType => {}
+                        fastn_runtime::PointerKind::Decimal => {}
+                        fastn_runtime::PointerKind::List => {}
+                        fastn_runtime::PointerKind::String => {}
+                    }
+                }*/
+            }
+        }
+
+        // self.memory.handle_event(2.into(), None)
     }
 
-    fn cursor_moved(&self, pos_x: f64, pos_y: f64) {
+    fn resolve_pointer(&mut self, _pointer: &fastn_runtime::Pointer) {
+        /*let store = self.store.data_mut();
+
+        match pointer.kind {
+            fastn_runtime::PointerKind::Boolean => store
+                .memory.boolean.get(pointer.pointer).unwrap().value
+            fastn_runtime::PointerKind::Integer => {}
+            fastn_runtime::PointerKind::Record => {}
+            fastn_runtime::PointerKind::OrType => {}
+            fastn_runtime::PointerKind::Decimal => {}
+            fastn_runtime::PointerKind::List => {}
+            fastn_runtime::PointerKind::String => {}
+        }*/
+        ()
+    }
+
+    fn resolve_heap_value<T>(
+        &mut self,
+        _kind: fastn_runtime::PointerKind,
+        _data: &mut fastn_runtime::HeapValue<T>,
+    ) {
+        /*use fastn_runtime::wasm_helpers::Params;
+        use wasmtime::AsContextMut;
+
+        let context = self.store.as_context_mut();
+        let closures = self.store.data().memory.closure.clone();
+
+        if let fastn_runtime::HeapValue::Formula {
+            cached_value,
+            closure,
+        } = data
+        {
+            let closure = closures.get(*closure).unwrap();
+            let mut values = vec![wasmtime::Val::I32(0)];
+            self.instance
+                .get_export(self.store.as_context_mut(), "call_by_index")
+                .expect("call_by_index is not defined")
+                .into_func()
+                .expect("call_by_index not a func")
+                .call(
+                    context,
+                    &[
+                        wasmtime::Val::I32(closure.function),
+                        wasmtime::Val::ExternRef(Some(wasmtime::ExternRef::new(
+                            closure.captured_variables,
+                        ))),
+                    ],
+                    &mut values,
+                )
+                .expect("call failed");
+
+            /*match kind {
+                fastn_runtime::PointerKind::Boolean => {
+                    *cached_value = store.memory.get_boolean(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::Integer => {
+                    *cached_value = store.memory.get_i32(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::Record => {
+                    *cached_value = store.memory.get_vec(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::Decimal => {
+                    *cached_value = store.memory.get_f32(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::List => {
+                    *cached_value = store.memory.get_vec(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::String => {
+                    *cached_value = store.memory.get_string(values.ptr(0));
+                }
+                fastn_runtime::PointerKind::OrType => todo!(),
+            }*/
+        }*/
+    }
+
+    fn cursor_moved(&self, _pos_x: f64, _pos_y: f64) {
         // let _nodes = self.nodes_under_mouse(self.root, pos_x, pos_y);
         // todo!()
     }
-
 
     // initial_html() -> server side HTML
     pub fn initial_html(&self) -> String {
