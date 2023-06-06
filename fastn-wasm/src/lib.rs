@@ -27,17 +27,26 @@ pub use pl::PL;
 pub use table::{table, table_1, table_2, table_3, table_4, Limits, RefType, Table};
 pub use ty::Type;
 
+pub fn group<'a>(name: &'static str, body: pretty::RcDoc<'a, ()>) -> pretty::RcDoc<'a, ()> {
+    pretty::RcDoc::intersperse(
+        vec![
+            pretty::RcDoc::text("(").append(name),
+            body,
+            pretty::RcDoc::text(")"),
+        ],
+        pretty::Doc::line(),
+    )
+}
 pub fn encode(module: &[fastn_wasm::Ast]) -> String {
     let mut w = Vec::new();
-    pretty::RcDoc::text("(module")
-        .append(pretty::Doc::space())
-        .append(
-            pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
-                .group()
-                .nest(1),
-        )
-        .append(")")
-        .render(80, &mut w)
-        .unwrap();
-    String::from_utf8(w).unwrap()
+    let o = group(
+        "module",
+        pretty::RcDoc::intersperse(module.into_iter().map(|x| x.to_doc()), pretty::Doc::line())
+            .nest(1)
+            .group(),
+    );
+    o.render(50, &mut w).unwrap();
+    let o = String::from_utf8(w).unwrap();
+    println!("{}", o);
+    o
 }

@@ -1,4 +1,4 @@
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct Func {
     pub name: Option<String>,
     pub export: Option<String>,
@@ -10,9 +10,15 @@ pub struct Func {
 
 impl Func {
     pub fn to_doc(&self) -> pretty::RcDoc<()> {
-        let mut o = pretty::RcDoc::text("(");
+        // let o = pretty::RcDoc::intersperse(vec![
+        //     pretty::RcDoc::text("(func"),
+        //     params,
+        //     pretty::RcDoc::text(")"),
+        // ]);
+
+        let mut o = pretty::RcDoc::text("(func");
         o = o.append({
-            let mut func_name = pretty::RcDoc::text("func");
+            let mut func_name = pretty::RcDoc::nil();
             if let Some(name) = &self.name {
                 func_name = func_name
                     .append(pretty::Doc::space())
@@ -38,14 +44,37 @@ impl Func {
             o = o.append(pretty::RcDoc::space());
         }
 
-        o.append(
+        o = o.append(
             pretty::RcDoc::intersperse(
                 self.params.iter().map(|x| x.to_doc(true)),
-                pretty::RcDoc::space(),
+                pretty::RcDoc::line(),
             )
             .group(),
-        )
-        .append(")")
+        );
+
+        if let Some(result) = &self.result {
+            o = o.append(
+                pretty::RcDoc::text(" (result ")
+                    .append(result.to_wat())
+                    .append(")"),
+            );
+        }
+
+        if !self.locals.is_empty() {
+            o = o.append(pretty::RcDoc::space());
+        }
+
+        o = o.append(
+            pretty::RcDoc::intersperse(
+                self.locals.iter().map(|x| x.to_doc(false)),
+                pretty::RcDoc::line(),
+            )
+            .group(),
+        );
+
+        o.append(")")
+
+        // fastn_wasm::group("func", body)
     }
 
     pub fn to_ast(self) -> fastn_wasm::Ast {
@@ -112,7 +141,13 @@ mod test {
 
     #[track_caller]
     fn e(f: super::Func, s: &str) {
-        assert_eq!(fastn_wasm::encode(&vec![fastn_wasm::Ast::Func(f)]), s);
+        assert_eq!(
+            fastn_wasm::encode(&vec![
+                fastn_wasm::Ast::Func(f.clone()),
+                fastn_wasm::Ast::Func(f)
+            ]),
+            s
+        );
     }
 
     #[test]
@@ -133,7 +168,7 @@ mod test {
             r#"(module (func (export "foo")))"#,
         );
         e(
-            fastn_wasm::Func {
+            Func {
                 name: Some("foo".to_string()),
                 export: Some("foo".to_string()),
                 ..Default::default()
@@ -141,28 +176,21 @@ mod test {
             r#"(module (func $foo (export "foo")))"#,
         );
         e(
-            fastn_wasm::Func {
+            Func {
                 params: vec![fastn_wasm::Type::I32.into()],
                 ..Default::default()
             },
             "(module (func (param i32)))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 params: vec![fastn_wasm::Type::I32.into(), fastn_wasm::Type::I64.into()],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (param i32 i64))
-                )
-            "
-            )
+            },
+            "(module (func (param i32) (param i64)))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 params: vec![
                     fastn_wasm::PL {
                         name: Some("foo".to_string()),
@@ -171,21 +199,14 @@ mod test {
                     fastn_wasm::PL {
                         name: Some("bar".to_string()),
                         ty: fastn_wasm::Type::F32,
-                    }
+                    },
                 ],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (param $foo i32) (param $bar f32))
-                )
-            "#
-            )
+            },
+            "(module (func (param $foo i32) (param $bar f32)))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 locals: vec![
                     fastn_wasm::PL {
                         name: Some("foo".to_string()),
@@ -194,75 +215,48 @@ mod test {
                     fastn_wasm::PL {
                         name: Some("bar".to_string()),
                         ty: fastn_wasm::Type::F32,
-                    }
+                    },
                 ],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func
-                        (local $foo i32)
-                        (local $bar f32)
-                    )
-                )
-            "#
-            )
+            },
+            "(module (func (local $foo i32) (local $bar f32)))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 locals: vec![fastn_wasm::PL {
                     name: Some("foo".to_string()),
                     ty: fastn_wasm::Type::I32,
-                },],
+                }],
                 params: vec![fastn_wasm::PL {
                     name: Some("bar".to_string()),
                     ty: fastn_wasm::Type::F32,
-                },],
+                }],
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (param $bar f32)
-                        (local $foo i32)
-                    )
-                )
-            "#
-            )
+            },
+            "(module (func (param $bar f32) (local $foo i32)))",
         );
-        assert_eq!(
-            fastn_wasm::Func {
+        e(
+            Func {
                 result: Some(fastn_wasm::Type::I32),
                 ..Default::default()
-            }
-            .to_wat(),
-            indoc::indoc!(
-                r#"
-                (module
-                    (func (result i32))
-                )
-            "#
-            )
+            },
+            "(module (func (result i32)))",
         );
-        assert_eq!(
+        e(
             fastn_wasm::Func {
                 name: Some("name".to_string()),
                 export: Some("exp".to_string()),
                 locals: vec![fastn_wasm::PL {
                     name: Some("foo".to_string()),
                     ty: fastn_wasm::Type::I32,
-                },],
+                }],
                 params: vec![fastn_wasm::PL {
                     name: Some("bar".to_string()),
                     ty: fastn_wasm::Type::F32,
-                },],
+                }],
                 result: Some(fastn_wasm::Type::I32),
                 body: vec![],
-            }
-            .to_wat(),
+            },
             indoc::indoc!(
                 r#"
                 (module
@@ -271,7 +265,7 @@ mod test {
                     )
                 )
             "#
-            )
+            ),
         );
         assert_eq!(
             fastn_wasm::Func {

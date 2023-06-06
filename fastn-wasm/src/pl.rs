@@ -20,7 +20,7 @@ impl PL {
         };
 
         if let Some(name) = &self.name {
-            o = o.append("$").append(name);
+            o = o.append(" $").append(name);
         }
 
         o.append(pretty::Doc::space())
