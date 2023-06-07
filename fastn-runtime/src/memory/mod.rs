@@ -249,27 +249,27 @@ impl Memory {
 
         let (dependents, values, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
-                let b = self.boolean.get(pointer.pointer.clone()).unwrap();
+                let b = self.boolean.get(pointer.pointer).unwrap();
                 (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Integer => {
-                let b = self.i32.get(pointer.pointer.clone()).unwrap();
+                let b = self.i32.get(pointer.pointer).unwrap();
                 (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Record | PointerKind::List => {
-                let b = self.vec.get(pointer.pointer.clone()).unwrap();
+                let b = self.vec.get(pointer.pointer).unwrap();
                 (&b.children, b.value.value().to_vec(), &b.ui_properties)
             }
             PointerKind::OrType => {
-                let b = self.or_type.get(pointer.pointer.clone()).unwrap();
+                let b = self.or_type.get(pointer.pointer).unwrap();
                 (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::Decimal => {
-                let b = self.f32.get(pointer.pointer.clone()).unwrap();
+                let b = self.f32.get(pointer.pointer).unwrap();
                 (&b.children, vec![], &b.ui_properties)
             }
             PointerKind::String => {
-                let b = self.string.get(pointer.pointer.clone()).unwrap();
+                let b = self.string.get(pointer.pointer).unwrap();
                 (&b.children, vec![], &b.ui_properties)
             }
         };

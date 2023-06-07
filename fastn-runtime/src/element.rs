@@ -52,8 +52,8 @@ impl From<ElementKind> for i32 {
 }
 
 #[derive(Debug)]
-pub struct CommonStyleMinusTaffy {
-    pub background_color: Option<fastn_runtime::ColorValue>,
+pub struct CommonStyle {
+    pub background_color: Option<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
     // border: Borders,
 }
 
@@ -61,7 +61,7 @@ pub struct CommonStyleMinusTaffy {
 pub struct Container {
     // if not wasm
     pub taffy_key: taffy::node::Node,
-    pub style: CommonStyleMinusTaffy,
+    pub style: CommonStyle,
 }
 
 impl Container {
@@ -77,13 +77,16 @@ impl Container {
                     ..Default::default()
                 })
                 .expect("this should never fail"),
-            style: CommonStyleMinusTaffy {
-                background_color: Some(fastn_runtime::ColorValue {
-                    red: 20,
-                    green: 0,
-                    blue: 0,
-                    alpha: 1.0,
-                }),
+            style: CommonStyle {
+                background_color: Some(
+                    fastn_runtime::Color {
+                        red: 20,
+                        green: 0,
+                        blue: 0,
+                        alpha: 1.0,
+                    }
+                    .into(),
+                ),
             },
         })
     }
@@ -94,13 +97,14 @@ pub struct Text {
     pub taffy: taffy::node::Node,
     pub text: fastn_runtime::PointerKey,
     pub role: fastn_runtime::ResponsiveProperty<fastn_runtime::TextRole>,
+    pub style: CommonStyle,
 }
 
 #[derive(Debug)]
 pub struct Image {
     pub taffy: taffy::node::Node,
-    // border: Borders,
-    pub src: fastn_runtime::PointerKey,
+    pub style: CommonStyle,
+    pub src: fastn_runtime::DarkModeProperty<fastn_runtime::PointerKey>,
 }
 
 // #[derive(Default, Debug)]
@@ -173,7 +177,7 @@ impl fastn_runtime::Element {
         }
     }
 
-    pub fn common_styles(&mut self) -> &mut CommonStyleMinusTaffy {
+    pub fn common_styles(&mut self) -> &mut CommonStyle {
         match self {
             fastn_runtime::Element::Container(c) => &mut c.style,
             t => unimplemented!("{:?}", t),
