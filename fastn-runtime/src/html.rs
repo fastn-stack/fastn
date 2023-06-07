@@ -432,11 +432,14 @@ mod test {
     #[test]
     fn test() {
         // write test of prime
-        e(fastn_runtime::Document::new(create_columns()), indoc::indoc!(
-            r#"
+        e(
+            fastn_runtime::Document::new(create_columns()),
+            indoc::indoc!(
+                r#"
             <div data-id=4294967297 > <div data-id=4294967298 > <div data-id=4294967299 ></div>
             <div data-id=4294967300 ></div></div></div>"#
-        ))
+            ),
+        )
     }
 
     #[test]

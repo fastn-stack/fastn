@@ -24,27 +24,27 @@ pub struct TextRole {
 }
 
 #[derive(Debug)]
-pub struct LengthRole {}
+pub struct DarkModeProperty<T> {
+    pub light: T,
+    pub dark: Option<T>,
+}
+
+impl<T> From<T> for DarkModeProperty<T> {
+    fn from(light: T) -> Self {
+        DarkModeProperty { light, dark: None }
+    }
+}
 
 #[derive(Debug)]
-pub struct ImageSrc {
-    dark: fastn_runtime::PointerKey,
-    light: fastn_runtime::PointerKey,
-}
+pub struct LengthRole {}
 
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]
-pub struct ColorValue {
+pub struct Color {
     pub red: u8,
     pub green: u8,
     pub blue: u8,
     pub alpha: f32,
-}
-
-#[derive(Debug, Default, Clone)]
-pub struct Color {
-    pub light: ColorValue,
-    pub dark: ColorValue,
 }
 
 impl Default for Dom {
@@ -137,13 +137,13 @@ impl Dom {
         // TODO: based on k, create different elements
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
             taffy_key,
-            style: fastn_runtime::CommonStyleMinusTaffy {
-                background_color: Some(fastn_runtime::ColorValue {
+            style: fastn_runtime::CommonStyle {
+                background_color: Some(fastn_runtime::Color {
                     red: 0,
                     green: 100,
                     blue: 0,
                     alpha: 1.0,
-                }),
+                }.into()),
             },
         });
 
@@ -178,12 +178,12 @@ impl Dom {
     ) {
         let common_styles = self.nodes[key].common_styles();
 
-        common_styles.background_color = Some(fastn_runtime::ColorValue {
+        common_styles.background_color = Some(fastn_runtime::Color {
             red: color_pointer.0 as u8,
             green: color_pointer.1 as u8,
             blue: color_pointer.2 as u8,
             alpha: color_pointer.3,
-        });
+        }.into());
     }
 
     pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
