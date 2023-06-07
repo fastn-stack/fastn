@@ -1,7 +1,7 @@
 #[derive(Debug, Clone)]
 pub struct DynamicProperty {
-    pub property: fastn_runtime::UIProperty,
     pub node: fastn_runtime::NodeKey,
+    pub property: fastn_runtime::UIProperty,
     pub closure: fastn_runtime::ClosurePointer,
 }
 

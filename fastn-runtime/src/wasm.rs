@@ -11,7 +11,7 @@ impl fastn_runtime::Dom {
 
         dom.register_functions(&mut linker);
 
-        let mut store = wasmtime::Store::new(&engine, fastn_runtime::Dom::default());
+        let mut store = wasmtime::Store::new(&engine, dom);
         let instance = linker
             .instantiate(&mut store, &module)
             .expect("cant create instance");

@@ -4,26 +4,27 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["native"]
+default = ["native", "server"]
+server = ["tokio", "fastn-wasm", "wasmtime", "taffy", "pretty"]
 native = ["winit", "env_logger", "log", "wgpu"]
 # terminal = ["crossterm"]
-# web = ["wasm-bindgen", "web-sys"]
+web = []
 
 [dependencies]
 async-trait.workspace = true
 bitflags.workspace = true
 bytemuck.workspace = true
 env_logger = { workspace = true, optional = true }
-fastn-wasm.workspace = true
+fastn-wasm = { workspace = true, optional = true }
 log = { workspace = true, optional = true }
 once_cell.workspace = true
-pretty.workspace = true
+pretty = { workspace = true, optional = true }
 serde.workspace = true
 slotmap.workspace = true
-taffy.workspace = true
+taffy = { workspace = true, optional = true }
 thiserror.workspace = true
-tokio.workspace = true
-wasmtime.workspace = true
+tokio = { workspace = true, optional = true }
+wasmtime = { workspace = true, optional = true }
 wgpu = { workspace = true, optional = true }
 winit = { workspace = true, optional = true }
 
