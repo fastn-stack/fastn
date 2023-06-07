@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ftd = { path = "../ftd" }
+ftd.workspace = true
 rusqlite.workspace = true
 thiserror.workspace = true

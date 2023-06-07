@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 camino.workspace = true
-fastn-core = { path = "../fastn-core" }
+fastn-core.workspace = true
 futures.workspace = true
 home.workspace = true
 mime_guess.workspace = true

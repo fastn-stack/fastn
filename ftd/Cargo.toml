@@ -18,36 +18,36 @@ native-rendering = ["taffy", "crossterm", "fastn-runtime", "fastn-wasm"]
 terminal = ["rink", "dioxus-native-core", "dioxus-native-core-macro", "dioxus-html", "futures", "tokio", "rustc-hash"]
 
 [dependencies]
-taffy = { workspace = true, optional = true }
+comrak.workspace = true
 crossterm = { workspace = true, optional = true }
 css-color-parser.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-thiserror.workspace = true
-once_cell.workspace = true
-regex.workspace = true
-format_num.workspace = true
-fastn-runtime = { path = "../fastn-runtime", optional = true }
-fastn-wasm = { path = "../fastn-wasm", optional = true }
-slug.workspace = true
-include_dir.workspace = true
-indoc.workspace = true
-itertools.workspace = true
-tracing.workspace = true
-syntect.workspace = true
-comrak.workspace = true
-rink = { workspace = true, optional = true }
 dioxus-html = { workspace = true, optional = true }
 dioxus-native-core = { workspace = true, optional = true }
 dioxus-native-core-macro = { workspace = true, optional = true }
+fastn-runtime = { workspace = true, optional = true }
+fastn-wasm = { workspace = true, optional = true }
+format_num.workspace = true
 futures = { workspace = true, optional = true }
-tokio = { workspace = true, optional = true }
+include_dir.workspace = true
+indoc.workspace = true
+itertools.workspace = true
+once_cell.workspace = true
+regex.workspace = true
+rink = { workspace = true, optional = true }
 rustc-hash = { workspace = true, optional = true }
+serde.workspace = true
+serde_json.workspace = true
+slug.workspace = true
+syntect.workspace = true
+taffy = { workspace = true, optional = true }
+thiserror.workspace = true
+tokio = { workspace = true, optional = true }
+tracing.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true
 pretty_assertions.workspace = true
-ron.workspace = true
 rand.workspace = true
 rand_pcg.workspace = true
+ron.workspace = true
 rusty-hook.workspace = true

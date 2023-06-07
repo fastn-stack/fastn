@@ -4,11 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# ariadne.workspace = true
 async-trait.workspace = true
 camino.workspace = true
-fastn-issues = { path = "../fastn-issues" }
-ftd = { path = "../ftd" }
+fastn-issues.workspace = true
+ftd.workspace = true
 futures.workspace = true
 rusqlite.workspace = true
 serde.workspace = true
