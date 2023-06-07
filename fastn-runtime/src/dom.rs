@@ -138,12 +138,15 @@ impl Dom {
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
             taffy_key,
             style: fastn_runtime::CommonStyle {
-                background_color: Some(fastn_runtime::Color {
-                    red: 0,
-                    green: 100,
-                    blue: 0,
-                    alpha: 1.0,
-                }.into()),
+                background_color: Some(
+                    fastn_runtime::Color {
+                        red: 0,
+                        green: 100,
+                        blue: 0,
+                        alpha: 1.0,
+                    }
+                    .into(),
+                ),
             },
         });
 
@@ -178,12 +181,15 @@ impl Dom {
     ) {
         let common_styles = self.nodes[key].common_styles();
 
-        common_styles.background_color = Some(fastn_runtime::Color {
-            red: color_pointer.0 as u8,
-            green: color_pointer.1 as u8,
-            blue: color_pointer.2 as u8,
-            alpha: color_pointer.3,
-        }.into());
+        common_styles.background_color = Some(
+            fastn_runtime::Color {
+                red: color_pointer.0 as u8,
+                green: color_pointer.1 as u8,
+                blue: color_pointer.2 as u8,
+                alpha: color_pointer.3,
+            }
+            .into(),
+        );
     }
 
     pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
