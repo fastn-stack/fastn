@@ -66,8 +66,9 @@ pub struct Memory {
     pub string: Heap<String>,
     or_type: Heap<(u8, Vec<Pointer>)>,
 
+    /// text role can only be attached to text
     text_role: Heap<fastn_runtime::TextRole>,
-    color_role: Heap<fastn_runtime::Color>,
+    color_role: Heap<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
     length_role: Heap<fastn_runtime::LengthRole>,
 
     pub(crate) closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
@@ -113,14 +114,6 @@ pub struct Closure {
     // pub v1: Pointer,
     // pub v2: Option<Pointer>,
     // pub rest: Option<Vec<Pointer>>,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Attachment {
-    /// this is the dom element we are directly or indirectly connected with
-    element: fastn_runtime::NodeKey,
-    /// who told we us about this element
-    source: Pointer,
 }
 
 #[derive(Debug, Default)]

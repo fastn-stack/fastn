@@ -24,6 +24,9 @@ pub struct TextRole {
 }
 
 #[derive(Debug)]
+pub struct LengthRole {}
+
+#[derive(Debug)]
 pub struct DarkModeProperty<T> {
     pub light: T,
     pub dark: Option<T>,
@@ -35,16 +38,13 @@ impl<T> From<T> for DarkModeProperty<T> {
     }
 }
 
-#[derive(Debug)]
-pub struct LengthRole {}
-
 #[repr(C)]
 #[derive(Copy, Clone, Default, Debug)]
 pub struct Color {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8,
-    pub alpha: f32,
+    pub red: fastn_runtime::PointerKey,
+    pub green: fastn_runtime::PointerKey,
+    pub blue: fastn_runtime::PointerKey,
+    pub alpha: fastn_runtime::PointerKey,
 }
 
 impl Default for Dom {
@@ -138,15 +138,15 @@ impl Dom {
         let c = fastn_runtime::Element::Container(fastn_runtime::Container {
             taffy_key,
             style: fastn_runtime::CommonStyle {
-                background_color: Some(
-                    fastn_runtime::Color {
-                        red: 0,
-                        green: 100,
-                        blue: 0,
-                        alpha: 1.0,
-                    }
-                    .into(),
-                ),
+                // background_color: Some(
+                //     fastn_runtime::Color {
+                //         red: self.memory.create_i32(0),
+                //         green: self.memory.create_i32(100),
+                //         blue: self.memory.create_i32(0),
+                //         alpha: self.memory.create_f32(1.0),
+                //     }
+                //     .into(),
+                // ),
             },
         });
 
@@ -176,20 +176,11 @@ impl Dom {
 
     pub fn set_element_background_solid(
         &mut self,
-        key: fastn_runtime::NodeKey,
-        color_pointer: (i32, i32, i32, f32),
+        _key: fastn_runtime::NodeKey,
+        _color: fastn_runtime::NodeKey,
     ) {
-        let common_styles = self.nodes[key].common_styles();
-
-        common_styles.background_color = Some(
-            fastn_runtime::Color {
-                red: color_pointer.0 as u8,
-                green: color_pointer.1 as u8,
-                blue: color_pointer.2 as u8,
-                alpha: color_pointer.3,
-            }
-            .into(),
-        );
+        // let common_styles = self.nodes[key].common_styles();
+        // common_styles.background_color = Some(color);
     }
 
     pub fn set_element_width_px(&mut self, key: fastn_runtime::NodeKey, width: i32) {
@@ -244,7 +235,8 @@ impl Dom {
                 self.set_element_height_percent(key, value.f32())
             }
             fastn_runtime::UIProperty::BackgroundSolid => {
-                self.set_element_background_solid(key, value.rgba())
+                // self.set_element_background_solid(key, value.rgba())
+                todo!()
             }
             fastn_runtime::UIProperty::SpacingFixedPx => {
                 self.set_element_spacing_px(key, value.i32())

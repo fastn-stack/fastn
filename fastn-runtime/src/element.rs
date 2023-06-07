@@ -51,9 +51,15 @@ impl From<ElementKind> for i32 {
     }
 }
 
+enum Property<T> {
+    Static(T),
+    Dynamic(fastn_runtime::PointerKey),
+}
+
 #[derive(Debug)]
 pub struct CommonStyle {
-    pub background_color: Option<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
+    // pub background_color: Option<Property<fastn_runtime::DarkModeProperty<fastn_runtime::StaticColor>>>,
+    // pub padding: Option<Property<fastn_runtime::ResponsiveProperty<fastn_runtime::StaticLength>>>,
     // border: Borders,
 }
 
@@ -78,15 +84,15 @@ impl Container {
                 })
                 .expect("this should never fail"),
             style: CommonStyle {
-                background_color: Some(
-                    fastn_runtime::Color {
-                        red: 20,
-                        green: 0,
-                        blue: 0,
-                        alpha: 1.0,
-                    }
-                    .into(),
-                ),
+                // background_color: Some(
+                //     fastn_runtime::Color {
+                //         red: 20,
+                //         green: 0,
+                //         blue: 0,
+                //         alpha: 1.0,
+                //     }
+                //     .into(),
+                // ),
             },
         })
     }
@@ -96,7 +102,7 @@ impl Container {
 pub struct Text {
     pub taffy: taffy::node::Node,
     pub text: fastn_runtime::PointerKey,
-    pub role: fastn_runtime::ResponsiveProperty<fastn_runtime::TextRole>,
+    pub role: fastn_runtime::ResponsiveProperty<fastn_runtime::PointerKey>,
     pub style: CommonStyle,
 }
 
