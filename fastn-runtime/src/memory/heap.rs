@@ -23,7 +23,7 @@ pub enum HeapValue<T> {
     ///
     /// -- integer x: 10 (stored as HeapValue::Value(10))
     /// -- integer y: 20 (stored as HeapValue::Value(10))
-    /// -- integer z = { x + y } (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
+    /// -- integer z: { x + y } ;; (stored as HeapValue::Formula { cached_value: 30, closure: 1v2 }
     Formula {
         cached_value: T,
         closure: fastn_runtime::ClosurePointer,
