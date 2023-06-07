@@ -454,6 +454,8 @@ favicon: /-/fastn.com/images/favicon.svg
   show-planning: true
 
 - Overview: /planning/
+- Documentation Systems: /documentation/
+  document: /planning/documentation-systems.ftd
 - Adding color-scheme: /color-scheme/-/planning/
   document: /expander/ds/ds-cs.ftd
 - Adding typography: /typography/-/planning/
