@@ -10,22 +10,22 @@ native = ["winit", "env_logger", "log", "wgpu"]
 # web = ["wasm-bindgen", "web-sys"]
 
 [dependencies]
-winit = { workspace = true, optional = true }
+async-trait.workspace = true
+bitflags.workspace = true
+bytemuck.workspace = true
 env_logger = { workspace = true, optional = true }
+fastn-wasm.workspace = true
 log = { workspace = true, optional = true }
-wgpu = { workspace = true, optional = true }
-taffy.workspace = true
+once_cell.workspace = true
+pretty.workspace = true
 serde.workspace = true
 slotmap.workspace = true
-once_cell.workspace = true
+taffy.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
-bytemuck.workspace = true
 wasmtime.workspace = true
-bitflags.workspace = true
-async-trait.workspace = true
-pretty.workspace = true
-fastn-wasm = { path = "../fastn-wasm" }
+wgpu = { workspace = true, optional = true }
+winit = { workspace = true, optional = true }
 
 [dev-dependencies]
 indoc.workspace = true
