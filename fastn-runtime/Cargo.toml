@@ -26,3 +26,6 @@ bitflags.workspace = true
 async-trait.workspace = true
 pretty.workspace = true
 fastn-wasm = { path = "../fastn-wasm" }
+
+[dev-dependencies]
+indoc.workspace = true
