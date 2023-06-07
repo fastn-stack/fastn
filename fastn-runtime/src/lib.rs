@@ -28,9 +28,7 @@ mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::{
-    Color, DarkModeProperty, Dom, LengthRole, NodeKey, ResponsiveProperty, TextRole,
-};
+pub use dom::{Color, DarkModeProperty, Dom, LengthRole, NodeKey, ResponsiveProperty, TextRole};
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::{
