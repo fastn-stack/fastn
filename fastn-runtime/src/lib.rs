@@ -20,6 +20,7 @@ mod dom;
 mod dom_helpers;
 mod element;
 mod event;
+pub mod html;
 mod memory;
 mod operation;
 pub mod wasm;

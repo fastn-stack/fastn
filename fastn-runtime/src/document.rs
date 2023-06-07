@@ -41,13 +41,13 @@ impl Document {
                 let closure = closures.get(event.closure).unwrap();
 
                 // Create a temporary variable to hold the export
-                let call_by_index_export = self
+                let void_by_index = self
                     .instance
                     .get_export(&mut self.store, "void_by_index")
                     .expect("void_by_index is not defined");
 
                 // Make the call using the temporary variable
-                call_by_index_export
+                void_by_index
                     .into_func()
                     .expect("void_by_index not a func")
                     .call(
@@ -165,7 +165,7 @@ impl Document {
 
     // initial_html() -> server side HTML
     pub fn initial_html(&self) -> String {
-        todo!()
+        fastn_runtime::html::initial(self.store.data())
     }
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>

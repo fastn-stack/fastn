@@ -1895,6 +1895,7 @@ dependencies = [
  "bytemuck",
  "env_logger",
  "fastn-wasm",
+ "indoc 2.0.1",
  "log",
  "once_cell",
  "pretty",
