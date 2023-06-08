@@ -33,7 +33,7 @@ pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::{
     Closure, ClosurePointer, EventHandler, HeapValue, Memory, Pointer, PointerKey, PointerKind,
-    UIProperty,
+    UIProperty, DynamicProperty
 };
 pub use operation::{Operation, Rectangle};
 

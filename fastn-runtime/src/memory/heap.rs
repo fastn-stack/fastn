@@ -10,6 +10,18 @@ pub struct HeapData<T> {
     pub parents: Vec<fastn_runtime::memory::Pointer>,
     /// whenever a dom node is added or deleted, it is added or removed from this list.
     pub ui_properties: Vec<fastn_runtime::memory::DynamicProperty>,
+
+    /// things are connected to root us via branches. One can be attached to more than one branches,
+    /// or to same branch by more than "via"s. When a pointer is created it is connected with no
+    /// branches. When the pointer is added to a UI via set_property(), we add an Attachment object
+    /// to this vector. If T is a container,
+    pub branches: std::collections::HashSet<Attachment>,
+}
+
+#[derive(Debug, Hash, Eq, PartialEq, Clone)]
+pub struct Attachment {
+    pub branch: fastn_runtime::DynamicProperty,
+    pub via: fastn_runtime::Pointer,
 }
 
 /// This is the data we store in the heap for any value.
@@ -36,6 +48,7 @@ impl<T> HeapData<T> {
             value,
             parents: vec![],
             ui_properties: vec![],
+            branches: std::collections::HashSet::new(),
         }
     }
 }

@@ -1,11 +1,11 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone)]
 pub struct DynamicProperty {
     pub node: fastn_runtime::NodeKey,
     pub property: fastn_runtime::UIProperty,
     pub closure: fastn_runtime::ClosurePointer,
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Hash, Eq, PartialEq, Clone)]
 pub enum UIProperty {
     WidthFixedPx,
     HeightFixedPx,
