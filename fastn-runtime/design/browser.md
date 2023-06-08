@@ -4,8 +4,8 @@
 
 ## `doc.wasm`
 
-Every ftd file is converted to a wasm file (refer `compilation.md` for details). In this document we will call the
-file `doc.wasm` i.e. `doc.ftd` gets compiled into `doc.wasm`.
+Every ftd file is converted to a wasm file (refer [`compilation.md`](compilation.md) for details). In this document we 
+will call the  file `doc.wasm` i.e. `doc.ftd` gets compiled into `doc.wasm`.
 
 ## `doc.json` and `doc.html`
 
@@ -18,7 +18,7 @@ would not work.
 
 ## `linker.js`
 
-Checkout `linker.md` for details.
+Checkout [`linker.md`](linking.md) for details.
 
 ## `runtime.wasm`
 
@@ -29,6 +29,5 @@ The runtime itself is written in Rust and get's compiled into a file `runtime.wa
 The `runtime.wasm` only changes when `fastn` itself changes, so we can serve the `runtime.wasm` from a global CDN, and
 the actual URL for `runtime.wasm` can be versioned, like `runtime-<hash>.wasm`.
 
-## `linker.js`
 
 

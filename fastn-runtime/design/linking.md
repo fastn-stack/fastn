@@ -1,15 +1,15 @@
 # `linker.js`
 
-Read `browser.md` first for context.
+Read [`browser.md`](browser.md) first for context.
 
-Once the page loads `doc.html` loads `linker.js`, which downloads `doc.json`, `doc.wasm`, `runtime.wasm` to make the
+Once `doc.html` loads, it loads `linker.js`, which downloads `doc.json`, `doc.wasm`, `runtime.wasm` to make the
 event handlers work.
 
-Linker creates two wasm instances, one for `runtime.wasm` and the other for `doc.wasm`. The `runtime instance` is fed
-`doc.json` as we are not going to call the `main` function of `doc.wasm` from browser, as main's job was to create the
-DOM tree, and initialise `fastn_runtime::Memory`.
+`linker.js` creates two wasm instances, one for `runtime.wasm` and the other for `doc.wasm`. The `runtime instance` is 
+fed `doc.json` as we are not going to call the `main` function of `doc.wasm` from browser, as main's job was to create 
+the  DOM tree, and initialise `fastn_runtime::Memory`.
 
-The way `doc.wasm` is constructed is that it assumes a bunch of functions are exported by the host (eg `create_i32()`,
+`doc.wasm` is created with assumption that a bunch of functions are exported by the host (eg `create_i32()`,
 `create_kernel()` and so on). And `doc.wasm` itself exports `main()`, `call_by_index(idx: i32, func_data:
 fastn_runtime::Pointer) -> fastn_runtime::Pointer` and `void_by_index(idx: i32, func_data: fastn_runtime::Pointer)`.
 
