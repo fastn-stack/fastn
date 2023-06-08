@@ -17,7 +17,11 @@ impl Pointer {
         match self.kind {
             fastn_runtime::PointerKind::String => mem.string[self.pointer].branches.to_owned(),
             fastn_runtime::PointerKind::Integer => mem.i32[self.pointer].branches.to_owned(),
-            _ => todo!(),
+            fastn_runtime::PointerKind::Boolean => mem.boolean[self.pointer].branches.to_owned(),
+            fastn_runtime::PointerKind::Record => mem.vec[self.pointer].branches.to_owned(),
+            fastn_runtime::PointerKind::OrType => mem.or_type[self.pointer].branches.to_owned(),
+            fastn_runtime::PointerKind::Decimal => mem.f32[self.pointer].branches.to_owned(),
+            fastn_runtime::PointerKind::List => mem.vec[self.pointer].branches.to_owned(),
         }
     }
     pub fn get_branches_mut(
@@ -27,7 +31,11 @@ impl Pointer {
         match self.kind {
             fastn_runtime::PointerKind::String => &mut mem.string[self.pointer].branches,
             fastn_runtime::PointerKind::Integer => &mut mem.i32[self.pointer].branches,
-            _ => todo!(),
+            fastn_runtime::PointerKind::Boolean => &mut mem.boolean[self.pointer].branches,
+            fastn_runtime::PointerKind::Record => &mut mem.vec[self.pointer].branches,
+            fastn_runtime::PointerKind::OrType => &mut mem.or_type[self.pointer].branches,
+            fastn_runtime::PointerKind::Decimal => &mut mem.f32[self.pointer].branches,
+            fastn_runtime::PointerKind::List => &mut mem.vec[self.pointer].branches,
         }
     }
 }
