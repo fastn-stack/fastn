@@ -13,9 +13,20 @@ impl Pointer {
     pub fn get_branches(
         self,
         mem: &fastn_runtime::Memory,
-    ) -> &std::collections::HashSet<fastn_runtime::Attachment> {
+    ) -> std::collections::HashSet<fastn_runtime::Attachment> {
         match self.kind {
-            fastn_runtime::PointerKind::String => &mem.string[self.pointer].branches,
+            fastn_runtime::PointerKind::String => mem.string[self.pointer].branches.to_owned(),
+            fastn_runtime::PointerKind::Integer => mem.i32[self.pointer].branches.to_owned(),
+            _ => todo!(),
+        }
+    }
+    pub fn get_branches_mut(
+        self,
+        mem: &mut fastn_runtime::Memory,
+    ) -> &mut std::collections::HashSet<fastn_runtime::Attachment> {
+        match self.kind {
+            fastn_runtime::PointerKind::String => &mut mem.string[self.pointer].branches,
+            fastn_runtime::PointerKind::Integer => &mut mem.i32[self.pointer].branches,
             _ => todo!(),
         }
     }
