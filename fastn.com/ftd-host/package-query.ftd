@@ -13,10 +13,10 @@ db: db.sqlite
 SELECT * FROM user;
 
 
--- ds.page: Package Query: Run SQL Queries
+-- my-ds.page: Package Query: Run SQL Queries
 
-`package-query` processor allows you to execute SQL queries against SQLite files
-present in your `fastn` package.
+`package-query` processor allows you to execute SQL queries against SQLite 
+files present in your `fastn` package.
 
 Say you have a record and a variable like this:
 
@@ -81,9 +81,9 @@ SELECT * FROM user;
 -- ds.markdown:
 
 The record we use must match with the result of the query, so if we would have
-individually selected columns, or used expressions in the SELECT clause, the type
-of expression must match with the record in which you are going to store the
-result.
+individually selected columns, or used expressions in the SELECT clause, the 
+type of expression must match with the record in which you are going to store 
+the result.
 
 You can then show the results in the FTD document, eg:
 
@@ -107,7 +107,13 @@ The name of `sqlite` database file is provided by the key `db`.
 -- show-person: $p
 $loop$: $people as $p
 
--- end: ds.page
+-- end: my-ds.page
+
+
+
+
+
+
 
 
 

@@ -73,9 +73,8 @@ favicon: /-/fastn.com/images/favicon.svg
   - Open terminal: /open-terminal/
     document: author/how-to/open-terminal.ftd
     skip: true
-- Syntax Highlighting For SublimeText 🚧: /sublime/
+- Syntax Highlighting For SublimeText: /sublime/
   document: author/how-to/sublime.ftd
-  skip: true
 - `fastn` Community: /community/
 - Docs: /docs/
 
@@ -336,6 +335,7 @@ favicon: /-/fastn.com/images/favicon.svg
 - Overview: /backend/
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
+  skip: true
 - Dynamic URLs: /dynamic-urls/
   document: backend/dynamic-urls.ftd
 - `http` processor: /http/
