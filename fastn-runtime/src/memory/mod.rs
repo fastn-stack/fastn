@@ -1,11 +1,7 @@
-mod heap;
+pub mod heap;
 mod helper;
-mod pointer;
-mod ui;
-
-pub use heap::{Heap, HeapData, HeapValue};
-pub use pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
-pub use ui::{DynamicProperty, UIProperty};
+pub mod pointer;
+pub mod ui;
 
 /// Memory contains all the data created by our runtime.
 ///
@@ -57,19 +53,19 @@ pub struct Memory {
     /// anything else, we clear it up cleanly.
     stack: Vec<Frame>,
 
-    pub(crate) boolean: Heap<bool>,
-    pub(crate) i32: Heap<i32>,
-    pub(crate) f32: Heap<f32>,
+    pub(crate) boolean: fastn_runtime::Heap<bool>,
+    pub(crate) i32: fastn_runtime::Heap<i32>,
+    pub(crate) f32: fastn_runtime::Heap<f32>,
     /// `.vec` can store both `vec`s, `tuple`s, and `struct`s using these. For struct the fields
     /// are stored in the order they are defined. We also closure captured variables here.
-    pub vec: Heap<Vec<Pointer>>,
-    pub string: Heap<String>,
-    or_type: Heap<(u8, Vec<Pointer>)>,
+    pub vec: fastn_runtime::Heap<Vec<fastn_runtime::Pointer>>,
+    pub string: fastn_runtime::Heap<String>,
+    or_type: fastn_runtime::Heap<(u8, Vec<fastn_runtime::Pointer>)>,
 
     /// text role can only be attached to text
-    text_role: Heap<fastn_runtime::TextRole>,
-    color_role: Heap<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
-    length_role: Heap<fastn_runtime::LengthRole>,
+    text_role: fastn_runtime::Heap<fastn_runtime::TextRole>,
+    color_role: fastn_runtime::Heap<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
+    length_role: fastn_runtime::Heap<fastn_runtime::LengthRole>,
 
     pub(crate) closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,
     event_handler: std::collections::HashMap<fastn_runtime::DomEventKind, Vec<EventHandler>>,
@@ -107,7 +103,7 @@ pub struct Closure {
     pub function: i32,
     /// function_data is the pointer to a vector that contains all the variables "captured" by this
     /// closure.
-    pub captured_variables: Pointer,
+    pub captured_variables: fastn_runtime::Pointer,
     // in future we can this optimisation: Saves us from creating vectors unless needed. Most
     // closures have two pointers (if most had three we can create a v3).
 
@@ -118,7 +114,7 @@ pub struct Closure {
 
 #[derive(Debug, Default)]
 pub struct Frame {
-    pointers: Vec<Pointer>,
+    pointers: Vec<fastn_runtime::Pointer>,
 }
 
 impl Memory {
@@ -190,10 +186,14 @@ impl Memory {
         (*r_value, *g_value, *b_value, *a_value)
     }
 
-    fn insert_in_frame(&mut self, pointer: fastn_runtime::PointerKey, kind: PointerKind) {
+    fn insert_in_frame(
+        &mut self,
+        pointer: fastn_runtime::PointerKey,
+        kind: fastn_runtime::PointerKind,
+    ) {
         // using .unwrap() so we crash on a bug instead of silently ignoring it
         let frame = self.stack.last_mut().unwrap();
-        let pointer = Pointer { pointer, kind };
+        let pointer = fastn_runtime::Pointer { pointer, kind };
         for p in frame.pointers.iter() {
             if p == &pointer {
                 panic!();
@@ -206,17 +206,27 @@ impl Memory {
         self.stack.push(Frame::default());
     }
 
-    fn drop_from_frame(&mut self, _pointer: &Pointer) {
+    fn drop_from_frame(&mut self, _pointer: &fastn_runtime::Pointer) {
         todo!()
     }
 
-    pub fn add_parent(&mut self, target: Pointer, parent: Pointer) {
+    pub fn add_parent(&mut self, target: fastn_runtime::Pointer, parent: fastn_runtime::Pointer) {
         let parents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().parents,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().parents,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().parents,
-            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().parents,
-            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
+            fastn_runtime::PointerKind::Integer => {
+                &mut self.i32.get_mut(target.pointer).unwrap().parents
+            }
+            fastn_runtime::PointerKind::Boolean => {
+                &mut self.boolean.get_mut(target.pointer).unwrap().parents
+            }
+            fastn_runtime::PointerKind::Decimal => {
+                &mut self.f32.get_mut(target.pointer).unwrap().parents
+            }
+            fastn_runtime::PointerKind::String => {
+                &mut self.string.get_mut(target.pointer).unwrap().parents
+            }
+            fastn_runtime::PointerKind::List
+            | fastn_runtime::PointerKind::Record
+            | fastn_runtime::PointerKind::OrType => {
                 &mut self.vec.get_mut(target.pointer).unwrap().parents
             }
         };
@@ -230,7 +240,7 @@ impl Memory {
 
     fn drop_pointer(
         &mut self,
-        pointer: Pointer,
+        pointer: fastn_runtime::Pointer,
         dropped_so_far: &mut Vec<fastn_runtime::Pointer>,
         parent_vec: Option<fastn_runtime::Pointer>,
     ) -> bool {
@@ -241,27 +251,27 @@ impl Memory {
         }
 
         let (dependents, values, ui_properties) = match pointer.kind {
-            PointerKind::Boolean => {
+            fastn_runtime::PointerKind::Boolean => {
                 let b = self.boolean.get(pointer.pointer).unwrap();
                 (&b.parents, vec![], &b.ui_properties)
             }
-            PointerKind::Integer => {
+            fastn_runtime::PointerKind::Integer => {
                 let b = self.i32.get(pointer.pointer).unwrap();
                 (&b.parents, vec![], &b.ui_properties)
             }
-            PointerKind::Record | PointerKind::List => {
+            fastn_runtime::PointerKind::Record | fastn_runtime::PointerKind::List => {
                 let b = self.vec.get(pointer.pointer).unwrap();
                 (&b.parents, b.value.value().to_vec(), &b.ui_properties)
             }
-            PointerKind::OrType => {
+            fastn_runtime::PointerKind::OrType => {
                 let b = self.or_type.get(pointer.pointer).unwrap();
                 (&b.parents, vec![], &b.ui_properties)
             }
-            PointerKind::Decimal => {
+            fastn_runtime::PointerKind::Decimal => {
                 let b = self.f32.get(pointer.pointer).unwrap();
                 (&b.parents, vec![], &b.ui_properties)
             }
-            PointerKind::String => {
+            fastn_runtime::PointerKind::String => {
                 let b = self.string.get(pointer.pointer).unwrap();
                 (&b.parents, vec![], &b.ui_properties)
             }
@@ -301,24 +311,24 @@ impl Memory {
         drop
     }
 
-    fn delete_pointer(&mut self, pointer: Pointer) {
+    fn delete_pointer(&mut self, pointer: fastn_runtime::Pointer) {
         match pointer.kind {
-            PointerKind::Boolean => {
+            fastn_runtime::PointerKind::Boolean => {
                 self.boolean.remove(pointer.pointer);
             }
-            PointerKind::Integer => {
+            fastn_runtime::PointerKind::Integer => {
                 self.i32.remove(pointer.pointer);
             }
-            PointerKind::Record | PointerKind::List => {
+            fastn_runtime::PointerKind::Record | fastn_runtime::PointerKind::List => {
                 self.vec.remove(pointer.pointer);
             }
-            PointerKind::OrType => {
+            fastn_runtime::PointerKind::OrType => {
                 self.or_type.remove(pointer.pointer);
             }
-            PointerKind::Decimal => {
+            fastn_runtime::PointerKind::Decimal => {
                 self.f32.remove(pointer.pointer);
             }
-            PointerKind::String => {
+            fastn_runtime::PointerKind::String => {
                 self.string.remove(pointer.pointer);
             }
         };
@@ -412,19 +422,21 @@ impl Memory {
 
     pub fn is_pointer_valid(&self, ptr: fastn_runtime::Pointer) -> bool {
         match ptr.kind {
-            PointerKind::Boolean => self.boolean.contains_key(ptr.pointer),
-            PointerKind::Integer => self.i32.contains_key(ptr.pointer),
-            PointerKind::Record => self.vec.contains_key(ptr.pointer),
-            PointerKind::OrType => self.or_type.contains_key(ptr.pointer),
-            PointerKind::Decimal => self.f32.contains_key(ptr.pointer),
-            PointerKind::List => self.vec.contains_key(ptr.pointer),
-            PointerKind::String => self.string.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::Boolean => self.boolean.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::Integer => self.i32.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::Record => self.vec.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::OrType => self.or_type.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::Decimal => self.f32.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::List => self.vec.contains_key(ptr.pointer),
+            fastn_runtime::PointerKind::String => self.string.contains_key(ptr.pointer),
         }
     }
 
     pub fn create_string_constant(&mut self, buffer: Vec<u8>) -> fastn_runtime::PointerKey {
         let s = String::from_utf8(buffer).unwrap();
-        let pointer = self.string.insert(HeapValue::new(s).into_heap_data());
+        let pointer = self
+            .string
+            .insert(fastn_runtime::HeapValue::new(s).into_heap_data());
         // Note: intentionally not adding to the frame as constant strings are not to be GCed
         // self.insert_in_frame(pointer, PointerKind::String);
         println!("{:?}", pointer);
@@ -432,8 +444,10 @@ impl Memory {
     }
 
     pub fn create_list(&mut self) -> fastn_runtime::PointerKey {
-        let pointer = self.vec.insert(HeapValue::new(vec![]).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::List);
+        let pointer = self
+            .vec
+            .insert(fastn_runtime::HeapValue::new(vec![]).into_heap_data());
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::List);
         println!("{:?}", pointer);
         pointer
     }
@@ -448,12 +462,14 @@ impl Memory {
             kind: v1_kind,
         };
 
-        let pointer = self.vec.insert(HeapValue::new(vec![ptr1]).into_heap_data());
+        let pointer = self
+            .vec
+            .insert(fastn_runtime::HeapValue::new(vec![ptr1]).into_heap_data());
 
         let list_pointer = pointer.into_list_pointer();
         self.add_parent(ptr1, list_pointer);
 
-        self.insert_in_frame(pointer, PointerKind::List);
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::List);
         pointer
     }
 
@@ -475,20 +491,22 @@ impl Memory {
 
         let pointer = self
             .vec
-            .insert(HeapValue::new(vec![ptr1, ptr2]).into_heap_data());
+            .insert(fastn_runtime::HeapValue::new(vec![ptr1, ptr2]).into_heap_data());
 
         let list_pointer = pointer.into_list_pointer();
         self.add_parent(ptr1, list_pointer);
         self.add_parent(ptr2, list_pointer);
 
-        self.insert_in_frame(pointer, PointerKind::List);
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::List);
         dbg!("create_list_2", &pointer, &self.vec);
         pointer
     }
 
     pub fn create_boolean(&mut self, value: bool) -> fastn_runtime::PointerKey {
-        let pointer = self.boolean.insert(HeapValue::new(value).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::Boolean);
+        let pointer = self
+            .boolean
+            .insert(fastn_runtime::HeapValue::new(value).into_heap_data());
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::Boolean);
         println!("{:?}", pointer);
         pointer
     }
@@ -502,8 +520,10 @@ impl Memory {
     }
 
     pub fn create_i32(&mut self, value: i32) -> fastn_runtime::PointerKey {
-        let pointer = self.i32.insert(HeapValue::new(value).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::Integer);
+        let pointer = self
+            .i32
+            .insert(fastn_runtime::HeapValue::new(value).into_heap_data());
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::Integer);
         println!("{:?}", pointer);
         pointer
     }
@@ -536,8 +556,10 @@ impl Memory {
     }
 
     pub fn create_f32(&mut self, value: f32) -> fastn_runtime::PointerKey {
-        let pointer = self.f32.insert(HeapValue::new(value).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::Integer);
+        let pointer = self
+            .f32
+            .insert(fastn_runtime::HeapValue::new(value).into_heap_data());
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::Integer);
         println!("{:?}", pointer);
         pointer
     }
@@ -556,10 +578,10 @@ impl Memory {
         closure: Closure,
     ) -> fastn_runtime::PointerKey {
         let closure_key = self.create_closure(closure);
-        let pointer = self
-            .i32
-            .insert(HeapValue::new_with_formula(cached_value, closure_key).into_heap_data());
-        self.insert_in_frame(pointer, PointerKind::Integer);
+        let pointer = self.i32.insert(
+            fastn_runtime::HeapValue::new_with_formula(cached_value, closure_key).into_heap_data(),
+        );
+        self.insert_in_frame(pointer, fastn_runtime::PointerKind::Integer);
         println!("{:?}", pointer);
         pointer
     }
@@ -598,14 +620,14 @@ impl Memory {
         ptr2: fastn_runtime::PointerKey,
     ) -> fastn_runtime::PointerKey {
         let vec = self.vec.insert(
-            HeapValue::new(vec![
-                Pointer {
+            fastn_runtime::HeapValue::new(vec![
+                fastn_runtime::Pointer {
                     pointer: ptr1,
-                    kind: PointerKind::Integer,
+                    kind: fastn_runtime::PointerKind::Integer,
                 },
-                Pointer {
+                fastn_runtime::Pointer {
                     pointer: ptr2,
-                    kind: PointerKind::Integer,
+                    kind: fastn_runtime::PointerKind::Integer,
                 },
             ])
             .into_heap_data(),
@@ -613,7 +635,7 @@ impl Memory {
         self.add_parent(ptr1.into_integer_pointer(), vec.into_list_pointer());
         self.add_parent(ptr2.into_integer_pointer(), vec.into_list_pointer());
 
-        self.insert_in_frame(vec, PointerKind::List);
+        self.insert_in_frame(vec, fastn_runtime::PointerKind::List);
         println!("{:?}", vec);
 
         vec
@@ -621,17 +643,25 @@ impl Memory {
 
     pub fn add_dynamic_property_dependency(
         &mut self,
-        target: Pointer,
-        dependency: DynamicProperty,
+        target: fastn_runtime::Pointer,
+        dependency: fastn_runtime::DynamicProperty,
     ) {
         let ui_properties = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().ui_properties,
-            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().ui_properties,
-            PointerKind::Boolean => {
+            fastn_runtime::PointerKind::Integer => {
+                &mut self.i32.get_mut(target.pointer).unwrap().ui_properties
+            }
+            fastn_runtime::PointerKind::String => {
+                &mut self.string.get_mut(target.pointer).unwrap().ui_properties
+            }
+            fastn_runtime::PointerKind::Boolean => {
                 &mut self.boolean.get_mut(target.pointer).unwrap().ui_properties
             }
-            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().ui_properties,
-            PointerKind::List | PointerKind::Record | PointerKind::OrType => {
+            fastn_runtime::PointerKind::Decimal => {
+                &mut self.f32.get_mut(target.pointer).unwrap().ui_properties
+            }
+            fastn_runtime::PointerKind::List
+            | fastn_runtime::PointerKind::Record
+            | fastn_runtime::PointerKind::OrType => {
                 &mut self.vec.get_mut(target.pointer).unwrap().ui_properties
             }
         };
@@ -641,27 +671,27 @@ impl Memory {
 
     pub fn create_rgba(&mut self, r: i32, g: i32, b: i32, a: f32) -> fastn_runtime::PointerKey {
         let r_pointer = self.create_i32(r);
-        let g_pointer = self.i32.insert(HeapValue::new(g).into_heap_data());
-        let b_pointer = self.i32.insert(HeapValue::new(b).into_heap_data());
-        let a_pointer = self.f32.insert(HeapValue::new(a).into_heap_data());
+        let g_pointer = self.create_i32(g);
+        let b_pointer = self.create_i32(b);
+        let a_pointer = self.create_f32(a);
 
         let vec = self.vec.insert(
-            HeapValue::new(vec![
-                Pointer {
+            fastn_runtime::HeapValue::new(vec![
+                fastn_runtime::Pointer {
                     pointer: r_pointer,
-                    kind: PointerKind::Integer,
+                    kind: fastn_runtime::PointerKind::Integer,
                 },
-                Pointer {
+                fastn_runtime::Pointer {
                     pointer: g_pointer,
-                    kind: PointerKind::Integer,
+                    kind: fastn_runtime::PointerKind::Integer,
                 },
-                Pointer {
+                fastn_runtime::Pointer {
                     pointer: b_pointer,
-                    kind: PointerKind::Integer,
+                    kind: fastn_runtime::PointerKind::Integer,
                 },
-                Pointer {
+                fastn_runtime::Pointer {
                     pointer: a_pointer,
-                    kind: PointerKind::Decimal,
+                    kind: fastn_runtime::PointerKind::Decimal,
                 },
             ])
             .into_heap_data(),
@@ -672,7 +702,7 @@ impl Memory {
         self.add_parent(b_pointer.into_integer_pointer(), vec.into_record_pointer());
         self.add_parent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
 
-        self.insert_in_frame(vec, PointerKind::Record);
+        self.insert_in_frame(vec, fastn_runtime::PointerKind::Record);
         println!("{:?}", vec);
         vec
     }
@@ -689,7 +719,7 @@ impl Memory {
         }
     }
 
-    pub(crate) fn get_vec(&self, ptr: fastn_runtime::PointerKey) -> Vec<Pointer> {
+    pub(crate) fn get_vec(&self, ptr: fastn_runtime::PointerKey) -> Vec<fastn_runtime::Pointer> {
         self.vec[ptr].value.value().to_vec()
     }
 
