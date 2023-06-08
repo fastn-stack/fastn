@@ -1,4 +1,4 @@
-#[derive(Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub struct DynamicProperty {
     pub node: fastn_runtime::NodeKey,
     pub property: fastn_runtime::UIProperty,

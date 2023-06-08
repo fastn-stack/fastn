@@ -18,7 +18,7 @@ pub struct HeapData<T> {
     pub branches: std::collections::HashSet<Attachment>,
 }
 
-#[derive(Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub struct Attachment {
     pub branch: fastn_runtime::DynamicProperty,
     pub via: fastn_runtime::Pointer,

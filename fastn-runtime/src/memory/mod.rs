@@ -211,31 +211,15 @@ impl Memory {
     }
 
     pub fn add_parent(&mut self, target: fastn_runtime::Pointer, parent: fastn_runtime::Pointer) {
-        let parents = match target.kind {
-            fastn_runtime::PointerKind::Integer => {
-                &mut self.i32.get_mut(target.pointer).unwrap().parents
-            }
-            fastn_runtime::PointerKind::Boolean => {
-                &mut self.boolean.get_mut(target.pointer).unwrap().parents
-            }
-            fastn_runtime::PointerKind::Decimal => {
-                &mut self.f32.get_mut(target.pointer).unwrap().parents
-            }
-            fastn_runtime::PointerKind::String => {
-                &mut self.string.get_mut(target.pointer).unwrap().parents
-            }
-            fastn_runtime::PointerKind::List
-            | fastn_runtime::PointerKind::Record
-            | fastn_runtime::PointerKind::OrType => {
-                &mut self.vec.get_mut(target.pointer).unwrap().parents
-            }
-        };
+        let branches = parent.get_branches(self);
+        let m = target.get_branches_mut(self);
 
-        println!(
-            "add_dependent, target: {:?}, dependent: {:?}",
-            target, &parent
-        );
-        parents.push(parent);
+        for a in branches {
+            dbg!(a);
+            // TODO: this has to be done recursively. We will also need a vec to ensure we only
+            //       visit each node only once
+            m.insert(a);
+        }
     }
 
     fn drop_pointer(
@@ -249,6 +233,8 @@ impl Memory {
             println!("pointer already dropped, ignoring: {:?}", pointer);
             return true;
         }
+
+        // TODO: rewrite this function completely
 
         let (dependents, values, ui_properties) = match pointer.kind {
             fastn_runtime::PointerKind::Boolean => {
