@@ -7,9 +7,9 @@ pub struct HeapData<T> {
     pub value: HeapValue<T>,
     /// the list of values that depend on this, eg if we add x to a list l, we also do a
     /// x.parents.add(l)
-    pub parents: Vec<fastn_runtime::memory::Pointer>,
+    pub parents: Vec<fastn_runtime::Pointer>,
     /// whenever a dom node is added or deleted, it is added or removed from this list.
-    pub ui_properties: Vec<fastn_runtime::memory::DynamicProperty>,
+    pub ui_properties: Vec<fastn_runtime::DynamicProperty>,
 
     /// things are connected to root us via branches. One can be attached to more than one branches,
     /// or to same branch by more than "via"s. When a pointer is created it is connected with no

@@ -31,10 +31,10 @@ pub use document::Document;
 pub use dom::{Color, DarkModeProperty, Dom, LengthRole, NodeKey, ResponsiveProperty, TextRole};
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
-pub use memory::{
-    Closure, ClosurePointer, EventHandler, HeapValue, Memory, Pointer, PointerKey, PointerKind,
-    UIProperty, DynamicProperty
-};
+pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};
+pub use memory::pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
+pub use memory::ui::{DynamicProperty, UIProperty};
+pub use memory::{Closure, EventHandler, Memory};
 pub use operation::{Operation, Rectangle};
 
 // #[derive(Debug, Default, Clone)]

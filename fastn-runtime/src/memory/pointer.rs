@@ -9,6 +9,18 @@ pub struct Pointer {
     pub kind: PointerKind,
 }
 
+impl Pointer {
+    pub fn get_branches(
+        self,
+        mem: &fastn_runtime::Memory,
+    ) -> &std::collections::HashSet<fastn_runtime::Attachment> {
+        match self.kind {
+            fastn_runtime::PointerKind::String => &mem.string[self.pointer].branches,
+            _ => todo!(),
+        }
+    }
+}
+
 impl fastn_runtime::PointerKey {
     pub(crate) fn into_boolean_pointer(self) -> Pointer {
         Pointer {
