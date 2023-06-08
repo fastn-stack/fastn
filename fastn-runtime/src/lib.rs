@@ -34,7 +34,7 @@ pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};
 pub use memory::pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
 pub use memory::ui::{DynamicProperty, UIProperty};
-pub use memory::{Closure, EventHandler, Memory};
+pub use memory::{Closure, EventHandler, Memory, Frame};
 pub use operation::{Operation, Rectangle};
 
 // #[derive(Debug, Default, Clone)]
