@@ -5,19 +5,21 @@ one document with an idea that it takes a flow that gives user a feel of a
 `tutorial`, by also covers a problem statement hence also acts as a `how-to 
 guide` and at times can also be used as a `reference`.
 
-We all agree that this setup was maybe necessary as we have less contents for 
-users and our aim was to add numbers in form of documents and videos.
+We all agree that this setup was maybe necessary when we had less contents for 
+users in the beginning and our aim was to produce quantity in form of 
+documents and videos.
 
-With the user base growing, and content we have. We want to move to the next 
-phase where more standards and classification is also important to us.
+With the user base growing, and with decent number of contents we have, we 
+want to move to the next phase where more standards are in place and there is 
+a definite classification is in place.
 
 In meetings, we had decided on to create a structure, a playlist and 
 classification that segregates the contents in 3 or 4 types.
 
-I had reached to my collegues and tried to understand the classification we 
-must structure our content. With their support via discussions and other 
-references, we have planned to make the effectiveness of the content by the 
-following classification:
+I had reached to my collegues and tried to understand the classification based 
+on which we must structure our content. With their support via discussions and 
+references ([source](https://documentation.divio.com/)), we are planning to 
+make the effectiveness of the content through these classifications:
 
 1. Tutorials
 2. How-to Guides
@@ -160,13 +162,29 @@ of topics for discussion can sometimes be a little arbitrary.
 
 
 
-/-- ds.h1: List of videos/topics we have covered
+-- ds.h1: List of videos/topics we have covered
 
-1. Expander
+1. [Expander](/expander/)
 
-- ftd.text as Hello World
-- 
+- ftd.text through Hello World
+- properties like padding, border, background color, width, height,
+  align-content, spacing and container components 
+- components in Part 3
+- event handling in Part 4
+- button with shadow
+- create rounded border
+- holy-grail layout
+- sitemap basic
+- create URLs
+- How to use images in documents
+- Add meta-data to doc-site
+- How to use Markdown
 
+
+-- ds.markdown: 
+
+We have to classify them and make tweaks in the documents in a way it does 
+justice to the 4 classifications.
 
 -- end: my-ds.page
 
