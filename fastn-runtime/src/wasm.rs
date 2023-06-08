@@ -392,7 +392,7 @@ impl fastn_runtime::Memory {
                 caller.data_mut().memory.i32[ptr].value.set_value(value);
                 dbg!(&caller.data().memory.i32[ptr]);
 
-                for dependent in caller.data().memory.i32[ptr].children.clone() {
+                for dependent in caller.data().memory.i32[ptr].parents.clone() {
                     for ui_property in caller.data().memory.vec[dependent.pointer]
                         .ui_properties
                         .clone()

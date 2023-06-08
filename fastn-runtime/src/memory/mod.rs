@@ -210,22 +210,22 @@ impl Memory {
         todo!()
     }
 
-    pub fn add_dependent(&mut self, target: Pointer, dependent: Pointer) {
-        let dependents = match target.kind {
-            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().children,
-            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().children,
-            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().children,
-            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().children,
+    pub fn add_parent(&mut self, target: Pointer, parent: Pointer) {
+        let parents = match target.kind {
+            PointerKind::Integer => &mut self.i32.get_mut(target.pointer).unwrap().parents,
+            PointerKind::Boolean => &mut self.boolean.get_mut(target.pointer).unwrap().parents,
+            PointerKind::Decimal => &mut self.f32.get_mut(target.pointer).unwrap().parents,
+            PointerKind::String => &mut self.string.get_mut(target.pointer).unwrap().parents,
             PointerKind::List | PointerKind::Record | PointerKind::OrType => {
-                &mut self.vec.get_mut(target.pointer).unwrap().children
+                &mut self.vec.get_mut(target.pointer).unwrap().parents
             }
         };
 
         println!(
             "add_dependent, target: {:?}, dependent: {:?}",
-            target, &dependent
+            target, &parent
         );
-        dependents.push(dependent);
+        parents.push(parent);
     }
 
     fn drop_pointer(
@@ -243,27 +243,27 @@ impl Memory {
         let (dependents, values, ui_properties) = match pointer.kind {
             PointerKind::Boolean => {
                 let b = self.boolean.get(pointer.pointer).unwrap();
-                (&b.children, vec![], &b.ui_properties)
+                (&b.parents, vec![], &b.ui_properties)
             }
             PointerKind::Integer => {
                 let b = self.i32.get(pointer.pointer).unwrap();
-                (&b.children, vec![], &b.ui_properties)
+                (&b.parents, vec![], &b.ui_properties)
             }
             PointerKind::Record | PointerKind::List => {
                 let b = self.vec.get(pointer.pointer).unwrap();
-                (&b.children, b.value.value().to_vec(), &b.ui_properties)
+                (&b.parents, b.value.value().to_vec(), &b.ui_properties)
             }
             PointerKind::OrType => {
                 let b = self.or_type.get(pointer.pointer).unwrap();
-                (&b.children, vec![], &b.ui_properties)
+                (&b.parents, vec![], &b.ui_properties)
             }
             PointerKind::Decimal => {
                 let b = self.f32.get(pointer.pointer).unwrap();
-                (&b.children, vec![], &b.ui_properties)
+                (&b.parents, vec![], &b.ui_properties)
             }
             PointerKind::String => {
                 let b = self.string.get(pointer.pointer).unwrap();
-                (&b.children, vec![], &b.ui_properties)
+                (&b.parents, vec![], &b.ui_properties)
             }
         };
 
@@ -451,7 +451,7 @@ impl Memory {
         let pointer = self.vec.insert(HeapValue::new(vec![ptr1]).into_heap_data());
 
         let list_pointer = pointer.into_list_pointer();
-        self.add_dependent(ptr1, list_pointer);
+        self.add_parent(ptr1, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
         pointer
@@ -478,8 +478,8 @@ impl Memory {
             .insert(HeapValue::new(vec![ptr1, ptr2]).into_heap_data());
 
         let list_pointer = pointer.into_list_pointer();
-        self.add_dependent(ptr1, list_pointer);
-        self.add_dependent(ptr2, list_pointer);
+        self.add_parent(ptr1, list_pointer);
+        self.add_parent(ptr2, list_pointer);
 
         self.insert_in_frame(pointer, PointerKind::List);
         dbg!("create_list_2", &pointer, &self.vec);
@@ -610,8 +610,8 @@ impl Memory {
             ])
             .into_heap_data(),
         );
-        self.add_dependent(ptr1.into_integer_pointer(), vec.into_list_pointer());
-        self.add_dependent(ptr2.into_integer_pointer(), vec.into_list_pointer());
+        self.add_parent(ptr1.into_integer_pointer(), vec.into_list_pointer());
+        self.add_parent(ptr2.into_integer_pointer(), vec.into_list_pointer());
 
         self.insert_in_frame(vec, PointerKind::List);
         println!("{:?}", vec);
@@ -667,10 +667,10 @@ impl Memory {
             .into_heap_data(),
         );
 
-        self.add_dependent(r_pointer.into_integer_pointer(), vec.into_record_pointer());
-        self.add_dependent(g_pointer.into_integer_pointer(), vec.into_record_pointer());
-        self.add_dependent(b_pointer.into_integer_pointer(), vec.into_record_pointer());
-        self.add_dependent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_parent(r_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_parent(g_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_parent(b_pointer.into_integer_pointer(), vec.into_record_pointer());
+        self.add_parent(a_pointer.into_integer_pointer(), vec.into_record_pointer());
 
         self.insert_in_frame(vec, PointerKind::Record);
         println!("{:?}", vec);
