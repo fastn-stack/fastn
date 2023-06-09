@@ -1,5 +1,5 @@
 -- my-ds.page: WorkShop Questions
-widthfill: true
+full-width: true
 
 -- question-ui: Which of the following is wrong?
 answers: 3
@@ -12,7 +12,7 @@ answers: 3
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- ftd.text: Hello
 color: red
@@ -27,7 +27,7 @@ color: red
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- ftd.text:
 text: Hello
@@ -44,7 +44,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- ftd.text:
 value: Hello
@@ -59,7 +59,7 @@ color: red
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- ftd.text:
 color: red
@@ -103,7 +103,7 @@ question: How to create a record `person` where
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- record person:
 caption integer employee-id:
@@ -121,7 +121,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- record person:
 caption integer employee-id:
@@ -139,7 +139,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- record person:
 integer caption employee-id:
@@ -155,7 +155,7 @@ optional body bio:
 -- options.ui:
 
 -- ds.code:
-lang: ftd
+max-width: fill-container
 
 \-- record person:
 employee-id: integer caption
@@ -328,6 +328,7 @@ if: { options-ui.value != NULL }
 
 -- ftd.column:
 children: $options-ui.more-detail-ui
+width: fill-container
 
 -- end: ftd.column
 
