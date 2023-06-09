@@ -1241,18 +1241,6 @@ impl<'a> TDoc<'a> {
         )
     }
 
-    pub fn resolve_aliased_name(&self, name: &str) -> String {
-        if let Some((doc_name, thing_name)) = name.split_once('#') {
-            let aliased_doc_name = self
-                .aliases
-                .get(doc_name)
-                .cloned()
-                .unwrap_or(doc_name.to_string());
-            return format!("{}#{}", aliased_doc_name, thing_name);
-        }
-        name.to_string()
-    }
-
     pub fn search_thing(
         &mut self,
         name: &str,
@@ -1263,11 +1251,6 @@ impl<'a> TDoc<'a> {
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
             .unwrap_or(name.as_str());
-
-        // let resolved_name_from_doc_alias = self.resolve_aliased_name(name);
-        // let name = resolved_name_from_doc_alias.as_str();
-
-        // println!("HELLLLLOooooooooooooooo: {}", name);
 
         let (initial_thing, remaining) =
             try_ok_state!(self.search_initial_thing(name, line_number)?);
@@ -1608,7 +1591,7 @@ impl<'a> TDoc<'a> {
                         return Ok(thing);
                     }
                 }*/
-                return self.err("not found 5", name, "search_thing", line_number);
+                return self.err("not found", name, "search_thing", line_number);
             }
 
             state
