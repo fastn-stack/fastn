@@ -996,14 +996,16 @@ fn search_things_for_module(
                 line_number,
             );
         }
-
-        let (m_name, things) = match property
+        let mut module_property = property
             .first()
             .unwrap()
             .resolve(doc, &Default::default())?
             // TODO: Remove unwrap()
-            .unwrap()
-        {
+            .unwrap();
+
+        ftd::interpreter::utils::update_module_things(&mut module_property, &argument, doc)?;
+
+        let (m_name, things) = match module_property {
             ftd::interpreter::Value::Module { name, things } => (name, things),
             t => {
                 return ftd::interpreter::utils::e2(
@@ -1015,7 +1017,7 @@ fn search_things_for_module(
         };
 
         let aliases;
-        let m_alias;
+        let mut m_alias;
         {
             let current_parsed_document = if let Some(state) = {
                 match &mut doc.bag {
@@ -1025,29 +1027,34 @@ fn search_things_for_module(
             } {
                 state.parsed_libs.get_mut(state.id.as_str()).unwrap()
             } else {
-                return doc.err("not found", m_name, "search_thing", line_number);
+                return doc.err("not found 3", m_name, "search_thing", line_number);
             };
-            let (module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
-            current_parsed_document
-                .doc_aliases
-                .insert(alias.to_string(), module.to_string());
+            let (_module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
+            if let Some(m) = current_parsed_document.doc_aliases.get(alias.as_str()) {
+                current_parsed_document
+                    .doc_aliases
+                    .insert(alias.to_string(), m.to_string());
+            }
             m_alias = alias;
             aliases = current_parsed_document.doc_aliases.clone();
+        }
+
+        if let Some(module) = doc.aliases.get(m_alias.as_str()) {
+            m_alias = module.to_string();
         }
 
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
             let thing_ = format!(
-                "{}.{}",
+                "{}#{}",
                 m_alias,
                 thing.trim_start_matches(
                     doc.resolve_name(format!("{}.{}.", component_name, argument.name).as_str())
                         .as_str(),
                 )
             );
-            let thing_real_name =
-                ftd::interpreter::utils::resolve_name(thing_.as_str(), doc.name, &aliases);
+            let thing_real_name = thing_.clone();
             if unresolved_thing.is_some() {
                 doc.scan_thing(&thing_real_name, line_number)?;
             } else {

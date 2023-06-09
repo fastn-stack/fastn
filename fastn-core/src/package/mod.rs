@@ -386,9 +386,68 @@ impl Package {
             return body.to_string();
         };
         match self.generate_prefix_string(with_alias) {
-            Some(s) => format!("{}\n\n{}", s.trim(), body),
-            None => body.to_string(),
+            Some(s) => {
+                let t = format!("{}\n\n{}", s, body);
+                self.fix_imports_in_body(t.as_str(), id).ok().unwrap_or(t)
+            }
+            None => self
+                .fix_imports_in_body(body, id)
+                .ok()
+                .unwrap_or(body.to_string()),
         }
+    }
+
+    pub fn find_final_dependency(&self, path: &str) -> String {
+        for dependency in self.dependencies.iter() {
+            if let Some(alias) = &dependency.alias {
+                if alias.eq(path) {
+                    return self.find_final_dependency(dependency.package.name.as_str());
+                }
+            }
+        }
+        return path.to_string();
+    }
+
+    pub fn fix_body_imports(&self, body: &str) -> String {
+        let mut s: Vec<String> = vec![];
+        for line in body.lines() {
+            let mut line = line.trim_start().to_string();
+
+            if line.starts_with("-- import") && line.contains(':') {
+                // IMPORT FOUND
+                if let Some((_, import_value)) = line.split_once(':') {
+                    // IMPORT SPLIT
+                    let import_value = import_value.trim();
+                    let mut final_import_value = import_value.to_string();
+                    if import_value.contains(" as ") {
+                        // println!("IMPORT found having alias: {}", &import_value);
+                        // package_url/alias as t
+                        if let Some((url_or_alias, _)) = import_value.split_once(" as ") {
+                            let final_dependency = self.find_final_dependency(url_or_alias);
+                            final_import_value =
+                                import_value.replace(url_or_alias, final_dependency.as_str());
+                        }
+                    } else {
+                        // println!("IMPORT found without alias: {}", &import_value);
+                        for dependency in self.dependencies.iter() {
+                            if let Some(alias) = &dependency.alias {
+                                if alias.eq(import_value) {
+                                    // final_import_value = dependency.package.name.clone();
+                                    final_import_value = format!(
+                                        "{} as {}",
+                                        dependency.package.name.clone(),
+                                        import_value,
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    line = format!("-- import: {}", final_import_value.trim_start());
+                }
+            }
+            s.push(line);
+        }
+        s.join("\n").to_string()
     }
 
     pub fn eval_auto_import(&self, name: &str) -> Option<&str> {

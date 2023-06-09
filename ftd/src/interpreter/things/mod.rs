@@ -18,20 +18,44 @@ pub enum ModuleThing {
 impl ModuleThing {
     pub fn component(
         name: String,
+        reference_name: String,
         kind: ftd::interpreter::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
-        return ModuleThing::Component(ComponentModuleThing::new(name, kind, arguments));
+        return ModuleThing::Component(ComponentModuleThing::new(
+            name,
+            reference_name,
+            kind,
+            arguments,
+        ));
     }
 
-    pub fn variable(name: String, kind: ftd::interpreter::KindData) -> Self {
-        return ModuleThing::Variable(VariableModuleThing::new(name, kind));
+    pub fn variable(
+        name: String,
+        reference_name: String,
+        kind: ftd::interpreter::KindData,
+    ) -> Self {
+        return ModuleThing::Variable(VariableModuleThing::new(name, reference_name, kind));
     }
 
     pub fn get_kind(&self) -> ftd::interpreter::KindData {
         match self {
             ftd::interpreter::ModuleThing::Component(c) => c.kind.clone(),
             ftd::interpreter::ModuleThing::Variable(v) => v.kind.clone(),
+        }
+    }
+
+    pub fn get_name(&self) -> String {
+        match self {
+            ftd::interpreter::ModuleThing::Component(c) => c.name.clone(),
+            ftd::interpreter::ModuleThing::Variable(v) => v.name.clone(),
+        }
+    }
+
+    pub fn get_reference_name(&self) -> String {
+        match self {
+            ftd::interpreter::ModuleThing::Component(c) => c.reference_name.clone(),
+            ftd::interpreter::ModuleThing::Variable(v) => v.reference_name.clone(),
         }
     }
 
@@ -46,18 +70,24 @@ impl ModuleThing {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableModuleThing {
     pub name: String,
+    pub reference_name: String,
     pub kind: ftd::interpreter::KindData,
 }
 
 impl VariableModuleThing {
-    pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
-        return VariableModuleThing { name, kind };
+    pub fn new(name: String, reference_name: String, kind: ftd::interpreter::KindData) -> Self {
+        return VariableModuleThing {
+            name,
+            reference_name,
+            kind,
+        };
     }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentModuleThing {
     pub name: String,
+    pub reference_name: String,
     pub kind: ftd::interpreter::KindData,
     pub arguments: Vec<ftd::interpreter::Argument>,
 }
@@ -65,11 +95,13 @@ pub struct ComponentModuleThing {
 impl ComponentModuleThing {
     pub fn new(
         name: String,
+        reference_name: String,
         kind: ftd::interpreter::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
         return ComponentModuleThing {
             name,
+            reference_name,
             kind,
             arguments,
         };

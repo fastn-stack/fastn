@@ -48,6 +48,7 @@ impl Variable {
                 );
 
             if !state.parsed_libs.contains_key(doc_name.as_str()) {
+                println!("P5: {}", doc_name);
                 state
                     .pending_imports
                     .stack

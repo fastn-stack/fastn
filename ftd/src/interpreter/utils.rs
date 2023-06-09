@@ -640,6 +640,7 @@ pub(crate) fn insert_module_thing(
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(
                     reference_full_name.to_string(),
+                    reference.to_string(),
                     ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
                     module_component_definition.arguments.clone(),
                 );
@@ -648,9 +649,10 @@ pub(crate) fn insert_module_thing(
             } else {
                 let variable_module_thing = ftd::interpreter::ModuleThing::variable(
                     reference_full_name.to_string(),
+                    reference.to_string(),
                     kind.clone(),
                 );
-                things.insert(reference_full_name.to_string(), variable_module_thing);
+                things.insert(reference.to_string(), variable_module_thing);
             }
         }
     }
@@ -678,12 +680,88 @@ pub(crate) fn find_properties_by_source(
     Ok(properties)
 }
 
+pub(crate) fn update_module_things(
+    property: &mut ftd::interpreter::Value,
+    argument: &ftd::interpreter::Argument,
+    doc: &mut ftd::interpreter::TDoc,
+) -> ftd::interpreter::Result<()> {
+    let (default_module, default_arg_things) = match argument
+        .value
+        .as_ref()
+        .unwrap()
+        .value(doc.name, argument.line_number)?
+    {
+        ftd::interpreter::Value::Module { name, things, .. } => (name, things),
+        t => {
+            return ftd::interpreter::utils::e2(
+                format!("Expected module, found: {:?}", t),
+                doc.name,
+                argument.line_number,
+            )
+        }
+    };
+
+    match property {
+        ftd::interpreter::Value::Module {
+            name: module_name,
+            things,
+            ..
+        } => {
+            if module_name.as_str().ne(default_module.as_str()) {
+                for (reference_full_name, module_thing) in default_arg_things.iter() {
+                    let reference = module_thing.get_reference_name();
+                    let kind = module_thing.get_kind();
+
+                    let mut reference_parts = reference.split('.');
+                    if let (Some(_), Some(_), Some(third)) = (
+                        reference_parts.next(),
+                        reference_parts.next(),
+                        reference_parts.next(),
+                    ) {
+                        let module_component_name = format!("{}#{}", module_name, third);
+                        if let Ok(module_component_definition) =
+                            doc.get_component(module_component_name.as_str(), 0)
+                        {
+                            let component_module_thing = ftd::interpreter::ModuleThing::component(
+                                reference_full_name.to_string(),
+                                reference.clone(),
+                                ftd::interpreter::Kind::ui_with_name(reference_full_name)
+                                    .into_kind_data(),
+                                module_component_definition.arguments.clone(),
+                            );
+
+                            things.insert(reference_full_name.to_string(), component_module_thing);
+                        } else {
+                            let variable_module_thing = ftd::interpreter::ModuleThing::variable(
+                                reference_full_name.to_string(),
+                                reference.clone(),
+                                kind.clone(),
+                            );
+                            things.insert(reference_full_name.to_string(), variable_module_thing);
+                        }
+                    }
+                }
+            }
+        }
+        t => {
+            return ftd::interpreter::utils::e2(
+                format!("Expected module, found: {:?}", t),
+                doc.name,
+                argument.line_number,
+            )
+        }
+    };
+
+    Ok(())
+}
+
 pub(crate) fn validate_properties_and_set_default(
     properties: &mut Vec<ftd::interpreter::Property>,
     argument: &ftd::interpreter::Argument,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
+    // println!("INSIDE VALIDATE");
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
     for property in properties.iter_mut() {
@@ -714,13 +792,13 @@ pub(crate) fn validate_properties_and_set_default(
         }
 
         if argument.kind.is_module() {
-            let arg_things = match argument
+            let (_default_module, arg_things) = match argument
                 .value
                 .as_ref()
                 .unwrap()
                 .value(doc_id, line_number)?
             {
-                ftd::interpreter::Value::Module { things, .. } => things,
+                ftd::interpreter::Value::Module { name, things } => (name, things),
                 t => {
                     return ftd::interpreter::utils::e2(
                         format!("Expected module, found: {:?}", t),
@@ -731,7 +809,7 @@ pub(crate) fn validate_properties_and_set_default(
             };
 
             if let ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Module { things, .. },
+                value: ftd::interpreter::Value::Module { things, name },
                 ..
             } = &mut property.value
             {
