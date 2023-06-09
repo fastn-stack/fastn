@@ -108,14 +108,16 @@ favicon: /-/fastn.com/images/favicon.svg
 - Create `font` package: /create-font-package/
   document: author/how-to/create-font-package.ftd
 
-# Frontend: /frontend/
+# Frontend: /frontend/why/
 
-## Docs: /frontend/
+## Docs: /frontend/why/
 
 - Overview 🚧: /frontend/
-- Why Use `fastn` for Your Next Frontend? 🚧: /frontend/why/
+  skip: true
+- Why Use `fastn` for Your Next Frontend?: /frontend/why/
 - Design System 🚧: /design-system/
   document: frontend/design-system.ftd
+  skip: true
 - Getting Started: /setup/
   document: ftd/setup.ftd
 - Data Modelling: /ftd/data-modelling/
@@ -325,8 +327,9 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/meta-data.ftd
 - Markdown: /markdown/-/frontend/
   document: /expander/ds/markdown.ftd
-- Using page component: /ds-page/-/frontend/
+- Using `ds.page` component: /ds-page/-/frontend/
   document: /expander/ds/ds-page.ftd
+  skip: true
 
 
 
@@ -381,6 +384,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/markdown.ftd
 - Using page component: /ds-page/
   document: /expander/ds/ds-page.ftd
+  skip: true
 - Redirects: /redirects/
 
 ## Featured Components: /featured/
