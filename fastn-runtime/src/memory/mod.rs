@@ -1,8 +1,8 @@
+mod gc;
 pub mod heap;
 mod helper;
 pub mod pointer;
 pub mod ui;
-mod gc;
 mod wasm;
 
 /// Memory contains all the data created by our runtime.
@@ -65,8 +65,9 @@ pub struct Memory {
     or_type: fastn_runtime::Heap<(u8, Vec<fastn_runtime::Pointer>)>,
 
     /// text role can only be attached to text
-    text_role: fastn_runtime::Heap<fastn_runtime::TextRole>,
-    color_role: fastn_runtime::Heap<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>,
+    text_role: fastn_runtime::Heap<fastn_runtime::TextRole>, // class: t_<id>
+    text_role_2: Vec<fastn_runtime::PointerKey>, // class: t_<id>
+    color_role: fastn_runtime::Heap<fastn_runtime::DarkModeProperty<fastn_runtime::Color>>, // c_2v1
     length_role: fastn_runtime::Heap<fastn_runtime::LengthRole>,
 
     pub(crate) closure: slotmap::SlotMap<fastn_runtime::ClosurePointer, Closure>,

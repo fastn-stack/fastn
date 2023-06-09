@@ -51,15 +51,13 @@ impl From<ElementKind> for i32 {
     }
 }
 
-enum Property<T> {
-    Static(T),
-    Dynamic(fastn_runtime::PointerKey),
-}
+struct I32Pointer(fastn_runtime::PointerKey);
 
 #[derive(Debug)]
 pub struct CommonStyle {
-    // pub background_color: Option<Property<fastn_runtime::DarkModeProperty<fastn_runtime::StaticColor>>>,
-    // pub padding: Option<Property<fastn_runtime::ResponsiveProperty<fastn_runtime::StaticLength>>>,
+    pub background_color: Option<I32Pointer>,
+    pub padding: Option<fastn_runtime::PointerKey>,
+    pub align: Option<Align>,
     // border: Borders,
 }
 

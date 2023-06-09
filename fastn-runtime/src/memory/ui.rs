@@ -5,6 +5,53 @@ pub struct DynamicProperty {
     pub closure: fastn_runtime::ClosurePointer,
 }
 
+#[derive(Debug)]
+pub struct TextRole {
+    font_size: fastn_runtime::PointerKey,
+    line_height: fastn_runtime::PointerKey,
+}
+
+// -- integer $x: 20
+
+// -- ftd.text-role r:
+// font-size: $x + 20
+
+// def x_modified_update_r(r, x):
+//     mem.set_list_item(r, 0, x)
+
+// def x_modified_update_r(r, x):
+//      mem.update_text_role(r, TextRoleField::FontSize.to_i32(), x)
+
+#[derive(Debug)]
+pub struct ResponsiveProperty<T> {
+    desktop: T,
+    mobile: T,
+}
+
+#[derive(Debug)]
+pub struct LengthRole {}
+
+#[derive(Debug)]
+pub struct DarkModeProperty<T> {
+    pub light: T,
+    pub dark: Option<T>,
+}
+
+impl<T> From<T> for DarkModeProperty<T> {
+    fn from(light: T) -> Self {
+        DarkModeProperty { light, dark: None }
+    }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Default, Debug)]
+pub struct Color {
+    pub red: fastn_runtime::PointerKey,
+    pub green: fastn_runtime::PointerKey,
+    pub blue: fastn_runtime::PointerKey,
+    pub alpha: fastn_runtime::PointerKey,
+}
+
 #[derive(Debug, Copy, Hash, Eq, PartialEq, Clone)]
 pub enum UIProperty {
     WidthFixedPx,

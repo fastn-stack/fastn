@@ -124,5 +124,4 @@ impl fastn_runtime::Memory {
             }
         };
     }
-
 }

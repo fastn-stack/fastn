@@ -40,7 +40,7 @@ let runtime_instance = null;
 let doc_instance = null;
 
 WebAssembly.instantiateStreaming(fetch("runtime.wasm"), importObject).then(
-  (obj) => runtime_instance = obj.instance;
+  (obj) => runtime_instance = obj.instance; // check if both are loaded, if so call .start on both
 );
 
 WebAssembly.instantiateStreaming(fetch("doc.wasm"), importObject).then(
@@ -59,7 +59,7 @@ Wasm files then import the methods they are interested in, eg `doc.wasm`:
     ..
     
     (func main
-        (call create_frame)
+        (call create_kernel)
     )
 )
 ```
@@ -74,7 +74,7 @@ let number_of_exports_in_doc = 2; // only call_by_index and void_by_index
 
 var table = new WebAssembly.Table({
     initial: number_of_exports_in_runtime + number_of_exports_in_doc, 
-    element:"externref"
+    element: "externref"
 });
 
 const importObject = {
@@ -102,6 +102,14 @@ And in our `doc.wasm` file we have:
     (import "linker" "table" ??)
     (elem (i32.const 0) $call_by_index $void_by_index)
     
+    (func $create_kernel
+        (call_inderct $create_kernel_type (i32.const 2))
+    )
+    
+    (func $main (export "main")  
+        (call $create_kernel)    
+    )
+    
     (func $call_by_index ..)
     (func $void_by_index ..)  
 )
@@ -115,7 +123,7 @@ uses the rest of the slots:
     (import "linker" "table" ??)
     (elem (i32.const 2) $create_kernel ..)
     
-    (func $create_kernel ..)
+    (func $create_kernel (export "")  ..)
 )
 ```
 

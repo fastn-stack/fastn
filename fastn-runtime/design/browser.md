@@ -18,11 +18,11 @@ would not work.
 
 ## `linker.js`
 
-Checkout [`linker.md`](linking.md) for details.
+Checkout [`linker.md`](linking.md) for details. For now we are going ahead with the Approach a discussed there.
 
 ## `runtime.wasm`
 
-The runtime itself is written in Rust and get's compiled into a file `runtime.wasm`. 
+The runtime itself is written in Rust and gets compiled into a file `runtime.wasm`. 
 
 ### Versioning
 
