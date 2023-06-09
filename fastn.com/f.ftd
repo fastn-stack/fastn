@@ -1,0 +1,344 @@
+-- my-ds.page: WorkShop Questions
+widthfill: true
+
+-- question-ui: Which of the following is wrong?
+answers: 3
+
+
+-- question-ui.options:
+
+-- options:
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: Hello
+color: red
+
+-- end: options.ui
+
+
+
+
+-- options:
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text:
+text: Hello
+color: red
+
+-- end: options.ui
+
+
+
+
+-- options:
+is-answer: true
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text:
+value: Hello
+color: red
+
+-- end: options.ui
+
+
+
+-- options:
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text:
+color: red
+
+Hello
+
+-- end: options.ui
+
+
+-- end: question-ui.options
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- question-ui:
+answers: 2
+question: How to create a record `person` where
+
+
+-- question-ui.more-detail:
+
+- `employee-id` of type `integer` is taken in `caption`
+- `name` of type `string`
+- `bio` of type `string` is taken in `body` and is `optional`?
+
+
+
+-- question-ui.options:
+
+-- options:
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption integer employee-id:
+string name:
+body bio:
+
+-- end: options.ui
+
+
+
+
+-- options:
+is-answer: true
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption integer employee-id:
+string name:
+optional body bio:
+
+-- end: options.ui
+
+
+
+
+-- options:
+is-answer: true
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+integer caption employee-id:
+string name:
+optional body bio:
+
+-- end: options.ui
+
+
+
+-- options:
+
+-- options.ui:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+employee-id: integer caption
+name: string
+bio: optional body
+
+-- end: options.ui
+
+
+-- end: question-ui.options
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- question-ui: Which of them are called container components?
+answers: 2
+
+-- question-ui.options:
+
+-- options: ftd.text
+
+-- options: ftd.row
+is-answer: true
+
+-- options: component
+
+-- options: ftd.kernel
+
+-- end: question-ui.options
+
+
+
+
+-- end: my-ds.page
+
+
+
+
+
+
+-- record options:
+optional caption value:
+boolean is-answer: false
+children ui:
+
+
+
+
+
+
+-- component question-ui:
+caption question:
+optional body more-detail:
+integer list answers:
+options list options:
+boolean $is-submitted: false
+
+-- ftd.column:
+role: $inherited.types.copy-regular
+spacing.fixed.px: 5
+width: fill-container
+color: $inherited.colors.text
+margin-bottom.px: 32
+padding-horizontal.px: 50
+padding-vertical.px: 30
+
+-- ftd.text: $question-ui.question
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.3
+region: h2
+border-bottom-width.px if { question-ui.more-detail == NULL }: 1
+border-color if { question-ui.more-detail == NULL }: $inherited.colors.border
+
+-- ftd.text: $question-ui.more-detail
+if: { question-ui.more-detail != NULL }
+border-bottom-width.px: 1
+width: fill-container
+border-color: $inherited.colors.border
+
+-- options-ui: $obj.value
+is-answer: $obj.is-answer
+$is-submitted: $question-ui.is-submitted
+number: $LOOP.COUNTER
+more-detail-ui: $obj.ui
+$loop$: $question-ui.options as $obj
+
+-- ftd.text: Submit
+if: { !question-ui.is-submitted }
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+padding-vertical.px: 5
+padding-horizontal.px: 10
+margin-top.px: 10
+$on-click$: $ftd.set-bool($a = $question-ui.is-submitted, v = true)
+
+-- ftd.row:
+margin-top.px: 10
+if: { question-ui.is-submitted }
+color: $inherited.colors.success.text
+spacing.fixed.px: 2
+
+-- ftd.text: Answers:
+
+-- ftd.integer: $obj
+$loop$: $question-ui.answers as $obj
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+
+-- end: question-ui
+
+
+
+
+
+
+
+-- component options-ui:
+optional caption or body value:
+integer number:
+children more-detail-ui:
+boolean is-answer:
+boolean $is-submitted:
+private boolean $is-checked: false
+
+-- ftd.column:
+width: fill-container
+background.solid if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.base
+background.solid if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.base
+background.solid if { options-ui.number % 2 == 0 }: $inherited.colors.background.step-1
+background.solid: $inherited.colors.background.base
+color if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.text
+color if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.text
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-content: center
+
+-- ftd.checkbox:
+$on-click$: $ftd.toggle($a = $options-ui.is-checked)
+checked: $options-ui.is-checked
+
+-- ftd.integer: $number-plus-one(a = $options-ui.number)
+style: bold
+
+-- ftd.text: $options-ui.value
+if: { options-ui.value != NULL }
+
+-- end: ftd.row
+
+
+-- ftd.column:
+children: $options-ui.more-detail-ui
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+
+-- end: options-ui
+
+
+
+-- integer number-plus-one(a):
+integer a:
+
+a + 1
