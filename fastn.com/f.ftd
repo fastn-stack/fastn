@@ -44,7 +44,7 @@ color: red
 
 
 -- options:
-is-answer: true
+is-answer: 1
 
 -- options.ui:
 
@@ -124,7 +124,7 @@ body bio:
 
 
 -- options:
-is-answer: true
+is-answer: 1
 
 -- options.ui:
 
@@ -143,7 +143,7 @@ optional body bio:
 
 
 -- options:
-is-answer: true
+is-answer: 1
 
 -- options.ui:
 
@@ -202,7 +202,7 @@ answers: 2
 -- options: ftd.text
 
 -- options: ftd.row
-is-answer: true
+is-answer: 1
 
 -- options: component
 
@@ -229,7 +229,7 @@ is-answer: true
 
 -- record options:
 optional caption value:
-boolean is-answer: false
+integer is-answer: -1
 children ui:
 
 
@@ -278,6 +278,7 @@ integer list answers:
 options list options:
 integer number:
 boolean $is-submitted: false
+
 
 -- ftd.column:
 role: $inherited.types.copy-regular
@@ -366,18 +367,18 @@ $loop$: $question-ui.answers as $obj
 optional caption or body value:
 integer number:
 children more-detail-ui:
-boolean is-answer:
+integer is-answer:
 boolean $is-submitted:
 private boolean $is-checked: false
 
 -- ftd.row:
 width: fill-container
-background.solid if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.base
-background.solid if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.base
+background.solid if { options-ui.is-answer != 1 && options-ui.is-submitted }: $inherited.colors.warning.base
+background.solid if { options-ui.is-answer == 1 && options-ui.is-submitted }: $inherited.colors.success.base
 background.solid if { options-ui.number % 2 == 0 }: $inherited.colors.background.step-1
 background.solid: $inherited.colors.background.base
-color if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.text
-color if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.text
+color if { options-ui.is-answer != 1 && options-ui.is-submitted }: $inherited.colors.warning.text
+color if { options-ui.is-answer == 1 && options-ui.is-submitted }: $inherited.colors.success.text
 color: $inherited.colors.text
 spacing.fixed.px: 10
 align-content: center
