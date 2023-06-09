@@ -1,17 +1,21 @@
 -- my-ds.page: WorkShop Questions
 full-width: true
 
--- question-ui: Which of the following is wrong?
+-- all-questions:
+
+-- all-questions.questions:
+
+-- question-data: Which of the following is wrong?
 answers: 3
 
-
--- question-ui.options:
+-- question-data.options:
 
 -- options:
 
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- ftd.text: Hello
@@ -27,6 +31,7 @@ color: red
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- ftd.text:
@@ -44,6 +49,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- ftd.text:
@@ -59,6 +65,7 @@ color: red
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- ftd.text:
@@ -69,7 +76,7 @@ Hello
 -- end: options.ui
 
 
--- end: question-ui.options
+-- end: question-data.options
 
 
 
@@ -83,12 +90,12 @@ Hello
 
 
 
--- question-ui:
+-- question-data:
 answers: 2
 question: How to create a record `person` where
 
 
--- question-ui.more-detail:
+-- question-data.more-detail:
 
 - `employee-id` of type `integer` is taken in `caption`
 - `name` of type `string`
@@ -96,13 +103,14 @@ question: How to create a record `person` where
 
 
 
--- question-ui.options:
+-- question-data.options:
 
 -- options:
 
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- record person:
@@ -121,6 +129,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- record person:
@@ -139,6 +148,7 @@ is-answer: true
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- record person:
@@ -155,6 +165,7 @@ optional body bio:
 -- options.ui:
 
 -- ds.code:
+copy: false
 max-width: fill-container
 
 \-- record person:
@@ -165,7 +176,7 @@ bio: optional body
 -- end: options.ui
 
 
--- end: question-ui.options
+-- end: question-data.options
 
 
 
@@ -183,10 +194,10 @@ bio: optional body
 
 
 
--- question-ui: Which of them are called container components?
+-- question-data: Which of them are called container components?
 answers: 2
 
--- question-ui.options:
+-- question-data.options:
 
 -- options: ftd.text
 
@@ -197,7 +208,14 @@ is-answer: true
 
 -- options: ftd.kernel
 
--- end: question-ui.options
+-- end: question-data.options
+
+
+-- end: all-questions.questions
+
+-- end: all-questions
+
+
 
 
 
@@ -218,12 +236,47 @@ children ui:
 
 
 
+-- record question-data:
+caption question:
+optional body more-detail:
+integer list answers:
+options list options:
+
+
+
+
+-- component all-questions:
+question-data list questions:
+
+-- ftd.column:
+width: fill-container
+
+-- question-ui: $obj.question
+more-detail: $obj.more-detail
+answers: $obj.answers
+options: $obj.options
+number: $LOOP.COUNTER
+$loop$: $all-questions.questions as $obj
+
+-- end: ftd.column
+
+-- end: all-questions
+
+
+
+
+
+
+
+
+
 
 -- component question-ui:
 caption question:
 optional body more-detail:
 integer list answers:
 options list options:
+integer number:
 boolean $is-submitted: false
 
 -- ftd.column:
@@ -235,7 +288,7 @@ margin-bottom.px: 32
 padding-horizontal.px: 50
 padding-vertical.px: 30
 
--- ftd.text: $question-ui.question
+-- ftd.row:
 role: $inherited.types.heading-medium
 color: $inherited.colors.text-strong
 margin-bottom.rem: 0.5
@@ -244,6 +297,20 @@ padding-top.em: 0.3
 region: h2
 border-bottom-width.px if { question-ui.more-detail == NULL }: 1
 border-color if { question-ui.more-detail == NULL }: $inherited.colors.border
+spacing.fixed.px: 10
+
+-- ftd.row:
+
+-- ftd.integer: $number-plus-one(a = $question-ui.number)
+style: bold
+
+-- ftd.text: .
+
+-- end: ftd.row
+
+-- ftd.text: $question-ui.question
+
+-- end: ftd.row
 
 -- ftd.text: $question-ui.more-detail
 if: { question-ui.more-detail != NULL }
@@ -291,6 +358,10 @@ $loop$: $question-ui.answers as $obj
 
 
 
+
+
+
+
 -- component options-ui:
 optional caption or body value:
 integer number:
@@ -299,7 +370,7 @@ boolean is-answer:
 boolean $is-submitted:
 private boolean $is-checked: false
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 background.solid if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.base
 background.solid if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.base
@@ -308,10 +379,9 @@ background.solid: $inherited.colors.background.base
 color if { options-ui.is-checked && !options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.warning.text
 color if { options-ui.is-checked && options-ui.is-answer && options-ui.is-submitted }: $inherited.colors.success.text
 color: $inherited.colors.text
-
--- ftd.row:
 spacing.fixed.px: 10
 align-content: center
+padding-horizontal.px: 20
 
 -- ftd.checkbox:
 $on-click$: $ftd.toggle($a = $options-ui.is-checked)
@@ -319,14 +389,17 @@ checked: $options-ui.is-checked
 enabled if { options-ui.is-submitted }: false
 enabled: true
 
+-- ftd.row:
+
 -- ftd.integer: $number-plus-one(a = $options-ui.number)
 style: bold
 
--- ftd.text: $options-ui.value
-if: { options-ui.value != NULL }
+-- ftd.text: .
 
 -- end: ftd.row
 
+-- ftd.text: $options-ui.value
+if: { options-ui.value != NULL }
 
 -- ftd.column:
 children: $options-ui.more-detail-ui
@@ -334,7 +407,8 @@ width: fill-container
 
 -- end: ftd.column
 
--- end: ftd.column
+-- end: ftd.row
+
 
 
 -- end: options-ui
