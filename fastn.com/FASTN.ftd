@@ -366,7 +366,6 @@ favicon: /-/fastn.com/images/favicon.svg
     document: author/setup/windows.ftd
   - On MacOS/Linux: /build-macos/-/expander/
     document: author/setup/macos.ftd
-  document: backend/redirects.ftd
 - Hello World: /expander/hello-world/-/build/
 - Basic UI: /expander/basic-ui/-/build/
 - Publish a package: /expander/publish/-/build/
@@ -386,6 +385,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/ds-page.ftd
   skip: true
 - Redirects: /redirects/
+  document: backend/redirects.ftd
 
 ## Featured Components: /featured/
 
