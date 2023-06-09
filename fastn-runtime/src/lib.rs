@@ -28,13 +28,13 @@ mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::{Color, DarkModeProperty, Dom, LengthRole, NodeKey, ResponsiveProperty, TextRole};
+pub use dom::{Dom, NodeKey, ResponsiveProperty};
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};
 pub use memory::pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
-pub use memory::ui::{DynamicProperty, UIProperty};
-pub use memory::{Closure, EventHandler, Memory, Frame};
+pub use memory::ui::{Color, DarkModeProperty, DynamicProperty, LengthRole, TextRole, UIProperty};
+pub use memory::{Closure, EventHandler, Frame, Memory};
 pub use operation::{Operation, Rectangle};
 
 // #[derive(Debug, Default, Clone)]

@@ -436,7 +436,7 @@ mod test {
             fastn_runtime::Document::new(create_columns()),
             indoc::indoc!(
                 r#"
-            <div data-id=4294967297 > <div data-id=4294967298 > <div data-id=4294967299 ></div>
+            <div data-id="1v1" > <div data-id=4294967298 > <div data-id=4294967299 ></div>
             <div data-id=4294967300 ></div></div></div>"#
             ),
         )
