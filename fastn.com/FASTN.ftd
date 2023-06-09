@@ -325,7 +325,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/meta-data.ftd
 - Markdown: /markdown/-/frontend/
   document: /expander/ds/markdown.ftd
-- Creating a page: /ds-page/-/frontend/
+- Using page component: /ds-page/-/frontend/
   document: /expander/ds/ds-page.ftd
 
 
@@ -359,9 +359,29 @@ favicon: /-/fastn.com/images/favicon.svg
 
 - Install: /install/-/build/
   document: author/how-to/install.ftd
-
-- Redirects: /redirects/
+  - On Windows: /build-windows/-/expander/
+    document: author/setup/windows.ftd
+  - On MacOS/Linux: /build-macos/-/expander/
+    document: author/setup/macos.ftd
   document: backend/redirects.ftd
+- Hello World: /expander/hello-world/-/build/
+- Basic UI: /expander/basic-ui/-/build/
+- Publish a package: /expander/publish/-/build/
+- Understanding sitemap: /understanding-sitemap/-/build/
+  document: /expander/ds/understanding-sitemap.ftd
+- Create clean URLs: /clean-urls/-/build/
+  document: /expander/sitemap-document.ftd 
+- Create rounded border: /rounded-border/-/build/
+  document: /expander/border-radius.ftd
+- Using images in documents: /using-images/-/build/
+  document: /expander/imagemodule/index.ftd
+- Add meta-data: /seo-meta/
+  document: /expander/ds/meta-data.ftd
+- Markdown in doc-site: /markdown/
+  document: /expander/ds/markdown.ftd
+- Using page component: /ds-page/
+  document: /expander/ds/ds-page.ftd
+- Redirects: /redirects/
 
 ## Featured Components: /featured/
 
@@ -384,31 +404,6 @@ favicon: /-/fastn.com/images/favicon.svg
   - Heroku: /heroku/
     document: deploy/heroku.ftd
 
-## Video Course: /expander/hello-world/-/build/
-
-- Hello World: /expander/hello-world/-/build/
-  - Install `fastn`: /build-install/-/expander/
-    document: author/how-to/install.ftd
-    - On Windows: /build-windows/-/expander/
-      document: author/setup/windows.ftd
-    - On MacOS/Linux: /build-macos/-/expander/
-      document: author/setup/macos.ftd
-- Basic UI: /expander/basic-ui/-/build/
-- Publish a package: /expander/publish/-/build/
-- Understanding sitemap: /understanding-sitemap/-/build/
-  document: /expander/ds/understanding-sitemap.ftd
-- Create clean URLs: /clean-urls/-/build/
-  document: /expander/sitemap-document.ftd 
-- Create rounded border: /rounded-border/-/build/
-  document: /expander/border-radius.ftd
-- Using images in documents: /using-images/-/build/
-  document: /expander/imagemodule/index.ftd
-- Add meta-data: /seo-meta/
-  document: /expander/ds/meta-data.ftd
-- Markdown in doc-site: /markdown/
-  document: /expander/ds/markdown.ftd
-- Creating a page: /ds-page/
-  document: /expander/ds/ds-page.ftd
 
 
 # Blog: /blog/
@@ -460,7 +455,7 @@ favicon: /-/fastn.com/images/favicon.svg
   document: /expander/ds/ds-cs.ftd
 - Adding typography: /typography/-/planning/
   document: /expander/ds/ds-typography.ftd
-- Creating a page: /ds-page/-/planning/
+- Using page component: /ds-page/-/planning/
   document: /expander/ds/ds-page.ftd
 - Markdown: /markdown/-/planning/
   document: /expander/ds/markdown.ftd
