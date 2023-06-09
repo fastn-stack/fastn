@@ -22,12 +22,12 @@ impl ModuleThing {
         kind: ftd::interpreter::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
-        return ModuleThing::Component(ComponentModuleThing::new(
+        ModuleThing::Component(ComponentModuleThing::new(
             name,
             reference_name,
             kind,
             arguments,
-        ));
+        ))
     }
 
     pub fn variable(
@@ -35,7 +35,7 @@ impl ModuleThing {
         reference_name: String,
         kind: ftd::interpreter::KindData,
     ) -> Self {
-        return ModuleThing::Variable(VariableModuleThing::new(name, reference_name, kind));
+        ModuleThing::Variable(VariableModuleThing::new(name, reference_name, kind))
     }
 
     pub fn get_kind(&self) -> ftd::interpreter::KindData {
@@ -60,11 +60,11 @@ impl ModuleThing {
     }
 
     pub fn is_component_thing(&self) -> bool {
-        return matches!(self, ftd::interpreter::ModuleThing::Component(_));
+        matches!(self, ftd::interpreter::ModuleThing::Component(_))
     }
 
     pub fn is_variable_thing(&self) -> bool {
-        return matches!(self, ftd::interpreter::ModuleThing::Variable(_));
+        matches!(self, ftd::interpreter::ModuleThing::Variable(_))
     }
 }
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -76,11 +76,11 @@ pub struct VariableModuleThing {
 
 impl VariableModuleThing {
     pub fn new(name: String, reference_name: String, kind: ftd::interpreter::KindData) -> Self {
-        return VariableModuleThing {
+        VariableModuleThing {
             name,
             reference_name,
             kind,
-        };
+        }
     }
 }
 
@@ -99,12 +99,12 @@ impl ComponentModuleThing {
         kind: ftd::interpreter::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
-        return ComponentModuleThing {
+        ComponentModuleThing {
             name,
             reference_name,
             kind,
             arguments,
-        };
+        }
     }
 }
 

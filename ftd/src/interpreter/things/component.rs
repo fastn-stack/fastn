@@ -1003,7 +1003,7 @@ fn search_things_for_module(
             // TODO: Remove unwrap()
             .unwrap();
 
-        ftd::interpreter::utils::update_module_things(&mut module_property, &argument, doc)?;
+        ftd::interpreter::utils::update_module_things(&mut module_property, argument, doc)?;
 
         let (m_name, things) = match module_property {
             ftd::interpreter::Value::Module { name, things } => (name, things),
@@ -1016,7 +1016,6 @@ fn search_things_for_module(
             }
         };
 
-        let aliases;
         let mut m_alias;
         {
             let current_parsed_document = if let Some(state) = {
@@ -1036,7 +1035,6 @@ fn search_things_for_module(
                     .insert(alias.to_string(), m.to_string());
             }
             m_alias = alias;
-            aliases = current_parsed_document.doc_aliases.clone();
         }
 
         if let Some(module) = doc.aliases.get(m_alias.as_str()) {

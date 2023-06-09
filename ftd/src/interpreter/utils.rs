@@ -642,7 +642,7 @@ pub(crate) fn insert_module_thing(
                     reference_full_name.to_string(),
                     reference.to_string(),
                     ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
-                    module_component_definition.arguments.clone(),
+                    module_component_definition.arguments,
                 );
 
                 things.insert(reference_full_name.to_string(), component_module_thing);
@@ -809,7 +809,7 @@ pub(crate) fn validate_properties_and_set_default(
             };
 
             if let ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Module { things, name },
+                value: ftd::interpreter::Value::Module { things, .. },
                 ..
             } = &mut property.value
             {
