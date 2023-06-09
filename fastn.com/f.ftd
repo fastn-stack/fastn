@@ -143,7 +143,6 @@ optional body bio:
 
 
 -- options:
-is-answer: 1
 
 -- options.ui:
 
@@ -278,6 +277,7 @@ integer list answers:
 options list options:
 integer number:
 boolean $is-submitted: false
+integer $number-correct: 0
 
 
 -- ftd.column:
@@ -324,6 +324,7 @@ is-answer: $obj.is-answer
 $is-submitted: $question-ui.is-submitted
 number: $LOOP.COUNTER
 more-detail-ui: $obj.ui
+$number-correct: $question-ui.number-correct
 $loop$: $question-ui.options as $obj
 
 -- ftd.text: Submit
@@ -334,6 +335,18 @@ padding-vertical.px: 5
 padding-horizontal.px: 10
 margin-top.px: 10
 $on-click$: $ftd.set-bool($a = $question-ui.is-submitted, v = true)
+
+-- ftd.text: Correct (+1)
+color: $inherited.colors.success.text
+role: $inherited.types.heading-small
+style: bold
+if: { question-ui.is-submitted && len(question-ui.answers) == question-ui.number-correct }
+
+-- ftd.text: Wrong (-1)
+color: $inherited.colors.warning.text
+role: $inherited.types.heading-small
+style: bold
+if: { question-ui.is-submitted && len(question-ui.answers) != question-ui.number-correct }
 
 -- ftd.row:
 margin-top.px: 10
@@ -363,12 +376,15 @@ $loop$: $question-ui.answers as $obj
 
 
 
+
+
 -- component options-ui:
 optional caption or body value:
 integer number:
 children more-detail-ui:
 integer is-answer:
 boolean $is-submitted:
+integer $number-correct:
 private boolean $is-checked: false
 
 -- ftd.row:
@@ -385,7 +401,8 @@ align-content: center
 padding-horizontal.px: 20
 
 -- ftd.checkbox:
-$on-click$: $ftd.toggle($a = $options-ui.is-checked)
+;; $on-click$: $ftd.toggle($a = $options-ui.is-checked)
+$on-click$: $toggle-option($a = $options-ui.is-checked, $checked = $options-ui.number-correct, answer = $options-ui.is-answer)
 checked: $options-ui.is-checked
 enabled if { options-ui.is-submitted }: false
 enabled: true
@@ -408,12 +425,40 @@ width: fill-container
 
 -- end: ftd.column
 
+-- ftd.image:
+src: $fastn-assets.files.images.correct.svg
+width.fixed.px: 70
+if: { options-ui.is-submitted && options-ui.is-answer == 1 && options-ui.is-checked }
+
+-- ftd.image:
+src: $fastn-assets.files.images.cross.svg
+width.fixed.px: 70
+if: { options-ui.is-submitted && options-ui.is-answer != 1 && options-ui.is-checked }
+
+-- ftd.image:
+src: $fastn-assets.files.images.missed.svg
+width.fixed.px: 70
+if: { options-ui.is-submitted && options-ui.is-answer == 1 && !options-ui.is-checked }
+
 -- end: ftd.row
 
 
 
 -- end: options-ui
 
+
+
+
+
+
+-- void toggle-option(a,checked,answer):
+boolean $a:
+integer $checked:
+integer answer:
+js: $fastn-assets.files.functions.js
+
+a = !a;
+checked = add_sub(checked, a, answer)
 
 
 -- integer number-plus-one(a):
