@@ -2,6 +2,7 @@
 full-width: true
 
 -- all-questions:
+total-questions: 3
 
 -- all-questions.questions:
 
@@ -246,20 +247,80 @@ options list options:
 
 -- component all-questions:
 question-data list questions:
+integer total-questions:
+integer $correct: 0
+integer $wrong: 0
 
 -- ftd.column:
 width: fill-container
+color: $inherited.colors.text
+
+-- ftd.row:
+color: $inherited.colors.success.text
+role: $inherited.types.heading-small
+spacing: space-between
+width: fill-container
+padding-horizontal.px: 50
+;; background.solid: $inherited.colors.info.base
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.text: Score:
+style: bold
+
+-- ftd.row:
+spacing.fixed.px: 5
+color: $inherited.colors.success.text
+
+-- ftd.text: Correct:
+style: bold
+
+-- ftd.integer: $all-questions.correct
+
+-- end: ftd.row
+
+
+-- ftd.row:
+spacing.fixed.px: 5
+color: $inherited.colors.warning.text
+
+-- ftd.text: Wrong:
+style: bold
+
+-- ftd.integer: $all-questions.wrong
+
+-- end: ftd.row
+
+-- ftd.row:
+spacing.fixed.px: 5
+
+-- ftd.text: Total Questions:
+style: bold
+
+-- ftd.integer: $all-questions.total-questions
+
+-- end: ftd.row
+
+-- end: ftd.row
 
 -- question-ui: $obj.question
 more-detail: $obj.more-detail
 answers: $obj.answers
 options: $obj.options
 number: $LOOP.COUNTER
+$correct: $all-questions.correct
+$wrong: $all-questions.wrong
 $loop$: $all-questions.questions as $obj
 
 -- end: ftd.column
 
 -- end: all-questions
+
+
+
+
+
+
+
 
 
 
@@ -278,6 +339,8 @@ options list options:
 integer number:
 boolean $is-submitted: false
 integer $number-correct: 0
+integer $correct:
+integer $wrong:
 
 
 -- ftd.column:
@@ -334,7 +397,12 @@ background.solid: $inherited.colors.cta-primary.base
 padding-vertical.px: 5
 padding-horizontal.px: 10
 margin-top.px: 10
+border-radius.px: 5
 $on-click$: $ftd.set-bool($a = $question-ui.is-submitted, v = true)
+$on-click$: $submit-answer($correct = $question-ui.correct, $wrong = $question-ui.wrong, number = $question-ui.number-correct, answers = $question-ui.answers)
+
+
+
 
 -- ftd.text: Correct (+1)
 color: $inherited.colors.success.text
@@ -465,3 +533,14 @@ checked = add_sub(checked, a, answer)
 integer a:
 
 a + 1
+
+
+
+-- void submit-answer(correct,wrong,number,answers):
+integer $correct:
+integer $wrong:
+integer number:
+integer list answers:
+
+correct = submit_correct_answer(correct,number,len(answers));
+wrong = submit_wrong_answer(wrong,number,len(answers))
