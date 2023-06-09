@@ -316,6 +316,8 @@ align-content: center
 -- ftd.checkbox:
 $on-click$: $ftd.toggle($a = $options-ui.is-checked)
 checked: $options-ui.is-checked
+enabled if { options-ui.is-submitted }: false
+enabled: true
 
 -- ftd.integer: $number-plus-one(a = $options-ui.number)
 style: bold
