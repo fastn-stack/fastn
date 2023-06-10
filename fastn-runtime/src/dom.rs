@@ -1,6 +1,8 @@
 slotmap::new_key_type! { pub struct NodeKey; }
 
 pub struct Dom {
+    pub width: u32,
+    pub height: u32,
     pub(crate) last_mouse: fastn_runtime::MouseState,
     pub(crate) has_focus: bool,
     pub(crate) modifiers: fastn_runtime::event::ModifiersState,
@@ -11,8 +13,9 @@ pub struct Dom {
     pub(crate) memory: fastn_runtime::memory::Memory,
 }
 
-impl Default for Dom {
-    fn default() -> Self {
+
+impl Dom {
+    pub fn new(width: u32, height: u32) -> Self {
         let mut nodes = slotmap::SlotMap::with_key();
         let mut taffy = taffy::Taffy::new();
         let mut children = slotmap::SecondaryMap::new();
@@ -20,6 +23,8 @@ impl Default for Dom {
         children.insert(root, vec![]);
 
         Dom {
+            width,
+            height,
             taffy,
             nodes,
             root,
@@ -30,9 +35,6 @@ impl Default for Dom {
             modifiers: Default::default(),
         }
     }
-}
-
-impl Dom {
     pub fn register_memory_functions(&self, linker: &mut wasmtime::Linker<fastn_runtime::Dom>) {
         self.memory.register(linker)
     }
