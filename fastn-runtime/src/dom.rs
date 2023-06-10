@@ -111,6 +111,9 @@ impl Dom {
                 //     }
                 //     .into(),
                 // ),
+                background_color: None,
+                padding: None,
+                align: None,
             },
         });
 

@@ -20,20 +20,25 @@ mod dom;
 mod dom_helpers;
 mod element;
 mod event;
+#[cfg(not(feature = "web"))]
 pub mod html;
 mod memory;
 mod operation;
+#[cfg(not(feature = "web"))]
 pub mod wasm;
+#[cfg(not(feature = "web"))]
 mod wasm_helpers;
 
 pub use control::ControlFlow;
 pub use document::Document;
-pub use dom::{Dom, NodeKey, ResponsiveProperty};
+pub use dom::{Dom, NodeKey};
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};
 pub use memory::pointer::{ClosurePointer, Pointer, PointerKey, PointerKind};
-pub use memory::ui::{Color, DarkModeProperty, DynamicProperty, LengthRole, TextRole, UIProperty};
+pub use memory::ui::{
+    Color, DarkModeProperty, DynamicProperty, LengthRole, ResponsiveProperty, TextRole, UIProperty,
+};
 pub use memory::{Closure, EventHandler, Frame, Memory};
 pub use operation::{Operation, Rectangle};
 

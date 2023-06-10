@@ -51,7 +51,15 @@ impl From<ElementKind> for i32 {
     }
 }
 
-struct I32Pointer(fastn_runtime::PointerKey);
+#[derive(Debug)]
+pub struct I32Pointer(fastn_runtime::PointerKey);
+
+#[derive(Debug)]
+pub enum Align {
+    Left,
+    Right,
+    Justify,
+}
 
 #[derive(Debug)]
 pub struct CommonStyle {
@@ -91,6 +99,9 @@ impl Container {
                 //     }
                 //     .into(),
                 // ),
+                background_color: None,
+                padding: None,
+                align: None,
             },
         })
     }
