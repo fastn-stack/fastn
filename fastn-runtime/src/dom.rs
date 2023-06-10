@@ -1,5 +1,19 @@
 slotmap::new_key_type! { pub struct NodeKey; }
 
+pub trait DomT {
+    fn create_kernel(
+        &mut self,
+        parent: fastn_runtime::NodeKey,
+        _k: fastn_runtime::ElementKind,
+    ) -> fastn_runtime::NodeKey;
+    fn add_child(
+        &mut self,
+        parent_key: fastn_runtime::NodeKey,
+        child_key: fastn_runtime::NodeKey,
+    );
+}
+
+#[cfg(not(feature = "browser"))]
 pub struct Dom {
     pub width: u32,
     pub height: u32,
@@ -13,7 +27,7 @@ pub struct Dom {
     pub(crate) memory: fastn_runtime::memory::Memory,
 }
 
-
+#[cfg(not(feature = "browser"))]
 impl Dom {
     pub fn new(width: u32, height: u32) -> Self {
         let mut nodes = slotmap::SlotMap::with_key();
@@ -89,6 +103,7 @@ impl Dom {
 }
 
 // functions used by wasm
+#[cfg(not(feature = "browser"))]
 impl Dom {
     pub fn create_kernel(
         &mut self,

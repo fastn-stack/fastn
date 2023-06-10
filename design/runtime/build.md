@@ -19,5 +19,5 @@ You have to re-run this command when you upgrade the Rust version.
 From `fastn-runtime` folder, run the following command:
 
 ```sh
-cargo build --target wasm32-unknown-unknown --no-default-features --features=web
+cargo build --target wasm32-unknown-unknown --no-default-features --features=browser
 ```

@@ -71,11 +71,12 @@ pub struct CommonStyle {
 
 #[derive(Debug)]
 pub struct Container {
-    // if not wasm
+    #[cfg(not(feature = "browser"))]
     pub taffy_key: taffy::node::Node,
     pub style: CommonStyle,
 }
 
+#[cfg(not(feature = "browser"))]
 impl Container {
     pub(crate) fn outer_column(taffy: &mut taffy::Taffy) -> Element {
         Element::Container(Container {
@@ -109,6 +110,7 @@ impl Container {
 
 #[derive(Debug)]
 pub struct Text {
+    #[cfg(not(feature = "browser"))]
     pub taffy: taffy::node::Node,
     pub text: fastn_runtime::PointerKey,
     pub role: fastn_runtime::ResponsiveProperty<fastn_runtime::PointerKey>,
@@ -117,6 +119,7 @@ pub struct Text {
 
 #[derive(Debug)]
 pub struct Image {
+    #[cfg(not(feature = "browser"))]
     pub taffy: taffy::node::Node,
     pub style: CommonStyle,
     pub src: fastn_runtime::DarkModeProperty<fastn_runtime::PointerKey>,
@@ -165,6 +168,7 @@ pub enum Dimension {
     Percent(f32),
 }
 
+#[cfg(not(feature = "browser"))]
 impl fastn_runtime::Element {
     pub fn render(&self, t: &taffy::Taffy) {
         dbg!(self);
