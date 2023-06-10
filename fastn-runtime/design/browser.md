@@ -1,6 +1,6 @@
 # Browser
 
-[Back To Design Home](..).
+[Back To Design Home](./).
 
 `fastn_runtime` uses `WebAssembly` for executing functions defined in the ftd file, event handlers etc. 
 
