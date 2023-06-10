@@ -10,7 +10,7 @@ native = ["winit", "env_logger", "log", "wgpu", "render", "pretty"]
 # render feature will be enabled only when we want to do native rendering, which is when terminal and native is set
 render = []
 terminal = ["render", "taffy", "pretty"]
-web = []
+browser = []
 
 [dependencies]
 async-trait.workspace = true

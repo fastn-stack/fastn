@@ -16,24 +16,31 @@ extern crate self as fastn_runtime;
 pub mod wgpu;
 
 mod control;
+#[cfg(not(feature = "browser"))]
 mod document;
 mod dom;
 mod element;
 mod event;
 mod memory;
+#[cfg(not(feature = "browser"))]
 mod operation;
 #[cfg(any(feature = "native", feature = "terminal"))]
 mod renderable;
 #[cfg(feature = "server")]
 mod server;
+#[cfg(not(feature = "browser"))]
 pub mod wasm;
+#[cfg(not(feature = "browser"))]
 mod wasm_helpers;
-#[cfg(feature = "web")]
+#[cfg(feature = "browser")]
 mod web;
 
 pub use control::ControlFlow;
+#[cfg(not(feature = "browser"))]
 pub use document::Document;
-pub use dom::{Dom, NodeKey};
+pub use dom::{NodeKey};
+#[cfg(not(feature = "browser"))]
+pub use dom::Dom;
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};
@@ -42,6 +49,7 @@ pub use memory::ui::{
     Color, DarkModeProperty, DynamicProperty, LengthRole, ResponsiveProperty, TextRole, UIProperty,
 };
 pub use memory::{Closure, EventHandler, Frame, Memory};
+#[cfg(not(feature = "browser"))]
 pub use operation::{Operation, Rectangle};
 
 // #[derive(Debug, Default, Clone)]

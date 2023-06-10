@@ -1,3 +1,7 @@
+#[cfg(feature = "browser")]
+fn main() {}
+
+#[cfg(not(feature = "browser"))]
 #[tokio::main]
 async fn main() {
     // check if --wasm is passed on cli
@@ -57,7 +61,7 @@ async fn main() {
 
     // let document = fastn_runtime::Document::new(wat);
 
-    let document = fastn_runtime::Document::new(create_columns());
+    // let document = fastn_runtime::Document::new(create_columns());
 
     #[cfg(feature = "native")]
     fastn_runtime::wgpu::render_document(document).await;
@@ -66,6 +70,7 @@ async fn main() {
     // fastn_runtime::terminal::draw(doc).await;
 }
 
+#[cfg(not(feature = "browser"))]
 pub fn create_module() -> Vec<u8> {
     let m: Vec<fastn_wasm::Ast> = vec![
         fastn_wasm::import::func0("create_column", fastn_wasm::Type::ExternRef),
@@ -146,6 +151,7 @@ pub fn create_module() -> Vec<u8> {
 }
 
 // source: columns.clj (derived from columns.ftd)
+#[cfg(not(feature = "browser"))]
 fn create_columns() -> Vec<u8> {
     let mut m: Vec<fastn_wasm::Ast> = fastn_runtime::Dom::imports();
 
