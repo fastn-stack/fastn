@@ -7,7 +7,7 @@ edition = "2021"
 default = ["native", "server"]
 server = ["tokio", "fastn-wasm", "wasmtime", "taffy", "pretty"]
 native = ["winit", "env_logger", "log", "wgpu"]
-# terminal = ["crossterm"]
+terminal = []
 web = []
 
 [dependencies]

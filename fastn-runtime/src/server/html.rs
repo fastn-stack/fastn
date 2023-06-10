@@ -91,9 +91,9 @@ impl fastn_runtime::Container {
             .map(|v| dom.html(*v))
             .collect::<Vec<_>>();
         if children.is_empty() {
-            fastn_runtime::html::leaf("div", node_key, None)
+            fastn_runtime::server::html::leaf("div", node_key, None)
         } else {
-            fastn_runtime::html::node(
+            fastn_runtime::server::html::node(
                 "div",
                 node_key,
                 None,

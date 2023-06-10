@@ -2,7 +2,7 @@
 
 [Back To Design Home](./).
 
-We have two operating modes. In `internal-dom` mode we maintain full DOM tree, and in `foreign-dom` mode we rely on an 
+We have two operating modes. In `internal-dom` mode we maintain full DOM tree, and in `browser-dom` mode we rely on an 
 external system to maintain the dom.
 
 The compiled wasm code expects a bunch of dom related functions that we provide. Eg `create_kernel()`, 
@@ -15,7 +15,7 @@ get updated.
 
 When the document is getting rendered on the server side, we operate in internal-dom mode. At the end of original page 
 creation, the dom is converted to HTML, which transferred to the browser. In the browser the DOM is managed by the
-browser, so we do not have to maintain our own DOM, this is called foreign-dom mode. Refer [`browser.md`](browser.md)
+browser, so we do not have to maintain our own DOM, this is called browser-dom mode. Refer [`browser.md`](browser.md)
 for details.
 
 When we are running in the native mode, say fastn uses WebGPU to render the DOM, or when we use curses based rendering,
@@ -43,7 +43,7 @@ struct TextStyle {
 }
 ```
 
-In case of `foreign-dom` (when running in browser), we directly modify the class list for the text node, eg
+In case of `browser-dom` (when running in browser), we directly modify the class list for the text node, eg
 
 ```js
 document.getElementById("1v1").t.classList.push("c_1v1");
