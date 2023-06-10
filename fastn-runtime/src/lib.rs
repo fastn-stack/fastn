@@ -2,10 +2,10 @@
 
 extern crate self as fastn_runtime;
 
-/// fastn-surface is a way to describe UI in platform independent way
+/// fastn-runtime is a way to describe UI in platform independent way
 ///
-/// fastn-surface::UI is a way to describe arbitrary UI that can be displayed on various backends
-/// like in browser, terminal or native. fastn-surface::UI exposes mutation methods, which can be
+/// fastn-runtime::Dom is a way to describe arbitrary UI that can be displayed on various backends
+/// like in browser, terminal or native. fastn-surface::Dom exposes mutation methods, which can be
 /// used to mutate the UI once the UI has been rendered on some surface. The mutations are applied
 /// in an efficient way.
 ///
@@ -20,14 +20,16 @@ mod dom;
 mod dom_helpers;
 mod element;
 mod event;
-#[cfg(not(feature = "web"))]
-pub mod html;
 mod memory;
 mod operation;
-#[cfg(not(feature = "web"))]
+#[cfg(any(feature = "native", feature = "terminal"))]
+mod renderable;
+#[cfg(feature = "server")]
+mod server;
 pub mod wasm;
-#[cfg(not(feature = "web"))]
 mod wasm_helpers;
+#[cfg(feature = "web")]
+mod web;
 
 pub use control::ControlFlow;
 pub use document::Document;

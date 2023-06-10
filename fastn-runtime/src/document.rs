@@ -165,7 +165,7 @@ impl Document {
 
     // initial_html() -> server side HTML
     pub fn initial_html(&self) -> String {
-        fastn_runtime::html::initial(self.store.data())
+        fastn_runtime::server::html::initial(self.store.data())
     }
     // hydrate() -> client side
     // event_with_target() -> Vec<DomMutation>
