@@ -11,13 +11,13 @@ extern crate self as fastn_runtime;
 ///
 /// fastn-surface::UI also send UI events, like window resize, keyboard, mouse events etc. The
 /// event includes data about the event.
+
 #[cfg(feature = "native")]
 pub mod wgpu;
 
 mod control;
 mod document;
 mod dom;
-mod dom_helpers;
 mod element;
 mod event;
 mod memory;
