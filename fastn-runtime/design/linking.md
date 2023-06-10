@@ -1,5 +1,7 @@
 # `linker.js`
 
+[Back To Design Home](./).
+
 Read [`browser.md`](browser.md) first for context.
 
 Once `doc.html` loads, it loads `linker.js`, which downloads `doc.json`, `doc.wasm`, `runtime.wasm` to make the

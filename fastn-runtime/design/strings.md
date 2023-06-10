@@ -1,5 +1,7 @@
 # Strings
 
+[Back To Design Home](./).
+
 We store strings like everything else in `fastn_runtime::Memory.string`.
 
 ## String Constants

@@ -1,4 +1,6 @@
-## Main On Server Vs Main In Browser
+# Main On Server Vs Main In Browser
+
+[Back To Design Home](./).
 
 Or, to ssr or not?
 
@@ -17,13 +19,13 @@ responsible for memory initialisation and initial DOM construction, this work.
 For clarity lets call `doc.ssr.html` which contains serialised DOM, the output of `main on server` method, and
 `doc.html` for when we run main in browser.
 
-### Note For Static Building
+## Note For Static Building
 
 We can still use the main in server approach in static build mode (we run `fastn build`, which generates a `.build`
 folder containing all static files, which is deployed on a static hosting provider). We will have to store the generated
 `doc.json` file as a separate artifact, or we can inline the `doc.json` in `doc.ssr.html` itself.
 
-### Consideration: Google Bots etc
+## Consideration: Google Bots etc
 
 In case of google bot etc, the `linker.js` logic, we should return `doc.ssr.minus-linker.html`, as Google etc do not
 trigger event handlers.
@@ -35,14 +37,14 @@ content of the other tabs unless google bot "clicks" on the other tabs.
 This is a tradeoff for the entire wasm based approach itself, it will only work if google bot runs wasm as well, which
 we do not know.
 
-### Consideration: Page Size
+## Consideration: Page Size
 
 `doc.ssr.html` is going to be bigger than `doc.html` as later does not contain server rendered HTML. We have discussed
 compilation approach which generates two wasm files, `doc.wasm` and `doc.without-main.wasm` files. If the `HTML_Delta >
 WASM_Delta` then for browsers (not crawlers) the optimal approach could be to send `doc.html` and `doc.wasm` instead of
 `doc.ssr.html` + `doc.without-main.wasm`.
 
-### Decision
+## Decision
 
 ssr only for bots and `fastn static` build. Because in static we do not have any way to serve different content based on
 user agent, if we could even in `fastn static` we will not send `doc.ssr.html` to regular browsers.

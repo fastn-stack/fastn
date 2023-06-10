@@ -1,5 +1,7 @@
 # Dom
 
+[Back To Design Home](./).
+
 We have two operating modes. In `internal-dom` mode we maintain full DOM tree, and in `foreign-dom` mode we rely on an 
 external system to maintain the dom.
 
