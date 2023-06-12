@@ -133,44 +133,47 @@ impl Multable {
 }
 ```
 
-## `Node.set_property()`
+## `Node.setStaticProperty()`
 
-```rust
-fn set_property(property: Property, deps: Vec<Mutable>, func: Fn) {
-    let closure = Closure {
-        cached_value: func(),
-        func,
-        ui: Some((this, property)),
-    };
-    closure.update_ui();
+```js
+function setStaticProperty(kind, value) {
+    if (kind === fastn_dom.PropertyKind.Width_Px) {
+        this.#node.style.width = value + "px";
+    } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
+        this.#node.style.color = value;
+    } else if (kind === fastn_dom.PropertyKind.IntegerValue) {
+        this.#node.innerHTML = value;
+    } else {
+        throw ("invalid fastn_dom.PropertyKind: " + kind);
+    }
+}
+```
 
-    for dep in deps {
-        dep.add_closure(closure)
+
+## `Node.setDynamicProperty()`
+
+```js
+function setDynamicProperty(kind, deps, func) {
+    let closure = fastn.closure(func).addNodeProperty(this, kind);
+    for (let dep in deps) {
+        deps[dep].addClosure(closure);
     }
 }
 ```
 
 ## `fastn.formula()`
 
-```rust
-fn formula(deps: Vec<Mutable>, func: Fn) -> Closure {
-    let v = func();
-
-    let closure = Closure {
-        cached_value: v,
-        func,
-        ui: None,
-    };
-
-    let m = Mutable {
-        value: v,
-        closures: vec![ closure ],
-    };
-
-    for dep in deps {
-        dep.add_closure(closure)
+```js
+function formula (deps, func) {
+    let closure = fastn.closure(func);
+    let mutable = new Mutable(closure.get());
+    for (let dep in deps) {
+        deps[dep].addClosure(new Closure(function () {
+            closure.update();
+            mutable.set(closure.get());
+        }));
     }
 
-    return m
+    return mutable;
 }
 ```

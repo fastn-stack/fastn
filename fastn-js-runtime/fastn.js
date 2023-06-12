@@ -72,15 +72,15 @@
 
     fastn.formula = function (deps, func) {
         let closure = fastn.closure(func);
-        let m = new Mutable(closure.get());
+        let mutable = new Mutable(closure.get());
         for (let dep in deps) {
             deps[dep].addClosure(new Closure(function () {
                 closure.update();
-                m.set(closure.get());
+                mutable.set(closure.get());
             }));
         }
 
-        return m;
+        return mutable;
     }
 
     window.fastn = fastn;
