@@ -8,8 +8,7 @@
 <script>
     (function() {
         function main (root) {
-            let x = fastn.mutable(10);
-            foo(root, x);
+            foo(root, fastn.mutable(10));
         }
 
         function foo(root, x) {
