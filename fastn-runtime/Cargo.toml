@@ -3,6 +3,12 @@ name = "fastn-runtime"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+
 [features]
 default = ["server", "native"]
 server = ["tokio", "fastn-wasm", "wasmtime", "taffy", "pretty"]
@@ -10,7 +16,7 @@ native = ["winit", "env_logger", "log", "wgpu", "render", "pretty"]
 # render feature will be enabled only when we want to do native rendering, which is when terminal and native is set
 render = []
 terminal = ["render", "taffy", "pretty"]
-browser = []
+browser = ["wasm-bindgen", "web-sys" ]
 
 [dependencies]
 async-trait.workspace = true
@@ -29,6 +35,8 @@ tokio = { workspace = true, optional = true }
 wasmtime = { workspace = true, optional = true }
 wgpu = { workspace = true, optional = true }
 winit = { workspace = true, optional = true }
+wasm-bindgen = { workspace = true, optional = true }
+web-sys = { workspace = true, optional = true }
 
 [dev-dependencies]
 indoc.workspace = true

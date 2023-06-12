@@ -1,16 +1,3 @@
-/// node_key_to_id converts a given slotmap key to a stable id. Each key in each slot map starts
-/// with a value like 1v1. This 1v1 is stable contract is the assumption we are working with. This
-/// should be stable as the first 1 refers to the index where we are adding the first element, and
-/// second 1 refers to the version number, eg if we remove the element at first index, and add
-/// another element, it would be 1v2 and so on. This should should be stable. Our entire design
-/// of generating pointers on server side and using them on browser side will break if this was not
-/// stable.
-///
-/// See also: node_key_ffi_is_stable() test in this file.
-fn node_key_to_id(node_key: fastn_runtime::NodeKey) -> String {
-    format!("{}", slotmap::Key::data(&node_key).as_ffi())
-}
-
 pub fn node(
     tag: &'static str,
     node_key: fastn_runtime::NodeKey,
