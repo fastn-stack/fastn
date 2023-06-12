@@ -28,11 +28,21 @@
         }
 
         set_static_property(kind, value) {
-            // todo
+            if (kind === fastn_dom.PropertyKind.Width_Px) {
+                this.#node.style.width = value + "px";
+            } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
+                this.#node.style.color = value;
+            } else {
+                throw ("invalid fastn_dom.PropertyKind: " + kind);
+            }
         }
 
-        function html_property(p) {
-            // todo;
+        destroy() {
+            for (let i = 0; i < this.#mutables.length; i++) {
+                this.#mutables[i].unlink_node(this);
+            }
+            this.#mutables = null;
+            this.#node = null;
         }
 
         function html_node(e) {

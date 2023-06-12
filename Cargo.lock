@@ -1661,6 +1661,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-js-runtime"
+version = "0.1.0"
+
+[[package]]
 name = "fastn-package"
 version = "0.1.0"
 dependencies = [
