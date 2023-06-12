@@ -44,3 +44,14 @@ gzip f.wasm
 ls -lh f.wasm.gz
 -rw-r--r--@ 1 amitu  staff   397K Jun 12 07:18 f.wasm.gz
 ```
+
+## Enabling `lto`
+
+With LTO enabled, the sizes are:
+
+```txt
+-rwxr-xr-x@ 1 amitu  staff   4.3M Jun 11 19:11 ../target/wasm32-unknown-unknown/debug/fastn_runtime.wasm
+-rwxr-xr-x@ 1 amitu  staff   518K Jun 12 07:24 ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm
+-rw-r--r--@ 1 amitu  staff   417K Jun 12 07:25 f.wasm
+-rw-r--r--@ 1 amitu  staff   108K Jun 12 07:26 f.wasm.gz
+```

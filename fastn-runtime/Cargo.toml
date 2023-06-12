@@ -6,11 +6,8 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib"]
 
-[profile.release]
-lto = true
-
 [features]
-default = ["server", "native"]
+default = ["server"]
 server = ["tokio", "fastn-wasm", "wasmtime", "taffy", "pretty"]
 native = ["winit", "env_logger", "log", "wgpu", "render", "pretty"]
 # render feature will be enabled only when we want to do native rendering, which is when terminal and native is set

@@ -6,9 +6,12 @@ members = [
     "fastn-cloud",
     "fastn-package",
     "fastn-issues",
-    "fastn-runtime",
     "fastn-wasm",
 ]
+exclude = ["fastn-runtime"]
+
+[profile.release]
+lto = true
 
 [workspace.dependencies]
 # Please do not specify a dependency more precisely than needed. If version "1" works, do
