@@ -95,9 +95,6 @@ struct Closure {
 }
 
 impl Closure {
-    fn get(&self) -> Value {
-        self.cached_value;
-    }
     fn update_ui(&self) {
         if let Some(ui) = self.ui {
             ui.update(self.cached_value);
@@ -155,16 +152,23 @@ fn set_property(node: Node, property: Property, deps: Vec<Mutable>, func: Fn) {
 
 ```rust
 fn formula(deps: Vec<Mutable>, func: Fn) -> Closure {
+    let v = func();
+
     let closure = Closure {
-        cached_value: func(),
+        cached_value: v,
         func,
         ui: None,
+    };
+
+    let m = Mutable {
+        value: v,
+        closures: vec![ closure ],
     };
 
     for dep in deps {
         dep.add_closure(closure)
     }
 
-    return closure
+    return m
 }
 ```
