@@ -76,3 +76,20 @@ strip = true
 -rw-r--r--@ 1 amitu  staff   353K Jun 12 07:58 f.wasm
 -rw-r--r--@ 1 amitu  staff    89K Jun 12 07:58 f.wasm.gz
 ```
+
+## `opt-level z` and `abort`
+
+```toml
+[profile.release]
+lto = true
+strip = true
+opt-level = "z"
+panic = "abort"
+```
+
+```shell
+-rwxr-xr-x@ 1 amitu  staff   4.3M Jun 11 19:11 ../target/wasm32-unknown-unknown/debug/fastn_runtime.wasm
+-rwxr-xr-x@ 1 amitu  staff   343K Jun 12 09:30 ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm
+-rw-r--r--@ 1 amitu  staff   322K Jun 12 09:31 f.wasm
+-rw-r--r--@ 1 amitu  staff    88K Jun 12 09:31 f.wasm.gz
+```
