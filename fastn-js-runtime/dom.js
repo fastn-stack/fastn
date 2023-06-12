@@ -19,9 +19,11 @@
 
     class Node {
         constructor(parent, kind) {
-            let (n, c) = html_node(kind);
-            this.#node = document.createElement(n);
-            this.#node.classList.append(c);
+            let node, classes = fastn_utils.html_node(kind);
+            this.#node = document.createElement(node);
+            for (c in classes) {
+                this.#node.classList.add(classes[c]);
+            }
             parent.addChild(this.#node);
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
@@ -45,7 +47,7 @@
             this.#node = null;
         }
 
-        function html_node(e) {
+        html_node(e) {
             if (e === fastn_dom.ElementKind.Row) return ("div", "row");
             if (e === fastn_dom.ElementKind.Column) return ("div", "row");
             if (e === fastn_dom.ElementKind.Integer) return ("div", "row");
