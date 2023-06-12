@@ -72,12 +72,13 @@
 
     fastn.formula = function (deps, func) {
         let closure = fastn.closure(func);
-        for (let dep in deps) {
-            deps[dep].addClosure(closure);
-        }
-
         let m = new Mutable(closure.get());
-        m.addClosure(closure);
+        for (let dep in deps) {
+            deps[dep].addClosure(new Closure(function () {
+                closure.update();
+                m.set(closure.get());
+            }));
+        }
 
         return m;
     }
