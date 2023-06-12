@@ -1,0 +1,59 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let x = fastn.mutable(10);
+            let y = 20;
+            let z = fastn.formula([x], function () { return x.get() * y; })
+            foo(root, x);
+            foo(root, x);
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [z], function () { return z.get(); });
+        }
+
+        function foo(root, x) {
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get() + 20; });
+            i.setStaticProperty(fastn_dom.PropertyKind.Color_RGB, "red");
+            i.addEventHandler(fastn_dom.Event.Click, function () {
+                x.set(x.get() + 1);
+            });
+        }
+
+        main(document.body);
+    })();
+</script>
+</html>
+
+
+<!--
+-- integer $x: 10
+-- integer y: 20
+-- integer z: { x * y }
+
+
+-- foo:
+$x: $x
+
+-- foo:
+$x: $x
+
+-- ftd.integer: $z
+
+
+
+-- component foo:
+integer $x:
+
+-- ftd.integer: { foo.x + 20 }
+color: red
+$on-click$: { foo.x += 1 }
+
+-- end: foo
+-->
