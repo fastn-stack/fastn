@@ -138,17 +138,25 @@ pre code {
     background: #c1c8ce;
 }
 
+a {
+    color: #2952a3;
+}
+
+a:visited {
+    color: #856ab9;
+}
+
+a:hover {
+    color: #24478f;
+}
+
 .ft_md a {
     text-decoration: none;
-    color: #6262ee;
 }
 
 .ft_md a:visited {
     text-decoration: none;
-    color: #ad71e4;
 }
-
-
 
 .ft_md a:hover {
     text-decoration: none;
