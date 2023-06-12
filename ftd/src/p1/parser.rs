@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(Debug, Clone)]
 enum ParsingStateReading {
     Section,
@@ -194,6 +196,8 @@ impl State {
         let last_section = self.get_latest_state().map(|v| v.0);
         match last_section {
             Some(section) if section_name.starts_with(format!("{}.", section.name).as_str()) => {
+                println!("THIS ERR HAPPENS");
+                dbg!(&section.name, &section_name);
                 return Err(ftd::p1::Error::SectionNotFound {
                     doc_id: self.doc_id.to_string(),
                     line_number: ftd::p1::utils::i32_to_usize(
@@ -272,6 +276,7 @@ impl State {
                             _ => unimplemented!(),
                         }
 
+                        // println!("UPDATING 3 BLOCK-HEADER: {}", header);
                         let block_record_header = ftd::p1::Header::block_record_header(
                             header,
                             kv.kind.to_owned(),
@@ -294,6 +299,7 @@ impl State {
                 }
             } else {
                 // No existing block record header found under section.headers
+                // println!("INSERTING 2 BLOCK-HEADER: {}", header_key);
                 section.headers.push(ftd::p1::Header::block_record_header(
                     header,
                     header_data.kind.clone(),
@@ -326,6 +332,7 @@ impl State {
     }
 
     fn reading_block_headers(&mut self) -> ftd::p1::Result<()> {
+        println!("INSIDE READING BLOCK HEADERS");
         self.end(&mut None)?;
         let (scan_line_number, content) = self.clean_content();
         let (section, parsing_states) =
@@ -358,12 +365,35 @@ impl State {
             &start_line[2..]
         };
 
+        dbg!(&section.headers);
+        dbg!(&line);
+
         let (name_with_kind, value) = colon_separated_values(
             ftd::p1::utils::i32_to_usize(self.line_number),
             line,
             self.doc_id.as_str(),
         )?;
         let (key, kind) = get_name_and_kind(name_with_kind.as_str());
+
+        let module_headers = section
+            .headers
+            .0
+            .iter()
+            .filter(|h| h.is_module_kind())
+            .collect_vec();
+        if let Some(possible_module) =
+            key.strip_prefix(format!("{}.", section.name.as_str()).as_str())
+        {
+            for m in module_headers.iter() {
+                dbg!(&possible_module, &m.get_key());
+                if possible_module.starts_with(m.get_key().as_str()) {
+                    println!("READING MODULE SECTION");
+                    // return self.reading_section();
+                    parsing_states.push(header_not_found_next_state);
+                    return Ok(());
+                }
+            }
+        }
 
         let key = if let Some(key) = key.strip_prefix(format!("{}.", section.name).as_str()) {
             key
@@ -513,6 +543,7 @@ impl State {
                         )
                     })
                     .collect();
+                // println!("INSERTING 1 BLOCK-HEADER: {}", header_key);
                 section.headers.push(ftd::p1::Header::block_record_header(
                     header_key,
                     header_kind,
@@ -779,6 +810,8 @@ pub fn parse_with_line_number(
         state: Default::default(),
     };
     state.next()?;
+    // println!("SHOWING STATE SECTIONS --------------------------------");
+    // dbg!(&state.sections);
     Ok(state.sections)
 }
 
