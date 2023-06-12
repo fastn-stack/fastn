@@ -21,3 +21,26 @@ From `fastn-runtime` folder, run the following command:
 ```sh
 cargo build --target wasm32-unknown-unknown --no-default-features --features=browser
 ```
+
+Attach `--release` flag to create smaller binaries.
+
+```txt
+-rwxr-xr-x@ 1 amitu  staff   4.3M Jun 11 19:11 ../target/wasm32-unknown-unknown/debug/fastn_runtime.wasm
+-rwxr-xr-x@ 1 amitu  staff   2.1M Jun 11 19:10 ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm
+```
+
+## Minimize using `wasm-opt`
+
+```sh
+wasm-opt -O3  ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm  -o f.wasm
+ls -lh f.wasm
+-rw-r--r--@ 1 amitu  staff   1.8M Jun 12 07:18 f.wasm
+```
+
+Gzip:
+
+```shell
+gzip f.wasm
+ls -lh f.wasm.gz
+-rw-r--r--@ 1 amitu  staff   397K Jun 12 07:18 f.wasm.gz
+```

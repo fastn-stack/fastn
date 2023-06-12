@@ -38,7 +38,7 @@ mod web;
 pub use control::ControlFlow;
 #[cfg(not(feature = "browser"))]
 pub use document::Document;
-pub use dom::{NodeKey};
+pub use dom::{NodeKey, DomT, node_key_to_id};
 #[cfg(not(feature = "browser"))]
 pub use dom::Dom;
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
