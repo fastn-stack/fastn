@@ -56,7 +56,7 @@ color: $inherited.colors.custom.ten
 display: inline
 margin-right.em: 0.25
 
-full-stack framework designed for creating good looking content centric or API
+full-stack Open Source framework designed for creating good looking content centric or API
 and database driven websites.
 
 -- end: hero-section
