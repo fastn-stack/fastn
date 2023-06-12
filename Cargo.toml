@@ -11,7 +11,10 @@ members = [
 exclude = ["fastn-runtime"]
 
 [profile.release]
-lto = true
+# enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023). The build time went up (no
+# objective data). Disabling it for now. It made a huge difference in fastn-runtime wasm size (without lto: 2.1M with
+# lto: 518K).
+# lto = true
 
 [workspace.dependencies]
 # Please do not specify a dependency more precisely than needed. If version "1" works, do
