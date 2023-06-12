@@ -57,10 +57,13 @@ $on-click$: { foo.x += 1 }
         let x = fastn.mutable(10);
         let y = 20;
         
-        let z = fastn.closure([x], function() {
-            get(x) + y
+        let z = fastn.formula([x], function() {
+            x.get() + y
         });
-                
+
+        let t = create_kernel(root, fastn.ElementKind.Integer);
+        fastn.set_property(t, fastn.Property.IntegerValue, [z], function() { z.get() });
+
         let f = foo(root, x);
         let f = foo(root, x);                
     }
@@ -68,7 +71,7 @@ $on-click$: { foo.x += 1 }
     function foo(root, x) {
         let i = fastn.create_kernel(root, fastn.ElementKind.Integer);
         
-        fastn.add_event_handler(i, "click", [x], function() {
+        i.add_event_handler(fastn.Event.Click, function() {
             x.set(x.get() + 1);
         });
 
@@ -79,38 +82,47 @@ $on-click$: { foo.x += 1 }
 })()
 ```
 
-## `fastn.Mutable`
+## `fastn.Closure`
 
 We are writing code in Rust, but its only for reference, code will actually be written in JS.
 
 ```rust
-// formula, dynamic property, and even handler?
+// formula and dynamic property
 struct Closure {
     cached_value: Value,
-    func_args: Vec<Mutable>,
     func: Fn,
     ui: Option<(Node, Property)>,
 }
 
 impl Closure {
-    fn call(&self) {
-        self.cached_value = self.func();
+    fn get(&self) -> Value {
+        self.cached_value;
+    }
+    fn update_ui(&self) {
         if let Some(ui) = self.ui {
             ui.update(self.cached_value);
         }
     }
+    fn call(&self) {
+        self.cached_value = self.func();
+        self.update_ui()
+    }
 }
+```
 
+## `fastn.Mutable`
+
+```rust
 struct Mutable {
     value: Value,
     closures: Vec<Closure>,
 }
 
-impl<T> Multable<T> {
-    fn get(&self) -> T {
+impl Multable {
+    fn get(&self) -> Value {
         self.value
     }
-    fn set(&self, new: T) {
+    fn set(&self, new: Value) {
         self.value = new;
         for c in self.closures {
             c.call();
@@ -119,5 +131,40 @@ impl<T> Multable<T> {
     fn add_closure(&mut self, closure: Closure) {
         self.closures.push(closure);
     }
+}
+```
+
+## `fastn.set_property()`
+
+```rust
+fn set_property(node: Node, property: Property, deps: Vec<Mutable>, func: Fn) {
+    let closure = Closure {
+        cached_value: func(),
+        func,
+        ui: Some((node, property)),
+    };
+    closure.update_ui();
+
+    for dep in deps {
+        dep.add_closure(closure)
+    }
+}
+```
+
+## `fastn.formula()`
+
+```rust
+fn formula(deps: Vec<Mutable>, func: Fn) -> Closure {
+    let closure = Closure {
+        cached_value: func(),
+        func,
+        ui: None,
+    };
+
+    for dep in deps {
+        dep.add_closure(closure)
+    }
+
+    return closure
 }
 ```
