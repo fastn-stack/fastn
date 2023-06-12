@@ -7,6 +7,7 @@ members = [
     "fastn-package",
     "fastn-issues",
     "fastn-wasm",
+    # "fastn-runtime",
 ]
 exclude = ["fastn-runtime"]
 
@@ -15,6 +16,7 @@ exclude = ["fastn-runtime"]
 # objective data). Disabling it for now. It made a huge difference in fastn-runtime wasm size (without lto: 2.1M with
 # lto: 518K).
 # lto = true
+strip = true
 
 [workspace.dependencies]
 # Please do not specify a dependency more precisely than needed. If version "1" works, do
