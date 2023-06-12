@@ -15,16 +15,19 @@
     fastn_dom.PropertyKind = {
         Width_Px: 0,
         Color_RGB: 1,
+        IntegerValue: 2,
     }
 
     class Node {
+        #node;
+        #mutables;
         constructor(parent, kind) {
             let node, classes = fastn_utils.html_node(kind);
             this.#node = document.createElement(node);
-            for (c in classes) {
+            for (let c in classes) {
                 this.#node.classList.add(classes[c]);
             }
-            parent.addChild(this.#node);
+            parent.appendChild(this.#node);
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
         }
@@ -34,6 +37,8 @@
                 this.#node.style.width = value + "px";
             } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
                 this.#node.style.color = value;
+            } else if (kind === fastn_dom.PropertyKind.IntegerValue) {
+                this.#node.innerHTML = value;
             } else {
                 throw ("invalid fastn_dom.PropertyKind: " + kind);
             }

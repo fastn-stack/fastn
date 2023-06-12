@@ -4,6 +4,9 @@
     let fastn = {};
 
     class Closure {
+        #cached_value;
+        #node;
+        #property;
         constructor(func, node, property) {
             this.#cached_value = func();
             this.#node = node;
@@ -13,6 +16,9 @@
         update() {
             this.#cached_value = func();
             this.update_ui();
+        }
+        getNode() {
+            return this.#node;
         }
         update_ui() {
             if (!this.#node || !this.#property) {
@@ -24,6 +30,8 @@
     }
 
     class Mutable {
+        #value;
+        #closures;
         constructor(val) {
             this.#value = val;
             this.#closures = [];
@@ -37,7 +45,7 @@
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlink_node(node) {
-            this.#closures = this.#closures.filter(closure => closure.#node !== node);
+            this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
         }
     }
 
