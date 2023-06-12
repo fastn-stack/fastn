@@ -49,9 +49,14 @@
         get() {
             return this.#value;
         }
+        getClosures() {
+            return this.#closures;
+        }
         set(value) {
-            this.#value = value;
-            this.#closures.forEach(closure => closure.update());
+            if (this.#value !== value) {
+                this.#value = value;
+                this.#closures.forEach(closure => closure.update());
+            }
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlink_node(node) {
