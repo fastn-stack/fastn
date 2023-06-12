@@ -19,7 +19,7 @@ A global variable, eg in:
     function main(root) {
         let x = 10;
         let i = fastn.create_kernel(root, fastn.ElementKind.Integer);
-        fastn.set_property(i, fastn.Property.IntegerValue, x);
+        fastn.set_property_static(i, fastn.Property.IntegerValue, x);
     }
 })()
 ```
@@ -79,7 +79,7 @@ $on-click$: { foo.x += 1 }
             x.get() + 20
         });
     }
-})()
+})();
 ```
 
 ## `fastn.Closure`
