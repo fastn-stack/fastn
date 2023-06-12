@@ -19,7 +19,7 @@ A global variable, eg in:
     function main(root) {
         let x = 10;
         let i = fastn.create_kernel(root, fastn.ElementKind.Integer);
-        fastn.set_property_static(i, fastn.Property.IntegerValue, x);
+        i.set_property_static(fastn.Property.IntegerValue, x);
     }
 })()
 ```
@@ -61,8 +61,8 @@ $on-click$: { foo.x += 1 }
             x.get() + y
         });
 
-        let t = create_kernel(root, fastn.ElementKind.Integer);
-        fastn.set_property(t, fastn.Property.IntegerValue, [z], function() { z.get() });
+        let t = fastn_dom.create_kernel(root, fastn_dom.ElementKind.Integer);
+        t.set_property(fastn.Property.IntegerValue, [z], function() { z.get() });
 
         let f = foo(root, x);
         let f = foo(root, x);                
@@ -75,7 +75,7 @@ $on-click$: { foo.x += 1 }
             x.set(x.get() + 1);
         });
 
-        fastn.set_property(i, fastn.Property.IntegerValue, [x], function() {
+        i.set_property(fastn.Property.IntegerValue, [x], function() {
             x.get() + 20
         });
     }
@@ -100,7 +100,7 @@ impl Closure {
             ui.update(self.cached_value);
         }
     }
-    fn call(&self) {
+    fn update(&self) {
         self.cached_value = self.func();
         self.update_ui()
     }
@@ -131,14 +131,14 @@ impl Multable {
 }
 ```
 
-## `fastn.set_property()`
+## `Node.set_property()`
 
 ```rust
-fn set_property(node: Node, property: Property, deps: Vec<Mutable>, func: Fn) {
+fn set_property(property: Property, deps: Vec<Mutable>, func: Fn) {
     let closure = Closure {
         cached_value: func(),
         func,
-        ui: Some((node, property)),
+        ui: Some((this, property)),
     };
     closure.update_ui();
 
