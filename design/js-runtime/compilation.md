@@ -52,30 +52,32 @@ $on-click$: { foo.x += 1 }
 ```
 
 ```js
-(function() {
+(function () {
     function main(root) {
         let x = fastn.mutable(10);
         let y = 20;
-        
-        let z = fastn.formula([x], function() {
+
+        let z = fastn.formula([x], function () {
             x.get() + y
         });
 
-        let t = fastn_dom.create_kernel(root, fastn_dom.ElementKind.Integer);
-        t.set_property(fastn.Property.IntegerValue, [z], function() { z.get() });
+        let t = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+        t.set_property(fastn.Property.IntegerValue, [z], function () {
+            z.get()
+        });
 
         let f = foo(root, x);
-        let f = foo(root, x);                
+        let f = foo(root, x);
     }
-    
+
     function foo(root, x) {
         let i = fastn.create_kernel(root, fastn.ElementKind.Integer);
-        
-        i.add_event_handler(fastn.Event.Click, function() {
+
+        i.add_event_handler(fastn.Event.Click, function () {
             x.set(x.get() + 1);
         });
 
-        i.set_property(fastn.Property.IntegerValue, [x], function() {
+        i.set_property(fastn.Property.IntegerValue, [x], function () {
             x.get() + 20
         });
     }

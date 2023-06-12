@@ -7,14 +7,16 @@
         #cached_value;
         #node;
         #property;
+        #formula;
         constructor(func, node, property) {
             this.#cached_value = func();
             this.#node = node;
+            this.#formula = func;
             this.#property = property;
             this.update_ui();
         }
         update() {
-            this.#cached_value = func();
+            this.#cached_value = this.#formula();
             this.update_ui();
         }
         getNode() {
@@ -25,7 +27,7 @@
                 return;
             }
 
-            this.#node.set_static_property(this.#property, this.#cached_value);
+            this.#node.setStaticProperty(this.#property, this.#cached_value);
         }
     }
 

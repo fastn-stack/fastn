@@ -1,5 +1,5 @@
 window.fastn_utils = {
-    html_node(kind) {
+    htmlNode(kind) {
         let node = "div";
         let css = ["ft_common"];
         if (kind === fastn_dom.ElementKind.Column) {
@@ -11,6 +11,6 @@ window.fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
         }
-        return (node, css);
+        return [node, css];
     }
 }
