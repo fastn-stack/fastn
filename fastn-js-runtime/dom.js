@@ -18,11 +18,15 @@
         IntegerValue: 2,
     }
 
+    fastn_dom.Event = {
+        Click: 0
+    }
+
     class Node {
         #node;
         #mutables;
         constructor(parent, kind) {
-            let node, classes = fastn_utils.html_node(kind);
+            let [node, classes] = fastn_utils.htmlNode(kind);
             this.#node = document.createElement(node);
             for (let c in classes) {
                 this.#node.classList.add(classes[c]);
@@ -31,7 +35,7 @@
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
         }
-        set_static_property(kind, value) {
+        setStaticProperty(kind, value) {
             if (kind === fastn_dom.PropertyKind.Width_Px) {
                 this.#node.style.width = value + "px";
             } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
@@ -43,10 +47,17 @@
             }
         }
 
-        set_dynamic_property(kind, deps, func) {
+        setDynamicProperty(kind, deps, func) {
             let closure = fastn.closure(func, this, kind);
             for (let dep in deps) {
-                dep.addClosure(closure);
+                deps[dep].addClosure(closure);
+            }
+        }
+
+
+        addEventHandler(event, func) {
+            if (event === fastn_dom.Event.Click) {
+                this.#node.onclick = func;
             }
         }
 
@@ -74,7 +85,7 @@
     }
 
 
-    fastn_dom.create_kernel = function (parent, kind) {
+    fastn_dom.createKernel = function (parent, kind) {
         return new Node(parent, kind);
     }
 

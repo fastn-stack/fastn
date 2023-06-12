@@ -9,8 +9,11 @@
     (function() {
         function main (root) {
             let x = fastn.mutable(4);
-            let i = fastn_dom.create_kernel(root, fastn_dom.ElementKind.Integer);
-            i.set_dynamic_property(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get(); });
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get(); });
+            i.addEventHandler(fastn_dom.Event.Click, function () {
+                x.set(x.get() + 1);
+            });
         }
 
         main(document.body);
