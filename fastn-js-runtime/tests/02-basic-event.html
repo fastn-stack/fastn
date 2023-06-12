@@ -8,11 +8,11 @@
 <script>
     (function() {
         function main (root) {
-            let x = fastn.mutable(4);
+            let num = fastn.mutable(4);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get(); });
+            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [num], function () { return num.get(); });
             i.addEventHandler(fastn_dom.Event.Click, function () {
-                x.set(x.get() + 1);
+                num.set(num.get() + 1);
             });
         }
 

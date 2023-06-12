@@ -8,11 +8,12 @@
 <script>
     (function() {
         function main (root) {
-            let x = fastn.mutable(4);
+            let num = fastn.mutable(4);
+            let value = fastn.formula([num], function () { return num.get() * 10; })
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get(); });
+            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [value], function () { return value.get(); });
             i.addEventHandler(fastn_dom.Event.Click, function () {
-                x.set(x.get() + 1);
+                num.set(num.get() + 1);
             });
         }
 
@@ -25,7 +26,7 @@
 <!--
 -- integer $num: 4
 
--- integer value: { num * 1 }
+-- integer value: { num * 10 }
 
 -- ftd.integer: $value
 $on-click$: $ftd.increment($a = $num)

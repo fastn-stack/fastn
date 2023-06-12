@@ -8,12 +8,20 @@
         #node;
         #property;
         #formula;
-        constructor(func, node, property) {
+        constructor(func) {
             this.#cached_value = func();
-            this.#node = node;
             this.#formula = func;
+        }
+
+        get() {
+            return this.#cached_value;
+        }
+        addNodeProperty(node, property) {
+            this.#node = node;
             this.#property = property;
             this.update_ui();
+
+            return this;
         }
         update() {
             this.#cached_value = this.#formula();
@@ -58,8 +66,20 @@
         return new Mutable(val)
     };
 
-    fastn.closure = function (func, node, property) {
-        return new Closure(func, node, property)
+    fastn.closure = function (func) {
+        return new Closure(func);
+    }
+
+    fastn.formula = function (deps, func) {
+        let closure = fastn.closure(func);
+        for (let dep in deps) {
+            deps[dep].addClosure(closure);
+        }
+
+        let m = new Mutable(closure.get());
+        m.addClosure(closure);
+
+        return m;
     }
 
     window.fastn = fastn;

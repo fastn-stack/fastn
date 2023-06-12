@@ -48,7 +48,7 @@
         }
 
         setDynamicProperty(kind, deps, func) {
-            let closure = fastn.closure(func, this, kind);
+            let closure = fastn.closure(func).addNodeProperty(this, kind);
             for (let dep in deps) {
                 deps[dep].addClosure(closure);
             }
