@@ -32,7 +32,7 @@ Component definitions will be compiled into functions.
 ```ftd
 -- integer $x: 10        ;; mutable
 -- integer y: 20         ;; static
--- integer z = $x + $y   ;; formula 
+-- integer z: $x + $y   ;; formula 
 
 -- foo: 
 $x: $x

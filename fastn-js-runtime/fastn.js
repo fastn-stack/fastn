@@ -22,7 +22,7 @@
         }
         update_ui() {
             if (!this.#node || !this.#property) {
-                return
+                return;
             }
 
             this.#node.set_static_property(this.#property, this.#cached_value);
@@ -47,11 +47,18 @@
         unlink_node(node) {
             this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
         }
+        addClosure(closure) {
+            this.#closures.push(closure);
+        }
     }
 
     fastn.mutable = function (val) {
         return new Mutable(val)
     };
+
+    fastn.closure = function (func, node, property) {
+        return new Closure(func, node, property)
+    }
 
     window.fastn = fastn;
 })();

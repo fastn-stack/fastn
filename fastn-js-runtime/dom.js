@@ -31,7 +31,6 @@
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
         }
-
         set_static_property(kind, value) {
             if (kind === fastn_dom.PropertyKind.Width_Px) {
                 this.#node.style.width = value + "px";
@@ -41,6 +40,13 @@
                 this.#node.innerHTML = value;
             } else {
                 throw ("invalid fastn_dom.PropertyKind: " + kind);
+            }
+        }
+
+        set_dynamic_property(kind, deps, func) {
+            let closure = fastn.closure(func, this, kind);
+            for (let dep in deps) {
+                dep.addClosure(closure);
             }
         }
 
