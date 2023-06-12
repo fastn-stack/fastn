@@ -8,7 +8,7 @@ pub fn node(
         .append(tag)
         .append(pretty::RcDoc::space())
         .append("data-id=")
-        .append(node_key_to_id(node_key));
+        .append(fastn_runtime::dom::node_key_to_id(node_key));
     let attrs = match attrs {
         Some(v) => v.append(">"),
         None => pretty::RcDoc::text(">"),
@@ -28,7 +28,7 @@ pub fn leaf(
         .append(tag)
         .append(pretty::RcDoc::space())
         .append("data-id=")
-        .append(node_key_to_id(node_key));
+        .append(fastn_runtime::dom::node_key_to_id(node_key));
     let attrs = match attrs {
         Some(v) => v.append(">"),
         None => pretty::RcDoc::text(">"),

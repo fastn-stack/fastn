@@ -1,3 +1,5 @@
+extern crate self as fastn_runtime;
+
 #[cfg(feature = "browser")]
 fn main() {}
 
