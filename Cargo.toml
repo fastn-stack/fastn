@@ -7,6 +7,7 @@ members = [
     "fastn-package",
     "fastn-issues",
     "fastn-wasm",
+    "fastn-js-runtime",
     # "fastn-runtime",
 ]
 exclude = ["fastn-runtime"]

@@ -1,0 +1,17 @@
+<html>
+<head>
+    <script src="dom.js"></script>
+    <script src="fastn.js"></script>
+    <script>
+        (function() {
+            function main (root) {
+                let x = 10;
+                let i = fastn_dom.create_kernel(root, fastn_dom.ElementKind.Integer);
+                i.set_static_property(fastn_dom.Property.IntegerValue, x);
+            }
+
+            main(document.body);
+        })();
+    </script>
+</head>
+</html>
