@@ -47,6 +47,12 @@ ls -lh f.wasm.gz
 
 ## Enabling `lto`
 
+
+```toml
+[profile.release]
+lto = true
+```
+
 With LTO enabled, the sizes are:
 
 ```txt
@@ -54,4 +60,19 @@ With LTO enabled, the sizes are:
 -rwxr-xr-x@ 1 amitu  staff   518K Jun 12 07:24 ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm
 -rw-r--r--@ 1 amitu  staff   417K Jun 12 07:25 f.wasm
 -rw-r--r--@ 1 amitu  staff   108K Jun 12 07:26 f.wasm.gz
+```
+
+## After Stripping Debug Info
+
+```toml
+[profile.release]
+lto = true
+strip = true
+```
+
+```shell
+-rwxr-xr-x@ 1 amitu  staff   4.3M Jun 11 19:11 ../target/wasm32-unknown-unknown/debug/fastn_runtime.wasm
+-rwxr-xr-x@ 1 amitu  staff   400K Jun 12 07:57 ../target/wasm32-unknown-unknown/release/fastn_runtime.wasm
+-rw-r--r--@ 1 amitu  staff   353K Jun 12 07:58 f.wasm
+-rw-r--r--@ 1 amitu  staff    89K Jun 12 07:58 f.wasm.gz
 ```
