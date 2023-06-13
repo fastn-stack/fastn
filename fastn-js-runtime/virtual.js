@@ -5,6 +5,13 @@
     let hydrating = false;
     let ssr = false;
 
+    class ClassList {
+        #classes = [];
+        add(item) {
+            this.#classes.push(item);
+        }
+    }
+
     class Node {
         #id
         #tagName
@@ -12,7 +19,7 @@
         constructor(id, tagName) {
             this.#tagName = tagName;
             this.#id = id;
-            this.classList = [];
+            this.classList = new ClassList();
             this.#children = [];
             this.innerHTML = "";
             this.style = {};
@@ -21,8 +28,19 @@
         appendChild(c) {
             this.#children.push(c);
         }
-        toHtml() {
+        toHtmlAsString() {
+            const openingTag = `<${this.#tagName} data-id="${this.#id}"${this.classList.length > 0 ? ` class="${this.classList.join(' ')}"` : ''}${Object.keys(this.style).length > 0 ? ` style="${this.getStyleString()}"` : ''}>`;
+            const closingTag = `</${this.#tagName}>`;
+            const innerHTML = this.innerHTML;
+            const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
 
+            return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
+        }
+
+        getStyleString() {
+            return Object.entries(this.style)
+                .map(([prop, value]) => `${prop}:${value}`)
+                .join(';');
         }
     }
 
@@ -42,7 +60,7 @@
         }
 
         getElementByDataID(id) {
-            return fastn_virtual.real_document.getElementById(id);
+            return fastn_virtual.real_document.querySelector(`[data-id=\"${id}\"]`);
         }
     }
 
@@ -54,7 +72,8 @@
     fastn_virtual.hydrate = function(main) {
         hydrating = true;
         let body = fastn_virtual.document.createElement("body");
-        main(body)
+        main(body);
+        id_counter = 0;
         hydrating = false;
     }
 
@@ -63,7 +82,8 @@
         let body = fastn_virtual.document.createElement("body");
         main(body)
         ssr = false;
-        return body.toHtml()
+        id_counter = 0;
+        return body.toHtmlAsString()
     }
 
     window.fastn_virtual = fastn_virtual;
