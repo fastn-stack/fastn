@@ -28,16 +28,17 @@
     class Document {
         createElement(tagName) {
             id_counter++;
-
             if (ssr) {
                 return new Node(id_counter, tagName);
             }
-
-            if (!hydrating)
+            if (!hydrating) {
                 return fastn_virtual.real_document.createElement(tagName);
             }
-
             return fastn_virtual.document.getElementByDataID(id_counter);
+        }
+
+        getElementByDataID(id) {
+            return fastn_virtual.real_document.getElementById(id);
         }
     }
 
@@ -61,5 +62,3 @@
 
     window.fastn_virtual = fastn_virtual;
 })();
-
-
