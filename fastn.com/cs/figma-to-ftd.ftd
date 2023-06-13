@@ -1,5 +1,5 @@
 -- import: fastn-stack.github.io/fastn-js/json-exporter as j
--- import: fifthtry.github.io/forest-cs as forest-cs
+-- import: fastn-community.github.io/forest-cs as forest-cs
 -- import: heulitig.github.io/figma-tokens-tutorial/assets as assets
 -- import: fastn/processors as pr
 
@@ -55,7 +55,7 @@ Download the below json code as a new json file named `forest-cs.json`
 by clicking on the download icon in the code-block below.
 
 `Note:` You can also get this json from its
-[color documentation](https://fifthtry.github.io/forest-cs/)
+[color documentation](https://fastn-community.github.io/forest-cs/)
 
 -- ds.code: forest-cs
 lang: json
@@ -215,7 +215,7 @@ on the copy icon at the top of the code-block above.
 
 This repo is a template repo for fastn color-schemes, we will create
 our own color-scheme repo using this. To visit this repo,
-[click here](https://github.com/FifthTry/sailing-shark-cs)
+[click here](https://github.com/fastn-community/sailing-shark-cs)
 
 To do that, click on the `Use this template` button then `Create a new repository`
 as shown below
@@ -363,10 +363,9 @@ Congratulations you have completed this tutorial.
 
 Check out these fastn color-schemes which you can use right away
 
-- [Forest CS](https://fifthtry.github.io/forest-cs/)
-- [Winter CS](https://fifthtry.github.io/winter-cs/)
-- [Saturated sunset CS](https://fifthtry.github.io/saturated-sunset-cs/)
-- [Black Forest CS](https://fifthtry.github.io/black-forest-cs/)
-- [Dark flame CS](https://fifthtry.github.io/dark-flame-cs/)
+- [Dark flame CS](https://fastn-community.github.io/dark-flame-cs/)
+- [Forest CS](https://fastn-community.github.io/forest-cs/)
+- [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
+- [Winter CS](https://fastn-community.github.io/winter-cs/)
 
 -- end: my-ds.page

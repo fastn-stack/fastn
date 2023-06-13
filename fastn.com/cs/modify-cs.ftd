@@ -7,17 +7,17 @@ requirement? How can we achieve this?
 Let's understand how this can be done.
 
 For example sake let's say you like
-[`forest-cs`](https://fifthtry.github.io/forest-cs) color scheme, but for
+[`forest-cs`](https://fastn-community.github.io/forest-cs/) color scheme, but for
 background step-2, you want to change it to brown and saddlebrown color for dark
 and light mode respectively.
 
 -- ds.h2: Step 1: Fork the `forest-cs` package
 
-You can fork this package by visiting [`forest-cs`](https://github.com/FifthTry/forest-cs)
+You can fork this package by visiting [`forest-cs`](https://github.com/fastn-community/forest-cs)
 package repository and then click on Fork.
 
 This will redirect you to
-[`Create a fork`](https://github.com/FifthTry/forest-cs/fork). Then finish
+[`Create a fork`](https://github.com/fastn-community/forest-cs/fork). Then finish
 creating the fork.
 
 If you need to understand how to fork a repo, visit

@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
--- import: fifthtry.github.io/bling/chat
--- import: fifthtry.github.io/bling/quote
--- import: fifthtry.github.io/bling/assets
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn-community.github.io/bling/assets
 
 
 -- component amitu:
@@ -75,14 +75,14 @@ no quotes. and **markdown** is *supported*.
 
 Note: These are not built in components of ftd, but are using [open source
 component libraries](/featured/), eg
-[fifthtry.github.io/bling/quote](https://fifthtry.github.io/bling/chat/). Learn
+[fastn-community.github.io/bling/quote](https://fastn-community.github.io/bling/chat/). Learn
 how to [build your own](/expander/).
 
 -- ds.code: using little more complex components
 lang: ftd
 
 
-\-- import: fifthtry.github.io/bling/quote
+\-- import: fastn-community.github.io/bling/quote
 
 \-- quote.charcoal: Amit Upadhyay
 label: Creator of FTD
@@ -104,7 +104,7 @@ early 2000s, and it makes me a little sad.
 -- ds.markdown:
 
 There are [many components to chose
-from](https://fifthtry.github.io/bling/quote/), and you can create your own
+from](https://fastn-community.github.io/bling/quote/), and you can create your own
 with ease.
 
 -- ds.h1: A language for building UI

@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/bling/quote
+-- import: fastn-community.github.io/bling/quote
 -- import: fastn.com/ftd as ftd-index
 
 -- my-ds.page: `fastn` - Full-stack Web Development Made Easy
@@ -68,7 +68,7 @@ Learn more about [`ftd` Programming Language](/ftd/).
 lang: ftd
 
 
-\-- import: fifthtry.github.io/bling/quote
+\-- import: fastn-community.github.io/bling/quote
 
 \-- quote.charcoal: Amit Upadhyay
 label: Creator of FTD
@@ -158,7 +158,7 @@ Pages](https://fastn.com/how-to/github-pages/),
 -- ds.code: `ftd` source code of the page you are reading
 lang: ftd
 
-\-- import: fifthtry.github.io/bling/quote
+\-- import: fastn-community.github.io/bling/quote
 \-- import: fastn.com/ftd as ftd-index
 
 \-- my-ds.page: Overview of `fastn` and `ftd`

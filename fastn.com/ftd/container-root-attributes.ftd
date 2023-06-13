@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/saturated-sunset-cs as cs
+-- import: fastn-community.github.io/saturated-sunset-cs as cs
 -- import: fifthtry.github.io/virgil-font-typography as typo
 
 -- my-ds.page: Container Root Attributes
@@ -60,7 +60,7 @@ type `ftd.color-scheme` and is optional.
 
 -- ds.rendered.input:
 
-\-- import: fifthtry.github.io/saturated-sunset-cs as cs
+\-- import: fastn-community.github.io/saturated-sunset-cs as cs
 
 \-- ftd.column:
 colors: $cs.main

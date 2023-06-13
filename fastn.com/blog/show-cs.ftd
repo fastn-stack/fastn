@@ -1,7 +1,7 @@
--- import: fifthtry.github.io/winter-cs as winter-cs
--- import: fifthtry.github.io/dark-flame-cs as dark-flame-cs
--- import: fifthtry.github.io/forest-cs as forest-cs
--- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
+-- import: fastn-community.github.io/winter-cs as winter-cs
+-- import: fastn-community.github.io/dark-flame-cs as dark-flame-cs
+-- import: fastn-community.github.io/forest-cs as forest-cs
+-- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
 -- import: fifthtry.github.io/button
 -- import: fastn.dev/assets
 
@@ -61,7 +61,7 @@ color, then, is inherited by `color-display`.
 -- ds.code: Using forest cs
 lang: ftd
 
-\-- import: fifthtry.github.io/forest-cs
+\-- import: fastn-community.github.io/forest-cs
 
 \-- ftd.column:
 colors: $forest-cs.main
@@ -199,7 +199,7 @@ We will then incorporate this component within a container and provide the
 -- ds.code: Using `my-color` component
 lang: ftd
 
-\-- import: fifthtry.github.io/saturated-sunset-cs as sunset-cs
+\-- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
 
 \-- ftd.column:
 colors: $sunset-cs.main
@@ -233,7 +233,7 @@ We can also apply another color scheme, such as `forest-cs`:
 -- ds.code: Using `my-color` component
 lang: ftd
 
-\-- import: fifthtry.github.io/forest-cs
+\-- import: fastn-community.github.io/forest-cs
 
 \-- ftd.column:
 colors: $forest-cs.main

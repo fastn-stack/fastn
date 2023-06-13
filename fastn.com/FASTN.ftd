@@ -3,29 +3,28 @@
 -- fastn.package: fastn.com
 favicon: /-/fastn.com/images/favicon.svg
 
--- fastn.dependency: fastn-stack.github.io/fastn-js
--- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+-- fastn.dependency: fastn-community.github.io/bling
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+-- fastn.dependency: fastn-community.github.io/doc-site as ds
+-- fastn.dependency: fastn-community.github.io/forest-cs
+-- fastn.dependency: fastn-community.github.io/saturated-sunset-cs
+-- fastn.dependency: fastn-community.github.io/winter-cs
+-- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/spectrum-ds
 -- fastn.dependency: fifthtry.github.io/admonitions
 -- fastn.dependency: fifthtry.github.io/banner
--- fastn.dependency: fifthtry.github.io/bling
 -- fastn.dependency: fifthtry.github.io/button
 -- fastn.dependency: fifthtry.github.io/common
--- fastn.dependency: fifthtry.github.io/dark-flame-cs
--- fastn.dependency: fastn-community.github.io/doc-site as ds
 -- fastn.dependency: fifthtry.github.io/fastn-io-typography
 -- fastn.dependency: fifthtry.github.io/fastn-typography
 -- fastn.dependency: fifthtry.github.io/fastn-ui
--- fastn.dependency: fifthtry.github.io/forest-cs
--- fastn.dependency: fifthtry.github.io/saturated-sunset-cs
 -- fastn.dependency: fifthtry.github.io/virgil-font-typography
--- fastn.dependency: fifthtry.github.io/winter-cs
--- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/dark-mode-switcher
--- fastn.dependency: fastn-stack.github.io/media
--- fastn.dependency: gargajit.github.io/expander
 -- fastn.dependency: fifthtry.github.io/banner
--- fastn.dependency: fastn-community.github.io/footer
--- fastn.dependency: fastn-community.github.io/spectrum-ds
+-- fastn.dependency: fastn-stack.github.io/media
+-- fastn.dependency: fastn-stack.github.io/fastn-js
+-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+-- fastn.dependency: gargajit.github.io/expander
 
 -- fastn.auto-import: ds
 -- fastn.auto-import: fastn.com/FASTN/my-ds as my-ds

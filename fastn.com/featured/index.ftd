@@ -1,6 +1,6 @@
 -- import: fastn-community.github.io/spectrum-ds as ds
 -- import: fastn-community.github.io/footer
--- import: fifthtry.github.io/dark-flame-cs
+-- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 
 
@@ -410,12 +410,12 @@ Add warmth and energy to your designs with the `forest-cs`.
 -- template list bling:
 
 -- template: Bling
-template-url: https://fifthtry.github.io/bling/
+template-url: https://fastn-community.github.io/bling/
 screenshot: $fastn-assets.files.images.featured.bling-components.png
 licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
 github-url: https://github.com/FifthTry/bling/
 
-`fifthtry.github.io/bling` is develoed and designed with various components which 
+`fastn-community.github.io/bling` is develoed and designed with various components which 
 can be used inside `ftd` web packages.
 
 -- end: bling
