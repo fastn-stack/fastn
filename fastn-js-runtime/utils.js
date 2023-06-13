@@ -12,5 +12,12 @@ window.fastn_utils = {
             node = "img";
         }
         return [node, css];
+    },
+    getValue(obj) {
+        if (!!obj.get) {
+           return obj.get();
+        } else {
+           return obj;
+        }
     }
 }

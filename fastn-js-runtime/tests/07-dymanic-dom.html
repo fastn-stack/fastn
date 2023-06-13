@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let p = fastn.mutable(null);
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me");
+            i.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": "Ritesh"})})
+            i.done();
+
+            let showPersonUI = null;
+            p.addClosure(fastn.closure(function () {
+                if (p.get() !== null) {
+                    showPersonUI = showPerson(p);
+                } else {
+
+                }
+            }))
+        }
+
+        function showPerson(p) {
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, p.get().name);
+            return i;
+        }
+
+        main(document.body);
+    })();
+</script>
+</html>
+
+
+<!--
+-- record person:
+caption name:
+
+-- optional person $p:
+
+-- ftd.text: Click me
+$on-click$: { p = { name: Ritesh }}
+
+-- show-person: $p
+if: { p != NULL }
+
+-- component show-person:
+caption person p:
+
+-- ftd.text: $show-person.p.name
+
+-- end: show-person
+-->
