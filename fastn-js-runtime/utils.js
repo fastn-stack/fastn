@@ -45,6 +45,14 @@ window.fastn_utils = {
         return true;
     },
 
+    /**
+     * Retrieves all mutables present in an object.
+     * This function recursively traverses the object and collects all instances
+     * of mutable classes, storing them in an array.
+     *
+     * @param {Object} obj - The object to traverse.
+     * @returns {Array} - An array containing all found mutables.
+     */
     getAllMutables(obj) {
         const nodes = [];
 
@@ -65,6 +73,14 @@ window.fastn_utils = {
         return nodes;
     },
 
+    /**
+     * This function compares the mutables found in both old and new values and returns
+     * an array of mutables that are present in the new value but not in the old value.
+     *
+     * @param {any} oldValue - The old value to compare.
+     * @param {any} newValue - The new value to compare.
+     * @returns {Array} - An array containing the new mutables.
+     */
     newMutables(oldValue, newValue) {
         const oldMutables = new Set(fastn_utils.getAllMutables(oldValue));
         const newMutables = fastn_utils.getAllMutables(newValue).filter(mutable => !oldMutables.has(mutable));
