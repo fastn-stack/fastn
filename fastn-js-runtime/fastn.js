@@ -67,6 +67,30 @@
         }
     }
 
+    class Proxy {
+        #getter
+        #setter
+        #cached_value
+        constructor(targets, getter, setter) {
+            this.#getter = getter;
+            this.#setter = setter;
+            this.#cached_value = this.#getter();
+            for (let idx in targets) {
+                targets[idx].addClosure(this);
+            }
+        }
+        update() {
+            this.#cached_value = this.#getter();
+        }
+        get() {
+            return this.#cached_value;
+        }
+        set(value) {
+            this.#setter(value);
+            this.#cached_value = this.#getter();
+        }
+    }
+
     fastn.mutable = function (val) {
         return new Mutable(val)
     };
@@ -78,8 +102,8 @@
     fastn.formula = function (deps, func) {
         let closure = fastn.closure(func);
         let mutable = new Mutable(closure.get());
-        for (let dep in deps) {
-            deps[dep].addClosure(new Closure(function () {
+        for (let idx in deps) {
+            deps[idx].addClosure(new Closure(function () {
                 closure.update();
                 mutable.set(closure.get());
             }));
@@ -87,6 +111,11 @@
 
         return mutable;
     }
+
+    fastn.proxy = function (targets, getter, setter) {
+        return new Proxy(targets, getter, setter)
+    };
+
 
     window.fastn = fastn;
 })();
