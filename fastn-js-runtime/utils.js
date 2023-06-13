@@ -19,5 +19,31 @@ window.fastn_utils = {
         } else {
            return obj;
         }
+    },
+    deepEqual(obj1, obj2) {
+        if (obj1 === obj2) {
+            return true;
+        }
+        // Check if the objects are of the same type
+        if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+            return false;
+        }
+
+        // Check if the objects have the same keys
+        const keys1 = Object.keys(obj1);
+        const keys2 = Object.keys(obj2);
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+
+        // Check if the values of the keys are deeply equal
+        for (let key of keys1) {
+            if (!this.deepEqual(obj1[key], obj2[key])) {
+                return false;
+            }
+        }
+
+        // Objects are deeply equal
+        return true;
     }
 }

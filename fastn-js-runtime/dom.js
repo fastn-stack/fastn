@@ -66,6 +66,9 @@
                 deps[dep].addClosure(closure);
             }
         }
+        getNode() {
+            return this.#node;
+        }
         addEventHandler(event, func) {
             if (event === fastn_dom.Event.Click) {
                 this.#node.onclick = func;

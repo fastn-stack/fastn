@@ -53,7 +53,8 @@
             return this.#closures;
         }
         set(value) {
-            if (this.#value !== value) {
+            // if (this.#value !== value) {
+            if (!fastn_utils.deepEqual(this.#value, value)) {
                 this.#value = value;
                 this.#closures.forEach(closure => closure.update());
             }

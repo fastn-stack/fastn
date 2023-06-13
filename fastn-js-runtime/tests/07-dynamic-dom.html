@@ -3,6 +3,7 @@
     <script src="../dom.js"></script>
     <script src="../fastn.js"></script>
     <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
 </head>
 <body></body>
 <script>
@@ -17,16 +18,21 @@
             let showPersonUI = null;
             p.addClosure(fastn.closure(function () {
                 if (p.get() !== null) {
-                    showPersonUI = showPerson(p);
-                } else {
-
+                    if (!!showPersonUI) {
+                        showPersonUI.getNode().remove();
+                    }
+                    showPersonUI = showPerson(root, p);
+                } else if (!!showPersonUI) {
+                    showPersonUI.getNode().remove();
+                    showPersonUI = null;
                 }
             }))
         }
 
-        function showPerson(p) {
+        function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, p.get().name);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getValue(p.get().name));
+            i.done();
             return i;
         }
 
