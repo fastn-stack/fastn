@@ -53,10 +53,24 @@
             return this.#closures;
         }
         set(value) {
-            // if (this.#value !== value) {
-            if (!fastn_utils.deepEqual(this.#value, value)) {
+            const oldValue = this.#value;
+
+            if (!fastn_utils.deepEqual(oldValue, value)) {
                 this.#value = value;
-                this.#closures.forEach(closure => closure.update());
+                let closures = this.#closures;
+
+                const updateClosures = () => {
+                    closures.forEach((closure) => closure.update());
+                };
+
+                // Get mutables present in the new value but not in the old value
+                const newMutables = fastn_utils.newMutables(oldValue, value);
+                // Add closures to the new mutables
+                newMutables.forEach((mutable) =>
+                    mutable.addClosure(fastn.closure(updateClosures))
+                );
+
+                updateClosures();
             }
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
@@ -128,6 +142,6 @@
         return proxy;
     };
 
-
+    fastn.mutableClass = Mutable;
     window.fastn = fastn;
 })();
