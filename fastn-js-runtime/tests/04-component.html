@@ -17,9 +17,13 @@
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 x.set(x.get() + 1);
             });
+            i.done();
         }
 
-        main(document.body);
+        let root = fastn_dom.node(document.body);
+        main(root);
+        root.done();
+        root.assert_is_closed();
     })();
 </script>
 </html>

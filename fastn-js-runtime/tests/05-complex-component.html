@@ -15,6 +15,7 @@
             foo(root, x);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [z], function () { return z.get(); });
+            i.done();
         }
 
         function foo(root, x) {
@@ -26,7 +27,11 @@
             });
             i.done();
         }
-        main(document.body);
+
+        let root = fastn_dom.node(document.body);
+        main(root);
+        root.done();
+        root.assert_is_closed();
     })();
 </script>
 </html>
