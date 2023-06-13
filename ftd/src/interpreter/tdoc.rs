@@ -1041,7 +1041,7 @@ impl<'a> TDoc<'a> {
         } {
             state
         } else {
-            return self.err("not found 2", name, "search_thing", line_number);
+            return self.err("not found", name, "search_thing", line_number);
         };
 
         if doc_name.eq(ftd::interpreter::FTD_INHERITED) {

@@ -640,7 +640,6 @@ pub(crate) fn insert_module_thing(
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(
                     reference_full_name.to_string(),
-                    reference.to_string(),
                     ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
                     module_component_definition.arguments,
                 );
@@ -649,7 +648,6 @@ pub(crate) fn insert_module_thing(
             } else {
                 let variable_module_thing = ftd::interpreter::ModuleThing::variable(
                     reference_full_name.to_string(),
-                    reference.to_string(),
                     kind.clone(),
                 );
                 things.insert(reference.to_string(), variable_module_thing);
