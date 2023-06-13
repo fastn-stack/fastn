@@ -46,7 +46,7 @@
             this.#children = [];
         }
         addChild(node) {
-            this.#children.push(node)
+            this.#children.push(node);
         }
         getNode() {
             return this.#node;
@@ -65,7 +65,6 @@
             this.#closed = true;
         }
         setStaticProperty(kind, value) {
-            this.assert_is_open()
             if (kind === fastn_dom.PropertyKind.Width_Px) {
                 this.#node.style.width = value + "px";
             } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
@@ -91,22 +90,10 @@
         }
         destroy() {
             for (let i = 0; i < this.#mutables.length; i++) {
-                this.#mutables[i].unlink_node(this);
+                this.#mutables[i].unlinkNode(this);
             }
             this.#mutables = null;
             this.#node = null;
-        }
-        html_node(e) {
-            if (e === fastn_dom.ElementKind.Row) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Column) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Integer) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Decimal) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Boolean) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Text) return ("div", "row");
-            if (e === fastn_dom.ElementKind.Image) return ("div", "row");
-            if (e === fastn_dom.ElementKind.IFrame) return ("div", "row");
-
-            throw ("invalid fastn_dom.ElementKind: " + e);
         }
     }
 
