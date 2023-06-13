@@ -10,12 +10,23 @@
         function main (root) {
             let x = fastn.mutable(10);
             let y = 20;
-            let z = fastn.formula([x], function () { return x.get() * y; })
+            let z = fastn.formula([x], function () { return x.get() * y; });
+
             foo(root, x);
+
             let x_value = fastn.mutable(1000);
-            let x_ = fastn.formula([x, x_value], function () { if (x.get() % 2 === 0) { return x_value.get(); } else { return x.get(); } });
-            x_.addClosure(fastn.closure(function () { if (x.get() % 2 === 0) { x_value.set(x_.get()); } else { x.set(x_.get()); }}));
+
+            let x_ = fastn.proxy(
+                [x, x_value],
+                function () {
+                    if (x.get() % 2 === 0) { return x_value.get(); } else { return x.get(); }
+                },
+                function (value) {
+                    if (x.get() % 2 === 0) { x_value.set(value); } else { x.set(value); }
+                }
+            );
             foo(root, x_);
+
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [z], function () { return z.get(); });
         }
