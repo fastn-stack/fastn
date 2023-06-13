@@ -29,6 +29,10 @@ window.fastn_utils = {
         if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
             return false;
         }
+        // Check for class instances
+        if (obj1.constructor !== obj2.constructor) {
+            return false;
+        }
         // Check for equal number of keys
         const keys1 = Object.keys(obj1);
         const keys2 = Object.keys(obj2);
@@ -40,6 +44,10 @@ window.fastn_utils = {
             if (!this.deepEqual(obj1[key], obj2[key])) {
                 return false;
             }
+        }
+        // Check for class instance variables
+        if (obj1 instanceof fastn.mutableClass && obj2 instanceof fastn.mutableClass) {
+            return obj1.equalMutable(obj2);
         }
         // Objects are deeply equal
         return true;
@@ -75,14 +83,23 @@ window.fastn_utils = {
 
     /**
      * This function compares the mutables found in both old and new values and returns
-     * an array of mutables that are present in the new value but not in the old value.
+     * an array of mutables that are present in the new value but not in the old value and
+     * also an array of mutables that are present in the old value but not in the new value
      *
      * @param {any} oldValue - The old value to compare.
      * @param {any} newValue - The new value to compare.
-     * @returns {Array} - An array containing the new mutables.
+     * @returns {{newMutables: *[], oldMutables: *[]}} - An object containing 'newMutables' and 'oldMutables' arrays.
      */
-    newMutables(oldValue, newValue) {
-        const oldMutables = new Set(fastn_utils.getAllMutables(oldValue));
-        return fastn_utils.getAllMutables(newValue).filter(mutable => !oldMutables.has(mutable));
+    getNewAndOldMutables(oldValue, newValue) {
+        const oldMutables = this.getAllMutables(oldValue);
+        const newMutables = this.getAllMutables(newValue);
+
+        const newMutablesOnly = newMutables.filter(mutable => !oldMutables.includes(mutable));
+        const oldMutablesOnly = oldMutables.filter(mutable => !newMutables.includes(mutable));
+
+        return {
+            newMutables: newMutablesOnly,
+            oldMutables: oldMutablesOnly
+        };
     }
 }

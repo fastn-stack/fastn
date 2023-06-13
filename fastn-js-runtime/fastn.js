@@ -16,6 +16,9 @@
         get() {
             return this.#cached_value;
         }
+        getFormula() {
+            return this.#formula;
+        }
         addNodeProperty(node, property) {
             this.#node = node;
             this.#property = property;
@@ -49,28 +52,26 @@
         get() {
             return this.#value;
         }
-        getClosures() {
-            return this.#closures;
-        }
         set(value) {
             const oldValue = this.#value;
 
             if (!fastn_utils.deepEqual(oldValue, value)) {
                 this.#value = value;
-                let closures = this.#closures;
-
-                const updateClosures = () => {
-                    closures.forEach((closure) => closure.update());
-                };
 
                 // Get mutables present in the new value but not in the old value
-                const newMutables = fastn_utils.newMutables(oldValue, value);
+                // Also mutables present in the old value but not in the new value
+                const { newMutables, oldMutables} =
+                    fastn_utils.getNewAndOldMutables(oldValue, value);
                 // Add closures to the new mutables
                 newMutables.forEach((mutable) =>
-                    mutable.addClosure(fastn.closure(updateClosures))
+                    mutable.extendClosures(this.#closures)
+                );
+                // Remove closures from the old mutables
+                oldMutables.forEach((mutable) =>
+                    mutable.removeClosures(this.#closures)
                 );
 
-                updateClosures();
+                this.#closures.forEach((closure) => closure.update());
             }
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
@@ -79,6 +80,21 @@
         }
         addClosure(closure) {
             this.#closures.push(closure);
+        }
+        extendClosures(closures) {
+            this.#closures.push(...closures);
+        }
+        removeClosures(closures) {
+            this.#closures = this.#closures.filter(closure => !closures.includes(closure));
+        }
+        equalMutable(other) {
+            if (!fastn_utils.deepEqual(this.get(), other.get())) {
+                return false;
+            }
+            const thisClosures = this.#closures;
+            const otherClosures = other.#closures;
+
+            return thisClosures === otherClosures;
         }
     }
 
@@ -102,6 +118,9 @@
         }
         addClosure(closure) {
             this.#closures.push(closure);
+        }
+        removeClosure(closure) {
+            this.#closures.filter(item => item !== closure);
         }
         update() {
             this.#cached_value = this.#differentiator().get();
