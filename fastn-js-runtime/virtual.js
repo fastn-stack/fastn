@@ -3,6 +3,7 @@
 
     let id_counter = 0;
     let hydrating = false;
+    let ssr = false;
 
     class Node {
         #id
@@ -21,7 +22,7 @@
             this.#children.push(c);
         }
         toHtml() {
-            // todo
+
         }
     }
 
@@ -30,6 +31,9 @@
             id_counter++;
             if (ssr) {
                 return new Node(id_counter, tagName);
+            }
+            if (tagName === "body") {
+                return fastn_virtual.real_document.body;
             }
             if (!hydrating) {
                 return fastn_virtual.real_document.createElement(tagName);
@@ -45,19 +49,21 @@
     fastn_virtual.real_document = window.document;
 
     fastn_virtual.document = new Document();
-    document.body = document.createElement("body");
+
 
     fastn_virtual.hydrate = function(main) {
         hydrating = true;
-        main()
+        let body = fastn_virtual.document.createElement("body");
+        main(body)
         hydrating = false;
     }
 
     fastn_virtual.ssr = function(main) {
         ssr = true;
-        main()
+        let body = fastn_virtual.document.createElement("body");
+        main(body)
         ssr = false;
-        return document.body.toHtml()
+        return body.toHtml()
     }
 
     window.fastn_virtual = fastn_virtual;

@@ -15,7 +15,8 @@
             i.done();
         }
 
-        return fastn_virtual.hydrate(main);
+        let ssr = fastn_virtual.ssr(main);
+        return ssr;
     })();
 </script>
 </html>

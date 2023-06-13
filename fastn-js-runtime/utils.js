@@ -14,3 +14,8 @@ window.fastn_utils = {
         return [node, css];
     }
 }
+
+// feature: ssr
+Array.prototype.add = function(item) {
+    this.push(item);
+};
