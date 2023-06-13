@@ -9,9 +9,9 @@
 <script>
     (function() {
         function main (root) {
-            let x = 10;
+            let number = 10;
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, x);
+            i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, number);
             i.done();
         }
 

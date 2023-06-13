@@ -16,6 +16,7 @@
         Width_Px: 0,
         Color_RGB: 1,
         IntegerValue: 2,
+        StringValue: 3,
     }
 
     fastn_dom.Event = {
@@ -51,7 +52,9 @@
                 this.#node.style.width = value + "px";
             } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
                 this.#node.style.color = value;
-            } else if (kind === fastn_dom.PropertyKind.IntegerValue) {
+            } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
+                kind === fastn_dom.PropertyKind.StringValue
+            ) {
                 this.#node.innerHTML = value;
             } else {
                 throw ("invalid fastn_dom.PropertyKind: " + kind);
