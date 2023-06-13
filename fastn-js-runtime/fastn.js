@@ -68,26 +68,28 @@
     }
 
     class Proxy {
-        #getter
-        #setter
+        #differentiator
         #cached_value
-        constructor(targets, getter, setter) {
-            this.#getter = getter;
-            this.#setter = setter;
-            this.#cached_value = this.#getter();
+        #closures;
+        constructor(targets, differentiator) {
+            this.#differentiator = differentiator;
+            this.#cached_value = this.#differentiator().get();
+
             for (let idx in targets) {
                 targets[idx].addClosure(this);
             }
         }
+        addClosure(closure) {
+            this.#closures.push(closure);
+        }
         update() {
-            this.#cached_value = this.#getter();
+            this.#cached_value = this.#differentiator().get();
         }
         get() {
             return this.#cached_value;
         }
         set(value) {
-            this.#setter(value);
-            this.#cached_value = this.#getter();
+            this.#differentiator().set(value);
         }
     }
 
