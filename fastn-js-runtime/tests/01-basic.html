@@ -3,6 +3,7 @@
     <script src="../dom.js"></script>
     <script src="../fastn.js"></script>
     <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
 </head>
 <body></body>
 <script>
@@ -13,7 +14,8 @@
             i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, x);
             i.done();
         }
-        main(document.body);
+
+        return fastn_virtual.hydrate(main);
     })();
 </script>
 </html>
