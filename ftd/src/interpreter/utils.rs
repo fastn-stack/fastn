@@ -761,7 +761,6 @@ pub(crate) fn validate_properties_and_set_default(
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    // println!("INSIDE VALIDATE");
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
     for property in properties.iter_mut() {
