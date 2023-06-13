@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(Debug, Clone)]
 enum ParsingStateReading {
     Section,
@@ -161,6 +159,8 @@ impl State {
     }
 
     fn reading_section(&mut self) -> ftd::p1::Result<()> {
+        use itertools::Itertools;
+
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         let start_line = start_line.trim();
@@ -202,16 +202,13 @@ impl State {
                     .iter()
                     .filter(|h| h.is_module_kind())
                     .collect_vec();
-                let found_module = module_headers
-                    .iter()
-                    .filter(|h| {
-                        h.is_module_kind()
-                            && section_name
-                                .strip_prefix(format!("{}.", section.name).as_str())
-                                .unwrap_or(section_name.as_str())
-                                .starts_with(h.get_key().as_str())
-                    })
-                    .next();
+                let found_module = module_headers.iter().find(|h| {
+                    h.is_module_kind()
+                        && section_name
+                            .strip_prefix(format!("{}.", section.name).as_str())
+                            .unwrap_or(section_name.as_str())
+                            .starts_with(h.get_key().as_str())
+                });
 
                 if found_module.is_none() {
                     return Err(ftd::p1::Error::SectionNotFound {
@@ -347,6 +344,8 @@ impl State {
     }
 
     fn reading_block_headers(&mut self) -> ftd::p1::Result<()> {
+        use itertools::Itertools;
+
         self.end(&mut None)?;
         let (scan_line_number, content) = self.clean_content();
         let (section, parsing_states) =

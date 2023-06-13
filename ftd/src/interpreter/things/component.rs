@@ -996,14 +996,12 @@ fn search_things_for_module(
                 line_number,
             );
         }
-        let mut module_property = property
+        let module_property = property
             .first()
             .unwrap()
             .resolve(doc, &Default::default())?
             // TODO: Remove unwrap()
             .unwrap();
-
-        ftd::interpreter::utils::update_module_things(&mut module_property, argument, doc)?;
 
         let (m_name, things) = match module_property {
             ftd::interpreter::Value::Module { name, things } => (name, things),
@@ -1026,33 +1024,43 @@ fn search_things_for_module(
             } {
                 state.parsed_libs.get_mut(state.id.as_str()).unwrap()
             } else {
-                return doc.err("not found 3", m_name, "search_thing", line_number);
+                return doc.err("not found", m_name, "search_thing", line_number);
             };
-            let (_module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
-            if let Some(m) = current_parsed_document.doc_aliases.get(alias.as_str()) {
+            let (module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
+            if !current_parsed_document
+                .doc_aliases
+                .contains_key(alias.as_str())
+            {
                 current_parsed_document
                     .doc_aliases
-                    .insert(alias.to_string(), m.to_string());
+                    .insert(alias.to_string(), module.to_string());
             }
             m_alias = alias;
         }
 
-        if let Some(module) = doc.aliases.get(m_alias.as_str()) {
-            m_alias = module.to_string();
+        if let Some(m) = doc.aliases.get(m_alias.as_str()) {
+            m_alias = m.to_string();
         }
-
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
-            let thing_ = format!(
-                "{}#{}",
-                m_alias,
-                thing.trim_start_matches(
-                    doc.resolve_name(format!("{}.{}.", component_name, argument.name).as_str())
-                        .as_str(),
+            let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
+                format!(
+                    "{}#{}",
+                    m_alias,
+                    element.trim_start_matches(
+                        format!("{}.{}.", component_name, argument.name).as_str(),
+                    )
                 )
-            );
-            let thing_real_name = thing_.clone();
+            } else {
+                format!(
+                    "{}#{}",
+                    m_alias,
+                    thing.trim_start_matches(
+                        format!("{}.{}.", component_name, argument.name).as_str()
+                    )
+                )
+            };
             if unresolved_thing.is_some() {
                 doc.scan_thing(&thing_real_name, line_number)?;
             } else {
