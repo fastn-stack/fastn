@@ -13,8 +13,10 @@
             i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, x);
             i.done();
         }
-
-        main(fastn_dom.node(document.body));
+        let root = fastn_dom.node(document.body);
+        main(root);
+        root.done();
+        root.assert_is_closed();
     })();
 </script>
 </html>
