@@ -628,6 +628,11 @@ pub(crate) fn insert_module_thing(
         })?
         .value_mut(doc.name, line_number)?
     {
+        let module_name = doc
+            .aliases
+            .get(module_name.as_str())
+            .cloned()
+            .unwrap_or(module_name.to_string());
         let mut reference_parts = reference.split('.');
         if let (Some(_), Some(_), Some(third)) = (
             reference_parts.next(),
