@@ -71,11 +71,18 @@
         #differentiator
         #cached_value
         #closures;
-        constructor(targets, differentiator) {
+        constructor(differentiator) {
             this.#differentiator = differentiator;
             this.#cached_value = this.#differentiator().get();
-
+            this.#closures = [];
+        }
+        updateTargetClosure(targets) {
+            let proxy = this;
             for (let idx in targets) {
+                targets[idx].addClosure(new Closure(function () {
+                    proxy.update();
+                    proxy.#closures.forEach(closure => closure.update());
+                }));
                 targets[idx].addClosure(this);
             }
         }
@@ -89,7 +96,9 @@
             return this.#cached_value;
         }
         set(value) {
-            this.#differentiator().set(value);
+            if (this.#cached_value !== value) {
+                this.#differentiator().set(value);
+            }
         }
     }
 
@@ -114,8 +123,10 @@
         return mutable;
     }
 
-    fastn.proxy = function (targets, getter, setter) {
-        return new Proxy(targets, getter, setter)
+    fastn.proxy = function (targets, differentiator) {
+        let proxy = new Proxy(differentiator);
+        proxy.updateTargetClosure(targets);
+        return proxy;
     };
 
 
