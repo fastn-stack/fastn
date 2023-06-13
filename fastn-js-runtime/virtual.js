@@ -10,6 +10,9 @@
         add(item) {
             this.#classes.push(item);
         }
+        toString() {
+            return this.#classes.join(' ');
+        }
     }
 
     class Node {
@@ -29,18 +32,25 @@
             this.#children.push(c);
         }
         toHtmlAsString() {
-            const openingTag = `<${this.#tagName} data-id="${this.#id}"${this.classList.length > 0 ? ` class="${this.classList.join(' ')}"` : ''}${Object.keys(this.style).length > 0 ? ` style="${this.getStyleString()}"` : ''}>`;
+            const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getClassString()}${this.getStyleString()}>`;
             const closingTag = `</${this.#tagName}>`;
             const innerHTML = this.innerHTML;
             const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
 
             return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
         }
-
+        getDataIdString() {
+            return ` data-id="${this.#id}"`;
+        }
+        getClassString() {
+            const classList = this.classList.toString();
+            return classList ? ` class="${classList}"` : '';
+        }
         getStyleString() {
-            return Object.entries(this.style)
+            const styleProperties = Object.entries(this.style)
                 .map(([prop, value]) => `${prop}:${value}`)
                 .join(';');
+            return styleProperties ? ` style="${styleProperties}"` : '';
         }
     }
 
