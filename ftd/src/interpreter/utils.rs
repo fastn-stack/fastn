@@ -650,7 +650,7 @@ pub(crate) fn insert_module_thing(
                     reference_full_name.to_string(),
                     kind.clone(),
                 );
-                things.insert(reference.to_string(), variable_module_thing);
+                things.insert(reference_full_name.to_string(), variable_module_thing);
             }
         }
     }
