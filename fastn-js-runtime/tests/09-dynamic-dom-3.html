@@ -1,0 +1,102 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let p = fastn.mutable(null);
+
+            let r = fastn.mutable("Ritesh");
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, "I change Ritesh to Bob");
+            i.addEventHandler(fastn_dom.Event.Click, function () { r.set("Bob") })
+            i.done();
+
+            let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me to set Ritesh/Bob");
+            i1.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": r }) })
+            i1.done();
+
+
+
+            let a = fastn.mutable("John");
+            let i2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i2.setStaticProperty(fastn_dom.PropertyKind.StringValue, "I change John to Doe");
+            i2.addEventHandler(fastn_dom.Event.Click, function () { a.set("Doe") })
+            i2.done();
+
+            let i3 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i3.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me to set John/Doe");
+            i3.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": a }) })
+            i3.done();
+
+            let showPersonUI = null;
+            p.addClosure(fastn.closure(function () {
+                if (p.get() !== null) {
+                    if (!!showPersonUI) {
+                        showPersonUI.getNode().remove();
+                    }
+                    showPersonUI = showPerson(root, p);
+                } else if (!!showPersonUI) {
+                    showPersonUI.getNode().remove();
+                    showPersonUI = null;
+                }
+            }))
+        }
+
+        function showPerson(root, p) {
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getValue(p.get().name));
+            i.done();
+            return i;
+        }
+
+        main(document.body);
+    })();
+</script>
+</html>
+
+
+<!--
+-- record person:
+caption name:
+
+-- optional person $p:
+
+
+-- string $r: Ritesh
+
+-- ftd.text: I change Ritesh to Bob
+$on-click$: { r = Bob }
+
+-- ftd.text: Click me to set Ritesh/Bob
+$on-click$: { p = { name: $r }}
+
+
+
+-- string $a: John
+
+-- ftd.text: I change John to Doe
+$on-click$: { a = Doe }
+
+-- ftd.text: Click me to set John/Doe
+$on-click$: { p = { name: $a }}
+
+
+
+
+-- show-person: $p
+if: { p != NULL }
+
+-- component show-person:
+caption person p:
+
+-- ftd.text: $show-person.p.name
+
+-- end: show-person
+-->
