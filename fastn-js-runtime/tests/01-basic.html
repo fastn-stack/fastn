@@ -11,6 +11,7 @@
             let x = 10;
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, x);
+            i.done();
         }
 
         main(document.body);
