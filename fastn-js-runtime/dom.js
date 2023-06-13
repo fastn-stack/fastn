@@ -24,45 +24,27 @@
 
     class Node {
         #node;
+        #parent
         #mutables;
-        #closed;
-        #children;
         constructor(parent, kind) {
-            if (!kind) {
-                this.#node = parent;
-            } else {
-                parent.assert_is_open();
-                let [node, classes] = fastn_utils.htmlNode(kind);
-                this.#node = document.createElement(node);
-                for (let c in classes) {
-                    this.#node.classList.add(classes[c]);
-                }
-                parent.getNode().appendChild(this.#node);
-                parent.addChild(this);
+            let [node, classes] = fastn_utils.htmlNode(kind);
+            this.#node = document.createElement(node);
+            for (let c in classes) {
+                this.#node.classList.add(classes[c]);
             }
+            this.#parent = parent;
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
-            this.#closed = false;
-            this.#children = [];
         }
-        addChild(node) {
-            this.#children.push(node);
-        }
-        getNode() {
-            return this.#node;
-        }
-        assert_is_closed() {
-            for (let i = 0; i < this.#children.length; i++) {
-                this.#children[i].assert_is_closed();
-            }
-            if (!this.#closed) throw ("fastn_dom.Node is not closed");
-        }
-        assert_is_open() {
-            if (this.#closed) throw ("fastn_dom.Node is closed");
+        parent() {
+            return this.#parent;
         }
         done() {
-            this.assert_is_open()
-            this.#closed = true;
+            let parent = this.#parent;
+            if (!!parent.parent) {
+                parent = parent.parent();
+            }
+            parent.appendChild(this.#node);
         }
         setStaticProperty(kind, value) {
             if (kind === fastn_dom.PropertyKind.Width_Px) {
@@ -76,14 +58,12 @@
             }
         }
         setDynamicProperty(kind, deps, func) {
-            this.assert_is_open()
             let closure = fastn.closure(func).addNodeProperty(this, kind);
             for (let dep in deps) {
                 deps[dep].addClosure(closure);
             }
         }
         addEventHandler(event, func) {
-            this.assert_is_open()
             if (event === fastn_dom.Event.Click) {
                 this.#node.onclick = func;
             }
@@ -99,10 +79,6 @@
 
     fastn_dom.createKernel = function (parent, kind) {
         return new Node(parent, kind);
-    }
-
-    fastn_dom.node = function (node) {
-        return new Node(node)
     }
 
     window.fastn_dom = fastn_dom;
