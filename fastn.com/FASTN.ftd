@@ -136,6 +136,9 @@ favicon: /-/fastn.com/images/favicon.svg
   document: ftd/headers.ftd
 - Visibility: /visibility/
   document: /ftd/visibility.ftd
+- Module: /module/
+  document: /ftd/module.ftd
+  skip: true
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /document/
