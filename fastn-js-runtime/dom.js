@@ -28,12 +28,12 @@
         #mutables;
         constructor(parent, kind) {
             let [node, classes] = fastn_utils.htmlNode(kind);
-            this.#node = document.createElement(node);
+            this.#node = fastn_virtual.document.createElement(node);
             for (let c in classes) {
                 this.#node.classList.add(classes[c]);
             }
             this.#parent = parent;
-            // this is where store all the closures attached, so we can free them when we are done
+            // this is where we store all the attached closures, so we can free them when we are done
             this.#mutables = [];
         }
         parent() {

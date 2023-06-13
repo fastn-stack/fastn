@@ -3,6 +3,7 @@
     <script src="../dom.js"></script>
     <script src="../fastn.js"></script>
     <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
 </head>
 <body></body>
 <script>
@@ -17,7 +18,8 @@
             });
             i.done();
         }
-        main(document.body);
+
+        fastn_virtual.hydrate(main);
     })();
 </script>
 </html>
