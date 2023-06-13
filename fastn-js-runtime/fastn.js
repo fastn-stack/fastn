@@ -19,18 +19,18 @@
         addNodeProperty(node, property) {
             this.#node = node;
             this.#property = property;
-            this.update_ui();
+            this.updateUi();
 
             return this;
         }
         update() {
             this.#cached_value = this.#formula();
-            this.update_ui();
+            this.updateUi();
         }
         getNode() {
             return this.#node;
         }
-        update_ui() {
+        updateUi() {
             if (!this.#node || !this.#property) {
                 return;
             }
@@ -59,7 +59,7 @@
             }
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
-        unlink_node(node) {
+        unlinkNode(node) {
             this.#closures = this.#closures.filter(closure => closure.getNode() !== node);
         }
         addClosure(closure) {

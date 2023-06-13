@@ -25,6 +25,7 @@
 
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [z], function () { return z.get(); });
+            i.done();
         }
 
         function foo(root, x) {
@@ -34,10 +35,12 @@
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 x.set(x.get() + 1);
             });
+            i.done();
         }
-
-        main(fastn_dom.node(document.body));
-        // node.assert_is_closed();
+        let root = fastn_dom.node(document.body);
+        main(root);
+        root.done();
+        root.assert_is_closed();
 
     })();
 </script>
