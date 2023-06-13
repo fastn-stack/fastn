@@ -138,8 +138,7 @@
     }
 
     fastn.proxy = function (targets, differentiator) {
-        let proxy = new Proxy(targets, differentiator);
-        return proxy;
+        return new Proxy(targets, differentiator);
     };
 
     fastn.mutableClass = Mutable;

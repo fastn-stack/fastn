@@ -83,7 +83,6 @@ window.fastn_utils = {
      */
     newMutables(oldValue, newValue) {
         const oldMutables = new Set(fastn_utils.getAllMutables(oldValue));
-        const newMutables = fastn_utils.getAllMutables(newValue).filter(mutable => !oldMutables.has(mutable));
-        return newMutables;
+        return fastn_utils.getAllMutables(newValue).filter(mutable => !oldMutables.has(mutable));
     }
 }
