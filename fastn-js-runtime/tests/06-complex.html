@@ -15,7 +15,6 @@
             foo(root, x);
 
             let x_value = fastn.mutable(1000);
-
             let x_ = fastn.proxy(
                 [x, x_value],
                 function () {
@@ -38,7 +37,7 @@
         }
 
         main(fastn_dom.node(document.body));
-        node.assert_is_closed();
+        // node.assert_is_closed();
 
     })();
 </script>

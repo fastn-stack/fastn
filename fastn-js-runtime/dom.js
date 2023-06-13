@@ -28,18 +28,28 @@
         #closed;
         #children;
         constructor(parent, kind) {
-            parent.assert_is_open();
-            let [node, classes] = fastn_utils.htmlNode(kind);
-            this.#node = document.createElement(node);
-            for (let c in classes) {
-                this.#node.classList.add(classes[c]);
+            if (!kind) {
+                this.#node = parent;
+            } else {
+                parent.assert_is_open();
+                let [node, classes] = fastn_utils.htmlNode(kind);
+                this.#node = document.createElement(node);
+                for (let c in classes) {
+                    this.#node.classList.add(classes[c]);
+                }
+                parent.getNode().appendChild(this.#node);
+                parent.addChild(this);
             }
-            parent.appendChild(this.#node);
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
             this.#closed = false;
-            parent.addChild(this);
             this.#children = [];
+        }
+        addChild(node) {
+            this.#children.push(node)
+        }
+        getNode() {
+            return this.#node;
         }
         assert_is_closed() {
             for (let i = 0; i < this.#children.length; i++) {
@@ -102,6 +112,10 @@
 
     fastn_dom.createKernel = function (parent, kind) {
         return new Node(parent, kind);
+    }
+
+    fastn_dom.node = function (node) {
+        return new Node(node)
     }
 
     window.fastn_dom = fastn_dom;
