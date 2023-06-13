@@ -37,11 +37,8 @@
             });
             i.done();
         }
-        let root = fastn_dom.node(document.body);
-        main(root);
-        root.done();
-        root.assert_is_closed();
 
+        main(document.body);
     })();
 </script>
 </html>
