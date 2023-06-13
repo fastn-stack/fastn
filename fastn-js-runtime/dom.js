@@ -26,6 +26,7 @@
         #node;
         #mutables;
         #closed;
+        #children;
         constructor(parent, kind) {
             parent.assert_is_open();
             let [node, classes] = fastn_utils.htmlNode(kind);
@@ -37,6 +38,14 @@
             // this is where store all the closures attached, so we can free them when we are done
             this.#mutables = [];
             this.#closed = false;
+            parent.addChild(this);
+            this.#children = [];
+        }
+        assert_is_closed() {
+            for (let i = 0; i < this.#children.length; i++) {
+                this.#children[i].assert_is_closed();
+            }
+            if (!this.#closed) throw ("fastn_dom.Node is not closed");
         }
         assert_is_open() {
             if (this.#closed) throw ("fastn_dom.Node is closed");

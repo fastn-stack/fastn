@@ -37,7 +37,9 @@
             });
         }
 
-        main(document.body);
+        main(fastn_dom.node(document.body));
+        node.assert_is_closed();
+
     })();
 </script>
 </html>
