@@ -71,12 +71,11 @@
         #differentiator
         #cached_value
         #closures;
-        constructor(differentiator) {
+        constructor(targets, differentiator) {
             this.#differentiator = differentiator;
             this.#cached_value = this.#differentiator().get();
             this.#closures = [];
-        }
-        updateTargetClosure(targets) {
+
             let proxy = this;
             for (let idx in targets) {
                 targets[idx].addClosure(new Closure(function () {
@@ -124,8 +123,7 @@
     }
 
     fastn.proxy = function (targets, differentiator) {
-        let proxy = new Proxy(differentiator);
-        proxy.updateTargetClosure(targets);
+        let proxy = new Proxy(targets, differentiator);
         return proxy;
     };
 
