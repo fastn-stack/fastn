@@ -10,6 +10,9 @@ window.fastn_utils = {
             node = "iframe";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
+        } else if (kind === fastn_dom.ElementKind.Div) {
+            node = "div";
+            css = [];
         }
         return [node, css];
     },
