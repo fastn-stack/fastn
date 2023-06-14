@@ -57,24 +57,28 @@
         set(value) {
             const oldValue = this.#value;
 
-            if (!fastn_utils.deepEqual(oldValue, value)) {
-                this.#value = value;
+            // Todo: Optimization removed. Reuse optimization later again
+            /*if (fastn_utils.deepEqual(oldValue, value)) {
+                return;
+            }*/
 
-                // Get mutables present in the new value but not in the old value
-                // Also mutables present in the old value but not in the new value
-                const { newMutables, oldMutables} =
-                    fastn_utils.getNewAndOldMutables(oldValue, value);
-                // Add closures to the new mutables
-                newMutables.forEach((mutable) =>
-                    mutable.addClosure(this.#closureInstance)
-                );
-                // Remove closures from the old mutables
-                oldMutables.forEach((mutable) =>
-                    mutable.removeClosure(this.#closureInstance)
-                );
+            this.#value = value;
 
-                this.#closureInstance.update();
-            }
+            // Get mutables present in the new value but not in the old value
+            // Also mutables present in the old value but not in the new value
+            const { newMutables, oldMutables} =
+                fastn_utils.getNewAndOldMutables(oldValue, value);
+            // Add closures to the new mutables
+            newMutables.forEach((mutable) =>
+                mutable.addClosure(this.#closureInstance)
+            );
+            // Remove closures from the old mutables
+            oldMutables.forEach((mutable) =>
+                mutable.removeClosure(this.#closureInstance)
+            );
+
+            this.#closureInstance.update();
+
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlinkNode(node) {
