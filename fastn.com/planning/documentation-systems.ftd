@@ -244,8 +244,6 @@ Again, Expander specific polishing.
 
 No concept level teaching.
 
--- end: my-ds.page
-
 
 
 -- ds.h1: Cleaning standalone documents
@@ -293,7 +291,7 @@ This is a `How-To`.
 
 This is a `tutorial`.
 
-
+-- end: my-ds.page
 
 
 -- component segment:
