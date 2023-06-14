@@ -164,13 +164,12 @@ of topics for discussion can sometimes be a little arbitrary.
 
 -- ds.h1: List of videos/topics we have covered
 
-1. [Expander](/expander/)
+- [Expander](/expander/)
+  - Hello World
+  - Basic UI
+  - Components
+  - Event handling
 
-- ftd.text through Hello World
-- properties like padding, border, background color, width, height,
-  align-content, spacing and container components 
-- components in Part 3
-- event handling in Part 4
 - button with shadow
 - create rounded border
 - holy-grail layout
@@ -187,10 +186,11 @@ We have to classify them and make tweaks in the documents in a way it does
 justice to the 4 classifications.
 
 
-
 -- ds.h1: Cleaning Expander
 
 The first thing Harish and I took is Expander.
+
+Expander as a unit can be a tutorial.
 
 -- ds.h3: Part 1 - Hello World
 
@@ -245,6 +245,54 @@ Again, Expander specific polishing.
 No concept level teaching.
 
 -- end: my-ds.page
+
+
+
+-- ds.h1: Cleaning standalone documents
+
+We have concept level and specific UI related separate videos. Let's try to 
+classify each.
+
+-- ds.h3: button with shadow
+
+This can be classified as a `How-To`.
+
+UI specific doc, that has used the following concepts:
+
+- components
+- various properties
+- records
+- event handling
+
+-- ds.h3: Create rounded border
+
+This can be classified as a `How-To`.
+
+
+-- ds.h3: Create holy-grail layout
+
+This is a `tutorial`.
+
+-- ds.h3: Understanding Sitemap
+
+This is a `tutorial`.
+
+-- ds.h3: Create clean URLs
+
+This is a `How-To`.
+
+-- ds.h3: Using Images in documents
+
+Video can be a `How to` but document can be a `tutorial`
+
+-- ds.h3: Add meta-data
+
+This is a `How-To`.
+
+-- ds.h3: markdown in doc-site
+
+This is a `tutorial`.
+
 
 
 
