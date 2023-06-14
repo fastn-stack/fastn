@@ -183,6 +183,7 @@ pub async fn resolve_import_2022<'a>(
             fastn_core::processor_ftd().to_string(),
             vec![],
             vec![
+                "figma-typo-token".to_string(),
                 "figma-cs-token".to_string(),
                 "figma-cs-token-old".to_string(),
                 "http".to_string(),
@@ -245,6 +246,7 @@ pub async fn resolve_import_2022<'a>(
             content,
             vec![],
             vec![
+                "figma-typo-token".to_string(),
                 "figma-cs-token".to_string(),
                 "figma-cs-token-old".to_string(),
                 "http".to_string(),
