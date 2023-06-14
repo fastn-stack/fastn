@@ -30,7 +30,7 @@ make the effectiveness of the content through these classifications:
 wrap: true
 width: fill-container
 
--- segment: Tutorial
+-- segment: Learning path
 b-right.px: 2
 b-bottom.px: 2
 subtitle: Learning Oriented
@@ -45,7 +45,7 @@ b-right.px: 2
 b-top.px: 2
 subtitle: Understanding Oriented
 
--- segment: Reference
+-- segment: Reference/Developer Docs
 b-left.px: 2
 b-top.px: 2
 subtitle: Information Oriented
@@ -58,10 +58,10 @@ Most of the documentations fail to achieve the output a company or a project
 like to have, when the documentation fails to make the distinction based on 
 the above classifications. So let's see in brief what they are:
 
--- ds.h2: Tutorial
+-- ds.h2: Learning Paths
 
 These are the lessons that take the learner by the hand through a series of 
-steps to complete a project.
+steps to complete a project. The paths will have tutorial content.
 
 In a tutorial you are the teacher and you know what the problems are. You 
 know the things that need to be done and the learner doesn't. You decide for 
@@ -185,6 +185,64 @@ of topics for discussion can sometimes be a little arbitrary.
 
 We have to classify them and make tweaks in the documents in a way it does 
 justice to the 4 classifications.
+
+
+
+-- ds.h1: Cleaning Expander
+
+The first thing Harish and I took is Expander.
+
+-- ds.h3: Part 1 - Hello World
+
+It talks about
+
+- small introduction to fastn
+- explains what is fastn package
+
+-- ds.h3: Part 2 - Basic UI
+
+The concepts it covers are as follows:
+
+- CSS properties like:
+  - padding.px
+  - border-width.px
+  - background-solid
+  - width as fill-container
+  - height as fill-container
+  - align content
+
+- Container components
+  - ftd.column
+  - ftd.row
+
+-- ds.h3: Part 3 - Components
+
+This part covers basics of Components along with `How-tos` associated with it.
+The documentation link is added to this part.
+
+Input: I think this part can be used in the How-tos
+
+-- ds.h3: Part 4 - Event Handling
+
+It also can be a How-to document but it is more of a how to create events for 
+the expander project.
+
+Does not explain Event Handling as a concept.
+
+-- ds.h3: Part 5 - Publish
+
+There are two videos for How to Publish a package. This one is expander 
+specific details.
+
+The other one was tailored to make it look generic by taking expander as an 
+example.
+
+
+-- ds.h3: Part 6 - Polish
+
+Again, Expander specific polishing. 
+
+No concept level teaching.
 
 -- end: my-ds.page
 
