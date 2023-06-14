@@ -133,9 +133,11 @@
             return this.#cached_value;
         }
         set(value) {
-            if (this.#cached_value !== value) {
-                this.#differentiator().set(value);
-            }
+            // Todo: Optimization removed. Reuse optimization later again
+            /*if (fastn_utils.deepEqual(this.#cached_value, value)) {
+                return;
+            }*/
+            this.#differentiator().set(value);
         }
     }
 
