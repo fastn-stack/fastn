@@ -10,6 +10,8 @@
         Text: 5,
         Image: 6,
         IFrame: 7,
+        // To create parent for dynamic DOM
+        Div: 8,
     };
 
     fastn_dom.PropertyKind = {
@@ -42,8 +44,11 @@
         }
         done() {
             let parent = this.#parent;
-            if (!!parent.parent) {
+            /*if (!!parent.parent) {
                 parent = parent.parent();
+            }*/
+            if (!!parent.getNode) {
+                parent = parent.getNode();
             }
             parent.appendChild(this.#node);
         }
@@ -85,8 +90,44 @@
         }
     }
 
+    class ConditionalDom {
+        #parent;
+        #node_constructor;
+        #condition;
+        #mutables;
+
+        constructor(parent, deps, condition, dom) {
+            let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+
+            let conditionUI = null;
+            let closure = fastn.closure(() => {
+                if (condition()) {
+                    if (!!conditionUI) {
+                        conditionUI.destroy();
+                    }
+                    conditionUI = dom(domNode);
+                } else if (!!conditionUI) {
+                    conditionUI.destroy();
+                    conditionUI = null;
+                }
+            })
+            deps.forEach(dep => dep.addClosure(closure));
+
+            domNode.done();
+
+            this.#parent = domNode;
+            this.#node_constructor = dom;
+            this.#condition = condition;
+            this.#mutables = [];
+        }
+    }
+
     fastn_dom.createKernel = function (parent, kind) {
         return new Node(parent, kind);
+    }
+
+    fastn_dom.conditionalDom = function (parent, deps, condition, dom) {
+        return new ConditionalDom(parent, deps, condition, dom);
     }
 
     window.fastn_dom = fastn_dom;

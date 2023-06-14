@@ -10,29 +10,22 @@
     (function() {
         function main (root) {
             let r = fastn.mutable("Ritesh");
-            let p = fastn.mutable(null);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setStaticProperty(fastn_dom.PropertyKind.StringValue, "I change name to Bob");
             i.addEventHandler(fastn_dom.Event.Click, function () { r.set("Bob") })
             i.done();
 
+
+            let p = fastn.mutable(null);
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me");
             i1.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": r}) })
             i1.done();
 
-            let showPersonUI = null;
-            p.addClosure(fastn.closure(function () {
-                if (p.get() !== null) {
-                    if (!!showPersonUI) {
-                        showPersonUI.getNode().remove();
-                    }
-                    showPersonUI = showPerson(root, p);
-                } else if (!!showPersonUI) {
-                    showPersonUI.getNode().remove();
-                    showPersonUI = null;
-                }
-            }))
+
+            fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
+                return showPerson(root, p);
+            });
         }
 
         function showPerson(root, p) {
@@ -66,6 +59,9 @@ $on-click$: { p = { name: $r }}
 
 -- show-person: $p
 if: { p != NULL }
+
+
+
 
 -- component show-person:
 caption person p:

@@ -35,18 +35,11 @@
             i3.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": a }) })
             i3.done();
 
-            let showPersonUI = null;
-            p.addClosure(fastn.closure(function () {
-                if (p.get() !== null) {
-                    if (!!showPersonUI) {
-                        showPersonUI.getNode().remove();
-                    }
-                    showPersonUI = showPerson(root, p);
-                } else if (!!showPersonUI) {
-                    showPersonUI.getNode().remove();
-                    showPersonUI = null;
-                }
-            }))
+
+
+            fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
+                return showPerson(root, p);
+            });
         }
 
         function showPerson(root, p) {
@@ -77,7 +70,7 @@ caption name:
 $on-click$: { r = Bob }
 
 -- ftd.text: Click me to set Ritesh/Bob
-$on-click$: { p = { name: $r }}
+$on-click$: { p = { name: $r } }
 
 
 
@@ -87,13 +80,15 @@ $on-click$: { p = { name: $r }}
 $on-click$: { a = Doe }
 
 -- ftd.text: Click me to set John/Doe
-$on-click$: { p = { name: $a }}
+$on-click$: { p = { name: $a } }
 
 
 
 
 -- show-person: $p
 if: { p != NULL }
+
+
 
 -- component show-person:
 caption person p:

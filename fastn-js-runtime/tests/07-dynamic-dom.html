@@ -15,7 +15,7 @@
             i.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": "Ritesh"})})
             i.done();
 
-            // fastn.conditionalDom(root, [p], function () { return p.get() !== null; }, function () {
+            // fastn.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
             //     return showPerson(root, p);
             // });
             //
@@ -23,7 +23,15 @@
             //     return showPerson(root, list[idx]);
             // })
 
-            let showPersonUI = null;
+            fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
+                return showPerson(root, p);
+            });
+
+            let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "After condition");
+            i1.done();
+
+            /*let showPersonUI = null;
             p.addClosure(fastn.closure(function () {
                 if (p.get() !== null) {
                     if (!!showPersonUI) {
@@ -34,7 +42,7 @@
                     showPersonUI.destroy()
                     showPersonUI = null;
                 }
-            }))
+            }))*/
         }
 
         function showPerson(root, p) {
@@ -59,10 +67,14 @@ caption name:
 -- optional person $p:
 
 -- ftd.text: Click me
-$on-click$: { p = { name: Ritesh }}
+$on-click$: { p = { name: Ritesh } }
 
 -- show-person: $p
 if: { p != NULL }
+
+-- ftd.text: After condition
+
+
 
 -- component show-person:
 caption person p:
