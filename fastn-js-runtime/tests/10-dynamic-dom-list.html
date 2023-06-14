@@ -1,0 +1,56 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let people = fastn.mutable([]);
+
+            let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            text.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
+            text.addEventHandler(fastn_dom.Event.Click, function () {people.append("Tom")});
+            text.done();
+
+            let showPersonUIs = [];
+            people.addClosure(fastn.closure(function () {
+
+            }))
+        }
+
+        function showPerson(root, p) {
+            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getValue(p));
+            i.done();
+            return i;
+        }
+
+        main(document.body);
+    })();
+</script>
+</html>
+
+
+<!--
+-- string list people:
+-- end: people
+
+-- ftd.text: Click to add Tom
+$on-click$: $ftd.append($a = $people, v = Tom)
+
+
+-- show-person: $p
+$loop$: $people as $p
+
+
+-- component show-person:
+caption name:
+
+-- ftd.text: $show-person.name
+
+-- end: show-person
+-->

@@ -45,9 +45,11 @@
     class Mutable {
         #value;
         #closures;
+        #closureInstance;
         constructor(val) {
             this.#value = val;
             this.#closures = [];
+            this.#closureInstance = fastn.closure(() => this.#closures.forEach((closure) => closure.update()));
         }
         get() {
             return this.#value;
@@ -64,14 +66,14 @@
                     fastn_utils.getNewAndOldMutables(oldValue, value);
                 // Add closures to the new mutables
                 newMutables.forEach((mutable) =>
-                    mutable.extendClosures(this.#closures)
+                    mutable.addClosure(this.#closureInstance)
                 );
                 // Remove closures from the old mutables
                 oldMutables.forEach((mutable) =>
-                    mutable.removeClosures(this.#closures)
+                    mutable.removeClosure(this.#closureInstance)
                 );
 
-                this.#closures.forEach((closure) => closure.update());
+                this.#closureInstance.update();
             }
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
@@ -81,11 +83,8 @@
         addClosure(closure) {
             this.#closures.push(closure);
         }
-        extendClosures(closures) {
-            this.#closures.push(...closures);
-        }
-        removeClosures(closures) {
-            this.#closures = this.#closures.filter(closure => !closures.includes(closure));
+        removeClosure(closure) {
+            this.#closures = this.#closures.filter(c => c !== closure);
         }
         equalMutable(other) {
             if (!fastn_utils.deepEqual(this.get(), other.get())) {
@@ -102,6 +101,7 @@
         #differentiator
         #cached_value
         #closures;
+        #closureInstance;
         constructor(targets, differentiator) {
             this.#differentiator = differentiator;
             this.#cached_value = this.#differentiator().get();
@@ -120,7 +120,7 @@
             this.#closures.push(closure);
         }
         removeClosure(closure) {
-            this.#closures.filter(item => item !== closure);
+            this.#closures = this.#closures.filter(c => c !== closure);
         }
         update() {
             this.#cached_value = this.#differentiator().get();
