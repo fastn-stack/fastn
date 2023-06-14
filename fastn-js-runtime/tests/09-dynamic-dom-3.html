@@ -35,8 +35,6 @@
             i3.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": a }) })
             i3.done();
 
-
-
             fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
                 return showPerson(root, p);
             });
@@ -51,7 +49,9 @@
             return i;
         }
 
-        main(document.body);
+        document.body.innerHTML = fastn_virtual.ssr(main);
+        fastn_virtual.hydrate(main);
+        // main(document.body);
     })();
 </script>
 </html>
