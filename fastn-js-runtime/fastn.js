@@ -160,6 +160,15 @@
         return new Proxy(targets, differentiator);
     };
 
+    class ConditionalDom {
+        #parent
+        #child_index
+        #node_constructor
+        #condition
+        #mutables
+    }
+
     fastn.mutableClass = Mutable;
+
     window.fastn = fastn;
 })();

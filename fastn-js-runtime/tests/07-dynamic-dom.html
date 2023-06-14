@@ -15,15 +15,23 @@
             i.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": "Ritesh"})})
             i.done();
 
+            // fastn.conditionalDom(root, [p], function () { return p.get() !== null; }, function () {
+            //     return showPerson(root, p);
+            // });
+            //
+            // fastn.mutableListWithDom(root, [list], function (idx) {
+            //     return showPerson(root, list[idx]);
+            // })
+
             let showPersonUI = null;
             p.addClosure(fastn.closure(function () {
                 if (p.get() !== null) {
                     if (!!showPersonUI) {
-                        showPersonUI.getNode().remove();
+                        showPersonUI.destroy();
                     }
                     showPersonUI = showPerson(root, p);
                 } else if (!!showPersonUI) {
-                    showPersonUI.getNode().remove();
+                    showPersonUI.destroy()
                     showPersonUI = null;
                 }
             }))

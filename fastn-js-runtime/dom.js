@@ -78,7 +78,9 @@
             for (let i = 0; i < this.#mutables.length; i++) {
                 this.#mutables[i].unlinkNode(this);
             }
+            this.#node.remove();
             this.#mutables = null;
+            this.#parent = null;
             this.#node = null;
         }
     }
