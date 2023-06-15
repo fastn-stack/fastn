@@ -59,13 +59,16 @@ class Document2 {
         if (ssr) {
             return new Node(id_counter, tagName);
         }
+
         if (tagName === "body") {
             return window.document.body;
         }
-        if (!hydrating) {
+
+        if (hydrating) {
+            return this.getElementByDataID(id_counter);
+        } else {
             return window.document.createElement(tagName);
         }
-        return window.document.getElementByDataID(id_counter);
     }
 
     getElementByDataID(id) {
