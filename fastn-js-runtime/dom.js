@@ -146,7 +146,7 @@
             this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
             this.#node_constructor = node_constructor;
             this.#list = list;
-            for (let idx in list) {
+            for (let idx in list.getList()) {
                 let v = list.get(idx);
                 node_constructor(this.#wrapper, v.item, v.index).done();
             }
