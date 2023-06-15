@@ -66,7 +66,7 @@ for creating SPA(Single Page Application or websites) etc.
 if: { show-grid }
 templates: $blog-sites
 more-link-text: View all
-more-link: /featured/landing-pages/
+more-link: /featured/blog-templates/
 
 We have designed and developed below landing pages site themes. You can use them
 for creating SPA(Single Page Application or websites) etc. 
