@@ -186,6 +186,7 @@ if: { grid-view.body != NULL }
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 margin-top.px: 16
+margin-bottom.px if { ftd.device == "mobile" }: 24
 
 $grid-view.body
 
@@ -216,8 +217,7 @@ wip: $obj.wip
 -- ftd.mobile:
 
 -- ftd.column:
-width.fixed.percent: 100
-
+width: fill-container
 
 -- grid-of-items: $obj.title
 $loop$: $grid-view.templates as $obj
@@ -318,7 +318,6 @@ src: $fastn-assets.files.images.mit-icon.svg
 width.fixed.px: 16
 height.fixed.px: 16
 align-self: center
-
 
 -- end: ftd.row
 
