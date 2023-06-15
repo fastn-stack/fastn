@@ -60,16 +60,16 @@ class Document2 {
             return new Node(id_counter, tagName);
         }
         if (tagName === "body") {
-            return fastn_virtual.real_document.body;
+            return window.document.body;
         }
         if (!hydrating) {
-            return fastn_virtual.real_document.createElement(tagName);
+            return window.document.createElement(tagName);
         }
-        return fastn_virtual.document.getElementByDataID(id_counter);
+        return window.document.getElementByDataID(id_counter);
     }
 
     getElementByDataID(id) {
-        return fastn_virtual.real_document.querySelector(`[data-id=\"${id}\"]`);
+        return window.document.querySelector(`[data-id=\"${id}\"]`);
     }
 }
 
