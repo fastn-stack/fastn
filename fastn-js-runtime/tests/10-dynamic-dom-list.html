@@ -10,7 +10,7 @@
     (function() {
         function main (root) {
             let first = fastn.mutable("hello");
-            let people = fastn.mutableList([first]);
+            let people = fastn.mutableList([first, "world"]);
 
             let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
