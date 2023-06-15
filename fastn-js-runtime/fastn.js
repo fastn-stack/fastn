@@ -44,41 +44,47 @@
 
     class Mutable {
         #value;
+        #old_closure
         #closures;
         #closureInstance;
         constructor(val) {
             this.#value = val;
+            this.#old_closure = null;
             this.#closures = [];
             this.#closureInstance = fastn.closure(() => this.#closures.forEach((closure) => closure.update()));
+            this.set(val);
         }
+
         get() {
             return this.#value;
         }
-        set(value) {
-            const oldValue = this.#value;
 
-            // Todo: Optimization removed. Reuse optimization later again
-            /*if (fastn_utils.deepEqual(oldValue, value)) {
-                return;
-            }*/
+        // x = 10
+        // x = 20
+        // y = 1
+        // x = y
+        // y = 20
+        // z = 2
+        // y = z
+        // z = 11
+        // x = 20
+
+
+        set(value) {
+            if (this.#old_closure) {
+                this.#value.removeClosure(this.#old_closure);
+            }
 
             this.#value = value;
 
-            // Get mutables present in the new value but not in the old value
-            // Also mutables present in the old value but not in the new value
-            const { newMutables, oldMutables} =
-                fastn_utils.getNewAndOldMutables(oldValue, value);
-            // Add closures to the new mutables
-            newMutables.forEach((mutable) =>
-                mutable.addClosure(this.#closureInstance)
-            );
-            // Remove closures from the old mutables
-            oldMutables.forEach((mutable) =>
-                mutable.removeClosure(this.#closureInstance)
-            );
+            if (value instanceof Mutable) {
+                this.#old_closure = fastn.closure(() => this.#closureInstance.update());
+                value.addClosure(this.#old_closure);
+            } else {
+                this.#old_closure = null;
+            }
 
             this.#closureInstance.update();
-
         }
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlinkNode(node) {
@@ -228,5 +234,33 @@
         return new MutableList(list);
     }
 
+    class RecordInstance {
+        #fields;
+        constructor(obj) {
+            this.#fields = {};
+
+            for (let key in obj) {
+                this.#fields[key] = fastn.wrapMutable(obj[key]);
+            }
+        }
+        get(key) {
+            return this.#fields[key];
+        }
+        set(key, value) {
+            this.#fields[key].set(fastn.wrapMutable(value).get());
+        }
+        replace(obj) {
+            for (let key in this.$fields) {
+                if (!(key in obj)) {
+                    throw new Error("RecordInstance.replace: key " + key + " not present in new object");
+                }
+                this.#fields[key].set(fastn.wrapMutable(obj[key]));
+            }
+        }
+    }
+
+    fastn.recordInstance = function (obj) {
+        return new RecordInstance(obj);
+    }
     window.fastn = fastn;
 })();
