@@ -24,9 +24,9 @@ fastn_dom.Event = {
     Click: 0
 }
 
-class Node {
+class Node2 {
     #node;
-    #parent
+    #parent;
     #mutables;
     constructor(parent, kind) {
         let [node, classes] = fastn_utils.htmlNode(kind);
@@ -130,7 +130,7 @@ class ConditionalDom {
 }
 
 fastn_dom.createKernel = function (parent, kind) {
-    return new Node(parent, kind);
+    return new Node2(parent, kind);
 }
 
 fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {

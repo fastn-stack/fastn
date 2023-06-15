@@ -73,8 +73,6 @@ class Document2 {
     }
 }
 
-fastn_virtual.real_document = window.document;
-
 fastn_virtual.document = new Document2();
 
 

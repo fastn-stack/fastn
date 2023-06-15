@@ -12,5 +12,7 @@ fn js() -> &'static str {
             i.setStaticProperty(fastn_dom.PropertyKind.IntegerValue, number);
             i.done();
         }
+
+        fastn_virtual.ssr(main)
     "#;
 }
