@@ -147,16 +147,20 @@
             this.#node_constructor = node_constructor;
             this.#list = list;
             for (let idx in list.getList()) {
-                let v = list.get(idx);
-                node_constructor(this.#wrapper, v.item, v.index).done();
+                // let v = list.get(idx);
+                // node_constructor(this.#wrapper, v.item, v.index).done();
+                this.createNode(idx);
             }
             this.#wrapper.done();
+        }
+        createNode(index) {
+            let v = this.#list.get(index);
+            this.#node_constructor(this.#wrapper, v.item, v.index).done();
         }
     }
 
     fastn_dom.forLoop = function (parent, node_constructor, list) {
         return new ForLoop(parent, node_constructor, list);
-
     }
 
     window.fastn_dom = fastn_dom;

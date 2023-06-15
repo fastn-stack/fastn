@@ -144,6 +144,7 @@
     class MutableList {
         #list;
         #watchers;
+        #dom_constructors;
         constructor(list) {
             this.#list = [];
             for (let idx in list) {
@@ -171,6 +172,10 @@
             // for every item after the inserted item, update the index
             for (let i = idx + 1; i < this.#list.length; i++) {
                 this.#list[i].index.set(i);
+            }
+
+            for (let i in this.#watchers) {
+                this.#watchers[i].createNode(idx);
             }
         }
         push(value) {
