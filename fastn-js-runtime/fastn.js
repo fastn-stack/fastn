@@ -147,7 +147,7 @@
         constructor(list) {
             this.#list = [];
             for (let idx in list) {
-                this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(idx) });
+                this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(parseInt(idx)) });
             }
             this.#watchers = [];
         }
@@ -156,8 +156,11 @@
             this.#watchers.push(l);
             return l;
         }
+        getList() {
+            return this.#list;
+        }
         get(idx) {
-            return this.#list[idx].item;
+            return this.#list[idx];
         }
         set(idx, value) {
             this.#list[idx].item.set(value);

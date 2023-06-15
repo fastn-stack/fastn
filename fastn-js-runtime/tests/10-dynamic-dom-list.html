@@ -18,7 +18,7 @@
             text.done();
 
             people.forLoop(root, function (root, item, index) {
-                let index_formula = fastn.formula([index], function () { return index * 100; });
+                let index_formula = fastn.formula([index], function () { return index.get() * 100; });
                 return showPerson(root, item, index_formula);
             });
         }
@@ -34,6 +34,7 @@
             i2.setProperty(fastn_dom.PropertyKind.IntegerValue, index);
             i2.done();
 
+            c.done();
             return c;
         }
 
