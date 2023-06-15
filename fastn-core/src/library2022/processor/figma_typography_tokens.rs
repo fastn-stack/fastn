@@ -8,8 +8,6 @@ pub fn process_typography_tokens(
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
-    // dbg!(&value);
-
     let mut desktop_types: ftd::Map<TypeData> = ftd::Map::new();
     let mut mobile_types: ftd::Map<TypeData> = ftd::Map::new();
 
@@ -27,7 +25,7 @@ pub fn process_typography_tokens(
     let json_formatted_mobile_types =
         serde_json::to_string_pretty(&mobile_types).expect("Not a serializable type");
 
-    let full_cs = format!(
+    let full_typography = format!(
         "{{\n\"{}-desktop\": {},\n\"{}-mobile\": {}\n}}",
         variable_name
             .clone()
@@ -40,7 +38,7 @@ pub fn process_typography_tokens(
         json_formatted_mobile_types
     );
 
-    let response_json: serde_json::Value = serde_json::Value::String(full_cs);
+    let response_json: serde_json::Value = serde_json::Value::String(full_typography);
     doc.from_json(&response_json, &kind, line_number)
 }
 
@@ -52,7 +50,6 @@ fn extract_types(
     mobile_types: &mut ftd::Map<TypeData>,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    println!("EXTRACTING TYPES --------------------------------");
     let headers = match &value {
         ftd::ast::VariableValue::Record { headers, .. } => headers,
         _ => {
