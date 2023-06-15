@@ -1,18 +1,16 @@
 extern crate self as fastn_js_runtime;
 
-#[rquickjs::bind(object)]
-pub fn add2(a: f32, b: f32) -> f32 {
-    a + b
-}
-
-pub fn ssr(_js: &str) -> String {
+pub fn ssr(js: &str) -> String {
+    let fastn_js = include_str!("../fastn.js");
+    let dom_js = include_str!("../dom.js");
+    let utils_js = include_str!("../utils.js");
+    let virtual_js = include_str!("../virtual.js");
+    let js = format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{js}");
+    std::fs::write("test.js", &js).unwrap();
     rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
         .unwrap()
         .with(|ctx| {
-            let glob = ctx.globals();
-            glob.init_def::<Add2>().unwrap();
-
-            ctx.eval::<i32, _>(r#"add2(10, 2)"#).unwrap()
+            ctx.eval::<String, _>(js).unwrap()
         })
         .to_string()
 }
