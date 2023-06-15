@@ -9,24 +9,32 @@
 <script>
     (function() {
         function main (root) {
-            let people = fastn.mutable([]);
+            let first = fastn.mutable("hello");
+            let people = fastn.mutableList([first]);
 
             let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
-            text.addEventHandler(fastn_dom.Event.Click, function () {people.append("Tom")});
+            text.addEventHandler(fastn_dom.Event.Click, function () { people.push("Tom")});
             text.done();
 
-            let showPersonUIs = [];
-            people.addClosure(fastn.closure(function () {
-
-            }))
+            people.forLoop(root, function (root, item, index) {
+                let index_formula = fastn.formula([index], function () { return index * 100; });
+                return showPerson(root, item, index_formula);
+            });
         }
 
-        function showPerson(root, p) {
-            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-            i.setStaticProperty(fastn_dom.PropertyKind.StringValue, fastn_utils.getValue(p));
+        function showPerson(root, name, index) {
+            let c = fastn_dom.createKernel(root, fastn_dom.ElementKind.Column);
+
+            let i = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
+            i.setProperty(fastn_dom.PropertyKind.StringValue, name);
             i.done();
-            return i;
+
+            let i2 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Integer);
+            i2.setProperty(fastn_dom.PropertyKind.IntegerValue, index);
+            i2.done();
+
+            return c;
         }
 
         main(document.body);
@@ -36,21 +44,28 @@
 
 
 <!--
--- string list people:
--- end: people
+-- string list $people:
+-- string: hello
+-- end: $people
 
 -- ftd.text: Click to add Tom
 $on-click$: $ftd.append($a = $people, v = Tom)
 
 
 -- show-person: $p
-$loop$: $people as $p
-
+for: $p, $idx in $people
+index: { $idx * 100 }
 
 -- component show-person:
 caption name:
+integer index:
+
+-- ftd.column:
 
 -- ftd.text: $show-person.name
+-- ftd.integer: $show-person.index
+
+-- end: ftd.column
 
 -- end: show-person
 -->

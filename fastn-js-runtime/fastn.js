@@ -141,6 +141,47 @@
         }
     }
 
+    class MutableList {
+        #list;
+        #watchers;
+        constructor(list) {
+            this.#list = [];
+            for (let idx in list) {
+                this.#list.push( { item: fastn.wrapMutable(list[idx]), index: new Mutable(idx) });
+            }
+            this.#watchers = [];
+        }
+        forLoop(root, dom_constructor) {
+            let l = fastn_dom.forLoop(root, dom_constructor, this);
+            this.#watchers.push(l);
+            return l;
+        }
+        get(idx) {
+            return this.#list[idx].item;
+        }
+        set(idx, value) {
+            this.#list[idx].item.set(value);
+        }
+        insertAt(idx, value) {
+            let mutable = fastn.wrapMutable(value);
+            this.#list.splice(idx, 0, { item: mutable, index: new Mutable(idx) });
+            // for every item after the inserted item, update the index
+            for (let i = idx + 1; i < this.#list.length; i++) {
+                this.#list[i].index.set(i);
+            }
+        }
+        push(value) {
+            this.insertAt(this.#list.length, value);
+        }
+        deleteAt(idx) {
+            this.#list.splice(idx, 1);
+            // for every item after the deleted item, update the index
+            for (let i = idx; i < this.#list.length; i++) {
+                this.#list[i].index.set(i);
+            }
+        }
+    }
+
     fastn.mutable = function (val) {
         return new Mutable(val)
     };
@@ -167,6 +208,17 @@
     };
 
     fastn.mutableClass = Mutable;
+
+    fastn.wrapMutable = function (obj) {
+        if (!(obj instanceof Mutable)) {
+            obj = new Mutable(obj);
+        }
+        return obj
+    }
+
+    fastn.mutableList = function (list) {
+        return new MutableList(list);
+    }
 
     window.fastn = fastn;
 })();

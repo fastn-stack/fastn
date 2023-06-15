@@ -53,6 +53,7 @@
             parent.appendChild(this.#node);
         }
         setStaticProperty(kind, value) {
+            // value can be either static or mutable
             if (kind === fastn_dom.PropertyKind.Width_Px) {
                 this.#node.style.width = value + "px";
             } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
@@ -63,6 +64,13 @@
                 this.#node.innerHTML = value;
             } else {
                 throw ("invalid fastn_dom.PropertyKind: " + kind);
+            }
+        }
+        setProperty(kind, value) {
+            if (value instanceof fastn.mutableClass) {
+                this.setDynamicProperty(kind, [value], () => { return value.get(); });
+            } else {
+                this.setStaticProperty(kind, value);
             }
         }
         setDynamicProperty(kind, deps, func) {
@@ -96,7 +104,7 @@
         #condition;
         #mutables;
 
-        constructor(parent, deps, condition, dom) {
+        constructor(parent, deps, condition, node_constructor) {
             let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
 
             let conditionUI = null;
@@ -105,7 +113,7 @@
                     if (!!conditionUI) {
                         conditionUI.destroy();
                     }
-                    conditionUI = dom(domNode);
+                    conditionUI = node_constructor(domNode);
                 } else if (!!conditionUI) {
                     conditionUI.destroy();
                     conditionUI = null;
@@ -116,7 +124,7 @@
             domNode.done();
 
             this.#parent = domNode;
-            this.#node_constructor = dom;
+            this.#node_constructor = node_constructor;
             this.#condition = condition;
             this.#mutables = [];
         }
@@ -126,8 +134,29 @@
         return new Node(parent, kind);
     }
 
-    fastn_dom.conditionalDom = function (parent, deps, condition, dom) {
-        return new ConditionalDom(parent, deps, condition, dom);
+    fastn_dom.conditionalDom = function (parent, deps, condition, node_constructor) {
+        return new ConditionalDom(parent, deps, condition, node_constructor);
+    }
+
+    class ForLoop {
+        #node_constructor;
+        #list;
+        #wrapper;
+        constructor(parent, node_constructor, list) {
+            this.#wrapper = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
+            this.#node_constructor = node_constructor;
+            this.#list = list;
+            for (let idx in list) {
+                let v = list.get(idx);
+                node_constructor(this.#wrapper, v.item, v.index).done();
+            }
+            this.#wrapper.done();
+        }
+    }
+
+    fastn_dom.forLoop = function (parent, node_constructor, list) {
+        return new ForLoop(parent, node_constructor, list);
+
     }
 
     window.fastn_dom = fastn_dom;
