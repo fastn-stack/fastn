@@ -15,7 +15,7 @@
 
 
 
--- ds.page: Documentation site themes
+-- ds.page: Single Page Application - Landing pages
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -41,9 +41,8 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.body:
 
-We have designed and developed below documentation site themes. You can use them
-for writing books, blog, technical documentation etc. These themes can be used 
-as personal web sites or organizational static web sites.
+We have designed and developed below landing pages site themes. You can use them
+for creating SPA(Single Page Application or websites) etc. 
 
 -- ft-ui.grid-view:
 if: { show-grid }
@@ -62,20 +61,10 @@ templates: $doc-sites
 
 -- ft-ui.template list doc-sites:
 
--- ft-ui.template: Doc-site
-template-url: https://fastn-community.github.io/doc-site/
-screenshot: $fastn-assets.files.images.featured.doc-site.jpg
-licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
-github-url: https://github.com/fastn-community/doc-site
-
-⚡️ doc-site will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Midnight Rush
-template-url: https://fastn-community.github.io/midnight-rush/
-screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+template-url: https://fastn-community.github.io/midnight-rush/landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 licence-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
 github-url: https://github.com/fastn-community/midnight-rush
 wip: true
@@ -86,23 +75,11 @@ It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
 
 -- ft-ui.template: Set 2 DS
-template-url: https://fastn-community.github.io/set-2-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+template-url: https://fastn-community.github.io/set-2-ds/landing/
+screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
 licence-url: https://github.com/fastn-community/set-2-ds/blob/master/LICENSE
 github-url: https://github.com/fastn-community/set-2-ds
 is-last: true
-wip: true
-
-⚡️ Set 2 DS will help you create a beautiful documentation site in no time.
-
-It provides out-of-the-box documentation features that can be used to create any
-kind of site(personal website, blog, etc).
-
--- ft-ui.template: Set 3 DS
-template-url: https://fastn-community.github.io/set-3-ds/
-screenshot: $fastn-assets.files.images.featured.doc-sites.set-3-ds.jpg
-licence-url: https://github.com/fastn-community/set-3-ds/blob/master/LICENSE
-github-url: https://github.com/fastn-community/set-3-ds
 wip: true
 
 ⚡️ Set 2 DS will help you create a beautiful documentation site in no time.

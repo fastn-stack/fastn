@@ -54,30 +54,32 @@ templates: $bling
 
 -- ft-ui.template: Bling
 template-url: https://fastn-community.github.io/bling/
-screenshot: $fastn-assets.files.images.featured.bling-components.png
+screenshot: $fastn-assets.files.images.featured.components.bling.jpg
 licence-url: https://github.com/fastn-community/bling/blob/main/LICENSE
 github-url: https://github.com/fastn-community/bling
 
-`bling` is developed and designed with various components which can be used
-inside `fastn` web packages.
+Bling components refer to a collection of visually appealing and interactive
+elements designed to enhance the presentation and engagement of web pages.
 
-/-- ft-ui.template: Image Gallery
-template-url: https://fifthtry.github.io/imago-gallery-ig/
-screenshot: $fastn-assets.files.static.slideshow-demo.png
-licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
-github-url: https://github.com/FifthTry/imago-gallery-ig/
+-- ft-ui.template: Code Block
+template-url: https://fastn-community.github.io/code-block/
+screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
+licence-url: https://github.com/fastn-community/code-block/blob/main/LICENSE
+github-url: https://github.com/fastn-community/code-block
 
-`fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
-inside `FTD` web packages.
+Code blocks are typically defined by using specific syntax or indentation rules,
+depending on the programming language.
 
-/-- ft-ui.template: Images
-template-url: https://fifthtry.github.io/images/
-screenshot: $fastn-assets.files.static.image-component.png
-licence-url: https://github.com/FifthTry/images/blob/main/LICENSE
-github-url: https://github.com/FifthTry/images/
+
+
+-- ft-ui.template: Header / Navbar
+template-url: https://fastn-community.github.io/header/
+screenshot: $fastn-assets.files.images.featured.components.header.jpg
+licence-url: https://github.com/fastn-community/header/blob/main/LICENSE
+github-url: https://github.com/fastn-community/header
 is-last: true
 
-`fifthtry.github.io/images` is a library of different image styles, which can be used 
-inside your `FTD` web package.
+The header component is already included inside doc-site. If you are using
+doc-site then don’t add header as fastn dependency.
 
 -- end: bling

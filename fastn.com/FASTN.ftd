@@ -391,12 +391,14 @@ favicon: /-/fastn.com/images/favicon.svg
 
 ## Featured Components: /featured/
 
-- Featured Components: /featured/
-- Documentation Sites: /featured/doc-sites/
-- Color Schemes: /featured/cs/
-- Component Libraries: /featured/components-library/
-;; - Fonts: /featured/fonts/
-- Font Typographies: /featured/fonts-typography/
+- Website Categories: /featured/doc-sites/
+  - Documentation Sites: /featured/doc-sites/
+  - SPA / Landing Pages: /featured/landing-pages/
+  - Blog Templates: /featured/blog-templates/
+- Component Library: /featured/components-library/
+- Design Elements: /featured/cs/
+  - Color Schemes: /featured/cs/
+  - Font Typographies: /featured/fonts-typography/
 
 ## Deploy: /deploy/
 
