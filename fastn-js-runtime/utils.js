@@ -1,4 +1,4 @@
-fastn_utils = {
+let fastn_utils = {
     htmlNode(kind) {
         let node = "div";
         let css = ["ft_common"];
