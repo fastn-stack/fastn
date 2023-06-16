@@ -31,7 +31,7 @@
         function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setDynamicProperty(fastn_dom.PropertyKind.StringValue, [p], () => {
-                return fastn_utils.getValue(p.get().name);
+                return fastn_utils.getStaticValue(p.get().name);
             });
             i.done();
             return i;
