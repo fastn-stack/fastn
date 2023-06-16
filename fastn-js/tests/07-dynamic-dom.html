@@ -12,12 +12,17 @@
             let p = fastn.mutable(null);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me");
-            i.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": "Ritesh"})})
+            i.addEventHandler(fastn_dom.Event.Click, function () {
+                p.set(fastn.recordInstance({"name": "Ritesh"}));
+            })
             i.done();
 
-            fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
-                return showPerson(root, p);
-            });
+            fastn_dom.conditionalDom(root, [p], function () {
+                    return p.get() !== null;
+                }, function (root) {
+                    return showPerson(root, p.get());
+                }
+            );
 
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "After condition");
