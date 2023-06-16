@@ -52,22 +52,13 @@ class Mutable {
         this.set(val);
     }
 
-    get() {
+    get(key) {
+        if (!!key && (this.#value instanceof RecordInstance || this.#value instanceof MutableList)) {
+            return this.#value.get(key)
+        }
         return this.#value;
     }
-
-    // x = 10
-    // x = 20
-    // y = 1
-    // x = y
-    // y = 20
-    // z = 2
-    // y = z
-    // z = 11
-    // x = 20
-
-
-    set(value) {
+    setWithoutUpdate(value) {
         if (this.#old_closure) {
             this.#value.removeClosure(this.#old_closure);
         }
@@ -80,6 +71,9 @@ class Mutable {
         } else {
             this.#old_closure = null;
         }
+    }
+    set(value) {
+        this.setWithoutUpdate(value);
 
         this.#closureInstance.update();
     }
@@ -132,7 +126,10 @@ class Proxy {
     update() {
         this.#cached_value = this.#differentiator().get();
     }
-    get() {
+    get(key) {
+        if (!!key && (this.#cached_value instanceof RecordInstance || this.#cached_value instanceof MutableList)) {
+            return this.#cached_value.get(key)
+        }
         return this.#cached_value;
     }
     set(value) {
@@ -242,7 +239,7 @@ class RecordInstance {
         for (let key in obj) {
             if (obj[key] instanceof fastn.mutableClass) {
                 this.#fields[key] = fastn.mutable(null)
-                this.#fields[key].set(obj[key]);
+                this.#fields[key].setWithoutUpdate(obj[key]);
             } else {
                 this.#fields[key] = fastn.mutable(obj[key]);
             }
