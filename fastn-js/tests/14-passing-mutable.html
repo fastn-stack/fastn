@@ -1,0 +1,97 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let x = fastn.mutable(30);
+            let y = fastn.mutable(20);
+            let z = fastn.mutable(10);
+
+            let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i1.setProperty(fastn_dom.PropertyKind.IntegerValue, x);
+            i1.done();
+
+            let i2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i2.setProperty(fastn_dom.PropertyKind.IntegerValue, y);
+            i2.done();
+
+            let i3 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i3.setProperty(fastn_dom.PropertyKind.IntegerValue, z);
+            i3.done();
+
+
+            let i4 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i4.setProperty(fastn_dom.PropertyKind.StringValue, "Remap x to y");
+            i4.addEventHandler(fastn_dom.Event.Click, function () {
+                x.set(y);
+            })
+            i4.done();
+
+
+            let i5 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i5.setProperty(fastn_dom.PropertyKind.StringValue, "Remap y to z");
+            i5.addEventHandler(fastn_dom.Event.Click, function () {
+                y.set(z);
+            })
+            i5.done();
+
+
+            let i6 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i6.setProperty(fastn_dom.PropertyKind.StringValue, "Set x to 40");
+            i6.addEventHandler(fastn_dom.Event.Click, function () {
+                x.set(40);
+            })
+            i6.done();
+
+            let i7 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i7.setProperty(fastn_dom.PropertyKind.StringValue, "Set y to 50");
+            i7.addEventHandler(fastn_dom.Event.Click, function () {
+                y.set(50);
+            })
+            i7.done();
+
+            let i8 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i8.setProperty(fastn_dom.PropertyKind.StringValue, "Set z to 60");
+            i8.addEventHandler(fastn_dom.Event.Click, function () {
+                z.set(60);
+            })
+            i8.done();
+        }
+
+        document.body.innerHTML = fastn_virtual.ssr(main);
+        fastn_virtual.hydrate(main);
+    })();
+</script>
+</html>
+
+
+<!--
+-- integer $x: 30
+-- integer $y: 20
+-- integer $z: 10
+
+-- ftd.integer: $x
+-- ftd.integer: $y
+-- ftd.integer: $z
+
+-- ftd.text: Remap x to y
+$on-click$: { x = y }
+
+-- ftd.text: Remap y to z
+$on-click$: { y = z }
+
+-- ftd.text: Set x to 40
+$on-click$: { x = 40 }
+
+-- ftd.text: Set y to 50
+$on-click$: { y = 50 }
+
+-- ftd.text: Set z to 60
+$on-click$: { z = 60 }
+-->

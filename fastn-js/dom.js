@@ -53,14 +53,15 @@ class Node2 {
     }
     setStaticProperty(kind, value) {
         // value can be either static or mutable
+        let staticvValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width_Px) {
-            this.#node.style.width = value + "px";
+            this.#node.style.width = staticvValue + "px";
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
-            this.#node.style.color = value;
+            this.#node.style.color = staticvValue;
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
-            this.#node.innerHTML = value;
+            this.#node.innerHTML = staticvValue;
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }

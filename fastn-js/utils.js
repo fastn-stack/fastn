@@ -16,9 +16,9 @@ let fastn_utils = {
         }
         return [node, css];
     },
-    getValue(obj) {
-        if (!!obj.get) {
-           return obj.get();
+    getStaticValue(obj) {
+        if (obj instanceof fastn.mutableClass) {
+           return this.getStaticValue(obj.get());
         } else {
            return obj;
         }
