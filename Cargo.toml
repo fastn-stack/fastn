@@ -6,11 +6,11 @@ members = [
     "fastn-cloud",
     "fastn-package",
     "fastn-issues",
-    "fastn-wasm",
-    "fastn-js-runtime",
+    "fastn-js",
+    # "fastn-wasm",
     # "fastn-runtime",
 ]
-exclude = ["fastn-runtime"]
+exclude = ["fastn-runtime", "fastn-wasm"]
 
 [profile.release]
 # enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023). The build time went up (no

@@ -1,4 +1,4 @@
-extern crate self as fastn_js_runtime;
+extern crate self as fastn_js;
 
 pub fn ssr(js: &str) -> String {
     let fastn_js = include_str!("../fastn.js");
