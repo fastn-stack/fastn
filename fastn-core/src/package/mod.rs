@@ -386,8 +386,14 @@ impl Package {
             return body.to_string();
         };
         match self.generate_prefix_string(with_alias) {
-            Some(s) => format!("{}\n\n{}", s.trim(), body),
-            None => body.to_string(),
+            Some(s) => {
+                let t = format!("{}\n\n{}", s, body);
+                self.fix_imports_in_body(t.as_str(), id).ok().unwrap_or(t)
+            }
+            None => self
+                .fix_imports_in_body(body, id)
+                .ok()
+                .unwrap_or(body.to_string()),
         }
     }
 

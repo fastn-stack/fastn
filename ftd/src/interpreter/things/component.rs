@@ -267,7 +267,7 @@ impl Component {
             name.as_str(),
             definition_name_with_arguments,
             ast_component.line_number(),
-            doc.name,
+            doc,
         )
         .ok();
 
@@ -996,14 +996,14 @@ fn search_things_for_module(
                 line_number,
             );
         }
-
-        let (m_name, things) = match property
+        let module_property = property
             .first()
             .unwrap()
             .resolve(doc, &Default::default())?
             // TODO: Remove unwrap()
-            .unwrap()
-        {
+            .unwrap();
+
+        let (m_name, things) = match module_property {
             ftd::interpreter::Value::Module { name, things } => (name, things),
             t => {
                 return ftd::interpreter::utils::e2(
@@ -1014,8 +1014,7 @@ fn search_things_for_module(
             }
         };
 
-        let aliases;
-        let m_alias;
+        let mut m_alias;
         {
             let current_parsed_document = if let Some(state) = {
                 match &mut doc.bag {
@@ -1028,26 +1027,40 @@ fn search_things_for_module(
                 return doc.err("not found", m_name, "search_thing", line_number);
             };
             let (module, alias) = ftd::ast::utils::get_import_alias(m_name.as_str());
-            current_parsed_document
+            if !current_parsed_document
                 .doc_aliases
-                .insert(alias.to_string(), module.to_string());
+                .contains_key(alias.as_str())
+            {
+                current_parsed_document
+                    .doc_aliases
+                    .insert(alias.to_string(), module.to_string());
+            }
             m_alias = alias;
-            aliases = current_parsed_document.doc_aliases.clone();
         }
 
+        if let Some(m) = doc.aliases.get(m_alias.as_str()) {
+            m_alias = m.to_string();
+        }
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
-            let thing_ = format!(
-                "{}.{}",
-                m_alias,
-                thing.trim_start_matches(
-                    doc.resolve_name(format!("{}.{}.", component_name, argument.name).as_str())
-                        .as_str(),
+            let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
+                format!(
+                    "{}#{}",
+                    m_alias,
+                    element.trim_start_matches(
+                        format!("{}.{}.", component_name, argument.name).as_str(),
+                    )
                 )
-            );
-            let thing_real_name =
-                ftd::interpreter::utils::resolve_name(thing_.as_str(), doc.name, &aliases);
+            } else {
+                format!(
+                    "{}#{}",
+                    m_alias,
+                    thing.trim_start_matches(
+                        format!("{}.{}.", component_name, argument.name).as_str()
+                    )
+                )
+            };
             if unresolved_thing.is_some() {
                 doc.scan_thing(&thing_real_name, line_number)?;
             } else {
