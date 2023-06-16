@@ -5,7 +5,7 @@ fn main() {
 }
 
 fn js() -> &'static str {
-    return r#"
+    r#"
         function main (root) {
             let number = 10;
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
@@ -14,5 +14,5 @@ fn js() -> &'static str {
         }
 
         fastn_virtual.ssr(main)
-    "#;
+    "#
 }
