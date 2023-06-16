@@ -224,7 +224,7 @@ fastn.wrapMutable = function (obj) {
     if (!(obj instanceof Mutable)) {
         obj = new Mutable(obj);
     }
-    return obj
+    return obj;
 }
 
 fastn.mutableList = function (list) {
@@ -237,14 +237,19 @@ class RecordInstance {
         this.#fields = {};
 
         for (let key in obj) {
-            this.#fields[key] = fastn.wrapMutable(obj[key]);
+            if (obj[key] instanceof fastn.mutableClass) {
+                this.#fields[key] = fastn.mutable(null)
+                this.#fields[key].set(obj[key]);
+            } else {
+                this.#fields[key] = fastn.mutable(obj[key]);
+            }
         }
     }
     get(key) {
         return this.#fields[key];
     }
     set(key, value) {
-        this.#fields[key].set(fastn.wrapMutable(value).get());
+        this.#fields[key].set(fastn.wrapMutable(value));
     }
     replace(obj) {
         for (let key in this.$fields) {

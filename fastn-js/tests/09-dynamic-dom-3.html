@@ -19,7 +19,7 @@
 
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me to set Ritesh/Bob");
-            i1.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": r }) })
+            i1.addEventHandler(fastn_dom.Event.Click, function () { p.set(fastn.recordInstance({"name": r })) })
             i1.done();
 
 
@@ -32,19 +32,17 @@
 
             let i3 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i3.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me to set John/Doe");
-            i3.addEventHandler(fastn_dom.Event.Click, function () { p.set({ "name": a }) })
+            i3.addEventHandler(fastn_dom.Event.Click, function () { p.set(fastn.recordInstance({"name": a })) })
             i3.done();
 
             fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
-                return showPerson(root, p);
+                return showPerson(root, p.get());
             });
         }
 
         function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-            i.setDynamicProperty(fastn_dom.PropertyKind.StringValue, [p], () => {
-                return fastn_utils.getStaticValue(p.get().name);
-            });
+            i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
             i.done();
             return i;
         }
