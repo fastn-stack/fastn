@@ -9,3 +9,4 @@ homepage.workspace = true
 
 [dependencies]
 rquickjs.workspace = true
+pretty.workspace = true
