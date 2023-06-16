@@ -8,9 +8,9 @@ if: { !show-planning }
 
 In this video we will learn how to add or change typography
 
-/-- ds.youtube:
+-- ds.youtube: 
 if: { !show-planning }
-v: 
+v: IcNMT-7lvgs
 
 -- lib.video-audience: How to add a typography
 if: { show-planning }
@@ -175,12 +175,12 @@ Support us by giving a star ⭐ on
 on [Discord](/discord/).
 
 
-/-- ds.h1: Final Video
+-- ds.h1: Final Video
 if: { show-planning }
 
-/-- ds.youtube:
+-- ds.youtube:
 if: { show-planning }
-v: 
+v: IcNMT-7lvgs
 
 
 -- end: my-ds.page
