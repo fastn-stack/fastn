@@ -1487,7 +1487,7 @@ dependencies = [
  "fastn-package",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0",
+ "ftd 0.3.0",
  "futures",
  "hyper",
  "ignore",
@@ -1522,7 +1522,7 @@ dependencies = [
 name = "fastn-issues"
 version = "0.1.0"
 dependencies = [
- "ftd 0.2.0",
+ "ftd 0.3.0",
  "rusqlite",
  "thiserror",
 ]
@@ -1541,7 +1541,7 @@ dependencies = [
  "async-trait",
  "camino",
  "fastn-issues",
- "ftd 0.2.0",
+ "ftd 0.3.0",
  "futures",
  "rusqlite",
  "serde",
@@ -1564,7 +1564,7 @@ source = "git+https://github.com/FifthTry/fbt?rev=ea0ee98#ea0ee9832ab515c8acf7f0
 dependencies = [
  "colored",
  "diffy",
- "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=b698bd6)",
+ "ftd 0.2.0",
  "rand",
  "sha2 0.10.6",
  "walkdir",
@@ -1684,6 +1684,26 @@ checksum = "c1fd087255f739f4f1aeea69f11b72f8080e9c2e7645cd06955dad4a178a49e3"
 [[package]]
 name = "ftd"
 version = "0.2.0"
+source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
+dependencies = [
+ "comrak 0.14.0",
+ "css-color-parser",
+ "format_num",
+ "include_dir",
+ "indoc 1.0.9",
+ "itertools",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
+]
+
+[[package]]
+name = "ftd"
+version = "0.3.0"
 dependencies = [
  "comrak 0.18.0",
  "crossterm 0.26.1",
@@ -1714,26 +1734,6 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "ftd"
-version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
-dependencies = [
- "comrak 0.14.0",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc 1.0.9",
- "itertools",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
 ]
 
 [[package]]

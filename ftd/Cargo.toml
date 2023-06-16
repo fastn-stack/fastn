@@ -1,16 +1,12 @@
 [package]
 name = "ftd"
-version = "0.2.0"
-authors = [
-    "Amit Upadhyay <upadhyay@gmail.com>",
-    "Arpita Jaiswal <arpita@fifthtry.com>",
-    "Sourabh Garg <sourabh@fifthtry.com>"
-]
-edition = "2021"
-description = "ftd: FifthTry Document Format"
-license = "MIT"
-repository = "https://github.com/FifthTry/ftd"
-homepage = "https://fastn.io/ftd/"
+version = "0.3.0"
+description.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [features]
 default = []
