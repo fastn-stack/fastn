@@ -1,17 +1,11 @@
 [package]
 name = "fastn"
 version = "0.2.0"
-authors = [
-    "Abrar Khan <abrark@fifthtry.com>",
-    "Amit Upadhyay <upadhyay@gmail.com>",
-    "Arpita Jaiswal <arpita@fifthtry.com>",
-    "Shobhit Sharma <shobhit@fifthtry.com>",
-]
-edition = "2021"
-description = "fastn: FTD Package Manager"
-license = "MIT"
-repository = "https://github.com/ftd-lang/fastn"
-homepage = "https://fastn.io"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [dependencies]
 clap.workspace = true

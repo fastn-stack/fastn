@@ -12,6 +12,23 @@ members = [
 ]
 exclude = ["fastn-runtime", "fastn-wasm"]
 
+[workspace.package]
+version = "0.3.0"
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Arpita Jaiswal <arpita@fifthtry.com>",
+    "Sourabh Garg <sourabh@fifthtry.com>",
+    "Shobhit Sharma <shobhit@fifthtry.com>",
+    "Abrar Khan <abrar@fifthtry.com>",
+    "Rithik Seth <rithik@fifthtry.com>",
+    "Ganesh Salunke <ganesh@fifthtry.com>",
+]
+edition = "2021"
+description = "fastn: Full-stack Web Development Made Easy"
+license = "BSD-3-Clause"
+repository = "https://github.com/fastn-stack/fastn"
+homepage = "https://fastn.com"
+
 [profile.release]
 # enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023). The build time went up (no
 # objective data). Disabling it for now. It made a huge difference in fastn-runtime wasm size (without lto: 2.1M with
