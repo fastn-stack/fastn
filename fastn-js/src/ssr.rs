@@ -1,4 +1,4 @@
-pub fn ssr(js: &str) -> String {
+pub fn ssr_str(js: &str) -> String {
     let fastn_js = include_str!("../fastn.js");
     let dom_js = include_str!("../dom.js");
     let utils_js = include_str!("../utils.js");
@@ -8,4 +8,9 @@ pub fn ssr(js: &str) -> String {
     rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
         .unwrap()
         .with(|ctx| ctx.eval::<String, _>(js).unwrap())
+}
+
+pub fn ssr(js: &[fastn_js::Func]) -> String {
+    let js = fastn_js::encode(js);
+    ssr_str(&js)
 }
