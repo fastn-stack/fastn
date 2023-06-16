@@ -249,17 +249,48 @@ fn extract_type_data(
     Ok(())
 }
 
-fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> Option<String> {
+fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> Option<ValueType> {
     return match property_value.as_ref() {
         Some(ftd::interpreter::PropertyValue::Value { value, .. }) => match value {
-            ftd::interpreter::Value::String { text } => Some(text.to_string()),
-            ftd::interpreter::Value::Integer { value, .. } => Some(value.to_string()),
-            ftd::interpreter::Value::Decimal { value, .. } => Some(value.to_string()),
-            ftd::interpreter::Value::Boolean { value, .. } => Some(value.to_string()),
-            ftd::interpreter::Value::OrType { value, .. } => extract_raw_data(Some(*value.clone())),
+            ftd::interpreter::Value::String { text } => Some(ValueType {
+                value: text.to_string(),
+                type_: "string".to_string(),
+            }),
+            ftd::interpreter::Value::Integer { value, .. } => Some(ValueType {
+                value: value.to_string(),
+                type_: "integer".to_string(),
+            }),
+            ftd::interpreter::Value::Decimal { value, .. } => Some(ValueType {
+                value: value.to_string(),
+                type_: "decimal".to_string(),
+            }),
+            ftd::interpreter::Value::Boolean { value, .. } => Some(ValueType {
+                value: value.to_string(),
+                type_: "boolean".to_string(),
+            }),
+            ftd::interpreter::Value::OrType {
+                value,
+                full_variant,
+                ..
+            } => {
+                let (_, variant) = full_variant
+                    .rsplit_once('.')
+                    .unwrap_or(("", full_variant.as_str()));
+                let inner_value = extract_raw_data(Some(*value.clone()));
+                if let Some(value) = inner_value {
+                    return Some(ValueType {
+                        value: value.value,
+                        type_: variant.to_string(),
+                    });
+                }
+                None
+            }
             _ => None,
         },
-        Some(ftd::interpreter::PropertyValue::Reference { name, .. }) => Some(name.to_string()),
+        Some(ftd::interpreter::PropertyValue::Reference { name, .. }) => Some(ValueType {
+            value: name.to_string(),
+            type_: "reference".to_string(),
+        }),
         Some(ftd::interpreter::PropertyValue::Clone { .. }) => None,
         Some(ftd::interpreter::PropertyValue::FunctionCall { .. }) => None,
         None => None,
@@ -269,11 +300,18 @@ fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> 
 #[derive(Debug, Default, Serialize, Deserialize)]
 struct TypeData {
     #[serde(rename = "font-family")]
-    font_family: Option<String>,
-    size: Option<String>,
+    font_family: Option<ValueType>,
+    size: Option<ValueType>,
     #[serde(rename = "letter-spacing")]
-    letter_spacing: Option<String>,
-    weight: Option<String>,
+    letter_spacing: Option<ValueType>,
+    weight: Option<ValueType>,
     #[serde(rename = "line-height")]
-    line_height: Option<String>,
+    line_height: Option<ValueType>,
+}
+
+#[derive(Debug, Default, Serialize, Deserialize)]
+struct ValueType {
+    value: String,
+    #[serde(rename = "type")]
+    type_: String,
 }
