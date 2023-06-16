@@ -4303,6 +4303,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -4451,6 +4463,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -4601,6 +4625,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -4749,6 +4785,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -4900,6 +4948,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-copy".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -5049,6 +5109,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-copy".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -5197,6 +5269,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-copy".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -5348,6 +5432,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-code".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -5497,6 +5593,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-code".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -5645,6 +5753,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-code".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -5796,6 +5916,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -5944,6 +6076,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -6095,6 +6239,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -6243,6 +6399,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
@@ -6393,6 +6561,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {
                                                                     value: ftd::interpreter::Value::OrType {
@@ -6541,6 +6721,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
                                                     value: ftd::interpreter::Value::Record {
                                                         name: ftd::interpreter::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter::PropertyValue::Value {

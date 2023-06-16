@@ -213,6 +213,9 @@ impl Library2022 {
         let line_number = ast.line_number();
         let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
+            "figma-typo-token" => {
+                processor::figma_typography_tokens::process_typography_tokens(value, kind, doc)
+            }
             "figma-cs-token" => {
                 processor::figma_tokens::process_figma_tokens(value, kind, doc, &self.config)
             }
