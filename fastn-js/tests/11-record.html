@@ -69,17 +69,17 @@
 caption name:
 optional body bio:
 
--- person $first: hello
+-- person $first: Jill
 
 -- person list $people:
 -- person: $first
 -- end: $people
 
 -- ftd.text: Click to add Tom
-$on-click$: $ftd.append($a = $people, v = { name: "Tom", bio: null })
+$on-click$: $ftd.append($a = $people, v = { name: "Tom", bio: "I am Tom" })
 
--- ftd.text: update first
-$on-click$: { first.name = Bob }
+-- ftd.text: Click to change first
+$on-click$: { first.name = "Jack"; first.name = "I am Jack" }
 
 -- show-person: $p
 for: $p, $idx in $people
@@ -92,6 +92,9 @@ integer index:
 -- ftd.column:
 
 -- ftd.text: $show-person.p.name
+-- ftd.text: $show-person.p.bio
+if: { show-person.p.bio != NULL }
+
 -- ftd.integer: $show-person.index
 
 -- end: ftd.column
