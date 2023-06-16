@@ -106,6 +106,10 @@ favicon: /-/fastn.com/images/favicon.svg
   document: cs/modify-cs.ftd
 - Create `font` package: /create-font-package/
   document: author/how-to/create-font-package.ftd
+- Export typography as json: /typo-to-json/
+  document: typo/typo-to-json.ftd
+- Typography json to FTD: /typo-json-to-ftd/
+  document: typo/typo-json-to-ftd
 
 # Frontend: /frontend/why/
 
