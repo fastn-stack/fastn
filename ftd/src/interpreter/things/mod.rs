@@ -10,6 +10,72 @@ pub(crate) mod variable;
 pub(crate) mod web_component;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum ModuleThing {
+    Component(ComponentModuleThing),
+    Variable(VariableModuleThing),
+}
+
+impl ModuleThing {
+    pub fn component(
+        name: String,
+        kind: ftd::interpreter::KindData,
+        arguments: Vec<ftd::interpreter::Argument>,
+    ) -> Self {
+        ModuleThing::Component(ComponentModuleThing::new(name, kind, arguments))
+    }
+
+    pub fn variable(name: String, kind: ftd::interpreter::KindData) -> Self {
+        ModuleThing::Variable(VariableModuleThing::new(name, kind))
+    }
+
+    pub fn get_kind(&self) -> ftd::interpreter::KindData {
+        match self {
+            ftd::interpreter::ModuleThing::Component(c) => c.kind.clone(),
+            ftd::interpreter::ModuleThing::Variable(v) => v.kind.clone(),
+        }
+    }
+
+    pub fn get_name(&self) -> String {
+        match self {
+            ftd::interpreter::ModuleThing::Component(c) => c.name.clone(),
+            ftd::interpreter::ModuleThing::Variable(v) => v.name.clone(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct VariableModuleThing {
+    pub name: String,
+    pub kind: ftd::interpreter::KindData,
+}
+
+impl VariableModuleThing {
+    pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
+        VariableModuleThing { name, kind }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ComponentModuleThing {
+    pub name: String,
+    pub kind: ftd::interpreter::KindData,
+    pub arguments: Vec<ftd::interpreter::Argument>,
+}
+
+impl ComponentModuleThing {
+    pub fn new(
+        name: String,
+        kind: ftd::interpreter::KindData,
+        arguments: Vec<ftd::interpreter::Argument>,
+    ) -> Self {
+        ComponentModuleThing {
+            name,
+            kind,
+            arguments,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
     Record(ftd::interpreter::Record),
     OrType(ftd::interpreter::OrType),

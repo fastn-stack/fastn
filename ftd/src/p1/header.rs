@@ -339,6 +339,19 @@ impl Header {
         }
     }
 
+    pub(crate) fn is_module_kind(&self) -> bool {
+        match self {
+            Header::KV(ftd::p1::header::KV { kind, .. })
+            | Header::Section(ftd::p1::header::Section { kind, .. })
+            | Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader { kind, .. }) => {
+                match kind {
+                    Some(k) => k.trim().eq("module"),
+                    None => false,
+                }
+            }
+        }
+    }
+
     pub(crate) fn get_condition(&self) -> Option<String> {
         match self {
             Header::KV(ftd::p1::header::KV { condition, .. })

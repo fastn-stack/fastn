@@ -1591,7 +1591,6 @@ impl<'a> TDoc<'a> {
                         return Ok(thing);
                     }
                 }*/
-
                 return self.err("not found", name, "search_thing", line_number);
             }
 

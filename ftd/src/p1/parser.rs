@@ -159,6 +159,8 @@ impl State {
     }
 
     fn reading_section(&mut self) -> ftd::p1::Result<()> {
+        use itertools::Itertools;
+
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         let start_line = start_line.trim();
@@ -194,12 +196,28 @@ impl State {
         let last_section = self.get_latest_state().map(|v| v.0);
         match last_section {
             Some(section) if section_name.starts_with(format!("{}.", section.name).as_str()) => {
-                return Err(ftd::p1::Error::SectionNotFound {
-                    doc_id: self.doc_id.to_string(),
-                    line_number: ftd::p1::utils::i32_to_usize(
-                        self.line_number + (scan_line_number as i32) + 1,
-                    ),
+                let module_headers = section
+                    .headers
+                    .0
+                    .iter()
+                    .filter(|h| h.is_module_kind())
+                    .collect_vec();
+                let found_module = module_headers.iter().find(|h| {
+                    h.is_module_kind()
+                        && section_name
+                            .strip_prefix(format!("{}.", section.name).as_str())
+                            .unwrap_or(section_name.as_str())
+                            .starts_with(h.get_key().as_str())
                 });
+
+                if found_module.is_none() {
+                    return Err(ftd::p1::Error::SectionNotFound {
+                        doc_id: self.doc_id.to_string(),
+                        line_number: ftd::p1::utils::i32_to_usize(
+                            self.line_number + (scan_line_number as i32) + 1,
+                        ),
+                    });
+                }
             }
             _ => {}
         }
@@ -326,6 +344,8 @@ impl State {
     }
 
     fn reading_block_headers(&mut self) -> ftd::p1::Result<()> {
+        use itertools::Itertools;
+
         self.end(&mut None)?;
         let (scan_line_number, content) = self.clean_content();
         let (section, parsing_states) =
@@ -364,6 +384,23 @@ impl State {
             self.doc_id.as_str(),
         )?;
         let (key, kind) = get_name_and_kind(name_with_kind.as_str());
+
+        let module_headers = section
+            .headers
+            .0
+            .iter()
+            .filter(|h| h.is_module_kind())
+            .collect_vec();
+        if let Some(possible_module) =
+            key.strip_prefix(format!("{}.", section.name.as_str()).as_str())
+        {
+            for m in module_headers.iter() {
+                if possible_module.starts_with(m.get_key().as_str()) {
+                    parsing_states.push(header_not_found_next_state);
+                    return Ok(());
+                }
+            }
+        }
 
         let key = if let Some(key) = key.strip_prefix(format!("{}.", section.name).as_str()) {
             key
