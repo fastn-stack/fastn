@@ -15,14 +15,6 @@
             i.addEventHandler(fastn_dom.Event.Click, function () { p.set({"name": "Ritesh"})})
             i.done();
 
-            // fastn.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
-            //     return showPerson(root, p);
-            // });
-            //
-            // fastn.mutableListWithDom(root, [list], function (idx) {
-            //     return showPerson(root, list[idx]);
-            // })
-
             fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
                 return showPerson(root, p);
             });
@@ -30,26 +22,11 @@
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "After condition");
             i1.done();
-
-            /*let showPersonUI = null;
-            p.addClosure(fastn.closure(function () {
-                if (p.get() !== null) {
-                    if (!!showPersonUI) {
-                        showPersonUI.destroy();
-                    }
-                    showPersonUI = showPerson(root, p);
-                } else if (!!showPersonUI) {
-                    showPersonUI.destroy()
-                    showPersonUI = null;
-                }
-            }))*/
         }
 
         function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-            i.setDynamicProperty(fastn_dom.PropertyKind.StringValue, [p], () => {
-                return fastn_utils.getStaticValue(p.get().name);
-            });
+            i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
             i.done();
             return i;
         }

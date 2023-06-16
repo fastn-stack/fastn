@@ -25,7 +25,7 @@
             foo(root, x_);
 
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [z], function () { return z.get(); });
+            i.setProperty(fastn_dom.PropertyKind.IntegerValue, z);
             i.done();
         }
 
