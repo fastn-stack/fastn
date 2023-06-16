@@ -221,7 +221,10 @@ fastn.proxy = function (targets, differentiator) {
 fastn.mutableClass = Mutable;
 
 fastn.wrapMutable = function (obj) {
-    if (!(obj instanceof Mutable)) {
+    if (!(obj instanceof Mutable)
+        && !(obj instanceof RecordInstance)
+        && !(obj instanceof MutableList)
+    ) {
         obj = new Mutable(obj);
     }
     return obj;

@@ -9,17 +9,22 @@
 <script>
     (function() {
         function main (root) {
-            let first = fastn.recordInstance({ name: "Tom", bio: null });
+            let first = fastn.recordInstance({ name: "Jill", bio: null });
             let people = fastn.mutableList([first]);
 
             let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
-            text.addEventHandler(fastn_dom.Event.Click, function () { people.push(fastn.recordInstance({ name: "Tom", "bio": null }))});
+            text.addEventHandler(fastn_dom.Event.Click, function () {
+                people.push(fastn.recordInstance({ name: "Tom", bio: "I am Tom" }));
+            });
             text.done();
 
             let text2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text2.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to change first");
-            text2.addEventHandler(fastn_dom.Event.Click, function () { first.set("name", "jack") });
+            text2.addEventHandler(fastn_dom.Event.Click, function () {
+                first.set("name", "Jack");
+                first.set("bio", "I am Jack");
+            });
             text2.done();
 
             people.forLoop(root, function (root, item, index) {
@@ -35,9 +40,14 @@
             i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
             i.done();
 
-            let i2 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
-            i2.setProperty(fastn_dom.PropertyKind.StringValue, p.get("bio"));
-            i2.done();
+            fastn_dom.conditionalDom(root, [p.get("bio")], function () { return p.get("bio").get() !== null; },
+                function (root) {
+                    let i2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+                    i2.setProperty(fastn_dom.PropertyKind.StringValue, p.get("bio"));
+                    i2.done();
+                    return i2;
+                });
+
 
             let i3 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Integer);
             i3.setProperty(fastn_dom.PropertyKind.IntegerValue, index);
