@@ -1,6 +1,6 @@
 fn main() {
     let start = std::time::Instant::now();
-    println!("{}", fastn_js_runtime::ssr(js()));
+    println!("{}", fastn_js::ssr(js()));
     println!("elapsed: {:?}", start.elapsed());
 }
 
