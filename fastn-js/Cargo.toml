@@ -10,3 +10,7 @@ homepage.workspace = true
 [dependencies]
 rquickjs.workspace = true
 pretty.workspace = true
+
+[dev-dependencies]
+indoc.workspace = true
+

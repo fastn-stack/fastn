@@ -3,10 +3,12 @@ extern crate self as fastn_js;
 mod func;
 mod instruction;
 mod ssr;
+mod static_variable;
 
-pub use func::{func0, Func};
-pub use instruction::{Instruction, StaticVariable};
+pub use func::{func0, func1, func2, Func};
+pub use instruction::Instruction;
 pub use ssr::{ssr, ssr_str};
+pub use static_variable::{static_unquoted, StaticVariable};
 
 pub fn encode(js: &[fastn_js::Func]) -> String {
     let mut w = Vec::new();

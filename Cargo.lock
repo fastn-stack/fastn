@@ -1537,6 +1537,7 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
+ "indoc 2.0.1",
  "pretty",
  "rquickjs",
 ]
