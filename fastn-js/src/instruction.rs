@@ -1,5 +1,5 @@
 pub enum Instruction {
-    StaticVariable(StaticVariable),
+    StaticVariable(fastn_js::StaticVariable),
     // MutableVariable(MutableVariable),
     // MutableList(MutableList),
     // RecordInstance(RecordInstance),
@@ -9,9 +9,4 @@ pub enum Instruction {
     // InstantiateComponent(InstantiateComponent),
     // ForLoop(ForLoop),
     // ConditionalComponent(ConditionalComponent),
-}
-
-pub struct StaticVariable {
-    pub name: String,
-    pub value: String,
 }
