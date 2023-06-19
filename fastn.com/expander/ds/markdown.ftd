@@ -1,5 +1,6 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
+-- import: fastn-community.github.io/bling/note
 
 -- my-ds.page: markdown in `doc-site`
 
@@ -70,7 +71,16 @@ src: $fastn-assets.files.expander.ds.img.makrdown-intro.png
 Markdown provides a way to style text elements such as headings, lists, links,
 and more, using plain text and minimal special characters.
 
+-- note.note: Markdown Yes, but...
 
+We do not recommend you to style text elements such as `headings`, `images` and 
+`code-block` instead we want you to use following components:
+
+| Elements     |  Components  |
+| :----------  |  :---------  |
+| heading      |  `ds.h1`     |
+| image        |  `ds.image`  | 
+| code-block   |  `ds.code`   |
 
 -- ds.h2: Benefits
 
@@ -122,7 +132,6 @@ Now, start using the components like ds.page, ds.markdown, ds.h1 etc.
 lang: ftd
 
 \-- ds.markdown: 
-
 
 
 -- ds.rendered: Plain text
