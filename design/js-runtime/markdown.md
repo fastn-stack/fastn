@@ -1,8 +1,8 @@
 # How Are We Handling Markdown?
 
 Markdown parser creates a tree, with items like h1, link, list etc. We currently render these elements in HTML and
-ftd authors can not change the way they are rendered. Say if we want to add a on hover property to every inline `code`
-block in markdown text, we can not do it.
+ftd authors can not change the way they are rendered. Say if we want to add an on-hover property to every inline `code`
+block in Markdown text, we can not do it.
 
 The design allows you to provide your own component constructors for every element in markdown.
 
@@ -18,7 +18,7 @@ caption title:
 -- end: h1
 ```
 
-This module defines a component for each element we can encounter in markdown, eg h1, link etc.
+This module defines a component for each element we can encounter in markdown, e.g. h1, link etc.
 
 ## `markdown` argument to `ftd.text`
 
@@ -53,5 +53,5 @@ function h1() {
 }
 ```
 
-Markdown parser will create a tree, and call `h1` etc on the tree to convert it to a DOM tree. If the text changes entire
-DOM tree will be re-created.
+Markdown parser will create a tree, and call `h1` etc. on the tree to convert it to a DOM tree. If the text changes 
+entire DOM tree will be re-created.
