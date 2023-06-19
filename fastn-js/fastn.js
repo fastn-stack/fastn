@@ -31,7 +31,7 @@ class Closure {
         return this.#node;
     }
     updateUi() {
-        if (!this.#node || !this.#property) {
+        if (!this.#node || !this.#property || !this.#node.getNode()) {
             return;
         }
 
@@ -63,11 +63,15 @@ class Mutable {
             this.#value.removeClosure(this.#old_closure);
         }
 
-        this.#value = value;
+        if (this.#value instanceof RecordInstance) {
+            this.#value.replace(value);
+        } else {
+            this.#value = value;
+        }
 
-        if (value instanceof Mutable) {
+        if (this.#value instanceof Mutable) {
             this.#old_closure = fastn.closure(() => this.#closureInstance.update());
-            value.addClosure(this.#old_closure);
+            this.#value.addClosure(this.#old_closure);
         } else {
             this.#old_closure = null;
         }
@@ -252,11 +256,11 @@ class RecordInstance {
         this.#fields[key].set(fastn.wrapMutable(value));
     }
     replace(obj) {
-        for (let key in this.$fields) {
-            if (!(key in obj)) {
+        for (let key in this.#fields) {
+            if (!(key in obj.#fields)) {
                 throw new Error("RecordInstance.replace: key " + key + " not present in new object");
             }
-            this.#fields[key].set(fastn.wrapMutable(obj[key]));
+            this.#fields[key].set(fastn.wrapMutable(obj.#fields[key]));
         }
     }
 }

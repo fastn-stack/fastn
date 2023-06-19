@@ -19,7 +19,7 @@
 
             let text2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text2.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to change first");
-            text2.addEventHandler(fastn_dom.Event.Click, function () { first.set("jack") });
+            text2.addEventHandler(fastn_dom.Event.Click, function () { first.set("Bob") });
             text2.done();
 
             people.forLoop(root, function (root, item, index) {
@@ -59,8 +59,8 @@
 -- ftd.text: Click to add Tom
 $on-click$: $ftd.append($a = $people, v = Tom)
 
--- ftd.text: update $name
-$on-click$: { name = Bob }
+-- ftd.text: update $first
+$on-click$: { first = Bob }
 
 -- show-person: $p
 for: $p, $idx in $people

@@ -53,15 +53,15 @@ class Node2 {
     }
     setStaticProperty(kind, value) {
         // value can be either static or mutable
-        let staticvValue = fastn_utils.getStaticValue(value);
+        let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width_Px) {
-            this.#node.style.width = staticvValue + "px";
+            this.#node.style.width = staticValue + "px";
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
-            this.#node.style.color = staticvValue;
+            this.#node.style.color = staticValue;
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
-            this.#node.innerHTML = staticvValue;
+            this.#node.innerHTML = staticValue;
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
@@ -103,20 +103,21 @@ class ConditionalDom {
     #node_constructor;
     #condition;
     #mutables;
+    #conditionUI;
 
     constructor(parent, deps, condition, node_constructor) {
         let domNode = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Div);
 
-        let conditionUI = null;
+        this.#conditionUI = null;
         let closure = fastn.closure(() => {
             if (condition()) {
-                if (!!conditionUI) {
-                    conditionUI.destroy();
+                if (!!this.#conditionUI) {
+                    this.#conditionUI.destroy();
                 }
-                conditionUI = node_constructor(domNode);
-            } else if (!!conditionUI) {
-                conditionUI.destroy();
-                conditionUI = null;
+                this.#conditionUI = node_constructor(domNode);
+            } else if (!!this.#conditionUI) {
+                this.#conditionUI.destroy();
+                this.#conditionUI = null;
             }
         })
         deps.forEach(dep => dep.addClosure(closure));
