@@ -12,7 +12,9 @@
             let r = fastn.mutable("Ritesh");
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setStaticProperty(fastn_dom.PropertyKind.StringValue, "I change name to Bob");
-            i.addEventHandler(fastn_dom.Event.Click, function () { r.set("Bob") })
+            i.addEventHandler(fastn_dom.Event.Click, function () {
+                r.set("Bob")
+            })
             i.done();
 
 
