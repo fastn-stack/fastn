@@ -31,7 +31,7 @@ class Closure {
         return this.#node;
     }
     updateUi() {
-        if (!this.#node || !this.#property) {
+        if (!this.#node || !this.#property || !this.#node.getNode()) {
             return;
         }
 
