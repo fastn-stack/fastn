@@ -10,6 +10,19 @@ pub fn static_unquoted(name: &str, value: &str) -> fastn_js::Instruction {
     })
 }
 
+impl StaticVariable {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        pretty::RcDoc::text("let")
+            .append(pretty::RcDoc::space())
+            .append(pretty::RcDoc::text(self.name.clone()))
+            .append(pretty::RcDoc::space())
+            .append(pretty::RcDoc::text("="))
+            .append(pretty::RcDoc::space())
+            .append(pretty::RcDoc::text(self.value.clone()))
+            .append(pretty::RcDoc::text(";"))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -19,9 +32,7 @@ mod tests {
             func,
             indoc::indoc!(
                 r#"
-            function foo(parent) {
-                let bar = 10;
-            }"#,
+            function foo(parent) {let bar = 10;}"#,
             ),
         );
     }

@@ -10,3 +10,11 @@ pub enum Instruction {
     // ForLoop(ForLoop),
     // ConditionalComponent(ConditionalComponent),
 }
+
+impl Instruction {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        match self {
+            Instruction::StaticVariable(f) => f.to_js(),
+        }
+    }
+}

@@ -41,12 +41,27 @@ impl Func {
                         .map(|v| pretty::RcDoc::text(v.to_string())),
                     pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
                 )
-                .nest(2)
+                .nest(4)
                 .group(),
             )
             .append(pretty::RcDoc::text(")"))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("{}"))
+            .append(pretty::RcDoc::softline_())
+            .append(
+                pretty::RcDoc::softline()
+                    .append(pretty::RcDoc::text("{"))
+                    .append(pretty::RcDoc::softline_())
+                    .append(
+                        pretty::RcDoc::intersperse(
+                            self.body.iter().map(|v| v.to_js()),
+                            pretty::RcDoc::softline(),
+                        )
+                        .group()
+                        .nest(4),
+                    )
+                    .append(pretty::RcDoc::softline_())
+                    .append(pretty::RcDoc::text("}"))
+                    .group(),
+            )
     }
 }
 
