@@ -77,6 +77,7 @@ class Node2 {
         let closure = fastn.closure(func).addNodeProperty(this, kind);
         for (let dep in deps) {
             deps[dep].addClosure(closure);
+            this.#mutables.push(deps[dep]);
         }
     }
     getNode() {
