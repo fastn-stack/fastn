@@ -1,4 +1,4 @@
--- my-ds.page: Syntax Highlighting In SublimeText
+-- my-ds.page: Syntax Highlighting In Sublime Text 3
 
 SublimeText does not come with built in syntax highlighting support for `ftd`,
 but we can install it ourselves.

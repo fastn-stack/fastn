@@ -106,6 +106,7 @@ issues](https://github.com/fastn-stack/fastn/issues) to tell us about it.
 - [Install `fastn`](install/)
 - [Create `fastn` package](create-fastn-package/)
 - [Expander Crash Course](expander/)
+- [Syntax Highlighting in Sublime Text](/sublime/)
 
 -- utils.compact-text: Join us
 
