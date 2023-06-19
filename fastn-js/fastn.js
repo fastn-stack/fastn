@@ -31,7 +31,7 @@ class Closure {
         return this.#node;
     }
     updateUi() {
-        if (!this.#node || !this.#property || !this.#node.getNode()) {
+        if (!this.#node || !this.#property) {
             return;
         }
 
@@ -51,7 +51,6 @@ class Mutable {
         this.#closureInstance = fastn.closure(() => this.#closures.forEach((closure) => closure.update()));
         this.set(val);
     }
-
     get(key) {
         if (!!key && (this.#value instanceof RecordInstance || this.#value instanceof MutableList)) {
             return this.#value.get(key)
