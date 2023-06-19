@@ -49,6 +49,7 @@ src: $fastn-assets.files.expander.ds.img.typography-intro.png
 
 
 -- ds.markdown: 
+if: { show-planning }
 
 Good typography enhances content legibility, guides users through the site,
 establishes a visual identity, highlights important information, ensures
