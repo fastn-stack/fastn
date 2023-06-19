@@ -41,7 +41,6 @@ impl StaticVariable {
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn unquoted() {
         fastn_js::func::e(
