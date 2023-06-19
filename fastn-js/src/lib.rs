@@ -8,7 +8,7 @@ mod static_variable;
 pub use func::{func0, func1, func2, Func};
 pub use instruction::Instruction;
 pub use ssr::{ssr, ssr_str};
-pub use static_variable::{static_unquoted, StaticVariable};
+pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
 
 pub fn encode(js: &[fastn_js::Func]) -> String {
     let mut w = Vec::new();
