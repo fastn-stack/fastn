@@ -11,7 +11,7 @@ The design allows you to provide your own component constructors for every eleme
 We are creating a new module, `ftd.markdown`:
 
 ```ftd
-;; content of ftd.markdown
+;; content of ftd/markdown.ftd
 -- component h1:
 caption title:
 
@@ -36,7 +36,11 @@ module markdown: ftd.markdown
 
 ```ftd
 -- component markdown:
-markdown: current-module 
+
+-- ftd.text:
+markdown: current-module
+
+-- end: markdown
 ```
 
 We are planning `current-package`, so `current-module` goes well with it.
@@ -62,6 +66,11 @@ entire DOM tree will be re-created.
 # hello world
 
 this is some text
+```
+
+```html
+<h1>hello world</h1>
+<p>this is some text</p>
 ```
 
 ```js

@@ -18,8 +18,7 @@
             i.done();
         }
 
-        document.body.innerHTML = fastn_virtual.ssr(main);
-        fastn_virtual.hydrate(main);
+        main(fastn_virtual.document.createElement("body"))
     })();
 </script>
 </html>

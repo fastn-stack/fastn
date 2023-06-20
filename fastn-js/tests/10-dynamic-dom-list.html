@@ -54,6 +54,7 @@
 
 -- string list $people:
 -- string: $first
+-- string: world
 -- end: $people
 
 -- ftd.text: Click to add Tom
@@ -65,6 +66,7 @@ $on-click$: { first = Bob }
 -- show-person: $p
 for: $p, $idx in $people
 index: { $idx * 100 }
+
 
 -- component show-person:
 caption name:

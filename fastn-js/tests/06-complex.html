@@ -56,8 +56,10 @@
 $x: $x
 
 -- foo:
-$x: $x
-$x if { x % 2 == 0 }: 1000
+$x: {
+    if { x % 2 == 0 }: 1000
+    else: $x
+}
 
 -- ftd.integer: $z
 
