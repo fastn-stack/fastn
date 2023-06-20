@@ -76,6 +76,11 @@ pub enum Operator {
         value: Value,
     },
     /// A write to a variable identifier.
+    // VariableIdentifierDefinition {
+    //     /// The identifier of the variable.
+    //     identifier: String,
+    // },
+    /// A write to a variable identifier.
     VariableIdentifierWrite {
         /// The identifier of the variable.
         identifier: String,

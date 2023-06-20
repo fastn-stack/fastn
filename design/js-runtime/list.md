@@ -49,7 +49,7 @@ function showPerson(parent, person, show_title) {
 }
 ```
 
-`fastn.listLoop` will create a fragment (`document.createDocumentFragment()`) and insert it in the root element. The
+`fastn.forLoop` will create a fragment (`document.createDocumentFragment()`) and insert it in the root element. The
 node returned by the constructor will be added in the fragment, not in the node.
 
 Since a list should have common type, we should create a static class also, which has same signature as mutable, so code

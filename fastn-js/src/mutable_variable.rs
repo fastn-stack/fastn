@@ -4,16 +4,16 @@ pub struct MutableVariable {
     is_quoted: bool,
 }
 
-pub fn mutable_unquoted(name: &str, value: &str) -> fastn_js::Instruction {
-    fastn_js::Instruction::MutableVariable(MutableVariable {
+pub fn mutable_unquoted(name: &str, value: &str) -> fastn_js::Statement {
+    fastn_js::Statement::MutableVariable(MutableVariable {
         name: name.to_string(),
         value: value.to_string(),
         is_quoted: false,
     })
 }
 
-pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::Instruction {
-    fastn_js::Instruction::MutableVariable(MutableVariable {
+pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::Statement {
+    fastn_js::Statement::MutableVariable(MutableVariable {
         name: name.to_string(),
         value: value.to_string(),
         is_quoted: true,

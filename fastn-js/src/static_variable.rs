@@ -4,16 +4,16 @@ pub struct StaticVariable {
     pub is_quoted: bool,
 }
 
-pub fn static_unquoted(name: &str, value: &str) -> fastn_js::Instruction {
-    fastn_js::Instruction::StaticVariable(StaticVariable {
+pub fn static_unquoted(name: &str, value: &str) -> fastn_js::Statement {
+    fastn_js::Statement::StaticVariable(StaticVariable {
         name: name.to_string(),
         value: value.to_string(),
         is_quoted: false,
     })
 }
 
-pub fn static_quoted(name: &str, value: &str) -> fastn_js::Instruction {
-    fastn_js::Instruction::StaticVariable(StaticVariable {
+pub fn static_quoted(name: &str, value: &str) -> fastn_js::Statement {
+    fastn_js::Statement::StaticVariable(StaticVariable {
         name: name.to_string(),
         value: value.to_string(),
         is_quoted: true,

@@ -1,5 +1,14 @@
 # Compilation Of FTD to JS
 
+## Naming Convention
+
+For every symbol in ftd, we will have a corresponding symbol in JS. We will use the following naming convention:
+`fastn-community.github.io/doc-site/page` will be compiled to `fastn$$$community$github$io$$doc_site$$page`. We will 
+replace the subdomain separators with `$` and path separators with `$$`. We will also replace `-` with `$$$`. We will
+also use `$` for module to symbol separator. `fastn-community.github.io/doc-site/page.x` will be 
+`fastn$$$community$github$io$$doc_site$$page$x`. GZip/deflate will compress these long variable names well. Or we will
+use some standard JS minifier.
+
 ## Module
 
 We compile all ftd modules into a single JS file. It is possible to compile each ftd module into separate js files, and
