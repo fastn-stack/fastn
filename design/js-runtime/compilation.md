@@ -14,7 +14,7 @@ use some standard JS minifier.
 We compile all ftd modules into a single JS file. It is possible to compile each ftd module into separate js files, and
 use JavaScript's module system. We are not considering it for now, to keep things simple.
 
-## Basic Global Variable
+## static Global Variable
 
 A global variable, eg in:
 
@@ -26,12 +26,14 @@ A global variable, eg in:
 ```js
 (function() {
     function main(root) {
+        // fastn_js::Ast::StaticVariable
         let x = 10;
         let i = fastn.create_kernel(root, fastn.ElementKind.Integer);
         i.set_property_static(fastn.Property.IntegerValue, x);
     }
 })()
 ```
+
 
 ## Component Definition
 
