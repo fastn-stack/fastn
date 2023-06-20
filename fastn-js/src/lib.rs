@@ -7,7 +7,7 @@ mod ssr;
 mod static_variable;
 
 pub use func::{func0, func1, func2, Func};
-pub use instruction::Instruction;
+pub use instruction::Statement;
 pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};

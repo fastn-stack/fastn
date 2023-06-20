@@ -1,6 +1,7 @@
-pub enum Instruction {
+pub enum Statement {
     StaticVariable(fastn_js::StaticVariable),
     MutableVariable(fastn_js::MutableVariable),
+    // JSExpression(ExprNode),
     // MutableList(MutableList),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
@@ -11,11 +12,18 @@ pub enum Instruction {
     // ConditionalComponent(ConditionalComponent),
 }
 
-impl Instruction {
+pub struct ExprNode {
+    operator: Operator,
+    children: Vec<ExprNode>,
+}
+
+pub enum Operator {}
+
+impl Statement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            Instruction::StaticVariable(f) => f.to_js(),
-            Instruction::MutableVariable(f) => f.to_js(),
+            Statement::StaticVariable(f) => f.to_js(),
+            Statement::MutableVariable(f) => f.to_js(),
         }
     }
 }

@@ -1,10 +1,10 @@
 pub struct Func {
     name: String,
     params: Vec<String>,
-    pub body: Vec<fastn_js::Instruction>,
+    pub body: Vec<fastn_js::Statement>,
 }
 
-pub fn func0(name: &str, body: Vec<fastn_js::Instruction>) -> Func {
+pub fn func0(name: &str, body: Vec<fastn_js::Statement>) -> Func {
     Func {
         name: name.to_string(),
         params: vec!["parent".to_string()],
@@ -12,7 +12,7 @@ pub fn func0(name: &str, body: Vec<fastn_js::Instruction>) -> Func {
     }
 }
 
-pub fn func1(name: &str, arg1: &str, body: Vec<fastn_js::Instruction>) -> Func {
+pub fn func1(name: &str, arg1: &str, body: Vec<fastn_js::Statement>) -> Func {
     Func {
         name: name.to_string(),
         params: vec!["parent".to_string(), arg1.to_string()],
@@ -20,7 +20,7 @@ pub fn func1(name: &str, arg1: &str, body: Vec<fastn_js::Instruction>) -> Func {
     }
 }
 
-pub fn func2(name: &str, arg1: &str, arg2: &str, body: Vec<fastn_js::Instruction>) -> Func {
+pub fn func2(name: &str, arg1: &str, arg2: &str, body: Vec<fastn_js::Statement>) -> Func {
     Func {
         name: name.to_string(),
         params: vec!["parent".to_string(), arg1.to_string(), arg2.to_string()],

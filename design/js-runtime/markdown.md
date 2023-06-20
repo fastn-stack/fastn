@@ -55,3 +55,22 @@ function h1() {
 
 Markdown parser will create a tree, and call `h1` etc. on the tree to convert it to a DOM tree. If the text changes 
 entire DOM tree will be re-created.
+
+## Static Markdown Compilation
+
+```md
+# hello world
+
+this is some text
+```
+
+```js
+function main(parent) {
+    let t = fastn_dom.createKernel(parent, fastn_dom.ElementKind.TextContainer);
+    ds_h1(t, "hello world");
+    ds_text(t, "this is some text");
+}
+
+function ds_h1() {}
+function ds_text() {}
+```
