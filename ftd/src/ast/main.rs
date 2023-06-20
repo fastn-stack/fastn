@@ -16,6 +16,19 @@ pub enum AST {
     WebComponentDefinition(ftd::ast::WebComponentDefinition),
 }
 
+// -- foo:
+
+// -- component foo:
+// -- ftd.text: hello
+// -- end: foo
+
+// -- integer x(a,b):
+// a + b
+
+// ->
+
+// -- ftd.text: hello
+
 impl AST {
     pub fn from_sections(
         sections: &[ftd::p1::Section],

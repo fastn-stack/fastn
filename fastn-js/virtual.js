@@ -79,6 +79,7 @@ class Document2 {
 fastn_virtual.document = new Document2();
 
 
+
 fastn_virtual.hydrate = function(main) {
     hydrating = true;
     let body = fastn_virtual.document.createElement("body");

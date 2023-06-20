@@ -2,9 +2,10 @@
 
 - prototype stage
   - [x] bug: node issue
-  - [ ] bug: infinite loop
+  - [ ] amitu: quickjs issue
+  - [ ] arpita: bug: infinite loop
+  - [ ] arpita: list addition example
   - [ ] the new ast (full ftd ast which is input to JS generation)
-  - [ ] list addition example
   - [ ] list index change example
   - [ ] list of list
   - [ ] list of optional record
@@ -12,7 +13,6 @@
   - [ ] responsive
   - [ ] css class generation
   - [ ] js generation
-  - [ ] quickjs issue
   - [ ] static markdown compiler
   - [ ] markdown as innerHTML
 - release

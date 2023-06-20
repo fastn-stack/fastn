@@ -9,11 +9,13 @@
 <script>
     (function() {
         function main (root) {
-            let number = 10;
+            let index$num = 10;
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setProperty(fastn_dom.PropertyKind.IntegerValue, number);
+            i.setProperty(fastn_dom.PropertyKind.IntegerValue, index$num);
             i.done();
         }
+
+        main(fastn_virtual.document.createElement("body"))
 
         document.body.innerHTML = fastn_virtual.ssr(main);
         fastn_virtual.hydrate(main);
@@ -23,7 +25,8 @@
 
 
 <!--
--- integer num: 10
+;; index.ftd
+-- integer num: 10    ;; index$num
 
 -- ftd.integer: $num
 -->

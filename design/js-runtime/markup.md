@@ -4,11 +4,13 @@ We have ftd specific extension to markdown, we call it `markup`. `markup` allows
 your text.
 
 ```ftd
--- string $markup: asd
--- ftd.text: hello {foo: $markup}
+-- ftd.text: hello {foo: markup}
 
 -- component foo:
 caption text:
+
+;; body omitted
+
 -- end: foo
 ```
 
@@ -55,7 +57,7 @@ function main(parent) {
     foo(t, "markup");
 }
 
-function foo(parent) {
+function foo(parent, text) {
     // ...    
 }
 ```

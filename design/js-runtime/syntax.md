@@ -13,7 +13,7 @@ function main(parent) {
     let t = fastn_dom.createKernel(parent, fastn_dom.ElementKind.CodeContainer);
     ds_keyword(t, "fn");
     ds_space(t, " ");
-    ds_identifier(t, "main");
+    ds_identifier(t, "main", code_context);
     ds_space(t, " ");
     ds_paren(t, "(");
     ds_string(t, `"hello world"`);
@@ -58,19 +58,28 @@ function main_help() {
 ```
 
 
-## Command Click
+## Command Click: jump to definition
 
 Any of the symbols can have an associated link, which is where the user will be taken when they command click on the 
 symbol. We will pass `link` as an argument to `ds_` functions.
+
+
+```ftd
+-- fastn.package:
+python-root: python/src
+```
 
 ```ftd
 -- ds.code:
 lang: py
 code-processor: lsp
+python-root: python/src
 diff: <old-commit-hash>
 
+import foo
+
 def main():
-    print("hello world") 
+    foo.bar
 ```
 
 ```js
@@ -110,7 +119,7 @@ package can fully customise the look and feel of the code block.
 ```js
 function main(parent) {
     let t = fastn_dom.createKernel(parent, fastn_dom.ElementKind.CodeContainer);
-    let region_1 = fastn_dom.createKernel(t, fastn_dom.ElementKind.CodeRegion);
+    let region_1 = ds_region(t, region_context);
     ds_region_gutter(region_1, code_context, region_context);
     let line = fastn_dom.createKernel(region_1, fastn_dom.ElementKind.CodeLine);
     ds_line_number(line, code_context);

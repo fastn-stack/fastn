@@ -132,6 +132,18 @@ let text = fastn.text("Hello World");
 text.setProperty(fastn.PropertyKind.Type, responsive_typography);
 ```
 
+
+```css
+body.desktop .t_3 {
+    size: 40px;
+    font-family: "times";
+}
+
+body.mobile .t_3 > {
+    border-color: green;
+}
+```
+
 ## Length
 
 ```ftd

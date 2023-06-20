@@ -8,12 +8,12 @@
 <body></body>
 <script>
     (function() {
-        function main (root) {
-            foo(root, fastn.mutable(10));
+        function main (parent) {
+            foo(parent, fastn.mutable(10));
         }
 
-        function foo(root, x) {
-            let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+        function foo(parent, x) {
+            let i = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
             i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get() + 20; });
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 x.set(x.get() + 1);
