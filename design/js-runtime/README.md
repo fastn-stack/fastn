@@ -3,6 +3,7 @@
 - prototype stage
   - [x] bug: node issue
   - [ ] bug: infinite loop
+  - [ ] the new ast (full ftd ast which is input to JS generation)
   - [ ] list addition example
   - [ ] list index change example
   - [ ] list of list
@@ -10,11 +11,19 @@
   - [ ] light/dark mode
   - [ ] responsive
   - [ ] css class generation
-  - [ ] js generation (basic)
-  - [ ] js generation (evalexpr ast)
+  - [ ] js generation
   - [ ] quickjs issue
   - [ ] static markdown compiler
+  - [ ] markdown as innerHTML
 - release
   - [ ] port fastn cli to use 0.4
   - [ ] all the properties
   - [ ] use 0.4 in FASTN.ftd
+- post release
+  - [ ] proper markdown support
+  - [ ] code block
+    - [ ] `ds_<highlight_name>`
+    - [ ] line numbering
+    - [ ] code context
+  - [ ] proper markup support
+  - [ ] variable interpolation
