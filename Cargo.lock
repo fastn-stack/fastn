@@ -1537,8 +1537,11 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
+ "ftd 0.3.0",
  "indoc 2.0.1",
+ "itertools",
  "pretty",
+ "pretty_assertions",
  "rquickjs",
 ]
 
