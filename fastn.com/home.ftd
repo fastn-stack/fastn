@@ -1,7 +1,7 @@
 -- import: fastn-community.github.io/bling/quote
 -- import: fastn.com/ftd as ftd-index
 
--- my-ds.page: `fastn` - Full-stack Web Development Made Easy
+-- ds.page: `fastn` - Full-stack Web Development Made Easy
 
 ;; Audience: People considering using it for their team.
 
@@ -161,7 +161,7 @@ lang: ftd
 \-- import: fastn-community.github.io/bling/quote
 \-- import: fastn.com/ftd as ftd-index
 
-\-- my-ds.page: Overview of `fastn` and `ftd`
+\-- ds.page: Overview of `fastn` and `ftd`
 
 `ftd` is a programming language for building user interfaces and content centric
 websites. `ftd` is easy to learn, especially for non programmers, but does not
@@ -244,4 +244,4 @@ We also offer our own hosting solution for your static and dynamic sites. Using
 `fastn` Cloud frees you from devops needs, and you get a fully integrated,
 managed hosting solution, that a non programmers can use with ease.
 
--- end: my-ds.page
+-- end: ds.page

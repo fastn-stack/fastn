@@ -1,9 +1,13 @@
--- import: ds
 -- import: fastn-community.github.io/dark-flame-cs
 -- import: fifthtry.github.io/fastn-io-typography as typo
 -- import: fastn.com/utils
 -- import: fifthtry.github.io/banner
 -- import: fastn-community.github.io/footer
+
+
+-- import: fastn-community.github.io/doc-site
+export: markdown, h0, h1, h2, h3, code, rendered, output, image
+
 
 -- component page:
 children wrapper:
@@ -12,7 +16,7 @@ optional body body:
 boolean sidebar: true
 optional boolean full-width: false
 
--- ds.page: $page.title
+-- doc-site.page: $page.title
 site-logo: $fastn-assets.files.images.fastn.svg
 body: $page.body
 colors: $dark-flame-cs.main
@@ -27,7 +31,7 @@ logo-width: 120
 github-icon: true
 github-url: https://github.com/fastn-stack/fastn
 
--- ds.page.footer:
+-- doc-site.page.footer:
 
 -- footer.social-sideline-footer:
 social: true
@@ -38,20 +42,20 @@ discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 
--- end: ds.page.footer
+-- end: doc-site.page.footer
 
 
--- ds.page.banner:
+-- doc-site.page.banner:
 
 /-- banner.cta-banner:
 cta-text: Jumpstart your Web Development with FTD!
 cta-link: /events/webdev-with-ftd/
 
 
--- end: ds.page.banner
+-- end: doc-site.page.banner
 
 
--- ds.page.right-sidebar:
+-- doc-site.page.right-sidebar:
 
 
 -- utils.compact-text: Support `fastn`!
@@ -117,7 +121,7 @@ We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
 
 
--- end: ds.page.right-sidebar
+-- end: doc-site.page.right-sidebar
 
 
 
@@ -130,7 +134,7 @@ children: $page.wrapper
 
 -- end: ftd.column
 
--- end: ds.page
+-- end: doc-site.page
 
 
 -- end: page
