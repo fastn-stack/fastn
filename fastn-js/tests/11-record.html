@@ -40,7 +40,7 @@
             i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
             i.done();
 
-            fastn_dom.conditionalDom(root, [p.get("bio")], function () { return p.get("bio").get() !== null; },
+            fastn_dom.conditionalDom(c, [p.get("bio")], function () { return p.get("bio").get() !== null; },
                 function (root) {
                     let i2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
                     i2.setProperty(fastn_dom.PropertyKind.StringValue, p.get("bio"));
