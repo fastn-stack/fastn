@@ -24,8 +24,8 @@ optional string github-url: https://github.com/fastn-stack/fastn
 boolean full-width: false
 ftd.type-data types: $typo.types
 ftd.color-scheme colors: $dark-flame-cs.main
-integer logo-width: $common.logo-width
-integer logo-height: $common.logo-height
+integer logo-width: 120
+integer logo-height: 38
 boolean show-footer: true
 boolean show-banner: true
 
