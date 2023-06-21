@@ -11,7 +11,7 @@
         function main (root) {
             let num = fastn.mutable(4);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
-            i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [num], function () { return num.get(); });
+            i.setProperty(fastn_dom.PropertyKind.IntegerValue, num);
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 num.set(num.get() + 1);
             });

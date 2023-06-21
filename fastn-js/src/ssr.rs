@@ -10,7 +10,7 @@ pub fn ssr_str(js: &str) -> String {
         .with(|ctx| ctx.eval::<String, _>(js).unwrap())
 }
 
-pub fn ssr(js: &[fastn_js::Func]) -> String {
-    let js = fastn_js::encode(js);
+pub fn ssr(ast: &[fastn_js::Ast]) -> String {
+    let js = fastn_js::to_js(ast);
     ssr_str(&js)
 }
