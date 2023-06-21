@@ -7,9 +7,11 @@ mod ast;
 mod component;
 mod component_invocation;
 mod component_statement;
+mod ftd;
 mod mutable_variable;
 mod ssr;
 mod static_variable;
+mod to_js;
 mod udf;
 mod utils;
 

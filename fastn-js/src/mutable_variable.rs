@@ -1,7 +1,7 @@
 pub struct MutableVariable {
-    name: String,
-    value: String,
-    is_quoted: bool,
+    pub name: String,
+    pub value: String,
+    pub is_quoted: bool,
 }
 
 pub fn mutable_unquoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
@@ -18,26 +18,6 @@ pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
         value: value.to_string(),
         is_quoted: true,
     })
-}
-
-impl MutableVariable {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("let")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("="))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("fastn.mutable("))
-            .append(if self.is_quoted {
-                pretty::RcDoc::text("\"")
-                    .append(pretty::RcDoc::text(self.value.replace("\n", "\\n")))
-                    .append(pretty::RcDoc::text("\""))
-            } else {
-                pretty::RcDoc::text(self.value.clone())
-            })
-            .append(pretty::RcDoc::text(");"))
-    }
 }
 
 // https://github.community/t5/How-to-use-Git-and-GitHub/How-github-detect-trending-repositories/td-p/5925

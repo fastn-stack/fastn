@@ -21,17 +21,6 @@ pub enum ComponentStatement {
 // pub enum Operator {}
 
 impl ComponentStatement {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        match self {
-            ComponentStatement::StaticVariable(f) => f.to_js(),
-            ComponentStatement::MutableVariable(f) => f.to_js(),
-            ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
-            ComponentStatement::Done { component_name } => {
-                pretty::RcDoc::text(format!("{component_name}.done();"))
-            }
-        }
-    }
-
     pub fn from_component(
         component: &ftd::interpreter::Component,
         parent: &str,
