@@ -1,4 +1,4 @@
-pub enum Statement {
+pub enum ComponentStatement {
     StaticVariable(fastn_js::StaticVariable),
     MutableVariable(fastn_js::MutableVariable),
     // JSExpression(ExprNode),
@@ -19,11 +19,11 @@ pub enum Statement {
 //
 // pub enum Operator {}
 
-impl Statement {
+impl ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            Statement::StaticVariable(f) => f.to_js(),
-            Statement::MutableVariable(f) => f.to_js(),
+            ComponentStatement::StaticVariable(f) => f.to_js(),
+            ComponentStatement::MutableVariable(f) => f.to_js(),
         }
     }
 }
