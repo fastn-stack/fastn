@@ -48,7 +48,9 @@
 
             fastn_dom.conditionalDom(root, [p.get("boss")], function() { return p.get("boss") != null }, function () {
                 let i2 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
-                i2.setProperty(fastn_dom.PropertyKind.StringValue, p.get("boss").get("name"));
+                let g = p.get("boss")
+                let gg = g.get("name");
+                i2.setProperty(fastn_dom.PropertyKind.StringValue, gg);
                 i2.setProperty(fastn_dom.PropertyKind.Color_RGB, "green");
                 i2.done();
                 return i2;

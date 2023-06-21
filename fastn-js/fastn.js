@@ -45,7 +45,7 @@ class Mutable {
     #closures;
     #closureInstance;
     constructor(val) {
-        this.#value = val;
+        this.#value = null;
         this.#old_closure = null;
         this.#closures = [];
         this.#closureInstance = fastn.closure(() => this.#closures.forEach((closure) => closure.update()));
@@ -252,14 +252,14 @@ class RecordInstance {
         return this.#fields[key];
     }
     set(key, value) {
-        this.#fields[key].set(fastn.wrapMutable(value));
+        this.#fields[key].set(value);
     }
     replace(obj) {
         for (let key in this.#fields) {
             if (!(key in obj.#fields)) {
                 throw new Error("RecordInstance.replace: key " + key + " not present in new object");
             }
-            this.#fields[key].set(fastn.wrapMutable(obj.#fields[key]));
+            this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
         }
     }
 }
