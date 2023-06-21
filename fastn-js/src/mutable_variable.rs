@@ -28,7 +28,7 @@ impl MutableVariable {
             .append(pretty::RcDoc::space())
             .append(pretty::RcDoc::text("="))
             .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("fastn.mutable(")
+            .append(pretty::RcDoc::text("fastn.mutable("))
             .append(if self.is_quoted {
                 pretty::RcDoc::text("\"")
                     .append(pretty::RcDoc::text(self.value.replace("\n", "\\n")))
