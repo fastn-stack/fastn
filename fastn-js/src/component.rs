@@ -1,34 +1,39 @@
-pub struct Func {
+pub struct Component {
     name: String,
     params: Vec<String>,
     pub body: Vec<fastn_js::Statement>,
 }
 
-pub fn func0(name: &str, body: Vec<fastn_js::Statement>) -> Func {
-    Func {
+pub fn component0(name: &str, body: Vec<fastn_js::Statement>) -> fastn_js::Ast {
+    fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: vec!["parent".to_string()],
         body,
-    }
+    })
 }
 
-pub fn func1(name: &str, arg1: &str, body: Vec<fastn_js::Statement>) -> Func {
-    Func {
+pub fn component1(name: &str, arg1: &str, body: Vec<fastn_js::Statement>) -> fastn_js::Ast {
+    fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: vec!["parent".to_string(), arg1.to_string()],
         body,
-    }
+    })
 }
 
-pub fn func2(name: &str, arg1: &str, arg2: &str, body: Vec<fastn_js::Statement>) -> Func {
-    Func {
+pub fn component2(
+    name: &str,
+    arg1: &str,
+    arg2: &str,
+    body: Vec<fastn_js::Statement>,
+) -> fastn_js::Ast {
+    fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: vec!["parent".to_string(), arg1.to_string(), arg2.to_string()],
         body,
-    }
+    })
 }
 
-impl Func {
+impl Component {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text("function")
             .append(pretty::RcDoc::space())
@@ -67,8 +72,8 @@ impl Func {
 
 #[cfg(test)]
 #[track_caller]
-pub fn e(f: fastn_js::Func, s: &str) {
-    let g = fastn_js::encode(&vec![f]);
+pub fn e(f: fastn_js::Ast, s: &str) {
+    let g = fastn_js::to_js(&vec![f]);
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);
@@ -78,11 +83,11 @@ pub fn e(f: fastn_js::Func, s: &str) {
 mod tests {
     #[test]
     fn test_func() {
-        let func = fastn_js::func0("foo", vec![]);
-        fastn_js::func::e(func, "function foo(parent) {}");
-        let func = fastn_js::func1("foo", "p", vec![]);
-        fastn_js::func::e(func, "function foo(parent, p) {}");
-        let func = fastn_js::func2("foo", "p", "q", vec![]);
-        fastn_js::func::e(func, "function foo(parent, p, q) {}");
+        let func = fastn_js::component0("foo", vec![]);
+        fastn_js::component::e(func, "function foo(parent) {}");
+        let func = fastn_js::component1("foo", "p", vec![]);
+        fastn_js::component::e(func, "function foo(parent, p) {}");
+        let func = fastn_js::component2("foo", "p", "q", vec![]);
+        fastn_js::component::e(func, "function foo(parent, p, q) {}");
     }
 }

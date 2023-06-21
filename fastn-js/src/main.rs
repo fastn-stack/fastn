@@ -21,6 +21,6 @@ fn js() -> &'static str {
     "#
 }
 
-fn js_constructor() -> Vec<fastn_js::Func> {
-    vec![fastn_js::func0("main", vec![])]
+fn js_constructor() -> Vec<fastn_js::Ast> {
+    vec![fastn_js::component0("main", vec![])]
 }
