@@ -10,7 +10,9 @@ homepage.workspace = true
 [dependencies]
 rquickjs.workspace = true
 pretty.workspace = true
+ftd.workspace = true
+itertools.workspace = true
 
 [dev-dependencies]
 indoc.workspace = true
-
+pretty_assertions.workspace = true

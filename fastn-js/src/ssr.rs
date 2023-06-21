@@ -11,6 +11,6 @@ pub fn ssr_str(js: &str) -> String {
 }
 
 pub fn ssr(ast: &[fastn_js::Ast]) -> String {
-    let js = fastn_js::to_js(ast);
+    let js = format!("{}\nfastn_virtual.ssr(main)", fastn_js::to_js(ast));
     ssr_str(&js)
 }

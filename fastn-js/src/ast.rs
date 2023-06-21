@@ -10,4 +10,8 @@ impl Ast {
             Ast::UDF(f) => f.to_js(),
         }
     }
+
+    pub fn from_tree(tree: &[ftd::interpreter::Component]) -> Ast {
+        fastn_js::Component::from_tree(tree)
+    }
 }

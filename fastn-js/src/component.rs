@@ -1,3 +1,5 @@
+use crate::Ast;
+
 pub struct Component {
     name: String,
     params: Vec<String>,
@@ -71,6 +73,16 @@ impl Component {
                     .append(pretty::RcDoc::text("}"))
                     .group(),
             )
+    }
+
+    pub fn from_tree(tree: &[ftd::interpreter::Component]) -> Ast {
+        let mut statements = vec![];
+        for (index, component) in tree.iter().enumerate() {
+            statements.extend(fastn_js::ComponentStatement::from_component(
+                component, "parent", index,
+            ))
+        }
+        fastn_js::component0("main", statements)
     }
 }
 
