@@ -1,0 +1,125 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+-- ds.page: Featured components
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+distribution-bar: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ds.page.layout-bar:
+
+-- ds.layout: Documentation Sites - Midnight Rush Blog
+cta-url: https://github.com/fastn-stack/fastn-template/generate
+previous-url: /featured/
+
+-- end: ds.page.layout-bar
+
+-- ds.page.abstract-bar:
+
+-- ds.distributors: 
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/midnight-rush/blob/main/LICENSE
+license: Creative Commons
+published-date: 05-June-2023
+used-by: 1 +
+likes: 1 Stars
+connect: $social-links
+
+-- end: ds.page.abstract-bar
+
+
+-- ds.page.body:
+
+We have designed and developed below blog site themes. You can use them for
+writing books, blog. These themes can be used as personal web or blog sites or
+organizational blog sites.
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+cta-url: https://fastn-community.github.io/midnight-rush/blog/
+
+-- ft-ui.grid-view: Blog Templates
+if: { show-grid }
+templates: $ft-ui.blog-sites
+more-link-text: View all
+more-link: /featured/blog-templates/
+
+We have designed and developed below blog site themes. You can use them for
+writing books, blog. These themes can be used as personal web or blog sites or
+organizational blog sites.
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media: 
+link: https://discord.gg/bucrdvptYd
+src: $assets.files.images.discord.svg
+
+-- common.social-media: 
+link: https://twitter.com/fastn_stack
+src: $assets.files.images.twitter.svg
+
+-- common.social-media: 
+link: https://www.linkedin.com/company/fifthtry/
+src: $assets.files.images.linkedin.svg
+
+-- end: social-links
+
+
+
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Fastn Community
+profile: https://github.com/fastn-community
+avatar: $assets.files.images.fastn.svg
+
+-- end: owner-fastn
+

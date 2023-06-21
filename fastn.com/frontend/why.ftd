@@ -1,4 +1,4 @@
--- my-ds.page: Why Use `fastn` for Your Next Front-end?
+-- ds.page: Why Use `fastn` for Your Next Front-end?
 
 Instead of React/Angular or JavaScript, you can use `fastn` as the frontend of
 your next webapp or website.
@@ -157,4 +157,4 @@ Learn more about [fastn design system](/design-system/).
 you can specify a "responsive length", and fastn will automatically use the
 right length based on mobile or desktop devices.
 
--- end: my-ds.page
+-- end: ds.page

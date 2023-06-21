@@ -2,7 +2,7 @@
 -- import: fastn.com/expander/lib
 -- import: fastn-community.github.io/bling/note
 
--- my-ds.page: markdown in `doc-site`
+-- ds.page: markdown in `doc-site`
 
 -- ds.markdown:
 if: { !show-planning }
@@ -384,7 +384,7 @@ if: { show-planning }
 v: 91NNB8VzG34
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- boolean $show-planning: false

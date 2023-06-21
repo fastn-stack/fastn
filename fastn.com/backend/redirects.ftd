@@ -1,4 +1,4 @@
--- my-ds.page: fastn Redirects
+-- ds.page: fastn Redirects
 
 `fastn` allows to redirect any outdated/broken URL to any other URL.
 It could be any sitemap URL or any other external link. This can be done by
@@ -24,4 +24,4 @@ In the above example, the url `/ftd/kernel/` will be redirected to `/kernel/`.
 Similarly, visiting `/discord/` will redirect to the official fastn discord
 server [link](https://discord.gg/eNXVBMq4xt)
 
--- end: my-ds.page
+-- end: ds.page

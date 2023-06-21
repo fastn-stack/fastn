@@ -1,4 +1,4 @@
--- my-ds.page: `fastn`: Package Manager
+-- ds.page: `fastn`: Package Manager
 
 `ftd` is a ["programming language for prose"](/ftd/), and `fastn` is
 the package manager for `ftd`.
@@ -75,4 +75,4 @@ request.
 If you are not using `Github`, you can store the entire package in some other
 location and send the prefix of the url from which the modules can be served.
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: FScript guidelines
+-- ds.page: FScript guidelines
 
 These guidelines should be followed while writing any FScript code. 
 
@@ -37,4 +37,4 @@ if: { num == 1 }	;; <hl>
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

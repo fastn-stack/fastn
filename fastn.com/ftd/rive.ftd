@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: `ftd.rive` - Rive Animations
+-- ds.page: `ftd.rive` - Rive Animations
 
 `ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
 animation](https://rive.app) in a `fastn` document.
@@ -123,4 +123,4 @@ event occurs in rive component.
 
 
 
--- end: my-ds.page
+-- end: ds.page

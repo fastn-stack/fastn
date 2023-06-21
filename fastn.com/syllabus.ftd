@@ -1,4 +1,4 @@
--- my-ds.page: `fastn` Syllabus
+-- ds.page: `fastn` Syllabus
 
 -- ds.h1: `UI Basics`
 
@@ -29,4 +29,4 @@ Chapter 6 teaches you how to integrate with HTTP APIs. How you can load during
 page load, or based on user events. It takes you through form handling, error
 handling etc use cases.
 
--- end: my-ds.page
+-- end: ds.page

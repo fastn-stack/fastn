@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: Edit Your Site 🚧
+-- ds.page: Edit Your Site 🚧
 
 So you have a [Github account](/book/github/), [a repo](/book/repo/), which
 you [published on Github Pages](/book/gh-pages/). You also learnt [how to
@@ -163,4 +163,4 @@ command.
 
 We are going to do that next. Let's run `git commit -am 
 
--- end: my-ds.page
+-- end: ds.page

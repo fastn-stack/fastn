@@ -1,4 +1,4 @@
--- my-ds.page: Open the Terminal (Linux/MacOS) or Command prompt (Windows)
+-- ds.page: Open the Terminal (Linux/MacOS) or Command prompt (Windows)
 
 A terminal is a text input and output environment. It is a program that acts as
 a wrapper and allows us to enter commands that the computer processes. Here we
@@ -173,4 +173,4 @@ src: $fastn-assets.files.images.setup.cmd-with-folderpath.png
 
 
 
--- end: my-ds.page
+-- end: ds.page

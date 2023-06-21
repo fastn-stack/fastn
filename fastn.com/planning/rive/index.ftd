@@ -1,6 +1,6 @@
 -- import: fastn.com/planning/creators-series as c
 
--- my-ds.page: Rive Video Planning
+-- ds.page: Rive Video Planning
 
 Video Title: Why And How You Should Use Rive Videos In Your Fastn Site
 
@@ -108,4 +108,4 @@ built something, or want to see what others are building, checkout our
 
 -- c.outro:
 
--- end: my-ds.page
+-- end: ds.page

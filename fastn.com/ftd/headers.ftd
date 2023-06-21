@@ -1,4 +1,4 @@
--- my-ds.page: Passing data through headers
+-- ds.page: Passing data through headers
 
 In fastn, we use headers to pass data to component, variables etc. There are
 several different ways to pass data through headers for various argument types.
@@ -397,7 +397,7 @@ optional integer age:
 
 -- end: rendered-with-definition
 
--- end: my-ds.page
+-- end: ds.page
 
 
 ;; ----------------------------

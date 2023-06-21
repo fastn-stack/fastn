@@ -1,6 +1,6 @@
 /-- ft-core.concept:
 
--- my-ds.page: `list`
+-- ds.page: `list`
 
 In ftd, the `list` keyword can be used to create an array or list of values. The
 `list` keyword is followed by the data type of the values that the list will
@@ -239,11 +239,11 @@ lang: ftd
 \-- $foo:
 $processor$: some-list
 
--- end: my-ds.page
+-- end: ds.page
 
 ;; Todo:
 
-/-- my-ds.page: `list`
+/-- ds.page: `list`
 
 -- ds.markdown: 
 
@@ -361,7 +361,7 @@ You can read more details of reading `ftd` files ["Reading FTD Files"](/reading-
 guide.
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

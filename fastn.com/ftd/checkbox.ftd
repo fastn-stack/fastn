@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `ftd.checkbox`
+-- ds.page: `ftd.checkbox`
 
 A `ftd.checkbox` is a [kernel component](/ftd/kernel/) that is used to select
 one or more options from a set of choices.
@@ -171,7 +171,7 @@ checked: true
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

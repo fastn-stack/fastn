@@ -1,4 +1,4 @@
--- my-ds.page: Planned Changes In Next Edition
+-- ds.page: Planned Changes In Next Edition
 
 We have a bunch of backward incompatible changes that we want to make when
 create our next edition. Currently we do not have edition support, so before we
@@ -67,4 +67,4 @@ We have a few abbrevated names. We prefer longer/descriptive names.
 
 Long names are okay as these types are infrequently used.
 
--- end: my-ds.page
+-- end: ds.page

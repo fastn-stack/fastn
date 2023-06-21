@@ -1,4 +1,4 @@
--- my-ds.page: Common Kernel Attributes
+-- ds.page: Common Kernel Attributes
 
 These attributes are available to all `ftd kernel` components.
 
@@ -4680,7 +4680,7 @@ and smiled, and passed it off Ere from the door she stept—
 
 /-- end: ds.output
 
--- end: my-ds.page
+-- end: ds.page
 
 -- integer $opacity-counter: 0
 

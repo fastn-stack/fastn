@@ -1,6 +1,6 @@
 \-- ft-core.concept:
 
--- my-ds.page: `record`
+-- ds.page: `record`
 
 -- ds.markdown: 
 
@@ -187,4 +187,4 @@ You can read more details of reading `ftd` files ["Reading FTD
 Files"](reading-data/) guide.
 
 
--- end: my-ds.page
+-- end: ds.page

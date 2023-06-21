@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: An Editor For Programmers
+-- ds.page: An Editor For Programmers
 
 So you have `fastn`, and you are eager to start writing some `ftd` code. But
 before that let's setup a decent programming editor. Programs are written in
@@ -78,4 +78,4 @@ program](/book/hello-world/).
 
 
 
--- end: my-ds.page
+-- end: ds.page

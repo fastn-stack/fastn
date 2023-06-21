@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Device component guidelines
+-- ds.page: Device component guidelines
 
 -- utils.code-display: `dont-use-device-condition`: Don't use device condition to show or hide the component
 id: dont-use-device-condition
@@ -37,4 +37,4 @@ lang: ftd
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

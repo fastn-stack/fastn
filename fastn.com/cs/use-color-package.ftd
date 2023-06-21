@@ -1,4 +1,4 @@
--- my-ds.page: How to use color scheme package?
+-- ds.page: How to use color scheme package?
 
 The importance of color in a website's overall look and feel is well known. The
 right color scheme can evoke emotions, create visual interest, and direct a
@@ -53,4 +53,4 @@ With just a few lines of code, you can dramatically change the look and feel of
 your website using the ftd color scheme framework.
 
 
--- end: my-ds.page
+-- end: ds.page

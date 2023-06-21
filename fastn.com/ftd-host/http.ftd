@@ -1,7 +1,7 @@
 -- import: fastn.com/ftd-host/processor
 
 
--- my-ds.page: `$processor$: http`
+-- ds.page: `$processor$: http`
 
 This processor is used to initialise some FTD variable with content of JSON
 fetched from HTTP.
@@ -98,4 +98,4 @@ variable and pass it as a reference since the type of the variable is known.
 The response of the JSON must match with type of the variable where we are storing
 the result, here it is `r` of type record `result` defined above.
 
--- end: my-ds.page
+-- end: ds.page

@@ -2,7 +2,7 @@
 
 
 
--- my-ds.page:
+-- ds.page:
 full-width: true
 sidebar: false
 
@@ -31,4 +31,4 @@ Uh oh, Panda can’t seem to find the page you’re looking for.
 
 -- end: ftd.column
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,7 +1,7 @@
--- my-ds.page:
+-- ds.page:
 
 -- ds.h1: The Lock
 
 `fastn_package::LOCK` is defined in.
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `ftd.mobile`
+-- ds.page: `ftd.mobile`
 
 The `ftd.mobile` is a component in the `fastn` language used to optimize the
 rendering of a web page for mobile devices. It is designed to work in
@@ -137,4 +137,4 @@ components that come after it.
 
 A mobile accepts the [container root attributes](ftd/container-root/).
 
--- end: my-ds.page
+-- end: ds.page

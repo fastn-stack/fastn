@@ -1,4 +1,4 @@
--- my-ds.page: Sitemap feature: document
+-- ds.page: Sitemap feature: document
 
 Video Title: How to create clean URL in `fastn`
 
@@ -128,4 +128,4 @@ Discord.
 -- ds.youtube:
 v: 4ke75MpOEks
 
--- end: my-ds.page
+-- end: ds.page

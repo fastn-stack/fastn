@@ -1,4 +1,4 @@
--- my-ds.page: Custom Components
+-- ds.page: Custom Components
 
 -- ds.youtube:
 v: G9Q6-bZyGwc
@@ -131,4 +131,4 @@ lang: ftd
 
 Continue with the [part 4 now](/expander/events/).
 
--- end: my-ds.page
+-- end: ds.page

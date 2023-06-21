@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
 
--- my-ds.page: `or-type`
+-- ds.page: `or-type`
 
 In `ftd` there is a concept of `or-type` can be used when give you a way of
 saying a value is one of a possible set of values. Consider we are defining
@@ -273,7 +273,7 @@ Some benefits of using `or-type` include:
   allows you to define complex data structures with ease.
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 
@@ -281,7 +281,7 @@ Some benefits of using `or-type` include:
 
 
 ;; Todo:
-/-- my-ds.page: `or-type`
+/-- ds.page: `or-type`
     
 -- ds.markdown: 
 
@@ -389,4 +389,4 @@ You can read more details of reading `ftd` files ["Reading FTD
 Files"](reading-data/) guide.
 
 
--- end: my-ds.page
+-- end: ds.page

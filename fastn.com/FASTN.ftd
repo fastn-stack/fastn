@@ -400,6 +400,26 @@ favicon: /-/fastn.com/images/favicon.svg
 
 - Website Categories: /featured/doc-sites/
   - Documentation Sites: /featured/doc-sites/
+    - Doc Site: /featured/ds/doc-site/
+      skip: true
+    - Midnight Rush: /featured/ds/mr-ds/
+      skip: true
+    - Set 2 DS: /featured/ds/set-2-ds/
+      skip: true
+    - Set 3 DS: /featured/ds/set-3-ds/
+      skip: true
+    - Doc Site Blog: /featured/blogs/doc-site/
+      skip: true
+    - Doc Site Blog: /featured/blogs/mr-blog/
+      skip: true
+    - Set 2 Blog: /featured/blogs/set-2-blog/
+      skip: true
+    - Set 3 Blog: /featured/blogs/set-3-blog/
+      skip: true
+    - Midnight Rush Landing: /featured/landing/mr-landing/
+      skip: true
+    - Set 2 Landing: /featured/landing/set-2-landing/
+      skip: true
   - SPA / Landing Pages: /featured/landing-pages/
   - Blog Templates: /featured/blog-templates/
 - Component Library: /featured/components-library/

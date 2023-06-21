@@ -1,4 +1,4 @@
--- my-ds.page: Built-in functions
+-- ds.page: Built-in functions
 
 These functions are available as a part of fastn and can be used in any fastn
 document. Besides the functions mentioned below, there are some other [built-in
@@ -726,7 +726,7 @@ padding.px: 10
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- ftd.color red-yellow:

@@ -1,4 +1,4 @@
--- my-ds.page: How to modify color scheme?
+-- ds.page: How to modify color scheme?
 
 What if you come across a color scheme package and you like it well, but you
 want to twitch a little bit and make it compatible to your taste and
@@ -46,4 +46,4 @@ package](how-to/use-color-package/) page.
 
 And voila! Your custom color scheme is ready.
 
--- end: my-ds.page
+-- end: ds.page

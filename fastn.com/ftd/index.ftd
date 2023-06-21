@@ -25,7 +25,7 @@ avatar: $fastn-assets.files.images.female-avatar.svg
 -- end: chat-female-avatar
 
 
--- my-ds.page: `ftd` Programming Language
+-- ds.page: `ftd` Programming Language
 
 `ftd` is designed for everyone, not just programmers.
 
@@ -431,7 +431,7 @@ v: n341w3GwdrQ
 v: qyP8bBBAu98
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.iframe`
+-- ds.page: `ftd.iframe`
 
 `ftd.iframe` is a kernel element used to embed any other HTML document
 within your current document.
@@ -138,7 +138,7 @@ loading: lazy
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

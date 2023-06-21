@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.decimal`
+-- ds.page: `ftd.decimal`
 
 `ftd.decimal` is a component used to render a decimal value in an `ftd`
 document.
@@ -120,4 +120,4 @@ color: $inherited.colors.text-strong
 -- end: ds.rendered
 
 
--- end: my-ds.page
+-- end: ds.page

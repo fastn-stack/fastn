@@ -1,4 +1,4 @@
--- my-ds.page: Documentation Systems
+-- ds.page: Documentation Systems
 
 While content creation, till now, we were trying to make use of one video and 
 one document with an idea that it takes a flow that gives user a feel of a 
@@ -291,7 +291,7 @@ This is a `How-To`.
 
 This is a `tutorial`.
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- component segment:

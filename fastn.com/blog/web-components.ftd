@@ -1,7 +1,7 @@
 -- import: fastn-stack.github.io/ftd-web-component-example
 -- import: fastn-community.github.io/bling/quote
 
--- my-ds.page: Ahoy, Web Components!
+-- ds.page: Ahoy, Web Components!
 
 AmitU, Saturday, 25th Feb 2023
 
@@ -159,4 +159,4 @@ for more detailed usage.
 Go ahead and give it a shot, and come over to [Discord](https://discord.gg/a7eBUeutWD)
 in case you face any issues, we would love to hear from you!
 
--- end: my-ds.page
+-- end: ds.page

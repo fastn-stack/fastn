@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Use `inherited types`
+-- ds.page: Use `inherited types`
 
 Using `inherited` types for colors and roles allows for greater flexibility in
 using different color schemes and typography.
@@ -89,4 +89,4 @@ role: $inherited.types.copy-regular
 
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: Terminal, Your New Best Friend
+-- ds.page: Terminal, Your New Best Friend
 
 If you want to program, you are going to have become friends with the terminal.
 This is how the terminal looks on my machine:
@@ -61,4 +61,4 @@ Now that you have seen what terminals are, let's move on to the next step and
 [install `fastn`](/book/install/).
 
 
--- end: my-ds.page
+-- end: ds.page

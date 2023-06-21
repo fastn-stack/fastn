@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Variable and it's Types
+-- ds.page: Variable and it's Types
 
 Following are the guidelines that helps to improve the quality of the code with
 respect to `Variables` and it's `Types`. 
@@ -28,4 +28,4 @@ children ui-list:
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

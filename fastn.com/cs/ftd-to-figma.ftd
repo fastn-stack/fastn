@@ -13,7 +13,7 @@ $processor$: pr.figma-cs-token
 variable: $sunset-cs.main
 name: sunset-cs
 
--- my-ds.page: How to use Figma Tokens with fastn color schemes
+-- ds.page: How to use Figma Tokens with fastn color schemes
 
 -- ds.youtube:
 v: 77axdv6ZdO4
@@ -241,4 +241,4 @@ Check out these fastn color-schemes which you can use right away
 - [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
 - [Winter CS](https://fastn-community.github.io/winter-cs/)
 
--- end: my-ds.page
+-- end: ds.page

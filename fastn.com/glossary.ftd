@@ -1,4 +1,4 @@
--- my-ds.page: Glossary
+-- ds.page: Glossary
 
 A `fastn` Glossary
 
@@ -114,4 +114,4 @@ A sitemap is a data-structure where information is provided about the files on
 site. A sitemap tells which pages are important in site, and placed in proper
 structure. See also [sitemap](sitemap/).
 
--- end: my-ds.page
+-- end: ds.page

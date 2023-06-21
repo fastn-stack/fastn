@@ -1,6 +1,6 @@
 -- import: fastn
 
--- my-ds.page: `import`
+-- ds.page: `import`
 
 In `ftd`, one module/component can access code from another component by
 importing it. To import a module, use the following syntax:
@@ -157,4 +157,4 @@ Overall, aliases can help improve the clarity, readability, and maintainability
 of code, while also making it more efficient to write and easier to integrate
 with other systems.
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,6 +1,6 @@
 -- import: fastn.com/ftd/utils as appendix
 
--- my-ds.page: Attributes
+-- ds.page: Attributes
 
 The attributes in ftd are classified into several different groups:
 
@@ -48,7 +48,7 @@ contents-x: $letter-contents-x
 contents-y: $letter-contents-y
 contents-z: $letter-contents-z
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

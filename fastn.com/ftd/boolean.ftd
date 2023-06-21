@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.boolean`
+-- ds.page: `ftd.boolean`
 
 `ftd.boolean` is a component used to render a boolean value in an `ftd`
 document.
@@ -99,4 +99,4 @@ false
 
 
 
--- end: my-ds.page
+-- end: ds.page

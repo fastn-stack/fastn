@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 -- import: fastn/processors as pr
 
--- my-ds.page: Basic UI
+-- ds.page: Basic UI
 
 In this video, I will first show you how to utilize the `fastn packages` that
 are there for use. Then, we will continue our learning and understand what are
@@ -248,7 +248,7 @@ if: { source == "build" }
 Continue with the [part 3 now](/expander/publish/-/build/).
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

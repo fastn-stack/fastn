@@ -1,4 +1,4 @@
--- my-ds.page: How to create clean URL
+-- ds.page: How to create clean URL
 
 Generally the URL of the page is corresponding to the location of that page in 
 the package. 
@@ -31,4 +31,4 @@ on the path of the file.
 4. Not only this, you can include a file more than once in the sitemap with 
 different URLs.
 
--- end: my-ds.page
+-- end: ds.page

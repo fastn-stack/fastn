@@ -6,7 +6,7 @@ $processor$: pr.figma-typo-token
 variable: $virgil-typo.types
 name: virgil-typography
 
--- my-ds.page: Export typography as json
+-- ds.page: Export typography as json
 
 fastn supports exporting `ftd.type-data` variables as json. To export it as json
 you will need to use a processor named `figma-typo-token` to generate the
@@ -46,4 +46,4 @@ $virgil-typo-json
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page

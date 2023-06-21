@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.code`
+-- ds.page: `ftd.code`
 
 `ftd.code` is a component used to render the code component in an `ftd`
 document.
@@ -584,4 +584,4 @@ print(value)
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page

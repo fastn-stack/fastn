@@ -1,6 +1,6 @@
 -- boolean $author-mode: false
 
--- my-ds.page: The Book Of `fastn` and `ftd`
+-- ds.page: The Book Of `fastn` and `ftd`
 
 *By Amit Upadhyay, with contributions from `fastn` community.*
 
@@ -36,7 +36,7 @@ $on-click$: $ftd.toggle($a=$author-mode)
 - the "star us on github" should be a properly designed UI, not just text.
 - infact entire sidebar can be like that.
 
--- end: my-ds.page
+-- end: ds.page
 
 -- component stuck:
 

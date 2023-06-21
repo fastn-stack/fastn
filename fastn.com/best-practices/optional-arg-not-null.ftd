@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Optional Arguments
+-- ds.page: Optional Arguments
 
 -- utils.code-display: `not-null-opt-arg`: Optional Arguments must have `!NULL` condition
 id: not-null-opt-arg
@@ -42,4 +42,4 @@ if: { school.name != NULL }
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -8,7 +8,7 @@ name: Virtual
 link: http://bit.ly/3GQ3P5Y
 
 
--- my-ds.page:
+-- ds.page:
 full-width: true
 sidebar: false
 
@@ -94,4 +94,4 @@ icon: $assets.files.images.linkedin.svg
 
 -- end: event.row-container
 
--- end: my-ds.page
+-- end: ds.page

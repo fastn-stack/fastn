@@ -1,9 +1,9 @@
--- my-ds.page:
+-- ds.page:
 
 -- switcher:
 s: $c
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

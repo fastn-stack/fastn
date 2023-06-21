@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: `fastn-package` crate overview and motivation
+-- ds.page: `fastn-package` crate overview and motivation
 
 `fastn-package` is responsible for providing access to any fastn package content
 to `fastn-serve`, `fastn-build` etc.
@@ -318,4 +318,4 @@ information to browser based poller, who will pass this information back to the
 server.
 
 
--- end: my-ds.page
+-- end: ds.page

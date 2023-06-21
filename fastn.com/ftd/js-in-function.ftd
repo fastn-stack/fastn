@@ -1,4 +1,4 @@
--- my-ds.page: Javascript in `ftd` function
+-- ds.page: Javascript in `ftd` function
 
 Here is an example of how you can integrate JavaScript in ftd functions.
 
@@ -45,7 +45,7 @@ $on-click$: $call-js-fn(a = FifthTry Alert)
 
 -- end: ds.output
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- void call-js-fn(a):

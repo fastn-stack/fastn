@@ -1,4 +1,4 @@
--- my-ds.page: `fastn` Docs
+-- ds.page: `fastn` Docs
 
 Everything you need to know about `fastn` and `ftd`.
 
@@ -51,4 +51,4 @@ will help you know where to look for certain things:
   and assume some knowledge of how Django works.
 
 
--- end: my-ds.page
+-- end: ds.page

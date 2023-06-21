@@ -16,12 +16,14 @@
 -- integer width: 1220
 
 
--- home-page:
-seo-title: fastn | The Beginner-Friendly Full-Stack Framework
-seo-description: Design, develop, and deploy stunning websites and web apps effortlessly. Easy-to-learn full-stack framework. No coding knowledge required. Start now!
-seo-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
+-- ds.page:
+document-title: fastn | The Beginner-Friendly Full-Stack Framework
+document-description: Design, develop, and deploy stunning websites and web apps effortlessly. Easy-to-learn full-stack framework. No coding knowledge required. Start now!
+document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
+full-width: true
+sidebar: false
 
--- home-page.footer:
+-- ds.page.footer:
 
 -- install: Get Started with fastn
 code-lang: sh
@@ -40,9 +42,9 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
--- end: home-page.footer
+-- end: ds.page.footer
 
--- home-page.wrapper:
+-- ds.page.wrapper:
 
 -- hero-section: Build your next landing page, blog, or webapp
 preposition: with
@@ -138,9 +140,9 @@ compromise on what you can build with it.
 
 -- deploy-chakra:
 
--- end: home-page.wrapper
+-- end: ds.page.wrapper
 
--- end: home-page
+-- end: ds.page
 
 
 

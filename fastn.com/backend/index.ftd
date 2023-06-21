@@ -1,4 +1,4 @@
--- my-ds.page: Backend And `fastn`
+-- ds.page: Backend And `fastn`
 
 Along with [building frontends](/frontend/) `fastn` can be used for
 building dynamic websites as well. With features already built and planned
@@ -46,4 +46,4 @@ you create data visualisation websites.
 
 Read more about [reading JSON](/get-data/).
 
--- end: my-ds.page
+-- end: ds.page

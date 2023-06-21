@@ -1,4 +1,4 @@
--- my-ds.page: `fastn` Color Scheme Packages
+-- ds.page: `fastn` Color Scheme Packages
 
 If you are maintaining a website, it is a good idea to keep the color scheme
 (and typography for that matter) separate from your main code base, so you can
@@ -20,4 +20,4 @@ document such color schemes. Currently, you can also use
 [`$processor$: figma-cs-token`](/processors/figma-cs-token/) to convert
 `ftd.color-scheme` type variable to figma token json.
 
--- end: my-ds.page
+-- end: ds.page

@@ -5,7 +5,7 @@
 -- import: fastn/processors as pr
 
 
--- my-ds.page:
+-- ds.page:
 sidebar: false
 full-width: true
 
@@ -174,7 +174,7 @@ Convert your fastn packages to static sites and deploy to your favorite service.
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- pr.toc-item list footer-toc:

@@ -1,4 +1,4 @@
--- my-ds.page: Getting Started 🚧
+-- ds.page: Getting Started 🚧
 
 Welcome to your journey to programming! In this chapter I will explains how to
 install `fastn`, how to write a "hello world" program, how to publish it on
@@ -14,4 +14,4 @@ others to view.
 
 Let's start with looking at [what is Github? ->](/book/github/)
 
--- end: my-ds.page
+-- end: ds.page

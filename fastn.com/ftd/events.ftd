@@ -1,4 +1,4 @@
--- my-ds.page: Events in `ftd`
+-- ds.page: Events in `ftd`
 
 The change in the state of an object is known as an Event. In `fastn`, there are
 various events which represents that some activity is performed by the user. A
@@ -308,7 +308,7 @@ $on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $flag)
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

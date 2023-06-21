@@ -1,6 +1,6 @@
 -- import: fastn/processors as pr
 
--- my-ds.page: Publishing a package
+-- ds.page: Publishing a package
 
 
 -- ds.youtube:
@@ -32,7 +32,7 @@ if: { source == "default" }
 Continue with the [part 6 now](/expander/polish/).
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

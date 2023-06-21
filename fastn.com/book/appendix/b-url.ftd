@@ -1,4 +1,4 @@
--- my-ds.page: URL 🚧
+-- ds.page: URL 🚧
 
 Before we create the repository let't take a look the URL I mentioned in the
 previous para: `https://github.com/fastn-stack/fastn-template`. These things
@@ -47,4 +47,4 @@ would be your account name. And finally the `fastn-template` part, which is the
 "name" of the repo.
 
 
--- end: my-ds.page
+-- end: ds.page

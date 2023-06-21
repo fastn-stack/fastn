@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Create a `fastn` package
+-- ds.page: Create a `fastn` package
 
 `fastn` is also a `ftd` package manager. A package contains all related and
 necessary files. `fastn` manages the packages and modules for `ftd` and
@@ -67,7 +67,7 @@ width: fill-container
 -- package-file-info:
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.integer`
+-- ds.page: `ftd.integer`
 
 `ftd.integer` is a component used to render an integer value in an `ftd`
 document.
@@ -121,4 +121,4 @@ format: #X
 -- end: ds.rendered
 
 
--- end: my-ds.page
+-- end: ds.page

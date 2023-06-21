@@ -1,4 +1,4 @@
--- my-ds.page: Clean URLs using Custom URLs
+-- ds.page: Clean URLs using Custom URLs
 
 `fastn` allows your to map documents to any URL you like, let's take a look at
 why and how.
@@ -61,4 +61,4 @@ lang: ftd
 There you go, make all your URLs clean, and folders organised! Do checkout the
 [dynamic URLs guide](/dynamic-urls/) to learn how to make URLs dynamic.
 
--- end: my-ds.page
+-- end: ds.page

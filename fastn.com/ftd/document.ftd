@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.document` 🚧
+-- ds.page: `ftd.document` 🚧
 
 `ftd.document` is a kernel component that provides root-level configuration to
 the document. In addition to the usual document attributes like title,
@@ -256,4 +256,4 @@ breakpoint: 800
 
 
 
--- end: my-ds.page
+-- end: ds.page

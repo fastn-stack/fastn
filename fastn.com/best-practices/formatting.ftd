@@ -2,7 +2,7 @@
 -- import: fastn.com/utils
 
 
--- my-ds.page: Formatting guidelines
+-- ds.page: Formatting guidelines
 
 Formatting guidelines help us to ensure that code is consistent, more readable,
 well-formatted which can enhance the quality and effectiveness of
@@ -336,4 +336,4 @@ lang: ftd
 
 
 
--- end: my-ds.page
+-- end: ds.page

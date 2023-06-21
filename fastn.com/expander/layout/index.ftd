@@ -2,7 +2,7 @@
 -- import: fastn.com/expander/lib
 
 
--- my-ds.page: Create `holy-grail` layout
+-- ds.page: Create `holy-grail` layout
 
 -- ds.markdown:
 if: { source == "default" }
@@ -386,7 +386,7 @@ v: https://youtu.be/tSX0io_zw18
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

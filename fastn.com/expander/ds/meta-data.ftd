@@ -1,11 +1,11 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: 
+-- ds.page: 
 
 -- show-md: 
 
--- end: my-ds.page
+-- end: ds.page
 
 -- component show-md:
 
@@ -16,7 +16,7 @@ width: fill-container
 
 -- ds.h0: Add meta-data to `doc-site`
 
-/-- my-ds.page: Add meta-data to `doc-site`
+/-- ds.page: Add meta-data to `doc-site`
 
 -- ds.markdown:
 if: { !show-planning }
@@ -298,7 +298,7 @@ if: { show-planning }
 if: { show-planning }
 v: 72N7f9on8iw
 
-/-- end: my-ds.page 
+/-- end: ds.page 
 
 -- end: ftd.column
 

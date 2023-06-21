@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: Hello, Github!
+-- ds.page: Hello, Github!
 
 Github is an online collaboration platform, where developers come together and
 write software. Github is not the only one, there is Gitlab, BitBucket and a
@@ -332,4 +332,4 @@ If you are facing any issue head over to our [Discord](https://discord.gg/a7eBUe
 server.
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,4 +1,4 @@
--- my-ds.page: Author Manual
+-- ds.page: Author Manual
 
 
 `fastn` helps you create your website. In this manual you will learn when and how
@@ -8,4 +8,4 @@ Everything related to hows and whats related to `fastn` usage are covered in
 this section. **This is the manual for the author to design their page using
 `fastn`**.
 
--- end: my-ds.page
+-- end: ds.page

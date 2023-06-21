@@ -1,4 +1,4 @@
--- my-ds.page: How to make rounded corners
+-- ds.page: How to make rounded corners
 
 -- ds.youtube:
 v: 6naTh8u_uOM
@@ -118,4 +118,4 @@ border-radius.px: 15
 I hope you know now how to add `border-radius` in `fastn`. Feel free to reach 
 out and ask your doubts, if you have any.
 
--- end: my-ds.page
+-- end: ds.page

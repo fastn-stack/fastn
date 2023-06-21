@@ -1,4 +1,4 @@
--- my-ds.page: Using Export/ Exposing
+-- ds.page: Using Export/ Exposing
 
 Export and exposing pertain to the accessibility of external
 package definitions. When exporting, additional external package
@@ -53,4 +53,4 @@ Above code shows that certain components (markdown, h0, h1, h2, h3) from
 **Note**: These components won't be available for external use wherever doc-site
 is imported.
 
--- end: my-ds.page
+-- end: ds.page

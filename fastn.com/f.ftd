@@ -1,4 +1,4 @@
--- my-ds.page: WorkShop Questions
+-- ds.page: WorkShop Questions
 full-width: true
 
 -- all-questions:
@@ -220,7 +220,7 @@ is-answer: 1
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 -- import: fastn-community.github.io/bling/read-more
 
--- my-ds.page: `processor` In `fastn`
+-- ds.page: `processor` In `fastn`
 
 `ftd` gives a way for its platform, `fastn`, to define some functions known as
 `processors`. These functions, then, can be used in the `ftd`, and their
@@ -57,7 +57,7 @@ processors documentation.
 `fastn` is planning to use [wasmtime](https://wasmtime.dev) to let anyone write
 their own custom processors, which will allow much more functionalities.
 
--- end: my-ds.page
+-- end: ds.page
 
 -- component static-vs-dynamic:
 

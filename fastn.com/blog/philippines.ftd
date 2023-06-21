@@ -1,7 +1,7 @@
 -- import: fastn.com/blog/lib
 -- import: fastn-community.github.io/bling/quote
 
--- my-ds.page: `fastn` goes to Philippines 
+-- ds.page: `fastn` goes to Philippines 
 
 13th April, 2023
 
@@ -75,4 +75,4 @@ member: $lib.zyle
 
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `fastn`: Static Site Generator
+-- ds.page: `fastn`: Static Site Generator
 
 `fastn` packages can be converted to static websites that can be hosted by any
 static hosting service like [Github Pages](/github-pages/), [Vercel](/vercel/),
@@ -20,4 +20,4 @@ static site on Github Pages and Vercel. Check them out below:
 - [Publishing Static Site On github pages](/github-pages/)
 - [Publishing Static Site On Vercel](/vercel/)
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,4 +1,4 @@
--- my-ds.page: Install `fastn`
+-- ds.page: Install `fastn`
 
 To write programs using `ftd` language you will have to use `fastn`, a command
 line program, like `ls` we mentioned in previous section. `fastn` is a
@@ -68,4 +68,4 @@ our [Discord](https://discord.gg/a7eBUeutWD) server.
 Now that you have `fastn` installed, let's install a [programming
 editor](/book/editor/).
 
--- end: my-ds.page
+-- end: ds.page

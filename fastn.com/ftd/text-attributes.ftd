@@ -1,4 +1,4 @@
--- my-ds.page: Text Attributes
+-- ds.page: Text Attributes
 
 These attributes are available to `ftd.text`, `ftd.integer`,
 `ftd.decimal` and `ftd.boolean` components.
@@ -298,7 +298,7 @@ border-width.px: 2
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- ftd.color yellow-red:

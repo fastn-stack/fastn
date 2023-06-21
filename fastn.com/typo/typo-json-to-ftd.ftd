@@ -21,7 +21,7 @@ value = typo_to_ftd(json);
 store_at = value[0];
 formatted_string = value[1];
 
--- my-ds.page: Typography json to FTD
+-- ds.page: Typography json to FTD
 
 fastn allows you to generate typography FTD code from its equivalent json.
 To generate FTD code, you will need to include `typo.js` from `fastn-js` repo
@@ -100,4 +100,4 @@ Paste any typography json below and generate its FTD equivalent code.
 
 -- t.json-exporter:
 
--- end: my-ds.page
+-- end: ds.page

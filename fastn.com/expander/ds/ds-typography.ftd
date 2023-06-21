@@ -1,7 +1,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 
--- my-ds.page: typography in doc-site
+-- ds.page: typography in doc-site
 
 -- ds.markdown:
 if: { !show-planning }
@@ -184,7 +184,7 @@ if: { show-planning }
 v: IcNMT-7lvgs
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- boolean $show-planning: false

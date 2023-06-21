@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `ftd.container`
+-- ds.page: `ftd.container`
 
 A `ftd.container` is a generalized container component where the user will be
 deciding how it should be behaving. So unlike other ftd containers like
@@ -72,7 +72,7 @@ In the above example, container is created which contains two text components.
 Two `ftd.text` components are displayed side by side since their display
 behavior is `inline`.
 
--- end: my-ds.page
+-- end: ds.page
 
 -- ftd.color red-yellow:
 light: red

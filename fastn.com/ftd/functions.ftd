@@ -1,4 +1,4 @@
--- my-ds.page: Functions
+-- ds.page: Functions
 
 FTD supports functions which users can create to execute their own logic
 in their ftd documents. It also provides various
@@ -165,7 +165,7 @@ a = (((a - min) + by) % (max + 1 - min)) + min  ;; <hl>
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- integer $num: 0

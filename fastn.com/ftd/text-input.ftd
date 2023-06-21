@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `ftd.text-input`
+-- ds.page: `ftd.text-input`
 
 `ftd.text-input` is used to create interactive controls for web-based forms in
 order to accept text type data from the user; a wide variety of types of input
@@ -444,7 +444,7 @@ type: file
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- string $current-value: Nothing typed yet

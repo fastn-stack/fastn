@@ -1,4 +1,4 @@
--- my-ds.page: Features of `fastn`
+-- ds.page: Features of `fastn`
 
 Here are some enhanced features of [`fastn`](/) that makes it a good to have
 tool:
@@ -103,4 +103,4 @@ the form of a sitemap.
 - Database and Cache
 - Logs(Observer)
 
--- end: my-ds.page
+-- end: ds.page

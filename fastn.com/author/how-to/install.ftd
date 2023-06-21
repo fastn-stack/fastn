@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: Install `fastn`
+-- ds.page: Install `fastn`
 
 `fastn` is compatible with various operating systems, including Windows, MacOS,
 and Linux.
@@ -55,4 +55,4 @@ following options:
 3. [`fastn` from `source`](macos/#fastn-from-source)
 
 
--- end: my-ds.page
+-- end: ds.page

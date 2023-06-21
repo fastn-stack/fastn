@@ -1,4 +1,4 @@
--- my-ds.page: How to make page responsive
+-- ds.page: How to make page responsive
 
 In ftd, we can make responsive pages using conditional expressions and
 event-handling. A responsive page ensures that the user experience
@@ -219,7 +219,7 @@ $on-mouse-leave$: $ftd.set-bool($a = $is-hovered, v = false) ;; <hl>
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 -- ftd.responsive-length responsive-padding-length:
 desktop.px: 15

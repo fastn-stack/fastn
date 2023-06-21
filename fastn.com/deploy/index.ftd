@@ -1,4 +1,4 @@
--- my-ds.page: Static Vs Dynamic
+-- ds.page: Static Vs Dynamic
 
 `fastn` can be deployed in two main modes, static and dynamic.
 
@@ -43,4 +43,4 @@ binary itself. `fastn` can run on Linux, Windows and Mac so you have a lot of
 choices for where to deploy it.
 
 
--- end: my-ds.page
+-- end: ds.page

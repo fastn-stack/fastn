@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Commenting guidelines
+-- ds.page: Commenting guidelines
 
 -- utils.code-display: `no-code-comments`: Avoid code comments
 id: no-code-comments
@@ -51,4 +51,4 @@ lang: ftd
 
 -- end: utils.code-display
 
--- end: my-ds.page
+-- end: ds.page

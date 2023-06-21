@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: Kernel Components
+-- ds.page: Kernel Components
 
 `ftd` comes with a few "kernel" components, these components are the building 
 blocks for building all other components.
@@ -44,4 +44,4 @@ the text "hello world" in the UI.
 - [`ftd.code`](ftd/code/)
 
 
--- end: my-ds.page
+-- end: ds.page

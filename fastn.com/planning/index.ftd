@@ -1,4 +1,4 @@
--- my-ds.page: Planning Overview
+-- ds.page: Planning Overview
 
 We are using fastn.com for planning fastn related official course. You will find
 the scripts etc here.
@@ -165,4 +165,4 @@ lang: txt
 - translation
 - versioning
 
--- end: my-ds.page
+-- end: ds.page

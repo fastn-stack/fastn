@@ -1,4 +1,4 @@
--- my-ds.page: Polishing UI
+-- ds.page: Polishing UI
 
 In this video, we are going to polish the UI of our Expander project.
 
@@ -19,4 +19,4 @@ I have learnt a lot.
 src: $fastn-assets.files.images.expander.thankyou.jpg
 width: fill-container
 
--- end: my-ds.page
+-- end: ds.page

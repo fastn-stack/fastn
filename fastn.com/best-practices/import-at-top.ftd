@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Import the packages
+-- ds.page: Import the packages
 
 We `import` the packages at the start of the `.ftd` file and there should be no
 space between two imports.
@@ -96,4 +96,4 @@ export: markdown, h1		;; <hl>
 
 -- end: utils.code-display 
 
--- end: my-ds.page
+-- end: ds.page

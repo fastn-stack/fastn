@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: How to use Conditions
+-- ds.page: How to use Conditions
 
 By following the best practices for writing conditional statements, developers
 can create code that is less error-prone and more efficient, making it easier
@@ -170,4 +170,4 @@ if: { flag } ;; <hl>
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -8,7 +8,7 @@ name: Virtual
 link: https://lu.ma/ftdwebmace
 
 
--- my-ds.page:
+-- ds.page:
 full-width: true
 sidebar: false
 
@@ -95,4 +95,4 @@ icon: $assets.files.images.linkedin.svg
 
 -- end: event.row-container
 
--- end: my-ds.page
+-- end: ds.page

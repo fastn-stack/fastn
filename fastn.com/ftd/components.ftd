@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `component`
+-- ds.page: `component`
 
 A `component` in `ftd` is similar to "react component". Components are
 independent and reusable bits of code. `component`s have "arguments", these are
@@ -754,11 +754,11 @@ My Description
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 
-/-- my-ds.page: `component`
+/-- ds.page: `component`
 
 A `component` in `ftd` is similar to "react component". Components are
 independent and reusable bits of code. `component`s have  "arguments", these are
@@ -1053,7 +1053,7 @@ based on the value of the `dark-mode` variable.
 Read more about it in [conditional components guide](ftd/if/).
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

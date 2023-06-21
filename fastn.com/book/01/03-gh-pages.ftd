@@ -1,7 +1,7 @@
 -- import: fastn-community.github.io/bling/quote
 -- import: fastn.com/assets
 
--- my-ds.page: Publish Your Site
+-- ds.page: Publish Your Site
 
 Let's recap your progress so far. You have created your Github account, and you
 have created your first repository. The respository contains a `fastn` powered
@@ -250,4 +250,4 @@ Note down your URL, share it us on our [discord channel: `Web Developers` ->
 On your site it mentions my name! It's time we checkout our code in an
 [online editor. ->](/book/codespaces/)
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,4 +1,4 @@
--- my-ds.page: `ftd` crate
+-- ds.page: `ftd` crate
 
 `ftd` is the crate the implements the language.
 
@@ -144,4 +144,4 @@ pub struct Section {
 
 Read: The [`ftd-p1` grammar](/p1-grammar/).
 
--- end: my-ds.page
+-- end: ds.page

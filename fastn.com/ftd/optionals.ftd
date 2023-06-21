@@ -1,4 +1,4 @@
--- my-ds.page: `optional` type
+-- ds.page: `optional` type
 
 `fastn lang` supports optional types.
 
@@ -8,4 +8,4 @@ lang: ftd
 \-- optional integer x:
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,4 +1,4 @@
--- my-ds.page: How to access fonts
+-- ds.page: How to access fonts
 
 The [`assets`](/assets/) module contains a variable named `fonts` that holds
 references to the fonts defined in a package.
@@ -53,4 +53,4 @@ unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2
 We have accessed these fonts using `fonts` variable which contains reference to
 `Roboto` (`$assets.fonts.Roboto`).
 
--- end: my-ds.page
+-- end: ds.page

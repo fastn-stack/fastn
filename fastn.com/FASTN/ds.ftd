@@ -3,10 +3,10 @@
 -- import: fastn.com/utils
 -- import: fifthtry.github.io/banner
 -- import: fastn-community.github.io/footer
-
+-- import: fastn-community.github.io/doc-site/common
 
 -- import: fastn-community.github.io/doc-site
-export: markdown, h0, h1, h2, h3, code, rendered, output, image
+export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group
 
 
 -- component page:
@@ -14,24 +14,22 @@ children wrapper:
 optional caption title:
 optional body body:
 boolean sidebar: true
-optional boolean full-width: false
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: NULL
+optional ftd.image-src site-logo: $fastn-assets.files.images.fastn.svg
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-stack/fastn
+boolean full-width: false
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $dark-flame-cs.main
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+boolean show-banner: true
 
--- doc-site.page: $page.title
-site-logo: $fastn-assets.files.images.fastn.svg
-body: $page.body
-colors: $dark-flame-cs.main
-sidebar: $page.sidebar
-full-width: $page.full-width
-types: $typo.types
-show-banner: true
-show-footer: true
-site-name: NULL
-logo-height: 38
-logo-width: 120
-github-icon: true
-github-url: https://github.com/fastn-stack/fastn
-
--- doc-site.page.footer:
+-- ftd.ui list page.footer:
 
 -- footer.social-sideline-footer:
 social: true
@@ -41,21 +39,20 @@ twitter-url: https://twitter.com/FifthTryHQ
 discord-url: https://discord.gg/bucrdvptYd
 copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
+-- end: page.footer
 
--- end: doc-site.page.footer
 
-
--- doc-site.page.banner:
+-- ftd.ui list page.banner:
 
 /-- banner.cta-banner:
 cta-text: Jumpstart your Web Development with FTD!
 cta-link: /events/webdev-with-ftd/
 
 
--- end: doc-site.page.banner
+-- end: page.banner
 
 
--- doc-site.page.right-sidebar:
+-- ftd.ui list page.right-sidebar:
 
 
 -- utils.compact-text: Support `fastn`!
@@ -73,10 +70,7 @@ Enjoying `fastn`? Please consider giving us a star ⭐️ on
 
 -- end: utils.compact-text
 
-
-
 -- utils.compact-text: Getting Help
-
 
 -- utils.compact-text.body:
 
@@ -90,7 +84,6 @@ thoughts, suggestion, question etc.
 
 Connect with our [community](/community/)!
 
-
 -- utils.compact-text.inner:
 
 -- chronica-component:
@@ -98,7 +91,6 @@ Connect with our [community](/community/)!
 -- end: utils.compact-text.inner
 
 -- end: utils.compact-text
-
 
 -- utils.compact-text: Found an issue?
 
@@ -120,10 +112,28 @@ today.
 We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
 
+-- end: page.right-sidebar
 
--- end: doc-site.page.right-sidebar
-
-
+-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.colors
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.types
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
 
 -- car-component:
 
@@ -136,8 +146,14 @@ children: $page.wrapper
 
 -- end: doc-site.page
 
-
 -- end: page
+
+
+
+
+
+
+
 
 
 
@@ -176,6 +192,9 @@ height.fixed.px: 150
 -- end: ftd.column
 
 -- end: star-component
+
+
+
 
 
 
@@ -250,6 +269,13 @@ height.fixed.px: 150
 -- end: ftd.column
 
 -- end: chronica-component
+
+
+
+
+
+
+
 
 
 

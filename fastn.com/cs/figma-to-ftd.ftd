@@ -9,7 +9,7 @@ variable: $forest-cs.main
 name: forest-cs
 
 
--- my-ds.page: How to create your own `Fastn Color Scheme` from Figma json
+-- ds.page: How to create your own `Fastn Color Scheme` from Figma json
 
 -- ds.youtube:
 v: znH1AEf6SMk
@@ -368,4 +368,4 @@ Check out these fastn color-schemes which you can use right away
 - [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
 - [Winter CS](https://fastn-community.github.io/winter-cs/)
 
--- end: my-ds.page
+-- end: ds.page

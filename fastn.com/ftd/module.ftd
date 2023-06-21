@@ -1,4 +1,4 @@
--- my-ds.page: Module
+-- ds.page: Module
 
 `fastn` allows users to effortlessly design and create `module-based` components.
 With this functionality, users can easily create components that
@@ -88,4 +88,4 @@ wrapper: $mod-page.ui
 
 
 
--- end: my-ds.page
+-- end: ds.page

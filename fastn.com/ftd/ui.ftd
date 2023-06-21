@@ -1,4 +1,4 @@
--- my-ds.page: Building UIs with `ftd`
+-- ds.page: Building UIs with `ftd`
 
 `ftd` is an alternative to HTML/CSS for building UIs. `ftd` uses HTML/CSS 
 internally for rendering on the web, but its planning to support more backends like
@@ -14,4 +14,4 @@ how it can be used to build UIs that are elegant, efficient, and easy to
 maintain.
 
 
--- end: my-ds.page
+-- end: ds.page

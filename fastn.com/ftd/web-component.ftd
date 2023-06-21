@@ -1,4 +1,4 @@
--- my-ds.page: Web Component
+-- ds.page: Web Component
 
 The `ftd` allows for the integration of custom web components created using
 JavaScript (or other languages that compile to JavaScript).
@@ -297,7 +297,7 @@ $num: $num-1
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

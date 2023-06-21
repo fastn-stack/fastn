@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
 
--- my-ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
+-- ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
 
 `fastn` is a comprehensive new-age web development platform. It has been built
 specifically to make workflows across design, development & deployment simple
@@ -84,4 +84,4 @@ would be possible without your support. We would love to hear from you.
 
 
 
--- end: my-ds.page
+-- end: ds.page

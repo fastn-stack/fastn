@@ -1,7 +1,7 @@
 -- import: fastn.com/utils
 -- import: fastn-community.github.io/bling/note
 
--- my-ds.page: Property Guidelines
+-- ds.page: Property Guidelines
 
 -- utils.code-display: `horizontal-not-left-right`: Use `horizontal` property
 id: horizontal-not-left-right
@@ -214,4 +214,4 @@ role: $inherited.types.copy-regular
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

@@ -1,4 +1,4 @@
--- my-ds.page: `request-data` processor
+-- ds.page: `request-data` processor
 
 `request-data` processor can be used to find the data from query string and
 [named-path parameters](/dynamic-urls/) or from request body.
@@ -68,4 +68,4 @@ If a field is present in more than one places, the JSON value is preferred over
 the named URL pattern, which itself is preferred over the query string.
 
 
--- end: my-ds.page
+-- end: ds.page

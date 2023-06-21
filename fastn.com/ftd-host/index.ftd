@@ -1,4 +1,4 @@
--- my-ds.page: `ftd` host feature
+-- ds.page: `ftd` host feature
 
 `fastn` serves as a platform for `ftd`, enabling it to return its value when it
 gets stuck at a certain state. This grants `fastn` some power over `ftd`,
@@ -44,4 +44,4 @@ For more information, please visit [foreign variables](foreign-variable).
 
 
 
--- end: my-ds.page
+-- end: ds.page

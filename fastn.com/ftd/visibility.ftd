@@ -1,4 +1,4 @@
--- my-ds.page: Visibility
+-- ds.page: Visibility
 
 Access modifiers are special keywords which can be used
 to control the visibility and accessibility of component arguments.
@@ -51,4 +51,4 @@ lang: ftd
 \-- foo: xyz
 $mouse-hovered: false
 
--- end: my-ds.page
+-- end: ds.page

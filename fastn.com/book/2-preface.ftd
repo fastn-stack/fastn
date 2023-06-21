@@ -1,4 +1,4 @@
--- my-ds.page: Preface
+-- ds.page: Preface
 
 This is my second attempt at writing a book. [8 years ago, I started writing
 Python For Developers](https://www.reddit.com/r/Python/comments/3bqt1h/writing_book_on_python_python_for_developers_1st/).
@@ -54,4 +54,4 @@ progressional applications productively. A language that will be used by the
 next billion programmers.
 
 
--- end: my-ds.page
+-- end: ds.page

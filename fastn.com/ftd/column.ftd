@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- my-ds.page: `ftd.column`
+-- ds.page: `ftd.column`
 
 A column is a container component that stacks a list of children vertically.
 
@@ -64,4 +64,4 @@ color: $inherited.colors.text
 
 -- end: ds.output
 
--- end: my-ds.page
+-- end: ds.page

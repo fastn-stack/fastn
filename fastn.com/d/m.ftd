@@ -1,4 +1,4 @@
--- my-ds.page: Maintenance of `fastn` and `ftd`
+-- ds.page: Maintenance of `fastn` and `ftd`
 
 -- ds.h1: Version Policy
 
@@ -6,4 +6,4 @@
 
 -- ds.h1: Monthly Cleanups
 
--- end: my-ds.page
+-- end: ds.page

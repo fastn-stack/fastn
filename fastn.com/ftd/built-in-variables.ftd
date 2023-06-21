@@ -1,4 +1,4 @@
--- my-ds.page: Built-in Variables
+-- ds.page: Built-in Variables
 
 `fastn` comes with some built-in variables, they are documented here.
 
@@ -45,7 +45,7 @@ the device is a mobile device, and sets `ftd.device` to `mobile`.
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

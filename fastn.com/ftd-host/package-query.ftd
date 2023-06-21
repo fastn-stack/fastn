@@ -13,7 +13,7 @@ db: db.sqlite
 SELECT * FROM user;
 
 
--- my-ds.page: Package Query: Run SQL Queries
+-- ds.page: Package Query: Run SQL Queries
 
 `package-query` processor allows you to execute SQL queries against SQLite 
 files present in your `fastn` package.
@@ -107,7 +107,7 @@ The name of `sqlite` database file is provided by the key `db`.
 -- show-person: $p
 $loop$: $people as $p
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

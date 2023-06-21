@@ -1,4 +1,4 @@
--- my-ds.page: Dynamic URLs Guide
+-- ds.page: Dynamic URLs Guide
 
 `fastn` can be used for creating dynamic websites. By default `fastn` maps the
 URL's path to file system to decide which `ftd` document to serve. This
@@ -54,4 +54,4 @@ This matches any valid integer.
 
 This matches any decimal number.
 
--- end: my-ds.page
+-- end: ds.page

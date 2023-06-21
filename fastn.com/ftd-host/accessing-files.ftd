@@ -1,4 +1,4 @@
--- my-ds.page: How to access files
+-- ds.page: How to access files
 
 The [`assets`](/assets/) module contains a foreign variable named `files` that
 holds references to the package's files. You can use this variable to get the
@@ -88,4 +88,4 @@ lang: ftd
 light: -/<package-name>/static/logo.png
 dark: -/<package-name>/static/logo-dark.png
 
--- end: my-ds.page
+-- end: ds.page

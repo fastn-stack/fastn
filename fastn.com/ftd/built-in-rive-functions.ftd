@@ -1,4 +1,4 @@
--- my-ds.page: Built-in Rive Functions
+-- ds.page: Built-in Rive Functions
 
 These [rive](/rive/) functions are available as a part of fastn and can be used
 in any fastn document. Checkout [built-in functions](/built-in-functions/) to
@@ -291,4 +291,4 @@ $on-mouse-leave$: $ftd.set-rive-boolean(rive = mousetoggle, input = Toggle, valu
 
 
 
--- end: my-ds.page
+-- end: ds.page

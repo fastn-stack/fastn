@@ -1,4 +1,4 @@
--- my-ds.page: `ftd.text`
+-- ds.page: `ftd.text`
 
 `ftd.text` is a [kernel component](/ftd/kernel/) used to render text in an `ftd`
 document.
@@ -145,4 +145,4 @@ a valuable and rewarding experience.
 -- end: ds.rendered
 
 
--- end: my-ds.page
+-- end: ds.page

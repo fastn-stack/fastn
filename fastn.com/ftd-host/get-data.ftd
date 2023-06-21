@@ -1,4 +1,4 @@
--- my-ds.page: `$processor$: get-data`
+-- ds.page: `$processor$: get-data`
 
 `get-data` processor is used to get data from a JSON files in the package or
 from [document-metadata in
@@ -124,4 +124,4 @@ female
 
 NOTE : It will throw an error if other than .json file is used.
 
--- end: my-ds.page
+-- end: ds.page

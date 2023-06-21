@@ -1,4 +1,4 @@
--- my-ds.page: Rive Events
+-- ds.page: Rive Events
 
 These events are specific to [rive](/rive/) component and can be added to rive
 components only. These fire callback at various events in rive component. To
@@ -85,7 +85,7 @@ $on-click$: $ftd.fire-rive(rive = van, input = bump)
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

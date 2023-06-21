@@ -1,4 +1,4 @@
--- my-ds.page: Container Attributes
+-- ds.page: Container Attributes
 
 These attributes are available to `ftd.row` and `ftd.column` container
 components in ftd.
@@ -127,7 +127,7 @@ width: fill-container
 
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 -- component wrap-sample:

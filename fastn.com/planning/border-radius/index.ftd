@@ -1,4 +1,4 @@
--- my-ds.page: Rounded corners using `border-radius`
+-- ds.page: Rounded corners using `border-radius`
 
 Video Title: How to add rounded corners
 
@@ -130,4 +130,4 @@ Discord.
 -- ds.youtube:
 v: 6naTh8u_uOM
 
--- end: my-ds.page
+-- end: ds.page

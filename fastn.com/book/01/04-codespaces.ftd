@@ -1,7 +1,7 @@
 -- import: fastn.com/assets
 -- import: fastn.com/book
 
--- my-ds.page: Github's Online Editor
+-- ds.page: Github's Online Editor
 
 Now that we have a template website ready, we want to edit it. To edit things we
 have to do three things: get the code stored in our repository, install `fastn`
@@ -219,5 +219,5 @@ browser. Congratulations, you are making good progress.
 
 You are going to [edit your website next ->](/book/first-edit/).
 
--- end: my-ds.page
+-- end: ds.page
 

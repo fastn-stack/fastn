@@ -1,4 +1,4 @@
--- my-ds.page: Sitemap
+-- ds.page: Sitemap
 
 "`fastn` Sitemap" is the structure we recommend for sites. This recommendation is
 optional, you can create any [sitemap](glossary/#sitemap) you want for your
@@ -746,4 +746,4 @@ writers: writers
   readers: readers
   writers: writers
 
--- end: my-ds.page
+-- end: ds.page

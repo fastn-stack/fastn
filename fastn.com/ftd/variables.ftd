@@ -1,4 +1,4 @@
--- my-ds.page: Variables
+-- ds.page: Variables
 
 `ftd` has support for [rich data modelling](data-modelling/), and it supports
 declaring variables.
@@ -304,7 +304,7 @@ Checkout [`src`](ftd/image/#src-ftd-image-src) property and
 [`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type for more details.
 
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

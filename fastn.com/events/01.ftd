@@ -19,7 +19,7 @@ link: https://discord.gg/3QZa96Xf?event=1080341689253765171
 
 
 
--- my-ds.page:
+-- ds.page:
 full-width: true
 sidebar: false
 
@@ -102,7 +102,7 @@ icon: $assets.files.images.linkedin.svg
 
 -- end: event.row-container
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

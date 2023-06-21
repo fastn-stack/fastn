@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: `ftd.image`
+-- ds.page: `ftd.image`
 
 `ftd.image` is the kernel element used to render images in `ftd`.
 
@@ -202,7 +202,7 @@ padding.px: 10
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

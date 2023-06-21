@@ -1,4 +1,4 @@
--- my-ds.page: Javascript in `fastn` World
+-- ds.page: Javascript in `fastn` World
 
 `ftd` provides support for JavaScript integration in various places. There are
 two main ways to incorporate JavaScript in `ftd`:
@@ -10,4 +10,4 @@ languages too, that compiles to JS) can be incorporated into ftd documentation.
 
 This gives you flexibility of using JS in `ftd` module.
 
--- end: my-ds.page
+-- end: ds.page

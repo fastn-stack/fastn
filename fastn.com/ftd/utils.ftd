@@ -1,4 +1,4 @@
--- my-ds.page:
+-- ds.page:
 
 This page will contain some components which would be useful probably.
 
@@ -34,7 +34,7 @@ contents-x: $letter-contents-x
 contents-y: $letter-contents-y
 contents-z: $letter-contents-z
 
--- end: my-ds.page
+-- end: ds.page
 
 -- ftd.color hover-c: coral
 

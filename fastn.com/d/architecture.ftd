@@ -1,4 +1,4 @@
--- my-ds.page: Architecture Of `fastn`
+-- ds.page: Architecture Of `fastn`
 
 `fastn` is composed a few important crates:
 
@@ -6,4 +6,4 @@
 - [`fastn-core`](/fastn-core-crate/)
 - [`fastn`](/fastn-crate/)
 
--- end: my-ds.page
+-- end: ds.page

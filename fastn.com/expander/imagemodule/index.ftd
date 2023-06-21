@@ -2,7 +2,7 @@
 -- import: fastn.com/expander/lib
 
 
--- my-ds.page: How to use images in documents
+-- ds.page: How to use images in documents
 
 -- ds.markdown:
 if: { source == "default" || source == "build" }
@@ -218,7 +218,7 @@ if: { source == "planning" }
 if: { source == "planning" }
 v: _yM7y_Suaio
 
--- end: my-ds.page 
+-- end: ds.page 
 
 
 

@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: Deploying On Heroku
+-- ds.page: Deploying On Heroku
 
 If you created your `fastn` package using the
 [fastn-template](https://github.com/fastn-stack/fastn-template) repository then
@@ -11,4 +11,4 @@ src: $assets.files.images.heroku-button.png
 
 You should be able to deploy it on heroku by clicking on the button.
 
--- end: my-ds.page
+-- end: ds.page

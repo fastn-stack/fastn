@@ -264,7 +264,7 @@ width if { ftd.device == "mobile" }: fill-container
 margin-bottom.px: 60
 spacing.fixed.px: 16
 link: $grid-of-items.template-url
-open-in-new-tab: true
+;;open-in-new-tab: true
 
 -- ftd.column:
 if: { grid-of-items.wip }
@@ -355,16 +355,16 @@ boolean wip: false
 -- template list doc-sites:
 
 -- template: Doc-site
-template-url: https://fastn-community.github.io/doc-site/
+template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 
 -- template: Midnight Rush
-template-url: https://fastn-community.github.io/midnight-rush/
+template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
 -- template: Set-2-DS
-template-url: https://fastn-community.github.io/set-2-ds/
+template-url: featured/ds/set-2-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
 wip: true
 
@@ -377,12 +377,12 @@ wip: true
 -- template list landing-pages:
 
 -- template: Midnight Rush
-template-url: https://fastn-community.github.io/midnight-rush/landing/
+template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 wip: true
 
 -- template: Set-2-DS
-template-url: https://fastn-community.github.io/set-2-ds/landing/
+template-url: featured/landing/set-2-landing/
 screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
 wip: true
 
@@ -395,17 +395,17 @@ wip: true
 -- template list blog-sites:
 
 -- template: Doc-site
-template-url: https://fastn-community.github.io/doc-site/blog/
+template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
 wip: true
 
 -- template: Midnight Rush
-template-url: https://fastn-community.github.io/midnight-rush/blog/
+template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 wip: true
 
 -- template: Set-2-DS
-template-url: https://fastn-community.github.io/set-2-ds/blog/
+template-url: featured/blogs/set-3-blog/
 screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
 wip: true
 

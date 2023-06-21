@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 
--- my-ds.page: Let's Create A Repo
+-- ds.page: Let's Create A Repo
 
 Now that you have your Github account you are ready to rock! The first thing
 we are going to do is to create a new "repository" or "repo" for short. A
@@ -207,4 +207,4 @@ section!
 Congratulations for creating your first git repository that is hosted on Github.
 You can now move on to [hosting your website on Github Pages. ->](/book/gh-pages/)
 
--- end: my-ds.page
+-- end: ds.page

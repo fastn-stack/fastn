@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Self-referencing guideline
+-- ds.page: Self-referencing guideline
 
 -- utils.code-display: 
 title: `self-ref-validity`: Preventing duplicate self-referencing properties
@@ -31,4 +31,4 @@ light: blue
 -- end: utils.code-display
 
 
--- end: my-ds.page
+-- end: ds.page

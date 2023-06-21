@@ -1,4 +1,4 @@
--- my-ds.page: Event Handing
+-- ds.page: Event Handing
 
 -- ds.youtube:
 v: 8f44sUZRSSA
@@ -65,4 +65,4 @@ In Part 5, you will learn how to publish it as a package on GitHub.
 
 Continue with the [part 5 now](/expander/publish/).
 
--- end: my-ds.page
+-- end: ds.page

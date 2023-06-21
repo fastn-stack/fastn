@@ -1,7 +1,7 @@
 -- import: fastn-community.github.io/saturated-sunset-cs as cs
 -- import: fifthtry.github.io/virgil-font-typography as typo
 
--- my-ds.page: Container Root Attributes
+-- ds.page: Container Root Attributes
 
 These attributes are available to all `container` components in ftd.
 
@@ -146,7 +146,7 @@ color: $inherited.colors.text
 
 -- end: ds.rendered
 
--- end: my-ds.page
+-- end: ds.page
 
 
 

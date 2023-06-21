@@ -1,4 +1,4 @@
--- my-ds.page: `assets`: A Special Module
+-- ds.page: `assets`: A Special Module
 
 The `fastn` package has a special module called `assets` importing which
 provides access to the variable referring to files and fonts defined in the
@@ -13,4 +13,4 @@ Using `assets` we can:
 
 - [Access font variables](/accessing-fonts/)
 
--- end: my-ds.page
+-- end: ds.page

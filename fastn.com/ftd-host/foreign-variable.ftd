@@ -1,4 +1,4 @@
--- my-ds.page: Understanding foreign variables
+-- ds.page: Understanding foreign variables
 
 `ftd` gives a way for its platform, `fastn`, to define some variables known as
 `foreign variables`. These variables, then, can be used in the

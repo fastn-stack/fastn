@@ -1,6 +1,6 @@
 -- import: fastn.com/utils
 
--- my-ds.page: Container Component guidelines
+-- ds.page: Container Component guidelines
 
 -- utils.code-display: `conditional-attributes-removes-component-duplication`: Using conditional attributes to avoid duplicating similar components
 id: conditional-attributes-removes-component-duplication
@@ -89,4 +89,4 @@ margin.px: 10
 
 
 
--- end: my-ds.page
+-- end: ds.page
