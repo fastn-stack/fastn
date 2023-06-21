@@ -15,3 +15,23 @@ impl fastn_js::Component {
         fastn_js::component0("main", statements)
     }
 }
+
+impl fastn_js::ComponentStatement {
+    pub fn from_component(
+        component: &ftd::interpreter::Component,
+        parent: &str,
+        index: usize,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if fastn_js::utils::is_kernel(component.name.as_str()) {
+            let kernel = fastn_js::Kernel::from_component(component.name.as_str(), parent, index);
+            component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+            component_statements.push(fastn_js::ComponentStatement::Done {
+                component_name: kernel.name.clone(),
+            });
+        } else {
+            todo!()
+        }
+        component_statements
+    }
+}

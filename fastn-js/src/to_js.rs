@@ -1,3 +1,10 @@
+pub fn to_js(ast: &[fastn_js::Ast]) -> String {
+    let mut w = Vec::new();
+    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), pretty::RcDoc::space());
+    o.render(80, &mut w).unwrap();
+    String::from_utf8(w).unwrap()
+}
+
 impl fastn_js::Ast {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
