@@ -2,7 +2,7 @@ extern crate self as fastn_js;
 
 #[cfg(test)]
 #[macro_use]
-mod test;
+mod ftd_test_helpers;
 mod ast;
 mod component;
 mod component_invocation;
@@ -22,11 +22,5 @@ pub use component_statement::ComponentStatement;
 pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
+pub use to_js::to_js;
 pub use udf::UDF;
-
-pub fn to_js(ast: &[fastn_js::Ast]) -> String {
-    let mut w = Vec::new();
-    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), pretty::RcDoc::space());
-    o.render(80, &mut w).unwrap();
-    String::from_utf8(w).unwrap()
-}
