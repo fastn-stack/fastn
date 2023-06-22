@@ -7,16 +7,17 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
-[features]
-windows = []
-
 [dependencies]
-quick-js.workspace = true
-rquickjs.workspace = true
 #rquickjs = { workspace = true, optional = true }
 pretty.workspace = true
 ftd.workspace = true
 itertools.workspace = true
+
+[target.'cfg(not(windows))'.dependencies]
+quick-js.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+rquickjs.workspace = true
 
 [dev-dependencies]
 indoc.workspace = true
