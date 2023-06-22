@@ -10,7 +10,6 @@ homepage.workspace = true
 [dependencies]
 #rquickjs = { workspace = true, optional = true }
 pretty.workspace = true
-ftd.workspace = true
 itertools.workspace = true
 
 [target.'cfg(not(windows))'.dependencies]

@@ -1,20 +1,16 @@
 extern crate self as fastn_js;
 
-#[cfg(test)]
-#[macro_use]
-mod ftd_test_helpers;
 mod ast;
 mod component;
 mod component_invocation;
 mod component_statement;
-mod ftd;
 mod mutable_variable;
 mod ssr;
 mod static_variable;
 mod to_js;
 mod udf;
 mod udf_statement;
-mod utils;
+pub mod utils;
 
 pub use ast::Ast;
 pub use component::{component0, component1, component2, Component};

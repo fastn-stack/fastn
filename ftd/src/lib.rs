@@ -22,6 +22,7 @@ pub mod executor;
 pub mod ftd2021;
 pub mod html;
 pub mod interpreter;
+mod js;
 pub mod node;
 pub mod p1;
 #[cfg(feature = "native-rendering")]

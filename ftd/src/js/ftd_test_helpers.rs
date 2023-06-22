@@ -73,10 +73,10 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    let js = vec![fastn_js::Ast::from_tree(i.tree.as_slice())];
+    let js = ftd::js::document_into_js_ast(i);
     let body = fastn_js::ssr(js.as_slice());
-    let html_str = ftd::html::utils::trim_all_lines(
-        std::fs::read_to_string("ftd.html")
+    let html_str = ftd::js::utils::trim_all_lines(
+        std::fs::read_to_string("ftd-js.html")
             .expect("cant read ftd.html")
             .replace("__js_script__", fastn_js::to_js(js.as_slice()).as_str())
             .replace("__html_body__", body.as_str())
@@ -134,7 +134,7 @@ fn find_all_files_matching_extension_recursively(
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("ftd_tests", "ftd");
+        let mut f = find_all_files_matching_extension_recursively("t/js", "ftd");
         f.sort();
         f
     };
