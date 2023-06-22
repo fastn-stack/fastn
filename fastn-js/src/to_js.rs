@@ -1,4 +1,5 @@
 use fastn_js::UDFStatement;
+
 fn space() -> pretty::RcDoc<'static> {
     pretty::RcDoc::space()
 }
@@ -201,9 +202,36 @@ impl UDFStatement {
             UDFStatement::Division { left, right } => binary("/", left, right),
             UDFStatement::Parens { value } => text("(").append(value.to_js()).append(text(")")),
             UDFStatement::Variable { name } => text(name.as_str()),
-            UDFStatement::If { .. } => todo!(),
+            UDFStatement::If {
+                condition,
+                then,
+                otherwise,
+            } => text("if")
+                .append(space())
+                .append(text("("))
+                .append(condition.to_js())
+                .append(text(")"))
+                .append(space())
+                .append(text("{"))
+                .append(then.to_js())
+                .append(text("}"))
+                .append(space())
+                .append(text("else"))
+                .append(space())
+                .append(text("{"))
+                .append(otherwise.to_js())
+                .append(text("}")),
+            UDFStatement::Call { name, args } => text(name.as_str())
+                .append(text("("))
+                .append(
+                    pretty::RcDoc::intersperse(
+                        args.iter().map(|f| f.to_js()),
+                        text(",").append(space()),
+                    )
+                    .group(),
+                )
+                .append(text(")")),
             UDFStatement::Block { .. } => todo!(),
-            UDFStatement::Call { .. } => todo!(),
         }
     }
 }
@@ -265,6 +293,18 @@ mod tests {
                 }],
             ),
             r#"function foo() {return "hello";}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Call {
+                    name: "bar".to_string(),
+                    args: vec![fastn_js::UDFStatement::String {
+                        value: "hello".to_string(),
+                    }],
+                }],
+            ),
+            r#"function foo() {bar("hello")}"#,
         );
     }
 
