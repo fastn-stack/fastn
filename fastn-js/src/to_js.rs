@@ -153,7 +153,14 @@ impl fastn_js::UDF {
 
 impl fastn_js::UDFStatement {
     fn to_js(&self) -> pretty::RcDoc<'static> {
-        todo!()
+        match self {
+            fastn_js::UDFStatement::Integer { value } => pretty::RcDoc::text(value.to_string()),
+            fastn_js::UDFStatement::Return { value } => pretty::RcDoc::text("return")
+                .append(pretty::RcDoc::space())
+                .append(value.to_js())
+                .append(pretty::RcDoc::text(";")),
+            _ => todo!(),
+        }
     }
 }
 
@@ -176,6 +183,14 @@ mod tests {
         fastn_js::to_js::e(func, "function foo(p) {}");
         let func = fastn_js::udf2("foo", "p", "q", vec![]);
         fastn_js::to_js::e(func, "function foo(p, q) {}");
+
+        let func = fastn_js::udf0(
+            "foo",
+            vec![fastn_js::UDFStatement::Return {
+                value: Box::new(fastn_js::UDFStatement::Integer { value: 10 }),
+            }],
+        );
+        fastn_js::to_js::e(func, "function foo() {return 10;}");
     }
 
     #[test]
