@@ -22,3 +22,11 @@ pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
 pub use to_js::to_js;
 pub use udf::{udf0, udf1, udf2, UDF};
 pub use udf_statement::UDFStatement;
+
+pub fn all_js() -> String {
+    let fastn_js = include_str!("../fastn.js");
+    let dom_js = include_str!("../dom.js");
+    let utils_js = include_str!("../utils.js");
+    let virtual_js = include_str!("../virtual.js");
+    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}")
+}

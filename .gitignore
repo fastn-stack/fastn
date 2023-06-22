@@ -2,11 +2,13 @@
 .idea
 **/.DS_Store
 
+ftd/t/js/**.manual.html
+
 # Rust stuff
 target
 **/*.rs.bk
 
-# fpm test
+# fastn test
 fastn-core/tests/**/.build
 
 fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
