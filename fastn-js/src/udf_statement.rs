@@ -23,6 +23,21 @@ pub enum UDFStatement {
         left: Box<UDFStatement>,
         right: Box<UDFStatement>,
     },
+    Exponentiation {
+        left: Box<UDFStatement>,
+        right: Box<UDFStatement>,
+    },
+    Not {
+        value: Box<UDFStatement>,
+    },
+    And {
+        left: Box<UDFStatement>,
+        right: Box<UDFStatement>,
+    },
+    Or {
+        left: Box<UDFStatement>,
+        right: Box<UDFStatement>,
+    },
     Parens {
         value: Box<UDFStatement>,
     },
