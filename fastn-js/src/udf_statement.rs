@@ -38,6 +38,11 @@ pub enum UDFStatement {
         left: Box<UDFStatement>,
         right: Box<UDFStatement>,
     },
+    Ternary {
+        condition: Box<UDFStatement>,
+        then: Box<UDFStatement>,
+        otherwise: Box<UDFStatement>,
+    },
     Parens {
         value: Box<UDFStatement>,
     },
