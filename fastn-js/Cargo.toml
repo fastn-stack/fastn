@@ -8,7 +8,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-rquickjs.workspace = true
+quick-js.workspace = true
 pretty.workspace = true
 ftd.workspace = true
 itertools.workspace = true
