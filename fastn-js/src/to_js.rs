@@ -206,6 +206,20 @@ impl UDFStatement {
             UDFStatement::Not { value } => text("!").append(value.to_js()),
             UDFStatement::Parens { value } => text("(").append(value.to_js()).append(text(")")),
             UDFStatement::Variable { name } => text(name.as_str()),
+            UDFStatement::Ternary {
+                condition,
+                then,
+                otherwise,
+            } => condition
+                .to_js()
+                .append(space())
+                .append(text("?"))
+                .append(space())
+                .append(then.to_js())
+                .append(space())
+                .append(text(":"))
+                .append(space())
+                .append(otherwise.to_js()),
             UDFStatement::If {
                 condition,
                 then,
