@@ -1,6 +1,15 @@
+use fastn_js::UDFStatement;
+fn space() -> pretty::RcDoc<'static> {
+    pretty::RcDoc::space()
+}
+
+fn text(t: &str) -> pretty::RcDoc<'static> {
+    pretty::RcDoc::text(t.to_string())
+}
+
 pub fn to_js(ast: &[fastn_js::Ast]) -> String {
     let mut w = Vec::new();
-    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), pretty::RcDoc::space());
+    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), space());
     o.render(80, &mut w).unwrap();
     String::from_utf8(w).unwrap()
 }
@@ -16,17 +25,17 @@ impl fastn_js::Ast {
 
 impl fastn_js::Kernel {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("let")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("="))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("fastn_dom.createKernel("))
-            .append(pretty::RcDoc::text(format!("{},", self.parent.clone())))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.element_kind.to_js()))
-            .append(pretty::RcDoc::text(");"))
+        text("let")
+            .append(space())
+            .append(text(&self.name))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("fastn_dom.createKernel("))
+            .append(text(&format!("{},", self.parent.clone())))
+            .append(space())
+            .append(text(self.element_kind.to_js()))
+            .append(text(");"))
     }
 }
 
@@ -52,7 +61,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::Done { component_name } => {
-                pretty::RcDoc::text(format!("{component_name}.done();"))
+                text(&format!("{component_name}.done();"))
             }
         }
     }
@@ -63,23 +72,23 @@ fn func(
     params: &[String],
     body: Vec<pretty::RcDoc<'static>>,
 ) -> pretty::RcDoc<'static> {
-    pretty::RcDoc::text("function")
-        .append(pretty::RcDoc::space())
-        .append(pretty::RcDoc::text(name.to_string()))
-        .append(pretty::RcDoc::text("("))
+    text("function")
+        .append(space())
+        .append(text(&name))
+        .append(text("("))
         .append(
             pretty::RcDoc::intersperse(
-                params.iter().map(|v| pretty::RcDoc::text(v.to_string())),
-                pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
+                params.iter().map(|v| text(v.as_str())),
+                text(",").append(space()),
             )
             .nest(4)
             .group(),
         )
-        .append(pretty::RcDoc::text(")"))
+        .append(text(")"))
         .append(pretty::RcDoc::softline_())
         .append(
             pretty::RcDoc::softline()
-                .append(pretty::RcDoc::text("{"))
+                .append(text("{"))
                 .append(pretty::RcDoc::softline_())
                 .append(
                     pretty::RcDoc::intersperse(body, pretty::RcDoc::softline())
@@ -87,7 +96,7 @@ fn func(
                         .nest(4),
                 )
                 .append(pretty::RcDoc::softline_())
-                .append(pretty::RcDoc::text("}"))
+                .append(text("}"))
                 .group(),
         )
 }
@@ -103,43 +112,43 @@ impl fastn_js::Component {
 }
 
 fn quote(s: &str) -> pretty::RcDoc<'static> {
-    pretty::RcDoc::text("\"")
-        .append(pretty::RcDoc::text(s.replace('\n', "\\n")))
-        .append(pretty::RcDoc::text("\""))
+    text("\"")
+        .append(text(&s.replace('\n', "\\n")))
+        .append(text(&"\""))
 }
 
 impl fastn_js::MutableVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("let")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("="))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("fastn.mutable("))
+        text("let")
+            .append(space())
+            .append(text(&self.name))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("fastn.mutable("))
             .append(if self.is_quoted {
                 quote(self.value.as_str())
             } else {
-                pretty::RcDoc::text(self.value.clone())
+                text(&self.value)
             })
-            .append(pretty::RcDoc::text(");"))
+            .append(text(");"))
     }
 }
 
 impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("let")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text("="))
-            .append(pretty::RcDoc::space())
+        text("let")
+            .append(space())
+            .append(text(self.name.as_str()))
+            .append(space())
+            .append(text("="))
+            .append(space())
             .append(if self.is_quoted {
                 quote(self.value.as_str())
             } else {
-                pretty::RcDoc::text(self.value.clone())
+                text(self.value.as_str())
             })
-            .append(pretty::RcDoc::text(";"))
+            .append(text(";"))
     }
 }
 
@@ -153,18 +162,48 @@ impl fastn_js::UDF {
     }
 }
 
-impl fastn_js::UDFStatement {
+fn binary(op: &str, left: &UDFStatement, right: &UDFStatement) -> pretty::RcDoc<'static> {
+    left.to_js()
+        .append(space())
+        .append(text(op))
+        .append(space())
+        .append(right.to_js())
+}
+
+impl UDFStatement {
     fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::UDFStatement::Integer { value } => pretty::RcDoc::text(value.to_string()),
-            fastn_js::UDFStatement::Decimal { value } => pretty::RcDoc::text(value.to_string()),
-            fastn_js::UDFStatement::Boolean { value } => pretty::RcDoc::text(value.to_string()),
-            fastn_js::UDFStatement::String { value } => quote(value.as_str()),
-            fastn_js::UDFStatement::Return { value } => pretty::RcDoc::text("return")
-                .append(pretty::RcDoc::space())
+            UDFStatement::Integer { value } => text(&value.to_string()),
+            UDFStatement::Decimal { value } => text(&value.to_string()),
+            UDFStatement::Boolean { value } => text(&value.to_string()),
+            UDFStatement::String { value } => quote(value.as_str()),
+            UDFStatement::Return { value } => text("return")
+                .append(space())
                 .append(value.to_js())
-                .append(pretty::RcDoc::text(";")),
-            _ => todo!(),
+                .append(text(";")),
+            UDFStatement::VariableDeclaration { name, value } => text("let")
+                .append(space())
+                .append(text(name.as_str()))
+                .append(space())
+                .append(text("="))
+                .append(space())
+                .append(value.to_js())
+                .append(text(";")),
+            UDFStatement::VariableAssignment { name, value } => text(name.as_str())
+                .append(space())
+                .append(text("="))
+                .append(space())
+                .append(value.to_js())
+                .append(text(";")),
+            UDFStatement::Addition { left, right } => binary("+", left, right),
+            UDFStatement::Subtraction { left, right } => binary("-", left, right),
+            UDFStatement::Multiplication { left, right } => binary("*", left, right),
+            UDFStatement::Division { left, right } => binary("/", left, right),
+            UDFStatement::Parens { value } => text("(").append(value.to_js()).append(text(")")),
+            UDFStatement::Variable { name } => text(name.as_str()),
+            UDFStatement::If { .. } => todo!(),
+            UDFStatement::Block { .. } => todo!(),
+            UDFStatement::Call { .. } => todo!(),
         }
     }
 }
@@ -172,7 +211,7 @@ impl fastn_js::UDFStatement {
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = fastn_js::to_js(&vec![f]);
+    let g = to_js(&vec![f]);
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);
