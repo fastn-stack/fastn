@@ -335,6 +335,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -348,6 +349,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -361,6 +363,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -374,6 +377,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -387,6 +391,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "28px",
 "size": "18px",
 "weight": 400
@@ -400,6 +405,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "16px",
 "weight": 400
@@ -413,6 +419,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -426,6 +433,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -453,6 +461,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "54px",
 "size": "36px",
 "weight": 400
@@ -466,6 +475,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "40px",
 "size": "26px",
 "weight": 400
@@ -479,6 +489,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "29px",
 "size": "22px",
 "weight": 400
@@ -492,6 +503,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -505,6 +517,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -518,6 +531,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -531,6 +545,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -544,6 +559,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -705,17 +721,25 @@ border-radius: 50%;
 background: #c1c8ce;
 }
 
+a {
+color: #2952a3;
+}
+
+a:visited {
+color: #856ab9;
+}
+
+a:hover {
+color: #24478f;
+}
+
 .ft_md a {
 text-decoration: none;
-color: #6262ee;
 }
 
 .ft_md a:visited {
 text-decoration: none;
-color: #ad71e4;
 }
-
-
 
 .ft_md a:hover {
 text-decoration: none;
@@ -2009,11 +2033,11 @@ window.ftd.utils.set_value_helper(data, "foo#yellow-red", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#yellow-red", "main");
 window.ftd.call_immutable_value_changes("foo#yellow-red", "main");
-window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
 window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2021,12 +2045,12 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
-window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
-window.ftd.utils.node_change_call("main","0:main__color", data);
 window.ftd.utils.node_change_call("main","0,2:main__border-color", data);
+window.ftd.utils.node_change_call("main","0:main__color", data);
+window.ftd.utils.node_change_call("main","0,0:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,1:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,3:main__border-color", data);
+window.ftd.utils.node_change_call("main","0,4:main__border-color", data);
 };
 
 window.set_value_main["ftd#default-colors"] = function (data, new_value, remaining) {

@@ -340,6 +340,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -353,6 +354,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -366,6 +368,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -379,6 +382,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -392,6 +396,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "28px",
 "size": "18px",
 "weight": 400
@@ -405,6 +410,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "16px",
 "weight": 400
@@ -418,6 +424,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -431,6 +438,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -458,6 +466,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "54px",
 "size": "36px",
 "weight": 400
@@ -471,6 +480,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "40px",
 "size": "26px",
 "weight": 400
@@ -484,6 +494,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "29px",
 "size": "22px",
 "weight": 400
@@ -497,6 +508,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -510,6 +522,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -523,6 +536,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -536,6 +550,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -549,6 +564,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -710,17 +726,25 @@ border-radius: 50%;
 background: #c1c8ce;
 }
 
+a {
+color: #2952a3;
+}
+
+a:visited {
+color: #856ab9;
+}
+
+a:hover {
+color: #24478f;
+}
+
 .ft_md a {
 text-decoration: none;
-color: #6262ee;
 }
 
 .ft_md a:visited {
 text-decoration: none;
-color: #ad71e4;
 }
-
-
 
 .ft_md a:hover {
 text-decoration: none;
@@ -2044,9 +2068,9 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
 window.ftd.utils.node_change_call("main","1:main__padding", data);
-window.ftd.utils.node_change_call("main","0:main__width", data);
 window.ftd.utils.node_change_call("main","2:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__height", data);
+window.ftd.utils.node_change_call("main","0:main__width", data);
 };
 
 

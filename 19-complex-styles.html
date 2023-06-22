@@ -335,6 +335,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -348,6 +349,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -361,6 +363,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -374,6 +377,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -387,6 +391,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "28px",
 "size": "18px",
 "weight": 400
@@ -400,6 +405,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "16px",
 "weight": 400
@@ -413,6 +419,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -426,6 +433,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -453,6 +461,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "54px",
 "size": "36px",
 "weight": 400
@@ -466,6 +475,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "40px",
 "size": "26px",
 "weight": 400
@@ -479,6 +489,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "29px",
 "size": "22px",
 "weight": 400
@@ -492,6 +503,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "18px",
 "weight": 400
@@ -505,6 +517,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -518,6 +531,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "12px",
 "weight": 400
@@ -531,6 +545,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "19px",
 "size": "14px",
 "weight": 400
@@ -544,6 +559,7 @@
 "weight": 400
 },
 "mobile": {
+"font-family": "sans-serif",
 "line-height": "21px",
 "size": "16px",
 "weight": 400
@@ -705,17 +721,25 @@ border-radius: 50%;
 background: #c1c8ce;
 }
 
+a {
+color: #2952a3;
+}
+
+a:visited {
+color: #856ab9;
+}
+
+a:hover {
+color: #24478f;
+}
+
 .ft_md a {
 text-decoration: none;
-color: #6262ee;
 }
 
 .ft_md a:visited {
 text-decoration: none;
-color: #ad71e4;
 }
-
-
 
 .ft_md a:hover {
 text-decoration: none;
@@ -2036,9 +2060,9 @@ set_data_value(data, "foo#foo:resize:1", value);
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
 window.ftd.utils.node_change_call("main","1:main__align-items", data);
+window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 window.ftd.utils.node_change_call("main","1,0:main__height", data);
 window.ftd.utils.node_change_call("main","1:main__width", data);
-window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 };
 
 window.set_value_main["foo#foo:align:1"] = function (data, new_value, remaining) {
@@ -2046,8 +2070,8 @@ window.ftd.utils.set_value_helper(data, "foo#foo:align:1", remaining, new_value)
 
 window.ftd.call_mutable_value_changes("foo#foo:align:1", "main");
 window.ftd.call_immutable_value_changes("foo#foo:align:1", "main");
-window.ftd.utils.node_change_call("main","1:main__align-items", data);
 window.ftd.utils.node_change_call("main","1:main__justify-content", data);
+window.ftd.utils.node_change_call("main","1:main__align-items", data);
 };
 
 window.set_value_main["foo#foo:px:1"] = function (data, new_value, remaining) {
@@ -2069,13 +2093,13 @@ window.ftd.utils.node_change_call("main","1:main__width", data);
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+window.resolve_value_main["foo#foo:align:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
+set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
 }
-else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
+else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
 
 }
 window.resolve_value_main["foo#foo:px:1"] = function(data) {
@@ -2087,13 +2111,13 @@ set_data_value(data, "foo#foo:px:1", 30);
 else {set_data_value(data, "foo#foo:px:1", 40);}
 
 }
-window.resolve_value_main["foo#foo:align:1"] = function(data) {
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
 }
-else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
 
 }
 
