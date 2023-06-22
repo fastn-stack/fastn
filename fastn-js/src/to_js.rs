@@ -200,6 +200,10 @@ impl UDFStatement {
             UDFStatement::Subtraction { left, right } => binary("-", left, right),
             UDFStatement::Multiplication { left, right } => binary("*", left, right),
             UDFStatement::Division { left, right } => binary("/", left, right),
+            UDFStatement::Exponentiation { left, right } => binary("**", left, right),
+            UDFStatement::And { left, right } => binary("&&", left, right),
+            UDFStatement::Or { left, right } => binary("||", left, right),
+            UDFStatement::Not { value } => text("!").append(value.to_js()),
             UDFStatement::Parens { value } => text("(").append(value.to_js()).append(text(")")),
             UDFStatement::Variable { name } => text(name.as_str()),
             UDFStatement::If {
