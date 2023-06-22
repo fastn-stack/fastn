@@ -37,6 +37,7 @@ taffy = { workspace = true, optional = true }
 thiserror.workspace = true
 tokio = { workspace = true, optional = true }
 tracing.workspace = true
+fastn-js.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true

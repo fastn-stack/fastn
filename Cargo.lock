@@ -1552,7 +1552,6 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
- "ftd 0.3.0",
  "indoc 2.0.1",
  "itertools",
  "pretty",
@@ -1739,6 +1738,7 @@ dependencies = [
  "dioxus-html",
  "dioxus-native-core",
  "dioxus-native-core-macro",
+ "fastn-js",
  "format_num",
  "futures",
  "include_dir",
