@@ -138,7 +138,7 @@ pub fn to_sitemap_compat(
             url: Some(toc_item.id.clone()),
             number: None,
             title: toc_item.title.clone(),
-            description: None,
+            description: toc_item.extra_data.get("description").cloned(),
             path: None,
             is_heading: false,
             font_icon: toc_item.icon.clone().map(|v| v.into()),
@@ -152,7 +152,11 @@ pub fn to_sitemap_compat(
             readers: toc_item.readers.clone(),
             writers: toc_item.writers.clone(),
             is_disabled: false,
-            image_src: None,
+            image_src: toc_item
+                .extra_data
+                .get("img-src")
+                .cloned()
+                .map(|v| v.into()),
             document: None,
         };
         toc_compat
@@ -175,7 +179,7 @@ pub fn to_sitemap_compat(
         fastn_core::sitemap::toc::TocItemCompat {
             url: subsection.id.clone(),
             title: subsection.title.clone(),
-            description: None,
+            description: subsection.extra_data.get("description").cloned(),
             path: None,
             is_heading: false,
             font_icon: subsection.icon.clone().map(|v| v.into()),
@@ -188,7 +192,11 @@ pub fn to_sitemap_compat(
                 is_child_active
             },
             is_open: false,
-            image_src: None,
+            image_src: subsection
+                .extra_data
+                .get("img-src")
+                .cloned()
+                .map(|v| v.into()),
             nav_title: subsection.nav_title.clone(),
             children,
             readers: subsection.readers.clone(),
@@ -216,7 +224,7 @@ pub fn to_sitemap_compat(
         fastn_core::sitemap::toc::TocItemCompat {
             url: Some(section.id.to_string()),
             number: None,
-            description: None,
+            description: section.extra_data.get("description").cloned(),
             title: section.title.clone(),
             path: None,
             is_heading: false,
@@ -233,7 +241,7 @@ pub fn to_sitemap_compat(
             readers: section.readers.clone(),
             writers: section.writers.clone(),
             is_disabled: false,
-            image_src: None,
+            image_src: section.extra_data.get("img-src").cloned().map(|v| v.into()),
             document: None,
         }
     }

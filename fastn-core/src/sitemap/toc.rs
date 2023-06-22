@@ -109,7 +109,7 @@ pub struct TocItemCompat {
     #[serde(rename = "is-open")]
     pub is_open: bool,
     #[serde(rename = "img-src")]
-    pub image_src: Option<String>,
+    pub image_src: Option<ImageSrc>,
     pub children: Vec<TocItemCompat>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,

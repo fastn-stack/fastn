@@ -9081,7 +9081,7 @@ mod interpreter {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::ftd2021::rendered::markup_line("\"0.2.0\""),
+                text: ftd::ftd2021::rendered::markup_line("\"0.3.0\""),
                 line: true,
                 common: ftd::Common {
                     reference: Some(s("foo/bar#test")),
@@ -9104,7 +9104,7 @@ mod interpreter {
                 name: "foo/bar#test".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
-                        text: "\"0.2.0\"".to_string(),
+                        text: "\"0.3.0\"".to_string(),
                         source: ftd::TextSource::Header,
                     },
                 },
@@ -9136,7 +9136,7 @@ mod interpreter {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::ftd2021::rendered::markup_line("\"0.2.0\""),
+                text: ftd::ftd2021::rendered::markup_line("\"0.3.0\""),
                 line: true,
                 common: ftd::Common {
                     reference: Some(s("foo/bar#test")),
@@ -9159,7 +9159,7 @@ mod interpreter {
                 name: "test".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
-                        text: "\"0.2.0\"".to_string(),
+                        text: "\"0.3.0\"".to_string(),
                         source: ftd::TextSource::Header,
                     },
                 },
