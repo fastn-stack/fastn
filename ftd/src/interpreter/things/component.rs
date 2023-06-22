@@ -1044,12 +1044,15 @@ fn search_things_for_module(
         let mut unresolved_thing = None;
 
         for (thing, _expected_kind) in things {
+            let (_, module_component_name) = component_name
+                .rsplit_once('.')
+                .unwrap_or(("", component_name));
             let thing_real_name = if let Some((_doc_name, element)) = thing.split_once('#') {
                 format!(
                     "{}#{}",
                     m_alias,
                     element.trim_start_matches(
-                        format!("{}.{}.", component_name, argument.name).as_str(),
+                        format!("{}.{}.", module_component_name, argument.name).as_str(),
                     )
                 )
             } else {
@@ -1057,7 +1060,7 @@ fn search_things_for_module(
                     "{}#{}",
                     m_alias,
                     thing.trim_start_matches(
-                        format!("{}.{}.", component_name, argument.name).as_str()
+                        format!("{}.{}.", module_component_name, argument.name).as_str(),
                     )
                 )
             };
