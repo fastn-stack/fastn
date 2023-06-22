@@ -135,6 +135,43 @@ impl fastn_js::StaticVariable {
 
 impl fastn_js::UDF {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        pretty::RcDoc::text("function")
+            .append(pretty::RcDoc::space())
+            .append(pretty::RcDoc::text(self.name.clone()))
+            .append(pretty::RcDoc::text("("))
+            .append(
+                pretty::RcDoc::intersperse(
+                    self.params
+                        .iter()
+                        .map(|v| pretty::RcDoc::text(v.to_string())),
+                    pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
+                )
+                .nest(4)
+                .group(),
+            )
+            .append(pretty::RcDoc::text(")"))
+            .append(pretty::RcDoc::softline_())
+            .append(
+                pretty::RcDoc::softline()
+                    .append(pretty::RcDoc::text("{"))
+                    .append(pretty::RcDoc::softline_())
+                    .append(
+                        pretty::RcDoc::intersperse(
+                            self.body.iter().map(|v| v.to_js()),
+                            pretty::RcDoc::softline(),
+                        )
+                        .group()
+                        .nest(4),
+                    )
+                    .append(pretty::RcDoc::softline_())
+                    .append(pretty::RcDoc::text("}"))
+                    .group(),
+            )
+    }
+}
+
+impl fastn_js::UDFStatement {
+    fn to_js(&self) -> pretty::RcDoc<'static> {
         todo!()
     }
 }
@@ -150,6 +187,16 @@ pub fn e(f: fastn_js::Ast, s: &str) {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn udf() {
+        let func = fastn_js::udf0("foo", vec![]);
+        fastn_js::to_js::e(func, "function foo() {}");
+        let func = fastn_js::udf1("foo", "p", vec![]);
+        fastn_js::to_js::e(func, "function foo(p) {}");
+        let func = fastn_js::udf2("foo", "p", "q", vec![]);
+        fastn_js::to_js::e(func, "function foo(p, q) {}");
+    }
+
     #[test]
     fn test_func() {
         let func = fastn_js::component0("foo", vec![]);
