@@ -328,12 +328,18 @@ mod tests {
 
     #[test]
     fn test_func() {
-        let func = fastn_js::component0("foo", vec![]);
-        fastn_js::to_js::e(func, "function foo(parent) {}");
-        let func = fastn_js::component1("foo", "p", vec![]);
-        fastn_js::to_js::e(func, "function foo(parent, p) {}");
-        let func = fastn_js::component2("foo", "p", "q", vec![]);
-        fastn_js::to_js::e(func, "function foo(parent, p, q) {}");
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![]),
+            "function foo(parent) {}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::component1("foo", "p", vec![]),
+            "function foo(parent, p) {}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::component2("foo", "p", "q", vec![]),
+            "function foo(parent, p, q) {}",
+        );
     }
 
     #[test]
