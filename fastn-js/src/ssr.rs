@@ -5,11 +5,15 @@ pub fn ssr_str(js: &str) -> String {
     let virtual_js = include_str!("../virtual.js");
     let js = format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{js}");
     std::fs::write("test.js", &js).unwrap();
-    if cfg!(feature = "windows") {
+
+    #[cfg(target_os = "windows")]
+    {
         rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
             .unwrap()
             .with(|ctx| ctx.eval::<String, _>(js).unwrap())
-    } else {
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
         let context = quick_js::Context::new().unwrap();
         context.eval_as::<String>(js.as_str()).unwrap()
     }
