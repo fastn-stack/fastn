@@ -27,7 +27,7 @@ impl fastn_js::ComponentStatement {
             let kernel = fastn_js::Kernel::from_component(component.name.as_str(), parent, index);
             component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
             component_statements.push(fastn_js::ComponentStatement::Done {
-                component_name: kernel.name.clone(),
+                component_name: kernel.name,
             });
         } else {
             todo!()

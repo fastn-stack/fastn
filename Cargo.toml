@@ -99,7 +99,8 @@ regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
 rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
-rquickjs = { version = "0.1", features = ["macro"] }
+#rquickjs = { version = "0.1", features = ["macro"] }
+quick-js = "0.4.1"
 rustc-hash = "1"
 rusty-hook = "^0.11.2"
 serde = { version = "1", features = ["derive"] }
