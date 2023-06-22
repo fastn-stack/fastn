@@ -13,6 +13,7 @@ mod ssr;
 mod static_variable;
 mod to_js;
 mod udf;
+mod udf_statement;
 mod utils;
 
 pub use ast::Ast;
@@ -23,4 +24,5 @@ pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
 pub use to_js::to_js;
-pub use udf::UDF;
+pub use udf::{udf0, udf1, udf2, UDF};
+pub use udf_statement::UDFStatement;
