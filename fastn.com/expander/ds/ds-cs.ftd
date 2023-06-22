@@ -1,5 +1,6 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
+-- import: fastn-community.github.io/bling/note
 
 -- ds.page: color-scheme in doc-site
 
@@ -40,6 +41,7 @@ if: { show-planning }
 src: $fastn-assets.files.expander.ds.img.cs-intro.png
 
 -- ds.markdown:
+if: { show-planning }
 
 A well-chosen color scheme is a powerful tool in website creation. It enhances
 the visual appeal, reinforces branding, improves readability and accessibility,
@@ -65,32 +67,29 @@ perception of the site.
 -- ds.h1: Adding color-scheme
 $on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
 
-The three steps to adding a color-scheme are:
-
-- **Select the color-scheme of your choice.** 
+**Select/choose the color-scheme of your choice.** 
 
   You can create your own color-scheme or
-  you can select it from the [`featured page`](/featured/cs/).
+  you can select it from the [`featured page`](/featured/cs/). 
+  Copy the package name.
 
   *Note:* For explanation, we have selected 
   [`winter-cs`](https://fastn-community.github.io/winter-cs/)
 
-
-
--- ds.markdown:
+The two steps to adding a color-scheme are:
 
 - **Add the color-scheme in your project**
 
--- ds.code: **A:** Add it as a dependency in `FASTN.ftd` document
+-- ds.code: **A:** By adding the package as a dependency in `FASTN.ftd` document
 lang: ftd
 
-\-- fastn.dependency: fastn-community.github.io/winter-cs as my-cs
+\-- fastn.dependency: fastn-community.github.io/winter-cs
 
 
--- ds.code: **B:** Import `my-cs` 
+-- ds.code: **B:** And, import the package in the `my-ds` document 
 lang: ftd
 
-\-- import: my-cs
+\-- import: fastn-community.github.io/winter-cs
 
 -- ds.markdown:
 
@@ -119,7 +118,7 @@ children wrapper:
 \-- ds.page: $page.title
 body: $page.body
 wrapper: $page.wrapper
-colors: $my-cs.main		;; <hl>
+colors: $winter-cs.main		;; <hl>
 
 \;; content goes here
 
@@ -127,9 +126,29 @@ colors: $my-cs.main		;; <hl>
 
 \-- end: page
 
+
+-- note.note: Note
+
+**Case A:** Some projects needs visibility i.e. instead of passing reference,
+  color-scheme should be visible and hence in such cases we pass the name of
+  the color-scheme as the value of `colors` property. 
+
+**Case B:** But at times, you need to do things quickly by changing one line of
+  code. In such cases we give alias `as my-cs` after the package name when
+  adding it as the dependency. Then pass the reference by alias while importing
+  and also passing it as the value of the `colors` property.
+
+
 -- ds.h1: Change the color-scheme
 
-To change the color-scheme,
+**Case A:** To change the color-scheme,
+
+- Select the color-scheme
+- Replace the package name of old color-scheme with new one dependency
+- Replace the package name of old color-scheme with new one
+- Use the new color-scheme name followed by `.main`
+
+**Case B:** To change the color-scheme,
 
 - Select the color-scheme
 - Replace the old color-scheme with new one as dependency
