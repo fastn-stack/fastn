@@ -38,6 +38,9 @@ pub enum UDFStatement {
     Boolean {
         value: bool,
     },
+    String {
+        value: String,
+    },
     Return {
         value: Box<UDFStatement>,
     },
