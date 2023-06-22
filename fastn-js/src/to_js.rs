@@ -102,6 +102,12 @@ impl fastn_js::Component {
     }
 }
 
+fn quote(s: &str) -> pretty::RcDoc<'static> {
+    pretty::RcDoc::text("\"")
+        .append(pretty::RcDoc::text(s.replace('\n', "\\n")))
+        .append(pretty::RcDoc::text("\""))
+}
+
 impl fastn_js::MutableVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text("let")
@@ -112,9 +118,7 @@ impl fastn_js::MutableVariable {
             .append(pretty::RcDoc::space())
             .append(pretty::RcDoc::text("fastn.mutable("))
             .append(if self.is_quoted {
-                pretty::RcDoc::text("\"")
-                    .append(pretty::RcDoc::text(self.value.replace('\n', "\\n")))
-                    .append(pretty::RcDoc::text("\""))
+                quote(self.value.as_str())
             } else {
                 pretty::RcDoc::text(self.value.clone())
             })
@@ -131,9 +135,7 @@ impl fastn_js::StaticVariable {
             .append(pretty::RcDoc::text("="))
             .append(pretty::RcDoc::space())
             .append(if self.is_quoted {
-                pretty::RcDoc::text("\"")
-                    .append(pretty::RcDoc::text(self.value.replace('\n', "\\n")))
-                    .append(pretty::RcDoc::text("\""))
+                quote(self.value.as_str())
             } else {
                 pretty::RcDoc::text(self.value.clone())
             })
@@ -155,6 +157,9 @@ impl fastn_js::UDFStatement {
     fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
             fastn_js::UDFStatement::Integer { value } => pretty::RcDoc::text(value.to_string()),
+            fastn_js::UDFStatement::Decimal { value } => pretty::RcDoc::text(value.to_string()),
+            fastn_js::UDFStatement::Boolean { value } => pretty::RcDoc::text(value.to_string()),
+            fastn_js::UDFStatement::String { value } => quote(value.as_str()),
             fastn_js::UDFStatement::Return { value } => pretty::RcDoc::text("return")
                 .append(pretty::RcDoc::space())
                 .append(value.to_js())
@@ -177,20 +182,51 @@ pub fn e(f: fastn_js::Ast, s: &str) {
 mod tests {
     #[test]
     fn udf() {
-        let func = fastn_js::udf0("foo", vec![]);
-        fastn_js::to_js::e(func, "function foo() {}");
-        let func = fastn_js::udf1("foo", "p", vec![]);
-        fastn_js::to_js::e(func, "function foo(p) {}");
-        let func = fastn_js::udf2("foo", "p", "q", vec![]);
-        fastn_js::to_js::e(func, "function foo(p, q) {}");
-
-        let func = fastn_js::udf0(
-            "foo",
-            vec![fastn_js::UDFStatement::Return {
-                value: Box::new(fastn_js::UDFStatement::Integer { value: 10 }),
-            }],
+        fastn_js::to_js::e(fastn_js::udf0("foo", vec![]), "function foo() {}");
+        fastn_js::to_js::e(fastn_js::udf1("foo", "p", vec![]), "function foo(p) {}");
+        fastn_js::to_js::e(
+            fastn_js::udf2("foo", "p", "q", vec![]),
+            "function foo(p, q) {}",
         );
-        fastn_js::to_js::e(func, "function foo() {return 10;}");
+
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Integer { value: 10 }),
+                }],
+            ),
+            "function foo() {return 10;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Decimal { value: 10.1 }),
+                }],
+            ),
+            "function foo() {return 10.1;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Boolean { value: true }),
+                }],
+            ),
+            "function foo() {return true;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::String {
+                        value: "hello".to_string(),
+                    }),
+                }],
+            ),
+            r#"function foo() {return "hello";}"#,
+        );
     }
 
     #[test]
