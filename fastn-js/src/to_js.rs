@@ -105,7 +105,7 @@ impl fastn_js::MutableVariable {
             .append(pretty::RcDoc::text("fastn.mutable("))
             .append(if self.is_quoted {
                 pretty::RcDoc::text("\"")
-                    .append(pretty::RcDoc::text(self.value.replace("\n", "\\n")))
+                    .append(pretty::RcDoc::text(self.value.replace('\n', "\\n")))
                     .append(pretty::RcDoc::text("\""))
             } else {
                 pretty::RcDoc::text(self.value.clone())
@@ -124,7 +124,7 @@ impl fastn_js::StaticVariable {
             .append(pretty::RcDoc::space())
             .append(if self.is_quoted {
                 pretty::RcDoc::text("\"")
-                    .append(pretty::RcDoc::text(self.value.replace("\n", "\\n")))
+                    .append(pretty::RcDoc::text(self.value.replace('\n', "\\n")))
                     .append(pretty::RcDoc::text("\""))
             } else {
                 pretty::RcDoc::text(self.value.clone())
