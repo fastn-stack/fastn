@@ -90,6 +90,12 @@ impl Library2022 {
                     return Some(r);
                 }
             }
+            // Self package referencing
+            if package.name.ends_with(name.trim_end_matches('/')) {
+                if let Some(r) = get_data_from_package(package.name.as_str(), &package, lib).await {
+                    return Some(r);
+                }
+            }
 
             for (alias, package) in package.aliases() {
                 lib.push_package_under_process(name, package).await.ok()?;
