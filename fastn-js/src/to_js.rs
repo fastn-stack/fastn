@@ -44,6 +44,7 @@ impl fastn_js::ElementKind {
         }
     }
 }
+
 impl fastn_js::ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
@@ -57,40 +58,47 @@ impl fastn_js::ComponentStatement {
     }
 }
 
-impl fastn_js::Component {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("function")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::text("("))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.params
-                        .iter()
-                        .map(|v| pretty::RcDoc::text(v.to_string())),
-                    pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
-                )
-                .nest(4)
-                .group(),
+fn func(
+    name: &str,
+    params: &[String],
+    body: Vec<pretty::RcDoc<'static>>,
+) -> pretty::RcDoc<'static> {
+    pretty::RcDoc::text("function")
+        .append(pretty::RcDoc::space())
+        .append(pretty::RcDoc::text(name.to_string()))
+        .append(pretty::RcDoc::text("("))
+        .append(
+            pretty::RcDoc::intersperse(
+                params.iter().map(|v| pretty::RcDoc::text(v.to_string())),
+                pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
             )
-            .append(pretty::RcDoc::text(")"))
-            .append(pretty::RcDoc::softline_())
-            .append(
-                pretty::RcDoc::softline()
-                    .append(pretty::RcDoc::text("{"))
-                    .append(pretty::RcDoc::softline_())
-                    .append(
-                        pretty::RcDoc::intersperse(
-                            self.body.iter().map(|v| v.to_js()),
-                            pretty::RcDoc::softline(),
-                        )
+            .nest(4)
+            .group(),
+        )
+        .append(pretty::RcDoc::text(")"))
+        .append(pretty::RcDoc::softline_())
+        .append(
+            pretty::RcDoc::softline()
+                .append(pretty::RcDoc::text("{"))
+                .append(pretty::RcDoc::softline_())
+                .append(
+                    pretty::RcDoc::intersperse(body, pretty::RcDoc::softline())
                         .group()
                         .nest(4),
-                    )
-                    .append(pretty::RcDoc::softline_())
-                    .append(pretty::RcDoc::text("}"))
-                    .group(),
-            )
+                )
+                .append(pretty::RcDoc::softline_())
+                .append(pretty::RcDoc::text("}"))
+                .group(),
+        )
+}
+
+impl fastn_js::Component {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        func(
+            self.name.as_str(),
+            &self.params,
+            self.body.iter().map(|f| f.to_js()).collect(),
+        )
     }
 }
 
@@ -135,38 +143,11 @@ impl fastn_js::StaticVariable {
 
 impl fastn_js::UDF {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        pretty::RcDoc::text("function")
-            .append(pretty::RcDoc::space())
-            .append(pretty::RcDoc::text(self.name.clone()))
-            .append(pretty::RcDoc::text("("))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.params
-                        .iter()
-                        .map(|v| pretty::RcDoc::text(v.to_string())),
-                    pretty::RcDoc::text(",").append(pretty::RcDoc::space()),
-                )
-                .nest(4)
-                .group(),
-            )
-            .append(pretty::RcDoc::text(")"))
-            .append(pretty::RcDoc::softline_())
-            .append(
-                pretty::RcDoc::softline()
-                    .append(pretty::RcDoc::text("{"))
-                    .append(pretty::RcDoc::softline_())
-                    .append(
-                        pretty::RcDoc::intersperse(
-                            self.body.iter().map(|v| v.to_js()),
-                            pretty::RcDoc::softline(),
-                        )
-                        .group()
-                        .nest(4),
-                    )
-                    .append(pretty::RcDoc::softline_())
-                    .append(pretty::RcDoc::text("}"))
-                    .group(),
-            )
+        func(
+            &self.name,
+            &self.params,
+            self.body.iter().map(|f| f.to_js()).collect(),
+        )
     }
 }
 
