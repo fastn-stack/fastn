@@ -64,6 +64,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.text-transform`](ftd/built-in-types/#ftd-text-transform)
   - [`ftd.type`](ftd/built-in-types/#ftd-type)
   - [`ftd.white-space`](ftd/built-in-types/#ftd-white-space)
+  - [`ftd.type-data`](ftd/built-in-types/#ftd-type-data)
 
 
 
@@ -1937,6 +1938,419 @@ text blocks.
 
 
 
+
+
+
+
+
+
+-- ds.h2: `ftd.type-data`
+
+`ftd.type-data` is a `record` type used to define typography data. It allows
+developers and designers to establish consistent and visually appealing
+typography styles throughout an application or website.
+
+
+-- ds.code: `ftd.type-data`
+lang: ftd
+
+\-- record type-data:
+ftd.responsive-type heading-large:
+ftd.responsive-type heading-medium:
+ftd.responsive-type heading-small:
+ftd.responsive-type heading-hero:
+ftd.responsive-type heading-tiny:
+ftd.responsive-type copy-small:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-large:
+ftd.responsive-type fine-print:
+ftd.responsive-type blockquote:
+ftd.responsive-type source-code:
+ftd.responsive-type button-small:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-large:
+ftd.responsive-type link:
+ftd.responsive-type label-large:
+ftd.responsive-type label-small:
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.type-data` has following fields:
+
+-- ds.h3: `heading-large`:
+
+Represents a type of typography for large headings. It is typically used to
+display prominent and visually impactful headings in a document or user
+interface.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 50px
+- line-height: 65px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 36px
+- line-height: 54px
+- font-weight: 400
+
+
+
+-- ds.h3: `heading-medium`:
+
+Represents a type of typography for medium-sized headings.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 38px
+- line-height: 57px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 26px
+- line-height: 40px
+- font-weight: 400
+
+
+-- ds.h3: `heading-small`:
+
+Represents a type of typography for small headings.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 24px
+- line-height: 31px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 22px
+- line-height: 29px
+- font-weight: 400
+
+
+-- ds.h3: `heading-hero`:
+
+Represents a type of typography for tiny headings. It is typically used for very
+small and subtle headings or captions.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 80px
+- line-height: 104px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 48px
+- line-height: 64px
+- font-weight: 400
+
+
+-- ds.h3: `heading-tiny`:
+
+Represents a type of typography for tiny headings. It is typically used for very
+small and subtle headings or captions.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 20px
+- line-height: 26px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+
+
+
+-- ds.h3: `copy-small`:
+
+Represents a type of typography for small-sized body copy or text blocks. It is
+typically used for displaying concise paragraphs, descriptions, or other textual
+content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+
+-- ds.h3: `copy-regular`:
+
+Represents a type of typography for regular-sized body copy or text blocks. It
+is typically used for displaying standard paragraphs, descriptions, or other
+textual content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 30px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 24px
+- font-weight: 400
+
+
+
+-- ds.h3: `copy-large`:
+
+Represents a type of typography for large-sized body copy or text blocks. It is
+typically used for displaying important or emphasized paragraphs, descriptions,
+or other textual content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 22px
+- line-height: 34px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 28px
+- font-weight: 400
+
+
+-- ds.h3: `fine-print`:
+
+Represents a type of typography for fine print or small-sized text. It is
+typically used for displaying legal disclaimers, copyright information, or other
+supplementary text that requires smaller font size and reduced emphasis.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+
+-- ds.h3: `blockquote`:
+
+Represents a type of typography for blockquote text, which is a quoted section
+of text often used to highlight and emphasize external content or significant
+statements.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+
+-- ds.h3: `source-code`:
+
+Represents a type of typography for displaying source code or programming code
+snippets. It is typically used to present code examples, syntax highlighting,
+and improve code readability.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 30px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+
+-- ds.h3: `button-small`:
+
+Represents a type of typography for small-sized buttons. It is typically used
+for displaying buttons with compact dimensions, such as in navigation bars, form
+elements, or areas with limited space.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+-- ds.h3: `button-medium`:
+
+Represents a type of typography for medium-sized buttons. It is typically used
+for displaying buttons with a balanced size, suitable for various interactive
+elements and user interface components.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+-- ds.h3: `button-large`:
+
+Represents a type of typography for large-sized buttons. It is typically used
+for displaying buttons with a prominent and impactful design, suitable for
+important calls to action or primary interaction points.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+-- ds.h3: `button-large`:
+
+Represents a type of typography for large-sized buttons. It is typically used
+for displaying buttons with a prominent and impactful design, suitable for
+important calls to action or primary interaction points.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+-- ds.h3: `link`:
+
+Represents a type of typography for hyperlinks or clickable text. It is
+typically used for styling text that serves as a link to other web pages or
+resources.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+
+-- ds.h3: `label-large`:
+
+Represents a type of typography for large-sized labels. It is typically used for
+displaying labels or tags that require a larger size and visual prominence.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+-- ds.h3: `label-small`:
+
+Represents a type of typography for small-sized labels. It is typically used for
+displaying labels or tags that require a relatively smaller size and visual
+prominence.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
 
 
 -- ds.h2: `ftd.text-transform`
