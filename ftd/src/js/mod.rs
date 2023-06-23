@@ -3,7 +3,12 @@
 #[cfg(test)]
 #[macro_use]
 mod ftd_test_helpers;
+mod element;
 mod utils;
+mod value;
+
+pub use element::Element;
+pub use value::Value;
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     vec![ftd::js::from_tree(document.tree.as_slice())]
@@ -23,16 +28,11 @@ impl ftd::interpreter::Component {
         parent: &str,
         index: usize,
     ) -> Vec<fastn_js::ComponentStatement> {
-        let mut component_statements = vec![];
-        if fastn_js::utils::is_kernel(self.name.as_str()) {
-            let kernel = fastn_js::Kernel::from_component(self.name.as_str(), parent, index);
-            component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
-            component_statements.push(fastn_js::ComponentStatement::Done {
-                component_name: kernel.name,
-            });
+        if ftd::js::element::is_kernel(self.name.as_str()) {
+            ftd::js::Element::from_interpreter_component(self)
+                .into_component_statements(parent, index)
         } else {
             todo!()
         }
-        component_statements
     }
 }
