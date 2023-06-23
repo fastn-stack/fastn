@@ -2335,8 +2335,8 @@ displaying labels or tags that require a larger size and visual prominence.
 -- ds.h3: `label-small`:
 
 Represents a type of typography for small-sized labels. It is typically used for
-displaying labels or tags that require a relatively smaller size and visual
-prominence.
+displaying compact labels or tags that require a smaller size and subtle
+presentation.
 
 **Desktop**
 
