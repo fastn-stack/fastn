@@ -40,6 +40,15 @@ impl fastn_js::Kernel {
     }
 }
 
+impl fastn_js::SetProperty {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text(format!("{}.setProperty(", self.element_name).as_str())
+            .append(text(format!("{},", self.kind.to_js()).as_str()))
+            .append(space())
+            .append(text(format!("{});", self.value.to_js()).as_str()))
+    }
+}
+
 impl fastn_js::ElementKind {
     pub fn to_js(&self) -> &'static str {
         match self {
@@ -61,6 +70,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::StaticVariable(f) => f.to_js(),
             fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
+            fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::Done { component_name } => {
                 text(&format!("{component_name}.done();"))
             }

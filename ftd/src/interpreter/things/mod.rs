@@ -165,4 +165,11 @@ impl Thing {
             ),
         }
     }
+
+    pub(crate) fn component(self) -> Option<ftd::interpreter::ComponentDefinition> {
+        match self {
+            ftd::interpreter::Thing::Component(v) => Some(v),
+            _ => None,
+        }
+    }
 }
