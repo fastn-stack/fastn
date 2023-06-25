@@ -363,7 +363,7 @@ template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 wip: true
 
--- template: Set-2-DS
+-- template: Midnight Storm
 template-url: featured/ds/set-2-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
 wip: true
@@ -381,7 +381,7 @@ template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 wip: true
 
--- template: Set-2-DS
+-- template: Midnight Storm
 template-url: featured/landing/set-2-landing/
 screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
 wip: true
@@ -404,8 +404,8 @@ template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 wip: true
 
--- template: Set-2-DS
-template-url: featured/blogs/set-3-blog/
+-- template: Midnight Storm
+template-url: featured/blogs/set-2-blog/
 screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
 wip: true
 

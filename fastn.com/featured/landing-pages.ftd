@@ -74,15 +74,15 @@ wip: true
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
 
--- ft-ui.template: Set 2 DS
-template-url: featured/landing/set-2-landing/
+-- ft-ui.template: Midnight Storm
+template-url: fastn-community.github.io/midnight-storm
 screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
-licence-url: https://github.com/fastn-community/set-2-ds/blob/master/LICENSE
-github-url: https://github.com/fastn-community/set-2-ds
+licence-url: https://github.com/fastn-community/midnight-storm/blob/master/LICENSE
+github-url: https://github.com/fastn-community/midnight-storm
 is-last: true
 wip: true
 
-⚡️ Set 2 DS will help you create a beautiful documentation site in no time.
+⚡️ Midnight Storm will help you create a beautiful documentation site in no time.
 
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).

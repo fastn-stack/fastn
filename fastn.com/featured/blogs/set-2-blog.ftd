@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Documentation Sites - Set 2 Blog
+-- ds.layout: Blog - Midnight Storm
 cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
@@ -49,7 +49,7 @@ previous-url: /featured/
 
 -- ds.distributors: 
 owners: $owner-fastn
-license-url: https://github.com/fastn-community/set-2-ds/blob/main/LICENSE
+license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
 license: Creative Commons
 published-date: 02-June-2023
 used-by: 1 +
@@ -68,7 +68,7 @@ organizational blog sites.
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
-cta-url: https://fastn-community.github.io/set-2-ds/blog/
+cta-url: https://fastn-community.github.io/midnight-storm/blog/
 
 -- ft-ui.grid-view: Blog Templates
 if: { show-grid }

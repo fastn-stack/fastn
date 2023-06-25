@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: SPA / Landing Pages - Set 2 SPA / Landing Page
+-- ds.layout: SPA / Landing Pages - Midnight Storm 
 cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
@@ -49,7 +49,7 @@ previous-url: /featured/
 
 -- ds.distributors: 
 owners: $owner-fastn
-license-url: https://github.com/fastn-community/set-2-ds/blob/main/LICENSE
+license-url: https://github.com/fastn-community/midnight-storm/blob/main/LICENSE
 license: Creative Commons
 published-date: 02-June-2023
 used-by: 1 +
@@ -66,7 +66,7 @@ for creating SPA(Single Page Application or websites) etc.
 
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
-cta-url: https://fastn-community.github.io/set-2-ds/landing/
+cta-url: https://fastn-community.github.io/midnight-storm/landing/
 
 -- ft-ui.grid-view: SPA / Landing Pages
 if: { show-grid }
