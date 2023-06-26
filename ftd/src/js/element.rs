@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Element {
     Text(Text),
 }
@@ -21,8 +22,10 @@ impl Element {
     }
 }
 
+#[derive(Debug)]
 pub struct Text {
     pub text: ftd::js::Value,
+    pub common: Common,
 }
 
 impl Text {
@@ -40,6 +43,10 @@ impl Text {
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
         }
     }
 
@@ -58,9 +65,36 @@ impl Text {
                 element_name: kernel.name.to_string(),
             },
         ));
+        component_statements.extend(self.common.to_set_properties(kernel.name.as_str()));
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name,
         });
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Common {
+    pub width: Option<ftd::js::Value>,
+}
+
+impl Common {
+    pub fn from(
+        property: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> Common {
+        Common {
+            width: ftd::js::value::get_properties("width", property, arguments),
+        }
+    }
+
+    pub fn to_set_properties(&self, element_name: &str) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if let Some(ref width) = self.width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                width.to_set_property(fastn_js::PropertyKind::Width, element_name),
+            ));
+        }
         component_statements
     }
 }
