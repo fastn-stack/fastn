@@ -59,7 +59,9 @@ pub(crate) fn get_properties(
             }
         }
     }
-    todo!()
+
+    // Todo: For more than one properties
+    return None;
 }
 
 impl ftd::interpreter::PropertyValue {
