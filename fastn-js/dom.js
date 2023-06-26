@@ -18,7 +18,32 @@ fastn_dom.PropertyKind = {
     Color_RGB: 1,
     IntegerValue: 2,
     StringValue: 3,
+    Width: 5
 }
+
+fastn_dom.Resizing = {
+    FillContainer: "100%",
+    HugContent: "fit-content",
+    Fixed: (value) => { return value; }
+}
+
+fastn_dom.Length = {
+    Px: (value) => {
+        return `${value}px`;
+    },
+    Em: (value) => {
+        return `${value}em`;
+    },
+    Responsive: (desktop, mobile) => {
+        if (ftd.device == "desktop") {
+            return desktop;
+        } else {
+            return mobile ? mobile: desktop;
+        }
+    }
+}
+
+
 
 fastn_dom.Event = {
     Click: 0
@@ -56,6 +81,10 @@ class Node2 {
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width_Px) {
             this.#node.style.width = staticValue + "px";
+        } else if (kind === fastn_dom.PropertyKind.Width_Em) {
+            this.#node.style.width = staticValue + "em";
+        } else if (kind === fastn_dom.PropertyKind.Width) {
+            this.#node.style.width = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
             this.#node.style.color = staticValue;
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||

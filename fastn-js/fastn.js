@@ -31,7 +31,10 @@ class Closure {
         return this.#node;
     }
     updateUi() {
-        if (!this.#node || !this.#property || !this.#node.getNode()) {
+        if (!this.#node ||
+            this.#property === null ||
+            this.#property === undefined ||
+            !this.#node.getNode()) {
             return;
         }
 
