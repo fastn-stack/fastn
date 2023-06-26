@@ -1,5 +1,22 @@
 let fastn_dom = {};
 
+fastn_dom.classes = {}
+fastn_dom.unsanitised_classes = {}
+fastn_dom.class_count = 0;
+fastn_dom.property_map = {"color": "c", "width": "w"};
+
+fastn_dom.getClassesAsString = function() {
+    let classes = Object.entries(fastn_dom.classes).map(entry => {
+        return `.${entry[0]} { ${entry[1].property}: ${entry[1].value}; }`;
+    });
+
+    if (classes.length == 0) {
+        return "";
+    }
+
+    return `<style>${classes.join("\n")}</style>`;
+}
+
 fastn_dom.ElementKind = {
     Row: 0,
     Column: 1,
@@ -75,13 +92,27 @@ class Node2 {
         }
         parent.appendChild(this.#node);
     }
+    attachCss(property, value) {
+        let property_short = fastn_dom.property_map[property];
+        let cls = `${property_short}-${value}`;
+        if (fastn_dom.unsanitised_classes[cls]) {
+            cls = fastn_dom.unsanitised_classes[cls];
+        } else {
+            fastn_dom.class_count++;
+            fastn_dom.unsanitised_classes[cls] = fastn_dom.class_count;
+            cls = fastn_dom.class_count;
+        }
+        cls = `c-${cls}`;
+        fastn_dom.classes[cls] = fastn_dom.classes[cls] || { property: property, value: value };
+        this.#node.classList.add(cls);
+    }
     setStaticProperty(kind, value) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width) {
-            this.#node.style.width = staticValue;
+            this.attachCss("width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
-            this.#node.style.color = staticValue;
+            this.attachCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
