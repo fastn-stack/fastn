@@ -1,5 +1,5 @@
 pub enum Value {
-    JSValue(ftd::interpreter::Value),
+    Data(ftd::interpreter::Value),
     Reference(String),
     Formula(Vec<ftd::interpreter::Property>),
 }
@@ -7,7 +7,7 @@ pub enum Value {
 impl Value {
     pub(crate) fn to_set_property_value(&self) -> fastn_js::SetPropertyValue {
         match self {
-            Value::JSValue(value) => fastn_js::SetPropertyValue::Value(value.to_fastn_js_value()),
+            Value::Data(value) => fastn_js::SetPropertyValue::Value(value.to_fastn_js_value()),
             Value::Reference(name) => fastn_js::SetPropertyValue::Reference(name.to_string()),
             _ => todo!(),
         }
@@ -37,7 +37,7 @@ pub(crate) fn get_properties(
         if property.condition.is_none() {
             match property.value {
                 ftd::interpreter::PropertyValue::Value { ref value, .. } => {
-                    return Some(Value::JSValue(value.to_owned()))
+                    return Some(Value::Data(value.to_owned()))
                 }
                 ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
                     return Some(Value::Reference(name.to_owned()))
