@@ -1,6 +1,6 @@
 -- ds.page: `ftd` crate
 
-`ftd` is the crate the implements the language.
+`ftd` is the crate that implements the language.
 
 -- ds.h1: Location
 
@@ -10,7 +10,7 @@
 -- ds.h1: How It Works
 
 You can check out `ftd_v2_interpret_helper()` in [`main.rs`](https://github.com/fastn-stack/fastn/blob/main/ftd/src/main.rs)
-to see how this crate is used standalone.
+to see how this crate is used as a standalone project.
 
 -- ds.h2: The "interpreter loop"
 

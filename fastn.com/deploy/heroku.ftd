@@ -2,13 +2,21 @@
 
 -- ds.page: Deploying On Heroku
 
-If you created your `fastn` package using the
-[fastn-template](https://github.com/fastn-stack/fastn-template) repository then
-you will see a button in README to deploy your package on Heroku.
+To deploy `fastn` on Heroku you can use our official
+[fastn-stack/heroku-buildpack](https://github.com/fastn-stack/heroku-buildpack):
 
--- ds.image:
-src: $assets.files.images.heroku-button.png
+-- ds.code:
+lang: sh
 
-You should be able to deploy it on heroku by clicking on the button.
+heroku config:add BUILDPACK_URL=https://github.com/fastn-stack/heroku-buildpack.git
+
+-- ds.markdown:
+
+You will have to launch `fastn` from your Procfile:
+
+-- ds.code:
+lang: Procfile
+
+web: fastn serve --port $PORT --bind 0.0.0.0
 
 -- end: ds.page
