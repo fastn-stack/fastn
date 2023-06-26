@@ -73,20 +73,20 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    let js = ftd::js::document_into_js_ast(i);
-    let body = fastn_js::ssr(js.as_slice());
-    let js_script = fastn_js::to_js(js.as_slice());
+    let js_ast = ftd::js::document_into_js_ast(i);
+    let ssr_body = fastn_js::ssr(js_ast.as_slice());
+    let js_script = fastn_js::to_js(js_ast.as_slice());
     let html_str = ftd::js::utils::trim_all_lines(
         std::fs::read_to_string("ftd-js.html")
-            .expect("cant read ftd.html")
+            .expect("can't read ftd-js.html")
             .replace("__js_script__", js_script.as_str())
-            .replace("__html_body__", body.as_str())
+            .replace("__html_body__", ssr_body.as_str())
             .replace(
                 "__script_file__",
                 if manual {
                     format!("<script>\n{}\n</script>", fastn_js::all_js())
                 } else {
-                    "<script src=\"fastn-js.js\"></script>".to_string()
+                    "<script src=\"fastn-js_ast.js_ast\"></script>".to_string()
                 }
                 .as_str(),
             )

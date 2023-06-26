@@ -17,13 +17,13 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
 pub fn from_tree(tree: &[ftd::interpreter::Component]) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.into_component_statements("parent", index))
+        statements.extend(component.to_component_statements("parent", index))
     }
     fastn_js::component0("main", statements)
 }
 
 impl ftd::interpreter::Component {
-    pub fn into_component_statements(
+    pub fn to_component_statements(
         &self,
         parent: &str,
         index: usize,
