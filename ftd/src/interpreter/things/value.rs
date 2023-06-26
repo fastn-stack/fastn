@@ -1329,7 +1329,7 @@ pub enum Value {
         name: String,
         variant: String,
         full_variant: String,
-        value: Box<PropertyValue>,
+        value: Box<PropertyValue>, // Todo: Make it optional
     },
     List {
         data: Vec<PropertyValue>,

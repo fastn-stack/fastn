@@ -7,7 +7,7 @@ mod element;
 mod utils;
 mod value;
 
-pub use element::Element;
+pub use element::{Common, Element};
 pub use value::Value;
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {

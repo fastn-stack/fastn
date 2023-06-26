@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum Value {
     Data(ftd::interpreter::Value),
     Reference(String),
@@ -7,9 +8,21 @@ pub enum Value {
 impl Value {
     pub(crate) fn to_set_property_value(&self) -> fastn_js::SetPropertyValue {
         match self {
-            Value::Data(value) => fastn_js::SetPropertyValue::Value(value.to_fastn_js_value()),
+            Value::Data(value) => value.to_fastn_js_value(),
             Value::Reference(name) => fastn_js::SetPropertyValue::Reference(name.to_string()),
             _ => todo!(),
+        }
+    }
+
+    pub(crate) fn to_set_property(
+        &self,
+        kind: fastn_js::PropertyKind,
+        element_name: &str,
+    ) -> fastn_js::SetProperty {
+        fastn_js::SetProperty {
+            kind,
+            value: self.to_set_property_value(),
+            element_name: element_name.to_string(),
         }
     }
 }
@@ -49,11 +62,79 @@ pub(crate) fn get_properties(
     todo!()
 }
 
-impl ftd::interpreter::Value {
-    pub(crate) fn to_fastn_js_value(&self) -> fastn_js::Value {
+impl ftd::interpreter::PropertyValue {
+    pub(crate) fn to_fastn_js_value(&self) -> fastn_js::SetPropertyValue {
         match self {
-            ftd::interpreter::Value::String { text } => fastn_js::Value::String(text.to_string()),
+            ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(),
+            ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
+                fastn_js::SetPropertyValue::Reference(name.to_string())
+            }
             _ => todo!(),
         }
+    }
+}
+
+impl ftd::interpreter::Value {
+    pub(crate) fn to_fastn_js_value(&self) -> fastn_js::SetPropertyValue {
+        match self {
+            ftd::interpreter::Value::String { text } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
+            }
+            ftd::interpreter::Value::Integer { value } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
+            }
+            ftd::interpreter::Value::OrType {
+                name,
+                variant,
+                value,
+                ..
+            } => {
+                let (js_variant, has_value) = ftd_to_js_variant(name, variant);
+                if has_value {
+                    return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                        variant: js_variant.to_string(),
+                        value: Some(Box::new(value.to_fastn_js_value())),
+                    });
+                }
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                    variant: js_variant.to_string(),
+                    value: None,
+                })
+            }
+            _ => todo!(),
+        }
+    }
+}
+
+fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
+    let variant = variant.strip_prefix(format!("{}.", name).as_str()).unwrap();
+    match name {
+        "ftd#resizing" => {
+            let js_variant = resizing_variants(variant);
+            (format!("fastn_dom.Resizing.{}", js_variant.0), js_variant.1)
+        }
+        "ftd#length" => {
+            let js_variant = length_variants(variant);
+            (format!("fastn_dom.Length.{}", js_variant), true)
+        }
+        _ => todo!(),
+    }
+}
+
+// Returns the corresponding js string and has_value
+// Todo: Remove has_value flag
+fn resizing_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "fixed" => ("Fixed", true),
+        "fill-container" => ("FillContainer", false),
+        _ => todo!(),
+    }
+}
+
+fn length_variants(name: &str) -> &'static str {
+    match name {
+        "px" => "Px",
+        "em" => "Em",
+        _ => todo!(),
     }
 }
