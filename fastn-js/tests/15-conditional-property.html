@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script src="../dom.js"></script>
+    <script src="../fastn.js"></script>
+    <script src="../utils.js"></script>
+    <script src="../virtual.js"></script>
+    <script src="../variables.js"></script>
+    <script src="../variables.js"></script>
+</head>
+<body></body>
+<script>
+    (function() {
+        function main (root) {
+            let value = fastn.mutable(1);
+            let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+            i1.setProperty(fastn_dom.PropertyKind.IntegerValue, value);
+            i1.done();
+
+            let i0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            let f = fastn.formula([value], function () {
+                if (value.get() % 2 == 0) {
+                    return "I am even";
+                } else {
+                    return "I am odd";
+                }
+            });
+            i0.setProperty(fastn_dom.PropertyKind.StringValue, f);
+            i0.setDynamicProperty(fastn_dom.PropertyKind.Width, [value], function () {
+                if (value.get() % 2 == 0) {
+                    return fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(fastn_dom.Length.Px(5)));
+                } else {
+                    return fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5));
+                }
+            });
+            i0.addEventHandler(fastn_dom.Event.Click, function () {
+                value.set(value.get() + 1);
+            })
+            i0.done();
+        }
+
+        main(document.body);
+    })();
+</script>
+</html>
+
+
+<!--
+-- integer $value: 1
+
+-- ftd.text:
+text if { value % 2 == 0 }: I am even
+text: I am odd
+width.fixed.px if { value % 2 == 0 }: 20
+width.fixed.em: 4
+$on-click$: $ftd.increment($a = $value)
+
+-->
