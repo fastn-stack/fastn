@@ -94,5 +94,5 @@ fastn_virtual.ssr = function(main) {
     main(body)
     ssr = false;
     id_counter = 0;
-    return body.toHtmlAsString()
+    return body.toHtmlAsString() + fastn_dom.getClassesAsString();
 }

@@ -1,3 +1,11 @@
 -- ftd.text: Hello
 width.fixed.px: 20
-;; width: fill-container
+
+-- ftd.text: Hello 30
+width.fixed.px: 30
+
+-- ftd.text: Hello 20
+width.fixed.px: 20
+
+-- ftd.text: fill-container
+width: fill-container

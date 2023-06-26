@@ -1,7 +1,7 @@
 let fastn_utils = {
     htmlNode(kind) {
         let node = "div";
-        let css = ["ft_common"];
+        let css = [];
         if (kind === fastn_dom.ElementKind.Column) {
             css.push("ft_column");
         } else if (kind === fastn_dom.ElementKind.Row) {
