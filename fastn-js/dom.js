@@ -102,7 +102,7 @@ class Node2 {
             fastn_dom.unsanitised_classes[cls] = fastn_dom.class_count;
             cls = fastn_dom.class_count;
         }
-        cls = `c-${cls}`;
+        cls = `c${cls}`;
         fastn_dom.classes[cls] = fastn_dom.classes[cls] || { property: property, value: value };
         this.#node.classList.add(cls);
     }
