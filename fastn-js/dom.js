@@ -14,11 +14,10 @@ fastn_dom.ElementKind = {
 };
 
 fastn_dom.PropertyKind = {
-    Width_Px: 0,
-    Color_RGB: 1,
-    IntegerValue: 2,
-    StringValue: 3,
-    Width: 5
+    Color_RGB: 0,
+    IntegerValue: 1,
+    StringValue: 2,
+    Width: 3
 }
 
 fastn_dom.Resizing = {
@@ -79,11 +78,7 @@ class Node2 {
     setStaticProperty(kind, value) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
-        if (kind === fastn_dom.PropertyKind.Width_Px) {
-            this.#node.style.width = staticValue + "px";
-        } else if (kind === fastn_dom.PropertyKind.Width_Em) {
-            this.#node.style.width = staticValue + "em";
-        } else if (kind === fastn_dom.PropertyKind.Width) {
+        if (kind === fastn_dom.PropertyKind.Width) {
             this.#node.style.width = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
             this.#node.style.color = staticValue;
