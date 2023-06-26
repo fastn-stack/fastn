@@ -85,7 +85,7 @@ fn func(
 ) -> pretty::RcDoc<'static> {
     text("function")
         .append(space())
-        .append(text(&name))
+        .append(text(name))
         .append(text("("))
         .append(
             pretty::RcDoc::intersperse(
@@ -125,7 +125,7 @@ impl fastn_js::Component {
 fn quote(s: &str) -> pretty::RcDoc<'static> {
     text("\"")
         .append(text(&s.replace('\n', "\\n")))
-        .append(text(&"\""))
+        .append(text("\""))
 }
 
 impl fastn_js::MutableVariable {

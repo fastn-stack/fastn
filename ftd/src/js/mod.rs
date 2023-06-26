@@ -30,7 +30,7 @@ impl ftd::interpreter::Component {
     ) -> Vec<fastn_js::ComponentStatement> {
         if ftd::js::element::is_kernel(self.name.as_str()) {
             ftd::js::Element::from_interpreter_component(self)
-                .into_component_statements(parent, index)
+                .to_component_statements(parent, index)
         } else {
             todo!()
         }

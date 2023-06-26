@@ -10,13 +10,13 @@ impl Element {
         }
     }
 
-    pub fn into_component_statements(
+    pub fn to_component_statements(
         &self,
         parent: &str,
         index: usize,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
-            Element::Text(text) => text.into_component_statements(parent, index),
+            Element::Text(text) => text.to_component_statements(parent, index),
         }
     }
 }
@@ -43,7 +43,7 @@ impl Text {
         }
     }
 
-    pub fn into_component_statements(
+    pub fn to_component_statements(
         &self,
         parent: &str,
         index: usize,
