@@ -86,7 +86,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
                 if manual {
                     format!("<script>\n{}\n</script>", fastn_js::all_js())
                 } else {
-                    "<script src=\"fastn-js_ast.js_ast\"></script>".to_string()
+                    "<script src=\"fastn-js.js\"></script>".to_string()
                 }
                 .as_str(),
             )
