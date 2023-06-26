@@ -17,7 +17,7 @@ fastn_dom.PropertyKind = {
     Color_RGB: 0,
     IntegerValue: 1,
     StringValue: 2,
-    Width: 3
+    Width: 3,
 }
 
 fastn_dom.Resizing = {
