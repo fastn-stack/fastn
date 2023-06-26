@@ -95,14 +95,10 @@ class Node2 {
     attachCss(property, value) {
         let property_short = fastn_dom.property_map[property];
         let cls = `${property_short}-${value}`;
-        if (fastn_dom.unsanitised_classes[cls]) {
-            cls = fastn_dom.unsanitised_classes[cls];
-        } else {
-            fastn_dom.class_count++;
-            fastn_dom.unsanitised_classes[cls] = fastn_dom.class_count;
-            cls = fastn_dom.class_count;
+        if (!fastn_dom.unsanitised_classes[cls]) {
+            fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
         }
-        cls = `c${cls}`;
+        cls = `c${fastn_dom.unsanitised_classes[cls]}`;
         fastn_dom.classes[cls] = fastn_dom.classes[cls] || { property: property, value: value };
         this.#node.classList.add(cls);
     }
