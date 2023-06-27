@@ -106,10 +106,7 @@ impl ftd::interpreter::Value {
                     value: None,
                 })
             }
-            _ => {
-                dbg!(&self);
-                todo!()
-            }
+            _ => todo!(),
         }
     }
 }
@@ -144,7 +141,11 @@ fn length_variants(name: &str) -> &'static str {
     match name {
         "px" => "Px",
         "em" => "Em",
+        "rem" => "Rem",
         "percent" => "Percent",
+        "vh" => "Vh",
+        "vw" => "Vw",
+        "calc" => "Calc",
         _ => todo!(),
     }
 }

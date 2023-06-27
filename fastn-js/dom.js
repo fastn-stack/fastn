@@ -51,8 +51,20 @@ fastn_dom.Length = {
     Em: (value) => {
         return `${value}em`;
     },
+    Rem: (value) => {
+        return `${value}rem`;
+    },
     Percent: (value) => {
         return `${value}%`;
+    },
+    Calc: (value) => {
+        return `calc(${value})`;
+    },
+    Vh: (value) => {
+        return `${value}vh`;
+    },
+    Vw: (value) => {
+        return `${value}vw`;
     },
     Responsive: (desktop, mobile) => {
         if (ftd.device == "desktop") {
