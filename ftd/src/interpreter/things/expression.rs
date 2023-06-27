@@ -238,4 +238,38 @@ impl ftd::evalexpr::ExprNode {
         }
         ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
+
+    pub fn update_node_with_variable_reference_js(
+        &self,
+        references: &ftd::Map<ftd::interpreter::PropertyValue>,
+    ) -> ftd::evalexpr::ExprNode {
+        let mut operator = self.operator().clone();
+        if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
+            if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
+                if let Some(ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Integer { value },
+                    ..
+                }) = references.get(identifier)
+                {
+                    operator = ftd::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: value.to_string(),
+                    }
+                }
+            } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                references.get(identifier)
+            {
+                operator = ftd::evalexpr::Operator::VariableIdentifierRead {
+                    identifier: format!(
+                        "fastn_utils.getter({})",
+                        fastn_js::utils::name_to_js(name).as_str()
+                    ),
+                }
+            }
+        }
+        let mut children = vec![];
+        for child in self.children() {
+            children.push(child.update_node_with_variable_reference_js(references));
+        }
+        ftd::evalexpr::ExprNode::new(operator).add_children(children)
+    }
 }
