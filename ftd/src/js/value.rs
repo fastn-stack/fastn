@@ -157,6 +157,7 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
     match name {
         "fixed" => ("Fixed", true),
         "fill-container" => ("FillContainer", false),
+        "hug-content" => ("HugContent", false),
         _ => todo!(),
     }
 }
