@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="fastn-js.js"></script>
+    <script src="fastn-js.js"></script>
 </head>
 <body data-id="1"><div data-id="2" class="c1">Fill-container height</div><div data-id="3" class="c2">Hug Content Height</div><div data-id="4" class="c3">px Height</div><div data-id="5" class="c4 c5">percent Height</div><div data-id="6" class="c4 c6">rem Height</div><div data-id="7" class="c4 c7">vh Height</div><div data-id="8" class="c4 c8">vw Height</div><div data-id="9" class="c4 c9">calc Height</div></body><style>.c1 { height: 100%; }
 .c2 { height: fit-content; }
@@ -12,62 +12,46 @@
 .c8 { height: 10vw; }
 .c9 { height: calc(100% - 90%); }</style>
 <script>
-(function() {
-function main(parent) {
-let i0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i0.setProperty(fastn_dom.PropertyKind.StringValue, "Fill-container height");
-i0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer);
-
-i0.done();
-
-let i1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i1.setProperty(fastn_dom.PropertyKind.StringValue, "Hug Content Height");
-i1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent);
-
-i1.done();
-
-let i2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i2.setProperty(fastn_dom.PropertyKind.StringValue, "px Height");
-i2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)));
-
-i2.done();
-
-let i3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i3.setProperty(fastn_dom.PropertyKind.StringValue, "percent Height");
-i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i3.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(20)));
-
-i3.done();
-
-let i4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i4.setProperty(fastn_dom.PropertyKind.StringValue, "rem Height");
-i4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i4.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Rem(1)));
-
-i4.done();
-
-let i5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i5.setProperty(fastn_dom.PropertyKind.StringValue, "vh Height");
-i5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i5.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vh(5)));
-
-i5.done();
-
-let i6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i6.setProperty(fastn_dom.PropertyKind.StringValue, "vw Height");
-i6.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i6.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vw(10)));
-
-i6.done();
-
-let i7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i7.setProperty(fastn_dom.PropertyKind.StringValue, "calc Height");
-i7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i7.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Calc("100% - 90%")));
-
-i7.done();
-}
-fastn_virtual.hydrate(main);
-})();
+    (function() {
+        function main(parent) {
+    let i0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i0.setProperty(fastn_dom.PropertyKind.StringValue, "Fill-container height");
+            i0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer);
+            i0.done();
+            let i1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i1.setProperty(fastn_dom.PropertyKind.StringValue, "Hug Content Height");
+            i1.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent);
+            i1.done();
+            let i2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i2.setProperty(fastn_dom.PropertyKind.StringValue, "px Height");
+            i2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)));
+            i2.done();
+            let i3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i3.setProperty(fastn_dom.PropertyKind.StringValue, "percent Height");
+            i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+            i3.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(20)));
+            i3.done();
+            let i4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i4.setProperty(fastn_dom.PropertyKind.StringValue, "rem Height");
+            i4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+            i4.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Rem(1)));
+            i4.done();
+            let i5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i5.setProperty(fastn_dom.PropertyKind.StringValue, "vh Height");
+            i5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+            i5.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vh(5)));
+            i5.done();
+            let i6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i6.setProperty(fastn_dom.PropertyKind.StringValue, "vw Height");
+            i6.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+            i6.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vw(10)));
+            i6.done();
+            let i7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+            i7.setProperty(fastn_dom.PropertyKind.StringValue, "calc Height");
+            i7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+            i7.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Calc("100% - 90%")));
+            i7.done();}
+        fastn_virtual.hydrate(main);
+    })();
 </script>
 </html>
