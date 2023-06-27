@@ -1,3 +1,6 @@
 -- string name: Arpita
 
+-- integer i: 20
+
 -- ftd.text: $name
+padding.px if { i > 10 }: 4
