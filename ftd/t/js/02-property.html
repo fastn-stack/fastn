@@ -11,19 +11,27 @@ function main(parent) {
 let i0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
 i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
 i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)));
+
 i0.done();
+
 let i1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
 i1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello 30");
 i1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)));
+
 i1.done();
+
 let i2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
 i2.setProperty(fastn_dom.PropertyKind.StringValue, "Hello 20");
 i2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(20)));
+
 i2.done();
+
 let i3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
 i3.setProperty(fastn_dom.PropertyKind.StringValue, "fill-container");
 i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-i3.done();}
+
+i3.done();
+}
 fastn_virtual.hydrate(main);
 })();
 </script>

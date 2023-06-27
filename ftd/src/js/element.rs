@@ -75,6 +75,7 @@ impl Text {
 
 #[derive(Debug)]
 pub struct Common {
+    pub id: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
     pub padding: Option<ftd::js::Value>,
@@ -86,6 +87,7 @@ impl Common {
         arguments: &[ftd::interpreter::Argument],
     ) -> Common {
         Common {
+            id: ftd::js::value::get_properties("id", properties, arguments),
             width: ftd::js::value::get_properties("width", properties, arguments),
             height: ftd::js::value::get_properties("height", properties, arguments),
             padding: ftd::js::value::get_properties("padding", properties, arguments),
@@ -94,6 +96,11 @@ impl Common {
 
     pub fn to_set_properties(&self, element_name: &str) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
+        if let Some(ref id) = self.id {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                id.to_set_property(fastn_js::PropertyKind::Id, element_name),
+            ));
+        }
         if let Some(ref width) = self.width {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 width.to_set_property(fastn_js::PropertyKind::Width, element_name),
