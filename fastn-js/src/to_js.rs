@@ -42,10 +42,15 @@ impl fastn_js::Kernel {
 
 impl fastn_js::SetProperty {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        text(format!("{}.setProperty(", self.element_name).as_str())
+        let set_property_func = if self.value.is_formula() {
+            "setDynamicProperty"
+        } else {
+            "setProperty"
+        };
+        text(format!("{}.{set_property_func}(", self.element_name).as_str())
             .append(text(format!("{},", self.kind.to_js()).as_str()))
             .append(space())
-            .append(text(format!("{});", self.value.to_js()).as_str()))
+            .append(text(format!("{});", self.value.to_js(&self.kind)).as_str()))
     }
 }
 

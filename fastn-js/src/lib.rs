@@ -18,7 +18,7 @@ pub use component::{component0, component1, component2, Component};
 pub use component_invocation::{ElementKind, Kernel};
 pub use component_statement::ComponentStatement;
 pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
-pub use property::{PropertyKind, SetProperty, SetPropertyValue, Value};
+pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
 pub use to_js::to_js;
