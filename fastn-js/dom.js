@@ -40,6 +40,7 @@ fastn_dom.PropertyKind = {
     Id: 6,
     BorderWidth: 7,
     BorderStyle: 8,
+    Margin: 9,
 }
 
 fastn_dom.Resizing = {
@@ -144,6 +145,8 @@ class Node2 {
             this.attachCss("height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Margin) {
+            this.attachCss("margin", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderWidth) {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
