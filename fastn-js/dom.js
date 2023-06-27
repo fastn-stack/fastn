@@ -37,6 +37,7 @@ fastn_dom.PropertyKind = {
     Width: 3,
     Padding: 4,
     Height: 5,
+    Id: 6,
 }
 
 fastn_dom.Resizing = {
@@ -122,7 +123,9 @@ class Node2 {
     setStaticProperty(kind, value) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
-        if (kind === fastn_dom.PropertyKind.Width) {
+        if (kind === fastn_dom.PropertyKind.Id) {
+            this.#node.id = staticValue;
+        } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Height) {
             this.attachCss("height", staticValue);

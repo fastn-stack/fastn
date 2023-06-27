@@ -2,12 +2,13 @@
 <head>
 <script src="fastn-js.js"></script>
 </head>
-<body data-id="1"><div data-id="2">Hello</div></body>
+<body data-id="1"><div data-id="2">Id Test</div></body>
 <script>
 (function() {
 function main(parent) {
 let i0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
+i0.setProperty(fastn_dom.PropertyKind.StringValue, "Id Test");
+i0.setProperty(fastn_dom.PropertyKind.Id, "id-123");
 i0.done();
 }
 fastn_virtual.hydrate(main);
