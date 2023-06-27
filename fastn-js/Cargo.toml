@@ -11,6 +11,7 @@ homepage.workspace = true
 #rquickjs = { workspace = true, optional = true }
 pretty.workspace = true
 itertools.workspace = true
+indoc.workspace = true
 
 [target.'cfg(not(windows))'.dependencies]
 quick-js.workspace = true

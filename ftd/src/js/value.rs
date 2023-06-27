@@ -10,7 +10,9 @@ impl Value {
         match self {
             Value::Data(value) => value.to_fastn_js_value(),
             Value::Reference(name) => fastn_js::SetPropertyValue::Reference(name.to_string()),
-            _ => todo!(),
+            Value::Formula(formulas) => {
+                fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(formulas))
+            }
         }
     }
 
@@ -24,6 +26,28 @@ impl Value {
             value: self.to_set_property_value(),
             element_name: element_name.to_string(),
         }
+    }
+}
+
+fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fastn_js::Formula {
+    let mut deps = vec![];
+    let mut conditional_values = vec![];
+    for property in properties {
+        if let Some(reference) = property.value.get_reference_or_clone() {
+            deps.push(reference.to_owned());
+        }
+        conditional_values.push(fastn_js::ConditionalValue {
+            condition: property
+                .condition
+                .as_ref()
+                .map(|condition| ftd::html::utils::get_condition_string_(condition, false)),
+            expression: property.value.to_fastn_js_value(),
+        });
+    }
+
+    fastn_js::Formula {
+        deps,
+        conditional_values,
     }
 }
 
