@@ -76,19 +76,22 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
     let js_ast = ftd::js::document_into_js_ast(i);
     let ssr_body = fastn_js::ssr(js_ast.as_slice());
     let js_script = fastn_js::to_js(js_ast.as_slice());
-    let html_str = std::fs::read_to_string("ftd-js.html")
-        .expect("can't read ftd-js.html")
-        .replace("__js_script__", js_script.as_str())
-        .replace("__html_body__", ssr_body.as_str())
-        .replace(
-            "__script_file__",
-            if manual {
-                format!("<script>\n{}\n</script>", fastn_js::all_js())
-            } else {
-                "<script src=\"fastn-js.js\"></script>".to_string()
-            }
+    let html_str = ftd::js::utils::trim_all_lines(
+        std::fs::read_to_string("ftd-js.html")
+            .expect("can't read ftd-js.html")
+            .replace("__js_script__", js_script.as_str())
+            .replace("__html_body__", ssr_body.as_str())
+            .replace(
+                "__script_file__",
+                if manual {
+                    format!("<script>\n{}\n</script>", fastn_js::all_js())
+                } else {
+                    "<script src=\"fastn-js.js\"></script>".to_string()
+                }
+                .as_str(),
+            )
             .as_str(),
-        );
+    );
     if fix || manual {
         std::fs::write(file_location, html_str).unwrap();
         return;

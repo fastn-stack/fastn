@@ -40,7 +40,7 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
             condition: property
                 .condition
                 .as_ref()
-                .map(|condition| ftd::html::utils::get_condition_string_(condition, false)),
+                .map(|condition| ftd::html::utils::get_condition_string_js(condition)),
             expression: property.value.to_fastn_js_value(),
         });
     }
@@ -69,6 +69,10 @@ pub(crate) fn get_properties(
     )
     .unwrap();
 
+    if properties.len() == 0 {
+        return None;
+    }
+
     if properties.len() == 1 {
         let property = properties.first().unwrap();
         if property.condition.is_none() {
@@ -84,8 +88,7 @@ pub(crate) fn get_properties(
         }
     }
 
-    // Todo: For more than one properties
-    None
+    Some(Value::Formula(properties))
 }
 
 impl ftd::interpreter::PropertyValue {
