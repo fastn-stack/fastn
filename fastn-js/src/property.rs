@@ -21,6 +21,7 @@ impl SetPropertyValue {
 pub enum Value {
     String(String),
     Integer(i64),
+    Decimal(f64),
     OrType {
         variant: String,
         value: Option<Box<SetPropertyValue>>,
@@ -32,6 +33,7 @@ impl Value {
         match self {
             Value::String(s) => format!("\"{s}\""),
             Value::Integer(i) => i.to_string(),
+            Value::Decimal(f) => f.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
                     format!("{}({})", variant, value.to_js())
@@ -46,6 +48,7 @@ impl Value {
 pub enum PropertyKind {
     StringValue,
     Width,
+    Padding,
 }
 
 impl PropertyKind {
@@ -53,6 +56,7 @@ impl PropertyKind {
         match self {
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
+            PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
         }
     }
 }
