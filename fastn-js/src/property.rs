@@ -117,6 +117,7 @@ pub enum PropertyKind {
     StringValue,
     Width,
     Padding,
+    Height,
 }
 
 impl PropertyKind {
@@ -125,6 +126,7 @@ impl PropertyKind {
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
+            PropertyKind::Height => "fastn_dom.PropertyKind.Height",
         }
     }
 }

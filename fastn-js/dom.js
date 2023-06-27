@@ -36,6 +36,7 @@ fastn_dom.PropertyKind = {
     StringValue: 2,
     Width: 3,
     Padding: 4,
+    Height: 5,
 }
 
 fastn_dom.Resizing = {
@@ -123,6 +124,8 @@ class Node2 {
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Height) {
+            this.attachCss("height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
