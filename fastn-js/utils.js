@@ -104,5 +104,17 @@ let fastn_utils = {
             newMutables: newMutablesOnly,
             oldMutables: oldMutablesOnly
         };
+    },
+
+    getter(value) {
+        if (!!value.get) {
+            return value.get();
+        } else {
+            return value;
+        }
+    },
+
+    defaultPropertyValue(_propertyValue) {
+        return null;
     }
 }

@@ -78,7 +78,9 @@ impl Formula {
 
         format!(
             indoc::indoc! {"
-            {expressions}{default}
+            function() {{
+                {expressions}{default}
+            }}
         "},
             expressions = conditions.join(" "),
             default = default,
