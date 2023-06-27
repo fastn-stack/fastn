@@ -13,7 +13,7 @@ pub enum SetPropertyValue {
 impl SetPropertyValue {
     pub fn to_js_with_kind(&self, kind: Option<&PropertyKind>) -> String {
         match self {
-            SetPropertyValue::Reference(name) => fastn_js::utils::name_to_js(name).to_string(),
+            SetPropertyValue::Reference(name) => fastn_js::utils::name_to_js(name),
             SetPropertyValue::Value(v) => v.to_js(kind),
             SetPropertyValue::Formula(f) => f.to_js(kind),
         }
@@ -124,6 +124,8 @@ pub enum PropertyKind {
     Width,
     Padding,
     Height,
+    BorderWidth,
+    BorderStyle,
 }
 
 impl PropertyKind {
@@ -134,6 +136,8 @@ impl PropertyKind {
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
             PropertyKind::Height => "fastn_dom.PropertyKind.Height",
+            PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
+            PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
         }
     }
 }
