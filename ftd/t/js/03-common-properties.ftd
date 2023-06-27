@@ -63,30 +63,30 @@ id: id-123
 
 -- ftd.text: Solid Border
 border-width.px: 4
-padding.px: 10
+margin.px: 11
 border-style: solid
 
 -- ftd.text: Double Border
 border-width.px: 4
-padding.px: 10
+margin.px: 12
 border-style: double
 
 -- ftd.text: Dashed Border
 border-width.px: 4
 border-style: dashed
-padding.px: 10
+margin.px: 12
 
 -- ftd.text: Dotted Border
 border-width.px: 4
 border-style: dotted
-padding.px: 10
+margin.px: 12
 
 -- ftd.text: Groove Border
 border-width.px: 4
 border-style: groove
-padding.px: 10
+margin.px: 12
 
 -- ftd.text: Ridge Border
 border-width.px: 4
 border-style: ridge
-padding.px: 10
+margin.px: 12

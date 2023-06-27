@@ -79,6 +79,7 @@ pub struct Common {
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
     pub padding: Option<ftd::js::Value>,
+    pub margin: Option<ftd::js::Value>,
     pub border_width: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
 }
@@ -93,6 +94,7 @@ impl Common {
             width: ftd::js::value::get_properties("width", properties, arguments),
             height: ftd::js::value::get_properties("height", properties, arguments),
             padding: ftd::js::value::get_properties("padding", properties, arguments),
+            margin: ftd::js::value::get_properties("margin", properties, arguments),
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
         }
@@ -118,6 +120,11 @@ impl Common {
         if let Some(ref padding) = self.padding {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding.to_set_property(fastn_js::PropertyKind::Padding, element_name),
+            ));
+        }
+        if let Some(ref margin) = self.margin {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin.to_set_property(fastn_js::PropertyKind::Margin, element_name),
             ));
         }
         if let Some(ref border_width) = self.border_width {
