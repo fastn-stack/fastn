@@ -115,6 +115,7 @@ impl Value {
 
 pub enum PropertyKind {
     StringValue,
+    Id,
     Width,
     Padding,
     Height,
@@ -123,6 +124,7 @@ pub enum PropertyKind {
 impl PropertyKind {
     pub(crate) fn to_js(&self) -> &'static str {
         match self {
+            PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",

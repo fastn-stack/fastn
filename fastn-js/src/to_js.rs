@@ -77,7 +77,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::Done { component_name } => {
-                text(&format!("{component_name}.done();"))
+                text(&format!("\n{component_name}.done();\n"))
             }
         }
     }
