@@ -1,2 +1,6 @@
 -- ftd.text: Padding test
 padding.px: 10
+
+-- ftd.text: Padding test 2
+padding.percent: 20
+width: fill-container

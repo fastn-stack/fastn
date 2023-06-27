@@ -61,7 +61,7 @@ pub(crate) fn get_properties(
     }
 
     // Todo: For more than one properties
-    return None;
+    None
 }
 
 impl ftd::interpreter::PropertyValue {
@@ -85,6 +85,9 @@ impl ftd::interpreter::Value {
             ftd::interpreter::Value::Integer { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
             }
+            ftd::interpreter::Value::Decimal { value } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Decimal(*value))
+            }
             ftd::interpreter::Value::OrType {
                 name,
                 variant,
@@ -94,16 +97,19 @@ impl ftd::interpreter::Value {
                 let (js_variant, has_value) = ftd_to_js_variant(name, variant);
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                        variant: js_variant.to_string(),
+                        variant: js_variant,
                         value: Some(Box::new(value.to_fastn_js_value())),
                     });
                 }
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                    variant: js_variant.to_string(),
+                    variant: js_variant,
                     value: None,
                 })
             }
-            _ => todo!(),
+            _ => {
+                dbg!(&self);
+                todo!()
+            }
         }
     }
 }
@@ -138,6 +144,7 @@ fn length_variants(name: &str) -> &'static str {
     match name {
         "px" => "Px",
         "em" => "Em",
+        "percent" => "Percent",
         _ => todo!(),
     }
 }
