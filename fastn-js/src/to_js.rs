@@ -20,6 +20,8 @@ impl fastn_js::Ast {
         match self {
             fastn_js::Ast::Component(f) => f.to_js(),
             fastn_js::Ast::UDF(f) => f.to_js(),
+            fastn_js::Ast::StaticVariable(s) => s.to_js(),
+            fastn_js::Ast::MutableVariable(m) => m.to_js(),
         }
     }
 }
@@ -50,7 +52,9 @@ impl fastn_js::SetProperty {
         text(format!("{}.{set_property_func}(", self.element_name).as_str())
             .append(text(format!("{},", self.kind.to_js()).as_str()))
             .append(space())
-            .append(text(format!("{});", self.value.to_js(&self.kind)).as_str()))
+            .append(text(
+                format!("{});", self.value.to_js_with_kind(Some(&self.kind))).as_str(),
+            ))
     }
 }
 
@@ -90,7 +94,7 @@ fn func(
 ) -> pretty::RcDoc<'static> {
     text("function")
         .append(space())
-        .append(text(name))
+        .append(text(fastn_js::utils::name_to_js(name).as_str()))
         .append(text("("))
         .append(
             pretty::RcDoc::intersperse(
@@ -137,7 +141,9 @@ impl fastn_js::MutableVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         text("let")
             .append(space())
-            .append(text(&self.name))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
             .append(space())
             .append(text("="))
             .append(space())
@@ -155,7 +161,9 @@ impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         text("let")
             .append(space())
-            .append(text(self.name.as_str()))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
             .append(space())
             .append(text("="))
             .append(space())
