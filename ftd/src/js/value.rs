@@ -109,6 +109,7 @@ impl ftd::interpreter::Value {
 }
 
 fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
+    // returns (JSVariant, has_value)
     let variant = variant.strip_prefix(format!("{}.", name).as_str()).unwrap();
     match name {
         "ftd#resizing" => {

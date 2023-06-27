@@ -76,15 +76,17 @@ impl Text {
 #[derive(Debug)]
 pub struct Common {
     pub width: Option<ftd::js::Value>,
+    pub padding: Option<ftd::js::Value>,
 }
 
 impl Common {
     pub fn from(
-        property: &[ftd::interpreter::Property],
+        properties: &[ftd::interpreter::Property],
         arguments: &[ftd::interpreter::Argument],
     ) -> Common {
         Common {
-            width: ftd::js::value::get_properties("width", property, arguments),
+            width: ftd::js::value::get_properties("width", properties, arguments),
+            padding: ftd::js::value::get_properties("padding", properties, arguments),
         }
     }
 
@@ -93,6 +95,11 @@ impl Common {
         if let Some(ref width) = self.width {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 width.to_set_property(fastn_js::PropertyKind::Width, element_name),
+            ));
+        }
+        if let Some(ref padding) = self.padding {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding.to_set_property(fastn_js::PropertyKind::Padding, element_name),
             ));
         }
         component_statements
