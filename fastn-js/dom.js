@@ -38,12 +38,25 @@ fastn_dom.PropertyKind = {
     Padding: 4,
     Height: 5,
     Id: 6,
+    BorderWidth: 7,
+    BorderStyle: 8,
 }
 
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
     Fixed: (value) => { return value; }
+}
+
+fastn_dom.BorderStyle = {
+    Solid: "solid",
+    Dashed: "dashed",
+    Dotted: "dotted",
+    Double: "double",
+    Ridge: "ridge",
+    Groove: "groove",
+    Inset: "inset",
+    Outset: "outset",
 }
 
 fastn_dom.Length = {
@@ -131,6 +144,10 @@ class Node2 {
             this.attachCss("height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderWidth) {
+            this.attachCss("border-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
+            this.attachCss("border-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
             this.attachCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
