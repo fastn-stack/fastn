@@ -35,6 +35,7 @@ fastn_dom.PropertyKind = {
     IntegerValue: 1,
     StringValue: 2,
     Width: 3,
+    Padding: 4,
 }
 
 fastn_dom.Resizing = {
@@ -49,6 +50,21 @@ fastn_dom.Length = {
     },
     Em: (value) => {
         return `${value}em`;
+    },
+    Rem: (value) => {
+        return `${value}rem`;
+    },
+    Percent: (value) => {
+        return `${value}%`;
+    },
+    Calc: (value) => {
+        return `calc(${value})`;
+    },
+    Vh: (value) => {
+        return `${value}vh`;
+    },
+    Vw: (value) => {
+        return `${value}vw`;
     },
     Responsive: (desktop, mobile) => {
         if (ftd.device == "desktop") {
@@ -107,6 +123,8 @@ class Node2 {
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Padding) {
+            this.attachCss("padding", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
             this.attachCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
