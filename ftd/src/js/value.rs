@@ -150,6 +150,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = length_variants(variant);
             (format!("fastn_dom.Length.{}", js_variant), true)
         }
+        "ftd#border-style" => {
+            let js_variant = border_style_variants(variant);
+            (format!("fastn_dom.BorderStyle.{}", js_variant), false)
+        }
         _ => todo!(),
     }
 }
@@ -174,6 +178,20 @@ fn length_variants(name: &str) -> &'static str {
         "vh" => "Vh",
         "vw" => "Vw",
         "calc" => "Calc",
+        _ => todo!(),
+    }
+}
+
+fn border_style_variants(name: &str) -> &'static str {
+    match name {
+        "solid" => "Solid",
+        "dashed" => "Dashed",
+        "dotted" => "Dotted",
+        "groove" => "Groove",
+        "inset" => "Inset",
+        "outset" => "Outset",
+        "ridge" => "Ridge",
+        "double" => "Double",
         _ => todo!(),
     }
 }
