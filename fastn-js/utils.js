@@ -109,7 +109,7 @@ let fastn_utils = {
     },
 
     getter(value) {
-        if (!!value.get) {
+        if (value.get) {
             return value.get();
         } else {
             return value;
