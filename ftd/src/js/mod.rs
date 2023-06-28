@@ -19,7 +19,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         .map(|v| v.0)
         .collect_vec();
     for (key, thing) in document.data.iter() {
-        if default_thing_name.contains(&key) {
+        if default_thing_name.contains(key) {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
