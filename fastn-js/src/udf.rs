@@ -21,8 +21,7 @@ pub fn udf_with_params(
 
     fastn_js::Ast::UDF(UDF {
         name: name.to_string(),
-        params: [vec!["parent".to_string()], params]
-            .concat()
+        params: params
             .into_iter()
             .map(|v| fastn_js::utils::name_to_js(v.as_str()))
             .collect_vec(),
