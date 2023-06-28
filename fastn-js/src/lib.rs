@@ -22,7 +22,7 @@ pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetProp
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
 pub use to_js::to_js;
-pub use udf::{udf0, udf1, udf2, UDF};
+pub use udf::{udf0, udf1, udf2, udf_with_params, UDF};
 pub use udf_statement::UDFStatement;
 
 pub fn all_js() -> String {

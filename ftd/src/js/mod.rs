@@ -26,9 +26,31 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
             asts.push(c.to_ast(&document.data));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             asts.push(v.to_ast());
+        } else if let ftd::interpreter::Thing::Function(f) = thing {
+            asts.push(f.to_ast());
         }
     }
     asts
+}
+
+impl ftd::interpreter::Function {
+    pub fn to_ast(&self) -> fastn_js::Ast {
+        use itertools::Itertools;
+
+        fastn_js::udf_with_params(
+            self.name.as_str(),
+            self.expression
+                .iter()
+                .map(|e| {
+                    fastn_grammar::evalexpr::build_operator_tree(e.expression.as_str()).unwrap()
+                })
+                .collect_vec(),
+            self.arguments
+                .iter()
+                .map(|v| v.name.to_string())
+                .collect_vec(),
+        )
+    }
 }
 
 impl ftd::interpreter::Variable {

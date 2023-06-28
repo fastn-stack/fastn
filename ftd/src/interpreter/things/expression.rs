@@ -270,10 +270,7 @@ impl Expression {
                     references.get(identifier)
                 {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: format!(
-                            "fastn_utils.getter({})",
-                            fastn_js::utils::name_to_js(name).as_str()
-                        ),
+                        identifier: fastn_js::utils::name_to_js(name),
                     }
                 }
             }
