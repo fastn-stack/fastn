@@ -1561,6 +1561,7 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
+ "fastn-grammar",
  "indoc 2.0.1",
  "itertools",
  "pretty",

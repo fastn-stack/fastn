@@ -53,6 +53,14 @@ impl Formula {
         let mut default = None;
         for conditional_value in &self.conditional_values {
             if let Some(ref condition) = conditional_value.condition {
+                let condition = format!(
+                    indoc::indoc! {"
+                        function(){{
+                            {expression}
+                        }}()"
+                    },
+                    expression = fastn_js::utils::ExpressionGenerator.to_js(condition).trim(),
+                );
                 conditions.push(format!(
                     indoc::indoc! {"
                         {if_exp}({condition}){{
@@ -95,7 +103,7 @@ impl Formula {
 }
 
 pub struct ConditionalValue {
-    pub condition: Option<String>,
+    pub condition: Option<fastn_grammar::evalexpr::ExprNode>,
     pub expression: SetPropertyValue,
 }
 
