@@ -13,6 +13,8 @@ let fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.Div) {
             node = "div";
             css = [];
+        } else if (kind === fastn_dom.ElementKind.Text) {
+            // css.push("ft_text");
         }
         return [node, css];
     },

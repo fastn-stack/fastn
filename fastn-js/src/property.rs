@@ -35,9 +35,15 @@ pub struct Formula {
 
 impl Formula {
     pub(crate) fn to_js(&self, kind: Option<&PropertyKind>) -> String {
+        use itertools::Itertools;
+
         format!(
             "[{}], {}",
-            self.deps.join(", "),
+            self.deps
+                .iter()
+                .map(|v| fastn_js::utils::name_to_js(v))
+                .collect_vec()
+                .join(", "),
             self.conditional_values_to_js(kind)
         )
     }

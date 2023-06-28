@@ -10,11 +10,12 @@ fastn_dom.getClassesAsString = function() {
         return `.${entry[0]} { ${entry[1].property}: ${entry[1].value}; }`;
     });
 
-    if (classes.length == 0) {
-        return "";
-    }
-
-    return `<style>${classes.join("\n")}</style>`;
+    return `<style>
+    /*.ft_text {
+        padding: 0;
+    }*/
+    ${classes.join("\n")}
+    </style>`;
 }
 
 fastn_dom.ElementKind = {
@@ -171,6 +172,9 @@ class Node2 {
     setDynamicProperty(kind, deps, func) {
         let closure = fastn.closure(func).addNodeProperty(this, kind);
         for (let dep in deps) {
+            if (!deps[dep].addClosure) {
+                continue;
+            }
             deps[dep].addClosure(closure);
             this.#mutables.push(deps[dep]);
         }
