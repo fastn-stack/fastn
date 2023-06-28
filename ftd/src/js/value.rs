@@ -48,7 +48,7 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
             condition: property
                 .condition
                 .as_ref()
-                .map(ftd::html::utils::get_condition_string_js),
+                .map(|condition| condition.update_node_with_variable_reference_js()),
             expression: property.value.to_fastn_js_value(),
         });
     }

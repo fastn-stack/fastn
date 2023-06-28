@@ -117,19 +117,6 @@ pub(crate) fn get_condition_string_(
     )
 }
 
-pub(crate) fn get_condition_string_js(condition: &ftd::interpreter::Expression) -> String {
-    let node = condition.update_node_with_variable_reference_js();
-    let expression = ftd::html::ExpressionGenerator.to_string_(&node, true, &[], false);
-    format!(
-        indoc::indoc! {"
-                function(){{
-                    {expression}
-                }}()"
-        },
-        expression = expression.trim(),
-    )
-}
-
 pub(crate) fn js_expression_from_list(
     expressions: Vec<(Option<String>, String)>,
     key: Option<&str>,

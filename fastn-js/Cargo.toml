@@ -12,6 +12,7 @@ homepage.workspace = true
 pretty.workspace = true
 itertools.workspace = true
 indoc.workspace = true
+fastn-grammar.workspace = true
 
 [target.'cfg(not(windows))'.dependencies]
 quick-js.workspace = true
