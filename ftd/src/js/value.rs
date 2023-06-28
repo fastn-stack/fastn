@@ -48,7 +48,7 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
             condition: property
                 .condition
                 .as_ref()
-                .map(|condition| ftd::html::utils::get_condition_string_js(condition)),
+                .map(ftd::html::utils::get_condition_string_js),
             expression: property.value.to_fastn_js_value(),
         });
     }
@@ -77,7 +77,7 @@ pub(crate) fn get_properties(
     )
     .unwrap();
 
-    if properties.len() == 0 {
+    if properties.is_empty() {
         return None;
     }
 
