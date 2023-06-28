@@ -5,6 +5,8 @@
 -- ftd.text: $name
 padding.px if { i > 10 }: 4
 
+-- foo:
+
 
 
 -- component foo:

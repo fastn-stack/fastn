@@ -4,11 +4,11 @@ pub enum ComponentStatement {
     CreateKernel(fastn_js::Kernel),
     Done { component_name: String },
     SetProperty(fastn_js::SetProperty),
+    InstantiateComponent(fastn_js::InstantiateComponent),
     // JSExpression(ExprNode),
     // MutableList(MutableList),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
-    // InstantiateComponent(InstantiateComponent),
     // ForLoop(ForLoop),
     // ConditionalComponent(ConditionalComponent),
 }

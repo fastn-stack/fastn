@@ -59,44 +59,68 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
     }
 }
 
+impl ftd::interpreter::Argument {
+    pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> Value {
+        if let Some(value) = self.get_optional_value(properties) {
+            value
+        } else if let Some(ref value) = self.value {
+            value.to_value()
+        } else if self.kind.is_list() {
+            Value::Data(ftd::interpreter::Value::List {
+                data: vec![],
+                kind: self.kind.clone(),
+            })
+        } else if self.kind.is_optional() {
+            Value::Data(ftd::interpreter::Value::Optional {
+                data: Box::new(None),
+                kind: self.kind.clone(),
+            })
+        } else {
+            panic!("{}", format!("Expected value for argument: {:?}", &self))
+        }
+    }
+
+    pub(crate) fn get_optional_value(
+        &self,
+        properties: &[ftd::interpreter::Property],
+        // doc_name: &str,
+        // line_number: usize
+    ) -> Option<Value> {
+        let sources = self.to_sources();
+        let properties = ftd::interpreter::utils::find_properties_by_source(
+            sources.as_slice(),
+            properties,
+            "", // doc_name
+            self,
+            0, // line_number
+        )
+        .unwrap();
+
+        if properties.is_empty() {
+            return None;
+        }
+
+        if properties.len() == 1 {
+            let property = properties.first().unwrap();
+            if property.condition.is_none() {
+                return Some(property.value.to_value());
+            }
+        }
+
+        Some(Value::Formula(properties))
+    }
+}
+
 pub(crate) fn get_properties(
     key: &str,
     properties: &[ftd::interpreter::Property],
     arguments: &[ftd::interpreter::Argument],
-    // doc_name: &str,
-    // line_number: usize
 ) -> Option<Value> {
-    let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
-    let sources = argument.to_sources();
-    let properties = ftd::interpreter::utils::find_properties_by_source(
-        sources.as_slice(),
-        properties,
-        "", // doc_name
-        argument,
-        0, // line_number
-    )
-    .unwrap();
-
-    if properties.is_empty() {
-        return None;
-    }
-
-    if properties.len() == 1 {
-        let property = properties.first().unwrap();
-        if property.condition.is_none() {
-            match property.value {
-                ftd::interpreter::PropertyValue::Value { ref value, .. } => {
-                    return Some(Value::Data(value.to_owned()))
-                }
-                ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                    return Some(Value::Reference(name.to_owned()))
-                }
-                _ => todo!(),
-            }
-        }
-    }
-
-    Some(Value::Formula(properties))
+    arguments
+        .iter()
+        .find(|v| v.name.eq(key))
+        .unwrap()
+        .get_optional_value(properties)
 }
 
 impl ftd::interpreter::PropertyValue {
@@ -105,6 +129,18 @@ impl ftd::interpreter::PropertyValue {
             ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(),
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
                 fastn_js::SetPropertyValue::Reference(name.to_string())
+            }
+            _ => todo!(),
+        }
+    }
+
+    pub(crate) fn to_value(&self) -> Value {
+        match self {
+            ftd::interpreter::PropertyValue::Value { ref value, .. } => {
+                Value::Data(value.to_owned())
+            }
+            ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
+                Value::Reference(name.to_owned())
             }
             _ => todo!(),
         }

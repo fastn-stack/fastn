@@ -5,7 +5,6 @@
     <script src="../utils.js"></script>
     <script src="../virtual.js"></script>
     <script src="../variables.js"></script>
-    <script src="../variables.js"></script>
 </head>
 <body></body>
 <script>
@@ -26,13 +25,20 @@
             });
             i0.setProperty(fastn_dom.PropertyKind.StringValue, f);
             i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5)))
-            i0.setDynamicProperty(fastn_dom.PropertyKind.Width, [value], function () {
+            i0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([value], function () {
                 if (value.get() % 2 == 0) {
                     return fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(fastn_dom.Length.Px(5)));
                 } else {
                     return fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5));
                 }
-            });
+            }));
+            /*i0.setDynamicProperty(fastn_dom.PropertyKind.Width, [value], function () {
+                if (value.get() % 2 == 0) {
+                    return fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(fastn_dom.Length.Px(5)));
+                } else {
+                    return fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5));
+                }
+            });*/
             i0.addEventHandler(fastn_dom.Event.Click, function () {
                 value.set(value.get() + 1);
             })
