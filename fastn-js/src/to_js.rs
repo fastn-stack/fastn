@@ -49,6 +49,39 @@ impl fastn_js::SetProperty {
     }
 }
 
+impl fastn_js::EventHandler {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text(format!("{}.addEventHandler(", self.element_name).as_str())
+            .append(self.event.to_js())
+            .append(text(","))
+            .append(space())
+            .append(text("function()"))
+            .append(space())
+            .append(text("{"))
+            .append(self.action.to_js())
+            .append(text("});"))
+    }
+}
+
+impl fastn_js::Event {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        match self {
+            fastn_js::Event::OnClick => text("fastn_dom.Event.Click"),
+        }
+    }
+}
+
+impl fastn_js::Function {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
+            .append(pretty::RcDoc::intersperse(
+                self.parameters.iter().map(|v| v.to_js()),
+                text(",").append(space()),
+            ))
+            .append(text(");"))
+    }
+}
+
 impl fastn_js::ElementKind {
     pub fn to_js(&self) -> &'static str {
         match self {
@@ -72,6 +105,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
+            fastn_js::ComponentStatement::AddEventHandler(e) => e.to_js(),
             fastn_js::ComponentStatement::Done { component_name } => {
                 text(&format!("{component_name}.done();"))
             }
@@ -542,13 +576,29 @@ impl ExpressionGenerator {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            let prefix = if !arguments.iter().any(|v| first.to_string().eq(v)) {
-                "let "
-            } else {
-                ""
+            if !arguments.iter().any(|v| first.to_string().eq(v)) {
+                return vec![
+                    "let ".to_string(),
+                    self.to_js_(first, false, arguments),
+                    node.operator().to_string(),
+                    self.to_js_(second, false, arguments),
+                ]
+                .join("");
+            } else if first.operator().get_variable_identifier_write().is_some() {
+                let var = self.to_js_(first, false, arguments);
+                let val = self.to_js_(second, false, arguments);
+                return format!(
+                    indoc::indoc! {
+                        "let fastn_utils_val_{var} = {val};
+                        if (!fastn_utils.setter({var}, fastn_utils_val_{var})) {{
+                            {var} = fastn_utils_val_{var};
+                        }}"
+                    },
+                    val = val,
+                    var = var
+                );
             };
             return vec![
-                prefix.to_string(),
                 self.to_js_(first, false, arguments),
                 node.operator().to_string(),
                 self.to_js_(second, false, arguments),

@@ -15,9 +15,10 @@ impl Element {
         &self,
         parent: &str,
         index: usize,
+        bag: &ftd::Map<ftd::interpreter::Thing>,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
-            Element::Text(text) => text.to_component_statements(parent, index),
+            Element::Text(text) => text.to_component_statements(parent, index, bag),
         }
     }
 }
@@ -46,6 +47,7 @@ impl Text {
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
+                component.events.as_slice(),
             ),
         }
     }
@@ -54,6 +56,7 @@ impl Text {
         &self,
         parent: &str,
         index: usize,
+        bag: &ftd::Map<ftd::interpreter::Thing>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component("ftd#text", parent, index);
@@ -65,7 +68,7 @@ impl Text {
                 element_name: kernel.name.to_string(),
             },
         ));
-        component_statements.extend(self.common.to_set_properties(kernel.name.as_str()));
+        component_statements.extend(self.common.to_set_properties(kernel.name.as_str(), bag));
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name,
         });
@@ -82,12 +85,14 @@ pub struct Common {
     pub margin: Option<ftd::js::Value>,
     pub border_width: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
+    pub events: Vec<ftd::interpreter::Event>,
 }
 
 impl Common {
     pub fn from(
         properties: &[ftd::interpreter::Property],
         arguments: &[ftd::interpreter::Argument],
+        events: &[ftd::interpreter::Event],
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
@@ -97,11 +102,21 @@ impl Common {
             margin: ftd::js::value::get_properties("margin", properties, arguments),
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
+            events: events.to_vec(),
         }
     }
 
-    pub fn to_set_properties(&self, element_name: &str) -> Vec<fastn_js::ComponentStatement> {
+    pub fn to_set_properties(
+        &self,
+        element_name: &str,
+        bag: &ftd::Map<ftd::interpreter::Thing>,
+    ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
+        for event in self.events.iter() {
+            component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
+                event.to_event_handler_js(element_name, bag),
+            ));
+        }
         if let Some(ref id) = self.id {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(fastn_js::PropertyKind::Id, element_name),
@@ -138,6 +153,55 @@ impl Common {
             ));
         }
         component_statements
+    }
+}
+
+impl ftd::interpreter::Event {
+    fn to_event_handler_js(
+        &self,
+        element_name: &str,
+        bag: &ftd::Map<ftd::interpreter::Thing>,
+    ) -> fastn_js::EventHandler {
+        fastn_js::EventHandler {
+            event: self.name.to_js_event_name(),
+            action: self.action.to_js_function(bag),
+            element_name: element_name.to_string(),
+        }
+    }
+}
+
+impl ftd::interpreter::FunctionCall {
+    fn to_js_function(&self, bag: &ftd::Map<ftd::interpreter::Thing>) -> fastn_js::Function {
+        let mut parameters = vec![];
+        let function = bag
+            .get(self.name.as_str())
+            .unwrap()
+            .clone()
+            .function_optional()
+            .unwrap();
+        for argument in function.arguments {
+            let value = if let Some(value) = self.values.get(argument.name.as_str()) {
+                value.to_value()
+            } else if let Some(value) = argument.get_default_value() {
+                value
+            } else {
+                panic!("Argument value not found {:?}", argument)
+            };
+            parameters.push(value.to_set_property_value());
+        }
+        fastn_js::Function {
+            name: self.name.to_string(),
+            parameters,
+        }
+    }
+}
+
+impl ftd::interpreter::EventName {
+    fn to_js_event_name(&self) -> fastn_js::Event {
+        match self {
+            ftd::interpreter::EventName::Click => fastn_js::Event::OnClick,
+            _ => todo!(),
+        }
     }
 }
 

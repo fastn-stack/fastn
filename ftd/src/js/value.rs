@@ -60,21 +60,28 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
 }
 
 impl ftd::interpreter::Argument {
+    pub(crate) fn get_default_value(&self) -> Option<Value> {
+        if let Some(ref value) = self.value {
+            Some(value.to_value())
+        } else if self.kind.is_list() {
+            Some(Value::Data(ftd::interpreter::Value::List {
+                data: vec![],
+                kind: self.kind.clone(),
+            }))
+        } else if self.kind.is_optional() {
+            Some(Value::Data(ftd::interpreter::Value::Optional {
+                data: Box::new(None),
+                kind: self.kind.clone(),
+            }))
+        } else {
+            None
+        }
+    }
     pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> Value {
         if let Some(value) = self.get_optional_value(properties) {
             value
-        } else if let Some(ref value) = self.value {
-            value.to_value()
-        } else if self.kind.is_list() {
-            Value::Data(ftd::interpreter::Value::List {
-                data: vec![],
-                kind: self.kind.clone(),
-            })
-        } else if self.kind.is_optional() {
-            Value::Data(ftd::interpreter::Value::Optional {
-                data: Box::new(None),
-                kind: self.kind.clone(),
-            })
+        } else if let Some(value) = self.get_default_value() {
+            value
         } else {
             panic!("{}", format!("Expected value for argument: {:?}", &self))
         }
