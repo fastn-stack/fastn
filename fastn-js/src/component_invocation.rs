@@ -39,22 +39,8 @@ impl ElementKind {
     }
 }
 
-/*pub struct ComponentInvocation {
+pub struct InstantiateComponent {
     pub name: String,
-    pub arguments: Vec<String>,
+    pub arguments: Vec<fastn_js::SetPropertyValue>,
     pub parent: String,
-}*/
-
-/*impl ComponentInvocation {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let mut js = pretty::RcDoc::text(format!("{}(", self.name))
-            .append(pretty::RcDoc::text(self.parent.clone()));
-        for argument in self.arguments.iter() {
-            js = js
-                .append(pretty::RcDoc::text(","))
-                .append(pretty::RcDoc::space())
-                .append(pretty::RcDoc::text(argument));
-        }
-        js
-    }
-}*/
+}

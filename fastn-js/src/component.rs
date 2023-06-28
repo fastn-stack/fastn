@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub struct Component {
     pub name: String,
     pub params: Vec<String>,
@@ -8,6 +10,22 @@ pub fn component0(name: &str, body: Vec<fastn_js::ComponentStatement>) -> fastn_
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: vec!["parent".to_string()],
+        body,
+    })
+}
+
+pub fn component_with_params(
+    name: &str,
+    body: Vec<fastn_js::ComponentStatement>,
+    params: Vec<String>,
+) -> fastn_js::Ast {
+    fastn_js::Ast::Component(Component {
+        name: name.to_string(),
+        params: [vec!["parent".to_string()], params]
+            .concat()
+            .into_iter()
+            .map(|v| fastn_js::utils::name_to_js(v.as_str()))
+            .collect_vec(),
         body,
     })
 }

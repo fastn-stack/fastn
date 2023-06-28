@@ -80,10 +80,26 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(),
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
+            fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
             fastn_js::ComponentStatement::Done { component_name } => {
                 text(&format!("{component_name}.done();"))
             }
         }
+    }
+}
+
+impl fastn_js::InstantiateComponent {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        pretty::RcDoc::text(format!(
+            "{}(",
+            fastn_js::utils::name_to_js(self.name.as_str())
+        ))
+        .append(pretty::RcDoc::text(self.parent.clone()))
+        .append(pretty::RcDoc::intersperse(
+            self.arguments.iter().map(|v| v.to_js()),
+            text(",").append(space()),
+        ))
+        .append(text(");"))
     }
 }
 

@@ -14,8 +14,8 @@ mod udf_statement;
 pub mod utils;
 
 pub use ast::Ast;
-pub use component::{component0, component1, component2, Component};
-pub use component_invocation::{ElementKind, Kernel};
+pub use component::{component0, component1, component2, component_with_params, Component};
+pub use component_invocation::{ElementKind, InstantiateComponent, Kernel};
 pub use component_statement::ComponentStatement;
 pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
 pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
