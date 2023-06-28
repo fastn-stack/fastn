@@ -59,7 +59,7 @@ impl Formula {
                             {expression}
                         }}()"
                     },
-                    expression = fastn_js::utils::ExpressionGenerator.to_js(condition).trim(),
+                    expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
                 );
                 conditions.push(format!(
                     indoc::indoc! {"
