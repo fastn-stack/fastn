@@ -38,6 +38,7 @@ thiserror.workspace = true
 tokio = { workspace = true, optional = true }
 tracing.workspace = true
 fastn-js.workspace = true
+fastn-grammar.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true

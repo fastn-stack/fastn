@@ -40,6 +40,7 @@ pub mod utils;
 pub use prelude::*;
 
 pub use tdoc::TDoc;
+pub use things::expression;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -83,7 +84,7 @@ pub enum Error {
     },
 
     #[error("EvalexprError: {}", _0)]
-    EvalexprError(#[from] ftd::evalexpr::EvalexprError),
+    EvalexprError(#[from] fastn_grammar::evalexpr::EvalexprError),
 
     #[error("serde error: {source}")]
     Serde {

@@ -91,14 +91,16 @@ pub(crate) fn update_condition_in_component(
             reference
         };
         let new_condition = ftd::interpreter::Expression {
-            expression: ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
-                .add_children(vec![ftd::evalexpr::ExprNode::new(
-                    ftd::evalexpr::Operator::And,
-                )
-                .add_children(vec![
-                    outer_condition.expression,
-                    condition.expression.to_owned(),
-                ])]),
+            expression: fastn_grammar::evalexpr::ExprNode::new(
+                fastn_grammar::evalexpr::Operator::RootNode,
+            )
+            .add_children(vec![fastn_grammar::evalexpr::ExprNode::new(
+                fastn_grammar::evalexpr::Operator::And,
+            )
+            .add_children(vec![
+                outer_condition.expression,
+                condition.expression.to_owned(),
+            ])]),
             references,
             line_number: 0,
         };

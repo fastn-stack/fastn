@@ -1527,12 +1527,12 @@ impl Value {
         &self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
         Ok(match self {
-            Value::String { text } => ftd::evalexpr::Value::String(text.to_string()),
-            Value::Integer { value } => ftd::evalexpr::Value::Int(*value),
-            Value::Decimal { value } => ftd::evalexpr::Value::Float(*value),
-            Value::Boolean { value } => ftd::evalexpr::Value::Boolean(*value),
+            Value::String { text } => fastn_grammar::evalexpr::Value::String(text.to_string()),
+            Value::Integer { value } => fastn_grammar::evalexpr::Value::Int(*value),
+            Value::Decimal { value } => fastn_grammar::evalexpr::Value::Float(*value),
+            Value::Boolean { value } => fastn_grammar::evalexpr::Value::Boolean(*value),
             Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
@@ -1542,13 +1542,13 @@ impl Value {
                         .to_evalexpr_value(doc, value.line_number())?;
                     values.push(v);
                 }
-                ftd::evalexpr::Value::Tuple(values)
+                fastn_grammar::evalexpr::Value::Tuple(values)
             }
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_evalexpr_value(doc, line_number)?
                 } else {
-                    ftd::evalexpr::Value::Empty
+                    fastn_grammar::evalexpr::Value::Empty
                 }
             }
             t => unimplemented!("{:?}", t),
@@ -1556,25 +1556,25 @@ impl Value {
     }
 
     pub(crate) fn from_evalexpr_value(
-        value: ftd::evalexpr::Value,
+        value: fastn_grammar::evalexpr::Value,
         expected_kind: &ftd::interpreter::Kind,
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<Value> {
         Ok(match value {
-            ftd::evalexpr::Value::String(text) if expected_kind.is_string() => {
+            fastn_grammar::evalexpr::Value::String(text) if expected_kind.is_string() => {
                 Value::String { text }
             }
-            ftd::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+            fastn_grammar::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
                 Value::Decimal { value }
             }
-            ftd::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+            fastn_grammar::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
                 Value::Integer { value }
             }
-            ftd::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+            fastn_grammar::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
                 Value::Boolean { value }
             }
-            ftd::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+            fastn_grammar::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
                 let mut values = vec![];
                 let val_kind = expected_kind.list_type(doc_name, line_number)?;
                 for val in data {
@@ -1589,10 +1589,12 @@ impl Value {
                     kind: ftd::interpreter::KindData::new(val_kind),
                 }
             }
-            ftd::evalexpr::Value::Empty if expected_kind.is_optional() => Value::Optional {
-                data: Box::new(None),
-                kind: ftd::interpreter::KindData::new(expected_kind.clone()),
-            },
+            fastn_grammar::evalexpr::Value::Empty if expected_kind.is_optional() => {
+                Value::Optional {
+                    data: Box::new(None),
+                    kind: ftd::interpreter::KindData::new(expected_kind.clone()),
+                }
+            }
             t => {
                 return ftd::interpreter::utils::e2(
                     format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
@@ -1633,17 +1635,25 @@ impl Value {
     pub(crate) fn into_evalexpr_value(
         self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
         match self {
-            ftd::interpreter::Value::String { text } => Ok(ftd::evalexpr::Value::String(text)),
-            ftd::interpreter::Value::Integer { value } => Ok(ftd::evalexpr::Value::Int(value)),
-            ftd::interpreter::Value::Decimal { value } => Ok(ftd::evalexpr::Value::Float(value)),
-            ftd::interpreter::Value::Boolean { value } => Ok(ftd::evalexpr::Value::Boolean(value)),
+            ftd::interpreter::Value::String { text } => {
+                Ok(fastn_grammar::evalexpr::Value::String(text))
+            }
+            ftd::interpreter::Value::Integer { value } => {
+                Ok(fastn_grammar::evalexpr::Value::Int(value))
+            }
+            ftd::interpreter::Value::Decimal { value } => {
+                Ok(fastn_grammar::evalexpr::Value::Float(value))
+            }
+            ftd::interpreter::Value::Boolean { value } => {
+                Ok(fastn_grammar::evalexpr::Value::Boolean(value))
+            }
             ftd::interpreter::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.clone().into_evalexpr_value(doc)
                 } else {
-                    Ok(ftd::evalexpr::Value::Empty)
+                    Ok(fastn_grammar::evalexpr::Value::Empty)
                 }
             }
             ftd::interpreter::Value::OrType { value, .. } => {
@@ -1652,7 +1662,7 @@ impl Value {
             }
             ftd::interpreter::Value::Record { .. } => {
                 if let Ok(Some(value)) = ftd::interpreter::utils::get_value(doc, &self) {
-                    Ok(ftd::evalexpr::Value::String(value.to_string()))
+                    Ok(fastn_grammar::evalexpr::Value::String(value.to_string()))
                 } else {
                     unimplemented!("{:?}", self)
                 }
@@ -1663,7 +1673,7 @@ impl Value {
                     let line_number = item.line_number();
                     values.push(item.resolve(doc, line_number)?.into_evalexpr_value(doc)?);
                 }
-                Ok(ftd::evalexpr::Value::Tuple(values))
+                Ok(fastn_grammar::evalexpr::Value::Tuple(values))
             }
             t => unimplemented!("{:?}", t),
         }
