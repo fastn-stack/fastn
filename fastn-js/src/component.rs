@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub struct Component {
     pub name: String,
     pub params: Vec<String>,
@@ -19,6 +17,8 @@ pub fn component_with_params(
     body: Vec<fastn_js::ComponentStatement>,
     params: Vec<String>,
 ) -> fastn_js::Ast {
+    use itertools::Itertools;
+
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: [vec!["parent".to_string()], params]

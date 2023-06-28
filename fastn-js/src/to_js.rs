@@ -1,5 +1,3 @@
-use fastn_js::UDFStatement;
-
 fn space() -> pretty::RcDoc<'static> {
     pretty::RcDoc::space()
 }
@@ -190,12 +188,21 @@ impl fastn_js::UDF {
         func(
             &self.name,
             &self.params,
-            self.body.iter().map(|f| f.to_js()).collect(),
+            self.body
+                .iter()
+                .map(|f| {
+                    pretty::RcDoc::text(fastn_js::to_js::ExpressionGenerator.to_js_(
+                        f,
+                        true,
+                        &self.params,
+                    ))
+                })
+                .collect(),
         )
     }
 }
 
-fn binary(op: &str, left: &UDFStatement, right: &UDFStatement) -> pretty::RcDoc<'static> {
+/*fn binary(op: &str, left: &UDFStatement, right: &UDFStatement) -> pretty::RcDoc<'static> {
     left.to_js()
         .append(space())
         .append(text(op))
@@ -285,6 +292,7 @@ impl UDFStatement {
         }
     }
 }
+*/
 
 #[cfg(test)]
 #[track_caller]
@@ -298,7 +306,7 @@ pub fn e(f: fastn_js::Ast, s: &str) {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn udf() {
+    /*fn udf() {
         fastn_js::to_js::e(fastn_js::udf0("foo", vec![]), "function foo() {}");
         fastn_js::to_js::e(fastn_js::udf1("foo", "p", vec![]), "function foo(p) {}");
         fastn_js::to_js::e(
@@ -356,8 +364,7 @@ mod tests {
             ),
             r#"function foo() {bar("hello")}"#,
         );
-    }
-
+    }*/
     #[test]
     fn test_func() {
         fastn_js::to_js::e(
@@ -458,7 +465,7 @@ impl ExpressionGenerator {
         &self,
         node: &fastn_grammar::evalexpr::ExprNode,
         root: bool,
-        arguments: &[(String, bool)],
+        arguments: &[String],
     ) -> String {
         use itertools::Itertools;
 
@@ -535,7 +542,7 @@ impl ExpressionGenerator {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            let prefix = if !arguments.iter().any(|(v, _)| first.to_string().eq(v)) {
+            let prefix = if !arguments.iter().any(|v| first.to_string().eq(v)) {
                 "let "
             } else {
                 ""
@@ -580,15 +587,11 @@ impl ExpressionGenerator {
             node.operator().to_string()
         };
 
-        format!(
-            "{}{}",
-            value,
-            if arguments.iter().any(|(v, mutable)| value.eq(v) && *mutable) {
-                ".value"
-            } else {
-                ""
-            }
-        )
+        if node.operator().get_variable_identifier_read().is_some() {
+            format!("fastn_utils.getter({})", value)
+        } else {
+            value
+        }
     }
 
     pub fn has_value(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
