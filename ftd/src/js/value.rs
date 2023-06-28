@@ -36,6 +36,14 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
         if let Some(reference) = property.value.get_reference_or_clone() {
             deps.push(reference.to_owned());
         }
+        if let Some(ref condition) = property.condition {
+            for property_value in condition.references.values() {
+                if let Some(reference) = property_value.get_reference_or_clone() {
+                    deps.push(reference.to_owned());
+                }
+            }
+        }
+
         conditional_values.push(fastn_js::ConditionalValue {
             condition: property
                 .condition
