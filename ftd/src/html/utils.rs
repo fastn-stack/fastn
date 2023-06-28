@@ -105,9 +105,7 @@ pub(crate) fn get_condition_string_(
     condition: &ftd::interpreter::Expression,
     extra_args: bool,
 ) -> String {
-    let node = condition
-        .expression
-        .update_node_with_variable_reference(&condition.references);
+    let node = condition.update_node_with_variable_reference();
     let expression = ftd::html::ExpressionGenerator.to_string_(&node, true, &[], extra_args);
     format!(
         indoc::indoc! {"
@@ -120,9 +118,7 @@ pub(crate) fn get_condition_string_(
 }
 
 pub(crate) fn get_condition_string_js(condition: &ftd::interpreter::Expression) -> String {
-    let node = condition
-        .expression
-        .update_node_with_variable_reference_js(&condition.references);
+    let node = condition.update_node_with_variable_reference_js();
     let expression = ftd::html::ExpressionGenerator.to_string_(&node, true, &[], false);
     format!(
         indoc::indoc! {"

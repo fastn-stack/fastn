@@ -1,4 +1,4 @@
-use ftd::evalexpr::ContextWithMutableFunctions;
+use fastn_grammar::evalexpr::ContextWithMutableFunctions;
 
 /**
 * The `default_aliases` function is intended to provide default aliases for the `ftd` module,
@@ -30,8 +30,8 @@ enable light mode in the application.
 enable system mode in the application, which means the application will use the system's default
 color scheme.
 **/
-pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
-    use ftd::evalexpr::*;
+pub fn default_functions() -> ftd::Map<fastn_grammar::evalexpr::Function> {
+    use fastn_grammar::evalexpr::*;
 
     std::iter::IntoIterator::into_iter([
         (
@@ -50,7 +50,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                 } else if let Ok(tuple) = argument.as_tuple() {
                     if tuple.len().ne(&2) {
                         Err(
-                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
+                            fastn_grammar::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
                                 expected: 2,
                                 actual: tuple.len(),
                             },
@@ -72,7 +72,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                         }
                     }
                 } else {
-                    Err(ftd::evalexpr::error::EvalexprError::ExpectedString {
+                    Err(fastn_grammar::evalexpr::error::EvalexprError::ExpectedString {
                         actual: argument.clone(),
                     })
                 }
@@ -98,7 +98,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                 if let Ok(s) = argument.as_tuple() {
                     if s.len() != 2 {
                         Err(
-                            ftd::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
+                            fastn_grammar::evalexpr::error::EvalexprError::WrongFunctionArgumentAmount {
                                 expected: 2,
                                 actual: s.len(),
                             },
@@ -130,8 +130,8 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
     .collect()
 }
 
-pub fn default_context() -> ftd::interpreter::Result<ftd::evalexpr::HashMapContext> {
-    let mut context = ftd::evalexpr::HashMapContext::new();
+pub fn default_context() -> ftd::interpreter::Result<fastn_grammar::evalexpr::HashMapContext> {
+    let mut context = fastn_grammar::evalexpr::HashMapContext::new();
     for (key, function) in default_functions() {
         context.set_function(key, function)?;
     }

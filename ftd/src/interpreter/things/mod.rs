@@ -1,6 +1,6 @@
 pub(crate) mod component;
 pub mod default;
-pub(crate) mod expression;
+pub mod expression;
 pub(crate) mod function;
 pub(crate) mod kind;
 pub(crate) mod or_type;

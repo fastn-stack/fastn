@@ -24,7 +24,7 @@ impl FunctionGenerator {
     pub fn get_function(&self, function: ftd::interpreter::Function) -> ftd::html::Result<String> {
         use itertools::Itertools;
 
-        /*let node = dbg!(ftd::evalexpr::build_operator_tree(
+        /*let node = dbg!(fastn_grammar::evalexpr::build_operator_tree(
             "a = a+b+f(a, b)+(j, k) + (a+b + g(a+j, k)); a"
         )
         .unwrap()); //TODO: remove unwrap
@@ -37,7 +37,8 @@ impl FunctionGenerator {
             .map(|v| (v.name.to_string(), v.mutable))
             .collect_vec();
         for expression in function.expression {
-            let node = ftd::evalexpr::build_operator_tree(expression.expression.as_str())?;
+            let node =
+                fastn_grammar::evalexpr::build_operator_tree(expression.expression.as_str())?;
             result.push(ftd::html::utils::trim_brackets(
                 ExpressionGenerator
                     .to_string(&node, true, arguments.as_slice())
@@ -76,7 +77,7 @@ pub struct ExpressionGenerator;
 impl ExpressionGenerator {
     pub fn to_string(
         &self,
-        node: &ftd::evalexpr::ExprNode,
+        node: &fastn_grammar::evalexpr::ExprNode,
         root: bool,
         arguments: &[(String, bool)],
     ) -> String {
@@ -85,7 +86,7 @@ impl ExpressionGenerator {
 
     pub fn to_string_(
         &self,
-        node: &ftd::evalexpr::ExprNode,
+        node: &fastn_grammar::evalexpr::ExprNode,
         root: bool,
         arguments: &[(String, bool)],
         extra_args: bool,
@@ -187,8 +188,8 @@ impl ExpressionGenerator {
         if let Some(operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
-            if matches!(node.operator(), ftd::evalexpr::Operator::Not)
-                || matches!(node.operator(), ftd::evalexpr::Operator::Neg)
+            if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
+                || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
                 return vec![
                     operator,
@@ -230,52 +231,56 @@ impl ExpressionGenerator {
         )
     }
 
-    pub fn has_value(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
+    pub fn has_value(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
         match operator {
-            ftd::evalexpr::Operator::Const { .. }
-            | ftd::evalexpr::Operator::VariableIdentifierRead { .. }
-            | ftd::evalexpr::Operator::VariableIdentifierWrite { .. } => Some(operator.to_string()),
+            fastn_grammar::evalexpr::Operator::Const { .. }
+            | fastn_grammar::evalexpr::Operator::VariableIdentifierRead { .. }
+            | fastn_grammar::evalexpr::Operator::VariableIdentifierWrite { .. } => {
+                Some(operator.to_string())
+            }
             _ => None,
         }
     }
 
-    pub fn has_function(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
+    pub fn has_function(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
         match operator {
-            ftd::evalexpr::Operator::FunctionIdentifier { .. } => Some(operator.to_string()),
+            fastn_grammar::evalexpr::Operator::FunctionIdentifier { .. } => {
+                Some(operator.to_string())
+            }
             _ => None,
         }
     }
 
-    pub fn is_assignment(&self, operator: &ftd::evalexpr::Operator) -> bool {
-        matches!(operator, ftd::evalexpr::Operator::Assign)
+    pub fn is_assignment(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_grammar::evalexpr::Operator::Assign)
     }
 
-    pub fn is_chain(&self, operator: &ftd::evalexpr::Operator) -> bool {
-        matches!(operator, ftd::evalexpr::Operator::Chain)
+    pub fn is_chain(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_grammar::evalexpr::Operator::Chain)
     }
 
-    pub fn is_tuple(&self, operator: &ftd::evalexpr::Operator) -> bool {
-        matches!(operator, ftd::evalexpr::Operator::Tuple)
+    pub fn is_tuple(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_grammar::evalexpr::Operator::Tuple)
     }
 
-    pub fn is_null(&self, operator: &ftd::evalexpr::Operator) -> bool {
+    pub fn is_null(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
         matches!(
             operator,
-            ftd::evalexpr::Operator::Const {
-                value: ftd::evalexpr::Value::Empty,
+            fastn_grammar::evalexpr::Operator::Const {
+                value: fastn_grammar::evalexpr::Value::Empty,
             }
         )
     }
 
-    pub fn function_name(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
-        if let ftd::evalexpr::Operator::FunctionIdentifier { identifier } = operator {
+    pub fn function_name(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
+        if let fastn_grammar::evalexpr::Operator::FunctionIdentifier { identifier } = operator {
             Some(identifier.to_string())
         } else {
             None
         }
     }
 
-    pub fn has_operator(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
+    pub fn has_operator(&self, operator: &fastn_grammar::evalexpr::Operator) -> Option<String> {
         if self.has_value(operator).is_none()
             && self.has_function(operator).is_none()
             && !self.is_chain(operator)
@@ -289,8 +294,8 @@ impl ExpressionGenerator {
         }
     }
 
-    pub fn is_root(&self, operator: &ftd::evalexpr::Operator) -> bool {
-        matches!(operator, ftd::evalexpr::Operator::RootNode)
+    pub fn is_root(&self, operator: &fastn_grammar::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_grammar::evalexpr::Operator::RootNode)
     }
 }
 

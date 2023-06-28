@@ -1057,21 +1057,29 @@ impl Device {
 
     fn add_condition(&self, instruction: &mut ftd::interpreter::Component, line_number: usize) {
         let expression =
-            ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::Eq).add_children(vec![
-                ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::VariableIdentifierRead {
-                    identifier: "ftd.device".to_string(),
-                }),
-                ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::Const {
-                    value: ftd::evalexpr::Value::String(self.to_str().to_string()),
-                }),
-            ]);
+            fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::Eq)
+                .add_children(vec![
+                    fastn_grammar::evalexpr::ExprNode::new(
+                        fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: "ftd.device".to_string(),
+                        },
+                    ),
+                    fastn_grammar::evalexpr::ExprNode::new(
+                        fastn_grammar::evalexpr::Operator::Const {
+                            value: fastn_grammar::evalexpr::Value::String(
+                                self.to_str().to_string(),
+                            ),
+                        },
+                    ),
+                ]);
 
         if let Some(condition) = instruction.condition.as_mut() {
-            let expression = ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
-                .add_children(vec![ftd::evalexpr::ExprNode::new(
-                    ftd::evalexpr::Operator::And,
-                )
-                .add_children(vec![expression, condition.expression.to_owned()])]);
+            let expression =
+                fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::RootNode)
+                    .add_children(vec![fastn_grammar::evalexpr::ExprNode::new(
+                        fastn_grammar::evalexpr::Operator::And,
+                    )
+                    .add_children(vec![expression, condition.expression.to_owned()])]);
 
             condition.expression = expression;
 
@@ -1086,8 +1094,9 @@ impl Device {
                 },
             );
         } else {
-            let expression = ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
-                .add_children(vec![expression]);
+            let expression =
+                fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::RootNode)
+                    .add_children(vec![expression]);
 
             let condition = ftd::interpreter::Expression {
                 expression,

@@ -1540,6 +1540,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-grammar"
+version = "0.1.0"
+dependencies = [
+ "ron",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "fastn-issues"
 version = "0.1.0"
 dependencies = [
@@ -1738,6 +1747,7 @@ dependencies = [
  "dioxus-html",
  "dioxus-native-core",
  "dioxus-native-core-macro",
+ "fastn-grammar",
  "fastn-js",
  "format_num",
  "futures",

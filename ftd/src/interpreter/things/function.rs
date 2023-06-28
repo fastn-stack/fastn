@@ -105,10 +105,10 @@ impl Function {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
-        use ftd::evalexpr::*;
+        use fastn_grammar::evalexpr::*;
 
         struct VariableContext {
-            value: ftd::evalexpr::Value,
+            value: fastn_grammar::evalexpr::Value,
             reference: Option<String>,
             mutable: bool,
             kind: ftd::interpreter::Kind,
@@ -168,8 +168,10 @@ impl Function {
 
         let expression = self.convert_to_evalexpr_expression();
 
-        let eval =
-            ftd::evalexpr::eval_with_context_mut(expression.as_str(), &mut evalexpr_context)?;
+        let eval = fastn_grammar::evalexpr::eval_with_context_mut(
+            expression.as_str(),
+            &mut evalexpr_context,
+        )?;
 
         for (key, context) in context {
             match context.reference {

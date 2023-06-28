@@ -1,13 +1,13 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Expression {
-    pub expression: ftd::evalexpr::ExprNode,
+    pub expression: fastn_grammar::evalexpr::ExprNode,
     pub references: ftd::Map<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
 }
 
 impl Expression {
     pub fn new(
-        expression: ftd::evalexpr::ExprNode,
+        expression: fastn_grammar::evalexpr::ExprNode,
         references: ftd::Map<ftd::interpreter::PropertyValue>,
         line_number: usize,
     ) -> Expression {
@@ -25,7 +25,7 @@ impl Expression {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
-            let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            let mut node = fastn_grammar::evalexpr::build_operator_tree(expression_mode.as_str())?;
             Expression::scan_references(
                 &mut node,
                 definition_name_with_arguments,
@@ -53,7 +53,7 @@ impl Expression {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
-            let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            let mut node = fastn_grammar::evalexpr::build_operator_tree(expression_mode.as_str())?;
             let references = try_ok_state!(Expression::get_references(
                 &mut node,
                 definition_name_with_arguments,
@@ -77,7 +77,7 @@ impl Expression {
     }
 
     pub(crate) fn scan_references(
-        node: &mut ftd::evalexpr::ExprNode,
+        node: &mut fastn_grammar::evalexpr::ExprNode,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter::TDoc,
@@ -99,7 +99,7 @@ impl Expression {
     }
 
     pub(crate) fn get_references(
-        node: &mut ftd::evalexpr::ExprNode,
+        node: &mut fastn_grammar::evalexpr::ExprNode,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument)>,
         doc: &mut ftd::interpreter::TDoc,
@@ -127,7 +127,7 @@ impl Expression {
     }
 
     pub fn eval(&self, doc: &ftd::interpreter::TDoc) -> ftd::interpreter::Result<bool> {
-        let mut values: ftd::Map<ftd::evalexpr::Value> = Default::default();
+        let mut values: ftd::Map<fastn_grammar::evalexpr::Value> = Default::default();
         for (key, property_value) in self.references.iter() {
             values.insert(
                 key.to_string(),
@@ -137,7 +137,7 @@ impl Expression {
                     .into_evalexpr_value(doc)?,
             );
         }
-        let node = self.expression.update_node_with_value(&values);
+        let node = update_node_with_value(&self.expression, &values);
         let mut context = ftd::interpreter::default::default_context()?;
         Ok(node.eval_boolean_with_context_mut(&mut context)?)
     }
@@ -158,11 +158,11 @@ fn get_expression_mode(exp: &str) -> Option<String> {
         .map(ToString::to_string)
 }
 
-fn get_variable_identifier_read(node: &mut ftd::evalexpr::ExprNode) -> Vec<String> {
+fn get_variable_identifier_read(node: &mut fastn_grammar::evalexpr::ExprNode) -> Vec<String> {
     return get_variable_identifier_read_(node, &mut vec![]);
 
     fn get_variable_identifier_read_(
-        node: &mut ftd::evalexpr::ExprNode,
+        node: &mut fastn_grammar::evalexpr::ExprNode,
         write_variable: &mut Vec<String>,
     ) -> Vec<String> {
         let mut values = vec![];
@@ -171,8 +171,8 @@ fn get_variable_identifier_read(node: &mut ftd::evalexpr::ExprNode) -> Vec<Strin
             // TODO: if operator.eq(ftd::ast::NULL) throw error
         } else if let Some(operator) = node.operator().get_variable_identifier_read() {
             if operator.eq(ftd::ast::NULL) {
-                *node.operator_mut() = ftd::evalexpr::Operator::Const {
-                    value: ftd::evalexpr::Value::Empty,
+                *node.operator_mut() = fastn_grammar::evalexpr::Operator::Const {
+                    value: fastn_grammar::evalexpr::Value::Empty,
                 };
             } else if !write_variable.contains(&operator) {
                 values.push(operator);
@@ -185,91 +185,103 @@ fn get_variable_identifier_read(node: &mut ftd::evalexpr::ExprNode) -> Vec<Strin
     }
 }
 
-impl ftd::evalexpr::ExprNode {
-    pub fn update_node_with_value(
-        &self,
-        values: &ftd::Map<ftd::evalexpr::Value>,
-    ) -> ftd::evalexpr::ExprNode {
-        let mut operator = self.operator().clone();
-        if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
-            if let Some(value) = values.get(identifier) {
-                operator = ftd::evalexpr::Operator::Const {
-                    value: value.to_owned(),
-                }
+pub(crate) fn update_node_with_value(
+    expr: &fastn_grammar::evalexpr::ExprNode,
+    values: &ftd::Map<fastn_grammar::evalexpr::Value>,
+) -> fastn_grammar::evalexpr::ExprNode {
+    let mut operator = expr.operator().clone();
+    if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
+        if let Some(value) = values.get(identifier) {
+            operator = fastn_grammar::evalexpr::Operator::Const {
+                value: value.to_owned(),
             }
         }
-        let mut children = vec![];
-        for child in self.children() {
-            children.push(child.update_node_with_value(values));
-        }
-        ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
+    let mut children = vec![];
+    for child in expr.children() {
+        children.push(update_node_with_value(child, values));
+    }
+    fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
+}
 
-    pub fn update_node_with_variable_reference(
-        &self,
-        references: &ftd::Map<ftd::interpreter::PropertyValue>,
-    ) -> ftd::evalexpr::ExprNode {
-        let mut operator = self.operator().clone();
-        if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
-            if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
-                if let Some(ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Integer { value },
-                    ..
-                }) = references.get(identifier)
+impl Expression {
+    pub fn update_node_with_variable_reference(&self) -> fastn_grammar::evalexpr::ExprNode {
+        return update_node_with_variable_reference_(&self.expression, &self.references);
+
+        fn update_node_with_variable_reference_(
+            expr: &fastn_grammar::evalexpr::ExprNode,
+            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+        ) -> fastn_grammar::evalexpr::ExprNode {
+            let mut operator = expr.operator().clone();
+            if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
+                operator
+            {
+                if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
+                    if let Some(ftd::interpreter::PropertyValue::Value {
+                        value: ftd::interpreter::Value::Integer { value },
+                        ..
+                    }) = references.get(identifier)
+                    {
+                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: value.to_string(),
+                        }
+                    }
+                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                    references.get(identifier)
                 {
-                    operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: value.to_string(),
+                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: format!(
+                            "resolve_reference(\"{}\", data)",
+                            ftd::interpreter::utils::js_reference_name(name)
+                        ),
                     }
                 }
-            } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
-                references.get(identifier)
-            {
-                operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                    identifier: format!(
-                        "resolve_reference(\"{}\", data)",
-                        ftd::interpreter::utils::js_reference_name(name)
-                    ),
-                }
             }
+            let mut children = vec![];
+            for child in expr.children() {
+                children.push(update_node_with_variable_reference_(child, references));
+            }
+            fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
         }
-        let mut children = vec![];
-        for child in self.children() {
-            children.push(child.update_node_with_variable_reference(references));
-        }
-        ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
 
-    pub fn update_node_with_variable_reference_js(
-        &self,
-        references: &ftd::Map<ftd::interpreter::PropertyValue>,
-    ) -> ftd::evalexpr::ExprNode {
-        let mut operator = self.operator().clone();
-        if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
-            if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
-                if let Some(ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Integer { value },
-                    ..
-                }) = references.get(identifier)
+    pub fn update_node_with_variable_reference_js(&self) -> fastn_grammar::evalexpr::ExprNode {
+        return update_node_with_variable_reference_js_(&self.expression, &self.references);
+
+        fn update_node_with_variable_reference_js_(
+            expr: &fastn_grammar::evalexpr::ExprNode,
+            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+        ) -> fastn_grammar::evalexpr::ExprNode {
+            let mut operator = expr.operator().clone();
+            if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
+                operator
+            {
+                if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
+                    if let Some(ftd::interpreter::PropertyValue::Value {
+                        value: ftd::interpreter::Value::Integer { value },
+                        ..
+                    }) = references.get(identifier)
+                    {
+                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: value.to_string(),
+                        }
+                    }
+                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                    references.get(identifier)
                 {
-                    operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: value.to_string(),
+                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: format!(
+                            "fastn_utils.getter({})",
+                            fastn_js::utils::name_to_js(name).as_str()
+                        ),
                     }
                 }
-            } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
-                references.get(identifier)
-            {
-                operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                    identifier: format!(
-                        "fastn_utils.getter({})",
-                        fastn_js::utils::name_to_js(name).as_str()
-                    ),
-                }
             }
+            let mut children = vec![];
+            for child in expr.children() {
+                children.push(update_node_with_variable_reference_js_(child, references));
+            }
+            fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
         }
-        let mut children = vec![];
-        for child in self.children() {
-            children.push(child.update_node_with_variable_reference_js(references));
-        }
-        ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
 }

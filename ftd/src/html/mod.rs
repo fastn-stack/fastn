@@ -31,7 +31,7 @@ pub enum Error {
     },
 
     #[error("InterpretEvalexprErrorerError: {}", _0)]
-    EvalexprError(#[from] ftd::evalexpr::EvalexprError),
+    EvalexprError(#[from] fastn_grammar::evalexpr::EvalexprError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -10,7 +10,7 @@ fn text(t: &str) -> pretty::RcDoc<'static> {
 
 pub fn to_js(ast: &[fastn_js::Ast]) -> String {
     let mut w = Vec::new();
-    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), pretty::RcDoc::line());
+    let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), space());
     o.render(80, &mut w).unwrap();
     String::from_utf8(w).unwrap()
 }
@@ -20,8 +20,8 @@ impl fastn_js::Ast {
         match self {
             fastn_js::Ast::Component(f) => f.to_js(),
             fastn_js::Ast::UDF(f) => f.to_js(),
-            fastn_js::Ast::StaticVariable(s) => s.to_js().nest(4),
-            fastn_js::Ast::MutableVariable(m) => m.to_js().nest(4),
+            fastn_js::Ast::StaticVariable(s) => s.to_js(),
+            fastn_js::Ast::MutableVariable(m) => m.to_js(),
         }
     }
 }
@@ -101,6 +101,7 @@ fn func(
                 params.iter().map(|v| text(v.as_str())),
                 text(",").append(space()),
             )
+            .nest(4)
             .group(),
         )
         .append(text(")"))
@@ -109,13 +110,15 @@ fn func(
             pretty::RcDoc::softline()
                 .append(text("{"))
                 .append(pretty::RcDoc::softline_())
-                .append(pretty::RcDoc::intersperse(body, pretty::RcDoc::softline()).nest(8))
+                .append(
+                    pretty::RcDoc::intersperse(body, pretty::RcDoc::softline())
+                        .group()
+                        .nest(4),
+                )
                 .append(pretty::RcDoc::softline_())
                 .append(text("}"))
                 .group(),
         )
-        .group()
-        .nest(4)
 }
 
 impl fastn_js::Component {
