@@ -67,24 +67,45 @@ fastn_dom.BorderStyle = {
 
 fastn_dom.Length = {
     Px: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}px`})
+        }
         return `${value}px`;
     },
     Em: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}em`})
+        }
         return `${value}em`;
     },
     Rem: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}rem`})
+        }
         return `${value}rem`;
     },
     Percent: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}%`})
+        }
         return `${value}%`;
     },
     Calc: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `calc(${value.get()})`})
+        }
         return `calc(${value})`;
     },
     Vh: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vh`})
+        }
         return `${value}vh`;
     },
     Vw: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vw`})
+        }
         return `${value}vw`;
     },
     Responsive: (desktop, mobile) => {

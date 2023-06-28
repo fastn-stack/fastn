@@ -4,9 +4,11 @@
 
 -- ftd.text: $name
 padding.px if { i > 10 }: 4
+margin.px: $i
 $on-click$: $increment($a = $i)
 
 -- foo:
+
 
 
 
