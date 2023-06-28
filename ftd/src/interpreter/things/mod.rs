@@ -166,6 +166,10 @@ impl Thing {
         }
     }
 
+    pub(crate) fn function_optional(self) -> Option<ftd::interpreter::Function> {
+        self.function("", 0).ok()
+    }
+
     pub(crate) fn component(self) -> Option<ftd::interpreter::ComponentDefinition> {
         match self {
             ftd::interpreter::Thing::Component(v) => Some(v),

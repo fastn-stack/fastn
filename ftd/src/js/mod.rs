@@ -110,7 +110,7 @@ impl ftd::interpreter::Component {
 
         if ftd::js::element::is_kernel(self.name.as_str()) {
             ftd::js::Element::from_interpreter_component(self)
-                .to_component_statements(parent, index)
+                .to_component_statements(parent, index, bag)
         } else if let Some(ftd::interpreter::Thing::Component(component_definition)) =
             bag.get(self.name.as_str())
         {

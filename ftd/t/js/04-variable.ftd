@@ -1,9 +1,10 @@
 -- string name: Arpita
 
--- integer i: 20
+-- integer $i: 9
 
 -- ftd.text: $name
 padding.px if { i > 10 }: 4
+$on-click$: $increment($a = $i)
 
 -- foo:
 
@@ -14,3 +15,10 @@ padding.px if { i > 10 }: 4
 -- ftd.text: Foo
 
 -- end: foo
+
+
+
+-- void increment(a):
+integer $a:
+
+a = a + 1;

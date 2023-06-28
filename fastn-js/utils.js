@@ -116,6 +116,13 @@ let fastn_utils = {
         }
     },
 
+    setter(variable, value) {
+        if (variable.set) {
+           variable.set(value);
+           return 1;
+        }
+    },
+
     defaultPropertyValue(_propertyValue) {
         return null;
     }
