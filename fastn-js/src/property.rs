@@ -38,7 +38,7 @@ impl Formula {
         use itertools::Itertools;
 
         format!(
-            "[{}], {}",
+            "fastn.formula([{}], {})",
             self.deps
                 .iter()
                 .map(|v| fastn_js::utils::name_to_js(v))

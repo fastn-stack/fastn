@@ -208,6 +208,9 @@ fastn.formula = function (deps, func) {
     let closure = fastn.closure(func);
     let mutable = new Mutable(closure.get());
     for (let idx in deps) {
+        if (!deps[idx].addClosure) {
+            continue;
+        }
         deps[idx].addClosure(new Closure(function () {
             closure.update();
             mutable.set(closure.get());
