@@ -3,19 +3,23 @@ let fastn_dom = {};
 fastn_dom.classes = {}
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
-fastn_dom.property_map = {"color": "c", "width": "w"};
+fastn_dom.property_map = {"color": "c", "width": "w", "padding": "p", "margin": "m"};
 
 fastn_dom.getClassesAsString = function() {
     let classes = Object.entries(fastn_dom.classes).map(entry => {
-        return `.${entry[0]} { ${entry[1].property}: ${entry[1].value}; }`;
+        return getClassAsString(entry[0], entry[1]);
     });
 
-    return `<style>
+    return `<style id="styles">
     /*.ft_text {
         padding: 0;
     }*/
     ${classes.join("\n")}
     </style>`;
+}
+
+function getClassAsString(className, obj) {
+    return `.${className} { ${obj.property}: ${obj.value}; }`;
 }
 
 fastn_dom.ElementKind = {
@@ -120,20 +124,39 @@ class Node2 {
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
-        if (!!parent.getNode) {
+        if (parent.getNode) {
             parent = parent.getNode();
         }
         parent.appendChild(this.#node);
     }
     attachCss(property, value) {
         let property_short = fastn_dom.property_map[property];
+        property_short = property_short ? property_short : property_short;
         let cls = `${property_short}-${value}`;
         if (!fastn_dom.unsanitised_classes[cls]) {
             fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
         }
-        cls = `c${fastn_dom.unsanitised_classes[cls]}`;
-        fastn_dom.classes[cls] = fastn_dom.classes[cls] || { property: property, value: value };
-        this.#node.classList.add(cls);
+        cls = `${property_short}-${fastn_dom.unsanitised_classes[cls]}`;
+        let obj = { property: property, value: value };
+
+        if (!ssr && !hydrating) {
+            for(const className of this.#node.classList.values()) {
+                if (className.startsWith(`${property_short}-`)) {
+                    this.#node.classList.remove(className);
+                }
+            }
+            if (!fastn_dom.classes[cls] && value !== undefined) {
+                let styles = document.getElementById('styles');
+                styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`
+            }
+        }
+
+        if (value !== undefined) {
+            fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+            this.#node.classList.add(cls);
+        }
+
+
     }
     setStaticProperty(kind, value) {
         // value can be either static or mutable
@@ -211,11 +234,11 @@ class ConditionalDom {
         this.#conditionUI = null;
         let closure = fastn.closure(() => {
             if (condition()) {
-                if (!!this.#conditionUI) {
+                if (this.#conditionUI) {
                     this.#conditionUI.destroy();
                 }
                 this.#conditionUI = node_constructor(domNode);
-            } else if (!!this.#conditionUI) {
+            } else if (this.#conditionUI) {
                 this.#conditionUI.destroy();
                 this.#conditionUI = null;
             }

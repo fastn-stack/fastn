@@ -47,9 +47,7 @@ impl fastn_js::SetProperty {
         text(format!("{}.setProperty(", self.element_name).as_str())
             .append(text(format!("{},", self.kind.to_js()).as_str()))
             .append(space())
-            .append(text(
-                format!("{});", self.value.to_js_with_kind(Some(&self.kind))).as_str(),
-            ))
+            .append(text(format!("{});", self.value.to_js()).as_str()))
     }
 }
 

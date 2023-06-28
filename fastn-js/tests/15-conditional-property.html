@@ -10,7 +10,7 @@
 <script>
     (function() {
         function main (root) {
-            let value = fastn.mutable(1);
+            let value = fastn.mutable(2);
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i1.setProperty(fastn_dom.PropertyKind.IntegerValue, value);
             i1.done();
@@ -24,7 +24,7 @@
                 }
             });
             i0.setProperty(fastn_dom.PropertyKind.StringValue, f);
-            i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5)))
+            // i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Em(5)))
             i0.setProperty(fastn_dom.PropertyKind.Width, fastn.formula([value], function () {
                 if (value.get() % 2 == 0) {
                     return fastn_dom.Resizing.Fixed(fastn_dom.Length.Responsive(fastn_dom.Length.Px(5)));
@@ -45,7 +45,8 @@
             i0.done();
         }
 
-        main(document.body);
+        document.body.innerHTML = fastn_virtual.ssr(main);
+        fastn_virtual.hydrate(main);
     })();
 </script>
 </html>

@@ -11,16 +11,12 @@ pub enum SetPropertyValue {
 }
 
 impl SetPropertyValue {
-    pub fn to_js_with_kind(&self, kind: Option<&PropertyKind>) -> String {
+    pub fn to_js(&self) -> String {
         match self {
             SetPropertyValue::Reference(name) => fastn_js::utils::name_to_js(name),
-            SetPropertyValue::Value(v) => v.to_js(kind),
-            SetPropertyValue::Formula(f) => f.to_js(kind),
+            SetPropertyValue::Value(v) => v.to_js(),
+            SetPropertyValue::Formula(f) => f.to_js(),
         }
-    }
-
-    pub fn to_js(&self) -> String {
-        self.to_js_with_kind(None)
     }
 
     pub fn is_formula(&self) -> bool {
@@ -34,7 +30,7 @@ pub struct Formula {
 }
 
 impl Formula {
-    pub(crate) fn to_js(&self, kind: Option<&PropertyKind>) -> String {
+    pub(crate) fn to_js(&self) -> String {
         use itertools::Itertools;
 
         format!(
@@ -44,11 +40,11 @@ impl Formula {
                 .map(|v| fastn_js::utils::name_to_js(v))
                 .collect_vec()
                 .join(", "),
-            self.conditional_values_to_js(kind)
+            self.conditional_values_to_js()
         )
     }
 
-    pub(crate) fn conditional_values_to_js(&self, kind: Option<&PropertyKind>) -> String {
+    pub(crate) fn conditional_values_to_js(&self) -> String {
         let mut conditions = vec![];
         let mut default = None;
         for conditional_value in &self.conditional_values {
@@ -62,31 +58,27 @@ impl Formula {
                     expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
                 );
                 conditions.push(format!(
-                    indoc::indoc! {"
-                        {if_exp}({condition}){{
+                    indoc::indoc! {
+                        "{if_exp}({condition}){{
                             return {expression};
-                        }}
-                    "},
+                        }}"
+                    },
                     if_exp = if conditions.is_empty() {
                         "if"
                     } else {
                         "else if"
                     },
                     condition = condition,
-                    expression = conditional_value.expression.to_js_with_kind(kind),
+                    expression = conditional_value.expression.to_js(),
                 ));
             } else {
-                default = Some(conditional_value.expression.to_js_with_kind(kind))
+                default = Some(conditional_value.expression.to_js())
             }
         }
 
         let default = match default {
             Some(d) if conditions.is_empty() => d,
             Some(d) => format!("else {{ return {}; }}", d),
-            None if kind.is_some() => format!(
-                "else {{ return fastn_utils.defaultPropertyValue({}); }}",
-                kind.unwrap().to_js()
-            ),
             None => "".to_string(),
         };
 
@@ -118,14 +110,14 @@ pub enum Value {
 }
 
 impl Value {
-    pub(crate) fn to_js(&self, kind: Option<&PropertyKind>) -> String {
+    pub(crate) fn to_js(&self) -> String {
         match self {
             Value::String(s) => format!("\"{s}\""),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
-                    format!("{}({})", variant, value.to_js_with_kind(kind))
+                    format!("{}({})", variant, value.to_js())
                 } else {
                     variant.to_owned()
                 }
