@@ -137,6 +137,7 @@ impl ftd::interpreter::Component {
                         true,
                     ),
                     parent: parent.to_string(),
+                    should_return,
                 },
             )]
         } else {
