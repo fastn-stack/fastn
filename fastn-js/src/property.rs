@@ -119,9 +119,8 @@ pub enum Value {
 impl Value {
     pub(crate) fn to_js(&self) -> String {
         use itertools::Itertools;
-
         match self {
-            Value::String(s) => format!("\"{s}\""),
+            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::OrType { variant, value } => {

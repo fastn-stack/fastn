@@ -1,21 +1,18 @@
 pub struct StaticVariable {
     pub name: String,
-    pub value: String,
-    pub is_quoted: bool,
+    pub value: fastn_js::SetPropertyValue,
 }
 
-pub fn static_unquoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
+pub fn static_integer(name: &str, value: i64) -> fastn_js::ComponentStatement {
     fastn_js::ComponentStatement::StaticVariable(StaticVariable {
         name: name.to_string(),
-        value: value.to_string(),
-        is_quoted: false,
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(value)),
     })
 }
 
-pub fn static_quoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
+pub fn static_string(name: &str, value: &str) -> fastn_js::ComponentStatement {
     fastn_js::ComponentStatement::StaticVariable(StaticVariable {
         name: name.to_string(),
-        value: value.to_string(),
-        is_quoted: true,
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::String(value.to_string())),
     })
 }
