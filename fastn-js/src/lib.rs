@@ -24,7 +24,7 @@ pub use event::{Event, EventHandler, Function};
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
 pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
 pub use ssr::{ssr, ssr_str};
-pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
+pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
 pub use udf::{udf0, udf1, udf2, udf_with_params, UDF};
 pub use udf_statement::UDFStatement;
