@@ -119,6 +119,7 @@ impl fastn_js::ComponentStatement {
             }
             fastn_js::ComponentStatement::ConditionalComponent(c) => c.to_js(),
             fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(),
+            fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
         }
     }
 }
@@ -168,6 +169,24 @@ impl fastn_js::ConditionalComponent {
             ))
             .append(text("},"))
             .append(text("function (root) {"))
+            .append(
+                pretty::RcDoc::intersperse(
+                    self.statements.iter().map(|v| v.to_js()),
+                    pretty::RcDoc::softline(),
+                )
+                .group(),
+            )
+            .append(text("});"))
+    }
+}
+
+impl fastn_js::ForLoop {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text(format!("{}.forLoop(", self.list_variable).as_str())
+            .append(text(self.parent.as_str()))
+            .append(comma())
+            .append(space())
+            .append(text("function (root, item, index) {"))
             .append(
                 pretty::RcDoc::intersperse(
                     self.statements.iter().map(|v| v.to_js()),

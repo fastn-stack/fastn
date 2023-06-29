@@ -9,10 +9,10 @@ pub enum ComponentStatement {
     Return { component_name: String },
     ConditionalComponent(fastn_js::ConditionalComponent),
     MutableList(fastn_js::MutableList),
+    ForLoop(fastn_js::ForLoop),
     // JSExpression(ExprNode),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
-    // ForLoop(ForLoop),
 }
 
 // pub struct ExprNode {
