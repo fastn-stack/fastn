@@ -19,3 +19,8 @@ pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
         is_quoted: true,
     })
 }
+
+pub struct MutableList {
+    pub name: String,
+    pub value: Vec<fastn_js::SetPropertyValue>,
+}

@@ -117,6 +117,7 @@ impl fastn_js::ComponentStatement {
                 text(&format!("return {component_name};"))
             }
             fastn_js::ComponentStatement::ConditionalComponent(c) => c.to_js(),
+            fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(),
         }
     }
 }
@@ -243,6 +244,25 @@ impl fastn_js::MutableVariable {
             } else {
                 text(&self.value)
             })
+            .append(text(");"))
+    }
+}
+
+impl fastn_js::MutableList {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text("let")
+            .append(space())
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("fastn.mutableList(["))
+            .append(pretty::RcDoc::intersperse(
+                self.value.iter().map(|v| v.to_js()),
+                comma().append(space()),
+            ))
             .append(text(");"))
     }
 }
