@@ -2,23 +2,27 @@
 
 - prototype stage
   - [x] bug: node issue
-  - [ ] amitu: quickjs issue
-  - [ ] arpita: bug: infinite loop
-  - [ ] arpita: list addition example
+  - [x] amitu: quickjs issue
+  - [x] arpita: bug: infinite loop
+  - [x] arpita: list addition example
+  - [ ] container
+  - [ ] conditionalDom
+  - [ ] forLoopDom
+  - [ ] inherited
+  - [ ] role
+  - [ ] record
   - [ ] the new ast (full ftd ast which is input to JS generation)
-  - [ ] list index change example
-  - [ ] list of list
-  - [ ] list of optional record
+  - [x] list index change example
+  - [x] list of optional record
   - [ ] light/dark mode
   - [ ] responsive
-  - [ ] css class generation
-  - [ ] js generation
+  - [x] css class generation
+  - [x] js generation
   - [ ] static markdown compiler
   - [ ] markdown as innerHTML
 - release
   - [ ] port fastn cli to use 0.4
   - [ ] all the properties
-  - [ ] use 0.4 in FASTN.ftd
 - post release
   - [ ] proper markdown support
   - [ ] code block
@@ -27,3 +31,4 @@
     - [ ] code context
   - [ ] proper markup support
   - [ ] variable interpolation
+  - [ ] use 0.4 in FASTN.ftd
