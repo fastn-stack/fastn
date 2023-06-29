@@ -12,18 +12,19 @@ pub use value::Value;
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     use itertools::Itertools;
-
-    let mut asts = vec![ftd::js::from_tree(document.tree.as_slice(), &document.data)];
+    let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
+    let mut asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
     let default_thing_name = ftd::interpreter::default::default_bag()
         .into_iter()
         .map(|v| v.0)
         .collect_vec();
+
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(key) {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
-            asts.push(c.to_ast(&document.data));
+            asts.push(c.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             asts.push(v.to_ast());
         } else if let ftd::interpreter::Thing::Function(f) = thing {
@@ -72,11 +73,11 @@ impl ftd::interpreter::Variable {
 }
 
 impl ftd::interpreter::ComponentDefinition {
-    pub fn to_ast(&self, bag: &ftd::Map<ftd::interpreter::Thing>) -> fastn_js::Ast {
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         let mut statements = vec![];
-        statements.extend(self.definition.to_component_statements("parent", 0, bag));
+        statements.extend(self.definition.to_component_statements("parent", 0, doc));
         fastn_js::component_with_params(
             self.name.as_str(),
             statements,
@@ -90,11 +91,11 @@ impl ftd::interpreter::ComponentDefinition {
 
 pub fn from_tree(
     tree: &[ftd::interpreter::Component],
-    bag: &ftd::Map<ftd::interpreter::Thing>,
+    doc: &ftd::interpreter::TDoc,
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements("parent", index, bag))
+        statements.extend(component.to_component_statements("parent", index, doc))
     }
     fastn_js::component0("main", statements)
 }
@@ -104,15 +105,15 @@ impl ftd::interpreter::Component {
         &self,
         parent: &str,
         index: usize,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
+        doc: &ftd::interpreter::TDoc,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
-
         if ftd::js::element::is_kernel(self.name.as_str()) {
-            ftd::js::Element::from_interpreter_component(self)
-                .to_component_statements(parent, index, bag)
-        } else if let Some(ftd::interpreter::Thing::Component(component_definition)) =
-            bag.get(self.name.as_str())
+            ftd::js::Element::from_interpreter_component(self, doc)
+                .to_component_statements(parent, index, doc)
+        } else if let Some(component_definition) = doc
+            .get_component(&self.name.as_str(), self.line_number)
+            .ok()
         {
             let arguments = component_definition
                 .arguments
