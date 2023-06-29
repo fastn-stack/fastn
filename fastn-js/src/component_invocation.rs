@@ -10,7 +10,7 @@ impl Kernel {
         let element_kind = fastn_js::ElementKind::from_component_name(component_name);
         Kernel {
             element_kind,
-            name: format!("i{index}"),
+            name: format!("{parent}i{index}"),
             parent: parent.to_string(),
         }
     }

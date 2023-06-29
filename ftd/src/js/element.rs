@@ -1,12 +1,17 @@
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
+    Column(Column),
 }
 
 impl Element {
-    pub fn from_interpreter_component(component: &ftd::interpreter::Component) -> Element {
+    pub fn from_interpreter_component(
+        component: &ftd::interpreter::Component,
+        doc: &ftd::interpreter::TDoc,
+    ) -> Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
+            "ftd#column" => Element::Column(Column::from(component, doc)),
             _ => todo!(),
         }
     }
@@ -15,10 +20,11 @@ impl Element {
         &self,
         parent: &str,
         index: usize,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
+        doc: &ftd::interpreter::TDoc,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
-            Element::Text(text) => text.to_component_statements(parent, index, bag),
+            Element::Text(text) => text.to_component_statements(parent, index, doc),
+            Element::Column(column) => column.to_component_statements(parent, index, doc),
         }
     }
 }
@@ -26,6 +32,12 @@ impl Element {
 #[derive(Debug)]
 pub struct Text {
     pub text: ftd::js::Value,
+    pub common: Common,
+}
+
+#[derive(Debug)]
+pub struct Column {
+    pub children: Vec<ftd::interpreter::Component>,
     pub common: Common,
 }
 
@@ -56,7 +68,7 @@ impl Text {
         &self,
         parent: &str,
         index: usize,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
+        doc: &ftd::interpreter::TDoc,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component("ftd#text", parent, index);
@@ -68,7 +80,50 @@ impl Text {
                 element_name: kernel.name.to_string(),
             },
         ));
-        component_statements.extend(self.common.to_set_properties(kernel.name.as_str(), bag));
+        component_statements.extend(self.common.to_set_properties(kernel.name.as_str(), doc));
+        component_statements.push(fastn_js::ComponentStatement::Done {
+            component_name: kernel.name,
+        });
+        component_statements
+    }
+}
+
+impl Column {
+    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Column {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#column")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Column {
+            children: component.get_children(doc).unwrap(),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component("ftd#column", parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(kernel.name.as_str(), doc));
+
+        component_statements.extend(
+            self.children
+                .iter()
+                .enumerate()
+                .map(|(index, v)| v.to_component_statements(kernel.name.as_str(), index, doc))
+                .flatten(),
+        );
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name,
         });
@@ -109,12 +164,12 @@ impl Common {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
+        doc: &ftd::interpreter::TDoc,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         for event in self.events.iter() {
             component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
-                event.to_event_handler_js(element_name, bag),
+                event.to_event_handler_js(element_name, doc),
             ));
         }
         if let Some(ref id) = self.id {
@@ -160,24 +215,21 @@ impl ftd::interpreter::Event {
     fn to_event_handler_js(
         &self,
         element_name: &str,
-        bag: &ftd::Map<ftd::interpreter::Thing>,
+        doc: &ftd::interpreter::TDoc,
     ) -> fastn_js::EventHandler {
         fastn_js::EventHandler {
             event: self.name.to_js_event_name(),
-            action: self.action.to_js_function(bag),
+            action: self.action.to_js_function(doc),
             element_name: element_name.to_string(),
         }
     }
 }
 
 impl ftd::interpreter::FunctionCall {
-    fn to_js_function(&self, bag: &ftd::Map<ftd::interpreter::Thing>) -> fastn_js::Function {
+    fn to_js_function(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Function {
         let mut parameters = vec![];
-        let function = bag
-            .get(self.name.as_str())
-            .unwrap()
-            .clone()
-            .function_optional()
+        let function = doc
+            .get_function(self.name.as_str(), self.line_number)
             .unwrap();
         for argument in function.arguments {
             let value = if let Some(value) = self.values.get(argument.name.as_str()) {
