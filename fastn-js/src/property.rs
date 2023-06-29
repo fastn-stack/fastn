@@ -4,6 +4,7 @@ pub struct SetProperty {
     pub element_name: String,
 }
 
+#[derive(Debug)]
 pub enum SetPropertyValue {
     Reference(String),
     Value(Value),
@@ -24,6 +25,7 @@ impl SetPropertyValue {
     }
 }
 
+#[derive(Debug)]
 pub struct Formula {
     pub deps: Vec<String>,
     pub conditional_values: Vec<ConditionalValue>,
@@ -94,11 +96,13 @@ impl Formula {
     }
 }
 
+#[derive(Debug)]
 pub struct ConditionalValue {
     pub condition: Option<fastn_grammar::evalexpr::ExprNode>,
     pub expression: SetPropertyValue,
 }
 
+#[derive(Debug)]
 pub enum Value {
     String(String),
     Integer(i64),
