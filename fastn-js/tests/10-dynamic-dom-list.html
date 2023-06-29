@@ -24,8 +24,15 @@
             text2.done();
 
             people.forLoop(root, function (root, item, index) {
-                let index_formula = fastn.formula([index], function () { return index.get() * 100; });
-                return showPerson(root, item, index_formula);
+                return fastn_dom.conditionalDom(root, [index], function () {
+                        return index.get() % 2 === 0
+                    }, function (root) {
+                        let index_formula = fastn.formula([index], function () { return index.get() * 100; });
+                        return showPerson(root, item, index_formula);
+                    }
+                ).getParent();
+                // let index_formula = fastn.formula([index], function () { return index.get() * 100; });
+                // return showPerson(root, item, index_formula);
             });
         }
 

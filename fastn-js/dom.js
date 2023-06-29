@@ -289,6 +289,10 @@ class ConditionalDom {
         this.#condition = condition;
         this.#mutables = [];
     }
+
+    getParent() {
+        return this.#parent;
+    }
 }
 
 fastn_dom.createKernel = function (parent, kind) {
