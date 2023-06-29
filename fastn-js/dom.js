@@ -164,14 +164,21 @@ class Node2 {
 
         if (!ssr && !hydrating) {
             for(const className of this.#node.classList.values()) {
-                if (className.startsWith(`${property_short}-`)) {
+                if (className.startsWith(`${property_short}-` )) {
                     this.#node.classList.remove(className);
                 }
             }
-            if (!fastn_dom.classes[cls] && value !== undefined) {
-                let styles = document.getElementById('styles');
-                styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`
+            if (value === undefined) {
+                return;
             }
+
+            if (!fastn_dom.classes[cls]) {
+                this.#node.style[`${property}`] = value;
+            } else {
+                this.#node.classList.add(cls);
+            }
+
+            return;
         }
 
         if (value !== undefined) {
