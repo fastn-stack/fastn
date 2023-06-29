@@ -130,7 +130,7 @@ impl ftd::interpreter::Component {
                         "root",
                         0,
                         doc,
-                        component_definition_name.clone(),
+                        component_definition_name,
                         true,
                     ),
                     parent: parent.to_string(),
