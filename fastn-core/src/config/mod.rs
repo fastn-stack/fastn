@@ -984,6 +984,10 @@ impl Config {
             return Ok((self.package.name.to_string(), self.package.to_owned()));
         };
 
+        if id.starts_with(self.package.name.as_str()) {
+            return Ok((self.package.name.to_string(), self.package.to_owned()));
+        }
+
         if let Some(package) = self.package.aliases().iter().find_map(|(alias, d)| {
             if id.starts_with(alias) {
                 Some((alias.to_string(), (*d).to_owned()))
