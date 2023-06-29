@@ -150,7 +150,9 @@ impl fastn_js::ConditionalComponent {
             .append(text("["))
             .append(
                 pretty::RcDoc::intersperse(
-                    self.deps.iter().map(|v| text(v)),
+                    self.deps
+                        .iter()
+                        .map(|v| text(fastn_js::utils::name_to_js(v).as_str())),
                     comma().append(space()),
                 )
                 .group(),
@@ -163,7 +165,7 @@ impl fastn_js::ConditionalComponent {
                 fastn_js::to_js::ExpressionGenerator.to_js(&self.condition),
             ))
             .append(text("},"))
-            .append(text("function () {"))
+            .append(text("function (root) {"))
             .append(
                 pretty::RcDoc::intersperse(
                     self.statements.iter().map(|v| v.to_js()),
