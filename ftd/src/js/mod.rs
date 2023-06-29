@@ -116,6 +116,46 @@ impl ftd::interpreter::Component {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
+
+        if let Some(condition) = self.condition.as_ref() {
+            vec![fastn_js::ComponentStatement::ConditionalComponent(
+                fastn_js::ConditionalComponent {
+                    deps: condition
+                        .references
+                        .values()
+                        .flat_map(|v| v.get_deps())
+                        .collect_vec(),
+                    condition: condition.update_node_with_variable_reference_js(),
+                    statements: self.to_component_statements_(
+                        "root",
+                        0,
+                        doc,
+                        component_definition_name.clone(),
+                        true,
+                    ),
+                    parent: parent.to_string(),
+                },
+            )]
+        } else {
+            self.to_component_statements_(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                should_return,
+            )
+        }
+    }
+
+    fn to_component_statements_(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: Option<String>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
             ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
                 parent,

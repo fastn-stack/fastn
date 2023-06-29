@@ -42,15 +42,9 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
-        if let Some(reference) = property.value.get_reference_or_clone() {
-            deps.push(reference.to_owned());
-        }
+        deps.extend(property.value.get_deps());
         if let Some(ref condition) = property.condition {
-            for property_value in condition.references.values() {
-                if let Some(reference) = property_value.get_reference_or_clone() {
-                    deps.push(reference.to_owned());
-                }
-            }
+            deps.extend(condition.get_deps());
         }
 
         conditional_values.push(fastn_js::ConditionalValue {
@@ -65,6 +59,30 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
     fastn_js::Formula {
         deps,
         conditional_values,
+    }
+}
+
+impl ftd::interpreter::Expression {
+    pub(crate) fn get_deps(&self) -> Vec<String> {
+        let mut deps = vec![];
+        for property_value in self.references.values() {
+            deps.extend(property_value.get_deps());
+        }
+        deps
+    }
+}
+
+impl ftd::interpreter::PropertyValue {
+    pub(crate) fn get_deps(&self) -> Vec<String> {
+        let mut deps = vec![];
+        if let Some(reference) = self.get_reference_or_clone() {
+            deps.push(reference.to_owned());
+        } else if let Some(function) = self.get_function() {
+            for value in function.values.values() {
+                deps.extend(value.get_deps());
+            }
+        }
+        deps
     }
 }
 

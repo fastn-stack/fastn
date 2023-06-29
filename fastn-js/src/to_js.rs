@@ -112,6 +112,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::Return { component_name } => {
                 text(&format!("return {component_name};"))
             }
+            fastn_js::ComponentStatement::ConditionalComponent(_) => todo!(),
         }
     }
 }
