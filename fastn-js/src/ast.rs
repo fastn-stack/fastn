@@ -3,4 +3,5 @@ pub enum Ast {
     UDF(fastn_js::UDF), // user defined function
     StaticVariable(fastn_js::StaticVariable),
     MutableVariable(fastn_js::MutableVariable),
+    MutableList(fastn_js::MutableList),
 }

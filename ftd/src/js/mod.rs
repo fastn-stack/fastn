@@ -56,7 +56,12 @@ impl ftd::interpreter::Function {
 
 impl ftd::interpreter::Variable {
     pub fn to_ast(&self) -> fastn_js::Ast {
-        if self.mutable {
+        if self.mutable && self.kind.is_list() {
+            fastn_js::Ast::MutableList(fastn_js::MutableList {
+                name: self.name.to_string(),
+                value: self.value.to_fastn_js_value(),
+            })
+        } else if self.mutable {
             fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                 name: self.name.to_string(),
                 value: self.value.to_fastn_js_value().to_js(),

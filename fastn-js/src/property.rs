@@ -111,10 +111,15 @@ pub enum Value {
         variant: String,
         value: Option<Box<SetPropertyValue>>,
     },
+    List {
+        value: Vec<SetPropertyValue>,
+    },
 }
 
 impl Value {
     pub(crate) fn to_js(&self) -> String {
+        use itertools::Itertools;
+
         match self {
             Value::String(s) => format!("\"{s}\""),
             Value::Integer(i) => i.to_string(),
@@ -126,6 +131,7 @@ impl Value {
                     variant.to_owned()
                 }
             }
+            Value::List { value } => format!("[{}]", value.iter().map(|v| v.to_js()).join(", ")),
         }
     }
 }
