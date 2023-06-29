@@ -121,8 +121,7 @@ impl Column {
             self.children
                 .iter()
                 .enumerate()
-                .map(|(index, v)| v.to_component_statements(kernel.name.as_str(), index, doc))
-                .flatten(),
+                .flat_map(|(index, v)| v.to_component_statements(kernel.name.as_str(), index, doc)),
         );
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name,

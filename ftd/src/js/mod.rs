@@ -111,9 +111,8 @@ impl ftd::interpreter::Component {
         if ftd::js::element::is_kernel(self.name.as_str()) {
             ftd::js::Element::from_interpreter_component(self, doc)
                 .to_component_statements(parent, index, doc)
-        } else if let Some(component_definition) = doc
-            .get_component(&self.name.as_str(), self.line_number)
-            .ok()
+        } else if let Ok(component_definition) =
+            doc.get_component(self.name.as_str(), self.line_number)
         {
             let arguments = component_definition
                 .arguments

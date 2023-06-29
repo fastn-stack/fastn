@@ -15,7 +15,8 @@ $on-click$: $increment($a = $i)
 -- component foo:
 
 -- ftd.column:
--- ftd.text: Foo
+-- ftd.text: Foo 1
+-- ftd.text: Foo 2
 -- end: ftd.column
 
 -- end: foo

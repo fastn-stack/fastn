@@ -5,7 +5,8 @@
   - [x] amitu: quickjs issue
   - [x] arpita: bug: infinite loop
   - [x] arpita: list addition example
-  - [ ] container
+  - [x] container
+  - [ ] Avoid Dynamic CSS
   - [ ] conditionalDom
   - [ ] forLoopDom
   - [ ] inherited
