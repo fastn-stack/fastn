@@ -5,6 +5,7 @@ fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.property_map = {"color": "c", "width": "w", "padding": "p", "margin": "m"};
 
+// dynamic-class-css.md
 fastn_dom.getClassesAsString = function() {
     let classes = Object.entries(fastn_dom.classes).map(entry => {
         return getClassAsString(entry[0], entry[1]);
@@ -150,6 +151,7 @@ class Node2 {
         }
         parent.appendChild(this.#node);
     }
+    // dynamic-class-css
     attachCss(property, value) {
         let property_short = fastn_dom.property_map[property];
         property_short = property_short ? property_short : property_short;
@@ -176,8 +178,6 @@ class Node2 {
             fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
             this.#node.classList.add(cls);
         }
-
-
     }
     setStaticProperty(kind, value) {
         // value can be either static or mutable
