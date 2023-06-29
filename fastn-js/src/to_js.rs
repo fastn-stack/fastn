@@ -6,6 +6,10 @@ fn text(t: &str) -> pretty::RcDoc<'static> {
     pretty::RcDoc::text(t.to_string())
 }
 
+fn comma() -> pretty::RcDoc<'static> {
+    pretty::RcDoc::text(",".to_string())
+}
+
 pub fn to_js(ast: &[fastn_js::Ast]) -> String {
     let mut w = Vec::new();
     let o = pretty::RcDoc::intersperse(ast.iter().map(|f| f.to_js()), space());
@@ -53,7 +57,7 @@ impl fastn_js::EventHandler {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         text(format!("{}.addEventHandler(", self.element_name).as_str())
             .append(self.event.to_js())
-            .append(text(","))
+            .append(comma())
             .append(space())
             .append(text("function()"))
             .append(space())
@@ -76,7 +80,7 @@ impl fastn_js::Function {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
             .append(pretty::RcDoc::intersperse(
                 self.parameters.iter().map(|v| v.to_js()),
-                text(",").append(space()),
+                comma().append(space()),
             ))
             .append(text(");"))
     }
@@ -112,7 +116,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::Return { component_name } => {
                 text(&format!("return {component_name};"))
             }
-            fastn_js::ComponentStatement::ConditionalComponent(_) => todo!(),
+            fastn_js::ComponentStatement::ConditionalComponent(c) => c.to_js(),
         }
     }
 }
@@ -125,15 +129,49 @@ impl fastn_js::InstantiateComponent {
             fastn_js::utils::name_to_js(self.name.as_str())
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
-        .append(text(",").append(space()))
+        .append(comma().append(space()))
         .append(
             pretty::RcDoc::intersperse(
                 self.arguments.iter().map(|v| v.to_js()),
-                text(",").append(space()),
+                comma().append(space()),
             )
             .group(),
         )
         .append(text(");"))
+    }
+}
+
+impl fastn_js::ConditionalComponent {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text("fastn_dom.conditionalDom(")
+            .append(text(self.parent.as_str()))
+            .append(comma())
+            .append(space())
+            .append(text("["))
+            .append(
+                pretty::RcDoc::intersperse(
+                    self.deps.iter().map(|v| text(v)),
+                    comma().append(space()),
+                )
+                .group(),
+            )
+            .append(text("]"))
+            .append(comma())
+            .append(space())
+            .append(text("function () {"))
+            .append(pretty::RcDoc::text(
+                fastn_js::to_js::ExpressionGenerator.to_js(&self.condition),
+            ))
+            .append(text("},"))
+            .append(text("function () {"))
+            .append(
+                pretty::RcDoc::intersperse(
+                    self.statements.iter().map(|v| v.to_js()),
+                    pretty::RcDoc::softline(),
+                )
+                .group(),
+            )
+            .append(text("});"))
     }
 }
 
@@ -149,7 +187,7 @@ fn func(
         .append(
             pretty::RcDoc::intersperse(
                 params.iter().map(|v| text(v.as_str())),
-                text(",").append(space()),
+                comma().append(space()),
             )
             .nest(4)
             .group(),
@@ -326,7 +364,7 @@ impl UDFStatement {
                 .append(
                     pretty::RcDoc::intersperse(
                         args.iter().map(|f| f.to_js()),
-                        text(",").append(space()),
+                        comma().append(space()),
                     )
                     .group(),
                 )
