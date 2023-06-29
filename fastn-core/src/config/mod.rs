@@ -984,7 +984,11 @@ impl Config {
             return Ok((self.package.name.to_string(), self.package.to_owned()));
         };
 
-        if let Some(package) = self.package.aliases().iter().find_map(|(alias, d)| {
+        if id.starts_with(self.package.name.as_str()) {
+            return Ok((self.package.name.to_string(), self.package.to_owned()));
+        }
+
+        if let Some(package) = self.package.aliases().iter().rev().find_map(|(alias, d)| {
             if id.starts_with(alias) {
                 Some((alias.to_string(), (*d).to_owned()))
             } else {
@@ -994,7 +998,7 @@ impl Config {
             return Ok(package);
         }
 
-        for (package_name, package) in self.all_packages.borrow().iter() {
+        for (package_name, package) in self.all_packages.borrow().iter().rev() {
             if id.starts_with(package_name) {
                 return Ok((package_name.to_string(), package.to_owned()));
             }
