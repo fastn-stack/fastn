@@ -198,19 +198,36 @@ impl fastn_js::ConditionalComponent {
 
 impl fastn_js::ForLoop {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        text(format!("{}.forLoop(", self.list_variable).as_str())
-            .append(text(self.parent.as_str()))
-            .append(comma())
-            .append(space())
-            .append(text("function (root, item, index) {"))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.statements.iter().map(|v| v.to_js()),
-                    pretty::RcDoc::softline(),
-                )
-                .group(),
+        text(
+            format!(
+                "{}{}.forLoop(",
+                if self.should_return { "return " } else { "" },
+                self.list_variable
             )
-            .append(text("});"))
+            .as_str(),
+        )
+        .append(text(self.parent.as_str()))
+        .append(comma())
+        .append(space())
+        .append(text("function (root, item, index) {"))
+        .append(
+            pretty::RcDoc::intersperse(
+                self.statements.iter().map(|v| v.to_js()),
+                pretty::RcDoc::softline(),
+            )
+            .group(),
+        )
+        .append(text(
+            format!(
+                "}}){};",
+                if self.should_return {
+                    ".getParent()"
+                } else {
+                    ""
+                }
+            )
+            .as_str(),
+        ))
     }
 }
 
