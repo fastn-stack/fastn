@@ -240,11 +240,7 @@ impl fastn_js::MutableVariable {
             .append(text("="))
             .append(space())
             .append(text("fastn.mutable("))
-            .append(if self.is_quoted {
-                quote(self.value.as_str())
-            } else {
-                text(&self.value)
-            })
+            .append(text(&self.value.to_js()))
             .append(text(");"))
     }
 }
@@ -485,7 +481,7 @@ mod tests {
     #[test]
     fn unquoted() {
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_unquoted("bar", "10")]),
+            fastn_js::component0("foo", vec![fastn_js::mutable_integer("bar", 10)]),
             r#"function foo(parent) {let bar = fastn.mutable(10);}"#,
         );
     }
@@ -493,22 +489,23 @@ mod tests {
     #[test]
     fn quoted() {
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_quoted("bar", "10")]),
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "10")]),
             r#"function foo(parent) {let bar = fastn.mutable("10");}"#,
         );
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_quoted("bar", "hello world")]),
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world")]),
             r#"function foo(parent) {let bar = fastn.mutable("hello world");}"#,
         );
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_quoted("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world, a long long\
+             long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
             indoc::indoc!(
                 r#"function foo(parent) {
                 let bar = fastn.mutable("hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on");
                 }"#),
         );
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_quoted("bar", "hello\nworld")]),
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello\nworld")]),
             r#"function foo(parent) {let bar = fastn.mutable("hello\nworld");}"#,
         );
         // std::fs::write(

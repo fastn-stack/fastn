@@ -1,22 +1,19 @@
 pub struct MutableVariable {
     pub name: String,
-    pub value: String,
-    pub is_quoted: bool,
+    pub value: fastn_js::SetPropertyValue,
 }
 
-pub fn mutable_unquoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
+pub fn mutable_integer(name: &str, value: i64) -> fastn_js::ComponentStatement {
     fastn_js::ComponentStatement::MutableVariable(MutableVariable {
         name: name.to_string(),
-        value: value.to_string(),
-        is_quoted: false,
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(value)),
     })
 }
 
-pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
+pub fn mutable_string(name: &str, value: &str) -> fastn_js::ComponentStatement {
     fastn_js::ComponentStatement::MutableVariable(MutableVariable {
         name: name.to_string(),
-        value: value.to_string(),
-        is_quoted: true,
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::String(value.to_string())),
     })
 }
 

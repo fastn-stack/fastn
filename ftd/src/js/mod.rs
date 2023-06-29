@@ -64,8 +64,7 @@ impl ftd::interpreter::Variable {
         } else if self.mutable {
             fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                 name: self.name.to_string(),
-                value: self.value.to_fastn_js_value().to_js(),
-                is_quoted: false,
+                value: self.value.to_fastn_js_value(),
             })
         } else {
             fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
