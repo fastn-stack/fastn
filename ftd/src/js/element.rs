@@ -250,7 +250,7 @@ impl Common {
                 border_style.to_set_property(
                     fastn_js::PropertyKind::BorderStyle,
                     element_name,
-                    component_definition_name.clone(),
+                    component_definition_name,
                 ),
             ));
         }
