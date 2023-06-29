@@ -7,7 +7,7 @@
   - [x] arpita: list addition example
   - [x] container
   - [x] Avoid Dynamic CSS
-  - [ ] conditionalDom
+  - [x] conditionalDom
   - [ ] forLoopDom
   - [ ] inherited
   - [ ] role
