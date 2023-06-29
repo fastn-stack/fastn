@@ -146,37 +146,53 @@ impl fastn_js::InstantiateComponent {
 
 impl fastn_js::ConditionalComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        text("fastn_dom.conditionalDom(")
-            .append(text(self.parent.as_str()))
-            .append(comma())
-            .append(space())
-            .append(text("["))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.deps
-                        .iter()
-                        .map(|v| text(fastn_js::utils::name_to_js(v).as_str())),
-                    comma().append(space()),
-                )
-                .group(),
+        text(
+            format!(
+                "{}fastn_dom.conditionalDom(",
+                if self.should_return { "return " } else { "" }
             )
-            .append(text("]"))
-            .append(comma())
-            .append(space())
-            .append(text("function () {"))
-            .append(pretty::RcDoc::text(
-                fastn_js::to_js::ExpressionGenerator.to_js(&self.condition),
-            ))
-            .append(text("},"))
-            .append(text("function (root) {"))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.statements.iter().map(|v| v.to_js()),
-                    pretty::RcDoc::softline(),
-                )
-                .group(),
+            .as_str(),
+        )
+        .append(text(self.parent.as_str()))
+        .append(comma())
+        .append(space())
+        .append(text("["))
+        .append(
+            pretty::RcDoc::intersperse(
+                self.deps
+                    .iter()
+                    .map(|v| text(fastn_js::utils::name_to_js(v).as_str())),
+                comma().append(space()),
             )
-            .append(text("});"))
+            .group(),
+        )
+        .append(text("]"))
+        .append(comma())
+        .append(space())
+        .append(text("function () {"))
+        .append(pretty::RcDoc::text(
+            fastn_js::to_js::ExpressionGenerator.to_js(&self.condition),
+        ))
+        .append(text("},"))
+        .append(text("function (root) {"))
+        .append(
+            pretty::RcDoc::intersperse(
+                self.statements.iter().map(|v| v.to_js()),
+                pretty::RcDoc::softline(),
+            )
+            .group(),
+        )
+        .append(text(
+            format!(
+                "}}){};",
+                if self.should_return {
+                    ".getParent()"
+                } else {
+                    ""
+                }
+            )
+            .as_str(),
+        ))
     }
 }
 
