@@ -77,7 +77,6 @@ impl ftd::interpreter::ComponentDefinition {
         use itertools::Itertools;
 
         let mut statements = vec![];
-        dbg!("to_ast", &self.name);
         statements.extend(self.definition.to_component_statements(
             "parent",
             0,

@@ -39,6 +39,7 @@ tokio = { workspace = true, optional = true }
 tracing.workspace = true
 fastn-js.workspace = true
 fastn-grammar.workspace = true
+prettify-js.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true
