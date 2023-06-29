@@ -21,7 +21,7 @@ pub use component_invocation::{ElementKind, InstantiateComponent, Kernel};
 pub use component_statement::ComponentStatement;
 pub use conditional_component::ConditionalComponent;
 pub use event::{Event, EventHandler, Function};
-pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableVariable};
+pub use mutable_variable::{mutable_quoted, mutable_unquoted, MutableList, MutableVariable};
 pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
 pub use ssr::{ssr, ssr_str};
 pub use static_variable::{static_quoted, static_unquoted, StaticVariable};
