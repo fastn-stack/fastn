@@ -22,6 +22,7 @@ impl Element {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
@@ -30,6 +31,7 @@ impl Element {
                 index,
                 doc,
                 component_definition_name,
+                loop_alias,
                 should_return,
             ),
             Element::Column(column) => column.to_component_statements(
@@ -37,6 +39,7 @@ impl Element {
                 index,
                 doc,
                 component_definition_name,
+                loop_alias,
                 should_return,
             ),
         }
@@ -84,6 +87,7 @@ impl Text {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -94,7 +98,7 @@ impl Text {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self
                     .text
-                    .to_set_property_value(component_definition_name.clone()),
+                    .to_set_property_value(component_definition_name.clone(), loop_alias.clone()),
                 element_name: kernel.name.to_string(),
             },
         ));
@@ -102,6 +106,7 @@ impl Text {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            loop_alias.clone(),
         ));
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name.clone(),
@@ -139,6 +144,7 @@ impl Column {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -148,6 +154,7 @@ impl Column {
             kernel.name.as_str(),
             doc,
             component_definition_name.clone(),
+            loop_alias.clone(),
         ));
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
@@ -206,11 +213,17 @@ impl Common {
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         for event in self.events.iter() {
             component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
-                event.to_event_handler_js(element_name, doc, component_definition_name.clone()),
+                event.to_event_handler_js(
+                    element_name,
+                    doc,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
             ));
         }
         if let Some(ref id) = self.id {
@@ -219,6 +232,7 @@ impl Common {
                     fastn_js::PropertyKind::Id,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -228,6 +242,7 @@ impl Common {
                     fastn_js::PropertyKind::Width,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -237,6 +252,7 @@ impl Common {
                     fastn_js::PropertyKind::Height,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -246,6 +262,7 @@ impl Common {
                     fastn_js::PropertyKind::Padding,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -255,6 +272,7 @@ impl Common {
                     fastn_js::PropertyKind::Margin,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -264,6 +282,7 @@ impl Common {
                     fastn_js::PropertyKind::BorderWidth,
                     element_name,
                     component_definition_name.clone(),
+                    loop_alias.clone(),
                 ),
             ));
         }
@@ -273,6 +292,7 @@ impl Common {
                     fastn_js::PropertyKind::BorderStyle,
                     element_name,
                     component_definition_name,
+                    loop_alias,
                 ),
             ));
         }
@@ -281,15 +301,18 @@ impl Common {
 }
 
 impl ftd::interpreter::Event {
-    fn to_event_handler_js(
+    pub(crate) fn to_event_handler_js(
         &self,
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
     ) -> fastn_js::EventHandler {
         fastn_js::EventHandler {
             event: self.name.to_js_event_name(),
-            action: self.action.to_js_function(doc, component_definition_name),
+            action: self
+                .action
+                .to_js_function(doc, component_definition_name, loop_alias),
             element_name: element_name.to_string(),
         }
     }
@@ -300,6 +323,7 @@ impl ftd::interpreter::FunctionCall {
         &self,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
         let function = doc
@@ -313,7 +337,9 @@ impl ftd::interpreter::FunctionCall {
             } else {
                 panic!("Argument value not found {:?}", argument)
             };
-            parameters.push(value.to_set_property_value(component_definition_name.clone()));
+            parameters.push(
+                value.to_set_property_value(component_definition_name.clone(), loop_alias.clone()),
+            );
         }
         fastn_js::Function {
             name: self.name.to_string(),

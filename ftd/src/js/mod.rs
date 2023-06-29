@@ -121,7 +121,14 @@ impl ftd::interpreter::Component {
         use itertools::Itertools;
 
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
-            self.to_component_statements_("root", 0, doc, component_definition_name, true)
+            self.to_component_statements_(
+                "root",
+                0,
+                doc,
+                component_definition_name,
+                true,
+                self.iteration.clone().map(|v| v.alias),
+            )
         } else {
             self.to_component_statements_(
                 parent,
@@ -129,6 +136,7 @@ impl ftd::interpreter::Component {
                 doc,
                 component_definition_name,
                 should_return,
+                None,
             )
         };
 
@@ -167,6 +175,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
         should_return: bool,
+        loop_alias: Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
@@ -175,6 +184,7 @@ impl ftd::interpreter::Component {
                 index,
                 doc,
                 component_definition_name,
+                loop_alias,
                 should_return,
             )
         } else if let Ok(component_definition) =
@@ -185,9 +195,18 @@ impl ftd::interpreter::Component {
                 .iter()
                 .map(|v| {
                     v.get_value(self.properties.as_slice())
-                        .to_set_property_value(component_definition_name.clone())
+                        .to_set_property_value(
+                            component_definition_name.clone(),
+                            loop_alias.clone(),
+                        )
                 })
                 .collect_vec();
+            // Todo: Add event
+            /*for event in self.events.iter() {
+                component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
+                    event.to_event_handler_js(element_name, doc, component_definition_name.clone()),
+                ));
+            }*/
             vec![fastn_js::ComponentStatement::InstantiateComponent(
                 fastn_js::InstantiateComponent {
                     name: self.name.to_string(),
