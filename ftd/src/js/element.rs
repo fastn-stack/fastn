@@ -22,14 +22,23 @@ impl Element {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
-            Element::Text(text) => {
-                text.to_component_statements(parent, index, doc, component_definition_name)
-            }
-            Element::Column(column) => {
-                column.to_component_statements(parent, index, doc, component_definition_name)
-            }
+            Element::Text(text) => text.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                should_return,
+            ),
+            Element::Column(column) => column.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                should_return,
+            ),
         }
     }
 }
@@ -79,6 +88,7 @@ impl Text {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component("ftd#text", parent, index);
@@ -98,8 +108,13 @@ impl Text {
             component_definition_name,
         ));
         component_statements.push(fastn_js::ComponentStatement::Done {
-            component_name: kernel.name,
+            component_name: kernel.name.clone(),
         });
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
         component_statements
     }
 }
@@ -132,6 +147,7 @@ impl Column {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component("ftd#column", parent, index);
@@ -148,11 +164,17 @@ impl Column {
                 index,
                 doc,
                 component_definition_name.clone(),
+                false,
             )
         }));
         component_statements.push(fastn_js::ComponentStatement::Done {
-            component_name: kernel.name,
+            component_name: kernel.name.clone(),
         });
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
         component_statements
     }
 }

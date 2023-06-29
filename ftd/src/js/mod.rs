@@ -82,6 +82,7 @@ impl ftd::interpreter::ComponentDefinition {
             0,
             doc,
             Some(self.name.to_string()),
+            true,
         ));
         fastn_js::component_with_params(
             self.name.as_str(),
@@ -100,7 +101,7 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements("parent", index, doc, None))
+        statements.extend(component.to_component_statements("parent", index, doc, None, false))
     }
     fastn_js::component0("main", statements)
 }
@@ -112,6 +113,7 @@ impl ftd::interpreter::Component {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: Option<String>,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
@@ -120,6 +122,7 @@ impl ftd::interpreter::Component {
                 index,
                 doc,
                 component_definition_name,
+                should_return,
             )
         } else if let Ok(component_definition) =
             doc.get_component(self.name.as_str(), self.line_number)
@@ -137,6 +140,7 @@ impl ftd::interpreter::Component {
                     name: self.name.to_string(),
                     arguments,
                     parent: parent.to_string(),
+                    should_return,
                 },
             )]
         } else {
