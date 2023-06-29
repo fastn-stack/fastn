@@ -9,6 +9,9 @@ $on-click$: $increment($a = $i)
 
 -- foo: Foo says Hello
 
+-- ftd.text: Hello
+if: { i > 11 }
+
 
 
 
