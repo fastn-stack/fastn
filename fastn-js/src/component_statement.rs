@@ -7,12 +7,12 @@ pub enum ComponentStatement {
     AddEventHandler(fastn_js::EventHandler),
     Done { component_name: String },
     Return { component_name: String },
+    ConditionalComponent(fastn_js::ConditionalComponent),
     // JSExpression(ExprNode),
     // MutableList(MutableList),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
     // ForLoop(ForLoop),
-    // ConditionalComponent(ConditionalComponent),
 }
 
 // pub struct ExprNode {
