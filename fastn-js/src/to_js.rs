@@ -109,6 +109,9 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::Done { component_name } => {
                 text(&format!("{component_name}.done();"))
             }
+            fastn_js::ComponentStatement::Return { component_name } => {
+                text(&format!("return {component_name};"))
+            }
         }
     }
 }
@@ -116,7 +119,8 @@ impl fastn_js::ComponentStatement {
 impl fastn_js::InstantiateComponent {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         pretty::RcDoc::text(format!(
-            "{}(",
+            "{}{}(",
+            if self.should_return { "return " } else { "" },
             fastn_js::utils::name_to_js(self.name.as_str())
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))

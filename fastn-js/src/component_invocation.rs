@@ -44,4 +44,5 @@ pub struct InstantiateComponent {
     pub name: String,
     pub arguments: Vec<fastn_js::SetPropertyValue>,
     pub parent: String,
+    pub should_return: bool,
 }

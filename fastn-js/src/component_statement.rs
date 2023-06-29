@@ -6,6 +6,7 @@ pub enum ComponentStatement {
     InstantiateComponent(fastn_js::InstantiateComponent),
     AddEventHandler(fastn_js::EventHandler),
     Done { component_name: String },
+    Return { component_name: String },
     // JSExpression(ExprNode),
     // MutableList(MutableList),
     // RecordInstance(RecordInstance),
