@@ -322,6 +322,10 @@ class ForLoop {
         let v = this.#list.get(index);
         this.#node_constructor(this.#wrapper, v.item, v.index).done();
     }
+
+    getParent() {
+        return this.#wrapper;
+    }
 }
 
 fastn_dom.forLoop = function (parent, node_constructor, list) {
