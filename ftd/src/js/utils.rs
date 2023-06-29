@@ -10,7 +10,6 @@ pub(crate) fn update_reference(
     component_definition_name: Option<String>,
     loop_alias: Option<String>,
 ) -> String {
-    dbg!(&reference);
     let mut name = reference
         .trim_start_matches(format!("{}.", component_definition_name.unwrap_or_default()).as_str())
         .to_string();

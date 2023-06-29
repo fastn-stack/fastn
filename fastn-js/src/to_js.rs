@@ -662,7 +662,6 @@ impl ExpressionGenerator {
         if self.is_tuple(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                dbg!("is_tuple", &children, &no_getter);
                 result.push(self.to_js_(children, false, arguments, no_getter));
             }
             return format!("[{}]", result.join(","));
@@ -672,7 +671,6 @@ impl ExpressionGenerator {
             let mut result = vec![];
             if let Some(child) = node.children().first() {
                 for children in child.children() {
-                    dbg!(&children);
                     let mut value = self.to_js_(children, false, arguments, true);
                     if self.is_tuple(children.operator()) {
                         value = value[1..value.len() - 1].to_string();
