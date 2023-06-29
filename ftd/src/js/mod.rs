@@ -120,26 +120,8 @@ impl ftd::interpreter::Component {
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
 
-        if let Some(condition) = self.condition.as_ref() {
-            vec![fastn_js::ComponentStatement::ConditionalComponent(
-                fastn_js::ConditionalComponent {
-                    deps: condition
-                        .references
-                        .values()
-                        .flat_map(|v| v.get_deps())
-                        .collect_vec(),
-                    condition: condition.update_node_with_variable_reference_js(),
-                    statements: self.to_component_statements_(
-                        "root",
-                        0,
-                        doc,
-                        component_definition_name,
-                        true,
-                    ),
-                    parent: parent.to_string(),
-                    should_return,
-                },
-            )]
+        let mut component_statements = if self.is_loop() || self.condition.is_some() {
+            self.to_component_statements_("root", 0, doc, component_definition_name, true)
         } else {
             self.to_component_statements_(
                 parent,
@@ -148,7 +130,34 @@ impl ftd::interpreter::Component {
                 component_definition_name,
                 should_return,
             )
+        };
+
+        if let Some(condition) = self.condition.as_ref() {
+            component_statements = vec![fastn_js::ComponentStatement::ConditionalComponent(
+                fastn_js::ConditionalComponent {
+                    deps: condition
+                        .references
+                        .values()
+                        .flat_map(|v| v.get_deps())
+                        .collect_vec(),
+                    condition: condition.update_node_with_variable_reference_js(),
+                    statements: component_statements,
+                    parent: parent.to_string(),
+                    should_return: self.is_loop() || should_return,
+                },
+            )]
         }
+
+        if let Some(iteration) = self.iteration.as_ref() {
+            component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
+                list_variable: iteration.on.to_fastn_js_value(),
+                statements: component_statements,
+                parent: parent.to_string(),
+                should_return,
+            })]
+        }
+
+        component_statements
     }
 
     fn to_component_statements_(
