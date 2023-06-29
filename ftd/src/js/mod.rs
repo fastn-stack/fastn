@@ -152,7 +152,7 @@ impl ftd::interpreter::Component {
                         })
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
-                        component_definition_name.clone(),
+                        component_definition_name,
                         loop_alias,
                     ),
                     statements: component_statements,
