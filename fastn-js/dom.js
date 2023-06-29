@@ -3,7 +3,16 @@ let fastn_dom = {};
 fastn_dom.classes = {}
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
-fastn_dom.property_map = {"color": "c", "width": "w", "padding": "p", "margin": "m"};
+fastn_dom.property_map = {
+    "color": "c",
+    "width": "w",
+    "padding": "p",
+    "margin": "m",
+    "height": "h",
+    "border-width": "bw",
+    "border-style": "bs",
+
+};
 
 // dynamic-class-css.md
 fastn_dom.getClassesAsString = function() {
@@ -153,18 +162,17 @@ class Node2 {
     }
     // dynamic-class-css
     attachCss(property, value) {
-        let property_short = fastn_dom.property_map[property];
-        property_short = property_short ? property_short : property_short;
-        let cls = `${property_short}-${value}`;
+        const propertyShort = fastn_dom.property_map[property] || property;
+        let cls = `${propertyShort}-${value}`;
         if (!fastn_dom.unsanitised_classes[cls]) {
             fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
         }
-        cls = `${property_short}-${fastn_dom.unsanitised_classes[cls]}`;
-        let obj = { property: property, value: value };
+        cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+        const obj = { property, value };
 
         if (!ssr && !hydrating) {
-            for(const className of this.#node.classList.values()) {
-                if (className.startsWith(`${property_short}-` )) {
+            for (const className of this.#node.classList.values()) {
+                if (className.startsWith(`${propertyShort}-`)) {
                     this.#node.classList.remove(className);
                 }
             }
@@ -173,7 +181,7 @@ class Node2 {
             }
 
             if (!fastn_dom.classes[cls]) {
-                this.#node.style[`${property}`] = value;
+                this.#node.style[property] = value;
             } else {
                 this.#node.classList.add(cls);
             }
@@ -186,6 +194,7 @@ class Node2 {
             this.#node.classList.add(cls);
         }
     }
+
     setStaticProperty(kind, value) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
