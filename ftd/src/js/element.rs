@@ -106,7 +106,7 @@ impl Text {
             kernel.name.as_str(),
             doc,
             component_definition_name,
-            loop_alias.clone(),
+            loop_alias,
         ));
         component_statements.push(fastn_js::ComponentStatement::Done {
             component_name: kernel.name.clone(),
@@ -154,7 +154,7 @@ impl Column {
             kernel.name.as_str(),
             doc,
             component_definition_name.clone(),
-            loop_alias.clone(),
+            loop_alias,
         ));
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
