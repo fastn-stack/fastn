@@ -26,6 +26,23 @@ caption name: Hello
 -- end: foo
 
 
+-- string list $names:
+
+-- ftd.text: Click me to add Tom
+$on-click$: $append-string($a = $names, v = Tom)
+
+-- ftd.text: $obj
+$loop$: $names as $obj
+
+
+
+-- void append-string(a,v):
+string list $a:
+string v:
+
+ftd.append(a, v)
+
+
 
 -- void increment(a):
 integer $a:

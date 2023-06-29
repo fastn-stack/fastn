@@ -301,7 +301,7 @@ impl fastn_js::MutableList {
             .append(space())
             .append(text("="))
             .append(space())
-            .append(text("fastn.mutableList(["))
+            .append(text("fastn.mutableList("))
             .append(text(self.value.to_js().as_str()))
             .append(text(");"))
     }
@@ -334,6 +334,7 @@ impl fastn_js::UDF {
                         f,
                         true,
                         &self.params,
+                        false,
                     ))
                 })
                 .collect(),
@@ -598,7 +599,7 @@ pub struct ExpressionGenerator;
 
 impl ExpressionGenerator {
     pub fn to_js(&self, node: &fastn_grammar::evalexpr::ExprNode) -> String {
-        self.to_js_(node, true, &[])
+        self.to_js_(node, true, &[], false)
     }
 
     pub fn to_js_(
@@ -606,6 +607,7 @@ impl ExpressionGenerator {
         node: &fastn_grammar::evalexpr::ExprNode,
         root: bool,
         arguments: &[String],
+        no_getter: bool,
     ) -> String {
         use itertools::Itertools;
 
@@ -613,7 +615,7 @@ impl ExpressionGenerator {
             let result = node
                 .children()
                 .iter()
-                .map(|children| self.to_js_(children, false, arguments))
+                .map(|children| self.to_js_(children, false, arguments, no_getter))
                 .collect_vec();
             let (is_assignment_or_chain, only_one_child) =
                 node.children().first().map_or((false, true), |first| {
@@ -643,8 +645,9 @@ impl ExpressionGenerator {
         if self.is_chain(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                let val =
-                    fastn_js::utils::trim_brackets(self.to_js_(children, true, arguments).trim());
+                let val = fastn_js::utils::trim_brackets(
+                    self.to_js_(children, true, arguments, false).trim(),
+                );
                 if !val.trim().is_empty() {
                     result.push(format!(
                         "{}{}",
@@ -659,7 +662,8 @@ impl ExpressionGenerator {
         if self.is_tuple(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                result.push(self.to_js_(children, false, arguments));
+                dbg!("is_tuple", &children, &no_getter);
+                result.push(self.to_js_(children, false, arguments, no_getter));
             }
             return format!("[{}]", result.join(","));
         }
@@ -668,7 +672,8 @@ impl ExpressionGenerator {
             let mut result = vec![];
             if let Some(child) = node.children().first() {
                 for children in child.children() {
-                    let mut value = self.to_js_(children, false, arguments);
+                    dbg!(&children);
+                    let mut value = self.to_js_(children, false, arguments, true);
                     if self.is_tuple(children.operator()) {
                         value = value[1..value.len() - 1].to_string();
                     }
@@ -685,14 +690,14 @@ impl ExpressionGenerator {
             if !arguments.iter().any(|v| first.to_string().eq(v)) {
                 return vec![
                     "let ".to_string(),
-                    self.to_js_(first, false, arguments),
+                    self.to_js_(first, false, arguments, false),
                     node.operator().to_string(),
-                    self.to_js_(second, false, arguments),
+                    self.to_js_(second, false, arguments, false),
                 ]
                 .join("");
             } else if first.operator().get_variable_identifier_write().is_some() {
-                let var = self.to_js_(first, false, arguments);
-                let val = self.to_js_(second, false, arguments);
+                let var = self.to_js_(first, false, arguments, false);
+                let val = self.to_js_(second, false, arguments, true);
                 return format!(
                     indoc::indoc! {
                         "let fastn_utils_val_{var} = {val};
@@ -705,9 +710,9 @@ impl ExpressionGenerator {
                 );
             };
             return vec![
-                self.to_js_(first, false, arguments),
+                self.to_js_(first, false, arguments, false),
                 node.operator().to_string(),
-                self.to_js_(second, false, arguments),
+                self.to_js_(second, false, arguments, false),
             ]
             .join("");
         }
@@ -718,13 +723,13 @@ impl ExpressionGenerator {
             if matches!(node.operator(), fastn_grammar::evalexpr::Operator::Not)
                 || matches!(node.operator(), fastn_grammar::evalexpr::Operator::Neg)
             {
-                return vec![operator, self.to_js_(first, false, arguments)].join("");
+                return vec![operator, self.to_js_(first, false, arguments, false)].join("");
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![
-                self.to_js_(first, false, arguments),
+                self.to_js_(first, false, arguments, false),
                 operator,
-                self.to_js_(second, false, arguments),
+                self.to_js_(second, false, arguments, false),
             ]
             .join("");
         }
@@ -732,7 +737,7 @@ impl ExpressionGenerator {
         if let Some(operator) = self.has_function(node.operator()) {
             let mut result = vec![];
             for children in node.children() {
-                result.push(self.to_js_(children, false, arguments));
+                result.push(self.to_js_(children, false, arguments, false));
             }
             return format!("{}{}", operator.trim(), result.join(" "));
         }
@@ -743,7 +748,7 @@ impl ExpressionGenerator {
             node.operator().to_string()
         };
 
-        if node.operator().get_variable_identifier_read().is_some() {
+        if node.operator().get_variable_identifier_read().is_some() && !no_getter {
             format!("fastn_utils.getter({})", value)
         } else {
             value

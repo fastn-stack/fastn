@@ -9,15 +9,26 @@ impl Value {
     pub(crate) fn to_set_property_value(
         &self,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(),
-            Value::Reference(name) => fastn_js::SetPropertyValue::Reference(
-                name.trim_start_matches(
-                    format!("{}.", component_definition_name.unwrap_or_default()).as_str(),
-                )
-                .to_string(),
-            ),
+            Value::Reference(name) => fastn_js::SetPropertyValue::Reference({
+                dbg!(&loop_alias, &name);
+                let mut name = name
+                    .trim_start_matches(
+                        format!("{}.", component_definition_name.unwrap_or_default()).as_str(),
+                    )
+                    .to_string();
+                if let Some(loop_alias) = loop_alias {
+                    if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
+                        name = format!("item.{alias}");
+                    } else if loop_alias.eq(&name) {
+                        name = "item".to_string()
+                    }
+                }
+                dbg!(name)
+            }),
             Value::Formula(formulas) => {
                 fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(formulas))
             }
@@ -29,10 +40,11 @@ impl Value {
         kind: fastn_js::PropertyKind,
         element_name: &str,
         component_definition_name: Option<String>,
+        loop_alias: Option<String>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
-            value: self.to_set_property_value(component_definition_name),
+            value: self.to_set_property_value(component_definition_name, loop_alias),
             element_name: element_name.to_string(),
         }
     }
