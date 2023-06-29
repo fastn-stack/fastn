@@ -65,6 +65,10 @@ impl Text {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
+                component
+                    .condition
+                    .clone()
+                    .map(|v| v.update_node_with_variable_reference_js()),
             ),
         }
     }
@@ -114,6 +118,10 @@ impl Column {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
+                component
+                    .condition
+                    .clone()
+                    .map(|v| v.update_node_with_variable_reference_js()),
             ),
         }
     }
@@ -159,6 +167,7 @@ pub struct Common {
     pub border_width: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
+    pub condition: Option<fastn_grammar::evalexpr::ExprNode>,
 }
 
 impl Common {
@@ -166,6 +175,7 @@ impl Common {
         properties: &[ftd::interpreter::Property],
         arguments: &[ftd::interpreter::Argument],
         events: &[ftd::interpreter::Event],
+        condition: Option<fastn_grammar::evalexpr::ExprNode>,
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
@@ -176,6 +186,7 @@ impl Common {
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
             events: events.to_vec(),
+            condition,
         }
     }
 
