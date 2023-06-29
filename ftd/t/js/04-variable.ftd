@@ -7,15 +7,16 @@ padding.px if { i > 10 }: 4
 margin.px: $i
 $on-click$: $increment($a = $i)
 
--- foo:
+-- foo: Foo says Hello
 
 
 
 
 -- component foo:
+caption name: Hello
 
 -- ftd.column:
--- ftd.text: Foo 1
+-- ftd.text: $foo.name
 -- ftd.text: Foo 2
 -- end: ftd.column
 

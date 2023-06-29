@@ -120,10 +120,14 @@ impl fastn_js::InstantiateComponent {
             fastn_js::utils::name_to_js(self.name.as_str())
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
-        .append(pretty::RcDoc::intersperse(
-            self.arguments.iter().map(|v| v.to_js()),
-            text(",").append(space()),
-        ))
+        .append(text(",").append(space()))
+        .append(
+            pretty::RcDoc::intersperse(
+                self.arguments.iter().map(|v| v.to_js()),
+                text(",").append(space()),
+            )
+            .group(),
+        )
         .append(text(");"))
     }
 }

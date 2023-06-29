@@ -77,7 +77,13 @@ impl ftd::interpreter::ComponentDefinition {
         use itertools::Itertools;
 
         let mut statements = vec![];
-        statements.extend(self.definition.to_component_statements("parent", 0, doc));
+        dbg!("to_ast", &self.name);
+        statements.extend(self.definition.to_component_statements(
+            "parent",
+            0,
+            doc,
+            Some(self.name.to_string()),
+        ));
         fastn_js::component_with_params(
             self.name.as_str(),
             statements,
@@ -95,7 +101,7 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements("parent", index, doc))
+        statements.extend(component.to_component_statements("parent", index, doc, None))
     }
     fastn_js::component0("main", statements)
 }
@@ -106,11 +112,16 @@ impl ftd::interpreter::Component {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
+        component_definition_name: Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
-            ftd::js::Element::from_interpreter_component(self, doc)
-                .to_component_statements(parent, index, doc)
+            ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+            )
         } else if let Ok(component_definition) =
             doc.get_component(self.name.as_str(), self.line_number)
         {
@@ -119,7 +130,7 @@ impl ftd::interpreter::Component {
                 .iter()
                 .map(|v| {
                     v.get_value(self.properties.as_slice())
-                        .to_set_property_value()
+                        .to_set_property_value(component_definition_name.clone())
                 })
                 .collect_vec();
             vec![fastn_js::ComponentStatement::InstantiateComponent(
