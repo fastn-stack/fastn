@@ -13,25 +13,12 @@ impl Value {
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(),
-            Value::Reference(name) => fastn_js::SetPropertyValue::Reference({
-                dbg!(&loop_alias, &name);
-                let mut name = name
-                    .trim_start_matches(
-                        format!("{}.", component_definition_name.unwrap_or_default()).as_str(),
-                    )
-                    .to_string();
-                if let Some(loop_alias) = loop_alias {
-                    if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
-                        name = format!("item.{alias}");
-                    } else if loop_alias.eq(&name) {
-                        name = "item".to_string()
-                    }
-                }
-                dbg!(name)
-            }),
-            Value::Formula(formulas) => {
-                fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(formulas))
-            }
+            Value::Reference(name) => fastn_js::SetPropertyValue::Reference(
+                ftd::js::utils::update_reference(name, component_definition_name, loop_alias),
+            ),
+            Value::Formula(formulas) => fastn_js::SetPropertyValue::Formula(
+                formulas_to_fastn_js_value(formulas, component_definition_name, loop_alias),
+            ),
         }
     }
 
@@ -50,20 +37,30 @@ impl Value {
     }
 }
 
-fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fastn_js::Formula {
+fn formulas_to_fastn_js_value(
+    properties: &[ftd::interpreter::Property],
+    component_definition_name: Option<String>,
+    loop_alias: Option<String>,
+) -> fastn_js::Formula {
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
-        deps.extend(property.value.get_deps());
+        deps.extend(
+            property
+                .value
+                .get_deps(component_definition_name.clone(), loop_alias.clone()),
+        );
         if let Some(ref condition) = property.condition {
-            deps.extend(condition.get_deps());
+            deps.extend(condition.get_deps(component_definition_name.clone(), loop_alias.clone()));
         }
 
         conditional_values.push(fastn_js::ConditionalValue {
-            condition: property
-                .condition
-                .as_ref()
-                .map(|condition| condition.update_node_with_variable_reference_js()),
+            condition: property.condition.as_ref().map(|condition| {
+                condition.update_node_with_variable_reference_js(
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                )
+            }),
             expression: property.value.to_fastn_js_value(),
         });
     }
@@ -75,23 +72,89 @@ fn formulas_to_fastn_js_value(properties: &[ftd::interpreter::Property]) -> fast
 }
 
 impl ftd::interpreter::Expression {
-    pub(crate) fn get_deps(&self) -> Vec<String> {
+    pub(crate) fn get_deps(
+        &self,
+        component_definition_name: Option<String>,
+        loop_alias: Option<String>,
+    ) -> Vec<String> {
         let mut deps = vec![];
         for property_value in self.references.values() {
-            deps.extend(property_value.get_deps());
+            deps.extend(
+                property_value.get_deps(component_definition_name.clone(), loop_alias.clone()),
+            );
         }
         deps
+    }
+
+    pub fn update_node_with_variable_reference_js(
+        &self,
+        component_definition_name: Option<String>,
+        loop_alias: Option<String>,
+    ) -> fastn_grammar::evalexpr::ExprNode {
+        return update_node_with_variable_reference_js_(
+            &self.expression,
+            &self.references,
+            component_definition_name,
+            loop_alias,
+        );
+
+        fn update_node_with_variable_reference_js_(
+            expr: &fastn_grammar::evalexpr::ExprNode,
+            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+            component_definition_name: Option<String>,
+            loop_alias: Option<String>,
+        ) -> fastn_grammar::evalexpr::ExprNode {
+            let mut operator = expr.operator().clone();
+            if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
+                operator
+            {
+                if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
+                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: "index".to_string(),
+                    }
+                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                    references.get(identifier)
+                {
+                    let name = ftd::js::utils::update_reference(
+                        name,
+                        component_definition_name.clone(),
+                        loop_alias.clone(),
+                    );
+                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: fastn_js::utils::name_to_js(name.as_str()),
+                    }
+                }
+            }
+            let mut children = vec![];
+            for child in expr.children() {
+                children.push(update_node_with_variable_reference_js_(
+                    child,
+                    references,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ));
+            }
+            fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
+        }
     }
 }
 
 impl ftd::interpreter::PropertyValue {
-    pub(crate) fn get_deps(&self) -> Vec<String> {
+    pub(crate) fn get_deps(
+        &self,
+        component_definition_name: Option<String>,
+        loop_alias: Option<String>,
+    ) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
-            deps.push(reference.to_owned());
+            deps.push(ftd::js::utils::update_reference(
+                reference,
+                component_definition_name,
+                loop_alias,
+            ));
         } else if let Some(function) = self.get_function() {
             for value in function.values.values() {
-                deps.extend(value.get_deps());
+                deps.extend(value.get_deps(component_definition_name.clone(), loop_alias.clone()));
             }
         }
         deps

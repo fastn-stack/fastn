@@ -120,21 +120,22 @@ impl ftd::interpreter::Component {
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
 
+        let loop_alias = self.iteration.clone().map(|v| v.alias);
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
             self.to_component_statements_(
                 "root",
                 0,
                 doc,
-                component_definition_name,
+                component_definition_name.clone(),
                 true,
-                self.iteration.clone().map(|v| v.alias),
+                loop_alias.clone(),
             )
         } else {
             self.to_component_statements_(
                 parent,
                 index,
                 doc,
-                component_definition_name,
+                component_definition_name.clone(),
                 should_return,
                 None,
             )
@@ -146,9 +147,14 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| v.get_deps())
+                        .flat_map(|v| {
+                            v.get_deps(component_definition_name.clone(), loop_alias.clone())
+                        })
                         .collect_vec(),
-                    condition: condition.update_node_with_variable_reference_js(),
+                    condition: condition.update_node_with_variable_reference_js(
+                        component_definition_name.clone(),
+                        loop_alias,
+                    ),
                     statements: component_statements,
                     parent: parent.to_string(),
                     should_return: self.is_loop() || should_return,

@@ -244,41 +244,4 @@ impl Expression {
             fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
         }
     }
-
-    pub fn update_node_with_variable_reference_js(&self) -> fastn_grammar::evalexpr::ExprNode {
-        return update_node_with_variable_reference_js_(&self.expression, &self.references);
-
-        fn update_node_with_variable_reference_js_(
-            expr: &fastn_grammar::evalexpr::ExprNode,
-            references: &ftd::Map<ftd::interpreter::PropertyValue>,
-        ) -> fastn_grammar::evalexpr::ExprNode {
-            let mut operator = expr.operator().clone();
-            if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
-                operator
-            {
-                if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
-                    if let Some(ftd::interpreter::PropertyValue::Value {
-                        value: ftd::interpreter::Value::Integer { value },
-                        ..
-                    }) = references.get(identifier)
-                    {
-                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
-                            identifier: value.to_string(),
-                        }
-                    }
-                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
-                    references.get(identifier)
-                {
-                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: fastn_js::utils::name_to_js(name),
-                    }
-                }
-            }
-            let mut children = vec![];
-            for child in expr.children() {
-                children.push(update_node_with_variable_reference_js_(child, references));
-            }
-            fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
-        }
-    }
 }
