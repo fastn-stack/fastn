@@ -1,44 +1,53 @@
 <html>
 <head>
-<script src="fastn-js.js"></script>
+    <script src="fastn-js.js"></script>
 </head>
 <body data-id="1"><div data-id="2" class="m-2">Arpita</div><div data-id="3" class="ft_column"><div data-id="4">Foo says Hello</div><div data-id="5">Foo 2</div></div></body><style id="styles">
-/*.ft_text {
-padding: 0;
-}*/
-.m-2 { margin: 9px; }
-</style>
+    /*.ft_text {
+        padding: 0;
+    }*/
+    .m-2 { margin: 9px; }
+    </style>
 <script>
-(function() {
-function main(parent) {
-let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-parenti0.setProperty(fastn_dom.PropertyKind.StringValue, foo__name);
-parenti0.addEventHandler(fastn_dom.Event.Click, function() {foo__increment(foo__i);});
-parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([foo__i], function() {
-if(function(){
-return (fastn_utils.getter(foo__i)>10);
-}()){
-return fastn_dom.Length.Px(4);
+    (function() {
+        function main(parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, foo__name);
+  parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__increment(foo__i);
+  });
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([foo__i], function () {
+    if (function () {
+      return (fastn_utils.getter(foo__i) > 10);
+    }()) {
+      return fastn_dom.Length.Px(4);
+    }
+  }
+  ));
+  parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(foo__i));
+  parenti0.done();
+  foo__foo(parent, "Foo says Hello");
 }
+function foo__foo(parent, name) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, name);
+  parenti0i0.done();
+  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2");
+  parenti0i1.done();
+  parenti0.done();
 }
-));
-parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(foo__i));
-parenti0.done(); foo__foo(parent, "Foo says Hello");
-} function foo__foo(parent, name) {
-let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, name);
-parenti0i0.done();
-let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2");
-parenti0i1.done(); parenti0.done();
-} let foo__i = fastn.mutable(9); function foo__increment(a) {
-let fastn_utils_val_a = fastn_utils.getter(a)+1;
-if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-a = fastn_utils_val_a;
-};
-} let foo__name = "Arpita";
-fastn_virtual.hydrate(main);
-})();
+let foo__i = fastn.mutable(9);
+function foo__increment(a) {
+  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
+  };
+}
+let foo__name = "Arpita";
+
+        fastn_virtual.hydrate(main);
+    })();
 </script>
 </html>

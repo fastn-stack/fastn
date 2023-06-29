@@ -55,11 +55,11 @@ impl Text {
             .component()
             .unwrap();
         Text {
-            text: dbg!(ftd::js::value::get_properties(
+            text: ftd::js::value::get_properties(
                 "text",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
-            ))
+            )
             .unwrap(),
             common: Common::from(
                 component.properties.as_slice(),

@@ -1756,6 +1756,7 @@ dependencies = [
  "indoc 2.0.1",
  "itertools",
  "once_cell",
+ "prettify-js",
  "pretty_assertions",
  "rand",
  "rand_pcg",
@@ -3072,6 +3073,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
+name = "prettify-js"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7ff18ec712649921186715eeee7d880c3c5fb41c86a5a3524057da346e27771"
+dependencies = [
+ "log",
+ "ress",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "pretty"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3367,6 +3380,16 @@ dependencies = [
  "web-sys",
  "webpki-roots",
  "winreg",
+]
+
+[[package]]
+name = "ress"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fb1cedc0fd02351568b53be91c4ba2f94beb31ff730bd7df1e54e9b19169b9b"
+dependencies = [
+ "log",
+ "unicode-xid",
 ]
 
 [[package]]
@@ -4415,6 +4438,12 @@ name = "unicode-width"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
+
+[[package]]
+name = "unicode-xid"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
 
 [[package]]
 name = "unicode_categories"
