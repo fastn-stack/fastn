@@ -34,6 +34,11 @@ $on-click$: $append-string($a = $names, v = Tom)
 -- ftd.text: $obj
 $loop$: $names as $obj
 
+-- ftd.text: End
+
+-- ftd.text: $obj
+$loop$: $names as $obj
+if: { LOOP.COUNTER % 2 == 0 }
 
 
 -- void append-string(a,v):
