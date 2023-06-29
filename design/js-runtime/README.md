@@ -6,7 +6,7 @@
   - [x] arpita: bug: infinite loop
   - [x] arpita: list addition example
   - [x] container
-  - [ ] Avoid Dynamic CSS
+  - [x] Avoid Dynamic CSS
   - [ ] conditionalDom
   - [ ] forLoopDom
   - [ ] inherited
