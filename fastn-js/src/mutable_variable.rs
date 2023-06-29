@@ -22,5 +22,5 @@ pub fn mutable_quoted(name: &str, value: &str) -> fastn_js::ComponentStatement {
 
 pub struct MutableList {
     pub name: String,
-    pub value: Vec<fastn_js::SetPropertyValue>,
+    pub value: fastn_js::SetPropertyValue,
 }

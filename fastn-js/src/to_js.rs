@@ -24,6 +24,7 @@ impl fastn_js::Ast {
             fastn_js::Ast::UDF(f) => f.to_js(),
             fastn_js::Ast::StaticVariable(s) => s.to_js(),
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
+            fastn_js::Ast::MutableList(ml) => ml.to_js(),
         }
     }
 }
@@ -259,10 +260,7 @@ impl fastn_js::MutableList {
             .append(text("="))
             .append(space())
             .append(text("fastn.mutableList(["))
-            .append(pretty::RcDoc::intersperse(
-                self.value.iter().map(|v| v.to_js()),
-                comma().append(space()),
-            ))
+            .append(text(self.value.to_js().as_str()))
             .append(text(");"))
     }
 }

@@ -183,6 +183,8 @@ impl ftd::interpreter::PropertyValue {
 
 impl ftd::interpreter::Value {
     pub(crate) fn to_fastn_js_value(&self) -> fastn_js::SetPropertyValue {
+        use itertools::Itertools;
+
         match self {
             ftd::interpreter::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
@@ -209,6 +211,11 @@ impl ftd::interpreter::Value {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                     variant: js_variant,
                     value: None,
+                })
+            }
+            ftd::interpreter::Value::List { data, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
+                    value: data.iter().map(|v| v.to_fastn_js_value()).collect_vec(),
                 })
             }
             _ => todo!(),
