@@ -53,8 +53,9 @@
             return c;
         }
 
-        document.body.innerHTML = fastn_virtual.ssr(main);
-        fastn_virtual.hydrate(main);
+        main(document.body);
+        // document.body.innerHTML = fastn_virtual.ssr(main);
+        // fastn_virtual.hydrate(main);
     })();
 </script>
 </html>

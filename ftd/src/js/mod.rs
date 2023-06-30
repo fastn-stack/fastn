@@ -57,10 +57,8 @@ impl ftd::interpreter::Function {
 impl ftd::interpreter::Variable {
     pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
-            if self.kind.is_record() {
-                let record = doc
-                    .get_record(self.name.as_str(), self.line_number)
-                    .unwrap();
+            if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
+                let record = doc.get_record(name, self.line_number).unwrap();
                 let record_fields = value
                     .record_fields(doc.name, self.value.line_number())
                     .unwrap();
