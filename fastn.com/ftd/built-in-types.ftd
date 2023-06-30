@@ -1085,6 +1085,8 @@ lang: ftd
 \-- string calc:
 \-- integer vh:
 \-- integer vw:
+\-- integer vmin:
+\-- integer vmax:
 \-- decimal em:
 \-- decimal rem:
 \-- ftd.responsive-length responsive:
@@ -1117,6 +1119,12 @@ height.
 - `vw`: This variant sets the value relative to 1% of the width of the viewport.
 For example, `width.fixed.vw: 25` sets the width to be 25% of the viewport's
 width.
+
+- vmin: This variant sets the value relative to the smaller dimension between the width and height of the viewport.
+For example, width.fixed.vmin: 25 sets the width to be 25% of the smaller dimension.
+
+- vmax: This variant sets the value relative to the larger dimension between the width and height of the viewport.
+For example, width.fixed.vmax: 25 sets the width to be 25% of the larger dimension.
 
 - `em`: This variant sets the value relative to the size of the parent
 element, in the case of typographical properties like `font-size`, and the font
@@ -2712,6 +2720,8 @@ style: italic
 - `percent <integer>`: This gives <integer>% space
 - `vh <integer>`: Relative to 1% of the height of the viewport
 - `vw <integer>`: Relative to 1% of the width of the viewport
+- `vmin <integer>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
+- `vmax <integer>`: Sets the value relative to the larger dimension between the width and height of the viewport.
 - `<integer>`: Gives <integer>px unit space.
 
 ;; Todo: Add all types from cheatsheet
