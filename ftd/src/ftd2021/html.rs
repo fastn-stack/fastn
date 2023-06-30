@@ -1658,6 +1658,8 @@ pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
         ftd::Length::Calc { value } => (s, format!("calc({})", value)),
         ftd::Length::VH { value } => (s, format!("{}vh", value)),
         ftd::Length::VW { value } => (s, format!("{}vw", value)),
+        ftd::Length::VMIN { value } => (s, format!("{}vmin", value)),
+        ftd::Length::VMAX { value } => (s, format!("{}vmax", value)),
 
         _ => (s, "100%".to_string()),
         //        ftd::Length::Shrink => (s, "width".to_string()),   TODO

@@ -180,6 +180,18 @@ fastn_dom.Length = {
         }
         return `${value}vw`;
     },
+    Vmin: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vmin`})
+        }
+        return `${value}vmin`;
+    },
+    Vmax: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vmax`})
+        }
+        return `${value}vmax`;
+    },
     Responsive: (desktop, mobile) => {
         if (ftd.device.get() == "desktop") {
             return desktop;
