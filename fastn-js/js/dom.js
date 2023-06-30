@@ -212,7 +212,7 @@ class Node2 {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
+        } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
