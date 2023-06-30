@@ -4,15 +4,6 @@ pub async fn process<'a>(
     doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    processor_(value, kind, doc, config).await
-}
-
-pub async fn processor_<'a>(
-    value: ftd::ast::VariableValue,
-    kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
-    config: &fastn_core::Config,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, body) = match value.get_record(doc.name) {
         Ok(val) => (val.2.to_owned(), val.3.to_owned()),
         Err(e) => return Err(e.into()),
