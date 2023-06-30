@@ -1,0 +1,58 @@
+<html>
+<head>
+    <script src="fastn-js.js"></script>
+</head>
+<body data-id="1"><div data-id="2">Click to add Tom</div><div data-id="3">update $first</div><div data-id="4"><div data-id="5" class="ft_column"><div data-id="6">hello</div><div data-id="7">0</div></div><div data-id="8" class="ft_column"><div data-id="9">world</div><div data-id="10">1</div></div></div></body><style id="styles">
+    /*.ft_text {
+        padding: 0;
+    }*/
+    
+    </style>
+<script>
+    (function() {
+        function main(parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
+  parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__append_string(foo__people, "Tom");
+  });
+  parenti0.done();
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "update $first");
+  parenti1.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__set_string(foo__first, "Bob");
+  });
+  parenti1.done();
+  foo__people.forLoop(parent, function (root, item, index) {
+    return foo__show_person(root, item, index);
+  });
+}
+function foo__append_string(a, v) {
+  return (ftd.append(a, v));
+}
+let foo__first = fastn.mutable("hello");
+let foo__people = fastn.mutableList([foo__first,
+"world"]);
+function foo__set_string(a, v)
+{
+  let fastn_utils_val_a = v;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
+  };
+}
+function foo__show_person(parent, name, index) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, name);
+  parenti0i0.done();
+  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, index);
+  parenti0i1.done();
+  parenti0.done();
+  return parenti0;
+}
+
+        fastn_virtual.hydrate(main);
+    })();
+</script>
+</html>

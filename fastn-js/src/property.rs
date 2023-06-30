@@ -14,7 +14,7 @@ pub enum SetPropertyValue {
 impl SetPropertyValue {
     pub fn to_js(&self) -> String {
         match self {
-            SetPropertyValue::Reference(name) => fastn_js::utils::name_to_js(name),
+            SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
             SetPropertyValue::Value(v) => v.to_js(),
             SetPropertyValue::Formula(f) => f.to_js(),
         }

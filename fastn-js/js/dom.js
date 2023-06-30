@@ -320,7 +320,7 @@ class ForLoop {
     }
     createNode(index) {
         let v = this.#list.get(index);
-        this.#node_constructor(this.#wrapper, v.item, v.index).done();
+        this.#node_constructor(this.#wrapper, v.item, v.index);
     }
 
     getParent() {
