@@ -303,9 +303,8 @@ impl fastn_js::MutableList {
             .append(space())
             .append(text("="))
             .append(space())
-            .append(text("fastn.mutableList("))
             .append(text(self.value.to_js().as_str()))
-            .append(text(");"))
+            .append(text(";"))
     }
 }
 
@@ -319,9 +318,8 @@ impl fastn_js::RecordInstance {
             .append(space())
             .append(text("="))
             .append(space())
-            .append(text("fastn.recordInstance("))
             .append(text(self.fields.to_js().as_str()))
-            .append(text(");"))
+            .append(text(";"))
     }
 }
 

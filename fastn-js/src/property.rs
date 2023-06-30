@@ -133,9 +133,12 @@ impl Value {
                     variant.to_owned()
                 }
             }
-            Value::List { value } => format!("[{}]", value.iter().map(|v| v.to_js()).join(", ")),
+            Value::List { value } => format!(
+                "fastn.mutableList([{}])",
+                value.iter().map(|v| v.to_js()).join(", ")
+            ),
             Value::Record { fields } => format!(
-                "{{{}}}",
+                "fastn.recordInstance({{{}}})",
                 fields
                     .iter()
                     .map(|(k, v)| format!("{}: {}", k, v.to_js()))
