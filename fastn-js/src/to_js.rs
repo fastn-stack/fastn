@@ -112,9 +112,6 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
             fastn_js::ComponentStatement::AddEventHandler(e) => e.to_js(),
-            fastn_js::ComponentStatement::Done { component_name } => {
-                text(&format!("{component_name}.done();"))
-            }
             fastn_js::ComponentStatement::Return { component_name } => {
                 text(&format!("return {component_name};"))
             }

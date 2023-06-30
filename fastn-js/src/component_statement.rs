@@ -5,7 +5,6 @@ pub enum ComponentStatement {
     SetProperty(fastn_js::SetProperty),
     InstantiateComponent(fastn_js::InstantiateComponent),
     AddEventHandler(fastn_js::EventHandler),
-    Done { component_name: String },
     Return { component_name: String },
     ConditionalComponent(fastn_js::ConditionalComponent),
     MutableList(fastn_js::MutableList),

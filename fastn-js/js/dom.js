@@ -146,19 +146,16 @@ class Node2 {
         this.#parent = parent;
         // this is where we store all the attached closures, so we can free them when we are done
         this.#mutables = [];
-    }
-    parent() {
-        return this.#parent;
-    }
-    done() {
-        let parent = this.#parent;
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
-        if (parent.getNode) {
-            parent = parent.getNode();
+        if (this.#parent.getNode) {
+            this.#parent = this.#parent.getNode();
         }
-        parent.appendChild(this.#node);
+        this.#parent.appendChild(this.#node);
+    }
+    parent() {
+        return this.#parent;
     }
     // dynamic-class-css
     attachCss(property, value) {
@@ -282,7 +279,6 @@ class ConditionalDom {
         })
         deps.forEach(dep => dep.addClosure(closure));
 
-        domNode.done();
 
         this.#parent = domNode;
         this.#node_constructor = node_constructor;
@@ -316,7 +312,6 @@ class ForLoop {
             // node_constructor(this.#wrapper, v.item, v.index).done();
             this.createNode(idx);
         }
-        this.#wrapper.done();
     }
     createNode(index) {
         let v = this.#list.get(index);
