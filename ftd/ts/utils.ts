@@ -1,3 +1,5 @@
+const DEVICE_SUFFIX = "____device";
+
 function console_log(...message: any) {
     if (true) { // false
         console.log(...message);
@@ -171,7 +173,8 @@ function len(data: any[]) {
 }
 
 function fallbackCopyTextToClipboard(text: string) {
-    var textArea = document.createElement("textarea");
+    const textArea = document.createElement("textarea");
+    
     textArea.value = text;
 
     // Avoid scrolling to bottom
@@ -184,14 +187,14 @@ function fallbackCopyTextToClipboard(text: string) {
     textArea.select();
 
     try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'successful' : 'unsuccessful';
         console.log('Fallback: Copying text command was ' + msg);
     } catch (err) {
         console.error('Fallback: Oops, unable to copy', err);
     }
 
-    document.body.removeChild(textArea);
+    textArea.remove();
 }
 
 window.ftd.utils = {};
@@ -229,14 +232,17 @@ window.ftd.utils.function_name_to_js_function = function (s: string) {
 };
 
 window.ftd.utils.node_change_call = function(id: string, key: string, data: any){
-    let node_function = `node_change_${id}`;
-    if(!!window[node_function] && !!window[node_function][key]) {
-        window[node_function][key](data);
+    const node_function = `node_change_${id}`;
+    const target = window[node_function];
+
+    if(!!target && !!target[key]) {
+        target[key](data);
     }
 }
+
 window.ftd.utils.set_value_helper = function(data: any, key: string, remaining: string, new_value: any) {
     if (!!remaining) {
-        set_data_value(data, key + "." + remaining, new_value);
+        set_data_value(data, `${key}.${remaining}`, new_value);
     } else {
         set_data_value(data, key, new_value);
     }
@@ -247,7 +253,7 @@ window.ftd.dependencies.eval_background_size = function(bg: any) {
     if (typeof bg === 'object' && !!bg && "size" in bg) {
         let sz = bg.size;
         if (typeof sz === 'object' && !!sz && "x" in sz && "y" in sz) {
-            return sz.x + " " + sz.y;
+            return `${sz.x} ${sz.y}`;
         }
         else {
             return sz;
@@ -261,7 +267,7 @@ window.ftd.dependencies.eval_background_position = function(bg: any) {
     if (typeof bg === 'object' && !!bg  && "position" in bg) {
         let pos = bg.position;
         if (typeof pos === 'object' && !!pos && "x" in pos && "y" in pos) {
-            return pos.x + " " + pos.y;
+            return `${pos.x} ${pos.y}`;
         }
         else {
             return pos.replace("-", " ");
@@ -299,26 +305,26 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
     if (typeof bg === 'object' && !!bg && "src" in bg) {
         let img_src = bg.src;
         if(!data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "light" in img_src) {
-            return "url(" + img_src.light + ")";
+            return `url("${img_src.light}")`;
         }
         else if(data["ftd#dark-mode"] && typeof img_src === 'object' && !!img_src && "dark" in img_src){
-            return "url(" + img_src.dark + ")";
+            return `url("${img_src.dark}")`;
         }
         else {
             return null;
         }
     } else if (typeof bg === 'object' && !!bg && "colors" in bg) {
-       var colors = "";
-       var direction = "to bottom";
+       let colors = "";
+       // if the bg direction is provided by the user, use it, otherwise default
+       let direction = bg.direction ?? "to bottom";
 
-       if ("direction" in bg) {
-           direction = bg.direction;
-       }
+       let colors_vec = bg.colors;
 
-       var colors_vec = bg.colors;
-       for (var c of colors_vec) {
+       for (const c of colors_vec) {
             if (typeof c === 'object' && !!c && "color" in c) {
+                
                 let color_value = c.color;
+
                 if(typeof color_value === 'object' && !!color_value && "light" in color_value && "dark" in color_value) {
 
                     if (colors) {
@@ -336,7 +342,8 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
             }
        }
 
-       var res = "linear-gradient(" + direction + ", " + colors + ")";
+       let res = `linear-gradient("${direction}, ${colors}")`;
+
        return res;
    }
     else {
@@ -346,14 +353,15 @@ window.ftd.dependencies.eval_background_image = function(bg: any, data: any) {
 
 window.ftd.dependencies.eval_box_shadow = function(shadow: any, data: any) {
     if (typeof shadow === 'object' && !!shadow) {
-        var inset, blur, spread, x_off, y_off, color;
+        let inset, blur, spread, x_off, y_off, color;
+
         inset = "";
+
         blur = spread = x_off = y_off = "0px";
+        
         color = "black";
 
-        if ("inset" in shadow) {
-            if (shadow.inset) inset = "inset";
-        }
+        if(("inset" in shadow) && shadow.inset) inset = "inset";
 
         if ("blur" in shadow) blur = shadow.blur;
         if ("spread" in shadow) spread = shadow.spread;
@@ -370,8 +378,8 @@ window.ftd.dependencies.eval_box_shadow = function(shadow: any, data: any) {
         }
 
         // inset, color, x_offset, y_offset, blur, spread
-        let res = inset + " " + color + " " + x_off + " " + y_off + " " + blur + " " + spread;
-        res = res.trim();
+        let res = `${inset} ${color} ${x_off} ${y_off} ${blur} ${spread}`.trim();
+        
         return res;
     }
     else {
@@ -382,14 +390,14 @@ window.ftd.dependencies.eval_box_shadow = function(shadow: any, data: any) {
 window.ftd.utils.add_extra_in_id = function (node_id: string) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
     if (element) {
-        changeElementId(element, "____device", true);
+        changeElementId(element, DEVICE_SUFFIX, true);
     }
 }
 
 window.ftd.utils.remove_extra_from_id = function (node_id: string) {
     let element = document.querySelector(`[data-id=\"${node_id}\"]`);
     if (element) {
-        changeElementId(element, "____device", false);
+        changeElementId(element, DEVICE_SUFFIX, false);
     }
 }
 
@@ -416,12 +424,11 @@ function changeElementId(element: Element, suffix: string, add: boolean) {
 }
 
 
-
 function updatedID(str: string, flag: boolean, suffix: string) {
     // check if the flag is set
     if (flag) {
         // append suffix to the string
-        return str + suffix;
+        return `${str} ${suffix}`;
     } else {
         // remove suffix from the string (if it exists)
         return str.replace(suffix, "");

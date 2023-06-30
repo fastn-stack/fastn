@@ -94,6 +94,8 @@ width.fixed.percent if { num % 7 == 1 }: 20
 width.fixed.calc if { num % 7 == 2 }: 20
 width.fixed.vh if { num % 7 == 3 }: 20
 width.fixed.vw if { num % 7 == 4 }: 20
+width.fixed.vmin if { num % 7 == 3 }: 20
+width.fixed.vmax if { num % 7 == 4 }: 20
 width.fixed.em if { num % 7 == 5 }: 20
 width.fixed.rem if { num % 7 == 6 }: 20
 background.solid: red

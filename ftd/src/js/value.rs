@@ -337,6 +337,8 @@ fn length_variants(name: &str) -> &'static str {
         "percent" => "Percent",
         "vh" => "Vh",
         "vw" => "Vw",
+        "vmin" => "Vmin",
+        "vmax" => "Vmax",
         "calc" => "Calc",
         _ => todo!(),
     }

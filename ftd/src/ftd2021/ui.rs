@@ -1849,6 +1849,8 @@ pub enum Length {
     Calc { value: String },
     VH { value: i64 },
     VW { value: i64 },
+    VMIN { value: i64 },
+    VMAX { value: i64 },
 }
 
 impl Length {
@@ -1914,6 +1916,26 @@ impl Length {
             let v = ftd::ftd2021::p2::utils::get_name("vw", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
+                Err(_) => {
+                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                } // TODO
+            };
+        }
+
+        if l.starts_with("vmin ") {
+            let v = ftd::ftd2021::p2::utils::get_name("vmin", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::VMIN { value: v })),
+                Err(_) => {
+                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                } // TODO
+            };
+        }
+
+        if l.starts_with("vmax ") {
+            let v = ftd::ftd2021::p2::utils::get_name("vmax", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::VMAX { value: v })),
                 Err(_) => {
                     ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
                 } // TODO
