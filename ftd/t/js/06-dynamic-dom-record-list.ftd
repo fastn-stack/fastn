@@ -1,0 +1,51 @@
+-- string $first: hello
+
+-- string list $people:
+-- string: $first
+-- string: world
+-- end: $people
+
+
+
+-- ftd.text: Click to add Tom
+$on-click$: $append-string($a = $people, v = Tom)
+
+-- ftd.text: update $first
+$on-click$: $set-string($a = $first, v = Bob)
+
+-- show-person: $p
+$loop$: $people as $p
+index: $LOOP.COUNTER
+
+
+
+
+-- component show-person:
+caption name:
+integer index:
+
+-- ftd.column:
+
+-- ftd.text: $show-person.name
+-- ftd.integer: $show-person.index
+
+-- end: ftd.column
+
+-- end: show-person
+
+
+
+
+
+-- void set-string(a,v):
+string $a:
+string v:
+
+a = v;
+
+
+-- void append-string(a,v):
+string list $a:
+string v:
+
+ftd.append(a, v)
