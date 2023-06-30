@@ -273,3 +273,9 @@ class RecordInstance {
 fastn.recordInstance = function (obj) {
     return new RecordInstance(obj);
 }
+
+
+
+fastn.color = function (r, g, b) {
+    return `rgb(${r},${g},${b})`;
+}
