@@ -124,9 +124,6 @@ impl Text {
             component_definition_name,
             loop_alias,
         ));
-        component_statements.push(fastn_js::ComponentStatement::Done {
-            component_name: kernel.name.clone(),
-        });
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -186,9 +183,6 @@ impl Integer {
             component_definition_name,
             loop_alias,
         ));
-        component_statements.push(fastn_js::ComponentStatement::Done {
-            component_name: kernel.name.clone(),
-        });
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -244,9 +238,6 @@ impl Column {
                 false,
             )
         }));
-        component_statements.push(fastn_js::ComponentStatement::Done {
-            component_name: kernel.name.clone(),
-        });
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
