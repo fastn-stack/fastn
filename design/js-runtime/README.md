@@ -8,10 +8,10 @@
   - [x] container
   - [x] Avoid Dynamic CSS
   - [x] conditionalDom
-  - [ ] forLoopDom
-  - [ ] inherited
-  - [ ] role
+  - [x] forLoopDom
   - [ ] record
+  - [ ] role
+  - [ ] inherited
   - [ ] the new ast (full ftd ast which is input to JS generation)
   - [x] list index change example
   - [x] list of optional record
