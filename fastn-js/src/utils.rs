@@ -1,5 +1,5 @@
 pub fn is_kernel(s: &str) -> bool {
-    ["ftd#text", "ftd#row", "ftd#column"].contains(&s)
+    ["ftd#text", "ftd#row", "ftd#column", "ftd#integer"].contains(&s)
 }
 
 pub fn name_to_js(s: &str) -> String {

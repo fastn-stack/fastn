@@ -1,6 +1,7 @@
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
+    Integer(Integer),
     Column(Column),
 }
 
@@ -12,6 +13,7 @@ impl Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
             "ftd#column" => Element::Column(Column::from(component, doc)),
+            "ftd#integer" => Element::Integer(Integer::from(component)),
             _ => todo!(),
         }
     }
@@ -34,6 +36,14 @@ impl Element {
                 loop_alias,
                 should_return,
             ),
+            Element::Integer(integer) => integer.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                should_return,
+            ),
             Element::Column(column) => column.to_component_statements(
                 parent,
                 index,
@@ -49,6 +59,12 @@ impl Element {
 #[derive(Debug)]
 pub struct Text {
     pub text: ftd::js::Value,
+    pub common: Common,
+}
+
+#[derive(Debug)]
+pub struct Integer {
+    pub value: ftd::js::Value,
     pub common: Common,
 }
 
@@ -98,6 +114,68 @@ impl Text {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self
                     .text
+                    .to_set_property_value(component_definition_name.clone(), loop_alias.clone()),
+                element_name: kernel.name.to_string(),
+            },
+        ));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            loop_alias,
+        ));
+        component_statements.push(fastn_js::ComponentStatement::Done {
+            component_name: kernel.name.clone(),
+        });
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+impl Integer {
+    pub fn from(component: &ftd::interpreter::Component) -> Integer {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#integer")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Integer {
+            value: ftd::js::value::get_properties(
+                "value",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: Option<String>,
+        loop_alias: Option<String>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component("ftd#integer", parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::StringValue,
+                value: self
+                    .value
                     .to_set_property_value(component_definition_name.clone(), loop_alias.clone()),
                 element_name: kernel.name.to_string(),
             },
@@ -358,5 +436,5 @@ impl ftd::interpreter::EventName {
 }
 
 pub fn is_kernel(s: &str) -> bool {
-    ["ftd#text", "ftd#row", "ftd#column"].contains(&s)
+    ["ftd#text", "ftd#row", "ftd#column", "ftd#integer"].contains(&s)
 }
