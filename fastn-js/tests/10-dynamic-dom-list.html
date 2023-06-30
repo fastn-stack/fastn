@@ -15,8 +15,9 @@
 
             let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
-            text.addEventHandler(fastn_dom.Event.Click, ftd.append(people, "Tom")
-                /*function () { people.push("Tom")}*/);
+            text.addEventHandler(fastn_dom.Event.Click,
+                // ftd.append(people, "Tom")
+                function () { people.push("Tom")});
             text.done();
 
             let text2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -52,7 +53,8 @@
             return c;
         }
 
-        main(document.body);
+        document.body.innerHTML = fastn_virtual.ssr(main);
+        fastn_virtual.hydrate(main);
     })();
 </script>
 </html>
