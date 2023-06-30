@@ -511,6 +511,10 @@ impl KindData {
         self.kind.is_integer()
     }
 
+    pub fn is_record(&self) -> bool {
+        self.kind.is_record()
+    }
+
     pub fn is_boolean(&self) -> bool {
         self.kind.is_boolean()
     }

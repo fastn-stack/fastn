@@ -25,6 +25,7 @@ impl fastn_js::Ast {
             fastn_js::Ast::StaticVariable(s) => s.to_js(),
             fastn_js::Ast::MutableVariable(m) => m.to_js(),
             fastn_js::Ast::MutableList(ml) => ml.to_js(),
+            fastn_js::Ast::RecordInstance(ri) => ri.to_js(),
         }
     }
 }
@@ -120,6 +121,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::ConditionalComponent(c) => c.to_js(),
             fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(),
             fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
+            fastn_js::ComponentStatement::RecordInstance(ri) => ri.to_js(),
         }
     }
 }
@@ -303,6 +305,22 @@ impl fastn_js::MutableList {
             .append(space())
             .append(text("fastn.mutableList("))
             .append(text(self.value.to_js().as_str()))
+            .append(text(");"))
+    }
+}
+
+impl fastn_js::RecordInstance {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text("let")
+            .append(space())
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("fastn.recordInstance("))
+            .append(text(self.fields.to_js().as_str()))
             .append(text(");"))
     }
 }

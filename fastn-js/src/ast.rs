@@ -4,4 +4,5 @@ pub enum Ast {
     StaticVariable(fastn_js::StaticVariable),
     MutableVariable(fastn_js::MutableVariable),
     MutableList(fastn_js::MutableList),
+    RecordInstance(fastn_js::RecordInstance),
 }

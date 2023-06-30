@@ -6,6 +6,10 @@ pub enum Value {
 }
 
 impl Value {
+    pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
+        self.to_set_property_value(None, None)
+    }
+
     pub(crate) fn to_set_property_value(
         &self,
         component_definition_name: Option<String>,
@@ -291,6 +295,14 @@ impl ftd::interpreter::Value {
             ftd::interpreter::Value::List { data, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data.iter().map(|v| v.to_fastn_js_value()).collect_vec(),
+                })
+            }
+            ftd::interpreter::Value::Record { fields, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                    fields: fields
+                        .iter()
+                        .map(|(k, v)| (k.to_string(), v.to_fastn_js_value()))
+                        .collect_vec(),
                 })
             }
             _ => todo!(),

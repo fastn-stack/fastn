@@ -114,6 +114,9 @@ pub enum Value {
     List {
         value: Vec<SetPropertyValue>,
     },
+    Record {
+        fields: Vec<(String, SetPropertyValue)>,
+    },
 }
 
 impl Value {
@@ -131,6 +134,13 @@ impl Value {
                 }
             }
             Value::List { value } => format!("[{}]", value.iter().map(|v| v.to_js()).join(", ")),
+            Value::Record { fields } => format!(
+                "{{{}}}",
+                fields
+                    .iter()
+                    .map(|(k, v)| format!("{}: {}", k, v.to_js()))
+                    .join(", ")
+            ),
         }
     }
 }

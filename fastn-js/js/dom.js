@@ -46,7 +46,7 @@ fastn_dom.ElementKind = {
 };
 
 fastn_dom.PropertyKind = {
-    Color_RGB: 0,
+    Color: 0,
     IntegerValue: 1,
     StringValue: 2,
     Width: 3,

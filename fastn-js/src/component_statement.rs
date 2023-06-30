@@ -10,6 +10,7 @@ pub enum ComponentStatement {
     ConditionalComponent(fastn_js::ConditionalComponent),
     MutableList(fastn_js::MutableList),
     ForLoop(fastn_js::ForLoop),
+    RecordInstance(fastn_js::RecordInstance),
     // JSExpression(ExprNode),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
