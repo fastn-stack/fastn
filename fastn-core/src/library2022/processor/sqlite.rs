@@ -1,13 +1,20 @@
+pub(crate) fn get_record<'a>(
+    value: &ftd::ast::VariableValue,
+    doc: &ftd::interpreter::TDoc<'a>,
+) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, Option<ftd::ast::BodyValue>)> {
+    match value.get_record(doc.name) {
+        Ok(val) => Ok((val.2.to_owned(), val.3.to_owned())),
+        Err(e) => return Err(e.into()),
+    }
+}
+
 pub async fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, body) = match value.get_record(doc.name) {
-        Ok(val) => (val.2.to_owned(), val.3.to_owned()),
-        Err(e) => return Err(e.into()),
-    };
+    let (headers, body) = get_record(&value, doc)?;
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {

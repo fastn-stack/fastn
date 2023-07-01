@@ -20,6 +20,9 @@ async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::Cre
     }
 }
 
+// TODO: I am a little confused about the use of `tokio::sync` here, both sides are async, so why
+//       do we need to use `tokio::sync`? Am I doing something wrong? How do I prove/verify that
+//       this is correct?
 static POOL_RESULT: tokio::sync::OnceCell<
     Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError>,
 > = tokio::sync::OnceCell::const_new();
@@ -29,12 +32,13 @@ async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::C
 }
 
 pub async fn process<'a>(
-    _value: ftd::ast::VariableValue,
+    value: ftd::ast::VariableValue,
     _kind: ftd::interpreter::Kind,
-    _doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'a>,
     _config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let _pool = pool().await.as_ref().unwrap();
+    let (_headers, _body) = super::sqlite::get_record(&value, doc)?;
 
     todo!()
 }
