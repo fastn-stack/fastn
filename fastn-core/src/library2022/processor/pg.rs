@@ -31,10 +31,10 @@ async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::C
     POOL_RESULT.get_or_init(create_pool).await
 }
 
-pub async fn process<'a>(
+pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data(&value, doc.name)?;
 

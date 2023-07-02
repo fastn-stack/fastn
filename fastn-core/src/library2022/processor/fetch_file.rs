@@ -1,7 +1,7 @@
-pub async fn fetch_files<'a>(
+pub async fn fetch_files(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if !kind.is_string() {
