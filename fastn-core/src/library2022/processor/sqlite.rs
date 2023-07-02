@@ -73,17 +73,27 @@ pub async fn process<'a>(
     // for now they wil be ordered
     // select * from users where
 
-    let query_params = get_params(&headers, doc)?;
-
-    let result = execute_query(
-        &sqlite_database_path,
-        query.as_str(),
+    result_to_value(
+        execute_query(
+            &sqlite_database_path,
+            query.as_str(),
+            doc.name,
+            value.line_number(),
+            get_params(&headers, doc)?,
+        )
+        .await?,
+        kind,
         doc.name,
         value.line_number(),
-        query_params,
     )
-    .await?;
+}
 
+fn result_to_value(
+    result: Vec<Vec<serde_json::Value>>,
+    kind: ftd::interpreter::Kind,
+    doc_name: &str,
+    line_number: usize,
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if kind.is_list() {
         doc.from_json_rows(result.as_slice(), &kind, value.line_number())
     } else {
@@ -91,13 +101,13 @@ pub async fn process<'a>(
             1 => doc.from_json_row(&result[0], &kind, value.line_number()),
             0 => ftd::interpreter::utils::e2(
                 "Query returned no result, expected one row".to_string(),
-                doc.name,
-                value.line_number(),
+                doc_name,
+                line_number,
             ),
             len => ftd::interpreter::utils::e2(
                 format!("Query returned {} rows, expected one row", len),
-                doc.name,
-                value.line_number(),
+                doc_name,
+                line_number,
             ),
         }
     }
