@@ -1,8 +1,8 @@
 pub(crate) fn get_p1_data(
     value: &ftd::ast::VariableValue,
-    doc: &ftd::interpreter::TDoc<'_>,
+    doc_name: &str,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
-    match value.get_record(doc.name) {
+    match value.get_record(doc_name) {
         Ok(val) => {
             Ok((
                 val.2.to_owned(),
@@ -11,7 +11,7 @@ pub(crate) fn get_p1_data(
                     None => return ftd::interpreter::utils::e2(
                         "$processor$: `package-query` query is not specified in the processor body"
                             .to_string(),
-                        doc.name,
+                        doc_name,
                         value.line_number(),
                     ),
                 },
@@ -34,13 +34,13 @@ pub(crate) fn get_params(
         .map_err(|e| e.into())
 }
 
-pub async fn process<'a>(
+pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = get_p1_data(&value, doc)?;
+    let (headers, query) = get_p1_data(&value, doc.name)?;
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
@@ -83,30 +83,30 @@ pub async fn process<'a>(
         )
         .await?,
         kind,
-        doc.name,
+        doc,
         value.line_number(),
     )
 }
 
-fn result_to_value(
+pub(crate) fn result_to_value(
     result: Vec<Vec<serde_json::Value>>,
     kind: ftd::interpreter::Kind,
-    doc_name: &str,
+    doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if kind.is_list() {
-        doc.from_json_rows(result.as_slice(), &kind, value.line_number())
+        doc.from_json_rows(result.as_slice(), &kind, line_number)
     } else {
         match result.len() {
-            1 => doc.from_json_row(&result[0], &kind, value.line_number()),
+            1 => doc.from_json_row(&result[0], &kind, line_number),
             0 => ftd::interpreter::utils::e2(
                 "Query returned no result, expected one row".to_string(),
-                doc_name,
+                doc.name,
                 line_number,
             ),
             len => ftd::interpreter::utils::e2(
                 format!("Query returned {} rows, expected one row", len),
-                doc_name,
+                doc.name,
                 line_number,
             ),
         }

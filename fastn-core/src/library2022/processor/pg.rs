@@ -33,12 +33,31 @@ async fn pool() -> &'static Result<deadpool_postgres::Pool, deadpool_postgres::C
 
 pub async fn process<'a>(
     value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
-    _config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let _pool = pool().await.as_ref().unwrap();
-    let (_headers, _body) = super::sqlite::get_p1_data(&value, doc)?;
+    let (headers, query) = super::sqlite::get_p1_data(&value, doc.name)?;
 
+    super::sqlite::result_to_value(
+        execute_query(
+            query.as_str(),
+            doc.name,
+            value.line_number(),
+            super::sqlite::get_params(&headers, doc)?,
+        )
+        .await?,
+        kind,
+        doc,
+        value.line_number(),
+    )
+}
+
+async fn execute_query(
+    _query: &str,
+    _doc_name: &str,
+    _line_number: usize,
+    _query_params: Vec<String>,
+) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let _pool = pool().await.as_ref().unwrap();
     todo!()
 }
