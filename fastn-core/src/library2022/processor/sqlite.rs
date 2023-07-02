@@ -189,7 +189,7 @@ fn row_to_json(
     doc_name: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
-    let mut row: Vec<serde_json::Value> = vec![];
+    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
     for i in 0..count {
         match r.get::<usize, rusqlite::types::Value>(i) {
             Ok(rusqlite::types::Value::Null) => row.push(serde_json::Value::Null),

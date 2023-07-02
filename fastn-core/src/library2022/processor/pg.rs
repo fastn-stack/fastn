@@ -54,18 +54,47 @@ pub async fn process(
 
 async fn execute_query(
     query: &str,
-    _doc_name: &str,
-    _line_number: usize,
+    doc_name: &str,
+    line_number: usize,
     query_params: Vec<String>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
+    let count = stmt.columns().len();
     let query_params = query_params
         .iter()
         .map(|value| value as &(dyn tokio_postgres::types::ToSql + Sync))
         .collect::<Vec<_>>();
 
-    let _rows = client.query(&stmt, &query_params).await.unwrap();
+    let rows = client.query(&stmt, &query_params).await.unwrap();
+    let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
-    todo!()
+    for r in rows {
+        result.push(row_to_json(r, count, doc_name, line_number)?)
+    }
+
+    Ok(result)
+}
+
+fn row_to_json(
+    r: tokio_postgres::Row,
+    count: usize,
+    doc_name: &str,
+    line_number: usize,
+) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
+    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
+    for i in 0..count {
+        match r.try_get::<usize, _>(i) {
+            Ok(value) => row.push(value),
+            Err(e) => {
+                return ftd::interpreter::utils::e2(
+                    format!("Can't get JSON Value at {}: {}", i, e),
+                    doc_name,
+                    line_number,
+                );
+            }
+        }
+    }
+
+    Ok(row)
 }
