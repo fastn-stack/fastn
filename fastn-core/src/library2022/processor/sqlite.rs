@@ -1,4 +1,4 @@
-pub(crate) fn get_record(
+pub(crate) fn get_p1_data(
     value: &ftd::ast::VariableValue,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
@@ -40,7 +40,7 @@ pub async fn process<'a>(
     doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = get_record(&value, doc)?;
+    let (headers, query) = get_p1_data(&value, doc)?;
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
@@ -73,34 +73,33 @@ pub async fn process<'a>(
     // for now they wil be ordered
     // select * from users where
 
-    dbg!(&sqlite_database_path);
-
     let query_params = get_params(&headers, doc)?;
 
-    dbg!(&query_params);
+    let result = execute_query(
+        &sqlite_database_path,
+        query.as_str(),
+        doc.name,
+        value.line_number(),
+        query_params,
+    )
+    .await?;
 
     if kind.is_list() {
-        let result = execute_query(
-            &sqlite_database_path,
-            query.as_str(),
-            doc.name,
-            value.line_number(),
-            kind.is_list(),
-            query_params,
-        )
-        .await?;
-        doc.from_json_rows(result.0.as_slice(), &kind, value.line_number())
+        doc.from_json_rows(result.as_slice(), &kind, value.line_number())
     } else {
-        let result = execute_query(
-            &sqlite_database_path,
-            query.as_str(),
-            doc.name,
-            value.line_number(),
-            kind.is_list(),
-            vec![],
-        )
-        .await?;
-        doc.from_json_row(&result.1, &kind, value.line_number())
+        match result.len() {
+            1 => doc.from_json_row(&result[0], &kind, value.line_number()),
+            0 => ftd::interpreter::utils::e2(
+                "Query returned no result, expected one row".to_string(),
+                doc.name,
+                value.line_number(),
+            ),
+            len => ftd::interpreter::utils::e2(
+                format!("Query returned {} rows, expected one row", len),
+                doc.name,
+                value.line_number(),
+            ),
+        }
     }
 }
 
@@ -109,9 +108,8 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    is_list: bool,
     query_params: Vec<String>,
-) -> ftd::interpreter::Result<(Vec<Vec<serde_json::Value>>, Vec<serde_json::Value>)> {
+) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
         rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
@@ -156,40 +154,23 @@ async fn execute_query(
         }
     };
 
-    return if is_list {
-        let mut result: Vec<Vec<serde_json::Value>> = vec![];
-        loop {
-            match rows.next() {
-                Ok(None) => break,
-                Ok(Some(r)) => {
-                    result.push(row_to_json(r, count, doc_name, line_number)?);
-                }
-                Err(e) => {
-                    return ftd::interpreter::utils::e2(
-                        format!("Failed to execute query: {:?}", e),
-                        doc_name,
-                        line_number,
-                    )
-                }
+    let mut result: Vec<Vec<serde_json::Value>> = vec![];
+    loop {
+        match rows.next() {
+            Ok(None) => break,
+            Ok(Some(r)) => {
+                result.push(row_to_json(r, count, doc_name, line_number)?);
+            }
+            Err(e) => {
+                return ftd::interpreter::utils::e2(
+                    format!("Failed to execute query: {:?}", e),
+                    doc_name,
+                    line_number,
+                )
             }
         }
-        Ok((result, vec![]))
-    } else {
-        match rows.next() {
-            Ok(Some(r)) => Ok((vec![], row_to_json(r, count, doc_name, line_number)?)),
-            Ok(None) => ftd::interpreter::utils::e2(
-                "Query returned no result, expected one row".to_string(),
-                doc_name,
-                line_number,
-            ),
-
-            Err(e) => ftd::interpreter::utils::e2(
-                format!("Failed to execute query: {:?}", e),
-                doc_name,
-                line_number,
-            ),
-        }
-    };
+    }
+    Ok(result)
 }
 
 fn row_to_json(

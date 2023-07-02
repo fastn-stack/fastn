@@ -38,7 +38,7 @@ pub async fn process<'a>(
     _config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let _pool = pool().await.as_ref().unwrap();
-    let (_headers, _body) = super::sqlite::get_record(&value, doc)?;
+    let (_headers, _body) = super::sqlite::get_p1_data(&value, doc)?;
 
     todo!()
 }
