@@ -1,9 +1,22 @@
 pub(crate) fn get_record(
     value: &ftd::ast::VariableValue,
     doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, Option<ftd::ast::BodyValue>)> {
+) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
     match value.get_record(doc.name) {
-        Ok(val) => Ok((val.2.to_owned(), val.3.to_owned())),
+        Ok(val) => {
+            Ok((
+                val.2.to_owned(),
+                match val.3 {
+                    Some(b) => b.value.clone(),
+                    None => return ftd::interpreter::utils::e2(
+                        "$processor$: `package-query` query is not specified in the processor body"
+                            .to_string(),
+                        doc.name,
+                        value.line_number(),
+                    ),
+                },
+            ))
+        }
         Err(e) => Err(e.into()),
     }
 }
@@ -27,7 +40,7 @@ pub async fn process<'a>(
     doc: &ftd::interpreter::TDoc<'a>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, body) = get_record(&value, doc)?;
+    let (headers, query) = get_record(&value, doc)?;
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
@@ -62,18 +75,6 @@ pub async fn process<'a>(
 
     dbg!(&sqlite_database_path);
 
-    let query = match &body {
-        Some(b) => &b.value,
-        None => {
-            return ftd::interpreter::utils::e2(
-                "$processor$: `package-query` query is not specified in the processor body"
-                    .to_string(),
-                doc.name,
-                value.line_number(),
-            )
-        }
-    };
-
     let query_params = get_params(&headers, doc)?;
 
     dbg!(&query_params);
@@ -81,7 +82,7 @@ pub async fn process<'a>(
     if kind.is_list() {
         let result = execute_query(
             &sqlite_database_path,
-            query,
+            query.as_str(),
             doc.name,
             value.line_number(),
             kind.is_list(),
@@ -92,7 +93,7 @@ pub async fn process<'a>(
     } else {
         let result = execute_query(
             &sqlite_database_path,
-            query,
+            query.as_str(),
             doc.name,
             value.line_number(),
             kind.is_list(),
