@@ -1,11 +1,24 @@
-pub(crate) fn get_record<'a>(
+pub(crate) fn get_record(
     value: &ftd::ast::VariableValue,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, Option<ftd::ast::BodyValue>)> {
     match value.get_record(doc.name) {
         Ok(val) => Ok((val.2.to_owned(), val.3.to_owned())),
-        Err(e) => return Err(e.into()),
+        Err(e) => Err(e.into()),
     }
+}
+
+pub(crate) fn get_params(
+    headers: &ftd::ast::HeaderValues,
+    doc: &ftd::interpreter::TDoc<'_>,
+) -> ftd::interpreter::Result<Vec<String>> {
+    headers
+        .0
+        .iter()
+        .filter(|hv| hv.key.eq("param"))
+        .map(|x| x.value.string(doc.name))
+        .collect::<ftd::ast::Result<Vec<String>>>()
+        .map_err(|e| e.into())
 }
 
 pub async fn process<'a>(
@@ -61,12 +74,7 @@ pub async fn process<'a>(
         }
     };
 
-    let query_params: Vec<String> = headers
-        .0
-        .iter()
-        .filter(|hv| hv.key.eq("param"))
-        .map(|x| x.value.string(doc.name))
-        .collect::<ftd::ast::Result<Vec<String>>>()?;
+    let query_params = get_params(&headers, doc)?;
 
     dbg!(&query_params);
 
@@ -95,7 +103,7 @@ pub async fn process<'a>(
     }
 }
 
-async fn execute_query<'a>(
+async fn execute_query(
     database_path: &camino::Utf8Path,
     query: &str,
     doc_name: &str,

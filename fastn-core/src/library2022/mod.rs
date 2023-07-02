@@ -141,6 +141,7 @@ impl Library2022 {
             None
         }
 
+        // TODO: This function is too long. Break it down.
         #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,

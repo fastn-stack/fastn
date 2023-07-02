@@ -219,7 +219,6 @@ impl fastn_core::Package {
         }
     }
 
-    #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
