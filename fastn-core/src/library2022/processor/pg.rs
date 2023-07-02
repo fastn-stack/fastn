@@ -53,11 +53,19 @@ pub async fn process(
 }
 
 async fn execute_query(
-    _query: &str,
+    query: &str,
     _doc_name: &str,
     _line_number: usize,
-    _query_params: Vec<String>,
+    query_params: Vec<String>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let _pool = pool().await.as_ref().unwrap();
+    let client = pool().await.as_ref().unwrap().get().await.unwrap();
+    let stmt = client.prepare_cached(query).await.unwrap();
+    let query_params = query_params
+        .iter()
+        .map(|value| value as &(dyn tokio_postgres::types::ToSql + Sync))
+        .collect::<Vec<_>>();
+
+    let _rows = client.query(&stmt, &query_params).await.unwrap();
+
     todo!()
 }
