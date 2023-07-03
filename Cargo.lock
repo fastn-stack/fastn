@@ -788,6 +788,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "colored"
+version = "2.0.0"
+source = "git+https://github.com/amitu/colored?rev=6eb9cc5#6eb9cc5a9b2908a111213e396688b4db66d15401"
+dependencies = [
+ "lazy_static 1.4.0",
+ "winapi 0.3.9",
+]
+
+[[package]]
 name = "comrak"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1523,7 +1532,7 @@ name = "fastn"
 version = "0.3.0"
 dependencies = [
  "clap",
- "colored",
+ "colored 2.0.0 (git+https://github.com/amitu/colored?rev=6eb9cc5)",
  "fastn-cloud",
  "fastn-core",
  "thiserror",
@@ -1561,7 +1570,7 @@ dependencies = [
  "async-recursion",
  "camino",
  "clap",
- "colored",
+ "colored 2.0.0 (git+https://github.com/amitu/colored?rev=6eb9cc5)",
  "deadpool-postgres",
  "diffy",
  "edit",
@@ -1662,7 +1671,7 @@ name = "fbt-lib"
 version = "0.1.18"
 source = "git+https://github.com/FifthTry/fbt?rev=ea0ee98#ea0ee9832ab515c8acf7f0a1f4d89f2d4e6671eb"
 dependencies = [
- "colored",
+ "colored 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "diffy",
  "ftd 0.2.0",
  "rand",

@@ -92,7 +92,9 @@ impl Library2022 {
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
-                if let Some(r) = get_data_from_package(package.name.as_str(), &package, lib).await {
+                let package_index = format!("{}/", package.name.as_str());
+                if let Some(r) = get_data_from_package(package_index.as_str(), &package, lib).await
+                {
                     return Some(r);
                 }
             }
