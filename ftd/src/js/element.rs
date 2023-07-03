@@ -271,6 +271,15 @@ pub struct Common {
     pub color: Option<ftd::js::Value>,
     pub background: Option<ftd::js::Value>,
     pub role: Option<ftd::js::Value>,
+    pub z_index: Option<ftd::js::Value>,
+    pub sticky: Option<ftd::js::Value>,
+    pub top: Option<ftd::js::Value>,
+    pub bottom: Option<ftd::js::Value>,
+    pub left: Option<ftd::js::Value>,
+    pub right: Option<ftd::js::Value>,
+    pub overflow: Option<ftd::js::Value>,
+    pub overflow_x: Option<ftd::js::Value>,
+    pub overflow_y: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -319,6 +328,15 @@ impl Common {
             color: ftd::js::value::get_properties("color", properties, arguments),
             background: ftd::js::value::get_properties("background", properties, arguments),
             role: ftd::js::value::get_properties("role", properties, arguments),
+            z_index: ftd::js::value::get_properties("z-index", properties, arguments),
+            sticky: ftd::js::value::get_properties("sticky", properties, arguments),
+            top: ftd::js::value::get_properties("top", properties, arguments),
+            bottom: ftd::js::value::get_properties("bottom", properties, arguments),
+            left: ftd::js::value::get_properties("left", properties, arguments),
+            right: ftd::js::value::get_properties("right", properties, arguments),
+            overflow: ftd::js::value::get_properties("overflow", properties, arguments),
+            overflow_x: ftd::js::value::get_properties("overflow-x", properties, arguments),
+            overflow_y: ftd::js::value::get_properties("overflow-y", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -520,6 +538,96 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style.to_set_property(
                     fastn_js::PropertyKind::BorderStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref overflow) = self.overflow {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                overflow.to_set_property(
+                    fastn_js::PropertyKind::Overflow,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref overflow_x) = self.overflow_x {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                overflow_x.to_set_property(
+                    fastn_js::PropertyKind::OverflowX,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref overflow_y) = self.overflow_y {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                overflow_y.to_set_property(
+                    fastn_js::PropertyKind::OverflowY,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref top) = self.top {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                top.to_set_property(
+                    fastn_js::PropertyKind::Top,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref bottom) = self.bottom {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                bottom.to_set_property(
+                    fastn_js::PropertyKind::Bottom,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref left) = self.left {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                left.to_set_property(
+                    fastn_js::PropertyKind::Left,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref right) = self.right {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                right.to_set_property(
+                    fastn_js::PropertyKind::Right,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref z_index) = self.z_index {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                z_index.to_set_property(
+                    fastn_js::PropertyKind::ZIndex,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref sticky) = self.sticky {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                sticky.to_set_property(
+                    fastn_js::PropertyKind::Sticky,
                     element_name,
                     component_definition_name,
                     loop_alias,

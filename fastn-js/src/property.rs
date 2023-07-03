@@ -178,6 +178,15 @@ pub enum PropertyKind {
     Color,
     Background,
     Role,
+    ZIndex,
+    Sticky,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    Overflow,
+    OverflowX,
+    OverflowY,
 }
 
 impl PropertyKind {
@@ -206,6 +215,15 @@ impl PropertyKind {
             PropertyKind::Color => "fastn_dom.PropertyKind.Color",
             PropertyKind::Background => "fastn_dom.PropertyKind.Background",
             PropertyKind::Role => "fastn_dom.PropertyKind.Role",
+            PropertyKind::ZIndex => "fastn_dom.PropertyKind.ZIndex",
+            PropertyKind::Sticky => "fastn_dom.PropertyKind.Sticky",
+            PropertyKind::Top => "fastn_dom.PropertyKind.Top",
+            PropertyKind::Bottom => "fastn_dom.PropertyKind.Bottom",
+            PropertyKind::Left => "fastn_dom.PropertyKind.Left",
+            PropertyKind::Right => "fastn_dom.PropertyKind.Right",
+            PropertyKind::Overflow => "fastn_dom.PropertyKind.Overflow",
+            PropertyKind::OverflowX => "fastn_dom.PropertyKind.OverflowX",
+            PropertyKind::OverflowY => "fastn_dom.PropertyKind.OverflowY",
         }
     }
 }

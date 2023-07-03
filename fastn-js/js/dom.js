@@ -23,7 +23,16 @@ fastn_dom.property_map = {
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
-    "background-color": "bgc"
+    "background-color": "bgc",
+    "z-index": "z",
+    "sticky": "s",
+    "top": "t",
+    "bottom": "b",
+    "left": "l",
+    "right": "r",
+    "overflow": "o",
+    "overflow-x": "ox",
+    "overflow-y": "oy"
 };
 
 // dynamic-class-css.md
@@ -92,7 +101,16 @@ fastn_dom.PropertyKind = {
     MarginRight: 20,
     MarginTop: 21,
     MarginBottom: 22,
-    Role: 23
+    Role: 23,
+    ZIndex: 24,
+    Sticky: 25,
+    Top: 26,
+    Bottom: 27,
+    Left: 28,
+    Right: 29,
+    Overflow: 30,
+    OverflowX: 31,
+    OverflowY: 32,
 }
 
 fastn_dom.Resizing = {
@@ -110,6 +128,13 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.Overflow = {
+    Scroll: "scroll",
+    Visible: "visible",
+    Hidden: "hidden",
+    Auto: "auto",
 }
 
 fastn_dom.BackgroundStyle = {
@@ -362,6 +387,25 @@ class Node2 {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.ZIndex) {
+            this.attachCss("z-index", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Sticky) {
+            // todo: need to set position based on sticky (bool) value
+            this.attachCss("sticky", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Top) {
+            this.attachCss("top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Bottom) {
+            this.attachCss("bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Left) {
+            this.attachCss("left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Right) {
+            this.attachCss("right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Overflow) {
+            this.attachCss("overflow", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OverflowX) {
+            this.attachCss("overflow-x", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OverflowY) {
+            this.attachCss("overflow-y", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
