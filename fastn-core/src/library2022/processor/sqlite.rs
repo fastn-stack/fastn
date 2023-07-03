@@ -25,7 +25,8 @@ pub(crate) fn get_p1_data(
 }
 
 pub enum QueryParam {
-    Integer(i64),
+    Integer4(i32),
+    Integer8(i64),
     Boolean(bool),
     Decimal(f64),
     String(String),
@@ -46,7 +47,8 @@ pub(crate) fn get_params(
         {
             "string" => result.push(QueryParam::String(x.value.string(doc.name)?)),
             "boolean" => result.push(QueryParam::Boolean(x.value.string(doc.name)?.parse()?)),
-            "integer" => result.push(QueryParam::Integer(x.value.string(doc.name)?.parse()?)),
+            "integer-4" => result.push(QueryParam::Integer4(x.value.string(doc.name)?.parse()?)),
+            "integer-8" => result.push(QueryParam::Integer8(x.value.string(doc.name)?.parse()?)),
             "decimal" => result.push(QueryParam::Decimal(x.value.string(doc.name)?.parse()?)),
             _ => {
                 return ftd::interpreter::utils::e2(

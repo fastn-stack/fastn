@@ -65,7 +65,10 @@ async fn execute_query(
     let query_params_dyns = query_params
         .iter()
         .map(|q| match q {
-            super::sqlite::QueryParam::Integer(v) => {
+            super::sqlite::QueryParam::Integer4(v) => {
+                v as &(dyn tokio_postgres::types::ToSql + Sync)
+            }
+            super::sqlite::QueryParam::Integer8(v) => {
                 v as &(dyn tokio_postgres::types::ToSql + Sync)
             }
             super::sqlite::QueryParam::Boolean(v) => {
