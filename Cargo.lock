@@ -1171,8 +1171,7 @@ dependencies = [
 [[package]]
 name = "deadpool"
 version = "0.9.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "421fe0f90f2ab22016f32a9881be5134fdd71c65298917084b0c7477cbc3856e"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
 dependencies = [
  "async-trait",
  "deadpool-runtime",
@@ -1184,20 +1183,18 @@ dependencies = [
 [[package]]
 name = "deadpool-postgres"
 version = "0.10.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "836a24a9d49deefe610b8b60c767a7412e9a931d79a89415cd2d2d71630ca8d7"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
 dependencies = [
  "deadpool",
- "log",
  "tokio",
  "tokio-postgres",
+ "tracing",
 ]
 
 [[package]]
 name = "deadpool-runtime"
 version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eaa37046cc0f6c3cc6090fbdbf73ef0b8ef4cfcc37f6befc0020f63e8cf121e1"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
 dependencies = [
  "tokio",
 ]

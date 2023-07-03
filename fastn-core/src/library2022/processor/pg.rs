@@ -1,6 +1,6 @@
 async fn create_pool() -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
     let mut cfg = deadpool_postgres::Config::new();
-    cfg.dbname = Some("deadpool".to_string());
+    cfg.libpq_style_connection_string = Some(std::env::var("FASTN_PG_URL").unwrap());
     cfg.manager = Some(deadpool_postgres::ManagerConfig {
         recycling_method: deadpool_postgres::RecyclingMethod::Verified,
     });
