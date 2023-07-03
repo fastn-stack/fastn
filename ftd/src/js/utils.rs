@@ -7,11 +7,13 @@ pub fn trim_all_lines(s: &str) -> String {
 
 pub(crate) fn update_reference(
     reference: &str,
-    component_definition_name: Option<String>,
-    loop_alias: Option<String>,
+    component_definition_name: &Option<String>,
+    loop_alias: &Option<String>,
 ) -> String {
     let mut name = reference
-        .trim_start_matches(format!("{}.", component_definition_name.unwrap_or_default()).as_str())
+        .trim_start_matches(
+            format!("{}.", component_definition_name.clone().unwrap_or_default()).as_str(),
+        )
         .to_string();
     if let Some(loop_alias) = loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
