@@ -136,6 +136,10 @@ fn row_to_json(
 }
 
 /*
+FASTN_PG_URL=postgres://amitu@localhost/amitu fastn serve
+ */
+
+/*
 -- import: fastn/processors as pr
 
 -- record person:
