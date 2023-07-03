@@ -181,7 +181,7 @@ fastn_dom.Length = {
         return `${value}vw`;
     },
     Responsive: (desktop, mobile) => {
-        if (ftd.device == "desktop") {
+        if (ftd.device.get() == "desktop") {
             return desktop;
         } else {
             return mobile ? mobile: desktop;
