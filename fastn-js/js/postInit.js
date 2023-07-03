@@ -8,7 +8,46 @@ ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "dark";
+    const MOBILE_CLASS = "mobile";
 
+    window.onresize = function () {
+        let current = get_device();
+        if (current === last_device) {
+            return;
+        }
+        last_device = current;
+    };
+    function initialise_device() {
+        last_device = get_device();
+        console.log("last_device", last_device);
+    }
+
+    function get_device() {
+        // not at all sure about this function logic.
+        let width = window.innerWidth;
+        // In the future, we may want to have more than one break points, and
+        // then
+        // we may also want the theme builders to decide where the breakpoints
+        // should go. we should be able to fetch fpm variables here, or maybe
+        // simply pass the width, user agent etc to fpm and let people put the
+        // checks on width user agent etc, but it would be good if we can
+        // standardize few breakpoints. or maybe we should do both, some
+        // standard breakpoints and pass the raw data.
+        // we would then rename this function to detect_device() which will
+        // return one of "desktop", "tablet", "mobile". and also maybe have
+        // another function detect_orientation(), "landscape" and "portrait" etc,
+        // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
+        // and `fpm#view-port-orientation` etc.
+        let mobile_breakpoint = fastn_utils.getStaticValue(ftd["breakpoint-width"].get("mobile"));
+        if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            return "mobile";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        return "desktop";
+    }
 
     /*
         ftd.dark-mode behaviour:
@@ -120,4 +159,5 @@ ftd.post_init = function () {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
     initialise_dark_mode();
+    initialise_device()
 }

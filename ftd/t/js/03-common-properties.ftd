@@ -104,20 +104,12 @@ color if { value % 3 == 0 }: $og
 color if { value % 3 == 1 }: $bp
 $on-click$: $increment($a = $value)
 
-;; --------------------- COLOR --------------------------
+;; --------------------- ROLE --------------------------
 
 -- ftd.text: Role
 role: $rtype
 
-;; --------------------- END --------------------------
-
--- end: ftd.column
-
 ;; -------------------- OTHER PADDING + MARGIN VARIANTS --------------------
-
--- ftd.column:
-width.fixed.percent: 80
-background.solid: $orange
 
 -- ftd.text: Padding Horizontal
 border-width.px: 2
@@ -178,6 +170,8 @@ margin-top.px: 10
 border-width.px: 2
 border-style: solid
 margin-bottom.px: 10
+
+;; --------------------- END --------------------------
 
 -- end: ftd.column
 
