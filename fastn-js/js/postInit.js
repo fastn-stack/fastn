@@ -12,9 +12,11 @@ ftd.post_init = function () {
 
     window.onresize = function () {
         let current = get_device();
+        console.log("last_device", last_device);
         if (current === last_device) {
             return;
         }
+        ftd.device.set(current);
         last_device = current;
     };
     function initialise_device() {
@@ -26,18 +28,17 @@ ftd.post_init = function () {
         // not at all sure about this function logic.
         let width = window.innerWidth;
         // In the future, we may want to have more than one break points, and
-        // then
-        // we may also want the theme builders to decide where the breakpoints
-        // should go. we should be able to fetch fpm variables here, or maybe
-        // simply pass the width, user agent etc to fpm and let people put the
-        // checks on width user agent etc, but it would be good if we can
-        // standardize few breakpoints. or maybe we should do both, some
-        // standard breakpoints and pass the raw data.
+        // then we may also want the theme builders to decide where the
+        // breakpoints should go. we should be able to fetch fpm variables
+        // here, or maybe simply pass the width, user agent etc. to fpm and
+        // let people put the checks on width user agent etc., but it would
+        // be good if we can standardize few breakpoints. or maybe we should
+        // do both, some standard breakpoints and pass the raw data.
         // we would then rename this function to detect_device() which will
-        // return one of "desktop", "tablet", "mobile". and also maybe have
-        // another function detect_orientation(), "landscape" and "portrait" etc,
-        // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
-        // and `fpm#view-port-orientation` etc.
+        // return one of "desktop", "mobile". and also maybe have another
+        // function detect_orientation(), "landscape" and "portrait" etc.,
+        // and instead of setting `ftd#mobile: boolean` we set `ftd#device`
+        // and `ftd#view-port-orientation` etc.
         let mobile_breakpoint = fastn_utils.getStaticValue(ftd["breakpoint-width"].get("mobile"));
         if (width <= mobile_breakpoint) {
             document.body.classList.add(MOBILE_CLASS);
