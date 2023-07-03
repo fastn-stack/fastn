@@ -109,7 +109,7 @@ impl ftd::interpreter::ComponentDefinition {
             "parent",
             0,
             doc,
-            Some(self.name.to_string()),
+            &Some(self.name.to_string()),
             true,
         ));
         fastn_js::component_with_params(
@@ -129,7 +129,7 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements("parent", index, doc, None, false))
+        statements.extend(component.to_component_statements("parent", index, doc, &None, false))
     }
     fastn_js::component0("main", statements)
 }
@@ -140,7 +140,7 @@ impl ftd::interpreter::Component {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        component_definition_name: Option<String>,
+        component_definition_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
@@ -151,18 +151,18 @@ impl ftd::interpreter::Component {
                 "root",
                 0,
                 doc,
-                component_definition_name.clone(),
+                component_definition_name,
                 true,
-                loop_alias.clone(),
+                &loop_alias,
             )
         } else {
             self.to_component_statements_(
                 parent,
                 index,
                 doc,
-                component_definition_name.clone(),
+                component_definition_name,
                 should_return,
-                None,
+                &None,
             )
         };
 
@@ -172,13 +172,11 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| {
-                            v.get_deps(component_definition_name.clone(), loop_alias.clone())
-                        })
+                        .flat_map(|v| v.get_deps(component_definition_name, &loop_alias))
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
                         component_definition_name,
-                        loop_alias,
+                        &loop_alias,
                     ),
                     statements: component_statements,
                     parent: parent.to_string(),
@@ -204,9 +202,9 @@ impl ftd::interpreter::Component {
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        component_definition_name: Option<String>,
+        component_definition_name: &Option<String>,
         should_return: bool,
-        loop_alias: Option<String>,
+        loop_alias: &Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
@@ -226,10 +224,7 @@ impl ftd::interpreter::Component {
                 .iter()
                 .map(|v| {
                     v.get_value(self.properties.as_slice())
-                        .to_set_property_value(
-                            component_definition_name.clone(),
-                            loop_alias.clone(),
-                        )
+                        .to_set_property_value(component_definition_name, loop_alias)
                 })
                 .collect_vec();
             // Todo: Add event
