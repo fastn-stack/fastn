@@ -160,6 +160,7 @@ pub enum PropertyKind {
     BorderWidth,
     BorderStyle,
     Color,
+    Background,
 }
 
 impl PropertyKind {
@@ -174,6 +175,7 @@ impl PropertyKind {
             PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
             PropertyKind::Color => "fastn_dom.PropertyKind.Color",
+            PropertyKind::Background => "fastn_dom.PropertyKind.Background",
         }
     }
 }
