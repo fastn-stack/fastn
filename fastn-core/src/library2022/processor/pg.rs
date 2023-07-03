@@ -134,3 +134,65 @@ fn row_to_json(
 
     Ok(row)
 }
+
+/*
+-- import: fastn/processors as pr
+
+-- record person:
+integer id:
+string name:
+string department:
+
+
+-- person list people:
+$processor$: pr.pg
+param-integer-4: 2
+
+SELECT * FROM "user" where id >= $1;
+
+-- integer int_2:
+$processor$: pr.pg
+
+SELECT 20::int2;
+
+-- ftd.integer: $int_2
+
+-- integer int_4:
+$processor$: pr.pg
+
+SELECT 40::int4;
+
+-- ftd.integer: $int_4
+
+-- integer int_8:
+$processor$: pr.pg
+
+SELECT 80::int8;
+
+-- ftd.integer: $int_8
+
+
+-- ftd.text: data from db
+
+-- ftd.text: $p.name
+$loop$: $people as $p
+
+
+
+
+-- decimal d_4:
+$processor$: pr.pg
+param-decimal: 10
+
+SELECT $1::FLOAT8;
+
+-- ftd.decimal: $d_4
+
+
+-- decimal d_8:
+$processor$: pr.pg
+
+SELECT 80.0::FLOAT8;
+
+-- ftd.decimal: $d_8
+ */
