@@ -2,22 +2,131 @@
 <head>
     <script src="fastn-js.js"></script>
 </head>
-<body data-id="1"><div data-id="2" class="c-1">Red Color</div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="p-1">px Padding</div><div data-id="3" class="w-2 p-3">percent Padding</div><div data-id="4" class="w-2 p-4">rem Padding</div><div data-id="5" class="w-2 p-5">vh Padding</div><div data-id="6" class="w-2 p-6">vw Padding</div><div data-id="7" class="w-2 p-7">calc Padding</div><div data-id="8" class="h-8">Fill-container height</div><div data-id="9" class="h-9">Hug Content Height</div><div data-id="10" class="h-10">px Height</div><div data-id="11" class="w-2 h-11">percent Height</div><div data-id="12" class="w-2 h-12">rem Height</div><div data-id="13" class="w-2 h-13">vh Height</div><div data-id="14" class="w-2 h-14">vw Height</div><div data-id="15" class="w-2 h-15">calc Height</div><div data-id="16">Id Test</div><div data-id="17" class="m-16 bw-17 bs-18">Solid Border</div><div data-id="18" class="m-19 bw-17 bs-20">Double Border</div><div data-id="19" class="m-19 bw-17 bs-21">Dashed Border</div><div data-id="20" class="m-19 bw-17 bs-22">Dotted Border</div><div data-id="21" class="m-19 bw-17 bs-23">Groove Border</div><div data-id="22" class="m-19 bw-17 bs-24">Ridge Border</div><div data-id="23" class="c-25">Red Color</div></body><style id="styles">
     /*.ft_text {
         padding: 0;
     }*/
-    .c-1 { color: orange; }
-body.dark .c-1 { color: green; }
+    .p-1 { padding: 10px; }
+.w-2 { width: 100%; }
+.p-3 { padding: 20%; }
+.p-4 { padding: 1rem; }
+.p-5 { padding: 2vh; }
+.p-6 { padding: 3vw; }
+.p-7 { padding: calc(100% - 95%); }
+.h-8 { height: 100%; }
+.h-9 { height: fit-content; }
+.h-10 { height: 30px; }
+.h-11 { height: 20%; }
+.h-12 { height: 1rem; }
+.h-13 { height: 5vh; }
+.h-14 { height: 10vw; }
+.h-15 { height: calc(100% - 90%); }
+.m-16 { margin: 11px; }
+.bw-17 { border-width: 4px; }
+.bs-18 { border-style: solid; }
+.m-19 { margin: 12px; }
+.bs-20 { border-style: double; }
+.bs-21 { border-style: dashed; }
+.bs-22 { border-style: dotted; }
+.bs-23 { border-style: groove; }
+.bs-24 { border-style: ridge; }
+.c-25 { color: orange; }
+body.dark .c-25 { color: green; }
     </style>
 <script>
     (function() {
         function main(parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Red Color");
-  parenti0.addEventHandler(fastn_dom.Event.Click, function () {
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "px Padding");
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "percent Padding");
+  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Percent(20));
+  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "rem Padding");
+  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Rem(1));
+  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "vh Padding");
+  parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vh(2));
+  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "vw Padding");
+  parenti4.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti4.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Vw(3));
+  let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "calc Padding");
+  parenti5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti5.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Calc("100% - 95%"));
+  let parenti6 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti6.setProperty(fastn_dom.PropertyKind.StringValue, "Fill-container height");
+  parenti6.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer);
+  let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti7.setProperty(fastn_dom.PropertyKind.StringValue, "Hug Content Height");
+  parenti7.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.HugContent);
+  let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti8.setProperty(fastn_dom.PropertyKind.StringValue, "px Height");
+  parenti8.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(30)));
+  let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti9.setProperty(fastn_dom.PropertyKind.StringValue, "percent Height");
+  parenti9.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti9.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(20)));
+  let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti10.setProperty(fastn_dom.PropertyKind.StringValue, "rem Height");
+  parenti10.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti10.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Rem(1)));
+  let parenti11 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti11.setProperty(fastn_dom.PropertyKind.StringValue, "vh Height");
+  parenti11.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti11.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vh(5)));
+  let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti12.setProperty(fastn_dom.PropertyKind.StringValue, "vw Height");
+  parenti12.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti12.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Vw(10)));
+  let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti13.setProperty(fastn_dom.PropertyKind.StringValue, "calc Height");
+  parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti13.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Calc("100% - 90%")));
+  let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti14.setProperty(fastn_dom.PropertyKind.StringValue, "Id Test");
+  parenti14.setProperty(fastn_dom.PropertyKind.Id, "id-123");
+  let parenti15 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti15.setProperty(fastn_dom.PropertyKind.StringValue, "Solid Border");
+  parenti15.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(11));
+  parenti15.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti15.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  let parenti16 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti16.setProperty(fastn_dom.PropertyKind.StringValue, "Double Border");
+  parenti16.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12));
+  parenti16.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti16.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  let parenti17 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti17.setProperty(fastn_dom.PropertyKind.StringValue, "Dashed Border");
+  parenti17.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12));
+  parenti17.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti17.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Dashed);
+  let parenti18 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti18.setProperty(fastn_dom.PropertyKind.StringValue, "Dotted Border");
+  parenti18.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12));
+  parenti18.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti18.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Dotted);
+  let parenti19 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti19.setProperty(fastn_dom.PropertyKind.StringValue, "Groove Border");
+  parenti19.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12));
+  parenti19.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti19.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Groove);
+  let parenti20 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti20.setProperty(fastn_dom.PropertyKind.StringValue, "Ridge Border");
+  parenti20.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(12));
+  parenti20.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti20.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Ridge);
+  let parenti21 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti21.setProperty(fastn_dom.PropertyKind.StringValue, "Red Color");
+  parenti21.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment(foo__value);
   });
-  parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([foo__og,
+  parenti21.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([foo__og,
   foo__value,
   foo__bp,
   foo__value], function () {
