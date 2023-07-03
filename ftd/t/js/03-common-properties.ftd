@@ -1,3 +1,6 @@
+-- ftd.column:
+width: fill-container
+background.solid: $ylg
 ;; ---------------------- PADDING ----------------------------
 
 -- ftd.text: px Padding
@@ -106,3 +109,50 @@ margin.px: 12
 border-width.px: 4
 border-style: ridge
 margin.px: 12
+
+
+;; --------------------- COLOR --------------------------
+
+-- ftd.text: Red Color
+color: red
+color if { value % 3 == 0 }: $og
+color if { value % 3 == 1 }: $bp
+$on-click$: $increment($a = $value)
+
+
+
+;; --------------------- END --------------------------
+
+-- end: ftd.column
+
+
+;; --------------------- VARIABLE --------------------------
+
+-- ftd.color og:
+light: orange
+dark: green
+
+-- ftd.color bp:
+light: blue
+dark: purple
+
+-- ftd.color ylg:
+light: yellow
+dark: lightgreen
+
+
+-- integer $value: 0
+
+
+
+-- void increment(a):
+integer $a:
+
+a = a + 1;
+
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a;

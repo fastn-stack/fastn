@@ -11,7 +11,7 @@ fastn_dom.property_map = {
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
-
+    "background-color": "bgc"
 };
 
 // dynamic-class-css.md
@@ -29,7 +29,7 @@ fastn_dom.getClassesAsString = function() {
 }
 
 function getClassAsString(className, obj) {
-    return `.${className} { ${obj.property}: ${obj.value}; }`;
+    return `${className} { ${obj.property}: ${obj.value}; }`;
 }
 
 fastn_dom.ElementKind = {
@@ -46,7 +46,7 @@ fastn_dom.ElementKind = {
 };
 
 fastn_dom.PropertyKind = {
-    Color_RGB: 0,
+    Color: 0,
     IntegerValue: 1,
     StringValue: 2,
     Width: 3,
@@ -56,6 +56,7 @@ fastn_dom.PropertyKind = {
     BorderWidth: 7,
     BorderStyle: 8,
     Margin: 9,
+    Background: 10,
 }
 
 fastn_dom.Resizing = {
@@ -73,6 +74,10 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.BackgroundStyle = {
+    Solid: (value) => { return value; }
 }
 
 fastn_dom.Length = {
@@ -158,52 +163,96 @@ class Node2 {
         this.#parent = parent;
         // this is where we store all the attached closures, so we can free them when we are done
         this.#mutables = [];
+        /*if (!!parent.parent) {
+            parent = parent.parent();
+        }*/
+        if (this.#parent.getNode) {
+            this.#parent = this.#parent.getNode();
+        }
+        this.#parent.appendChild(this.#node);
     }
     parent() {
         return this.#parent;
     }
-    done() {
-        let parent = this.#parent;
-        /*if (!!parent.parent) {
-            parent = parent.parent();
-        }*/
-        if (parent.getNode) {
-            parent = parent.getNode();
-        }
-        parent.appendChild(this.#node);
-    }
     // dynamic-class-css
-    attachCss(property, value) {
+    attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
         let cls = `${propertyShort}-${value}`;
-        if (!fastn_dom.unsanitised_classes[cls]) {
-            fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+        if (!!className) {
+           cls = className;
+        } else {
+            if (!fastn_dom.unsanitised_classes[cls]) {
+                fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+            }
+            cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
         }
-        cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+        let cssClass = className ? cls : `.${cls}`;
+
         const obj = { property, value };
 
+        if (value === undefined) {
+            if (!ssr && !hydrating) {
+                for (const className of this.#node.classList.values()) {
+                    if (className.startsWith(`${propertyShort}-`)) {
+                        this.#node.classList.remove(className);
+                    }
+                }
+            }
+            return cls;
+        }
+
         if (!ssr && !hydrating) {
+            if (!!className) {
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                }
+                return cls;
+            }
+
             for (const className of this.#node.classList.values()) {
                 if (className.startsWith(`${propertyShort}-`)) {
                     this.#node.classList.remove(className);
                 }
             }
-            if (value === undefined) {
-                return;
-            }
 
-            if (!fastn_dom.classes[cls]) {
+            if (createClass) {
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                }
+                this.#node.style.removeProperty(property);
+                this.#node.classList.add(cls);
+            } else if (!fastn_dom.classes[cssClass]) {
                 this.#node.style[property] = value;
             } else {
+                this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             }
 
-            return;
+            return cls;
         }
 
-        if (value !== undefined) {
-            fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
-            this.#node.classList.add(cls);
+        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+
+        if (!!className) {
+            return cls;
+        }
+
+        this.#node.classList.add(cls);
+        return cls;
+    }
+
+    attachColorCss(property, value) {
+        let lightValue = fastn_utils.getStaticValue(value.get("light"));
+        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
+        if (lightValue === darkValue) {
+            this.attachCss(property, lightValue, false);
+        } else {
+            let lightClass = this.attachCss(property, lightValue, true);
+            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
         }
     }
 
@@ -224,8 +273,10 @@ class Node2 {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.Color_RGB) {
-            this.attachCss("color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Color) {
+            this.attachColorCss("color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Background) {
+            this.attachColorCss("background-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
@@ -294,7 +345,6 @@ class ConditionalDom {
         })
         deps.forEach(dep => dep.addClosure(closure));
 
-        domNode.done();
 
         this.#parent = domNode;
         this.#node_constructor = node_constructor;
@@ -328,11 +378,10 @@ class ForLoop {
             // node_constructor(this.#wrapper, v.item, v.index).done();
             this.createNode(idx);
         }
-        this.#wrapper.done();
     }
     createNode(index) {
         let v = this.#list.get(index);
-        this.#node_constructor(this.#wrapper, v.item, v.index).done();
+        this.#node_constructor(this.#wrapper, v.item, v.index);
     }
 
     getParent() {

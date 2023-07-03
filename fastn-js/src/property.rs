@@ -14,7 +14,7 @@ pub enum SetPropertyValue {
 impl SetPropertyValue {
     pub fn to_js(&self) -> String {
         match self {
-            SetPropertyValue::Reference(name) => fastn_js::utils::name_to_js(name),
+            SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
             SetPropertyValue::Value(v) => v.to_js(),
             SetPropertyValue::Formula(f) => f.to_js(),
         }
@@ -107,12 +107,16 @@ pub enum Value {
     String(String),
     Integer(i64),
     Decimal(f64),
+    Boolean(bool),
     OrType {
         variant: String,
         value: Option<Box<SetPropertyValue>>,
     },
     List {
         value: Vec<SetPropertyValue>,
+    },
+    Record {
+        fields: Vec<(String, SetPropertyValue)>,
     },
 }
 
@@ -123,6 +127,7 @@ impl Value {
             Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
+            Value::Boolean(b) => b.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
                     format!("{}({})", variant, value.to_js())
@@ -130,7 +135,17 @@ impl Value {
                     variant.to_owned()
                 }
             }
-            Value::List { value } => format!("[{}]", value.iter().map(|v| v.to_js()).join(", ")),
+            Value::List { value } => format!(
+                "fastn.mutableList([{}])",
+                value.iter().map(|v| v.to_js()).join(", ")
+            ),
+            Value::Record { fields } => format!(
+                "fastn.recordInstance({{{}}})",
+                fields
+                    .iter()
+                    .map(|(k, v)| format!("{}: {}", k, v.to_js()))
+                    .join(", ")
+            ),
         }
     }
 }
@@ -144,6 +159,8 @@ pub enum PropertyKind {
     Height,
     BorderWidth,
     BorderStyle,
+    Color,
+    Background,
 }
 
 impl PropertyKind {
@@ -157,6 +174,8 @@ impl PropertyKind {
             PropertyKind::Height => "fastn_dom.PropertyKind.Height",
             PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
+            PropertyKind::Color => "fastn_dom.PropertyKind.Color",
+            PropertyKind::Background => "fastn_dom.PropertyKind.Background",
         }
     }
 }

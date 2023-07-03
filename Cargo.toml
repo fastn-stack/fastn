@@ -54,6 +54,10 @@ strip = true
 # using the latest dependency, and what is the plan to moving to the latest version.
 actix-web = "4"
 antidote = "1"
+native-tls = "0.2"
+deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46" }
+postgres-native-tls = "0.5"
+tokio-postgres = { version = "0.7", features = ["with-serde_json-1"] }
 async-lock = "2"
 async-recursion = "1"
 async-trait = "0.1"
@@ -61,7 +65,7 @@ bitflags = "2"
 bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
 clap = "4"
-colored = "2"
+colored = { git = "https://github.com/amitu/colored", rev = "6eb9cc5" }
 crossterm = "0.26"
 css-color-parser = "0.1"
 diffy = "0.3"

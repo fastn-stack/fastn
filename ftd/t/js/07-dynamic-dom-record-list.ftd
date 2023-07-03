@@ -1,0 +1,51 @@
+-- record person:
+caption name:
+body bio:
+
+
+
+-- person list $people:
+-- person: $first
+-- end: $people
+
+
+-- person tom: Tom
+
+I am Tom
+
+-- person $first: Jill
+
+I am Jill
+
+
+
+-- ftd.text: Click to add Tom
+$on-click$: $append-person($a = $people, v = $tom)
+
+
+-- show-person: $p
+$loop$: $people as $p
+index: $LOOP.COUNTER
+
+
+-- component show-person:
+caption person p:
+integer index:
+
+-- ftd.column:
+
+-- ftd.text: $show-person.p.name
+-- ftd.text: $show-person.p.bio
+-- ftd.integer: $show-person.index
+
+-- end: ftd.column
+
+-- end: show-person
+
+
+
+-- void append-person(a,v):
+person list $a:
+person v:
+
+ftd.append(a, v)

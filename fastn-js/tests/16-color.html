@@ -7,11 +7,16 @@
     <script src="../js/ftd.js"></script>
     <script src="../js/postInit.js"></script>
 </head>
-__html_body__
+<body></body>
 <script>
-
     (function() {
-        __js_script__
+        function main (root) {
+            let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+            i1.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({ light: "red", dark: "red"}));
+            i1.done();
+        }
+
+        document.body.innerHTML = fastn_virtual.ssr(main);
         fastn_virtual.hydrate(main);
     })();
 </script>
@@ -19,8 +24,6 @@ __html_body__
 
 
 <!--
-;; index.ftd
--- integer num: 10    ;; index$num
-
--- ftd.integer: $num
+-- ftd.text: hello
+color: red
 -->

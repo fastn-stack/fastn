@@ -1,10 +1,11 @@
 <html>
 <head>
-    <script src="../dom.js"></script>
-    <script src="../fastn.js"></script>
-    <script src="../utils.js"></script>
-    <script src="../virtual.js"></script>
-    <script src="../variables.js"></script>
+    <script src="../js/dom.js"></script>
+    <script src="../js/fastn.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/virtual.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -16,14 +17,12 @@
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 r.set("Bob")
             })
-            i.done();
 
 
             let p = fastn.mutable(null);
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click me");
             i1.addEventHandler(fastn_dom.Event.Click, function () { p.set(fastn.recordInstance({"name": r })) })
-            i1.done();
 
 
             fastn_dom.conditionalDom(root, [p], function () { return p.get() !== null; }, function (root) {
@@ -35,7 +34,6 @@
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             let g = p.get("name");
             i.setProperty(fastn_dom.PropertyKind.StringValue, g);
-            i.done();
             return i;
         }
 

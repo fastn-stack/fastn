@@ -92,7 +92,9 @@ impl Library2022 {
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
-                if let Some(r) = get_data_from_package(package.name.as_str(), &package, lib).await {
+                let package_index = format!("{}/", package.name.as_str());
+                if let Some(r) = get_data_from_package(package_index.as_str(), &package, lib).await
+                {
                     return Some(r);
                 }
             }
@@ -141,6 +143,7 @@ impl Library2022 {
             None
         }
 
+        // TODO: This function is too long. Break it down.
         #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
@@ -277,6 +280,7 @@ impl Library2022 {
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
+            "pg" => processor::pg::process(value, kind, doc).await,
             "query" => {
                 processor::query::process(
                     value,

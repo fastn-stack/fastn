@@ -1,10 +1,11 @@
 <html>
 <head>
-    <script src="../dom.js"></script>
-    <script src="../fastn.js"></script>
-    <script src="../utils.js"></script>
-    <script src="../virtual.js"></script>
-    <script src="../variables.js"></script>
+    <script src="../js/dom.js"></script>
+    <script src="../js/fastn.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/virtual.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -13,7 +14,6 @@
             let index$num = 10;
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setProperty(fastn_dom.PropertyKind.IntegerValue, index$num);
-            i.done();
         }
 
         main(fastn_virtual.document.createElement("body"))

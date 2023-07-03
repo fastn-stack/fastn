@@ -26,7 +26,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         if let ftd::interpreter::Thing::Component(c) = thing {
             asts.push(c.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
-            asts.push(v.to_ast());
+            asts.push(v.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             asts.push(f.to_ast());
         }
@@ -55,23 +55,48 @@ impl ftd::interpreter::Function {
 }
 
 impl ftd::interpreter::Variable {
-    pub fn to_ast(&self) -> fastn_js::Ast {
-        if self.mutable && self.kind.is_list() {
-            fastn_js::Ast::MutableList(fastn_js::MutableList {
-                name: self.name.to_string(),
-                value: self.value.to_fastn_js_value(),
-            })
-        } else if self.mutable {
-            fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
-                name: self.name.to_string(),
-                value: self.value.to_fastn_js_value(),
-            })
-        } else {
-            fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
-                name: self.name.to_string(),
-                value: self.value.to_fastn_js_value(),
-            })
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+        if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
+            if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
+                let record = doc.get_record(name, self.line_number).unwrap();
+                let record_fields = value
+                    .record_fields(doc.name, self.value.line_number())
+                    .unwrap();
+                let mut fields = vec![];
+                for field in record.fields {
+                    if let Some(value) = record_fields.get(field.name.as_str()) {
+                        fields.push((field.name.to_string(), value.to_fastn_js_value()));
+                    } else {
+                        fields.push((
+                            field.name.to_string(),
+                            field
+                                .get_default_value()
+                                .unwrap()
+                                .to_set_property_value_with_none(),
+                        ));
+                    }
+                }
+                return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
+                    name: self.name.to_string(),
+                    fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record { fields }),
+                });
+            } else if self.kind.is_list() {
+                // Todo: It should be only for Mutable not Static
+                return fastn_js::Ast::MutableList(fastn_js::MutableList {
+                    name: self.name.to_string(),
+                    value: self.value.to_fastn_js_value(),
+                });
+            } else if self.mutable {
+                return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
+                    name: self.name.to_string(),
+                    value: self.value.to_fastn_js_value(),
+                });
+            }
         }
+        fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+            name: self.name.to_string(),
+            value: self.value.to_fastn_js_value(),
+        })
     }
 }
 

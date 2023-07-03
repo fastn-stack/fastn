@@ -6,6 +6,10 @@ pub enum Value {
 }
 
 impl Value {
+    pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
+        self.to_set_property_value(None, None)
+    }
+
     pub(crate) fn to_set_property_value(
         &self,
         component_definition_name: Option<String>,
@@ -261,6 +265,9 @@ impl ftd::interpreter::Value {
         use itertools::Itertools;
 
         match self {
+            ftd::interpreter::Value::Boolean { value } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
+            }
             ftd::interpreter::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
             }
@@ -293,7 +300,15 @@ impl ftd::interpreter::Value {
                     value: data.iter().map(|v| v.to_fastn_js_value()).collect_vec(),
                 })
             }
-            _ => todo!(),
+            ftd::interpreter::Value::Record { fields, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                    fields: fields
+                        .iter()
+                        .map(|(k, v)| (k.to_string(), v.to_fastn_js_value()))
+                        .collect_vec(),
+                })
+            }
+            t => todo!("{:?}", t),
         }
     }
 }
@@ -314,7 +329,11 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = border_style_variants(variant);
             (format!("fastn_dom.BorderStyle.{}", js_variant), false)
         }
-        _ => todo!(),
+        "ftd#background" => {
+            let js_variant = background_variants(variant);
+            (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
+        }
+        t => todo!("{}", t),
     }
 }
 
@@ -355,5 +374,12 @@ fn border_style_variants(name: &str) -> &'static str {
         "ridge" => "Ridge",
         "double" => "Double",
         _ => todo!(),
+    }
+}
+
+fn background_variants(name: &str) -> &'static str {
+    match name {
+        "solid" => "Solid",
+        t => todo!("{}", t),
     }
 }

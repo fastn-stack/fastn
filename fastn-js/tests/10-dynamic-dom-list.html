@@ -1,10 +1,11 @@
 <html>
 <head>
-    <script src="../dom.js"></script>
-    <script src="../fastn.js"></script>
-    <script src="../utils.js"></script>
-    <script src="../virtual.js"></script>
-    <script src="../variables.js"></script>
+    <script src="../js/dom.js"></script>
+    <script src="../js/fastn.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/virtual.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -15,14 +16,13 @@
 
             let text = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
-            text.addEventHandler(fastn_dom.Event.Click, ftd.append(people, "Tom")
-                /*function () { people.push("Tom")}*/);
-            text.done();
+            text.addEventHandler(fastn_dom.Event.Click,
+                // ftd.append(people, "Tom")
+                function () { people.push("Tom")});
 
             let text2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             text2.setStaticProperty(fastn_dom.PropertyKind.StringValue, "Click to change first");
             text2.addEventHandler(fastn_dom.Event.Click, function () { first.set("Bob") });
-            text2.done();
 
             people.forLoop(root, function (root, item, index) {
                 return fastn_dom.conditionalDom(root, [index], function () {
@@ -42,17 +42,16 @@
 
             let i = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
             i.setProperty(fastn_dom.PropertyKind.StringValue, name);
-            i.done();
 
             let i2 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Integer);
             i2.setProperty(fastn_dom.PropertyKind.IntegerValue, index);
-            i2.done();
 
-            c.done();
             return c;
         }
 
         main(document.body);
+        // document.body.innerHTML = fastn_virtual.ssr(main);
+        // fastn_virtual.hydrate(main);
     })();
 </script>
 </html>

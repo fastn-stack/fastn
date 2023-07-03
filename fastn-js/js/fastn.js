@@ -66,7 +66,13 @@ class Mutable {
         }
 
         if (this.#value instanceof RecordInstance) {
-            this.#value.replace(value);
+            // this.#value.replace(value); will replace the record type
+            // variable instance created which we don't want.
+            // color: red
+            // color if { something }: $orange-green
+            // The `this.#value.replace(value);` will replace the value of
+            // `orange-green` with `{light: red, dark: red}`
+            this.#value = value;
         } else {
             this.#value = value;
         }
@@ -272,4 +278,10 @@ class RecordInstance {
 
 fastn.recordInstance = function (obj) {
     return new RecordInstance(obj);
+}
+
+
+
+fastn.color = function (r, g, b) {
+    return `rgb(${r},${g},${b})`;
 }

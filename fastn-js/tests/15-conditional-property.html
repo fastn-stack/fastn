@@ -1,10 +1,11 @@
 <html>
 <head>
-    <script src="../dom.js"></script>
-    <script src="../fastn.js"></script>
-    <script src="../utils.js"></script>
-    <script src="../virtual.js"></script>
-    <script src="../variables.js"></script>
+    <script src="../js/dom.js"></script>
+    <script src="../js/fastn.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/virtual.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -13,7 +14,6 @@
             let value = fastn.mutable(2);
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i1.setProperty(fastn_dom.PropertyKind.IntegerValue, value);
-            i1.done();
 
             let i0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             let f = fastn.formula([value], function () {
@@ -42,7 +42,6 @@
             i0.addEventHandler(fastn_dom.Event.Click, function () {
                 value.set(value.get() + 1);
             })
-            i0.done();
         }
 
         document.body.innerHTML = fastn_virtual.ssr(main);

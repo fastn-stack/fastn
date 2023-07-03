@@ -1,10 +1,11 @@
 <html>
 <head>
-    <script src="../dom.js"></script>
-    <script src="../fastn.js"></script>
-    <script src="../utils.js"></script>
-    <script src="../virtual.js"></script>
-    <script src="../variables.js"></script>
+    <script src="../js/dom.js"></script>
+    <script src="../js/fastn.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/virtual.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -20,7 +21,6 @@
                     p.set(null);
                 }
             })
-            i.done();
 
             fastn_dom.conditionalDom(root, [p], function () {
                     return p.get() !== null
@@ -31,13 +31,11 @@
 
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "After condition");
-            i1.done();
         }
 
         function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
-            i.done();
             return i;
         }
 
