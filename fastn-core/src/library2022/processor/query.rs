@@ -1,7 +1,7 @@
-pub async fn process<'a>(
+pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &'a ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
     config: &mut fastn_core::Config,
     document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {

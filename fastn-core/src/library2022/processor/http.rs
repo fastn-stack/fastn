@@ -1,7 +1,7 @@
-pub async fn process<'a>(
+pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {

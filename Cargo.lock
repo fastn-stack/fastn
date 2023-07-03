@@ -110,7 +110,7 @@ dependencies = [
  "futures-util",
  "mio 0.8.8",
  "num_cpus",
- "socket2",
+ "socket2 0.4.9",
  "tokio",
  "tracing",
 ]
@@ -172,7 +172,7 @@ dependencies = [
  "serde_json",
  "serde_urlencoded",
  "smallvec",
- "socket2",
+ "socket2 0.4.9",
  "time",
  "url",
 ]
@@ -1053,7 +1053,7 @@ dependencies = [
  "dtoa-short",
  "itoa",
  "matches",
- "phf",
+ "phf 0.10.1",
  "proc-macro2",
  "quote",
  "smallvec",
@@ -1175,6 +1175,37 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a30bfce702bcfa94e906ef82421f2c0e61c076ad76030c16ee5d2e9a32fe193"
 dependencies = [
  "matches",
+]
+
+[[package]]
+name = "deadpool"
+version = "0.9.5"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
+dependencies = [
+ "async-trait",
+ "deadpool-runtime",
+ "num_cpus",
+ "retain_mut",
+ "tokio",
+]
+
+[[package]]
+name = "deadpool-postgres"
+version = "0.10.5"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
+dependencies = [
+ "deadpool",
+ "tokio",
+ "tokio-postgres",
+ "tracing",
+]
+
+[[package]]
+name = "deadpool-runtime"
+version = "0.1.2"
+source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
+dependencies = [
+ "tokio",
 ]
 
 [[package]]
@@ -1540,6 +1571,7 @@ dependencies = [
  "camino",
  "clap",
  "colored 2.0.0 (git+https://github.com/amitu/colored?rev=6eb9cc5)",
+ "deadpool-postgres",
  "diffy",
  "edit",
  "env_logger",
@@ -1555,9 +1587,11 @@ dependencies = [
  "itertools",
  "magic-crypt",
  "mime_guess",
+ "native-tls",
  "notify",
  "oauth2",
  "once_cell",
+ "postgres-native-tls",
  "pretty_assertions",
  "realm-lang",
  "regex",
@@ -1570,6 +1604,7 @@ dependencies = [
  "slug",
  "thiserror",
  "tokio",
+ "tokio-postgres",
  "tracing",
  "tracing-forest",
  "tracing-subscriber",
@@ -2129,7 +2164,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "socket2",
+ "socket2 0.4.9",
  "tokio",
  "tower-service",
  "tracing",
@@ -2575,7 +2610,7 @@ dependencies = [
  "crc-any",
  "des",
  "digest 0.9.0",
- "md-5",
+ "md-5 0.9.1",
  "sha2 0.9.9",
  "tiger",
 ]
@@ -2595,6 +2630,15 @@ dependencies = [
  "block-buffer 0.9.0",
  "digest 0.9.0",
  "opaque-debug",
+]
+
+[[package]]
+name = "md-5"
+version = "0.10.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6365506850d44bff6e2fbcb5176cf63650e48bd45ef2fe2665ae1570e0f4b9ca"
+dependencies = [
+ "digest 0.10.7",
 ]
 
 [[package]]
@@ -2880,7 +2924,7 @@ dependencies = [
  "cssparser",
  "fxhash",
  "log",
- "phf",
+ "phf 0.10.1",
  "phf_codegen",
  "precomputed-hash",
  "smallvec",
@@ -3040,8 +3084,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fabbf1ead8a5bcbc20f5f8b939ee3f5b0f6f281b6ad3468b84656b658b455259"
 dependencies = [
  "phf_macros",
- "phf_shared",
+ "phf_shared 0.10.0",
  "proc-macro-hack",
+]
+
+[[package]]
+name = "phf"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ade2d8b8f33c7333b51bcf0428d37e217e9f32192ae4772156f65063b8ce03dc"
+dependencies = [
+ "phf_shared 0.11.2",
 ]
 
 [[package]]
@@ -3051,7 +3104,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4fb1c3a8bc4dd4e5cfce29b44ffc14bedd2ee294559a294e2a4d4c9e9a6a13cd"
 dependencies = [
  "phf_generator",
- "phf_shared",
+ "phf_shared 0.10.0",
 ]
 
 [[package]]
@@ -3060,7 +3113,7 @@ version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d5285893bb5eb82e6aaf5d59ee909a06a16737a8970984dd7746ba9283498d6"
 dependencies = [
- "phf_shared",
+ "phf_shared 0.10.0",
  "rand",
 ]
 
@@ -3071,7 +3124,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "58fdf3184dd560f160dd73922bea2d5cd6e8f064bf4b13110abd81b03697b4e0"
 dependencies = [
  "phf_generator",
- "phf_shared",
+ "phf_shared 0.10.0",
  "proc-macro-hack",
  "proc-macro2",
  "quote",
@@ -3083,6 +3136,15 @@ name = "phf_shared"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6796ad771acdc0123d2a88dc428b5e38ef24456743ddb1744ed628f9815c096"
+dependencies = [
+ "siphasher",
+]
+
+[[package]]
+name = "phf_shared"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90fcb95eef784c2ac79119d1dd819e162b5da872ce6f3c3abe1e8ca1c082f72b"
 dependencies = [
  "siphasher",
 ]
@@ -3117,6 +3179,50 @@ dependencies = [
  "quick-xml",
  "serde",
  "time",
+]
+
+[[package]]
+name = "postgres-native-tls"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d442770e2b1e244bb5eb03b31c79b65bb2568f413b899eaba850fa945a65954"
+dependencies = [
+ "futures",
+ "native-tls",
+ "tokio",
+ "tokio-native-tls",
+ "tokio-postgres",
+]
+
+[[package]]
+name = "postgres-protocol"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "78b7fa9f396f51dffd61546fd8573ee20592287996568e6175ceb0f8699ad75d"
+dependencies = [
+ "base64 0.21.2",
+ "byteorder",
+ "bytes",
+ "fallible-iterator",
+ "hmac",
+ "md-5 0.10.5",
+ "memchr",
+ "rand",
+ "sha2 0.10.7",
+ "stringprep",
+]
+
+[[package]]
+name = "postgres-types"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f028f05971fe20f512bcc679e2c10227e57809a3af86a7606304435bc8896cd6"
+dependencies = [
+ "bytes",
+ "fallible-iterator",
+ "postgres-protocol",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -3450,6 +3556,12 @@ dependencies = [
  "log",
  "unicode-xid",
 ]
+
+[[package]]
+name = "retain_mut"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4389f1d5789befaf6029ebd9f7dac4af7f7e3d61b69d4f30e2ac02b57e7712b0"
 
 [[package]]
 name = "ring"
@@ -4013,10 +4125,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "socket2"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2538b18701741680e0322a2302176d3253a35388e2e62f172f64f4f16605f877"
+dependencies = [
+ "libc",
+ "windows-sys 0.48.0",
+]
+
+[[package]]
 name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
+
+[[package]]
+name = "stringprep"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ee348cb74b87454fff4b551cbf727025810a004f88aeacae7f85b87f4e9a1c1"
+dependencies = [
+ "unicode-bidi",
+ "unicode-normalization",
+]
 
 [[package]]
 name = "strsim"
@@ -4250,7 +4382,7 @@ dependencies = [
  "parking_lot 0.12.1",
  "pin-project-lite",
  "signal-hook-registry",
- "socket2",
+ "socket2 0.4.9",
  "tokio-macros",
  "windows-sys 0.48.0",
 ]
@@ -4274,6 +4406,30 @@ checksum = "bbae76ab933c85776efabc971569dd6119c580d8f5d448769dec1764bf796ef2"
 dependencies = [
  "native-tls",
  "tokio",
+]
+
+[[package]]
+name = "tokio-postgres"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e89f6234aa8fd43779746012fcf53603cdb91fdd8399aa0de868c2d56b6dde1"
+dependencies = [
+ "async-trait",
+ "byteorder",
+ "bytes",
+ "fallible-iterator",
+ "futures-channel",
+ "futures-util",
+ "log",
+ "parking_lot 0.12.1",
+ "percent-encoding",
+ "phf 0.11.2",
+ "pin-project-lite",
+ "postgres-protocol",
+ "postgres-types",
+ "socket2 0.5.3",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]
