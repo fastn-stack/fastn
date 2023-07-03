@@ -333,6 +333,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = font_size_variants(variant);
             (format!("fastn_dom.FontSize.{}", js_variant), true)
         }
+        "ftd#overflow" => {
+            let js_variant = overflow_variants(variant);
+            (format!("fastn_dom.Overflow.{}", js_variant.0), js_variant.1)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -389,6 +393,16 @@ fn font_size_variants(name: &str) -> &'static str {
         "px" => "Px",
         "em" => "Em",
         "rem" => "Rem",
+        _ => todo!(),
+    }
+}
+
+fn overflow_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "scroll" => ("Scroll", false),
+        "visible" => ("Visible", false),
+        "hidden" => ("Hidden", false),
+        "auto" => ("Auto", false),
         _ => todo!(),
     }
 }

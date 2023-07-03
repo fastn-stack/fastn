@@ -191,8 +191,251 @@ margin-bottom.px: 10
 
 -- end: ftd.column
 
+;; ------------------------ Z-INDEX ------------------------
+
+-- ftd.column:
+width: fill-container
+height.fixed.px: 180
+
+-- ftd.text: z-index = 3
+left.px: 50
+top.px: 20
+padding.px: 20
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 3
+
+-- ftd.text: z-index = 2
+right.px: 60
+bottom.px: 70
+padding.px: 20
+width.fixed.px: 200
+border-color: $red-blue
+border-width.px: 2
+background.solid: deepskyblue
+z-index: 2
+
+-- end: ftd.column
+
+
+;; ---------------------- STICKY -----------------------------
+;; Overflow, Spacing, Anchor not yet implemented
+
+-- ftd.column:
+padding.px: 10
+spacing.fixed.px: 50
+height.fixed.px: 200
+width.fixed.px: 300
+overflow-y: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+-- ftd.text: The blue planet below is sticky
+
+-- ftd.text: Blue planet
+color: black
+background.solid: deepskyblue
+sticky: true
+width.fixed.px: 120
+text-align: center
+left.px: 50
+top.px: 0
+
+-- ftd.text:
+padding.px: 10
+
+Far out in the uncharted backwaters of the unfashionable end of the western
+spiral arm of the Galaxy lies a small unregarded blue planet.
+Orbiting this at a distance of roughly ninety-two million miles is an
+utterly insignificant little planet whose ape-descended life
+forms are so amazingly primitive that they still think fastn code written
+by humans is still a pretty neat idea of escalating knowledge throughout the
+universe.
+
+-- end: ftd.column
+
+;; ---------------------- OVERFLOW --------------------------------
+
+-- ftd.column:
+width: fill-container
+spacing: space-evenly
+background.solid: red
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow: visible
+border-color: $red-yellow
+border-width.px: 2
+
+overflow = Visible
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+overflow = Scroll
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow: auto
+border-color: $red-yellow
+border-width.px: 2
+
+overflow = Auto
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow: hidden
+border-color: $red-yellow
+border-width.px: 2
+
+overflow = Hidden
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- end: ftd.column
+
+;; ------------------------- OVERFLOW-X -------------------------------
+
+-- ftd.column:
+width: fill-container
+spacing: space-evenly
+background.solid: green
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-x: visible
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-x = Visible
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-x: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-x = Scroll
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-x: auto
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-x = Auto
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-x: hidden
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-x = Hidden
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- end: ftd.column
+
+
+;; ---------------------- OVERFLOW-Y --------------------------------
+
+-- ftd.column:
+width: fill-container
+spacing: space-evenly
+background.solid: deepskyblue
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-y: visible
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-y = Visible
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-y: scroll
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-y = Scroll
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-y: auto
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-y = Auto
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- ftd.text:
+width.fixed.px: 150
+height.fixed.px: 100
+overflow-y: hidden
+border-color: $red-yellow
+border-width.px: 2
+
+overflow-y = Hidden
+
+The quick, brown fox jumps over a lazy dog.
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
+
+-- end: ftd.column
+
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
+
+-- ftd.color red-blue: red
+dark: blue
+
+-- ftd.color red-yellow: red
+dark: yellow
 
 -- ftd.color og:
 light: orange
