@@ -40,5 +40,6 @@ pub fn all_js() -> String {
     let virtual_js = include_str!("../js/virtual.js");
     let ftd_js = include_str!("../js/ftd.js");
     let post_init_js = include_str!("../js/postInit.js");
-    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}")
+    let test_js = include_str!("../js/test.js");
+    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}{test_js}")
 }

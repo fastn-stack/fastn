@@ -113,6 +113,8 @@ fastn_dom.PropertyKind = {
     OverflowY: 32,
 }
 
+
+
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
@@ -206,7 +208,7 @@ fastn_dom.Length = {
         return `${value}vw`;
     },
     Responsive: (desktop, mobile) => {
-        if (ftd.device.get() == "desktop") {
+        if (ftd.device.get() === "desktop") {
             return desktop;
         } else {
             return mobile ? mobile: desktop;
