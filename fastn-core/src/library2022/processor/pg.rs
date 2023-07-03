@@ -88,7 +88,7 @@ fn row_to_json(
         match columns[i].type_() {
             &postgres_types::Type::BOOL => row.push(serde_json::Value::Bool(r.get(i))),
             &postgres_types::Type::INT2 => {
-                row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
+                row.push(serde_json::Value::Number(r.get::<usize, i16>(i).into()))
             }
             &postgres_types::Type::INT4 => {
                 row.push(serde_json::Value::Number(r.get::<usize, i32>(i).into()))
@@ -96,15 +96,16 @@ fn row_to_json(
             &postgres_types::Type::INT8 => {
                 row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
             }
-            // &postgres_types::Type::FLOAT4 => {
-            //     row.push(serde_json::Value::Number(r.get::<usize, f64>(i).into()))
-            // }
-            // &postgres_types::Type::FLOAT8 => {
-            //     row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
-            // }
+            &postgres_types::Type::FLOAT4 => row.push(serde_json::Value::Number(
+                serde_json::Number::from_f64(r.get::<usize, f32>(i) as f64).unwrap(),
+            )),
+            &postgres_types::Type::FLOAT8 => row.push(serde_json::Value::Number(
+                serde_json::Number::from_f64(r.get::<usize, f64>(i)).unwrap(),
+            )),
             &postgres_types::Type::TEXT => row.push(serde_json::Value::String(r.get(i))),
             &postgres_types::Type::CHAR => row.push(serde_json::Value::String(r.get(i))),
             &postgres_types::Type::VARCHAR => row.push(serde_json::Value::String(r.get(i))),
+            &postgres_types::Type::JSON => row.push(r.get(i)),
 
             t => {
                 return ftd::interpreter::utils::e2(
