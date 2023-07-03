@@ -107,6 +107,7 @@ pub enum Value {
     String(String),
     Integer(i64),
     Decimal(f64),
+    Boolean(bool),
     OrType {
         variant: String,
         value: Option<Box<SetPropertyValue>>,
@@ -126,6 +127,7 @@ impl Value {
             Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
+            Value::Boolean(b) => b.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
                     format!("{}({})", variant, value.to_js())
@@ -157,6 +159,7 @@ pub enum PropertyKind {
     Height,
     BorderWidth,
     BorderStyle,
+    Color,
 }
 
 impl PropertyKind {
@@ -170,6 +173,7 @@ impl PropertyKind {
             PropertyKind::Height => "fastn_dom.PropertyKind.Height",
             PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
+            PropertyKind::Color => "fastn_dom.PropertyKind.Color",
         }
     }
 }

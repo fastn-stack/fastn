@@ -11,7 +11,6 @@ fastn_dom.property_map = {
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
-
 };
 
 // dynamic-class-css.md
@@ -158,14 +157,40 @@ class Node2 {
         return this.#parent;
     }
     // dynamic-class-css
-    attachCss(property, value) {
+    attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
         let cls = `${propertyShort}-${value}`;
-        if (!fastn_dom.unsanitised_classes[cls]) {
-            fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+        if (!!className) {
+           cls = className;
+        } else {
+            if (!fastn_dom.unsanitised_classes[cls]) {
+                fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+            }
+            cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
         }
-        cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+
         const obj = { property, value };
+
+        if (value === undefined) {
+            if (!ssr && !hydrating) {
+                for (const className of this.#node.classList.values()) {
+                    if (className.startsWith(`${propertyShort}-`)) {
+                        this.#node.classList.remove(className);
+                    }
+                }
+            }
+            return cls;
+        }
+
+        if (!!className) {
+            if (!fastn_dom.classes[cls]) {
+                fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+                let styles = document.getElementById('styles');
+                styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`;
+            }
+            this.#node.classList.add(cls);
+            return cls;
+        }
 
         if (!ssr && !hydrating) {
             for (const className of this.#node.classList.values()) {
@@ -173,23 +198,26 @@ class Node2 {
                     this.#node.classList.remove(className);
                 }
             }
-            if (value === undefined) {
-                return;
-            }
 
-            if (!fastn_dom.classes[cls]) {
+            if (createClass) {
+                if (!fastn_dom.classes[cls]) {
+                    fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`;
+                }
+                this.#node.classList.add(cls);
+            } else if (!fastn_dom.classes[cls]) {
                 this.#node.style[property] = value;
             } else {
                 this.#node.classList.add(cls);
             }
 
-            return;
+            return cls;
         }
 
-        if (value !== undefined) {
-            fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
-            this.#node.classList.add(cls);
-        }
+        fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+        this.#node.classList.add(cls);
+        return cls;
     }
 
     setStaticProperty(kind, value) {
@@ -210,7 +238,14 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
-            this.attachCss("color", staticValue);
+            let lightValue = fastn_utils.getStaticValue(staticValue.get("light"));
+            let darkValue = fastn_utils.getStaticValue(staticValue.get("dark"));
+            if (lightValue === darkValue) {
+                this.attachCss("color", lightValue, false);
+            } else {
+                let lightClass = this.attachCss("color", lightValue, true);
+                this.attachCss("color", darkValue, true, `body.dark ${lightClass}`);
+            }
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {

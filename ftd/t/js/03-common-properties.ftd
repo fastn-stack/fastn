@@ -90,3 +90,9 @@ margin.px: 12
 border-width.px: 4
 border-style: ridge
 margin.px: 12
+
+
+;; --------------------- COLOR --------------------------
+
+-- ftd.text: Red Color
+color: red
