@@ -28,7 +28,7 @@ fastn_dom.getClassesAsString = function() {
 }
 
 function getClassAsString(className, obj) {
-    return `.${className} { ${obj.property}: ${obj.value}; }`;
+    return `${className} { ${obj.property}: ${obj.value}; }`;
 }
 
 fastn_dom.ElementKind = {
@@ -168,6 +168,7 @@ class Node2 {
             }
             cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
         }
+        let cssClass = className ? cls : `.${cls}`;
 
         const obj = { property, value };
 
@@ -182,17 +183,16 @@ class Node2 {
             return cls;
         }
 
-        if (!!className) {
-            if (!fastn_dom.classes[cls]) {
-                fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
-                let styles = document.getElementById('styles');
-                styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`;
-            }
-            this.#node.classList.add(cls);
-            return cls;
-        }
-
         if (!ssr && !hydrating) {
+            if (!!className) {
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                }
+                return cls;
+            }
+
             for (const className of this.#node.classList.values()) {
                 if (className.startsWith(`${propertyShort}-`)) {
                     this.#node.classList.remove(className);
@@ -200,22 +200,29 @@ class Node2 {
             }
 
             if (createClass) {
-                if (!fastn_dom.classes[cls]) {
-                    fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
                     let styles = document.getElementById('styles');
-                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cls, obj)}\n`;
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
                 }
+                this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
-            } else if (!fastn_dom.classes[cls]) {
+            } else if (!fastn_dom.classes[cssClass]) {
                 this.#node.style[property] = value;
             } else {
+                this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             }
 
             return cls;
         }
 
-        fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
+        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+
+        if (!!className) {
+            return cls;
+        }
+
         this.#node.classList.add(cls);
         return cls;
     }
@@ -244,7 +251,7 @@ class Node2 {
                 this.attachCss("color", lightValue, false);
             } else {
                 let lightClass = this.attachCss("color", lightValue, true);
-                this.attachCss("color", darkValue, true, `body.dark ${lightClass}`);
+                this.attachCss("color", darkValue, true, `body.dark .${lightClass}`);
             }
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
