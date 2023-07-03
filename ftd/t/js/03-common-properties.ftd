@@ -1,6 +1,8 @@
 -- ftd.column:
 width: fill-container
 background.solid: $ylg
+
+
 ;; ---------------------- PADDING ----------------------------
 
 -- ftd.text: px Padding
@@ -102,7 +104,10 @@ color if { value % 3 == 0 }: $og
 color if { value % 3 == 1 }: $bp
 $on-click$: $increment($a = $value)
 
+;; --------------------- COLOR --------------------------
 
+-- ftd.text: Role
+role: $rtype
 
 ;; --------------------- END --------------------------
 
@@ -193,6 +198,28 @@ dark: lightgreen
 
 
 -- integer $value: 0
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 700
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
+
+
+;; --------------------- VARIABLE --------------------------
 
 
 

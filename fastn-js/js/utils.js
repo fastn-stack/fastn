@@ -126,5 +126,23 @@ let fastn_utils = {
 
     defaultPropertyValue(_propertyValue) {
         return null;
+    },
+
+    sameResponsiveRole(desktop, mobile) {
+       return (desktop.get("font_family") ==  mobile.get("font_family")) &&
+       (desktop.get("letter_spacing") ==  mobile.get("letter_spacing")) &&
+       (desktop.get("line_height") ==  mobile.get("line_height")) &&
+       (desktop.get("size") ==  mobile.get("size")) &&
+       (desktop.get("weight") ==  mobile.get("weight"));
+    },
+
+    getRoleValues(value) {
+        return {
+            "font-family": fastn_utils.getStaticValue(value.get("font_family")),
+            "letter-spacing":fastn_utils.getStaticValue(value.get("letter_spacing")),
+            "font-size": fastn_utils.getStaticValue(value.get("size")),
+            "font-weight": fastn_utils.getStaticValue(value.get("weight")),
+            "line-height": fastn_utils.getStaticValue(value.get("line_height")),
+        };
     }
 }

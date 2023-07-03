@@ -333,7 +333,11 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = background_variants(variant);
             (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
         }
-        t => todo!("{}", t),
+        "ftd#font-size" => {
+            let js_variant = font_size_variants(variant);
+            (format!("fastn_dom.FontSize.{}", js_variant), true)
+        }
+        t => todo!("{} {}", t, variant),
     }
 }
 
@@ -379,5 +383,14 @@ fn background_variants(name: &str) -> &'static str {
     match name {
         "solid" => "Solid",
         t => todo!("{}", t),
+    }
+}
+
+fn font_size_variants(name: &str) -> &'static str {
+    match name {
+        "px" => "Px",
+        "em" => "Em",
+        "rem" => "Rem",
+        _ => todo!(),
     }
 }
