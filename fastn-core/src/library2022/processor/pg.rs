@@ -56,14 +56,26 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    query_params: Vec<String>,
+    query_params: Vec<(String, String)>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
     let count = stmt.columns().len();
     let query_params = query_params
         .iter()
-        .map(|value| value as &(dyn tokio_postgres::types::ToSql + Sync))
+        .map(|(kind, value)| match kind.as_str() {
+            "integer" => {
+                &value.parse::<i32>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+            }
+            "boolean" => {
+                &value.parse::<bool>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+            }
+            "decimal" => {
+                &value.parse::<f64>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+            }
+            "string" => &value as &(dyn tokio_postgres::types::ToSql + Sync),
+            _ => panic!("unknown kind: {:?}", kind),
+        })
         .collect::<Vec<_>>();
 
     let rows = client.query(&stmt, &query_params).await.unwrap();

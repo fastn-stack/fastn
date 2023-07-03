@@ -27,13 +27,21 @@ pub(crate) fn get_p1_data(
 pub(crate) fn get_params(
     headers: &ftd::ast::HeaderValues,
     doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Vec<String>> {
+) -> ftd::interpreter::Result<Vec<(String, String)>> {
     headers
         .0
         .iter()
-        .filter(|hv| hv.key.eq("param"))
-        .map(|x| x.value.string(doc.name))
-        .collect::<ftd::ast::Result<Vec<String>>>()
+        .filter(|hv| hv.key.starts_with("param"))
+        .map(|x| {
+            (
+                match x.key.split_once('-') {
+                    Some((_, v)) => v.to_string(),
+                    None => "string".to_string(),
+                },
+                x.value.string(doc.name),
+            )
+        })
+        .collect::<ftd::ast::Result<Vec<(String, String)>>>()
         .map_err(|e| e.into())
 }
 
@@ -121,7 +129,7 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    query_params: Vec<String>,
+    _query_params: Vec<(String, String)>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
@@ -156,7 +164,8 @@ async fn execute_query(
     // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
     // let mut rows = stmt.query([name])?;
 
-    let mut rows = match stmt.query(rusqlite::params_from_iter(query_params)) {
+    let v: Vec<String> = vec![];
+    let mut rows = match stmt.query(rusqlite::params_from_iter(v)) {
         Ok(v) => v,
         Err(e) => {
             return ftd::interpreter::utils::e2(
