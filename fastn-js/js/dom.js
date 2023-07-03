@@ -11,6 +11,7 @@ fastn_dom.property_map = {
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
+    "background-color": "bgc"
 };
 
 // dynamic-class-css.md
@@ -55,6 +56,7 @@ fastn_dom.PropertyKind = {
     BorderWidth: 7,
     BorderStyle: 8,
     Margin: 9,
+    Background: 10,
 }
 
 fastn_dom.Resizing = {
@@ -72,6 +74,10 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.BackgroundStyle = {
+    Solid: (value) => { return value; }
 }
 
 fastn_dom.Length = {
@@ -227,6 +233,17 @@ class Node2 {
         return cls;
     }
 
+    attachColorCss(property, value) {
+        let lightValue = fastn_utils.getStaticValue(value.get("light"));
+        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
+        if (lightValue === darkValue) {
+            this.attachCss(property, lightValue, false);
+        } else {
+            let lightClass = this.attachCss(property, lightValue, true);
+            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
+        }
+    }
+
     setStaticProperty(kind, value) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
@@ -245,14 +262,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
-            let lightValue = fastn_utils.getStaticValue(staticValue.get("light"));
-            let darkValue = fastn_utils.getStaticValue(staticValue.get("dark"));
-            if (lightValue === darkValue) {
-                this.attachCss("color", lightValue, false);
-            } else {
-                let lightClass = this.attachCss("color", lightValue, true);
-                this.attachCss("color", darkValue, true, `body.dark .${lightClass}`);
-            }
+            this.attachColorCss("color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Background) {
+            this.attachColorCss("background-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {

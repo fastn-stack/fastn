@@ -1,3 +1,6 @@
+-- ftd.column:
+width: fill-container
+background.solid: $ylg
 ;; ---------------------- PADDING ----------------------------
 
 -- ftd.text: px Padding
@@ -101,6 +104,14 @@ color if { value % 3 == 1 }: $bp
 $on-click$: $increment($a = $value)
 
 
+
+;; --------------------- END --------------------------
+
+-- end: ftd.column
+
+
+;; --------------------- VARIABLE --------------------------
+
 -- ftd.color og:
 light: orange
 dark: green
@@ -108,6 +119,11 @@ dark: green
 -- ftd.color bp:
 light: blue
 dark: purple
+
+-- ftd.color ylg:
+light: yellow
+dark: lightgreen
+
 
 -- integer $value: 0
 

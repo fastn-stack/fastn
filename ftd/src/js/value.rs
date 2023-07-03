@@ -329,7 +329,11 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = border_style_variants(variant);
             (format!("fastn_dom.BorderStyle.{}", js_variant), false)
         }
-        _ => todo!(),
+        "ftd#background" => {
+            let js_variant = background_variants(variant);
+            (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
+        }
+        t => todo!("{}", t),
     }
 }
 
@@ -368,5 +372,12 @@ fn border_style_variants(name: &str) -> &'static str {
         "ridge" => "Ridge",
         "double" => "Double",
         _ => todo!(),
+    }
+}
+
+fn background_variants(name: &str) -> &'static str {
+    match name {
+        "solid" => "Solid",
+        t => todo!("{}", t),
     }
 }
