@@ -270,6 +270,7 @@ pub struct Common {
     pub border_style: Option<ftd::js::Value>,
     pub color: Option<ftd::js::Value>,
     pub background: Option<ftd::js::Value>,
+    pub role: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -317,6 +318,7 @@ impl Common {
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
             color: ftd::js::value::get_properties("color", properties, arguments),
             background: ftd::js::value::get_properties("background", properties, arguments),
+            role: ftd::js::value::get_properties("role", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -543,6 +545,16 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 background.to_set_property(
                     fastn_js::PropertyKind::Background,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref background) = self.role {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                background.to_set_property(
+                    fastn_js::PropertyKind::Role,
                     element_name,
                     component_definition_name,
                     loop_alias,

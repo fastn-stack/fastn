@@ -41,7 +41,18 @@ fastn_dom.getClassesAsString = function() {
 }
 
 function getClassAsString(className, obj) {
-    return `${className} { ${obj.property}: ${obj.value}; }`;
+    if (typeof obj.value === 'object' && obj.value !== null) {
+        let value = "";
+        for (let key in obj.value) {
+            if (obj.value[key] === undefined || obj.value[key] === null) {
+                continue
+            }
+            value = `${value} ${key}: ${obj.value[key]};`
+        }
+        return `${className} { ${value} }`
+    } else {
+        return `${className} { ${obj.property}: ${obj.value}; }`;
+    }
 }
 
 fastn_dom.ElementKind = {
@@ -81,6 +92,7 @@ fastn_dom.PropertyKind = {
     MarginRight: 20,
     MarginTop: 21,
     MarginBottom: 22,
+    Role: 23
 }
 
 fastn_dom.Resizing = {
@@ -102,6 +114,27 @@ fastn_dom.BorderStyle = {
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => { return value; }
+}
+
+fastn_dom.FontSize = {
+    Px: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}px`})
+        }
+        return `${value}px`;
+    },
+    Em: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}em`})
+        }
+        return `${value}em`;
+    },
+    Rem: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}rem`})
+        }
+        return `${value}rem`;
+    },
 }
 
 fastn_dom.Length = {
@@ -189,7 +222,7 @@ class Node2 {
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
-        let cls = `${propertyShort}-${value}`;
+        let cls = `${propertyShort}-${JSON.stringify(value)}`;
         if (!!className) {
            cls = className;
         } else {
@@ -238,7 +271,13 @@ class Node2 {
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             } else if (!fastn_dom.classes[cssClass]) {
-                this.#node.style[property] = value;
+                if (typeof value === 'object' && value !== null) {
+                    for (let key in value) {
+                        this.#node.style[key] = value[key];
+                    }
+                } else {
+                    this.#node.style[property] = value;
+                }
             } else {
                 this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
@@ -265,6 +304,16 @@ class Node2 {
         } else {
             let lightClass = this.attachCss(property, lightValue, true);
             this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachRoleCss(value) {
+        let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
+        let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
+        if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
+            this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+        } else {
+            let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+            this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
         }
     }
 
@@ -317,6 +366,8 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Role) {
+            this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {

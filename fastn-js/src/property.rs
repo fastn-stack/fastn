@@ -143,7 +143,11 @@ impl Value {
                 "fastn.recordInstance({{{}}})",
                 fields
                     .iter()
-                    .map(|(k, v)| format!("{}: {}", k, v.to_js()))
+                    .map(|(k, v)| format!(
+                        "{}: {}",
+                        fastn_js::utils::kebab_to_snake_case(k),
+                        v.to_js()
+                    ))
                     .join(", ")
             ),
         }
@@ -173,6 +177,7 @@ pub enum PropertyKind {
     BorderStyle,
     Color,
     Background,
+    Role,
 }
 
 impl PropertyKind {
@@ -200,6 +205,7 @@ impl PropertyKind {
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
             PropertyKind::Color => "fastn_dom.PropertyKind.Color",
             PropertyKind::Background => "fastn_dom.PropertyKind.Background",
+            PropertyKind::Role => "fastn_dom.PropertyKind.Role",
         }
     }
 }
