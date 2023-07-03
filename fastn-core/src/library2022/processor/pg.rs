@@ -60,7 +60,6 @@ async fn execute_query(
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
-    let count = stmt.columns().len();
 
     let query_params_dyns = query_params
         .iter()
@@ -85,7 +84,7 @@ async fn execute_query(
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
     for r in rows {
-        result.push(row_to_json(r, count, doc_name, line_number)?)
+        result.push(row_to_json(r, doc_name, line_number)?)
     }
 
     Ok(result)
@@ -93,14 +92,13 @@ async fn execute_query(
 
 fn row_to_json(
     r: tokio_postgres::Row,
-    count: usize,
     doc_name: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
-    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
     let columns = r.columns();
-    for i in 0..count {
-        match columns[i].type_() {
+    let mut row: Vec<serde_json::Value> = Vec::with_capacity(columns.len());
+    for (i, column) in columns.iter().enumerate() {
+        match column.type_() {
             &postgres_types::Type::BOOL => row.push(serde_json::Value::Bool(r.get(i))),
             &postgres_types::Type::INT2 => {
                 row.push(serde_json::Value::Number(r.get::<usize, i16>(i).into()))
@@ -140,6 +138,18 @@ FASTN_PG_URL=postgres://amitu@localhost/amitu fastn serve
  */
 
 /*
+CREATE TABLE users (
+    id SERIAL,
+    name TEXT,
+    department TEXT
+);
+
+INSERT INTO "users" (name, department) VALUES ('jack', 'design');
+INSERT INTO "users" (name, department) VALUES ('jill', 'engineering');
+
+ */
+
+/*
 -- import: fastn/processors as pr
 
 -- record person:
@@ -150,9 +160,9 @@ string department:
 
 -- person list people:
 $processor$: pr.pg
-param-integer-4: 2
+param-integer-4: 1
 
-SELECT * FROM "user" where id >= $1;
+SELECT * FROM "users" where id >= $1;
 
 -- integer int_2:
 $processor$: pr.pg
@@ -199,4 +209,5 @@ $processor$: pr.pg
 SELECT 80.0::FLOAT8;
 
 -- ftd.decimal: $d_8
+
  */
