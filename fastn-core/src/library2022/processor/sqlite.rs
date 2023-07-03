@@ -24,25 +24,41 @@ pub(crate) fn get_p1_data(
     }
 }
 
+pub enum QueryParam {
+    Integer(i64),
+    Boolean(bool),
+    Decimal(f64),
+    String(String),
+}
+
 pub(crate) fn get_params(
     headers: &ftd::ast::HeaderValues,
     doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Vec<(String, String)>> {
-    headers
-        .0
-        .iter()
-        .filter(|hv| hv.key.starts_with("param"))
-        .map(|x| {
-            (
-                match x.key.split_once('-') {
-                    Some((_, v)) => v.to_string(),
-                    None => "string".to_string(),
-                },
-                x.value.string(doc.name),
-            )
+) -> ftd::interpreter::Result<Vec<QueryParam>> {
+    let mut result = vec![];
+
+    for x in headers.0.iter().filter(|hv| hv.key.starts_with("param")) {
+        match (match x.key.split_once('-') {
+            Some((_, v)) => v.to_string(),
+            None => "string".to_string(),
         })
-        .collect::<ftd::ast::Result<Vec<(String, String)>>>()
-        .map_err(|e| e.into())
+        .as_str()
+        {
+            "string" => result.push(QueryParam::String(x.value.string(doc.name)?)),
+            "boolean" => result.push(QueryParam::Boolean(x.value.string(doc.name)?.parse()?)),
+            "integer" => result.push(QueryParam::Integer(x.value.string(doc.name)?.parse()?)),
+            "decimal" => result.push(QueryParam::Decimal(x.value.string(doc.name)?.parse()?)),
+            _ => {
+                return ftd::interpreter::utils::e2(
+                    format!("unknown param type: {}", x.key),
+                    doc.name,
+                    x.value.line_number(),
+                )
+            }
+        }
+    }
+
+    Ok(result)
 }
 
 pub async fn process(
@@ -129,7 +145,7 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    _query_params: Vec<(String, String)>,
+    _query_params: Vec<QueryParam>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,

@@ -56,29 +56,29 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    query_params: Vec<(String, String)>,
+    query_params: Vec<super::sqlite::QueryParam>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
     let count = stmt.columns().len();
-    let query_params = query_params
+
+    let query_params_dyns = query_params
         .iter()
-        .map(|(kind, value)| match kind.as_str() {
-            "integer" => {
-                &value.parse::<i32>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+        .map(|q| match q {
+            super::sqlite::QueryParam::Integer(v) => {
+                v as &(dyn tokio_postgres::types::ToSql + Sync)
             }
-            "boolean" => {
-                &value.parse::<bool>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+            super::sqlite::QueryParam::Boolean(v) => {
+                v as &(dyn tokio_postgres::types::ToSql + Sync)
             }
-            "decimal" => {
-                &value.parse::<f64>().unwrap() as &(dyn tokio_postgres::types::ToSql + Sync)
+            super::sqlite::QueryParam::Decimal(v) => {
+                v as &(dyn tokio_postgres::types::ToSql + Sync)
             }
-            "string" => &value as &(dyn tokio_postgres::types::ToSql + Sync),
-            _ => panic!("unknown kind: {:?}", kind),
+            super::sqlite::QueryParam::String(v) => v as &(dyn tokio_postgres::types::ToSql + Sync),
         })
         .collect::<Vec<_>>();
 
-    let rows = client.query(&stmt, &query_params).await.unwrap();
+    let rows = client.query(&stmt, &query_params_dyns).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
     for r in rows {
