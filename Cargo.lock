@@ -1592,6 +1592,7 @@ dependencies = [
  "oauth2",
  "once_cell",
  "postgres-native-tls",
+ "postgres-types",
  "pretty_assertions",
  "realm-lang",
  "regex",

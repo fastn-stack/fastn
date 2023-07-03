@@ -36,7 +36,7 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = super::sqlite::get_p1_data(&value, doc.name)?;
+    let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
     super::sqlite::result_to_value(
         execute_query(
@@ -83,15 +83,35 @@ fn row_to_json(
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
     let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
+    let columns = r.columns();
     for i in 0..count {
-        match r.try_get::<usize, _>(i) {
-            Ok(value) => row.push(value),
-            Err(e) => {
+        match columns[i].type_() {
+            &postgres_types::Type::BOOL => row.push(serde_json::Value::Bool(r.get(i))),
+            &postgres_types::Type::INT2 => {
+                row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
+            }
+            &postgres_types::Type::INT4 => {
+                row.push(serde_json::Value::Number(r.get::<usize, i32>(i).into()))
+            }
+            &postgres_types::Type::INT8 => {
+                row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
+            }
+            // &postgres_types::Type::FLOAT4 => {
+            //     row.push(serde_json::Value::Number(r.get::<usize, f64>(i).into()))
+            // }
+            // &postgres_types::Type::FLOAT8 => {
+            //     row.push(serde_json::Value::Number(r.get::<usize, i64>(i).into()))
+            // }
+            &postgres_types::Type::TEXT => row.push(serde_json::Value::String(r.get(i))),
+            &postgres_types::Type::CHAR => row.push(serde_json::Value::String(r.get(i))),
+            &postgres_types::Type::VARCHAR => row.push(serde_json::Value::String(r.get(i))),
+
+            t => {
                 return ftd::interpreter::utils::e2(
-                    format!("Can't get JSON Value at {}: {}", i, e),
+                    format!("type {} not yet supported", t),
                     doc_name,
                     line_number,
-                );
+                )
             }
         }
     }

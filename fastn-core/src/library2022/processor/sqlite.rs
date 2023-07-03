@@ -1,22 +1,25 @@
 pub(crate) fn get_p1_data(
+    name: &str,
     value: &ftd::ast::VariableValue,
     doc_name: &str,
 ) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
     match value.get_record(doc_name) {
-        Ok(val) => {
-            Ok((
-                val.2.to_owned(),
-                match val.3 {
-                    Some(b) => b.value.clone(),
-                    None => return ftd::interpreter::utils::e2(
-                        "$processor$: `package-query` query is not specified in the processor body"
-                            .to_string(),
+        Ok(val) => Ok((
+            val.2.to_owned(),
+            match val.3 {
+                Some(b) => b.value.clone(),
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        format!(
+                            "$processor$: `{}` query is not specified in the processor body",
+                            name
+                        ),
                         doc_name,
                         value.line_number(),
-                    ),
-                },
-            ))
-        }
+                    )
+                }
+            },
+        )),
         Err(e) => Err(e.into()),
     }
 }
@@ -40,7 +43,7 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = get_p1_data(&value, doc.name)?;
+    let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
 
     let sqlite_database =
         match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {

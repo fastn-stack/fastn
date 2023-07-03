@@ -277,10 +277,10 @@ impl Library2022 {
             "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
             "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
+            "pg" => processor::pg::process(value, kind, doc).await,
             "package-tree" => {
                 processor::package_tree::process(value, kind, doc, &self.config).await
             }
-            "pg" => processor::pg::process(value, kind, doc).await,
             "query" => {
                 processor::query::process(
                     value,
