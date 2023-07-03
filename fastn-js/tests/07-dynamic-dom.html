@@ -20,7 +20,6 @@
                     p.set(null);
                 }
             })
-            i.done();
 
             fastn_dom.conditionalDom(root, [p], function () {
                     return p.get() !== null
@@ -31,13 +30,11 @@
 
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i1.setStaticProperty(fastn_dom.PropertyKind.StringValue, "After condition");
-            i1.done();
         }
 
         function showPerson(root, p) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
-            i.done();
             return i;
         }
 

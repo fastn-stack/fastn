@@ -17,17 +17,18 @@
             foo(root, x);
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setProperty(fastn_dom.PropertyKind.IntegerValue, z);
-            i.done();
         }
 
         function foo(root, x) {
             let i = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i.setDynamicProperty(fastn_dom.PropertyKind.IntegerValue, [x], function () { return x.get() + 20; });
-            i.setStaticProperty(fastn_dom.PropertyKind.Color_RGB, "red");
+            i.setStaticProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+                dark: "red",
+                light: "red"
+            }));
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 x.set(x.get() + 1);
             });
-            i.done();
         }
 
         document.body.innerHTML = fastn_virtual.ssr(main);

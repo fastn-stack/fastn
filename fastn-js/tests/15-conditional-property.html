@@ -13,7 +13,6 @@
             let value = fastn.mutable(2);
             let i1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
             i1.setProperty(fastn_dom.PropertyKind.IntegerValue, value);
-            i1.done();
 
             let i0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             let f = fastn.formula([value], function () {
@@ -42,7 +41,6 @@
             i0.addEventHandler(fastn_dom.Event.Click, function () {
                 value.set(value.get() + 1);
             })
-            i0.done();
         }
 
         document.body.innerHTML = fastn_virtual.ssr(main);
