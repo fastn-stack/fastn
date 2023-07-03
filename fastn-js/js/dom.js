@@ -7,7 +7,19 @@ fastn_dom.property_map = {
     "color": "c",
     "width": "w",
     "padding": "p",
+    "padding-horizontal": "ph",
+    "padding-vertical": "pv",
+    "padding-left": "pl",
+    "padding-right": "pr",
+    "padding-top": "pt",
+    "padding-bottom": "pb",
     "margin": "m",
+    "margin-horizontal": "mh",
+    "margin-vertical": "mv",
+    "margin-left": "ml",
+    "margin-right": "mr",
+    "margin-top": "mt",
+    "margin-bottom": "mb",
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
@@ -57,6 +69,18 @@ fastn_dom.PropertyKind = {
     BorderStyle: 8,
     Margin: 9,
     Background: 10,
+    PaddingHorizontal: 11,
+    PaddingVertical: 12,
+    PaddingLeft: 13,
+    PaddingRight: 14,
+    PaddingTop: 15,
+    PaddingBottom: 16,
+    MarginHorizontal: 17,
+    MarginVertical: 18,
+    MarginLeft: 19,
+    MarginRight: 20,
+    MarginTop: 21,
+    MarginBottom: 22,
 }
 
 fastn_dom.Resizing = {
@@ -255,8 +279,36 @@ class Node2 {
             this.attachCss("height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingHorizontal) {
+            this.attachCss("padding-left", staticValue);
+            this.attachCss("padding-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingVertical) {
+            this.attachCss("padding-top", staticValue);
+            this.attachCss("padding-bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingLeft) {
+            this.attachCss("padding-left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingRight) {
+            this.attachCss("padding-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingTop) {
+            this.attachCss("padding-top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingBottom) {
+            this.attachCss("padding-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Margin) {
             this.attachCss("margin", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginHorizontal) {
+            this.attachCss("margin-top", staticValue);
+            this.attachCss("margin-bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
+            this.attachCss("margin-left", staticValue);
+            this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginLeft) {
+            this.attachCss("margin-left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginRight) {
+            this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginTop) {
+            this.attachCss("margin-top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginBottom) {
+            this.attachCss("margin-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderWidth) {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {

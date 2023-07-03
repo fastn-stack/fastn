@@ -253,7 +253,19 @@ pub struct Common {
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
     pub padding: Option<ftd::js::Value>,
+    pub padding_horizontal: Option<ftd::js::Value>,
+    pub padding_vertical: Option<ftd::js::Value>,
+    pub padding_left: Option<ftd::js::Value>,
+    pub padding_right: Option<ftd::js::Value>,
+    pub padding_top: Option<ftd::js::Value>,
+    pub padding_bottom: Option<ftd::js::Value>,
     pub margin: Option<ftd::js::Value>,
+    pub margin_horizontal: Option<ftd::js::Value>,
+    pub margin_vertical: Option<ftd::js::Value>,
+    pub margin_left: Option<ftd::js::Value>,
+    pub margin_right: Option<ftd::js::Value>,
+    pub margin_top: Option<ftd::js::Value>,
+    pub margin_bottom: Option<ftd::js::Value>,
     pub border_width: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
     pub color: Option<ftd::js::Value>,
@@ -272,7 +284,35 @@ impl Common {
             width: ftd::js::value::get_properties("width", properties, arguments),
             height: ftd::js::value::get_properties("height", properties, arguments),
             padding: ftd::js::value::get_properties("padding", properties, arguments),
+            padding_horizontal: ftd::js::value::get_properties(
+                "padding-horizontal",
+                properties,
+                arguments,
+            ),
+            padding_vertical: ftd::js::value::get_properties(
+                "padding-vertical",
+                properties,
+                arguments,
+            ),
+            padding_left: ftd::js::value::get_properties("padding-left", properties, arguments),
+            padding_right: ftd::js::value::get_properties("padding-right", properties, arguments),
+            padding_top: ftd::js::value::get_properties("padding-top", properties, arguments),
+            padding_bottom: ftd::js::value::get_properties("padding-bottom", properties, arguments),
             margin: ftd::js::value::get_properties("margin", properties, arguments),
+            margin_horizontal: ftd::js::value::get_properties(
+                "margin-horizontal",
+                properties,
+                arguments,
+            ),
+            margin_vertical: ftd::js::value::get_properties(
+                "margin-vertical",
+                properties,
+                arguments,
+            ),
+            margin_left: ftd::js::value::get_properties("margin-left", properties, arguments),
+            margin_right: ftd::js::value::get_properties("margin-right", properties, arguments),
+            margin_top: ftd::js::value::get_properties("margin-top", properties, arguments),
+            margin_bottom: ftd::js::value::get_properties("margin-bottom", properties, arguments),
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
             color: ftd::js::value::get_properties("color", properties, arguments),
@@ -339,10 +379,130 @@ impl Common {
                 ),
             ));
         }
+        if let Some(ref padding_horizontal) = self.padding_horizontal {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_horizontal.to_set_property(
+                    fastn_js::PropertyKind::PaddingHorizontal,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref padding_vertical) = self.padding_vertical {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_vertical.to_set_property(
+                    fastn_js::PropertyKind::PaddingVertical,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref padding_left) = self.padding_left {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_left.to_set_property(
+                    fastn_js::PropertyKind::PaddingLeft,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref padding_right) = self.padding_right {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_right.to_set_property(
+                    fastn_js::PropertyKind::PaddingRight,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref padding_top) = self.padding_top {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_top.to_set_property(
+                    fastn_js::PropertyKind::PaddingTop,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref padding_bottom) = self.padding_bottom {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                padding_bottom.to_set_property(
+                    fastn_js::PropertyKind::PaddingBottom,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
         if let Some(ref margin) = self.margin {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin.to_set_property(
                     fastn_js::PropertyKind::Margin,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_horizontal) = self.margin_horizontal {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_horizontal.to_set_property(
+                    fastn_js::PropertyKind::MarginHorizontal,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_vertical) = self.margin_vertical {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_vertical.to_set_property(
+                    fastn_js::PropertyKind::MarginVertical,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_left) = self.margin_left {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_left.to_set_property(
+                    fastn_js::PropertyKind::MarginLeft,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_right) = self.margin_right {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_right.to_set_property(
+                    fastn_js::PropertyKind::MarginRight,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_top) = self.margin_top {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_top.to_set_property(
+                    fastn_js::PropertyKind::MarginTop,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref margin_bottom) = self.margin_bottom {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                margin_bottom.to_set_property(
+                    fastn_js::PropertyKind::MarginBottom,
                     element_name,
                     component_definition_name.clone(),
                     loop_alias.clone(),

@@ -94,7 +94,6 @@ border-width.px: 4
 border-style: ridge
 margin.px: 12
 
-
 ;; --------------------- COLOR --------------------------
 
 -- ftd.text: Red Color
@@ -109,8 +108,76 @@ $on-click$: $increment($a = $value)
 
 -- end: ftd.column
 
+;; -------------------- OTHER PADDING + MARGIN VARIANTS --------------------
+
+-- ftd.column:
+width.fixed.percent: 80
+background.solid: $orange
+
+-- ftd.text: Padding Horizontal
+border-width.px: 2
+border-style: solid
+padding-horizontal.px: 10
+
+-- ftd.text: Padding Vertical
+border-width.px: 2
+border-style: solid
+padding-vertical.px: 10
+
+-- ftd.text: Padding Left
+border-width.px: 2
+border-style: solid
+padding-left.px: 10
+
+-- ftd.text: Padding Right
+border-width.px: 2
+border-style: solid
+padding-right.px: 10
+
+-- ftd.text: Padding Top
+border-width.px: 2
+border-style: solid
+padding-top.px: 10
+
+-- ftd.text: Padding Bottom
+border-width.px: 2
+border-style: solid
+padding-bottom.px: 10
+
+-- ftd.text: Margin Horizontal
+border-width.px: 2
+border-style: solid
+margin-horizontal.px: 10
+
+-- ftd.text: Margin Vertical
+border-width.px: 2
+border-style: solid
+margin-vertical.px: 10
+
+-- ftd.text: Margin Left
+border-width.px: 2
+border-style: solid
+margin-left.px: 10
+
+-- ftd.text: Margin Right
+border-width.px: 2
+border-style: solid
+margin-right.px: 10
+
+-- ftd.text: Margin Top
+border-width.px: 2
+border-style: solid
+margin-top.px: 10
+
+-- ftd.text: Margin Bottom
+border-width.px: 2
+border-style: solid
+margin-bottom.px: 10
+
+-- end: ftd.column
 
 ;; --------------------- VARIABLE --------------------------
+-- ftd.color orange: orange
 
 -- ftd.color og:
 light: orange
