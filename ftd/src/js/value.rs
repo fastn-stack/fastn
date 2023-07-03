@@ -265,6 +265,9 @@ impl ftd::interpreter::Value {
         use itertools::Itertools;
 
         match self {
+            ftd::interpreter::Value::Boolean { value } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
+            }
             ftd::interpreter::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
             }
@@ -305,7 +308,7 @@ impl ftd::interpreter::Value {
                         .collect_vec(),
                 })
             }
-            _ => todo!(),
+            t => todo!("{:?}", t),
         }
     }
 }

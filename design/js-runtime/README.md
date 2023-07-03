@@ -9,7 +9,7 @@
   - [x] Avoid Dynamic CSS
   - [x] conditionalDom
   - [x] forLoopDom
-  - [ ] record
+  - [x] record
   - [ ] role
   - [ ] inherited
   - [ ] the new ast (full ftd ast which is input to JS generation)

@@ -256,6 +256,7 @@ pub struct Common {
     pub margin: Option<ftd::js::Value>,
     pub border_width: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
+    pub color: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -273,6 +274,7 @@ impl Common {
             margin: ftd::js::value::get_properties("margin", properties, arguments),
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
+            color: ftd::js::value::get_properties("color", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -359,6 +361,16 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style.to_set_property(
                     fastn_js::PropertyKind::BorderStyle,
+                    element_name,
+                    component_definition_name.clone(),
+                    loop_alias.clone(),
+                ),
+            ));
+        }
+        if let Some(ref color) = self.color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                color.to_set_property(
+                    fastn_js::PropertyKind::Color,
                     element_name,
                     component_definition_name,
                     loop_alias,
