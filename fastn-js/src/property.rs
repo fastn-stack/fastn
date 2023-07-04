@@ -187,6 +187,7 @@ pub enum PropertyKind {
     Overflow,
     OverflowX,
     OverflowY,
+    Spacing,
 }
 
 impl PropertyKind {
@@ -224,6 +225,7 @@ impl PropertyKind {
             PropertyKind::Overflow => "fastn_dom.PropertyKind.Overflow",
             PropertyKind::OverflowX => "fastn_dom.PropertyKind.OverflowX",
             PropertyKind::OverflowY => "fastn_dom.PropertyKind.OverflowY",
+            PropertyKind::Spacing => "fastn_dom.PropertyKind.Spacing",
         }
     }
 }

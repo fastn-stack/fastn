@@ -121,11 +121,13 @@ pub struct Column {
 pub struct Container {
     pub colors: Option<ftd::js::Value>,
     pub types: Option<ftd::js::Value>,
+    pub spacing: Option<ftd::js::Value>,
 }
 
 #[derive(Debug)]
 pub struct Row {
     pub children: Vec<ftd::interpreter::Component>,
+    pub container: Container,
     pub common: Common,
 }
 
@@ -137,6 +139,7 @@ impl Container {
         Container {
             colors: ftd::js::value::get_properties("colors", properties, arguments),
             types: ftd::js::value::get_properties("types", properties, arguments),
+            spacing: ftd::js::value::get_properties("spacing", properties, arguments),
         }
     }
 
@@ -174,6 +177,27 @@ impl Container {
         } else {
             None
         }
+    }
+
+    pub fn to_set_properties(
+        &self,
+        element_name: &str,
+        _doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if let Some(ref spacing) = self.spacing {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                spacing.to_set_property(
+                    fastn_js::PropertyKind::Spacing,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        component_statements
     }
 }
 
@@ -455,6 +479,13 @@ impl Column {
             loop_alias,
         ));
 
+        component_statements.extend(self.container.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            loop_alias,
+        ));
+
         let _inherited_variables = self.container.get_inherited_variables(
             component_definition_name,
             loop_alias,
@@ -489,6 +520,10 @@ impl Row {
             .unwrap();
         Row {
             children: component.get_children(doc).unwrap(),
+            container: Container::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -511,6 +546,13 @@ impl Row {
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            loop_alias,
+        ));
+
+        component_statements.extend(self.container.to_set_properties(
             kernel.name.as_str(),
             doc,
             component_definition_name,

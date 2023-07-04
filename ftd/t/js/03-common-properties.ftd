@@ -221,10 +221,10 @@ z-index: 2
 
 
 ;; ---------------------- STICKY -----------------------------
-;; Overflow, Spacing, Anchor not yet implemented
 
 -- ftd.column:
 padding.px: 10
+/color: $inherited.colors.text
 spacing.fixed.px: 50
 height.fixed.px: 200
 width.fixed.px: 300
@@ -239,7 +239,7 @@ color: black
 background.solid: deepskyblue
 sticky: true
 width.fixed.px: 120
-text-align: center
+/text-align: center
 left.px: 50
 top.px: 0
 
@@ -428,10 +428,89 @@ DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
 -- end: ftd.row
 
+;; -------------------------- SPACING ---------------------------------
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 10
+spacing.fixed.px: 10
+
+-- ftd.text: Space Between
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- ftd.text: Space Evenly
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-evenly
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- ftd.text: Space Around
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-around
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- end: ftd.column
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:
 width: fill-container
+spacing: space-between
 
 -- ftd.integer: 32
 

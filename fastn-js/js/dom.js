@@ -65,7 +65,10 @@ fastn_dom.property_map = {
     "right": "r",
     "overflow": "o",
     "overflow-x": "ox",
-    "overflow-y": "oy"
+    "overflow-y": "oy",
+    "gap": "g",
+    "justify-content": "jc",
+    "position": "pos",
 };
 
 // dynamic-class-css.md
@@ -144,6 +147,7 @@ fastn_dom.PropertyKind = {
     Overflow: 30,
     OverflowX: 31,
     OverflowY: 32,
+    Spacing: 33,
 }
 
 
@@ -153,6 +157,14 @@ fastn_dom.Resizing = {
     HugContent: "fit-content",
     Fixed: (value) => { return value; }
 }
+
+fastn_dom.Spacing = {
+    SpaceEvenly: "space-evenly",
+    SpaceBetween: "space-between",
+    SpaceAround: "space-around",
+    Fixed: (value) => { return value; }
+}
+
 
 fastn_dom.BorderStyle = {
     Solid: "solid",
@@ -443,8 +455,19 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.ZIndex) {
             this.attachCss("z-index", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
-            // todo: need to set position based on sticky (bool) value
-            this.attachCss("sticky", staticValue);
+            // sticky is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachCss("position", "sticky");
+                break;
+              case 'false':
+              case false:
+                this.attachCss("position", "static");
+                break;
+              default:
+                this.attachCss("position", "static");
+            }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Bottom) {
@@ -459,6 +482,16 @@ class Node2 {
             this.attachCss("overflow-x", staticValue);
         } else if (kind === fastn_dom.PropertyKind.OverflowY) {
             this.attachCss("overflow-y", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Spacing) {
+            switch (staticValue) {
+              case 'space-evenly':
+              case 'space-between':
+              case 'space-around':
+                this.attachCss("justify-content", staticValue);
+                break;
+              default:
+                this.attachCss("gap", staticValue);
+            }
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

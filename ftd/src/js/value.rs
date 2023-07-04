@@ -341,6 +341,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = display_variants(variant);
             (format!("fastn_dom.Display.{}", js_variant), false)
         }
+        "ftd#spacing" => {
+            let js_variant = spacing_variants(variant);
+            (format!("fastn_dom.Spacing.{}", js_variant.0), js_variant.1)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -417,5 +421,15 @@ fn display_variants(name: &str) -> &'static str {
         "inline" => "Inline",
         "inline-block" => "InlineBlock",
         t => todo!("invalid display variant {}", t),
+    }
+}
+
+fn spacing_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "space-evenly" => ("SpaceEvenly", false),
+        "space-between" => ("SpaceBetween", false),
+        "space-around" => ("SpaceAround", false),
+        "fixed" => ("Fixed", true),
+        t => todo!("invalid spacing variant {}", t),
     }
 }
