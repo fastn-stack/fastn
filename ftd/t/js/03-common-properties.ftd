@@ -506,6 +506,32 @@ border-style: solid
 
 -- end: ftd.column
 
+;; --------------------------- WRAP -----------------------------
+
+-- ftd.row:
+width.fixed.px: 100
+spacing.fixed.px: 10
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+padding.px: 5
+color: blue
+wrap: true
+
+-- ftd.text: One
+
+-- ftd.text: Two
+
+-- ftd.text: Three
+
+-- ftd.text: Four
+
+-- ftd.text: Five
+
+-- ftd.text: Six
+
+-- end: ftd.row
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

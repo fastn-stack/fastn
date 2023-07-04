@@ -45,7 +45,7 @@ The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.</div><div data-id="63" class="w-61 h-62 bw-34 oy-74">overflow-y = Hidden
 
 The quick, brown fox jumps over a lazy dog.
-DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.</div></div><div data-id="64" class="ft_column w-1 pt-35 pb-36 g-75"><div data-id="65" class="role-31">Space Between</div><div data-id="66" class="ft_row w-1 bw-34 bs-23 jc-76"><div data-id="67" class="bw-34 bs-23">One</div><div data-id="68" class="bw-34 bs-23">Two</div><div data-id="69" class="bw-34 bs-23">Three</div></div><div data-id="70" class="role-31">Space Evenly</div><div data-id="71" class="ft_row w-1 bw-34 bs-23 jc-60"><div data-id="72" class="bw-34 bs-23">One</div><div data-id="73" class="bw-34 bs-23">Two</div><div data-id="74" class="bw-34 bs-23">Three</div></div><div data-id="75" class="role-31">Space Around</div><div data-id="76" class="ft_row w-1 bw-34 bs-23 jc-77"><div data-id="77" class="bw-34 bs-23">One</div><div data-id="78" class="bw-34 bs-23">Two</div><div data-id="79" class="bw-34 bs-23">Three</div></div></div><div data-id="80" class="ft_row w-1 jc-76"><div data-id="81">32</div><div data-id="82">1.123</div><div data-id="83">true</div></div></body><style id="styles">
+DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.</div></div><div data-id="64" class="ft_column w-1 pt-35 pb-36 g-75"><div data-id="65" class="role-31">Space Between</div><div data-id="66" class="ft_row w-1 bw-34 bs-23 jc-76"><div data-id="67" class="bw-34 bs-23">One</div><div data-id="68" class="bw-34 bs-23">Two</div><div data-id="69" class="bw-34 bs-23">Three</div></div><div data-id="70" class="role-31">Space Evenly</div><div data-id="71" class="ft_row w-1 bw-34 bs-23 jc-60"><div data-id="72" class="bw-34 bs-23">One</div><div data-id="73" class="bw-34 bs-23">Two</div><div data-id="74" class="bw-34 bs-23">Three</div></div><div data-id="75" class="role-31">Space Around</div><div data-id="76" class="ft_row w-1 bw-34 bs-23 jc-77"><div data-id="77" class="bw-34 bs-23">One</div><div data-id="78" class="bw-34 bs-23">Two</div><div data-id="79" class="bw-34 bs-23">Three</div></div></div><div data-id="80" class="ft_row w-78 p-79 bw-34 bs-23 c-80 g-75 fw-81"><div data-id="81">One</div><div data-id="82">Two</div><div data-id="83">Three</div><div data-id="84">Four</div><div data-id="85">Five</div><div data-id="86">Six</div></div><div data-id="87" class="ft_row w-1 jc-76"><div data-id="88">32</div><div data-id="89">1.123</div><div data-id="90">true</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
@@ -129,6 +129,10 @@ DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.</div></d
 	.g-75 { gap: 10px; }
 	.jc-76 { justify-content: space-between; }
 	.jc-77 { justify-content: space-around; }
+	.w-78 { width: 100px; }
+	.p-79 { padding: 5px; }
+	.c-80 { color: blue; }
+	.fw-81 { flex-wrap: wrap; }
     </style>
 <script>
     (function() {
@@ -546,14 +550,37 @@ function main(parent)
   parenti6i5i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
   parenti6i5i2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
   let parenti7 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti7.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
-  let parenti7i0 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Integer);
-  parenti7i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
-  let parenti7i1 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Decimal);
-  parenti7i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
-  let parenti7i2 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Boolean);
-  parenti7i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
+  parenti7.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(100)));
+  parenti7.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
+  parenti7.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti7.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  parenti7.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "blue",
+    light: "blue"
+  }));
+  parenti7.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
+  parenti7.setProperty(fastn_dom.PropertyKind.Wrap, true);
+  let parenti7i0 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i0.setProperty(fastn_dom.PropertyKind.StringValue, "One");
+  let parenti7i1 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i1.setProperty(fastn_dom.PropertyKind.StringValue, "Two");
+  let parenti7i2 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i2.setProperty(fastn_dom.PropertyKind.StringValue, "Three");
+  let parenti7i3 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i3.setProperty(fastn_dom.PropertyKind.StringValue, "Four");
+  let parenti7i4 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i4.setProperty(fastn_dom.PropertyKind.StringValue, "Five");
+  let parenti7i5 = fastn_dom.createKernel(parenti7, fastn_dom.ElementKind.Text);
+  parenti7i5.setProperty(fastn_dom.PropertyKind.StringValue, "Six");
+  let parenti8 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti8.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti8.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
+  let parenti8i0 = fastn_dom.createKernel(parenti8, fastn_dom.ElementKind.Integer);
+  parenti8i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
+  let parenti8i1 = fastn_dom.createKernel(parenti8, fastn_dom.ElementKind.Decimal);
+  parenti8i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
+  let parenti8i2 = fastn_dom.createKernel(parenti8, fastn_dom.ElementKind.Boolean);
+  parenti8i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
 foo__bp = fastn.recordInstance({
   light: "blue",

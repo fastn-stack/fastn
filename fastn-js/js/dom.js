@@ -69,6 +69,7 @@ fastn_dom.property_map = {
     "gap": "g",
     "justify-content": "jc",
     "position": "pos",
+    "flex-wrap": "fw"
 };
 
 // dynamic-class-css.md
@@ -148,6 +149,7 @@ fastn_dom.PropertyKind = {
     OverflowX: 31,
     OverflowY: 32,
     Spacing: 33,
+    Wrap: 34
 }
 
 
@@ -491,6 +493,20 @@ class Node2 {
                 break;
               default:
                 this.attachCss("gap", staticValue);
+            }
+        } else if (kind === fastn_dom.PropertyKind.Wrap) {
+            // sticky is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachCss("flex-wrap", "wrap");
+                break;
+              case 'false':
+              case false:
+                this.attachCss("flex-wrap", "no-wrap");
+                break;
+              default:
+                this.attachCss("flex-wrap", "no-wrap");
             }
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);

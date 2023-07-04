@@ -122,6 +122,7 @@ pub struct Container {
     pub colors: Option<ftd::js::Value>,
     pub types: Option<ftd::js::Value>,
     pub spacing: Option<ftd::js::Value>,
+    pub wrap: Option<ftd::js::Value>,
 }
 
 #[derive(Debug)]
@@ -140,6 +141,7 @@ impl Container {
             colors: ftd::js::value::get_properties("colors", properties, arguments),
             types: ftd::js::value::get_properties("types", properties, arguments),
             spacing: ftd::js::value::get_properties("spacing", properties, arguments),
+            wrap: ftd::js::value::get_properties("wrap", properties, arguments),
         }
     }
 
@@ -191,6 +193,16 @@ impl Container {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 spacing.to_set_property(
                     fastn_js::PropertyKind::Spacing,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                ),
+            ));
+        }
+        if let Some(ref wrap) = self.wrap {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                wrap.to_set_property(
+                    fastn_js::PropertyKind::Wrap,
                     element_name,
                     component_definition_name,
                     loop_alias,
