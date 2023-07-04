@@ -6,3 +6,15 @@ pub enum Ast {
     MutableList(fastn_js::MutableList),
     RecordInstance(fastn_js::RecordInstance),
 }
+
+impl Ast {
+    pub fn get_variable_name(&self) -> Option<String> {
+        match self {
+            Ast::StaticVariable(static_variable) => Some(static_variable.name.clone()),
+            Ast::MutableVariable(mutable_variable) => Some(mutable_variable.name.clone()),
+            Ast::RecordInstance(record_instance) => Some(record_instance.name.clone()),
+            Ast::MutableList(mutable_list) => Some(mutable_list.name.clone()),
+            _ => None,
+        }
+    }
+}

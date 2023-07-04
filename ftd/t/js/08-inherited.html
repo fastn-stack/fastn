@@ -1,0 +1,510 @@
+<html>
+<head>
+    <script src="fastn-js.js"></script>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column w-1 h-2 bgc-3"></div></body><style id="styles">
+    /*.ft_text {
+        padding: 0;
+    }*/
+    .w-1 { width: 100%; }
+.h-2 { height: 1000px; }
+.bgc-3 { background-color: yellow; }
+    </style>
+<script>
+    (function() {
+        let foo__accent_,
+foo__accent_primary_,
+foo__accent_secondary_,
+foo__accent_tertiary_,
+foo__background_,
+foo__base_,
+foo__border_,
+foo__border_strong_,
+foo__code_,
+foo__colors,
+foo__cta_danger_,
+foo__cta_danger_base_,
+foo__cta_danger_border_,
+foo__cta_danger_border_disabled_,
+foo__cta_danger_disabled_,
+foo__cta_danger_focused_,
+foo__cta_danger_hover_,
+foo__cta_danger_pressed_,
+foo__cta_danger_text_,
+foo__cta_danger_text_disabled_,
+foo__cta_primary_,
+foo__cta_primary_base_,
+foo__cta_primary_border_,
+foo__cta_primary_border_disabled_,
+foo__cta_primary_disabled_,
+foo__cta_primary_focused_,
+foo__cta_primary_hover_,
+foo__cta_primary_pressed_,
+foo__cta_primary_text_,
+foo__cta_primary_text_disabled_,
+foo__cta_secondary_,
+foo__cta_secondary_base_,
+foo__cta_secondary_border_,
+foo__cta_secondary_border_disabled_,
+foo__cta_secondary_disabled_,
+foo__cta_secondary_focused_,
+foo__cta_secondary_hover_,
+foo__cta_secondary_pressed_,
+foo__cta_secondary_text_,
+foo__cta_secondary_text_disabled_,
+foo__cta_tertiary_,
+foo__cta_tertiary_base_,
+foo__cta_tertiary_border_,
+foo__cta_tertiary_border_disabled_,
+foo__cta_tertiary_disabled_,
+foo__cta_tertiary_focused_,
+foo__cta_tertiary_hover_,
+foo__cta_tertiary_pressed_,
+foo__cta_tertiary_text_,
+foo__cta_tertiary_text_disabled_,
+foo__custom_,
+foo__custom_eight_,
+foo__custom_five_,
+foo__custom_four_,
+foo__custom_nine_,
+foo__custom_one_,
+foo__custom_seven_,
+foo__custom_six_,
+foo__custom_ten_,
+foo__custom_three_,
+foo__custom_two_,
+foo__error_base_,
+foo__error_border_,
+foo__error_btb_,
+foo__error_text_,
+foo__info_base_,
+foo__info_border_,
+foo__info_btb_,
+foo__info_text_,
+foo__overlay_,
+foo__scrim_,
+foo__shadow_,
+foo__step_1_,
+foo__step_2_,
+foo__success_base_,
+foo__success_border_,
+foo__success_btb_,
+foo__success_text_,
+foo__text_,
+foo__text_strong_,
+foo__warning_base_,
+foo__warning_border_,
+foo__warning_btb_,
+foo__warning_text_;
+function main(parent)
+{
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(1000)));
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "yellow",
+    light: "yellow"
+  })));
+}
+foo__accent_ = fastn.recordInstance({
+  primary: foo__accent_primary_,
+  secondary: foo__accent_secondary_,
+  tertiary: foo__accent_tertiary_
+});
+foo__accent_primary_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+foo__accent_secondary_ = fastn.recordInstance({
+  light: "#EBE8E5",
+  dark: "#EBE8E5"
+});
+foo__accent_tertiary_ = fastn.recordInstance({
+  light: "#c5cbd7",
+  dark: "#c5cbd7"
+});
+foo__background_ = fastn.recordInstance({
+  base: foo__base_,
+  step_1: foo__step_1_,
+  step_2: foo__step_2_,
+  overlay: foo__overlay_,
+  code: foo__code_
+});
+foo__base_ = fastn.recordInstance({
+  light: "#FFFFFF",
+  dark: "#000000"
+});
+foo__border_ = fastn.recordInstance({
+  light: "#f0ece2",
+  dark: "#434547"
+});
+foo__border_strong_ = fastn.recordInstance({
+  light: "#D9D9D9",
+  dark: "#333333"
+});
+foo__code_ = fastn.recordInstance({
+  light: "#f5f5f5",
+  dark: "#21222c"
+});
+foo__colors = fastn.recordInstance({
+  background: foo__background_,
+  border: foo__border_,
+  border_strong: foo__border_strong_,
+  text: foo__text_,
+  text_strong: foo__text_strong_,
+  shadow: foo__shadow_,
+  scrim: foo__scrim_,
+  cta_primary: foo__cta_primary_,
+  cta_secondary: foo__cta_secondary_,
+  cta_tertiary: foo__cta_tertiary_,
+  cta_danger: foo__cta_danger_,
+  accent: foo__accent_,
+  error: foo__error_btb_,
+  success: foo__success_btb_,
+  info: foo__info_btb_,
+  warning: foo__warning_btb_,
+  custom: foo__custom_
+});
+foo__cta_danger_ = fastn.recordInstance({
+  base: foo__cta_danger_base_,
+  hover: foo__cta_danger_hover_,
+  pressed: foo__cta_danger_pressed_,
+  disabled: foo__cta_danger_disabled_,
+  focused: foo__cta_danger_focused_,
+  border: foo__cta_danger_border_,
+  border_disabled: foo__cta_danger_border_disabled_,
+  text: foo__cta_danger_text_,
+  text_disabled: foo__cta_danger_text_disabled_
+});
+foo__cta_danger_base_ = fastn.recordInstance({
+  light: "#F9E4E1",
+  dark: "#F9E4E1"
+});
+foo__cta_danger_border_ = fastn.recordInstance({
+  light: "#E9968C",
+  dark: "#E9968C"
+});
+foo__cta_danger_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+foo__cta_danger_disabled_ = fastn.recordInstance({
+  light: "#FAECEB",
+  dark: "#FAECEB"
+});
+foo__cta_danger_focused_ = fastn.recordInstance({
+  light: "#D97973",
+  dark: "#D97973"
+});
+foo__cta_danger_hover_ = fastn.recordInstance({
+  light: "#F1BDB6",
+  dark: "#F1BDB6"
+});
+foo__cta_danger_pressed_ = fastn.recordInstance({
+  light: "#D46A63",
+  dark: "#D46A63"
+});
+foo__cta_danger_text_ = fastn.recordInstance({
+  light: "#D84836",
+  dark: "#D84836"
+});
+foo__cta_danger_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+foo__cta_primary_ = fastn.recordInstance({
+  base: foo__cta_primary_base_,
+  hover: foo__cta_primary_hover_,
+  pressed: foo__cta_primary_pressed_,
+  disabled: foo__cta_primary_disabled_,
+  focused: foo__cta_primary_focused_,
+  border: foo__cta_primary_border_,
+  border_disabled: foo__cta_primary_border_disabled_,
+  text: foo__cta_primary_text_,
+  text_disabled: foo__cta_primary_text_disabled_
+});
+foo__cta_primary_base_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+foo__cta_primary_border_ = fastn.recordInstance({
+  light: "#F3A063",
+  dark: "#F3A063"
+});
+foo__cta_primary_border_disabled_ = fastn.recordInstance({
+  light: "#fad9c0",
+  dark: "#fad9c0"
+});
+foo__cta_primary_disabled_ = fastn.recordInstance({
+  light: "#FAD9C0",
+  dark: "#FAD9C0"
+});
+foo__cta_primary_focused_ = fastn.recordInstance({
+  light: "#B36328",
+  dark: "#B36328"
+});
+foo__cta_primary_hover_ = fastn.recordInstance({
+  light: "#D77730",
+  dark: "#D77730"
+});
+foo__cta_primary_pressed_ = fastn.recordInstance({
+  light: "#BF6A2A",
+  dark: "#BF6A2A"
+});
+foo__cta_primary_text_ = fastn.recordInstance({
+  light: "#512403",
+  dark: "#512403"
+});
+foo__cta_primary_text_disabled_ = fastn.recordInstance({
+  light: "#f2a164",
+  dark: "#f2a164"
+});
+foo__cta_secondary_ = fastn.recordInstance({
+  base: foo__cta_secondary_base_,
+  hover: foo__cta_secondary_hover_,
+  pressed: foo__cta_secondary_pressed_,
+  disabled: foo__cta_secondary_disabled_,
+  focused: foo__cta_secondary_focused_,
+  border: foo__cta_secondary_border_,
+  border_disabled: foo__cta_secondary_border_disabled_,
+  text: foo__cta_secondary_text_,
+  text_disabled: foo__cta_secondary_text_disabled_
+});
+foo__cta_secondary_base_ = fastn.recordInstance({
+  light: "#EBE8E5",
+  dark: "#EBE8E5"
+});
+foo__cta_secondary_border_ = fastn.recordInstance({
+  light: "#B0AEAC",
+  dark: "#B0AEAC"
+});
+foo__cta_secondary_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+foo__cta_secondary_disabled_ = fastn.recordInstance({
+  light: "#F9F8F7",
+  dark: "#F9F8F7"
+});
+foo__cta_secondary_focused_ = fastn.recordInstance({
+  light: "#B0AEAC",
+  dark: "#B0AEAC"
+});
+foo__cta_secondary_hover_ = fastn.recordInstance({
+  light: "#D4D1CE",
+  dark: "#D4D1CE"
+});
+foo__cta_secondary_pressed_ = fastn.recordInstance({
+  light: "#BCBAB7",
+  dark: "#BCBAB7"
+});
+foo__cta_secondary_text_ = fastn.recordInstance({
+  light: "#333333",
+  dark: "#333333"
+});
+foo__cta_secondary_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+foo__cta_tertiary_ = fastn.recordInstance({
+  base: foo__cta_tertiary_base_,
+  hover: foo__cta_tertiary_hover_,
+  pressed: foo__cta_tertiary_pressed_,
+  disabled: foo__cta_tertiary_disabled_,
+  focused: foo__cta_tertiary_focused_,
+  border: foo__cta_tertiary_border_,
+  border_disabled: foo__cta_tertiary_border_disabled_,
+  text: foo__cta_tertiary_text_,
+  text_disabled: foo__cta_tertiary_text_disabled_
+});
+foo__cta_tertiary_base_ = fastn.recordInstance({
+  light: "#4A6490",
+  dark: "#4A6490"
+});
+foo__cta_tertiary_border_ = fastn.recordInstance({
+  light: "#4e6997",
+  dark: "#4e6997"
+});
+foo__cta_tertiary_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+foo__cta_tertiary_disabled_ = fastn.recordInstance({
+  light: "rgba(74, 100, 144, 0.4)",
+  dark: "rgba(74, 100, 144, 0.4)"
+});
+foo__cta_tertiary_focused_ = fastn.recordInstance({
+  light: "#6882b1",
+  dark: "#6882b1"
+});
+foo__cta_tertiary_hover_ = fastn.recordInstance({
+  light: "#3d5276",
+  dark: "#3d5276"
+});
+foo__cta_tertiary_pressed_ = fastn.recordInstance({
+  light: "#2b3a54",
+  dark: "#2b3a54"
+});
+foo__cta_tertiary_text_ = fastn.recordInstance({
+  light: "#ffffff",
+  dark: "#ffffff"
+});
+foo__cta_tertiary_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+foo__custom_ = fastn.recordInstance({
+  one: foo__custom_one_,
+  two: foo__custom_two_,
+  three: foo__custom_three_,
+  four: foo__custom_four_,
+  five: foo__custom_five_,
+  six: foo__custom_six_,
+  seven: foo__custom_seven_,
+  eight: foo__custom_eight_,
+  nine: foo__custom_nine_,
+  ten: foo__custom_ten_
+});
+foo__custom_eight_ = fastn.recordInstance({
+  light: "#d554b3",
+  dark: "#d554b3"
+});
+foo__custom_five_ = fastn.recordInstance({
+  light: "#FBF5E2",
+  dark: "#222222"
+});
+foo__custom_four_ = fastn.recordInstance({
+  light: "#FDFAF1",
+  dark: "#111111"
+});
+foo__custom_nine_ = fastn.recordInstance({
+  light: "#ec8943",
+  dark: "#ec8943"
+});
+foo__custom_one_ = fastn.recordInstance({
+  light: "#4AA35C",
+  dark: "#4AA35C"
+});
+foo__custom_seven_ = fastn.recordInstance({
+  light: "#7564be",
+  dark: "#7564be"
+});
+foo__custom_six_ = fastn.recordInstance({
+  light: "#ef8dd6",
+  dark: "#ef8dd6"
+});
+foo__custom_ten_ = fastn.recordInstance({
+  light: "#da7a4a",
+  dark: "#da7a4a"
+});
+foo__custom_three_ = fastn.recordInstance({
+  light: "#EBBE52",
+  dark: "#EBBE52"
+});
+foo__custom_two_ = fastn.recordInstance({
+  light: "#5C2860",
+  dark: "#5C2860"
+});
+foo__error_base_ = fastn.recordInstance({
+  light: "#F9E4E1",
+  dark: "#4f2a25c9"
+});
+foo__error_border_ = fastn.recordInstance({
+  light: "#E9968C",
+  dark: "#E9968C"
+});
+foo__error_btb_ = fastn.recordInstance({
+  base: foo__error_base_,
+  text: foo__error_text_,
+  border: foo__error_border_
+});
+foo__error_text_ = fastn.recordInstance({
+  light: "#D84836",
+  dark: "#D84836"
+});
+foo__info_base_ = fastn.recordInstance({
+  light: "#DAE7FB",
+  dark: "#233a5dc7"
+});
+foo__info_border_ = fastn.recordInstance({
+  light: "#7EACF1",
+  dark: "#7EACF1"
+});
+foo__info_btb_ = fastn.recordInstance({
+  base: foo__info_base_,
+  text: foo__info_text_,
+  border: foo__info_border_
+});
+foo__info_text_ = fastn.recordInstance({
+  light: "#5290EC",
+  dark: "#5290EC"
+});
+foo__overlay_ = fastn.recordInstance({
+  light: "#000000",
+  dark: "#000000"
+});
+foo__scrim_ = fastn.recordInstance({
+  light: "#393939",
+  dark: "#393939"
+});
+foo__shadow_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+foo__step_1_ = fastn.recordInstance({
+  light: "#FDFAF1",
+  dark: "#111111"
+});
+foo__step_2_ = fastn.recordInstance({
+  light: "#fbf3dc",
+  dark: "#2b2b2b"
+});
+foo__success_base_ = fastn.recordInstance({
+  light: "#DCEFE4",
+  dark: "#033a1bb8"
+});
+foo__success_border_ = fastn.recordInstance({
+  light: "#95D0AF",
+  dark: "#95D0AF"
+});
+foo__success_btb_ = fastn.recordInstance({
+  base: foo__success_base_,
+  text: foo__success_text_,
+  border: foo__success_border_
+});
+foo__success_text_ = fastn.recordInstance({
+  light: "#3E8D61",
+  dark: "#159f52"
+});
+foo__text_ = fastn.recordInstance({
+  light: "#707070",
+  dark: "#D9D9D9"
+});
+foo__text_strong_ = fastn.recordInstance({
+  light: "#333333",
+  dark: "#FFFFFF"
+});
+foo__warning_base_ = fastn.recordInstance({
+  light: "#FDF7F1",
+  dark: "#3b2c1ee6"
+});
+foo__warning_border_ = fastn.recordInstance({
+  light: "#F2C097",
+  dark: "#F2C097"
+});
+foo__warning_btb_ = fastn.recordInstance({
+  base: foo__warning_base_,
+  text: foo__warning_text_,
+  border: foo__warning_border_
+});
+foo__warning_text_ = fastn.recordInstance({
+  light: "#E78B3E",
+  dark: "#E78B3E"
+});
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>
