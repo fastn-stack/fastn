@@ -1,6 +1,39 @@
 let fastn_dom = {};
 
-fastn_dom.classes = {}
+fastn_dom.common = {
+    ".ft_common": {
+        "value": {
+            "text-decoration": "none",
+            "box-sizing": "border-box",
+            "border-top-width": "0px",
+            "border-bottom-width": "0px",
+            "border-left-width": "0px",
+            "border-right-width": "0px",
+            "border-style": "solid",
+            "height": "auto",
+            "width": "auto",
+        }
+    },
+    ".ft_row": {
+        "value": {
+            "display": "flex",
+            "align-items": "start",
+            "justify-content": "start",
+            "flex-direction": "row",
+        }
+    },
+    ".ft_column": {
+        "value": {
+            "display": "flex",
+            "align-items": "start",
+            "justify-content": "start",
+            "flex-direction": "column",
+        }
+    }
+};
+
+
+fastn_dom.classes = { ...fastn_dom.common }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.property_map = {
@@ -41,11 +74,11 @@ fastn_dom.getClassesAsString = function() {
         return getClassAsString(entry[0], entry[1]);
     });
 
-    return `<style id="styles">
     /*.ft_text {
         padding: 0;
     }*/
-    ${classes.join("\n")}
+    return `<style id="styles">
+    ${classes.join("\n\t")}
     </style>`;
 }
 

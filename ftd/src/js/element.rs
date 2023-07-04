@@ -5,7 +5,7 @@ pub enum Element {
     Decimal(Decimal),
     Boolean(Boolean),
     Column(Column),
-    // Row(Row),
+    Row(Row),
 }
 
 impl Element {
@@ -15,10 +15,11 @@ impl Element {
     ) -> Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
-            "ftd#column" => Element::Column(Column::from(component, doc)),
             "ftd#integer" => Element::Integer(Integer::from(component)),
             "ftd#decimal" => Element::Decimal(Decimal::from(component)),
             "ftd#boolean" => Element::Boolean(Boolean::from(component)),
+            "ftd#column" => Element::Column(Column::from(component, doc)),
+            "ftd#row" => Element::Row(Row::from(component, doc)),
             _ => todo!("{}", component.name.as_str()),
         }
     }
@@ -66,6 +67,14 @@ impl Element {
                 should_return,
             ),
             Element::Column(column) => column.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                should_return,
+            ),
+            Element::Row(row) => row.to_component_statements(
                 parent,
                 index,
                 doc,
@@ -451,6 +460,62 @@ impl Column {
             loop_alias,
             kernel.name.as_str(),
         );
+
+        component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
+            v.to_component_statements(
+                kernel.name.as_str(),
+                index,
+                doc,
+                component_definition_name,
+                false,
+            )
+        }));
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+impl Row {
+    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Row {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#row")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Row {
+            children: component.get_children(doc).unwrap(),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component("ftd#row", parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            loop_alias,
+        ));
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
             v.to_component_statements(

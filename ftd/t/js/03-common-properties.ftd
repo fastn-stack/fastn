@@ -258,7 +258,7 @@ universe.
 
 ;; ---------------------- OVERFLOW --------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: red
@@ -311,11 +311,11 @@ overflow = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
--- end: ftd.column
+-- end: ftd.row
 
 ;; ------------------------- OVERFLOW-X -------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: green
@@ -368,12 +368,12 @@ overflow-x = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
--- end: ftd.column
+-- end: ftd.row
 
 
 ;; ---------------------- OVERFLOW-Y --------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: deepskyblue
@@ -426,15 +426,20 @@ overflow-y = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
--- end: ftd.column
+-- end: ftd.row
 
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
+
+-- ftd.row:
+width: fill-container
 
 -- ftd.integer: 32
 
 -- ftd.decimal: 1.123
 
 -- ftd.boolean: true
+
+-- end: ftd.row
 
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
@@ -480,7 +485,7 @@ desktop: $dtype
 mobile: $mtype
 
 
-;; --------------------- VARIABLE --------------------------
+;; --------------------- FUNCTIONS --------------------------
 
 
 
