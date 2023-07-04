@@ -413,7 +413,6 @@ impl Column {
             .component()
             .unwrap();
 
-        dbg!(&component);
         Column {
             children: component.get_children(doc).unwrap(),
             container: Container::from(
