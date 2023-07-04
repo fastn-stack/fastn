@@ -412,6 +412,14 @@ DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
 -- end: ftd.column
 
+;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
+
+-- ftd.integer: 32
+
+-- ftd.decimal: 1.123
+
+-- ftd.boolean: true
+
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
 

@@ -139,6 +139,12 @@ fastn_dom.Overflow = {
     Auto: "auto",
 }
 
+fastn_dom.Display = {
+    Block: "block",
+    Inline: "inline",
+    InlineBlock: "inline-block",
+}
+
 fastn_dom.BackgroundStyle = {
     Solid: (value) => { return value; }
 }
