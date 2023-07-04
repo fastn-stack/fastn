@@ -46,20 +46,36 @@ pub async fn process(
     )
 }
 
-struct Args {}
+struct QueryArgs {
+    args: Vec<Box<dyn postgres_types::ToSql + Sync>>,
+}
 
-impl Args {
+impl QueryArgs {
     fn pg_args(&self) -> Vec<&(dyn postgres_types::ToSql + Sync)> {
-        todo!()
+        self.args.iter().map(|x| x.as_ref()).collect()
     }
 }
 
-fn parse_query(
-    _query: &str,
-    _args: &[postgres_types::Type],
-    _doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Args> {
-    todo!()
+fn prepare_args(
+    query_args: Vec<String>,
+    expected_args: &[postgres_types::Type],
+    doc: &ftd::interpreter::TDoc<'_>,
+    line_number: usize,
+) -> ftd::interpreter::Result<QueryArgs> {
+    if expected_args.len() != query_args.len() {
+        return ftd::interpreter::utils::e2(
+            format!(
+                "expected {} arguments, found {}",
+                expected_args.len(),
+                query_args.len()
+            ),
+            doc.name,
+            line_number,
+        );
+    }
+    Ok(QueryArgs {
+        args: vec![], // TODO
+    })
 }
 
 async fn execute_query(
@@ -67,9 +83,11 @@ async fn execute_query(
     doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let (query, query_args) = super::sql::extract_arguments(query)?;
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
-    let stmt = client.prepare_cached(query).await.unwrap();
-    let args = parse_query(query, stmt.params(), doc)?;
+
+    let stmt = client.prepare_cached(query.as_str()).await.unwrap();
+    let args = prepare_args(query_args, stmt.params(), doc, line_number)?;
 
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];

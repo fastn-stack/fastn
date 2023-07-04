@@ -1,4 +1,4 @@
-fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
+pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
     let chars: Vec<char> = query.chars().collect();
     let len = chars.len();
     let mut i = 0;
