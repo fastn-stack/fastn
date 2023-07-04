@@ -335,7 +335,11 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         }
         "ftd#overflow" => {
             let js_variant = overflow_variants(variant);
-            (format!("fastn_dom.Overflow.{}", js_variant.0), js_variant.1)
+            (format!("fastn_dom.Overflow.{}", js_variant), false)
+        }
+        "ftd#display" => {
+            let js_variant = display_variants(variant);
+            (format!("fastn_dom.Display.{}", js_variant), false)
         }
         t => todo!("{} {}", t, variant),
     }
@@ -348,7 +352,7 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "fixed" => ("Fixed", true),
         "fill-container" => ("FillContainer", false),
         "hug-content" => ("HugContent", false),
-        _ => todo!(),
+        t => todo!("invalid resizing variant {}", t),
     }
 }
 
@@ -363,7 +367,7 @@ fn length_variants(name: &str) -> &'static str {
         "vmin" => "Vmin",
         "vmax" => "Vmax",
         "calc" => "Calc",
-        _ => todo!(),
+        t => todo!("invalid length variant {}", t),
     }
 }
 
@@ -377,14 +381,14 @@ fn border_style_variants(name: &str) -> &'static str {
         "outset" => "Outset",
         "ridge" => "Ridge",
         "double" => "Double",
-        _ => todo!(),
+        t => todo!("invalid border-style variant {}", t),
     }
 }
 
 fn background_variants(name: &str) -> &'static str {
     match name {
         "solid" => "Solid",
-        t => todo!("{}", t),
+        t => todo!("invalid background variant {}", t),
     }
 }
 
@@ -393,16 +397,25 @@ fn font_size_variants(name: &str) -> &'static str {
         "px" => "Px",
         "em" => "Em",
         "rem" => "Rem",
-        _ => todo!(),
+        t => todo!("invalid font-size variant {}", t),
     }
 }
 
-fn overflow_variants(name: &str) -> (&'static str, bool) {
+fn overflow_variants(name: &str) -> &'static str {
     match name {
-        "scroll" => ("Scroll", false),
-        "visible" => ("Visible", false),
-        "hidden" => ("Hidden", false),
-        "auto" => ("Auto", false),
-        _ => todo!(),
+        "scroll" => "Scroll",
+        "visible" => "Visible",
+        "hidden" => "Hidden",
+        "auto" => "Auto",
+        t => todo!("invalid overflow variant {}", t),
+    }
+}
+
+fn display_variants(name: &str) -> &'static str {
+    match name {
+        "block" => "Block",
+        "inline" => "Inline",
+        "inline-block" => "InlineBlock",
+        t => todo!("invalid display variant {}", t),
     }
 }
