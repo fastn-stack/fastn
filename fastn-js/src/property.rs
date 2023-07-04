@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct SetProperty {
     pub kind: PropertyKind,
     pub value: SetPropertyValue,
@@ -154,6 +155,7 @@ impl Value {
     }
 }
 
+#[derive(Debug)]
 pub enum PropertyKind {
     StringValue,
     Id,

@@ -9,12 +9,14 @@ pub(crate) fn update_reference(
     reference: &str,
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
+    inherited_variable_name: &Option<String>,
 ) -> String {
     let mut name = reference
         .trim_start_matches(
             format!("{}.", component_definition_name.clone().unwrap_or_default()).as_str(),
         )
         .to_string();
+
     if let Some(loop_alias) = loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
             name = format!("item.{alias}");
@@ -22,6 +24,14 @@ pub(crate) fn update_reference(
             name = "item".to_string()
         }
     }
+
+    if let Some(inherited_variable_name) = inherited_variable_name {
+        if let Some(remaining) = name.strip_prefix("inherited.") {
+            name = format!("{inherited_variable_name}.{remaining}");
+        }
+    }
+
+    dbg!("update_reference", &inherited_variable_name, &name);
 
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
         name = "index".to_string()

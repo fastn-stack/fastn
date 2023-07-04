@@ -7,22 +7,33 @@ pub enum Value {
 
 impl Value {
     pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(&None, &None)
+        self.to_set_property_value(&None, &None, &None)
     }
 
     pub(crate) fn to_set_property_value(
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(),
-            Value::Reference(name) => fastn_js::SetPropertyValue::Reference(
-                ftd::js::utils::update_reference(name, component_definition_name, loop_alias),
-            ),
-            Value::Formula(formulas) => fastn_js::SetPropertyValue::Formula(
-                formulas_to_fastn_js_value(formulas, component_definition_name, loop_alias),
-            ),
+            Value::Reference(name) => {
+                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+                    name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ))
+            }
+            Value::Formula(formulas) => {
+                fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(
+                    formulas,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ))
+            }
         }
     }
 
@@ -32,10 +43,15 @@ impl Value {
         element_name: &str,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
-            value: self.to_set_property_value(component_definition_name, loop_alias),
+            value: self.to_set_property_value(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ),
             element_name: element_name.to_string(),
         }
     }
@@ -45,23 +61,31 @@ fn formulas_to_fastn_js_value(
     properties: &[ftd::interpreter::Property],
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
+    inherited_variable_name: &Option<String>,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
-        deps.extend(
-            property
-                .value
-                .get_deps(component_definition_name, loop_alias),
-        );
+        deps.extend(property.value.get_deps(
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+        ));
         if let Some(ref condition) = property.condition {
-            deps.extend(condition.get_deps(component_definition_name, loop_alias));
+            deps.extend(condition.get_deps(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ));
         }
 
         conditional_values.push(fastn_js::ConditionalValue {
             condition: property.condition.as_ref().map(|condition| {
-                condition
-                    .update_node_with_variable_reference_js(component_definition_name, loop_alias)
+                condition.update_node_with_variable_reference_js(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                )
             }),
             expression: property.value.to_fastn_js_value(),
         });
@@ -78,10 +102,15 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> Vec<String> {
         let mut deps = vec![];
         for property_value in self.references.values() {
-            deps.extend(property_value.get_deps(component_definition_name, loop_alias));
+            deps.extend(property_value.get_deps(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ));
         }
         deps
     }
@@ -90,12 +119,14 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> fastn_grammar::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(
             &self.expression,
             &self.references,
             component_definition_name,
             loop_alias,
+            inherited_variable_name,
         );
 
         fn update_node_with_variable_reference_js_(
@@ -103,6 +134,7 @@ impl ftd::interpreter::Expression {
             references: &ftd::Map<ftd::interpreter::PropertyValue>,
             component_definition_name: &Option<String>,
             loop_alias: &Option<String>,
+            inherited_variable_name: &Option<String>,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
@@ -119,6 +151,7 @@ impl ftd::interpreter::Expression {
                         name,
                         component_definition_name,
                         loop_alias,
+                        inherited_variable_name,
                     );
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: fastn_js::utils::name_to_js(name.as_str()),
@@ -132,6 +165,7 @@ impl ftd::interpreter::Expression {
                     references,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ));
             }
             fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
@@ -144,6 +178,7 @@ impl ftd::interpreter::PropertyValue {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -151,10 +186,15 @@ impl ftd::interpreter::PropertyValue {
                 reference,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
             ));
         } else if let Some(function) = self.get_function() {
             for value in function.values.values() {
-                deps.extend(value.get_deps(component_definition_name, loop_alias));
+                deps.extend(value.get_deps(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ));
             }
         }
         deps

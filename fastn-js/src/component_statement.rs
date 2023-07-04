@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum ComponentStatement {
     StaticVariable(fastn_js::StaticVariable),
     MutableVariable(fastn_js::MutableVariable),

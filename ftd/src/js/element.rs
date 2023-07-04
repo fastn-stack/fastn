@@ -31,6 +31,7 @@ impl Element {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
@@ -40,6 +41,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
             Element::Integer(integer) => integer.to_component_statements(
@@ -48,6 +50,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
             Element::Decimal(decimal) => decimal.to_component_statements(
@@ -56,6 +59,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
             Element::Boolean(boolean) => boolean.to_component_statements(
@@ -64,6 +68,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
             Element::Column(column) => column.to_component_statements(
@@ -72,6 +77,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
             Element::Row(row) => row.to_component_statements(
@@ -80,6 +86,7 @@ impl Element {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             ),
         }
@@ -150,32 +157,30 @@ impl Container {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         component_name: &str,
-    ) -> Option<fastn_js::ComponentStatement> {
+    ) -> Option<fastn_js::StaticVariable> {
         let mut inherited_fields = vec![];
 
         if let Some(ref colors) = self.colors {
             inherited_fields.push((
                 "colors".to_string(),
-                colors.to_set_property_value(component_definition_name, loop_alias),
+                colors.to_set_property_value(component_definition_name, loop_alias, &None),
             ));
         }
 
         if let Some(ref types) = self.types {
             inherited_fields.push((
                 "types".to_string(),
-                types.to_set_property_value(component_definition_name, loop_alias),
+                types.to_set_property_value(component_definition_name, loop_alias, &None),
             ));
         }
 
         if !inherited_fields.is_empty() {
-            Some(fastn_js::ComponentStatement::StaticVariable(
-                fastn_js::StaticVariable {
-                    name: format!("{}__inherited", component_name),
-                    value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                        fields: inherited_fields,
-                    }),
-                },
-            ))
+            Some(fastn_js::StaticVariable {
+                name: format!("{}__inherited", component_name),
+                value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                    fields: inherited_fields,
+                }),
+            })
         } else {
             None
         }
@@ -187,6 +192,7 @@ impl Container {
         _doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         if let Some(ref spacing) = self.spacing {
@@ -196,6 +202,7 @@ impl Container {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -206,6 +213,7 @@ impl Container {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -243,6 +251,7 @@ impl Text {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -251,9 +260,11 @@ impl Text {
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
-                value: self
-                    .text
-                    .to_set_property_value(component_definition_name, loop_alias),
+                value: self.text.to_set_property_value(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
                 element_name: kernel.name.to_string(),
             },
         ));
@@ -261,6 +272,7 @@ impl Text {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
         if should_return {
@@ -302,6 +314,7 @@ impl Integer {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -310,9 +323,11 @@ impl Integer {
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
-                value: self
-                    .value
-                    .to_set_property_value(component_definition_name, loop_alias),
+                value: self.value.to_set_property_value(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
                 element_name: kernel.name.to_string(),
             },
         ));
@@ -320,6 +335,7 @@ impl Integer {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
         if should_return {
@@ -361,6 +377,7 @@ impl Decimal {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -369,9 +386,11 @@ impl Decimal {
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
-                value: self
-                    .value
-                    .to_set_property_value(component_definition_name, loop_alias),
+                value: self.value.to_set_property_value(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
                 element_name: kernel.name.to_string(),
             },
         ));
@@ -379,6 +398,7 @@ impl Decimal {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
         if should_return {
@@ -420,6 +440,7 @@ impl Boolean {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -428,9 +449,11 @@ impl Boolean {
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
-                value: self
-                    .value
-                    .to_set_property_value(component_definition_name, loop_alias),
+                value: self.value.to_set_property_value(
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
                 element_name: kernel.name.to_string(),
             },
         ));
@@ -438,6 +461,7 @@ impl Boolean {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
         if should_return {
@@ -479,6 +503,7 @@ impl Column {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -488,6 +513,7 @@ impl Column {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
 
@@ -496,13 +522,25 @@ impl Column {
             doc,
             component_definition_name,
             loop_alias,
+            inherited_variable_name,
         ));
 
-        let _inherited_variables = self.container.get_inherited_variables(
+        let inherited_variables = self.container.get_inherited_variables(
             component_definition_name,
             loop_alias,
             kernel.name.as_str(),
         );
+
+        let inherited_variable_name = inherited_variables
+            .as_ref()
+            .map(|v| v.name.clone())
+            .or(inherited_variable_name.clone());
+
+        if let Some(inherited_variables) = inherited_variables {
+            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
+                inherited_variables,
+            ));
+        }
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
             v.to_component_statements(
@@ -510,6 +548,7 @@ impl Column {
                 index,
                 doc,
                 component_definition_name,
+                &inherited_variable_name,
                 false,
             )
         }));
@@ -551,6 +590,7 @@ impl Row {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -561,6 +601,7 @@ impl Row {
             kernel.name.as_str(),
             doc,
             component_definition_name,
+            inherited_variable_name,
             loop_alias,
         ));
 
@@ -569,7 +610,25 @@ impl Row {
             doc,
             component_definition_name,
             loop_alias,
+            inherited_variable_name,
         ));
+
+        let inherited_variables = self.container.get_inherited_variables(
+            component_definition_name,
+            loop_alias,
+            kernel.name.as_str(),
+        );
+
+        let inherited_variable_name = inherited_variables
+            .as_ref()
+            .map(|v| v.name.clone())
+            .or(inherited_variable_name.clone());
+
+        if let Some(inherited_variables) = inherited_variables {
+            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
+                inherited_variables,
+            ));
+        }
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
             v.to_component_statements(
@@ -577,6 +636,7 @@ impl Row {
                 index,
                 doc,
                 component_definition_name,
+                &inherited_variable_name,
                 false,
             )
         }));
@@ -688,12 +748,19 @@ impl Common {
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
+        inherited_variable_name: &Option<String>,
         loop_alias: &Option<String>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         for event in self.events.iter() {
             component_statements.push(fastn_js::ComponentStatement::AddEventHandler(
-                event.to_event_handler_js(element_name, doc, component_definition_name, loop_alias),
+                event.to_event_handler_js(
+                    element_name,
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
             ));
         }
         if let Some(ref id) = self.id {
@@ -703,6 +770,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -713,6 +781,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -723,6 +792,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -733,6 +803,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -743,6 +814,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -753,6 +825,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -763,6 +836,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -773,6 +847,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -783,6 +858,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -793,6 +869,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -803,6 +880,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -813,6 +891,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -823,6 +902,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -833,6 +913,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -843,6 +924,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -853,6 +935,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -863,6 +946,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -873,6 +957,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -883,6 +968,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -893,6 +979,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -903,6 +990,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -913,6 +1001,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -923,6 +1012,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -933,6 +1023,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -943,6 +1034,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -953,6 +1045,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -963,6 +1056,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -973,18 +1067,19 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
         if let Some(ref color) = self.color {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                color.to_set_property(
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(dbg!(color
+                .to_set_property(
                     fastn_js::PropertyKind::Color,
                     element_name,
                     component_definition_name,
                     loop_alias,
-                ),
-            ));
+                    inherited_variable_name
+                ))));
         }
         if let Some(ref background) = self.background {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
@@ -993,6 +1088,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -1003,6 +1099,7 @@ impl Common {
                     element_name,
                     component_definition_name,
                     loop_alias,
+                    inherited_variable_name,
                 ),
             ));
         }
@@ -1017,12 +1114,16 @@ impl ftd::interpreter::Event {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> fastn_js::EventHandler {
         fastn_js::EventHandler {
             event: self.name.to_js_event_name(),
-            action: self
-                .action
-                .to_js_function(doc, component_definition_name, loop_alias),
+            action: self.action.to_js_function(
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ),
             element_name: element_name.to_string(),
         }
     }
@@ -1034,6 +1135,7 @@ impl ftd::interpreter::FunctionCall {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
         let function = doc
@@ -1047,7 +1149,11 @@ impl ftd::interpreter::FunctionCall {
             } else {
                 panic!("Argument value not found {:?}", argument)
             };
-            parameters.push(value.to_set_property_value(component_definition_name, loop_alias));
+            parameters.push(value.to_set_property_value(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ));
         }
         fastn_js::Function {
             name: self.name.to_string(),

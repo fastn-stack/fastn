@@ -3,13 +3,15 @@
     <script src="fastn-js.js"></script>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 h-2 bgc-3"></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 h-2 bgc-3"><div data-id="3" class="c-4">Hello</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
 	.h-2 { height: 1000px; }
-	.bgc-3 { background-color: yellow; }
+	.bgc-3 { background-color: black; }
+	.c-4 { color: #f0ece2; }
+	body.dark .c-4 { color: #434547; }
     </style>
 <script>
     (function() {
@@ -97,15 +99,22 @@ foo__warning_base_,
 foo__warning_border_,
 foo__warning_btb_,
 foo__warning_text_;
-function main(parent)
+function main(parent, inherited)
 {
+  let parenti0__inherited;
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(1000)));
   parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
-    dark: "yellow",
-    light: "yellow"
+    dark: "black",
+    light: "black"
   })));
+  parenti0__inherited = fastn.recordInstance({
+    colors: foo__colors
+  });
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Color, parenti0__inherited.get("colors").get("border"));
 }
 foo__accent_ = fastn.recordInstance({
   primary: foo__accent_primary_,

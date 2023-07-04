@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct StaticVariable {
     pub name: String,
     pub value: fastn_js::SetPropertyValue,
