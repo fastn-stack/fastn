@@ -104,13 +104,68 @@ pub struct Boolean {
 #[derive(Debug)]
 pub struct Column {
     pub children: Vec<ftd::interpreter::Component>,
+    pub container: Container,
     pub common: Common,
+}
+
+#[derive(Debug)]
+pub struct Container {
+    pub colors: Option<ftd::js::Value>,
+    pub types: Option<ftd::js::Value>,
 }
 
 #[derive(Debug)]
 pub struct Row {
     pub children: Vec<ftd::interpreter::Component>,
     pub common: Common,
+}
+
+impl Container {
+    pub fn from(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> Container {
+        Container {
+            colors: ftd::js::value::get_properties("colors", properties, arguments),
+            types: ftd::js::value::get_properties("types", properties, arguments),
+        }
+    }
+
+    pub(crate) fn get_inherited_variables(
+        &self,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        component_name: &str,
+    ) -> Option<fastn_js::ComponentStatement> {
+        let mut inherited_fields = vec![];
+
+        if let Some(ref colors) = self.colors {
+            inherited_fields.push((
+                "colors".to_string(),
+                colors.to_set_property_value(component_definition_name, loop_alias),
+            ));
+        }
+
+        if let Some(ref types) = self.types {
+            inherited_fields.push((
+                "types".to_string(),
+                types.to_set_property_value(component_definition_name, loop_alias),
+            ));
+        }
+
+        if !inherited_fields.is_empty() {
+            Some(fastn_js::ComponentStatement::StaticVariable(
+                fastn_js::StaticVariable {
+                    name: format!("{}__inherited", component_name),
+                    value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                        fields: inherited_fields,
+                    }),
+                },
+            ))
+        } else {
+            None
+        }
+    }
 }
 
 impl Text {
@@ -357,8 +412,14 @@ impl Column {
             .clone()
             .component()
             .unwrap();
+
+        dbg!(&component);
         Column {
             children: component.get_children(doc).unwrap(),
+            container: Container::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -385,6 +446,12 @@ impl Column {
             component_definition_name,
             loop_alias,
         ));
+
+        let _inherited_variables = self.container.get_inherited_variables(
+            component_definition_name,
+            loop_alias,
+            kernel.name.as_str(),
+        );
 
         component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
             v.to_component_statements(
