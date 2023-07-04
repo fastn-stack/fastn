@@ -4,7 +4,8 @@
     <script src="../js/fastn.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/virtual.js"></script>
-    <script src="../js/variables.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -19,7 +20,6 @@
             i.addEventHandler(fastn_dom.Event.Click, function () {
                 x.set(x.get() + 1);
             });
-            i.done();
         }
 
         document.body.innerHTML = fastn_virtual.ssr(main);

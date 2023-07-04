@@ -7,11 +7,32 @@ fastn_dom.property_map = {
     "color": "c",
     "width": "w",
     "padding": "p",
+    "padding-horizontal": "ph",
+    "padding-vertical": "pv",
+    "padding-left": "pl",
+    "padding-right": "pr",
+    "padding-top": "pt",
+    "padding-bottom": "pb",
     "margin": "m",
+    "margin-horizontal": "mh",
+    "margin-vertical": "mv",
+    "margin-left": "ml",
+    "margin-right": "mr",
+    "margin-top": "mt",
+    "margin-bottom": "mb",
     "height": "h",
     "border-width": "bw",
     "border-style": "bs",
-
+    "background-color": "bgc",
+    "z-index": "z",
+    "sticky": "s",
+    "top": "t",
+    "bottom": "b",
+    "left": "l",
+    "right": "r",
+    "overflow": "o",
+    "overflow-x": "ox",
+    "overflow-y": "oy"
 };
 
 // dynamic-class-css.md
@@ -29,7 +50,18 @@ fastn_dom.getClassesAsString = function() {
 }
 
 function getClassAsString(className, obj) {
-    return `.${className} { ${obj.property}: ${obj.value}; }`;
+    if (typeof obj.value === 'object' && obj.value !== null) {
+        let value = "";
+        for (let key in obj.value) {
+            if (obj.value[key] === undefined || obj.value[key] === null) {
+                continue
+            }
+            value = `${value} ${key}: ${obj.value[key]};`
+        }
+        return `${className} { ${value} }`
+    } else {
+        return `${className} { ${obj.property}: ${obj.value}; }`;
+    }
 }
 
 fastn_dom.ElementKind = {
@@ -56,7 +88,32 @@ fastn_dom.PropertyKind = {
     BorderWidth: 7,
     BorderStyle: 8,
     Margin: 9,
+    Background: 10,
+    PaddingHorizontal: 11,
+    PaddingVertical: 12,
+    PaddingLeft: 13,
+    PaddingRight: 14,
+    PaddingTop: 15,
+    PaddingBottom: 16,
+    MarginHorizontal: 17,
+    MarginVertical: 18,
+    MarginLeft: 19,
+    MarginRight: 20,
+    MarginTop: 21,
+    MarginBottom: 22,
+    Role: 23,
+    ZIndex: 24,
+    Sticky: 25,
+    Top: 26,
+    Bottom: 27,
+    Left: 28,
+    Right: 29,
+    Overflow: 30,
+    OverflowX: 31,
+    OverflowY: 32,
 }
+
+
 
 fastn_dom.Resizing = {
     FillContainer: "100%",
@@ -73,6 +130,44 @@ fastn_dom.BorderStyle = {
     Groove: "groove",
     Inset: "inset",
     Outset: "outset",
+}
+
+fastn_dom.Overflow = {
+    Scroll: "scroll",
+    Visible: "visible",
+    Hidden: "hidden",
+    Auto: "auto",
+}
+
+fastn_dom.Display = {
+    Block: "block",
+    Inline: "inline",
+    InlineBlock: "inline-block",
+}
+
+fastn_dom.BackgroundStyle = {
+    Solid: (value) => { return value; }
+}
+
+fastn_dom.FontSize = {
+    Px: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}px`})
+        }
+        return `${value}px`;
+    },
+    Em: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}em`})
+        }
+        return `${value}em`;
+    },
+    Rem: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}rem`})
+        }
+        return `${value}rem`;
+    },
 }
 
 fastn_dom.Length = {
@@ -118,8 +213,20 @@ fastn_dom.Length = {
         }
         return `${value}vw`;
     },
+    Vmin: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vmin`})
+        }
+        return `${value}vmin`;
+    },
+    Vmax: (value) => {
+        if (value instanceof fastn.mutableClass) {
+            return fastn.formula([value], function () { return `${value.get()}vmax`})
+        }
+        return `${value}vmax`;
+    },
     Responsive: (desktop, mobile) => {
-        if (ftd.device == "desktop") {
+        if (ftd.device.get() === "desktop") {
             return desktop;
         } else {
             return mobile ? mobile: desktop;
@@ -158,37 +265,100 @@ class Node2 {
         return this.#parent;
     }
     // dynamic-class-css
-    attachCss(property, value) {
+    attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
-        let cls = `${propertyShort}-${value}`;
-        if (!fastn_dom.unsanitised_classes[cls]) {
-            fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+        let cls = `${propertyShort}-${JSON.stringify(value)}`;
+        if (!!className) {
+           cls = className;
+        } else {
+            if (!fastn_dom.unsanitised_classes[cls]) {
+                fastn_dom.unsanitised_classes[cls] = ++fastn_dom.class_count;
+            }
+            cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
         }
-        cls = `${propertyShort}-${fastn_dom.unsanitised_classes[cls]}`;
+        let cssClass = className ? cls : `.${cls}`;
+
         const obj = { property, value };
 
+        if (value === undefined) {
+            if (!ssr && !hydrating) {
+                for (const className of this.#node.classList.values()) {
+                    if (className.startsWith(`${propertyShort}-`)) {
+                        this.#node.classList.remove(className);
+                    }
+                }
+            }
+            return cls;
+        }
+
         if (!ssr && !hydrating) {
+            if (!!className) {
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                }
+                return cls;
+            }
+
             for (const className of this.#node.classList.values()) {
                 if (className.startsWith(`${propertyShort}-`)) {
                     this.#node.classList.remove(className);
                 }
             }
-            if (value === undefined) {
-                return;
-            }
 
-            if (!fastn_dom.classes[cls]) {
-                this.#node.style[property] = value;
+            if (createClass) {
+                if (!fastn_dom.classes[cssClass]) {
+                    fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+                    let styles = document.getElementById('styles');
+                    styles.innerHTML = `${styles.innerHTML}${getClassAsString(cssClass, obj)}\n`;
+                }
+                this.#node.style.removeProperty(property);
+                this.#node.classList.add(cls);
+            } else if (!fastn_dom.classes[cssClass]) {
+                if (typeof value === 'object' && value !== null) {
+                    for (let key in value) {
+                        this.#node.style[key] = value[key];
+                    }
+                } else {
+                    this.#node.style[property] = value;
+                }
             } else {
+                this.#node.style.removeProperty(property);
                 this.#node.classList.add(cls);
             }
 
-            return;
+            return cls;
         }
 
-        if (value !== undefined) {
-            fastn_dom.classes[cls] = fastn_dom.classes[cls] || obj;
-            this.#node.classList.add(cls);
+        fastn_dom.classes[cssClass] = fastn_dom.classes[cssClass] || obj;
+
+        if (!!className) {
+            return cls;
+        }
+
+        this.#node.classList.add(cls);
+        return cls;
+    }
+
+    attachColorCss(property, value) {
+        let lightValue = fastn_utils.getStaticValue(value.get("light"));
+        let darkValue = fastn_utils.getStaticValue(value.get("dark"));
+        if (lightValue === darkValue) {
+            this.attachCss(property, lightValue, false);
+        } else {
+            let lightClass = this.attachCss(property, lightValue, true);
+            this.attachCss(property, darkValue, true, `body.dark .${lightClass}`);
+        }
+    }
+    attachRoleCss(value) {
+        let desktopValue = fastn_utils.getStaticValue(value.get("desktop"));
+        let mobileValue = fastn_utils.getStaticValue(value.get("mobile"));
+        if (fastn_utils.sameResponsiveRole(desktopValue, mobileValue)) {
+            this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+        } else {
+            let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
+            this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
         }
     }
 
@@ -203,14 +373,65 @@ class Node2 {
             this.attachCss("height", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Padding) {
             this.attachCss("padding", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingHorizontal) {
+            this.attachCss("padding-left", staticValue);
+            this.attachCss("padding-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingVertical) {
+            this.attachCss("padding-top", staticValue);
+            this.attachCss("padding-bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingLeft) {
+            this.attachCss("padding-left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingRight) {
+            this.attachCss("padding-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingTop) {
+            this.attachCss("padding-top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.PaddingBottom) {
+            this.attachCss("padding-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Margin) {
             this.attachCss("margin", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginHorizontal) {
+            this.attachCss("margin-top", staticValue);
+            this.attachCss("margin-bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
+            this.attachCss("margin-left", staticValue);
+            this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginLeft) {
+            this.attachCss("margin-left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginRight) {
+            this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginTop) {
+            this.attachCss("margin-top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginBottom) {
+            this.attachCss("margin-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderWidth) {
             this.attachCss("border-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.ZIndex) {
+            this.attachCss("z-index", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Sticky) {
+            // todo: need to set position based on sticky (bool) value
+            this.attachCss("sticky", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Top) {
+            this.attachCss("top", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Bottom) {
+            this.attachCss("bottom", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Left) {
+            this.attachCss("left", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Right) {
+            this.attachCss("right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Overflow) {
+            this.attachCss("overflow", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OverflowX) {
+            this.attachCss("overflow-x", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OverflowY) {
+            this.attachCss("overflow-y", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
-            this.attachCss("color", staticValue);
+            this.attachColorCss("color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Background) {
+            this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Role) {
+            this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {

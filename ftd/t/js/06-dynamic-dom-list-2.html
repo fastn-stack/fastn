@@ -2,6 +2,7 @@
 <head>
     <script src="fastn-js.js"></script>
 </head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <body data-id="1"><div data-id="2">Click to add Tom</div><div data-id="3">update $first</div><div data-id="4"><div data-id="5" class="ft_column"><div data-id="6">hello</div><div data-id="7">0</div></div><div data-id="8" class="ft_column"><div data-id="9">world</div><div data-id="10">1</div></div></div></body><style id="styles">
     /*.ft_text {
         padding: 0;
@@ -10,7 +11,9 @@
     </style>
 <script>
     (function() {
-        function main(parent) {
+        let foo__first,
+foo__people;
+function main(parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
@@ -28,8 +31,8 @@
 function foo__append_string(a, v) {
   return (ftd.append(a, v));
 }
-let foo__first = fastn.mutable("hello");
-let foo__people = fastn.mutableList([foo__first,
+foo__first = fastn.mutable("hello");
+foo__people = fastn.mutableList([foo__first,
 "world"]);
 function foo__set_string(a, v)
 {
@@ -42,12 +45,13 @@ function foo__show_person(parent, name, index) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, name);
-  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Integer);
   parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, index);
   return parenti0;
 }
 
         fastn_virtual.hydrate(main);
+        ftd.post_init();
     })();
 </script>
 </html>

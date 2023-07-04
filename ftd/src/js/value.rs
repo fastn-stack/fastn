@@ -7,13 +7,13 @@ pub enum Value {
 
 impl Value {
     pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(None, None)
+        self.to_set_property_value(&None, &None)
     }
 
     pub(crate) fn to_set_property_value(
         &self,
-        component_definition_name: Option<String>,
-        loop_alias: Option<String>,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(),
@@ -30,8 +30,8 @@ impl Value {
         &self,
         kind: fastn_js::PropertyKind,
         element_name: &str,
-        component_definition_name: Option<String>,
-        loop_alias: Option<String>,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
@@ -43,8 +43,8 @@ impl Value {
 
 fn formulas_to_fastn_js_value(
     properties: &[ftd::interpreter::Property],
-    component_definition_name: Option<String>,
-    loop_alias: Option<String>,
+    component_definition_name: &Option<String>,
+    loop_alias: &Option<String>,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
     let mut conditional_values = vec![];
@@ -52,18 +52,16 @@ fn formulas_to_fastn_js_value(
         deps.extend(
             property
                 .value
-                .get_deps(component_definition_name.clone(), loop_alias.clone()),
+                .get_deps(component_definition_name, loop_alias),
         );
         if let Some(ref condition) = property.condition {
-            deps.extend(condition.get_deps(component_definition_name.clone(), loop_alias.clone()));
+            deps.extend(condition.get_deps(component_definition_name, loop_alias));
         }
 
         conditional_values.push(fastn_js::ConditionalValue {
             condition: property.condition.as_ref().map(|condition| {
-                condition.update_node_with_variable_reference_js(
-                    component_definition_name.clone(),
-                    loop_alias.clone(),
-                )
+                condition
+                    .update_node_with_variable_reference_js(component_definition_name, loop_alias)
             }),
             expression: property.value.to_fastn_js_value(),
         });
@@ -78,22 +76,20 @@ fn formulas_to_fastn_js_value(
 impl ftd::interpreter::Expression {
     pub(crate) fn get_deps(
         &self,
-        component_definition_name: Option<String>,
-        loop_alias: Option<String>,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
     ) -> Vec<String> {
         let mut deps = vec![];
         for property_value in self.references.values() {
-            deps.extend(
-                property_value.get_deps(component_definition_name.clone(), loop_alias.clone()),
-            );
+            deps.extend(property_value.get_deps(component_definition_name, loop_alias));
         }
         deps
     }
 
     pub fn update_node_with_variable_reference_js(
         &self,
-        component_definition_name: Option<String>,
-        loop_alias: Option<String>,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
     ) -> fastn_grammar::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(
             &self.expression,
@@ -105,8 +101,8 @@ impl ftd::interpreter::Expression {
         fn update_node_with_variable_reference_js_(
             expr: &fastn_grammar::evalexpr::ExprNode,
             references: &ftd::Map<ftd::interpreter::PropertyValue>,
-            component_definition_name: Option<String>,
-            loop_alias: Option<String>,
+            component_definition_name: &Option<String>,
+            loop_alias: &Option<String>,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
@@ -121,8 +117,8 @@ impl ftd::interpreter::Expression {
                 {
                     let name = ftd::js::utils::update_reference(
                         name,
-                        component_definition_name.clone(),
-                        loop_alias.clone(),
+                        component_definition_name,
+                        loop_alias,
                     );
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
                         identifier: fastn_js::utils::name_to_js(name.as_str()),
@@ -134,8 +130,8 @@ impl ftd::interpreter::Expression {
                 children.push(update_node_with_variable_reference_js_(
                     child,
                     references,
-                    component_definition_name.clone(),
-                    loop_alias.clone(),
+                    component_definition_name,
+                    loop_alias,
                 ));
             }
             fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
@@ -146,8 +142,8 @@ impl ftd::interpreter::Expression {
 impl ftd::interpreter::PropertyValue {
     pub(crate) fn get_deps(
         &self,
-        component_definition_name: Option<String>,
-        loop_alias: Option<String>,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
     ) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -158,7 +154,7 @@ impl ftd::interpreter::PropertyValue {
             ));
         } else if let Some(function) = self.get_function() {
             for value in function.values.values() {
-                deps.extend(value.get_deps(component_definition_name.clone(), loop_alias.clone()));
+                deps.extend(value.get_deps(component_definition_name, loop_alias));
             }
         }
         deps
@@ -265,6 +261,9 @@ impl ftd::interpreter::Value {
         use itertools::Itertools;
 
         match self {
+            ftd::interpreter::Value::Boolean { value } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
+            }
             ftd::interpreter::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
             }
@@ -305,7 +304,7 @@ impl ftd::interpreter::Value {
                         .collect_vec(),
                 })
             }
-            _ => todo!(),
+            t => todo!("{:?}", t),
         }
     }
 }
@@ -326,7 +325,23 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = border_style_variants(variant);
             (format!("fastn_dom.BorderStyle.{}", js_variant), false)
         }
-        _ => todo!(),
+        "ftd#background" => {
+            let js_variant = background_variants(variant);
+            (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
+        }
+        "ftd#font-size" => {
+            let js_variant = font_size_variants(variant);
+            (format!("fastn_dom.FontSize.{}", js_variant), true)
+        }
+        "ftd#overflow" => {
+            let js_variant = overflow_variants(variant);
+            (format!("fastn_dom.Overflow.{}", js_variant), false)
+        }
+        "ftd#display" => {
+            let js_variant = display_variants(variant);
+            (format!("fastn_dom.Display.{}", js_variant), false)
+        }
+        t => todo!("{} {}", t, variant),
     }
 }
 
@@ -337,7 +352,7 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "fixed" => ("Fixed", true),
         "fill-container" => ("FillContainer", false),
         "hug-content" => ("HugContent", false),
-        _ => todo!(),
+        t => todo!("invalid resizing variant {}", t),
     }
 }
 
@@ -349,8 +364,10 @@ fn length_variants(name: &str) -> &'static str {
         "percent" => "Percent",
         "vh" => "Vh",
         "vw" => "Vw",
+        "vmin" => "Vmin",
+        "vmax" => "Vmax",
         "calc" => "Calc",
-        _ => todo!(),
+        t => todo!("invalid length variant {}", t),
     }
 }
 
@@ -364,6 +381,41 @@ fn border_style_variants(name: &str) -> &'static str {
         "outset" => "Outset",
         "ridge" => "Ridge",
         "double" => "Double",
-        _ => todo!(),
+        t => todo!("invalid border-style variant {}", t),
+    }
+}
+
+fn background_variants(name: &str) -> &'static str {
+    match name {
+        "solid" => "Solid",
+        t => todo!("invalid background variant {}", t),
+    }
+}
+
+fn font_size_variants(name: &str) -> &'static str {
+    match name {
+        "px" => "Px",
+        "em" => "Em",
+        "rem" => "Rem",
+        t => todo!("invalid font-size variant {}", t),
+    }
+}
+
+fn overflow_variants(name: &str) -> &'static str {
+    match name {
+        "scroll" => "Scroll",
+        "visible" => "Visible",
+        "hidden" => "Hidden",
+        "auto" => "Auto",
+        t => todo!("invalid overflow variant {}", t),
+    }
+}
+
+fn display_variants(name: &str) -> &'static str {
+    match name {
+        "block" => "Block",
+        "inline" => "Inline",
+        "inline-block" => "InlineBlock",
+        t => todo!("invalid display variant {}", t),
     }
 }

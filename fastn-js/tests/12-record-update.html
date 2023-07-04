@@ -4,7 +4,8 @@
     <script src="../js/fastn.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/virtual.js"></script>
-    <script src="../js/variables.js"></script>
+    <script src="../js/ftd.js"></script>
+    <script src="../js/postInit.js"></script>
 </head>
 <body></body>
 <script>
@@ -19,14 +20,12 @@
             i1.addEventHandler(fastn_dom.Event.Click, function () {
                 dwight.set("name", "The Dwight Shrute");
             });
-            i1.done();
 
             let i2 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
             i2.setProperty(fastn_dom.PropertyKind.StringValue, "directly change $name");
             i2.addEventHandler(fastn_dom.Event.Click, function () {
                 name.set("New name");
             });
-            i2.done();
 
 
             let i3 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -34,7 +33,6 @@
             i3.addEventHandler(fastn_dom.Event.Click, function () {
                 dwight.set("boss", michael);
             });
-            i3.done();
 
             showPerson(root, dwight);
         }
@@ -44,20 +42,23 @@
 
             let i = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
             i.setProperty(fastn_dom.PropertyKind.StringValue, p.get("name"));
-            i.setProperty(fastn_dom.PropertyKind.Color_RGB, "red");
-            i.done();
+            i.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+                dark: "red",
+                light: "red"
+            }));
 
             fastn_dom.conditionalDom(root, [p.get("boss")], function() { return p.get("boss") != null }, function () {
                 let i2 = fastn_dom.createKernel(c, fastn_dom.ElementKind.Text);
                 let g = p.get("boss")
                 let gg = g.get("name");
                 i2.setProperty(fastn_dom.PropertyKind.StringValue, gg);
-                i2.setProperty(fastn_dom.PropertyKind.Color_RGB, "green");
-                i2.done();
+                i2.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+                    dark: "green",
+                    light: "green"
+                }));
                 return i2;
             });
 
-            c.done();
             return c;
         }
 
@@ -82,10 +83,10 @@ optional person boss:
 -- person $michael: Michael Scott
 
 -- ftd.text: directly change $dwight.name
-$on-click$: { dwight.name = "dd" }
+$on-click$: { dwight.name = "The Dwight Shrute" }
 
 -- ftd.text: directly change $name
-$on-click$: { name = "dd2" }
+$on-click$: { name = "New name" }
 
 -- ftd.text: Make michael boss of dwight
 $on-click$: { dwight.boss = michael }

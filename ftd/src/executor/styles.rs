@@ -7,6 +7,8 @@ pub enum Length {
     Calc(String),
     Vh(f64),
     Vw(f64),
+    Vmin(f64),
+    Vmax(f64),
     Em(f64),
     Rem(f64),
     Responsive(Box<ResponsiveLength>),
@@ -100,6 +102,21 @@ impl Length {
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
+            //
+            ftd::interpreter::FTD_LENGTH_VMIN => Ok(Length::Vmin(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            ftd::interpreter::FTD_LENGTH_VMAX => Ok(Length::Vmax(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
             ftd::interpreter::FTD_LENGTH_EM => Ok(Length::Em(
                 or_type_value
                     .1
@@ -159,6 +176,8 @@ impl Length {
             Length::Calc(calc) => format!("calc({})", calc),
             Length::Vh(vh) => format!("{}vh", vh),
             Length::Vw(vw) => format!("{}vw", vw),
+            Length::Vmin(vmin) => format!("{}vmin", vmin),
+            Length::Vmax(vmax) => format!("{}vmax", vmax),
             Length::Em(em) => format!("{}em", em),
             Length::Rem(rem) => format!("{}rem", rem),
             Length::Responsive(r) => match device {
@@ -179,6 +198,8 @@ impl Length {
             | ftd::interpreter::FTD_LENGTH_CALC
             | ftd::interpreter::FTD_LENGTH_VH
             | ftd::interpreter::FTD_LENGTH_VW
+            | ftd::interpreter::FTD_LENGTH_VMIN
+            | ftd::interpreter::FTD_LENGTH_VMAX
             | ftd::interpreter::FTD_LENGTH_EM
             | ftd::interpreter::FTD_LENGTH_REM => Ok("{0}"),
             t => ftd::executor::utils::parse_error(
@@ -200,6 +221,8 @@ impl Length {
             ftd::interpreter::FTD_LENGTH_CALC => Ok("calc({0})"),
             ftd::interpreter::FTD_LENGTH_VH => Ok("{0}vh"),
             ftd::interpreter::FTD_LENGTH_VW => Ok("{0}vw"),
+            ftd::interpreter::FTD_LENGTH_VMIN => Ok("{0}vmin"),
+            ftd::interpreter::FTD_LENGTH_VMAX => Ok("{0}vmax"),
             ftd::interpreter::FTD_LENGTH_EM => Ok("{0}em"),
             ftd::interpreter::FTD_LENGTH_REM => Ok("{0}rem"),
             t => ftd::executor::utils::parse_error(
@@ -222,6 +245,8 @@ impl Length {
             ftd::interpreter::FTD_LENGTH_CALC => Ok(format!("calc({})", value)),
             ftd::interpreter::FTD_LENGTH_VH => Ok(format!("{}vh", value)),
             ftd::interpreter::FTD_LENGTH_VW => Ok(format!("{}vw", value)),
+            ftd::interpreter::FTD_LENGTH_VMIN => Ok(format!("{}vmin", value)),
+            ftd::interpreter::FTD_LENGTH_VMAX => Ok(format!("{}vmax", value)),
             ftd::interpreter::FTD_LENGTH_EM => Ok(format!("{}em", value)),
             ftd::interpreter::FTD_LENGTH_REM => Ok(format!("{}rem", value)),
             t => ftd::executor::utils::parse_error(

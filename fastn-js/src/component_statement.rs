@@ -15,6 +15,24 @@ pub enum ComponentStatement {
     // Formula(Formula),
 }
 
+impl ComponentStatement {
+    pub fn get_variable_name(&self) -> Option<String> {
+        match self {
+            ComponentStatement::StaticVariable(static_variable) => {
+                Some(static_variable.name.clone())
+            }
+            ComponentStatement::MutableVariable(mutable_variable) => {
+                Some(mutable_variable.name.clone())
+            }
+            ComponentStatement::RecordInstance(record_instance) => {
+                Some(record_instance.name.clone())
+            }
+            ComponentStatement::MutableList(mutable_list) => Some(mutable_list.name.clone()),
+            _ => None,
+        }
+    }
+}
+
 // pub struct ExprNode {
 //     operator: Operator,
 //     children: Vec<ExprNode>,

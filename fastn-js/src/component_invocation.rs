@@ -32,9 +32,11 @@ impl ElementKind {
     pub(crate) fn from_component_name(name: &str) -> ElementKind {
         match name {
             "ftd#text" => ElementKind::Text,
-            "ftd#integer" => ElementKind::Text,
+            "ftd#integer" => ElementKind::Integer,
             "ftd#row" => ElementKind::Row,
             "ftd#column" => ElementKind::Column,
+            "ftd#decimal" => ElementKind::Decimal,
+            "ftd#boolean" => ElementKind::Boolean,
             _ => todo!(),
         }
     }

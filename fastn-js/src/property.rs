@@ -107,6 +107,7 @@ pub enum Value {
     String(String),
     Integer(i64),
     Decimal(f64),
+    Boolean(bool),
     OrType {
         variant: String,
         value: Option<Box<SetPropertyValue>>,
@@ -126,6 +127,7 @@ impl Value {
             Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
+            Value::Boolean(b) => b.to_string(),
             Value::OrType { variant, value } => {
                 if let Some(value) = value {
                     format!("{}({})", variant, value.to_js())
@@ -141,7 +143,11 @@ impl Value {
                 "fastn.recordInstance({{{}}})",
                 fields
                     .iter()
-                    .map(|(k, v)| format!("{}: {}", k, v.to_js()))
+                    .map(|(k, v)| format!(
+                        "{}: {}",
+                        fastn_js::utils::kebab_to_snake_case(k),
+                        v.to_js()
+                    ))
                     .join(", ")
             ),
         }
@@ -153,10 +159,34 @@ pub enum PropertyKind {
     Id,
     Width,
     Padding,
+    PaddingHorizontal,
+    PaddingVertical,
+    PaddingLeft,
+    PaddingRight,
+    PaddingTop,
+    PaddingBottom,
     Margin,
+    MarginHorizontal,
+    MarginVertical,
+    MarginTop,
+    MarginBottom,
+    MarginLeft,
+    MarginRight,
     Height,
     BorderWidth,
     BorderStyle,
+    Color,
+    Background,
+    Role,
+    ZIndex,
+    Sticky,
+    Top,
+    Bottom,
+    Left,
+    Right,
+    Overflow,
+    OverflowX,
+    OverflowY,
 }
 
 impl PropertyKind {
@@ -166,10 +196,34 @@ impl PropertyKind {
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
+            PropertyKind::PaddingHorizontal => "fastn_dom.PropertyKind.PaddingHorizontal",
+            PropertyKind::PaddingVertical => "fastn_dom.PropertyKind.PaddingVertical",
+            PropertyKind::PaddingLeft => "fastn_dom.PropertyKind.PaddingLeft",
+            PropertyKind::PaddingRight => "fastn_dom.PropertyKind.PaddingRight",
+            PropertyKind::PaddingTop => "fastn_dom.PropertyKind.PaddingTop",
+            PropertyKind::PaddingBottom => "fastn_dom.PropertyKind.PaddingBottom",
             PropertyKind::Margin => "fastn_dom.PropertyKind.Margin",
+            PropertyKind::MarginHorizontal => "fastn_dom.PropertyKind.MarginHorizontal",
+            PropertyKind::MarginVertical => "fastn_dom.PropertyKind.MarginVertical",
+            PropertyKind::MarginLeft => "fastn_dom.PropertyKind.MarginLeft",
+            PropertyKind::MarginRight => "fastn_dom.PropertyKind.MarginRight",
+            PropertyKind::MarginTop => "fastn_dom.PropertyKind.MarginTop",
+            PropertyKind::MarginBottom => "fastn_dom.PropertyKind.MarginBottom",
             PropertyKind::Height => "fastn_dom.PropertyKind.Height",
             PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
+            PropertyKind::Color => "fastn_dom.PropertyKind.Color",
+            PropertyKind::Background => "fastn_dom.PropertyKind.Background",
+            PropertyKind::Role => "fastn_dom.PropertyKind.Role",
+            PropertyKind::ZIndex => "fastn_dom.PropertyKind.ZIndex",
+            PropertyKind::Sticky => "fastn_dom.PropertyKind.Sticky",
+            PropertyKind::Top => "fastn_dom.PropertyKind.Top",
+            PropertyKind::Bottom => "fastn_dom.PropertyKind.Bottom",
+            PropertyKind::Left => "fastn_dom.PropertyKind.Left",
+            PropertyKind::Right => "fastn_dom.PropertyKind.Right",
+            PropertyKind::Overflow => "fastn_dom.PropertyKind.Overflow",
+            PropertyKind::OverflowX => "fastn_dom.PropertyKind.OverflowX",
+            PropertyKind::OverflowY => "fastn_dom.PropertyKind.OverflowY",
         }
     }
 }
