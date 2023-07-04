@@ -39,26 +39,43 @@ pub async fn process(
     let (_, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
     super::sqlite::result_to_value(
-        execute_query(query.as_str(), doc.name, value.line_number()).await?,
+        execute_query(query.as_str(), doc, value.line_number()).await?,
         kind,
         doc,
         value.line_number(),
     )
 }
 
+struct Args {}
+
+impl Args {
+    fn pg_args(&self) -> Vec<&(dyn postgres_types::ToSql + Sync)> {
+        todo!()
+    }
+}
+
+fn parse_query(
+    _query: &str,
+    _args: &[postgres_types::Type],
+    _doc: &ftd::interpreter::TDoc<'_>,
+) -> ftd::interpreter::Result<Args> {
+    todo!()
+}
+
 async fn execute_query(
     query: &str,
-    doc_name: &str,
+    doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
+    let args = parse_query(query, stmt.params(), doc)?;
 
-    let rows = client.query(&stmt, &vec![]).await.unwrap();
+    let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
     for r in rows {
-        result.push(row_to_json(r, doc_name, line_number)?)
+        result.push(row_to_json(r, doc.name, line_number)?)
     }
 
     Ok(result)
