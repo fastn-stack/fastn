@@ -2233,39 +2233,49 @@ else {document.querySelector(`[data-id="6:main"]`).style["width"] = eval(`{0}`.f
 }
 window.node_change_main["8:main__width"] = function(data) {
 if(function(){
-return (resolve_reference("foo#num", data)%7==0);
+return (resolve_reference("foo#num", data)%9==0);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}px`.format(JSON.stringify(20)))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==1);
+return (resolve_reference("foo#num", data)%9==1);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}%`.format(JSON.stringify(20)))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==2);
+return (resolve_reference("foo#num", data)%9==2);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`calc({0})`.format(JSON.stringify("20")))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==3);
+return (resolve_reference("foo#num", data)%9==3);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}vh`.format(JSON.stringify(20)))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==4);
+return (resolve_reference("foo#num", data)%9==4);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}vw`.format(JSON.stringify(20)))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==5);
+return (resolve_reference("foo#num", data)%9==5);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}em`.format(JSON.stringify(20)))));
 }
 else if(function(){
-return (resolve_reference("foo#num", data)%7==6);
+return (resolve_reference("foo#num", data)%9==6);
 }()){
 document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}rem`.format(JSON.stringify(20)))));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%9==7);
+}()){
+document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}vmin`.format(JSON.stringify(20)))));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%9==8);
+}()){
+document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`{0}`.format(JSON.stringify(`{0}vmax`.format(JSON.stringify(20)))));
 }
 else { document.querySelector(`[data-id="8:main"]`).style["width"] = null }
 }
