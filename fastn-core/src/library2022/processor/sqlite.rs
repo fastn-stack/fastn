@@ -24,45 +24,6 @@ pub(crate) fn get_p1_data(
     }
 }
 
-pub enum QueryParam {
-    Integer4(i32),
-    Integer8(i64),
-    Boolean(bool),
-    Decimal(f64),
-    String(String),
-}
-
-pub(crate) fn get_params(
-    headers: &ftd::ast::HeaderValues,
-    doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Vec<QueryParam>> {
-    let mut result = vec![];
-
-    for x in headers.0.iter().filter(|hv| hv.key.starts_with("param")) {
-        match (match x.key.split_once('-') {
-            Some((_, v)) => v.to_string(),
-            None => "string".to_string(),
-        })
-        .as_str()
-        {
-            "string" => result.push(QueryParam::String(x.value.string(doc.name)?)),
-            "boolean" => result.push(QueryParam::Boolean(x.value.string(doc.name)?.parse()?)),
-            "integer-4" => result.push(QueryParam::Integer4(x.value.string(doc.name)?.parse()?)),
-            "integer-8" => result.push(QueryParam::Integer8(x.value.string(doc.name)?.parse()?)),
-            "decimal" => result.push(QueryParam::Decimal(x.value.string(doc.name)?.parse()?)),
-            _ => {
-                return ftd::interpreter::utils::e2(
-                    format!("unknown param type: {}", x.key),
-                    doc.name,
-                    x.value.line_number(),
-                )
-            }
-        }
-    }
-
-    Ok(result)
-}
-
 pub async fn process(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter::Kind,
@@ -72,11 +33,11 @@ pub async fn process(
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
 
     let sqlite_database =
-        match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
+        match headers.get_optional_string_by_key("$db$", doc.name, value.line_number())? {
             Some(k) => k,
             None => {
                 return ftd::interpreter::utils::e2(
-                    "`db` is not specified".to_string(),
+                    "`$db$` is not specified".to_string(),
                     doc.name,
                     value.line_number(),
                 )
@@ -86,7 +47,7 @@ pub async fn process(
     if !sqlite_database_path.exists() {
         if !config.root.join(sqlite_database_path.as_path()).exists() {
             return ftd::interpreter::utils::e2(
-                "`db` does not exists for package-query processor".to_string(),
+                "`$db$` does not exists for package-query processor".to_string(),
                 doc.name,
                 value.line_number(),
             );
@@ -108,7 +69,6 @@ pub async fn process(
             query.as_str(),
             doc.name,
             value.line_number(),
-            get_params(&headers, doc)?,
         )
         .await?,
         kind,
@@ -147,7 +107,6 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    _query_params: Vec<QueryParam>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
@@ -181,9 +140,8 @@ async fn execute_query(
 
     // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
     // let mut rows = stmt.query([name])?;
-
-    let v: Vec<String> = vec![];
-    let mut rows = match stmt.query(rusqlite::params_from_iter(v)) {
+    let params: Vec<String> = vec![];
+    let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
         Ok(v) => v,
         Err(e) => {
             return ftd::interpreter::utils::e2(

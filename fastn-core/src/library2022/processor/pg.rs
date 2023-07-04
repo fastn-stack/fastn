@@ -36,16 +36,10 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
+    let (_, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
     super::sqlite::result_to_value(
-        execute_query(
-            query.as_str(),
-            doc.name,
-            value.line_number(),
-            super::sqlite::get_params(&headers, doc)?,
-        )
-        .await?,
+        execute_query(query.as_str(), doc.name, value.line_number()).await?,
         kind,
         doc,
         value.line_number(),
@@ -56,31 +50,11 @@ async fn execute_query(
     query: &str,
     doc_name: &str,
     line_number: usize,
-    query_params: Vec<super::sqlite::QueryParam>,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
     let stmt = client.prepare_cached(query).await.unwrap();
 
-    let query_params_dyns = query_params
-        .iter()
-        .map(|q| match q {
-            super::sqlite::QueryParam::Integer4(v) => {
-                v as &(dyn tokio_postgres::types::ToSql + Sync)
-            }
-            super::sqlite::QueryParam::Integer8(v) => {
-                v as &(dyn tokio_postgres::types::ToSql + Sync)
-            }
-            super::sqlite::QueryParam::Boolean(v) => {
-                v as &(dyn tokio_postgres::types::ToSql + Sync)
-            }
-            super::sqlite::QueryParam::Decimal(v) => {
-                v as &(dyn tokio_postgres::types::ToSql + Sync)
-            }
-            super::sqlite::QueryParam::String(v) => v as &(dyn tokio_postgres::types::ToSql + Sync),
-        })
-        .collect::<Vec<_>>();
-
-    let rows = client.query(&stmt, &query_params_dyns).await.unwrap();
+    let rows = client.query(&stmt, &vec![]).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
 
     for r in rows {
@@ -160,7 +134,7 @@ string department:
 
 -- person list people:
 $processor$: pr.pg
-param-integer-4: 1
+param: 1
 
 SELECT * FROM "users" where id >= $1;
 
@@ -210,4 +184,11 @@ SELECT 80.0::FLOAT8;
 
 -- ftd.decimal: $d_8
 
+ */
+
+/*
+PREPARE my_query AS
+SELECT * FROM "users" where id >= $1;
+SELECT parameter_types FROM pg_prepared_statements WHERE name = 'my_query';
+DEALLOCATE my_query;
  */
