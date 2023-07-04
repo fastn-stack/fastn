@@ -1,5 +1,50 @@
-fn extract_arguments(_query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
-    todo!()
+fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
+    let chars: Vec<char> = query.chars().collect();
+    let len = chars.len();
+    let mut i = 0;
+    let mut found_eq = false;
+    let mut args: Vec<String> = Vec::new();
+    let mut output_query = String::new();
+
+    while i < len {
+        let current_char = chars[i];
+
+        if current_char == '=' {
+            found_eq = true;
+        }
+
+        if found_eq && current_char == '$' && chars[i - 1] != '\\' {
+            let mut arg = String::new();
+            i += 1;
+
+            while i < len && chars[i] != ' ' {
+                arg.push(chars[i]);
+                i += 1;
+            }
+
+            let gap = if i < len { " " } else { "" };
+
+            if !arg.is_empty() {
+                let index = args.iter().position(|x| *x == arg);
+
+                match index {
+                    Some(idx) => {
+                        output_query.push_str(&format!("${}{}", idx + 1, gap));
+                    }
+                    None => {
+                        args.push(arg.clone());
+                        output_query.push_str(&format!("${}{}", args.len(), gap));
+                    }
+                }
+            }
+        } else {
+            output_query.push(current_char);
+        }
+
+        i += 1;
+    }
+
+    Ok((output_query, args))
 }
 
 #[cfg(test)]
