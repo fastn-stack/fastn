@@ -65,6 +65,21 @@ mod test {
             vec!["name"],
         );
         e(
+            "SELECT * FROM test where name = $name and full_name = $full_name",
+            "SELECT * FROM test where name = $1 and full_name = $2",
+            vec!["name", "full_name"],
+        );
+        e(
+            r#"SELECT * FROM test where name = \$name and full_name = $full_name"#,
+            r#"SELECT * FROM test where name = \$name and full_name = $1"#,
+            vec!["full_name"],
+        );
+        e(
+            r#"SELECT * FROM test where name = \\$name and full_name = $full_name"#,
+            r#"SELECT * FROM test where name = \\$1 and full_name = $2"#,
+            vec!["name", "full_name"],
+        );
+        e(
             "SELECT * FROM test where name = $name and full_name = $name",
             "SELECT * FROM test where name = $1 and full_name = $1",
             vec!["name"],
