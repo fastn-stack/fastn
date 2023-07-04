@@ -860,7 +860,7 @@ impl ExpressionGenerator {
 }
 
 pub(crate) fn get_variable_declaration(variables: &[String]) -> pretty::RcDoc<'static> {
-    if variables.len() != 0 {
+    if !variables.is_empty() {
         text("let")
             .append(space())
             .append(pretty::RcDoc::intersperse(
