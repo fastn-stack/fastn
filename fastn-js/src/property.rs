@@ -191,6 +191,10 @@ pub enum PropertyKind {
     OverflowY,
     Spacing,
     Wrap,
+    TextTransform,
+    TextIndent,
+    TextAlign,
+    LineClamp,
 }
 
 impl PropertyKind {
@@ -230,6 +234,10 @@ impl PropertyKind {
             PropertyKind::OverflowY => "fastn_dom.PropertyKind.OverflowY",
             PropertyKind::Spacing => "fastn_dom.PropertyKind.Spacing",
             PropertyKind::Wrap => "fastn_dom.PropertyKind.Wrap",
+            PropertyKind::TextTransform => "fastn_dom.PropertyKind.TextTransform",
+            PropertyKind::TextIndent => "fastn_dom.PropertyKind.TextIndent",
+            PropertyKind::TextAlign => "fastn_dom.PropertyKind.TextAlign",
+            PropertyKind::LineClamp => "fastn_dom.PropertyKind.LineClamp",
         }
     }
 }

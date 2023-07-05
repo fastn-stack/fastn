@@ -385,6 +385,14 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = spacing_variants(variant);
             (format!("fastn_dom.Spacing.{}", js_variant.0), js_variant.1)
         }
+        "ftd#text-transform" => {
+            let js_variant = text_transform_variants(variant);
+            (format!("fastn_dom.TextTransform.{}", js_variant), false)
+        }
+        "ftd#text-align" => {
+            let js_variant = text_align_variants(variant);
+            (format!("fastn_dom.TextAlign.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -471,5 +479,27 @@ fn spacing_variants(name: &str) -> (&'static str, bool) {
         "space-around" => ("SpaceAround", false),
         "fixed" => ("Fixed", true),
         t => todo!("invalid spacing variant {}", t),
+    }
+}
+
+fn text_transform_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "None",
+        "capitalize" => "Capitalize",
+        "uppercase" => "Uppercase",
+        "lowercase" => "Lowercase",
+        "inherit" => "Inherit",
+        "initial" => "Initial",
+        t => todo!("invalid text-transform variant {}", t),
+    }
+}
+
+fn text_align_variants(name: &str) -> &'static str {
+    match name {
+        "start" => "Start",
+        "center" => "Center",
+        "end" => "End",
+        "justify" => "Justify",
+        t => todo!("invalid text-align variant {}", t),
     }
 }

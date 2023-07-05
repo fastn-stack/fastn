@@ -97,24 +97,28 @@ impl Element {
 pub struct Text {
     pub text: ftd::js::Value,
     pub common: Common,
+    pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Integer {
     pub value: ftd::js::Value,
     pub common: Common,
+    pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Decimal {
     pub value: ftd::js::Value,
     pub common: Common,
+    pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Boolean {
     pub value: ftd::js::Value,
     pub common: Common,
+    pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
@@ -241,6 +245,10 @@ impl Text {
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
             ),
+            text_common: TextCommon::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
         }
     }
 
@@ -275,6 +283,14 @@ impl Text {
             inherited_variable_name,
             loop_alias,
         ));
+        component_statements.extend(self.text_common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+        ));
+
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -303,6 +319,10 @@ impl Integer {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
+            ),
+            text_common: TextCommon::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
             ),
         }
     }
@@ -338,6 +358,13 @@ impl Integer {
             inherited_variable_name,
             loop_alias,
         ));
+        component_statements.extend(self.text_common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+        ));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -366,6 +393,10 @@ impl Decimal {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
+            ),
+            text_common: TextCommon::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
             ),
         }
     }
@@ -401,6 +432,13 @@ impl Decimal {
             inherited_variable_name,
             loop_alias,
         ));
+        component_statements.extend(self.text_common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+        ));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -430,6 +468,10 @@ impl Boolean {
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
             ),
+            text_common: TextCommon::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
         }
     }
 
@@ -458,6 +500,13 @@ impl Boolean {
             },
         ));
         component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+        ));
+        component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
             doc,
             component_definition_name,
@@ -645,6 +694,84 @@ impl Row {
                 component_name: kernel.name,
             });
         }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct TextCommon {
+    pub text_transform: Option<ftd::js::Value>,
+    pub text_indent: Option<ftd::js::Value>,
+    pub text_align: Option<ftd::js::Value>,
+    // pub line_clamp: Option<ftd::js::Value>,
+}
+
+impl TextCommon {
+    pub fn from(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> TextCommon {
+        TextCommon {
+            text_transform: ftd::js::value::get_properties("text-transform", properties, arguments),
+            text_indent: ftd::js::value::get_properties("text-indent", properties, arguments),
+            text_align: ftd::js::value::get_properties("text-align", properties, arguments),
+            // line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
+        }
+    }
+
+    pub fn to_set_properties(
+        &self,
+        element_name: &str,
+        _doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        inherited_variable_name: &Option<String>,
+        loop_alias: &Option<String>,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if let Some(ref transform) = self.text_transform {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                transform.to_set_property(
+                    fastn_js::PropertyKind::TextTransform,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref indent) = self.text_indent {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                indent.to_set_property(
+                    fastn_js::PropertyKind::TextIndent,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref align) = self.text_align {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                align.to_set_property(
+                    fastn_js::PropertyKind::TextAlign,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        // if let Some(ref clamp) = self.line_clamp {
+        //     component_statements.push(fastn_js::ComponentStatement::SetProperty(
+        //         clamp.to_set_property(
+        //             fastn_js::PropertyKind::LineClamp,
+        //             element_name,
+        //             component_definition_name,
+        //             loop_alias,
+        //             inherited_variable_name,
+        //         ),
+        //     ));
+        // }
         component_statements
     }
 }

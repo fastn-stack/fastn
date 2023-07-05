@@ -1,0 +1,109 @@
+<html>
+<head>
+    <script src="fastn-js.js"></script>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column w-1 bw-2 bs-3 c-4 g-5"><div data-id="3" class="tt-6">capitalize</div><div data-id="4" class="tt-7">LOWER</div><div data-id="5" class="tt-8">upper</div></div><div data-id="6" class="ft_row w-1 p-9 mt-10 mb-11 bgc-12"><div data-id="7" class="c-13 text-indent-14">This is some indented text.
+
+It only applies spacing at the beginning of the first line.</div></div><div data-id="8" class="ft_row c-15 g-5"><div data-id="9" class="w-16 p-17 bw-18 ta-19">this is **text-align: center** text. a bit longer text so you can see what's going on.</div><div data-id="10" class="w-16 p-17 bw-18 ta-20">this is **text-align: start** text. a bit longer text so you can see what's
+going on.</div><div data-id="11" class="w-16 p-17 bw-18 ta-21">this is **text-align: end** text. a bit longer text so you can see what's going
+on.</div><div data-id="12" class="w-16 p-17 bw-18 ta-22">this is **text-align: justify** text. a bit longer text so you can see what's going on.</div></div></body><style id="styles">
+    .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
+	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
+	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+	.w-1 { width: 100%; }
+	.bw-2 { border-width: 2px; }
+	.bs-3 { border-style: double; }
+	.c-4 { color: red; }
+	.g-5 { gap: 10px; }
+	.tt-6 { text-transform: capitalize; }
+	.tt-7 { text-transform: lowercase; }
+	.tt-8 { text-transform: uppercase; }
+	.p-9 { padding: 10px; }
+	.mt-10 { margin-top: 5px; }
+	.mb-11 { margin-bottom: 5px; }
+	.bgc-12 { background-color: black; }
+	.c-13 { color: yellow; }
+	.text-indent-14 { text-indent: 30px; }
+	.c-15 { color: blue; }
+	.w-16 { width: 30%; }
+	.p-17 { padding: 5px; }
+	.bw-18 { border-width: 1px; }
+	.ta-19 { text-align: center; }
+	.ta-20 { text-align: start; }
+	.ta-21 { text-align: end; }
+	.ta-22 { text-align: justify; }
+    </style>
+<script>
+    (function() {
+        function main(parent, inherited) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "red",
+    light: "red"
+  }));
+  parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "capitalize");
+  parenti0i0.setProperty(fastn_dom.PropertyKind.TextTransform, fastn_dom.TextTransform.Capitalize);
+  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "LOWER");
+  parenti0i1.setProperty(fastn_dom.PropertyKind.TextTransform, fastn_dom.TextTransform.Lowercase);
+  let parenti0i2 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i2.setProperty(fastn_dom.PropertyKind.StringValue, "upper");
+  parenti0i2.setProperty(fastn_dom.PropertyKind.TextTransform, fastn_dom.TextTransform.Uppercase);
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti1.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(5));
+  parenti1.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "black",
+    light: "black"
+  })));
+  let parenti1i0 = fastn_dom.createKernel(parenti1, fastn_dom.ElementKind.Text);
+  parenti1i0.setProperty(fastn_dom.PropertyKind.StringValue, "This is some indented text.\n\nIt only applies spacing at the beginning of the first line.");
+  parenti1i0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "yellow",
+    light: "yellow"
+  }));
+  parenti1i0.setProperty(fastn_dom.PropertyKind.TextIndent, fastn_dom.Length.Px(30));
+  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti2.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "blue",
+    light: "blue"
+  }));
+  parenti2.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
+  let parenti2i0 = fastn_dom.createKernel(parenti2, fastn_dom.ElementKind.Text);
+  parenti2i0.setProperty(fastn_dom.PropertyKind.StringValue, "this is **text-align: center** text. a bit longer text so you can see what's going on.");
+  parenti2i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(30)));
+  parenti2i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
+  parenti2i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1));
+  parenti2i0.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Center);
+  let parenti2i1 = fastn_dom.createKernel(parenti2, fastn_dom.ElementKind.Text);
+  parenti2i1.setProperty(fastn_dom.PropertyKind.StringValue, "this is **text-align: start** text. a bit longer text so you can see what's\ngoing on.");
+  parenti2i1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(30)));
+  parenti2i1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
+  parenti2i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1));
+  parenti2i1.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Start);
+  let parenti2i2 = fastn_dom.createKernel(parenti2, fastn_dom.ElementKind.Text);
+  parenti2i2.setProperty(fastn_dom.PropertyKind.StringValue, "this is **text-align: end** text. a bit longer text so you can see what's going\non.");
+  parenti2i2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(30)));
+  parenti2i2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
+  parenti2i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1));
+  parenti2i2.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.End);
+  let parenti2i3 = fastn_dom.createKernel(parenti2, fastn_dom.ElementKind.Text);
+  parenti2i3.setProperty(fastn_dom.PropertyKind.StringValue, "this is **text-align: justify** text. a bit longer text so you can see what's going on.");
+  parenti2i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Percent(30)));
+  parenti2i3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
+  parenti2i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1));
+  parenti2i3.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Justify);
+}
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

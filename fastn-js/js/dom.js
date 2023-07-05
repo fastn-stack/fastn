@@ -69,7 +69,9 @@ fastn_dom.property_map = {
     "gap": "g",
     "justify-content": "jc",
     "position": "pos",
-    "flex-wrap": "fw"
+    "flex-wrap": "fw",
+    "text-transform": "tt",
+    "text-align": "ta",
 };
 
 // dynamic-class-css.md
@@ -149,7 +151,11 @@ fastn_dom.PropertyKind = {
     OverflowX: 31,
     OverflowY: 32,
     Spacing: 33,
-    Wrap: 34
+    Wrap: 34,
+    TextTransform: 35,
+    TextIndent: 36,
+    TextAlign: 37,
+    LineClamp: 38,
 }
 
 
@@ -190,6 +196,22 @@ fastn_dom.Display = {
     Block: "block",
     Inline: "inline",
     InlineBlock: "inline-block",
+}
+
+fastn_dom.TextTransform = {
+    None: "none",
+    Capitalize: "capitalize",
+    Uppercase: "uppercase",
+    Lowercase: "lowercase",
+    Inherit: "inherit",
+    Initial: "initial",
+}
+
+fastn_dom.TextAlign = {
+    Start: "start",
+    Center: "center",
+    End: "end",
+    Justify: "justify",
 }
 
 fastn_dom.BackgroundStyle = {
@@ -437,11 +459,11 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Margin) {
             this.attachCss("margin", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginHorizontal) {
-            this.attachCss("margin-top", staticValue);
-            this.attachCss("margin-bottom", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
             this.attachCss("margin-left", staticValue);
             this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
+            this.attachCss("margin-top", staticValue);
+            this.attachCss("margin-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginLeft) {
             this.attachCss("margin-left", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginRight) {
@@ -508,6 +530,12 @@ class Node2 {
               default:
                 this.attachCss("flex-wrap", "no-wrap");
             }
+        } else if (kind === fastn_dom.PropertyKind.TextTransform) {
+            this.attachCss("text-transform", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.TextIndent) {
+            this.attachCss("text-indent", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.TextAlign) {
+            this.attachCss("text-align", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
