@@ -816,6 +816,7 @@ pub struct Common {
     pub max_width: Option<ftd::js::Value>,
     pub min_height: Option<ftd::js::Value>,
     pub min_width: Option<ftd::js::Value>,
+    pub whitespace: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -880,6 +881,7 @@ impl Common {
             max_width: ftd::js::value::get_properties("max-width", properties, arguments),
             min_height: ftd::js::value::get_properties("min-height", properties, arguments),
             min_width: ftd::js::value::get_properties("min-width", properties, arguments),
+            whitespace: ftd::js::value::get_properties("white-space", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -1315,6 +1317,17 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 min_width.to_set_property(
                     fastn_js::PropertyKind::MinWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref whitespace) = self.whitespace {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                whitespace.to_set_property(
+                    fastn_js::PropertyKind::WhiteSpace,
                     element_name,
                     component_definition_name,
                     loop_alias,

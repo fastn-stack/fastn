@@ -718,6 +718,54 @@ padding.px: 10
 
 -- end: ftd.row
 
+;; ------------------------ WHITESPACE ------------------------------
+
+-- string sample-text2:
+
+But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept-
+
+-- end: sample-text2
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+-- ftd.text: $sample-text2
+white-space: normal
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: nowrap
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: pre
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: break-spaces
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.column
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

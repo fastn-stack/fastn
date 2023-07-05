@@ -202,6 +202,7 @@ pub enum PropertyKind {
     MinHeight,
     MaxWidth,
     MinWidth,
+    WhiteSpace,
 }
 
 impl PropertyKind {
@@ -252,6 +253,7 @@ impl PropertyKind {
             PropertyKind::MinHeight => "fastn_dom.PropertyKind.MinHeight",
             PropertyKind::MaxWidth => "fastn_dom.PropertyKind.MaxWidth",
             PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
+            PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
         }
     }
 }

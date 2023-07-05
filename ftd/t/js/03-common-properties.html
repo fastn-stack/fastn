@@ -56,7 +56,19 @@ life One day however a small line of blind text by the name of Lorem
 Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89" class="ft_column w-1 p-3 m-88 g-78"><div data-id="90" class="p-3 bw-22 bs-25 cur-89">This text will show pointer cursor on hover</div><div data-id="91" class="p-3 bw-22 bs-25 cur-90">This text will show progress cursor on hover</div><div data-id="92" class="p-3 bw-22 bs-25 cur-91">This text will show zoom-in cursor on hover</div><div data-id="93" class="p-3 bw-22 bs-25 cur-92">This text will show help cursor on hover</div><div data-id="94" class="p-3 bw-22 bs-25 cur-93">This text will show cross-hair cursor on hover</div></div><div data-id="95" class="ft_column w-94 m-95 g-78"><div data-id="96" class="ft_row p-82 bw-96 bs-23 r-97 o-68"><div data-id="97">This row is resizable both directions</div></div><div data-id="98" class="ft_row p-82 bw-96 bs-23 r-98 o-68"><div data-id="99">This row is resizable only horizontally</div></div><div data-id="100" class="ft_row p-82 bw-96 bs-23 r-99 o-68"><div data-id="101">This row is resizable only vertically</div></div></div><div data-id="102" class="ft_row w-1 g-78"><div data-id="103" class="ft_column bw-34 bs-23 mxh-100 mxw-101"><div data-id="104" class="p-3">Max Height of this container is 50px.
 If you add more text than it can accommodate, then it will overflow.</div></div><div data-id="105" class="ft_column bw-34 bs-23 mnh-102 g-78"><div data-id="106" class="p-3">Min Height of this container is 100px</div><div data-id="107" class="p-3">If more text are added inside this container, the text might overflow
 if it can't be accommodated.</div></div><div data-id="108" class="ft_column bw-34 bs-23 mxw-101"><div data-id="109" class="p-3">Max Width of this container is 300px.
-If you add more text than it can accommodate, then it will overflow.</div></div><div data-id="110" class="ft_column bw-34 bs-23 mnw-103"><div data-id="111" class="p-3">Min Width of this container is 400px</div></div></div><div data-id="112" class="ft_row w-1 jc-79"><div data-id="113">32</div><div data-id="114">1.123</div><div data-id="115">true</div></div></body><style id="styles">
+If you add more text than it can accommodate, then it will overflow.</div></div><div data-id="110" class="ft_column bw-34 bs-23 mnw-103"><div data-id="111" class="p-3">Min Width of this container is 400px</div></div></div><div data-id="112" class="ft_column g-78"><div data-id="113" class="w-104 p-3 bw-34 white-space-105">But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="114" class="w-104 p-3 bw-34 white-space-106">But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="115" class="w-104 p-3 bw-34 white-space-107">But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept—</div><div data-id="116" class="w-104 p-3 bw-34 white-space-108">But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept—</div></div><div data-id="117" class="ft_row w-1 jc-79"><div data-id="118">32</div><div data-id="119">1.123</div><div data-id="120">true</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
@@ -166,6 +178,11 @@ If you add more text than it can accommodate, then it will overflow.</div></div>
 	.mxw-101 { max-width: 300px; }
 	.mnh-102 { min-height: 100px; }
 	.mnw-103 { min-width: 400px; }
+	.w-104 { width: 400px; }
+	.white-space-105 { white-space: normal; }
+	.white-space-106 { white-space: nowrap; }
+	.white-space-107 { white-space: pre; }
+	.white-space-108 { white-space: break-spaces; }
     </style>
 <script>
     (function() {
@@ -714,15 +731,41 @@ function main(parent, inherited) {
   let parenti11i3i0 = fastn_dom.createKernel(parenti11i3, fastn_dom.ElementKind.Text);
   parenti11i3i0.setProperty(fastn_dom.PropertyKind.StringValue, "Min Width of this container is 400px");
   parenti11i3i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti12.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti12.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
-  let parenti12i0 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Integer);
-  parenti12i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
-  let parenti12i1 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Decimal);
-  parenti12i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
-  let parenti12i2 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Boolean);
-  parenti12i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
+  let parenti12 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti12.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
+  let parenti12i0 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Text);
+  parenti12i0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2);
+  parenti12i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti12i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti12i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti12i0.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Normal);
+  let parenti12i1 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Text);
+  parenti12i1.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2);
+  parenti12i1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti12i1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti12i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti12i1.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.NoWrap);
+  let parenti12i2 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Text);
+  parenti12i2.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2);
+  parenti12i2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti12i2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti12i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti12i2.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.Pre);
+  let parenti12i3 = fastn_dom.createKernel(parenti12, fastn_dom.ElementKind.Text);
+  parenti12i3.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text2);
+  parenti12i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti12i3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti12i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti12i3.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.BreakSpaces);
+  let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti13.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
+  let parenti13i0 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Integer);
+  parenti13i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
+  let parenti13i1 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Decimal);
+  parenti13i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
+  let parenti13i2 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Boolean);
+  parenti13i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
 global.foo__bp = fastn.recordInstance({
   light: "blue",
@@ -766,6 +809,7 @@ global.foo__rtype = fastn.recordInstance({
   mobile: global.foo__mtype
 });
 global.foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
+global.foo__sample_text2 = "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept—";
 global.foo__value = fastn.mutable(0);
 global.foo__ylg = fastn.recordInstance({
   light: "yellow",

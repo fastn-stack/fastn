@@ -454,6 +454,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = resize_variants(variant);
             (format!("fastn_dom.Resize.{}", js_variant), false)
         }
+        "ftd#white-space" => {
+            let js_variant = whitespace_variants(variant);
+            (format!("fastn_dom.WhiteSpace.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -610,6 +614,18 @@ fn resize_variants(name: &str) -> &'static str {
         "vertical" => "Vertical",
         "horizontal" => "Horizontal",
         "both" => "Both",
+        t => todo!("invalid resize variant {}", t),
+    }
+}
+
+fn whitespace_variants(name: &str) -> &'static str {
+    match name {
+        "normal" => "Normal",
+        "nowrap" => "NoWrap",
+        "pre" => "Pre",
+        "pre-line" => "PreLine",
+        "pre-wrap" => "PreWrap",
+        "break-spaces" => "BreakSpaces",
         t => todo!("invalid resize variant {}", t),
     }
 }

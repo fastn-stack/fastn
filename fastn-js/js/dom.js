@@ -173,6 +173,7 @@ fastn_dom.PropertyKind = {
     MaxHeight: 43,
     MinWidth: 44,
     MaxWidth: 45,
+    WhiteSpace: 46,
 }
 
 
@@ -273,6 +274,17 @@ fastn_dom.Resize = {
     Horizontal: "horizontal",
     Both: "both",
 }
+
+fastn_dom.WhiteSpace = {
+    Normal: "normal",
+    NoWrap: "nowrap",
+    Pre: "pre",
+    PreLine: "pre-line",
+    PreWrap: "pre-wrap",
+    BreakSpaces: "break-spaces",
+}
+
+
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => { return value; }
@@ -620,6 +632,8 @@ class Node2 {
             this.attachCss("min-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MaxWidth) {
             this.attachCss("max-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.WhiteSpace) {
+            this.attachCss("white-space", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
