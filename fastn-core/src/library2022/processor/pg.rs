@@ -96,6 +96,15 @@ fn resolve_variable_from_headers(
         (&postgres_types::Type::INT8, ftd::ast::VariableValue::String { value, .. }) => {
             Some(Box::new(value.parse::<i64>()?))
         }
+        (&postgres_types::Type::FLOAT4, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<f32>()?))
+        }
+        (&postgres_types::Type::FLOAT8, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<f64>()?))
+        }
+        (&postgres_types::Type::BOOL, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<bool>()?))
+        }
         (e, a) => {
             return ftd::interpreter::utils::e2(
                 format!("for {} postgresql expected ${:?}, found {:?}", var, e, a),
