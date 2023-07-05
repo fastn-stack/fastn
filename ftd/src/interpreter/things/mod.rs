@@ -121,7 +121,7 @@ impl Thing {
         }
     }
 
-    pub(crate) fn variable(
+    pub fn variable(
         self,
         doc_id: &str,
         line_number: usize,

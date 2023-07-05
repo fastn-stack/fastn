@@ -59,11 +59,15 @@ impl QueryArgs {
 }
 
 fn resolve_variable_from_doc(
-    _doc: &ftd::interpreter::TDoc<'_>,
+    doc: &ftd::interpreter::TDoc<'_>,
     var: &str,
     e: &postgres_types::Type,
 ) -> ftd::interpreter::Result<Box<PGData>> {
     dbg!(var, e);
+
+    // let qualified_name = doc.resolve_name(variable_header_value);
+    // let bag_thing = doc.bag().get(bag_entry.as_str());
+
     todo!()
 }
 
