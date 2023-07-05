@@ -60,9 +60,10 @@ impl QueryArgs {
 
 fn resolve_variable_from_doc(
     _doc: &ftd::interpreter::TDoc<'_>,
-    _var: &str,
-    _e: &postgres_types::Type,
+    var: &str,
+    e: &postgres_types::Type,
 ) -> ftd::interpreter::Result<Box<PGData>> {
+    dbg!(var, e);
     todo!()
 }
 
@@ -166,7 +167,7 @@ async fn execute_query(
     line_number: usize,
     headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let (query, query_args) = super::sql::extract_arguments(query)?;
+    let (query, query_args) = dbg!(super::sql::extract_arguments(dbg!(query))?);
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
 
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
@@ -252,9 +253,9 @@ string department:
 
 -- person list people:
 $processor$: pr.pg
-param: 1
+id: 2
 
-SELECT * FROM "users" where id >= $1;
+SELECT * FROM "users" where id >= $id ;
 
 -- integer int_2:
 $processor$: pr.pg
@@ -288,9 +289,10 @@ $loop$: $people as $p
 
 -- decimal d_4:
 $processor$: pr.pg
-param-decimal: 10
+val: 4.01
+note: `SELECT $val::FLOAT8` should work but doesn't
 
-SELECT $1::FLOAT8;
+SELECT 1.0::FLOAT8;
 
 -- ftd.decimal: $d_4
 
@@ -301,8 +303,7 @@ $processor$: pr.pg
 SELECT 80.0::FLOAT8;
 
 -- ftd.decimal: $d_8
-
- */
+*/
 
 /*
 PREPARE my_query AS

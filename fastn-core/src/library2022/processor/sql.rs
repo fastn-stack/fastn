@@ -16,7 +16,7 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
             escaped = true;
 
             let mut escape_count = 0;
-            
+
             while i < len && chars[i] == '\\' {
                 escape_count += 1;
                 i += 1;
@@ -81,6 +81,12 @@ mod test {
             "SELECT * FROM test where name = $1",
             vec!["name"],
         );
+        e(
+            "SELECT * FROM test where name = $name;",
+            "SELECT * FROM test where name = $1;",
+            vec!["name"],
+        );
+        e("SELECT $val::FLOAT8;", "SELECT $1::FLOAT8;", vec!["val"]);
         e(
             "SELECT * FROM test where name = $name and full_name = $full_name",
             "SELECT * FROM test where name = $1 and full_name = $2",
