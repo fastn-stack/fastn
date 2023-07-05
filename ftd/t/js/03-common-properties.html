@@ -53,7 +53,7 @@ with the necessary regelialia. It is a paradisematic country, in which
 roasted parts of sentences fly into your mouth. Even the all-powerful
 Pointing has no control about the blind texts it is an almost unorthographic
 life One day however a small line of blind text by the name of Lorem
-Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89" class="ft_row w-1 jc-76"><div data-id="90">32</div><div data-id="91">1.123</div><div data-id="92">true</div></div></body><style id="styles">
+Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89" class="ft_column w-1 p-3 g-75"><div data-id="90" class="p-3 bw-34 op-85">This text will show pointer cursor on hover</div><div data-id="91" class="p-3 bw-34 op-86">This text will show progress cursor on hover</div><div data-id="92" class="p-3 bw-34 op-87">This text will show zoom-in cursor on hover</div><div data-id="93" class="p-3 bw-34 op-88">This text will show help cursor on hover</div><div data-id="94" class="p-3 bw-34 op-89">This text will show cross-hair cursor on hover</div></div><div data-id="95" class="ft_row w-1 jc-76"><div data-id="96">32</div><div data-id="97">1.123</div><div data-id="98">true</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
@@ -144,6 +144,11 @@ Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89
 	.bgc-82 { background-color: #963770; }
 	.op-83 { opacity: 0.6; }
 	.c-84 { color: white; }
+	.op-85 { opacity: pointer; }
+	.op-86 { opacity: progress; }
+	.op-87 { opacity: zoom-in; }
+	.op-88 { opacity: help; }
+	.op-89 { opacity: crosshair; }
     </style>
 <script>
     (function() {
@@ -598,15 +603,44 @@ function main(parent, inherited)
     dark: "white",
     light: "white"
   }));
-  let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   parenti9.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti9.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
-  let parenti9i0 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Integer);
-  parenti9i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
-  let parenti9i1 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Decimal);
-  parenti9i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
-  let parenti9i2 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Boolean);
-  parenti9i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
+  parenti9.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
+  let parenti9i0 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
+  parenti9i0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show pointer cursor on hover");
+  parenti9i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti9i0.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Pointer);
+  let parenti9i1 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
+  parenti9i1.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show progress cursor on hover");
+  parenti9i1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti9i1.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Progress);
+  let parenti9i2 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
+  parenti9i2.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show zoom-in cursor on hover");
+  parenti9i2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti9i2.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.ZoomIn);
+  let parenti9i3 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
+  parenti9i3.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show help cursor on hover");
+  parenti9i3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti9i3.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Help);
+  let parenti9i4 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
+  parenti9i4.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show cross-hair cursor on hover");
+  parenti9i4.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9i4.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti9i4.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.CrossHair);
+  let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti10.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti10.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
+  let parenti10i0 = fastn_dom.createKernel(parenti10, fastn_dom.ElementKind.Integer);
+  parenti10i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
+  let parenti10i1 = fastn_dom.createKernel(parenti10, fastn_dom.ElementKind.Decimal);
+  parenti10i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
+  let parenti10i2 = fastn_dom.createKernel(parenti10, fastn_dom.ElementKind.Boolean);
+  parenti10i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
 foo__bp = fastn.recordInstance({
   light: "blue",

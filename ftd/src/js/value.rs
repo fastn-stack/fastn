@@ -393,6 +393,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = text_align_variants(variant);
             (format!("fastn_dom.TextAlign.{}", js_variant), false)
         }
+        "ftd#cursor" => {
+            let js_variant = cursor_variants(variant);
+            (format!("fastn_dom.Cursor.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -501,5 +505,45 @@ fn text_align_variants(name: &str) -> &'static str {
         "end" => "End",
         "justify" => "Justify",
         t => todo!("invalid text-align variant {}", t),
+    }
+}
+
+fn cursor_variants(name: &str) -> &'static str {
+    match name {
+        "none" => "None",
+        "default" => "Default",
+        "context-menu" => "ContextMenu",
+        "help" => "Help",
+        "pointer" => "Pointer",
+        "progress" => "Progress",
+        "wait" => "Wait",
+        "cell" => "Cell",
+        "crosshair" => "CrossHair",
+        "text" => "Text",
+        "vertical-text" => "VerticalText",
+        "alias" => "Alias",
+        "copy" => "Copy",
+        "move" => "Move",
+        "no-drop" => "NoDrop",
+        "not-allowed" => "NotAllowed",
+        "grab" => "Grab",
+        "grabbing" => "Grabbing",
+        "e-resize" => "EResize",
+        "n-resize" => "NResize",
+        "ne-resize" => "NeResize",
+        "s-resize" => "SResize",
+        "se-resize" => "SeResize",
+        "sw-resize" => "SwResize",
+        "w-resize" => "Wresize",
+        "ew-resize" => "Ewresize",
+        "ns-resize" => "NsResize",
+        "nesw-resize" => "NeswResize",
+        "nwse-resize" => "NwseResize",
+        "col-resize" => "ColResize",
+        "row-resize" => "RowResize",
+        "all-scroll" => "AllScroll",
+        "zoom-in" => "ZoomIn",
+        "zoom-out" => "ZoomOut",
+        t => todo!("invalid cursor variant {}", t),
     }
 }

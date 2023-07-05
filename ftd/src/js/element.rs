@@ -810,6 +810,7 @@ pub struct Common {
     pub overflow_x: Option<ftd::js::Value>,
     pub overflow_y: Option<ftd::js::Value>,
     pub opacity: Option<ftd::js::Value>,
+    pub cursor: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -868,6 +869,7 @@ impl Common {
             overflow_x: ftd::js::value::get_properties("overflow-x", properties, arguments),
             overflow_y: ftd::js::value::get_properties("overflow-y", properties, arguments),
             opacity: ftd::js::value::get_properties("opacity", properties, arguments),
+            cursor: ftd::js::value::get_properties("cursor", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -1236,6 +1238,17 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 opacity.to_set_property(
                     fastn_js::PropertyKind::Opacity,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref cursor) = self.cursor {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                cursor.to_set_property(
+                    fastn_js::PropertyKind::Cursor,
                     element_name,
                     component_definition_name,
                     loop_alias,

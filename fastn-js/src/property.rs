@@ -196,6 +196,7 @@ pub enum PropertyKind {
     TextAlign,
     LineClamp,
     Opacity,
+    Cursor,
 }
 
 impl PropertyKind {
@@ -240,6 +241,7 @@ impl PropertyKind {
             PropertyKind::TextAlign => "fastn_dom.PropertyKind.TextAlign",
             PropertyKind::LineClamp => "fastn_dom.PropertyKind.LineClamp",
             PropertyKind::Opacity => "fastn_dom.PropertyKind.Opacity",
+            PropertyKind::Cursor => "fastn_dom.PropertyKind.Cursor",
         }
     }
 }

@@ -557,6 +557,52 @@ padding.px: 10
 
 -- end: ftd.column
 
+;; ---------------------------- CURSOR --------------------------------
+
+-- ftd.column:
+width: fill-container
+padding.px: 10
+spacing.fixed.px: 10
+margin.px: 5
+
+-- ftd.text: This text will show pointer cursor on hover
+padding.px: 10
+cursor: pointer
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show progress cursor on hover
+padding.px: 10
+cursor: progress
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+
+-- ftd.text: This text will show zoom-in cursor on hover
+padding.px: 10
+cursor: zoom-in
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show help cursor on hover
+padding.px: 10
+cursor: help
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show cross-hair cursor on hover
+padding.px: 10
+cursor: crosshair
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- end: ftd.column
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

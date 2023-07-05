@@ -76,6 +76,7 @@ fastn_dom.property_map = {
     "-webkit-line-clamp": "wlc",
     "display": "d",
     "opacity": "op",
+    "cursor": "cur",
 };
 
 // dynamic-class-css.md
@@ -161,6 +162,7 @@ fastn_dom.PropertyKind = {
     TextAlign: 37,
     LineClamp: 38,
     Opacity: 39,
+    Cursor: 40,
 }
 
 
@@ -217,6 +219,43 @@ fastn_dom.TextAlign = {
     Center: "center",
     End: "end",
     Justify: "justify",
+}
+
+fastn_dom.Cursor = {
+    None: "none",
+    Default: "default",
+    ContextMenu: "context-menu",
+    Help: "help",
+    Pointer: "pointer",
+    Progress: "progress",
+    Wait: "wait",
+    Cell: "cell",
+    CrossHair: "crosshair",
+    Text: "text",
+    VerticalText: "vertical-text",
+    Alias: "alias",
+    Copy: "copy",
+    Move: "move",
+    NoDrop: "no-drop",
+    NotAllowed: "not-allowed",
+    Grab: "grab",
+    Grabbing: "grabbing",
+    EResize: "e-resize",
+    NResize: "n-resize",
+    NeResize: "ne-resize",
+    SResize: "s-resize",
+    SeResize: "se-resize",
+    SwResize: "sw-resize",
+    Wresize: "w-resize",
+    Ewresize: "ew-resize",
+    NsResize: "ns-resize",
+    NeswResize: "nesw-resize",
+    NwseResize: "nwse-resize",
+    ColResize: "col-resize",
+    RowResize: "row-resize",
+    AllScroll: "all-scroll",
+    ZoomIn: "zoom-in",
+    ZoomOut: "zoom-out"
 }
 
 fastn_dom.BackgroundStyle = {
@@ -551,6 +590,8 @@ class Node2 {
             this.attachCss("-webkit-box-orient", "vertical");
         } else if (kind === fastn_dom.PropertyKind.Opacity) {
             this.attachCss("opacity", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Cursor) {
+            this.attachCss("cursor", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
