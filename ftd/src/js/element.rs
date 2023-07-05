@@ -1203,14 +1203,15 @@ impl Common {
             ));
         }
         if let Some(ref color) = self.color {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(dbg!(color
-                .to_set_property(
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                color.to_set_property(
                     fastn_js::PropertyKind::Color,
                     element_name,
                     component_definition_name,
                     loop_alias,
-                    inherited_variable_name
-                ))));
+                    inherited_variable_name,
+                ),
+            ));
         }
         if let Some(ref background) = self.background {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(

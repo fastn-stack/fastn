@@ -11,14 +11,8 @@ fn comma() -> pretty::RcDoc<'static> {
 }
 
 pub fn to_js(ast: &[fastn_js::Ast]) -> String {
-    use itertools::Itertools;
-
     let mut w = Vec::new();
-    let variables = ast
-        .iter()
-        .filter_map(|f| f.get_variable_name())
-        .collect_vec();
-    let o = get_variable_declaration(variables.as_slice()).append(pretty::RcDoc::intersperse(
+    let o = get_variable_declaration("global").append(pretty::RcDoc::intersperse(
         ast.iter().map(|f| f.to_js()),
         space(),
     ));
@@ -31,10 +25,10 @@ impl fastn_js::Ast {
         match self {
             fastn_js::Ast::Component(f) => f.to_js(),
             fastn_js::Ast::UDF(f) => f.to_js(),
-            fastn_js::Ast::StaticVariable(s) => s.to_js(true),
-            fastn_js::Ast::MutableVariable(m) => m.to_js(true),
-            fastn_js::Ast::MutableList(ml) => ml.to_js(true),
-            fastn_js::Ast::RecordInstance(ri) => ri.to_js(true),
+            fastn_js::Ast::StaticVariable(s) => s.to_js(fastn_js::GLOBAL_VARIABLE_MAP),
+            fastn_js::Ast::MutableVariable(m) => m.to_js(fastn_js::GLOBAL_VARIABLE_MAP),
+            fastn_js::Ast::MutableList(ml) => ml.to_js(fastn_js::GLOBAL_VARIABLE_MAP),
+            fastn_js::Ast::RecordInstance(ri) => ri.to_js(fastn_js::GLOBAL_VARIABLE_MAP),
         }
     }
 }
@@ -115,8 +109,12 @@ impl fastn_js::ElementKind {
 impl fastn_js::ComponentStatement {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            fastn_js::ComponentStatement::StaticVariable(f) => f.to_js(true),
-            fastn_js::ComponentStatement::MutableVariable(f) => f.to_js(true),
+            fastn_js::ComponentStatement::StaticVariable(f) => {
+                f.to_js(fastn_js::LOCAL_VARIABLE_MAP)
+            }
+            fastn_js::ComponentStatement::MutableVariable(f) => {
+                f.to_js(fastn_js::LOCAL_VARIABLE_MAP)
+            }
             fastn_js::ComponentStatement::CreateKernel(kernel) => kernel.to_js(),
             fastn_js::ComponentStatement::SetProperty(set_property) => set_property.to_js(),
             fastn_js::ComponentStatement::InstantiateComponent(i) => i.to_js(),
@@ -125,9 +123,11 @@ impl fastn_js::ComponentStatement {
                 text(&format!("return {component_name};"))
             }
             fastn_js::ComponentStatement::ConditionalComponent(c) => c.to_js(),
-            fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(true),
+            fastn_js::ComponentStatement::MutableList(ml) => ml.to_js(fastn_js::LOCAL_VARIABLE_MAP),
             fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
-            fastn_js::ComponentStatement::RecordInstance(ri) => ri.to_js(true),
+            fastn_js::ComponentStatement::RecordInstance(ri) => {
+                ri.to_js(fastn_js::LOCAL_VARIABLE_MAP)
+            }
         }
     }
 }
@@ -171,7 +171,7 @@ impl fastn_js::ConditionalComponent {
             pretty::RcDoc::intersperse(
                 self.deps
                     .iter()
-                    .map(|v| text(fastn_js::utils::name_to_js(v).as_str())),
+                    .map(|v| text(fastn_js::utils::reference_to_js(v).as_str())),
                 comma().append(space()),
             )
             .group(),
@@ -269,95 +269,87 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
 
 impl fastn_js::Component {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        use itertools::Itertools;
-
-        let variables = self
-            .body
-            .iter()
-            .filter_map(|f| f.get_variable_name())
-            .collect_vec();
-        let body = get_variable_declaration(variables.as_slice()).append(
-            pretty::RcDoc::intersperse(
-                self.body.iter().map(|f| f.to_js()),
+        let body = get_variable_declaration(fastn_js::LOCAL_VARIABLE_MAP)
+            .append(pretty::RcDoc::intersperse(
+                self.params.iter().filter_map(|f| {
+                    if ["parent", "inherited"].contains(&f.as_str()) {
+                        None
+                    } else {
+                        Some(format!("{}.{f}= {f};", fastn_js::LOCAL_VARIABLE_MAP))
+                    }
+                }),
                 pretty::RcDoc::softline(),
-            )
-            .group(),
-        );
+            ))
+            .append(
+                pretty::RcDoc::intersperse(
+                    self.body.iter().map(|f| f.to_js()),
+                    pretty::RcDoc::softline(),
+                )
+                .group(),
+            );
 
         func(self.name.as_str(), &self.params, body)
     }
 }
 
 impl fastn_js::MutableVariable {
-    pub fn to_js(&self, update: bool) -> pretty::RcDoc<'static> {
-        if !update {
-            text("let").append(space())
-        } else {
-            pretty::RcDoc::nil()
-        }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text("fastn.mutable("))
-        .append(text(&self.value.to_js()))
-        .append(text(");"))
+    pub fn to_js(&self, prefix: &str) -> pretty::RcDoc<'static> {
+        text(prefix)
+            .append(text("."))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("fastn.mutable("))
+            .append(text(&self.value.to_js()))
+            .append(text(");"))
     }
 }
 
 impl fastn_js::MutableList {
-    pub fn to_js(&self, update: bool) -> pretty::RcDoc<'static> {
-        if !update {
-            text("let").append(space())
-        } else {
-            pretty::RcDoc::nil()
-        }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text(self.value.to_js().as_str()))
-        .append(text(";"))
+    pub fn to_js(&self, prefix: &str) -> pretty::RcDoc<'static> {
+        text(prefix)
+            .append(text("."))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text(self.value.to_js().as_str()))
+            .append(text(";"))
     }
 }
 
 impl fastn_js::RecordInstance {
-    pub fn to_js(&self, update: bool) -> pretty::RcDoc<'static> {
-        if !update {
-            text("let").append(space())
-        } else {
-            pretty::RcDoc::nil()
-        }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text(self.fields.to_js().as_str()))
-        .append(text(";"))
+    pub fn to_js(&self, prefix: &str) -> pretty::RcDoc<'static> {
+        text(prefix)
+            .append(text("."))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text(self.fields.to_js().as_str()))
+            .append(text(";"))
     }
 }
 
 impl fastn_js::StaticVariable {
-    pub fn to_js(&self, update: bool) -> pretty::RcDoc<'static> {
-        if !update {
-            text("let").append(space())
-        } else {
-            pretty::RcDoc::nil()
-        }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
-        .append(space())
-        .append(text("="))
-        .append(space())
-        .append(text(self.value.to_js().as_str()))
-        .append(text(";"))
+    pub fn to_js(&self, prefix: &str) -> pretty::RcDoc<'static> {
+        text(prefix)
+            .append(text("."))
+            .append(text(
+                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
+            ))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text(self.value.to_js().as_str()))
+            .append(text(";"))
     }
 }
 
@@ -861,18 +853,13 @@ impl ExpressionGenerator {
     }
 }
 
-pub(crate) fn get_variable_declaration(variables: &[String]) -> pretty::RcDoc<'static> {
-    if !variables.is_empty() {
-        text("let")
-            .append(space())
-            .append(pretty::RcDoc::intersperse(
-                variables
-                    .iter()
-                    .map(|v| text(fastn_js::utils::name_to_js(v.as_str()).as_str())),
-                text(","),
-            ))
-            .append(text(";"))
-    } else {
-        pretty::RcDoc::nil()
-    }
+pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static> {
+    text("let")
+        .append(space())
+        .append(text(variable))
+        .append(space())
+        .append(text("="))
+        .append(space())
+        .append(text("{}"))
+        .append(text(";"))
 }

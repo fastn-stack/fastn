@@ -40,7 +40,7 @@ impl Formula {
             "fastn.formula([{}], {})",
             self.deps
                 .iter()
-                .map(|v| fastn_js::utils::name_to_js(v))
+                .map(|v| fastn_js::utils::reference_to_js(v))
                 .collect_vec()
                 .join(", "),
             self.conditional_values_to_js()

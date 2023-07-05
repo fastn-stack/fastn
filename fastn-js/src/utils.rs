@@ -3,14 +3,32 @@ pub fn is_kernel(s: &str) -> bool {
 }
 
 pub fn reference_to_js(s: &str) -> String {
-    let (mut p1, mut p2) = get_doc_name_and_remaining(s);
+    let mut s = s.to_string();
+    let prefix = if let Some(prefix) =
+        s.strip_prefix(format!("{}.", fastn_js::GLOBAL_VARIABLE_MAP).as_str())
+    {
+        s = prefix.to_string();
+        Some(fastn_js::GLOBAL_VARIABLE_MAP)
+    } else if let Some(prefix) =
+        s.strip_prefix(format!("{}.", fastn_js::LOCAL_VARIABLE_MAP).as_str())
+    {
+        s = prefix.to_string();
+        Some(fastn_js::LOCAL_VARIABLE_MAP)
+    } else {
+        None
+    };
+
+    let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
     p1 = fastn_js::utils::name_to_js(p1.as_str());
     while let Some(remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
         p1 = format!("{}.get(\"{}\")", p1, p21);
         p2 = p22;
     }
-    p1
+    format!(
+        "{}{p1}",
+        prefix.map(|v| format!("{v}.")).unwrap_or_default()
+    )
 }
 
 pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {

@@ -5,6 +5,7 @@ mod component;
 mod component_invocation;
 mod component_statement;
 mod conditional_component;
+mod constants;
 mod event;
 mod loop_component;
 mod mutable_variable;
@@ -22,6 +23,7 @@ pub use component::{component0, component1, component2, component_with_params, C
 pub use component_invocation::{ElementKind, InstantiateComponent, Kernel};
 pub use component_statement::ComponentStatement;
 pub use conditional_component::ConditionalComponent;
+pub use constants::*;
 pub use event::{Event, EventHandler, Function};
 pub use loop_component::ForLoop;
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};

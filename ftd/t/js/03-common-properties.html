@@ -53,7 +53,7 @@ with the necessary regelialia. It is a paradisematic country, in which
 roasted parts of sentences fly into your mouth. Even the all-powerful
 Pointing has no control about the blind texts it is an almost unorthographic
 life One day however a small line of blind text by the name of Lorem
-Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89" class="ft_column w-1 p-3 g-75"><div data-id="90" class="p-3 bw-34 op-85">This text will show pointer cursor on hover</div><div data-id="91" class="p-3 bw-34 op-86">This text will show progress cursor on hover</div><div data-id="92" class="p-3 bw-34 op-87">This text will show zoom-in cursor on hover</div><div data-id="93" class="p-3 bw-34 op-88">This text will show help cursor on hover</div><div data-id="94" class="p-3 bw-34 op-89">This text will show cross-hair cursor on hover</div></div><div data-id="95" class="ft_row w-1 jc-76"><div data-id="96">32</div><div data-id="97">1.123</div><div data-id="98">true</div></div></body><style id="styles">
+Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89" class="ft_column w-1 p-3 m-85 g-75"><div data-id="90" class="p-3 bw-22 bs-25 cur-86">This text will show pointer cursor on hover</div><div data-id="91" class="p-3 bw-22 bs-25 cur-87">This text will show progress cursor on hover</div><div data-id="92" class="p-3 bw-22 bs-25 cur-88">This text will show zoom-in cursor on hover</div><div data-id="93" class="p-3 bw-22 bs-25 cur-89">This text will show help cursor on hover</div><div data-id="94" class="p-3 bw-22 bs-25 cur-90">This text will show cross-hair cursor on hover</div></div><div data-id="95" class="ft_row w-1 jc-76"><div data-id="96">32</div><div data-id="97">1.123</div><div data-id="98">true</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
@@ -144,29 +144,23 @@ Ipsum decided to leave for the far World of Grammar.</div></div><div data-id="89
 	.bgc-82 { background-color: #963770; }
 	.op-83 { opacity: 0.6; }
 	.c-84 { color: white; }
-	.op-85 { opacity: pointer; }
-	.op-86 { opacity: progress; }
-	.op-87 { opacity: zoom-in; }
-	.op-88 { opacity: help; }
-	.op-89 { opacity: crosshair; }
+	.m-85 { margin: 5px; }
+	.cur-86 { cursor: pointer; }
+	.cur-87 { cursor: progress; }
+	.cur-88 { cursor: zoom-in; }
+	.cur-89 { cursor: help; }
+	.cur-90 { cursor: crosshair; }
     </style>
 <script>
     (function() {
-        let foo__bp,
-foo__dtype,
-foo__mtype,
-foo__og,
-foo__red_blue,
-foo__red_yellow,
-foo__rtype,
-foo__sample_text,
-foo__value,
-foo__ylg;
-function main(parent, inherited)
-{
+        let global = {
+};
+function main(parent, inherited) {
+  let __args__ = {
+  };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(foo__ylg));
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(global.foo__ylg));
   let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "px Padding");
   parenti0i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
@@ -271,20 +265,20 @@ function main(parent, inherited)
   let parenti0i25 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i25.setProperty(fastn_dom.PropertyKind.StringValue, "Red Color");
   parenti0i25.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__increment(foo__value);
+    foo__increment(global.foo__value);
   });
-  parenti0i25.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([foo__og,
-  foo__value,
-  foo__bp,
-  foo__value], function () {
+  parenti0i25.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
+  global.foo__value,
+  global.foo__bp,
+  global.foo__value], function () {
     if (function () {
-      return (fastn_utils.getter(foo__value) % 3 == 0);
+      return (fastn_utils.getter(global.foo__value) % 3 == 0);
     }()) {
-      return foo__og;
+      return global.foo__og;
     } else if (function () {
-      return (fastn_utils.getter(foo__value) % 3 == 1);
+      return (fastn_utils.getter(global.foo__value) % 3 == 1);
     }()) {
-      return foo__bp;
+      return global.foo__bp;
     } else {
       return fastn.recordInstance({
         dark: "red",
@@ -295,7 +289,7 @@ function main(parent, inherited)
   ));
   let parenti0i26 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i26.setProperty(fastn_dom.PropertyKind.StringValue, "Role");
-  parenti0i26.setProperty(fastn_dom.PropertyKind.Role, foo__rtype);
+  parenti0i26.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype);
   let parenti0i27 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i27.setProperty(fastn_dom.PropertyKind.StringValue, "Padding Horizontal");
   parenti0i27.setProperty(fastn_dom.PropertyKind.PaddingHorizontal, fastn_dom.Length.Px(10));
@@ -508,7 +502,7 @@ function main(parent, inherited)
   parenti6.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
   let parenti6i0 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Text);
   parenti6i0.setProperty(fastn_dom.PropertyKind.StringValue, "Space Between");
-  parenti6i0.setProperty(fastn_dom.PropertyKind.Role, foo__rtype);
+  parenti6i0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype);
   let parenti6i1 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Row);
   parenti6i1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti6i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
@@ -528,7 +522,7 @@ function main(parent, inherited)
   parenti6i1i2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
   let parenti6i2 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Text);
   parenti6i2.setProperty(fastn_dom.PropertyKind.StringValue, "Space Evenly");
-  parenti6i2.setProperty(fastn_dom.PropertyKind.Role, foo__rtype);
+  parenti6i2.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype);
   let parenti6i3 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Row);
   parenti6i3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti6i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
@@ -548,7 +542,7 @@ function main(parent, inherited)
   parenti6i3i2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
   let parenti6i4 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Text);
   parenti6i4.setProperty(fastn_dom.PropertyKind.StringValue, "Space Around");
-  parenti6i4.setProperty(fastn_dom.PropertyKind.Role, foo__rtype);
+  parenti6i4.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype);
   let parenti6i5 = fastn_dom.createKernel(parenti6, fastn_dom.ElementKind.Row);
   parenti6i5.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti6i5.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
@@ -597,7 +591,7 @@ function main(parent, inherited)
   })));
   parenti8.setProperty(fastn_dom.PropertyKind.Opacity, 0.6);
   let parenti8i0 = fastn_dom.createKernel(parenti8, fastn_dom.ElementKind.Text);
-  parenti8i0.setProperty(fastn_dom.PropertyKind.StringValue, foo__sample_text);
+  parenti8i0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__sample_text);
   parenti8i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
   parenti8i0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
     dark: "white",
@@ -606,32 +600,38 @@ function main(parent, inherited)
   let parenti9 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   parenti9.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti9.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
+  parenti9.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(5));
   parenti9.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)));
   let parenti9i0 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
   parenti9i0.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show pointer cursor on hover");
   parenti9i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  parenti9i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
-  parenti9i0.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Pointer);
+  parenti9i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti9i0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti9i0.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Pointer);
   let parenti9i1 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
   parenti9i1.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show progress cursor on hover");
   parenti9i1.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  parenti9i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
-  parenti9i1.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Progress);
+  parenti9i1.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti9i1.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti9i1.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Progress);
   let parenti9i2 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
   parenti9i2.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show zoom-in cursor on hover");
   parenti9i2.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  parenti9i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
-  parenti9i2.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.ZoomIn);
+  parenti9i2.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti9i2.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti9i2.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.ZoomIn);
   let parenti9i3 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
   parenti9i3.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show help cursor on hover");
   parenti9i3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  parenti9i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
-  parenti9i3.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.Help);
+  parenti9i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti9i3.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti9i3.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.Help);
   let parenti9i4 = fastn_dom.createKernel(parenti9, fastn_dom.ElementKind.Text);
   parenti9i4.setProperty(fastn_dom.PropertyKind.StringValue, "This text will show cross-hair cursor on hover");
   parenti9i4.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10));
-  parenti9i4.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
-  parenti9i4.setProperty(fastn_dom.PropertyKind.Opacity, fastn_dom.Cursor.CrossHair);
+  parenti9i4.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(4));
+  parenti9i4.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Double);
+  parenti9i4.setProperty(fastn_dom.PropertyKind.Cursor, fastn_dom.Cursor.CrossHair);
   let parenti10 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
   parenti10.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
   parenti10.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
@@ -642,11 +642,11 @@ function main(parent, inherited)
   let parenti10i2 = fastn_dom.createKernel(parenti10, fastn_dom.ElementKind.Boolean);
   parenti10i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
-foo__bp = fastn.recordInstance({
+global.foo__bp = fastn.recordInstance({
   light: "blue",
   dark: "purple"
 });
-foo__dtype = fastn.recordInstance({
+global.foo__dtype = fastn.recordInstance({
   size: fastn_dom.FontSize.Px(40),
   line_height: fastn_dom.FontSize.Px(65),
   letter_spacing: fastn_dom.FontSize.Px(5),
@@ -660,32 +660,32 @@ function foo__increment(a)
     a = fastn_utils_val_a;
   };
 }
-foo__mtype = fastn.recordInstance({
+global.foo__mtype = fastn.recordInstance({
   size: fastn_dom.FontSize.Px(20),
   line_height: fastn_dom.FontSize.Px(35),
   letter_spacing: fastn_dom.FontSize.Px(3),
   weight: 100,
   font_family: "fantasy"
 });
-foo__og = fastn.recordInstance({
+global.foo__og = fastn.recordInstance({
   light: "orange",
   dark: "green"
 });
-foo__red_blue = fastn.recordInstance({
+global.foo__red_blue = fastn.recordInstance({
   light: "red",
   dark: "blue"
 });
-foo__red_yellow = fastn.recordInstance({
+global.foo__red_yellow = fastn.recordInstance({
   light: "red",
   dark: "yellow"
 });
-foo__rtype = fastn.recordInstance({
-  desktop: foo__dtype,
-  mobile: foo__mtype
+global.foo__rtype = fastn.recordInstance({
+  desktop: global.foo__dtype,
+  mobile: global.foo__mtype
 });
-foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
-foo__value = fastn.mutable(0);
-foo__ylg = fastn.recordInstance({
+global.foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
+global.foo__value = fastn.mutable(0);
+global.foo__ylg = fastn.recordInstance({
   light: "yellow",
   dark: "lightgreen"
 });

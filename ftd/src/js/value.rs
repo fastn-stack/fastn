@@ -17,7 +17,11 @@ impl Value {
         inherited_variable_name: &Option<String>,
     ) -> fastn_js::SetPropertyValue {
         match self {
-            Value::Data(value) => value.to_fastn_js_value(),
+            Value::Data(value) => value.to_fastn_js_value(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ),
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
                     name,
@@ -87,7 +91,11 @@ fn formulas_to_fastn_js_value(
                     inherited_variable_name,
                 )
             }),
-            expression: property.value.to_fastn_js_value(),
+            expression: property.value.to_fastn_js_value(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ),
         });
     }
 
@@ -154,7 +162,7 @@ impl ftd::interpreter::Expression {
                         inherited_variable_name,
                     );
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: fastn_js::utils::name_to_js(name.as_str()),
+                        identifier: fastn_js::utils::reference_to_js(name.as_str()),
                     }
                 }
             }
@@ -273,11 +281,29 @@ pub(crate) fn get_properties(
 }
 
 impl ftd::interpreter::PropertyValue {
-    pub(crate) fn to_fastn_js_value(&self) -> fastn_js::SetPropertyValue {
+    pub(crate) fn to_fastn_js_value_with_none(&self) -> fastn_js::SetPropertyValue {
+        self.to_fastn_js_value(&None, &None, &None)
+    }
+
+    pub(crate) fn to_fastn_js_value(
+        &self,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
+    ) -> fastn_js::SetPropertyValue {
         match self {
-            ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(),
+            ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+            ),
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                fastn_js::SetPropertyValue::Reference(name.to_string())
+                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
+                    name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ))
             }
             _ => todo!(),
         }
@@ -297,7 +323,12 @@ impl ftd::interpreter::PropertyValue {
 }
 
 impl ftd::interpreter::Value {
-    pub(crate) fn to_fastn_js_value(&self) -> fastn_js::SetPropertyValue {
+    pub(crate) fn to_fastn_js_value(
+        &self,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
+    ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
         match self {
@@ -323,7 +354,11 @@ impl ftd::interpreter::Value {
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
-                        value: Some(Box::new(value.to_fastn_js_value())),
+                        value: Some(Box::new(value.to_fastn_js_value(
+                            component_definition_name,
+                            loop_alias,
+                            inherited_variable_name,
+                        ))),
                     });
                 }
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
@@ -333,14 +368,32 @@ impl ftd::interpreter::Value {
             }
             ftd::interpreter::Value::List { data, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
-                    value: data.iter().map(|v| v.to_fastn_js_value()).collect_vec(),
+                    value: data
+                        .iter()
+                        .map(|v| {
+                            v.to_fastn_js_value(
+                                component_definition_name,
+                                loop_alias,
+                                inherited_variable_name,
+                            )
+                        })
+                        .collect_vec(),
                 })
             }
             ftd::interpreter::Value::Record { fields, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: fields
                         .iter()
-                        .map(|(k, v)| (k.to_string(), v.to_fastn_js_value()))
+                        .map(|(k, v)| {
+                            (
+                                k.to_string(),
+                                v.to_fastn_js_value(
+                                    component_definition_name,
+                                    loop_alias,
+                                    inherited_variable_name,
+                                ),
+                            )
+                        })
                         .collect_vec(),
                 })
             }

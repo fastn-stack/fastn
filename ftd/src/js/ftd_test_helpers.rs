@@ -75,7 +75,6 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast = ftd::js::document_into_js_ast(i);
     let js_script = prettify_js::prettyprint(fastn_js::to_js(js_ast.as_slice()).as_str()).0;
-    dbg!(&js_script);
     let ssr_body = fastn_js::ssr(js_ast.as_slice());
     let html_str = std::fs::read_to_string("ftd-js.html")
         .expect("can't read ftd-js.html")

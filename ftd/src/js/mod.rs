@@ -65,7 +65,7 @@ impl ftd::interpreter::Variable {
                 let mut fields = vec![];
                 for field in record.fields {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((field.name.to_string(), value.to_fastn_js_value()));
+                        fields.push((field.name.to_string(), value.to_fastn_js_value_with_none()));
                     } else {
                         fields.push((
                             field.name.to_string(),
@@ -84,18 +84,18 @@ impl ftd::interpreter::Variable {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value(),
+                    value: self.value.to_fastn_js_value_with_none(),
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value(),
+                    value: self.value.to_fastn_js_value_with_none(),
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
-            value: self.value.to_fastn_js_value(),
+            value: self.value.to_fastn_js_value_with_none(),
         })
     }
 }
@@ -199,7 +199,11 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration.on.to_fastn_js_value(),
+                list_variable: iteration.on.to_fastn_js_value(
+                    component_definition_name,
+                    &loop_alias,
+                    inherited_variable_name,
+                ),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,

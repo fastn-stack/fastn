@@ -11,31 +11,31 @@ pub(crate) fn update_reference(
     loop_alias: &Option<String>,
     inherited_variable_name: &Option<String>,
 ) -> String {
-    let mut name = reference
-        .trim_start_matches(
-            format!("{}.", component_definition_name.clone().unwrap_or_default()).as_str(),
-        )
-        .to_string();
+    let name = reference.to_string();
+
+    if let Some(component_definition_name) = component_definition_name {
+        if let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {
+            return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);
+        }
+    }
 
     if let Some(loop_alias) = loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
-            name = format!("item.{alias}");
+            return format!("item.{alias}");
         } else if loop_alias.eq(&name) {
-            name = "item".to_string()
+            return "item".to_string();
         }
     }
 
     if let Some(inherited_variable_name) = inherited_variable_name {
         if let Some(remaining) = name.strip_prefix("inherited.") {
-            name = format!("{inherited_variable_name}.{remaining}");
+            return format!("{inherited_variable_name}.{remaining}");
         }
     }
 
-    dbg!("update_reference", &inherited_variable_name, &name);
-
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
-        name = "index".to_string()
+        return "index".to_string();
     }
 
-    name
+    format!("{}.{name}", fastn_js::GLOBAL_VARIABLE_MAP)
 }
