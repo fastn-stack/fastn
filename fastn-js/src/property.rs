@@ -198,6 +198,10 @@ pub enum PropertyKind {
     Opacity,
     Cursor,
     Resize,
+    MaxHeight,
+    MinHeight,
+    MaxWidth,
+    MinWidth,
 }
 
 impl PropertyKind {
@@ -244,6 +248,10 @@ impl PropertyKind {
             PropertyKind::Opacity => "fastn_dom.PropertyKind.Opacity",
             PropertyKind::Cursor => "fastn_dom.PropertyKind.Cursor",
             PropertyKind::Resize => "fastn_dom.PropertyKind.Resize",
+            PropertyKind::MaxHeight => "fastn_dom.PropertyKind.MaxHeight",
+            PropertyKind::MinHeight => "fastn_dom.PropertyKind.MinHeight",
+            PropertyKind::MaxWidth => "fastn_dom.PropertyKind.MaxWidth",
+            PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
         }
     }
 }

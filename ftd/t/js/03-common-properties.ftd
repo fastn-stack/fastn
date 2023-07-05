@@ -648,6 +648,76 @@ padding.px: 5
 
 -- end: ftd.column
 
+;; ------------------------ MAX-MIN HEIGHT/WIDTH ------------------------
+
+-- ftd.row:
+width: fill-container
+align-content: center
+spacing.fixed.px: 10
+
+-- ftd.column:
+max-height.fixed.px: 50
+max-width.fixed.px: 300
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text:
+padding.px: 10
+
+Max Height of this container is 50px.
+If you add more text than it can accommodate, then it will overflow.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+min-height.fixed.px: 100
+border-color: $red-yellow
+border-width.px: 2
+spacing.fixed.px: 10
+border-style: solid
+
+-- ftd.text: Min Height of this container is 100px
+padding.px: 10
+
+-- ftd.text:
+padding.px: 10
+
+If more text are added inside this container, the text might overflow
+if it can't be accommodated.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+max-width.fixed.px: 300
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text:
+padding.px: 10
+
+Max Width of this container is 300px.
+If you add more text than it can accommodate, then it will overflow.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+min-width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Min Width of this container is 400px
+padding.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.row
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

@@ -78,6 +78,10 @@ fastn_dom.property_map = {
     "opacity": "op",
     "cursor": "cur",
     "resize": "r",
+    "max-height": "mxh",
+    "min-height": "mnh",
+    "max-width": "mxw",
+    "min-width": "mnw",
 };
 
 // dynamic-class-css.md
@@ -165,6 +169,10 @@ fastn_dom.PropertyKind = {
     Opacity: 39,
     Cursor: 40,
     Resize: 41,
+    MinHeight: 42,
+    MaxHeight: 43,
+    MinWidth: 44,
+    MaxWidth: 45,
 }
 
 
@@ -604,6 +612,14 @@ class Node2 {
             // overflow: auto, resize: staticValue
             this.attachCss("resize", staticValue);
             this.attachCss("overflow", "auto");
+        } else if (kind === fastn_dom.PropertyKind.MinHeight) {
+            this.attachCss("min-height", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MaxHeight) {
+            this.attachCss("max-height", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MinWidth) {
+            this.attachCss("min-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MaxWidth) {
+            this.attachCss("max-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

@@ -812,6 +812,10 @@ pub struct Common {
     pub opacity: Option<ftd::js::Value>,
     pub cursor: Option<ftd::js::Value>,
     pub resize: Option<ftd::js::Value>,
+    pub max_height: Option<ftd::js::Value>,
+    pub max_width: Option<ftd::js::Value>,
+    pub min_height: Option<ftd::js::Value>,
+    pub min_width: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -872,6 +876,10 @@ impl Common {
             opacity: ftd::js::value::get_properties("opacity", properties, arguments),
             cursor: ftd::js::value::get_properties("cursor", properties, arguments),
             resize: ftd::js::value::get_properties("resize", properties, arguments),
+            max_height: ftd::js::value::get_properties("max-height", properties, arguments),
+            max_width: ftd::js::value::get_properties("max-width", properties, arguments),
+            min_height: ftd::js::value::get_properties("min-height", properties, arguments),
+            min_width: ftd::js::value::get_properties("min-width", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -1263,6 +1271,50 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 resize.to_set_property(
                     fastn_js::PropertyKind::Resize,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref max_height) = self.max_height {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                max_height.to_set_property(
+                    fastn_js::PropertyKind::MaxHeight,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref min_height) = self.min_height {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                min_height.to_set_property(
+                    fastn_js::PropertyKind::MinHeight,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref max_width) = self.max_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                max_width.to_set_property(
+                    fastn_js::PropertyKind::MaxWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref min_width) = self.min_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                min_width.to_set_property(
+                    fastn_js::PropertyKind::MinWidth,
                     element_name,
                     component_definition_name,
                     loop_alias,
