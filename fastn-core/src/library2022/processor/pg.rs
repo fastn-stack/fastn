@@ -88,12 +88,45 @@ fn resolve_variable_from_headers(
     Ok(if e == &postgres_types::Type::TEXT {
         match &header.value {
             ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.to_string())),
-            _ => todo!(),
+            _ => {
+                return ftd::interpreter::utils::e2(
+                    format!("expected string for ${}, found {:?}", var, header.value),
+                    doc.name,
+                    line_number,
+                )
+            }
+        }
+    } else if e == &postgres_types::Type::INT4 {
+        match &header.value {
+            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.parse::<i32>()?)),
+            _ => {
+                return ftd::interpreter::utils::e2(
+                    format!("expected string for ${}, found {:?}", var, header.value),
+                    doc.name,
+                    line_number,
+                )
+            }
         }
     } else if e == &postgres_types::Type::INT8 {
-        todo!()
+        match &header.value {
+            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.parse::<i64>()?)),
+            _ => {
+                return ftd::interpreter::utils::e2(
+                    format!("expected string for ${}, found {:?}", var, header.value),
+                    doc.name,
+                    line_number,
+                )
+            }
+        }
     } else {
-        todo!()
+        return ftd::interpreter::utils::e2(
+            format!(
+                "unknown type expected from postgresql for `{}`: {:?}",
+                var, e
+            ),
+            doc.name,
+            line_number,
+        );
     })
 }
 
