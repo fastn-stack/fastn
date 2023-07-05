@@ -86,48 +86,23 @@ fn resolve_variable_from_headers(
         }
     }
 
-    Ok(if e == &postgres_types::Type::TEXT {
-        match &header.value {
-            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.to_string())),
-            _ => {
-                return ftd::interpreter::utils::e2(
-                    format!("expected string for ${}, found {:?}", var, header.value),
-                    doc.name,
-                    line_number,
-                )
-            }
+    Ok(match (e, &header.value) {
+        (&postgres_types::Type::TEXT, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.to_string()))
         }
-    } else if e == &postgres_types::Type::INT4 {
-        match &header.value {
-            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.parse::<i32>()?)),
-            _ => {
-                return ftd::interpreter::utils::e2(
-                    format!("expected string for ${}, found {:?}", var, header.value),
-                    doc.name,
-                    line_number,
-                )
-            }
+        (&postgres_types::Type::INT4, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<i32>()?))
         }
-    } else if e == &postgres_types::Type::INT8 {
-        match &header.value {
-            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.parse::<i64>()?)),
-            _ => {
-                return ftd::interpreter::utils::e2(
-                    format!("expected string for ${}, found {:?}", var, header.value),
-                    doc.name,
-                    line_number,
-                )
-            }
+        (&postgres_types::Type::INT8, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<i64>()?))
         }
-    } else {
-        return ftd::interpreter::utils::e2(
-            format!(
-                "unknown type expected from postgresql for `{}`: {:?}",
-                var, e
-            ),
-            doc.name,
-            line_number,
-        );
+        (e, a) => {
+            return ftd::interpreter::utils::e2(
+                format!("for {} postgresql expected ${:?}, found {:?}", var, e, a),
+                doc.name,
+                line_number,
+            )
+        }
     })
 }
 
