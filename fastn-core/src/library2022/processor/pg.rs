@@ -67,6 +67,7 @@ fn resolve_variable_from_doc(
 }
 
 fn resolve_variable_from_headers(
+    doc: &ftd::interpreter::TDoc<'_>,
     headers: &ftd::ast::HeaderValues,
     var: &str,
     e: &postgres_types::Type,
@@ -77,6 +78,12 @@ fn resolve_variable_from_headers(
         Some(v) => v,
         None => return Ok(None),
     };
+
+    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+        if value.starts_with('$') {
+            return resolve_variable_from_doc(doc, &value[1..], e).map(Some);
+        }
+    }
 
     Ok(if e == &postgres_types::Type::TEXT {
         match &header.value {
@@ -111,7 +118,7 @@ fn prepare_args(
     let mut args = vec![];
     for (e, a) in expected_args.iter().zip(query_args) {
         args.push(
-            match resolve_variable_from_headers(&headers, &a, e, doc.name, line_number)? {
+            match resolve_variable_from_headers(doc, &headers, &a, e, doc.name, line_number)? {
                 Some(v) => v,
                 None => resolve_variable_from_doc(doc, &a[1..], e)?,
             },
