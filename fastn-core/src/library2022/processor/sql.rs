@@ -3,17 +3,32 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
     let len = chars.len();
     let mut i = 0;
     let mut found_eq = false;
+    let mut escaped = false;
     let mut args: Vec<String> = Vec::new();
     let mut output_query = String::new();
 
     while i < len {
-        let current_char = chars[i];
-
-        if current_char == '=' {
+        if chars[i] == '=' {
             found_eq = true;
         }
 
-        if found_eq && current_char == '$' && chars[i - 1] != '\\' {
+        if chars[i] == '\\' {
+            escaped = true;
+
+            let mut escape_count = 0;
+            
+            while i < len && chars[i] == '\\' {
+                escape_count += 1;
+                i += 1;
+            }
+
+            if escape_count % 2 == 0 {
+                output_query += &"\\".repeat(escape_count);
+                escaped = false;
+            }
+        }
+
+        if found_eq && chars[i] == '$' && !escaped {
             let mut arg = String::new();
             i += 1;
 
@@ -22,23 +37,25 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
                 i += 1;
             }
 
-            let gap = if i < len { " " } else { "" };
-
             if !arg.is_empty() {
-                let index = args.iter().position(|x| *x == arg);
+                let index = args.iter().position(|x| x == &arg);
 
-                match index {
-                    Some(idx) => {
-                        output_query.push_str(&format!("${}{}", idx + 1, gap));
-                    }
-                    None => {
-                        args.push(arg.clone());
-                        output_query.push_str(&format!("${}{}", args.len(), gap));
-                    }
+                let gap = if i < len { " " } else { "" };
+
+                if let Some(idx) = index {
+                    output_query += &format!("${}{}", idx + 1, gap);
+                } else {
+                    args.push(arg.clone());
+                    output_query += &format!("${}{}", args.len(), gap);
                 }
             }
         } else {
-            output_query.push(current_char);
+            if escaped {
+                output_query += "\\";
+                escaped = false;
+            }
+
+            output_query.push(chars[i]);
         }
 
         i += 1;
