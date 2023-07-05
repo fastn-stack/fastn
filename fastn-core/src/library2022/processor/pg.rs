@@ -66,10 +66,10 @@ fn resolve_variable_from_doc(
     todo!()
 }
 
-fn resolve_string(
-    _s: &str,
-    _e: &postgres_types::Type,
+fn resolve_variable_from_headers(
     _headers: &ftd::ast::HeaderValues,
+    _var: &str,
+    _e: &postgres_types::Type,
 ) -> ftd::interpreter::Result<Box<PGData>> {
     todo!()
 }
@@ -97,7 +97,7 @@ fn prepare_args(
         if a.starts_with("$") {
             args.push(resolve_variable_from_doc(doc, &a[1..], e)?);
         } else {
-            args.push(resolve_string(&a, e, &headers)?);
+            args.push(resolve_variable_from_headers(&headers, &a, e)?);
         }
     }
     Ok(QueryArgs { args })
