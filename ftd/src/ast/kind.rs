@@ -193,6 +193,20 @@ impl HeaderValues {
         }
     }
 
+    pub fn get_string_by_key(
+        &self,
+        key: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<String> {
+        match self.get_optional_string_by_key(key, doc_id, line_number)? {
+            Some(v) => Ok(v),
+            None => {
+                ftd::ast::parse_error(format!("Header not found `{}`", key), doc_id, line_number)
+            }
+        }
+    }
+
     pub fn get_optional_string_by_key(
         &self,
         key: &str,
