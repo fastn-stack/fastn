@@ -72,6 +72,9 @@ fastn_dom.property_map = {
     "flex-wrap": "fw",
     "text-transform": "tt",
     "text-align": "ta",
+    "-webkit-box-orient": "wbo",
+    "-webkit-line-clamp": "wlc",
+    "display": "d",
 };
 
 // dynamic-class-css.md
@@ -536,6 +539,14 @@ class Node2 {
             this.attachCss("text-indent", staticValue);
         } else if (kind === fastn_dom.PropertyKind.TextAlign) {
             this.attachCss("text-align", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.LineClamp) {
+            // -webkit-line-clamp: staticValue
+            // display: -webkit-box, overflow: hidden
+            // -webkit-box-orient: vertical
+            this.attachCss("-webkit-line-clamp", staticValue);
+            this.attachCss("display", "-webkit-box");
+            this.attachCss("overflow", "hidden");
+            this.attachCss("-webkit-box-orient", "vertical");
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

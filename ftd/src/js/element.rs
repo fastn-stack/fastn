@@ -703,7 +703,7 @@ pub struct TextCommon {
     pub text_transform: Option<ftd::js::Value>,
     pub text_indent: Option<ftd::js::Value>,
     pub text_align: Option<ftd::js::Value>,
-    // pub line_clamp: Option<ftd::js::Value>,
+    pub line_clamp: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -715,7 +715,7 @@ impl TextCommon {
             text_transform: ftd::js::value::get_properties("text-transform", properties, arguments),
             text_indent: ftd::js::value::get_properties("text-indent", properties, arguments),
             text_align: ftd::js::value::get_properties("text-align", properties, arguments),
-            // line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
+            line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
         }
     }
 
@@ -761,17 +761,17 @@ impl TextCommon {
                 ),
             ));
         }
-        // if let Some(ref clamp) = self.line_clamp {
-        //     component_statements.push(fastn_js::ComponentStatement::SetProperty(
-        //         clamp.to_set_property(
-        //             fastn_js::PropertyKind::LineClamp,
-        //             element_name,
-        //             component_definition_name,
-        //             loop_alias,
-        //             inherited_variable_name,
-        //         ),
-        //     ));
-        // }
+        if let Some(ref clamp) = self.line_clamp {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                clamp.to_set_property(
+                    fastn_js::PropertyKind::LineClamp,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
         component_statements
     }
 }

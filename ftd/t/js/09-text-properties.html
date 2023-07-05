@@ -7,7 +7,14 @@
 
 It only applies spacing at the beginning of the first line.</div></div><div data-id="8" class="ft_row c-15 g-5"><div data-id="9" class="w-16 p-17 bw-18 ta-19">this is **text-align: center** text. a bit longer text so you can see what's going on.</div><div data-id="10" class="w-16 p-17 bw-18 ta-20">this is **text-align: start** text. a bit longer text so you can see what's
 going on.</div><div data-id="11" class="w-16 p-17 bw-18 ta-21">this is **text-align: end** text. a bit longer text so you can see what's going
-on.</div><div data-id="12" class="w-16 p-17 bw-18 ta-22">this is **text-align: justify** text. a bit longer text so you can see what's going on.</div></div></body><style id="styles">
+on.</div><div data-id="12" class="w-16 p-17 bw-18 ta-22">this is **text-align: justify** text. a bit longer text so you can see what's going on.</div></div><div data-id="13" class="ft_column w-1 m-23"><div data-id="14" class="-webkit-line-clamp-24 display-25 o-26 -webkit-box-orient-27">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+when an unknown printer took a galley of type and scrambled it to make a
+type specimen book. It has survived not only five centuries, but also the
+leap into electronic typesetting, remaining essentially unchanged. It was
+popularised in the 1960s with the release of Letraset sheets containing
+Lorem Ipsum passages, and more recently with desktop publishing software
+like Aldus PageMaker including versions of Lorem Ipsum.</div></div></body><style id="styles">
     .ft_common {  text-decoration: none; box-sizing: border-box; border-top-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; height: auto; width: auto; }
 	.ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
@@ -33,6 +40,11 @@ on.</div><div data-id="12" class="w-16 p-17 bw-18 ta-22">this is **text-align: j
 	.ta-20 { text-align: start; }
 	.ta-21 { text-align: end; }
 	.ta-22 { text-align: justify; }
+	.m-23 { margin: 10px; }
+	.-webkit-line-clamp-24 { -webkit-line-clamp: 2; }
+	.display-25 { display: -webkit-box; }
+	.o-26 { overflow: hidden; }
+	.-webkit-box-orient-27 { -webkit-box-orient: vertical; }
     </style>
 <script>
     (function() {
@@ -100,6 +112,12 @@ on.</div><div data-id="12" class="w-16 p-17 bw-18 ta-22">this is **text-align: j
   parenti2i3.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(5));
   parenti2i3.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(1));
   parenti2i3.setProperty(fastn_dom.PropertyKind.TextAlign, fastn_dom.TextAlign.Justify);
+  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti3.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10));
+  let parenti3i0 = fastn_dom.createKernel(parenti3, fastn_dom.ElementKind.Text);
+  parenti3i0.setProperty(fastn_dom.PropertyKind.StringValue, "Lorem Ipsum is simply dummy text of the printing and typesetting industry.\nLorem Ipsum has been the industry's standard dummy text ever since the 1500s,\nwhen an unknown printer took a galley of type and scrambled it to make a\ntype specimen book. It has survived not only five centuries, but also the\nleap into electronic typesetting, remaining essentially unchanged. It was\npopularised in the 1960s with the release of Letraset sheets containing\nLorem Ipsum passages, and more recently with desktop publishing software\nlike Aldus PageMaker including versions of Lorem Ipsum.");
+  parenti3i0.setProperty(fastn_dom.PropertyKind.LineClamp, 2);
 }
 
         fastn_virtual.hydrate(main);
