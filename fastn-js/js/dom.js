@@ -77,6 +77,7 @@ fastn_dom.property_map = {
     "display": "d",
     "opacity": "op",
     "cursor": "cur",
+    "resize": "r",
 };
 
 // dynamic-class-css.md
@@ -163,6 +164,7 @@ fastn_dom.PropertyKind = {
     LineClamp: 38,
     Opacity: 39,
     Cursor: 40,
+    Resize: 41,
 }
 
 
@@ -256,6 +258,12 @@ fastn_dom.Cursor = {
     AllScroll: "all-scroll",
     ZoomIn: "zoom-in",
     ZoomOut: "zoom-out"
+}
+
+fastn_dom.Resize = {
+    Vertical: "vertical",
+    Horizontal: "horizontal",
+    Both: "both",
 }
 
 fastn_dom.BackgroundStyle = {
@@ -592,6 +600,10 @@ class Node2 {
             this.attachCss("opacity", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Cursor) {
             this.attachCss("cursor", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Resize) {
+            // overflow: auto, resize: staticValue
+            this.attachCss("resize", staticValue);
+            this.attachCss("overflow", "auto");
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

@@ -197,6 +197,7 @@ pub enum PropertyKind {
     LineClamp,
     Opacity,
     Cursor,
+    Resize,
 }
 
 impl PropertyKind {
@@ -242,6 +243,7 @@ impl PropertyKind {
             PropertyKind::LineClamp => "fastn_dom.PropertyKind.LineClamp",
             PropertyKind::Opacity => "fastn_dom.PropertyKind.Opacity",
             PropertyKind::Cursor => "fastn_dom.PropertyKind.Cursor",
+            PropertyKind::Resize => "fastn_dom.PropertyKind.Resize",
         }
     }
 }

@@ -450,6 +450,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = cursor_variants(variant);
             (format!("fastn_dom.Cursor.{}", js_variant), false)
         }
+        "ftd#resize" => {
+            let js_variant = resize_variants(variant);
+            (format!("fastn_dom.Resize.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -598,5 +602,14 @@ fn cursor_variants(name: &str) -> &'static str {
         "zoom-in" => "ZoomIn",
         "zoom-out" => "ZoomOut",
         t => todo!("invalid cursor variant {}", t),
+    }
+}
+
+fn resize_variants(name: &str) -> &'static str {
+    match name {
+        "vertical" => "Vertical",
+        "horizontal" => "Horizontal",
+        "both" => "Both",
+        t => todo!("invalid resize variant {}", t),
     }
 }

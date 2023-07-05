@@ -230,6 +230,7 @@ height.fixed.px: 200
 width.fixed.px: 300
 overflow-y: scroll
 border-color: $red-yellow
+border-style: solid
 border-width.px: 2
 
 -- ftd.text: The blue planet below is sticky
@@ -239,7 +240,7 @@ color: black
 background.solid: deepskyblue
 sticky: true
 width.fixed.px: 120
-/text-align: center
+text-align: center
 left.px: 50
 top.px: 0
 
@@ -262,6 +263,7 @@ universe.
 width: fill-container
 spacing: space-evenly
 background.solid: red
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -319,6 +321,7 @@ DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 width: fill-container
 spacing: space-evenly
 background.solid: green
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -377,6 +380,7 @@ DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 width: fill-container
 spacing: space-evenly
 background.solid: deepskyblue
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -579,7 +583,6 @@ border-width.px: 4
 border-style: double
 border-color: $red-yellow
 
-
 -- ftd.text: This text will show zoom-in cursor on hover
 padding.px: 10
 cursor: zoom-in
@@ -600,6 +603,48 @@ cursor: crosshair
 border-width.px: 4
 border-style: double
 border-color: $red-yellow
+
+-- end: ftd.column
+
+;; -------------------------- RESIZE ------------------------
+
+-- ftd.column:
+width.fixed.percent: 50
+spacing.fixed.px: 10
+margin.px: 10
+
+-- ftd.row:
+resize: both
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable both directions
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: horizontal
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable only horizontally
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: vertical
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable only vertically
+
+-- end: ftd.row
 
 -- end: ftd.column
 
