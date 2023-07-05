@@ -36,40 +36,126 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (_, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
+    let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
     super::sqlite::result_to_value(
-        execute_query(query.as_str(), doc, value.line_number()).await?,
+        execute_query(query.as_str(), doc, value.line_number(), headers).await?,
         kind,
         doc,
         value.line_number(),
     )
 }
 
-struct Args {}
+type PGData = dyn postgres_types::ToSql + Sync;
 
-impl Args {
-    fn pg_args(&self) -> Vec<&(dyn postgres_types::ToSql + Sync)> {
-        todo!()
+struct QueryArgs {
+    args: Vec<Box<PGData>>,
+}
+
+impl QueryArgs {
+    fn pg_args(&self) -> Vec<&PGData> {
+        self.args.iter().map(|x| x.as_ref()).collect()
     }
 }
 
-fn parse_query(
-    _query: &str,
-    _args: &[postgres_types::Type],
+fn resolve_variable_from_doc(
     _doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Args> {
+    var: &str,
+    e: &postgres_types::Type,
+) -> ftd::interpreter::Result<Box<PGData>> {
+    dbg!(var, e);
     todo!()
+}
+
+fn resolve_variable_from_headers(
+    doc: &ftd::interpreter::TDoc<'_>,
+    headers: &ftd::ast::HeaderValues,
+    var: &str,
+    e: &postgres_types::Type,
+    doc_name: &str,
+    line_number: usize,
+) -> ftd::interpreter::Result<Option<Box<PGData>>> {
+    let header = match headers.optional_header_by_name(var, doc_name, line_number)? {
+        Some(v) => v,
+        None => return Ok(None),
+    };
+
+    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+        if value.starts_with('$') {
+            return resolve_variable_from_doc(doc, &value[1..], e).map(Some);
+        }
+    }
+
+    Ok(match (e, &header.value) {
+        (&postgres_types::Type::TEXT, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.to_string()))
+        }
+        (&postgres_types::Type::INT4, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<i32>()?))
+        }
+        (&postgres_types::Type::INT8, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<i64>()?))
+        }
+        (&postgres_types::Type::FLOAT4, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<f32>()?))
+        }
+        (&postgres_types::Type::FLOAT8, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<f64>()?))
+        }
+        (&postgres_types::Type::BOOL, ftd::ast::VariableValue::String { value, .. }) => {
+            Some(Box::new(value.parse::<bool>()?))
+        }
+        (e, a) => {
+            return ftd::interpreter::utils::e2(
+                format!("for {} postgresql expected ${:?}, found {:?}", var, e, a),
+                doc.name,
+                line_number,
+            )
+        }
+    })
+}
+
+fn prepare_args(
+    query_args: Vec<String>,
+    expected_args: &[postgres_types::Type],
+    doc: &ftd::interpreter::TDoc<'_>,
+    line_number: usize,
+    headers: ftd::ast::HeaderValues,
+) -> ftd::interpreter::Result<QueryArgs> {
+    if expected_args.len() != query_args.len() {
+        return ftd::interpreter::utils::e2(
+            format!(
+                "expected {} arguments, found {}",
+                expected_args.len(),
+                query_args.len()
+            ),
+            doc.name,
+            line_number,
+        );
+    }
+    let mut args = vec![];
+    for (e, a) in expected_args.iter().zip(query_args) {
+        args.push(
+            match resolve_variable_from_headers(doc, &headers, &a, e, doc.name, line_number)? {
+                Some(v) => v,
+                None => resolve_variable_from_doc(doc, &a[1..], e)?,
+            },
+        );
+    }
+    Ok(QueryArgs { args })
 }
 
 async fn execute_query(
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
+    headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+    let (query, query_args) = dbg!(super::sql::extract_arguments(dbg!(query))?);
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
-    let stmt = client.prepare_cached(query).await.unwrap();
-    let args = parse_query(query, stmt.params(), doc)?;
+
+    let stmt = client.prepare_cached(query.as_str()).await.unwrap();
+    let args = prepare_args(query_args, stmt.params(), doc, line_number, headers)?;
 
     let rows = client.query(&stmt, &args.pg_args()).await.unwrap();
     let mut result: Vec<Vec<serde_json::Value>> = vec![];
@@ -151,9 +237,9 @@ string department:
 
 -- person list people:
 $processor$: pr.pg
-param: 1
+id: 2
 
-SELECT * FROM "users" where id >= $1;
+SELECT * FROM "users" where id >= $id ;
 
 -- integer int_2:
 $processor$: pr.pg
@@ -187,9 +273,10 @@ $loop$: $people as $p
 
 -- decimal d_4:
 $processor$: pr.pg
-param-decimal: 10
+val: 4.01
+note: `SELECT $val::FLOAT8` should work but doesn't
 
-SELECT $1::FLOAT8;
+SELECT 1.0::FLOAT8;
 
 -- ftd.decimal: $d_4
 
@@ -200,8 +287,7 @@ $processor$: pr.pg
 SELECT 80.0::FLOAT8;
 
 -- ftd.decimal: $d_8
-
- */
+*/
 
 /*
 PREPARE my_query AS
