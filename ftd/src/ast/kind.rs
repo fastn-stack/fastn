@@ -175,6 +175,28 @@ impl HeaderValues {
             .collect_vec()
     }
 
+    pub fn get_header_by_name(
+        &self,
+        name: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<&HeaderValue> {
+        let values = self
+            .get_by_key(name)
+            .into_iter()
+            .filter(|v| v.key.eq(name))
+            .collect::<Vec<_>>();
+        if values.len() > 1 {
+            ftd::ast::parse_error(
+                format!("Multiple header found `{}`", name),
+                doc_id,
+                line_number,
+            )
+        } else {
+            Ok(values.first().unwrap())
+        }
+    }
+
     pub fn get_by_key_optional(
         &self,
         key: &str,
@@ -190,20 +212,6 @@ impl HeaderValues {
             )
         } else {
             Ok(values.first().copied())
-        }
-    }
-
-    pub fn get_string_by_key(
-        &self,
-        key: &str,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::ast::Result<String> {
-        match self.get_optional_string_by_key(key, doc_id, line_number)? {
-            Some(v) => Ok(v),
-            None => {
-                ftd::ast::parse_error(format!("Header not found `{}`", key), doc_id, line_number)
-            }
         }
     }
 

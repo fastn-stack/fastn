@@ -73,7 +73,7 @@ fn resolve_variable_from_headers(
     doc_name: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<Option<Box<PGData>>> {
-    let _val = headers.get_string_by_key(var, doc_name, line_number)?;
+    let _header = headers.get_header_by_name(var, doc_name, line_number)?;
     todo!()
 }
 
