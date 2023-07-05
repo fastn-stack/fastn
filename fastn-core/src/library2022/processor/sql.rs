@@ -49,6 +49,8 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
                     output_query += &format!("${}{}", args.len(), gap);
                 }
             }
+
+            found_eq = false;
         } else {
             if escaped {
                 output_query += "\\";
