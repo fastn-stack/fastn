@@ -69,12 +69,25 @@ fn resolve_variable_from_doc(
 fn resolve_variable_from_headers(
     headers: &ftd::ast::HeaderValues,
     var: &str,
-    _e: &postgres_types::Type,
+    e: &postgres_types::Type,
     doc_name: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<Option<Box<PGData>>> {
-    let _header = headers.get_header_by_name(var, doc_name, line_number)?;
-    todo!()
+    let header = match headers.optional_header_by_name(var, doc_name, line_number)? {
+        Some(v) => v,
+        None => return Ok(None),
+    };
+
+    Ok(if e == &postgres_types::Type::TEXT {
+        match &header.value {
+            ftd::ast::VariableValue::String { value, .. } => Some(Box::new(value.to_string())),
+            _ => todo!(),
+        }
+    } else if e == &postgres_types::Type::INT8 {
+        todo!()
+    } else {
+        todo!()
+    })
 }
 
 fn prepare_args(

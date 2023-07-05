@@ -175,12 +175,12 @@ impl HeaderValues {
             .collect_vec()
     }
 
-    pub fn get_header_by_name(
+    pub fn optional_header_by_name(
         &self,
         name: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::ast::Result<&HeaderValue> {
+    ) -> ftd::ast::Result<Option<&HeaderValue>> {
         let values = self
             .get_by_key(name)
             .into_iter()
@@ -193,7 +193,11 @@ impl HeaderValues {
                 line_number,
             )
         } else {
-            Ok(values.first().unwrap())
+            if let Some(value) = values.first() {
+                Ok(Some(value))
+            } else {
+                Ok(None)
+            }
         }
     }
 
