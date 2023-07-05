@@ -70,7 +70,7 @@ fn resolve_variable_from_headers(
     _headers: &ftd::ast::HeaderValues,
     _var: &str,
     _e: &postgres_types::Type,
-) -> ftd::interpreter::Result<Box<PGData>> {
+) -> ftd::interpreter::Result<Option<Box<PGData>>> {
     todo!()
 }
 
@@ -94,11 +94,10 @@ fn prepare_args(
     }
     let mut args = vec![];
     for (e, a) in expected_args.iter().zip(query_args) {
-        if a.starts_with("$") {
-            args.push(resolve_variable_from_doc(doc, &a[1..], e)?);
-        } else {
-            args.push(resolve_variable_from_headers(&headers, &a, e)?);
-        }
+        args.push(match resolve_variable_from_headers(&headers, &a, e)? {
+            Some(v) => v,
+            None => resolve_variable_from_doc(doc, &a[1..], e)?,
+        });
     }
     Ok(QueryArgs { args })
 }
