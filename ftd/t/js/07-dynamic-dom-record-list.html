@@ -13,14 +13,14 @@
         let foo__first,
 foo__people,
 foo__tom;
-function main(parent) {
+function main(parent, inherited) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom");
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__append_person(foo__people, foo__tom);
   });
   foo__people.forLoop(parent, function (root, item, index) {
-    return foo__show_person(root, item, index);
+    return foo__show_person(root, inherited, item, index);
   });
 }
 function foo__append_person(a, v) {
@@ -31,7 +31,7 @@ foo__first = fastn.recordInstance({
   bio: "I am Jill"
 });
 foo__people = fastn.mutableList([foo__first]);
-function foo__show_person(parent, p, index)
+function foo__show_person(parent, inherited, p, index)
 {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);

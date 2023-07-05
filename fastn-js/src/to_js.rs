@@ -141,6 +141,8 @@ impl fastn_js::InstantiateComponent {
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
+        .append(pretty::RcDoc::text(self.inherited.clone()))
+        .append(comma().append(space()))
         .append(
             pretty::RcDoc::intersperse(
                 self.arguments.iter().map(|v| v.to_js()),
