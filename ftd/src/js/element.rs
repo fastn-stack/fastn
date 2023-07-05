@@ -796,7 +796,22 @@ pub struct Common {
     pub margin_top: Option<ftd::js::Value>,
     pub margin_bottom: Option<ftd::js::Value>,
     pub border_width: Option<ftd::js::Value>,
+    pub border_top_width: Option<ftd::js::Value>,
+    pub border_bottom_width: Option<ftd::js::Value>,
+    pub border_left_width: Option<ftd::js::Value>,
+    pub border_right_width: Option<ftd::js::Value>,
+    pub border_radius: Option<ftd::js::Value>,
+    pub border_top_left_radius: Option<ftd::js::Value>,
+    pub border_top_right_radius: Option<ftd::js::Value>,
+    pub border_bottom_left_radius: Option<ftd::js::Value>,
+    pub border_bottom_right_radius: Option<ftd::js::Value>,
     pub border_style: Option<ftd::js::Value>,
+    pub border_style_vertical: Option<ftd::js::Value>,
+    pub border_style_horizontal: Option<ftd::js::Value>,
+    pub border_left_style: Option<ftd::js::Value>,
+    pub border_right_style: Option<ftd::js::Value>,
+    pub border_top_style: Option<ftd::js::Value>,
+    pub border_bottom_style: Option<ftd::js::Value>,
     pub color: Option<ftd::js::Value>,
     pub background: Option<ftd::js::Value>,
     pub role: Option<ftd::js::Value>,
@@ -861,7 +876,78 @@ impl Common {
             margin_top: ftd::js::value::get_properties("margin-top", properties, arguments),
             margin_bottom: ftd::js::value::get_properties("margin-bottom", properties, arguments),
             border_width: ftd::js::value::get_properties("border-width", properties, arguments),
+            border_top_width: ftd::js::value::get_properties(
+                "border-top-width",
+                properties,
+                arguments,
+            ),
+            border_bottom_width: ftd::js::value::get_properties(
+                "border-bottom-width",
+                properties,
+                arguments,
+            ),
+            border_left_width: ftd::js::value::get_properties(
+                "border-left-width",
+                properties,
+                arguments,
+            ),
+            border_right_width: ftd::js::value::get_properties(
+                "border-right-width",
+                properties,
+                arguments,
+            ),
+            border_radius: ftd::js::value::get_properties("border-radius", properties, arguments),
+            border_top_left_radius: ftd::js::value::get_properties(
+                "border-top-left-radius",
+                properties,
+                arguments,
+            ),
+            border_top_right_radius: ftd::js::value::get_properties(
+                "border-top-right-radius",
+                properties,
+                arguments,
+            ),
+            border_bottom_left_radius: ftd::js::value::get_properties(
+                "border-bottom-left-radius",
+                properties,
+                arguments,
+            ),
+            border_bottom_right_radius: ftd::js::value::get_properties(
+                "border-bottom-right-radius",
+                properties,
+                arguments,
+            ),
             border_style: ftd::js::value::get_properties("border-style", properties, arguments),
+            border_style_vertical: ftd::js::value::get_properties(
+                "border-style-vertical",
+                properties,
+                arguments,
+            ),
+            border_style_horizontal: ftd::js::value::get_properties(
+                "border-style-horizontal",
+                properties,
+                arguments,
+            ),
+            border_left_style: ftd::js::value::get_properties(
+                "border-style-left",
+                properties,
+                arguments,
+            ),
+            border_right_style: ftd::js::value::get_properties(
+                "border-style-right",
+                properties,
+                arguments,
+            ),
+            border_top_style: ftd::js::value::get_properties(
+                "border-style-top",
+                properties,
+                arguments,
+            ),
+            border_bottom_style: ftd::js::value::get_properties(
+                "border-style-bottom",
+                properties,
+                arguments,
+            ),
             color: ftd::js::value::get_properties("color", properties, arguments),
             background: ftd::js::value::get_properties("background", properties, arguments),
             role: ftd::js::value::get_properties("role", properties, arguments),
@@ -1104,10 +1190,175 @@ impl Common {
                 ),
             ));
         }
+        if let Some(ref border_top_width) = self.border_top_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_top_width.to_set_property(
+                    fastn_js::PropertyKind::BorderTopWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_bottom_width) = self.border_bottom_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_bottom_width.to_set_property(
+                    fastn_js::PropertyKind::BorderBottomWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_left_width) = self.border_left_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_left_width.to_set_property(
+                    fastn_js::PropertyKind::BorderLeftWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_right_width) = self.border_right_width {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_right_width.to_set_property(
+                    fastn_js::PropertyKind::BorderRightWidth,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_radius) = self.border_radius {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_radius.to_set_property(
+                    fastn_js::PropertyKind::BorderRadius,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_top_left_radius) = self.border_top_left_radius {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_top_left_radius.to_set_property(
+                    fastn_js::PropertyKind::BorderTopLeftRadius,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_top_right_radius) = self.border_top_right_radius {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_top_right_radius.to_set_property(
+                    fastn_js::PropertyKind::BorderTopRightRadius,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_bottom_left_radius) = self.border_bottom_left_radius {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_bottom_left_radius.to_set_property(
+                    fastn_js::PropertyKind::BorderBottomLeftRadius,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_bottom_right_radius) = self.border_bottom_right_radius {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_bottom_right_radius.to_set_property(
+                    fastn_js::PropertyKind::BorderBottomRightRadius,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
         if let Some(ref border_style) = self.border_style {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style.to_set_property(
                     fastn_js::PropertyKind::BorderStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_style_vertical) = self.border_style_vertical {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_style_vertical.to_set_property(
+                    fastn_js::PropertyKind::BorderStyleVertical,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_style_horizontal) = self.border_style_horizontal {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_style_horizontal.to_set_property(
+                    fastn_js::PropertyKind::BorderStyleHorizontal,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_left_style) = self.border_left_style {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_left_style.to_set_property(
+                    fastn_js::PropertyKind::BorderLeftStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_right_style) = self.border_right_style {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_right_style.to_set_property(
+                    fastn_js::PropertyKind::BorderRightStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_top_style) = self.border_top_style {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_top_style.to_set_property(
+                    fastn_js::PropertyKind::BorderTopStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_bottom_style) = self.border_bottom_style {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_bottom_style.to_set_property(
+                    fastn_js::PropertyKind::BorderBottomStyle,
                     element_name,
                     component_definition_name,
                     loop_alias,

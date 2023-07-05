@@ -80,7 +80,7 @@ width: fill-container
 -- ftd.text: Id Test
 id: id-123
 
-;; ------------------------ BORDER WIDTH + BORDER STYLE ------------------------
+;; ------------------------ BORDER WIDTH/STYLE/RADIUS ------------------------
 
 -- ftd.text: Solid Border
 border-width.px: 4
@@ -90,27 +90,78 @@ border-style: solid
 -- ftd.text: Double Border
 border-width.px: 4
 margin.px: 12
-border-style: double
+border-style-left: double
 
 -- ftd.text: Dashed Border
 border-width.px: 4
-border-style: dashed
+border-style-right: dashed
 margin.px: 12
 
 -- ftd.text: Dotted Border
 border-width.px: 4
-border-style: dotted
+border-style-top: dotted
 margin.px: 12
 
 -- ftd.text: Groove Border
 border-width.px: 4
-border-style: groove
+border-style-bottom: groove
 margin.px: 12
 
 -- ftd.text: Ridge Border
 border-width.px: 4
 border-style: ridge
 margin.px: 12
+
+-- ftd.text: Left Border Width
+border-left-width.px: 2
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Right Border Width
+border-right-width.px: 4
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Top Border Width
+border-top-width.px: 6
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Bottom Border Width
+border-bottom-width.px: 8
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Border Radius
+border-width.px: 4
+border-style: double
+border-radius.px: 15
+margin.px: 12
+
+-- ftd.text: Top Left Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-left-radius.px: 15
+
+-- ftd.text: Top Right Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-right-radius.px: 15
+
+-- ftd.text: Bottom Left Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-left-radius.px: 15
+
+-- ftd.text: Bottom Right Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-right-radius.px: 15
+
 
 ;; --------------------- COLOR --------------------------
 
