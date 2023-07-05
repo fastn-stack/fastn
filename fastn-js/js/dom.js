@@ -75,6 +75,7 @@ fastn_dom.property_map = {
     "-webkit-box-orient": "wbo",
     "-webkit-line-clamp": "wlc",
     "display": "d",
+    "opacity": "op",
 };
 
 // dynamic-class-css.md
@@ -159,6 +160,7 @@ fastn_dom.PropertyKind = {
     TextIndent: 36,
     TextAlign: 37,
     LineClamp: 38,
+    Opacity: 39,
 }
 
 
@@ -547,6 +549,8 @@ class Node2 {
             this.attachCss("display", "-webkit-box");
             this.attachCss("overflow", "hidden");
             this.attachCss("-webkit-box-orient", "vertical");
+        } else if (kind === fastn_dom.PropertyKind.Opacity) {
+            this.attachCss("opacity", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
