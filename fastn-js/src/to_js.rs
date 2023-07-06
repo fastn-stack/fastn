@@ -142,14 +142,23 @@ impl fastn_js::InstantiateComponent {
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
         .append(pretty::RcDoc::text(self.inherited.clone()))
-        .append(comma().append(space()))
-        .append(
-            pretty::RcDoc::intersperse(
-                self.arguments.iter().map(|v| v.to_js()),
-                comma().append(space()),
+        .append(if !self.arguments.is_empty() {
+            comma().append(space()).append(
+                text("{")
+                    .append(
+                        pretty::RcDoc::intersperse(
+                            self.arguments
+                                .iter()
+                                .map(|(k, v)| format!("{}: {}", k, v.to_js())),
+                            comma().append(space()),
+                        )
+                        .group(),
+                    )
+                    .append(text("}")),
             )
-            .group(),
-        )
+        } else {
+            pretty::RcDoc::nil()
+        })
         .append(text(");"))
     }
 }
@@ -269,17 +278,22 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
 
 impl fastn_js::Component {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let body = get_variable_declaration(fastn_js::LOCAL_VARIABLE_MAP)
+        let body = text("let")
+            .append(space())
+            .append(text(fastn_js::LOCAL_VARIABLE_MAP))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("{"))
             .append(pretty::RcDoc::intersperse(
-                self.params.iter().filter_map(|f| {
-                    if ["parent", "inherited"].contains(&f.as_str()) {
-                        None
-                    } else {
-                        Some(format!("{}.{f}= {f};", fastn_js::LOCAL_VARIABLE_MAP))
-                    }
-                }),
+                self.args
+                    .iter()
+                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
                 pretty::RcDoc::softline(),
             ))
+            .append(text("...args"))
+            .append(pretty::RcDoc::softline())
+            .append(text("};"))
             .append(
                 pretty::RcDoc::intersperse(
                     self.body.iter().map(|f| f.to_js()),

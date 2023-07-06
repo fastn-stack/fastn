@@ -118,7 +118,18 @@ impl ftd::interpreter::ComponentDefinition {
             statements,
             self.arguments
                 .iter()
-                .map(|v| v.name.to_string())
+                .flat_map(|v| {
+                    v.get_default_value().map(|val| {
+                        (
+                            v.name.to_string(),
+                            val.to_set_property_value(
+                                &Some(self.name.to_string()),
+                                &None,
+                                &Some("inherited".to_string()),
+                            ),
+                        )
+                    })
+                })
                 .collect_vec(),
         )
     }
@@ -214,7 +225,6 @@ impl ftd::interpreter::Component {
     }
 
     #[allow(renamed_and_removed_lints)]
-    #[allow(too_many_arguments)]
     fn to_component_statements_(
         &self,
         parent: &str,
@@ -242,13 +252,17 @@ impl ftd::interpreter::Component {
             let arguments = component_definition
                 .arguments
                 .iter()
-                .map(|v| {
-                    v.get_value(self.properties.as_slice())
-                        .to_set_property_value(
-                            component_definition_name,
-                            loop_alias,
-                            inherited_variable_name,
+                .filter_map(|v| {
+                    v.get_optional_value(self.properties.as_slice()).map(|val| {
+                        (
+                            v.name.to_string(),
+                            val.to_set_property_value(
+                                component_definition_name,
+                                loop_alias,
+                                inherited_variable_name,
+                            ),
                         )
+                    })
                 })
                 .collect_vec();
             // Todo: Add event
