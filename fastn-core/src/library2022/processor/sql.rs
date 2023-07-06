@@ -31,7 +31,7 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
             }
         }
 
-        if (chars[i] == '"' || chars[i] == '"') && !escaped {
+        if chars[i] == '"' && !escaped {
             if quote_open {
                 if Some(chars[i]) == quote {
                     quote_open = false;

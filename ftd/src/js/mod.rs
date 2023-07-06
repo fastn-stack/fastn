@@ -214,6 +214,7 @@ impl ftd::interpreter::Component {
     }
 
     #[allow(renamed_and_removed_lints)]
+    #[allow(unknown_lints)]
     #[allow(too_many_arguments)]
     fn to_component_statements_(
         &self,
