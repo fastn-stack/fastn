@@ -372,6 +372,9 @@ window.ftd = (function() {
 
     // source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
     exports.copy_to_clipboard = function (text: string) {
+        if (text.startsWith("\\", 0)) {
+            text = text.substring(1);
+        }
         if (!navigator.clipboard) {
             fallbackCopyTextToClipboard(text);
             return;
