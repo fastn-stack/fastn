@@ -225,6 +225,7 @@ impl ftd::interpreter::Component {
     }
 
     #[allow(renamed_and_removed_lints)]
+    #[allow(clippy::too_many_arguments)]
     fn to_component_statements_(
         &self,
         parent: &str,
