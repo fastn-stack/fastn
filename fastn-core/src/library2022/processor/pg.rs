@@ -130,24 +130,80 @@ fn resolve_variable_from_headers(
         }
     }
 
+    fn friendlier_error<T, E: ToString>(
+        r: Result<T, E>,
+        var: &str,
+        val: &str,
+        into: &str,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<T> {
+        match r {
+            Ok(r) => Ok(r),
+            Err(e) => ftd::interpreter::utils::e2(
+                format!(
+                    "failed to parse `{var}: {val}` into {into}: {e}",
+                    e = e.to_string()
+                ),
+                doc_name,
+                line_number,
+            ),
+        }
+    }
+
     Ok(match (e, &header.value) {
         (&postgres_types::Type::TEXT, ftd::ast::VariableValue::String { value, .. }) => {
             Some(Box::new(value.to_string()))
         }
         (&postgres_types::Type::INT4, ftd::ast::VariableValue::String { value, .. }) => {
-            Some(Box::new(value.parse::<i32>()?))
+            Some(Box::new(friendlier_error(
+                value.parse::<i32>(),
+                var,
+                value,
+                "i32",
+                doc_name,
+                line_number,
+            )?))
         }
         (&postgres_types::Type::INT8, ftd::ast::VariableValue::String { value, .. }) => {
-            Some(Box::new(value.parse::<i64>()?))
+            Some(Box::new(friendlier_error(
+                value.parse::<i64>(),
+                var,
+                value,
+                "i64",
+                doc_name,
+                line_number,
+            )?))
         }
         (&postgres_types::Type::FLOAT4, ftd::ast::VariableValue::String { value, .. }) => {
-            Some(Box::new(value.parse::<f32>()?))
+            Some(Box::new(friendlier_error(
+                value.parse::<f32>(),
+                var,
+                value,
+                "f32",
+                doc_name,
+                line_number,
+            )?))
         }
         (&postgres_types::Type::FLOAT8, ftd::ast::VariableValue::String { value, .. }) => {
-            Some(Box::new(value.parse::<f64>()?))
+            Some(Box::new(friendlier_error(
+                value.parse::<f64>(),
+                var,
+                value,
+                "f64",
+                doc_name,
+                line_number,
+            )?))
         }
         (&postgres_types::Type::BOOL, ftd::ast::VariableValue::String { value, .. }) => {
-            Some(Box::new(value.parse::<bool>()?))
+            Some(Box::new(friendlier_error(
+                value.parse::<bool>(),
+                var,
+                value,
+                "bool",
+                doc_name,
+                line_number,
+            )?))
         }
         (e, a) => {
             return ftd::interpreter::utils::e2(
