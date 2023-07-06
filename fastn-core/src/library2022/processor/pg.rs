@@ -64,18 +64,18 @@ fn resolve_variable_from_doc(
     e: &postgres_types::Type,
     line_number: usize,
 ) -> ftd::interpreter::Result<Box<PGData>> {
-    let thing = match doc.bag().get(doc.resolve_name(var).as_str()) {
-        Some(ftd::interpreter::Thing::Variable(v)) => v.value.clone().resolve(doc, line_number)?,
-        Some(v) => {
+    let thing = match doc.get_thing(var, line_number) {
+        Ok(ftd::interpreter::Thing::Variable(v)) => v.value.clone().resolve(doc, line_number)?,
+        Ok(v) => {
             return ftd::interpreter::utils::e2(
-                format!("{} is not a variable, it's a {:?}", var, v),
+                format!("{var} is not a variable, it's a {v:?}"),
                 doc.name,
                 line_number,
             )
         }
-        None => {
+        Err(e) => {
             return ftd::interpreter::utils::e2(
-                format!("${} not found in the document", var),
+                format!("${var} not found in the document: {e:?}"),
                 doc.name,
                 line_number,
             )
