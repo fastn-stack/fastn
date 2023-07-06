@@ -119,7 +119,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div><div
 She smiled, and smiled, and passed it off Ere from the door she stept-</div><div data-id="130" class="w-119 p-3 bw-49 bs-23 bc-40 white-space-123">But ere she from the church-door stepped She smiled and told us why:
 
 'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_row w-1 jc-94"><div data-id="132">32</div><div data-id="133">1.123</div><div data-id="134">true</div></div></body><style id="styles">
+She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-124 c-125">Start</div><div data-id="133" class="as-126 c-125">Center</div><div data-id="134" class="as-127 c-125">End</div></div><div data-id="135" class="ft_row w-1 jc-94"><div data-id="136">32</div><div data-id="137">1.123</div><div data-id="138">true</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -253,6 +253,11 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.white-space-121 { white-space: nowrap; }
 	.white-space-122 { white-space: pre; }
 	.white-space-123 { white-space: break-spaces; }
+	.as-124 { align-self: start; }
+	.c-125 { color: red; }
+	body.dark .c-125 { color: yellow; }
+	.as-126 { align-self: center; }
+	.as-127 { align-self: end; }
     </style>
 <script>
     (function() {
@@ -944,15 +949,29 @@ function main(parent, inherited, args) {
   parenti12i3.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
   parenti12i3.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow);
   parenti12i3.setProperty(fastn_dom.PropertyKind.WhiteSpace, fastn_dom.WhiteSpace.BreakSpaces);
-  let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti13.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
-  let parenti13i0 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Integer);
-  parenti13i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
-  let parenti13i1 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Decimal);
-  parenti13i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
-  let parenti13i2 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Boolean);
-  parenti13i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
+  let parenti13 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti13.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)));
+  let parenti13i0 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Text);
+  parenti13i0.setProperty(fastn_dom.PropertyKind.StringValue, "Start");
+  parenti13i0.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Start);
+  parenti13i0.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow);
+  let parenti13i1 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Text);
+  parenti13i1.setProperty(fastn_dom.PropertyKind.StringValue, "Center");
+  parenti13i1.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.Center);
+  parenti13i1.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow);
+  let parenti13i2 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Text);
+  parenti13i2.setProperty(fastn_dom.PropertyKind.StringValue, "End");
+  parenti13i2.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End);
+  parenti13i2.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow);
+  let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti14.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti14.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
+  let parenti14i0 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Integer);
+  parenti14i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
+  let parenti14i1 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Decimal);
+  parenti14i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
+  let parenti14i2 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Boolean);
+  parenti14i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
 global.foo__ylg = fastn.recordInstance({
   light: "yellow",
