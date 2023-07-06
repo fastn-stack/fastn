@@ -2,7 +2,7 @@
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a mut ftd::Map<ftd::interpreter::Thing>,
+    pub bag: &'a mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub instructions: &'a [ftd::interpreter::Component],
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
@@ -15,7 +15,7 @@ pub struct ExecuteDoc<'a> {
 pub struct RT {
     pub name: String,
     pub aliases: ftd::Map<String>,
-    pub bag: ftd::Map<ftd::interpreter::Thing>,
+    pub bag: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub main: ftd::executor::Column,
     pub html_data: ftd::executor::HTMLData,
     pub dummy_instructions: ftd::VecMap<ftd::executor::DummyElement>,
@@ -124,7 +124,7 @@ impl<'a> ExecuteDoc<'a> {
     }
 
     pub fn set_document_breakpoint(
-        bag: &mut ftd::Map<ftd::interpreter::Thing>,
+        bag: &mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
         breakpoint_width: i64,
         line_number: usize,
     ) {

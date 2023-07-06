@@ -23,7 +23,7 @@
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InterpreterState {
     pub id: String,
-    pub bag: ftd::Map<ftd::interpreter::Thing>,
+    pub bag: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
     pub to_process: ToProcess,
@@ -1054,7 +1054,7 @@ impl InterpreterWithoutState {
 
 #[derive(Debug, Default, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Document {
-    pub data: ftd::Map<ftd::interpreter::Thing>,
+    pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
     pub tree: Vec<ftd::interpreter::Component>,
     pub aliases: ftd::Map<String>,

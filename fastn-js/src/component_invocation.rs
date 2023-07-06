@@ -45,7 +45,7 @@ impl ElementKind {
 #[derive(Debug)]
 pub struct InstantiateComponent {
     pub name: String,
-    pub arguments: Vec<fastn_js::SetPropertyValue>,
+    pub arguments: Vec<(String, fastn_js::SetPropertyValue)>,
     pub parent: String,
     pub inherited: String,
     pub should_return: bool,

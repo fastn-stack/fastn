@@ -769,7 +769,7 @@ pub(crate) fn validate_properties_and_set_default(
 pub(crate) fn insert_export_thing(
     exports: &[String],
     thing_name: &str,
-    bag: &mut ftd::Map<ftd::interpreter::Thing>,
+    bag: &mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
     doc_id: &str,
     line_number: usize,
 ) {

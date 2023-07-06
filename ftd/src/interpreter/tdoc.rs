@@ -7,7 +7,7 @@ pub struct TDoc<'a> {
 
 #[derive(Debug, PartialEq)]
 pub enum BagOrState<'a> {
-    Bag(&'a ftd::Map<ftd::interpreter::Thing>),
+    Bag(&'a indexmap::IndexMap<String, ftd::interpreter::Thing>),
     State(&'a mut ftd::interpreter::InterpreterState),
 }
 
@@ -15,7 +15,7 @@ impl<'a> TDoc<'a> {
     pub fn new(
         name: &'a str,
         aliases: &'a ftd::Map<String>,
-        bag: &'a ftd::Map<ftd::interpreter::Thing>,
+        bag: &'a indexmap::IndexMap<String, ftd::interpreter::Thing>,
     ) -> TDoc<'a> {
         TDoc {
             name,
@@ -47,7 +47,7 @@ impl<'a> TDoc<'a> {
         ftd::interpreter::utils::resolve_name(name, self.name, self.aliases)
     }
 
-    pub fn bag(&'a self) -> &'a ftd::Map<ftd::interpreter::Thing> {
+    pub fn bag(&'a self) -> &'a indexmap::IndexMap<String, ftd::interpreter::Thing> {
         match &self.bag {
             BagOrState::Bag(b) => b,
             BagOrState::State(s) => &s.bag,
