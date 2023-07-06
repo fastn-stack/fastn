@@ -119,7 +119,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div><div
 She smiled, and smiled, and passed it off Ere from the door she stept-</div><div data-id="130" class="w-119 p-3 bw-49 bs-23 bc-40 white-space-123">But ere she from the church-door stepped She smiled and told us why:
 
 'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-124 c-125">Start</div><div data-id="133" class="as-126 c-125">Center</div><div data-id="134" class="as-127 c-125">End</div></div><div data-id="135" class="ft_row w-1 jc-94"><div data-id="136">32</div><div data-id="137">1.123</div><div data-id="138">true</div></div></body><style id="styles">
+She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-124 c-125">Start</div><div data-id="133" class="as-126 c-125">Center</div><div data-id="134" class="as-127 c-125">End</div></div><div data-id="135" class="[object Object] c-125">This is text with class</div><div data-id="136" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="137" class="ft_column w-119 p-58 bw-49 bs-23 bc-129"><div data-id="138" class="pos-130 t-71 l-131 c-132">Inside Inner Container</div></div></div><div data-id="139" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="140" class="ft_column w-119 p-58 bw-49 bs-23 bc-133"><div data-id="141" class="pos-130 t-71 l-131 c-98">Inside Outer Container</div></div></div><div data-id="142" class="ft_row w-1 jc-94"><div data-id="143">32</div><div data-id="144">1.123</div><div data-id="145">true</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -258,6 +258,12 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	body.dark .c-125 { color: yellow; }
 	.as-126 { align-self: center; }
 	.as-127 { align-self: end; }
+	.w-128 { width: 600px; }
+	.bc-129 { border-color: green; }
+	.pos-130 { position: absolute; }
+	.l-131 { left: 0px; }
+	.c-132 { color: green; }
+	.bc-133 { border-color: blue; }
     </style>
 <script>
     (function() {
@@ -963,15 +969,77 @@ function main(parent, inherited, args) {
   parenti13i2.setProperty(fastn_dom.PropertyKind.StringValue, "End");
   parenti13i2.setProperty(fastn_dom.PropertyKind.AlignSelf, fastn_dom.AlignSelf.End);
   parenti13i2.setProperty(fastn_dom.PropertyKind.Color, global.foo__red_yellow);
-  let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-  parenti14.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti14.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
-  let parenti14i0 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Integer);
-  parenti14i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
-  let parenti14i1 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Decimal);
-  parenti14i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
-  let parenti14i2 = fastn_dom.createKernel(parenti14, fastn_dom.ElementKind.Boolean);
-  parenti14i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
+  let parenti14 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti14.setProperty(fastn_dom.PropertyKind.StringValue, "This is text with class");
+  parenti14.setProperty(fastn_dom.PropertyKind.Classes, fastn.mutableList(["a",
+  "b",
+  "c",
+  "d"]));
+  parenti14.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "red",
+    light: "red"
+  }));
+  let parenti15 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti15.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)));
+  parenti15.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20));
+  parenti15.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10));
+  parenti15.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti15.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  parenti15.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow);
+  let parenti15i0 = fastn_dom.createKernel(parenti15, fastn_dom.ElementKind.Column);
+  parenti15i0.setProperty(fastn_dom.PropertyKind.Id, "c1");
+  parenti15i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti15i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20));
+  parenti15i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti15i0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  parenti15i0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+    dark: "green",
+    light: "green"
+  }));
+  let parenti15i0i0 = fastn_dom.createKernel(parenti15i0, fastn_dom.ElementKind.Text);
+  parenti15i0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Inner Container");
+  parenti15i0i0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id);
+  parenti15i0i0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0));
+  parenti15i0i0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0));
+  parenti15i0i0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "green",
+    light: "green"
+  }));
+  let parenti16 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti16.setProperty(fastn_dom.PropertyKind.Id, "c2");
+  parenti16.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(600)));
+  parenti16.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20));
+  parenti16.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(10));
+  parenti16.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti16.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  parenti16.setProperty(fastn_dom.PropertyKind.BorderColor, global.foo__red_yellow);
+  let parenti16i0 = fastn_dom.createKernel(parenti16, fastn_dom.ElementKind.Column);
+  parenti16i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(400)));
+  parenti16i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(20));
+  parenti16i0.setProperty(fastn_dom.PropertyKind.BorderWidth, fastn_dom.Length.Px(2));
+  parenti16i0.setProperty(fastn_dom.PropertyKind.BorderStyle, fastn_dom.BorderStyle.Solid);
+  parenti16i0.setProperty(fastn_dom.PropertyKind.BorderColor, fastn.recordInstance({
+    dark: "blue",
+    light: "blue"
+  }));
+  let parenti16i0i0 = fastn_dom.createKernel(parenti16i0, fastn_dom.ElementKind.Text);
+  parenti16i0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Inside Outer Container");
+  parenti16i0i0.setProperty(fastn_dom.PropertyKind.Anchor, fastn_dom.Anchor.Id);
+  parenti16i0i0.setProperty(fastn_dom.PropertyKind.Top, fastn_dom.Length.Px(0));
+  parenti16i0i0.setProperty(fastn_dom.PropertyKind.Left, fastn_dom.Length.Px(0));
+  parenti16i0i0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+    dark: "blue",
+    light: "blue"
+  }));
+  let parenti17 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+  parenti17.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti17.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceBetween);
+  let parenti17i0 = fastn_dom.createKernel(parenti17, fastn_dom.ElementKind.Integer);
+  parenti17i0.setProperty(fastn_dom.PropertyKind.StringValue, 32);
+  let parenti17i1 = fastn_dom.createKernel(parenti17, fastn_dom.ElementKind.Decimal);
+  parenti17i1.setProperty(fastn_dom.PropertyKind.StringValue, 1.123);
+  let parenti17i2 = fastn_dom.createKernel(parenti17, fastn_dom.ElementKind.Boolean);
+  parenti17i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
 global.foo__ylg = fastn.recordInstance({
   light: "yellow",
