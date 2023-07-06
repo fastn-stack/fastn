@@ -4,7 +4,6 @@ pub fn process(
     doc: &ftd::interpreter::TDoc,
     config: &fastn_core::Config,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    // TODO: URL params not yet handled
     let req = match config.request.as_ref() {
         Some(v) => v,
         None => {
