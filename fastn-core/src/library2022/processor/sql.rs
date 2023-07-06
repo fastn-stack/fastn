@@ -95,18 +95,13 @@ mod test {
     }
 
     #[test]
-    #[ignore]
-    fn not_yet_passing() {
+    fn extract_arguments() {
         e("SELECT $val::FLOAT8;", "SELECT $1::FLOAT8;", vec!["val"]);
         e(
             "SELECT * FROM test where name = $name;",
             "SELECT * FROM test where name = $1;",
             vec!["name"],
         );
-    }
-
-    #[test]
-    fn extract_arguments() {
         e("hello", "hello", vec![]);
         e(
             "SELECT * FROM test where name = $name",
