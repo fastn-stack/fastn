@@ -1,19 +1,6 @@
 let fastn_dom = {};
 
 fastn_dom.common = {
-    ".ft_common": {
-        "value": {
-            "text-decoration": "none",
-            "box-sizing": "border-box",
-            "border-top-width": "0px",
-            "border-bottom-width": "0px",
-            "border-left-width": "0px",
-            "border-right-width": "0px",
-            "border-style": "solid",
-            "height": "auto",
-            "width": "auto",
-        }
-    },
     ".ft_row": {
         "value": {
             "display": "flex",
