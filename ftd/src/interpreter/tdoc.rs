@@ -1890,31 +1890,78 @@ impl<'a> TDoc<'a> {
                 })?,
             },
             ftd::interpreter::Kind::Integer { .. } => ftd::interpreter::Value::Integer {
-                value: serde_json::from_value::<i64>(json.to_owned()).map_err(|_| {
-                    ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to integer, found: {}", json),
-                        doc_id: self.name.to_string(),
-                        line_number,
+                value: match json {
+                    serde_json::Value::Number(n) => {
+                        n.as_i64()
+                            .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to integer, found: {}", json),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })?
                     }
-                })?,
+                    serde_json::Value::String(s) => {
+                        s.parse::<i64>()
+                            .map_err(|_| ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to integer, found: {}", json),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })?
+                    }
+                    _ => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to integer, found: {}", json),
+                            self.name,
+                            line_number,
+                        )
+                    }
+                },
             },
             ftd::interpreter::Kind::Decimal { .. } => ftd::interpreter::Value::Decimal {
-                value: serde_json::from_value::<f64>(json.to_owned()).map_err(|_| {
-                    ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to decimal, found: {}", json),
-                        doc_id: self.name.to_string(),
-                        line_number,
+                value: match json {
+                    serde_json::Value::Number(n) => {
+                        n.as_f64()
+                            .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to integer, found: {}", json),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })?
                     }
-                })?,
+                    serde_json::Value::String(s) => {
+                        s.parse::<f64>()
+                            .map_err(|_| ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to decimal, found: {}", json),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })?
+                    }
+                    _ => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to integer, found: {}", json),
+                            self.name,
+                            line_number,
+                        )
+                    }
+                },
             },
             ftd::interpreter::Kind::Boolean { .. } => ftd::interpreter::Value::Boolean {
-                value: serde_json::from_value::<bool>(json.to_owned()).map_err(|_| {
-                    ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to boolean,found: {}", json),
-                        doc_id: self.name.to_string(),
-                        line_number,
+                value: match json {
+                    serde_json::Value::Bool(n) => *n,
+                    serde_json::Value::String(s) => {
+                        s.parse::<bool>()
+                            .map_err(|_| ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to boolean, found: {}", json),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })?
                     }
-                })?,
+                    _ => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to boolean, found: {}", json),
+                            self.name,
+                            line_number,
+                        )
+                    }
+                },
             },
             ftd::interpreter::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(&name, line_number)?.fields;
