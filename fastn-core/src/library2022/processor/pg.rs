@@ -64,10 +64,8 @@ fn resolve_variable_from_doc(
     e: &postgres_types::Type,
     line_number: usize,
 ) -> ftd::interpreter::Result<Box<PGData>> {
-    dbg!(var, e);
-
     let thing = match doc.bag().get(doc.resolve_name(var).as_str()) {
-        Some(ftd::interpreter::Thing::Variable(v)) => &v.value,
+        Some(ftd::interpreter::Thing::Variable(v)) => v.value.clone().resolve(doc, line_number)?,
         Some(v) => {
             return ftd::interpreter::utils::e2(
                 format!("{} is not a variable, it's a {:?}", var, v),
@@ -84,9 +82,33 @@ fn resolve_variable_from_doc(
         }
     };
 
-    dbg!(thing);
-
-    todo!()
+    Ok(match (e, thing) {
+        (&postgres_types::Type::TEXT, ftd::interpreter::Value::String { text, .. }) => {
+            Box::new(text)
+        }
+        (&postgres_types::Type::INT4, ftd::interpreter::Value::Integer { value, .. }) => {
+            Box::new(value as i32)
+        }
+        (&postgres_types::Type::INT8, ftd::interpreter::Value::Integer { value, .. }) => {
+            Box::new(value)
+        }
+        (&postgres_types::Type::FLOAT4, ftd::interpreter::Value::Decimal { value, .. }) => {
+            Box::new(value as f32)
+        }
+        (&postgres_types::Type::FLOAT8, ftd::interpreter::Value::Decimal { value, .. }) => {
+            Box::new(value)
+        }
+        (&postgres_types::Type::BOOL, ftd::interpreter::Value::Boolean { value, .. }) => {
+            Box::new(value)
+        }
+        (e, a) => {
+            return ftd::interpreter::utils::e2(
+                format!("for {} postgresql expected ${:?}, found {:?}", var, e, a),
+                doc.name,
+                line_number,
+            )
+        }
+    })
 }
 
 fn resolve_variable_from_headers(
@@ -160,7 +182,7 @@ fn prepare_args(
         args.push(
             match resolve_variable_from_headers(doc, &headers, &a, e, doc.name, line_number)? {
                 Some(v) => v,
-                None => resolve_variable_from_doc(doc, &a[1..], e, line_number)?,
+                None => resolve_variable_from_doc(doc, &a, e, line_number)?,
             },
         );
     }
@@ -173,7 +195,7 @@ async fn execute_query(
     line_number: usize,
     headers: ftd::ast::HeaderValues,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let (query, query_args) = dbg!(super::sql::extract_arguments(dbg!(query))?);
+    let (query, query_args) = super::sql::extract_arguments(query)?;
     let client = pool().await.as_ref().unwrap().get().await.unwrap();
 
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();
@@ -257,11 +279,22 @@ string name:
 string department:
 
 
+-- integer id: 1
+
+-- ftd.integer: $id
+
 -- person list people:
 $processor$: pr.pg
-id: 2
 
 SELECT * FROM "users" where id >= $id ;
+
+
+-- ftd.text: data from db
+
+-- ftd.text: $p.name
+$loop$: $people as $p
+
+
 
 -- integer int_2:
 $processor$: pr.pg
@@ -285,10 +318,6 @@ SELECT 80::int8;
 -- ftd.integer: $int_8
 
 
--- ftd.text: data from db
-
--- ftd.text: $p.name
-$loop$: $people as $p
 
 
 
