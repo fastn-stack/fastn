@@ -59,14 +59,32 @@ impl QueryArgs {
 }
 
 fn resolve_variable_from_doc(
-    _doc: &ftd::interpreter::TDoc<'_>,
+    doc: &ftd::interpreter::TDoc<'_>,
     var: &str,
     e: &postgres_types::Type,
+    line_number: usize,
 ) -> ftd::interpreter::Result<Box<PGData>> {
     dbg!(var, e);
 
-    // let qualified_name = doc.resolve_name(variable_header_value);
-    // let bag_thing = doc.bag().get(bag_entry.as_str());
+    let thing = match doc.bag().get(doc.resolve_name(var).as_str()) {
+        Some(ftd::interpreter::Thing::Variable(v)) => &v.value,
+        Some(v) => {
+            return ftd::interpreter::utils::e2(
+                format!("{} is not a variable, it's a {:?}", var, v),
+                doc.name,
+                line_number,
+            )
+        }
+        None => {
+            return ftd::interpreter::utils::e2(
+                format!("${} not found in the document", var),
+                doc.name,
+                line_number,
+            )
+        }
+    };
+
+    dbg!(thing);
 
     todo!()
 }
@@ -86,7 +104,7 @@ fn resolve_variable_from_headers(
 
     if let ftd::ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
-            return resolve_variable_from_doc(doc, stripped, e).map(Some);
+            return resolve_variable_from_doc(doc, stripped, e, line_number).map(Some);
         }
     }
 
@@ -142,7 +160,7 @@ fn prepare_args(
         args.push(
             match resolve_variable_from_headers(doc, &headers, &a, e, doc.name, line_number)? {
                 Some(v) => v,
-                None => resolve_variable_from_doc(doc, &a[1..], e)?,
+                None => resolve_variable_from_doc(doc, &a[1..], e, line_number)?,
             },
         );
     }
