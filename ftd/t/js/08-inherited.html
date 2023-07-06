@@ -54,9 +54,14 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 h-2 bgc-3"><div data-id="3" class="c-4">Hello</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+	.w-1 { width: 100%; }
+	.h-2 { height: 1000px; }
+	.bgc-3 { background-color: black; }
+	.c-4 { color: #f0ece2; }
+	body.dark .c-4 { color: #434547; }
     </style>
 <script>
     (function() {
@@ -66,7 +71,415 @@ function main(parent, inherited, args) {
   let __args__ = {
     ...args
   };
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(1000)));
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+    dark: "black",
+    light: "black"
+  })));
+  let __$$inherited$$__parenti0 = fastn.recordInstance({
+    colors: global.foo__colors
+  });
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Color, __$$inherited$$__parenti0.get("colors").get("border"));
 }
+global.foo__accent_ = fastn.recordInstance({
+  primary: global.foo__accent_primary_,
+  secondary: global.foo__accent_secondary_,
+  tertiary: global.foo__accent_tertiary_
+});
+global.foo__accent_primary_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+global.foo__accent_secondary_ = fastn.recordInstance({
+  light: "#EBE8E5",
+  dark: "#EBE8E5"
+});
+global.foo__accent_tertiary_ = fastn.recordInstance({
+  light: "#c5cbd7",
+  dark: "#c5cbd7"
+});
+global.foo__background_ = fastn.recordInstance({
+  base: global.foo__base_,
+  step_1: global.foo__step_1_,
+  step_2: global.foo__step_2_,
+  overlay: global.foo__overlay_,
+  code: global.foo__code_
+});
+global.foo__base_ = fastn.recordInstance({
+  light: "#FFFFFF",
+  dark: "#000000"
+});
+global.foo__border_ = fastn.recordInstance({
+  light: "#f0ece2",
+  dark: "#434547"
+});
+global.foo__border_strong_ = fastn.recordInstance({
+  light: "#D9D9D9",
+  dark: "#333333"
+});
+global.foo__code_ = fastn.recordInstance({
+  light: "#f5f5f5",
+  dark: "#21222c"
+});
+global.foo__colors = fastn.recordInstance({
+  background: global.foo__background_,
+  border: global.foo__border_,
+  border_strong: global.foo__border_strong_,
+  text: global.foo__text_,
+  text_strong: global.foo__text_strong_,
+  shadow: global.foo__shadow_,
+  scrim: global.foo__scrim_,
+  cta_primary: global.foo__cta_primary_,
+  cta_secondary: global.foo__cta_secondary_,
+  cta_tertiary: global.foo__cta_tertiary_,
+  cta_danger: global.foo__cta_danger_,
+  accent: global.foo__accent_,
+  error: global.foo__error_btb_,
+  success: global.foo__success_btb_,
+  info: global.foo__info_btb_,
+  warning: global.foo__warning_btb_,
+  custom: global.foo__custom_
+});
+global.foo__cta_danger_ = fastn.recordInstance({
+  base: global.foo__cta_danger_base_,
+  hover: global.foo__cta_danger_hover_,
+  pressed: global.foo__cta_danger_pressed_,
+  disabled: global.foo__cta_danger_disabled_,
+  focused: global.foo__cta_danger_focused_,
+  border: global.foo__cta_danger_border_,
+  border_disabled: global.foo__cta_danger_border_disabled_,
+  text: global.foo__cta_danger_text_,
+  text_disabled: global.foo__cta_danger_text_disabled_
+});
+global.foo__cta_danger_base_ = fastn.recordInstance({
+  light: "#F9E4E1",
+  dark: "#F9E4E1"
+});
+global.foo__cta_danger_border_ = fastn.recordInstance({
+  light: "#E9968C",
+  dark: "#E9968C"
+});
+global.foo__cta_danger_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+global.foo__cta_danger_disabled_ = fastn.recordInstance({
+  light: "#FAECEB",
+  dark: "#FAECEB"
+});
+global.foo__cta_danger_focused_ = fastn.recordInstance({
+  light: "#D97973",
+  dark: "#D97973"
+});
+global.foo__cta_danger_hover_ = fastn.recordInstance({
+  light: "#F1BDB6",
+  dark: "#F1BDB6"
+});
+global.foo__cta_danger_pressed_ = fastn.recordInstance({
+  light: "#D46A63",
+  dark: "#D46A63"
+});
+global.foo__cta_danger_text_ = fastn.recordInstance({
+  light: "#D84836",
+  dark: "#D84836"
+});
+global.foo__cta_danger_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+global.foo__cta_primary_ = fastn.recordInstance({
+  base: global.foo__cta_primary_base_,
+  hover: global.foo__cta_primary_hover_,
+  pressed: global.foo__cta_primary_pressed_,
+  disabled: global.foo__cta_primary_disabled_,
+  focused: global.foo__cta_primary_focused_,
+  border: global.foo__cta_primary_border_,
+  border_disabled: global.foo__cta_primary_border_disabled_,
+  text: global.foo__cta_primary_text_,
+  text_disabled: global.foo__cta_primary_text_disabled_
+});
+global.foo__cta_primary_base_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+global.foo__cta_primary_border_ = fastn.recordInstance({
+  light: "#F3A063",
+  dark: "#F3A063"
+});
+global.foo__cta_primary_border_disabled_ = fastn.recordInstance({
+  light: "#fad9c0",
+  dark: "#fad9c0"
+});
+global.foo__cta_primary_disabled_ = fastn.recordInstance({
+  light: "#FAD9C0",
+  dark: "#FAD9C0"
+});
+global.foo__cta_primary_focused_ = fastn.recordInstance({
+  light: "#B36328",
+  dark: "#B36328"
+});
+global.foo__cta_primary_hover_ = fastn.recordInstance({
+  light: "#D77730",
+  dark: "#D77730"
+});
+global.foo__cta_primary_pressed_ = fastn.recordInstance({
+  light: "#BF6A2A",
+  dark: "#BF6A2A"
+});
+global.foo__cta_primary_text_ = fastn.recordInstance({
+  light: "#512403",
+  dark: "#512403"
+});
+global.foo__cta_primary_text_disabled_ = fastn.recordInstance({
+  light: "#f2a164",
+  dark: "#f2a164"
+});
+global.foo__cta_secondary_ = fastn.recordInstance({
+  base: global.foo__cta_secondary_base_,
+  hover: global.foo__cta_secondary_hover_,
+  pressed: global.foo__cta_secondary_pressed_,
+  disabled: global.foo__cta_secondary_disabled_,
+  focused: global.foo__cta_secondary_focused_,
+  border: global.foo__cta_secondary_border_,
+  border_disabled: global.foo__cta_secondary_border_disabled_,
+  text: global.foo__cta_secondary_text_,
+  text_disabled: global.foo__cta_secondary_text_disabled_
+});
+global.foo__cta_secondary_base_ = fastn.recordInstance({
+  light: "#EBE8E5",
+  dark: "#EBE8E5"
+});
+global.foo__cta_secondary_border_ = fastn.recordInstance({
+  light: "#B0AEAC",
+  dark: "#B0AEAC"
+});
+global.foo__cta_secondary_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+global.foo__cta_secondary_disabled_ = fastn.recordInstance({
+  light: "#F9F8F7",
+  dark: "#F9F8F7"
+});
+global.foo__cta_secondary_focused_ = fastn.recordInstance({
+  light: "#B0AEAC",
+  dark: "#B0AEAC"
+});
+global.foo__cta_secondary_hover_ = fastn.recordInstance({
+  light: "#D4D1CE",
+  dark: "#D4D1CE"
+});
+global.foo__cta_secondary_pressed_ = fastn.recordInstance({
+  light: "#BCBAB7",
+  dark: "#BCBAB7"
+});
+global.foo__cta_secondary_text_ = fastn.recordInstance({
+  light: "#333333",
+  dark: "#333333"
+});
+global.foo__cta_secondary_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+global.foo__cta_tertiary_ = fastn.recordInstance({
+  base: global.foo__cta_tertiary_base_,
+  hover: global.foo__cta_tertiary_hover_,
+  pressed: global.foo__cta_tertiary_pressed_,
+  disabled: global.foo__cta_tertiary_disabled_,
+  focused: global.foo__cta_tertiary_focused_,
+  border: global.foo__cta_tertiary_border_,
+  border_disabled: global.foo__cta_tertiary_border_disabled_,
+  text: global.foo__cta_tertiary_text_,
+  text_disabled: global.foo__cta_tertiary_text_disabled_
+});
+global.foo__cta_tertiary_base_ = fastn.recordInstance({
+  light: "#4A6490",
+  dark: "#4A6490"
+});
+global.foo__cta_tertiary_border_ = fastn.recordInstance({
+  light: "#4e6997",
+  dark: "#4e6997"
+});
+global.foo__cta_tertiary_border_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#f1dac0"
+});
+global.foo__cta_tertiary_disabled_ = fastn.recordInstance({
+  light: "rgba(74, 100, 144, 0.4)",
+  dark: "rgba(74, 100, 144, 0.4)"
+});
+global.foo__cta_tertiary_focused_ = fastn.recordInstance({
+  light: "#6882b1",
+  dark: "#6882b1"
+});
+global.foo__cta_tertiary_hover_ = fastn.recordInstance({
+  light: "#3d5276",
+  dark: "#3d5276"
+});
+global.foo__cta_tertiary_pressed_ = fastn.recordInstance({
+  light: "#2b3a54",
+  dark: "#2b3a54"
+});
+global.foo__cta_tertiary_text_ = fastn.recordInstance({
+  light: "#ffffff",
+  dark: "#ffffff"
+});
+global.foo__cta_tertiary_text_disabled_ = fastn.recordInstance({
+  light: "#304655",
+  dark: "#fff"
+});
+global.foo__custom_ = fastn.recordInstance({
+  one: global.foo__custom_one_,
+  two: global.foo__custom_two_,
+  three: global.foo__custom_three_,
+  four: global.foo__custom_four_,
+  five: global.foo__custom_five_,
+  six: global.foo__custom_six_,
+  seven: global.foo__custom_seven_,
+  eight: global.foo__custom_eight_,
+  nine: global.foo__custom_nine_,
+  ten: global.foo__custom_ten_
+});
+global.foo__custom_eight_ = fastn.recordInstance({
+  light: "#d554b3",
+  dark: "#d554b3"
+});
+global.foo__custom_five_ = fastn.recordInstance({
+  light: "#FBF5E2",
+  dark: "#222222"
+});
+global.foo__custom_four_ = fastn.recordInstance({
+  light: "#FDFAF1",
+  dark: "#111111"
+});
+global.foo__custom_nine_ = fastn.recordInstance({
+  light: "#ec8943",
+  dark: "#ec8943"
+});
+global.foo__custom_one_ = fastn.recordInstance({
+  light: "#4AA35C",
+  dark: "#4AA35C"
+});
+global.foo__custom_seven_ = fastn.recordInstance({
+  light: "#7564be",
+  dark: "#7564be"
+});
+global.foo__custom_six_ = fastn.recordInstance({
+  light: "#ef8dd6",
+  dark: "#ef8dd6"
+});
+global.foo__custom_ten_ = fastn.recordInstance({
+  light: "#da7a4a",
+  dark: "#da7a4a"
+});
+global.foo__custom_three_ = fastn.recordInstance({
+  light: "#EBBE52",
+  dark: "#EBBE52"
+});
+global.foo__custom_two_ = fastn.recordInstance({
+  light: "#5C2860",
+  dark: "#5C2860"
+});
+global.foo__error_base_ = fastn.recordInstance({
+  light: "#F9E4E1",
+  dark: "#4f2a25c9"
+});
+global.foo__error_border_ = fastn.recordInstance({
+  light: "#E9968C",
+  dark: "#E9968C"
+});
+global.foo__error_btb_ = fastn.recordInstance({
+  base: global.foo__error_base_,
+  text: global.foo__error_text_,
+  border: global.foo__error_border_
+});
+global.foo__error_text_ = fastn.recordInstance({
+  light: "#D84836",
+  dark: "#D84836"
+});
+global.foo__info_base_ = fastn.recordInstance({
+  light: "#DAE7FB",
+  dark: "#233a5dc7"
+});
+global.foo__info_border_ = fastn.recordInstance({
+  light: "#7EACF1",
+  dark: "#7EACF1"
+});
+global.foo__info_btb_ = fastn.recordInstance({
+  base: global.foo__info_base_,
+  text: global.foo__info_text_,
+  border: global.foo__info_border_
+});
+global.foo__info_text_ = fastn.recordInstance({
+  light: "#5290EC",
+  dark: "#5290EC"
+});
+global.foo__overlay_ = fastn.recordInstance({
+  light: "#000000",
+  dark: "#000000"
+});
+global.foo__scrim_ = fastn.recordInstance({
+  light: "#393939",
+  dark: "#393939"
+});
+global.foo__shadow_ = fastn.recordInstance({
+  light: "#EF8435",
+  dark: "#EF8435"
+});
+global.foo__step_1_ = fastn.recordInstance({
+  light: "#FDFAF1",
+  dark: "#111111"
+});
+global.foo__step_2_ = fastn.recordInstance({
+  light: "#fbf3dc",
+  dark: "#2b2b2b"
+});
+global.foo__success_base_ = fastn.recordInstance({
+  light: "#DCEFE4",
+  dark: "#033a1bb8"
+});
+global.foo__success_border_ = fastn.recordInstance({
+  light: "#95D0AF",
+  dark: "#95D0AF"
+});
+global.foo__success_btb_ = fastn.recordInstance({
+  base: global.foo__success_base_,
+  text: global.foo__success_text_,
+  border: global.foo__success_border_
+});
+global.foo__success_text_ = fastn.recordInstance({
+  light: "#3E8D61",
+  dark: "#159f52"
+});
+global.foo__text_ = fastn.recordInstance({
+  light: "#707070",
+  dark: "#D9D9D9"
+});
+global.foo__text_strong_ = fastn.recordInstance({
+  light: "#333333",
+  dark: "#FFFFFF"
+});
+global.foo__warning_base_ = fastn.recordInstance({
+  light: "#FDF7F1",
+  dark: "#3b2c1ee6"
+});
+global.foo__warning_border_ = fastn.recordInstance({
+  light: "#F2C097",
+  dark: "#F2C097"
+});
+global.foo__warning_btb_ = fastn.recordInstance({
+  base: global.foo__warning_base_,
+  text: global.foo__warning_text_,
+  border: global.foo__warning_border_
+});
+global.foo__warning_text_ = fastn.recordInstance({
+  light: "#E78B3E",
+  dark: "#E78B3E"
+});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

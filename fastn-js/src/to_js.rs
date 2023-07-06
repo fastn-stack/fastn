@@ -354,16 +354,18 @@ impl fastn_js::RecordInstance {
 
 impl fastn_js::StaticVariable {
     pub fn to_js(&self, prefix: &str) -> pretty::RcDoc<'static> {
-        text(prefix)
-            .append(text("."))
-            .append(text(
-                fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-            ))
-            .append(space())
-            .append(text("="))
-            .append(space())
-            .append(text(self.value.to_js().as_str()))
-            .append(text(";"))
+        let variable_name = fastn_js::utils::name_to_js(self.name.as_str());
+        if variable_name.starts_with(fastn_js::INHERITED_PREFIX) {
+            text("let").append(space())
+        } else {
+            text(prefix).append(text("."))
+        }
+        .append(text(variable_name.as_str()))
+        .append(space())
+        .append(text("="))
+        .append(space())
+        .append(text(self.value.to_js().as_str()))
+        .append(text(";"))
     }
 }
 

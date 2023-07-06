@@ -184,7 +184,7 @@ impl Container {
 
         if !inherited_fields.is_empty() {
             Some(fastn_js::StaticVariable {
-                name: format!("{}__inherited", component_name),
+                name: format!("{}{}", fastn_js::INHERITED_PREFIX, component_name),
                 value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: inherited_fields,
                 }),

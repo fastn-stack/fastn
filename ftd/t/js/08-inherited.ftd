@@ -1,4 +1,4 @@
-/-- ftd.column:
+-- ftd.column:
 colors: $colors
 background.solid: black
 width: fill-container
