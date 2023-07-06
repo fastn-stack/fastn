@@ -1,6 +1,26 @@
 let fastn_dom = {};
 
-fastn_dom.classes = {}
+fastn_dom.common = {
+    ".ft_row": {
+        "value": {
+            "display": "flex",
+            "align-items": "start",
+            "justify-content": "start",
+            "flex-direction": "row",
+        }
+    },
+    ".ft_column": {
+        "value": {
+            "display": "flex",
+            "align-items": "start",
+            "justify-content": "start",
+            "flex-direction": "column",
+        }
+    }
+};
+
+
+fastn_dom.classes = { ...fastn_dom.common }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.property_map = {
@@ -22,7 +42,25 @@ fastn_dom.property_map = {
     "margin-bottom": "mb",
     "height": "h",
     "border-width": "bw",
+    "border-left-width": "blw",
+    "border-right-width": "brw",
+    "border-top-width": "btw",
+    "border-bottom-width": "bbw",
+    "border-radius": "br",
+    "border-top-left-radius": "btlr",
+    "border-top-right-radius": "btrr",
+    "border-bottom-left-radius": "bblr",
+    "border-bottom-right-radius": "bbrr",
     "border-style": "bs",
+    "border-top-style": "bts",
+    "border-bottom-style": "bbs",
+    "border-left-style": "bls",
+    "border-right-style": "brs",
+    "border-color": "bc",
+    "border-top-color": "btc",
+    "border-bottom-color": "bbc",
+    "border-left-color": "blc",
+    "border-right-color": "brc",
     "background-color": "bgc",
     "z-index": "z",
     "sticky": "s",
@@ -32,7 +70,23 @@ fastn_dom.property_map = {
     "right": "r",
     "overflow": "o",
     "overflow-x": "ox",
-    "overflow-y": "oy"
+    "overflow-y": "oy",
+    "gap": "g",
+    "justify-content": "jc",
+    "position": "pos",
+    "flex-wrap": "fw",
+    "text-transform": "tt",
+    "text-align": "ta",
+    "-webkit-box-orient": "wbo",
+    "-webkit-line-clamp": "wlc",
+    "display": "d",
+    "opacity": "op",
+    "cursor": "cur",
+    "resize": "r",
+    "max-height": "mxh",
+    "min-height": "mnh",
+    "max-width": "mxw",
+    "min-width": "mnw",
 };
 
 // dynamic-class-css.md
@@ -41,11 +95,11 @@ fastn_dom.getClassesAsString = function() {
         return getClassAsString(entry[0], entry[1]);
     });
 
-    return `<style id="styles">
     /*.ft_text {
         padding: 0;
     }*/
-    ${classes.join("\n")}
+    return `<style id="styles">
+    ${classes.join("\n\t")}
     </style>`;
 }
 
@@ -111,6 +165,40 @@ fastn_dom.PropertyKind = {
     Overflow: 30,
     OverflowX: 31,
     OverflowY: 32,
+    Spacing: 33,
+    Wrap: 34,
+    TextTransform: 35,
+    TextIndent: 36,
+    TextAlign: 37,
+    LineClamp: 38,
+    Opacity: 39,
+    Cursor: 40,
+    Resize: 41,
+    MinHeight: 42,
+    MaxHeight: 43,
+    MinWidth: 44,
+    MaxWidth: 45,
+    WhiteSpace: 46,
+    BorderTopWidth: 47,
+    BorderBottomWidth: 48,
+    BorderLeftWidth: 49,
+    BorderRightWidth: 50,
+    BorderRadius: 51,
+    BorderTopLeftRadius: 52,
+    BorderTopRightRadius: 53,
+    BorderBottomLeftRadius: 54,
+    BorderBottomRightRadius: 55,
+    BorderStyleVertical: 56,
+    BorderStyleHorizontal: 57,
+    BorderLeftStyle: 58,
+    BorderRightStyle: 59,
+    BorderTopStyle: 60,
+    BorderBottomStyle: 61,
+    BorderColor: 62,
+    BorderLeftColor: 63,
+    BorderRightColor: 64,
+    BorderTopColor: 65,
+    BorderBottomColor: 66,
 }
 
 
@@ -120,6 +208,14 @@ fastn_dom.Resizing = {
     HugContent: "fit-content",
     Fixed: (value) => { return value; }
 }
+
+fastn_dom.Spacing = {
+    SpaceEvenly: "space-evenly",
+    SpaceBetween: "space-between",
+    SpaceAround: "space-around",
+    Fixed: (value) => { return value; }
+}
+
 
 fastn_dom.BorderStyle = {
     Solid: "solid",
@@ -144,6 +240,76 @@ fastn_dom.Display = {
     Inline: "inline",
     InlineBlock: "inline-block",
 }
+
+fastn_dom.TextTransform = {
+    None: "none",
+    Capitalize: "capitalize",
+    Uppercase: "uppercase",
+    Lowercase: "lowercase",
+    Inherit: "inherit",
+    Initial: "initial",
+}
+
+fastn_dom.TextAlign = {
+    Start: "start",
+    Center: "center",
+    End: "end",
+    Justify: "justify",
+}
+
+fastn_dom.Cursor = {
+    None: "none",
+    Default: "default",
+    ContextMenu: "context-menu",
+    Help: "help",
+    Pointer: "pointer",
+    Progress: "progress",
+    Wait: "wait",
+    Cell: "cell",
+    CrossHair: "crosshair",
+    Text: "text",
+    VerticalText: "vertical-text",
+    Alias: "alias",
+    Copy: "copy",
+    Move: "move",
+    NoDrop: "no-drop",
+    NotAllowed: "not-allowed",
+    Grab: "grab",
+    Grabbing: "grabbing",
+    EResize: "e-resize",
+    NResize: "n-resize",
+    NeResize: "ne-resize",
+    SResize: "s-resize",
+    SeResize: "se-resize",
+    SwResize: "sw-resize",
+    Wresize: "w-resize",
+    Ewresize: "ew-resize",
+    NsResize: "ns-resize",
+    NeswResize: "nesw-resize",
+    NwseResize: "nwse-resize",
+    ColResize: "col-resize",
+    RowResize: "row-resize",
+    AllScroll: "all-scroll",
+    ZoomIn: "zoom-in",
+    ZoomOut: "zoom-out"
+}
+
+fastn_dom.Resize = {
+    Vertical: "vertical",
+    Horizontal: "horizontal",
+    Both: "both",
+}
+
+fastn_dom.WhiteSpace = {
+    Normal: "normal",
+    NoWrap: "nowrap",
+    Pre: "pre",
+    PreLine: "pre-line",
+    PreWrap: "pre-wrap",
+    BreakSpaces: "break-spaces",
+}
+
+
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => { return value; }
@@ -390,11 +556,11 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Margin) {
             this.attachCss("margin", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginHorizontal) {
-            this.attachCss("margin-top", staticValue);
-            this.attachCss("margin-bottom", staticValue);
-        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
             this.attachCss("margin-left", staticValue);
             this.attachCss("margin-right", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MarginVertical) {
+            this.attachCss("margin-top", staticValue);
+            this.attachCss("margin-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginLeft) {
             this.attachCss("margin-left", staticValue);
         } else if (kind === fastn_dom.PropertyKind.MarginRight) {
@@ -405,13 +571,56 @@ class Node2 {
             this.attachCss("margin-bottom", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderWidth) {
             this.attachCss("border-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopWidth) {
+            this.attachCss("border-top-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomWidth) {
+            this.attachCss("border-bottom-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderLeftWidth) {
+            this.attachCss("border-left-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderRightWidth) {
+            this.attachCss("border-right-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderRadius) {
+            this.attachCss("border-radius", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopLeftRadius) {
+            this.attachCss("border-top-left-radius", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopRightRadius) {
+            this.attachCss("border-top-right-radius", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomLeftRadius) {
+            this.attachCss("border-bottom-left-radius", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomRightRadius) {
+            this.attachCss("border-bottom-right-radius", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderStyle) {
             this.attachCss("border-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderStyleVertical) {
+            this.attachCss("border-top-style", staticValue);
+            this.attachCss("border-bottom-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderStyleHorizontal) {
+            this.attachCss("border-left-style", staticValue);
+            this.attachCss("border-right-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderLeftStyle) {
+            this.attachCss("border-left-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderRightStyle) {
+            this.attachCss("border-right-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopStyle) {
+            this.attachCss("border-top-style", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomStyle) {
+            this.attachCss("border-bottom-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ZIndex) {
             this.attachCss("z-index", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
-            // todo: need to set position based on sticky (bool) value
-            this.attachCss("sticky", staticValue);
+            // sticky is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachCss("position", "sticky");
+                break;
+              case 'false':
+              case false:
+                this.attachCss("position", "static");
+                break;
+              default:
+                this.attachCss("position", "static");
+            }
         } else if (kind === fastn_dom.PropertyKind.Top) {
             this.attachCss("top", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Bottom) {
@@ -426,6 +635,72 @@ class Node2 {
             this.attachCss("overflow-x", staticValue);
         } else if (kind === fastn_dom.PropertyKind.OverflowY) {
             this.attachCss("overflow-y", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Spacing) {
+            switch (staticValue) {
+              case 'space-evenly':
+              case 'space-between':
+              case 'space-around':
+                this.attachCss("justify-content", staticValue);
+                break;
+              default:
+                this.attachCss("gap", staticValue);
+            }
+        } else if (kind === fastn_dom.PropertyKind.Wrap) {
+            // sticky is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachCss("flex-wrap", "wrap");
+                break;
+              case 'false':
+              case false:
+                this.attachCss("flex-wrap", "no-wrap");
+                break;
+              default:
+                this.attachCss("flex-wrap", "no-wrap");
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextTransform) {
+            this.attachCss("text-transform", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.TextIndent) {
+            this.attachCss("text-indent", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.TextAlign) {
+            this.attachCss("text-align", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.LineClamp) {
+            // -webkit-line-clamp: staticValue
+            // display: -webkit-box, overflow: hidden
+            // -webkit-box-orient: vertical
+            this.attachCss("-webkit-line-clamp", staticValue);
+            this.attachCss("display", "-webkit-box");
+            this.attachCss("overflow", "hidden");
+            this.attachCss("-webkit-box-orient", "vertical");
+        } else if (kind === fastn_dom.PropertyKind.Opacity) {
+            this.attachCss("opacity", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Cursor) {
+            this.attachCss("cursor", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Resize) {
+            // overflow: auto, resize: staticValue
+            this.attachCss("resize", staticValue);
+            this.attachCss("overflow", "auto");
+        } else if (kind === fastn_dom.PropertyKind.MinHeight) {
+            this.attachCss("min-height", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MaxHeight) {
+            this.attachCss("max-height", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MinWidth) {
+            this.attachCss("min-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.MaxWidth) {
+            this.attachCss("max-width", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.WhiteSpace) {
+            this.attachCss("white-space", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderColor) {
+            this.attachColorCss("border-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderLeftColor) {
+            this.attachColorCss("border-left-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderRightColor) {
+            this.attachColorCss("border-right-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopColor) {
+            this.attachColorCss("border-top-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomColor) {
+            this.attachColorCss("border-bottom-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

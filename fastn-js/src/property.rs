@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct SetProperty {
     pub kind: PropertyKind,
     pub value: SetPropertyValue,
@@ -39,7 +40,7 @@ impl Formula {
             "fastn.formula([{}], {})",
             self.deps
                 .iter()
-                .map(|v| fastn_js::utils::name_to_js(v))
+                .map(|v| fastn_js::utils::reference_to_js(v))
                 .collect_vec()
                 .join(", "),
             self.conditional_values_to_js()
@@ -154,6 +155,7 @@ impl Value {
     }
 }
 
+#[derive(Debug)]
 pub enum PropertyKind {
     StringValue,
     Id,
@@ -174,7 +176,27 @@ pub enum PropertyKind {
     MarginRight,
     Height,
     BorderWidth,
+    BorderTopWidth,
+    BorderBottomWidth,
+    BorderLeftWidth,
+    BorderRightWidth,
+    BorderRadius,
+    BorderTopLeftRadius,
+    BorderTopRightRadius,
+    BorderBottomLeftRadius,
+    BorderBottomRightRadius,
     BorderStyle,
+    BorderStyleVertical,
+    BorderStyleHorizontal,
+    BorderLeftStyle,
+    BorderRightStyle,
+    BorderTopStyle,
+    BorderBottomStyle,
+    BorderColor,
+    BorderLeftColor,
+    BorderRightColor,
+    BorderTopColor,
+    BorderBottomColor,
     Color,
     Background,
     Role,
@@ -187,6 +209,20 @@ pub enum PropertyKind {
     Overflow,
     OverflowX,
     OverflowY,
+    Spacing,
+    Wrap,
+    TextTransform,
+    TextIndent,
+    TextAlign,
+    LineClamp,
+    Opacity,
+    Cursor,
+    Resize,
+    MaxHeight,
+    MinHeight,
+    MaxWidth,
+    MinWidth,
+    WhiteSpace,
 }
 
 impl PropertyKind {
@@ -211,7 +247,29 @@ impl PropertyKind {
             PropertyKind::MarginBottom => "fastn_dom.PropertyKind.MarginBottom",
             PropertyKind::Height => "fastn_dom.PropertyKind.Height",
             PropertyKind::BorderWidth => "fastn_dom.PropertyKind.BorderWidth",
+            PropertyKind::BorderTopWidth => "fastn_dom.PropertyKind.BorderTopWidth",
+            PropertyKind::BorderBottomWidth => "fastn_dom.PropertyKind.BorderBottomWidth",
+            PropertyKind::BorderLeftWidth => "fastn_dom.PropertyKind.BorderLeftWidth",
+            PropertyKind::BorderRightWidth => "fastn_dom.PropertyKind.BorderRightWidth",
+            PropertyKind::BorderRadius => "fastn_dom.PropertyKind.BorderRadius",
+            PropertyKind::BorderTopLeftRadius => "fastn_dom.PropertyKind.BorderTopLeftRadius",
+            PropertyKind::BorderTopRightRadius => "fastn_dom.PropertyKind.BorderTopRightRadius",
+            PropertyKind::BorderBottomLeftRadius => "fastn_dom.PropertyKind.BorderBottomLeftRadius",
+            PropertyKind::BorderBottomRightRadius => {
+                "fastn_dom.PropertyKind.BorderBottomRightRadius"
+            }
             PropertyKind::BorderStyle => "fastn_dom.PropertyKind.BorderStyle",
+            PropertyKind::BorderStyleVertical => "fastn_dom.PropertyKind.BorderStyleVertical",
+            PropertyKind::BorderStyleHorizontal => "fastn_dom.PropertyKind.BorderStyleHorizontal",
+            PropertyKind::BorderLeftStyle => "fastn_dom.PropertyKind.BorderLeftStyle",
+            PropertyKind::BorderRightStyle => "fastn_dom.PropertyKind.BorderRightStyle",
+            PropertyKind::BorderTopStyle => "fastn_dom.PropertyKind.BorderTopStyle",
+            PropertyKind::BorderBottomStyle => "fastn_dom.PropertyKind.BorderBottomStyle",
+            PropertyKind::BorderColor => "fastn_dom.PropertyKind.BorderColor",
+            PropertyKind::BorderLeftColor => "fastn_dom.PropertyKind.BorderLeftColor",
+            PropertyKind::BorderRightColor => "fastn_dom.PropertyKind.BorderRightColor",
+            PropertyKind::BorderTopColor => "fastn_dom.PropertyKind.BorderTopColor",
+            PropertyKind::BorderBottomColor => "fastn_dom.PropertyKind.BorderBottomColor",
             PropertyKind::Color => "fastn_dom.PropertyKind.Color",
             PropertyKind::Background => "fastn_dom.PropertyKind.Background",
             PropertyKind::Role => "fastn_dom.PropertyKind.Role",
@@ -224,6 +282,20 @@ impl PropertyKind {
             PropertyKind::Overflow => "fastn_dom.PropertyKind.Overflow",
             PropertyKind::OverflowX => "fastn_dom.PropertyKind.OverflowX",
             PropertyKind::OverflowY => "fastn_dom.PropertyKind.OverflowY",
+            PropertyKind::Spacing => "fastn_dom.PropertyKind.Spacing",
+            PropertyKind::Wrap => "fastn_dom.PropertyKind.Wrap",
+            PropertyKind::TextTransform => "fastn_dom.PropertyKind.TextTransform",
+            PropertyKind::TextIndent => "fastn_dom.PropertyKind.TextIndent",
+            PropertyKind::TextAlign => "fastn_dom.PropertyKind.TextAlign",
+            PropertyKind::LineClamp => "fastn_dom.PropertyKind.LineClamp",
+            PropertyKind::Opacity => "fastn_dom.PropertyKind.Opacity",
+            PropertyKind::Cursor => "fastn_dom.PropertyKind.Cursor",
+            PropertyKind::Resize => "fastn_dom.PropertyKind.Resize",
+            PropertyKind::MaxHeight => "fastn_dom.PropertyKind.MaxHeight",
+            PropertyKind::MinHeight => "fastn_dom.PropertyKind.MinHeight",
+            PropertyKind::MaxWidth => "fastn_dom.PropertyKind.MaxWidth",
+            PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
+            PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
         }
     }
 }

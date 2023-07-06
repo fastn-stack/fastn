@@ -1,0 +1,107 @@
+;; ----------------------- TEXT TRANSFORM ------------------------
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+color: red
+border-style: double
+border-width.px: 2
+border-color: blue
+
+-- ftd.text: capitalize
+text-transform: capitalize
+
+-- ftd.text: LOWER
+text-transform: lowercase
+
+-- ftd.text: upper
+text-transform: uppercase
+
+-- end: ftd.column
+
+
+;; ----------------------- TEXT INDENT ------------------------
+
+-- ftd.row:
+background.solid: black
+width: fill-container
+padding.px: 10
+margin-vertical.px: 5
+
+-- ftd.text:
+text-indent.px: 30
+color: yellow
+
+This is some indented text.
+
+It only applies spacing at the beginning of the first line.
+
+-- end: ftd.row
+
+;; -------------------------- TEXT ALIGN ------------------------------
+
+-- ftd.row:
+spacing.fixed.px: 10
+color: blue
+
+-- ftd.text:
+text-align: center
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+width.fixed.percent: 30
+
+this is **text-align: center** text. a bit longer text so you can see what's going on.
+
+-- ftd.text:
+text-align: start
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+width.fixed.percent: 30
+
+this is **text-align: start** text. a bit longer text so you can see what's
+going on.
+
+-- ftd.text:
+text-align: end
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+width.fixed.percent: 30
+
+this is **text-align: end** text. a bit longer text so you can see what's going
+on.
+
+-- ftd.text:
+text-align: justify
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+width.fixed.percent: 30
+
+this is **text-align: justify** text. a bit longer text so you can see what's going on.
+
+-- end: ftd.row
+
+;; --------------------------- LINE CLAMP --------------------------------
+
+-- ftd.column:
+width.fixed.percent: 50
+margin.px: 10
+
+-- ftd.text:
+line-clamp: 2
+border-width.px: 5
+border-style: double
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+when an unknown printer took a galley of type and scrambled it to make a
+type specimen book. It has survived not only five centuries, but also the
+leap into electronic typesetting, remaining essentially unchanged. It was
+popularised in the 1960s with the release of Letraset sheets containing
+Lorem Ipsum passages, and more recently with desktop publishing software
+like Aldus PageMaker including versions of Lorem Ipsum.
+
+-- end: ftd.column

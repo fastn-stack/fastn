@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct MutableVariable {
     pub name: String,
     pub value: fastn_js::SetPropertyValue,
@@ -17,6 +18,7 @@ pub fn mutable_string(name: &str, value: &str) -> fastn_js::ComponentStatement {
     })
 }
 
+#[derive(Debug)]
 pub struct MutableList {
     pub name: String,
     pub value: fastn_js::SetPropertyValue,

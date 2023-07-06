@@ -7,7 +7,7 @@ pub struct Component {
 pub fn component0(name: &str, body: Vec<fastn_js::ComponentStatement>) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: vec!["parent".to_string()],
+        params: vec!["parent".to_string(), "inherited".to_string()],
         body,
     })
 }
@@ -21,7 +21,7 @@ pub fn component_with_params(
 
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: [vec!["parent".to_string()], params]
+        params: [vec!["parent".to_string(), "inherited".to_string()], params]
             .concat()
             .into_iter()
             .map(|v| fastn_js::utils::name_to_js(v.as_str()))

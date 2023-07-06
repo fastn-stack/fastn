@@ -65,7 +65,7 @@ impl ftd::interpreter::Variable {
                 let mut fields = vec![];
                 for field in record.fields {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((field.name.to_string(), value.to_fastn_js_value()));
+                        fields.push((field.name.to_string(), value.to_fastn_js_value_with_none()));
                     } else {
                         fields.push((
                             field.name.to_string(),
@@ -84,18 +84,18 @@ impl ftd::interpreter::Variable {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value(),
+                    value: self.value.to_fastn_js_value_with_none(),
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value(),
+                    value: self.value.to_fastn_js_value_with_none(),
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
-            value: self.value.to_fastn_js_value(),
+            value: self.value.to_fastn_js_value_with_none(),
         })
     }
 }
@@ -110,6 +110,7 @@ impl ftd::interpreter::ComponentDefinition {
             0,
             doc,
             &Some(self.name.to_string()),
+            &Some("inherited".to_string()),
             true,
         ));
         fastn_js::component_with_params(
@@ -129,7 +130,8 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements("parent", index, doc, &None, false))
+        statements
+            .extend(component.to_component_statements("parent", index, doc, &None, &None, false))
     }
     fastn_js::component0("main", statements)
 }
@@ -141,6 +143,7 @@ impl ftd::interpreter::Component {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
+        inherited_variable_name: &Option<String>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
@@ -152,8 +155,9 @@ impl ftd::interpreter::Component {
                 0,
                 doc,
                 component_definition_name,
-                true,
                 &loop_alias,
+                inherited_variable_name,
+                true,
             )
         } else {
             self.to_component_statements_(
@@ -161,8 +165,9 @@ impl ftd::interpreter::Component {
                 index,
                 doc,
                 component_definition_name,
-                should_return,
                 &None,
+                inherited_variable_name,
+                should_return,
             )
         };
 
@@ -172,11 +177,18 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| v.get_deps(component_definition_name, &loop_alias))
+                        .flat_map(|v| {
+                            v.get_deps(
+                                component_definition_name,
+                                &loop_alias,
+                                inherited_variable_name,
+                            )
+                        })
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
                         component_definition_name,
                         &loop_alias,
+                        inherited_variable_name,
                     ),
                     statements: component_statements,
                     parent: parent.to_string(),
@@ -187,7 +199,11 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration.on.to_fastn_js_value(),
+                list_variable: iteration.on.to_fastn_js_value(
+                    component_definition_name,
+                    &loop_alias,
+                    inherited_variable_name,
+                ),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,
@@ -197,14 +213,17 @@ impl ftd::interpreter::Component {
         component_statements
     }
 
+    #[allow(renamed_and_removed_lints)]
+    #[allow(too_many_arguments)]
     fn to_component_statements_(
         &self,
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
-        should_return: bool,
         loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
+        should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
@@ -214,6 +233,7 @@ impl ftd::interpreter::Component {
                 doc,
                 component_definition_name,
                 loop_alias,
+                inherited_variable_name,
                 should_return,
             )
         } else if let Ok(component_definition) =
@@ -224,7 +244,11 @@ impl ftd::interpreter::Component {
                 .iter()
                 .map(|v| {
                     v.get_value(self.properties.as_slice())
-                        .to_set_property_value(component_definition_name, loop_alias)
+                        .to_set_property_value(
+                            component_definition_name,
+                            loop_alias,
+                            inherited_variable_name,
+                        )
                 })
                 .collect_vec();
             // Todo: Add event
@@ -238,6 +262,9 @@ impl ftd::interpreter::Component {
                     name: self.name.to_string(),
                     arguments,
                     parent: parent.to_string(),
+                    inherited: inherited_variable_name
+                        .clone()
+                        .unwrap_or_else(|| "inherited".to_string()),
                     should_return,
                 },
             )]

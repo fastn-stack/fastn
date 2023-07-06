@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct ForLoop {
     pub list_variable: fastn_js::SetPropertyValue,
     pub statements: Vec<fastn_js::ComponentStatement>,

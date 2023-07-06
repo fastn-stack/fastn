@@ -1,39 +1,90 @@
 <html>
 <head>
     <script src="fastn-js.js"></script>
+
+    <style>
+        /* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <body data-id="1"><div data-id="2" class="m-2">Arpita</div><div data-id="3" class="ft_column"><div data-id="4">Foo says Hello</div><div data-id="5">Foo 2</div></div><div data-id="6"></div><div data-id="7">Click me to add Tom</div><div data-id="8"></div><div data-id="9">End</div><div data-id="10"></div></body><style id="styles">
-    /*.ft_text {
-        padding: 0;
-    }*/
-    .m-2 { margin: 9px; }
+    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
+	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+	.m-2 { margin: 9px; }
     </style>
 <script>
     (function() {
-        let foo__i,
-foo__name,
-foo__names;
-function main(parent) {
+        let global = {
+};
+function main(parent, inherited) {
+  let __args__ = {
+  };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, foo__name);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name);
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__increment(foo__i);
+    foo__increment(global.foo__i);
   });
-  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([foo__i], function () {
+  parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([global.foo__i], function () {
     if (function () {
-      return (fastn_utils.getter(foo__i) > 10);
+      return (fastn_utils.getter(global.foo__i) > 10);
     }()) {
       return fastn_dom.Length.Px(4);
     }
   }
   ));
-  parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(foo__i));
-  foo__foo(parent, "Foo says Hello");
+  parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(global.foo__i));
+  foo__foo(parent, inherited, "Foo says Hello");
   fastn_dom.conditionalDom(parent, [
-    foo__i
+    global.foo__i
   ], function () {
-    return (fastn_utils.getter(foo__i) > 11);
+    return (fastn_utils.getter(global.foo__i) > 11);
   }, function (root) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
@@ -42,16 +93,16 @@ function main(parent) {
   let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Click me to add Tom");
   parenti3.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__append_string(foo__names, "Tom");
+    foo__append_string(global.foo__names, "Tom");
   });
-  foo__names.forLoop(parent, function (root, item, index) {
+  global.foo__names.forLoop(parent, function (root, item, index) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item);
     return rooti0;
   });
   let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "End");
-  foo__names.forLoop(parent, function (root, item, index) {
+  global.foo__names.forLoop(parent, function (root, item, index) {
     return fastn_dom.conditionalDom(parent, [
       index
     ], function () {
@@ -66,23 +117,26 @@ function main(parent) {
 function foo__append_string(a, v) {
   return (ftd.append(a, v));
 }
-function foo__foo(parent, name) {
+function foo__foo(parent, inherited, name) {
+  let __args__ = {
+  };
+  __args__.name = name;
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, name);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name);
   let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
   parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2");
   return parenti0;
 }
-foo__i = fastn.mutable(9);
+global.foo__i = fastn.mutable(9);
 function foo__increment(a) {
   let fastn_utils_val_a = fastn_utils.getter(a) + 1;
   if (!fastn_utils.setter(a, fastn_utils_val_a)) {
     a = fastn_utils_val_a;
   };
 }
-foo__name = "Arpita";
-foo__names = fastn.mutableList([]);
+global.foo__name = "Arpita";
+global.foo__names = fastn.mutableList([]);
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

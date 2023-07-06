@@ -80,7 +80,7 @@ width: fill-container
 -- ftd.text: Id Test
 id: id-123
 
-;; ------------------------ BORDER WIDTH + BORDER STYLE ------------------------
+;; ------------------------ BORDER WIDTH/STYLE/RADIUS ------------------------
 
 -- ftd.text: Solid Border
 border-width.px: 4
@@ -90,27 +90,110 @@ border-style: solid
 -- ftd.text: Double Border
 border-width.px: 4
 margin.px: 12
-border-style: double
+border-style-left: double
 
 -- ftd.text: Dashed Border
 border-width.px: 4
-border-style: dashed
+border-style-right: dashed
 margin.px: 12
 
 -- ftd.text: Dotted Border
 border-width.px: 4
-border-style: dotted
+border-style-top: dotted
 margin.px: 12
 
 -- ftd.text: Groove Border
 border-width.px: 4
-border-style: groove
+border-style-bottom: groove
 margin.px: 12
 
 -- ftd.text: Ridge Border
 border-width.px: 4
 border-style: ridge
 margin.px: 12
+
+-- ftd.text: Left Border Width
+border-left-width.px: 2
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Right Border Width
+border-right-width.px: 4
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Top Border Width
+border-top-width.px: 6
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Bottom Border Width
+border-bottom-width.px: 8
+margin.px: 11
+border-style: solid
+
+-- ftd.text: Border Radius
+border-width.px: 4
+border-style: double
+border-radius.px: 15
+margin.px: 12
+
+-- ftd.text: Top Left Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-left-radius.px: 15
+
+-- ftd.text: Top Right Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-right-radius.px: 15
+
+-- ftd.text: Bottom Left Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-left-radius.px: 15
+
+-- ftd.text: Bottom Right Border Radius
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-right-radius.px: 15
+
+;; ---------------------- BORDER COLOR --------------------
+
+-- ftd.text: Border Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: Border Left Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-left-color: $red-yellow
+
+-- ftd.text: Border Right Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-right-color: $red-yellow
+
+-- ftd.text: Border Top Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-color: $red-yellow
+
+-- ftd.text: Border Bottom Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-color: $red-yellow
+
 
 ;; --------------------- COLOR --------------------------
 
@@ -221,15 +304,16 @@ z-index: 2
 
 
 ;; ---------------------- STICKY -----------------------------
-;; Overflow, Spacing, Anchor not yet implemented
 
 -- ftd.column:
 padding.px: 10
+/color: $inherited.colors.text
 spacing.fixed.px: 50
 height.fixed.px: 200
 width.fixed.px: 300
 overflow-y: scroll
 border-color: $red-yellow
+border-style: solid
 border-width.px: 2
 
 -- ftd.text: The blue planet below is sticky
@@ -258,10 +342,11 @@ universe.
 
 ;; ---------------------- OVERFLOW --------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: red
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -311,14 +396,15 @@ overflow = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
--- end: ftd.column
+-- end: ftd.row
 
 ;; ------------------------- OVERFLOW-X -------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: green
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -368,15 +454,16 @@ overflow-x = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
--- end: ftd.column
+-- end: ftd.row
 
 
 ;; ---------------------- OVERFLOW-Y --------------------------------
 
--- ftd.column:
+-- ftd.row:
 width: fill-container
 spacing: space-evenly
 background.solid: deepskyblue
+margin-vertical.px: 50
 
 -- ftd.text:
 width.fixed.px: 150
@@ -426,15 +513,355 @@ overflow-y = Hidden
 The quick, brown fox jumps over a lazy dog.
 DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps.
 
+-- end: ftd.row
+
+;; -------------------------- SPACING ---------------------------------
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 10
+spacing.fixed.px: 10
+
+-- ftd.text: Space Between
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- ftd.text: Space Evenly
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-evenly
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- ftd.text: Space Around
+role: $rtype
+
+-- ftd.row:
+width: fill-container
+spacing: space-around
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: One
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Two
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Three
+border-width.px: 2
+border-style: solid
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+;; --------------------------- WRAP -----------------------------
+
+-- ftd.row:
+width.fixed.px: 100
+spacing.fixed.px: 10
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+padding.px: 5
+color: blue
+wrap: true
+
+-- ftd.text: One
+
+-- ftd.text: Two
+
+-- ftd.text: Three
+
+-- ftd.text: Four
+
+-- ftd.text: Five
+
+-- ftd.text: Six
+
+-- end: ftd.row
+
+;; -------------------------- OPACITY -----------------------------
+
+-- string sample-text:
+
+Far far away, behind the word mountains, far from the countries
+Vokalia and Consonantia, there live the blind texts. Separated they
+in Bookmarksgrove right at the coast of the Semantics, a large language
+ocean. A small river named Duden flows by their place and supplies it
+with the necessary regelialia. It is a paradisematic country, in which
+roasted parts of sentences fly into your mouth. Even the all-powerful
+Pointing has no control about the blind texts it is an almost unorthographic
+life One day however a small line of blind text by the name of Lorem
+Ipsum decided to leave for the far World of Grammar.
+
+-- ftd.column:
+width: fill-container
+background.solid: #963770
+opacity: 0.6
+
+-- ftd.text: $sample-text
+color: white
+padding.px: 10
+
+-- end: ftd.column
+
+;; ---------------------------- CURSOR --------------------------------
+
+-- ftd.column:
+width: fill-container
+padding.px: 10
+spacing.fixed.px: 10
+margin.px: 5
+
+-- ftd.text: This text will show pointer cursor on hover
+padding.px: 10
+cursor: pointer
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show progress cursor on hover
+padding.px: 10
+cursor: progress
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show zoom-in cursor on hover
+padding.px: 10
+cursor: zoom-in
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show help cursor on hover
+padding.px: 10
+cursor: help
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: This text will show cross-hair cursor on hover
+padding.px: 10
+cursor: crosshair
+border-width.px: 4
+border-style: double
+border-color: $red-yellow
+
+-- end: ftd.column
+
+;; -------------------------- RESIZE ------------------------
+
+-- ftd.column:
+width.fixed.percent: 50
+spacing.fixed.px: 10
+margin.px: 10
+
+-- ftd.row:
+resize: both
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable both directions
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: horizontal
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable only horizontally
+
+-- end: ftd.row
+
+-- ftd.row:
+resize: vertical
+border-color: $red-yellow
+border-width.px: 1
+border-style: solid
+padding.px: 5
+
+-- ftd.text: This row is resizable only vertically
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+;; ------------------------ MAX-MIN HEIGHT/WIDTH ------------------------
+
+-- ftd.row:
+width: fill-container
+align-content: center
+spacing.fixed.px: 10
+
+-- ftd.column:
+max-height.fixed.px: 50
+max-width.fixed.px: 300
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text:
+padding.px: 10
+
+Max Height of this container is 50px.
+If you add more text than it can accommodate, then it will overflow.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+min-height.fixed.px: 100
+border-color: $red-yellow
+border-width.px: 2
+spacing.fixed.px: 10
+border-style: solid
+
+-- ftd.text: Min Height of this container is 100px
+padding.px: 10
+
+-- ftd.text:
+padding.px: 10
+
+If more text are added inside this container, the text might overflow
+if it can't be accommodated.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+max-width.fixed.px: 300
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text:
+padding.px: 10
+
+Max Width of this container is 300px.
+If you add more text than it can accommodate, then it will overflow.
+
+-- end: ftd.column
+
+
+-- ftd.column:
+min-width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: Min Width of this container is 400px
+padding.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+;; ------------------------ WHITESPACE ------------------------------
+
+-- string sample-text2:
+
+But ere she from the church-door stepped She smiled and told us why:
+
+'It was a wicked woman's curse,' Quoth she, 'and what care I?'
+She smiled, and smiled, and passed it off Ere from the door she stept-
+
+-- end: sample-text2
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+-- ftd.text: $sample-text2
+white-space: normal
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: nowrap
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: pre
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
+-- ftd.text: $sample-text2
+white-space: break-spaces
+padding.px: 10
+width.fixed.px: 400
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+
 -- end: ftd.column
 
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
 
 -- ftd.integer: 32
 
 -- ftd.decimal: 1.123
 
 -- ftd.boolean: true
+
+-- end: ftd.row
 
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
@@ -480,7 +907,7 @@ desktop: $dtype
 mobile: $mtype
 
 
-;; --------------------- VARIABLE --------------------------
+;; --------------------- FUNCTIONS --------------------------
 
 
 

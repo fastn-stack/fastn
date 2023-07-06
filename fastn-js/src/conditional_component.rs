@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct ConditionalComponent {
     pub deps: Vec<String>,
     pub condition: fastn_grammar::evalexpr::ExprNode,
