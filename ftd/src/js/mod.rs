@@ -213,6 +213,8 @@ impl ftd::interpreter::Component {
         component_statements
     }
 
+    #[allow(renamed_and_removed_lints)]
+    #[allow(too_many_arguments)]
     fn to_component_statements_(
         &self,
         parent: &str,

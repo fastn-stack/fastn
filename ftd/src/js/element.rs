@@ -1,3 +1,6 @@
+#![allow(renamed_and_removed_lints)]
+#![allow(too_many_arguments)]
+
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
