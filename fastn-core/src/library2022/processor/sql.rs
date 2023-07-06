@@ -31,9 +31,9 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
             }
         }
 
-        if let Some(quote_char) = quote {
-            if chars[i] == quote_char && !escaped {
-                if quote_open {
+        if chars[i] == '"' || chars[i] == '"' && !escaped {
+            if quote_open {
+                if Some(chars[i]) == quote {
                     quote_open = false;
                     quote = None;
                 }
@@ -131,6 +131,16 @@ mod test {
         e(
             "SELECT * FROM test where name = $name and full_name = $name",
             "SELECT * FROM test where name = $1 and full_name = $1",
+            vec!["name"],
+        );
+        e(
+            "SELECT * FROM test where name = \"$name\" and full_name = $name",
+            "SELECT * FROM test where name = \"$name\" and full_name = $1",
+            vec!["name"],
+        );
+        e(
+            "SELECT * FROM test where name = \"'$name'\" and full_name = $name",
+            "SELECT * FROM test where name = \"'$name'\" and full_name = $1",
             vec!["name"],
         );
     }
