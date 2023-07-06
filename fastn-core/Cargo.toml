@@ -39,6 +39,7 @@ clap.workspace = true
 colored.workspace = true
 native-tls.workspace = true
 deadpool-postgres.workspace = true
+postgres-types.workspace = true
 postgres-native-tls.workspace = true
 tokio-postgres.workspace = true
 diffy.workspace = true

@@ -58,6 +58,7 @@ native-tls = "0.2"
 deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46" }
 postgres-native-tls = "0.5"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1"] }
+postgres-types = "0.2"
 async-lock = "2"
 async-recursion = "1"
 async-trait = "0.1"
@@ -65,7 +66,7 @@ bitflags = "2"
 bytemuck = { version = "1", features = [ "derive" ] }
 camino = "1"
 clap = "4"
-colored = { git = "https://github.com/amitu/colored", rev = "6eb9cc5" }
+colored = "2.0.4"
 crossterm = "0.26"
 css-color-parser = "0.1"
 diffy = "0.3"
