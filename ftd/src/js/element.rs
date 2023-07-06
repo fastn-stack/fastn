@@ -842,6 +842,8 @@ pub struct Common {
     pub min_height: Option<ftd::js::Value>,
     pub min_width: Option<ftd::js::Value>,
     pub whitespace: Option<ftd::js::Value>,
+    pub classes: Option<ftd::js::Value>,
+    pub anchor: Option<ftd::js::Value>,
     pub events: Vec<ftd::interpreter::Event>,
 }
 
@@ -853,6 +855,8 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
+            anchor: ftd::js::value::get_properties("anchor", properties, arguments),
+            classes: ftd::js::value::get_properties("classes", properties, arguments),
             align_self: ftd::js::value::get_properties("align-self", properties, arguments),
             width: ftd::js::value::get_properties("width", properties, arguments),
             height: ftd::js::value::get_properties("height", properties, arguments),
@@ -1039,6 +1043,28 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 align_self.to_set_property(
                     fastn_js::PropertyKind::AlignSelf,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref classes) = self.classes {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                classes.to_set_property(
+                    fastn_js::PropertyKind::Classes,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref anchor) = self.anchor {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                anchor.to_set_property(
+                    fastn_js::PropertyKind::Anchor,
                     element_name,
                     component_definition_name,
                     loop_alias,

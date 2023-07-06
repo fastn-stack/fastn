@@ -201,9 +201,15 @@ fastn_dom.PropertyKind = {
     BorderTopColor: 65,
     BorderBottomColor: 66,
     AlignSelf: 67,
+    Classes: 68,
+    Anchor: 69,
 }
 
-
+fastn_dom.Anchor = {
+    Window: "fixed",
+    Parent: "absolute",
+    Id: "absolute",
+}
 
 fastn_dom.Resizing = {
     FillContainer: "100%",
@@ -615,6 +621,14 @@ class Node2 {
             this.attachCss("border-bottom-style", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ZIndex) {
             this.attachCss("z-index", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Classes) {
+            // todo: this needs to be fixed
+            this.#node.classList.add(staticValue);
+            // this.attachCss("classes", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Anchor) {
+            // todo: this needs fixed for anchor.id = v
+            // need to change position of element with id = v to relative
+            this.attachCss("position", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Sticky) {
             // sticky is boolean type
             switch (staticValue) {
