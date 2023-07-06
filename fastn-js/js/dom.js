@@ -69,6 +69,11 @@ fastn_dom.property_map = {
     "border-bottom-style": "bbs",
     "border-left-style": "bls",
     "border-right-style": "brs",
+    "border-color": "bc",
+    "border-top-color": "btc",
+    "border-bottom-color": "bbc",
+    "border-left-color": "blc",
+    "border-right-color": "brc",
     "background-color": "bgc",
     "z-index": "z",
     "sticky": "s",
@@ -202,6 +207,11 @@ fastn_dom.PropertyKind = {
     BorderRightStyle: 59,
     BorderTopStyle: 60,
     BorderBottomStyle: 61,
+    BorderColor: 62,
+    BorderLeftColor: 63,
+    BorderRightColor: 64,
+    BorderTopColor: 65,
+    BorderBottomColor: 66,
 }
 
 
@@ -694,6 +704,16 @@ class Node2 {
             this.attachCss("max-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.WhiteSpace) {
             this.attachCss("white-space", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderColor) {
+            this.attachColorCss("border-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderLeftColor) {
+            this.attachColorCss("border-left-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderRightColor) {
+            this.attachColorCss("border-right-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderTopColor) {
+            this.attachColorCss("border-top-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.BorderBottomColor) {
+            this.attachColorCss("border-bottom-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {

@@ -812,6 +812,11 @@ pub struct Common {
     pub border_right_style: Option<ftd::js::Value>,
     pub border_top_style: Option<ftd::js::Value>,
     pub border_bottom_style: Option<ftd::js::Value>,
+    pub border_color: Option<ftd::js::Value>,
+    pub border_left_color: Option<ftd::js::Value>,
+    pub border_right_color: Option<ftd::js::Value>,
+    pub border_top_color: Option<ftd::js::Value>,
+    pub border_bottom_color: Option<ftd::js::Value>,
     pub color: Option<ftd::js::Value>,
     pub background: Option<ftd::js::Value>,
     pub role: Option<ftd::js::Value>,
@@ -945,6 +950,27 @@ impl Common {
             ),
             border_bottom_style: ftd::js::value::get_properties(
                 "border-style-bottom",
+                properties,
+                arguments,
+            ),
+            border_color: ftd::js::value::get_properties("border-color", properties, arguments),
+            border_left_color: ftd::js::value::get_properties(
+                "border-left-color",
+                properties,
+                arguments,
+            ),
+            border_right_color: ftd::js::value::get_properties(
+                "border-right-color",
+                properties,
+                arguments,
+            ),
+            border_top_color: ftd::js::value::get_properties(
+                "border-top-color",
+                properties,
+                arguments,
+            ),
+            border_bottom_color: ftd::js::value::get_properties(
+                "border-bottom-color",
                 properties,
                 arguments,
             ),
@@ -1359,6 +1385,61 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_style.to_set_property(
                     fastn_js::PropertyKind::BorderBottomStyle,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_color) = self.border_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_color.to_set_property(
+                    fastn_js::PropertyKind::BorderColor,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_top_color) = self.border_top_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_top_color.to_set_property(
+                    fastn_js::PropertyKind::BorderTopColor,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_bottom_color) = self.border_bottom_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_bottom_color.to_set_property(
+                    fastn_js::PropertyKind::BorderBottomColor,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_left_color) = self.border_left_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_left_color.to_set_property(
+                    fastn_js::PropertyKind::BorderLeftColor,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref border_right_color) = self.border_right_color {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                border_right_color.to_set_property(
+                    fastn_js::PropertyKind::BorderRightColor,
                     element_name,
                     component_definition_name,
                     loop_alias,

@@ -162,6 +162,38 @@ margin.px: 11
 border-style: double
 border-bottom-right-radius.px: 15
 
+;; ---------------------- BORDER COLOR --------------------
+
+-- ftd.text: Border Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-color: $red-yellow
+
+-- ftd.text: Border Left Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-left-color: $red-yellow
+
+-- ftd.text: Border Right Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-right-color: $red-yellow
+
+-- ftd.text: Border Top Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-top-color: $red-yellow
+
+-- ftd.text: Border Bottom Color
+border-width.px: 4
+margin.px: 11
+border-style: double
+border-bottom-color: $red-yellow
+
 
 ;; --------------------- COLOR --------------------------
 
