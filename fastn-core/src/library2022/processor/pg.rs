@@ -59,7 +59,7 @@ impl QueryArgs {
 }
 
 fn resolve_variable_from_doc(
-    doc: &ftd::interpreter::TDoc<'_>,
+    _doc: &ftd::interpreter::TDoc<'_>,
     var: &str,
     e: &postgres_types::Type,
 ) -> ftd::interpreter::Result<Box<PGData>> {
@@ -85,8 +85,8 @@ fn resolve_variable_from_headers(
     };
 
     if let ftd::ast::VariableValue::String { value, .. } = &header.value {
-        if value.starts_with('$') {
-            return resolve_variable_from_doc(doc, &value[1..], e).map(Some);
+        if let Some(stripped) = value.strip_prefix('$') {
+            return resolve_variable_from_doc(doc, stripped, e).map(Some);
         }
     }
 

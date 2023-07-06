@@ -192,12 +192,10 @@ impl HeaderValues {
                 doc_id,
                 line_number,
             )
+        } else if let Some(value) = values.first() {
+            Ok(Some(value))
         } else {
-            if let Some(value) = values.first() {
-                Ok(Some(value))
-            } else {
-                Ok(None)
-            }
+            Ok(None)
         }
     }
 
