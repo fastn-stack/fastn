@@ -868,6 +868,67 @@ align-self: end
 
 -- end: ftd.column
 
+
+;; --------------------- CLASSES -----------------------
+
+-- ftd.text: This is text with class
+color: red
+classes: a, b, c, d
+
+;; -------------------- ANCHOR --------------------------------
+
+-- ftd.column:
+margin.px: 10
+padding.px: 20
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+width.fixed.px: 600
+
+-- ftd.column:
+id: c1
+padding.px: 20
+border-color: green
+border-width.px: 2
+border-style: solid
+width.fixed.px: 400
+
+-- ftd.text: Inside Inner Container
+color: green
+anchor.id: c1
+top.px: 0
+left.px: 0
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+id: c2
+margin.px: 10
+padding.px: 20
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+width.fixed.px: 600
+
+-- ftd.column:
+padding.px: 20
+border-color: blue
+border-width.px: 2
+border-style: solid
+width.fixed.px: 400
+
+-- ftd.text: Inside Outer Container
+color: blue
+anchor.id: c2
+top.px: 0
+left.px: 0
+
+-- end: ftd.column
+
+-- end: ftd.column
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

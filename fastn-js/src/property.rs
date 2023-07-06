@@ -159,6 +159,8 @@ impl Value {
 pub enum PropertyKind {
     StringValue,
     Id,
+    Anchor,
+    Classes,
     AlignSelf,
     Width,
     Padding,
@@ -231,6 +233,7 @@ impl PropertyKind {
         match self {
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
+            PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
             PropertyKind::StringValue => "fastn_dom.PropertyKind.StringValue",
             PropertyKind::Width => "fastn_dom.PropertyKind.Width",
             PropertyKind::Padding => "fastn_dom.PropertyKind.Padding",
@@ -298,6 +301,7 @@ impl PropertyKind {
             PropertyKind::MaxWidth => "fastn_dom.PropertyKind.MaxWidth",
             PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
             PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
+            PropertyKind::Classes => "fastn_dom.PropertyKind.Classes",
         }
     }
 }

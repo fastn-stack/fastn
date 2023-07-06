@@ -462,6 +462,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = align_self_variants(variant);
             (format!("fastn_dom.AlignSelf.{}", js_variant), false)
         }
+        "ftd#anchor" => {
+            let js_variant = anchor_variants(variant);
+            (format!("fastn_dom.Anchor.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -640,5 +644,14 @@ fn align_self_variants(name: &str) -> &'static str {
         "center" => "Center",
         "end" => "End",
         t => todo!("invalid align-self variant {}", t),
+    }
+}
+
+fn anchor_variants(name: &str) -> &'static str {
+    match name {
+        "window" => "Window",
+        "parent" => "Parent",
+        "id" => "Id",
+        t => todo!("invalid anchor variant {}", t),
     }
 }
