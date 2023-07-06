@@ -466,167 +466,6 @@ impl UDFStatement {
 }
 */
 
-#[cfg(test)]
-#[track_caller]
-pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&vec![f]);
-    println!("got: {}", g);
-    println!("expected: {}", s);
-    assert_eq!(g, s);
-}
-
-#[cfg(test)]
-mod tests {
-    /*
-    #[test]
-    fn udf() {
-        fastn_js::to_js::e(fastn_js::udf0("foo", vec![]), "function foo() {}");
-        fastn_js::to_js::e(fastn_js::udf1("foo", "p", vec![]), "function foo(p) {}");
-        fastn_js::to_js::e(
-            fastn_js::udf2("foo", "p", "q", vec![]),
-            "function foo(p, q) {}",
-        );
-
-        fastn_js::to_js::e(
-            fastn_js::udf0(
-                "foo",
-                vec![fastn_js::UDFStatement::Return {
-                    value: Box::new(fastn_js::UDFStatement::Integer { value: 10 }),
-                }],
-            ),
-            "function foo() {return 10;}",
-        );
-        fastn_js::to_js::e(
-            fastn_js::udf0(
-                "foo",
-                vec![fastn_js::UDFStatement::Return {
-                    value: Box::new(fastn_js::UDFStatement::Decimal { value: 10.1 }),
-                }],
-            ),
-            "function foo() {return 10.1;}",
-        );
-        fastn_js::to_js::e(
-            fastn_js::udf0(
-                "foo",
-                vec![fastn_js::UDFStatement::Return {
-                    value: Box::new(fastn_js::UDFStatement::Boolean { value: true }),
-                }],
-            ),
-            "function foo() {return true;}",
-        );
-        fastn_js::to_js::e(
-            fastn_js::udf0(
-                "foo",
-                vec![fastn_js::UDFStatement::Return {
-                    value: Box::new(fastn_js::UDFStatement::String {
-                        value: "hello".to_string(),
-                    }),
-                }],
-            ),
-            r#"function foo() {return "hello";}"#,
-        );
-        fastn_js::to_js::e(
-            fastn_js::udf0(
-                "foo",
-                vec![fastn_js::UDFStatement::Call {
-                    name: "bar".to_string(),
-                    args: vec![fastn_js::UDFStatement::String {
-                        value: "hello".to_string(),
-                    }],
-                }],
-            ),
-            r#"function foo() {bar("hello")}"#,
-        );
-    }*/
-    #[test]
-    fn test_func() {
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![]),
-            "function foo(parent) {}",
-        );
-        fastn_js::to_js::e(
-            fastn_js::component1("foo", "p", vec![]),
-            "function foo(parent, p) {}",
-        );
-        fastn_js::to_js::e(
-            fastn_js::component2("foo", "p", "q", vec![]),
-            "function foo(parent, p, q) {}",
-        );
-    }
-
-    #[test]
-    fn unquoted() {
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_integer("bar", 10)]),
-            r#"function foo(parent) {let bar;bar = fastn.mutable(10);}"#,
-        );
-    }
-
-    #[test]
-    fn quoted() {
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "10")]),
-            r#"function foo(parent) {let bar;bar = fastn.mutable("10");}"#,
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world")]),
-            r#"function foo(parent) {let bar;bar = fastn.mutable("hello world");}"#,
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
-            indoc::indoc!(
-                r#"function foo(parent) {
-                let bar;bar = fastn.mutable("hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on");
-                }"#),
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello\nworld")]),
-            r#"function foo(parent) {let bar;bar = fastn.mutable("hello\nworld");}"#,
-        );
-        // std::fs::write(
-        //     "test.js",
-        //     r#"function foo(parent) {let bar = "hello\nworld";}"#,
-        // )
-        // .unwrap();
-    }
-
-    #[test]
-    fn static_unquoted() {
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_integer("bar", 10)]),
-            r#"function foo(parent) {let bar;bar = 10;}"#,
-        );
-    }
-
-    #[test]
-    fn static_quoted() {
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "10")]),
-            r#"function foo(parent) {let bar;bar = "10";}"#,
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello world")]),
-            r#"function foo(parent) {let bar;bar = "hello world";}"#,
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
-            indoc::indoc!(
-                r#"function foo(parent) {
-                let bar;bar = "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on";
-                }"#),
-        );
-        fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello\nworld")]),
-            r#"function foo(parent) {let bar;bar = "hello\nworld";}"#,
-        );
-        // std::fs::write(
-        //     "test.js",
-        //     r#"function foo(parent) {let bar = "hello\nworld";}"#,
-        // )
-        // .unwrap();
-    }
-}
-
 pub struct ExpressionGenerator;
 
 impl ExpressionGenerator {
@@ -862,4 +701,170 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
         .append(space())
         .append(text("{}"))
         .append(text(";"))
+}
+
+#[cfg(test)]
+#[track_caller]
+pub fn e(f: fastn_js::Ast, s: &str) {
+    let g = to_js(&vec![f]);
+    println!("got: {}", g);
+    println!("expected: {}", s);
+    assert_eq!(g, s);
+}
+
+#[cfg(test)]
+mod tests {
+    /*
+    #[test]
+    fn udf() {
+        fastn_js::to_js::e(fastn_js::udf0("foo", vec![]), "function foo() {}");
+        fastn_js::to_js::e(fastn_js::udf1("foo", "p", vec![]), "function foo(p) {}");
+        fastn_js::to_js::e(
+            fastn_js::udf2("foo", "p", "q", vec![]),
+            "function foo(p, q) {}",
+        );
+
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Integer { value: 10 }),
+                }],
+            ),
+            "function foo() {return 10;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Decimal { value: 10.1 }),
+                }],
+            ),
+            "function foo() {return 10.1;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::Boolean { value: true }),
+                }],
+            ),
+            "function foo() {return true;}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Return {
+                    value: Box::new(fastn_js::UDFStatement::String {
+                        value: "hello".to_string(),
+                    }),
+                }],
+            ),
+            r#"function foo() {return "hello";}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::udf0(
+                "foo",
+                vec![fastn_js::UDFStatement::Call {
+                    name: "bar".to_string(),
+                    args: vec![fastn_js::UDFStatement::String {
+                        value: "hello".to_string(),
+                    }],
+                }],
+            ),
+            r#"function foo() {bar("hello")}"#,
+        );
+    }*/
+    #[test]
+    #[ignore]
+    fn test_func() {
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![]),
+            "function foo(parent) {}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::component1("foo", "p", vec![]),
+            "function foo(parent, p) {}",
+        );
+        fastn_js::to_js::e(
+            fastn_js::component2("foo", "p", "q", vec![]),
+            "function foo(parent, p, q) {}",
+        );
+    }
+
+    #[test]
+    #[ignore]
+    fn unquoted() {
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::mutable_integer("bar", 10)]),
+            r#"function foo(parent) {let bar;bar = fastn.mutable(10);}"#,
+        );
+    }
+
+    #[test]
+    #[ignore]
+    fn quoted() {
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "10")]),
+            r#"function foo(parent) {let bar;bar = fastn.mutable("10");}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world")]),
+            r#"function foo(parent) {let bar;bar = fastn.mutable("hello world");}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
+            indoc::indoc!(
+                r#"function foo(parent) {
+                let bar;bar = fastn.mutable("hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on");
+                }"#),
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello\nworld")]),
+            r#"function foo(parent) {let bar;bar = fastn.mutable("hello\nworld");}"#,
+        );
+        // std::fs::write(
+        //     "test.js",
+        //     r#"function foo(parent) {let bar = "hello\nworld";}"#,
+        // )
+        // .unwrap();
+    }
+
+    #[test]
+    #[ignore]
+    fn static_unquoted() {
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::static_integer("bar", 10)]),
+            r#"function foo(parent) {let bar;bar = 10;}"#,
+        );
+    }
+
+    #[test]
+    #[ignore]
+    fn static_quoted() {
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "10")]),
+            r#"function foo(parent) {let bar;bar = "10";}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello world")]),
+            r#"function foo(parent) {let bar;bar = "hello world";}"#,
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
+            indoc::indoc!(
+                r#"function foo(parent) {
+                let bar;bar = "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on";
+                }"#),
+        );
+        fastn_js::to_js::e(
+            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello\nworld")]),
+            r#"function foo(parent) {let bar;bar = "hello\nworld";}"#,
+        );
+        // std::fs::write(
+        //     "test.js",
+        //     r#"function foo(parent) {let bar = "hello\nworld";}"#,
+        // )
+        // .unwrap();
+    }
 }

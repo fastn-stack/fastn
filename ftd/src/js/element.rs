@@ -1,3 +1,4 @@
+#![allow(unknown_lints)]
 #![allow(renamed_and_removed_lints)]
 #![allow(too_many_arguments)]
 
