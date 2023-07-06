@@ -783,6 +783,7 @@ impl TextCommon {
 #[derive(Debug)]
 pub struct Common {
     pub id: Option<ftd::js::Value>,
+    pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
     pub padding: Option<ftd::js::Value>,
@@ -852,6 +853,7 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
+            align_self: ftd::js::value::get_properties("align-self", properties, arguments),
             width: ftd::js::value::get_properties("width", properties, arguments),
             height: ftd::js::value::get_properties("height", properties, arguments),
             padding: ftd::js::value::get_properties("padding", properties, arguments),
@@ -1026,6 +1028,17 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(
                     fastn_js::PropertyKind::Id,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref align_self) = self.align_self {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                align_self.to_set_property(
+                    fastn_js::PropertyKind::AlignSelf,
                     element_name,
                     component_definition_name,
                     loop_alias,

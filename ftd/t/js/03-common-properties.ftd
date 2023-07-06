@@ -849,6 +849,25 @@ border-style: solid
 
 -- end: ftd.column
 
+;; -------------------------- ALIGN-SELF --------------------------------
+
+-- ftd.column:
+width.fixed.px: 200
+
+-- ftd.text: Start
+color: $red-yellow
+align-self: start
+
+-- ftd.text: Center
+color: $red-yellow
+align-self: center
+
+-- ftd.text: End
+color: $red-yellow
+align-self: end
+
+-- end: ftd.column
+
 ;; ----------------- INTEGER, DECIMAL and BOOLEAN ---------------------
 
 -- ftd.row:

@@ -458,6 +458,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = whitespace_variants(variant);
             (format!("fastn_dom.WhiteSpace.{}", js_variant), false)
         }
+        "ftd#align-self" => {
+            let js_variant = align_self_variants(variant);
+            (format!("fastn_dom.AlignSelf.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -627,5 +631,14 @@ fn whitespace_variants(name: &str) -> &'static str {
         "pre-wrap" => "PreWrap",
         "break-spaces" => "BreakSpaces",
         t => todo!("invalid resize variant {}", t),
+    }
+}
+
+fn align_self_variants(name: &str) -> &'static str {
+    match name {
+        "start" => "Start",
+        "center" => "Center",
+        "end" => "End",
+        t => todo!("invalid align-self variant {}", t),
     }
 }

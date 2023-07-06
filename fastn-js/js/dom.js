@@ -24,6 +24,7 @@ fastn_dom.classes = { ...fastn_dom.common }
 fastn_dom.unsanitised_classes = {}
 fastn_dom.class_count = 0;
 fastn_dom.property_map = {
+    "align-self": "as",
     "color": "c",
     "width": "w",
     "padding": "p",
@@ -199,6 +200,7 @@ fastn_dom.PropertyKind = {
     BorderRightColor: 64,
     BorderTopColor: 65,
     BorderBottomColor: 66,
+    AlignSelf: 67,
 }
 
 
@@ -239,6 +241,12 @@ fastn_dom.Display = {
     Block: "block",
     Inline: "inline",
     InlineBlock: "inline-block",
+}
+
+fastn_dom.AlignSelf = {
+    Start: "start",
+    Center: "center",
+    End: "end",
 }
 
 fastn_dom.TextTransform = {
@@ -691,6 +699,8 @@ class Node2 {
             this.attachCss("max-width", staticValue);
         } else if (kind === fastn_dom.PropertyKind.WhiteSpace) {
             this.attachCss("white-space", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.AlignSelf) {
+            this.attachCss("align-self", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderColor) {
             this.attachColorCss("border-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.BorderLeftColor) {
