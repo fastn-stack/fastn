@@ -117,10 +117,16 @@ function main(parent, inherited, args) {
     }).getParent();
   });
 }
-function foo__append_string(a, v) {
-  return (ftd.append(a, v));
+function foo__increment(a) {
+  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
+  };
 }
-function foo__foo(parent, inherited, args) {
+global.foo__i = fastn.mutable(9);
+global.foo__name = "Arpita";
+function foo__foo(parent, inherited, args)
+{
   let __args__ = {
     name: "Hello",
     ...args
@@ -132,14 +138,9 @@ function foo__foo(parent, inherited, args) {
   parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2");
   return parenti0;
 }
-global.foo__i = fastn.mutable(9);
-function foo__increment(a) {
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
-  };
+function foo__append_string(a, v) {
+  return (ftd.append(a, v));
 }
-global.foo__name = "Arpita";
 global.foo__names = fastn.mutableList([]);
 
         fastn_virtual.hydrate(main);

@@ -91,14 +91,22 @@ function main(parent, inherited, args) {
     }).getParent();
   });
 }
-function foo__append_integer(a, v) {
-  return (ftd.append(a, v));
-}
+global.foo__value = fastn.mutable(0);
 function foo__clamp(a) {
   let fastn_utils_val_a = (fastn_utils.getter(a) + 1) % 2;
   if (!fastn_utils.setter(a, fastn_utils_val_a)) {
     a = fastn_utils_val_a;
   }
+}
+function foo__append_integer(a, v) {
+  return (ftd.append(a, v));
+}
+global.foo__counters = fastn.mutableList([]);
+function foo__increment(a) {
+  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
+  };
 }
 function foo__counter_list(parent, inherited, args) {
   let __args__ = {
@@ -111,14 +119,6 @@ function foo__counter_list(parent, inherited, args) {
   });
   return parenti0;
 }
-global.foo__counters = fastn.mutableList([]);
-function foo__increment(a) {
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
-  };
-}
-global.foo__value = fastn.mutable(0);
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

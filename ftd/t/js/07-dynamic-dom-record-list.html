@@ -86,6 +86,10 @@ global.foo__first = fastn.recordInstance({
   bio: "I am Jill"
 });
 global.foo__people = fastn.mutableList([global.foo__first]);
+global.foo__tom = fastn.recordInstance({
+  name: "Tom",
+  bio: "I am Tom"
+});
 function foo__show_person(parent, inherited, args)
 {
   let __args__ = {
@@ -100,10 +104,6 @@ function foo__show_person(parent, inherited, args)
   parenti0i2.setProperty(fastn_dom.PropertyKind.StringValue, __args__.index);
   return parenti0;
 }
-global.foo__tom = fastn.recordInstance({
-  name: "Tom",
-  bio: "I am Tom"
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

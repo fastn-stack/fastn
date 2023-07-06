@@ -145,7 +145,7 @@ The `Map` is a data structure that stores key-value pairs in a hash table. In th
 are `String`s representing the names of different `Thing`s, and the values are the `Thing`s
 themselves.
 **/
-pub fn default_bag() -> ftd::Map<ftd::interpreter::Thing> {
+pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     let record = |n: &str, r: &str| (n.to_string(), ftd::interpreter::Kind::record(r));
     let _color = |n: &str| record(n, "ftd#color");
     std::iter::IntoIterator::into_iter([

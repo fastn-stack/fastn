@@ -954,6 +954,26 @@ function main(parent, inherited, args) {
   let parenti13i2 = fastn_dom.createKernel(parenti13, fastn_dom.ElementKind.Boolean);
   parenti13i2.setProperty(fastn_dom.PropertyKind.StringValue, true);
 }
+global.foo__ylg = fastn.recordInstance({
+  light: "yellow",
+  dark: "lightgreen"
+});
+global.foo__red_yellow = fastn.recordInstance({
+  light: "red",
+  dark: "yellow"
+});
+function foo__increment(a)
+{
+  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
+  };
+}
+global.foo__value = fastn.mutable(0);
+global.foo__og = fastn.recordInstance({
+  light: "orange",
+  dark: "green"
+});
 global.foo__bp = fastn.recordInstance({
   light: "blue",
   dark: "purple"
@@ -965,13 +985,6 @@ global.foo__dtype = fastn.recordInstance({
   weight: 700,
   font_family: "cursive"
 });
-function foo__increment(a)
-{
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
-  };
-}
 global.foo__mtype = fastn.recordInstance({
   size: fastn_dom.FontSize.Px(20),
   line_height: fastn_dom.FontSize.Px(35),
@@ -979,29 +992,16 @@ global.foo__mtype = fastn.recordInstance({
   weight: 100,
   font_family: "fantasy"
 });
-global.foo__og = fastn.recordInstance({
-  light: "orange",
-  dark: "green"
+global.foo__rtype = fastn.recordInstance({
+  desktop: global.foo__dtype,
+  mobile: global.foo__mtype
 });
 global.foo__red_blue = fastn.recordInstance({
   light: "red",
   dark: "blue"
 });
-global.foo__red_yellow = fastn.recordInstance({
-  light: "red",
-  dark: "yellow"
-});
-global.foo__rtype = fastn.recordInstance({
-  desktop: global.foo__dtype,
-  mobile: global.foo__mtype
-});
 global.foo__sample_text = "Far far away, behind the word mountains, far from the countries\nVokalia and Consonantia, there live the blind texts. Separated they\nin Bookmarksgrove right at the coast of the Semantics, a large language\nocean. A small river named Duden flows by their place and supplies it\nwith the necessary regelialia. It is a paradisematic country, in which\nroasted parts of sentences fly into your mouth. Even the all-powerful\nPointing has no control about the blind texts it is an almost unorthographic\nlife One day however a small line of blind text by the name of Lorem\nIpsum decided to leave for the far World of Grammar.";
 global.foo__sample_text2 = "But ere she from the church-door stepped She smiled and told us why:\n\n'It was a wicked woman's curse,' Quoth she, 'and what care I?'\nShe smiled, and smiled, and passed it off Ere from the door she stept-";
-global.foo__value = fastn.mutable(0);
-global.foo__ylg = fastn.recordInstance({
-  light: "yellow",
-  dark: "lightgreen"
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

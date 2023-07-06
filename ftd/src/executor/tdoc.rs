@@ -2,7 +2,7 @@
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a mut ftd::Map<ftd::interpreter::Thing>,
+    pub bag: &'a mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,

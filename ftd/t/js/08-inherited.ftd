@@ -1,11 +1,10 @@
 -- ftd.column:
 colors: $colors
-background.solid: black
 width: fill-container
 height.fixed.px: 1000
 
 -- ftd.text: Hello
-color: $inherited.colors.border
+color: $inherited.colors.text
 
 -- end: ftd.column
 
