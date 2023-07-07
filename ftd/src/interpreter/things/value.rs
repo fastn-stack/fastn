@@ -731,24 +731,38 @@ impl PropertyValue {
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
-                    if value.is_null() {
-                        ftd::interpreter::StateWithThing::new_thing(PropertyValue::Value {
-                            value: Value::Optional {
-                                data: Box::new(None),
-                                kind,
-                            },
-                            is_mutable,
-                            line_number: value.line_number(),
-                        })
-                    } else {
-                        get_property_value(
-                            value,
+                    if value.is_null() {}
+                    match value {
+                        ftd::ast::VariableValue::Optional {
+                            value: ref ivalue, ..
+                        } => match ivalue.as_ref() {
+                            None => ftd::interpreter::StateWithThing::new_thing(
+                                ftd::interpreter::PropertyValue::Value {
+                                    value: ftd::interpreter::Value::Optional {
+                                        data: Box::new(None),
+                                        kind,
+                                    },
+                                    is_mutable,
+                                    line_number: value.line_number(),
+                                },
+                            ),
+                            Some(value) => get_property_value(
+                                value.to_owned(),
+                                doc,
+                                is_mutable,
+                                &kind,
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind,
+                            )?,
+                        },
+                        _ => get_property_value(
+                            value.to_owned(),
                             doc,
                             is_mutable,
                             &kind,
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
-                        )?
+                        )?,
                     }
                 }
                 ftd::interpreter::Kind::String => {
