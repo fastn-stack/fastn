@@ -756,7 +756,7 @@ impl PropertyValue {
                             )?,
                         },
                         _ => get_property_value(
-                            value.to_owned(),
+                            value,
                             doc,
                             is_mutable,
                             &kind,
