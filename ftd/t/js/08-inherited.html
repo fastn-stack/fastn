@@ -54,13 +54,16 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 h-2"><div data-id="3" class="c-3">Hello</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 h-2"><div data-id="3" class="ft_column w-1 h-3 bgc-4"><div data-id="4" class="c-5">Hello</div></div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
 	.h-2 { height: 1000px; }
-	.c-3 { color: #707070; }
-	body.dark .c-3 { color: #D9D9D9; }
+	.h-3 { height: 100%; }
+	.bgc-4 { background-color: #FDFAF1; }
+	body.dark .bgc-4 { background-color: #111111; }
+	.c-5 { color: #707070; }
+	body.dark .c-5 { color: #D9D9D9; }
     </style>
 <script>
     (function() {
@@ -76,9 +79,13 @@ function main(parent, inherited, args) {
   let __$$inherited$$__parenti0 = fastn.recordInstance({
     colors: global.foo__colors
   });
-  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
-  parenti0i0.setProperty(fastn_dom.PropertyKind.Color, __$$inherited$$__parenti0.get("colors").get("text"));
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Column);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Background, __$$inherited$$__parenti0.get("colors").get("background").get("step_1"));
+  let parenti0i0i0 = fastn_dom.createKernel(parenti0i0, fastn_dom.ElementKind.Text);
+  parenti0i0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
+  parenti0i0i0.setProperty(fastn_dom.PropertyKind.Color, __$$inherited$$__parenti0.get("colors").get("text"));
 }
 global.foo__base_ = fastn.recordInstance({
   light: "#FFFFFF",

@@ -62,7 +62,11 @@ impl Function {
                     },
                     doc,
                     false,
-                    Some(&ftd::interpreter::Kind::string().into_kind_data()),
+                    Some(
+                        &ftd::interpreter::Kind::string()
+                            .into_list()
+                            .into_kind_data()
+                    ),
                 )?
             ))
         } else {
