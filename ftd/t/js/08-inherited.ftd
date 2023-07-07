@@ -11,8 +11,21 @@ background.solid: $inherited.colors.background.step-1
 -- ftd.text: Hello
 color: $inherited.colors.text
 
+-- foo:
+
 -- end: ftd.column
 -- end: ftd.column
+
+
+
+
+
+-- component foo:
+
+-- ftd.text: Hello
+color: $inherited.colors.text-strong
+
+-- end: foo
 
 
 

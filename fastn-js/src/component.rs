@@ -8,11 +8,7 @@ pub struct Component {
 pub fn component0(name: &str, body: Vec<fastn_js::ComponentStatement>) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: vec![
-            "parent".to_string(),
-            "inherited".to_string(),
-            "args".to_string(),
-        ],
+        params: vec!["parent".to_string(), "inherited".to_string()],
         args: vec![],
         body,
     })

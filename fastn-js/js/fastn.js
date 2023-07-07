@@ -260,6 +260,9 @@ class RecordInstance {
             }
         }
     }
+    getAllFields() {
+        return this.#fields;
+    }
     get(key) {
         return this.#fields[key];
     }

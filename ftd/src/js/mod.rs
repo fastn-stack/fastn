@@ -144,7 +144,7 @@ pub fn from_tree(
         statements
             .extend(component.to_component_statements("parent", index, doc, &None, &None, false))
     }
-    fastn_js::component0("main", statements)
+    fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
 impl ftd::interpreter::Component {

@@ -278,29 +278,69 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
 
 impl fastn_js::Component {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        let body = text("let")
-            .append(space())
-            .append(text(fastn_js::LOCAL_VARIABLE_MAP))
-            .append(space())
-            .append(text("="))
-            .append(space())
-            .append(text("{"))
-            .append(pretty::RcDoc::intersperse(
-                self.args
-                    .iter()
-                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
-                pretty::RcDoc::softline(),
-            ))
-            .append(text("...args"))
-            .append(pretty::RcDoc::softline())
-            .append(text("};"))
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.body.iter().map(|f| f.to_js()),
+        let body = if self.name.eq(fastn_js::MAIN_FUNCTION) {
+            pretty::RcDoc::nil()
+        } else {
+            text("let")
+                .append(space())
+                .append(text(fastn_js::LOCAL_VARIABLE_MAP))
+                .append(space())
+                .append(text("="))
+                .append(space())
+                .append(text("{"))
+                .append(pretty::RcDoc::intersperse(
+                    self.args
+                        .iter()
+                        .map(|(k, v)| format!("{k}: {},", v.to_js())),
                     pretty::RcDoc::softline(),
+                ))
+                .append(text("};"))
+                .append(
+                    text(fastn_js::INHERITED_VARIABLE)
+                        .append(space())
+                        .append(text("="))
+                        .append(space())
+                        .append(text("fastn.recordInstance({"))
+                        .append(text(
+                            format!("...{}", fastn_js::LOCAL_VARIABLE_MAP).as_str(),
+                        ))
+                        .append(comma())
+                        .append(space())
+                        .append(text(
+                            format!(
+                                "...({}?.getAllFields ? {}.getAllFields(): {{}})",
+                                fastn_js::INHERITED_VARIABLE,
+                                fastn_js::INHERITED_VARIABLE
+                            )
+                            .as_str(),
+                        ))
+                        .append(comma())
+                        .append(space())
+                        .append(text("...args"))
+                        .append(text("});"))
+                        .append(pretty::RcDoc::softline())
+                        .append(text(fastn_js::LOCAL_VARIABLE_MAP))
+                        .append(space())
+                        .append(text("="))
+                        .append(space())
+                        .append(text("{"))
+                        .append(text(
+                            format!("...{}", fastn_js::LOCAL_VARIABLE_MAP).as_str(),
+                        ))
+                        .append(comma())
+                        .append(space())
+                        .append(text("...args"))
+                        .append(text("};"))
+                        .append(pretty::RcDoc::softline()),
                 )
-                .group(),
-            );
+        }
+        .append(
+            pretty::RcDoc::intersperse(
+                self.body.iter().map(|f| f.to_js()),
+                pretty::RcDoc::softline(),
+            )
+            .group(),
+        );
 
         func(self.name.as_str(), &self.params, body)
     }
