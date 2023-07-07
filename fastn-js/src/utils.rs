@@ -22,7 +22,11 @@ pub fn reference_to_js(s: &str) -> String {
     p1 = fastn_js::utils::name_to_js(p1.as_str());
     while let Some(remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
-        p1 = format!("{}.get(\"{}\")", p1, p21);
+        p1 = format!(
+            "{}.get(\"{}\")",
+            p1,
+            fastn_js::utils::name_to_js(p21.as_str())
+        );
         p2 = p22;
     }
     format!(
