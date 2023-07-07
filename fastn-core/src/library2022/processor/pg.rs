@@ -65,7 +65,7 @@ fn resolve_variable_from_doc(
     line_number: usize,
 ) -> ftd::interpreter::Result<Box<PGData>> {
     let thing = match doc.get_thing(var, line_number) {
-        Ok(ftd::interpreter::Thing::Variable(v)) => v.value.clone().resolve(doc, line_number)?,
+        Ok(ftd::interpreter::Thing::Variable(v)) => v.value.resolve(doc, line_number)?,
         Ok(v) => {
             return ftd::interpreter::utils::e2(
                 format!("{var} is not a variable, it's a {v:?}"),
