@@ -1,0 +1,84 @@
+-- ftd.column:
+width: fill-container
+background.solid: pink
+background.solid if { value % 3 == 0 }: $bg-og
+background.solid if { value % 3 == 1 }: $bg-bp
+
+-- ftd.text:
+color: red
+color if { value % 3 == 0 }: $og
+color if { value % 3 == 1 }: $bp
+$on-click$: $increment($a = $value)
+padding.px: 40
+role: $rtype
+
+
+
+Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
+qui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto
+delectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi
+aut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.
+
+Ut esse consequatur ex molestiae consequatur sed nobis consequuntur ut
+temporibus eveniet ut aperiam esse a rerum libero. Et perferendis voluptas eos
+culpa odit et architecto officiis aut eveniet commodi. Eos quia quia qui nulla
+error et quaerat dolor vel odit reprehenderit ut nemo numquam non molestias
+illum aut nobis omnis. Qui galisum commodi At internos dolorum sed repudiandae
+quisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.
+
+A repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur
+quo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est
+consectetur voluptatum et Quis inventore ab dignissimos amet?
+
+
+-- end: ftd.column
+
+
+
+
+
+
+
+-- ftd.color og:
+light: orange
+dark: green
+
+-- ftd.color bg-og:
+light: #170d03
+dark: #edfce8
+
+-- ftd.color bp:
+light: blue
+dark: purple
+
+-- ftd.color bg-bp:
+light: #e8eafc
+dark: #f4e8fc
+
+-- integer $value: 0
+
+-- ftd.type dtype:
+size.px: 36
+weight: 700
+font-family: cursive
+line-height.px: 40
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
+
+
+
+
+-- void increment(a):
+integer $a:
+
+a = a + 1;

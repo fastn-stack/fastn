@@ -20,7 +20,9 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         .collect_vec();
 
     for (key, thing) in document.data.iter() {
-        if default_thing_name.contains(key) {
+        if default_thing_name.contains(key)
+            && !["ftd#default-types", "ftd#default-colors"].contains(&key.as_str())
+        {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
@@ -31,6 +33,26 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
             asts.push(f.to_ast());
         }
     }
+    asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+        name: "inherited".to_string(),
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+            fields: vec![
+                (
+                    "colors".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        ftd::js::utils::update_reference_with_none("ftd#default-colors"),
+                    ),
+                ),
+                (
+                    "types".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        ftd::js::utils::update_reference_with_none("ftd#default-types"),
+                    ),
+                ),
+            ],
+        }),
+        prefix: None,
+    }));
     asts
 }
 
@@ -79,23 +101,27 @@ impl ftd::interpreter::Variable {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
                     fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record { fields }),
+                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
                 });
             } else if self.kind.is_list() {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
                     value: self.value.to_fastn_js_value_with_none(),
+                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
                     value: self.value.to_fastn_js_value_with_none(),
+                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
             value: self.value.to_fastn_js_value_with_none(),
+            prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
         })
     }
 }
@@ -144,7 +170,7 @@ pub fn from_tree(
         statements
             .extend(component.to_component_statements("parent", index, doc, &None, &None, false))
     }
-    fastn_js::component0("main", statements)
+    fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
 impl ftd::interpreter::Component {

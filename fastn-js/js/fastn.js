@@ -252,13 +252,17 @@ class RecordInstance {
         this.#fields = {};
 
         for (let key in obj) {
-            if (obj[key] instanceof fastn.mutableClass) {
+            this.#fields[key] = fastn.wrapMutable(obj[key]);
+            /*if (obj[key] instanceof fastn.mutableClass) {
                 this.#fields[key] = fastn.mutable(null)
                 this.#fields[key].setWithoutUpdate(obj[key]);
             } else {
                 this.#fields[key] = fastn.mutable(obj[key]);
-            }
+            }*/
         }
+    }
+    getAllFields() {
+        return this.#fields;
     }
     get(key) {
         return this.#fields[key];

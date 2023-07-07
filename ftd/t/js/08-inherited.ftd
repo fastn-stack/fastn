@@ -1,7 +1,13 @@
+-- foo:
+
+-- ftd.text: ftd.text says Hello
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.base
+
 -- ftd.column:
 colors: $colors
 width: fill-container
-height.fixed.px: 1000
+height.fixed.px: 200
 
 -- ftd.column:
 width: fill-container
@@ -11,8 +17,22 @@ background.solid: $inherited.colors.background.step-1
 -- ftd.text: Hello
 color: $inherited.colors.text
 
+-- foo:
+
 -- end: ftd.column
 -- end: ftd.column
+
+
+
+
+
+-- component foo:
+
+-- ftd.text: Hello from foo
+color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.base
+
+-- end: foo
 
 
 

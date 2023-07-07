@@ -188,6 +188,7 @@ impl Container {
                 value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields: inherited_fields,
                 }),
+                prefix: None,
             })
         } else {
             None

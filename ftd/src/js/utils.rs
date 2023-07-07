@@ -5,6 +5,10 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub(crate) fn update_reference_with_none(reference: &str) -> String {
+    update_reference(reference, &None, &None, &None)
+}
+
 pub(crate) fn update_reference(
     reference: &str,
     component_definition_name: &Option<String>,
@@ -31,6 +35,10 @@ pub(crate) fn update_reference(
         if let Some(remaining) = name.strip_prefix("inherited.") {
             return format!("{inherited_variable_name}.{remaining}");
         }
+    }
+
+    if name.starts_with("inherited.") {
+        return name;
     }
 
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
