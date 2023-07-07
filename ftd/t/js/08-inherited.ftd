@@ -3,10 +3,18 @@ colors: $colors
 width: fill-container
 height.fixed.px: 1000
 
+-- ftd.column:
+width: fill-container
+height: fill-container
+background.solid: $inherited.colors.background.step-1
+
 -- ftd.text: Hello
 color: $inherited.colors.text
 
 -- end: ftd.column
+-- end: ftd.column
+
+
 
 
 -- ftd.color base-:
