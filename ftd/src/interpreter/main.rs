@@ -243,8 +243,11 @@ impl InterpreterState {
                                     let js = js
                                         .to_owned()
                                         .resolve(&doc, function.line_number)?
-                                        .string(doc.name, function.line_number)?;
-                                    self.js.insert(js);
+                                        .string_list(&doc, function.line_number)?;
+
+                                    for js in js.iter() {
+                                        self.js.insert(js.to_string());
+                                    }
                                 }
                                 ftd::interpreter::utils::insert_export_thing(
                                     exports.as_slice(),
