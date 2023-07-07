@@ -54,49 +54,84 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="c-1 bgc-2">Hello from foo</div><div data-id="3" class="c-1 bgc-2">ftd.text says Hello</div><div data-id="4" class="ft_column w-3 h-4"><div data-id="5" class="ft_column w-3 h-5 bgc-6"><div data-id="6" class="c-7">Hello</div><div data-id="7" class="c-8 bgc-9">Hello from foo</div></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 bgc-2"><div data-id="3" class="p-3 c-4 role-5">Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia
+qui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto
+delectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi
+aut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.
+
+Ut esse consequatur ex molestiae consequatur sed nobis consequuntur ut
+temporibus eveniet ut aperiam esse a rerum libero. Et perferendis voluptas eos
+culpa odit et architecto officiis aut eveniet commodi. Eos quia quia qui nulla
+error et quaerat dolor vel odit reprehenderit ut nemo numquam non molestias
+illum aut nobis omnis. Qui galisum commodi At internos dolorum sed repudiandae
+quisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.
+
+A repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur
+quo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est
+consectetur voluptatum et Quis inventore ab dignissimos amet?</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.c-1 { color: #141414; }
-	body.dark .c-1 { color: #ffffff; }
-	.bgc-2 { background-color: #e7e7e4; }
-	body.dark .bgc-2 { background-color: #18181b; }
-	.w-3 { width: 100%; }
-	.h-4 { height: 200px; }
-	.h-5 { height: 100%; }
-	.bgc-6 { background-color: #FDFAF1; }
-	body.dark .bgc-6 { background-color: #111111; }
-	.c-7 { color: #707070; }
-	body.dark .c-7 { color: #D9D9D9; }
-	.c-8 { color: #333333; }
-	body.dark .c-8 { color: #FFFFFF; }
-	.bgc-9 { background-color: #FFFFFF; }
-	body.dark .bgc-9 { background-color: #000000; }
+	.w-1 { width: 100%; }
+	.bgc-2 { background-color: #170d03; }
+	body.dark .bgc-2 { background-color: #edfce8; }
+	.p-3 { padding: 40px; }
+	.c-4 { color: orange; }
+	body.dark .c-4 { color: green; }
+	.role-5 {  font-family: cursive; letter-spacing: 5px; font-size: 36px; font-weight: 700; line-height: 40px; }
+	body.mobile .role-5 {  font-family: fantasy; letter-spacing: 3px; font-size: 20px; font-weight: 100; line-height: 35px; }
     </style>
 <script>
     (function() {
         let global = {
 };
 function main(parent) {
-  foo__foo(parent, inherited);
-  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "ftd.text says Hello");
-  parenti1.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"));
-  parenti1.setProperty(fastn_dom.PropertyKind.Background, inherited.get("colors").get("background").get("base"));
-  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti2.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(200)));
-  let __$$inherited$$__parenti2 = fastn.recordInstance({
-    colors: global.foo__colors
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
+  parenti0.setProperty(fastn_dom.PropertyKind.Background, fastn.formula([global.foo__value,
+  global.foo__value], function () {
+    if (function () {
+      return (fastn_utils.getter(global.foo__value) % 3 == 0);
+    }()) {
+      return fastn_dom.BackgroundStyle.Solid(global.foo__bg_og);
+    } else if (function () {
+      return (fastn_utils.getter(global.foo__value) % 3 == 1);
+    }()) {
+      return fastn_dom.BackgroundStyle.Solid(global.foo__bg_bp);
+    } else {
+      return fastn_dom.BackgroundStyle.Solid(fastn.recordInstance({
+        dark: "pink",
+        light: "pink"
+      }));
+    }
+  }
+  ));
+  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia\nqui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto\ndelectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi\naut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.\n\nUt esse consequatur ex molestiae consequatur sed nobis consequuntur ut\ntemporibus eveniet ut aperiam esse a rerum libero. Et perferendis voluptas eos\nculpa odit et architecto officiis aut eveniet commodi. Eos quia quia qui nulla\nerror et quaerat dolor vel odit reprehenderit ut nemo numquam non molestias\nillum aut nobis omnis. Qui galisum commodi At internos dolorum sed repudiandae\nquisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.\n\nA repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur\nquo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est\nconsectetur voluptatum et Quis inventore ab dignissimos amet?");
+  parenti0i0.addEventHandler(fastn_dom.Event.Click, function () {
+    foo__increment(global.foo__value);
   });
-  let parenti2i0 = fastn_dom.createKernel(parenti2, fastn_dom.ElementKind.Column);
-  parenti2i0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer);
-  parenti2i0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer);
-  parenti2i0.setProperty(fastn_dom.PropertyKind.Background, __$$inherited$$__parenti2.get("colors").get("background").get("step_1"));
-  let parenti2i0i0 = fastn_dom.createKernel(parenti2i0, fastn_dom.ElementKind.Text);
-  parenti2i0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
-  parenti2i0i0.setProperty(fastn_dom.PropertyKind.Color, __$$inherited$$__parenti2.get("colors").get("text"));
-  foo__foo(parenti2i0, __$$inherited$$__parenti2);
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(40));
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
+  global.foo__value,
+  global.foo__bp,
+  global.foo__value], function () {
+    if (function () {
+      return (fastn_utils.getter(global.foo__value) % 3 == 0);
+    }()) {
+      return global.foo__og;
+    } else if (function () {
+      return (fastn_utils.getter(global.foo__value) % 3 == 1);
+    }()) {
+      return global.foo__bp;
+    } else {
+      return fastn.recordInstance({
+        dark: "red",
+        light: "red"
+      });
+    }
+  }
+  ));
+  parenti0i0.setProperty(fastn_dom.PropertyKind.Role, global.foo__rtype);
 }
 global.ftd__default_types = fastn.recordInstance({
   heading_large: fastn.recordInstance({
@@ -650,419 +685,47 @@ global.ftd__default_colors = fastn.recordInstance({
     })
   })
 });
-function foo__foo(parent, inherited, args)
+global.foo__bg_og = fastn.recordInstance({
+  light: "#170d03",
+  dark: "#edfce8"
+});
+global.foo__value = fastn.mutable(0);
+function foo__increment(a)
 {
-  let __args__ = {
+  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
+  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
+    a = fastn_utils_val_a;
   };
-  inherited = fastn.recordInstance({
-    ...__args__,
-    ...inherited.getAllFields(),
-    ...args
-  });
-  __args__ = {
-    ...__args__,
-    ...args
-  };
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from foo");
-  parenti0.setProperty(fastn_dom.PropertyKind.Color, inherited.get("colors").get("text_strong"));
-  parenti0.setProperty(fastn_dom.PropertyKind.Background, inherited.get("colors").get("background").get("base"));
-  return parenti0;
 }
-global.foo__base_ = fastn.recordInstance({
-  light: "#FFFFFF",
-  dark: "#000000"
-});
-global.foo__step_1_ = fastn.recordInstance({
-  light: "#FDFAF1",
-  dark: "#111111"
-});
-global.foo__step_2_ = fastn.recordInstance({
-  light: "#fbf3dc",
-  dark: "#2b2b2b"
-});
-global.foo__overlay_ = fastn.recordInstance({
-  light: "#000000",
-  dark: "#000000"
-});
-global.foo__code_ = fastn.recordInstance({
-  light: "#f5f5f5",
-  dark: "#21222c"
-});
-global.foo__background_ = fastn.recordInstance({
-  base: global.foo__base_,
-  step_1: global.foo__step_1_,
-  step_2: global.foo__step_2_,
-  overlay: global.foo__overlay_,
-  code: global.foo__code_
-});
-global.foo__border_ = fastn.recordInstance({
-  light: "#f0ece2",
-  dark: "#434547"
-});
-global.foo__border_strong_ = fastn.recordInstance({
-  light: "#D9D9D9",
-  dark: "#333333"
-});
-global.foo__text_ = fastn.recordInstance({
-  light: "#707070",
-  dark: "#D9D9D9"
-});
-global.foo__text_strong_ = fastn.recordInstance({
-  light: "#333333",
-  dark: "#FFFFFF"
-});
-global.foo__shadow_ = fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-});
-global.foo__scrim_ = fastn.recordInstance({
-  light: "#393939",
-  dark: "#393939"
-});
-global.foo__cta_primary_base_ = fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-});
-global.foo__cta_primary_hover_ = fastn.recordInstance({
-  light: "#D77730",
-  dark: "#D77730"
-});
-global.foo__cta_primary_pressed_ = fastn.recordInstance({
-  light: "#BF6A2A",
-  dark: "#BF6A2A"
-});
-global.foo__cta_primary_disabled_ = fastn.recordInstance({
-  light: "#FAD9C0",
-  dark: "#FAD9C0"
-});
-global.foo__cta_primary_focused_ = fastn.recordInstance({
-  light: "#B36328",
-  dark: "#B36328"
-});
-global.foo__cta_primary_border_ = fastn.recordInstance({
-  light: "#F3A063",
-  dark: "#F3A063"
-});
-global.foo__cta_primary_text_ = fastn.recordInstance({
-  light: "#512403",
-  dark: "#512403"
-});
-global.foo__cta_primary_text_disabled_ = fastn.recordInstance({
-  light: "#f2a164",
-  dark: "#f2a164"
-});
-global.foo__cta_primary_border_disabled_ = fastn.recordInstance({
-  light: "#fad9c0",
-  dark: "#fad9c0"
-});
-global.foo__cta_primary_ = fastn.recordInstance({
-  base: global.foo__cta_primary_base_,
-  hover: global.foo__cta_primary_hover_,
-  pressed: global.foo__cta_primary_pressed_,
-  disabled: global.foo__cta_primary_disabled_,
-  focused: global.foo__cta_primary_focused_,
-  border: global.foo__cta_primary_border_,
-  border_disabled: global.foo__cta_primary_border_disabled_,
-  text: global.foo__cta_primary_text_,
-  text_disabled: global.foo__cta_primary_text_disabled_
-});
-global.foo__cta_secondary_base_ = fastn.recordInstance({
-  light: "#EBE8E5",
-  dark: "#EBE8E5"
-});
-global.foo__cta_secondary_hover_ = fastn.recordInstance({
-  light: "#D4D1CE",
-  dark: "#D4D1CE"
-});
-global.foo__cta_secondary_pressed_ = fastn.recordInstance({
-  light: "#BCBAB7",
-  dark: "#BCBAB7"
-});
-global.foo__cta_secondary_disabled_ = fastn.recordInstance({
-  light: "#F9F8F7",
-  dark: "#F9F8F7"
-});
-global.foo__cta_secondary_focused_ = fastn.recordInstance({
-  light: "#B0AEAC",
-  dark: "#B0AEAC"
-});
-global.foo__cta_secondary_border_ = fastn.recordInstance({
-  light: "#B0AEAC",
-  dark: "#B0AEAC"
-});
-global.foo__cta_secondary_text_ = fastn.recordInstance({
-  light: "#333333",
-  dark: "#333333"
-});
-global.foo__cta_secondary_text_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-});
-global.foo__cta_secondary_border_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-});
-global.foo__cta_secondary_ = fastn.recordInstance({
-  base: global.foo__cta_secondary_base_,
-  hover: global.foo__cta_secondary_hover_,
-  pressed: global.foo__cta_secondary_pressed_,
-  disabled: global.foo__cta_secondary_disabled_,
-  focused: global.foo__cta_secondary_focused_,
-  border: global.foo__cta_secondary_border_,
-  border_disabled: global.foo__cta_secondary_border_disabled_,
-  text: global.foo__cta_secondary_text_,
-  text_disabled: global.foo__cta_secondary_text_disabled_
-});
-global.foo__cta_tertiary_base_ = fastn.recordInstance({
-  light: "#4A6490",
-  dark: "#4A6490"
-});
-global.foo__cta_tertiary_hover_ = fastn.recordInstance({
-  light: "#3d5276",
-  dark: "#3d5276"
-});
-global.foo__cta_tertiary_pressed_ = fastn.recordInstance({
-  light: "#2b3a54",
-  dark: "#2b3a54"
-});
-global.foo__cta_tertiary_disabled_ = fastn.recordInstance({
-  light: "rgba(74, 100, 144, 0.4)",
-  dark: "rgba(74, 100, 144, 0.4)"
-});
-global.foo__cta_tertiary_focused_ = fastn.recordInstance({
-  light: "#6882b1",
-  dark: "#6882b1"
-});
-global.foo__cta_tertiary_border_ = fastn.recordInstance({
-  light: "#4e6997",
-  dark: "#4e6997"
-});
-global.foo__cta_tertiary_text_ = fastn.recordInstance({
-  light: "#ffffff",
-  dark: "#ffffff"
-});
-global.foo__cta_tertiary_text_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-});
-global.foo__cta_tertiary_border_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-});
-global.foo__cta_tertiary_ = fastn.recordInstance({
-  base: global.foo__cta_tertiary_base_,
-  hover: global.foo__cta_tertiary_hover_,
-  pressed: global.foo__cta_tertiary_pressed_,
-  disabled: global.foo__cta_tertiary_disabled_,
-  focused: global.foo__cta_tertiary_focused_,
-  border: global.foo__cta_tertiary_border_,
-  border_disabled: global.foo__cta_tertiary_border_disabled_,
-  text: global.foo__cta_tertiary_text_,
-  text_disabled: global.foo__cta_tertiary_text_disabled_
-});
-global.foo__cta_danger_base_ = fastn.recordInstance({
-  light: "#F9E4E1",
-  dark: "#F9E4E1"
-});
-global.foo__cta_danger_hover_ = fastn.recordInstance({
-  light: "#F1BDB6",
-  dark: "#F1BDB6"
-});
-global.foo__cta_danger_pressed_ = fastn.recordInstance({
-  light: "#D46A63",
-  dark: "#D46A63"
-});
-global.foo__cta_danger_disabled_ = fastn.recordInstance({
-  light: "#FAECEB",
-  dark: "#FAECEB"
-});
-global.foo__cta_danger_focused_ = fastn.recordInstance({
-  light: "#D97973",
-  dark: "#D97973"
-});
-global.foo__cta_danger_border_ = fastn.recordInstance({
-  light: "#E9968C",
-  dark: "#E9968C"
-});
-global.foo__cta_danger_text_ = fastn.recordInstance({
-  light: "#D84836",
-  dark: "#D84836"
-});
-global.foo__cta_danger_text_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#fff"
-});
-global.foo__cta_danger_border_disabled_ = fastn.recordInstance({
-  light: "#304655",
-  dark: "#f1dac0"
-});
-global.foo__cta_danger_ = fastn.recordInstance({
-  base: global.foo__cta_danger_base_,
-  hover: global.foo__cta_danger_hover_,
-  pressed: global.foo__cta_danger_pressed_,
-  disabled: global.foo__cta_danger_disabled_,
-  focused: global.foo__cta_danger_focused_,
-  border: global.foo__cta_danger_border_,
-  border_disabled: global.foo__cta_danger_border_disabled_,
-  text: global.foo__cta_danger_text_,
-  text_disabled: global.foo__cta_danger_text_disabled_
-});
-global.foo__accent_primary_ = fastn.recordInstance({
-  light: "#EF8435",
-  dark: "#EF8435"
-});
-global.foo__accent_secondary_ = fastn.recordInstance({
-  light: "#EBE8E5",
-  dark: "#EBE8E5"
-});
-global.foo__accent_tertiary_ = fastn.recordInstance({
-  light: "#c5cbd7",
-  dark: "#c5cbd7"
-});
-global.foo__accent_ = fastn.recordInstance({
-  primary: global.foo__accent_primary_,
-  secondary: global.foo__accent_secondary_,
-  tertiary: global.foo__accent_tertiary_
-});
-global.foo__error_base_ = fastn.recordInstance({
-  light: "#F9E4E1",
-  dark: "#4f2a25c9"
-});
-global.foo__error_text_ = fastn.recordInstance({
-  light: "#D84836",
-  dark: "#D84836"
-});
-global.foo__error_border_ = fastn.recordInstance({
-  light: "#E9968C",
-  dark: "#E9968C"
-});
-global.foo__error_btb_ = fastn.recordInstance({
-  base: global.foo__error_base_,
-  text: global.foo__error_text_,
-  border: global.foo__error_border_
-});
-global.foo__success_base_ = fastn.recordInstance({
-  light: "#DCEFE4",
-  dark: "#033a1bb8"
-});
-global.foo__success_text_ = fastn.recordInstance({
-  light: "#3E8D61",
-  dark: "#159f52"
-});
-global.foo__success_border_ = fastn.recordInstance({
-  light: "#95D0AF",
-  dark: "#95D0AF"
-});
-global.foo__success_btb_ = fastn.recordInstance({
-  base: global.foo__success_base_,
-  text: global.foo__success_text_,
-  border: global.foo__success_border_
-});
-global.foo__info_base_ = fastn.recordInstance({
-  light: "#DAE7FB",
-  dark: "#233a5dc7"
-});
-global.foo__info_text_ = fastn.recordInstance({
-  light: "#5290EC",
-  dark: "#5290EC"
-});
-global.foo__info_border_ = fastn.recordInstance({
-  light: "#7EACF1",
-  dark: "#7EACF1"
-});
-global.foo__info_btb_ = fastn.recordInstance({
-  base: global.foo__info_base_,
-  text: global.foo__info_text_,
-  border: global.foo__info_border_
-});
-global.foo__warning_base_ = fastn.recordInstance({
-  light: "#FDF7F1",
-  dark: "#3b2c1ee6"
-});
-global.foo__warning_text_ = fastn.recordInstance({
-  light: "#E78B3E",
-  dark: "#E78B3E"
-});
-global.foo__warning_border_ = fastn.recordInstance({
-  light: "#F2C097",
-  dark: "#F2C097"
-});
-global.foo__warning_btb_ = fastn.recordInstance({
-  base: global.foo__warning_base_,
-  text: global.foo__warning_text_,
-  border: global.foo__warning_border_
-});
-global.foo__custom_one_ = fastn.recordInstance({
-  light: "#4AA35C",
-  dark: "#4AA35C"
-});
-global.foo__custom_two_ = fastn.recordInstance({
-  light: "#5C2860",
-  dark: "#5C2860"
-});
-global.foo__custom_three_ = fastn.recordInstance({
-  light: "#EBBE52",
-  dark: "#EBBE52"
-});
-global.foo__custom_four_ = fastn.recordInstance({
-  light: "#FDFAF1",
-  dark: "#111111"
-});
-global.foo__custom_five_ = fastn.recordInstance({
-  light: "#FBF5E2",
-  dark: "#222222"
-});
-global.foo__custom_six_ = fastn.recordInstance({
-  light: "#ef8dd6",
-  dark: "#ef8dd6"
-});
-global.foo__custom_seven_ = fastn.recordInstance({
-  light: "#7564be",
-  dark: "#7564be"
-});
-global.foo__custom_eight_ = fastn.recordInstance({
-  light: "#d554b3",
-  dark: "#d554b3"
-});
-global.foo__custom_nine_ = fastn.recordInstance({
-  light: "#ec8943",
-  dark: "#ec8943"
-});
-global.foo__custom_ten_ = fastn.recordInstance({
-  light: "#da7a4a",
-  dark: "#da7a4a"
-});
-global.foo__custom_ = fastn.recordInstance({
-  one: global.foo__custom_one_,
-  two: global.foo__custom_two_,
-  three: global.foo__custom_three_,
-  four: global.foo__custom_four_,
-  five: global.foo__custom_five_,
-  six: global.foo__custom_six_,
-  seven: global.foo__custom_seven_,
-  eight: global.foo__custom_eight_,
-  nine: global.foo__custom_nine_,
-  ten: global.foo__custom_ten_
-});
-global.foo__colors = fastn.recordInstance({
-  background: global.foo__background_,
-  border: global.foo__border_,
-  border_strong: global.foo__border_strong_,
-  text: global.foo__text_,
-  text_strong: global.foo__text_strong_,
-  shadow: global.foo__shadow_,
-  scrim: global.foo__scrim_,
-  cta_primary: global.foo__cta_primary_,
-  cta_secondary: global.foo__cta_secondary_,
-  cta_tertiary: global.foo__cta_tertiary_,
-  cta_danger: global.foo__cta_danger_,
-  accent: global.foo__accent_,
-  error: global.foo__error_btb_,
-  success: global.foo__success_btb_,
-  info: global.foo__info_btb_,
-  warning: global.foo__warning_btb_,
-  custom: global.foo__custom_
+global.foo__og = fastn.recordInstance({
+  light: "orange",
+  dark: "green"
+});
+global.foo__bp = fastn.recordInstance({
+  light: "blue",
+  dark: "purple"
+});
+global.foo__dtype = fastn.recordInstance({
+  size: fastn_dom.FontSize.Px(36),
+  line_height: fastn_dom.FontSize.Px(40),
+  letter_spacing: fastn_dom.FontSize.Px(5),
+  weight: 700,
+  font_family: "cursive"
+});
+global.foo__mtype = fastn.recordInstance({
+  size: fastn_dom.FontSize.Px(20),
+  line_height: fastn_dom.FontSize.Px(35),
+  letter_spacing: fastn_dom.FontSize.Px(3),
+  weight: 100,
+  font_family: "fantasy"
+});
+global.foo__rtype = fastn.recordInstance({
+  desktop: global.foo__dtype,
+  mobile: global.foo__mtype
+});
+global.foo__bg_bp = fastn.recordInstance({
+  light: "#e8eafc",
+  dark: "#f4e8fc"
 });
 let inherited = fastn.recordInstance({
   colors: global.ftd__default_colors,

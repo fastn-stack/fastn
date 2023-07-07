@@ -28,8 +28,9 @@ color: $inherited.colors.text
 
 -- component foo:
 
--- ftd.text: Hello
+-- ftd.text: Hello from foo
 color: $inherited.colors.text-strong
+background.solid: $inherited.colors.background.base
 
 -- end: foo
 
