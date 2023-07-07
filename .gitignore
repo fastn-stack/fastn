@@ -18,3 +18,5 @@ fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
 
 
 docs
+.env
+.env.swp
