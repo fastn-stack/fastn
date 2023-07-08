@@ -42,7 +42,7 @@ pub async fn process(
         execute_query(query.as_str(), doc, value.line_number(), headers).await?,
         kind,
         doc,
-        value.line_number(),
+        &value,
     )
 }
 

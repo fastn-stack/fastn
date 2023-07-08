@@ -64,5 +64,5 @@ pub async fn process(
     )
     .await
     .unwrap();
-    doc.from_json(&tree, &kind, value.line_number())
+    doc.from_json(&tree, &kind, &value)
 }

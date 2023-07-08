@@ -29,7 +29,7 @@ pub fn process_readers(
         None => vec![],
     };
 
-    doc.from_json(dbg!(&readers), &kind, value.line_number())
+    doc.from_json(dbg!(&readers), &kind, &value)
 }
 
 pub fn process_writers(
@@ -62,7 +62,7 @@ pub fn process_writers(
         None => vec![],
     };
 
-    doc.from_json(&writers, &kind, value.line_number())
+    doc.from_json(&writers, &kind, &value)
 }
 
 pub fn document_id(

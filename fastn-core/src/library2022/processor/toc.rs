@@ -23,5 +23,5 @@ pub fn process(
     .iter()
     .map(|item| item.to_toc_item_compat())
     .collect::<Vec<fastn_core::library::toc::TocItemCompat>>();
-    doc.from_json(&toc_items, &kind, line_number)
+    doc.from_json(&toc_items, &kind, &value)
 }

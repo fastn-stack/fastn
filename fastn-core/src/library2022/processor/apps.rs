@@ -27,5 +27,5 @@ pub fn process(
         .collect_vec();
 
     let installed_apps = fastn_core::ds::LengthList::from_owned(apps);
-    doc.from_json(&installed_apps, &kind, value.line_number())
+    doc.from_json(&installed_apps, &kind, &value)
 }

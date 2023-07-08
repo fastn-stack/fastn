@@ -45,5 +45,5 @@ pub fn process(
         }
     }
 
-    doc.from_json(&data, &kind, value.line_number())
+    doc.from_json(&data, &kind, &value)
 }

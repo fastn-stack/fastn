@@ -12,7 +12,7 @@ pub fn process_typography_tokens(
     let mut mobile_types: ftd::Map<TypeData> = ftd::Map::new();
 
     extract_types(
-        value,
+        &value,
         doc,
         &mut variable_name,
         &mut desktop_types,
@@ -39,11 +39,11 @@ pub fn process_typography_tokens(
     );
 
     let response_json: serde_json::Value = serde_json::Value::String(full_typography);
-    doc.from_json(&response_json, &kind, line_number)
+    doc.from_json(&response_json, &kind, &value)
 }
 
 fn extract_types(
-    value: ftd::ast::VariableValue,
+    value: &ftd::ast::VariableValue,
     doc: &mut ftd::interpreter::TDoc,
     variable_name: &mut Option<String>,
     desktop_types: &mut ftd::Map<TypeData>,
