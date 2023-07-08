@@ -1850,6 +1850,7 @@ impl<'a> TDoc<'a> {
         kind: &ftd::interpreter::Kind,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         let line_number = value.line_number();
+        dbg!(value, json, kind);
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
@@ -1865,7 +1866,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {}", json),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1873,14 +1874,28 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {}", json),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
                     }
+                    serde_json::Value::Object(o) => {
+                        if let ftd::ast::VariableValue::Record { name, .. } = value {
+                            if let Some(v) = o.get(name) {
+                                return self.as_json_(value, v, kind);
+                            } else if let Some(v) = value.caption() {
+                                return self.as_json_(value, &serde_json::Value::String(v), kind);
+                            }
+                        }
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to integer, found: {json}"),
+                            self.name,
+                            line_number,
+                        );
+                    }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to integer, found: {}", json),
+                            format!("Can't parse to integer, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1892,7 +1907,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to integer, found: {}", json),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1900,7 +1915,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<f64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to decimal, found: {}", json),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
