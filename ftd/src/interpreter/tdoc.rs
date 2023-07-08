@@ -1741,7 +1741,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn from_json_rows(
+    pub fn rows_to_value(
         &self,
         rows: &[Vec<serde_json::Value>],
         kind: &ftd::interpreter::Kind,
@@ -1752,7 +1752,7 @@ impl<'a> TDoc<'a> {
                 let mut data = vec![];
                 for row in rows {
                     data.push(
-                        self.from_json_row(row, kind, value)?
+                        self.row_to_value(row, kind, value)?
                             .into_property_value(false, value.line_number()),
                     );
                 }
@@ -1771,7 +1771,7 @@ impl<'a> TDoc<'a> {
         })
     }
 
-    fn from_json_row_record(
+    fn row_to_record(
         &self,
         row: &[serde_json::Value],
         name: &str,
@@ -1804,14 +1804,14 @@ impl<'a> TDoc<'a> {
         })
     }
 
-    pub fn from_json_row(
+    pub fn row_to_value(
         &self,
         row: &[serde_json::Value],
         kind: &ftd::interpreter::Kind,
         value: &ftd::ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         if let ftd::interpreter::Kind::Record { name } = kind {
-            return self.from_json_row_record(row, name, value);
+            return self.row_to_record(row, name, value);
         }
 
         if row.len() != 1 {
@@ -1822,7 +1822,7 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        self.as_json_(value.line_number(), &row[0], kind)
+        self.as_json_(value, &row[0], kind)
     }
 
     pub fn from_json<T>(
@@ -1840,15 +1840,16 @@ impl<'a> TDoc<'a> {
             line_number: value.line_number(),
         })?;
 
-        self.as_json_(value.line_number(), &json, kind)
+        self.as_json_(value, &json, kind)
     }
 
     fn as_json_(
         &self,
-        line_number: usize,
+        value: &ftd::ast::VariableValue,
         json: &serde_json::Value,
         kind: &ftd::interpreter::Kind,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+        let line_number = value.line_number();
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
@@ -1953,7 +1954,7 @@ impl<'a> TDoc<'a> {
                         fields.insert(
                             field.name,
                             ftd::interpreter::PropertyValue::Value {
-                                value: self.as_json_(line_number, &val, &field.kind.kind)?,
+                                value: self.as_json_(value, &val, &field.kind.kind)?,
                                 is_mutable: false,
                                 line_number,
                             },
@@ -1995,7 +1996,7 @@ impl<'a> TDoc<'a> {
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
                         data.push(ftd::interpreter::PropertyValue::Value {
-                            value: self.as_json_(line_number, item, kind)?,
+                            value: self.as_json_(value, item, kind)?,
                             is_mutable: false,
                             line_number,
                         });
@@ -2019,7 +2020,7 @@ impl<'a> TDoc<'a> {
                         kind: kind.clone().into_kind_data(),
                         data: Box::new(None),
                     },
-                    _ => self.as_json_(line_number, json, kind)?,
+                    _ => self.as_json_(value, json, kind)?,
                 }
             }
             t => unimplemented!(
