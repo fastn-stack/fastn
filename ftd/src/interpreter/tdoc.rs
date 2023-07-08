@@ -1874,13 +1874,17 @@ impl<'a> TDoc<'a> {
         dbg!(value, json, kind);
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
-                text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
-                    ftd::interpreter::Error::ParseError {
-                        message: format!("Can't parse to string, found: {}", json),
-                        doc_id: self.name.to_string(),
-                        line_number,
+                text: match json {
+                    serde_json::Value::String(v) => v.to_string(),
+                    serde_json::Value::Object(o) => return self.handle_object(o, value, kind),
+                    _ => {
+                        return ftd::interpreter::utils::e2(
+                            format!("Can't parse to string, found: {json}"),
+                            self.name,
+                            line_number,
+                        )
                     }
-                })?,
+                },
             },
             ftd::interpreter::Kind::Integer { .. } => ftd::interpreter::Value::Integer {
                 value: match json {
