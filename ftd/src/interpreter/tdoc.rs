@@ -1752,7 +1752,7 @@ impl<'a> TDoc<'a> {
                 let mut data = vec![];
                 for row in rows {
                     data.push(
-                        self.from_json_row(row, kind.as_ref(), value)?
+                        self.from_json_row(row, kind, value)?
                             .into_property_value(false, value.line_number()),
                     );
                 }
@@ -1771,88 +1771,58 @@ impl<'a> TDoc<'a> {
         })
     }
 
+    fn from_json_row_record(
+        &self,
+        row: &[serde_json::Value],
+        name: &str,
+        value: &ftd::ast::VariableValue,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+        let rec = self.get_record(name, value.line_number())?;
+        let rec_fields = rec.fields;
+        let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        for (idx, key) in rec_fields.iter().enumerate() {
+            let val = match row.get(idx) {
+                Some(v) => v,
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        format!("key not found: {}", key.name.as_str()),
+                        self.name,
+                        value.line_number(),
+                    )
+                }
+            };
+            fields.insert(
+                key.name.to_string(),
+                self.from_json(val, &key.kind.kind, value)?
+                    .into_property_value(false, value.line_number()),
+            );
+        }
+
+        Ok(ftd::interpreter::Value::Record {
+            name: name.to_string(),
+            fields,
+        })
+    }
+
     pub fn from_json_row(
         &self,
         row: &[serde_json::Value],
         kind: &ftd::interpreter::Kind,
         value: &ftd::ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        Ok(match kind {
-            ftd::interpreter::Kind::Record { name, .. } => {
-                let rec = self.get_record(name, value.line_number())?;
-                let rec_fields = rec.fields;
-                let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
-                for (idx, key) in rec_fields.iter().enumerate() {
-                    let val = match row.get(idx) {
-                        Some(v) => v,
-                        None => {
-                            return ftd::interpreter::utils::e2(
-                                format!("key not found: {}", key.name.as_str()),
-                                self.name,
-                                value.line_number(),
-                            )
-                        }
-                    };
-                    fields.insert(
-                        key.name.to_string(),
-                        self.from_json(val, &key.kind.kind, value)?
-                            .into_property_value(false, value.line_number()),
-                    );
-                }
-                ftd::interpreter::Value::Record {
-                    name: name.to_string(),
-                    fields,
-                }
-            }
-            ftd::interpreter::Kind::String { .. } if row.first().is_some() => {
-                ftd::interpreter::Value::String {
-                    text: serde_json::from_value::<String>(row.first().unwrap().to_owned())
-                        .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to string, found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number: value.line_number(),
-                        })?,
-                }
-            }
-            ftd::interpreter::Kind::Integer { .. } if row.first().is_some() => {
-                ftd::interpreter::Value::Integer {
-                    value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
-                        |_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to integer, found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number: value.line_number(),
-                        },
-                    )?,
-                }
-            }
-            ftd::interpreter::Kind::Decimal { .. } if row.first().is_some() => {
-                ftd::interpreter::Value::Decimal {
-                    value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
-                        |_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to decimal, found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number: value.line_number(),
-                        },
-                    )?,
-                }
-            }
-            ftd::interpreter::Kind::Boolean { .. } if row.first().is_some() => {
-                ftd::interpreter::Value::Boolean {
-                    value: serde_json::from_value::<bool>(row.first().unwrap().to_owned())
-                        .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't parse to boolean,found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number: value.line_number(),
-                        })?,
-                }
-            }
-            t => unimplemented!(
-                "{:?} not yet implemented, line number: {}, doc: {}",
-                t,
+        if let ftd::interpreter::Kind::Record { name } = kind {
+            return self.from_json_row_record(row, name, value);
+        }
+
+        if row.len() != 1 {
+            return ftd::interpreter::utils::e2(
+                format!("expected one column, found: {}", row.len()),
+                self.name,
                 value.line_number(),
-                self.name.to_string()
-            ),
-        })
+            );
+        }
+
+        self.as_json_(value.line_number(), &row[0], kind)
     }
 
     pub fn from_json<T>(
@@ -1864,14 +1834,13 @@ impl<'a> TDoc<'a> {
     where
         T: serde::Serialize + std::fmt::Debug,
     {
-        let line_number = value.line_number();
         let json = serde_json::to_value(json).map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("Can't serialize to json: {:?}, found: {:?}", e, json),
             doc_id: self.name.to_string(),
-            line_number,
+            line_number: value.line_number(),
         })?;
 
-        self.as_json_(line_number, &json, kind)
+        self.as_json_(value.line_number(), &json, kind)
     }
 
     fn as_json_(
