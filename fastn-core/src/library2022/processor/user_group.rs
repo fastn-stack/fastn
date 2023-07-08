@@ -11,7 +11,7 @@ pub fn process(
         .values()
         .map(|g| g.to_group_compat())
         .collect_vec();
-    doc.from_json(&g, &kind, value.line_number())
+    doc.from_json(&g, &kind, &value)
 }
 
 /// processor: user-group-by-id
@@ -47,7 +47,7 @@ pub fn process_by_id(
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
-    doc.from_json(&g, &kind, value.line_number())
+    doc.from_json(&g, &kind, &value)
 }
 
 /// processor: get-identities

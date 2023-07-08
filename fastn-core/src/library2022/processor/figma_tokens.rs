@@ -13,7 +13,7 @@ pub fn process_figma_tokens(
     let mut dark_colors: ftd::Map<ftd::Map<VT>> = ftd::Map::new();
 
     extract_light_dark_colors(
-        value,
+        &value,
         doc,
         &mut variable_name,
         &mut light_colors,
@@ -40,7 +40,7 @@ pub fn process_figma_tokens(
     );
 
     let response_json: serde_json::Value = serde_json::Value::String(full_cs);
-    doc.from_json(&response_json, &kind, line_number)
+    doc.from_json(&response_json, &kind, &value)
 }
 
 pub fn process_figma_tokens_old(
@@ -56,7 +56,7 @@ pub fn process_figma_tokens_old(
     let mut dark_colors: ftd::Map<ftd::Map<VT>> = ftd::Map::new();
 
     extract_light_dark_colors(
-        value,
+        &value,
         doc,
         &mut variable_name,
         &mut light_colors,
@@ -246,7 +246,7 @@ pub fn process_figma_tokens_old(
     );
 
     let response_json: serde_json::Value = serde_json::Value::String(full_cs);
-    doc.from_json(&response_json, &kind, line_number)
+    doc.from_json(&response_json, &kind, &value)
 }
 
 pub fn capitalize_word(s: &str) -> String {
@@ -258,7 +258,7 @@ pub fn capitalize_word(s: &str) -> String {
 }
 
 fn extract_light_dark_colors(
-    value: ftd::ast::VariableValue,
+    value: &ftd::ast::VariableValue,
     doc: &mut ftd::interpreter::TDoc,
     variable_name: &mut Option<String>,
     light_colors: &mut ftd::Map<ftd::Map<VT>>,

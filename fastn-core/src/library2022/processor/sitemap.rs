@@ -18,13 +18,13 @@ pub fn process(
             .replace(std::path::MAIN_SEPARATOR, "/");
 
         if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.as_str()) {
-            return doc.from_json(&sitemap, &kind, value.line_number());
+            return doc.from_json(&sitemap, &kind, &value);
         }
     }
     doc.from_json(
         &fastn_core::sitemap::SiteMapCompat::default(),
         &kind,
-        value.line_number(),
+        &value,
     )
 }
 
@@ -48,12 +48,12 @@ pub fn full_sitemap_process(
             .replace(std::path::MAIN_SEPARATOR, "/");
 
         let sitemap_compat = to_sitemap_compat(sitemap, doc_id.as_str());
-        return doc.from_json(&sitemap_compat, &kind, value.line_number());
+        return doc.from_json(&sitemap_compat, &kind, &value);
     }
     doc.from_json(
         &fastn_core::sitemap::SiteMapCompat::default(),
         &kind,
-        value.line_number(),
+        &value,
     )
 }
 

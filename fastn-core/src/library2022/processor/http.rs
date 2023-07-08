@@ -118,5 +118,5 @@ pub async fn process(
     let response_json: serde_json::Value = serde_json::from_str(&response_string)
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
-    doc.from_json(&response_json, &kind, line_number)
+    doc.from_json(&response_json, &kind, &value)
 }

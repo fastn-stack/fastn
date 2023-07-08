@@ -23,5 +23,5 @@ pub fn process(
         is_login: bool,
     }
     let ud = UserDetails { is_login };
-    doc.from_json(&ud, &kind, value.line_number())
+    doc.from_json(&ud, &kind, &value)
 }

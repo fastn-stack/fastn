@@ -37,6 +37,6 @@ pub async fn process(
             }
         })?,
         &kind,
-        value.line_number(),
+        &value,
     )
 }

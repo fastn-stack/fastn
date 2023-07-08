@@ -73,7 +73,7 @@ pub async fn process(
         .await?,
         kind,
         doc,
-        value.line_number(),
+        &value,
     )
 }
 
@@ -81,22 +81,22 @@ pub(crate) fn result_to_value(
     result: Vec<Vec<serde_json::Value>>,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    line_number: usize,
+    value: &ftd::ast::VariableValue,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if kind.is_list() {
-        doc.from_json_rows(result.as_slice(), &kind, line_number)
+        doc.from_json_rows(result.as_slice(), &kind, value)
     } else {
         match result.len() {
-            1 => doc.from_json_row(&result[0], &kind, line_number),
+            1 => doc.from_json_row(&result[0], &kind, value),
             0 => ftd::interpreter::utils::e2(
                 "Query returned no result, expected one row".to_string(),
                 doc.name,
-                line_number,
+                value.line_number(),
             ),
             len => ftd::interpreter::utils::e2(
                 format!("Query returned {} rows, expected one row", len),
                 doc.name,
-                line_number,
+                value.line_number(),
             ),
         }
     }

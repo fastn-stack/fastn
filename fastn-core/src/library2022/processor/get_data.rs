@@ -31,7 +31,7 @@ pub fn process(
     }
 
     if let Some(data) = config.extra_data.get(key.as_str()) {
-        return doc.from_json(data, &kind, line_number);
+        return doc.from_json(data, &kind, &value);
     }
 
     if let Some(ref sitemap) = config.package.sitemap {
@@ -51,36 +51,36 @@ pub fn process(
             if let Some(data) = extra_data.get(key.as_str()) {
                 return match kind {
                     ftd::interpreter::Kind::Integer => {
-                        let value = data.parse::<i64>().map_err(|e| {
+                        let value2 = data.parse::<i64>().map_err(|e| {
                             ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             }
                         })?;
-                        doc.from_json(&value, &kind, line_number)
+                        doc.from_json(&value2, &kind, &value)
                     }
                     ftd::interpreter::Kind::Decimal { .. } => {
-                        let value = data.parse::<f64>().map_err(|e| {
+                        let value2 = data.parse::<f64>().map_err(|e| {
                             ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             }
                         })?;
-                        doc.from_json(&value, &kind, line_number)
+                        doc.from_json(&value2, &kind, &value)
                     }
                     ftd::interpreter::Kind::Boolean { .. } => {
-                        let value = data.parse::<bool>().map_err(|e| {
+                        let value2 = data.parse::<bool>().map_err(|e| {
                             ftd::interpreter::Error::ParseError {
                                 message: e.to_string(),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             }
                         })?;
-                        doc.from_json(&value, &kind, line_number)
+                        doc.from_json(&value2, &kind, &value)
                     }
-                    _ => doc.from_json(data, &kind, line_number),
+                    _ => doc.from_json(data, &kind, &value),
                 };
             }
         }
@@ -118,7 +118,7 @@ pub fn process(
         return doc.from_json(
             &serde_json::from_str::<serde_json::Value>(&file)?,
             &kind,
-            line_number,
+            &value,
         );
     }
 
@@ -126,7 +126,7 @@ pub fn process(
         return doc.from_json(
             &serde_json::from_str::<serde_json::Value>(b.value.as_str())?,
             &kind,
-            line_number,
+            &value,
         );
     }
 
@@ -142,16 +142,16 @@ pub fn process(
     };
 
     if let Ok(val) = caption.parse::<bool>() {
-        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+        return doc.from_json(&serde_json::json!(val), &kind, &value);
     }
 
     if let Ok(val) = caption.parse::<i64>() {
-        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+        return doc.from_json(&serde_json::json!(val), &kind, &value);
     }
 
     if let Ok(val) = caption.parse::<f64>() {
-        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+        return doc.from_json(&serde_json::json!(val), &kind, &value);
     }
 
-    doc.from_json(&serde_json::json!(caption), &kind, line_number)
+    doc.from_json(&serde_json::json!(caption), &kind, &value)
 }
