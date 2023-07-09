@@ -550,7 +550,7 @@ impl Sitemap {
     pub async fn parse(
         s: &str,
         package: &fastn_core::Package,
-        config: &mut fastn_core::Config,
+        config: &fastn_core::Config,
         resolve_sitemap: bool,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
@@ -595,7 +595,7 @@ impl Sitemap {
     async fn resolve(
         &mut self,
         package: &fastn_core::Package,
-        config: &mut fastn_core::Config,
+        config: &fastn_core::Config,
     ) -> fastn_core::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.root.to_owned();
@@ -608,7 +608,7 @@ impl Sitemap {
             section: &mut section::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fastn_core::Config,
+            config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
                 .get_file_path_and_resolve(
@@ -677,7 +677,7 @@ impl Sitemap {
             subsection: &mut section::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fastn_core::Config,
+            config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
                 let (file_location, translation_file_location) = if let Ok(file_name) = config
@@ -737,7 +737,7 @@ impl Sitemap {
             toc: &mut toc::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fastn_core::Config,
+            config: &fastn_core::Config,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
                 .get_file_path_and_resolve(
