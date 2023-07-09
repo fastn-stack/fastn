@@ -45,5 +45,6 @@ pub fn process(
         }
     }
 
+    data.extend(config.extra_data.clone());
     doc.from_json(&data, &kind, &value)
 }
