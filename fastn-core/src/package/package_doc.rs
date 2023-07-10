@@ -458,10 +458,7 @@ pub(crate) async fn process_ftd(
     } else if main.id.contains("index.ftd") {
         main.id.replace("index.ftd", "index.html")
     } else {
-        main.id.replace(
-            ".ftd",
-            format!("{}index.html", std::path::MAIN_SEPARATOR).as_str(),
-        )
+        main.id.replace(".ftd", "/index.html")
     };
 
     let response = read_ftd(config, &main, base_url, !no_static, test).await?;
