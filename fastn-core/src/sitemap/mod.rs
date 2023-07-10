@@ -28,7 +28,7 @@ pub struct Sitemap {
 }
 
 #[derive(Debug, Default, serde::Serialize)]
-pub struct SiteMapCompat {
+pub struct SitemapCompat {
     pub sections: Vec<toc::TocItemCompat>,
     pub subsections: Vec<toc::TocItemCompat>,
     pub toc: Vec<toc::TocItemCompat>,
@@ -892,7 +892,7 @@ impl Sitemap {
         }
     }
 
-    pub(crate) fn get_sitemap_by_id(&self, id: &str) -> Option<SiteMapCompat> {
+    pub(crate) fn get_sitemap_by_id(&self, id: &str) -> Option<SitemapCompat> {
         use itertools::Itertools;
 
         let mut sections = vec![];
@@ -1034,7 +1034,7 @@ impl Sitemap {
                     )
                 }),
         );
-        return Some(SiteMapCompat {
+        return Some(SitemapCompat {
             sections,
             subsections,
             toc,
