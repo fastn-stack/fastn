@@ -6,8 +6,11 @@ pub struct Kernel {
 }
 
 impl Kernel {
-    pub fn from_component(component_name: &str, parent: &str, index: usize) -> Kernel {
-        let element_kind = fastn_js::ElementKind::from_component_name(component_name);
+    pub fn from_component(
+        element_kind: fastn_js::ElementKind,
+        parent: &str,
+        index: usize,
+    ) -> Kernel {
         Kernel {
             element_kind,
             name: format!("{parent}i{index}"),
@@ -26,20 +29,7 @@ pub enum ElementKind {
     Text,
     Image,
     IFrame,
-}
-
-impl ElementKind {
-    pub(crate) fn from_component_name(name: &str) -> ElementKind {
-        match name {
-            "ftd#text" => ElementKind::Text,
-            "ftd#integer" => ElementKind::Integer,
-            "ftd#row" => ElementKind::Row,
-            "ftd#column" => ElementKind::Column,
-            "ftd#decimal" => ElementKind::Decimal,
-            "ftd#boolean" => ElementKind::Boolean,
-            _ => todo!(),
-        }
-    }
+    Device,
 }
 
 #[derive(Debug)]

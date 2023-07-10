@@ -10,6 +10,7 @@ pub enum Element {
     Boolean(Boolean),
     Column(Column),
     Row(Row),
+    Device(Device),
 }
 
 impl Element {
@@ -24,6 +25,9 @@ impl Element {
             "ftd#boolean" => Element::Boolean(Boolean::from(component)),
             "ftd#column" => Element::Column(Column::from(component, doc)),
             "ftd#row" => Element::Row(Row::from(component, doc)),
+            "ftd#desktop" | "ftd#mobile" => {
+                Element::Device(Device::from(component, doc, component.name.as_str()))
+            }
             _ => todo!("{}", component.name.as_str()),
         }
     }
@@ -36,6 +40,7 @@ impl Element {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
@@ -82,6 +87,7 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             ),
             Element::Row(row) => row.to_component_statements(
@@ -91,6 +97,17 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
+                should_return,
+            ),
+            Element::Device(d) => d.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
                 should_return,
             ),
         }
@@ -268,7 +285,7 @@ impl Text {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#text", parent, index);
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Text, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -343,7 +360,8 @@ impl Integer {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#integer", parent, index);
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::Integer, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -417,7 +435,8 @@ impl Decimal {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#decimal", parent, index);
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::Decimal, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -491,7 +510,8 @@ impl Boolean {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#boolean", parent, index);
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::Boolean, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.push(fastn_js::ComponentStatement::SetProperty(
             fastn_js::SetProperty {
@@ -558,10 +578,11 @@ impl Column {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#column", parent, index);
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
         component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
@@ -603,6 +624,7 @@ impl Column {
                 doc,
                 component_definition_name,
                 &inherited_variable_name,
+                device,
                 false,
             )
         }));
@@ -645,10 +667,11 @@ impl Row {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component("ftd#row", parent, index);
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Row, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.common.to_set_properties(
@@ -691,6 +714,7 @@ impl Row {
                 doc,
                 component_definition_name,
                 &inherited_variable_name,
+                device,
                 false,
             )
         }));
@@ -700,6 +724,106 @@ impl Row {
             });
         }
         component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Device {
+    pub children: Vec<ftd::interpreter::Component>,
+    pub container: Container,
+    pub device: fastn_js::DeviceType,
+}
+
+impl Device {
+    pub fn from(
+        component: &ftd::interpreter::Component,
+        doc: &ftd::interpreter::TDoc,
+        device: &str,
+    ) -> Device {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get(device)
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Device {
+            children: component.get_children(doc).unwrap(),
+            container: Container::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            device: device.into(),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if let Some(ref device) = device {
+            if device.ne(&self.device) {
+                return component_statements;
+            }
+        }
+
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Device, parent, index);
+
+        component_statements.push(fastn_js::ComponentStatement::StaticVariable(
+            fastn_js::StaticVariable {
+                name: kernel.name.to_string(),
+                value: fastn_js::SetPropertyValue::Reference(parent.to_string()),
+                prefix: None,
+            },
+        ));
+
+        let inherited_variables = self.container.get_inherited_variables(
+            component_definition_name,
+            loop_alias,
+            kernel.name.as_str(),
+        );
+
+        let inherited_variable_name = inherited_variables
+            .as_ref()
+            .map(|v| v.name.clone())
+            .or(inherited_variable_name.clone());
+
+        if let Some(inherited_variables) = inherited_variables {
+            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
+                inherited_variables,
+            ));
+        }
+
+        component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
+            v.to_component_statements(
+                kernel.name.as_str(),
+                index,
+                doc,
+                component_definition_name,
+                &inherited_variable_name,
+                &Some(self.device.to_owned()),
+                false,
+            )
+        }));
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+
+        vec![fastn_js::ComponentStatement::DeviceBlock(
+            fastn_js::DeviceBlock {
+                device: self.device.to_owned(),
+                component_statements,
+            },
+        )]
     }
 }
 

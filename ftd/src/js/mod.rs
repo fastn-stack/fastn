@@ -137,6 +137,7 @@ impl ftd::interpreter::ComponentDefinition {
             doc,
             &Some(self.name.to_string()),
             &Some("inherited".to_string()),
+            &None,
             true,
         ));
         fastn_js::component_with_params(
@@ -167,8 +168,9 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements
-            .extend(component.to_component_statements("parent", index, doc, &None, &None, false))
+        statements.extend(
+            component.to_component_statements("parent", index, doc, &None, &None, &None, false),
+        )
     }
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
@@ -181,6 +183,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
@@ -194,6 +197,7 @@ impl ftd::interpreter::Component {
                 component_definition_name,
                 &loop_alias,
                 inherited_variable_name,
+                device,
                 true,
             )
         } else {
@@ -204,6 +208,7 @@ impl ftd::interpreter::Component {
                 component_definition_name,
                 &None,
                 inherited_variable_name,
+                device,
                 should_return,
             )
         };
@@ -259,6 +264,7 @@ impl ftd::interpreter::Component {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
@@ -270,6 +276,7 @@ impl ftd::interpreter::Component {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             )
         } else if let Ok(component_definition) =
