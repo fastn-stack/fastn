@@ -35,7 +35,7 @@ pub struct Package {
 
     pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
 
-    /// sitemap stores the structure of the package. The structure includes sections, subsections
+    /// sitemap stores the structure of the package. The structure includes sections, sub_sections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
     pub sitemap: Option<fastn_core::sitemap::Sitemap>,

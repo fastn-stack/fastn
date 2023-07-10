@@ -344,13 +344,13 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
 
         // section could be component definition
         // in that case ignore relevant id's defined under its definition
-        // including the ids defined on its subsections
+        // including the ids defined on its sub_sections
         if ftd::identifier::is_section(line) {
             ignore_id = ignore_next_id(line);
             register_id_for_last_section = !ignore_id;
         }
 
-        // In cases, when there are uncommented subsections
+        // In cases, when there are uncommented sub_sections
         // under commented section then ignore their id's
         if ftd::identifier::is_subsection(line) && register_id_for_last_section {
             ignore_id = ignore_next_id(line);

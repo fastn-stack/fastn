@@ -671,7 +671,7 @@ impl Property {
 
         let _argument = Property::get_argument_for_children(&component_arguments).ok_or(
             ftd::interpreter::Error::ParseError {
-                message: "Subsection is unexpected".to_string(),
+                message: "SubSection is unexpected".to_string(),
                 doc_id: doc.name.to_string(),
                 line_number,
             },

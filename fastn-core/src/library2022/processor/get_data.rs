@@ -30,20 +30,12 @@ pub fn process(
         });
     }
 
-    if let Some(data) = config.extra_data.get(key.as_str()) {
-        return doc.from_json(data, &kind, &value);
-    }
-
     if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
-            .clone()
-            .map(|v| fastn_core::utils::id_to_path(v.as_str()))
-            .unwrap_or_else(|| {
-                doc.name
-                    .to_string()
-                    .replace(config.package.name.as_str(), "")
-            })
+            .as_ref()
+            .map(|v| fastn_core::utils::id_to_path(v))
+            .unwrap_or_else(|| doc.name.replace(config.package.name.as_str(), ""))
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");
 

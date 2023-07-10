@@ -252,8 +252,8 @@ impl AST {
 /// Only '/' comments are ignored here.
 /// ';' comments are ignored inside the [`parser`] itself.
 ///
-/// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
-/// in sections and subsections accordingly.
+/// uses [`Section::remove_comments()`] and [`SubSection::remove_comments()`] to remove comments
+/// in sections and sub_sections accordingly.
 ///
 /// [`parser`]: ftd::p1::parser::parse
 /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments

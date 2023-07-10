@@ -30,12 +30,12 @@ pub struct Sitemap {
 #[derive(Debug, Default, serde::Serialize)]
 pub struct SitemapCompat {
     pub sections: Vec<toc::TocItemCompat>,
-    pub subsections: Vec<toc::TocItemCompat>,
+    pub sub_sections: Vec<toc::TocItemCompat>,
     pub toc: Vec<toc::TocItemCompat>,
     #[serde(rename = "current-section")]
     pub current_section: Option<toc::TocItemCompat>,
     #[serde(rename = "current-subsection")]
-    pub current_subsection: Option<toc::TocItemCompat>,
+    pub current_sub_section: Option<toc::TocItemCompat>,
     #[serde(rename = "current-page")]
     pub current_page: Option<toc::TocItemCompat>,
     pub readers: Vec<String>,
@@ -45,7 +45,7 @@ pub struct SitemapCompat {
 #[derive(Debug, Clone)]
 pub enum SitemapElement {
     Section(section::Section),
-    Subsection(section::Subsection),
+    SubSection(section::Subsection),
     TocItem(toc::TocItem),
 }
 
@@ -84,7 +84,7 @@ impl SitemapElement {
     pub(crate) fn insert_key_value(&mut self, key: &str, value: &str) {
         let element_title = match self {
             SitemapElement::Section(s) => &mut s.extra_data,
-            SitemapElement::Subsection(s) => &mut s.extra_data,
+            SitemapElement::SubSection(s) => &mut s.extra_data,
             SitemapElement::TocItem(s) => &mut s.extra_data,
         };
         element_title.insert(key.to_string(), value.trim().to_string());
@@ -93,7 +93,7 @@ impl SitemapElement {
     pub(crate) fn set_title(&mut self, title: Option<String>) {
         let element_title = match self {
             SitemapElement::Section(s) => &mut s.title,
-            SitemapElement::Subsection(s) => &mut s.title,
+            SitemapElement::SubSection(s) => &mut s.title,
             SitemapElement::TocItem(s) => &mut s.title,
         };
         *element_title = title;
@@ -102,7 +102,7 @@ impl SitemapElement {
     pub(crate) fn set_icon(&mut self, path: Option<String>) {
         let element_icon = match self {
             SitemapElement::Section(s) => &mut s.icon,
-            SitemapElement::Subsection(s) => &mut s.icon,
+            SitemapElement::SubSection(s) => &mut s.icon,
             SitemapElement::TocItem(s) => &mut s.icon,
         };
         *element_icon = path;
@@ -111,7 +111,7 @@ impl SitemapElement {
     pub(crate) fn set_bury(&mut self, value: bool) {
         let element_bury = match self {
             SitemapElement::Section(s) => &mut s.bury,
-            SitemapElement::Subsection(s) => &mut s.bury,
+            SitemapElement::SubSection(s) => &mut s.bury,
             SitemapElement::TocItem(s) => &mut s.bury,
         };
         *element_bury = value;
@@ -127,7 +127,7 @@ impl SitemapElement {
             SitemapElement::Section(s) => {
                 s.id = id;
             }
-            SitemapElement::Subsection(s) => {
+            SitemapElement::SubSection(s) => {
                 s.id = Some(id);
             }
             SitemapElement::TocItem(s) => {
@@ -139,7 +139,7 @@ impl SitemapElement {
     pub(crate) fn set_nav_title(&mut self, nav_title: Option<String>) {
         let nav = match self {
             SitemapElement::Section(s) => &mut s.nav_title,
-            SitemapElement::Subsection(s) => &mut s.nav_title,
+            SitemapElement::SubSection(s) => &mut s.nav_title,
             SitemapElement::TocItem(s) => &mut s.nav_title,
         };
         *nav = nav_title;
@@ -148,7 +148,7 @@ impl SitemapElement {
     pub(crate) fn set_skip(&mut self, flag: bool) {
         let skip = match self {
             SitemapElement::Section(s) => &mut s.skip,
-            SitemapElement::Subsection(s) => &mut s.skip,
+            SitemapElement::SubSection(s) => &mut s.skip,
             SitemapElement::TocItem(s) => &mut s.skip,
         };
         *skip = flag;
@@ -157,7 +157,7 @@ impl SitemapElement {
     pub(crate) fn set_confidential(&mut self, flag: bool) {
         let skip = match self {
             SitemapElement::Section(s) => &mut s.confidential,
-            SitemapElement::Subsection(s) => &mut s.confidential,
+            SitemapElement::SubSection(s) => &mut s.confidential,
             SitemapElement::TocItem(s) => &mut s.confidential,
         };
         *skip = flag;
@@ -166,7 +166,7 @@ impl SitemapElement {
     pub(crate) fn set_readers(&mut self, group: &str) {
         let readers = match self {
             SitemapElement::Section(s) => &mut s.readers,
-            SitemapElement::Subsection(s) => &mut s.readers,
+            SitemapElement::SubSection(s) => &mut s.readers,
             SitemapElement::TocItem(s) => &mut s.readers,
         };
         readers.push(group.to_string());
@@ -175,7 +175,7 @@ impl SitemapElement {
     pub(crate) fn set_writers(&mut self, group: &str) {
         let writers = match self {
             SitemapElement::Section(s) => &mut s.writers,
-            SitemapElement::Subsection(s) => &mut s.writers,
+            SitemapElement::SubSection(s) => &mut s.writers,
             SitemapElement::TocItem(s) => &mut s.writers,
         };
         writers.push(group.to_string());
@@ -184,7 +184,7 @@ impl SitemapElement {
     pub(crate) fn set_document(&mut self, doc: &str) {
         let document = match self {
             SitemapElement::Section(s) => &mut s.document,
-            SitemapElement::Subsection(s) => &mut s.document,
+            SitemapElement::SubSection(s) => &mut s.document,
             SitemapElement::TocItem(s) => &mut s.document,
         };
         *document = Some(doc.to_string());
@@ -193,7 +193,7 @@ impl SitemapElement {
     pub(crate) fn get_title(&self) -> Option<String> {
         match self {
             SitemapElement::Section(s) => &s.title,
-            SitemapElement::Subsection(s) => &s.title,
+            SitemapElement::SubSection(s) => &s.title,
             SitemapElement::TocItem(s) => &s.title,
         }
         .clone()
@@ -202,7 +202,7 @@ impl SitemapElement {
     pub(crate) fn get_id(&self) -> Option<String> {
         match self {
             SitemapElement::Section(s) => Some(s.id.clone()),
-            SitemapElement::Subsection(s) => s.id.clone(),
+            SitemapElement::SubSection(s) => s.id.clone(),
             SitemapElement::TocItem(s) => Some(s.id.clone()),
         }
     }
@@ -221,7 +221,7 @@ impl SitemapElement {
             SitemapElement::Section(s) => {
                 s.path_parameters = params;
             }
-            SitemapElement::Subsection(s) => {
+            SitemapElement::SubSection(s) => {
                 s.path_parameters = params;
             }
             SitemapElement::TocItem(t) => {
@@ -329,7 +329,7 @@ impl SitemapParser {
                         if !ParsingState::ParsingSection.eq(&self.state) {
                             return Err(ParseError::InvalidTOCItem {
                                 doc_id: self.doc_name.clone(),
-                                message: "Ambiguous <title>: <URL> evaluation. Subsection is called before subsection".to_string(),
+                                message: "Ambiguous <title>: <URL> evaluation. SubSection is called before subsection".to_string(),
                                 row_content: rest.as_str().to_string(),
                             });
                         }
@@ -362,7 +362,7 @@ impl SitemapParser {
                 id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
-            ParsingState::ParsingSubsection => SitemapElement::Subsection(section::Subsection {
+            ParsingState::ParsingSubsection => SitemapElement::SubSection(section::Subsection {
                 id: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             }),
@@ -1036,10 +1036,10 @@ impl Sitemap {
         );
         return Some(SitemapCompat {
             sections,
-            subsections,
+            sub_sections: subsections,
             toc,
             current_section,
-            current_subsection,
+            current_sub_section: current_subsection,
             current_page,
             readers: self.readers.clone(),
             writers: self.writers.clone(),
@@ -1606,7 +1606,7 @@ fn construct_tree_util(mut elements: Vec<(SitemapElement, usize)>) -> Vec<sectio
             // todo: return an error
             return;
         };
-        while let Some((SitemapElement::Subsection(subsection), _)) = elements.last() {
+        while let Some((SitemapElement::SubSection(subsection), _)) = elements.last() {
             last_section.subsections.push(subsection.to_owned());
             elements.pop();
         }
