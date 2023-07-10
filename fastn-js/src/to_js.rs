@@ -104,7 +104,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::Text => "fastn_dom.ElementKind.Text",
             fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image",
             fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame",
-            fastn_js::ElementKind::Device => unreachable!(),
+            fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Div",
         }
     }
 }
@@ -158,6 +158,53 @@ impl fastn_js::InstantiateComponent {
             pretty::RcDoc::nil()
         })
         .append(text(");"))
+    }
+}
+
+impl fastn_js::DeviceBlock {
+    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        text(
+            format!(
+                "{}fastn_dom.conditionalDom(",
+                if self.should_return { "return " } else { "" }
+            )
+            .as_str(),
+        )
+        .append(text(self.parent.as_str()))
+        .append(comma())
+        .append(space())
+        .append(text("["))
+        .append(text("ftd.device"))
+        .append(text("]"))
+        .append(comma())
+        .append(space())
+        .append(text("function () {"))
+        .append(text("return (ftd.device.get()"))
+        .append(space())
+        .append(text("==="))
+        .append(self.device.to_js())
+        .append(text(");"))
+        .append(pretty::RcDoc::softline())
+        .append(text("},"))
+        .append(text("function (root) {"))
+        .append(
+            pretty::RcDoc::intersperse(
+                self.statements.iter().map(|v| v.to_js()),
+                pretty::RcDoc::softline(),
+            )
+            .group(),
+        )
+        .append(text(
+            format!(
+                "}}){};",
+                if self.should_return {
+                    ".getParent()"
+                } else {
+                    ""
+                }
+            )
+            .as_str(),
+        ))
     }
 }
 
@@ -412,35 +459,11 @@ impl fastn_js::StaticVariable {
     }
 }
 
-impl fastn_js::DeviceBlock {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        text("if")
-            .append(space())
-            .append(text("(ftd.device.get()"))
-            .append(space())
-            .append(text("==="))
-            .append(self.device.to_js())
-            .append(text(")"))
-            .append(space())
-            .append(text("{"))
-            .append(pretty::RcDoc::softline())
-            .append(
-                pretty::RcDoc::intersperse(
-                    self.component_statements.iter().map(|v| v.to_js()),
-                    pretty::RcDoc::softline(),
-                )
-                .group(),
-            )
-            .append(pretty::RcDoc::softline())
-            .append(text("}"))
-    }
-}
-
 impl fastn_js::DeviceType {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            DeviceType::Desktop => text("desktop"),
-            DeviceType::Mobile => text("mobile"),
+            DeviceType::Desktop => text("\"desktop\""),
+            DeviceType::Mobile => text("\"mobile\""),
         }
     }
 }

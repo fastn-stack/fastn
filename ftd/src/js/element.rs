@@ -145,23 +145,21 @@ pub struct Boolean {
 #[derive(Debug)]
 pub struct Column {
     pub children: Vec<ftd::interpreter::Component>,
+    pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
+}
+
+#[derive(Debug)]
+pub struct InheritedProperties {
+    pub colors: Option<ftd::js::Value>,
+    pub types: Option<ftd::js::Value>,
 }
 
 #[derive(Debug)]
 pub struct Container {
-    pub colors: Option<ftd::js::Value>,
-    pub types: Option<ftd::js::Value>,
     pub spacing: Option<ftd::js::Value>,
     pub wrap: Option<ftd::js::Value>,
-}
-
-#[derive(Debug)]
-pub struct Row {
-    pub children: Vec<ftd::interpreter::Component>,
-    pub container: Container,
-    pub common: Common,
 }
 
 impl Container {
@@ -170,10 +168,62 @@ impl Container {
         arguments: &[ftd::interpreter::Argument],
     ) -> Container {
         Container {
-            colors: ftd::js::value::get_properties("colors", properties, arguments),
-            types: ftd::js::value::get_properties("types", properties, arguments),
             spacing: ftd::js::value::get_properties("spacing", properties, arguments),
             wrap: ftd::js::value::get_properties("wrap", properties, arguments),
+        }
+    }
+
+    pub fn to_set_properties(
+        &self,
+        element_name: &str,
+        _doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &Option<String>,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        if let Some(ref spacing) = self.spacing {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                spacing.to_set_property(
+                    fastn_js::PropertyKind::Spacing,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref wrap) = self.wrap {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                wrap.to_set_property(
+                    fastn_js::PropertyKind::Wrap,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Row {
+    pub children: Vec<ftd::interpreter::Component>,
+    pub inherited: InheritedProperties,
+    pub container: Container,
+    pub common: Common,
+}
+
+impl InheritedProperties {
+    pub fn from(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> InheritedProperties {
+        InheritedProperties {
+            colors: ftd::js::value::get_properties("colors", properties, arguments),
+            types: ftd::js::value::get_properties("types", properties, arguments),
         }
     }
 
@@ -210,40 +260,6 @@ impl Container {
         } else {
             None
         }
-    }
-
-    pub fn to_set_properties(
-        &self,
-        element_name: &str,
-        _doc: &ftd::interpreter::TDoc,
-        component_definition_name: &Option<String>,
-        loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
-    ) -> Vec<fastn_js::ComponentStatement> {
-        let mut component_statements = vec![];
-        if let Some(ref spacing) = self.spacing {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                spacing.to_set_property(
-                    fastn_js::PropertyKind::Spacing,
-                    element_name,
-                    component_definition_name,
-                    loop_alias,
-                    inherited_variable_name,
-                ),
-            ));
-        }
-        if let Some(ref wrap) = self.wrap {
-            component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                wrap.to_set_property(
-                    fastn_js::PropertyKind::Wrap,
-                    element_name,
-                    component_definition_name,
-                    loop_alias,
-                    inherited_variable_name,
-                ),
-            ));
-        }
-        component_statements
     }
 }
 
@@ -558,6 +574,10 @@ impl Column {
 
         Column {
             children: component.get_children(doc).unwrap(),
+            inherited: InheritedProperties::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -600,7 +620,7 @@ impl Column {
             inherited_variable_name,
         ));
 
-        let inherited_variables = self.container.get_inherited_variables(
+        let inherited_variables = self.inherited.get_inherited_variables(
             component_definition_name,
             loop_alias,
             kernel.name.as_str(),
@@ -647,6 +667,10 @@ impl Row {
             .unwrap();
         Row {
             children: component.get_children(doc).unwrap(),
+            inherited: InheritedProperties::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
             container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -690,7 +714,7 @@ impl Row {
             inherited_variable_name,
         ));
 
-        let inherited_variables = self.container.get_inherited_variables(
+        let inherited_variables = self.inherited.get_inherited_variables(
             component_definition_name,
             loop_alias,
             kernel.name.as_str(),
@@ -730,7 +754,7 @@ impl Row {
 #[derive(Debug)]
 pub struct Device {
     pub children: Vec<ftd::interpreter::Component>,
-    pub container: Container,
+    pub container: InheritedProperties,
     pub device: fastn_js::DeviceType,
 }
 
@@ -748,7 +772,7 @@ impl Device {
             .unwrap();
         Device {
             children: component.get_children(doc).unwrap(),
-            container: Container::from(
+            container: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -774,15 +798,8 @@ impl Device {
             }
         }
 
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Device, parent, index);
-
-        component_statements.push(fastn_js::ComponentStatement::StaticVariable(
-            fastn_js::StaticVariable {
-                name: kernel.name.to_string(),
-                value: fastn_js::SetPropertyValue::Reference(parent.to_string()),
-                prefix: None,
-            },
-        ));
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Device, "root", index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         let inherited_variables = self.container.get_inherited_variables(
             component_definition_name,
@@ -812,16 +829,16 @@ impl Device {
                 false,
             )
         }));
-        if should_return {
-            component_statements.push(fastn_js::ComponentStatement::Return {
-                component_name: kernel.name,
-            });
-        }
+        component_statements.push(fastn_js::ComponentStatement::Return {
+            component_name: kernel.name,
+        });
 
         vec![fastn_js::ComponentStatement::DeviceBlock(
             fastn_js::DeviceBlock {
                 device: self.device.to_owned(),
-                component_statements,
+                statements: component_statements,
+                parent: parent.to_string(),
+                should_return,
             },
         )]
     }
@@ -1911,6 +1928,8 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#integer",
         "ftd#decimal",
         "ftd#boolean",
+        "ftd#desktop",
+        "ftd#mobile",
     ]
     .contains(&s)
 }
