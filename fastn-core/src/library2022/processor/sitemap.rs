@@ -22,7 +22,7 @@ pub fn process(
         }
     }
     doc.from_json(
-        &fastn_core::sitemap::SiteMapCompat::default(),
+        &fastn_core::sitemap::SitemapCompat::default(),
         &kind,
         &value,
     )
@@ -51,7 +51,7 @@ pub fn full_sitemap_process(
         return doc.from_json(&sitemap_compat, &kind, &value);
     }
     doc.from_json(
-        &fastn_core::sitemap::SiteMapCompat::default(),
+        &fastn_core::sitemap::SitemapCompat::default(),
         &kind,
         &value,
     )
@@ -118,7 +118,7 @@ pub struct SiteMapCompat {
 pub fn to_sitemap_compat(
     sitemap: &fastn_core::sitemap::Sitemap,
     current_document: &str,
-) -> fastn_core::sitemap::SiteMapCompat {
+) -> fastn_core::sitemap::SitemapCompat {
     use itertools::Itertools;
     fn to_toc_compat(
         toc_item: &fastn_core::sitemap::toc::TocItem,
@@ -246,7 +246,7 @@ pub fn to_sitemap_compat(
         }
     }
 
-    fastn_core::sitemap::SiteMapCompat {
+    fastn_core::sitemap::SitemapCompat {
         sections: sitemap
             .sections
             .iter()

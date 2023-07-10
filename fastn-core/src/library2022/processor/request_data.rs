@@ -22,7 +22,7 @@ pub fn process(
             param_value
                 .to_serde_value()
                 .ok_or(ftd::ftd2021::p1::Error::ParseError {
-                    message: format!("ftd value cannot be parsed to json: name: {}", name),
+                    message: format!("ftd value cannot be parsed to json: name: {name}"),
                     doc_id: doc.name.to_string(),
                     line_number: value.line_number(),
                 })?;
@@ -38,7 +38,7 @@ pub fn process(
         Ok(None) => {}
         Err(e) => {
             return ftd::interpreter::utils::e2(
-                format!("Error while parsing request body: {:?}", e),
+                format!("Error while parsing request body: {e:?}"),
                 doc.name,
                 value.line_number(),
             )
