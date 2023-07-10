@@ -674,7 +674,7 @@ impl Config {
                 let mut s = fastn_core::sitemap::Sitemap::parse(
                     sitemap_temp.body.as_str(),
                     &package,
-                    &self,
+                    self,
                     false,
                 )
                 .await?;
