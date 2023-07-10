@@ -22,6 +22,7 @@ ftd.post_init = function () {
     function initialise_device() {
         last_device = get_device();
         console.log("last_device", last_device);
+        ftd.device.set(last_device);
     }
 
     function get_device() {

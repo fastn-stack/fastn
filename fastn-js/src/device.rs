@@ -17,5 +17,7 @@ impl From<&str> for DeviceType {
 #[derive(Debug)]
 pub struct DeviceBlock {
     pub device: fastn_js::DeviceType,
-    pub component_statements: Vec<fastn_js::ComponentStatement>,
+    pub statements: Vec<fastn_js::ComponentStatement>,
+    pub parent: String,
+    pub should_return: bool,
 }
