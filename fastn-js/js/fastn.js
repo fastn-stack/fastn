@@ -55,7 +55,7 @@ class Mutable {
         this.set(val);
     }
     get(key) {
-        if (!!key && (this.#value instanceof RecordInstance || this.#value instanceof MutableList)) {
+        if (!!key && (this.#value instanceof RecordInstance || this.#value instanceof MutableList || this.#value instanceof Mutable)) {
             return this.#value.get(key)
         }
         return this.#value;
@@ -139,7 +139,7 @@ class Proxy {
         this.#cached_value = this.#differentiator().get();
     }
     get(key) {
-        if (!!key && (this.#cached_value instanceof RecordInstance || this.#cached_value instanceof MutableList)) {
+        if (!!key && (this.#cached_value instanceof RecordInstance || this.#cached_value instanceof MutableList || this.#cached_value instanceof Mutable)) {
             return this.#cached_value.get(key)
         }
         return this.#cached_value;
@@ -252,13 +252,12 @@ class RecordInstance {
         this.#fields = {};
 
         for (let key in obj) {
-            this.#fields[key] = fastn.wrapMutable(obj[key]);
-            /*if (obj[key] instanceof fastn.mutableClass) {
+            if (obj[key] instanceof fastn.mutableClass) {
                 this.#fields[key] = fastn.mutable(null)
                 this.#fields[key].setWithoutUpdate(obj[key]);
             } else {
                 this.#fields[key] = fastn.mutable(obj[key]);
-            }*/
+            }
         }
     }
     getAllFields() {
