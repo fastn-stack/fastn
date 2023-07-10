@@ -11,6 +11,7 @@ pub enum ComponentStatement {
     MutableList(fastn_js::MutableList),
     ForLoop(fastn_js::ForLoop),
     RecordInstance(fastn_js::RecordInstance),
+    DeviceBlock(fastn_js::DeviceBlock),
     // JSExpression(ExprNode),
     // RecordInstance(RecordInstance),
     // Formula(Formula),
