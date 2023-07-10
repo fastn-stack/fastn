@@ -182,7 +182,7 @@ pub(crate) async fn get_file(
             }
             .as_str(),
         ) {
-        Some((_, id)) => id.to_string(),
+        Some((_, id)) => id.replace(std::path::MAIN_SEPARATOR, "/"),
         None => {
             return Err(fastn_core::Error::UsageError {
                 message: format!("{:?} should be a file", doc_path),
