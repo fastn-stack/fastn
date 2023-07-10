@@ -86,7 +86,6 @@ pub struct Section {
     /// The above example injects the value `true` and `Hello World`
     /// to the variables `show` and `message` respectively in inheritance.ftd
     /// and then renders it.
-    //    pub extra_data: Vec<(String, String)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub nav_title: Option<String>,

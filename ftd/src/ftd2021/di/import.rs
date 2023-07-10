@@ -26,7 +26,7 @@ impl Import {
         if !section.sub_sections.is_empty() {
             return ftd::ftd2021::di::parse_error(
                 format!(
-                    "Subsection not expected for import statement `{:?}`",
+                    "SubSection not expected for import statement `{:?}`",
                     section
                 ),
                 doc_id,

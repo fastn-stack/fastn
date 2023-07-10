@@ -31,8 +31,6 @@ pub struct Config {
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn_core::Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
-    // Related to current request, or per request
-    pub extra_data: serde_json::Map<String, serde_json::Value>,
     pub named_parameters: Vec<(String, ftd::Value)>,
     pub current_document: Option<String>,
     pub request: Option<fastn_core::http::Request>, // TODO: It should only contain reference
@@ -326,27 +324,6 @@ impl Config {
             }
         }
 
-        Ok(())
-    }
-
-    /// `attach_data_string()` sets the value of extra data in fastn_core::Config,
-    /// provided as `data` paramater of type `&str`
-    pub fn attach_data_string(&mut self, data: &str) -> fastn_core::Result<()> {
-        self.attach_data(serde_json::from_str(data)?)
-    }
-
-    /// `attach_data()` sets the value of extra data in fastn_core::Config,
-    /// provided as `data` paramater of type `serde_json::Value`
-    pub fn attach_data(&mut self, data: serde_json::Value) -> fastn_core::Result<()> {
-        let data = match data {
-            serde_json::Value::Object(o) => o,
-            t => {
-                return Err(fastn_core::Error::UsageError {
-                    message: format!("Expected object type, found: `{:?}`", t),
-                })
-            }
-        };
-        self.extra_data = data;
         Ok(())
     }
 
@@ -1295,7 +1272,6 @@ impl Config {
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
-            extra_data: Default::default(),
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),

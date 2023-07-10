@@ -140,7 +140,7 @@ fn di_import() {
             -- end: import
             "
         ),
-        "ASTParseError: foo:1 -> Subsection not expected for import statement \
+        "ASTParseError: foo:1 -> SubSection not expected for import statement \
         `Section { name: \"import\", kind: None, caption: Some(KV(KV { \
         line_number: 1, key: \"$caption$\", kind: None, value: Some(\"foo\"), \
         condition: None, access_modifier: Public, source: Caption })), \

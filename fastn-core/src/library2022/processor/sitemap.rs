@@ -253,10 +253,10 @@ pub fn to_sitemap_compat(
             .filter(|s| !s.skip)
             .map(|s| to_section_compat(s, current_document))
             .collect_vec(),
-        subsections: vec![],
+        sub_sections: vec![],
         toc: vec![],
         current_section: None,
-        current_subsection: None,
+        current_sub_section: None,
         current_page: None,
         readers: sitemap.readers.clone(),
         writers: sitemap.writers.clone(),

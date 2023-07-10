@@ -53,7 +53,7 @@ impl Import {
         if !section.sub_sections.is_empty() {
             return ftd::ast::parse_error(
                 format!(
-                    "Subsection not expected for import statement `{:?}`",
+                    "SubSection not expected for import statement `{:?}`",
                     section
                 ),
                 doc_id,

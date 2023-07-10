@@ -1015,7 +1015,7 @@ impl InterpreterState {
         var_types: &[String],
     ) -> ftd::ftd2021::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>
     {
-        // will contain all replace blocks for section and its subsections
+        // will contain all replace blocks for section and its sub_sections
         // where link replacement or escape links need to be resolved
         let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
             vec![];
@@ -1353,7 +1353,7 @@ impl InterpreterState {
                                 .get_mut(target_subsection_index)
                                 .ok_or_else(|| ftd::ftd2021::p1::Error::UnknownData {
                                     message: format!(
-                                        "No subsection present at index {} in subsections",
+                                        "No subsection present at index {} in sub_sections",
                                         target_subsection_index
                                     ),
                                     doc_id: self.id.clone(),
@@ -1397,7 +1397,7 @@ impl InterpreterState {
 
         return self.continue_();
 
-        /// replaces all links present in any textsource from a single section and its subsections,
+        /// replaces all links present in any textsource from a single section and its sub_sections,
         /// also resolves any escaped links if present.
         /// returns true if any replacement took place else false
         fn replace_all_links(
@@ -1773,8 +1773,8 @@ impl ParsedDocument {
     /// Only '/' comments are ignored here.
     /// ';' comments are ignored inside the [`parser`] itself.
     ///
-    /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
-    /// in sections and subsections accordingly.
+    /// uses [`Section::remove_comments()`] and [`SubSection::remove_comments()`] to remove comments
+    /// in sections and sub_sections accordingly.
     ///
     /// [`parser`]: ftd::p1::parser::parse
     /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
