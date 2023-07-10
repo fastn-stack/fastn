@@ -176,6 +176,7 @@ pub fn from_tree(
 }
 
 impl ftd::interpreter::Component {
+    #[allow(clippy::too_many_arguments)]
     pub fn to_component_statements(
         &self,
         parent: &str,
