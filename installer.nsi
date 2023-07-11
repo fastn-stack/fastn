@@ -1,10 +1,11 @@
 ; Set the name and output file of the installer
-Outfile "fastn_installer.exe"
+Outfile "windows_x64_latest_installer.exe"
 
 ; Set the name and version of the application
 Name "Fastn"
+
 ; Version "1.0"
-VIProductVersion "1.0"
+; VIProductVersion "1.0"
 
 ; Default installation directory
 InstallDir $PROGRAMFILES\fastn
@@ -24,12 +25,8 @@ Section "Fastn Installer" SectionOne
     ; Set the output path for installation
     SetOutPath $INSTDIR
     
-    ; Create shortcuts
-    CreateDirectory $DESKTOP
-    CreateShortCut "$DESKTOP\fastn.lnk" "cmd.exe $INSTDIR\fastn.exe"
-    
     ; Copy application files
-    File "fastn.exe"
+    File "target/release/fastn.exe"
     ; File "Readme.txt"
     
 SectionEnd

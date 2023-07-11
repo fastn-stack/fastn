@@ -75,11 +75,10 @@ jobs:
             target/release/fastn.exe
       - name: Create installer
         uses: joncloud/makensis-action@v4
+      - uses: actions/upload-artifact@master
         with:
-          arguments: "/V4"
-          name: windows_x64_latest_installer
-          path: |
-            target/release/fastn.exe
+          name: windows_x64_latest
+          path: /windows_x64_latest_installer.exe
           
   release-macos:
     name: Build for MacOS
