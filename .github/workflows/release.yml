@@ -78,7 +78,8 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest_installer
-          path: /windows_x64_latest_installer.exe
+          path: |
+            windows_x64_latest_installer.exe
           
   release-macos:
     name: Build for MacOS
