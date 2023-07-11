@@ -77,7 +77,7 @@ jobs:
         uses: joncloud/makensis-action@v4
       - uses: actions/upload-artifact@master
         with:
-          name: windows_x64_latest
+          name: windows_x64_latest_installer
           path: /windows_x64_latest_installer.exe
           
   release-macos:
