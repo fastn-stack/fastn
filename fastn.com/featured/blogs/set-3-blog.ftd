@@ -40,7 +40,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Blog - Set 3
-cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -67,6 +66,7 @@ organizational blog sites.
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.blog.set-3-blog.jpg
 cta-url: https://fastn-community.github.io/set-2-ds/blog/
+wip: true
 
 -- ft-ui.grid-view: Blog Templates
 if: { show-grid }

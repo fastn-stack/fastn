@@ -40,7 +40,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: Documentation Sites - Midnight Storm
-cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -71,6 +70,7 @@ kind of site(personal website, blog, etc).
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
 cta-url: https://fastn-community.github.io/midnight-storm/
+wip: true
 
 -- ft-ui.grid-view: Documentation Sites
 if: { show-grid }

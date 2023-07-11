@@ -40,7 +40,6 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 -- ds.page.layout-bar:
 
 -- ds.layout: SPA / Landing Pages - Midnight Rush 
-cta-url: https://github.com/fastn-stack/fastn-template/generate
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -67,6 +66,7 @@ for creating SPA(Single Page Application or websites) etc.
 -- ds.preview-card:
 image: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 cta-url: https://fastn-community.github.io/midnight-rush/landing/
+wip: true
 
 -- ft-ui.grid-view: SPA / Landing Pages
 if: { show-grid }

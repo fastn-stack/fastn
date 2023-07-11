@@ -67,7 +67,6 @@ template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
 licence-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
 github-url: https://github.com/fastn-community/doc-site
-wip: true
 
 ⚡️ doc-site will help you create a beautiful documentation site in no time.
 

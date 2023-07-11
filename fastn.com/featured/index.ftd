@@ -267,20 +267,40 @@ link: $grid-of-items.template-url
 ;;open-in-new-tab: true
 
 -- ftd.column:
-if: { grid-of-items.wip }
 width: fill-container
-height.fixed.px: 230
-anchor: parent
-top.px: 0
-left.px: 0
-background.solid: rgba(0,0,0,0.4)
+height.fixed.px: 220
 align-content: center
+border-width.px: 1
+border-color: $inherited.colors.border
 overflow: hidden
 border-radius.px: 10
 
--- ftd.text: 🚧 Coming Soon!
-role: $inherited.types.copy-regular
+-- ftd.column:
+if: { grid-of-items.wip }
+width.fixed.px: 190
+height.fixed.px: 166
+anchor: parent
+background.solid: $overlay-bg
+overflow: hidden
+border-radius.px: 10
+align-content: center
+z-index: 99
+
+-- ftd.column:
+width: fill-container
+align-content: center
+spacing.fixed.px: 16
+
+-- ftd.image:
+src: $fastn-assets.files.images.featured.lock-icon.svg
+width.fixed.px: 48
+height.fixed.px: 48
+
+-- ftd.text: Coming Soon
+role: $inherited.types.button-medium
 color: #d9d9d9
+
+-- end: ftd.column
 
 -- end: ftd.column
 
@@ -292,6 +312,10 @@ height.fixed.px: 230
 border-radius.px: 10
 $on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
 $on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+classes if { grid-of-items.wip }: filter-1px
+css if { grid-of-items.wip }: [$fastn-assets.files.featured.filter.css]
+
+-- end: ftd.column
 
 -- ftd.row:
 align-content: right
@@ -685,3 +709,13 @@ github: https://github.com/FifthTry/roboto
 -- end: ftd.column
 
 -- end: fonts
+
+
+
+
+
+-- ftd.color overlay-bg:
+light: #00000066
+dark:  #00000066
+
+
