@@ -62,7 +62,7 @@ templates: $fonts-typography
 -- ft-ui.template list fonts-typography:
 
 -- ft-ui.template: Arya Typography
-template-url: https://fastn-community.github.io/arya-font-typography/
+template-url: https://fastn-community.github.io/arya-typography/
 licence-url: https://github.com/fastn-community/arya-typography/blob/main/LICENSE.md
 github-url: https://github.com/fastn-community/arya-typography
 screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
