@@ -71,15 +71,16 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest
-          path: |
-            target/release/fastn.exe
+          path: target/release/fastn.exe
       - name: Create installer
         uses: joncloud/makensis-action@v4
-      - uses: actions/upload-artifact@master
         with:
-          name: windows_x64_latest_installer
-          path: |
-            windows_x64_latest_installer.exe
+          arguments: ${{ github.workspace }}/target/release/fastn.exe
+      - uses: actions/upload-artifact@v2
+        with:
+          name: windows_x64_installer.exe
+          path: windows_x64_installer.exe
+
           
   release-macos:
     name: Build for MacOS

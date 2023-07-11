@@ -1,5 +1,5 @@
 ; Set the name and output file of the installer
-Outfile "windows_x64_latest_installer.exe"
+Outfile "windows_x64_installer.exe"
 
 ; Set the name and version of the application
 Name "Fastn"
@@ -26,7 +26,7 @@ Section "Fastn Installer" SectionOne
     SetOutPath $INSTDIR
     
     ; Copy application files
-    File "target/release/fastn.exe"
+    File "$%BINARY_PATH%"
     ; File "Readme.txt"
     
 SectionEnd
