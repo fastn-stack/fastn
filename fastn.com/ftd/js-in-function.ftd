@@ -50,6 +50,6 @@ $on-click$: $call-js-fn(a = FifthTry Alert)
 
 -- void call-js-fn(a):
 string a:
-js: $fastn-assets.files.functions.js
+js: [$fastn-assets.files.functions.js]
 
 show_alert(a)

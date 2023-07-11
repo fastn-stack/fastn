@@ -15,7 +15,7 @@ name: fastn-typography
 string json:
 string $store_at:
 string $formatted_string:
-js: $js-assets.files.typo.js
+js: [$js-assets.files.typo.js]
 
 value = typo_to_ftd(json);
 store_at = value[0];
@@ -55,7 +55,7 @@ name: fastn-typography
 string json:
 string $store_at:
 string $formatted_string:
-js: $js-assets.files.typo.js
+js: [$js-assets.files.typo.js]
 
 value = typo_to_ftd(json);
 store_at = value[0];

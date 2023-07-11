@@ -88,7 +88,7 @@ to declare it in a `ftd` file:
 lang: ftd
 
 \-- web-component word-count:
-js: $assets.files.word-count.js
+js: [$assets.files.word-count.js]
 
 -- ds.markdown:
 
@@ -120,7 +120,7 @@ lang: ftd
 \-- web-component todo-list-display:
 string name:
 todo-item list $todo_list:
-js: $assets.files.todo.js
+js: [$assets.files.todo.js]
 
 -- ds.markdown:
 

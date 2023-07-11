@@ -523,7 +523,7 @@ if: { options-ui.is-submitted && options-ui.is-answer == 1 && !options-ui.is-che
 boolean $a:
 integer $checked:
 integer answer:
-js: $fastn-assets.files.functions.js
+js: [$fastn-assets.files.functions.js]
 
 a = !a;
 checked = add_sub(checked, a, answer)
