@@ -33,11 +33,11 @@ pub async fn process(
     let (headers, query) = get_p1_data("package-data", &value, doc.name)?;
 
     let sqlite_database =
-        match headers.get_optional_string_by_key("$db$", doc.name, value.line_number())? {
+        match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
             Some(k) => k,
             None => {
                 return ftd::interpreter::utils::e2(
-                    "`$db$` is not specified".to_string(),
+                    "`db` is not specified".to_string(),
                     doc.name,
                     value.line_number(),
                 )
@@ -47,7 +47,7 @@ pub async fn process(
     if !sqlite_database_path.exists() {
         if !config.root.join(sqlite_database_path.as_path()).exists() {
             return ftd::interpreter::utils::e2(
-                "`$db$` does not exists for package-query processor".to_string(),
+                "`db` does not exists for package-query processor".to_string(),
                 doc.name,
                 value.line_number(),
             );
