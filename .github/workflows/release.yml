@@ -75,8 +75,7 @@ jobs:
       - name: Create installer
         uses: joncloud/makensis-action@v4
         with:
-          arguments: |
-            /DBINARY_PATH="${{ github.workspace }}\target\release\fastn.exe"
+          arguments: /DBINARY_PATH=${{ github.workspace }}\target\release\fastn.exe
       - uses: actions/upload-artifact@v2
         with:
           name: windows_x64_installer.exe

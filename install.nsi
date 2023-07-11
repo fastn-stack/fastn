@@ -1,3 +1,5 @@
+!define BINARY_PATH
+
 ; Set the name and output file of the installer
 Outfile "windows_x64_installer.exe"
 
@@ -26,7 +28,7 @@ Section "Fastn Installer" SectionOne
     SetOutPath $INSTDIR
     
     ; Copy application files
-    File "$%BINARY_PATH%"
+    File "${BINARY_PATH}"
     ; File "Readme.txt"
     
 SectionEnd
