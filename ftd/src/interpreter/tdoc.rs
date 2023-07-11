@@ -1871,7 +1871,7 @@ impl<'a> TDoc<'a> {
         kind: &ftd::interpreter::Kind,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         let line_number = value.line_number();
-        dbg!(value, json, kind);
+        // dbg!(value, json, kind);
         Ok(match kind {
             ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: match json {
