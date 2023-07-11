@@ -1,4 +1,4 @@
-!define BINARY_PATH
+; !define BINARY_PATH
 
 ; Set the name and output file of the installer
 Outfile "windows_x64_installer.exe"
