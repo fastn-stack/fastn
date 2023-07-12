@@ -71,8 +71,26 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest
-          path: |
-            target/release/fastn.exe
+          path: target/release/fastn.exe
+      - name: Download EnVar plugin for NSIS
+        uses: carlosperate/download-file-action@v1.0.3
+        with:
+          file-url: https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip
+          file-name: envar_plugin.zip
+          location: ${{ github.workspace }}
+      - name: Extract EnVar plugin
+        run: 7z x -o"${{ github.workspace }}/NSIS_Plugins" "${{ github.workspace }}/envar_plugin.zip"
+      - name: Create installer
+        uses: joncloud/makensis-action@v4
+        with:
+          arguments: /DBINARY_PATH=${{ github.workspace }}\target\release\fastn.exe /DVERSION=${{ github.event.inputs.releaseTag }}
+          additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
+      - uses: actions/upload-artifact@v2
+        with:
+          name: windows_x64_installer.exe
+          path: windows_x64_installer.exe
+
+          
   release-macos:
     name: Build for MacOS
     runs-on: macos-latest
@@ -121,9 +139,14 @@ jobs:
         with:
           name: windows_x64_latest
           path: ~/download/windows
+      - uses: actions/download-artifact@v2
+        with:
+          name: windows_x64_installer.exe
+          path: ~/download/windows
       - name: Rename assets
         run: |
           mv ~/download/windows/fastn.exe ~/download/windows/fastn_windows_x86_64.exe
+          mv ~/download/windows/windows_x64_installer.exe ~/download/windows/fastn_setup.exe
           mv ~/download/macos/fastn ~/download/macos/fastn_macos_x86_64
           mv ~/download/linux_musl/fastn ~/download/linux_musl/fastn_linux_musl_x86_64
           mv ~/download/linux_musl/fastn.d ~/download/linux_musl/fastn_linux_musl_x86_64.d
@@ -131,7 +154,7 @@ jobs:
           mv ~/download/fastn_controller_linux_musl/fastn.d ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64.d,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d"
+          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64.d,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
