@@ -55,6 +55,7 @@ Section "Fastn Installer" SectionOne
     ; Copy application files
     File ${CURRENT_WD}\target\release\fastn.exe
     File ${CURRENT_WD}\LICENSE
+    File ${CURRENT_WD}\README.md
 
     ; Set the Path variables
     EnVar::SetHKCU
