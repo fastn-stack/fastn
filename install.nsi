@@ -1,41 +1,24 @@
+!include LogicLib.nsh
+
 ; Set the name and output file of the installer
 Outfile "windows_x64_installer.exe"
 
 ; Set the name and version of the application
 Name "Fastn"
 
-; Set Version of installer
+; Version "1.0"
 VIProductVersion "${VERSION}"
 
 ; Default installation directory
 InstallDir $PROGRAMFILES\fastn
-
-!define PRODUCT_NAME "fastn"
-!define MUI_BRANDINGTEXT "fastn ${VERSION}"
-!define MUI_ICON "fastn.ico"
-!define MUI_INSTFILESPAGE_COLORS "FFFFFF 000000"
-!define MUI_BGCOLOR 000000
-!define MUI_TEXTCOLOR ffffff
-!define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_SHOWREADME "https://fastn.com"
-CRCCheck On
-
-!include LogicLib.nsh
-
-!include "MUI.nsh"
 
 ; Request application privileges for installation
 RequestExecutionLevel admin
 
 ; Pages
 
-!define MUI_WELCOMEPAGE  
-;!define MUI_LICENSEPAGE
-!define MUI_DIRECTORYPAGE
-!define MUI_ABORTWARNING
-; !define MUI_UNINSTALLER
-; !define MUI_UNCONFIRMPAGE
-!define MUI_FINISHPAGE 
+Page Directory
+Page InstFiles
 
 ; Sections
 
