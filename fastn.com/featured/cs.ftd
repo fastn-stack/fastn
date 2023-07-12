@@ -53,13 +53,21 @@ templates: $schemes
 
 -- ft-ui.template list schemes:
 
--- ft-ui.template: Winter CS
-template-url: https://fastn-community.github.io/winter-cs/
-screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
-licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/winter-cs
+-- ft-ui.template: Blog Template CS
+template-url: https://fastn-community.github.io/blog-template-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
+licence-url: https://github.com/fastn-community/blog-template-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/blog-template-cs
 
-Add warmth and energy to your designs with the `winter-cs`.
+Add warmth and energy to your designs with the `blog-template-cs`.
+
+-- ft-ui.template: Blue Heal CS
+template-url: https://fastn-community.github.io/blue-heal-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
+licence-url: https://github.com/fastn-community/blue-heal-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/blue-heal-cs
+
+Add warmth and energy to your designs with the `blue-heal-cs`.
 
 -- ft-ui.template: Dark Flame CS
 template-url: https://fastn-community.github.io/dark-flame-cs/
@@ -69,6 +77,45 @@ github-url: https://github.com/fastn-community/dark-flame-cs/
 
 Add warmth and energy to your designs with the `dark-flame-cs`.
 
+-- ft-ui.template: Forest CS
+template-url: https://fastn-community.github.io/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/forest-cs
+
+Add warmth and energy to your designs with the `forest-cs`.
+
+-- ft-ui.template: Midnight Storm CS
+template-url: https://fastn-community.github.io/midnight-storm-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+licence-url: https://github.com/fastn-community/midnight-storm-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/midnight-storm-cs
+
+Add warmth and energy to your designs with the `midnight-storm-cs`.
+
+-- ft-ui.template: Misty Gray CS
+template-url: https://fastn-community.github.io/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+licence-url: https://github.com/fastn-community/misty-gray-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/misty-gray-cs
+
+Add warmth and energy to your designs with the `misty-gray-cs`.
+
+-- ft-ui.template: Navy Nebula CS
+template-url: https://fastn-community.github.io/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+licence-url: https://github.com/fastn-community/navy-nebula-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/navy-nebula-cs
+
+Add warmth and energy to your designs with the `navy-nebula-cs`.
+
+-- ft-ui.template: Pretty CS
+template-url: https://fastn-community.github.io/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
+licence-url: https://github.com/fastn-community/pretty-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/pretty-cs
+
+Add warmth and energy to your designs with the `pretty-cs`.
 
 -- ft-ui.template: Saturated Sunset CS
 template-url: https://fastn-community.github.io/saturated-sunset-cs/
@@ -78,13 +125,12 @@ github-url: https://github.com/fastn-community/saturated-sunset-cs
 
 Add warmth and energy to your designs with the `saturated-sunset-cs`.
 
+-- ft-ui.template: Winter CS
+template-url: https://fastn-community.github.io/winter-cs/
+screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
+licence-url: https://github.com/fastn-community/winter-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/winter-cs
 
--- ft-ui.template: Forest CS
-template-url: https://fastn-community.github.io/forest-cs/
-screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
-licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
-github-url: https://github.com/fastn-community/forest-cs
-
-Add warmth and energy to your designs with the `forest-cs`.
+Add warmth and energy to your designs with the `winter-cs`.
 
 -- end: schemes

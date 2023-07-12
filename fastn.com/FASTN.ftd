@@ -12,7 +12,7 @@ favicon: /-/fastn.com/images/favicon.svg
 -- fastn.dependency: fastn-community.github.io/footer
 -- fastn.dependency: fastn-community.github.io/spectrum-ds
 -- fastn.dependency: fifthtry.github.io/admonitions
--- fastn.dependency: fifthtry.github.io/banner
+-- fastn.dependency: fastn-community.github.io/banner
 -- fastn.dependency: fifthtry.github.io/button
 -- fastn.dependency: fifthtry.github.io/common
 -- fastn.dependency: fifthtry.github.io/fastn-io-typography
