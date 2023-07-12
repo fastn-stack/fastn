@@ -237,7 +237,7 @@ impl ftd::interpreter::Component {
                     parent: parent.to_string(),
                     should_return: self.is_loop() || should_return,
                 },
-            )]
+            )];
         }
 
         if let Some(iteration) = self.iteration.as_ref() {
@@ -250,7 +250,7 @@ impl ftd::interpreter::Component {
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,
-            })]
+            })];
         }
 
         component_statements
