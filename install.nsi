@@ -32,7 +32,7 @@ RequestExecutionLevel admin
 ; Pages
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE ${CURRENT_WD}LICENSE
+!insertmacro MUI_PAGE_LICENSE ${CURRENT_WD}\LICENSE
 !insertmacro MUI_PAGE_INSTFILES
 
 ; Default Language
