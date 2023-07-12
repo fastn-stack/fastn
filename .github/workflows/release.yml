@@ -83,7 +83,7 @@ jobs:
       - name: Create installer
         uses: joncloud/makensis-action@v4
         with:
-          arguments: /DBINARY_PATH=${{ github.workspace }}\target\release\fastn.exe /DVERSION=${{ github.event.inputs.releaseTag }}
+          arguments: /V3 /DCURRENT_WD=${{ github.workspace }} /DVERSION=${{ github.event.inputs.releaseTag }}
           additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
       - uses: actions/upload-artifact@v2
         with:
