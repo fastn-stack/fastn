@@ -211,6 +211,13 @@ pub async fn default_build_files(base_path: camino::Utf8PathBuf) -> fastn_core::
         .await
         .ok();
 
+    let default_ftd_js_content = fastn_js::all_js_without_test();
+    let hashed_ftd_js_name = fastn_core::utils::hashed_default_ftd_js();
+    let save_default_ftd_js = base_path.join(hashed_ftd_js_name.as_str());
+    fastn_core::utils::update(save_default_ftd_js, default_ftd_js_content.as_bytes())
+        .await
+        .ok();
+
     Ok(())
 }
 
