@@ -55,3 +55,19 @@ e.g.
 2. To fix `01-basic.ftd` test in `js`, use: 
    `cargo test fastn_js_test_all -- --nocapture path=01 fix=true` or
    `cargo test fastn_js_test_all -- --nocapture fix=true path=01` etc.
+
+
+# How to create tests
+
+1. Go to the corresponding folder for which the test needs to be created.
+   Suppose, if you want to create a new test for `js`. Then go to `t/js` 
+   folder.
+2. Create a new file, preferably, the file name format should be 
+   `<test-number>-<what-test-is-related-to>.ftd`. Suppose, if you want to 
+   create a test for list type variable and the latest test number in the 
+   folder is `11`. The file name should be `12-list-type-variable.ftd`.
+3. Write the `ftd` code in the newly created test file.
+4. Then run `cargo test fastn_js_test_all -- --nocapture path=11 fix=true`. 
+   This will create a new output file. For above example, 
+   `12-list-type-variable.html` will be created. 
+5. You can check the generated file if it matches with your expectation.
