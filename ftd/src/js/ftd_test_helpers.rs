@@ -74,8 +74,8 @@ pub fn interpret_helper(
 fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast = ftd::js::document_into_js_ast(i);
-    let js_script = prettify_js::prettyprint(fastn_js::to_js(js_ast.as_slice()).as_str()).0;
-    let ssr_body = fastn_js::ssr(js_ast.as_slice());
+    let js_script = fastn_js::to_js(js_ast.as_slice());
+    let ssr_body = fastn_js::ssr_with_js_string(js_script.as_str());
     let html_str = std::fs::read_to_string("ftd-js.html")
         .expect("can't read ftd-js.html")
         .replace("__js_script__", js_script.as_str())
@@ -83,7 +83,7 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
         .replace(
             "__script_file__",
             if manual {
-                format!("<script>\n{}\n</script>", fastn_js::all_js())
+                format!("<script>\n{}\n</script>", fastn_js::all_js_with_test())
             } else {
                 "<script src=\"fastn-js.js\"></script>".to_string()
             }

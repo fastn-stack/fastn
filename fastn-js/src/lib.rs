@@ -31,13 +31,23 @@ pub use loop_component::ForLoop;
 pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
 pub use property::{ConditionalValue, Formula, PropertyKind, SetProperty, SetPropertyValue, Value};
 pub use record::RecordInstance;
-pub use ssr::{ssr, ssr_str};
+pub use ssr::{ssr, ssr_str, ssr_with_js_string};
 pub use static_variable::{static_integer, static_string, StaticVariable};
 pub use to_js::to_js;
 pub use udf::{udf0, udf1, udf2, udf_with_params, UDF};
 pub use udf_statement::UDFStatement;
 
-pub fn all_js() -> String {
+pub fn all_js_without_test() -> String {
+    let fastn_js = include_str!("../js/fastn.js");
+    let dom_js = include_str!("../js/dom.js");
+    let utils_js = include_str!("../js/utils.js");
+    let virtual_js = include_str!("../js/virtual.js");
+    let ftd_js = include_str!("../js/ftd.js");
+    let post_init_js = include_str!("../js/postInit.js");
+    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}")
+}
+
+pub fn all_js_with_test() -> String {
     let fastn_js = include_str!("../js/fastn.js");
     let dom_js = include_str!("../js/dom.js");
     let utils_js = include_str!("../js/utils.js");

@@ -631,6 +631,22 @@ pub fn replace_markers_2022(
     )
 }
 
+#[allow(clippy::too_many_arguments)]
+pub fn replace_markers_2023(s: &str, js_script: &str, ssr_body: &str, font_style: &str) -> String {
+    ftd::html::utils::trim_all_lines(
+        s.replace("__js_script__", js_script)
+            .replace(
+                "__html_body__",
+                format!("{}{}", ssr_body, font_style).as_str(),
+            )
+            .replace(
+                "__script_file__",
+                format!("<script src=\"{}\"></script>", hashed_default_ftd_js()).as_str(),
+            )
+            .as_str(),
+    )
+}
+
 pub fn is_test() -> bool {
     cfg!(test) || std::env::args().any(|e| e == "--test")
 }
@@ -814,6 +830,13 @@ pub fn hashed_default_js_name() -> String {
     format!(
         "default-{}.js",
         generate_hash(format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js()).as_str())
+    )
+}
+
+pub fn hashed_default_ftd_js() -> String {
+    format!(
+        "default-{}.js",
+        generate_hash(fastn_js::all_js_without_test().as_str())
     )
 }
 

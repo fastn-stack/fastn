@@ -19,7 +19,7 @@ pub fn to_js(ast: &[fastn_js::Ast]) -> String {
         space(),
     ));
     o.render(80, &mut w).unwrap();
-    String::from_utf8(w).unwrap()
+    prettify_js::prettyprint(String::from_utf8(w).unwrap().as_str()).0
 }
 
 impl fastn_js::Ast {
