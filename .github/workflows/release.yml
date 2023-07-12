@@ -89,7 +89,6 @@ jobs:
         with:
           name: windows_x64_installer.exe
           path: windows_x64_installer.exe
-
           
   release-macos:
     name: Build for MacOS
