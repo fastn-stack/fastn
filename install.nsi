@@ -7,7 +7,7 @@ Outfile "windows_x64_installer.exe"
 Name "Fastn"
 
 ; Version "1.0"
-; VIProductVersion "1.0"
+VIProductVersion "${VERSION}"
 
 ; Default installation directory
 InstallDir $PROGRAMFILES\fastn
