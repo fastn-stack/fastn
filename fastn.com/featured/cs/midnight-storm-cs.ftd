@@ -1,0 +1,161 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-io-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+-- ds.page: Color schemes
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+distribution-bar: true
+
+-- ds.page.footer:
+
+-- footer.social-sideline-footer:
+social: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-url: /
+twitter-url: https://twitter.com/FifthTryHQ
+discord-url: https://discord.gg/bucrdvptYd
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: ds.page.footer
+
+-- ds.page.layout-bar:
+
+-- ds.layout: Color schemes
+cta-url: https://fastn-community.github.io/midnight-storm-cs/
+previous-url: /featured/cs/
+cta-text: Use this color scheme
+
+-- end: ds.page.layout-bar
+
+-- ds.page.abstract-bar:
+
+-- ds.distributors: 
+owners: $owner-fastn
+license-url: https://github.com/fastn-community/midnight-storm-cs/blob/main/LICENSE
+license: Creative Commons
+published-date: 26-June-2023
+used-by: 2 +
+likes: 1 Stars
+connect: $social-links
+
+-- end: ds.page.abstract-bar
+
+
+-- ds.page.body:
+
+We have designed and developed below color schemes. You can use them to change
+your `FTD` web site color scheme. 
+
+
+-- ds.preview-card: Midnight Storm CS
+image: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+cta-url: https://fastn-community.github.io/midnight-storm-cs/
+
+-- ft-ui.grid-view: Similar Color schemes
+if: { show-grid }
+templates: $similar-schemes
+more-link-text: View all
+more-link: /featured/cs/
+
+Add warmth and energy to your fastn web site designs with our fastn Color
+Schemes.
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media: 
+link: https://discord.gg/bucrdvptYd
+src: $assets.files.images.discord.svg
+
+-- common.social-media: 
+link: https://twitter.com/fastn_stack
+src: $assets.files.images.twitter.svg
+
+-- common.social-media: 
+link: https://www.linkedin.com/company/fifthtry/
+src: $assets.files.images.linkedin.svg
+
+-- end: social-links
+
+
+
+
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Fastn Community
+profile: https://github.com/fastn-community
+avatar: $assets.files.images.fastn.svg
+
+-- end: owner-fastn
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list similar-schemes:
+
+-- ft-ui.template: Forest CS
+template-url: featured/cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+licence-url: https://github.com/fastn-community/forest-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/forest-cs
+
+Add warmth and energy to your designs with the `forest-cs`.
+
+-- ft-ui.template: Misty Gray CS
+template-url: featured/cs/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+licence-url: https://github.com/fastn-community/misty-gray-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/misty-gray-cs
+
+Add warmth and energy to your designs with the `misty-gray-cs`.
+
+-- ft-ui.template: Pretty CS
+template-url: featured/cs/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
+licence-url: https://github.com/fastn-community/pretty-cs/blob/main/LICENSE
+github-url: https://github.com/fastn-community/pretty-cs
+
+Add warmth and energy to your designs with the `pretty-cs`.
+
+
+-- end: similar-schemes
