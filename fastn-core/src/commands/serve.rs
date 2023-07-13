@@ -1,6 +1,19 @@
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
+#[tracing::instrument(skip_all)]
+fn handle_redirect(
+    config: &mut fastn_core::Config,
+    path: &camino::Utf8Path,
+) -> Option<fastn_core::http::Response> {
+    config
+        .package
+        .redirects
+        .as_ref()
+        .and_then(|v| fastn_core::package::redirects::find_redirect(v, path.as_str()))
+        .map(|r| fastn_core::http::redirect(r.to_string()))
+}
+
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
 ///
@@ -9,39 +22,11 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    let url_regex = fastn_core::http::url_regex();
-
-    let mut path = <&camino::Utf8Path>::clone(&path);
-    let redirects = config.package.redirects.clone();
-    let mut current_path = path.to_string();
-    let mut has_redirect_url = false;
-    let mut has_external_redirect = false;
-    if let Some(r) = redirects {
-        if let Some(redirected_path) =
-            fastn_core::package::redirects::find_redirect(&r, current_path.as_str())
-        {
-            current_path = redirected_path.to_string();
-            path = camino::Utf8Path::new(current_path.as_str());
-            has_redirect_url = true;
-            if url_regex.is_match(redirected_path.as_str()) {
-                has_external_redirect = true;
-            }
-        }
+    if let Some(r) = handle_redirect(config, path) {
+        return r;
     }
 
-    if has_external_redirect {
-        return match fastn_core::http::get_external_response(current_path.as_str()).await {
-            Ok(r) => r,
-            Err(e) => {
-                tracing::error!(
-                    msg = "fastn-error external redirect path not found",
-                    path = path.as_str(),
-                    error = %e
-                );
-                fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
-            }
-        };
-    }
+    let path = <&camino::Utf8Path>::clone(&path);
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
@@ -105,14 +90,7 @@ async fn serve_file(
     match f {
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
-                return if has_redirect_url {
-                    fastn_core::http::redirect(
-                        main_document.content.as_bytes().to_vec(),
-                        current_path.as_str(),
-                    )
-                } else {
-                    fastn_core::http::ok(main_document.content.as_bytes().to_vec())
-                };
+                return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
             }
             match fastn_core::package::package_doc::read_ftd(
                 config,
@@ -123,16 +101,9 @@ async fn serve_file(
             )
             .await
             {
-                Ok(r) => match has_redirect_url {
-                    true => fastn_core::http::redirect_with_content_type(
-                        r,
-                        mime_guess::mime::TEXT_HTML_UTF_8,
-                        current_path.as_str(),
-                    ),
-                    false => {
-                        fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
-                    }
-                },
+                Ok(r) => {
+                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                }
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
@@ -288,6 +259,7 @@ pub async fn serve(
         .add_inline_js(inline_js)
         .add_external_css(external_css)
         .add_inline_css(inline_css);
+
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
