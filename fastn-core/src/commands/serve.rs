@@ -280,37 +280,19 @@ pub async fn serve(
     let _lock = LOCK.read().await;
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
+    let mut config = fastn_core::Config::read(None, false, Some(&req))
+        .await
+        .unwrap()
+        .add_edition(edition)?
+        .add_external_js(external_js)
+        .add_inline_js(inline_js)
+        .add_external_css(external_css)
+        .add_inline_css(inline_css);
     Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        let config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
         serve_fastn_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .set_request(req)
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
-
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -318,15 +300,6 @@ pub async fn serve(
 
         let req_method = req.method().to_string();
         let query_string = req.query_string().to_string();
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css)
-            .set_request(req);
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
