@@ -1,0 +1,14 @@
+;; ------------------------ LINK -----------------------------
+
+-- ftd.column:
+width: fill-container
+align-content: center
+
+-- ftd.text: This is a link
+link: https://www.fastn.com
+margin.px: 20
+
+-- end: ftd.column
+
+;; ------------------------- OPEN-IN-NEW-TAB --------------------------------
+;; todo!

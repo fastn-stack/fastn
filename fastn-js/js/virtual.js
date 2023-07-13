@@ -18,11 +18,13 @@ class Node {
     #id
     #tagName
     #children
+    #attributes
     constructor(id, tagName) {
         this.#tagName = tagName;
         this.#id = id;
         this.classList = new ClassList();
         this.#children = [];
+        this.#attributes = {};
         this.innerHTML = "";
         this.style = {};
         this.onclick = null;
@@ -30,8 +32,17 @@ class Node {
     appendChild(c) {
         this.#children.push(c);
     }
+    removeLastChild() {
+        this.#children.pop();
+    }
+    addAttribute(attribute, value) {
+        this.#attributes[attribute] = value;
+    }
+    updateTagName(tagName) {
+        this.#tagName = tagName;
+    }
     toHtmlAsString() {
-        const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getClassString()}${this.getStyleString()}>`;
+        const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;
         const innerHTML = this.innerHTML;
         const childNodes = this.#children.map(child => child.toHtmlAsString()).join('');
@@ -50,6 +61,16 @@ class Node {
             .map(([prop, value]) => `${prop}:${value}`)
             .join(';');
         return styleProperties ? ` style="${styleProperties}"` : '';
+    }
+    getAttributesString() {
+        const nodeAttributes = Object.entries(this.#attributes)
+            .map(([attribute, value]) => {
+                if (value != null) {
+                    return `${attribute}=${value}`;
+                }
+                return `${attribute}`;
+            }).join(' ');
+        return nodeAttributes ? ` ${nodeAttributes}` : '';
     }
 }
 

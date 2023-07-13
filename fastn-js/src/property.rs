@@ -177,6 +177,7 @@ pub enum PropertyKind {
     Children,
     StringValue,
     Id,
+    Link,
     Anchor,
     Classes,
     AlignSelf,
@@ -321,6 +322,7 @@ impl PropertyKind {
             PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
             PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
             PropertyKind::Classes => "fastn_dom.PropertyKind.Classes",
+            PropertyKind::Link => "fastn_dom.PropertyKind.Link",
         }
     }
 }
