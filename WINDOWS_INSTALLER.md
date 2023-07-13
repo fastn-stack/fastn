@@ -1,35 +1,39 @@
-# Fastn Windows Installer Support
-
-This pull request adds Windows installer support to Fastn.
+# Fastn Windows Installer
 
 ## Introduction
 
-This pull request aims to introduce a Windows installer for fastn. It includes the necessary changes to the `release.yml` file and the addition of an NSIS (Nullsoft Scriptable Install System) configuration script called `install.nsi`. By leveraging NSIS, a popular tool for creating Windows installers, we simplify the deployment and setup process for Fastn on Windows platforms.
+The Windows installer for Fastn is built using NSIS (Nullsoft Scriptable Install System), a popular tool for creating Windows installers. NSIS is configured using its own scripting language. The configuration script is named `install.nsi` and can be found in the root folder. Some changes were made in the `release.yml`, which are mentioned below. Additionally, an icon for the installer named `fastn.ico` was added to the root folder.
 
 ## Changes Made
-
-The following changes have been implemented in this pull request:
 
 1. Updated the `release.yml` file to incorporate Windows installer support for the Fastn executable.
 2. Integrated NSIS into the build process using the `makensis` GitHub Action. This action allows the execution of NSIS scripts during the build workflow.
 3. Added the `install.nsi` script to the root folder of the Fastn project. This script configures the NSIS installer.
-4. Following major changes were made in this revision:
-    - The installer now uses the NSIS MUI. 
-    - Changed the color scheme to dark color scheme which matches the website. 
-    - Changed the default icon to Fastn's logo.
-    - Changed the `release.yml` file to set the nsis version to V3.
+4. Some other important details:
+    - The installer uses the NSIS MUI.
+    - The color scheme is set to a dark color scheme to match the color scheme of the Fastn website:
+      ```nsi
+      !define MUI_INSTFILESPAGE_COLORS "FFFFFF 000000"
+      !define MUI_BGCOLOR 000000
+      !define MUI_TEXTCOLOR ffffff
+      ```
+    - The default icon is replaced with `fastn.ico`.
+    ```nsi
+    !define MUI_ICON "fastn.ico"
+    ```
+    - We are using version 3 of NSIS.
 
 ## Installer Functionality
 
 The Fastn installer performs the following tasks:
 
-1. Shows a Welcome and License Page
+1. Shows a Welcome and License Page.
 2. Extracts all necessary files to either the default location (Program Files) or a user-defined folder.
 3. Checks if the required path variable is already set up on the system. If not, it automatically configures the correct path variable to ensure seamless execution of Fastn without any issues.
 
 ## Code Changes
 
-The following code changes have been made to the `release windows` job:
+The following code in the `release-windows` job is responsible for building the installer from the executable built by `cargo` in the previous step:
 
 ```yaml
 - name: Download EnVar Plugin for NSIS
@@ -51,10 +55,12 @@ The following code changes have been made to the `release windows` job:
     path: windows_x64_installer.exe
 ```
 
-These code changes have been added to the `release windows` job in the workflow file. The steps include:
+Explanation:
 
-1. Downloading the EnVar Plugin for NSIS, which is required for correctly configuring path variables in Windows.
-2. Extracting the plugin to the appropriate location.
-3. Creating the installer executable by specifying the following inputs:
+1. Download the EnVar Plugin for NSIS, which is required for correctly configuring path variables in Windows.
+2. Extract the plugin to the appropriate location.
+3. Create the installer executable by specifying the following inputs:
    - `CURRENT_WD`: The current Github Working Directory.
    - `VERSION`: The release tag.
+
+In the `create-release` job, we download the `windows_x64_installer.exe` artifact and rename it to `fastn_setup`. In the next step, it is added to the `artifacts` list as part of the files to be released.
