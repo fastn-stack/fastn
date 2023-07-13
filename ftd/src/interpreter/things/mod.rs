@@ -173,7 +173,7 @@ impl Thing {
         }
     }
 
-    pub(crate) fn is_component(&self) -> bool {
+    pub fn is_component(&self) -> bool {
         matches!(self, ftd::interpreter::Thing::Component(_))
     }
 }

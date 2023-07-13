@@ -50,6 +50,7 @@ impl Value {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn to_set_property(
         &self,
         kind: fastn_js::PropertyKind,
