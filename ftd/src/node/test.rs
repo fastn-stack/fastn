@@ -97,7 +97,11 @@ fn node_test_all() {
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json) in find_file_groups() {
-        let t = std::fs::read_to_string(&json).unwrap();
+        let t = if fix {
+            "".to_string()
+        } else {
+            std::fs::read_to_string(&json).unwrap()
+        };
         for f in files {
             match path {
                 Some(path) if !f.to_str().unwrap().contains(path) => continue,
