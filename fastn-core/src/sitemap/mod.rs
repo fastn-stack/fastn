@@ -1505,11 +1505,17 @@ impl Sitemap {
     /// path: /
     /// This function can be used for if path exists in sitemap or not
     // #[tracing::instrument(name = "sitemap-resolve-document", skip_all)]
-    pub fn resolve_document(&self, path: &str) -> Option<String> {
+    pub fn resolve_document(
+        &self,
+        path: &str,
+    ) -> Option<(String, std::collections::BTreeMap<String, String>)> {
         // tracing::info!(path = path);
-        fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
+        fn resolve_in_toc(
+            toc: &toc::TocItem,
+            path: &str,
+        ) -> Option<(String, std::collections::BTreeMap<String, String>)> {
             if fastn_core::utils::ids_matches(toc.id.as_str(), path) {
-                return toc.document.clone();
+                return toc.document.clone().map(|v| (v, toc.extra_data.clone()));
             }
 
             for child in toc.children.iter() {
@@ -1521,10 +1527,16 @@ impl Sitemap {
             None
         }
 
-        fn resolve_in_sub_section(sub_section: &section::Subsection, path: &str) -> Option<String> {
+        fn resolve_in_sub_section(
+            sub_section: &section::Subsection,
+            path: &str,
+        ) -> Option<(String, std::collections::BTreeMap<String, String>)> {
             if let Some(id) = sub_section.id.as_ref() {
                 if fastn_core::utils::ids_matches(path, id.as_str()) {
-                    return sub_section.document.clone();
+                    return sub_section
+                        .document
+                        .clone()
+                        .map(|v| (v, sub_section.extra_data.clone()));
                 }
             }
 
@@ -1538,9 +1550,15 @@ impl Sitemap {
             None
         }
 
-        fn resolve_in_section(section: &section::Section, path: &str) -> Option<String> {
+        fn resolve_in_section(
+            section: &section::Section,
+            path: &str,
+        ) -> Option<(String, std::collections::BTreeMap<String, String>)> {
             if fastn_core::utils::ids_matches(section.id.as_str(), path) {
-                return section.document.clone();
+                return section
+                    .document
+                    .clone()
+                    .map(|v| (v, section.extra_data.clone()));
             }
 
             for subsection in section.subsections.iter() {
@@ -1700,8 +1718,8 @@ pub fn resolve(
 ) -> fastn_core::Result<fastn_core::sitemap::dynamic_urls::ResolveDocOutput> {
     // resolve in sitemap
     if let Some(sitemap) = package.sitemap.as_ref() {
-        if let Some(document) = sitemap.resolve_document(path) {
-            return Ok((Some(document), vec![]));
+        if let Some((document, extra_data)) = sitemap.resolve_document(path) {
+            return Ok((Some(document), vec![], extra_data));
         }
     };
 
@@ -1710,5 +1728,5 @@ pub fn resolve(
         return dynamic_urls.resolve_document(path);
     };
 
-    Ok((None, vec![]))
+    Ok((None, vec![], Default::default()))
 }

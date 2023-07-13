@@ -37,6 +37,7 @@ pub struct Config {
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
     pub named_parameters: Vec<(String, ftd::Value)>,
+    pub extra_data: std::collections::BTreeMap<String, String>,
     pub current_document: Option<String>,
     pub request: Option<fastn_core::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
@@ -720,40 +721,40 @@ impl Config {
         let package1;
 
         // TODO: The shitty code written by me ever
-        let (path_with_package_name, document, path_params) = if !fastn_core::file::is_static(path)?
-        {
-            let (path_with_package_name, sanitized_package, sanitized_path) =
-                match self.get_mountpoint_sanitized_path(&self.package, path) {
-                    Some((new_path, package, remaining_path, _)) => {
-                        // Update the sitemap of the package, if it does not contain the sitemap information
-                        if package.name != self.package.name {
-                            package1 = self.update_sitemap(package).await?;
-                            (new_path, &package1, remaining_path)
-                        } else {
-                            (new_path, package, remaining_path)
+        let (path_with_package_name, document, path_params, extra_data) =
+            if !fastn_core::file::is_static(path)? {
+                let (path_with_package_name, sanitized_package, sanitized_path) =
+                    match self.get_mountpoint_sanitized_path(&self.package, path) {
+                        Some((new_path, package, remaining_path, _)) => {
+                            // Update the sitemap of the package, if it does not contain the sitemap information
+                            if package.name != self.package.name {
+                                package1 = self.update_sitemap(package).await?;
+                                (new_path, &package1, remaining_path)
+                            } else {
+                                (new_path, package, remaining_path)
+                            }
                         }
-                    }
-                    None => (path.to_string(), &self.package, path.to_string()),
-                };
+                        None => (path.to_string(), &self.package, path.to_string()),
+                    };
 
-            // Getting `document` with dynamic parameters, if exists
-            // It will first resolve in sitemap
-            // Then it will resolve in the dynamic urls
-            let (document, path_params) =
-                fastn_core::sitemap::resolve(sanitized_package, &sanitized_path)?;
+                // Getting `document` with dynamic parameters, if exists
+                // It will first resolve in sitemap
+                // Then it will resolve in the dynamic urls
+                let (document, path_params, extra_data) =
+                    fastn_core::sitemap::resolve(sanitized_package, &sanitized_path)?;
 
-            // document with package-name prefix
-            let document = document.map(|doc| {
-                format!(
-                    "-/{}/{}",
-                    sanitized_package.name.trim_matches('/'),
-                    doc.trim_matches('/')
-                )
-            });
-            (path_with_package_name, document, path_params)
-        } else {
-            (path.to_string(), None, vec![])
-        };
+                // document with package-name prefix
+                let document = document.map(|doc| {
+                    format!(
+                        "-/{}/{}",
+                        sanitized_package.name.trim_matches('/'),
+                        doc.trim_matches('/')
+                    )
+                });
+                (path_with_package_name, document, path_params, extra_data)
+            } else {
+                (path.to_string(), None, vec![], Default::default())
+            };
 
         let path = path_with_package_name.as_str();
 
@@ -768,6 +769,7 @@ impl Config {
             .await?;
             self.current_document = Some(path.to_string());
             self.named_parameters = path_params;
+            self.extra_data = extra_data;
             Ok(file)
         } else {
             // -/fifthtry.github.io/todos/add-todo/
@@ -1280,6 +1282,7 @@ impl Config {
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
+            extra_data: Default::default(),
             global_ids: Default::default(),
             request: req.map(ToOwned::to_owned),
             named_parameters: vec![],
