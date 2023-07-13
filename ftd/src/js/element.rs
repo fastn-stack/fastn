@@ -36,7 +36,7 @@ impl Element {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -180,7 +180,7 @@ impl Container {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -250,7 +250,7 @@ impl InheritedProperties {
                     doc,
                     component_definition_name,
                     loop_alias,
-                    &None,
+                    fastn_js::INHERITED_VARIABLE,
                     device,
                 ),
             ));
@@ -263,7 +263,7 @@ impl InheritedProperties {
                     doc,
                     component_definition_name,
                     loop_alias,
-                    &None,
+                    fastn_js::INHERITED_VARIABLE,
                     device,
                 ),
             ));
@@ -317,7 +317,7 @@ impl Text {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -335,9 +335,7 @@ impl Text {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -400,7 +398,7 @@ impl Integer {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -419,9 +417,7 @@ impl Integer {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -483,7 +479,7 @@ impl Decimal {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -502,9 +498,7 @@ impl Decimal {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -566,7 +560,7 @@ impl Boolean {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -585,9 +579,7 @@ impl Boolean {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -649,7 +641,7 @@ impl Column {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -685,7 +677,7 @@ impl Column {
         let inherited_variable_name = inherited_variables
             .as_ref()
             .map(|v| v.name.clone())
-            .or(inherited_variable_name.clone());
+            .unwrap_or_else(|| inherited_variable_name.to_string());
 
         if let Some(inherited_variables) = inherited_variables {
             component_statements.push(fastn_js::ComponentStatement::StaticVariable(
@@ -704,9 +696,7 @@ impl Column {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             })
         }));
         if should_return {
@@ -751,7 +741,7 @@ impl Row {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -788,7 +778,7 @@ impl Row {
         let inherited_variable_name = inherited_variables
             .as_ref()
             .map(|v| v.name.clone())
-            .or(inherited_variable_name.clone());
+            .unwrap_or_else(|| inherited_variable_name.to_string());
 
         if let Some(inherited_variables) = inherited_variables {
             component_statements.push(fastn_js::ComponentStatement::StaticVariable(
@@ -807,9 +797,7 @@ impl Row {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             })
         }));
         if should_return {
@@ -853,7 +841,7 @@ impl Device {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -878,7 +866,7 @@ impl Device {
         let inherited_variable_name = inherited_variables
             .as_ref()
             .map(|v| v.name.clone())
-            .or(inherited_variable_name.clone());
+            .unwrap_or_else(|| inherited_variable_name.to_string());
 
         if let Some(inherited_variables) = inherited_variables {
             component_statements.push(fastn_js::ComponentStatement::StaticVariable(
@@ -897,9 +885,7 @@ impl Device {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name
-                    .clone()
-                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+                inherited: inherited_variable_name.to_string(),
             })
         }));
         component_statements.push(fastn_js::ComponentStatement::Return {
@@ -943,7 +929,7 @@ impl TextCommon {
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         loop_alias: &Option<String>,
         device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1237,7 +1223,7 @@ impl Common {
         element_name: &str,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         loop_alias: &Option<String>,
         device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -2071,7 +2057,7 @@ impl ftd::interpreter::Event {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::EventHandler {
         fastn_js::EventHandler {
@@ -2094,7 +2080,7 @@ impl ftd::interpreter::FunctionCall {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::Function {
         let mut parameters = vec![];

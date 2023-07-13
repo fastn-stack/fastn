@@ -10,7 +10,7 @@ impl Value {
         &self,
         doc: &ftd::interpreter::TDoc,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(doc, &None, &None, &None, &None)
+        self.to_set_property_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
     }
 
     pub(crate) fn to_set_property_value(
@@ -18,7 +18,7 @@ impl Value {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
@@ -58,7 +58,7 @@ impl Value {
         element_name: &str,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
@@ -71,9 +71,7 @@ impl Value {
                 device,
             ),
             element_name: element_name.to_string(),
-            inherited: inherited_variable_name
-                .clone()
-                .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+            inherited: inherited_variable_name.to_string(),
         }
     }
 }
@@ -83,7 +81,7 @@ fn formulas_to_fastn_js_value(
     properties: &[ftd::interpreter::Property],
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
-    inherited_variable_name: &Option<String>,
+    inherited_variable_name: &str,
     device: &Option<fastn_js::DeviceType>,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
@@ -131,7 +129,7 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> Vec<String> {
         let mut deps = vec![];
         for property_value in self.references.values() {
@@ -148,7 +146,7 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> fastn_grammar::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(
             &self.expression,
@@ -163,7 +161,7 @@ impl ftd::interpreter::Expression {
             references: &ftd::Map<ftd::interpreter::PropertyValue>,
             component_definition_name: &Option<String>,
             loop_alias: &Option<String>,
-            inherited_variable_name: &Option<String>,
+            inherited_variable_name: &str,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
@@ -207,7 +205,7 @@ impl ftd::interpreter::PropertyValue {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -306,7 +304,7 @@ impl ftd::interpreter::PropertyValue {
         &self,
         doc: &ftd::interpreter::TDoc,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value(doc, &None, &None, &None, &None)
+        self.to_fastn_js_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
     }
 
     pub(crate) fn to_fastn_js_value(
@@ -314,7 +312,7 @@ impl ftd::interpreter::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
@@ -356,7 +354,7 @@ impl ftd::interpreter::Value {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
@@ -441,7 +439,7 @@ impl ftd::interpreter::Value {
                         doc,
                         component_definition_name,
                         loop_alias,
-                        &Some(fastn_js::INHERITED_VARIABLE.to_string()),
+                        fastn_js::INHERITED_VARIABLE,
                         device,
                         false,
                     ),
