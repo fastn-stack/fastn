@@ -585,8 +585,8 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_external_children__", "{}")
-        .replace("__hashed_default_css__", hashed_default_css_name().as_str())
-        .replace("__hashed_default_js__", hashed_default_js_name().as_str())
+        .replace("__hashed_default_css__", hashed_default_css_name())
+        .replace("__hashed_default_js__", hashed_default_js_name())
         .replace(
             "__ftd__",
             format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
@@ -822,15 +822,22 @@ pub fn generate_hash(content: &str) -> String {
     format!("{:X}", hasher.finalize_fixed())
 }
 
-pub fn hashed_default_css_name() -> String {
-    format!("default-{}.css", generate_hash(ftd::css()))
+static CSS_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("default-{}.css", generate_hash(ftd::css())));
+
+pub fn hashed_default_css_name() -> &'static str {
+    &CSS_HASH
 }
 
-pub fn hashed_default_js_name() -> String {
+static JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
     format!(
         "default-{}.js",
         generate_hash(format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js()).as_str())
     )
+});
+
+pub fn hashed_default_js_name() -> &'static str {
+    &JS_HASH
 }
 
 pub fn hashed_default_ftd_js() -> String {

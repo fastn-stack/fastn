@@ -272,10 +272,7 @@ pub async fn serve(
     let _lock = LOCK.read().await;
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
-    let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
-    let response = if path.eq(&favicon) {
-        static_file(favicon).await
-    } else if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
+    Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         let config = fastn_core::Config::read(None, false, Some(&req))
             .await
             .unwrap()
@@ -451,8 +448,7 @@ pub async fn serve(
         // }
 
         file_response
-    };
-    Ok(response)
+    })
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -599,7 +595,7 @@ struct AppData {
 fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http::Response> {
     if req
         .path()
-        .ends_with(fastn_core::utils::hashed_default_css_name().as_str())
+        .ends_with(fastn_core::utils::hashed_default_css_name())
     {
         return Some(
             actix_web::HttpResponse::Ok()
@@ -608,7 +604,7 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
         );
     } else if req
         .path()
-        .ends_with(fastn_core::utils::hashed_default_js_name().as_str())
+        .ends_with(fastn_core::utils::hashed_default_js_name())
     {
         return Some(
             actix_web::HttpResponse::Ok()
@@ -670,6 +666,7 @@ async fn route(
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
+        ("get", "/favicon.ico") => Ok(static_file("favicon.ico".into()).await),
         (_, _) => {
             serve(
                 req,
