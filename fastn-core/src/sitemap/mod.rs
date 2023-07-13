@@ -30,6 +30,7 @@ pub struct Sitemap {
 #[derive(Debug, Default, serde::Serialize)]
 pub struct SitemapCompat {
     pub sections: Vec<toc::TocItemCompat>,
+    #[serde(rename = "subsections")]
     pub sub_sections: Vec<toc::TocItemCompat>,
     pub toc: Vec<toc::TocItemCompat>,
     #[serde(rename = "current-section")]
