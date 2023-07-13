@@ -421,6 +421,8 @@ fastn_dom.Event = {
     Click: 0
 }
 
+// Node2 -> Intermediate node
+// Node -> similar to HTML DOM node (Node2.#node)
 class Node2 {
     #node;
     #parent;
@@ -445,6 +447,11 @@ class Node2 {
     parent() {
         return this.#parent;
     }
+    // for attaching inline attributes
+    attachAttribute(property, value) {
+        this.#node.addAttribute(property, value);
+    }
+
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
@@ -731,11 +738,9 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
-            this.#node = fastn_virtual.document.createElement("a");
-            this.attachCss("href", staticValue);
-            if (this.#parent.appendChild) {
-                this.#parent.appendChild(this.#node);
-            }
+            // Changing node type to `a` for link
+            this.#node.updateTagName("a")
+            this.attachAttribute("href", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
