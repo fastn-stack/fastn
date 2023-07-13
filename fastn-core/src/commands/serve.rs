@@ -240,6 +240,14 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
     fastn_core::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
+async fn favicon() -> fastn_core::Result<fastn_core::http::Response> {
+    let mut path = camino::Utf8PathBuf::from("favicon.ico");
+    if !path.exists() {
+        path = camino::Utf8PathBuf::from("static/favicon.ico");
+    }
+    Ok(static_file(path).await)
+}
+
 #[tracing::instrument(skip_all)]
 async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Response {
     if !file_path.exists() {
@@ -666,7 +674,7 @@ async fn route(
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
-        ("get", "/favicon.ico") => Ok(static_file("favicon.ico".into()).await),
+        ("get", "/favicon.ico") => favicon().await,
         (_, _) => {
             serve(
                 req,
