@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: SPA / Landing Pages - Midnight Rush 
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -70,7 +70,7 @@ wip: true
 
 -- ft-ui.grid-view: SPA / Landing Pages
 if: { show-grid }
-templates: $ft-ui.landing-pages
+templates: $ft-ui.landing-pages-1
 more-link-text: View all
 more-link: /featured/landing-pages/
 

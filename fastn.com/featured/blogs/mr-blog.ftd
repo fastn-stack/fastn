@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Featured components
+-- ds.page: Featured components - Blog Templates - Midnight Rush Blog
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Documentation Sites - Midnight Rush Blog
+-- ds.layout: Blog Templates - Midnight Rush Blog
 previous-url: /featured/
 
 -- end: ds.page.layout-bar
@@ -72,7 +72,7 @@ wip: true
 
 -- ft-ui.grid-view: Blog Templates
 if: { show-grid }
-templates: $ft-ui.blog-sites
+templates: $ft-ui.blog-sites-2
 more-link-text: View all
 more-link: /featured/blog-templates/
 

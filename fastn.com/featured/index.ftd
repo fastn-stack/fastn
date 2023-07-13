@@ -46,7 +46,7 @@ templates: $doc-sites
 more-link-text: View all
 more-link: /featured/doc-sites/
 
-`doc-site` will help you create a beautiful documentation site in no time. 
+`doc-sites` will help you create a beautiful documentation site in no time. 
 
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).
@@ -398,6 +398,23 @@ wip: true
 
 
 
+-- template list doc-sites-1:
+
+-- template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+wip: true
+
+-- template: Midnight Storm
+template-url: featured/ds/set-2-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.set-2-ds.jpg
+wip: true
+
+-- end: doc-sites-1
+
+
+
+
 -- template list landing-pages:
 
 -- template: Midnight Rush
@@ -415,13 +432,36 @@ wip: true
 
 
 
+-- template list landing-pages-1:
+
+-- template: Midnight Storm
+template-url: featured/landing/set-2-landing/
+screenshot: $fastn-assets.files.images.featured.landing.set-2-landing.jpg
+wip: true
+
+-- end: landing-pages-1
+
+
+
+
+-- template list landing-pages-2:
+
+-- template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+wip: true
+
+-- end: landing-pages-2
+
+
+
+
 
 -- template list blog-sites:
 
 -- template: Doc-site
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
-wip: true
 
 -- template: Midnight Rush
 template-url: featured/blogs/mr-blog/
@@ -434,6 +474,55 @@ screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
 wip: true
 
 -- end: blog-sites
+
+
+
+
+-- template list blog-sites-1:
+
+-- template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+wip: true
+
+-- template: Midnight Storm
+template-url: featured/blogs/set-2-blog/
+screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
+wip: true
+
+-- end: blog-sites-1
+
+
+
+
+-- template list blog-sites-2:
+
+-- template: Doc-site
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
+
+-- template: Midnight Storm
+template-url: featured/blogs/set-2-blog/
+screenshot: $fastn-assets.files.images.featured.blog.set-2-blog.jpg
+wip: true
+
+-- end: blog-sites-2
+
+
+
+
+-- template list blog-sites-3:
+
+-- template: Doc-site
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.jpg
+
+-- template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+wip: true
+
+-- end: blog-sites-3
 
 
 

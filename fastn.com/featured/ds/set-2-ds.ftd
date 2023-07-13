@@ -78,8 +78,7 @@ templates: $ft-ui.doc-sites
 more-link-text: View all
 more-link: /featured/doc-sites/
 
-`midnight-storm` will help you create a beautiful documentation site in no
-time. 
+`doc-sites` will help you create a beautiful documentation site in no time. 
 
 It provides out-of-the-box documentation features that can be used to create any
 kind of site(personal website, blog, etc).

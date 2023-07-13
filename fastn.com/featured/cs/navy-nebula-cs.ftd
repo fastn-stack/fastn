@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Color schemes
+-- ds.page: Color schemes - Navy Nebula CS
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Color schemes
+-- ds.layout: Color schemes - Navy Nebula CS
 cta-url: https://fastn-community.github.io/navy-nebula-cs/
 previous-url: /featured/cs/
 cta-text: Use this color scheme
@@ -66,7 +66,7 @@ We have designed and developed below color schemes. You can use them to change
 your `FTD` web site color scheme. 
 
 
--- ds.preview-card: Navy Nebula CS
+-- ds.preview-card: 
 image: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 cta-url: https://fastn-community.github.io/navy-nebula-cs/
 

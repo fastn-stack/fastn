@@ -13,7 +13,7 @@
 
 
 
--- ds.page: Color schemes
+-- ds.page: Color schemes - Misty Gray CS
 show-footer: true
 site-logo: $fastn-assets.files.images.fastn.svg
 site-name: NULL
@@ -39,7 +39,7 @@ copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
 
 -- ds.page.layout-bar:
 
--- ds.layout: Color schemes
+-- ds.layout: Color schemes - Misty Gray CS
 cta-url: https://fastn-community.github.io/misty-gray-cs/
 previous-url: /featured/cs/
 cta-text: Use this color scheme
