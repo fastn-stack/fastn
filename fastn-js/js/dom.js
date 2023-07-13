@@ -739,6 +739,7 @@ class Node2 {
             this.attachColorCss("background-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
+            // todo: needs fix for image links
             this.#node.updateTagName("a")
             this.attachAttribute("href", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Role) {
