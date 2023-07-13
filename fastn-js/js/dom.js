@@ -631,7 +631,7 @@ class Node2 {
             this.attachCss("z-index", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             // todo: this needs to be fixed
-            this.#node.classList.add(staticValue);
+            this.#node.classList.add(staticValue.map(obj => fastn_utils.getStaticValue(obj.item)));
             // this.attachCss("classes", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v

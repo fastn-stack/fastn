@@ -65,7 +65,7 @@
 };
 function main(parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment(global.foo__i);
   });
@@ -76,8 +76,8 @@ function main(parent) {
       return fastn_dom.Length.Px(4);
     }
   }
-  ));
-  parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(global.foo__i));
+  ), inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(global.foo__i), inherited);
   foo__foo(parent, inherited, {
     name: "Foo says Hello"
   });
@@ -87,21 +87,21 @@ function main(parent) {
     return (fastn_utils.getter(global.foo__i) > 11);
   }, function (root) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello");
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello", inherited);
     return rooti0;
   });
   let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Click me to add Tom");
+  parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Click me to add Tom", inherited);
   parenti3.addEventHandler(fastn_dom.Event.Click, function () {
     foo__append_string(global.foo__names, "Tom");
   });
   global.foo__names.forLoop(parent, function (root, item, index) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
     return rooti0;
   });
   let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "End");
+  parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "End", inherited);
   global.foo__names.forLoop(parent, function (root, item, index) {
     return fastn_dom.conditionalDom(parent, [
       index
@@ -109,7 +109,7 @@ function main(parent) {
       return (fastn_utils.getter(index) % 2 == 0);
     }, function (root) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
       return rooti0;
     }).getParent();
   });
@@ -690,10 +690,15 @@ function foo__foo(parent, inherited, args)
     ...args
   };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
-  let parenti0i0 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-  parenti0i0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name);
-  let parenti0i1 = fastn_dom.createKernel(parenti0, fastn_dom.ElementKind.Text);
-  parenti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2");
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.name, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Foo 2", inherited);
+  }
+  ]), inherited);
   return parenti0;
 }
 function foo__append_string(a, v) {
