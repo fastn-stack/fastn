@@ -144,58 +144,6 @@
         "is_static": false
       }
     },
-    "foo#full-name": {
-      "Record": {
-        "name": "foo#full-name",
-        "fields": [
-          {
-            "name": "first-name",
-            "kind": {
-              "kind": "String",
-              "caption": true,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 2,
-            "access_modifier": "Public"
-          },
-          {
-            "name": "middle-name",
-            "kind": {
-              "kind": {
-                "Optional": {
-                  "kind": "String"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 3,
-            "access_modifier": "Public"
-          },
-          {
-            "name": "last-name",
-            "kind": {
-              "kind": {
-                "Optional": {
-                  "kind": "String"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "mutable": false,
-            "value": null,
-            "line_number": 4,
-            "access_modifier": "Public"
-          }
-        ],
-        "line_number": 1
-      }
-    },
     "foo#name": {
       "Variable": {
         "name": "foo#name",
@@ -255,6 +203,58 @@
           }
         ],
         "line_number": 7
+      }
+    },
+    "foo#full-name": {
+      "Record": {
+        "name": "foo#full-name",
+        "fields": [
+          {
+            "name": "first-name",
+            "kind": {
+              "kind": "String",
+              "caption": true,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2,
+            "access_modifier": "Public"
+          },
+          {
+            "name": "middle-name",
+            "kind": {
+              "kind": {
+                "Optional": {
+                  "kind": "String"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3,
+            "access_modifier": "Public"
+          },
+          {
+            "name": "last-name",
+            "kind": {
+              "kind": {
+                "Optional": {
+                  "kind": "String"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 4,
+            "access_modifier": "Public"
+          }
+        ],
+        "line_number": 1
       }
     }
   },
