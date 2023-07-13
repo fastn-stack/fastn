@@ -21,6 +21,9 @@ impl FTDEdition {
             }
         }
     }
+    pub(crate) fn is_2023(&self) -> bool {
+        matches!(self, fastn_core::FTDEdition::FTD2023)
+    }
 }
 
 #[derive(Debug, Clone)]

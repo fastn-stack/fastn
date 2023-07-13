@@ -142,7 +142,7 @@ impl ftd::interpreter::ComponentDefinition {
             0,
             doc,
             &Some(self.name.to_string()),
-            &Some(fastn_js::INHERITED_VARIABLE.to_string()),
+            fastn_js::INHERITED_VARIABLE,
             &None,
             true,
         ));
@@ -159,7 +159,7 @@ impl ftd::interpreter::ComponentDefinition {
                                 doc,
                                 &Some(self.name.to_string()),
                                 &None,
-                                &Some("inherited".to_string()),
+                                fastn_js::INHERITED_VARIABLE,
                                 &None,
                             ),
                         )
@@ -176,9 +176,15 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(
-            component.to_component_statements("parent", index, doc, &None, &None, &None, false),
-        )
+        statements.extend(component.to_component_statements(
+            "parent",
+            index,
+            doc,
+            &None,
+            fastn_js::INHERITED_VARIABLE,
+            &None,
+            false,
+        ))
     }
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
@@ -191,7 +197,7 @@ impl ftd::interpreter::Component {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -274,7 +280,7 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -322,9 +328,7 @@ impl ftd::interpreter::Component {
                     name: self.name.to_string(),
                     arguments,
                     parent: parent.to_string(),
-                    inherited: inherited_variable_name
-                        .clone()
-                        .unwrap_or_else(|| "inherited".to_string()),
+                    inherited: inherited_variable_name.to_string(),
                     should_return,
                 },
             )]
