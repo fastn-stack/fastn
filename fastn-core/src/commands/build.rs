@@ -14,7 +14,7 @@ pub async fn build(
     let no_static: bool = file.is_some();
 
     // Default css and js
-    default_build_files(config.root.join(".build")).await?;
+    default_build_files(config.root.join(".build"), &config.ftd_edition).await?;
 
     // All redirect html files under .build
     let redirects = config.package.redirects.clone();
