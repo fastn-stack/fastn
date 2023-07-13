@@ -1259,10 +1259,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 link.to_set_property(
                     fastn_js::PropertyKind::Link,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }

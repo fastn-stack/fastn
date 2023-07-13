@@ -204,7 +204,7 @@ fastn_dom.PropertyKind = {
     Classes: 68,
     Anchor: 69,
     Link: 70,
-    Children: 70,
+    Children: 71,
 }
 
 fastn_dom.Anchor = {

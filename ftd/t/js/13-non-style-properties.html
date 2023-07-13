@@ -54,20 +54,26 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><input data-id="2" class="checked-1 enabled-2"></input></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1"><a data-id="3" href=https://www.fastn.com class="m-2">This is a link</a></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
-	.checked-1 { checked: true; }
-	.enabled-2 { enabled: false; }
+	.w-1 { width: 100%; }
+	.m-2 { margin: 20px; }
     </style>
 <script>
     (function() {
         let global = {
 };
 function main(parent) {
-  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.CheckBox);
-  parenti0.setProperty(fastn_dom.PropertyKind.Checked, true);
-  parenti0.setProperty(fastn_dom.PropertyKind.Enabled, false);
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+  }
+  ]), inherited);
 }
 global.ftd__default_types = fastn.recordInstance({
   heading_large: fastn.recordInstance({
