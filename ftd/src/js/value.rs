@@ -6,21 +6,28 @@ pub enum Value {
 }
 
 impl Value {
-    pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(&None, &None, &None)
+    pub(crate) fn to_set_property_value_with_none(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> fastn_js::SetPropertyValue {
+        self.to_set_property_value(doc, &None, &None, &None, &None)
     }
 
     pub(crate) fn to_set_property_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
@@ -32,10 +39,12 @@ impl Value {
             }
             Value::Formula(formulas) => {
                 fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(
+                    doc,
                     formulas,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ))
             }
         }
@@ -44,17 +53,21 @@ impl Value {
     pub(crate) fn to_set_property(
         &self,
         kind: fastn_js::PropertyKind,
+        doc: &ftd::interpreter::TDoc,
         element_name: &str,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
             value: self.to_set_property_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             element_name: element_name.to_string(),
         }
@@ -62,10 +75,12 @@ impl Value {
 }
 
 fn formulas_to_fastn_js_value(
+    doc: &ftd::interpreter::TDoc,
     properties: &[ftd::interpreter::Property],
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
     inherited_variable_name: &Option<String>,
+    device: &Option<fastn_js::DeviceType>,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
     let mut conditional_values = vec![];
@@ -92,9 +107,11 @@ fn formulas_to_fastn_js_value(
                 )
             }),
             expression: property.value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
         });
     }
@@ -281,21 +298,28 @@ pub(crate) fn get_properties(
 }
 
 impl ftd::interpreter::PropertyValue {
-    pub(crate) fn to_fastn_js_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value(&None, &None, &None)
+    pub(crate) fn to_fastn_js_value_with_none(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> fastn_js::SetPropertyValue {
+        self.to_fastn_js_value(doc, &None, &None, &None, &None)
     }
 
     pub(crate) fn to_fastn_js_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
@@ -325,9 +349,11 @@ impl ftd::interpreter::PropertyValue {
 impl ftd::interpreter::Value {
     pub(crate) fn to_fastn_js_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
@@ -355,9 +381,11 @@ impl ftd::interpreter::Value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
                         value: Some(Box::new(value.to_fastn_js_value(
+                            doc,
                             component_definition_name,
                             loop_alias,
                             inherited_variable_name,
+                            device,
                         ))),
                     });
                 }
@@ -372,9 +400,11 @@ impl ftd::interpreter::Value {
                         .iter()
                         .map(|v| {
                             v.to_fastn_js_value(
+                                doc,
                                 component_definition_name,
                                 loop_alias,
                                 inherited_variable_name,
+                                device,
                             )
                         })
                         .collect_vec(),
@@ -388,13 +418,29 @@ impl ftd::interpreter::Value {
                             (
                                 k.to_string(),
                                 v.to_fastn_js_value(
+                                    doc,
                                     component_definition_name,
                                     loop_alias,
                                     inherited_variable_name,
+                                    device,
                                 ),
                             )
                         })
                         .collect_vec(),
+                })
+            }
+            ftd::interpreter::Value::UI { component, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
+                    value: component.to_component_statements_(
+                        fastn_js::FUNCTION_PARENT,
+                        0,
+                        doc,
+                        component_definition_name,
+                        loop_alias,
+                        inherited_variable_name,
+                        device,
+                        false,
+                    ),
                 })
             }
             t => todo!("{:?}", t),

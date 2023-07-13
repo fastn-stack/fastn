@@ -165,6 +165,7 @@ impl Component {
         } else {
             return Ok(vec![]);
         };
+        dbg!(&property);
 
         let value = property.value.clone().resolve(doc, property.line_number)?;
         if let ftd::interpreter::Value::UI { component, .. } = value {

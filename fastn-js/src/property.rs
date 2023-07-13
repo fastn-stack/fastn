@@ -119,6 +119,9 @@ pub enum Value {
     Record {
         fields: Vec<(String, SetPropertyValue)>,
     },
+    UI {
+        value: Vec<fastn_js::ComponentStatement>,
+    },
 }
 
 impl Value {
@@ -150,6 +153,18 @@ impl Value {
                         v.to_js()
                     ))
                     .join(", ")
+            ),
+            Value::UI { value } => format!(
+                "function({}){{{}}}",
+                fastn_js::FUNCTION_PARENT,
+                value
+                    .iter()
+                    .map(|v| {
+                        let mut w = Vec::new();
+                        v.to_js().render(80, &mut w).unwrap();
+                        String::from_utf8(w).unwrap()
+                    })
+                    .join("")
             ),
         }
     }

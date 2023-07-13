@@ -51,6 +51,7 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             ),
             Element::Integer(integer) => integer.to_component_statements(
@@ -60,6 +61,7 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             ),
             Element::Decimal(decimal) => decimal.to_component_statements(
@@ -69,6 +71,7 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             ),
             Element::Boolean(boolean) => boolean.to_component_statements(
@@ -78,6 +81,7 @@ impl Element {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
                 should_return,
             ),
             Element::Column(column) => column.to_component_statements(
@@ -176,20 +180,23 @@ impl Container {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        _doc: &ftd::interpreter::TDoc,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         if let Some(ref spacing) = self.spacing {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 spacing.to_set_property(
                     fastn_js::PropertyKind::Spacing,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -197,10 +204,12 @@ impl Container {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(
                     fastn_js::PropertyKind::Wrap,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -229,8 +238,10 @@ impl InheritedProperties {
 
     pub(crate) fn get_inherited_variables(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         component_name: &str,
     ) -> Option<fastn_js::StaticVariable> {
         let mut inherited_fields = vec![];
@@ -238,14 +249,26 @@ impl InheritedProperties {
         if let Some(ref colors) = self.colors {
             inherited_fields.push((
                 "colors".to_string(),
-                colors.to_set_property_value(component_definition_name, loop_alias, &None),
+                colors.to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    &None,
+                    device,
+                ),
             ));
         }
 
         if let Some(ref types) = self.types {
             inherited_fields.push((
                 "types".to_string(),
-                types.to_set_property_value(component_definition_name, loop_alias, &None),
+                types.to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    &None,
+                    device,
+                ),
             ));
         }
 
@@ -298,6 +321,7 @@ impl Text {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -307,9 +331,11 @@ impl Text {
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self.text.to_set_property_value(
+                    doc,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
                 element_name: kernel.name.to_string(),
             },
@@ -320,6 +346,7 @@ impl Text {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
@@ -327,6 +354,7 @@ impl Text {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
 
         if should_return {
@@ -373,6 +401,7 @@ impl Integer {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -383,9 +412,11 @@ impl Integer {
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self.value.to_set_property_value(
+                    doc,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
                 element_name: kernel.name.to_string(),
             },
@@ -396,6 +427,7 @@ impl Integer {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
@@ -403,6 +435,7 @@ impl Integer {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
@@ -448,6 +481,7 @@ impl Decimal {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -458,9 +492,11 @@ impl Decimal {
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self.value.to_set_property_value(
+                    doc,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
                 element_name: kernel.name.to_string(),
             },
@@ -471,6 +507,7 @@ impl Decimal {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
@@ -478,6 +515,7 @@ impl Decimal {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
@@ -523,6 +561,7 @@ impl Boolean {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -533,9 +572,11 @@ impl Boolean {
             fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::StringValue,
                 value: self.value.to_set_property_value(
+                    doc,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
                 element_name: kernel.name.to_string(),
             },
@@ -546,6 +587,7 @@ impl Boolean {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         component_statements.extend(self.text_common.to_set_properties(
             kernel.name.as_str(),
@@ -553,6 +595,7 @@ impl Boolean {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
@@ -610,6 +653,7 @@ impl Column {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
 
         component_statements.extend(self.container.to_set_properties(
@@ -618,11 +662,14 @@ impl Column {
             component_definition_name,
             loop_alias,
             inherited_variable_name,
+            device,
         ));
 
         let inherited_variables = self.inherited.get_inherited_variables(
+            doc,
             component_definition_name,
             loop_alias,
+            device,
             kernel.name.as_str(),
         );
 
@@ -704,6 +751,7 @@ impl Row {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
+            device,
         ));
 
         component_statements.extend(self.container.to_set_properties(
@@ -712,11 +760,14 @@ impl Row {
             component_definition_name,
             loop_alias,
             inherited_variable_name,
+            device,
         ));
 
         let inherited_variables = self.inherited.get_inherited_variables(
+            doc,
             component_definition_name,
             loop_alias,
+            device,
             kernel.name.as_str(),
         );
 
@@ -802,8 +853,10 @@ impl Device {
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         let inherited_variables = self.container.get_inherited_variables(
+            doc,
             component_definition_name,
             loop_alias,
+            device,
             kernel.name.as_str(),
         );
 
@@ -868,20 +921,23 @@ impl TextCommon {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        _doc: &ftd::interpreter::TDoc,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         inherited_variable_name: &Option<String>,
         loop_alias: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         if let Some(ref transform) = self.text_transform {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 transform.to_set_property(
                     fastn_js::PropertyKind::TextTransform,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -889,10 +945,12 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 indent.to_set_property(
                     fastn_js::PropertyKind::TextIndent,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -900,10 +958,12 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 align.to_set_property(
                     fastn_js::PropertyKind::TextAlign,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -911,10 +971,12 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 clamp.to_set_property(
                     fastn_js::PropertyKind::LineClamp,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1157,6 +1219,7 @@ impl Common {
         component_definition_name: &Option<String>,
         inherited_variable_name: &Option<String>,
         loop_alias: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         for event in self.events.iter() {
@@ -1167,6 +1230,7 @@ impl Common {
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1174,10 +1238,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(
                     fastn_js::PropertyKind::Id,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1185,10 +1251,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 align_self.to_set_property(
                     fastn_js::PropertyKind::AlignSelf,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1196,10 +1264,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 classes.to_set_property(
                     fastn_js::PropertyKind::Classes,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1207,10 +1277,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 anchor.to_set_property(
                     fastn_js::PropertyKind::Anchor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1218,10 +1290,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 width.to_set_property(
                     fastn_js::PropertyKind::Width,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1229,10 +1303,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 height.to_set_property(
                     fastn_js::PropertyKind::Height,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1240,10 +1316,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding.to_set_property(
                     fastn_js::PropertyKind::Padding,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1251,10 +1329,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_horizontal.to_set_property(
                     fastn_js::PropertyKind::PaddingHorizontal,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1262,10 +1342,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_vertical.to_set_property(
                     fastn_js::PropertyKind::PaddingVertical,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1273,10 +1355,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_left.to_set_property(
                     fastn_js::PropertyKind::PaddingLeft,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1284,10 +1368,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_right.to_set_property(
                     fastn_js::PropertyKind::PaddingRight,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1295,10 +1381,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_top.to_set_property(
                     fastn_js::PropertyKind::PaddingTop,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1306,10 +1394,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 padding_bottom.to_set_property(
                     fastn_js::PropertyKind::PaddingBottom,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1317,10 +1407,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin.to_set_property(
                     fastn_js::PropertyKind::Margin,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1328,10 +1420,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_horizontal.to_set_property(
                     fastn_js::PropertyKind::MarginHorizontal,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1339,10 +1433,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_vertical.to_set_property(
                     fastn_js::PropertyKind::MarginVertical,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1350,10 +1446,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_left.to_set_property(
                     fastn_js::PropertyKind::MarginLeft,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1361,10 +1459,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_right.to_set_property(
                     fastn_js::PropertyKind::MarginRight,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1372,10 +1472,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_top.to_set_property(
                     fastn_js::PropertyKind::MarginTop,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1383,10 +1485,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 margin_bottom.to_set_property(
                     fastn_js::PropertyKind::MarginBottom,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1394,10 +1498,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_width.to_set_property(
                     fastn_js::PropertyKind::BorderWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1405,10 +1511,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_top_width.to_set_property(
                     fastn_js::PropertyKind::BorderTopWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1416,10 +1524,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_width.to_set_property(
                     fastn_js::PropertyKind::BorderBottomWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1427,10 +1537,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_left_width.to_set_property(
                     fastn_js::PropertyKind::BorderLeftWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1438,10 +1550,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_right_width.to_set_property(
                     fastn_js::PropertyKind::BorderRightWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1449,10 +1563,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_radius.to_set_property(
                     fastn_js::PropertyKind::BorderRadius,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1460,10 +1576,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_top_left_radius.to_set_property(
                     fastn_js::PropertyKind::BorderTopLeftRadius,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1471,10 +1589,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_top_right_radius.to_set_property(
                     fastn_js::PropertyKind::BorderTopRightRadius,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1482,10 +1602,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_left_radius.to_set_property(
                     fastn_js::PropertyKind::BorderBottomLeftRadius,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1493,10 +1615,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_right_radius.to_set_property(
                     fastn_js::PropertyKind::BorderBottomRightRadius,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1504,10 +1628,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style.to_set_property(
                     fastn_js::PropertyKind::BorderStyle,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1515,10 +1641,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style_vertical.to_set_property(
                     fastn_js::PropertyKind::BorderStyleVertical,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1526,10 +1654,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_style_horizontal.to_set_property(
                     fastn_js::PropertyKind::BorderStyleHorizontal,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1537,10 +1667,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_left_style.to_set_property(
                     fastn_js::PropertyKind::BorderLeftStyle,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1548,10 +1680,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_right_style.to_set_property(
                     fastn_js::PropertyKind::BorderRightStyle,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1559,10 +1693,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_top_style.to_set_property(
                     fastn_js::PropertyKind::BorderTopStyle,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1570,10 +1706,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_style.to_set_property(
                     fastn_js::PropertyKind::BorderBottomStyle,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1581,10 +1719,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_color.to_set_property(
                     fastn_js::PropertyKind::BorderColor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1592,10 +1732,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_top_color.to_set_property(
                     fastn_js::PropertyKind::BorderTopColor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1603,10 +1745,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_bottom_color.to_set_property(
                     fastn_js::PropertyKind::BorderBottomColor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1614,10 +1758,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_left_color.to_set_property(
                     fastn_js::PropertyKind::BorderLeftColor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1625,10 +1771,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 border_right_color.to_set_property(
                     fastn_js::PropertyKind::BorderRightColor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1636,10 +1784,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 overflow.to_set_property(
                     fastn_js::PropertyKind::Overflow,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1647,10 +1797,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 overflow_x.to_set_property(
                     fastn_js::PropertyKind::OverflowX,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1658,10 +1810,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 overflow_y.to_set_property(
                     fastn_js::PropertyKind::OverflowY,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1669,10 +1823,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 top.to_set_property(
                     fastn_js::PropertyKind::Top,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1680,10 +1836,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 bottom.to_set_property(
                     fastn_js::PropertyKind::Bottom,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1691,10 +1849,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 left.to_set_property(
                     fastn_js::PropertyKind::Left,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1702,10 +1862,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 right.to_set_property(
                     fastn_js::PropertyKind::Right,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1713,10 +1875,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 z_index.to_set_property(
                     fastn_js::PropertyKind::ZIndex,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1724,10 +1888,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 sticky.to_set_property(
                     fastn_js::PropertyKind::Sticky,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1735,10 +1901,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 color.to_set_property(
                     fastn_js::PropertyKind::Color,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1746,10 +1914,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 background.to_set_property(
                     fastn_js::PropertyKind::Background,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1757,10 +1927,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 background.to_set_property(
                     fastn_js::PropertyKind::Role,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1768,10 +1940,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 opacity.to_set_property(
                     fastn_js::PropertyKind::Opacity,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1779,10 +1953,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 cursor.to_set_property(
                     fastn_js::PropertyKind::Cursor,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1790,10 +1966,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 resize.to_set_property(
                     fastn_js::PropertyKind::Resize,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1801,10 +1979,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 max_height.to_set_property(
                     fastn_js::PropertyKind::MaxHeight,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1812,10 +1992,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 min_height.to_set_property(
                     fastn_js::PropertyKind::MinHeight,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1823,10 +2005,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 max_width.to_set_property(
                     fastn_js::PropertyKind::MaxWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1834,10 +2018,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 min_width.to_set_property(
                     fastn_js::PropertyKind::MinWidth,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1845,10 +2031,12 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 whitespace.to_set_property(
                     fastn_js::PropertyKind::WhiteSpace,
+                    doc,
                     element_name,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
             ));
         }
@@ -1864,6 +2052,7 @@ impl ftd::interpreter::Event {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::EventHandler {
         fastn_js::EventHandler {
             event: self.name.to_js_event_name(),
@@ -1872,6 +2061,7 @@ impl ftd::interpreter::Event {
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             element_name: element_name.to_string(),
         }
@@ -1885,6 +2075,7 @@ impl ftd::interpreter::FunctionCall {
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
         inherited_variable_name: &Option<String>,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
         let function = doc
@@ -1899,9 +2090,11 @@ impl ftd::interpreter::FunctionCall {
                 panic!("Argument value not found {:?}", argument)
             };
             parameters.push(value.to_set_property_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ));
         }
         fastn_js::Function {
