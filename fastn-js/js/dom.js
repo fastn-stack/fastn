@@ -203,6 +203,7 @@ fastn_dom.PropertyKind = {
     AlignSelf: 67,
     Classes: 68,
     Anchor: 69,
+    Link: 70,
 }
 
 fastn_dom.Anchor = {
@@ -729,6 +730,12 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Link) {
+            this.#node = fastn_virtual.document.createElement("a");
+            this.attachCss("href", staticValue);
+            if (this.#parent.appendChild) {
+                this.#parent.appendChild(this.#node);
+            }
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||

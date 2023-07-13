@@ -925,6 +925,7 @@ impl TextCommon {
 #[derive(Debug)]
 pub struct Common {
     pub id: Option<ftd::js::Value>,
+    pub link: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
@@ -997,6 +998,7 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
+            link: ftd::js::value::get_properties("link", properties, arguments),
             anchor: ftd::js::value::get_properties("anchor", properties, arguments),
             classes: ftd::js::value::get_properties("classes", properties, arguments),
             align_self: ftd::js::value::get_properties("align-self", properties, arguments),
@@ -1174,6 +1176,17 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(
                     fastn_js::PropertyKind::Id,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                ),
+            ));
+        }
+        if let Some(ref link) = self.link {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                link.to_set_property(
+                    fastn_js::PropertyKind::Link,
                     element_name,
                     component_definition_name,
                     loop_alias,
