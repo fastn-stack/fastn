@@ -30,52 +30,40 @@ pub fn process(
         });
     }
 
-    if let Some(ref sitemap) = config.package.sitemap {
-        let doc_id = config
-            .current_document
-            .as_ref()
-            .map(|v| fastn_core::utils::id_to_path(v))
-            .unwrap_or_else(|| doc.name.replace(config.package.name.as_str(), ""))
-            .trim()
-            .replace(std::path::MAIN_SEPARATOR, "/");
-
-        if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
-            if let Some(data) = extra_data.get(key.as_str()) {
-                return match kind {
-                    ftd::interpreter::Kind::Integer => {
-                        let value2 = data.parse::<i64>().map_err(|e| {
-                            ftd::interpreter::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            }
+    if let Some(data) = config.extra_data.get(key.as_str()) {
+        return match kind {
+            ftd::interpreter::Kind::Integer => {
+                let value2 =
+                    data.parse::<i64>()
+                        .map_err(|e| ftd::interpreter::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
                         })?;
-                        doc.from_json(&value2, &kind, &value)
-                    }
-                    ftd::interpreter::Kind::Decimal { .. } => {
-                        let value2 = data.parse::<f64>().map_err(|e| {
-                            ftd::interpreter::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            }
-                        })?;
-                        doc.from_json(&value2, &kind, &value)
-                    }
-                    ftd::interpreter::Kind::Boolean { .. } => {
-                        let value2 = data.parse::<bool>().map_err(|e| {
-                            ftd::interpreter::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            }
-                        })?;
-                        doc.from_json(&value2, &kind, &value)
-                    }
-                    _ => doc.from_json(data, &kind, &value),
-                };
+                doc.from_json(&value2, &kind, &value)
             }
-        }
+            ftd::interpreter::Kind::Decimal { .. } => {
+                let value2 =
+                    data.parse::<f64>()
+                        .map_err(|e| ftd::interpreter::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?;
+                doc.from_json(&value2, &kind, &value)
+            }
+            ftd::interpreter::Kind::Boolean { .. } => {
+                let value2 =
+                    data.parse::<bool>()
+                        .map_err(|e| ftd::interpreter::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?;
+                doc.from_json(&value2, &kind, &value)
+            }
+            _ => doc.from_json(data, &kind, &value),
+        };
     }
 
     if let Ok(Some(path)) =
