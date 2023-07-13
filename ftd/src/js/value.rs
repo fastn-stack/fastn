@@ -70,6 +70,9 @@ impl Value {
                 device,
             ),
             element_name: element_name.to_string(),
+            inherited: inherited_variable_name
+                .clone()
+                .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
         }
     }
 }
@@ -437,7 +440,7 @@ impl ftd::interpreter::Value {
                         doc,
                         component_definition_name,
                         loop_alias,
-                        inherited_variable_name,
+                        &Some(fastn_js::INHERITED_VARIABLE.to_string()),
                         device,
                         false,
                     ),

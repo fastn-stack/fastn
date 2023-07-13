@@ -203,6 +203,7 @@ fastn_dom.PropertyKind = {
     AlignSelf: 67,
     Classes: 68,
     Anchor: 69,
+    Children: 70,
 }
 
 fastn_dom.Anchor = {
@@ -542,10 +543,17 @@ class Node2 {
         }
     }
 
-    setStaticProperty(kind, value) {
+    setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
-        if (kind === fastn_dom.PropertyKind.Id) {
+        if (kind === fastn_dom.PropertyKind.Children) {
+            if (Array.isArray(staticValue)) {
+                staticValue.forEach(func =>
+                    fastn_utils.getStaticValue(func.item)(this, inherited));
+            } else {
+                staticValue(this, inherited);
+            }
+        } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
@@ -739,15 +747,15 @@ class Node2 {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
     }
-    setProperty(kind, value) {
+    setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
             this.setDynamicProperty(kind, [value], () => { return value.get(); });
         } else {
-            this.setStaticProperty(kind, value);
+            this.setStaticProperty(kind, value, inherited);
         }
     }
-    setDynamicProperty(kind, deps, func) {
-        let closure = fastn.closure(func).addNodeProperty(this, kind);
+    setDynamicProperty(kind, deps, func, inherited) {
+        let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
             if (!deps[dep].addClosure) {
                 continue;

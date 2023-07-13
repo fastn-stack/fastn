@@ -1,13 +1,1 @@
--- ftd.desktop:
-
--- ftd.text: Hello from desktop
--- ftd.text: Hello again from desktop
-
--- end: ftd.desktop
-
--- ftd.mobile:
-
--- ftd.text: Hello from mobile
--- ftd.text: Hello again from mobile
-
--- end: ftd.mobile
+-- ftd.text: Hello

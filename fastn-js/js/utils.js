@@ -21,6 +21,8 @@ let fastn_utils = {
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());
+        } if (obj instanceof fastn.mutableListClass) {
+            return obj.getList();
         } else {
            return obj;
         }

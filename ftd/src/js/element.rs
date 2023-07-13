@@ -14,19 +14,16 @@ pub enum Element {
 }
 
 impl Element {
-    pub fn from_interpreter_component(
-        component: &ftd::interpreter::Component,
-        doc: &ftd::interpreter::TDoc,
-    ) -> Element {
+    pub fn from_interpreter_component(component: &ftd::interpreter::Component) -> Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
             "ftd#integer" => Element::Integer(Integer::from(component)),
             "ftd#decimal" => Element::Decimal(Decimal::from(component)),
             "ftd#boolean" => Element::Boolean(Boolean::from(component)),
-            "ftd#column" => Element::Column(Column::from(component, doc)),
-            "ftd#row" => Element::Row(Row::from(component, doc)),
+            "ftd#column" => Element::Column(Column::from(component)),
+            "ftd#row" => Element::Row(Row::from(component)),
             "ftd#desktop" | "ftd#mobile" => {
-                Element::Device(Device::from(component, doc, component.name.as_str()))
+                Element::Device(Device::from(component, component.name.as_str()))
             }
             _ => todo!("{}", component.name.as_str()),
         }
@@ -148,7 +145,7 @@ pub struct Boolean {
 
 #[derive(Debug)]
 pub struct Column {
-    pub children: Vec<ftd::interpreter::Component>,
+    pub children: Option<ftd::interpreter::Property>,
     pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
@@ -219,7 +216,7 @@ impl Container {
 
 #[derive(Debug)]
 pub struct Row {
-    pub children: Vec<ftd::interpreter::Component>,
+    pub children: Option<ftd::interpreter::Property>,
     pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
@@ -338,6 +335,9 @@ impl Text {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -419,6 +419,9 @@ impl Integer {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -499,6 +502,9 @@ impl Decimal {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -579,6 +585,9 @@ impl Boolean {
                     device,
                 ),
                 element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
             },
         ));
         component_statements.extend(self.common.to_set_properties(
@@ -607,7 +616,7 @@ impl Boolean {
 }
 
 impl Column {
-    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Column {
+    pub fn from(component: &ftd::interpreter::Component) -> Column {
         let component_definition = ftd::interpreter::default::default_bag()
             .get("ftd#column")
             .unwrap()
@@ -616,7 +625,7 @@ impl Column {
             .unwrap();
 
         Column {
-            children: component.get_children(doc).unwrap(),
+            children: component.get_children_property(),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -684,16 +693,21 @@ impl Column {
             ));
         }
 
-        component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
-            v.to_component_statements(
-                kernel.name.as_str(),
-                index,
-                doc,
-                component_definition_name,
-                &inherited_variable_name,
-                device,
-                false,
-            )
+        component_statements.extend(self.children.iter().map(|v| {
+            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::Children,
+                value: v.value.to_fastn_js_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    &inherited_variable_name,
+                    device,
+                ),
+                element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+            })
         }));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
@@ -705,7 +719,7 @@ impl Column {
 }
 
 impl Row {
-    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Row {
+    pub fn from(component: &ftd::interpreter::Component) -> Row {
         let component_definition = ftd::interpreter::default::default_bag()
             .get("ftd#row")
             .unwrap()
@@ -713,7 +727,7 @@ impl Row {
             .component()
             .unwrap();
         Row {
-            children: component.get_children(doc).unwrap(),
+            children: component.get_children_property(),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -782,16 +796,21 @@ impl Row {
             ));
         }
 
-        component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
-            v.to_component_statements(
-                kernel.name.as_str(),
-                index,
-                doc,
-                component_definition_name,
-                &inherited_variable_name,
-                device,
-                false,
-            )
+        component_statements.extend(self.children.iter().map(|v| {
+            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::Children,
+                value: v.value.to_fastn_js_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    &inherited_variable_name,
+                    device,
+                ),
+                element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+            })
         }));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
@@ -804,17 +823,13 @@ impl Row {
 
 #[derive(Debug)]
 pub struct Device {
-    pub children: Vec<ftd::interpreter::Component>,
+    pub children: Option<ftd::interpreter::Property>,
     pub container: InheritedProperties,
     pub device: fastn_js::DeviceType,
 }
 
 impl Device {
-    pub fn from(
-        component: &ftd::interpreter::Component,
-        doc: &ftd::interpreter::TDoc,
-        device: &str,
-    ) -> Device {
+    pub fn from(component: &ftd::interpreter::Component, device: &str) -> Device {
         let component_definition = ftd::interpreter::default::default_bag()
             .get(device)
             .unwrap()
@@ -822,7 +837,7 @@ impl Device {
             .component()
             .unwrap();
         Device {
-            children: component.get_children(doc).unwrap(),
+            children: component.get_children_property(),
             container: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -871,16 +886,21 @@ impl Device {
             ));
         }
 
-        component_statements.extend(self.children.iter().enumerate().flat_map(|(index, v)| {
-            v.to_component_statements(
-                kernel.name.as_str(),
-                index,
-                doc,
-                component_definition_name,
-                &inherited_variable_name,
-                &Some(self.device.to_owned()),
-                false,
-            )
+        component_statements.extend(self.children.iter().map(|v| {
+            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::Children,
+                value: v.value.to_fastn_js_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    &inherited_variable_name,
+                    device,
+                ),
+                element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name
+                    .clone()
+                    .unwrap_or_else(|| fastn_js::INHERITED_VARIABLE.to_string()),
+            })
         }));
         component_statements.push(fastn_js::ComponentStatement::Return {
             component_name: kernel.name,

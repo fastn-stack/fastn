@@ -142,7 +142,7 @@ impl ftd::interpreter::ComponentDefinition {
             0,
             doc,
             &Some(self.name.to_string()),
-            &Some("inherited".to_string()),
+            &Some(fastn_js::INHERITED_VARIABLE.to_string()),
             &None,
             true,
         ));
@@ -280,7 +280,7 @@ impl ftd::interpreter::Component {
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
-            ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
+            ftd::js::Element::from_interpreter_component(self).to_component_statements(
                 parent,
                 index,
                 doc,
