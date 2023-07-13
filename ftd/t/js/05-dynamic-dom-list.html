@@ -64,14 +64,14 @@
 };
 function main(parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__value);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__value, inherited);
   let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value");
+  parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "Click to change value", inherited);
   parenti1.addEventHandler(fastn_dom.Event.Click, function () {
     foo__clamp(global.foo__value);
   });
   let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
-  parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one");
+  parenti2.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add one", inherited);
   parenti2.addEventHandler(fastn_dom.Event.Click, function () {
     foo__append_integer(global.foo__counters, 1);
   });
@@ -671,7 +671,7 @@ function foo__counter_list(parent, inherited, args) {
     ...args
   };
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Integer);
-  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.counter);
+  parenti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.counter, inherited);
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
     foo__increment(__args__.counter);
   });

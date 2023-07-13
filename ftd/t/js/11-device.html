@@ -69,10 +69,15 @@ function main(parent) {
     return (ftd.device.get() === "desktop");
   }, function (root) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
-    let rooti0i0 = fastn_dom.createKernel(rooti0, fastn_dom.ElementKind.Text);
-    rooti0i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop");
-    let rooti0i1 = fastn_dom.createKernel(rooti0, fastn_dom.ElementKind.Text);
-    rooti0i1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop");
+    rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from desktop", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from desktop", inherited);
+    }
+    ]), inherited);
     return rooti0;
   });
   fastn_dom.conditionalDom(parent, [
@@ -81,10 +86,15 @@ function main(parent) {
     return (ftd.device.get() === "mobile");
   }, function (root) {
     let rooti1 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Div);
-    let rooti1i0 = fastn_dom.createKernel(rooti1, fastn_dom.ElementKind.Text);
-    rooti1i0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile");
-    let rooti1i1 = fastn_dom.createKernel(rooti1, fastn_dom.ElementKind.Text);
-    rooti1i1.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from mobile");
+    rooti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello from mobile", inherited);
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello again from mobile", inherited);
+    }
+    ]), inherited);
     return rooti1;
   });
 }
