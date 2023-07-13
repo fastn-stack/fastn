@@ -1,5 +1,9 @@
 // document and path-parameters
-pub(crate) type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
+pub(crate) type ResolveDocOutput = (
+    Option<String>,
+    Vec<(String, ftd::Value)>,
+    std::collections::BTreeMap<String, String>,
+);
 
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct DynamicUrlsTemp {
@@ -104,7 +108,7 @@ impl DynamicUrls {
     }
 
     #[tracing::instrument(name = "dynamic-urls-resolve-document")]
-    pub fn resolve_document(&self, path: &str) -> fastn_core::Result<ResolveDocOutput> {
+    pub fn resolve_document<'a>(&'a self, path: &str) -> fastn_core::Result<ResolveDocOutput> {
         fn resolve_in_toc(
             toc: &fastn_core::sitemap::toc::TocItem,
             path: &str,
@@ -118,18 +122,18 @@ impl DynamicUrls {
                     fastn_core::sitemap::utils::url_match(path, toc.path_parameters.as_slice())?;
 
                 if params.0 {
-                    return Ok((toc.document.clone(), params.1));
+                    return Ok((toc.document.clone(), params.1, toc.extra_data.clone()));
                 }
             }
 
             for child in toc.children.iter() {
-                let (document, path_prams) = resolve_in_toc(child, path)?;
+                let (document, path_prams, extra_data) = resolve_in_toc(child, path)?;
                 if document.is_some() {
-                    return Ok((document, path_prams));
+                    return Ok((document, path_prams, extra_data));
                 }
             }
 
-            Ok((None, vec![]))
+            Ok((None, vec![], toc.extra_data.clone()))
         }
 
         fn resolve_in_sub_section(
@@ -147,17 +151,21 @@ impl DynamicUrls {
                 )?;
 
                 if params.0 {
-                    return Ok((sub_section.document.clone(), params.1));
+                    return Ok((
+                        sub_section.document.clone(),
+                        params.1,
+                        sub_section.extra_data.clone(),
+                    ));
                 }
             }
             for toc in sub_section.toc.iter() {
-                let (document, path_params) = resolve_in_toc(toc, path)?;
+                let (document, path_params, extra_data) = resolve_in_toc(toc, path)?;
                 if document.is_some() {
-                    return Ok((document, path_params));
+                    return Ok((document, path_params, extra_data));
                 }
             }
 
-            Ok((None, vec![]))
+            Ok((None, vec![], sub_section.extra_data.clone()))
         }
 
         fn resolve_in_section(
@@ -177,29 +185,33 @@ impl DynamicUrls {
                 )?;
 
                 if params.0 {
-                    return Ok((section.document.clone(), params.1));
+                    return Ok((
+                        section.document.clone(),
+                        params.1,
+                        section.extra_data.clone(),
+                    ));
                 }
             }
 
             for subsection in section.subsections.iter() {
-                let (document, path_params) = resolve_in_sub_section(subsection, path)?;
+                let (document, path_params, extra_data) = resolve_in_sub_section(subsection, path)?;
                 if document.is_some() {
-                    return Ok((document, path_params));
+                    return Ok((document, path_params, extra_data));
                 }
             }
-            Ok((None, vec![]))
+            Ok((None, vec![], section.extra_data.clone()))
         }
 
         for section in self.sections.iter() {
-            let (document, path_params) = resolve_in_section(section, path)?;
+            let (document, path_params, extra) = resolve_in_section(section, path)?;
             if document.is_some() {
                 tracing::info!(msg = "return: document found", path = path);
-                return Ok((document, path_params));
+                return Ok((document, path_params, extra));
             }
         }
 
         tracing::info!(msg = "return: document not found", path = path);
-        Ok((None, vec![]))
+        Ok((None, vec![], Default::default()))
     }
 }
 
