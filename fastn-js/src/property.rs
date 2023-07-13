@@ -3,6 +3,7 @@ pub struct SetProperty {
     pub kind: PropertyKind,
     pub value: SetPropertyValue,
     pub element_name: String,
+    pub inherited: String,
 }
 
 #[derive(Debug)]
@@ -119,6 +120,9 @@ pub enum Value {
     Record {
         fields: Vec<(String, SetPropertyValue)>,
     },
+    UI {
+        value: Vec<fastn_js::ComponentStatement>,
+    },
 }
 
 impl Value {
@@ -151,12 +155,26 @@ impl Value {
                     ))
                     .join(", ")
             ),
+            Value::UI { value } => format!(
+                "function({}, {}){{{}}}",
+                fastn_js::FUNCTION_PARENT,
+                fastn_js::INHERITED_VARIABLE,
+                value
+                    .iter()
+                    .map(|v| {
+                        let mut w = Vec::new();
+                        v.to_js().render(80, &mut w).unwrap();
+                        String::from_utf8(w).unwrap()
+                    })
+                    .join("")
+            ),
         }
     }
 }
 
 #[derive(Debug)]
 pub enum PropertyKind {
+    Children,
     StringValue,
     Id,
     Link,
@@ -232,6 +250,7 @@ pub enum PropertyKind {
 impl PropertyKind {
     pub(crate) fn to_js(&self) -> &'static str {
         match self {
+            PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",

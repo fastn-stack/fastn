@@ -1,0 +1,23 @@
+-- page:
+
+-- ftd.text: Hello
+
+-- ftd.text: World
+
+-- end: page
+
+-- component page:
+children uis:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: My page
+
+-- ftd.column:
+children: $page.uis
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: page

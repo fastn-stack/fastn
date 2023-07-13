@@ -1,5 +1,83 @@
 {
   "data": {
+    "foo#fifthtry": {
+      "Variable": {
+        "name": "foo#fifthtry",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#company"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#company",
+                "fields": {
+                  "locations": {
+                    "Value": {
+                      "value": {
+                        "List": {
+                          "data": [],
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 30
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "FifthTry"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 31
+                    }
+                  },
+                  "people": {
+                    "Value": {
+                      "value": {
+                        "List": {
+                          "data": [],
+                          "kind": {
+                            "kind": {
+                              "Record": {
+                                "name": "foo#person"
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 30
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 30
+          }
+        },
+        "conditional_value": [],
+        "line_number": 30,
+        "is_static": true
+      }
+    },
     "foo#company": {
       "Record": {
         "name": "foo#company",
@@ -182,84 +260,6 @@
           }
         ],
         "line_number": 7
-      }
-    },
-    "foo#fifthtry": {
-      "Variable": {
-        "name": "foo#fifthtry",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#company"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "Record": {
-                "name": "foo#company",
-                "fields": {
-                  "locations": {
-                    "Value": {
-                      "value": {
-                        "List": {
-                          "data": [],
-                          "kind": {
-                            "kind": "String",
-                            "caption": false,
-                            "body": false
-                          }
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 30
-                    }
-                  },
-                  "name": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "FifthTry"
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 31
-                    }
-                  },
-                  "people": {
-                    "Value": {
-                      "value": {
-                        "List": {
-                          "data": [],
-                          "kind": {
-                            "kind": {
-                              "Record": {
-                                "name": "foo#person"
-                              }
-                            },
-                            "caption": false,
-                            "body": false
-                          }
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 30
-                    }
-                  }
-                }
-              }
-            },
-            "is_mutable": false,
-            "line_number": 30
-          }
-        },
-        "conditional_value": [],
-        "line_number": 30,
-        "is_static": true
       }
     },
     "foo#person": {

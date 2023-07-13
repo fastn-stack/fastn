@@ -5,6 +5,7 @@ class Closure {
     #node;
     #property;
     #formula;
+    #inherited;
     constructor(func) {
         this.#cached_value = func();
         this.#formula = func;
@@ -16,9 +17,10 @@ class Closure {
     getFormula() {
         return this.#formula;
     }
-    addNodeProperty(node, property) {
+    addNodeProperty(node, property, inherited) {
         this.#node = node;
         this.#property = property;
+        this.#inherited = inherited;
         this.updateUi();
 
         return this;
@@ -38,7 +40,7 @@ class Closure {
             return;
         }
 
-        this.#node.setStaticProperty(this.#property, this.#cached_value);
+        this.#node.setStaticProperty(this.#property, this.#cached_value, this.#inherited);
     }
 }
 
@@ -231,6 +233,7 @@ fastn.proxy = function (targets, differentiator) {
 };
 
 fastn.mutableClass = Mutable;
+fastn.mutableListClass = MutableList;
 
 fastn.wrapMutable = function (obj) {
     if (!(obj instanceof Mutable)
