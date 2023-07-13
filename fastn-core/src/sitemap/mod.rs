@@ -1241,63 +1241,6 @@ impl Sitemap {
         }
     }
 
-    pub(crate) fn get_extra_data_by_id(
-        &self,
-        id: &str,
-    ) -> Option<std::collections::BTreeMap<String, String>> {
-        for section in self.sections.iter() {
-            if fastn_core::utils::ids_matches(section.id.as_str(), id) {
-                return Some(section.extra_data.to_owned());
-            }
-            if let Some(data) = get_extra_data_from_subsections(id, section.subsections.as_slice())
-            {
-                let mut all_data = section.extra_data.clone();
-                all_data.extend(data);
-                return Some(all_data);
-            }
-        }
-        return None;
-
-        fn get_extra_data_from_subsections(
-            id: &str,
-            subsections: &[section::Subsection],
-        ) -> Option<std::collections::BTreeMap<String, String>> {
-            for subsection in subsections {
-                if subsection.visible
-                    && fastn_core::utils::ids_matches(
-                        subsection.id.as_ref().unwrap_or(&"".to_string()),
-                        id,
-                    )
-                {
-                    return Some(subsection.extra_data.to_owned());
-                }
-                if let Some(data) = get_extra_data_from_toc(id, subsection.toc.as_slice()) {
-                    let mut all_data = subsection.extra_data.clone();
-                    all_data.extend(data);
-                    return Some(all_data);
-                }
-            }
-            None
-        }
-
-        fn get_extra_data_from_toc(
-            id: &str,
-            toc: &[toc::TocItem],
-        ) -> Option<std::collections::BTreeMap<String, String>> {
-            for toc_item in toc {
-                if fastn_core::utils::ids_matches(toc_item.id.as_str(), id) {
-                    return Some(toc_item.extra_data.to_owned());
-                }
-                if let Some(data) = get_extra_data_from_toc(id, toc_item.children.as_slice()) {
-                    let mut all_data = toc_item.extra_data.clone();
-                    all_data.extend(data);
-                    return Some(all_data);
-                }
-            }
-            None
-        }
-    }
-
     /// This function will return all the readers and readers which are inherited from parent
 
     // TODO: need to handle special reader: everyone, writer: everyone
