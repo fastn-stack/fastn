@@ -1,4 +1,5 @@
 !include LogicLib.nsh
+!include "MUI.nsh"
 
 ; Set the name and output file of the installer
 Outfile "windows_x64_installer.exe"
@@ -6,19 +7,37 @@ Outfile "windows_x64_installer.exe"
 ; Set the name and version of the application
 Name "Fastn"
 
-; Version "1.0"
+; Set Version of installer
 VIProductVersion "${VERSION}"
 
 ; Default installation directory
 InstallDir $PROGRAMFILES\fastn
+
+!define PRODUCT_NAME "fastn"
+
+; Styling
+
+!define MUI_BRANDINGTEXT "fastn ${VERSION}"
+!define MUI_ICON "fastn.ico"
+!define MUI_INSTFILESPAGE_COLORS "FFFFFF 000000"
+!define MUI_BGCOLOR 000000
+!define MUI_TEXTCOLOR ffffff
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_SHOWREADME "https://fastn.com"
+CRCCheck On
 
 ; Request application privileges for installation
 RequestExecutionLevel admin
 
 ; Pages
 
-Page Directory
-Page InstFiles
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE ${CURRENT_WD}\LICENSE
+!insertmacro MUI_PAGE_INSTFILES
+
+; Default Language
+
+!insertmacro MUI_LANGUAGE "English"
 
 ; Sections
 
@@ -32,8 +51,11 @@ Section "Fastn Installer" SectionOne
     ; Set the output path for installation
     SetOutPath $INSTDIR
     
+    ; CURRENT_WD is provided through cmd arguments
     ; Copy application files
-    File "${BINARY_PATH}"
+    File ${CURRENT_WD}\target\release\fastn.exe
+    File ${CURRENT_WD}\LICENSE
+    File ${CURRENT_WD}\README.md
 
     ; Set the Path variables
     EnVar::SetHKCU

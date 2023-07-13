@@ -13,14 +13,19 @@ The following changes have been implemented in this pull request:
 1. Updated the `release.yml` file to incorporate Windows installer support for the Fastn executable.
 2. Integrated NSIS into the build process using the `makensis` GitHub Action. This action allows the execution of NSIS scripts during the build workflow.
 3. Added the `install.nsi` script to the root folder of the Fastn project. This script configures the NSIS installer.
-4. The installer currently utilizes the Standard UI provided by NSIS. However, due to limitations with the GitHub Action, the Modern UI (MUI) of NSIS will be implemented in a future update to enhance the user experience and improve the visual appeal of the installation process.
+4. Following major changes were made in this revision:
+    - The installer now uses the NSIS MUI. 
+    - Changed the color scheme to dark color scheme which matches the website. 
+    - Changed the default icon to Fastn's logo.
+    - Changed the `release.yml` file to set the nsis version to V3.
 
 ## Installer Functionality
 
 The Fastn installer performs the following tasks:
 
-1. Extracts all necessary files to either the default location (Program Files) or a user-defined folder.
-2. Checks if the required path variable is already set up on the system. If not, it automatically configures the correct path variable to ensure seamless execution of Fastn without any issues.
+1. Shows a Welcome and License Page
+2. Extracts all necessary files to either the default location (Program Files) or a user-defined folder.
+3. Checks if the required path variable is already set up on the system. If not, it automatically configures the correct path variable to ensure seamless execution of Fastn without any issues.
 
 ## Code Changes
 
@@ -38,7 +43,7 @@ The following code changes have been made to the `release windows` job:
 - name: Create installer
   uses: joncloud/makensis-action@v4
   with:
-    arguments: /DBINARY_PATH=${{ github.workspace }}\target\release\fastn.exe /DVERSION=${{ github.event.inputs.releaseTag }}
+    arguments: /V3 /DCURRENT_WD=${{ github.workspace }} /DVERSION=${{ github.event.inputs.releaseTag }}
     additional-plugin-paths: ${{ github.workspace }}/NSIS_Plugins/Plugins
 - uses: actions/upload-artifact@v2
   with:
@@ -51,5 +56,5 @@ These code changes have been added to the `release windows` job in the workflow 
 1. Downloading the EnVar Plugin for NSIS, which is required for correctly configuring path variables in Windows.
 2. Extracting the plugin to the appropriate location.
 3. Creating the installer executable by specifying the following inputs:
-   - `BINARY_PATH`: The absolute path of the Fastn executable generated using Cargo.
+   - `CURRENT_WD`: The current Github Working Directory.
    - `VERSION`: The release tag.
