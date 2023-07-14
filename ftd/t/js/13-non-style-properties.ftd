@@ -6,12 +6,19 @@ align-content: center
 
 -- ftd.text: This is a link
 link: https://www.fastn.com
-open-in-new-tab: true
 margin.px: 20
 
 -- end: ftd.column
 
 ;; ------------------------- OPEN-IN-NEW-TAB --------------------------------
 
+-- ftd.column:
+width: fill-container
+align-content: center
 
--- ftd.text: hfajsbfjqw
+-- ftd.text: This is a link (will open in new tab)
+link: https://www.fastn.com
+open-in-new-tab: true
+margin.px: 20
+
+-- end: ftd.column
