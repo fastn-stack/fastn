@@ -22,3 +22,46 @@ open-in-new-tab: true
 margin.px: 20
 
 -- end: ftd.column
+
+;; ---------------------- KERNEL(ftd.checkbox) -------------------------------
+;; checked, enabled
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+
+-- ftd.checkbox:
+checked: true
+
+-- ftd.checkbox:
+checked: false
+enabled: false
+
+-- end: ftd.column
+
+;; -------------------- KERNEL(ftd.text-input) -------------------
+;; placeholder, type, multiline, enabled, default-value
+
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+
+-- ftd.text-input:
+placeholder: Enter some text
+
+-- ftd.text-input:
+placeholder: Multiline input
+multiline: true
+
+-- ftd.text-input:
+type: password
+
+-- ftd.text-input:
+placeholder: This would be disabled
+enabled: false
+
+-- ftd.text-input:
+default-value: This is default text
+
+-- end: ftd.column

@@ -107,6 +107,8 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::Image => "fastn_dom.ElementKind.Image",
             fastn_js::ElementKind::IFrame => "fastn_dom.ElementKind.IFrame",
             fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Div",
+            fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
+            fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
         }
     }
 }
