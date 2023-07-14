@@ -10,33 +10,44 @@ mod value;
 pub use element::{Common, Element};
 pub use value::Value;
 
-pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
+/// This struct is used to store asts derived from `data` and `tree` fields in
+/// `ftd::interpreter::Document`
+pub struct JSAst {
+    /// This contains asts of things present in `ftd` module or `default_bag`
+    pub ftd: Vec<fastn_js::Ast>,
+    /// This contains asts of things (other than `ftd`) and instructions/tree
+    pub document: Vec<fastn_js::Ast>,
+}
+
+pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAst {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
-    let mut asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
+    let mut document_asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
     let default_thing_name = ftd::interpreter::default::default_bag()
         .into_iter()
         .map(|v| v.0)
         .collect_vec();
 
+    let mut ftd_asts = vec![];
+
     for (key, thing) in document.data.iter() {
-        // if default_thing_name.contains(key) && thing.is_component() {
-        //     continue;
-        // }
-        if default_thing_name.contains(key)
-            && !["ftd#default-types", "ftd#default-colors"].contains(&key.as_str())
-        {
+        if default_thing_name.contains(key) {
+            if let ftd::interpreter::Thing::Variable(v) = thing {
+                ftd_asts.push(v.to_ast(&doc, None));
+            } else if let ftd::interpreter::Thing::Function(f) = thing {
+                ftd_asts.push(f.to_ast());
+            }
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
-            asts.push(c.to_ast(&doc));
+            document_asts.push(c.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
-            asts.push(v.to_ast(&doc));
+            document_asts.push(v.to_ast(&doc, Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
-            asts.push(f.to_ast());
+            document_asts.push(f.to_ast());
         }
     }
-    asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+    document_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
         name: "inherited".to_string(),
         value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
             fields: vec![
@@ -56,7 +67,10 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         }),
         prefix: None,
     }));
-    asts
+    ftd::js::JSAst {
+        ftd: ftd_asts,
+        document: document_asts,
+    }
 }
 
 impl ftd::interpreter::Function {
@@ -80,7 +94,7 @@ impl ftd::interpreter::Function {
 }
 
 impl ftd::interpreter::Variable {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc, prefix: Option<String>) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
             if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
                 let record = doc.get_record(name, self.line_number).unwrap();
@@ -107,27 +121,27 @@ impl ftd::interpreter::Variable {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
                     fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record { fields }),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    prefix,
                 });
             } else if self.kind.is_list() {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
                     value: self.value.to_fastn_js_value_with_none(doc),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    prefix,
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
                     value: self.value.to_fastn_js_value_with_none(doc),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    prefix,
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
             value: self.value.to_fastn_js_value_with_none(doc),
-            prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+            prefix,
         })
     }
 }

@@ -16,11 +16,12 @@ pub fn ssr_str(js: &str) -> String {
 }
 
 pub fn ssr(ast: &[fastn_js::Ast]) -> String {
-    let js = format!("{}\nfastn_virtual.ssr(main)", fastn_js::to_js(ast));
+    let js = format!("{}\nfastn_virtual.ssr(main)", fastn_js::to_js(ast, false));
     ssr_str(&js)
 }
 
 pub fn ssr_with_js_string(js: &str) -> String {
     let js = format!("{}\nfastn_virtual.ssr(main)", js);
+    dbg!(&js);
     ssr_str(&js)
 }

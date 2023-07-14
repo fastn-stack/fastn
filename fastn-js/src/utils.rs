@@ -3,29 +3,16 @@ pub fn is_kernel(s: &str) -> bool {
 }
 
 pub fn reference_to_js(s: &str) -> String {
-    let mut s = s.to_string();
-    let prefix = if let Some(prefix) =
-        s.strip_prefix(format!("{}.", fastn_js::GLOBAL_VARIABLE_MAP).as_str())
-    {
-        s = prefix.to_string();
-        Some(fastn_js::GLOBAL_VARIABLE_MAP)
-    } else if let Some(prefix) =
-        s.strip_prefix(format!("{}.", fastn_js::LOCAL_VARIABLE_MAP).as_str())
-    {
-        s = prefix.to_string();
-        Some(fastn_js::LOCAL_VARIABLE_MAP)
-    } else {
-        None
-    };
+    let (prefix, s) = get_prefix(s);
 
     let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
-    p1 = fastn_js::utils::name_to_js(p1.as_str());
+    p1 = fastn_js::utils::name_to_js_(p1.as_str());
     while let Some(remaining) = p2 {
         let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
         p1 = format!(
             "{}.get(\"{}\")",
             p1,
-            fastn_js::utils::name_to_js(p21.as_str())
+            fastn_js::utils::name_to_js_(p21.as_str())
         );
         p2 = p22;
     }
@@ -49,7 +36,40 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
     }
 }
 
+fn get_prefix(s: &str) -> (Option<&str>, String) {
+    let mut s = s.to_string();
+    let prefix = if let Some(prefix) =
+        s.strip_prefix(format!("{}.", fastn_js::GLOBAL_VARIABLE_MAP).as_str())
+    {
+        s = prefix.to_string();
+        Some(fastn_js::GLOBAL_VARIABLE_MAP)
+    } else if let Some(prefix) =
+        s.strip_prefix(format!("{}.", fastn_js::LOCAL_VARIABLE_MAP).as_str())
+    {
+        s = prefix.to_string();
+        Some(fastn_js::LOCAL_VARIABLE_MAP)
+    } else if let Some(prefix) = s
+        .strip_prefix(format!("ftd.").as_str())
+        .or(s.strip_prefix(format!("ftd#").as_str()))
+    {
+        s = prefix.to_string();
+        Some("ftd")
+    } else {
+        None
+    };
+    (prefix, s)
+}
+
 pub fn name_to_js(s: &str) -> String {
+    let (prefix, s) = get_prefix(s);
+    format!(
+        "{}{}",
+        prefix.map(|v| format!("{v}.")).unwrap_or_default(),
+        name_to_js_(s.as_str())
+    )
+}
+
+pub fn name_to_js_(s: &str) -> String {
     let mut s = s.to_string();
     if s.as_bytes()[0].is_ascii_digit() {
         s = format!("_{}", s);

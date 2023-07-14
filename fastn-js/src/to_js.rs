@@ -12,9 +12,14 @@ fn comma() -> pretty::RcDoc<'static> {
     pretty::RcDoc::text(",".to_string())
 }
 
-pub fn to_js(ast: &[fastn_js::Ast]) -> String {
+pub fn to_js(ast: &[fastn_js::Ast], is_global_need: bool) -> String {
     let mut w = Vec::new();
-    let o = get_variable_declaration("global").append(pretty::RcDoc::intersperse(
+    let o = if is_global_need {
+        get_variable_declaration("global")
+    } else {
+        pretty::RcDoc::nil()
+    }
+    .append(pretty::RcDoc::intersperse(
         ast.iter().map(|f| f.to_js()),
         space(),
     ));
@@ -298,29 +303,40 @@ impl fastn_js::ForLoop {
 }
 
 fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::RcDoc<'static> {
-    text("function")
-        .append(space())
-        .append(text(fastn_js::utils::name_to_js(name).as_str()))
-        .append(text("("))
-        .append(
-            pretty::RcDoc::intersperse(
-                params.iter().map(|v| text(v.as_str())),
-                comma().append(space()),
-            )
-            .nest(4)
+    let name = fastn_js::utils::name_to_js(name);
+    // `.` means the function is placed in object so no need of `let`
+    // e.g. ftd.toggle
+    if name.contains(".") {
+        pretty::RcDoc::nil()
+    } else {
+        text("let").append(space())
+    }
+    .append(text(name.as_str()))
+    .append(space())
+    .append(text("="))
+    .append(space())
+    .append(text("function"))
+    .append(space())
+    .append(text("("))
+    .append(
+        pretty::RcDoc::intersperse(
+            params.iter().map(|v| text(v.as_str())),
+            comma().append(space()),
+        )
+        .nest(4)
+        .group(),
+    )
+    .append(text(")"))
+    .append(pretty::RcDoc::softline_())
+    .append(
+        pretty::RcDoc::softline()
+            .append(text("{"))
+            .append(pretty::RcDoc::softline_())
+            .append(body.nest(4))
+            .append(pretty::RcDoc::softline_())
+            .append(text("}"))
             .group(),
-        )
-        .append(text(")"))
-        .append(pretty::RcDoc::softline_())
-        .append(
-            pretty::RcDoc::softline()
-                .append(text("{"))
-                .append(pretty::RcDoc::softline_())
-                .append(body.nest(4))
-                .append(pretty::RcDoc::softline_())
-                .append(text("}"))
-                .group(),
-        )
+    )
 }
 
 impl fastn_js::Component {
@@ -390,14 +406,17 @@ impl fastn_js::Component {
 
 impl fastn_js::MutableVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        let name = fastn_js::utils::name_to_js(self.name.as_str());
         if let Some(ref prefix) = self.prefix {
             text(prefix).append(text("."))
+        } else if name.contains('.') {
+            // `.` means the variable is placed in object so no need of `let`.
+            // e.g: ftd.device
+            pretty::RcDoc::nil()
         } else {
             text("let").append(space())
         }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
+        .append(text(name.as_str()))
         .append(space())
         .append(text("="))
         .append(space())
@@ -409,14 +428,17 @@ impl fastn_js::MutableVariable {
 
 impl fastn_js::MutableList {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        let name = fastn_js::utils::name_to_js(self.name.as_str());
         if let Some(ref prefix) = self.prefix {
             text(prefix).append(text("."))
+        } else if name.contains('.') {
+            // `.` means the variable is placed in object so no need of `let`.
+            // e.g: ftd.device
+            pretty::RcDoc::nil()
         } else {
             text("let").append(space())
         }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
+        .append(text(name.as_str()))
         .append(space())
         .append(text("="))
         .append(space())
@@ -427,14 +449,17 @@ impl fastn_js::MutableList {
 
 impl fastn_js::RecordInstance {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        let name = fastn_js::utils::name_to_js(self.name.as_str());
         if let Some(ref prefix) = self.prefix {
             text(prefix).append(text("."))
+        } else if name.contains('.') {
+            // `.` means the variable is placed in object so no need of `let`.
+            // e.g: ftd.device
+            pretty::RcDoc::nil()
         } else {
             text("let").append(space())
         }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
+        .append(text(name.as_str()))
         .append(space())
         .append(text("="))
         .append(space())
@@ -445,14 +470,17 @@ impl fastn_js::RecordInstance {
 
 impl fastn_js::StaticVariable {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
+        let name = fastn_js::utils::name_to_js(self.name.as_str());
         if let Some(ref prefix) = self.prefix {
             text(prefix).append(text("."))
+        } else if name.contains('.') {
+            // `.` means the variable is placed in object so no need of `let`.
+            // e.g: ftd.device
+            pretty::RcDoc::nil()
         } else {
             text("let").append(space())
         }
-        .append(text(
-            fastn_js::utils::name_to_js(self.name.as_str()).as_str(),
-        ))
+        .append(text(name.as_str()))
         .append(space())
         .append(text("="))
         .append(space())
@@ -823,7 +851,7 @@ pub(crate) fn get_variable_declaration(variable: &str) -> pretty::RcDoc<'static>
 #[cfg(test)]
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
-    let g = to_js(&vec![f]);
+    let g = to_js(&vec![f], false);
     println!("got: {}", g);
     println!("expected: {}", s);
     assert_eq!(g, s);

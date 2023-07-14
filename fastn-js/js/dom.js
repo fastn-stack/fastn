@@ -213,6 +213,11 @@ fastn_dom.Anchor = {
     Id: "absolute",
 }
 
+fastn_dom.DeviceData = {
+    Desktop: "desktop",
+    Mobile: "mobile",
+}
+
 fastn_dom.Resizing = {
     FillContainer: "100%",
     HugContent: "fit-content",
