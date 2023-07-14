@@ -877,7 +877,7 @@ impl ParsedDocument {
         ParsedDocument::parse_with_line_number(id, source, 0)
     }
 
-    #[tracing::instrument(name = "parse_with_line_number", skip_all)]
+    #[tracing::instrument(skip(source))]
     pub fn parse_with_line_number(
         id: &str,
         source: &str,
