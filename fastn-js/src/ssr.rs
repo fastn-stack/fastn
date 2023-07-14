@@ -10,7 +10,15 @@ pub fn ssr_str(js: &str) -> String {
     }
     #[cfg(not(target_os = "windows"))]
     {
-        let context = quick_js::Context::new().unwrap();
+        // Added logging support from console from within context
+        let context = quick_js::Context::builder()
+            .console(
+                |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
+                    eprintln!("{}: {:?}", level, args);
+                },
+            )
+            .build()
+            .unwrap();
         context.eval_as::<String>(js.as_str()).unwrap()
     }
 }

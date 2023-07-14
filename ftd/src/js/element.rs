@@ -161,6 +161,7 @@ pub struct InheritedProperties {
 pub struct Container {
     pub spacing: Option<ftd::js::Value>,
     pub wrap: Option<ftd::js::Value>,
+    pub align_content: Option<ftd::js::Value>,
 }
 
 impl Container {
@@ -171,6 +172,7 @@ impl Container {
         Container {
             spacing: ftd::js::value::get_properties("spacing", properties, arguments),
             wrap: ftd::js::value::get_properties("wrap", properties, arguments),
+            align_content: ftd::js::value::get_properties("align-content", properties, arguments),
         }
     }
 
@@ -201,6 +203,19 @@ impl Container {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(
                     fastn_js::PropertyKind::Wrap,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref align_content) = self.align_content {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                align_content.to_set_property(
+                    fastn_js::PropertyKind::AlignContent,
                     doc,
                     element_name,
                     component_definition_name,
@@ -909,6 +924,7 @@ pub struct TextCommon {
     pub text_indent: Option<ftd::js::Value>,
     pub text_align: Option<ftd::js::Value>,
     pub line_clamp: Option<ftd::js::Value>,
+    pub style: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -921,6 +937,7 @@ impl TextCommon {
             text_indent: ftd::js::value::get_properties("text-indent", properties, arguments),
             text_align: ftd::js::value::get_properties("text-align", properties, arguments),
             line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
+            style: ftd::js::value::get_properties("style", properties, arguments),
         }
     }
 
@@ -986,6 +1003,19 @@ impl TextCommon {
                 ),
             ));
         }
+        if let Some(ref style) = self.style {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                style.to_set_property(
+                    fastn_js::PropertyKind::TextStyle,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
         component_statements
     }
 }
@@ -993,7 +1023,9 @@ impl TextCommon {
 #[derive(Debug)]
 pub struct Common {
     pub id: Option<ftd::js::Value>,
+    pub region: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
+    pub open_in_new_tab: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
     pub width: Option<ftd::js::Value>,
     pub height: Option<ftd::js::Value>,
@@ -1066,7 +1098,13 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
+            region: ftd::js::value::get_properties("region", properties, arguments),
             link: ftd::js::value::get_properties("link", properties, arguments),
+            open_in_new_tab: ftd::js::value::get_properties(
+                "open-in-new-tab",
+                properties,
+                arguments,
+            ),
             anchor: ftd::js::value::get_properties("anchor", properties, arguments),
             classes: ftd::js::value::get_properties("classes", properties, arguments),
             align_self: ftd::js::value::get_properties("align-self", properties, arguments),
@@ -1255,10 +1293,36 @@ impl Common {
                 ),
             ));
         }
+        if let Some(ref region) = self.region {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                region.to_set_property(
+                    fastn_js::PropertyKind::Region,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
         if let Some(ref link) = self.link {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 link.to_set_property(
                     fastn_js::PropertyKind::Link,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref open_in_new_tab) = self.open_in_new_tab {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                open_in_new_tab.to_set_property(
+                    fastn_js::PropertyKind::OpenInNewTab,
                     doc,
                     element_name,
                     component_definition_name,

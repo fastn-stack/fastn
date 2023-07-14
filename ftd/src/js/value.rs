@@ -518,6 +518,18 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = device_data_variants(variant);
             (format!("fastn_dom.DeviceData.{}", js_variant), false)
         }
+        "ftd#text-style" => {
+            let js_variant = text_style_variants(variant);
+            (format!("fastn_dom.TextStyle.{}", js_variant), false)
+        }
+        "ftd#region" => {
+            let js_variant = region_variants(variant);
+            (format!("fastn_dom.Region.{}", js_variant), false)
+        }
+        "ftd#align" => {
+            let js_variant = align_variants(variant);
+            (format!("fastn_dom.AlignContent.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -713,5 +725,50 @@ fn device_data_variants(name: &str) -> &'static str {
         "desktop" => "Desktop",
         "mobile" => "Mobile",
         t => todo!("invalid anchor variant {}", t),
+    }
+}
+
+fn text_style_variants(name: &str) -> &'static str {
+    match name {
+        "underline" => "Underline",
+        "italic" => "Italic",
+        "strike" => "Strike",
+        "heavy" => "Heavy",
+        "extra-bold" => "Extrabold",
+        "bold" => "Bold",
+        "semi-bold" => "SemiBold",
+        "medium" => "Medium",
+        "regular" => "Regular",
+        "light" => "Light",
+        "extra-light" => "ExtraLight",
+        "hairline" => "Hairline",
+        t => todo!("invalid text-style variant {}", t),
+    }
+}
+
+fn region_variants(name: &str) -> &'static str {
+    match name {
+        "h1" => "H1",
+        "h2" => "H2",
+        "h3" => "H3",
+        "h4" => "H4",
+        "h5" => "H5",
+        "h6" => "H6",
+        t => todo!("invalid region variant {}", t),
+    }
+}
+
+fn align_variants(name: &str) -> &'static str {
+    match name {
+        "top-left" => "TopLeft",
+        "top-center" => "TopCenter",
+        "top-right" => "TopRight",
+        "right" => "Right",
+        "left" => "Left",
+        "center" => "Center",
+        "bottom-left" => "BottomLeft",
+        "bottom-right" => "BottomRight",
+        "bottom-center" => "BottomCenter",
+        t => todo!("invalid align-content variant {}", t),
     }
 }

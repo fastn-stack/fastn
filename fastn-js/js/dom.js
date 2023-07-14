@@ -88,6 +88,10 @@ fastn_dom.property_map = {
     "min-height": "mnh",
     "max-width": "mxw",
     "min-width": "mnw",
+    "font-weight": "fw",
+    "font-style": "fst",
+    "text-decoration": "td",
+    "align-items": "ali",
 };
 
 // dynamic-class-css.md
@@ -205,6 +209,31 @@ fastn_dom.PropertyKind = {
     Anchor: 69,
     Link: 70,
     Children: 71,
+    OpenInNewTab: 72,
+    TextStyle: 73,
+    Region: 74,
+    AlignContent: 75,
+}
+
+fastn_dom.AlignContent = {
+    TopLeft: "top-left",
+    TopCenter: "top-center",
+    TopRight: "top-right",
+    Right: "right",
+    Left: "left",
+    Center: "center",
+    BottomLeft: "bottom-left",
+    BottomRight: "bottom-right",
+    BottomCenter: "bottom-center",
+}
+
+fastn_dom.Region = {
+    H1: "h1",
+    H2: "h2",
+    H3: "h3",
+    H4: "h4",
+    H5: "h5",
+    H6: "h6",
 }
 
 fastn_dom.Anchor = {
@@ -216,6 +245,21 @@ fastn_dom.Anchor = {
 fastn_dom.DeviceData = {
     Desktop: "desktop",
     Mobile: "mobile",
+}
+
+fastn_dom.TextStyle = {
+    Underline: "underline",
+    Italic: "italic",
+    Strike: "line-through",
+    Heavy: "900",
+    Extrabold: "800",
+    Bold: "700",
+    SemiBold: "600",
+    Medium: "500",
+    Regular: "400",
+    Light: "300",
+    ExtraLight: "200",
+    Hairline: "100",
 }
 
 fastn_dom.Resizing = {
@@ -431,9 +475,12 @@ fastn_dom.Event = {
 // Node -> similar to HTML DOM node (Node2.#node)
 class Node2 {
     #node;
+    #kind;
     #parent;
     #mutables;
     constructor(parent, kind) {
+        this.#kind = kind;
+
         let [node, classes] = fastn_utils.htmlNode(kind);
         this.#node = fastn_virtual.document.createElement(node);
         for (let c in classes) {
@@ -455,7 +502,13 @@ class Node2 {
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
-        this.#node.addAttribute(property, value);
+        this.#node.setAttribute(property, value);
+    }
+
+    updateTagName(name) {
+        if (ssr) {
+            this.#node.updateTagName(name);
+        }
     }
 
     // dynamic-class-css
@@ -553,6 +606,63 @@ class Node2 {
         } else {
             let desktopClass = this.attachCss("role", fastn_utils.getRoleValues(desktopValue), true);
             this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
+        }
+    }
+    attachTextStyles(styles) {
+        for (var s of styles) {
+            switch (s) {
+              case 'italic':
+                this.attachCss("font-style", s);
+                break;
+              case 'underline':
+              case 'line-through':
+                this.attachCss("text-decoration", s);
+                break;
+              default:
+                this.attachCss("font-weight", s);
+            }
+        }
+    }
+
+    attachAlignContent(value, node_kind) {
+        if (node_kind === fastn_dom.ElementKind.Row) {
+            switch (value) {
+                case 'top-left':
+                case 'left':
+                case 'bottom-left':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'top-center':
+                case 'center':
+                case 'bottom-center':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'top-right':
+                case 'right':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
+            }
+        }
+
+        if (node_kind === fastn_dom.ElementKind.Column) {
+            switch (value) {
+                case 'top-left':
+                case 'top-center':
+                case 'top-right':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'left':
+                case 'center':
+                case 'right':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'bottom-left':
+                case 'bottom-center':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
+            }
         }
     }
 
@@ -753,8 +863,28 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.#node.updateTagName("a")
+            this.updateTagName("a");
             this.attachAttribute("href", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
+            // open_in_new_tab is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachAttribute("target", "_blank");
+                break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextStyle) {
+            let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            this.attachTextStyles(styles);
+        } else if (kind === fastn_dom.PropertyKind.Region) {
+            this.updateTagName(staticValue);
+            if (this.#node.innerHTML) {
+                // todo: need to slugify this id
+                this.#node.id = this.#node.innerHTML;
+            }
+        } else if (kind === fastn_dom.PropertyKind.AlignContent) {
+            let node_kind = this.#kind;
+            this.attachAlignContent(staticValue, node_kind);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||

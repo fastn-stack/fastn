@@ -54,11 +54,12 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1"><a data-id="3" href=https://www.fastn.com class="m-2">This is a link</a></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 ali-2"><a data-id="3" href=https://www.fastn.com class="m-3">This is a link</a></div><div data-id="4" class="ft_column w-1 ali-2"><a data-id="5" href=https://www.fastn.com target=_blank class="m-3">This is a link (will open in new tab)</a></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
-	.m-2 { margin: 20px; }
+	.ali-2 { align-items: center; }
+	.m-3 { margin: 20px; }
     </style>
 <script>
     (function() {
@@ -67,10 +68,22 @@
 function main(parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
   parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
   parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+  }
+  ]), inherited);
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link (will open in new tab)", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
   }
   ]), inherited);
