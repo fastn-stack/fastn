@@ -249,6 +249,7 @@ pub async fn serve(
     inline_css: Vec<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
+
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
     let mut config = fastn_core::Config::read(None, false, Some(&req))

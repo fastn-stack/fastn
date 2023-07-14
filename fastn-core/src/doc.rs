@@ -99,24 +99,16 @@ pub async fn interpret_helper<'a>(
                 variable,
                 caller_module,
             } => {
-                if module.eq("test") {
-                    let value = ftd::interpreter::Value::String {
-                        text: variable.to_uppercase().to_string(),
-                    };
-                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
-                } else {
-                    let value = resolve_foreign_variable2022(
-                        variable.as_str(),
-                        module.as_str(),
-                        &state,
-                        lib,
-                        base_url,
-                        download_assets,
-                        caller_module.as_str(),
-                    )
-                    .await?;
-                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
-                }
+                let value = resolve_foreign_variable2022(
+                    variable.as_str(),
+                    module.as_str(),
+                    lib,
+                    base_url,
+                    download_assets,
+                    caller_module.as_str(),
+                )
+                .await?;
+                s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
             }
         }
     }
@@ -283,11 +275,10 @@ pub async fn resolve_import_2022<'a>(
     Ok(source)
 }
 
-#[tracing::instrument(name = "fastn_core::stuck-on-foreign-variable", err)]
+#[tracing::instrument(name = "fastn_core::stuck-on-foreign-variable", err, skip(lib))]
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
-    _state: &ftd::interpreter::InterpreterState,
     lib: &mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,
