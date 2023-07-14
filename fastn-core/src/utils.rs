@@ -836,7 +836,7 @@ pub fn hashed_default_js_name() -> String {
 pub fn hashed_default_ftd_js() -> String {
     format!(
         "default-{}.js",
-        generate_hash(fastn_js::all_js_without_test().as_str())
+        generate_hash(ftd::js::all_js_without_test().as_str())
     )
 }
 

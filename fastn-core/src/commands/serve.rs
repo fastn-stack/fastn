@@ -626,7 +626,7 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
         return Some(
             actix_web::HttpResponse::Ok()
                 .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
-                .body(fastn_js::all_js_without_test()),
+                .body(ftd::js::all_js_without_test()),
         );
     }
 

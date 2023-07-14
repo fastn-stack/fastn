@@ -43,12 +43,12 @@ ftd.post_init = function () {
         let mobile_breakpoint = fastn_utils.getStaticValue(ftd["breakpoint-width"].get("mobile"));
         if (width <= mobile_breakpoint) {
             document.body.classList.add(MOBILE_CLASS);
-            return "mobile";
+            return fastn_dom.DeviceData.Mobile;
         }
         if (document.body.classList.contains(MOBILE_CLASS)) {
             document.body.classList.remove(MOBILE_CLASS);
         }
-        return "desktop";
+        return fastn_dom.DeviceData.Desktop;
     }
 
     /*

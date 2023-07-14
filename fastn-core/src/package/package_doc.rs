@@ -474,8 +474,8 @@ pub(crate) async fn read_ftd_2023(
     };
 
     let js_ast = ftd::js::document_into_js_ast(main_ftd_doc);
-    let js_document_script = fastn_js::to_js(js_ast.document.as_slice(), true);
-    let js_ftd_script = fastn_js::to_js(js_ast.ftd.as_slice(), false);
+    let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
+    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
     let ssr_body =
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
 
@@ -490,7 +490,7 @@ pub(crate) async fn read_ftd_2023(
     let file_content = fastn_core::utils::replace_markers_2023(
         ftd::ftd_js_html(),
         js_document_script.as_str(),
-        format!("<script>{js_ftd_script}</script>\n{ssr_body}").as_str(),
+        ssr_body.as_str(),
         font_style.as_str(),
     );
 

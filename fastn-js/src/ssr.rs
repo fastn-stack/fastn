@@ -30,6 +30,5 @@ pub fn ssr(ast: &[fastn_js::Ast]) -> String {
 
 pub fn ssr_with_js_string(js: &str) -> String {
     let js = format!("{}\nfastn_virtual.ssr(main)", js);
-    dbg!(&js);
     ssr_str(&js)
 }

@@ -48,12 +48,7 @@ pub fn all_js_without_test() -> String {
 }
 
 pub fn all_js_with_test() -> String {
-    let fastn_js = include_str!("../js/fastn.js");
-    let dom_js = include_str!("../js/dom.js");
-    let utils_js = include_str!("../js/utils.js");
-    let virtual_js = include_str!("../js/virtual.js");
-    let ftd_js = include_str!("../js/ftd.js");
-    let post_init_js = include_str!("../js/postInit.js");
     let test_js = include_str!("../js/test.js");
-    format!("{fastn_js}{dom_js}{utils_js}{virtual_js}{ftd_js}{post_init_js}{test_js}")
+    let all_js = all_js_without_test();
+    format!("{all_js}{test_js}")
 }

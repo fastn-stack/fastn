@@ -10,16 +10,39 @@ mod value;
 pub use element::{Common, Element};
 pub use value::Value;
 
-/// This struct is used to store asts derived from `data` and `tree` fields in
-/// `ftd::interpreter::Document`
-pub struct JSAst {
-    /// This contains asts of things present in `ftd` module or `default_bag`
-    pub ftd: Vec<fastn_js::Ast>,
-    /// This contains asts of things (other than `ftd`) and instructions/tree
-    pub document: Vec<fastn_js::Ast>,
+pub fn all_js_without_test() -> String {
+    let all_js = fastn_js::all_js_without_test();
+    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
+    format!("{all_js}\n{default_bag_js}")
 }
 
-pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAst {
+pub fn all_js_with_test() -> String {
+    let all_js = fastn_js::all_js_with_test();
+    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
+    format!("{all_js}\n{default_bag_js}")
+}
+
+/// This returns asts of things present in `ftd` module or `default_bag`
+pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
+    let mut ftd_asts = vec![];
+    let bag = ftd::interpreter::default::default_bag();
+    let doc = ftd::interpreter::TDoc {
+        name: "",
+        aliases: &ftd::interpreter::default::default_aliases(),
+        bag: ftd::interpreter::BagOrState::Bag(&bag),
+    };
+    for thing in ftd::interpreter::default::default_bag().values() {
+        if let ftd::interpreter::Thing::Variable(v) = thing {
+            ftd_asts.push(v.to_ast(&doc, None));
+        } else if let ftd::interpreter::Thing::Function(f) = thing {
+            ftd_asts.push(f.to_ast());
+        }
+    }
+    ftd_asts
+}
+
+/// This contains asts of things (other than `ftd`) and instructions/tree
+pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
     let mut document_asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
@@ -28,15 +51,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAst {
         .map(|v| v.0)
         .collect_vec();
 
-    let mut ftd_asts = vec![];
-
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(key) {
-            if let ftd::interpreter::Thing::Variable(v) = thing {
-                ftd_asts.push(v.to_ast(&doc, None));
-            } else if let ftd::interpreter::Thing::Function(f) = thing {
-                ftd_asts.push(f.to_ast());
-            }
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
@@ -67,10 +83,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAst {
         }),
         prefix: None,
     }));
-    ftd::js::JSAst {
-        ftd: ftd_asts,
-        document: document_asts,
-    }
+    document_asts
 }
 
 impl ftd::interpreter::Function {

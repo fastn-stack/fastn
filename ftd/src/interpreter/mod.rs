@@ -39,7 +39,7 @@ mod things;
 pub mod utils;
 pub use prelude::*;
 
-pub use tdoc::TDoc;
+pub use tdoc::{BagOrState, TDoc};
 pub use things::expression;
 
 #[derive(thiserror::Error, Debug)]
