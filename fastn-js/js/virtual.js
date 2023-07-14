@@ -32,15 +32,15 @@ class Node {
     appendChild(c) {
         this.#children.push(c);
     }
-    removeLastChild() {
-        this.#children.pop();
-    }
-    addAttribute(attribute, value) {
+
+    setAttribute(attribute, value) {
         this.#attributes[attribute] = value;
     }
+    // Caution: This is only supported in ssr mode
     updateTagName(tagName) {
         this.#tagName = tagName;
     }
+    // Caution: This is only supported in ssr mode
     toHtmlAsString() {
         const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;
@@ -49,19 +49,23 @@ class Node {
 
         return `${openingTag}${innerHTML}${childNodes}${closingTag}`;
     }
+    // Caution: This is only supported in ssr mode
     getDataIdString() {
         return ` data-id="${this.#id}"`;
     }
+    // Caution: This is only supported in ssr mode
     getClassString() {
         const classList = this.classList.toString();
         return classList ? ` class="${classList}"` : '';
     }
+    // Caution: This is only supported in ssr mode
     getStyleString() {
         const styleProperties = Object.entries(this.style)
             .map(([prop, value]) => `${prop}:${value}`)
             .join(';');
         return styleProperties ? ` style="${styleProperties}"` : '';
     }
+    // Caution: This is only supported in ssr mode
     getAttributesString() {
         const nodeAttributes = Object.entries(this.#attributes)
             .map(([attribute, value]) => {
