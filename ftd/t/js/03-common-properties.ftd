@@ -967,6 +967,37 @@ color: red
 
 -- end: ftd.column
 
+;; ---------------------- REGION ----------------------------
+
+-- ftd.column:
+width: fill-container
+margin.px: 20
+
+-- ftd.text: Hello World
+region: h1
+color: blue
+
+-- end: ftd.column
+
+;; ----------------------- ALIGN-CONTENT --------------------------------
+
+-- ftd.column:
+width.fixed.px: 300
+align-content: center
+color: green
+border-color: $red-yellow
+border-width.px: 2
+border-style: solid
+margin.px: 20
+
+-- ftd.text: One
+
+-- ftd.text: Two
+
+-- ftd.text: Three
+
+-- end: ftd.column
+
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
 
