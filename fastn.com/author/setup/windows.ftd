@@ -21,7 +21,7 @@ This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
 
 -- ds.image:
-src: $fastn-assets.files.images.setup.windows-fastn-installation.gif
+src: $fastn-assets.files.images.setup.windows-setup-process.gif
 
 -- ds.markdown: 
 
