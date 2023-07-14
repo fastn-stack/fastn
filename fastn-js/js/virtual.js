@@ -32,15 +32,15 @@ class Node {
     appendChild(c) {
         this.#children.push(c);
     }
-    removeLastChild() {
-        let popped = this.#children.pop();
-    }
-    addAttribute(attribute, value) {
+
+    setAttribute(attribute, value) {
         this.#attributes[attribute] = value;
     }
+    // Caution: This is only supported in ssr mode
     updateTagName(tagName) {
         this.#tagName = tagName;
     }
+    // Caution: This is only supported in ssr mode
     toHtmlAsString() {
         const openingTag = `<${this.#tagName}${this.getDataIdString()}${this.getAttributesString()}${this.getClassString()}${this.getStyleString()}>`;
         const closingTag = `</${this.#tagName}>`;

@@ -470,7 +470,13 @@ class Node2 {
     }
     // for attaching inline attributes
     attachAttribute(property, value) {
-        this.#node.addAttribute(property, value);
+        this.#node.setAttribute(property, value);
+    }
+
+    updateTagName(name) {
+        if (ssr) {
+            this.#node.updateTagName(name);
+        }
     }
 
     // dynamic-class-css
@@ -783,7 +789,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.#node.updateTagName("a");
+            this.updateTagName("a");
             this.attachAttribute("href", staticValue);
         } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
             // open_in_new_tab is boolean type
