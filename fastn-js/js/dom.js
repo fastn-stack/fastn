@@ -88,6 +88,9 @@ fastn_dom.property_map = {
     "min-height": "mnh",
     "max-width": "mxw",
     "min-width": "mnw",
+    "font-weight": "fw",
+    "font-style": "fst",
+    "text-decoration": "td",
 };
 
 // dynamic-class-css.md
@@ -205,12 +208,29 @@ fastn_dom.PropertyKind = {
     Anchor: 69,
     Link: 70,
     Children: 71,
+    OpenInNewTab: 72,
+    TextStyle: 73,
 }
 
 fastn_dom.Anchor = {
     Window: "fixed",
     Parent: "absolute",
     Id: "absolute",
+}
+
+fastn_dom.TextStyle = {
+    Underline: "underline",
+    Italic: "italic",
+    Strike: "line-through",
+    Heavy: "900",
+    Extrabold: "800",
+    Bold: "700",
+    SemiBold: "600",
+    Medium: "500",
+    Regular: "400",
+    Light: "300",
+    ExtraLight: "200",
+    Hairline: "100",
 }
 
 fastn_dom.Resizing = {
@@ -550,6 +570,21 @@ class Node2 {
             this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
         }
     }
+    attachTextStyles(styles) {
+        for (var s of styles) {
+            switch (s) {
+              case 'italic':
+                this.attachCss("font-style", s);
+                break;
+              case 'underline':
+              case 'line-through':
+                this.attachCss("text-decoration", s);
+                break;
+              default:
+                this.attachCss("font-weight", s);
+            }
+        }
+    }
 
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
@@ -748,8 +783,19 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
-            this.#node.updateTagName("a")
+            this.#node.updateTagName("a");
             this.attachAttribute("href", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
+            // open_in_new_tab is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachAttribute("target", "_blank");
+                break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextStyle) {
+            let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||

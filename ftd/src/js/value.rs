@@ -514,6 +514,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = anchor_variants(variant);
             (format!("fastn_dom.Anchor.{}", js_variant), false)
         }
+        "ftd#text-style" => {
+            let js_variant = text_style_variants(variant);
+            (format!("fastn_dom.TextStyle.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -701,5 +705,23 @@ fn anchor_variants(name: &str) -> &'static str {
         "parent" => "Parent",
         "id" => "Id",
         t => todo!("invalid anchor variant {}", t),
+    }
+}
+
+fn text_style_variants(name: &str) -> &'static str {
+    match name {
+        "underline" => "Underline",
+        "italic" => "Italic",
+        "strike" => "Strike",
+        "heavy" => "Heavy",
+        "extra-bold" => "Extrabold",
+        "bold" => "Bold",
+        "semi-bold" => "SemiBold",
+        "medium" => "Medium",
+        "regular" => "Regular",
+        "light" => "Light",
+        "extra-light" => "ExtraLight",
+        "hairline" => "Hairline",
+        t => todo!("invalid text-style variant {}", t),
     }
 }

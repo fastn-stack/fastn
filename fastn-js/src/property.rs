@@ -177,6 +177,7 @@ pub enum PropertyKind {
     Children,
     StringValue,
     Id,
+    OpenInNewTab,
     Link,
     Anchor,
     Classes,
@@ -245,6 +246,7 @@ pub enum PropertyKind {
     MaxWidth,
     MinWidth,
     WhiteSpace,
+    TextStyle,
 }
 
 impl PropertyKind {
@@ -323,6 +325,8 @@ impl PropertyKind {
             PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
             PropertyKind::Classes => "fastn_dom.PropertyKind.Classes",
             PropertyKind::Link => "fastn_dom.PropertyKind.Link",
+            PropertyKind::OpenInNewTab => "fastn_dom.PropertyKind.OpenInNewTab",
+            PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
         }
     }
 }

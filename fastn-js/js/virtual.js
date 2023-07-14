@@ -33,7 +33,7 @@ class Node {
         this.#children.push(c);
     }
     removeLastChild() {
-        this.#children.pop();
+        let popped = this.#children.pop();
     }
     addAttribute(attribute, value) {
         this.#attributes[attribute] = value;
