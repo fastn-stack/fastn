@@ -161,6 +161,7 @@ pub struct InheritedProperties {
 pub struct Container {
     pub spacing: Option<ftd::js::Value>,
     pub wrap: Option<ftd::js::Value>,
+    pub align_content: Option<ftd::js::Value>,
 }
 
 impl Container {
@@ -171,6 +172,7 @@ impl Container {
         Container {
             spacing: ftd::js::value::get_properties("spacing", properties, arguments),
             wrap: ftd::js::value::get_properties("wrap", properties, arguments),
+            align_content: ftd::js::value::get_properties("align-content", properties, arguments),
         }
     }
 
@@ -201,6 +203,19 @@ impl Container {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 wrap.to_set_property(
                     fastn_js::PropertyKind::Wrap,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref align_content) = self.align_content {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                align_content.to_set_property(
+                    fastn_js::PropertyKind::AlignContent,
                     doc,
                     element_name,
                     component_definition_name,

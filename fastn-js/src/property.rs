@@ -248,6 +248,7 @@ pub enum PropertyKind {
     MinWidth,
     WhiteSpace,
     TextStyle,
+    AlignContent,
 }
 
 impl PropertyKind {
@@ -329,6 +330,7 @@ impl PropertyKind {
             PropertyKind::OpenInNewTab => "fastn_dom.PropertyKind.OpenInNewTab",
             PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
             PropertyKind::Region => "fastn_dom.PropertyKind.Region",
+            PropertyKind::AlignContent => "fastn_dom.PropertyKind.AlignContent",
         }
     }
 }

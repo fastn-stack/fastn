@@ -91,6 +91,7 @@ fastn_dom.property_map = {
     "font-weight": "fw",
     "font-style": "fst",
     "text-decoration": "td",
+    "align-items": "ali",
 };
 
 // dynamic-class-css.md
@@ -211,6 +212,19 @@ fastn_dom.PropertyKind = {
     OpenInNewTab: 72,
     TextStyle: 73,
     Region: 74,
+    AlignContent: 75,
+}
+
+fastn_dom.AlignContent = {
+    TopLeft: "top-left",
+    TopCenter: "top-center",
+    TopRight: "top-right",
+    Right: "right",
+    Left: "left",
+    Center: "center",
+    BottomLeft: "bottom-left",
+    BottomRight: "bottom-right",
+    BottomCenter: "bottom-center",
 }
 
 fastn_dom.Region = {
@@ -456,9 +470,12 @@ fastn_dom.Event = {
 // Node -> similar to HTML DOM node (Node2.#node)
 class Node2 {
     #node;
+    #kind;
     #parent;
     #mutables;
     constructor(parent, kind) {
+        this.#kind = kind;
+
         let [node, classes] = fastn_utils.htmlNode(kind);
         this.#node = fastn_virtual.document.createElement(node);
         for (let c in classes) {
@@ -598,6 +615,48 @@ class Node2 {
                 break;
               default:
                 this.attachCss("font-weight", s);
+            }
+        }
+    }
+
+    attachAlignContent(value, node_kind) {
+        if (node_kind === fastn_dom.ElementKind.Row) {
+            switch (value) {
+                case 'top-left':
+                case 'left':
+                case 'bottom-left':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'top-center':
+                case 'center':
+                case 'bottom-center':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'top-right':
+                case 'right':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
+            }
+        }
+
+        if (node_kind === fastn_dom.ElementKind.Column) {
+            switch (value) {
+                case 'top-left':
+                case 'top-center':
+                case 'top-right':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'left':
+                case 'center':
+                case 'right':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'bottom-left':
+                case 'bottom-center':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
             }
         }
     }
@@ -813,12 +872,14 @@ class Node2 {
             let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
             this.attachTextStyles(styles);
         } else if (kind === fastn_dom.PropertyKind.Region) {
-            console.log(staticValue);
             this.updateTagName(staticValue);
             if (this.#node.innerHTML) {
                 // todo: need to slugify this id
                 this.#node.id = this.#node.innerHTML;
             }
+        } else if (kind === fastn_dom.PropertyKind.AlignContent) {
+            let node_kind = this.#kind;
+            this.attachAlignContent(staticValue, node_kind);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
