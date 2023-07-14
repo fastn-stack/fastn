@@ -518,6 +518,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = text_style_variants(variant);
             (format!("fastn_dom.TextStyle.{}", js_variant), false)
         }
+        "ftd#region" => {
+            let js_variant = region_variants(variant);
+            (format!("fastn_dom.Region.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -723,5 +727,17 @@ fn text_style_variants(name: &str) -> &'static str {
         "extra-light" => "ExtraLight",
         "hairline" => "Hairline",
         t => todo!("invalid text-style variant {}", t),
+    }
+}
+
+fn region_variants(name: &str) -> &'static str {
+    match name {
+        "h1" => "H1",
+        "h2" => "H2",
+        "h3" => "H3",
+        "h4" => "H4",
+        "h5" => "H5",
+        "h6" => "H6",
+        t => todo!("invalid region variant {}", t),
     }
 }

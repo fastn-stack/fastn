@@ -119,7 +119,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div><div
 She smiled, and smiled, and passed it off Ere from the door she stept-</div><div data-id="130" class="w-119 p-3 bw-49 bs-23 bc-40 white-space-123">But ere she from the church-door stepped She smiled and told us why:
 
 'It was a wicked woman's curse,' Quoth she, 'and what care I?'
-She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-124 c-125">Start</div><div data-id="133" class="as-126 c-125">Center</div><div data-id="134" class="as-127 c-125">End</div></div><div data-id="135" class="a,b,c,d c-125">This is text with class</div><div data-id="136" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="137" class="ft_column w-119 p-58 bw-49 bs-23 bc-129"><div data-id="138" class="pos-130 t-71 l-131 c-132">Inside Inner Container</div></div></div><div data-id="139" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="140" class="ft_column w-119 p-58 bw-49 bs-23 bc-133"><div data-id="141" class="pos-130 t-71 l-131 c-98">Inside Outer Container</div></div></div><div data-id="142" class="ft_row w-1 jc-94"><div data-id="143">32</div><div data-id="144">1.123</div><div data-id="145">true</div></div><div data-id="146" class="ft_column w-1 bgc-134"><div data-id="147" class="c-125 fst-135 fw-136">These are stylized values</div><div data-id="148" class="c-125 fw-137">1234</div><div data-id="149" class="c-125 td-138 fst-135">3.142</div><div data-id="150" class="c-125 fw-139">true</div></div></body><style id="styles">
+She smiled, and smiled, and passed it off Ere from the door she stept-</div></div><div data-id="131" class="ft_column w-57"><div data-id="132" class="as-124 c-125">Start</div><div data-id="133" class="as-126 c-125">Center</div><div data-id="134" class="as-127 c-125">End</div></div><div data-id="135" class="a,b,c,d c-125">This is text with class</div><div data-id="136" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="137" class="ft_column w-119 p-58 bw-49 bs-23 bc-129"><div data-id="138" class="pos-130 t-71 l-131 c-132">Inside Inner Container</div></div></div><div data-id="139" class="ft_column w-128 p-58 m-110 bw-49 bs-23 bc-40"><div data-id="140" class="ft_column w-119 p-58 bw-49 bs-23 bc-133"><div data-id="141" class="pos-130 t-71 l-131 c-98">Inside Outer Container</div></div></div><div data-id="142" class="ft_row w-1 jc-94"><div data-id="143">32</div><div data-id="144">1.123</div><div data-id="145">true</div></div><div data-id="146" class="ft_column w-1 bgc-134"><div data-id="147" class="c-125 fst-135 fw-136">These are stylized values</div><div data-id="148" class="c-125 fw-137">1234</div><div data-id="149" class="c-125 td-138 fst-135">3.142</div><div data-id="150" class="c-125 fw-139">true</div></div><div data-id="151" class="ft_column w-1 m-140"><h1 data-id="152" class="c-98">Hello World</h1></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -270,6 +270,7 @@ She smiled, and smiled, and passed it off Ere from the door she stept-</div></di
 	.fw-137 { font-weight: 700; }
 	.td-138 { text-decoration: underline; }
 	.fw-139 { font-weight: 900; }
+	.m-140 { margin: 20px; }
     </style>
 <script>
     (function() {
@@ -1367,6 +1368,19 @@ function main(parent) {
       light: "red"
     }), inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.TextStyle, fastn.mutableList([fastn_dom.TextStyle.Heavy]), inherited);
+  }
+  ]), inherited);
+  let parenti19 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti19.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti19.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+  parenti19.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Hello World", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Region, fastn_dom.Region.H1, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.recordInstance({
+      dark: "blue",
+      light: "blue"
+    }), inherited);
   }
   ]), inherited);
 }

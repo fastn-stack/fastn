@@ -967,6 +967,18 @@ color: red
 
 -- end: ftd.column
 
+;; ---------------------- REGION ----------------------------
+
+-- ftd.column:
+width: fill-container
+margin.px: 20
+
+-- ftd.text: Hello World
+region: h1
+color: blue
+
+-- end: ftd.column
+
 ;; --------------------- VARIABLE --------------------------
 -- ftd.color orange: orange
 

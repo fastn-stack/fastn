@@ -1008,6 +1008,7 @@ impl TextCommon {
 #[derive(Debug)]
 pub struct Common {
     pub id: Option<ftd::js::Value>,
+    pub region: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
     pub open_in_new_tab: Option<ftd::js::Value>,
     pub align_self: Option<ftd::js::Value>,
@@ -1082,6 +1083,7 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_properties("id", properties, arguments),
+            region: ftd::js::value::get_properties("region", properties, arguments),
             link: ftd::js::value::get_properties("link", properties, arguments),
             open_in_new_tab: ftd::js::value::get_properties(
                 "open-in-new-tab",
@@ -1267,6 +1269,19 @@ impl Common {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(
                     fastn_js::PropertyKind::Id,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref region) = self.region {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                region.to_set_property(
+                    fastn_js::PropertyKind::Region,
                     doc,
                     element_name,
                     component_definition_name,
