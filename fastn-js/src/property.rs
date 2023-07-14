@@ -177,6 +177,7 @@ pub enum PropertyKind {
     Children,
     StringValue,
     Id,
+    Region,
     OpenInNewTab,
     Link,
     Anchor,
@@ -327,6 +328,7 @@ impl PropertyKind {
             PropertyKind::Link => "fastn_dom.PropertyKind.Link",
             PropertyKind::OpenInNewTab => "fastn_dom.PropertyKind.OpenInNewTab",
             PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
+            PropertyKind::Region => "fastn_dom.PropertyKind.Region",
         }
     }
 }

@@ -210,6 +210,16 @@ fastn_dom.PropertyKind = {
     Children: 71,
     OpenInNewTab: 72,
     TextStyle: 73,
+    Region: 74,
+}
+
+fastn_dom.Region = {
+    H1: "h1",
+    H2: "h2",
+    H3: "h3",
+    H4: "h4",
+    H5: "h5",
+    H6: "h6",
 }
 
 fastn_dom.Anchor = {
@@ -802,6 +812,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.TextStyle) {
             let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
             this.attachTextStyles(styles);
+        } else if (kind === fastn_dom.PropertyKind.Region) {
+            console.log(staticValue);
+            this.updateTagName(staticValue);
+            if (this.#node.innerHTML) {
+                // todo: need to slugify this id
+                this.#node.id = this.#node.innerHTML;
+            }
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
