@@ -5,7 +5,7 @@
 `fastn` is compatible with various operating systems, including Windows, MacOS,
 and Linux.
 
-There are three options available for installation on each system:
+There are three common options available for installation on each system:
 
 1. Using a `pre-built binary`
 2. Installing with `cargo`
@@ -14,11 +14,15 @@ There are three options available for installation on each system:
 
 -- cbox.info: Our Recommendation
 
+If you are using Windows, we recommend you to install `fastn` through fastn installer
+which can be found can be found under the [releases](https://github.com/fastn-stack/fastn/releases/)
+section of the official [fastn](https://github.com/fastn-stack/fastn) github repository.
 
-We recommend you to install `fastn` through `pre-built binary`.
-
-This is the preferred method as it only requires downloading the binary and
+This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
+
+If you are using Mac/Linux, we recommend you to install `fastn` using the installer
+script by running the below mentioned command in your terminal.
 
 
 -- ds.code: Installer Script
@@ -39,11 +43,10 @@ following options:
 
 -- ds.h2:  For Windows
 
-
-1. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
- (Recommended)
-2. [`fastn` using `cargo`](windows/#fastn-using-cargo)
-3. [`fastn` from `source`](windows/#fastn-from-source)
+1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
+2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
+3. [`fastn` using `cargo`](windows/#fastn-using-cargo)
+4. [`fastn` from `source`](windows/#fastn-from-source)
 
 
 

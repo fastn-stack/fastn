@@ -5,18 +5,19 @@
 
 For Windows machine, there are three ways to install `fastn`. 
 
-1. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
- (Recommended)
-2. [`fastn` using `cargo`](windows/#fastn-using-cargo)
-3. [`fastn` from `source`](windows/#fastn-from-source)
+1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
+2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
+3. [`fastn` using `cargo`](windows/#fastn-using-cargo)
+4. [`fastn` from `source`](windows/#fastn-from-source)
 
 
 -- cbox.info: Our Recommendation
 
+On Windows, we recommend you to install `fastn` through fastn installer
+which can be found can be found under the [releases](https://github.com/fastn-stack/fastn/releases/)
+section of the official [fastn](https://github.com/fastn-stack/fastn) github repository.
 
-We recommend you to install `fastn` through `pre-built binary`.
-
-This is the preferred method as it only requires downloading the binary and
+This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
 
 -- ds.image:
@@ -32,6 +33,31 @@ other two options, i.e, by installing it using `cargo` or by building the
 Based on your machine and your choice of installation, you can select one of the
 following options:
 
+-- ds.h1: `fastn` through `installer`
+
+;; Pending video (coming soon)
+/-- ds.youtube:
+v: <some-id>
+
+-- ds.markdown:
+
+- Download the setup named `fastn.setup.exe`
+from the [Releases](https://github.com/fastn-stack/fastn/releases) page
+
+- Run the setup and follow the installation steps
+
+- Once the setup is complete, you will have `fastn` installed in your system
+
+To verify, open command prompt and execute the command, `fastn`
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
+width: fill-container
+
+-- ds.markdown:
+
+If you see the Help text of the fastn command, it confirms that `fastn` is
+successfully installed.
 
 -- ds.h1: `fastn` through `pre-built binary`
 
@@ -78,11 +104,10 @@ To verify, open command prompt and execute the command, `fastn`
 src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
 width: fill-container
 
--- ds.markdown: 
+-- ds.markdown:
 
 If you see the Help text of the fastn command, it confirms that `fastn` is
 successfully installed.
-
 
 -- ds.h2: Common errors to avoid
 
