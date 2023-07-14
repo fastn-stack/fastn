@@ -221,6 +221,7 @@ fastn_dom.PropertyKind = {
     TextInputType: 79,
     Placeholder: 80,
     Multiline: 81,
+    DefaultTextInputValue: 82,
 }
 
 fastn_dom.TextInputType = {
@@ -895,6 +896,8 @@ class Node2 {
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
             this.attachAttribute("type", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            this.attachAttribute("value", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Placeholder) {
             this.attachAttribute("placeholder", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Multiline) {

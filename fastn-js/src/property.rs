@@ -255,6 +255,7 @@ pub enum PropertyKind {
     Placeholder,
     Multiline,
     TextInputType,
+    DefaultTextInputValue,
 }
 
 impl PropertyKind {
@@ -343,6 +344,7 @@ impl PropertyKind {
             PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
             PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
             PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
         }
     }
 }

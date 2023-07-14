@@ -23,7 +23,8 @@ margin.px: 20
 
 -- end: ftd.column
 
-;; ---------------------- KERNEL(ftd.checkbox): CHECKED + ENABLED -------------------------------
+;; ---------------------- KERNEL(ftd.checkbox) -------------------------------
+;; checked, enabled
 
 -- ftd.column:
 width: fill-container
@@ -38,7 +39,9 @@ enabled: false
 
 -- end: ftd.column
 
-;; -------------------- KERNEL(ftd.text-input): placeholder, type, multiline -------------------
+;; -------------------- KERNEL(ftd.text-input) -------------------
+;; placeholder, type, multiline, enabled, default-value
+
 
 -- ftd.column:
 width: fill-container
@@ -53,5 +56,12 @@ multiline: true
 
 -- ftd.text-input:
 type: password
+
+-- ftd.text-input:
+placeholder: This would be disabled
+enabled: false
+
+-- ftd.text-input:
+default-value: This is default text
 
 -- end: ftd.column

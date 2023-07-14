@@ -246,6 +246,8 @@ pub struct TextInput {
     pub placeholder: Option<ftd::js::Value>,
     pub multiline: Option<ftd::js::Value>,
     pub _type: Option<ftd::js::Value>,
+    pub default_value: Option<ftd::js::Value>,
+    pub enabled: Option<ftd::js::Value>,
     pub common: Common,
 }
 
@@ -271,6 +273,16 @@ impl TextInput {
             ),
             _type: ftd::js::value::get_properties(
                 "type",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            default_value: ftd::js::value::get_properties(
+                "default-value",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            enabled: ftd::js::value::get_properties(
+                "enabled",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -336,6 +348,32 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 _type.to_set_property(
                     fastn_js::PropertyKind::TextInputType,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref enabled) = self.enabled {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                enabled.to_set_property(
+                    fastn_js::PropertyKind::Enabled,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref default_value) = self.default_value {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                default_value.to_set_property(
+                    fastn_js::PropertyKind::DefaultTextInputValue,
                     doc,
                     kernel.name.as_str(),
                     component_definition_name,
