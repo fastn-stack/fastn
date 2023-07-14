@@ -33,7 +33,7 @@ other two options, i.e, by installing it using `cargo` or by building the
 Based on your machine and your choice of installation, you can select one of the
 following options:
 
--- ds.h1: `fastn` through `installer`
+-- ds.h1: `fastn` using `installer`
 
 -- ds.youtube:
 v: hCnDjhSPJLg
