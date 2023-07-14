@@ -306,7 +306,7 @@ fn func(name: &str, params: &[String], body: pretty::RcDoc<'static>) -> pretty::
     let name = fastn_js::utils::name_to_js(name);
     // `.` means the function is placed in object so no need of `let`
     // e.g. ftd.toggle
-    if name.contains(".") {
+    if name.contains('.') {
         pretty::RcDoc::nil()
     } else {
         text("let").append(space())

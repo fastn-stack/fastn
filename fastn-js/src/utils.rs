@@ -48,10 +48,7 @@ fn get_prefix(s: &str) -> (Option<&str>, String) {
     {
         s = prefix.to_string();
         Some(fastn_js::LOCAL_VARIABLE_MAP)
-    } else if let Some(prefix) = s
-        .strip_prefix(format!("ftd.").as_str())
-        .or(s.strip_prefix(format!("ftd#").as_str()))
-    {
+    } else if let Some(prefix) = s.strip_prefix("ftd.").or(s.strip_prefix("ftd#")) {
         s = prefix.to_string();
         Some("ftd")
     } else {
