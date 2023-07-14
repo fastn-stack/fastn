@@ -65,7 +65,7 @@ type specimen book. It has survived not only five centuries, but also the
 leap into electronic typesetting, remaining essentially unchanged. It was
 popularised in the 1960s with the release of Letraset sheets containing
 Lorem Ipsum passages, and more recently with desktop publishing software
-like Aldus PageMaker including versions of Lorem Ipsum.</div></div></body><style id="styles">
+like Aldus PageMaker including versions of Lorem Ipsum.</div></div><div data-id="15" class="d-32">This has block display</div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -99,6 +99,7 @@ like Aldus PageMaker including versions of Lorem Ipsum.</div></div></body><style
 	.d-29 { display: -webkit-box; }
 	.o-30 { overflow: hidden; }
 	.wbo-31 { -webkit-box-orient: vertical; }
+	.d-32 { display: block; }
     </style>
 <script>
     (function() {
@@ -206,6 +207,9 @@ function main(parent) {
     rooti0.setProperty(fastn_dom.PropertyKind.LineClamp, 2, inherited);
   }
   ]), inherited);
+  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
+  parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "This has block display", inherited);
+  parenti4.setProperty(fastn_dom.PropertyKind.Display, fastn_dom.Display.Block, inherited);
 }
 global.ftd__default_types = fastn.recordInstance({
   heading_large: fastn.recordInstance({

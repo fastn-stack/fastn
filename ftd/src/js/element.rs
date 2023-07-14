@@ -925,6 +925,7 @@ pub struct TextCommon {
     pub text_align: Option<ftd::js::Value>,
     pub line_clamp: Option<ftd::js::Value>,
     pub style: Option<ftd::js::Value>,
+    pub display: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -938,6 +939,7 @@ impl TextCommon {
             text_align: ftd::js::value::get_properties("text-align", properties, arguments),
             line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
             style: ftd::js::value::get_properties("style", properties, arguments),
+            display: ftd::js::value::get_properties("display", properties, arguments),
         }
     }
 
@@ -1007,6 +1009,19 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 style.to_set_property(
                     fastn_js::PropertyKind::TextStyle,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref display) = self.display {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                display.to_set_property(
+                    fastn_js::PropertyKind::Display,
                     doc,
                     element_name,
                     component_definition_name,
