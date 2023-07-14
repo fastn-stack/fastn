@@ -14,6 +14,10 @@ let fastn_utils = {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Text) {
             // css.push("ft_text");
+        } else if (kind === fastn_dom.ElementKind.CheckBox) {
+            node = "input type=\"checkbox\"";
+        } else if (kind === fastn_dom.ElementKind.TextInput) {
+            node = "input";
         }
         return [node, css];
     },

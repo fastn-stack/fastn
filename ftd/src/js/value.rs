@@ -526,6 +526,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = align_variants(variant);
             (format!("fastn_dom.AlignContent.{}", js_variant), false)
         }
+        "ftd#text-input-type" => {
+            let js_variant = text_input_type_variants(variant);
+            (format!("fastn_dom.TextInputType.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -758,5 +762,22 @@ fn align_variants(name: &str) -> &'static str {
         "bottom-right" => "BottomRight",
         "bottom-center" => "BottomCenter",
         t => todo!("invalid align-content variant {}", t),
+    }
+}
+
+fn text_input_type_variants(name: &str) -> &'static str {
+    match name {
+        "text" => "Text",
+        "email" => "Email",
+        "password" => "Password",
+        "url" => "Url",
+        "datetime" => "DateTime",
+        "date" => "Date",
+        "time" => "Time",
+        "month" => "Month",
+        "week" => "Week",
+        "color" => "Color",
+        "file" => "File",
+        t => todo!("invalid text-input-type variant {}", t),
     }
 }

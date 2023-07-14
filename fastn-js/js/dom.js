@@ -134,6 +134,8 @@ fastn_dom.ElementKind = {
     IFrame: 7,
     // To create parent for dynamic DOM
     Div: 8,
+    CheckBox: 9,
+    TextInput: 10,
 };
 
 fastn_dom.PropertyKind = {
@@ -214,6 +216,25 @@ fastn_dom.PropertyKind = {
     Region: 74,
     AlignContent: 75,
     Display: 76,
+    Checked: 77,
+    Enabled: 78,
+    TextInputType: 79,
+    Placeholder: 80,
+    Multiline: 81,
+}
+
+fastn_dom.TextInputType = {
+    Text: "text",
+    Email: "email",
+    Password: "password",
+    Url: "url",
+    DateTime: "datetime",
+    Date: "date",
+    Time: "time",
+    Month: "month",
+    Week: "week",
+    Color: "color",
+    File: "file",
 }
 
 fastn_dom.AlignContent = {
@@ -858,6 +879,35 @@ class Node2 {
             this.attachColorCss("background-color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Display) {
             this.attachCss("display", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Checked) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.attachAttribute("checked", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.Enabled) {
+            switch (staticValue) {
+                case "false":
+                case false:
+                    this.attachAttribute("disabled", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextInputType) {
+            this.attachAttribute("type", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Placeholder) {
+            this.attachAttribute("placeholder", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Multiline) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.updateTagName("textarea");
+                    break;
+                case "false":
+                case false:
+                    this.updateTagName("input");
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links

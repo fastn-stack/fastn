@@ -250,6 +250,11 @@ pub enum PropertyKind {
     TextStyle,
     AlignContent,
     Display,
+    Checked,
+    Enabled,
+    Placeholder,
+    Multiline,
+    TextInputType,
 }
 
 impl PropertyKind {
@@ -333,6 +338,11 @@ impl PropertyKind {
             PropertyKind::Region => "fastn_dom.PropertyKind.Region",
             PropertyKind::AlignContent => "fastn_dom.PropertyKind.AlignContent",
             PropertyKind::Display => "fastn_dom.PropertyKind.Display",
+            PropertyKind::Checked => "fastn_dom.PropertyKind.Checked",
+            PropertyKind::Enabled => "fastn_dom.PropertyKind.Enabled",
+            PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
+            PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
+            PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
         }
     }
 }
