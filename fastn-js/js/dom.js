@@ -213,6 +213,7 @@ fastn_dom.PropertyKind = {
     TextStyle: 73,
     Region: 74,
     AlignContent: 75,
+    Display: 76,
 }
 
 fastn_dom.AlignContent = {
@@ -855,6 +856,8 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Display) {
+            this.attachCss("display", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links

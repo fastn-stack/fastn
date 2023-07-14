@@ -249,6 +249,7 @@ pub enum PropertyKind {
     WhiteSpace,
     TextStyle,
     AlignContent,
+    Display,
 }
 
 impl PropertyKind {
@@ -331,6 +332,7 @@ impl PropertyKind {
             PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
             PropertyKind::Region => "fastn_dom.PropertyKind.Region",
             PropertyKind::AlignContent => "fastn_dom.PropertyKind.AlignContent",
+            PropertyKind::Display => "fastn_dom.PropertyKind.Display",
         }
     }
 }
