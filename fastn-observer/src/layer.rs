@@ -3,17 +3,8 @@ pub const OPENED_SPAN_NOT_IN_EXTENSIONS: &str =
     "Span extension doesn't contain `OpenedSpan`, this is a bug";
 pub const WRITING_URGENT_ERROR: &str = "writing_urgent failed, this is a bug";
 
-pub struct Layer {
-    start: std::time::Instant,
-}
-
-impl Layer {
-    pub fn new() -> Self {
-        Self {
-            start: std::time::Instant::now(),
-        }
-    }
-}
+#[derive(Default)]
+pub struct Layer {}
 
 impl<S> tracing_subscriber::Layer<S> for Layer
 where
@@ -137,7 +128,10 @@ where
                 .get_mut::<fastn_observer::OpenedSpan>()
                 .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
                 .record_span(span),
-            None => todo!(),
+            None => {
+                dbg!(span);
+                todo!()
+            }
         }
     }
 }
