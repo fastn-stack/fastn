@@ -7,7 +7,7 @@ pub struct OpenedSpan {
 }
 
 impl OpenedSpan {
-    fn new(attrs: &tracing::span::Attributes) -> Self {
+    pub fn new(attrs: &tracing::span::Attributes) -> Self {
         let mut fields = fastn_observer::FieldSet::default();
 
         attrs.record(
@@ -30,23 +30,23 @@ impl OpenedSpan {
         }
     }
 
-    fn enter(&mut self) {
+    pub fn enter(&mut self) {
         self.last_enter = std::time::Instant::now();
     }
 
-    fn exit(&mut self) {
+    pub fn exit(&mut self) {
         self.span.total_duration += self.last_enter.elapsed();
     }
 
-    fn close(self) -> fastn_observer::Span {
+    pub fn close(self) -> fastn_observer::Span {
         self.span
     }
 
-    fn record_event(&mut self, event: fastn_observer::Event) {
+    pub fn record_event(&mut self, event: fastn_observer::Event) {
         self.span.nodes.push(fastn_observer::Tree::Event(event));
     }
 
-    fn record_span(&mut self, span: fastn_observer::Span) {
+    pub fn record_span(&mut self, span: fastn_observer::Span) {
         self.span.inner_duration += span.total_duration;
         self.span.nodes.push(fastn_observer::Tree::Span(span));
     }
