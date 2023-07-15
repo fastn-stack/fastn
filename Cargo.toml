@@ -7,7 +7,8 @@ members = [
     "fastn-package",
     "fastn-issues",
     "fastn-js",
-    "fastn-grammar"
+    "fastn-grammar",
+    "fastn-observer",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -80,6 +81,7 @@ fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
+fastn-observer = { path = "fastn-observer" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
 fluent = "0.16"
@@ -153,19 +155,6 @@ features = [
     'HtmlElement',
     'Node',
     'Window',
-]
-
-[workspace.dependencies.tracing-forest]
-version = "0.1"
-features = [
-    "ansi", # This is for printing the ColorLevel in the events
-    "smallvec",
-    "serde",
-    "tokio",
-
-    # "uuid",  # This is for printing uuid for every request
-    # "chrono", # This is for printing the time of the event
-    # "env-filter",
 ]
 
 [workspace.dependencies.hyper]

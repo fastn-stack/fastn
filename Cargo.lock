@@ -305,15 +305,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ansi_term"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d52a9bb7ec0cf484c551830a7ce27bd20d67eac647e1befb56b0be4ee39a55d2"
-dependencies = [
- "winapi 0.3.9",
-]
-
-[[package]]
 name = "anstream"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1515,10 +1506,10 @@ dependencies = [
  "colored",
  "fastn-cloud",
  "fastn-core",
+ "fastn-observer",
  "thiserror",
  "tokio",
  "tracing",
- "tracing-forest",
  "tracing-subscriber",
 ]
 
@@ -1556,6 +1547,7 @@ dependencies = [
  "edit",
  "env_logger",
  "fastn-js",
+ "fastn-observer",
  "fastn-package",
  "fbt-lib",
  "fluent",
@@ -1588,7 +1580,6 @@ dependencies = [
  "tokio",
  "tokio-postgres",
  "tracing",
- "tracing-forest",
  "tracing-subscriber",
  "url",
  "zip",
@@ -1624,6 +1615,15 @@ dependencies = [
  "pretty_assertions",
  "quick-js",
  "rquickjs",
+]
+
+[[package]]
+name = "fastn-observer"
+version = "0.1.0"
+dependencies = [
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -4509,21 +4509,6 @@ checksum = "0955b8137a1df6f1a2e9a37d8a6656291ff0297c1a97c24e0d8425fe2312f79a"
 dependencies = [
  "once_cell",
  "valuable",
-]
-
-[[package]]
-name = "tracing-forest"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee40835db14ddd1e3ba414292272eddde9dad04d3d4b65509656414d1c42592f"
-dependencies = [
- "ansi_term",
- "serde",
- "smallvec",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
