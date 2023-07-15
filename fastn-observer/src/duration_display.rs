@@ -1,3 +1,5 @@
+// borrowed from https://github.com/QnnOkabayashi/tracing-forest/ (license: MIT)
+
 pub struct DurationDisplay(pub(crate) f64);
 
 // Taken from chrono

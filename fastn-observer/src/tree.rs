@@ -1,3 +1,5 @@
+// borrowed from https://github.com/QnnOkabayashi/tracing-forest/ (license: MIT)
+
 #[derive(Debug)]
 pub enum Tree {
     Event(Event),

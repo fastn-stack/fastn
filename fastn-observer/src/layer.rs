@@ -1,3 +1,5 @@
+// borrowed from https://github.com/QnnOkabayashi/tracing-forest/ (license: MIT)
+
 pub const SPAN_NOT_IN_CONTEXT: &str = "Span not in context, this is a bug";
 pub const OPENED_SPAN_NOT_IN_EXTENSIONS: &str =
     "Span extension doesn't contain `OpenedSpan`, this is a bug";
@@ -129,8 +131,12 @@ where
                 .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
                 .record_span(span),
             None => {
-                dbg!(span);
-                todo!()
+                println!(
+                    "{}",
+                    fastn_observer::formatter::Pretty {}
+                        .fmt(&fastn_observer::Tree::Span(span))
+                        .unwrap()
+                );
             }
         }
     }
