@@ -31,7 +31,7 @@ macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;
         let msg = format!($($t)*);
-        if fastn_core::utils::is_traced() {
+        if fastn_observer::is_traced() {
             tracing::warn!(msg);
         } else {
             eprintln!("WARN: {}", msg.yellow());
@@ -649,10 +649,6 @@ pub fn replace_markers_2023(s: &str, js_script: &str, ssr_body: &str, font_style
 
 pub fn is_test() -> bool {
     cfg!(test) || std::env::args().any(|e| e == "--test")
-}
-
-pub fn is_traced() -> bool {
-    std::env::var("TRACING").is_ok() || std::env::args().any(|e| e == "--trace")
 }
 
 pub(crate) async fn write(

@@ -39,6 +39,7 @@ async fn serve_file(
             return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
         }
     };
+
     // Auth Stuff
     if !f.is_static() {
         let req = if let Some(ref r) = config.request {
@@ -584,7 +585,38 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
 }
 
 #[tracing::instrument(skip_all)]
+async fn foo() {
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+}
+
+#[tracing::instrument(skip_all)]
+async fn test() -> fastn_core::Result<fastn_core::http::Response> {
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+    foo().await;
+    Ok(actix_web::HttpResponse::Ok().finish())
+}
+
 async fn route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+    app_data: actix_web::web::Data<AppData>,
+) -> fastn_core::Result<fastn_core::http::Response> {
+    let mut res = None;
+
+    let logs: Vec<tracing_forest::tree::Tree> = tracing_forest::capture()
+        .build()
+        .on(async {
+            res = Some(route_(req, body, app_data).await);
+        })
+        .await;
+
+    dbg!(logs);
+
+    res.unwrap()
+}
+
+#[tracing::instrument(skip_all)]
+async fn route_(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
@@ -621,6 +653,7 @@ async fn route(
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
         ("get", "/favicon.ico") => favicon().await,
+        ("get", "/test/") => test().await,
         (_, _) => {
             serve(
                 req,
