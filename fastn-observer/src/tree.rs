@@ -37,9 +37,4 @@ impl Span {
             nodes: Vec::new(),
         }
     }
-
-    /// Returns the duration this span was entered, but not in any child spans.
-    pub fn base_duration(&self) -> std::time::Duration {
-        self.total_duration - self.inner_duration
-    }
 }

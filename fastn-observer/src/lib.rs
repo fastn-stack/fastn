@@ -26,12 +26,12 @@ pub fn observe() {
     if is_traced() {
         let s = tracing_subscriber::registry()
             //.with(level)
-            .with(Layer::new());
+            .with(Layer::default());
         tracing::subscriber::set_global_default(s).unwrap();
     } else {
         let s = tracing_subscriber::registry()
             //.with(level)
-            .with(Layer::new());
+            .with(Layer::default());
         tracing::subscriber::set_global_default(s).unwrap();
         // let s = tracing_subscriber::registry().with(level);
         // tracing::subscriber::set_global_default(s).unwrap();
