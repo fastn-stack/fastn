@@ -1,4 +1,5 @@
 // borrowed from https://github.com/QnnOkabayashi/tracing-forest/ (license: MIT)
+
 pub type FieldSet = smallvec::SmallVec<[Field; 3]>;
 
 /// A key-value pair recorded from trace data.
