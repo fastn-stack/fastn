@@ -2,12 +2,14 @@ extern crate self as fastn_observer;
 
 mod duration_display;
 mod field;
+mod formatter;
 mod layer;
 mod opened_span;
 mod tree;
 
 pub(crate) use duration_display::DurationDisplay;
 pub use field::{Field, FieldSet};
+pub use formatter::write_immediate;
 pub use layer::Layer;
 pub use opened_span::OpenedSpan;
 pub use tree::{Event, Shared, Span, Tree};
