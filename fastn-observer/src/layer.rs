@@ -19,7 +19,14 @@ where
         ctx: tracing_subscriber::layer::Context<S>,
     ) {
         let span = ctx.span(id).expect(SPAN_NOT_IN_CONTEXT);
-        let opened = fastn_observer::OpenedSpan::new(attrs);
+        let opened = fastn_observer::OpenedSpan::new(
+            attrs,
+            span.parent().and_then(|v| {
+                v.extensions()
+                    .get::<fastn_observer::OpenedSpan>()
+                    .map(|v| v.start)
+            }),
+        );
 
         let mut extensions = span.extensions_mut();
         extensions.insert(opened);
@@ -56,19 +63,26 @@ where
         };
 
         event.record(&mut visitor);
+        let current_span = ctx.event_span(event);
 
         let shared = fastn_observer::Shared {
             level: *event.metadata().level(),
             fields: visitor.fields,
-            on: std::time::Duration::ZERO, // TODO
+            on: current_span
+                .as_ref()
+                .and_then(|v| {
+                    v.extensions()
+                        .get::<fastn_observer::OpenedSpan>()
+                        .map(|v| v.start)
+                })
+                .unwrap_or_else(|| std::time::Instant::now())
+                .elapsed(),
         };
 
         let tree_event = fastn_observer::Event {
             shared,
             message: visitor.message,
         };
-
-        let current_span = ctx.event_span(event);
 
         if visitor.immediate {
             fastn_observer::write_immediate(&tree_event, current_span.as_ref())

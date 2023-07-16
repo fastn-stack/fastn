@@ -2,12 +2,16 @@
 
 pub struct OpenedSpan {
     span: fastn_observer::Span,
-    start: std::time::Instant,
+    pub start: std::time::Instant,
     last_enter: std::time::Instant,
 }
 
 impl OpenedSpan {
-    pub fn new(attrs: &tracing::span::Attributes) -> Self {
+    pub fn new(
+        attrs: &tracing::span::Attributes,
+        parent_start: Option<std::time::Instant>,
+    ) -> Self {
+        let start = std::time::Instant::now();
         let mut fields = fastn_observer::FieldSet::default();
 
         attrs.record(
@@ -20,13 +24,13 @@ impl OpenedSpan {
         let shared = fastn_observer::Shared {
             level: *attrs.metadata().level(),
             fields,
-            on: std::time::Duration::ZERO,
+            on: parent_start.unwrap_or(start).elapsed(),
         };
 
         OpenedSpan {
             span: fastn_observer::Span::new(shared, attrs.metadata().name()),
-            start: std::time::Instant::now(),
-            last_enter: std::time::Instant::now(),
+            last_enter: start,
+            start,
         }
     }
 
