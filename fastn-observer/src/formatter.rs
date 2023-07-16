@@ -114,7 +114,6 @@ impl Pretty {
         use std::fmt::Write;
 
         let total_duration = span.total_duration.as_nanos() as f64;
-        let inner_duration = span.inner_duration.as_nanos() as f64;
         let root_duration = duration_root.unwrap_or(total_duration);
         let percent_total_of_root_duration = 100.0 * total_duration / root_duration;
 
