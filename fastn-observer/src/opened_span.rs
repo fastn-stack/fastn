@@ -3,7 +3,6 @@
 pub struct OpenedSpan {
     span: fastn_observer::Span,
     pub start: std::time::Instant,
-    last_enter: std::time::Instant,
 }
 
 impl OpenedSpan {
@@ -29,20 +28,12 @@ impl OpenedSpan {
 
         OpenedSpan {
             span: fastn_observer::Span::new(shared, attrs.metadata().name()),
-            last_enter: start,
             start,
         }
     }
 
-    pub fn enter(&mut self) {
-        self.last_enter = std::time::Instant::now();
-    }
-
-    pub fn exit(&mut self) {
-        self.span.total_duration += self.last_enter.elapsed();
-    }
-
-    pub fn close(self) -> fastn_observer::Span {
+    pub fn close(mut self) -> fastn_observer::Span {
+        self.span.duration = self.start.elapsed();
         self.span
     }
 
@@ -51,7 +42,6 @@ impl OpenedSpan {
     }
 
     pub fn record_span(&mut self, span: fastn_observer::Span) {
-        self.span.inner_duration += span.total_duration;
         self.span.nodes.push(fastn_observer::Tree::Span(span));
     }
 }

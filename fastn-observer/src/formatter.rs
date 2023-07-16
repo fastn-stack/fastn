@@ -99,7 +99,13 @@ impl Pretty {
         }
 
         for field in event.shared.fields.iter() {
-            write!(writer, " | {}: {}", field.key(), field.value())?;
+            write!(
+                writer,
+                " | {} {}: {}",
+                fastn_observer::DurationDisplay(event.shared.on.as_nanos() as f64),
+                field.key(),
+                field.value()
+            )?;
         }
 
         writeln!(writer)
@@ -113,18 +119,16 @@ impl Pretty {
     ) -> std::fmt::Result {
         use std::fmt::Write;
 
-        let total_duration = span.total_duration.as_nanos() as f64;
+        let total_duration = span.duration.as_nanos() as f64;
         let root_duration = duration_root.unwrap_or(total_duration);
-        let percent_total_of_root_duration = 100.0 * total_duration / root_duration;
 
         write!(
             writer,
-            "{} [ {} | ",
+            "{} {} [ {} ] ",
+            fastn_observer::DurationDisplay(span.shared.on.as_nanos() as f64),
             span.name,
             fastn_observer::DurationDisplay(total_duration)
         )?;
-
-        write!(writer, "{:.2}% ]", percent_total_of_root_duration)?;
 
         for (n, field) in span.shared.fields.iter().enumerate() {
             write!(

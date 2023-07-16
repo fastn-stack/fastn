@@ -16,8 +16,7 @@ pub struct Event {
 pub struct Span {
     pub(crate) shared: Shared,
     pub(crate) name: &'static str,
-    pub(crate) total_duration: std::time::Duration,
-    pub(crate) inner_duration: std::time::Duration,
+    pub(crate) duration: std::time::Duration,
     pub(crate) nodes: Vec<Tree>,
 }
 
@@ -34,8 +33,7 @@ impl Span {
         Span {
             shared,
             name,
-            total_duration: std::time::Duration::ZERO,
-            inner_duration: std::time::Duration::ZERO,
+            duration: std::time::Duration::ZERO,
             nodes: Vec::new(),
         }
     }
