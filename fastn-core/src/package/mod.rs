@@ -106,14 +106,12 @@ impl Package {
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub fn get_font_ftd(&self) -> Option<String> {
         use itertools::Itertools;
-
         if self.fonts.is_empty() {
             return None;
         }
-
         let (font_record, fonts) = self
             .fonts
             .iter()
@@ -141,7 +139,7 @@ impl Package {
                     )
                 },
             );
-        Some(format!("{font_record}{fonts}"))
+        Some(format!("{font_record}\n{fonts}"))
     }
 
     pub fn with_base(mut self, base: String) -> fastn_core::Package {
