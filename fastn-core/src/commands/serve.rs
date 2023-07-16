@@ -661,6 +661,7 @@ pub async fn listen(
     inline_css: Vec<String>,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     if package_download_base_url.is_some() {
         download_init_package(package_download_base_url).await?;
