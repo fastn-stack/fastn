@@ -100,43 +100,14 @@ where
         }
     }
 
-    fn on_enter(&self, id: &tracing::Id, ctx: tracing_subscriber::layer::Context<S>) {
-        ctx.span(id)
-            .expect(SPAN_NOT_IN_CONTEXT)
-            .extensions_mut()
-            .get_mut::<fastn_observer::OpenedSpan>()
-            .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
-            .enter();
-    }
-
-    fn on_exit(&self, id: &tracing::Id, ctx: tracing_subscriber::layer::Context<S>) {
-        ctx.span(id)
-            .expect(SPAN_NOT_IN_CONTEXT)
-            .extensions_mut()
-            .get_mut::<fastn_observer::OpenedSpan>()
-            .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
-            .exit();
-    }
-
     fn on_close(&self, id: tracing::Id, ctx: tracing_subscriber::layer::Context<S>) {
         let span_ref = ctx.span(&id).expect(SPAN_NOT_IN_CONTEXT);
 
-        let mut span = span_ref
+        let span = span_ref
             .extensions_mut()
             .remove::<fastn_observer::OpenedSpan>()
             .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
             .close();
-
-        // Ensure that the total duration is at least as much as the inner
-        // duration. This is caused by when a child span is manually passed
-        // a parent span and then enters without entering the parent span. Also
-        // when a child span is created within a parent, and then stored and
-        // entered again when the parent isn't opened.
-        //
-        // Issue: https://github.com/QnnOkabayashi/tracing-forest/issues/11
-        if span.total_duration < span.inner_duration {
-            span.total_duration = span.inner_duration;
-        }
 
         match span_ref.parent() {
             Some(parent) => parent
@@ -148,7 +119,7 @@ where
                 println!(
                     "{}",
                     fastn_observer::formatter::Pretty {}
-                        .fmt(&fastn_observer::Tree::Span(span))
+                        .fmt(&fastn_observer::Tree::Span(dbg!(span)))
                         .unwrap()
                 );
             }
