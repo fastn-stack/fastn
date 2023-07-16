@@ -116,12 +116,14 @@ where
                 .expect(OPENED_SPAN_NOT_IN_EXTENSIONS)
                 .record_span(span),
             None => {
-                println!(
-                    "{}",
-                    fastn_observer::formatter::Pretty {}
-                        .fmt(&fastn_observer::Tree::Span(span))
-                        .unwrap()
-                );
+                if fastn_observer::is_traced() {
+                    println!(
+                        "{}",
+                        fastn_observer::formatter::Pretty {}
+                            .fmt(&fastn_observer::Tree::Span(span))
+                            .unwrap()
+                    );
+                }
             }
         }
     }
