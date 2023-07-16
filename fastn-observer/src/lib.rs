@@ -22,6 +22,10 @@ pub fn observe() {
     //     .parse::<tracing_forest::util::LevelFilter>()
     //     .unwrap_or(tracing_forest::util::LevelFilter::INFO);
 
+    if !is_traced() {
+        return;
+    }
+
     let s = tracing_subscriber::registry()
         //.with(level)
         .with(Layer::default());
