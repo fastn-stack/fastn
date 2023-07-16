@@ -1417,7 +1417,7 @@ impl Config {
         ))
     }
 
-    #[tracing::instrument(skip(req))]
+    #[tracing::instrument(skip(req, self))]
     pub(crate) async fn can_read(
         &self,
         req: &fastn_core::http::Request,
@@ -1466,7 +1466,7 @@ impl Config {
         Ok(true)
     }
 
-    #[tracing::instrument(skip(req))]
+    #[tracing::instrument(skip(req, self))]
     pub(crate) async fn can_write(
         &self,
         req: &fastn_core::http::Request,
