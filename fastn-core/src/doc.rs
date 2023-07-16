@@ -1,7 +1,7 @@
 type ParsedDocC =
-    std::sync::RwLock<std::collections::HashMap<String, ftd::interpreter::ParsedDocument>>;
+    antidote::RwLock<std::collections::HashMap<String, ftd::interpreter::ParsedDocument>>;
 static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
-    once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
+    once_cell::sync::Lazy::new(|| antidote::RwLock::new(std::collections::HashMap::new()));
 
 fn cached_parse(
     id: &str,
@@ -15,17 +15,12 @@ fn cached_parse(
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
 
     if fastn_core::utils::parse_caching_enabled() {
-        if let Ok(mut l) = PARSED_DOC_CACHE.write() {
-            l.insert(id.to_string(), doc.clone());
-        }
+        PARSED_DOC_CACHE.write().insert(id.to_string(), doc.clone());
     }
     return Ok(doc);
 
     fn cached_doc(id: &str) -> Option<ftd::interpreter::ParsedDocument> {
-        if let Ok(l) = PARSED_DOC_CACHE.read() {
-            return l.get(id).cloned();
-        }
-        None
+        PARSED_DOC_CACHE.read().get(id).cloned()
     }
 }
 
