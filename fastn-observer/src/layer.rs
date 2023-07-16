@@ -119,7 +119,7 @@ where
                 println!(
                     "{}",
                     fastn_observer::formatter::Pretty {}
-                        .fmt(&fastn_observer::Tree::Span(dbg!(span)))
+                        .fmt(&fastn_observer::Tree::Span(span))
                         .unwrap()
                 );
             }

@@ -106,7 +106,7 @@ impl Package {
         }
     }
 
-    #[tracing::instrument]
+    #[tracing::instrument(skip_all)]
     pub fn get_font_ftd(&self) -> Option<String> {
         use itertools::Itertools;
 
