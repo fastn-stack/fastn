@@ -39,7 +39,7 @@ impl Instruction {
             }
             Instruction::Component { parent, children } => {
                 parent.line_number = 0;
-                for mut child in children {
+                for child in children {
                     child.line_number = 0;
                 }
             }
