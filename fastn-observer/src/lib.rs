@@ -22,20 +22,10 @@ pub fn observe() {
     //     .parse::<tracing_forest::util::LevelFilter>()
     //     .unwrap_or(tracing_forest::util::LevelFilter::INFO);
 
-    // only difference between the two branches of this if condition is the extra forest layer.
-    if is_traced() {
-        let s = tracing_subscriber::registry()
-            //.with(level)
-            .with(Layer::default());
-        tracing::subscriber::set_global_default(s).unwrap();
-    } else {
-        let s = tracing_subscriber::registry()
-            //.with(level)
-            .with(Layer::default());
-        tracing::subscriber::set_global_default(s).unwrap();
-        // let s = tracing_subscriber::registry().with(level);
-        // tracing::subscriber::set_global_default(s).unwrap();
-    }
+    let s = tracing_subscriber::registry()
+        //.with(level)
+        .with(Layer::default());
+    tracing::subscriber::set_global_default(s).unwrap();
 }
 
 pub fn is_traced() -> bool {

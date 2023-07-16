@@ -75,7 +75,7 @@ where
                         .get::<fastn_observer::OpenedSpan>()
                         .map(|v| v.start)
                 })
-                .unwrap_or_else(|| std::time::Instant::now())
+                .unwrap_or_else(std::time::Instant::now)
                 .elapsed(),
         };
 
