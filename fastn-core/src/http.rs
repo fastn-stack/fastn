@@ -395,12 +395,21 @@ pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
+static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
+    once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
+
 #[tracing::instrument(skip_all)]
 pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<Vec<u8>> {
+    if NOT_FOUND_CACHE.read().contains(url) {
+        return Err(fastn_core::Error::APIResponseError(
+            "page not found, cached".to_string(),
+        ));
+    }
+
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
@@ -435,6 +444,7 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
+        NOT_FOUND_CACHE.write().insert(url.to_string());
         return Err(fastn_core::Error::APIResponseError(message));
     }
     tracing::info!(msg = "returning success", url = url);
