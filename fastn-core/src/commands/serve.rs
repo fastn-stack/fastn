@@ -596,27 +596,8 @@ async fn test() -> fastn_core::Result<fastn_core::http::Response> {
     Ok(actix_web::HttpResponse::Ok().finish())
 }
 
-async fn route(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-    app_data: actix_web::web::Data<AppData>,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut res = None;
-
-    let logs: Vec<tracing_forest::tree::Tree> = tracing_forest::capture()
-        .build()
-        .on(async {
-            res = Some(route_(req, body, app_data).await);
-        })
-        .await;
-
-    dbg!(logs);
-
-    res.unwrap()
-}
-
 #[tracing::instrument(skip_all)]
-async fn route_(
+async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,

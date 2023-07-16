@@ -77,7 +77,7 @@ impl Pretty {
     fn format_shared(shared: &fastn_observer::Shared, writer: &mut String) -> std::fmt::Result {
         use std::fmt::Write;
 
-        return write!(writer, "{:<8} ", ColorLevel(shared.level));
+        write!(writer, "{:<8} ", ColorLevel(shared.level))
     }
 
     fn format_indent(indent: &[Indent], writer: &mut String) -> std::fmt::Result {
