@@ -8,7 +8,7 @@ fn cached_parse(
     source: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::ParsedDocument> {
-    if let Some(doc) = cached_doc(id) {
+    if let Some(doc) = PARSED_DOC_CACHE.read().get(id).cloned() {
         return Ok(doc);
     }
 
@@ -17,11 +17,8 @@ fn cached_parse(
     if fastn_core::utils::parse_caching_enabled() {
         PARSED_DOC_CACHE.write().insert(id.to_string(), doc.clone());
     }
-    return Ok(doc);
 
-    fn cached_doc(id: &str) -> Option<ftd::interpreter::ParsedDocument> {
-        PARSED_DOC_CACHE.read().get(id).cloned()
-    }
+    Ok(doc)
 }
 
 #[tracing::instrument(skip_all)]
