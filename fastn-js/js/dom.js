@@ -957,6 +957,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
+            console.log(staticValue);
             this.#node.innerHTML = staticValue;
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);

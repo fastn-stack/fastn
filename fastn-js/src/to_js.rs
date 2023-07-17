@@ -98,6 +98,7 @@ impl fastn_js::Function {
 impl fastn_js::ElementKind {
     pub fn to_js(&self) -> &'static str {
         match self {
+            fastn_js::ElementKind::Div => "fastn_dom.ElementKind.Div",
             fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row",
             fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column",
             fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer",

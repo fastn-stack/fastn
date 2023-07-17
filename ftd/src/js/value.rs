@@ -74,6 +74,19 @@ impl Value {
             inherited: inherited_variable_name.to_string(),
         }
     }
+
+    pub fn from_str(s: &str) -> Value {
+        return Value::Data(ftd::interpreter::Value::String {
+            text: s.to_string(),
+        });
+    }
+
+    pub fn get_string_data(&self) -> Option<String> {
+        if let Value::Data(ftd::interpreter::Value::String { text }) = self {
+            return Some(text.to_string());
+        }
+        None
+    }
 }
 
 fn formulas_to_fastn_js_value(
@@ -297,6 +310,18 @@ pub(crate) fn get_properties(
         .find(|v| v.name.eq(key))
         .unwrap()
         .get_optional_value(properties)
+}
+
+pub(crate) fn get_properties_with_default(
+    key: &str,
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
+    default: Value,
+) -> Value {
+    if let Some(argument) = arguments.iter().find(|v| v.name.eq(key)) {
+        return argument.get_optional_value(properties).unwrap_or(default);
+    }
+    return default;
 }
 
 impl ftd::interpreter::PropertyValue {
