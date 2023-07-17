@@ -6,14 +6,14 @@ pub fn trim_all_lines(s: &str) -> String {
 }
 
 pub(crate) fn update_reference_with_none(reference: &str) -> String {
-    update_reference(reference, &None, &None, &None)
+    update_reference(reference, &None, &None, fastn_js::INHERITED_VARIABLE)
 }
 
 pub(crate) fn update_reference(
     reference: &str,
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
-    inherited_variable_name: &Option<String>,
+    inherited_variable_name: &str,
 ) -> String {
     let name = reference.to_string();
 
@@ -31,19 +31,21 @@ pub(crate) fn update_reference(
         }
     }
 
-    if let Some(inherited_variable_name) = inherited_variable_name {
-        if let Some(remaining) = name.strip_prefix("inherited.") {
-            return format!("{inherited_variable_name}.{remaining}");
-        }
-    }
-
-    if name.starts_with("inherited.") {
-        return name;
+    if let Some(remaining) = name.strip_prefix("inherited.") {
+        return format!("{inherited_variable_name}.{remaining}");
     }
 
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
         return "index".to_string();
     }
 
+    if is_ftd_thing(name.as_str()) {
+        return name.replace("ftd#", "ftd.");
+    }
+
     format!("{}.{name}", fastn_js::GLOBAL_VARIABLE_MAP)
+}
+
+fn is_ftd_thing(name: &str) -> bool {
+    name.starts_with("ftd#") || name.starts_with("ftd.")
 }

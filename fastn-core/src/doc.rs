@@ -1,32 +1,71 @@
-type ParsedDocC =
-    std::sync::RwLock<std::collections::HashMap<String, ftd::interpreter::ParsedDocument>>;
-static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
-    once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
-
 fn cached_parse(
     id: &str,
     source: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::ParsedDocument> {
-    if let Some(doc) = cached_doc(id) {
-        return Ok(doc);
+    #[derive(serde::Deserialize, serde::Serialize)]
+    struct C {
+        hash: String,
+        doc: ftd::interpreter::ParsedDocument,
+    }
+
+    let hash = fastn_core::utils::generate_hash(source);
+
+    if let Some(c) = get_cached::<C>(id) {
+        if c.hash == hash {
+            tracing::debug!("cache hit");
+            return Ok(c.doc);
+        }
+        tracing::debug!("cached hash mismatch");
+    } else {
+        tracing::debug!("cached miss");
     }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
+    cache_it(id, C { doc, hash }).map(|v| v.doc)
+}
 
-    if fastn_core::utils::parse_caching_enabled() {
-        if let Ok(mut l) = PARSED_DOC_CACHE.write() {
-            l.insert(id.to_string(), doc.clone());
-        }
-    }
-    return Ok(doc);
+fn id_to_cache_key(id: &str) -> String {
+    id.replace('/', "_")
+}
 
-    fn cached_doc(id: &str) -> Option<ftd::interpreter::ParsedDocument> {
-        if let Ok(l) = PARSED_DOC_CACHE.read() {
-            return l.get(id).cloned();
-        }
-        None
-    }
+fn get_cached<T>(id: &str) -> Option<T>
+where
+    T: serde::de::DeserializeOwned,
+{
+    let cache_file = dirs::cache_dir()?
+        .join("fastn.com/ast-cache/")
+        .join(id_to_cache_key(id));
+    serde_json::from_str(
+        &std::fs::read_to_string(cache_file)
+            .map_err(|e| {
+                tracing::debug!("file read error: {}", e.to_string());
+                e
+            })
+            .ok()?,
+    )
+    .map_err(|e| {
+        tracing::debug!("not valid json: {}", e.to_string());
+        e
+    })
+    .ok()
+}
+
+fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
+where
+    T: serde::ser::Serialize,
+{
+    let cache_file = dirs::cache_dir()
+        .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?
+        .join("fastn.com/ast-cache/")
+        .join(id_to_cache_key(id));
+    std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
+    })?;
+    std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
+    })?;
+    Ok(d)
 }
 
 #[tracing::instrument(skip_all)]
@@ -99,24 +138,16 @@ pub async fn interpret_helper<'a>(
                 variable,
                 caller_module,
             } => {
-                if module.eq("test") {
-                    let value = ftd::interpreter::Value::String {
-                        text: variable.to_uppercase().to_string(),
-                    };
-                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
-                } else {
-                    let value = resolve_foreign_variable2022(
-                        variable.as_str(),
-                        module.as_str(),
-                        &state,
-                        lib,
-                        base_url,
-                        download_assets,
-                        caller_module.as_str(),
-                    )
-                    .await?;
-                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
-                }
+                let value = resolve_foreign_variable2022(
+                    variable.as_str(),
+                    module.as_str(),
+                    lib,
+                    base_url,
+                    download_assets,
+                    caller_module.as_str(),
+                )
+                .await?;
+                s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
             }
         }
     }
@@ -283,11 +314,10 @@ pub async fn resolve_import_2022<'a>(
     Ok(source)
 }
 
-#[tracing::instrument(name = "fastn_core::stuck-on-foreign-variable", err)]
+#[tracing::instrument(name = "fastn_core::stuck-on-foreign-variable", err, skip(lib))]
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
-    _state: &ftd::interpreter::InterpreterState,
     lib: &mut fastn_core::Library2022,
     base_url: &str,
     download_assets: bool,

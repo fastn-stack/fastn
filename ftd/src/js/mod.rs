@@ -10,30 +10,60 @@ mod value;
 pub use element::{Common, Element};
 pub use value::Value;
 
+pub fn all_js_without_test() -> String {
+    let all_js = fastn_js::all_js_without_test();
+    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
+    format!("{all_js}\n{default_bag_js}")
+}
+
+pub fn all_js_with_test() -> String {
+    let all_js = fastn_js::all_js_with_test();
+    let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
+    format!("{all_js}\n{default_bag_js}")
+}
+
+/// This returns asts of things present in `ftd` module or `default_bag`
+pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
+    let mut ftd_asts = vec![];
+    let bag = ftd::interpreter::default::default_bag();
+    let doc = ftd::interpreter::TDoc {
+        name: "",
+        aliases: &ftd::interpreter::default::default_aliases(),
+        bag: ftd::interpreter::BagOrState::Bag(&bag),
+    };
+    for thing in ftd::interpreter::default::default_bag().values() {
+        if let ftd::interpreter::Thing::Variable(v) = thing {
+            ftd_asts.push(v.to_ast(&doc, None));
+        } else if let ftd::interpreter::Thing::Function(f) = thing {
+            ftd_asts.push(f.to_ast());
+        }
+    }
+    ftd_asts
+}
+
+/// This contains asts of things (other than `ftd`) and instructions/tree
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
-    let mut asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
+    let mut document_asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
     let default_thing_name = ftd::interpreter::default::default_bag()
         .into_iter()
         .map(|v| v.0)
         .collect_vec();
 
     for (key, thing) in document.data.iter() {
-        if default_thing_name.contains(key)
-            && !["ftd#default-types", "ftd#default-colors"].contains(&key.as_str())
-        {
+        if default_thing_name.contains(key) {
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
-            asts.push(c.to_ast(&doc));
+            document_asts.push(c.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
-            asts.push(v.to_ast(&doc));
+            document_asts.push(v.to_ast(&doc, Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
-            asts.push(f.to_ast());
+            document_asts.push(f.to_ast());
         }
     }
-    asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+    document_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
         name: "inherited".to_string(),
         value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
             fields: vec![
@@ -53,7 +83,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         }),
         prefix: None,
     }));
-    asts
+    document_asts
 }
 
 impl ftd::interpreter::Function {
@@ -77,7 +107,7 @@ impl ftd::interpreter::Function {
 }
 
 impl ftd::interpreter::Variable {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc, prefix: Option<String>) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
             if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
                 let record = doc.get_record(name, self.line_number).unwrap();
@@ -87,41 +117,44 @@ impl ftd::interpreter::Variable {
                 let mut fields = vec![];
                 for field in record.fields {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((field.name.to_string(), value.to_fastn_js_value_with_none()));
+                        fields.push((
+                            field.name.to_string(),
+                            value.to_fastn_js_value_with_none(doc),
+                        ));
                     } else {
                         fields.push((
                             field.name.to_string(),
                             field
                                 .get_default_value()
                                 .unwrap()
-                                .to_set_property_value_with_none(),
+                                .to_set_property_value_with_none(doc),
                         ));
                     }
                 }
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
                     fields: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record { fields }),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    prefix,
                 });
             } else if self.kind.is_list() {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value_with_none(),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    value: self.value.to_fastn_js_value_with_none(doc),
+                    prefix,
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value_with_none(),
-                    prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                    value: self.value.to_fastn_js_value_with_none(doc),
+                    prefix,
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
-            value: self.value.to_fastn_js_value_with_none(),
-            prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+            value: self.value.to_fastn_js_value_with_none(doc),
+            prefix,
         })
     }
 }
@@ -136,7 +169,7 @@ impl ftd::interpreter::ComponentDefinition {
             0,
             doc,
             &Some(self.name.to_string()),
-            &Some("inherited".to_string()),
+            fastn_js::INHERITED_VARIABLE,
             &None,
             true,
         ));
@@ -150,9 +183,11 @@ impl ftd::interpreter::ComponentDefinition {
                         (
                             v.name.to_string(),
                             val.to_set_property_value(
+                                doc,
                                 &Some(self.name.to_string()),
                                 &None,
-                                &Some("inherited".to_string()),
+                                fastn_js::INHERITED_VARIABLE,
+                                &None,
                             ),
                         )
                     })
@@ -168,9 +203,15 @@ pub fn from_tree(
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
-        statements.extend(
-            component.to_component_statements("parent", index, doc, &None, &None, &None, false),
-        )
+        statements.extend(component.to_component_statements(
+            "parent",
+            index,
+            doc,
+            &None,
+            fastn_js::INHERITED_VARIABLE,
+            &None,
+            false,
+        ))
     }
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
@@ -183,7 +224,7 @@ impl ftd::interpreter::Component {
         index: usize,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -243,9 +284,11 @@ impl ftd::interpreter::Component {
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
                 list_variable: iteration.on.to_fastn_js_value(
+                    doc,
                     component_definition_name,
                     &loop_alias,
                     inherited_variable_name,
+                    device,
                 ),
                 statements: component_statements,
                 parent: parent.to_string(),
@@ -264,13 +307,13 @@ impl ftd::interpreter::Component {
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
-            ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
+            ftd::js::Element::from_interpreter_component(self).to_component_statements(
                 parent,
                 index,
                 doc,
@@ -291,9 +334,11 @@ impl ftd::interpreter::Component {
                         (
                             v.name.to_string(),
                             val.to_set_property_value(
+                                doc,
                                 component_definition_name,
                                 loop_alias,
                                 inherited_variable_name,
+                                device,
                             ),
                         )
                     })
@@ -310,9 +355,7 @@ impl ftd::interpreter::Component {
                     name: self.name.to_string(),
                     arguments,
                     parent: parent.to_string(),
-                    inherited: inherited_variable_name
-                        .clone()
-                        .unwrap_or_else(|| "inherited".to_string()),
+                    inherited: inherited_variable_name.to_string(),
                     should_return,
                 },
             )]

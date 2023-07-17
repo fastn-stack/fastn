@@ -14,6 +14,10 @@ let fastn_utils = {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Text) {
             // css.push("ft_text");
+        } else if (kind === fastn_dom.ElementKind.CheckBox) {
+            node = "input type=\"checkbox\"";
+        } else if (kind === fastn_dom.ElementKind.TextInput) {
+            node = "input";
         }
         return [node, css];
     },
@@ -21,6 +25,8 @@ let fastn_utils = {
     getStaticValue(obj) {
         if (obj instanceof fastn.mutableClass) {
            return this.getStaticValue(obj.get());
+        } if (obj instanceof fastn.mutableListClass) {
+            return obj.getList();
         } else {
            return obj;
         }

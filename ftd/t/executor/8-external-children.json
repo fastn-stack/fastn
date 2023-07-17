@@ -5,6 +5,102 @@
     "inherited": "inherited"
   },
   "bag": {
+    "foo#foo:c:0": {
+      "Variable": {
+        "name": "foo#foo:c:0",
+        "kind": {
+          "kind": {
+            "List": {
+              "kind": {
+                "UI": {
+                  "name": null,
+                  "subsection_source": true,
+                  "is_web_component": false
+                }
+              }
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "List": {
+                "data": [
+                  {
+                    "Value": {
+                      "value": {
+                        "UI": {
+                          "name": "ftd#text",
+                          "kind": {
+                            "kind": {
+                              "UI": {
+                                "name": null,
+                                "subsection_source": true,
+                                "is_web_component": false
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          },
+                          "component": {
+                            "name": "ftd#text",
+                            "properties": [
+                              {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "String": {
+                                        "text": "Hello"
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 21
+                                  }
+                                },
+                                "source": "Caption",
+                                "condition": null,
+                                "line_number": 21
+                              }
+                            ],
+                            "iteration": null,
+                            "condition": null,
+                            "events": [],
+                            "children": [],
+                            "source": "Declaration",
+                            "line_number": 21
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 21
+                    }
+                  }
+                ],
+                "kind": {
+                  "kind": {
+                    "UI": {
+                      "name": null,
+                      "subsection_source": true,
+                      "is_web_component": false
+                    }
+                  },
+                  "caption": false,
+                  "body": false
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 21
+          }
+        },
+        "conditional_value": [],
+        "line_number": 19,
+        "is_static": true
+      }
+    },
     "foo#foo": {
       "Component": {
         "name": "foo#foo",
@@ -190,102 +286,6 @@
         },
         "css": null,
         "line_number": 1
-      }
-    },
-    "foo#foo:c:0": {
-      "Variable": {
-        "name": "foo#foo:c:0",
-        "kind": {
-          "kind": {
-            "List": {
-              "kind": {
-                "UI": {
-                  "name": null,
-                  "subsection_source": true,
-                  "is_web_component": false
-                }
-              }
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "List": {
-                "data": [
-                  {
-                    "Value": {
-                      "value": {
-                        "UI": {
-                          "name": "ftd#text",
-                          "kind": {
-                            "kind": {
-                              "UI": {
-                                "name": null,
-                                "subsection_source": true,
-                                "is_web_component": false
-                              }
-                            },
-                            "caption": false,
-                            "body": false
-                          },
-                          "component": {
-                            "name": "ftd#text",
-                            "properties": [
-                              {
-                                "value": {
-                                  "Value": {
-                                    "value": {
-                                      "String": {
-                                        "text": "Hello"
-                                      }
-                                    },
-                                    "is_mutable": false,
-                                    "line_number": 21
-                                  }
-                                },
-                                "source": "Caption",
-                                "condition": null,
-                                "line_number": 21
-                              }
-                            ],
-                            "iteration": null,
-                            "condition": null,
-                            "events": [],
-                            "children": [],
-                            "source": "Declaration",
-                            "line_number": 21
-                          }
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 21
-                    }
-                  }
-                ],
-                "kind": {
-                  "kind": {
-                    "UI": {
-                      "name": null,
-                      "subsection_source": true,
-                      "is_web_component": false
-                    }
-                  },
-                  "caption": false,
-                  "body": false
-                }
-              }
-            },
-            "is_mutable": false,
-            "line_number": 21
-          }
-        },
-        "conditional_value": [],
-        "line_number": 19,
-        "is_static": true
       }
     }
   },

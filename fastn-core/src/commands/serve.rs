@@ -1,6 +1,19 @@
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
+#[tracing::instrument(skip_all)]
+fn handle_redirect(
+    config: &mut fastn_core::Config,
+    path: &camino::Utf8Path,
+) -> Option<fastn_core::http::Response> {
+    config
+        .package
+        .redirects
+        .as_ref()
+        .and_then(|v| fastn_core::package::redirects::find_redirect(v, path.as_str()))
+        .map(|r| fastn_core::http::redirect(r.to_string()))
+}
+
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
 ///
@@ -9,39 +22,11 @@ async fn serve_file(
     config: &mut fastn_core::Config,
     path: &camino::Utf8Path,
 ) -> fastn_core::http::Response {
-    let url_regex = fastn_core::http::url_regex();
-
-    let mut path = <&camino::Utf8Path>::clone(&path);
-    let redirects = config.package.redirects.clone();
-    let mut current_path = path.to_string();
-    let mut has_redirect_url = false;
-    let mut has_external_redirect = false;
-    if let Some(r) = redirects {
-        if let Some(redirected_path) =
-            fastn_core::package::redirects::find_redirect(&r, current_path.as_str())
-        {
-            current_path = redirected_path.to_string();
-            path = camino::Utf8Path::new(current_path.as_str());
-            has_redirect_url = true;
-            if url_regex.is_match(redirected_path.as_str()) {
-                has_external_redirect = true;
-            }
-        }
+    if let Some(r) = handle_redirect(config, path) {
+        return r;
     }
 
-    if has_external_redirect {
-        return match fastn_core::http::get_external_response(current_path.as_str()).await {
-            Ok(r) => r,
-            Err(e) => {
-                tracing::error!(
-                    msg = "fastn-error external redirect path not found",
-                    path = path.as_str(),
-                    error = %e
-                );
-                fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
-            }
-        };
-    }
+    let path = <&camino::Utf8Path>::clone(&path);
 
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
@@ -54,6 +39,7 @@ async fn serve_file(
             return fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e);
         }
     };
+
     // Auth Stuff
     if !f.is_static() {
         let req = if let Some(ref r) = config.request {
@@ -105,14 +91,7 @@ async fn serve_file(
     match f {
         fastn_core::File::Ftd(main_document) => {
             if fastn_core::utils::is_ftd_path(path.as_str()) {
-                return if has_redirect_url {
-                    fastn_core::http::redirect(
-                        main_document.content.as_bytes().to_vec(),
-                        current_path.as_str(),
-                    )
-                } else {
-                    fastn_core::http::ok(main_document.content.as_bytes().to_vec())
-                };
+                return fastn_core::http::ok(main_document.content.as_bytes().to_vec());
             }
             match fastn_core::package::package_doc::read_ftd(
                 config,
@@ -123,16 +102,9 @@ async fn serve_file(
             )
             .await
             {
-                Ok(r) => match has_redirect_url {
-                    true => fastn_core::http::redirect_with_content_type(
-                        r,
-                        mime_guess::mime::TEXT_HTML_UTF_8,
-                        current_path.as_str(),
-                    ),
-                    false => {
-                        fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
-                    }
-                },
+                Ok(r) => {
+                    fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8)
+                }
                 Err(e) => {
                     tracing::error!(
                         msg = "fastn-Error",
@@ -240,6 +212,14 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
     fastn_core::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
+async fn favicon() -> fastn_core::Result<fastn_core::http::Response> {
+    let mut path = camino::Utf8PathBuf::from("favicon.ico");
+    if !path.exists() {
+        path = camino::Utf8PathBuf::from("static/favicon.ico");
+    }
+    Ok(static_file(path).await)
+}
+
 #[tracing::instrument(skip_all)]
 async fn static_file(file_path: camino::Utf8PathBuf) -> fastn_core::http::Response {
     if !file_path.exists() {
@@ -270,42 +250,23 @@ pub async fn serve(
     inline_css: Vec<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let _lock = LOCK.read().await;
+
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
-    let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
-    let response = if path.eq(&favicon) {
-        static_file(favicon).await
-    } else if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        let config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
+    let mut config = fastn_core::Config::read(None, false, Some(&req))
+        .await
+        .unwrap()
+        .add_edition(edition)?
+        .add_external_js(external_js)
+        .add_inline_js(inline_js)
+        .add_external_css(external_css)
+        .add_inline_css(inline_css);
+
+    Ok(if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
         serve_fastn_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .set_request(req)
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
-
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fastn_core::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css);
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -313,15 +274,6 @@ pub async fn serve(
 
         let req_method = req.method().to_string();
         let query_string = req.query_string().to_string();
-        let mut config = fastn_core::Config::read(None, false, Some(&req))
-            .await
-            .unwrap()
-            .add_edition(edition)?
-            .add_external_js(external_js)
-            .add_inline_js(inline_js)
-            .add_external_css(external_css)
-            .add_inline_css(inline_css)
-            .set_request(req);
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
@@ -451,8 +403,7 @@ pub async fn serve(
         // }
 
         file_response
-    };
-    Ok(response)
+    })
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -599,7 +550,7 @@ struct AppData {
 fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http::Response> {
     if req
         .path()
-        .ends_with(fastn_core::utils::hashed_default_css_name().as_str())
+        .ends_with(fastn_core::utils::hashed_default_css_name())
     {
         return Some(
             actix_web::HttpResponse::Ok()
@@ -608,7 +559,7 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
         );
     } else if req
         .path()
-        .ends_with(fastn_core::utils::hashed_default_js_name().as_str())
+        .ends_with(fastn_core::utils::hashed_default_js_name())
     {
         return Some(
             actix_web::HttpResponse::Ok()
@@ -619,9 +570,30 @@ fn handle_default_route(req: &actix_web::HttpRequest) -> Option<fastn_core::http
                     fastn_core::fastn_2022_js()
                 )),
         );
+    } else if req
+        .path()
+        .ends_with(fastn_core::utils::hashed_default_ftd_js())
+    {
+        return Some(
+            actix_web::HttpResponse::Ok()
+                .content_type(mime_guess::mime::TEXT_JAVASCRIPT)
+                .body(ftd::js::all_js_without_test()),
+        );
     }
 
     None
+}
+
+#[tracing::instrument(skip_all)]
+async fn foo() {
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+}
+
+#[tracing::instrument(skip_all)]
+async fn test() -> fastn_core::Result<fastn_core::http::Response> {
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+    foo().await;
+    Ok(actix_web::HttpResponse::Ok().finish())
 }
 
 #[tracing::instrument(skip_all)]
@@ -661,6 +633,8 @@ async fn route(
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fastn_core::watcher::poll().await,
+        ("get", "/favicon.ico") => favicon().await,
+        ("get", "/test/") => test().await,
         (_, _) => {
             serve(
                 req,
@@ -687,6 +661,7 @@ pub async fn listen(
     inline_css: Vec<String>,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     if package_download_base_url.is_some() {
         download_init_package(package_download_base_url).await?;
@@ -725,8 +700,6 @@ You can try without providing port, it will automatically pick unused port."#,
             std::process::exit(2);
         }
     };
-
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let app = move || {
         actix_web::App::new()

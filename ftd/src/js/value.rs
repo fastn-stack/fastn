@@ -6,21 +6,28 @@ pub enum Value {
 }
 
 impl Value {
-    pub(crate) fn to_set_property_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(&None, &None, &None)
+    pub(crate) fn to_set_property_value_with_none(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> fastn_js::SetPropertyValue {
+        self.to_set_property_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
     }
 
     pub(crate) fn to_set_property_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
@@ -32,40 +39,50 @@ impl Value {
             }
             Value::Formula(formulas) => {
                 fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(
+                    doc,
                     formulas,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
+                    device,
                 ))
             }
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn to_set_property(
         &self,
         kind: fastn_js::PropertyKind,
+        doc: &ftd::interpreter::TDoc,
         element_name: &str,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
             value: self.to_set_property_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             element_name: element_name.to_string(),
+            inherited: inherited_variable_name.to_string(),
         }
     }
 }
 
 fn formulas_to_fastn_js_value(
+    doc: &ftd::interpreter::TDoc,
     properties: &[ftd::interpreter::Property],
     component_definition_name: &Option<String>,
     loop_alias: &Option<String>,
-    inherited_variable_name: &Option<String>,
+    inherited_variable_name: &str,
+    device: &Option<fastn_js::DeviceType>,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
     let mut conditional_values = vec![];
@@ -92,9 +109,11 @@ fn formulas_to_fastn_js_value(
                 )
             }),
             expression: property.value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
         });
     }
@@ -110,7 +129,7 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> Vec<String> {
         let mut deps = vec![];
         for property_value in self.references.values() {
@@ -127,7 +146,7 @@ impl ftd::interpreter::Expression {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> fastn_grammar::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(
             &self.expression,
@@ -142,7 +161,7 @@ impl ftd::interpreter::Expression {
             references: &ftd::Map<ftd::interpreter::PropertyValue>,
             component_definition_name: &Option<String>,
             loop_alias: &Option<String>,
-            inherited_variable_name: &Option<String>,
+            inherited_variable_name: &str,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
@@ -186,7 +205,7 @@ impl ftd::interpreter::PropertyValue {
         &self,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
     ) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -281,21 +300,28 @@ pub(crate) fn get_properties(
 }
 
 impl ftd::interpreter::PropertyValue {
-    pub(crate) fn to_fastn_js_value_with_none(&self) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value(&None, &None, &None)
+    pub(crate) fn to_fastn_js_value_with_none(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> fastn_js::SetPropertyValue {
+        self.to_fastn_js_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
     }
 
     pub(crate) fn to_fastn_js_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         match self {
             ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(
+                doc,
                 component_definition_name,
                 loop_alias,
                 inherited_variable_name,
+                device,
             ),
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
@@ -325,9 +351,11 @@ impl ftd::interpreter::PropertyValue {
 impl ftd::interpreter::Value {
     pub(crate) fn to_fastn_js_value(
         &self,
+        doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
         loop_alias: &Option<String>,
-        inherited_variable_name: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
@@ -355,9 +383,11 @@ impl ftd::interpreter::Value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                         variant: js_variant,
                         value: Some(Box::new(value.to_fastn_js_value(
+                            doc,
                             component_definition_name,
                             loop_alias,
                             inherited_variable_name,
+                            device,
                         ))),
                     });
                 }
@@ -372,9 +402,11 @@ impl ftd::interpreter::Value {
                         .iter()
                         .map(|v| {
                             v.to_fastn_js_value(
+                                doc,
                                 component_definition_name,
                                 loop_alias,
                                 inherited_variable_name,
+                                device,
                             )
                         })
                         .collect_vec(),
@@ -388,13 +420,29 @@ impl ftd::interpreter::Value {
                             (
                                 k.to_string(),
                                 v.to_fastn_js_value(
+                                    doc,
                                     component_definition_name,
                                     loop_alias,
                                     inherited_variable_name,
+                                    device,
                                 ),
                             )
                         })
                         .collect_vec(),
+                })
+            }
+            ftd::interpreter::Value::UI { component, .. } => {
+                fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
+                    value: component.to_component_statements_(
+                        fastn_js::FUNCTION_PARENT,
+                        0,
+                        doc,
+                        component_definition_name,
+                        loop_alias,
+                        fastn_js::INHERITED_VARIABLE,
+                        device,
+                        false,
+                    ),
                 })
             }
             t => todo!("{:?}", t),
@@ -465,6 +513,30 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         "ftd#anchor" => {
             let js_variant = anchor_variants(variant);
             (format!("fastn_dom.Anchor.{}", js_variant), false)
+        }
+        "ftd#device-data" => {
+            let js_variant = device_data_variants(variant);
+            (format!("fastn_dom.DeviceData.{}", js_variant), false)
+        }
+        "ftd#text-style" => {
+            let js_variant = text_style_variants(variant);
+            (format!("fastn_dom.TextStyle.{}", js_variant), false)
+        }
+        "ftd#region" => {
+            let js_variant = region_variants(variant);
+            (format!("fastn_dom.Region.{}", js_variant), false)
+        }
+        "ftd#align" => {
+            let js_variant = align_variants(variant);
+            (format!("fastn_dom.AlignContent.{}", js_variant), false)
+        }
+        "ftd#text-input-type" => {
+            let js_variant = text_input_type_variants(variant);
+            (format!("fastn_dom.TextInputType.{}", js_variant), false)
+        }
+        "ftd#loading" => {
+            let js_variant = loading_variants(variant);
+            (format!("fastn_dom.Loading.{}", js_variant), false)
         }
         t => todo!("{} {}", t, variant),
     }
@@ -653,5 +725,83 @@ fn anchor_variants(name: &str) -> &'static str {
         "parent" => "Parent",
         "id" => "Id",
         t => todo!("invalid anchor variant {}", t),
+    }
+}
+
+fn device_data_variants(name: &str) -> &'static str {
+    match name {
+        "desktop" => "Desktop",
+        "mobile" => "Mobile",
+        t => todo!("invalid anchor variant {}", t),
+    }
+}
+
+fn text_style_variants(name: &str) -> &'static str {
+    match name {
+        "underline" => "Underline",
+        "italic" => "Italic",
+        "strike" => "Strike",
+        "heavy" => "Heavy",
+        "extra-bold" => "Extrabold",
+        "bold" => "Bold",
+        "semi-bold" => "SemiBold",
+        "medium" => "Medium",
+        "regular" => "Regular",
+        "light" => "Light",
+        "extra-light" => "ExtraLight",
+        "hairline" => "Hairline",
+        t => todo!("invalid text-style variant {}", t),
+    }
+}
+
+fn region_variants(name: &str) -> &'static str {
+    match name {
+        "h1" => "H1",
+        "h2" => "H2",
+        "h3" => "H3",
+        "h4" => "H4",
+        "h5" => "H5",
+        "h6" => "H6",
+        t => todo!("invalid region variant {}", t),
+    }
+}
+
+fn align_variants(name: &str) -> &'static str {
+    match name {
+        "top-left" => "TopLeft",
+        "top-center" => "TopCenter",
+        "top-right" => "TopRight",
+        "right" => "Right",
+        "left" => "Left",
+        "center" => "Center",
+        "bottom-left" => "BottomLeft",
+        "bottom-right" => "BottomRight",
+        "bottom-center" => "BottomCenter",
+        t => todo!("invalid align-content variant {}", t),
+    }
+}
+
+fn text_input_type_variants(name: &str) -> &'static str {
+    match name {
+        "text" => "Text",
+        "email" => "Email",
+        "password" => "Password",
+        "url" => "Url",
+        "datetime" => "DateTime",
+        "date" => "Date",
+        "time" => "Time",
+        "month" => "Month",
+        "week" => "Week",
+        "color" => "Color",
+        "file" => "File",
+        t => todo!("invalid text-input-type variant {}", t),
+    }
+}
+
+fn loading_variants(name: &str) -> &'static str {
+    match name {
+        "lazy" => "Lazy",
+        "eager" => "Eager",
+        t => todo!("invalid loading variant {}", t),
     }
 }

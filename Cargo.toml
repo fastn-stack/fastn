@@ -7,7 +7,8 @@ members = [
     "fastn-package",
     "fastn-issues",
     "fastn-js",
-    "fastn-grammar"
+    "fastn-grammar",
+    "fastn-observer",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -54,6 +55,7 @@ strip = true
 # using the latest dependency, and what is the plan to moving to the latest version.
 actix-web = "4"
 antidote = "1"
+dirs = "5"
 native-tls = "0.2"
 deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46" }
 postgres-native-tls = "0.5"
@@ -80,6 +82,7 @@ fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }
 fastn-package = { path = "fastn-package" }
 fastn-runtime = { path = "fastn-runtime" }
+fastn-observer = { path = "fastn-observer" }
 fastn-wasm = { path = "fastn-wasm" }
 fastn-grammar = { path = "fastn-grammar" }
 fluent = "0.16"
@@ -123,9 +126,11 @@ tokio = { version = "1.27.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 url = "2"
+ansi_term = "0.12"
 walkdir = "2"
+smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "9"
+wasmtime = "10"
 wgpu = "0.16"
 winit = "0.28"
 zip = "0.6"
@@ -153,19 +158,6 @@ features = [
     'HtmlElement',
     'Node',
     'Window',
-]
-
-[workspace.dependencies.tracing-forest]
-version = "0.1"
-features = [
-    "ansi", # This is for printing the ColorLevel in the events
-    "smallvec",
-    "serde",
-    "tokio",
-
-    # "uuid",  # This is for printing uuid for every request
-    # "chrono", # This is for printing the time of the event
-    # "env-filter",
 ]
 
 [workspace.dependencies.hyper]

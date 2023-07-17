@@ -152,15 +152,21 @@ impl Component {
         }
     }
 
+    pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
+        self.properties.iter().find_map(|v| {
+            if v.value.kind().inner_list().is_subsection_ui() {
+                Some(v.to_owned())
+            } else {
+                None
+            }
+        })
+    }
+
     pub fn get_children(
         &self,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<Vec<Component>> {
-        let property = if let Some(property) = self
-            .properties
-            .iter()
-            .find(|v| v.value.kind().inner_list().is_subsection_ui())
-        {
+        let property = if let Some(property) = self.get_children_property() {
             property
         } else {
             return Ok(vec![]);

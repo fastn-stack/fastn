@@ -38,25 +38,14 @@ impl actix_web::ResponseError for fastn_core::Error {}
 
 pub type Response = actix_web::HttpResponse;
 
-pub async fn get_external_response(url: &str) -> fastn_core::Result<fastn_core::http::Response> {
-    let response = reqwest::Client::new().get(url).send().await?;
-
-    let response_text = response.text().await?;
-
-    Ok(fastn_core::http::Response::PermanentRedirect()
-        .insert_header(("LOCATION", url))
-        .content_type(mime_guess::mime::TEXT_HTML)
-        .body(response_text))
-}
-
 pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn redirect(data: Vec<u8>, url: &str) -> fastn_core::http::Response {
+pub fn redirect(url: String) -> fastn_core::http::Response {
     actix_web::HttpResponse::PermanentRedirect()
         .insert_header(("LOCATION", url))
-        .body(data)
+        .finish()
 }
 
 pub fn ok_with_content_type(
@@ -65,17 +54,6 @@ pub fn ok_with_content_type(
 ) -> fastn_core::http::Response {
     actix_web::HttpResponse::Ok()
         .content_type(content_type)
-        .body(data)
-}
-
-pub fn redirect_with_content_type(
-    data: Vec<u8>,
-    content_type: mime_guess::Mime,
-    url: &str,
-) -> fastn_core::http::Response {
-    actix_web::HttpResponse::PermanentRedirect()
-        .content_type(content_type)
-        .insert_header(("LOCATION", url))
         .body(data)
 }
 
@@ -417,12 +395,21 @@ pub(crate) async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
+static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
+    once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
+
 #[tracing::instrument(skip_all)]
 pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
 ) -> fastn_core::Result<Vec<u8>> {
+    if NOT_FOUND_CACHE.read().contains(url) {
+        return Err(fastn_core::Error::APIResponseError(
+            "page not found, cached".to_string(),
+        ));
+    }
+
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
@@ -457,6 +444,7 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
+        NOT_FOUND_CACHE.write().insert(url.to_string());
         return Err(fastn_core::Error::APIResponseError(message));
     }
     tracing::info!(msg = "returning success", url = url);

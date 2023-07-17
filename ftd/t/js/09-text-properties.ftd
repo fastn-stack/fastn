@@ -105,3 +105,8 @@ Lorem Ipsum passages, and more recently with desktop publishing software
 like Aldus PageMaker including versions of Lorem Ipsum.
 
 -- end: ftd.column
+
+;; --------------------------- DISPLAY --------------------------------
+
+-- ftd.text: This has block display
+display: block

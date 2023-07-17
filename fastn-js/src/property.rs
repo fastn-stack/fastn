@@ -3,6 +3,7 @@ pub struct SetProperty {
     pub kind: PropertyKind,
     pub value: SetPropertyValue,
     pub element_name: String,
+    pub inherited: String,
 }
 
 #[derive(Debug)]
@@ -119,6 +120,9 @@ pub enum Value {
     Record {
         fields: Vec<(String, SetPropertyValue)>,
     },
+    UI {
+        value: Vec<fastn_js::ComponentStatement>,
+    },
 }
 
 impl Value {
@@ -151,14 +155,31 @@ impl Value {
                     ))
                     .join(", ")
             ),
+            Value::UI { value } => format!(
+                "function({}, {}){{{}}}",
+                fastn_js::FUNCTION_PARENT,
+                fastn_js::INHERITED_VARIABLE,
+                value
+                    .iter()
+                    .map(|v| {
+                        let mut w = Vec::new();
+                        v.to_js().render(80, &mut w).unwrap();
+                        String::from_utf8(w).unwrap()
+                    })
+                    .join("")
+            ),
         }
     }
 }
 
 #[derive(Debug)]
 pub enum PropertyKind {
+    Children,
     StringValue,
     Id,
+    Region,
+    OpenInNewTab,
+    Link,
     Anchor,
     Classes,
     AlignSelf,
@@ -226,11 +247,24 @@ pub enum PropertyKind {
     MaxWidth,
     MinWidth,
     WhiteSpace,
+    TextStyle,
+    AlignContent,
+    Display,
+    Checked,
+    Enabled,
+    Placeholder,
+    Multiline,
+    TextInputType,
+    DefaultTextInputValue,
+    Loading,
+    Src,
+    YoutubeSrc,
 }
 
 impl PropertyKind {
     pub(crate) fn to_js(&self) -> &'static str {
         match self {
+            PropertyKind::Children => "fastn_dom.PropertyKind.Children",
             PropertyKind::Id => "fastn_dom.PropertyKind.Id",
             PropertyKind::AlignSelf => "fastn_dom.PropertyKind.AlignSelf",
             PropertyKind::Anchor => "fastn_dom.PropertyKind.Anchor",
@@ -302,6 +336,21 @@ impl PropertyKind {
             PropertyKind::MinWidth => "fastn_dom.PropertyKind.MinWidth",
             PropertyKind::WhiteSpace => "fastn_dom.PropertyKind.WhiteSpace",
             PropertyKind::Classes => "fastn_dom.PropertyKind.Classes",
+            PropertyKind::Link => "fastn_dom.PropertyKind.Link",
+            PropertyKind::OpenInNewTab => "fastn_dom.PropertyKind.OpenInNewTab",
+            PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
+            PropertyKind::Region => "fastn_dom.PropertyKind.Region",
+            PropertyKind::AlignContent => "fastn_dom.PropertyKind.AlignContent",
+            PropertyKind::Display => "fastn_dom.PropertyKind.Display",
+            PropertyKind::Checked => "fastn_dom.PropertyKind.Checked",
+            PropertyKind::Enabled => "fastn_dom.PropertyKind.Enabled",
+            PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
+            PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
+            PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
+            PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
+            PropertyKind::Src => "fastn_dom.PropertyKind.Src",
+            PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
         }
     }
 }

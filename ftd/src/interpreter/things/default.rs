@@ -546,7 +546,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "a += 1".to_string(),
+                        expression: "a = a + 1".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -591,7 +591,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "a += v".to_string(),
+                        expression: "a = a + v".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -9233,7 +9233,8 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             ftd::interpreter::FTD_DEVICE.to_string(),
             ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
                 name: ftd::interpreter::FTD_DEVICE.to_string(),
-                kind: ftd::interpreter::Kind::record(ftd::interpreter::FTD_DEVICE_DATA).into_kind_data(),
+                kind: ftd::interpreter::Kind::or_type(ftd::interpreter::FTD_DEVICE_DATA)
+                    .into_kind_data(),
                 mutable: true,
                 value: ftd::interpreter::PropertyValue::Value {
                     value: ftd::interpreter::Value::OrType {
