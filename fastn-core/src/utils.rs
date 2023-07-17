@@ -14,17 +14,6 @@ impl ValueOf for clap::ArgMatches {
     }
 }
 
-static CACHE_ENABLED: once_cell::sync::Lazy<antidote::RwLock<bool>> =
-    once_cell::sync::Lazy::new(|| antidote::RwLock::new(false));
-
-pub(crate) fn parse_caching_enabled() -> bool {
-    *CACHE_ENABLED.read()
-}
-
-pub fn enable_parse_caching(enabled: bool) {
-    *CACHE_ENABLED.write() = enabled
-}
-
 // https://stackoverflow.com/questions/71985357/whats-the-best-way-to-write-a-custom-format-macro
 #[macro_export]
 macro_rules! warning {
