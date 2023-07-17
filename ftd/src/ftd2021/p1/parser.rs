@@ -294,11 +294,11 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
 
     for (line_number, mut line) in s.split('\n').enumerate() {
         let line_number = line_number + 1;
-        
+
         if line.starts_with(';') {
             continue;
         }
-        
+
         if line.starts_with("\\;") {
             line = &line[1..];
         }
@@ -408,53 +408,47 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
     }
 }
 
-
 fn remove_inline_comments(line: &str) -> String {
     let mut output = String::new();
 
-    let mut found = false;
+    let mut chars = line.chars().peekable();
+
+    let mut escape = false;
 
     let mut count = 0;
-    
-    let chars: Vec<char> = line.chars().collect();
-    
-    let len = chars.len();
-    
-    let mut i = 0;
 
-    while i < len {
-        if chars[i] == '\\' {
-            if !found {
-                found = true;
-                count = 0;
+    while let Some(c) = chars.next() {
+        if c == '\\' {
+            if !escape {
+                escape = true;
             }
-            
+
             count += 1;
-            
-            if chars[i + 1] == ';' {
+
+            match chars.peek() {
+                Some(nc) => {
+                    if nc == &';' {
+                        continue;
+                    }
+                }
+                None => break,
+            }
+        }
+
+        if c == ';' {
+            if escape {
                 if count % 2 == 0 {
                     break;
+                } else {
+                    escape = false;
+                    count = 0;
                 }
             } else {
-                output.push(chars[i]);
-            }
-            
-            i += 1;
-            
-            continue;
-        }
-        
-        if chars[i] == ';' {
-            if !found && count % 2 == 0 {
                 break;
             }
         }
-        
-        found = false;
-        
-        output.push(chars[i]);
-        
-        i += 1;
+
+        output.push(c);
     }
 
     return output.trim().to_string();
@@ -467,27 +461,15 @@ mod test2 {
             t!($s, $t)
         };
         ($s:expr, $t: expr) => {
-            assert_eq!(
-                super::remove_inline_comments($s),
-                $t
-            )
+            assert_eq!(super::remove_inline_comments($s), $t)
         };
     }
 
     #[test]
     fn test_esc() {
-        t!(
-            "Hello      ;; displays the hello",
-            "Hello"
-        );
-        t!(
-            "Hello      \\;; displays the hello",
-            "Hello      ;; displays the hello"
-        );
-        t!(
-            "Hello      \\\\\\;; displays the hello",
-            "Hello      \\\\;; displays the hello"
-        );
+        t!(r#"Hello      ;; displays the hello"#, "Hello");
+        t!(r#"Hello      \;; displays the hello"#, "Hello      ;");
+        t!(r#"Hello      \\;; displays the hello"#, r#"Hello      \"#);
     }
 }
 
