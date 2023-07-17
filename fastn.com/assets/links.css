@@ -1,0 +1,24 @@
+.link {
+    color: #EF8435 !important;
+}
+
+.link:visited {
+    color: #EF8435;
+}
+
+.link:hover {
+    text-decoration: underline !important;
+}
+
+.anchor-link a{
+    color: #EF8435 !important;
+}
+
+.anchor-link a:visited{
+    color: #EF8435 !important;
+}
+
+.anchor-link a:hover{
+    text-decoration: underline !important;
+}
+

@@ -224,7 +224,7 @@ children subtitle:
 width: fill-container
 height: fill-container
 color: $inherited.colors.text-strong
-background.image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+background.image: $fastn-assets.files.assets.background.svg
 
 -- ftd.column:
 width: fill-container
@@ -251,6 +251,7 @@ text-align: center
 color: $inherited.colors.text
 role: $inherited.types.heading-medium
 role if { ftd.device == "mobile" }: $inherited.types.copy-large
+margin-top.px: 24
 
 -- ftd.text: fastn
 text-align: center
@@ -619,6 +620,7 @@ website's appearance with one line of code.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
 cta-link: /featured/cs/
 cta-text: Check out the full library ->
+min-height.fixed.em: 21
 
 fastn has well defined structure to define color schema and typography. This can
 change your website look and feel just with **one line**. You can create your
@@ -628,6 +630,7 @@ own scheme or use them from library provided by fastn.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-link: /figma/
 cta-text: Using figma token guides ->
+min-height.fixed.em: 21
 
 You can use figma token with fastn color scheme. You also can create your own
 fastn color scheme from figma json.
@@ -657,6 +660,7 @@ language for your entire app.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
 cta-link: /featured/
 cta-text: Check out the full library ->
+min-height.fixed.em: 21
 
 fastn comes with a library of ready to use UI components. These components are
 fully customizable. Change the property values of the component to match your
@@ -666,6 +670,7 @@ project.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 cta-link: /components/
 cta-text: Create component guide ->
+min-height.fixed.em: 21
 
 Create your own components in a few lines of code. Use them in rest of your app
 package or in totally different package.
@@ -698,6 +703,7 @@ built and planned fastn aspires to be a full stack framework.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-2.svg
 cta-link: /endpoint/
 cta-text: Endpoint guide ->
+min-height.fixed.em: 22
 
 Interact with backend APIs and create dynamic web pages using fastn. Check out
 our [http processor](/http/) for more details
@@ -709,6 +715,7 @@ cross-origin policy concerns.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-3.svg
 cta-link: /dynamic-urls/
 cta-text: Dynamic URLs guide ->
+min-height.fixed.em: 22
 
 Create beautiful, custom URLs independent of file organization, or serve
 documents based on specific URL patterns.
@@ -717,7 +724,7 @@ documents based on specific URL patterns.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
 cta-link: /request-data/
 cta-text: Request Data Processor ->
-min-height.fixed.em: 20
+min-height.fixed.em: 22
 
 Extract and use request data like URL, query parameter etc in your web pages,
 APIs or queries.
@@ -726,7 +733,7 @@ APIs or queries.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-4.svg
 cta-link: /package-query/
 cta-text: Package query processor ->
-min-height.fixed.em: 20
+min-height.fixed.em: 22
 
 Query data from sqlite database to generate dynamic websites.
 
@@ -734,7 +741,7 @@ Query data from sqlite database to generate dynamic websites.
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/feature-icon-1.svg
 cta-link: /get-data/
 cta-text: Reading JSON ->
-min-height.fixed.em: 20
+min-height.fixed.em: 22
 
 Read data in JSON files and create data visualisation websites.
 
@@ -742,7 +749,7 @@ Read data in JSON files and create data visualisation websites.
 
 -- card: Upcoming WASM Support
 image: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/uses/image1.svg
-min-height.fixed.em: 20
+min-height.fixed.em: 22
 
 We are working on wasm support so developers can extend fastn's standard
 libraries and offer access to more backend functionalities.
@@ -819,10 +826,8 @@ string code:
 
 -- ftd.column:
 width: fill-container
-padding-vertical.em if { ftd.device == "desktop" }: 8
-padding-vertical.em: 4
-padding-horizontal.em if { ftd.device == "desktop" }: 10
-padding-horizontal.em if { ftd.device == "mobile" }: 1
+padding-vertical.em: 2
+padding-horizontal.em: 1
 background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
 
 -- ftd.column:
@@ -933,12 +938,16 @@ text-align if { ftd.device == "mobile" }: center
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 text-align if { ftd.device == "mobile" }: center
+classes: anchor-link
 
 -- ftd.text: $card.cta-text
 if: { card.cta-text != NULL }
 role: $inherited.types.copy-regular
 link: $card.cta-link
 text-align if { ftd.device == "mobile" }: center
+classes: link
+css: [$fastn-assets.files.assets.links.css]
+
 
 -- end: ftd.column
 
