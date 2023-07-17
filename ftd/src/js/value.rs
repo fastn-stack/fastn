@@ -530,6 +530,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = text_input_type_variants(variant);
             (format!("fastn_dom.TextInputType.{}", js_variant), false)
         }
+        "ftd#loading" => {
+            let js_variant = loading_variants(variant);
+            (format!("fastn_dom.Loading.{}", js_variant), false)
+        }
         t => todo!("{} {}", t, variant),
     }
 }
@@ -779,5 +783,13 @@ fn text_input_type_variants(name: &str) -> &'static str {
         "color" => "Color",
         "file" => "File",
         t => todo!("invalid text-input-type variant {}", t),
+    }
+}
+
+fn loading_variants(name: &str) -> &'static str {
+    match name {
+        "lazy" => "Lazy",
+        "eager" => "Eager",
+        t => todo!("invalid loading variant {}", t),
     }
 }

@@ -13,6 +13,7 @@ pub enum Element {
     Device(Device),
     CheckBox(CheckBox),
     TextInput(TextInput),
+    Iframe(Iframe),
 }
 
 impl Element {
@@ -26,6 +27,7 @@ impl Element {
             "ftd#row" => Element::Row(Row::from(component)),
             "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
             "ftd#text-input" => Element::TextInput(TextInput::from(component)),
+            "ftd#iframe" => Element::Iframe(Iframe::from(component)),
             "ftd#desktop" | "ftd#mobile" => {
                 Element::Device(Device::from(component, component.name.as_str()))
             }
@@ -135,6 +137,16 @@ impl Element {
                 device,
                 should_return,
             ),
+            Element::Iframe(i) => i.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
         }
     }
 }
@@ -233,13 +245,6 @@ impl CheckBox {
         component_statements
     }
 }
-
-//     pub placeholder: ftd::executor::Value<Option<String>>,
-//     pub value: ftd::executor::Value<Option<String>>,
-//     pub multiline: ftd::executor::Value<bool>,
-//     pub default_value: ftd::executor::Value<Option<String>>,
-//     pub type_: ftd::executor::Value<Option<ftd::executor::TextInputType>>,
-//     pub enabled: ftd::executor::Value<Option<bool>>,
 
 #[derive(Debug)]
 pub struct TextInput {
@@ -374,6 +379,141 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 default_value.to_set_property(
                     fastn_js::PropertyKind::DefaultTextInputValue,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Iframe {
+    pub common: Common,
+    pub src: Option<ftd::js::Value>,
+    pub srcdoc: Option<ftd::js::Value>,
+    pub youtube: Option<ftd::js::Value>,
+    pub loading: Option<ftd::js::Value>,
+}
+
+impl Iframe {
+    pub fn from(component: &ftd::interpreter::Component) -> Iframe {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#iframe")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        Iframe {
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+            src: ftd::js::value::get_properties(
+                "src",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            srcdoc: ftd::js::value::get_properties(
+                "srcdoc",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            loading: ftd::js::value::get_properties(
+                "loading",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            youtube: ftd::js::value::get_properties(
+                "youtube",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::IFrame, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if let Some(ref loading) = self.loading {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                loading.to_set_property(
+                    fastn_js::PropertyKind::Loading,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref src) = self.src {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                src.to_set_property(
+                    fastn_js::PropertyKind::Src,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref srcdoc) = self.srcdoc {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                srcdoc.to_set_property(
+                    fastn_js::PropertyKind::Src,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref youtube) = self.youtube {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                youtube.to_set_property(
+                    fastn_js::PropertyKind::YoutubeSrc,
                     doc,
                     kernel.name.as_str(),
                     component_definition_name,
@@ -2503,6 +2643,9 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#mobile",
         "ftd#checkbox",
         "ftd#text-input",
+        "ftd#iframe",
+        "ftd#code",
+        "ftd#image",
     ]
     .contains(&s)
 }

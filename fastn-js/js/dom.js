@@ -222,6 +222,14 @@ fastn_dom.PropertyKind = {
     Placeholder: 80,
     Multiline: 81,
     DefaultTextInputValue: 82,
+    Loading: 83,
+    Src: 84,
+    YoutubeSrc: 85,
+}
+
+fastn_dom.Loading = {
+    Lazy: "lazy",
+    Eager: "eager",
 }
 
 fastn_dom.TextInputType = {
@@ -936,6 +944,14 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
             this.attachAlignContent(staticValue, node_kind);
+        } else if (kind === fastn_dom.PropertyKind.Loading) {
+            this.attachAttribute("loading", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Src) {
+            this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            const id_pattern = "^([a-zA-Z0-9_-]{11})$";
+            let id = staticValue.match(id_pattern);
+            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
