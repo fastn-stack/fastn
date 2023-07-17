@@ -172,8 +172,4 @@ impl Thing {
             _ => None,
         }
     }
-
-    pub fn is_component(&self) -> bool {
-        matches!(self, ftd::interpreter::Thing::Component(_))
-    }
 }

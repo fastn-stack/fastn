@@ -836,11 +836,15 @@ pub fn hashed_default_js_name() -> &'static str {
     &JS_HASH
 }
 
-pub fn hashed_default_ftd_js() -> String {
+static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
     format!(
         "default-{}.js",
-        generate_hash(fastn_js::all_js_without_test().as_str())
+        generate_hash(ftd::js::all_js_without_test().as_str())
     )
+});
+
+pub fn hashed_default_ftd_js() -> &'static str {
+    &FTD_JS_HASH
 }
 
 #[cfg(test)]

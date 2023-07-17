@@ -74,16 +74,19 @@ pub fn interpret_helper(
 fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathBuf) {
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast = ftd::js::document_into_js_ast(i);
-    let js_script = fastn_js::to_js(js_ast.as_slice());
-    let ssr_body = fastn_js::ssr_with_js_string(js_script.as_str());
+    let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
+    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
+    let ssr_body =
+        fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
+
     let html_str = std::fs::read_to_string("ftd-js.html")
         .expect("can't read ftd-js.html")
-        .replace("__js_script__", js_script.as_str())
+        .replace("__js_script__", js_document_script.as_str())
         .replace("__html_body__", ssr_body.as_str())
         .replace(
             "__script_file__",
             if manual {
-                format!("<script>\n{}\n</script>", fastn_js::all_js_with_test())
+                format!("<script>\n{}\n</script>", ftd::js::all_js_with_test())
             } else {
                 "<script src=\"fastn-js.js\"></script>".to_string()
             }

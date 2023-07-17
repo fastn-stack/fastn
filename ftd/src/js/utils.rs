@@ -39,5 +39,13 @@ pub(crate) fn update_reference(
         return "index".to_string();
     }
 
+    if is_ftd_thing(name.as_str()) {
+        return name.replace("ftd#", "ftd.");
+    }
+
     format!("{}.{name}", fastn_js::GLOBAL_VARIABLE_MAP)
+}
+
+fn is_ftd_thing(name: &str) -> bool {
+    name.starts_with("ftd#") || name.starts_with("ftd.")
 }
