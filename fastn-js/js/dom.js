@@ -134,6 +134,8 @@ fastn_dom.ElementKind = {
     IFrame: 7,
     // To create parent for dynamic DOM
     Div: 8,
+    CheckBox: 9,
+    TextInput: 10,
 };
 
 fastn_dom.PropertyKind = {
@@ -213,6 +215,35 @@ fastn_dom.PropertyKind = {
     TextStyle: 73,
     Region: 74,
     AlignContent: 75,
+    Display: 76,
+    Checked: 77,
+    Enabled: 78,
+    TextInputType: 79,
+    Placeholder: 80,
+    Multiline: 81,
+    DefaultTextInputValue: 82,
+    Loading: 83,
+    Src: 84,
+    YoutubeSrc: 85,
+}
+
+fastn_dom.Loading = {
+    Lazy: "lazy",
+    Eager: "eager",
+}
+
+fastn_dom.TextInputType = {
+    Text: "text",
+    Email: "email",
+    Password: "password",
+    Url: "url",
+    DateTime: "datetime",
+    Date: "date",
+    Time: "time",
+    Month: "month",
+    Week: "week",
+    Color: "color",
+    File: "file",
 }
 
 fastn_dom.AlignContent = {
@@ -860,6 +891,39 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Display) {
+            this.attachCss("display", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Checked) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.attachAttribute("checked", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.Enabled) {
+            switch (staticValue) {
+                case "false":
+                case false:
+                    this.attachAttribute("disabled", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextInputType) {
+            this.attachAttribute("type", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            this.attachAttribute("value", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Placeholder) {
+            this.attachAttribute("placeholder", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Multiline) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.updateTagName("textarea");
+                    break;
+                case "false":
+                case false:
+                    this.updateTagName("input");
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
@@ -885,6 +949,14 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.AlignContent) {
             let node_kind = this.#kind;
             this.attachAlignContent(staticValue, node_kind);
+        } else if (kind === fastn_dom.PropertyKind.Loading) {
+            this.attachAttribute("loading", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Src) {
+            this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            const id_pattern = "^([a-zA-Z0-9_-]{11})$";
+            let id = staticValue.match(id_pattern);
+            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||

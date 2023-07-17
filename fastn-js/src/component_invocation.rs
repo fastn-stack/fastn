@@ -30,6 +30,8 @@ pub enum ElementKind {
     Image,
     IFrame,
     Device,
+    CheckBox,
+    TextInput,
 }
 
 #[derive(Debug)]

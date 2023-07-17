@@ -11,6 +11,9 @@ pub enum Element {
     Column(Column),
     Row(Row),
     Device(Device),
+    CheckBox(CheckBox),
+    TextInput(TextInput),
+    Iframe(Iframe),
 }
 
 impl Element {
@@ -22,6 +25,9 @@ impl Element {
             "ftd#boolean" => Element::Boolean(Boolean::from(component)),
             "ftd#column" => Element::Column(Column::from(component)),
             "ftd#row" => Element::Row(Row::from(component)),
+            "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
+            "ftd#text-input" => Element::TextInput(TextInput::from(component)),
+            "ftd#iframe" => Element::Iframe(Iframe::from(component)),
             "ftd#desktop" | "ftd#mobile" => {
                 Element::Device(Device::from(component, component.name.as_str()))
             }
@@ -111,7 +117,419 @@ impl Element {
                 device,
                 should_return,
             ),
+            Element::CheckBox(c) => c.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
+            Element::TextInput(t) => t.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
+            Element::Iframe(i) => i.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
         }
+    }
+}
+
+#[derive(Debug)]
+pub struct CheckBox {
+    pub enabled: Option<ftd::js::Value>,
+    pub checked: Option<ftd::js::Value>,
+    pub common: Common,
+}
+
+impl CheckBox {
+    pub fn from(component: &ftd::interpreter::Component) -> CheckBox {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#checkbox")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        CheckBox {
+            enabled: ftd::js::value::get_properties(
+                "enabled",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            checked: ftd::js::value::get_properties(
+                "checked",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::CheckBox, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if let Some(ref checked) = self.checked {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                checked.to_set_property(
+                    fastn_js::PropertyKind::Checked,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref enabled) = self.enabled {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                enabled.to_set_property(
+                    fastn_js::PropertyKind::Enabled,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct TextInput {
+    pub placeholder: Option<ftd::js::Value>,
+    pub multiline: Option<ftd::js::Value>,
+    pub _type: Option<ftd::js::Value>,
+    pub default_value: Option<ftd::js::Value>,
+    pub enabled: Option<ftd::js::Value>,
+    pub common: Common,
+}
+
+impl TextInput {
+    pub fn from(component: &ftd::interpreter::Component) -> TextInput {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#text-input")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        TextInput {
+            placeholder: ftd::js::value::get_properties(
+                "placeholder",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            multiline: ftd::js::value::get_properties(
+                "multiline",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            _type: ftd::js::value::get_properties(
+                "type",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            default_value: ftd::js::value::get_properties(
+                "default-value",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            enabled: ftd::js::value::get_properties(
+                "enabled",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel =
+            fastn_js::Kernel::from_component(fastn_js::ElementKind::TextInput, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if let Some(ref placeholder) = self.placeholder {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                placeholder.to_set_property(
+                    fastn_js::PropertyKind::Placeholder,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref multiline) = self.multiline {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                multiline.to_set_property(
+                    fastn_js::PropertyKind::Multiline,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref _type) = self._type {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                _type.to_set_property(
+                    fastn_js::PropertyKind::TextInputType,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref enabled) = self.enabled {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                enabled.to_set_property(
+                    fastn_js::PropertyKind::Enabled,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref default_value) = self.default_value {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                default_value.to_set_property(
+                    fastn_js::PropertyKind::DefaultTextInputValue,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Iframe {
+    pub common: Common,
+    pub src: Option<ftd::js::Value>,
+    pub srcdoc: Option<ftd::js::Value>,
+    pub youtube: Option<ftd::js::Value>,
+    pub loading: Option<ftd::js::Value>,
+}
+
+impl Iframe {
+    pub fn from(component: &ftd::interpreter::Component) -> Iframe {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#iframe")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        Iframe {
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+            src: ftd::js::value::get_properties(
+                "src",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            srcdoc: ftd::js::value::get_properties(
+                "srcdoc",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            loading: ftd::js::value::get_properties(
+                "loading",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            youtube: ftd::js::value::get_properties(
+                "youtube",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::IFrame, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if let Some(ref loading) = self.loading {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                loading.to_set_property(
+                    fastn_js::PropertyKind::Loading,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref src) = self.src {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                src.to_set_property(
+                    fastn_js::PropertyKind::Src,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref srcdoc) = self.srcdoc {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                srcdoc.to_set_property(
+                    fastn_js::PropertyKind::Src,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if let Some(ref youtube) = self.youtube {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                youtube.to_set_property(
+                    fastn_js::PropertyKind::YoutubeSrc,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
     }
 }
 
@@ -925,6 +1343,7 @@ pub struct TextCommon {
     pub text_align: Option<ftd::js::Value>,
     pub line_clamp: Option<ftd::js::Value>,
     pub style: Option<ftd::js::Value>,
+    pub display: Option<ftd::js::Value>,
 }
 
 impl TextCommon {
@@ -938,6 +1357,7 @@ impl TextCommon {
             text_align: ftd::js::value::get_properties("text-align", properties, arguments),
             line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
             style: ftd::js::value::get_properties("style", properties, arguments),
+            display: ftd::js::value::get_properties("display", properties, arguments),
         }
     }
 
@@ -1007,6 +1427,19 @@ impl TextCommon {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 style.to_set_property(
                     fastn_js::PropertyKind::TextStyle,
+                    doc,
+                    element_name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        if let Some(ref display) = self.display {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                display.to_set_property(
+                    fastn_js::PropertyKind::Display,
                     doc,
                     element_name,
                     component_definition_name,
@@ -2208,6 +2641,11 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#boolean",
         "ftd#desktop",
         "ftd#mobile",
+        "ftd#checkbox",
+        "ftd#text-input",
+        "ftd#iframe",
+        "ftd#code",
+        "ftd#image",
     ]
     .contains(&s)
 }

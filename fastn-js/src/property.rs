@@ -249,6 +249,16 @@ pub enum PropertyKind {
     WhiteSpace,
     TextStyle,
     AlignContent,
+    Display,
+    Checked,
+    Enabled,
+    Placeholder,
+    Multiline,
+    TextInputType,
+    DefaultTextInputValue,
+    Loading,
+    Src,
+    YoutubeSrc,
 }
 
 impl PropertyKind {
@@ -331,6 +341,16 @@ impl PropertyKind {
             PropertyKind::TextStyle => "fastn_dom.PropertyKind.TextStyle",
             PropertyKind::Region => "fastn_dom.PropertyKind.Region",
             PropertyKind::AlignContent => "fastn_dom.PropertyKind.AlignContent",
+            PropertyKind::Display => "fastn_dom.PropertyKind.Display",
+            PropertyKind::Checked => "fastn_dom.PropertyKind.Checked",
+            PropertyKind::Enabled => "fastn_dom.PropertyKind.Enabled",
+            PropertyKind::Placeholder => "fastn_dom.PropertyKind.Placeholder",
+            PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
+            PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
+            PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
+            PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
+            PropertyKind::Src => "fastn_dom.PropertyKind.Src",
+            PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
         }
     }
 }

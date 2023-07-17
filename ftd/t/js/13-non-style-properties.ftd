@@ -22,3 +22,54 @@ open-in-new-tab: true
 margin.px: 20
 
 -- end: ftd.column
+
+;; ---------------------- KERNEL(ftd.checkbox) -------------------------------
+;; checked, enabled
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+
+-- ftd.checkbox:
+checked: true
+
+-- ftd.checkbox:
+checked: false
+enabled: false
+
+-- end: ftd.column
+
+;; -------------------- KERNEL(ftd.text-input) -------------------
+;; placeholder, type, multiline, enabled, default-value
+
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 30
+
+-- ftd.text-input:
+placeholder: Enter some text
+
+-- ftd.text-input:
+placeholder: Multiline input
+multiline: true
+
+-- ftd.text-input:
+type: password
+
+-- ftd.text-input:
+placeholder: This would be disabled
+enabled: false
+
+-- ftd.text-input:
+default-value: This is default text
+
+-- end: ftd.column
+
+;; ---------------------- KERNEL(ftd.iframe) --------------------
+
+-- ftd.iframe:
+src: https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik
+youtube: cWdivkyoOTA
+loading: lazy
+

@@ -118,7 +118,7 @@ impl fastn_core::Package {
         Err(fastn_core::Error::PackageError { message })
     }
 
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn http_download_by_id(
         &self,
         id: &str,

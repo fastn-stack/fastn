@@ -1,39 +1,12 @@
 mod commands;
 pub fn main() {
+    fastn_observer::observe();
+
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
         .unwrap()
-        .block_on(traced_main())
-}
-
-async fn traced_main() {
-    use tracing_subscriber::layer::SubscriberExt;
-    let level = std::env::var("TRACING")
-        .unwrap_or_else(|_| "info".to_string())
-        .parse::<tracing_forest::util::LevelFilter>()
-        .unwrap_or(tracing_forest::util::LevelFilter::INFO);
-
-    // only difference between the two branches of this if condition is the extra forest layer.
-    if fastn_core::utils::is_traced() {
-        tracing_forest::worker_task()
-            .set_global(true)
-            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-                tracing_subscriber::Registry::default()
-                    .with(tracing_forest::ForestLayer::default())
-                    .with(level)
-            })
-            .on(outer_main())
-            .await
-    } else {
-        tracing_forest::worker_task()
-            .set_global(true)
-            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-                tracing_subscriber::Registry::default().with(level)
-            })
-            .on(outer_main())
-            .await
-    }
+        .block_on(outer_main())
 }
 
 async fn outer_main() {

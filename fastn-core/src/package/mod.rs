@@ -106,47 +106,40 @@ impl Package {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub fn get_font_ftd(&self) -> Option<String> {
         use itertools::Itertools;
         if self.fonts.is_empty() {
-            None
-        } else {
-            let (font_record, fonts) = self
-                .fonts
-                .iter()
-                .unique_by(|font| font.name.as_str())
-                .collect_vec()
-                .iter()
-                .fold(
-                    (
-                        String::from("-- record font:"),
-                        String::from("-- font fonts:"),
-                    ),
-                    |(record_accumulator, instance_accumulator), font| {
-                        (
-                            format!(
-                                "{pre}\nstring {font_var_name}:",
-                                pre = record_accumulator,
-                                font_var_name = font.name.as_str(),
-                            ),
-                            format!(
-                                "{pre}\n{font_var_name}: {font_var_val}",
-                                pre = instance_accumulator,
-                                font_var_name = font.name.as_str(),
-                                font_var_val = font.html_name(self.name.as_str())
-                            ),
-                        )
-                    },
-                );
-            Some(format!(
-                indoc::indoc! {"
-                            {font_record}
-                            {fonts}
-                        "},
-                font_record = font_record,
-                fonts = fonts
-            ))
+            return None;
         }
+        let (font_record, fonts) = self
+            .fonts
+            .iter()
+            .unique_by(|font| font.name.as_str())
+            .collect_vec()
+            .iter()
+            .fold(
+                (
+                    String::from("-- record font:"),
+                    String::from("-- font fonts:"),
+                ),
+                |(record_accumulator, instance_accumulator), font| {
+                    (
+                        format!(
+                            "{pre}\nstring {font_var_name}:",
+                            pre = record_accumulator,
+                            font_var_name = font.name.as_str(),
+                        ),
+                        format!(
+                            "{pre}\n{font_var_name}: {font_var_val}",
+                            pre = instance_accumulator,
+                            font_var_name = font.name.as_str(),
+                            font_var_val = font.html_name(self.name.as_str())
+                        ),
+                    )
+                },
+            );
+        Some(format!("{font_record}\n{fonts}"))
     }
 
     pub fn with_base(mut self, base: String) -> fastn_core::Package {
@@ -175,8 +168,7 @@ impl Package {
     pub fn get_font_html(&self) -> String {
         self.fonts.iter().fold(String::new(), |accumulator, font| {
             format!(
-                "{pre}{new}\n",
-                pre = accumulator,
+                "{accumulator}{new}\n",
                 new = font.to_html(self.name.as_str())
             )
         })
@@ -532,6 +524,7 @@ impl Package {
         Ok(())
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn get_and_resolve(
         &self,
         package_root: &camino::Utf8PathBuf,

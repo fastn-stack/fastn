@@ -6,7 +6,7 @@
 </div>
 
 <div align="center">
-    <img src="fastn.svg" width="150" alt="fastn"/>
+    <img src="assets/fastn.svg" width="150" alt="fastn"/>
 </div>
 
 
@@ -49,7 +49,7 @@ yet it does not feel technical.
 
 This is what it produces:
 
-<a href="https://fastn.io/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
+<a href="https://fastn.io/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="assets/img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
 
 
 Learn more about [`ftd` Programming Language](https://fastn.io/ftd/).
@@ -71,7 +71,7 @@ The web has lost some of the exuberance from the
 early 2000s, and it makes me a little sad.
 ```
 
-[![img_1.png](img_1.png)](https://fastn.io/#there-are-a-lot-of-ready-made-ftd-components-available-today)
+[![img_1.png](assets/img_1.png)](https://fastn.io/#there-are-a-lot-of-ready-made-ftd-components-available-today)
 
 ## Or you can create your own components
 
@@ -96,7 +96,7 @@ border-radius.px: 5
 -- toggle-text: `ftd` is cool!
 ```
 
-<a href="https://fastn.io/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
+<a href="https://fastn.io/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="assets/img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
 
 `ftd`'s event handling capabilities can be used for form validation, ajax
 requests etc, to create fully functional frontend applications.
@@ -110,7 +110,7 @@ We ship pre built binaries for Linux, Mac and Windows.
 curl -fsSL https://fastn.io/install.sh | bash
 ```
 
-[![fastn.png](fastn.png)](https://fastn.io/#you-use-fastn-to-work-with-ftd)
+[![fastn.png](assets/fastn.png)](https://fastn.io/#you-use-fastn-to-work-with-ftd)
 
 
 ## Integrated Web Development Experience
@@ -149,7 +149,7 @@ compromise on what you can build with it.
 portfolio websites, project and marketing websites etc. It is cheap, fast, and
 requires little maintenance.
 
-[![github-pages.png](github-pages.png)](https://fastn.io/#fastn-for-static-sites)
+[![github-pages.png](assets/github-pages.png)](https://fastn.io/#fastn-for-static-sites)
 
 ## Data Driven Website
 

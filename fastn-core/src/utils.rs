@@ -31,7 +31,7 @@ macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;
         let msg = format!($($t)*);
-        if fastn_core::utils::is_traced() {
+        if fastn_observer::is_traced() {
             tracing::warn!(msg);
         } else {
             eprintln!("WARN: {}", msg.yellow());
@@ -585,8 +585,8 @@ pub fn replace_markers_2022(
             .as_str(),
         )
         .replace("__ftd_external_children__", "{}")
-        .replace("__hashed_default_css__", hashed_default_css_name().as_str())
-        .replace("__hashed_default_js__", hashed_default_js_name().as_str())
+        .replace("__hashed_default_css__", hashed_default_css_name())
+        .replace("__hashed_default_js__", hashed_default_js_name())
         .replace(
             "__ftd__",
             format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
@@ -649,10 +649,6 @@ pub fn replace_markers_2023(s: &str, js_script: &str, ssr_body: &str, font_style
 
 pub fn is_test() -> bool {
     cfg!(test) || std::env::args().any(|e| e == "--test")
-}
-
-pub fn is_traced() -> bool {
-    std::env::var("TRACING").is_ok() || std::env::args().any(|e| e == "--trace")
 }
 
 pub(crate) async fn write(
@@ -822,22 +818,33 @@ pub fn generate_hash(content: &str) -> String {
     format!("{:X}", hasher.finalize_fixed())
 }
 
-pub fn hashed_default_css_name() -> String {
-    format!("default-{}.css", generate_hash(ftd::css()))
+static CSS_HASH: once_cell::sync::Lazy<String> =
+    once_cell::sync::Lazy::new(|| format!("default-{}.css", generate_hash(ftd::css())));
+
+pub fn hashed_default_css_name() -> &'static str {
+    &CSS_HASH
 }
 
-pub fn hashed_default_js_name() -> String {
+static JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
     format!(
         "default-{}.js",
         generate_hash(format!("{}\n\n{}", ftd::build_js(), fastn_core::fastn_2022_js()).as_str())
     )
+});
+
+pub fn hashed_default_js_name() -> &'static str {
+    &JS_HASH
 }
 
-pub fn hashed_default_ftd_js() -> String {
+static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
     format!(
         "default-{}.js",
         generate_hash(ftd::js::all_js_without_test().as_str())
     )
+});
+
+pub fn hashed_default_ftd_js() -> &'static str {
+    &FTD_JS_HASH
 }
 
 #[cfg(test)]

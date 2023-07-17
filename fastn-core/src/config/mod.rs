@@ -1380,6 +1380,7 @@ impl Config {
             .insert(package.name.to_string(), package.to_owned());
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) fn get_fastn_document(
         &self,
         package_name: &str,
@@ -1416,6 +1417,7 @@ impl Config {
         ))
     }
 
+    #[tracing::instrument(skip(req, self))]
     pub(crate) async fn can_read(
         &self,
         req: &fastn_core::http::Request,
@@ -1464,6 +1466,7 @@ impl Config {
         Ok(true)
     }
 
+    #[tracing::instrument(skip(req, self))]
     pub(crate) async fn can_write(
         &self,
         req: &fastn_core::http::Request,
