@@ -303,11 +303,9 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
             line = &line[1..];
         }
 
-        let output = remove_inline_comments(&line);
+        let line_without_comments = remove_inline_comments(&line);
 
-        if line.contains(';') {
-            line = output.as_str();
-        }
+        line = line_without_comments.as_str();
 
         match state.state {
             ParsingState::WaitingForSection => {
