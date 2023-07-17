@@ -256,6 +256,9 @@ pub enum PropertyKind {
     Multiline,
     TextInputType,
     DefaultTextInputValue,
+    Loading,
+    Src,
+    YoutubeSrc,
 }
 
 impl PropertyKind {
@@ -345,6 +348,9 @@ impl PropertyKind {
             PropertyKind::Multiline => "fastn_dom.PropertyKind.Multiline",
             PropertyKind::TextInputType => "fastn_dom.PropertyKind.TextInputType",
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
+            PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
+            PropertyKind::Src => "fastn_dom.PropertyKind.Src",
+            PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
         }
     }
 }
