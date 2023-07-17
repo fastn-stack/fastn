@@ -5,8 +5,6 @@ pub async fn build(
     ignore_failed: bool,
     test: bool,
 ) -> fastn_core::Result<()> {
-    fastn_core::utils::enable_parse_caching(true);
-
     tokio::fs::create_dir_all(config.build_dir()).await?;
     let documents = get_documents_for_current_package(config).await?;
 
