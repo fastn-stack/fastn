@@ -26,7 +26,7 @@ fn cached_parse(
 }
 
 fn id_to_cache_key(id: &str) -> String {
-    id.replace("/", "_")
+    id.replace('/', "_")
 }
 
 fn get_cached<T>(id: &str) -> Option<T>
@@ -60,16 +60,10 @@ where
         .join("fastn.com/ast-cache/")
         .join(id_to_cache_key(id));
     std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!(
-            "failed to create cache dir: {}",
-            e.to_string()
-        ))
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
     })?;
     std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!(
-            "failed to write cache file: {}",
-            e.to_string()
-        ))
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
     })?;
     Ok(d)
 }
