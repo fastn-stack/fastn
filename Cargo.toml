@@ -55,6 +55,7 @@ strip = true
 # using the latest dependency, and what is the plan to moving to the latest version.
 actix-web = "4"
 antidote = "1"
+dirs = "5"
 native-tls = "0.2"
 deadpool-postgres = { git = "https://github.com/amitu/deadpool", rev = "dbf5a46" }
 postgres-native-tls = "0.5"
