@@ -39,11 +39,14 @@ mod things;
 pub mod utils;
 pub use prelude::*;
 
-pub use tdoc::TDoc;
+pub use tdoc::{BagOrState, TDoc};
 pub use things::expression;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+    #[error("OtherError: {}", _0)]
+    OtherError(String),
+
     #[error("P1Error: {}", _0)]
     P1Error(#[from] ftd::p1::Error),
 

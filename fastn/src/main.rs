@@ -1,39 +1,12 @@
 mod commands;
 pub fn main() {
+    fastn_observer::observe();
+
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
         .unwrap()
-        .block_on(traced_main())
-}
-
-async fn traced_main() {
-    use tracing_subscriber::layer::SubscriberExt;
-    let level = std::env::var("TRACING")
-        .unwrap_or_else(|_| "info".to_string())
-        .parse::<tracing_forest::util::LevelFilter>()
-        .unwrap_or(tracing_forest::util::LevelFilter::INFO);
-
-    // only difference between the two branches of this if condition is the extra forest layer.
-    if fastn_core::utils::is_traced() {
-        tracing_forest::worker_task()
-            .set_global(true)
-            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-                tracing_subscriber::Registry::default()
-                    .with(tracing_forest::ForestLayer::default())
-                    .with(level)
-            })
-            .on(outer_main())
-            .await
-    } else {
-        tracing_forest::worker_task()
-            .set_global(true)
-            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-                tracing_subscriber::Registry::default().with(level)
-            })
-            .on(outer_main())
-            .await
-    }
+        .block_on(outer_main())
 }
 
 async fn outer_main() {
@@ -106,11 +79,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = serve.values_of_("js");
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
-
-        if serve.get_flag("cached-parse") {
-            fastn_core::warning!("using cached parser, files modifications may be ignored");
-            fastn_core::utils::enable_parse_caching(true);
-        }
 
         return fastn_core::listen(
             bind.as_str(),
@@ -450,7 +418,6 @@ mod sub_command {
             Read more about it on https://fastn.io/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
-            .arg(clap::arg!(--"cached-parse" "Use cached parser"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
             .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                 .action(clap::ArgAction::Append))

@@ -88,6 +88,10 @@ fastn_dom.property_map = {
     "min-height": "mnh",
     "max-width": "mxw",
     "min-width": "mnw",
+    "font-weight": "fw",
+    "font-style": "fst",
+    "text-decoration": "td",
+    "align-items": "ali",
 };
 
 // dynamic-class-css.md
@@ -130,6 +134,8 @@ fastn_dom.ElementKind = {
     IFrame: 7,
     // To create parent for dynamic DOM
     Div: 8,
+    CheckBox: 9,
+    TextInput: 10,
 };
 
 fastn_dom.PropertyKind = {
@@ -203,12 +209,88 @@ fastn_dom.PropertyKind = {
     AlignSelf: 67,
     Classes: 68,
     Anchor: 69,
+    Link: 70,
+    Children: 71,
+    OpenInNewTab: 72,
+    TextStyle: 73,
+    Region: 74,
+    AlignContent: 75,
+    Display: 76,
+    Checked: 77,
+    Enabled: 78,
+    TextInputType: 79,
+    Placeholder: 80,
+    Multiline: 81,
+    DefaultTextInputValue: 82,
+    Loading: 83,
+    Src: 84,
+    YoutubeSrc: 85,
+}
+
+fastn_dom.Loading = {
+    Lazy: "lazy",
+    Eager: "eager",
+}
+
+fastn_dom.TextInputType = {
+    Text: "text",
+    Email: "email",
+    Password: "password",
+    Url: "url",
+    DateTime: "datetime",
+    Date: "date",
+    Time: "time",
+    Month: "month",
+    Week: "week",
+    Color: "color",
+    File: "file",
+}
+
+fastn_dom.AlignContent = {
+    TopLeft: "top-left",
+    TopCenter: "top-center",
+    TopRight: "top-right",
+    Right: "right",
+    Left: "left",
+    Center: "center",
+    BottomLeft: "bottom-left",
+    BottomRight: "bottom-right",
+    BottomCenter: "bottom-center",
+}
+
+fastn_dom.Region = {
+    H1: "h1",
+    H2: "h2",
+    H3: "h3",
+    H4: "h4",
+    H5: "h5",
+    H6: "h6",
 }
 
 fastn_dom.Anchor = {
     Window: "fixed",
     Parent: "absolute",
     Id: "absolute",
+}
+
+fastn_dom.DeviceData = {
+    Desktop: "desktop",
+    Mobile: "mobile",
+}
+
+fastn_dom.TextStyle = {
+    Underline: "underline",
+    Italic: "italic",
+    Strike: "line-through",
+    Heavy: "900",
+    Extrabold: "800",
+    Bold: "700",
+    SemiBold: "600",
+    Medium: "500",
+    Regular: "400",
+    Light: "300",
+    ExtraLight: "200",
+    Hairline: "100",
 }
 
 fastn_dom.Resizing = {
@@ -420,11 +502,16 @@ fastn_dom.Event = {
     Click: 0
 }
 
+// Node2 -> Intermediate node
+// Node -> similar to HTML DOM node (Node2.#node)
 class Node2 {
     #node;
+    #kind;
     #parent;
     #mutables;
     constructor(parent, kind) {
+        this.#kind = kind;
+
         let [node, classes] = fastn_utils.htmlNode(kind);
         this.#node = fastn_virtual.document.createElement(node);
         for (let c in classes) {
@@ -444,6 +531,17 @@ class Node2 {
     parent() {
         return this.#parent;
     }
+    // for attaching inline attributes
+    attachAttribute(property, value) {
+        this.#node.setAttribute(property, value);
+    }
+
+    updateTagName(name) {
+        if (ssr) {
+            this.#node.updateTagName(name);
+        }
+    }
+
     // dynamic-class-css
     attachCss(property, value, createClass, className) {
         const propertyShort = fastn_dom.property_map[property] || property;
@@ -541,11 +639,75 @@ class Node2 {
             this.attachCss("role", fastn_utils.getRoleValues(mobileValue), true, `body.mobile .${desktopClass}`);
         }
     }
+    attachTextStyles(styles) {
+        for (var s of styles) {
+            switch (s) {
+              case 'italic':
+                this.attachCss("font-style", s);
+                break;
+              case 'underline':
+              case 'line-through':
+                this.attachCss("text-decoration", s);
+                break;
+              default:
+                this.attachCss("font-weight", s);
+            }
+        }
+    }
 
-    setStaticProperty(kind, value) {
+    attachAlignContent(value, node_kind) {
+        if (node_kind === fastn_dom.ElementKind.Row) {
+            switch (value) {
+                case 'top-left':
+                case 'left':
+                case 'bottom-left':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'top-center':
+                case 'center':
+                case 'bottom-center':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'top-right':
+                case 'right':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
+            }
+        }
+
+        if (node_kind === fastn_dom.ElementKind.Column) {
+            switch (value) {
+                case 'top-left':
+                case 'top-center':
+                case 'top-right':
+                    this.attachCss("align-items", "start");
+                    break;
+                case 'left':
+                case 'center':
+                case 'right':
+                    this.attachCss("align-items", "center");
+                    break;
+                case 'bottom-left':
+                case 'bottom-center':
+                case 'bottom-right':
+                    this.attachCss("align-items", "end");
+                    break;
+            }
+        }
+    }
+
+    setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
-        if (kind === fastn_dom.PropertyKind.Id) {
+        if (kind === fastn_dom.PropertyKind.Children) {
+            if (Array.isArray(staticValue)) {
+                staticValue.forEach(func =>
+                    fastn_utils.getStaticValue(func.item)(this, inherited));
+            } else {
+                staticValue(this, inherited);
+            }
+        } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
         } else if (kind === fastn_dom.PropertyKind.Width) {
             this.attachCss("width", staticValue);
@@ -623,7 +785,7 @@ class Node2 {
             this.attachCss("z-index", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Classes) {
             // todo: this needs to be fixed
-            this.#node.classList.add(staticValue);
+            this.#node.classList.add(staticValue.map(obj => fastn_utils.getStaticValue(obj.item)));
             // this.attachCss("classes", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Anchor) {
             // todo: this needs fixed for anchor.id = v
@@ -729,6 +891,72 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             this.attachColorCss("background-color", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Display) {
+            this.attachCss("display", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Checked) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.attachAttribute("checked", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.Enabled) {
+            switch (staticValue) {
+                case "false":
+                case false:
+                    this.attachAttribute("disabled", null);
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextInputType) {
+            this.attachAttribute("type", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.DefaultTextInputValue) {
+            this.attachAttribute("value", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Placeholder) {
+            this.attachAttribute("placeholder", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Multiline) {
+            switch (staticValue) {
+                case "true":
+                case true:
+                    this.updateTagName("textarea");
+                    break;
+                case "false":
+                case false:
+                    this.updateTagName("input");
+                    break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.Link) {
+            // Changing node type to `a` for link
+            // todo: needs fix for image links
+            this.updateTagName("a");
+            this.attachAttribute("href", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.OpenInNewTab) {
+            // open_in_new_tab is boolean type
+            switch (staticValue) {
+              case 'true':
+              case true:
+                this.attachAttribute("target", "_blank");
+                break;
+            }
+        } else if (kind === fastn_dom.PropertyKind.TextStyle) {
+            let styles = staticValue.map(obj => fastn_utils.getStaticValue(obj.item));
+            this.attachTextStyles(styles);
+        } else if (kind === fastn_dom.PropertyKind.Region) {
+            this.updateTagName(staticValue);
+            if (this.#node.innerHTML) {
+                // todo: need to slugify this id
+                this.#node.id = this.#node.innerHTML;
+            }
+        } else if (kind === fastn_dom.PropertyKind.AlignContent) {
+            let node_kind = this.#kind;
+            this.attachAlignContent(staticValue, node_kind);
+        } else if (kind === fastn_dom.PropertyKind.Loading) {
+            this.attachAttribute("loading", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Src) {
+            this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
+            const id_pattern = "^([a-zA-Z0-9_-]{11})$";
+            let id = staticValue.match(id_pattern);
+            this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
@@ -739,15 +967,15 @@ class Node2 {
             throw ("invalid fastn_dom.PropertyKind: " + kind);
         }
     }
-    setProperty(kind, value) {
+    setProperty(kind, value, inherited) {
         if (value instanceof fastn.mutableClass) {
             this.setDynamicProperty(kind, [value], () => { return value.get(); });
         } else {
-            this.setStaticProperty(kind, value);
+            this.setStaticProperty(kind, value, inherited);
         }
     }
-    setDynamicProperty(kind, deps, func) {
-        let closure = fastn.closure(func).addNodeProperty(this, kind);
+    setDynamicProperty(kind, deps, func, inherited) {
+        let closure = fastn.closure(func).addNodeProperty(this, kind, inherited);
         for (let dep in deps) {
             if (!deps[dep].addClosure) {
                 continue;

@@ -1,0 +1,145 @@
+<html>
+<head>
+    <script src="fastn-js.js"></script>
+
+    <style>
+        /* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column w-1 ali-2"><a data-id="3" href=https://www.fastn.com class="m-3">This is a link</a></div><div data-id="4" class="ft_column w-1 ali-2"><a data-id="5" href=https://www.fastn.com target=_blank class="m-3">This is a link (will open in new tab)</a></div><div data-id="6" class="ft_column w-1 mt-4 mb-5"><input type="checkbox" data-id="7" checked></input type="checkbox"><input type="checkbox" data-id="8" disabled></input type="checkbox"></div><div data-id="9" class="ft_column w-1 mt-4 mb-5"><input data-id="10" placeholder=Enter some text></input><textarea data-id="11" placeholder=Multiline input></textarea><input data-id="12" type=password></input><input data-id="13" placeholder=This would be disabled disabled></input><input data-id="14" value=This is default text></input></div><iframe data-id="15" loading=lazy src=https://youtube.com/embed/cWdivkyoOTA></iframe></body><style id="styles">
+    .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
+	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
+	.w-1 { width: 100%; }
+	.ali-2 { align-items: center; }
+	.m-3 { margin: 20px; }
+	.mt-4 { margin-top: 30px; }
+	.mb-5 { margin-bottom: 30px; }
+    </style>
+<script>
+    (function() {
+        let global = {
+};
+let main = function (parent) {
+  let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+  parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+  }
+  ]), inherited);
+  let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti1.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.AlignContent, fastn_dom.AlignContent.Center, inherited);
+  parenti1.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "This is a link (will open in new tab)", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.fastn.com", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.OpenInNewTab, true, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Margin, fastn_dom.Length.Px(20), inherited);
+  }
+  ]), inherited);
+  let parenti2 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti2.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti2.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
+  parenti2.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
+    rooti0.setProperty(fastn_dom.PropertyKind.Checked, true, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.CheckBox);
+    rooti0.setProperty(fastn_dom.PropertyKind.Checked, false, inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
+  }
+  ]), inherited);
+  let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+  parenti3.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+  parenti3.setProperty(fastn_dom.PropertyKind.MarginVertical, fastn_dom.Length.Px(30), inherited);
+  parenti3.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Enter some text", inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "Multiline input", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Multiline, true, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+    rooti0.setProperty(fastn_dom.PropertyKind.TextInputType, fastn_dom.TextInputType.Password, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+    rooti0.setProperty(fastn_dom.PropertyKind.Placeholder, "This would be disabled", inherited);
+    rooti0.setProperty(fastn_dom.PropertyKind.Enabled, false, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.TextInput);
+    rooti0.setProperty(fastn_dom.PropertyKind.DefaultTextInputValue, "This is default text", inherited);
+  }
+  ]), inherited);
+  let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.IFrame);
+  parenti4.setProperty(fastn_dom.PropertyKind.Loading, fastn_dom.Loading.Lazy, inherited);
+  parenti4.setProperty(fastn_dom.PropertyKind.Src, "https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik", inherited);
+  parenti4.setProperty(fastn_dom.PropertyKind.YoutubeSrc, "cWdivkyoOTA", inherited);
+}
+let inherited = fastn.recordInstance({
+  colors: ftd.default_colors,
+  types: ftd.default_types
+});
+
+        fastn_virtual.hydrate(main);
+        ftd.post_init();
+    })();
+</script>
+</html>

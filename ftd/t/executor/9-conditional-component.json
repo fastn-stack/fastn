@@ -5,29 +5,36 @@
     "inherited": "inherited"
   },
   "bag": {
-    "foo#flag": {
-      "Variable": {
-        "name": "foo#flag",
-        "kind": {
-          "kind": "Boolean",
+    "foo#toggle": {
+      "Function": {
+        "name": "foo#toggle",
+        "return_kind": {
+          "kind": "Void",
           "caption": false,
           "body": false
         },
-        "mutable": true,
-        "value": {
-          "Value": {
-            "value": {
-              "Boolean": {
-                "value": true
-              }
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Boolean",
+              "caption": false,
+              "body": false
             },
-            "is_mutable": true,
-            "line_number": 1
+            "mutable": true,
+            "value": null,
+            "line_number": 23,
+            "access_modifier": "Public"
           }
-        },
-        "conditional_value": [],
-        "line_number": 1,
-        "is_static": false
+        ],
+        "expression": [
+          {
+            "expression": "a = !a;",
+            "line_number": 29
+          }
+        ],
+        "js": null,
+        "line_number": 22
       }
     },
     "foo#foo": {
@@ -193,6 +200,31 @@
         "line_number": 5
       }
     },
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": true,
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1,
+        "is_static": false
+      }
+    },
     "foo#increment": {
       "Function": {
         "name": "foo#increment",
@@ -248,38 +280,6 @@
         "conditional_value": [],
         "line_number": 3,
         "is_static": false
-      }
-    },
-    "foo#toggle": {
-      "Function": {
-        "name": "foo#toggle",
-        "return_kind": {
-          "kind": "Void",
-          "caption": false,
-          "body": false
-        },
-        "arguments": [
-          {
-            "name": "a",
-            "kind": {
-              "kind": "Boolean",
-              "caption": false,
-              "body": false
-            },
-            "mutable": true,
-            "value": null,
-            "line_number": 23,
-            "access_modifier": "Public"
-          }
-        ],
-        "expression": [
-          {
-            "expression": "a = !a;",
-            "line_number": 29
-          }
-        ],
-        "js": null,
-        "line_number": 22
       }
     }
   },

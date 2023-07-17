@@ -58,8 +58,10 @@
               "name": "ftd#device",
               "kind": {
                 "kind": {
-                  "Record": {
-                    "name": "ftd#device-data"
+                  "OrType": {
+                    "name": "ftd#device-data",
+                    "variant": null,
+                    "full_variant": null
                   }
                 },
                 "caption": false,
@@ -169,8 +171,10 @@
               "name": "ftd#device",
               "kind": {
                 "kind": {
-                  "Record": {
-                    "name": "ftd#device-data"
+                  "OrType": {
+                    "name": "ftd#device-data",
+                    "variant": null,
+                    "full_variant": null
                   }
                 },
                 "caption": false,

@@ -118,7 +118,7 @@ impl fastn_core::Package {
         Err(fastn_core::Error::PackageError { message })
     }
 
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn http_download_by_id(
         &self,
         id: &str,
@@ -345,6 +345,9 @@ pub(crate) async fn read_ftd(
         fastn_core::FTDEdition::FTD2022 => {
             read_ftd_2022(config, main, base_url, download_assets, test).await
         }
+        fastn_core::FTDEdition::FTD2023 => {
+            read_ftd_2023(config, main, base_url, download_assets).await
+        }
     }
 }
 
@@ -416,6 +419,79 @@ pub(crate) async fn read_ftd_2022(
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
+    );
+
+    Ok(file_content.into())
+}
+
+#[allow(clippy::await_holding_refcell_ref)]
+#[tracing::instrument(name = "read_ftd_2023", skip_all)]
+pub(crate) async fn read_ftd_2023(
+    config: &mut fastn_core::Config,
+    main: &fastn_core::Document,
+    base_url: &str,
+    download_assets: bool,
+) -> fastn_core::Result<Vec<u8>> {
+    let lib_config = config.clone();
+    let mut all_packages = config.all_packages.borrow_mut();
+    let current_package = all_packages
+        .get(main.package_name.as_str())
+        .unwrap_or(&config.package);
+
+    let mut lib = fastn_core::Library2022 {
+        config: lib_config,
+        markdown: None,
+        document_id: main.id.clone(),
+        translated_data: Default::default(),
+        base_url: base_url.to_string(),
+        module_package_map: Default::default(),
+    };
+
+    // Get Prefix Body => [AutoImports + Actual Doc content]
+    let mut doc_content =
+        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
+    // Fix aliased imports to full path (if any)
+    doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+
+    let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
+    let main_ftd_doc = match fastn_core::doc::interpret_helper(
+        main.id_with_package().as_str(),
+        doc_content.as_str(),
+        &mut lib,
+        base_url,
+        download_assets,
+        line_number,
+    )
+    .await
+    {
+        Ok(v) => v,
+        Err(e) => {
+            tracing::error!(msg = "failed to parse", doc = main.id.as_str());
+            return Err(fastn_core::Error::PackageError {
+                message: format!("failed to parse {:?}", &e),
+            });
+        }
+    };
+
+    let js_ast = ftd::js::document_into_js_ast(main_ftd_doc);
+    let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
+    let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
+    let ssr_body =
+        fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
+
+    all_packages.extend(lib.config.all_packages.into_inner());
+    drop(all_packages);
+
+    config
+        .downloaded_assets
+        .extend(lib.config.downloaded_assets);
+
+    let font_style = config.get_font_style();
+    let file_content = fastn_core::utils::replace_markers_2023(
+        ftd::ftd_js_html(),
+        js_document_script.as_str(),
+        ssr_body.as_str(),
+        font_style.as_str(),
     );
 
     Ok(file_content.into())

@@ -21,7 +21,7 @@ pub mod executor;
 pub mod ftd2021;
 pub mod html;
 pub mod interpreter;
-mod js;
+pub mod js;
 pub mod node;
 pub mod p1;
 #[cfg(feature = "native-rendering")]
@@ -40,6 +40,10 @@ pub fn css() -> &'static str {
     // }
 
     include_str!("../ftd.css")
+}
+
+pub fn ftd_js_html() -> &'static str {
+    include_str!("../ftd-js.html")
 }
 
 pub fn terminal() -> &'static str {

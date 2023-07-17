@@ -5,6 +5,31 @@
     "inherited": "inherited"
   },
   "bag": {
+    "foo#print:name:1": {
+      "Variable": {
+        "name": "foo#print:name:1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello Again"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 19
+          }
+        },
+        "conditional_value": [],
+        "line_number": 18,
+        "is_static": true
+      }
+    },
     "foo#name": {
       "Variable": {
         "name": "foo#name",
@@ -141,31 +166,6 @@
         },
         "css": null,
         "line_number": 3
-      }
-    },
-    "foo#print:name:1": {
-      "Variable": {
-        "name": "foo#print:name:1",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Hello Again"
-              }
-            },
-            "is_mutable": false,
-            "line_number": 19
-          }
-        },
-        "conditional_value": [],
-        "line_number": 18,
-        "is_static": true
       }
     }
   },

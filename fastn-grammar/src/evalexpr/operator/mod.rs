@@ -3,7 +3,6 @@ use fastn_grammar::evalexpr::function::builtin::builtin_function;
 use fastn_grammar::evalexpr::{
     context::Context, error::*, value::Value, ContextWithMutableVariables,
 };
-use std::borrow::Borrow;
 
 mod display;
 
@@ -221,7 +220,7 @@ impl Operator {
                 } else {
                     Err(EvalexprError::wrong_type_combination(
                         self.clone(),
-                        vec![arguments[0].borrow().into(), arguments[1].borrow().into()],
+                        vec![(&arguments[0]).into(), (&arguments[1]).into()],
                     ))
                 }
             }
