@@ -1,9 +1,6 @@
 #![allow(unknown_lints)]
 #![allow(renamed_and_removed_lints)]
 #![allow(too_many_arguments)]
-
-use ftd::js::Value;
-
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
@@ -579,7 +576,7 @@ impl Code {
             "lang",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
-            Value::from_str("txt"),
+            ftd::js::Value::from_str("txt"),
         )
         .get_string_data()
         .unwrap();
@@ -588,7 +585,7 @@ impl Code {
             "theme",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
-            Value::from_str(ftd::js::CODE_DEFAULT_THEME),
+            ftd::js::Value::from_str(ftd::js::CODE_DEFAULT_THEME),
         )
         .get_string_data()
         .unwrap();
@@ -619,7 +616,7 @@ impl Code {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            code: Value::from_str(stylized_code.as_str()),
+            code: ftd::js::Value::from_str(stylized_code.as_str()),
         }
     }
 
