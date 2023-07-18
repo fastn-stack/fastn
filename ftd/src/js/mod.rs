@@ -10,6 +10,8 @@ mod value;
 pub use element::{Common, Element};
 pub use value::Value;
 
+pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
+
 pub fn all_js_without_test() -> String {
     let all_js = fastn_js::all_js_without_test();
     let default_bag_js = fastn_js::to_js(default_bag_into_js_ast().as_slice(), false);
@@ -42,6 +44,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
 }
 
 /// This contains asts of things (other than `ftd`) and instructions/tree
+
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
@@ -313,7 +316,7 @@ impl ftd::interpreter::Component {
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
-            ftd::js::Element::from_interpreter_component(self).to_component_statements(
+            ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
                 parent,
                 index,
                 doc,

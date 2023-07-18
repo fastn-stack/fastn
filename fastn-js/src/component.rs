@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Component {
     pub name: String,
     pub params: Vec<String>,

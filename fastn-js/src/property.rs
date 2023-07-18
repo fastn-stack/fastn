@@ -259,6 +259,7 @@ pub enum PropertyKind {
     Loading,
     Src,
     YoutubeSrc,
+    Code,
 }
 
 impl PropertyKind {
@@ -351,6 +352,7 @@ impl PropertyKind {
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
+            PropertyKind::Code => "fastn_dom.PropertyKind.Code",
         }
     }
 }

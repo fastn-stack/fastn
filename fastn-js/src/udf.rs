@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct UDF {
     pub name: String,
     pub params: Vec<String>,

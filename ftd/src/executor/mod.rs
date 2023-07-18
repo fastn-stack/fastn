@@ -2,7 +2,7 @@
 #[macro_use]
 mod test;
 
-mod code;
+pub mod code;
 mod dummy;
 mod element;
 mod main;
@@ -11,7 +11,7 @@ mod rive;
 mod styles;
 mod tdoc;
 pub(crate) mod utils;
-mod value;
+pub mod value;
 mod youtube_id;
 
 pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd::ast::VariableValue>);

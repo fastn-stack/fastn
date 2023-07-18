@@ -14,10 +14,14 @@ pub enum Element {
     CheckBox(CheckBox),
     TextInput(TextInput),
     Iframe(Iframe),
+    Code(Code),
 }
 
 impl Element {
-    pub fn from_interpreter_component(component: &ftd::interpreter::Component) -> Element {
+    pub fn from_interpreter_component(
+        component: &ftd::interpreter::Component,
+        doc: &ftd::interpreter::TDoc,
+    ) -> Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
             "ftd#integer" => Element::Integer(Integer::from(component)),
@@ -28,6 +32,7 @@ impl Element {
             "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
             "ftd#text-input" => Element::TextInput(TextInput::from(component)),
             "ftd#iframe" => Element::Iframe(Iframe::from(component)),
+            "ftd#code" => Element::Code(Code::from(component, doc)),
             "ftd#desktop" | "ftd#mobile" => {
                 Element::Device(Device::from(component, component.name.as_str()))
             }
@@ -138,6 +143,16 @@ impl Element {
                 should_return,
             ),
             Element::Iframe(i) => i.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
+            Element::Code(c) => c.to_component_statements(
                 parent,
                 index,
                 doc,
@@ -523,6 +538,130 @@ impl Iframe {
                 ),
             ));
         }
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Code {
+    pub common: Common,
+    pub text_common: TextCommon,
+    pub code: ftd::js::Value,
+}
+
+impl Code {
+    pub fn from(component: &ftd::interpreter::Component, doc: &ftd::interpreter::TDoc) -> Code {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#code")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        let raw_code = ftd::js::value::get_properties(
+            "text",
+            component.properties.as_slice(),
+            component_definition.arguments.as_slice(),
+        )
+        .unwrap()
+        .get_string_data()
+        .unwrap();
+
+        let lang = ftd::js::value::get_properties_with_default(
+            "lang",
+            component.properties.as_slice(),
+            component_definition.arguments.as_slice(),
+            ftd::js::Value::from_str_value("txt"),
+        )
+        .get_string_data()
+        .unwrap();
+
+        let theme = ftd::js::value::get_properties_with_default(
+            "theme",
+            component.properties.as_slice(),
+            component_definition.arguments.as_slice(),
+            ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
+        )
+        .get_string_data()
+        .unwrap();
+
+        let stylized_code = ftd::executor::code::code(
+            raw_code
+                .replace("\n\\-- ", "\n-- ")
+                .replace("\\$", "$")
+                .as_str(),
+            lang.as_str(),
+            theme.as_str(),
+            doc.name,
+        )
+        .ok()
+        .unwrap()
+        .replace('\"', "\\\"");
+
+        Code {
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+            text_common: TextCommon::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            code: ftd::js::Value::from_str_value(stylized_code.as_str()),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+
+        let code = self.code.to_set_property(
+            fastn_js::PropertyKind::Code,
+            doc,
+            kernel.name.as_str(),
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+            device,
+        );
+
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(code));
+
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        component_statements.extend(self.text_common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
 
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
