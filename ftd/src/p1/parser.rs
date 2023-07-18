@@ -873,7 +873,11 @@ fn clean_line(line: &str) -> String {
         return line[1..].to_string();
     }
 
-    remove_inline_comments(line)
+    if line.contains(";;") {
+        return remove_inline_comments(line);
+    }
+
+    line.to_string()
 }
 
 fn remove_inline_comments(line: &str) -> String {
@@ -926,7 +930,7 @@ fn remove_inline_comments(line: &str) -> String {
         output.push(c);
     }
 
-    return output.trim().to_string();
+    output.to_string()
 }
 
 fn valid_line(line: &str) -> bool {
