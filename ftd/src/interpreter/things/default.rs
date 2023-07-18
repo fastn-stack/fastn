@@ -546,7 +546,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "a += 1".to_string(),
+                        expression: "a = a + 1".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -591,7 +591,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "a += v".to_string(),
+                        expression: "a = a + v".to_string(),
                         line_number: 0,
                     }
                 ],

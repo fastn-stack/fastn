@@ -14,17 +14,6 @@ impl ValueOf for clap::ArgMatches {
     }
 }
 
-static CACHE_ENABLED: once_cell::sync::Lazy<antidote::RwLock<bool>> =
-    once_cell::sync::Lazy::new(|| antidote::RwLock::new(false));
-
-pub(crate) fn parse_caching_enabled() -> bool {
-    *CACHE_ENABLED.read()
-}
-
-pub fn enable_parse_caching(enabled: bool) {
-    *CACHE_ENABLED.write() = enabled
-}
-
 // https://stackoverflow.com/questions/71985357/whats-the-best-way-to-write-a-custom-format-macro
 #[macro_export]
 macro_rules! warning {
@@ -836,11 +825,15 @@ pub fn hashed_default_js_name() -> &'static str {
     &JS_HASH
 }
 
-pub fn hashed_default_ftd_js() -> String {
+static FTD_JS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
     format!(
         "default-{}.js",
-        generate_hash(fastn_js::all_js_without_test().as_str())
+        generate_hash(ftd::js::all_js_without_test().as_str())
     )
+});
+
+pub fn hashed_default_ftd_js() -> &'static str {
+    &FTD_JS_HASH
 }
 
 #[cfg(test)]

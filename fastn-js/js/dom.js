@@ -274,6 +274,11 @@ fastn_dom.Anchor = {
     Id: "absolute",
 }
 
+fastn_dom.DeviceData = {
+    Desktop: "desktop",
+    Mobile: "mobile",
+}
+
 fastn_dom.TextStyle = {
     Underline: "underline",
     Italic: "italic",

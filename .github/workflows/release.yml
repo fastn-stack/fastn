@@ -151,6 +151,10 @@ jobs:
           mv ~/download/linux_musl/fastn.d ~/download/linux_musl/fastn_linux_musl_x86_64.d
           mv ~/download/fastn_controller_linux_musl/fastn ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64
           mv ~/download/fastn_controller_linux_musl/fastn.d ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d
+      - name: Update .github/RELEASE_TEMPLATE.md
+        run: |
+            sed -i "s/GITHUB_SHA/${GITHUB_SHA}/g" .github/RELEASE_TEMPLATE.md
+            sed -i "s/DATE/$(date)/g" .github/RELEASE_TEMPLATE.md
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64.d,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d"
@@ -158,4 +162,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
           prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
-          body: "Checkout fastn installation step: https://fastn.io/install/"
+          bodyFile: .github/RELEASE_TEMPLATE.md

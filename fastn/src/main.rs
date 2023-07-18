@@ -80,11 +80,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
 
-        if serve.get_flag("cached-parse") {
-            fastn_core::warning!("using cached parser, files modifications may be ignored");
-            fastn_core::utils::enable_parse_caching(true);
-        }
-
         return fastn_core::listen(
             bind.as_str(),
             port,
@@ -423,7 +418,6 @@ mod sub_command {
             Read more about it on https://fastn.io/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
-            .arg(clap::arg!(--"cached-parse" "Use cached parser"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
             .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                 .action(clap::ArgAction::Append))
