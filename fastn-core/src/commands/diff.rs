@@ -69,7 +69,7 @@ async fn get_track_diff(
 
             let then_path = fastn_core::utils::history_path(
                 &track.filename,
-                &doc.get_base_path(),
+                doc.get_base_path(),
                 track.other_timestamp.as_ref().unwrap(),
             );
 

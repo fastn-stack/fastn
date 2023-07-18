@@ -97,14 +97,11 @@ macro_rules! p {
                 }
             }
         }
-        bag = bag
-            .into_iter()
-            .filter(|(k, _)| {
+        bag.retain(|k, _| {
                 !["SIBLING-INDEX", "CHILDREN-COUNT"]
                     .iter()
                     .any(|v| k.contains(v))
-            })
-            .collect();
+            });
         if !ebag.is_empty() {
             pretty_assertions::assert_eq!(bag, ebag);
         }
@@ -250,7 +247,7 @@ mod interpreter {
         let var_name = root_parts[1];
 
         let integer_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
+            name: var_name.to_string(),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Integer { value: val },
             },
@@ -279,7 +276,7 @@ mod interpreter {
         let value = ftd::Value::default_optional_value_from_kind(kind);
 
         let optional_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
+            name: var_name.to_string(),
             value: ftd::PropertyValue::Value { value },
             conditions: vec![],
             flags: Default::default(),
@@ -310,7 +307,7 @@ mod interpreter {
         };
 
         let optional_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
+            name: var_name.to_string(),
             value: ftd::PropertyValue::Value { value },
             conditions: vec![],
             flags: Default::default(),
@@ -334,7 +331,7 @@ mod interpreter {
         let var_name = root_parts[1];
 
         let decimal_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
+            name: var_name.to_string(),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Decimal { value },
             },
@@ -361,7 +358,7 @@ mod interpreter {
         let var_name = root_parts[1];
 
         let string_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
+            name: var_name.to_string(),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::String {
                     text: val.to_string(),

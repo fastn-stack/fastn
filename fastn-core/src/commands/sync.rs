@@ -113,15 +113,15 @@ async fn get_changed_files(
         }
         if let Some(timestamp) = snapshots.get(document.get_id()) {
             let snapshot_file_path = fastn_core::utils::history_path(
-                &document.get_id(),
-                &document.get_base_path(),
+                document.get_id(),
+                document.get_base_path(),
                 timestamp,
             );
             let snapshot_file_content = tokio::fs::read(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
             if sha2::Sha256::digest(&snapshot_file_content)
-                .eq(&sha2::Sha256::digest(&current_file_content))
+                .eq(&sha2::Sha256::digest(current_file_content))
             {
                 continue;
             }
@@ -188,7 +188,7 @@ async fn write(
     }
 
     let new_file_path =
-        fastn_core::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
+        fastn_core::utils::history_path(doc.get_id(), doc.get_base_path(), &timestamp);
 
     tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
 

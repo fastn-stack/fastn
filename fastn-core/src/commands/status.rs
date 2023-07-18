@@ -142,7 +142,7 @@ fn get_track_status(
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TrackStatus>> {
-    let path = fastn_core::utils::track_path(&doc.get_id(), &doc.get_base_path());
+    let path = fastn_core::utils::track_path(doc.get_id(), doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(track_list);
