@@ -1,5 +1,8 @@
 pub fn ssr_str(js: &str) -> String {
     let all_js = fastn_js::all_js_with_test();
+    println!("START js ----------------");
+    dbg!(js);
+    println!("END js ----------------");
     let js = format!("{all_js}{js}");
 
     #[cfg(target_os = "windows")]

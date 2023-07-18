@@ -225,6 +225,7 @@ fastn_dom.PropertyKind = {
     Loading: 83,
     Src: 84,
     YoutubeSrc: 85,
+    Code: 86,
 }
 
 fastn_dom.Loading = {
@@ -954,10 +955,13 @@ class Node2 {
             this.attachAttribute("src", `https:\/\/youtube.com/embed/${id[0]}`);
         } else if (kind === fastn_dom.PropertyKind.Role) {
             this.attachRoleCss(staticValue);
+        } else if (kind === fastn_dom.PropertyKind.Code) {
+            console.log(staticValue);
+            this.#node.innerHTML = staticValue;
         } else if (kind === fastn_dom.PropertyKind.IntegerValue ||
             kind === fastn_dom.PropertyKind.StringValue
         ) {
-            console.log(staticValue);
+            // console.log(staticValue);
             this.#node.innerHTML = staticValue;
         } else {
             throw ("invalid fastn_dom.PropertyKind: " + kind);

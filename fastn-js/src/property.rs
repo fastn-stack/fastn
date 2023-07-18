@@ -129,7 +129,10 @@ impl Value {
     pub(crate) fn to_js(&self) -> String {
         use itertools::Itertools;
         match self {
-            Value::String(s) => format!("\"{}\"", s.replace('\n', "\\n")),
+            Value::String(s) => {
+                dbg!(&s);
+                dbg!(format!("\"{}\"", s.replace('\n', "\\n")))
+            }
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),
             Value::Boolean(b) => b.to_string(),
@@ -259,6 +262,7 @@ pub enum PropertyKind {
     Loading,
     Src,
     YoutubeSrc,
+    Code,
 }
 
 impl PropertyKind {
@@ -351,6 +355,7 @@ impl PropertyKind {
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
+            PropertyKind::Code => "fastn_dom.PropertyKind.Code",
         }
     }
 }

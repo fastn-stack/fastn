@@ -1,6 +1,7 @@
 #![allow(unknown_lints)]
 #![allow(renamed_and_removed_lints)]
 #![allow(too_many_arguments)]
+
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
@@ -590,9 +591,9 @@ impl Code {
         .get_string_data()
         .unwrap();
 
-        dbg!(&raw_code, &lang, &theme);
+        // dbg!(&raw_code, &lang, &theme);
 
-        let stylized_code = ftd::executor::code::code(
+        let _stylized_code = ftd::executor::code::code(
             raw_code
                 .replace("\n\\-- ", "\n-- ")
                 .replace("\\$", "$")
@@ -603,6 +604,11 @@ impl Code {
         )
         .ok()
         .unwrap();
+
+        dbg!(&_stylized_code);
+
+        let stylized_code = "<pre style=\"padding: 0.7720588235em 1.1764705882em; \"><span \
+        style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.text</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#2fb170;\">Hello World\n</span></pre>".to_string();
 
         dbg!(&stylized_code);
 
@@ -632,11 +638,12 @@ impl Code {
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Div, parent, index);
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
+        dbg!(&self.code);
         let code = self.code.to_set_property(
-            fastn_js::PropertyKind::StringValue,
+            fastn_js::PropertyKind::Code,
             doc,
             kernel.name.as_str(),
             component_definition_name,
@@ -644,8 +651,6 @@ impl Code {
             inherited_variable_name,
             device,
         );
-
-        dbg!(&code);
 
         component_statements.push(fastn_js::ComponentStatement::SetProperty(code));
 
