@@ -487,7 +487,7 @@ impl Config {
         // TODO: Unwrap?
         let mut documents =
             fastn_core::paths_to_files(package.name.as_str(), all_files, &path).await?;
-        documents.sort_by_key(|v| v.get_id());
+        documents.sort_by_key(|v| v.get_id().to_string()); // TODO: why is to_string() needed?
 
         Ok(documents)
     }
@@ -797,7 +797,7 @@ impl Config {
                 };
                 file.set_id(format!("{}{}", url, extension).as_str());
             }
-            self.current_document = Some(file.get_id());
+            self.current_document = Some(file.get_id().to_string());
             Ok(file)
         }
     }

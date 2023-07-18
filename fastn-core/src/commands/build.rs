@@ -1,19 +1,20 @@
 pub async fn build(
     config: &mut fastn_core::Config,
-    file: Option<&str>,
+    only_id: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
 ) -> fastn_core::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
     let documents = get_documents_for_current_package(config).await?;
-    dbg!(documents.keys().collect::<Vec<_>>());
-
-    // No need to build static files when file is passed during fastn_core build (no-static behaviour)
-    let no_static: bool = file.is_some();
 
     // Default css and js
     default_build_files(config.root.join(".build"), &config.ftd_edition).await?;
+
+    if let Some(id) = only_id {
+        handle_only_id(id, config, base_url, ignore_failed, test, documents).await?;
+        return Ok(());
+    }
 
     // All redirect html files under .build
     if let Some(ref r) = config.package.redirects {
@@ -48,7 +49,7 @@ pub async fn build(
             config.package.name.as_str(),
             main.get_id()
         );
-        if let Ok(()) = handle_file(main, config, file, base_url, ignore_failed, test).await {
+        if let Ok(()) = handle_file(main, config, base_url, ignore_failed, test, false).await {
             fastn_core::utils::print_end(
                 format!(
                     "Processed {}/{}",
@@ -61,27 +62,37 @@ pub async fn build(
         }
     }
 
-    if !no_static {
-        config.download_fonts().await?;
-    }
-    Ok(())
+    config.download_fonts().await
+}
+
+async fn handle_only_id(
+    id: &str,
+    config: &mut fastn_core::Config,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    documents: std::collections::BTreeMap<String, fastn_core::File>,
+) -> fastn_core::Result<()> {
+    let main = documents.get(id).ok_or_else(|| {
+        fastn_core::Error::GenericError(format!(
+            "Document {} not found in package {}",
+            id,
+            config.package.name.as_str()
+        ))
+    })?;
+
+    handle_file(main, config, base_url, ignore_failed, test, true).await
 }
 
 async fn handle_file(
     main: &fastn_core::File,
     config: &mut fastn_core::Config,
-    file: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
+    no_static: bool,
 ) -> fastn_core::Result<()> {
-    if file.is_some() && file != Some(main.get_id().as_str()) {
-        return Ok(());
-    }
-
-    let no_static = file.is_some();
-
-    config.current_document = Some(main.get_id());
+    config.current_document = Some(main.get_id().to_string());
 
     match main {
         fastn_core::File::Ftd(doc) => {
@@ -235,7 +246,7 @@ async fn get_documents_for_current_package(
             .get_files(&config.package)
             .await?
             .into_iter()
-            .map(|v| (v.get_id(), v)),
+            .map(|v| (v.get_id().to_string(), v)),
     );
 
     if let Some(ref sitemap) = config.package.sitemap {
@@ -263,7 +274,7 @@ async fn get_documents_for_current_package(
                 }
                 file
             };
-            files.insert(file.get_id(), file);
+            files.insert(file.get_id().to_string(), file);
         }
 
         config

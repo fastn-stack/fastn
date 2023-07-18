@@ -8,13 +8,13 @@ pub enum File {
 }
 
 impl File {
-    pub fn get_id(&self) -> String {
+    pub fn get_id(&self) -> &str {
         match self {
-            Self::Ftd(a) => a.id.clone(),
-            Self::Static(a) => a.id.clone(),
-            Self::Markdown(a) => a.id.clone(),
-            Self::Code(a) => a.id.clone(),
-            Self::Image(a) => a.id.clone(),
+            Self::Ftd(a) => a.id.as_str(),
+            Self::Static(a) => a.id.as_str(),
+            Self::Markdown(a) => a.id.as_str(),
+            Self::Code(a) => a.id.as_str(),
+            Self::Image(a) => a.id.as_str(),
         }
     }
     pub fn set_id(&mut self, new_id: &str) {
@@ -26,13 +26,13 @@ impl File {
             Self::Image(a) => &mut a.id,
         }) = new_id.to_string();
     }
-    pub fn get_base_path(&self) -> String {
+    pub fn get_base_path(&self) -> &str {
         match self {
-            Self::Ftd(a) => a.parent_path.to_string(),
-            Self::Static(a) => a.base_path.to_string(),
-            Self::Markdown(a) => a.parent_path.to_string(),
-            Self::Code(a) => a.parent_path.to_string(),
-            Self::Image(a) => a.base_path.to_string(),
+            Self::Ftd(a) => a.parent_path.as_str(),
+            Self::Static(a) => a.base_path.as_str(),
+            Self::Markdown(a) => a.parent_path.as_str(),
+            Self::Code(a) => a.parent_path.as_str(),
+            Self::Image(a) => a.base_path.as_str(),
         }
     }
     pub fn get_full_path(&self) -> camino::Utf8PathBuf {
@@ -46,13 +46,13 @@ impl File {
         camino::Utf8PathBuf::from(base_path).join(id)
     }
 
-    pub(crate) fn get_content(&self) -> Vec<u8> {
+    pub(crate) fn get_content(&self) -> &[u8] {
         match self {
-            Self::Ftd(ref a) => a.content.as_bytes().to_vec(),
-            Self::Static(ref a) => a.content.clone(),
-            Self::Markdown(ref a) => a.content.as_bytes().to_vec(),
-            Self::Code(ref a) => a.content.as_bytes().to_vec(),
-            Self::Image(ref a) => a.content.clone(),
+            Self::Ftd(ref a) => a.content.as_bytes(),
+            Self::Static(ref a) => a.content.as_ref(),
+            Self::Markdown(ref a) => a.content.as_bytes(),
+            Self::Code(ref a) => a.content.as_bytes(),
+            Self::Image(ref a) => a.content.as_ref(),
         }
     }
 
