@@ -1,3 +1,4 @@
+// #[tracing::instrument(skip(config))]
 pub async fn build(
     config: &mut fastn_core::Config,
     only_id: Option<&str>,
@@ -42,29 +43,14 @@ pub async fn build(
         }
     }
 
-    for main in documents.values() {
-        let start = std::time::Instant::now();
-        print!(
-            "Processing {}/{} ... ",
-            config.package.name.as_str(),
-            main.get_id()
-        );
-        if let Ok(()) = handle_file(main, config, base_url, ignore_failed, test, false).await {
-            fastn_core::utils::print_end(
-                format!(
-                    "Processed {}/{}",
-                    config.package.name.as_str(),
-                    main.get_id()
-                )
-                .as_str(),
-                start,
-            );
-        }
+    for document in documents.values() {
+        handle_file(document, config, base_url, ignore_failed, test, false).await?;
     }
 
     config.download_fonts().await
 }
 
+#[tracing::instrument(skip(config, documents))]
 async fn handle_only_id(
     id: &str,
     config: &mut fastn_core::Config,
@@ -73,28 +59,61 @@ async fn handle_only_id(
     test: bool,
     documents: std::collections::BTreeMap<String, fastn_core::File>,
 ) -> fastn_core::Result<()> {
-    let main = documents.get(id).ok_or_else(|| {
-        fastn_core::Error::GenericError(format!(
-            "Document {} not found in package {}",
-            id,
-            config.package.name.as_str()
-        ))
-    })?;
+    for doc in documents.values() {
+        if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
+            return handle_file(doc, config, base_url, ignore_failed, test, true).await;
+        }
+    }
 
-    handle_file(main, config, base_url, ignore_failed, test, true).await
+    Err(fastn_core::Error::GenericError(format!(
+        "Document {} not found in package {}",
+        id,
+        config.package.name.as_str()
+    )))
 }
 
 async fn handle_file(
-    main: &fastn_core::File,
+    document: &fastn_core::File,
     config: &mut fastn_core::Config,
     base_url: &str,
     ignore_failed: bool,
     test: bool,
     no_static: bool,
 ) -> fastn_core::Result<()> {
-    config.current_document = Some(main.get_id().to_string());
+    let start = std::time::Instant::now();
+    print!(
+        "Processing {}/{} ... ",
+        config.package.name.as_str(),
+        document.get_id_with_package()
+    );
 
-    match main {
+    if let Ok(()) = handle_file_(document, config, base_url, ignore_failed, test, no_static).await {
+        fastn_core::utils::print_end(
+            format!(
+                "Processed {}/{}",
+                config.package.name.as_str(),
+                document.get_id()
+            )
+            .as_str(),
+            start,
+        );
+    }
+
+    Ok(())
+}
+
+#[tracing::instrument(skip(document, config))]
+async fn handle_file_(
+    document: &fastn_core::File,
+    config: &mut fastn_core::Config,
+    base_url: &str,
+    ignore_failed: bool,
+    test: bool,
+    no_static: bool,
+) -> fastn_core::Result<()> {
+    config.current_document = Some(document.get_id().to_string());
+
+    match document {
         fastn_core::File::Ftd(doc) => {
             if !config
                 .ftd_edition
@@ -178,6 +197,7 @@ async fn handle_file(
         fastn_core::File::Code(doc) => {
             process_static(
                 &fastn_core::Static {
+                    package_name: config.package.name.to_string(),
                     id: doc.id.to_string(),
                     content: vec![],
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
@@ -208,6 +228,7 @@ async fn handle_file(
     Ok(())
 }
 
+#[tracing::instrument]
 pub async fn default_build_files(
     base_path: camino::Utf8PathBuf,
     ftd_edition: &fastn_core::FTDEdition,
@@ -238,6 +259,7 @@ pub async fn default_build_files(
     Ok(())
 }
 
+#[tracing::instrument(skip(config))]
 async fn get_documents_for_current_package(
     config: &mut fastn_core::Config,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::File>> {

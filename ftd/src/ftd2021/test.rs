@@ -98,10 +98,10 @@ macro_rules! p {
             }
         }
         bag.retain(|k, _| {
-                !["SIBLING-INDEX", "CHILDREN-COUNT"]
-                    .iter()
-                    .any(|v| k.contains(v))
-            });
+            !["SIBLING-INDEX", "CHILDREN-COUNT"]
+                .iter()
+                .any(|v| k.contains(v))
+        });
         if !ebag.is_empty() {
             pretty_assertions::assert_eq!(bag, ebag);
         }

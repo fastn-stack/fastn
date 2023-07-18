@@ -17,6 +17,15 @@ impl File {
             Self::Image(a) => a.id.as_str(),
         }
     }
+    pub fn get_id_with_package(&self) -> String {
+        match self {
+            Self::Ftd(a) => a.id_with_package(),
+            Self::Static(a) => a.id_with_package(),
+            Self::Markdown(a) => a.id_with_package(),
+            Self::Code(a) => a.id_with_package(),
+            Self::Image(a) => a.id_with_package(),
+        }
+    }
     pub fn set_id(&mut self, new_id: &str) {
         *(match self {
             Self::Ftd(a) => &mut a.id,
@@ -84,7 +93,7 @@ impl Document {
     pub fn id_with_package(&self) -> String {
         format!(
             "{}/{}",
-            self.package_name.as_str(),
+            self.package_name,
             self.id
                 .replace("/index.ftd", "/")
                 .replace("index.ftd", "")
@@ -95,9 +104,16 @@ impl Document {
 
 #[derive(Debug, Clone)]
 pub struct Static {
+    pub package_name: String,
     pub id: String,
     pub content: Vec<u8>,
     pub base_path: camino::Utf8PathBuf,
+}
+
+impl Static {
+    pub fn id_with_package(&self) -> String {
+        format!("{}/{}", self.package_name, self.id)
+    }
 }
 
 pub(crate) async fn paths_to_files(
@@ -210,6 +226,7 @@ pub(crate) async fn get_file(
                 .starts_with("image/") =>
         {
             File::Image(Static {
+                package_name: package_name.to_string(),
                 id: id.to_string(),
                 content: tokio::fs::read(&doc_path).await?,
                 base_path: base_path.to_path_buf(),
@@ -224,6 +241,7 @@ pub(crate) async fn get_file(
             })
         }
         _ => File::Static(Static {
+            package_name: package_name.to_string(),
             id: id.to_string(),
             content: tokio::fs::read(&doc_path).await?,
             base_path: base_path.to_path_buf(),
