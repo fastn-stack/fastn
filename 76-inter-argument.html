@@ -1935,13 +1935,13 @@ a.value = !a.value
 
 
 function ftd__increment___main(a,args,data,id){
-return (a.value += 1);
+a.value = a.value+1
 }
 
 
 
 function ftd__increment_by___main(a,v,args,data,id){
-return (a.value += v);
+a.value = a.value+v
 }
 
 
@@ -2043,8 +2043,8 @@ window.ftd.utils.set_value_helper(data, "foo#code:title:0", remaining, new_value
 
 window.ftd.call_mutable_value_changes("foo#code:title:0", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:0", "main");
-window.ftd.utils.node_change_call("main","0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
+window.ftd.utils.node_change_call("main","0,2:main__text", data);
 window.ftd.utils.node_change_call("main","0,1:main__text", data);
 };
 
@@ -2053,8 +2053,8 @@ window.ftd.utils.set_value_helper(data, "foo#code:title:1", remaining, new_value
 
 window.ftd.call_mutable_value_changes("foo#code:title:1", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:1", "main");
-window.ftd.utils.node_change_call("main","1,0:main__text", data);
 window.ftd.utils.node_change_call("main","1,1:main__text", data);
+window.ftd.utils.node_change_call("main","1,0:main__text", data);
 };
 
 window.set_value_main["foo#code:title:2"] = function (data, new_value, remaining) {
