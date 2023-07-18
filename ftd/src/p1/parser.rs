@@ -872,12 +872,8 @@ fn clean_line(line: &str) -> String {
     if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
-
-    if line.contains(";;") {
-        return remove_inline_comments(line);
-    }
-
-    line.to_string()
+    
+    remove_inline_comments(line)
 }
 
 fn remove_inline_comments(line: &str) -> String {
