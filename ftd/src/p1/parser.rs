@@ -872,7 +872,61 @@ fn clean_line(line: &str) -> String {
     if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
-    line.to_string()
+
+    remove_inline_comments(line)
+}
+
+fn remove_inline_comments(line: &str) -> String {
+    let mut output = String::new();
+
+    let mut chars = line.chars().peekable();
+
+    let mut escape = false;
+
+    let mut count = 0;
+
+    while let Some(c) = chars.next() {
+        if c == '\\' {
+            if !escape {
+                escape = true;
+            }
+
+            count += 1;
+
+            match chars.peek() {
+                Some(nc) => {
+                    if nc == &';' {
+                        chars.next();
+                        continue;
+                    } else if nc != &'\\' {
+                        escape = false;
+                        count = 0;
+                    }
+                }
+                None => break,
+            }
+        }
+
+        if c == ';' {
+            if escape {
+                if count % 2 == 0 {
+                    break;
+                } else {
+                    output.push(';');
+                    escape = false;
+                    count = 0;
+                }
+            } else if let Some(nc) = chars.peek() {
+                if nc == &';' {
+                    break;
+                }
+            }
+        }
+
+        output.push(c);
+    }
+
+    return output.trim().to_string();
 }
 
 fn valid_line(line: &str) -> bool {

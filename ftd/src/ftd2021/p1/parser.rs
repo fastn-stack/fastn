@@ -294,19 +294,12 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
 
     for (line_number, mut line) in s.split('\n').enumerate() {
         let line_number = line_number + 1;
-
         if line.starts_with(';') {
             continue;
         }
-
         if line.starts_with("\\;") {
             line = &line[1..];
         }
-
-        let line_without_comments = remove_inline_comments(line);
-
-        line = line_without_comments.as_str();
-
         match state.state {
             ParsingState::WaitingForSection => {
                 state.waiting_for_section(line_number, line, doc_id)?
@@ -405,71 +398,6 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
         }
 
         false
-    }
-}
-
-fn remove_inline_comments(line: &str) -> String {
-    let mut output = String::new();
-
-    let mut chars = line.chars().peekable();
-
-    let mut escape = false;
-
-    let mut count = 0;
-
-    while let Some(c) = chars.next() {
-        if c == '\\' {
-            if !escape {
-                escape = true;
-            }
-
-            count += 1;
-
-            match chars.peek() {
-                Some(nc) => {
-                    if nc == &';' {
-                        continue;
-                    }
-                }
-                None => break,
-            }
-        }
-
-        if c == ';' {
-            if escape {
-                if count % 2 == 0 {
-                    break;
-                } else {
-                    escape = false;
-                    count = 0;
-                }
-            } else {
-                break;
-            }
-        }
-
-        output.push(c);
-    }
-
-    return output.trim().to_string();
-}
-
-#[cfg(test)]
-mod test2 {
-    macro_rules! t {
-        ($s:expr, $t: expr,) => {
-            t!($s, $t)
-        };
-        ($s:expr, $t: expr) => {
-            assert_eq!(super::remove_inline_comments($s), $t)
-        };
-    }
-
-    #[test]
-    fn test_esc() {
-        t!(r#"Hello      ;; displays the hello"#, "Hello");
-        t!(r#"Hello      \;; displays the hello"#, "Hello      ;");
-        t!(r#"Hello      \\;; displays the hello"#, r#"Hello      \"#);
     }
 }
 
