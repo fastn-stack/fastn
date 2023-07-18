@@ -577,7 +577,7 @@ impl Code {
             "lang",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
-            ftd::js::Value::from_str("txt"),
+            ftd::js::Value::from_str_value("txt"),
         )
         .get_string_data()
         .unwrap();
@@ -586,14 +586,12 @@ impl Code {
             "theme",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
-            ftd::js::Value::from_str(ftd::js::CODE_DEFAULT_THEME),
+            ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
         )
         .get_string_data()
         .unwrap();
 
-        // dbg!(&raw_code, &lang, &theme);
-
-        let _stylized_code = ftd::executor::code::code(
+        let stylized_code = ftd::executor::code::code(
             raw_code
                 .replace("\n\\-- ", "\n-- ")
                 .replace("\\$", "$")
@@ -603,14 +601,8 @@ impl Code {
             doc.name,
         )
         .ok()
-        .unwrap();
-
-        dbg!(&_stylized_code);
-
-        let stylized_code = "<pre style=\"padding: 0.7720588235em 1.1764705882em; \"><span \
-        style=\"color:#cecfd2;\">-- </span><span style=\"color:#6791e0;\">ftd.text</span><span style=\"color:#cecfd2;\">: </span><span style=\"color:#2fb170;\">Hello World\n</span></pre>".to_string();
-
-        dbg!(&stylized_code);
+        .unwrap()
+        .replace('\"', "\\\"");
 
         Code {
             common: Common::from(
@@ -622,7 +614,7 @@ impl Code {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            code: ftd::js::Value::from_str(stylized_code.as_str()),
+            code: ftd::js::Value::from_str_value(stylized_code.as_str()),
         }
     }
 
@@ -641,7 +633,6 @@ impl Code {
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
-        dbg!(&self.code);
         let code = self.code.to_set_property(
             fastn_js::PropertyKind::Code,
             doc,

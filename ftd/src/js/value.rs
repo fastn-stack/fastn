@@ -75,10 +75,10 @@ impl Value {
         }
     }
 
-    pub fn from_str(s: &str) -> Value {
-        return Value::Data(ftd::interpreter::Value::String {
+    pub fn from_str_value(s: &str) -> Value {
+        Value::Data(ftd::interpreter::Value::String {
             text: s.to_string(),
-        });
+        })
     }
 
     pub fn get_string_data(&self) -> Option<String> {
@@ -321,7 +321,7 @@ pub(crate) fn get_properties_with_default(
     if let Some(argument) = arguments.iter().find(|v| v.name.eq(key)) {
         return argument.get_optional_value(properties).unwrap_or(default);
     }
-    return default;
+    default
 }
 
 impl ftd::interpreter::PropertyValue {
