@@ -540,9 +540,7 @@ string list title-css:
 width: fill-container
 align-content: center
 padding-horizontal.em if { ftd.device == "desktop" }: 3
-padding-vertical.em: 2
-margin-top.em if { ftd.device == "desktop" }: 2.5
-margin-bottom.em if { ftd.device == "desktop" }: 5
+padding-vertical.em: 3
 color: $inherited.colors.text-strong
 background if { ftd.device == "desktop" }: $summary-cards.bg-color
 
@@ -1065,7 +1063,7 @@ width if { $ftd.device == "mobile" }: fill-container
 text: $github-star-cta.body
 role: $inherited.types.button-medium
 color: $inherited.colors.text-strong
-color if { github-star-cta.mousein }: #000000
+color if { github-star-cta.mousein }: $inherited.colors.cta-primary.base
 text-align: center
 
 -- end: ftd.row
