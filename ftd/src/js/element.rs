@@ -714,7 +714,7 @@ pub struct Boolean {
 
 #[derive(Debug)]
 pub struct Column {
-    pub children: Option<ftd::interpreter::Property>,
+    pub children: Option<ftd::js::Value>,
     pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
@@ -808,7 +808,7 @@ pub struct ContainerElement {
 
 #[derive(Debug)]
 pub struct Row {
-    pub children: Option<ftd::interpreter::Property>,
+    pub children: Option<ftd::js::Value>,
     pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
@@ -1209,7 +1209,9 @@ impl Column {
             .unwrap();
 
         Column {
-            children: component.get_children_property(),
+            children: ftd::js::utils::get_js_value_from_properties(
+                component.get_children_properties().as_slice(),
+            ),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1280,7 +1282,7 @@ impl Column {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.value.to_fastn_js_value(
+                value: v.to_set_property_value(
                     doc,
                     component_definition_name,
                     loop_alias,
@@ -1309,7 +1311,9 @@ impl Row {
             .component()
             .unwrap();
         Row {
-            children: component.get_children_property(),
+            children: ftd::js::utils::get_js_value_from_properties(
+                component.get_children_properties().as_slice(),
+            ),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1381,7 +1385,7 @@ impl Row {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.value.to_fastn_js_value(
+                value: v.to_set_property_value(
                     doc,
                     component_definition_name,
                     loop_alias,
@@ -2852,7 +2856,7 @@ impl ftd::interpreter::Event {
 }
 
 impl ftd::interpreter::FunctionCall {
-    fn to_js_function(
+    pub(crate) fn to_js_function(
         &self,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
