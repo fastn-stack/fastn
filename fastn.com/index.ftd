@@ -583,7 +583,7 @@ text-align: center
 width: fill-container
 wrap: true
 spacing.fixed.em: 2
-padding-vertical.em: 2
+padding-top.em: 2
 children: $summary-cards.cards
 
 -- end: ftd.row
