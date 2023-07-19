@@ -34,7 +34,13 @@ impl fastn_js::SetPropertyValue {
 #[derive(Debug)]
 pub struct Formula {
     pub deps: Vec<String>,
-    pub conditional_values: Vec<ConditionalValue>,
+    pub type_: FormulaType,
+}
+
+#[derive(Debug)]
+pub enum FormulaType {
+    Conditional(Vec<ConditionalValue>),
+    FunctionCall(fastn_js::Function),
 }
 
 impl Formula {
@@ -48,57 +54,22 @@ impl Formula {
                 .map(|v| fastn_js::utils::reference_to_js(v))
                 .collect_vec()
                 .join(", "),
-            self.conditional_values_to_js()
+            self.formula_value_to_js()
         )
     }
 
-    pub(crate) fn conditional_values_to_js(&self) -> String {
-        let mut conditions = vec![];
-        let mut default = None;
-        for conditional_value in &self.conditional_values {
-            if let Some(ref condition) = conditional_value.condition {
-                let condition = format!(
-                    indoc::indoc! {"
-                        function(){{
-                            {expression}
-                        }}()"
-                    },
-                    expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
-                );
-                conditions.push(format!(
-                    indoc::indoc! {
-                        "{if_exp}({condition}){{
-                            return {expression};
-                        }}"
-                    },
-                    if_exp = if conditions.is_empty() {
-                        "if"
-                    } else {
-                        "else if"
-                    },
-                    condition = condition,
-                    expression = conditional_value.expression.to_js(),
-                ));
-            } else {
-                default = Some(conditional_value.expression.to_js())
+    pub(crate) fn formula_value_to_js(&self) -> String {
+        match self.type_ {
+            fastn_js::FormulaType::Conditional(ref conditional_values) => {
+                conditional_values_to_js(conditional_values.as_slice())
+            }
+            fastn_js::FormulaType::FunctionCall(ref function_call) => {
+                let mut w = Vec::new();
+                let o = function_call.to_js();
+                o.render(80, &mut w).unwrap();
+                format!("function(){{return {}}}", String::from_utf8(w).unwrap())
             }
         }
-
-        let default = match default {
-            Some(d) if conditions.is_empty() => d,
-            Some(d) => format!("else {{ return {}; }}", d),
-            None => "".to_string(),
-        };
-
-        format!(
-            indoc::indoc! {"
-            function() {{
-                {expressions}{default}
-            }}
-        "},
-            expressions = conditions.join(" "),
-            default = default,
-        )
     }
 }
 
@@ -106,6 +77,57 @@ impl Formula {
 pub struct ConditionalValue {
     pub condition: Option<fastn_grammar::evalexpr::ExprNode>,
     pub expression: SetPropertyValue,
+}
+
+pub(crate) fn conditional_values_to_js(
+    conditional_values: &[fastn_js::ConditionalValue],
+) -> String {
+    let mut conditions = vec![];
+    let mut default = None;
+    for conditional_value in conditional_values {
+        if let Some(ref condition) = conditional_value.condition {
+            let condition = format!(
+                indoc::indoc! {"
+                        function(){{
+                            {expression}
+                        }}()"
+                },
+                expression = fastn_js::to_js::ExpressionGenerator.to_js(condition).trim(),
+            );
+            conditions.push(format!(
+                indoc::indoc! {
+                    "{if_exp}({condition}){{
+                            return {expression};
+                        }}"
+                },
+                if_exp = if conditions.is_empty() {
+                    "if"
+                } else {
+                    "else if"
+                },
+                condition = condition,
+                expression = conditional_value.expression.to_js(),
+            ));
+        } else {
+            default = Some(conditional_value.expression.to_js())
+        }
+    }
+
+    let default = match default {
+        Some(d) if conditions.is_empty() => d,
+        Some(d) => format!("else {{ return {}; }}", d),
+        None => "".to_string(),
+    };
+
+    format!(
+        indoc::indoc! {"
+            function() {{
+                {expressions}{default}
+            }}
+        "},
+        expressions = conditions.join(" "),
+        default = default,
+    )
 }
 
 #[derive(Debug)]

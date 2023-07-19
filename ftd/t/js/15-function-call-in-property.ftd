@@ -1,0 +1,17 @@
+-- decimal $num: 2
+
+-- ftd.text: Hello
+padding.em: $multiply-by-two(a= $num)
+$on-click$: $increment($a = $num)
+
+
+-- decimal multiply-by-two(a):
+decimal a:
+
+a * 2
+
+
+-- void increment(a):
+decimal $a:
+
+a = a + 1;
