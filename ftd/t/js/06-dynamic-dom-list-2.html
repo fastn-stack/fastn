@@ -66,12 +66,18 @@ let main = function (parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, "Click to add Tom", inherited);
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__append_string(global.foo__people, "Tom");
+    foo__append_string({
+      a: global.foo__people,
+      v: "Tom",
+    });
   });
   let parenti1 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti1.setProperty(fastn_dom.PropertyKind.StringValue, "update $first", inherited);
   parenti1.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__set_string(global.foo__first, "Bob");
+    foo__set_string({
+      a: global.foo__first,
+      v: "Bob",
+    });
   });
   global.foo__people.forLoop(parent, function (root, item, index) {
     return foo__show_person(root, inherited, {
@@ -80,17 +86,27 @@ let main = function (parent) {
     });
   });
 }
-let foo__append_string = function (a, v) {
-  return (ftd.append(a, v));
+let foo__append_string = function (args) {
+  let __args__ = {
+    a: fastn.mutableList([]),
+    v: null,
+    ...args
+  };
+  return (ftd.append(__args__.a, __args__.v));
 }
 global.foo__first = fastn.mutable("hello");
 global.foo__people = fastn.mutableList([global.foo__first,
 "world"]);
-let foo__set_string = function (a, v)
+let foo__set_string = function (args)
 {
-  let fastn_utils_val_a = v;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
+  let __args__ = {
+    a: null,
+    v: null,
+    ...args
+  };
+  let fastn_utils_val___args___a = __args__.v;
+  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+    __args__.a = fastn_utils_val___args___a;
   };
 }
 let foo__show_person = function (parent, inherited, args) {
