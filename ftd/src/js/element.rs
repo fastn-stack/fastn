@@ -2909,6 +2909,7 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#column",
         "ftd#integer",
         "ftd#decimal",
+        "ftd#container",
         "ftd#boolean",
         "ftd#desktop",
         "ftd#mobile",
