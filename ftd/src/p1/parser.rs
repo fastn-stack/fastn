@@ -872,7 +872,7 @@ fn clean_line(line: &str) -> String {
     if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
-    
+
     remove_inline_comments(line)
 }
 
@@ -893,26 +893,24 @@ fn remove_inline_comments(line: &str) -> String {
 
             count += 1;
 
-            match chars.peek() {
-                Some(nc) => {
-                    if nc == &';' {
-                        chars.next();
-                        continue;
-                    } else if nc != &'\\' {
-                        escape = false;
-                        count = 0;
-                    }
+            if let Some(nc) = chars.peek() {
+                if nc == &';' {
+                    output.push(';');
+                    chars.next();
+                    continue;
+                } else if nc != &'\\' {
+                    escape = false;
+                    count = 0;
                 }
-                None => break,
             }
         }
 
         if c == ';' {
             if escape {
                 if count % 2 == 0 {
+                    output.pop();
                     break;
                 } else {
-                    output.push(';');
                     escape = false;
                     count = 0;
                 }
@@ -921,6 +919,11 @@ fn remove_inline_comments(line: &str) -> String {
                     break;
                 }
             }
+        }
+
+        if escape {
+            escape = false;
+            count = 0;
         }
 
         output.push(c);
