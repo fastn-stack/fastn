@@ -399,9 +399,7 @@ ftd.ui list right-side-ui:
 
 -- ftd.column:
 width: fill-container
-padding-horizontal.em: 3
-padding-top.em: 2
-padding-bottom.em: 5
+padding.em: 3
 background.solid: $inherited.colors.background.step-1
 
 -- ftd.column:
