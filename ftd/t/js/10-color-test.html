@@ -109,7 +109,9 @@ let main = function (parent) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Lorem ipsum dolor sit amet. Quo aliquam natus id cumque Quis quo eligendi quia\nqui aliquid dolores. Qui atque delectus quo maxime numquam qui architecto\ndelectus. Qui maxime galisum sit magni placeat sed illum sunt. Ut illo excepturi\naut nulla molestiae et excepturi voluptas aut voluptatem obcaecati id harum quia.\n\nUt esse consequatur ex molestiae consequatur sed nobis consequuntur ut\ntemporibus eveniet ut aperiam esse a rerum libero. Et perferendis voluptas eos\nculpa odit et architecto officiis aut eveniet commodi. Eos quia quia qui nulla\nerror et quaerat dolor vel odit reprehenderit ut nemo numquam non molestias\nillum aut nobis omnis. Qui galisum commodi At internos dolorum sed repudiandae\nquisquam ab repellat molestiae qui quia repudiandae ut doloribus impedit.\n\nA repellendus sapiente id Quis doloremque qui Quis omnis in blanditiis tenetur\nquo esse dolor. 33 vitae modi ut voluptates distinctio est dicta temporibus est\nconsectetur voluptatum et Quis inventore ab dignissimos amet?", inherited);
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
-      foo__increment(global.foo__value);
+      foo__increment({
+        a: global.foo__value,
+      });
     });
     rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(40), inherited);
     rooti0.setProperty(fastn_dom.PropertyKind.Color, fastn.formula([global.foo__og,
@@ -141,11 +143,15 @@ global.foo__bg_og = fastn.recordInstance({
   dark: "#edfce8"
 });
 global.foo__value = fastn.mutable(0);
-let foo__increment = function (a)
+let foo__increment = function (args)
 {
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
+  let __args__ = {
+    a: null,
+    ...args
+  };
+  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
+  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+    __args__.a = fastn_utils_val___args___a;
   };
 }
 global.foo__og = fastn.recordInstance({
