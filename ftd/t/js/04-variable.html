@@ -67,7 +67,9 @@ let main = function (parent) {
   let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name, inherited);
   parenti0.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__increment(global.foo__i);
+    foo__increment({
+      a: global.foo__i,
+    });
   });
   parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn.formula([global.foo__i], function () {
     if (function () {
@@ -93,7 +95,10 @@ let main = function (parent) {
   let parenti3 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
   parenti3.setProperty(fastn_dom.PropertyKind.StringValue, "Click me to add Tom", inherited);
   parenti3.addEventHandler(fastn_dom.Event.Click, function () {
-    foo__append_string(global.foo__names, "Tom");
+    foo__append_string({
+      a: global.foo__names,
+      v: "Tom",
+    });
   });
   global.foo__names.forLoop(parent, function (root, item, index) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
@@ -114,10 +119,14 @@ let main = function (parent) {
     }).getParent();
   });
 }
-let foo__increment = function (a) {
-  let fastn_utils_val_a = fastn_utils.getter(a) + 1;
-  if (!fastn_utils.setter(a, fastn_utils_val_a)) {
-    a = fastn_utils_val_a;
+let foo__increment = function (args) {
+  let __args__ = {
+    a: null,
+    ...args
+  };
+  let fastn_utils_val___args___a = fastn_utils.getter(__args__.a) + 1;
+  if (!fastn_utils.setter(__args__.a, fastn_utils_val___args___a)) {
+    __args__.a = fastn_utils_val___args___a;
   };
 }
 global.foo__i = fastn.mutable(9);
@@ -148,8 +157,13 @@ let foo__foo = function (parent, inherited, args)
   ]), inherited);
   return parenti0;
 }
-let foo__append_string = function (a, v) {
-  return (ftd.append(a, v));
+let foo__append_string = function (args) {
+  let __args__ = {
+    a: fastn.mutableList([]),
+    v: null,
+    ...args
+  };
+  return (ftd.append(__args__.a, __args__.v));
 }
 global.foo__names = fastn.mutableList([]);
 let inherited = fastn.recordInstance({

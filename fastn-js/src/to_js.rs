@@ -1,5 +1,3 @@
-use crate::DeviceType;
-
 fn space() -> pretty::RcDoc<'static> {
     pretty::RcDoc::space()
 }
@@ -92,11 +90,14 @@ impl fastn_js::Event {
 impl fastn_js::Function {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
+            .append(text("{"))
             .append(pretty::RcDoc::intersperse(
-                self.parameters.iter().map(|v| v.to_js()),
-                comma().append(space()),
+                self.parameters
+                    .iter()
+                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                pretty::RcDoc::softline(),
             ))
-            .append(text(");"))
+            .append(text("});"))
     }
 }
 
@@ -495,30 +496,55 @@ impl fastn_js::StaticVariable {
 impl fastn_js::DeviceType {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
-            DeviceType::Desktop => text("\"desktop\""),
-            DeviceType::Mobile => text("\"mobile\""),
+            fastn_js::DeviceType::Desktop => text("\"desktop\""),
+            fastn_js::DeviceType::Mobile => text("\"mobile\""),
         }
     }
 }
 
 impl fastn_js::UDF {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
-        func(
-            &self.name,
-            &self.params,
-            pretty::RcDoc::intersperse(
+        use itertools::Itertools;
+
+        let body = text("let")
+            .append(space())
+            .append(text(fastn_js::LOCAL_VARIABLE_MAP))
+            .append(space())
+            .append(text("="))
+            .append(space())
+            .append(text("{"))
+            .append(pretty::RcDoc::intersperse(
+                self.args
+                    .iter()
+                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                pretty::RcDoc::softline(),
+            ))
+            .append(text("...args"))
+            .append(text("};"))
+            .append(pretty::RcDoc::intersperse(
                 self.body.iter().map(|f| {
-                    pretty::RcDoc::text(fastn_js::to_js::ExpressionGenerator.to_js_(
-                        f,
-                        true,
-                        &self.params,
-                        false,
-                    ))
+                    pretty::RcDoc::text(
+                        fastn_js::to_js::ExpressionGenerator.to_js_(
+                            f,
+                            true,
+                            self.args
+                                .iter()
+                                .map(|v| {
+                                    (
+                                        v.0.to_string(),
+                                        Some(fastn_js::LOCAL_VARIABLE_MAP.to_string()),
+                                    )
+                                })
+                                .collect_vec()
+                                .as_slice(),
+                            false,
+                        ),
+                    )
                 }),
                 pretty::RcDoc::softline(),
-            )
-            .group(),
-        )
+            ));
+
+        func(self.name.as_str(), &self.params, body)
     }
 }
 
@@ -625,7 +651,7 @@ impl ExpressionGenerator {
         &self,
         node: &fastn_grammar::evalexpr::ExprNode,
         root: bool,
-        arguments: &[String],
+        arguments: &[(String, Option<String>)],
         no_getter: bool,
     ) -> String {
         use itertools::Itertools;
@@ -704,7 +730,7 @@ impl ExpressionGenerator {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            if !arguments.iter().any(|v| first.to_string().eq(v)) {
+            if !arguments.iter().any(|v| first.to_string().eq(&v.0)) {
                 return vec![
                     "let ".to_string(),
                     self.to_js_(first, false, arguments, false),
@@ -717,13 +743,14 @@ impl ExpressionGenerator {
                 let val = self.to_js_(second, false, arguments, true);
                 return format!(
                     indoc::indoc! {
-                        "let fastn_utils_val_{var} = {val};
-                        if (!fastn_utils.setter({var}, fastn_utils_val_{var})) {{
-                            {var} = fastn_utils_val_{var};
+                        "let fastn_utils_val_{refined_var} = {val};
+                        if (!fastn_utils.setter({var}, fastn_utils_val_{refined_var})) {{
+                            {var} = fastn_utils_val_{refined_var};
                         }}"
                     },
                     val = val,
-                    var = var
+                    var = var,
+                    refined_var = fastn_js::utils::name_to_js_(var.as_str())
                 );
             };
             return vec![
@@ -762,7 +789,19 @@ impl ExpressionGenerator {
         let value = if self.is_null(node.operator()) {
             "null".to_string()
         } else {
-            node.operator().to_string()
+            let value = node.operator().to_string();
+            let prefix = arguments
+                .iter()
+                .find_map(|v| {
+                    if value.to_string().eq(&v.0) {
+                        v.1.clone()
+                    } else {
+                        None
+                    }
+                })
+                .map(|v| format!("{}.", v))
+                .unwrap_or_default();
+            format!("{}{}", prefix, value)
         };
 
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {

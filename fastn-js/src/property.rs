@@ -9,21 +9,25 @@ pub struct SetProperty {
 #[derive(Debug)]
 pub enum SetPropertyValue {
     Reference(String),
-    Value(Value),
-    Formula(Formula),
+    Value(fastn_js::Value),
+    Formula(fastn_js::Formula),
 }
 
-impl SetPropertyValue {
+impl fastn_js::SetPropertyValue {
     pub fn to_js(&self) -> String {
         match self {
-            SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
-            SetPropertyValue::Value(v) => v.to_js(),
-            SetPropertyValue::Formula(f) => f.to_js(),
+            fastn_js::SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
+            fastn_js::SetPropertyValue::Value(v) => v.to_js(),
+            fastn_js::SetPropertyValue::Formula(f) => f.to_js(),
         }
     }
 
     pub fn is_formula(&self) -> bool {
-        matches!(&self, SetPropertyValue::Formula(_))
+        matches!(&self, fastn_js::SetPropertyValue::Formula(_))
+    }
+
+    pub fn null() -> fastn_js::SetPropertyValue {
+        fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
     }
 }
 
@@ -123,6 +127,7 @@ pub enum Value {
     UI {
         value: Vec<fastn_js::ComponentStatement>,
     },
+    Null,
 }
 
 impl Value {
@@ -168,6 +173,7 @@ impl Value {
                     })
                     .join("")
             ),
+            Value::Null => "null".to_string(),
         }
     }
 }

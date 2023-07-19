@@ -2739,20 +2739,20 @@ impl ftd::interpreter::FunctionCall {
             .get_function(self.name.as_str(), self.line_number)
             .unwrap();
         for argument in function.arguments {
-            let value = if let Some(value) = self.values.get(argument.name.as_str()) {
-                value.to_value()
-            } else if let Some(value) = argument.get_default_value() {
-                value
-            } else {
+            if let Some(value) = self.values.get(argument.name.as_str()) {
+                parameters.push((
+                    argument.name.to_string(),
+                    value.to_value().to_set_property_value(
+                        doc,
+                        component_definition_name,
+                        loop_alias,
+                        inherited_variable_name,
+                        device,
+                    ),
+                ));
+            } else if argument.get_default_value().is_none() {
                 panic!("Argument value not found {:?}", argument)
-            };
-            parameters.push(value.to_set_property_value(
-                doc,
-                component_definition_name,
-                loop_alias,
-                inherited_variable_name,
-                device,
-            ));
+            }
         }
         fastn_js::Function {
             name: self.name.to_string(),

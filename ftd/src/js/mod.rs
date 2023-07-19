@@ -37,14 +37,13 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
         if let ftd::interpreter::Thing::Variable(v) = thing {
             ftd_asts.push(v.to_ast(&doc, None));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
-            ftd_asts.push(f.to_ast());
+            ftd_asts.push(f.to_ast(&doc));
         }
     }
     ftd_asts
 }
 
 /// This contains asts of things (other than `ftd`) and instructions/tree
-
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
@@ -63,7 +62,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             document_asts.push(v.to_ast(&doc, Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
-            document_asts.push(f.to_ast());
+            document_asts.push(f.to_ast(&doc));
         }
     }
     document_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
@@ -90,10 +89,10 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
 }
 
 impl ftd::interpreter::Function {
-    pub fn to_ast(&self) -> fastn_js::Ast {
+    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
-        fastn_js::udf_with_params(
+        fastn_js::udf_with_arguments(
             self.name.as_str(),
             self.expression
                 .iter()
@@ -103,7 +102,22 @@ impl ftd::interpreter::Function {
                 .collect_vec(),
             self.arguments
                 .iter()
-                .map(|v| v.name.to_string())
+                .map(|v| {
+                    v.get_default_value()
+                        .map(|val| {
+                            (
+                                v.name.to_string(),
+                                val.to_set_property_value(
+                                    doc,
+                                    &Some(self.name.to_string()),
+                                    &None,
+                                    fastn_js::INHERITED_VARIABLE,
+                                    &None,
+                                ),
+                            )
+                        })
+                        .unwrap_or_else(|| (v.name.to_string(), fastn_js::SetPropertyValue::null()))
+                })
                 .collect_vec(),
         )
     }
