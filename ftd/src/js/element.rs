@@ -800,7 +800,7 @@ impl Container {
 
 #[derive(Debug)]
 pub struct ContainerElement {
-    pub children: Option<ftd::interpreter::Property>,
+    pub children: Option<ftd::js::Value>,
     pub inherited: InheritedProperties,
     pub container: Container,
     pub common: Common,
@@ -1415,7 +1415,9 @@ impl ContainerElement {
             .unwrap();
 
         ContainerElement {
-            children: component.get_children_property(),
+            children: ftd::js::utils::get_js_value_from_properties(
+                component.get_children_properties().as_slice(),
+            ),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1491,7 +1493,7 @@ impl ContainerElement {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.value.to_fastn_js_value(
+                value: v.to_set_property_value(
                     doc,
                     component_definition_name,
                     loop_alias,
