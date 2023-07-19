@@ -152,14 +152,24 @@ impl Component {
         }
     }
 
+    // Todo: Remove this function after removing 0.3
     pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
-        self.properties.iter().find_map(|v| {
-            if v.value.kind().inner_list().is_subsection_ui() {
-                Some(v.to_owned())
-            } else {
-                None
-            }
-        })
+        self.get_children_properties().first().map(|v| v.to_owned())
+    }
+
+    pub fn get_children_properties(&self) -> Vec<ftd::interpreter::Property> {
+        use itertools::Itertools;
+
+        self.properties
+            .iter()
+            .filter_map(|v| {
+                if v.value.kind().inner_list().is_subsection_ui() {
+                    Some(v.to_owned())
+                } else {
+                    None
+                }
+            })
+            .collect_vec()
     }
 
     pub fn get_children(
