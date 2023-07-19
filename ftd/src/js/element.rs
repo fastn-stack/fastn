@@ -1189,9 +1189,9 @@ impl Column {
             .unwrap();
 
         Column {
-            children: component
-                .get_children_property()
-                .map(|v| ftd::js::utils::get_js_value_from_properties(vec![v].as_slice()).unwrap()),
+            children: ftd::js::utils::get_js_value_from_properties(
+                component.get_children_properties().as_slice(),
+            ),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1291,9 +1291,9 @@ impl Row {
             .component()
             .unwrap();
         Row {
-            children: component
-                .get_children_property()
-                .map(|v| ftd::js::utils::get_js_value_from_properties(vec![v].as_slice()).unwrap()),
+            children: ftd::js::utils::get_js_value_from_properties(
+                component.get_children_properties().as_slice(),
+            ),
             inherited: InheritedProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
