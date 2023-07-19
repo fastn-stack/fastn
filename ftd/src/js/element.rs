@@ -802,7 +802,6 @@ impl Container {
 pub struct ContainerElement {
     pub children: Option<ftd::js::Value>,
     pub inherited: InheritedProperties,
-    pub container: Container,
     pub common: Common,
 }
 
@@ -1422,10 +1421,6 @@ impl ContainerElement {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            container: Container::from(
-                component.properties.as_slice(),
-                component_definition.arguments.as_slice(),
-            ),
             common: Common::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1459,15 +1454,6 @@ impl ContainerElement {
             component_definition_name,
             inherited_variable_name,
             loop_alias,
-            device,
-        ));
-
-        component_statements.extend(self.container.to_set_properties(
-            kernel.name.as_str(),
-            doc,
-            component_definition_name,
-            loop_alias,
-            inherited_variable_name,
             device,
         ));
 
