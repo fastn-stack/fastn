@@ -12,6 +12,8 @@ let fastn_utils = {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Div) {
             node = "div";
+        } else if (kind === fastn_dom.ElementKind.ContainerElement) {
+            node = "div";
         } else if (kind === fastn_dom.ElementKind.Text) {
             // css.push("ft_text");
         } else if (kind === fastn_dom.ElementKind.CheckBox) {

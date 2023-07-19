@@ -106,6 +106,7 @@ impl fastn_js::ElementKind {
         match self {
             fastn_js::ElementKind::Div => "fastn_dom.ElementKind.Div",
             fastn_js::ElementKind::Row => "fastn_dom.ElementKind.Row",
+            fastn_js::ElementKind::ContainerElement => "fastn_dom.ElementKind.ContainerElement",
             fastn_js::ElementKind::Column => "fastn_dom.ElementKind.Column",
             fastn_js::ElementKind::Integer => "fastn_dom.ElementKind.Integer",
             fastn_js::ElementKind::Decimal => "fastn_dom.ElementKind.Decimal",

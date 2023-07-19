@@ -24,6 +24,7 @@ pub enum ElementKind {
     Div,
     Row,
     Column,
+    ContainerElement,
     Integer,
     Decimal,
     Boolean,
