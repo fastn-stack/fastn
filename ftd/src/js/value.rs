@@ -2,7 +2,8 @@
 pub enum Value {
     Data(ftd::interpreter::Value),
     Reference(String),
-    Formula(Vec<ftd::interpreter::Property>),
+    ConditionalFormula(Vec<ftd::interpreter::Property>),
+    FunctionCall(ftd::interpreter::FunctionCall),
 }
 
 impl Value {
@@ -37,10 +38,20 @@ impl Value {
                     inherited_variable_name,
                 ))
             }
-            Value::Formula(formulas) => {
-                fastn_js::SetPropertyValue::Formula(formulas_to_fastn_js_value(
+            Value::ConditionalFormula(formulas) => {
+                fastn_js::SetPropertyValue::Formula(properties_to_js_conditional_formula(
                     doc,
                     formulas,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ))
+            }
+            Value::FunctionCall(function_call) => {
+                fastn_js::SetPropertyValue::Formula(function_call_to_js_formula(
+                    function_call,
+                    doc,
                     component_definition_name,
                     loop_alias,
                     inherited_variable_name,
@@ -89,7 +100,36 @@ impl Value {
     }
 }
 
-fn formulas_to_fastn_js_value(
+fn function_call_to_js_formula(
+    function_call: &ftd::interpreter::FunctionCall,
+    doc: &ftd::interpreter::TDoc,
+    component_definition_name: &Option<String>,
+    loop_alias: &Option<String>,
+    inherited_variable_name: &str,
+    device: &Option<fastn_js::DeviceType>,
+) -> fastn_js::Formula {
+    let mut deps = vec![];
+    for property_value in function_call.values.values() {
+        deps.extend(property_value.get_deps(
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+        ));
+    }
+
+    fastn_js::Formula {
+        deps,
+        type_: fastn_js::FormulaType::FunctionCall(function_call.to_js_function(
+            doc,
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+            device,
+        )),
+    }
+}
+
+fn properties_to_js_conditional_formula(
     doc: &ftd::interpreter::TDoc,
     properties: &[ftd::interpreter::Property],
     component_definition_name: &Option<String>,
@@ -133,7 +173,7 @@ fn formulas_to_fastn_js_value(
 
     fastn_js::Formula {
         deps,
-        conditional_values,
+        type_: fastn_js::FormulaType::Conditional(conditional_values),
     }
 }
 
@@ -296,7 +336,7 @@ impl ftd::interpreter::Argument {
             }
         }
 
-        Some(Value::Formula(properties))
+        Some(Value::ConditionalFormula(properties))
     }
 }
 
@@ -340,33 +380,25 @@ impl ftd::interpreter::PropertyValue {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
-        match self {
-            ftd::interpreter::PropertyValue::Value { ref value, .. } => value.to_fastn_js_value(
-                doc,
-                component_definition_name,
-                loop_alias,
-                inherited_variable_name,
-                device,
-            ),
-            ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
-                    name,
-                    component_definition_name,
-                    loop_alias,
-                    inherited_variable_name,
-                ))
-            }
-            _ => todo!(),
-        }
+        self.to_value().to_set_property_value(
+            doc,
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+            device,
+        )
     }
 
-    pub(crate) fn to_value(&self) -> Value {
+    pub(crate) fn to_value(&self) -> ftd::js::Value {
         match self {
             ftd::interpreter::PropertyValue::Value { ref value, .. } => {
-                Value::Data(value.to_owned())
+                ftd::js::Value::Data(value.to_owned())
             }
             ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                Value::Reference(name.to_owned())
+                ftd::js::Value::Reference(name.to_owned())
+            }
+            ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
+                ftd::js::Value::FunctionCall(function_call.to_owned())
             }
             _ => todo!(),
         }

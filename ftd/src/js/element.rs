@@ -2726,7 +2726,7 @@ impl ftd::interpreter::Event {
 }
 
 impl ftd::interpreter::FunctionCall {
-    fn to_js_function(
+    pub(crate) fn to_js_function(
         &self,
         doc: &ftd::interpreter::TDoc,
         component_definition_name: &Option<String>,
