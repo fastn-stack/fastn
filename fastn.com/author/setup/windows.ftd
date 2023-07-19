@@ -14,8 +14,10 @@ For Windows machine, there are three ways to install `fastn`.
 -- cbox.info: Our Recommendation
 
 On Windows, we recommend you to install `fastn` through fastn installer
-which can be found can be found under the [releases](https://github.com/fastn-stack/fastn/releases/)
-section of the official [fastn](https://github.com/fastn-stack/fastn) github repository.
+which can be found under the 
+[releases](https://github.com/fastn-stack/fastn/releases/)
+section of the official [fastn](https://github.com/fastn-stack/fastn) github 
+repository.
 
 This is the preferred method as it only requires downloading the setup and
 installing it on your local system.
@@ -70,9 +72,13 @@ v: lw-qVPCJgZs
 
 - Click on latest release
 
-- Get the latest executable file for windows in the releases page, under Assets 
+- Get the latest executable file for windows in the releases page, under Assets
 
-- Create a folder named FASTN in your C drive
+- Once downloaded, select `Keep` option and ignore the warning 
+
+- Create a folder named `FASTN` (UpperCase) in your C drive
+
+- Paste the downloaded executable and rename it as `fastn` (not `fastn.exe`)
 
 - Go to Settings and search Environment Variable
 
@@ -91,13 +97,13 @@ C:\FASTN
 
 -- ds.markdown:
 
-- Click OK.
+- Click `OK` to close all pop-ups.
 
 -- ds.markdown:
 
 Installation of `fastn` is complete.
 
-To verify, open command prompt and execute the command, `fastn`
+To verify, open a fresh command prompt window and execute the command, `fastn`
 
 -- ds.image:
 src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
