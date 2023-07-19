@@ -49,3 +49,20 @@ pub(crate) fn update_reference(
 fn is_ftd_thing(name: &str) -> bool {
     name.starts_with("ftd#") || name.starts_with("ftd.")
 }
+
+pub(crate) fn get_js_value_from_properties(
+    properties: &[ftd::interpreter::Property],
+) -> Option<ftd::js::Value> {
+    if properties.is_empty() {
+        return None;
+    }
+
+    if properties.len() == 1 {
+        let property = properties.first().unwrap();
+        if property.condition.is_none() {
+            return Some(property.value.to_value());
+        }
+    }
+
+    Some(ftd::js::Value::ConditionalFormula(properties.to_owned()))
+}

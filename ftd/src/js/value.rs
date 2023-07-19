@@ -325,18 +325,7 @@ impl ftd::interpreter::Argument {
         )
         .unwrap();
 
-        if properties.is_empty() {
-            return None;
-        }
-
-        if properties.len() == 1 {
-            let property = properties.first().unwrap();
-            if property.condition.is_none() {
-                return Some(property.value.to_value());
-            }
-        }
-
-        Some(Value::ConditionalFormula(properties))
+        ftd::js::utils::get_js_value_from_properties(properties.as_slice())
     }
 }
 
