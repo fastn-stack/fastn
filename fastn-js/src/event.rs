@@ -13,5 +13,5 @@ pub enum Event {
 #[derive(Debug)]
 pub struct Function {
     pub name: String,
-    pub parameters: Vec<fastn_js::SetPropertyValue>,
+    pub parameters: Vec<(String, fastn_js::SetPropertyValue)>,
 }
