@@ -967,8 +967,12 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
-            const lightSrc = staticValue.get('light');
-            this.attachAttribute("src", fastn_utils.getStaticValue(lightSrc));
+            ftd.dark_mode.addClosure(fastn.closure(() => {
+                const is_dark_mode = ftd.dark_mode.get();
+                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+
+                this.attachAttribute("src", fastn_utils.getStaticValue(src));
+            }));
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {

@@ -1,7 +1,8 @@
--- ftd.column:
+-- ftd.image-src my-images:
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+dark: https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg
 
 -- ftd.image:
-src: https://picsum.photos/200/300
-alt: Alternate Text
-
--- end: ftd.column
+src: $my-images
+width.fixed.px: 200
+height.fixed.px: 115
