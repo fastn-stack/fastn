@@ -83,6 +83,8 @@ impl fastn_js::Event {
     pub fn to_js(&self) -> pretty::RcDoc<'static> {
         match self {
             fastn_js::Event::OnClick => text("fastn_dom.Event.Click"),
+            fastn_js::Event::OnMouseEnter => text("fastn_dom.Event.MouseEnter"),
+            fastn_js::Event::OnMouseLeave => text("fastn_dom.Event.MouseLeave"),
         }
     }
 }
