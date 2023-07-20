@@ -1771,7 +1771,7 @@ impl Rive {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            state_machines: ftd::js::value::get_optional_js_value(
+            state_machines: ftd::js::value::get_optional_js_value_with_default(
                 "state-machine",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),

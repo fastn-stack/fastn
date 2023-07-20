@@ -344,6 +344,15 @@ pub(crate) fn get_optional_js_value(
     arguments: &[ftd::interpreter::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
+    argument.get_optional_value(properties)
+}
+
+pub(crate) fn get_optional_js_value_with_default(
+    key: &str,
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
+) -> Option<ftd::js::Value> {
+    let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
     argument
         .get_optional_value(properties)
         .or(argument.get_default_value())
