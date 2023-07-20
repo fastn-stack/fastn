@@ -503,7 +503,8 @@ fastn_dom.Length = {
 fastn_dom.Event = {
     Click: 0,
     MouseEnter: 1,
-    MouseLeave: 2
+    MouseLeave: 2,
+    ClickOutside: 3
 }
 
 // Node2 -> Intermediate node
@@ -1000,6 +1001,8 @@ class Node2 {
             this.#node.onmouseenter = func;
         } else if (event === fastn_dom.Event.MouseLeave) {
             this.#node.onmouseleave = func;
+        } else if (event === fastn_dom.Event.ClickOutside) {
+            ftd.clickOutsideEvents.push([this, func]);
         }
     }
     destroy() {

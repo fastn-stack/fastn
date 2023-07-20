@@ -7,9 +7,10 @@ pub struct EventHandler {
 
 #[derive(Debug)]
 pub enum Event {
-    OnClick,
-    OnMouseEnter,
-    OnMouseLeave,
+    Click,
+    MouseEnter,
+    MouseLeave,
+    ClickOutside,
 }
 
 #[derive(Debug)]

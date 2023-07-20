@@ -1,3 +1,5 @@
+ftd.clickOutsideEvents = [];
+
 ftd.post_init = function () {
     let DARK_MODE = false;
     let SYSTEM_DARK_MODE = false;
@@ -19,6 +21,16 @@ ftd.post_init = function () {
         ftd.device.set(current);
         last_device = current;
     };
+    function initialise_click_outside_events() {
+        document.addEventListener("click", function (event) {
+            ftd.clickOutsideEvents.forEach(([ftdNode, func]) => {
+                let node = ftdNode.getNode();
+                if (!!node && node.style.display !== "none" && !node.contains(event.target)) {
+                    func();
+                }
+            })
+        })
+    }
     function initialise_device() {
         last_device = get_device();
         console.log("last_device", last_device);
@@ -161,5 +173,6 @@ ftd.post_init = function () {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
     initialise_dark_mode();
-    initialise_device()
+    initialise_device();
+    initialise_click_outside_events()
 }
