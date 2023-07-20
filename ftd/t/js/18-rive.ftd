@@ -1,0 +1,8 @@
+-- ftd.rive:
+id: panda
+src: ftd/ftd/t/assets/panda.riv
+canvas-width: 500
+canvas-height: 500
+state-machine: State Machine 1
+width.fixed.px: 500
+background.solid: yellow
