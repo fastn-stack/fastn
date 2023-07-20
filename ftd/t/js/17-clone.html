@@ -54,7 +54,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column w-1 p-2 g-3"><div data-id="3">Ritesh</div><div data-id="4">Ritesh</div><div data-id="5">Change name 1</div><div data-id="6">Change name 2</div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column w-1 p-2 g-3"><div data-id="3">Ritesh</div><div data-id="4">Ritesh</div><div data-id="5">Ritesh</div><div data-id="6">Change name 1</div><div data-id="7">Change name 2</div></div></body><style id="styles">
     .ft_row {  display: flex; align-items: start; justify-content: start; flex-direction: row; }
 	.ft_column {  display: flex; align-items: start; justify-content: start; flex-direction: column; }
 	.w-1 { width: 100%; }
@@ -80,6 +80,10 @@ let main = function (parent) {
   },
   function (root, inherited) {
     let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+    rooti0.setProperty(fastn_dom.PropertyKind.StringValue, global.foo__name3, inherited);
+  },
+  function (root, inherited) {
+    let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
     rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name 1", inherited);
     rooti0.addEventHandler(fastn_dom.Event.Click, function () {
       foo__append_yo({
@@ -100,6 +104,7 @@ let main = function (parent) {
 }
 global.foo__name = fastn.mutable("Ritesh");
 global.foo__name2 = fastn_utils.clone(global.foo__name);
+global.foo__name3 = global.foo__name;
 let foo__append_yo = function (args)
 {
   let __args__ = {
