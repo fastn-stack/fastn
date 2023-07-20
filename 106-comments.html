@@ -6,11 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
-"foo#yellow": {
-"dark": "yellow",
-"light": "yellow"
-},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -785,7 +780,11 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 1800px; width: 300px" class="ft_common ft_column"><div data-id="0,0:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; left: 100px; padding: 20px; position: sticky; top: 50px" class="ft_common ft_md">Sticky Hello world</div><div data-id="0,2:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,3:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,4:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,5:main" style="padding: 80px" class="ft_common ft_md">dummy</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">Hello world</div><div data-id="1:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">Hello world</div><div data-id="2:main" style="" class="ft_common ft_md"><p>Hello world</p> This is how we escape comments ;; Comment escaped</div><div data-id="3:main" style="" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.column</span><span style="color:#cecfd2;">:
+</span><span style="background-color:#222b42; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 #2a77ff inset"><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">ftd.text</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">Hello World
+</span></span><span style="color:#cecfd2;">-- </span><span style="color:#6791e0;">end</span><span style="color:#cecfd2;">: </span><span style="color:#2fb170;">ftd.column
+</span></pre>
+</div></div>
 
 
 <script>
@@ -1992,70 +1991,7 @@ a.value = v
 }
 
 
-window.node_change_main = {};
-window.node_change_main["0:main__background-color"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#yellow", data).light)));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = eval(`window.ftd.dependencies.eval_background_color({0}, data)`.format(JSON.stringify(resolve_reference("foo#yellow", data).dark)));}
-}
 
-window.node_change_main["0:main__background-image"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#yellow", data).light)));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-image"] = eval(`window.ftd.dependencies.eval_background_image({0}, data)`.format(JSON.stringify(resolve_reference("foo#yellow", data).dark)));}
-}
-
-window.node_change_main["0:main__background-position"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).light)));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-position"] = eval(`window.ftd.dependencies.eval_background_position({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).dark)));}
-}
-
-window.node_change_main["0:main__background-repeat"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).light)));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-repeat"] = eval(`window.ftd.dependencies.eval_background_repeat({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).dark)));}
-}
-
-window.node_change_main["0:main__background-size"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).light)));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["background-size"] = eval(`window.ftd.dependencies.eval_background_size({0})`.format(JSON.stringify(resolve_reference("foo#yellow", data).dark)));}
-}
-
-window.node_change_main["0,1:main__position"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="0,1:main"]`).style["position"] = eval(`if ({0}) {"sticky"} else {"static"}`.format(JSON.stringify(true)));
-}
-else { document.querySelector(`[data-id="0,1:main"]`).style["position"] = null }
-}
-window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("foo#flag", "main");
-window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0,1:main__position", data);
-};
-
-window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
-
-window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
-window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-size", data);
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
-window.ftd.utils.node_change_call("main","0:main__background-color", data);
-window.ftd.utils.node_change_call("main","0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
-};
 
 
 
