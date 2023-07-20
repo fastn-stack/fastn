@@ -11,11 +11,9 @@ let fastn_utils = {
             node = "iframe";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
-        } else if (kind === fastn_dom.ElementKind.Div) {
-            node = "div";
-        } else if (kind === fastn_dom.ElementKind.ContainerElement) {
-            node = "div";
-        } else if (kind === fastn_dom.ElementKind.Text) {
+        } else if (kind === fastn_dom.ElementKind.Div ||
+            kind === fastn_dom.ElementKind.ContainerElement ||
+            kind === fastn_dom.ElementKind.Text) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.CheckBox) {
             node = "input";

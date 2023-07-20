@@ -908,14 +908,14 @@ class Node2 {
             switch (staticValue) {
                 case "true":
                 case true:
-                    this.attachAttribute("checked", null);
+                    this.attachAttribute("checked");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
                 case "false":
                 case false:
-                    this.attachAttribute("disabled", null);
+                    this.attachAttribute("disabled");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
