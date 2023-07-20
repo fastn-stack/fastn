@@ -2,6 +2,7 @@ let fastn_utils = {
     htmlNode(kind) {
         let node = "div";
         let css = [];
+        let attributes = {};
         if (kind === fastn_dom.ElementKind.Column) {
             css.push("ft_column");
         } else if (kind === fastn_dom.ElementKind.Row) {
@@ -15,13 +16,14 @@ let fastn_utils = {
         } else if (kind === fastn_dom.ElementKind.ContainerElement) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Text) {
-            // css.push("ft_text");
+            node = "div";
         } else if (kind === fastn_dom.ElementKind.CheckBox) {
-            node = "input type=\"checkbox\"";
+            node = "input";
+            attributes["type"] = "checkbox";
         } else if (kind === fastn_dom.ElementKind.TextInput) {
             node = "input";
         }
-        return [node, css];
+        return [node, css, attributes];
     },
 
     getStaticValue(obj) {
