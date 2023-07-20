@@ -2883,7 +2883,9 @@ impl ftd::interpreter::EventName {
     fn to_js_event_name(&self) -> fastn_js::Event {
         match self {
             ftd::interpreter::EventName::Click => fastn_js::Event::OnClick,
-            _ => todo!(),
+            ftd::interpreter::EventName::MouseEnter => fastn_js::Event::OnMouseEnter,
+            ftd::interpreter::EventName::MouseLeave => fastn_js::Event::OnMouseLeave,
+            t => todo!("{:#?}", t),
         }
     }
 }

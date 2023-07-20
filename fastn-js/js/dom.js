@@ -501,7 +501,9 @@ fastn_dom.Length = {
 
 
 fastn_dom.Event = {
-    Click: 0
+    Click: 0,
+    MouseEnter: 1,
+    MouseLeave: 2
 }
 
 // Node2 -> Intermediate node
@@ -994,6 +996,10 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             this.#node.onclick = func;
+        } else if (event === fastn_dom.Event.MouseEnter) {
+            this.#node.onmouseenter = func;
+        } else if (event === fastn_dom.Event.MouseLeave) {
+            this.#node.onmouseleave = func;
         }
     }
     destroy() {

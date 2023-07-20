@@ -1,0 +1,7 @@
+-- boolean $flag: false
+
+-- ftd.text: Hello
+color if {flag}: red
+color: green
+$on-mouse-enter$: $ftd.set-bool($a = $flag, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $flag, v = false)
