@@ -168,7 +168,9 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
             fastn_js::ComponentStatement::RecordInstance(ri) => ri.to_js(),
             fastn_js::ComponentStatement::DeviceBlock(db) => db.to_js(),
-            fastn_js::ComponentStatement::AnyBlock(ab) => text(ab),
+            fastn_js::ComponentStatement::AnyBlock(ab) => {
+                text(format!("if (!ssr) {{{}}}", ab).as_str())
+            }
         }
     }
 }
