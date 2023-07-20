@@ -2891,6 +2891,9 @@ impl ftd::interpreter::EventName {
             ftd::interpreter::EventName::GlobalKey(gk) => fastn_js::Event::GlobalKey(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
             ),
+            ftd::interpreter::EventName::GlobalKeySeq(gk) => fastn_js::Event::GlobalKeySeq(
+                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
+            ),
             t => todo!("{:#?}", t),
         }
     }

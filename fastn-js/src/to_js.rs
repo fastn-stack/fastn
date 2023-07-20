@@ -98,6 +98,16 @@ impl fastn_js::Event {
                 )
                 .as_str(),
             ),
+            fastn_js::Event::GlobalKeySeq(gk) => text(
+                format!(
+                    "fastn_dom.Event.GlobalKeySeq([{}])",
+                    gk.iter()
+                        .map(|v| format!("\"{}\"", v))
+                        .collect_vec()
+                        .join(", ")
+                )
+                .as_str(),
+            ),
         }
     }
 }
