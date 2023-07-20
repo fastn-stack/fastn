@@ -7,7 +7,12 @@ pub struct EventHandler {
 
 #[derive(Debug)]
 pub enum Event {
-    OnClick,
+    Click,
+    MouseEnter,
+    MouseLeave,
+    ClickOutside,
+    GlobalKey(Vec<String>),
+    GlobalKeySeq(Vec<String>),
 }
 
 #[derive(Debug)]

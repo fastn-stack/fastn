@@ -2881,9 +2881,20 @@ impl ftd::interpreter::FunctionCall {
 
 impl ftd::interpreter::EventName {
     fn to_js_event_name(&self) -> fastn_js::Event {
+        use itertools::Itertools;
+
         match self {
-            ftd::interpreter::EventName::Click => fastn_js::Event::OnClick,
-            _ => todo!(),
+            ftd::interpreter::EventName::Click => fastn_js::Event::Click,
+            ftd::interpreter::EventName::MouseEnter => fastn_js::Event::MouseEnter,
+            ftd::interpreter::EventName::MouseLeave => fastn_js::Event::MouseLeave,
+            ftd::interpreter::EventName::ClickOutside => fastn_js::Event::ClickOutside,
+            ftd::interpreter::EventName::GlobalKey(gk) => fastn_js::Event::GlobalKey(
+                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
+            ),
+            ftd::interpreter::EventName::GlobalKeySeq(gk) => fastn_js::Event::GlobalKeySeq(
+                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
+            ),
+            t => todo!("{:#?}", t),
         }
     }
 }

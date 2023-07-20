@@ -81,5 +81,14 @@ let fastn_utils = {
             return cloned_value;
         }
         return value;
+    },
+  
+    getEventKey(event) {
+        if (65 <= event.keyCode && event.keyCode <= 90) {
+            return String.fromCharCode(event.keyCode).toLowerCase();
+        }
+        else {
+            return event.key;
+        }
     }
 }
