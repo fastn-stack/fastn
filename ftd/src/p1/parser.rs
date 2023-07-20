@@ -873,7 +873,7 @@ fn clean_line(line: &str) -> String {
         return line[1..].to_string();
     }
 
-    if !line.contains(" ;; <hl>") {
+    if !line.contains("<hl>") {
         return remove_inline_comments(line);
     }
 
@@ -882,15 +882,12 @@ fn clean_line(line: &str) -> String {
 
 fn remove_inline_comments(line: &str) -> String {
     let mut output = String::new();
-
     let mut chars = line.chars().peekable();
-
     let mut escape = false;
-
     let mut count = 0;
 
     while let Some(c) = chars.next() {
-        if c == '\\' {
+        if c.eq(&'\\') {
             if !escape {
                 escape = true;
             }
@@ -898,18 +895,18 @@ fn remove_inline_comments(line: &str) -> String {
             count += 1;
 
             if let Some(nc) = chars.peek() {
-                if nc == &';' {
+                if nc.eq(&';') {
                     output.push(';');
                     chars.next();
                     continue;
-                } else if nc != &'\\' {
+                } else if nc.ne(&'\\') {
                     escape = false;
                     count = 0;
                 }
             }
         }
 
-        if c == ';' {
+        if c.eq(&';') {
             if escape {
                 if count % 2 == 0 {
                     output.pop();
@@ -919,7 +916,7 @@ fn remove_inline_comments(line: &str) -> String {
                     count = 0;
                 }
             } else if let Some(nc) = chars.peek() {
-                if nc == &';' {
+                if nc.eq(&';') {
                     break;
                 }
             }
