@@ -964,7 +964,7 @@ class Node2 {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
             const lightSrc = staticValue.get('light');
-            this.attachAttribute("src", lightSrc.get());
+            this.attachAttribute("src", fastn_utils.getStaticValue(lightSrc));
         } else if (kind === fastn_dom.PropertyKind.Alt) {
             this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
