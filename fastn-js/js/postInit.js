@@ -1,5 +1,6 @@
 ftd.clickOutsideEvents = [];
 ftd.globalKeyEvents = [];
+ftd.globalKeySeqEvents = [];
 
 ftd.post_init = function () {
     let DARK_MODE = false;
@@ -49,10 +50,19 @@ ftd.post_init = function () {
                 return;
             }
             buffer.push(eventKey);
-            console.log(buffer, globalKeys, ftd.globalKeyEvents);
-            ftd.globalKeyEvents.forEach(([ftdNode, func, array]) => {
+
+            ftd.globalKeyEvents.forEach(([_ftdNode, func, array]) => {
                 let globalKeysPresent = array.reduce((accumulator, currentValue) => accumulator && !!globalKeys[currentValue], true);
-                if (globalKeysPresent && buffer.join(",").includes(array.join(","))) {
+                if (globalKeysPresent && buffer.join(',').includes(array.join(','))) {
+                    func();
+                    globalKeys[eventKey] = false;
+                    buffer = [];
+                }
+                return;
+            })
+
+            ftd.globalKeySeqEvents.forEach(([_ftdNode, func, array]) => {
+                if (buffer.join(',').includes(array.join(','))) {
                     func();
                     globalKeys[eventKey] = false;
                     buffer = [];

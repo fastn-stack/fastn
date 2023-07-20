@@ -6,4 +6,5 @@ color: green
 $on-mouse-enter$: $ftd.set-bool($a = $flag, v = true)
 $on-mouse-leave$: $ftd.set-bool($a = $flag, v = false)
 $on-global-key[ctrl-a]$: $ftd.toggle($a = $flag)
+$on-global-key-seq[shift-shift]$: $ftd.toggle($a = $flag)
 $on-click-outside$: $ftd.toggle($a = $flag)
