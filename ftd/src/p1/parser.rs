@@ -873,7 +873,11 @@ fn clean_line(line: &str) -> String {
         return line[1..].to_string();
     }
 
-    remove_inline_comments(line)
+    if !line.contains(" ;; <hl>") {
+        return remove_inline_comments(line);
+    }
+
+    line.to_string()
 }
 
 fn remove_inline_comments(line: &str) -> String {
