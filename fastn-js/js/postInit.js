@@ -3,9 +3,6 @@ ftd.globalKeyEvents = [];
 ftd.globalKeySeqEvents = [];
 
 ftd.post_init = function () {
-    let DARK_MODE = false;
-    let SYSTEM_DARK_MODE = false;
-    let FOLLOW_SYSTEM_DARK_MODE = false;
     const DARK_MODE_COOKIE = "fastn-dark-mode";
     const COOKIE_SYSTEM_LIGHT = "system-light";
     const COOKIE_SYSTEM_DARK = "system-dark";
@@ -145,18 +142,18 @@ ftd.post_init = function () {
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        DARK_MODE = true;
-        FOLLOW_SYSTEM_DARK_MODE = false;
-        SYSTEM_DARK_MODE = system_dark_mode();
+        ftd.dark_mode.set(true);
+        ftd.follow_system_dark_mode.set(false);
+        ftd.system_dark_mode.set(system_dark_mode());
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
     };
     window.enable_light_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        DARK_MODE = false;
-        FOLLOW_SYSTEM_DARK_MODE = false;
-        SYSTEM_DARK_MODE = system_dark_mode();
+        ftd.dark_mode.set(false);
+        ftd.follow_system_dark_mode.set(false);
+        ftd.system_dark_mode.set(system_dark_mode());
         if (document.body.classList.contains(DARK_MODE_CLASS)) {
             document.body.classList.remove(DARK_MODE_CLASS);
         }
@@ -165,15 +162,16 @@ ftd.post_init = function () {
     window.enable_system_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
-        FOLLOW_SYSTEM_DARK_MODE = true;
-        SYSTEM_DARK_MODE = system_dark_mode();
-        if (SYSTEM_DARK_MODE) {
-            DARK_MODE = true;
+        let systemMode = system_dark_mode();
+        ftd.follow_system_dark_mode.set(true);
+        ftd.system_dark_mode.set(systemMode);
+        if (systemMode) {
+            ftd.dark_mode.set(true);
             document.body.classList.add(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
         }
         else {
-            DARK_MODE = false;
+            ftd.dark_mode.set(false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
             }
