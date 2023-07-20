@@ -75,7 +75,6 @@ fn p(s: &str, t: &str, fix: bool, manual: bool, file_location: &std::path::PathB
     let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let js_ast = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
-    dbg!(&js_document_script);
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), false);
     let ssr_body =
         fastn_js::ssr_with_js_string(format!("{js_ftd_script}\n{js_document_script}").as_str());
