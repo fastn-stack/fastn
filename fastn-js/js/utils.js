@@ -72,8 +72,14 @@ let fastn_utils = {
         };
     },
 
-    // todo: need to update this
     clone(value) {
+        if (value === null || value === undefined) {
+            return value;
+        }
+        if (value instanceof Mutable) {
+            let cloned_value = value.getClone();
+            return cloned_value;
+        }
         return value;
     }
 }
