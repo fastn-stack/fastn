@@ -4,6 +4,7 @@ pub enum Value {
     Reference(String),
     ConditionalFormula(Vec<ftd::interpreter::Property>),
     FunctionCall(ftd::interpreter::FunctionCall),
+    Clone(String),
 }
 
 impl Value {
@@ -56,6 +57,14 @@ impl Value {
                     loop_alias,
                     inherited_variable_name,
                     device,
+                ))
+            }
+            Value::Clone(name) => {
+                fastn_js::SetPropertyValue::Clone(ftd::js::utils::update_reference(
+                    name,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
                 ))
             }
         }
@@ -389,7 +398,9 @@ impl ftd::interpreter::PropertyValue {
             ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
                 ftd::js::Value::FunctionCall(function_call.to_owned())
             }
-            _ => todo!(),
+            ftd::interpreter::PropertyValue::Clone { ref name, .. } => {
+                ftd::js::Value::Clone(name.to_owned())
+            }
         }
     }
 }

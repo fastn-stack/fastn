@@ -29,6 +29,10 @@ pub fn reference_to_js(s: &str) -> String {
     )
 }
 
+pub fn clone_to_js(s: &str) -> String {
+    format!("fastn_utils.clone({})", reference_to_js(s))
+}
+
 pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
