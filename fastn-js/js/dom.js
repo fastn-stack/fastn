@@ -504,7 +504,8 @@ fastn_dom.Event = {
     Click: 0,
     MouseEnter: 1,
     MouseLeave: 2,
-    ClickOutside: 3
+    ClickOutside: 3,
+    GlobalKey: (val) => {return [4, val];}
 }
 
 // Node2 -> Intermediate node
@@ -1003,6 +1004,8 @@ class Node2 {
             this.#node.onmouseleave = func;
         } else if (event === fastn_dom.Event.ClickOutside) {
             ftd.clickOutsideEvents.push([this, func]);
+        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
+            ftd.globalKeyEvents.push([this, func, event[1]]);
         }
     }
     destroy() {

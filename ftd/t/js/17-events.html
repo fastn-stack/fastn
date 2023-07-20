@@ -78,6 +78,12 @@ let main = function (parent) {
       v: false,
     });
   });
+  parenti0.addEventHandler(fastn_dom.Event.GlobalKey(["Control",
+  "a"]), function () {
+    ftd.toggle({
+      a: global.foo__flag,
+    });
+  });
   parenti0.addEventHandler(fastn_dom.Event.ClickOutside, function () {
     ftd.toggle({
       a: global.foo__flag,

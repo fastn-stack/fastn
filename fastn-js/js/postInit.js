@@ -1,4 +1,5 @@
 ftd.clickOutsideEvents = [];
+ftd.globalKeyEvents = [];
 
 ftd.post_init = function () {
     let DARK_MODE = false;
@@ -29,6 +30,39 @@ ftd.post_init = function () {
                     func();
                 }
             })
+        })
+    }
+    function initialise_global_key_events() {
+        let globalKeys = {};
+        let buffer = [];
+        let lastKeyTime = Date.now();
+
+        document.addEventListener("keydown", function (event) {
+            let eventKey =  fastn_utils.getEventKey(event);
+            globalKeys[eventKey] = true;
+            const currentTime = Date.now();
+            if (currentTime - lastKeyTime > 1000) {
+                buffer = [];
+            }
+            lastKeyTime = currentTime;
+            if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
+                return;
+            }
+            buffer.push(eventKey);
+            console.log(buffer, globalKeys, ftd.globalKeyEvents);
+            ftd.globalKeyEvents.forEach(([ftdNode, func, array]) => {
+                let globalKeysPresent = array.reduce((accumulator, currentValue) => accumulator && !!globalKeys[currentValue], true);
+                if (globalKeysPresent && buffer.join(",").includes(array.join(","))) {
+                    func();
+                    globalKeys[eventKey] = false;
+                    buffer = [];
+                }
+                return;
+            })
+        })
+
+        document.addEventListener("keyup", function(event) {
+            globalKeys[fastn_utils.getEventKey(event)] = false;
         })
     }
     function initialise_device() {
@@ -174,5 +208,6 @@ ftd.post_init = function () {
     }
     initialise_dark_mode();
     initialise_device();
-    initialise_click_outside_events()
+    initialise_click_outside_events();
+    initialise_global_key_events()
 }

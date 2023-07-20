@@ -70,5 +70,14 @@ let fastn_utils = {
             "font-weight": fastn_utils.getStaticValue(value.get("weight")),
             "line-height": fastn_utils.getStaticValue(value.get("line_height")),
         };
+    },
+
+    getEventKey(event) {
+        if (65 <= event.keyCode && event.keyCode <= 90) {
+            return String.fromCharCode(event.keyCode).toLowerCase();
+        }
+        else {
+            return event.key;
+        }
     }
 }
