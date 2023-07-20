@@ -34,6 +34,7 @@ pub enum ElementKind {
     Device,
     CheckBox,
     TextInput,
+    Rive,
 }
 
 #[derive(Debug)]

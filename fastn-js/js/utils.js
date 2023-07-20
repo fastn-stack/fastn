@@ -12,6 +12,8 @@ let fastn_utils = {
             node = "img";
         } else if (kind === fastn_dom.ElementKind.Div) {
             node = "div";
+        } else if (kind === fastn_dom.ElementKind.Rive) {
+            node = "canvas";
         } else if (kind === fastn_dom.ElementKind.ContainerElement) {
             node = "div";
         } else if (kind === fastn_dom.ElementKind.Text) {
@@ -32,6 +34,15 @@ let fastn_utils = {
         } else {
            return obj;
         }
+    },
+
+    getFlattenStaticValue(obj) {
+        let staticValue = fastn_utils.getStaticValue(obj);
+        if (Array.isArray(staticValue)) {
+            return staticValue.map(func =>
+                fastn_utils.getFlattenStaticValue(func.item));
+        }
+        return staticValue;
     },
 
     getter(value) {
