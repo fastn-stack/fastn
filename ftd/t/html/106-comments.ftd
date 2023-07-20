@@ -1,0 +1,20 @@
+-- ftd.text: Hello world ;; this will be ignored
+
+-- ftd.text:
+text: Hello world ;; this will be ignored
+color: red ;; COLOR RED
+
+-- ftd.text:
+
+Hello world ;; this is on new line
+
+This is how we escape comments \;; Comment escaped ;; But this is ignored
+
+;; Highlighting works normally
+
+-- ftd.code:
+lang: ftd
+
+\-- ftd.column:
+\-- ftd.text: Hello World ;; <hl>
+\-- end: ftd.column
