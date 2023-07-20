@@ -5,6 +5,23 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub(crate) fn to_key(key: &str) -> String {
+    match key {
+        "ctrl" => "Control",
+        "alt" => "Alt",
+        "shift" => "Shift",
+        "up" => "ArrowUp",
+        "down" => "ArrowDown",
+        "right" => "ArrowRight",
+        "left" => "ArrowLeft",
+        "esc" => "Escape",
+        "dash" => "-",
+        "space" => " ",
+        t => t,
+    }
+    .to_string()
+}
+
 pub(crate) fn update_reference_with_none(reference: &str) -> String {
     update_reference(reference, &None, &None, fastn_js::INHERITED_VARIABLE)
 }

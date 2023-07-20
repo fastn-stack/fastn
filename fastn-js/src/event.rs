@@ -11,6 +11,7 @@ pub enum Event {
     MouseEnter,
     MouseLeave,
     ClickOutside,
+    GlobalKey(Vec<String>),
 }
 
 #[derive(Debug)]
