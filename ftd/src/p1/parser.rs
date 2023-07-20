@@ -872,7 +872,65 @@ fn clean_line(line: &str) -> String {
     if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
+
+    if !line.contains("<hl>") {
+        return remove_inline_comments(line);
+    }
+
     line.to_string()
+}
+
+fn remove_inline_comments(line: &str) -> String {
+    let mut output = String::new();
+    let mut chars = line.chars().peekable();
+    let mut escape = false;
+    let mut count = 0;
+
+    while let Some(c) = chars.next() {
+        if c.eq(&'\\') {
+            if !escape {
+                escape = true;
+            }
+
+            count += 1;
+
+            if let Some(nc) = chars.peek() {
+                if nc.eq(&';') {
+                    output.push(';');
+                    chars.next();
+                    continue;
+                } else if nc.ne(&'\\') {
+                    escape = false;
+                    count = 0;
+                }
+            }
+        }
+
+        if c.eq(&';') {
+            if escape {
+                if count % 2 == 0 {
+                    output.pop();
+                    break;
+                } else {
+                    escape = false;
+                    count = 0;
+                }
+            } else if let Some(nc) = chars.peek() {
+                if nc.eq(&';') {
+                    break;
+                }
+            }
+        }
+
+        if escape {
+            escape = false;
+            count = 0;
+        }
+
+        output.push(c);
+    }
+
+    output.to_string()
 }
 
 fn valid_line(line: &str) -> bool {

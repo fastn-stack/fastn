@@ -503,7 +503,12 @@ fastn_dom.Length = {
 
 
 fastn_dom.Event = {
-    Click: 0
+    Click: 0,
+    MouseEnter: 1,
+    MouseLeave: 2,
+    ClickOutside: 3,
+    GlobalKey: (val) => {return [4, val];},
+    GlobalKeySeq: (val) => {return [5, val];}
 }
 
 // Node2 -> Intermediate node
@@ -1001,6 +1006,16 @@ class Node2 {
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {
             this.#node.onclick = func;
+        } else if (event === fastn_dom.Event.MouseEnter) {
+            this.#node.onmouseenter = func;
+        } else if (event === fastn_dom.Event.MouseLeave) {
+            this.#node.onmouseleave = func;
+        } else if (event === fastn_dom.Event.ClickOutside) {
+            ftd.clickOutsideEvents.push([this, func]);
+        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKey()[0]) {
+            ftd.globalKeyEvents.push([this, func, event[1]]);
+        } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
+            ftd.globalKeySeqEvents.push([this, func, event[1]]);
         }
     }
     destroy() {
