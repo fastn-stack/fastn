@@ -70,5 +70,10 @@ let fastn_utils = {
             "font-weight": fastn_utils.getStaticValue(value.get("weight")),
             "line-height": fastn_utils.getStaticValue(value.get("line_height")),
         };
+    },
+
+    // todo: need to update this
+    clone(value) {
+        return value;
     }
 }

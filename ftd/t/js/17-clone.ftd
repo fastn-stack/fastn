@@ -1,0 +1,17 @@
+-- string $name: Ritesh
+
+
+-- ftd.text: $name
+
+-- ftd.text: *$name
+
+
+-- ftd.text: Change name
+$on-click$: $append-yo($a = $name)
+
+
+-- void append-yo(a):
+string $a:
+
+a = a + " yo "
+

@@ -29,6 +29,26 @@ pub fn reference_to_js(s: &str) -> String {
     )
 }
 
+pub fn clone_to_js(s: &str) -> String {
+    let (prefix, s) = get_prefix(s);
+
+    let (mut p1, mut p2) = get_doc_name_and_remaining(s.as_str());
+    p1 = fastn_js::utils::name_to_js_(p1.as_str());
+    while let Some(remaining) = p2 {
+        let (p21, p22) = get_doc_name_and_remaining(remaining.as_str());
+        p1 = format!(
+            "{}.get(\"{}\")",
+            p1,
+            fastn_js::utils::name_to_js_(p21.as_str())
+        );
+        p2 = p22;
+    }
+    format!(
+        "fastn_utils.clone({}{p1})",
+        prefix.map(|v| format!("{v}.")).unwrap_or_default()
+    )
+}
+
 pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
