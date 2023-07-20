@@ -108,6 +108,10 @@ impl fastn_js::Event {
                 )
                 .as_str(),
             ),
+            fastn_js::Event::Input => text("fastn_dom.Event.Input"),
+            fastn_js::Event::Change => text("fastn_dom.Event.Change"),
+            fastn_js::Event::Blur => text("fastn_dom.Event.Blur"),
+            fastn_js::Event::Focus => text("fastn_dom.Event.Focus"),
         }
     }
 }
