@@ -508,7 +508,11 @@ fastn_dom.Event = {
     MouseLeave: 2,
     ClickOutside: 3,
     GlobalKey: (val) => {return [4, val];},
-    GlobalKeySeq: (val) => {return [5, val];}
+    GlobalKeySeq: (val) => {return [5, val];},
+    Input: 5,
+    Change: 6,
+    Blur: 7,
+    Focus: 8
 }
 
 // Node2 -> Intermediate node
@@ -1016,6 +1020,14 @@ class Node2 {
             ftd.globalKeyEvents.push([this, func, event[1]]);
         } else if (!!event[0] && event[0] === fastn_dom.Event.GlobalKeySeq()[0]) {
             ftd.globalKeySeqEvents.push([this, func, event[1]]);
+        } else if (event === fastn_dom.Event.Input) {
+            this.#node.oninput = func;
+        } else if (event === fastn_dom.Event.Change) {
+            this.#node.onchange = func;
+        } else if (event === fastn_dom.Event.Blur) {
+            this.#node.onblur = func;
+        } else if (event === fastn_dom.Event.Focus) {
+            this.#node.onfocus = func;
         }
     }
     destroy() {

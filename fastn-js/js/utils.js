@@ -72,6 +72,17 @@ let fastn_utils = {
         };
     },
 
+    clone(value) {
+        if (value === null || value === undefined) {
+            return value;
+        }
+        if (value instanceof Mutable) {
+            let cloned_value = value.getClone();
+            return cloned_value;
+        }
+        return value;
+    },
+  
     getEventKey(event) {
         if (65 <= event.keyCode && event.keyCode <= 90) {
             return String.fromCharCode(event.keyCode).toLowerCase();

@@ -1,0 +1,31 @@
+-- string $name: Ritesh
+
+-- string $name2: *$name
+
+-- string $name3: $name
+
+-- ftd.column:
+width: fill-container
+padding.px: 10
+spacing.fixed.px: 5
+
+-- ftd.text: $name
+
+-- ftd.text: $name2
+
+-- ftd.text: $name3
+
+-- ftd.text: Change name 1
+$on-click$: $append-yo($a = $name)
+
+-- ftd.text: Change name 2
+$on-click$: $append-yo($a = $name2)
+
+-- end: ftd.column
+
+
+-- void append-yo(a):
+string $a:
+
+a = a + " yo "
+

@@ -110,6 +110,23 @@ class Mutable {
 
         return thisClosures === otherClosures;
     }
+    setClosures(closures) {
+        this.#closures = closures;
+    }
+    setClosureInstance(closureInstance) {
+        this.#closureInstance = closureInstance;
+    }
+    setOldClosure(old_closure) {
+        this.#old_closure = old_closure;
+    }
+    getClone() {
+        var newMutable = new Mutable(this.#value);
+        newMutable.setClosures(this.#closures);
+        newMutable.setClosureInstance(this.#closureInstance);
+        newMutable.setOldClosure(this.#old_closure);
+
+        return newMutable;
+    }
 }
 
 class Proxy {

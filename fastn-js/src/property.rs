@@ -11,6 +11,7 @@ pub enum SetPropertyValue {
     Reference(String),
     Value(fastn_js::Value),
     Formula(fastn_js::Formula),
+    Clone(String),
 }
 
 impl fastn_js::SetPropertyValue {
@@ -19,6 +20,7 @@ impl fastn_js::SetPropertyValue {
             fastn_js::SetPropertyValue::Reference(name) => fastn_js::utils::reference_to_js(name),
             fastn_js::SetPropertyValue::Value(v) => v.to_js(),
             fastn_js::SetPropertyValue::Formula(f) => f.to_js(),
+            fastn_js::SetPropertyValue::Clone(name) => fastn_js::utils::clone_to_js(name),
         }
     }
 
