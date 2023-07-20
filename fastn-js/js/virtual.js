@@ -69,7 +69,7 @@ class Node {
     getAttributesString() {
         const nodeAttributes = Object.entries(this.#attributes)
             .map(([attribute, value]) => {
-                if (!!value && value !== undefined && value !== null && value !== "null") {
+                if (value !== undefined && value !== null && value !== "") {
                     return `${attribute}=\"${value}\"`;
                 }
                 return `${attribute}`;
