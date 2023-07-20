@@ -2894,6 +2894,10 @@ impl ftd::interpreter::EventName {
             ftd::interpreter::EventName::GlobalKeySeq(gk) => fastn_js::Event::GlobalKeySeq(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
             ),
+            ftd::interpreter::EventName::Input => fastn_js::Event::Input,
+            ftd::interpreter::EventName::Change => fastn_js::Event::Change,
+            ftd::interpreter::EventName::Blur => fastn_js::Event::Blur,
+            ftd::interpreter::EventName::Focus => fastn_js::Event::Focus,
             t => todo!("{:#?}", t),
         }
     }

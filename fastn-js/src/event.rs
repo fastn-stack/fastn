@@ -13,6 +13,10 @@ pub enum Event {
     ClickOutside,
     GlobalKey(Vec<String>),
     GlobalKeySeq(Vec<String>),
+    Input,
+    Change,
+    Blur,
+    Focus,
 }
 
 #[derive(Debug)]
