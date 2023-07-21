@@ -556,6 +556,13 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
                 js_variant.1,
             )
         }
+        "ftd#linear-gradient-directions" => {
+            let js_variant = linear_gradient_direction_variants(variant);
+            (
+                format!("fastn_dom.LinearGradientDirection.{}", js_variant.0),
+                js_variant.1,
+            )
+        }
         "ftd#background-position" => {
             let js_variant = background_position_variants(variant);
             (
@@ -722,6 +729,22 @@ fn background_position_variants(name: &str) -> (&'static str, bool) {
         "right-bottom" => ("RightBottom", false),
         "length" => ("Length", true),
         t => todo!("invalid background position variant {}", t),
+    }
+}
+
+fn linear_gradient_direction_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "angle" => ("Angle", true),
+        "turn" => ("Turn", true),
+        "left" => ("Left", false),
+        "right" => ("Right", false),
+        "top" => ("Top", false),
+        "bottom" => ("Bottom", false),
+        "top-left" => ("TopLeft", false),
+        "top-right" => ("TopRight", false),
+        "bottom-left" => ("BottomLeft", false),
+        "bottom-right" => ("BottomRight", false),
+        t => todo!("invalid linear-gradient direction variant {}", t),
     }
 }
 
