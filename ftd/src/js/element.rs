@@ -724,13 +724,13 @@ impl Image {
             .component()
             .unwrap();
         Image {
-            src: ftd::js::value::get_properties(
+            src: ftd::js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            alt: ftd::js::value::get_properties(
+            alt: ftd::js::value::get_optional_js_value(
                 "alt",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
