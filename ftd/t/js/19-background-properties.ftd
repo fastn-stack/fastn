@@ -6,10 +6,31 @@ dark: green
 light: https://picsum.photos/id/236/200/300
 dark: https://picsum.photos/id/237/200/300
 
+-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ftd.color yellow-blue:
+light: yellow
+dark: blue
+
 -- ftd.background-image bg-image:
 src: $bg-image-src
 repeat: no-repeat
 size: contain
+
+-- ftd.linear-gradient lg:
+direction: bottom-left
+colors: $color-values
+
+-- ftd.linear-gradient-color list color-values:
+
+-- ftd.linear-gradient-color: $red-orange
+stop-position.percent: 40
+
+-- ftd.linear-gradient-color: $yellow-blue
+
+-- end: color-values
 
 -- ftd.column:
 width: fill-container
@@ -27,6 +48,14 @@ align-self: center
 
 -- ftd.column:
 background.image: $bg-image
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+background.linear-gradient: $lg
 width.fixed.px: 400
 height.fixed.px: 200
 align-self: center

@@ -457,6 +457,19 @@ fastn_dom.BackgroundPosition = {
     Length: (value) => { return value; },
 }
 
+fastn_dom.LinearGradientDirection = {
+    Angle: (value) => { return value; },
+    Turn: (value) => { return value; },
+    Left: "270deg",
+    Right: "90deg",
+    Top: "0deg",
+    Bottom: "180deg",
+    TopLeft: "315deg",
+    TopRight: "45deg",
+    BottomLeft: "225deg",
+    BottomRight: "135deg",
+}
+
 fastn_dom.FontSize = {
     Px: (value) => {
         if (value instanceof fastn.mutableClass) {
@@ -678,6 +691,55 @@ class Node2 {
         return cls;
     }
 
+    attachLinearGradientCss(value) {
+        var lightGradientString = "";
+        var darkGradientString = "";
+
+        let colorsList = value.get("colors").get().getList();
+        let direction = fastn_utils.getStaticValue(value.get("direction"));
+        colorsList.map(function (element) {
+            // LinearGradient RecordInstance
+            let lg_color = element.item;
+
+            let color = lg_color.get("color").get();
+            let lightColor = fastn_utils.getStaticValue(color.get("light"));
+            let darkColor = fastn_utils.getStaticValue(color.get("dark"));
+
+            lightGradientString = `${lightGradientString} ${lightColor}`;
+            darkGradientString = `${darkGradientString} ${darkColor}`;
+
+            let start = fastn_utils.getStaticValue(lg_color.get("start"));
+            if (start !== undefined && start !== null ) {
+                lightGradientString = `${lightGradientString} ${start}`;
+                darkGradientString = `${darkGradientString} ${start}`;
+            }
+
+            let end = fastn_utils.getStaticValue(lg_color.get("end"));
+            if (end !== undefined && end !== null ) {
+                lightGradientString = `${lightGradientString} ${end}`;
+                darkGradientString = `${darkGradientString} ${end}`;
+            }
+
+            let stop_position = fastn_utils.getStaticValue(lg_color.get("stop_position"));
+            if (stop_position !== undefined && stop_position !== null ) {
+                lightGradientString = `${lightGradientString}, ${stop_position}`;
+                darkGradientString = `${darkGradientString}, ${stop_position}`;
+            }
+
+            lightGradientString = `${lightGradientString},`
+            darkGradientString = `${darkGradientString},`
+        });
+
+        lightGradientString = lightGradientString.trim().slice(0, -1);
+        darkGradientString = darkGradientString.trim().slice(0, -1);
+
+        if (lightGradientString === darkGradientString) {
+            this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `linear-gradient(${direction}, ${lightGradientString})`,true);
+            this.attachCss("background-image", `linear-gradient(${direction}, ${darkGradientString})`, true, `body.dark .${lightClass}`);
+        }
+    }
     attachBackgroundImageCss(value) {
         let src = fastn_utils.getStaticValue(value.get("src"));
         let lightValue = fastn_utils.getStaticValue(src.get("light"));
@@ -970,18 +1032,15 @@ class Node2 {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
             let backgroundType = staticValue[0];
-            console.log(backgroundType);
             switch (backgroundType) {
                 case 1:
-                    console.log("SOLID background");
                     this.attachColorCss("background-color", staticValue[1]);
                     break;
                 case 2:
-                    console.log("IMAGE background");
                     this.attachBackgroundImageCss(staticValue[1]);
                     break;
                 case 3:
-                    console.log("LG background");
+                    this.attachLinearGradientCss(staticValue[1]);
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.Display) {
