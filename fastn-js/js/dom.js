@@ -92,6 +92,7 @@ fastn_dom.property_map = {
     "font-style": "fst",
     "text-decoration": "td",
     "align-items": "ali",
+    "background-image": "bg",
 };
 
 // dynamic-class-css.md
@@ -413,7 +414,15 @@ fastn_dom.WhiteSpace = {
 
 
 fastn_dom.BackgroundStyle = {
-    Solid: (value) => { return value; }
+    Solid: (value) => {
+        return [value, "solid"];
+    },
+    Image: (value) => {
+        return [value, "image"];
+    },
+    LinearGradient: (value) => {
+        return [value, "linear-gradient"];
+    },
 }
 
 fastn_dom.FontSize = {
@@ -637,6 +646,26 @@ class Node2 {
         return cls;
     }
 
+    attachBackgroundImageCss(value) {
+        let src = fastn_utils.getStaticValue(value.get("src"));
+        let lightValue = fastn_utils.getStaticValue(src.get("light"));
+        let darkValue = fastn_utils.getStaticValue(src.get("dark"));
+
+        let position = fastn_utils.getStaticValue(value.get("position"));
+        let repeat = fastn_utils.getStaticValue(value.get("repeat"));
+        let size = fastn_utils.getStaticValue(value.get("size"));
+
+        this.attachCss("background-repeat", repeat);
+        this.attachCss("background-position", position);
+        this.attachCss("background-size", size);
+
+        if (lightValue === darkValue) {
+            this.attachCss("background-image", `url(${lightValue})`, false);
+        } else {
+            let lightClass = this.attachCss("background-image", `url(${lightValue})`, true);
+            this.attachCss("background-image", `url(${darkValue})`, true, `body.dark .${lightClass}`);
+        }
+    }
     attachColorCss(property, value) {
         let lightValue = fastn_utils.getStaticValue(value.get("light"));
         let darkValue = fastn_utils.getStaticValue(value.get("dark"));
@@ -908,7 +937,22 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
-            this.attachColorCss("background-color", staticValue);
+            let backgroundType = staticValue[1];
+            console.log(backgroundType);
+            switch (backgroundType) {
+                case "solid":
+                    console.log("SOLID background");
+                    this.attachColorCss("background-color", staticValue[0]);
+                    break;
+                case "image":
+                    console.log("IMAGE background");
+                    console.log(staticValue[0]);
+                    this.attachBackgroundImageCss(staticValue[0]);
+                    break;
+                case "linear-gradient":
+                    console.log("LG background");
+                    break;
+            }
         } else if (kind === fastn_dom.PropertyKind.Display) {
             this.attachCss("display", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Checked) {
