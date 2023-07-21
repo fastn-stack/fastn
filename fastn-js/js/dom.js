@@ -229,6 +229,8 @@ fastn_dom.PropertyKind = {
     Src: 84,
     YoutubeSrc: 85,
     Code: 86,
+    ImageSrc: 87,
+    Alt: 88,
 }
 
 fastn_dom.Loading = {
@@ -1103,6 +1105,15 @@ class Node2 {
             this.attachAttribute("loading", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
+            ftd.dark_mode.addClosure(fastn.closure(() => {
+                const is_dark_mode = ftd.dark_mode.get();
+                const src = staticValue.get(is_dark_mode ? 'dark' : 'light');
+
+                this.attachAttribute("src", fastn_utils.getStaticValue(src));
+            }));
+        } else if (kind === fastn_dom.PropertyKind.Alt) {
+            this.attachAttribute("alt", staticValue);
         } else if (kind === fastn_dom.PropertyKind.YoutubeSrc) {
             const id_pattern = "^([a-zA-Z0-9_-]{11})$";
             let id = staticValue.match(id_pattern);

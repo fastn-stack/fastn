@@ -11,6 +11,7 @@ pub enum Element {
     Column(Column),
     Row(Row),
     ContainerElement(ContainerElement),
+    Image(Image),
     Device(Device),
     CheckBox(CheckBox),
     TextInput(TextInput),
@@ -32,6 +33,7 @@ impl Element {
             "ftd#column" => Element::Column(Column::from(component)),
             "ftd#row" => Element::Row(Row::from(component)),
             "ftd#container" => Element::ContainerElement(ContainerElement::from(component)),
+            "ftd#image" => Element::Image(Image::from(component)),
             "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
             "ftd#text-input" => Element::TextInput(TextInput::from(component)),
             "ftd#iframe" => Element::Iframe(Iframe::from(component)),
@@ -117,6 +119,16 @@ impl Element {
                 should_return,
             ),
             Element::ContainerElement(container) => container.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
+            Element::Image(image) => image.to_component_statements(
                 parent,
                 index,
                 doc,
@@ -679,6 +691,100 @@ impl Code {
         ));
 
         component_statements.extend(self.text_common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct Image {
+    pub src: ftd::js::Value,
+    pub alt: Option<ftd::js::Value>,
+    pub common: Common,
+}
+
+impl Image {
+    pub fn from(component: &ftd::interpreter::Component) -> Image {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#image")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Image {
+            src: ftd::js::value::get_optional_js_value(
+                "src",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
+            alt: ftd::js::value::get_optional_js_value(
+                "alt",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Image, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::ImageSrc,
+                value: self.src.to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+                element_name: kernel.name.to_string(),
+                inherited: inherited_variable_name.to_string(),
+            },
+        ));
+        if let Some(ref alt) = self.alt {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                alt.to_set_property(
+                    fastn_js::PropertyKind::Alt,
+                    doc,
+                    kernel.name.as_str(),
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device,
+                ),
+            ));
+        }
+        component_statements.extend(self.common.to_set_properties(
             kernel.name.as_str(),
             doc,
             component_definition_name,
