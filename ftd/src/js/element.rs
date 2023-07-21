@@ -16,6 +16,7 @@ pub enum Element {
     TextInput(TextInput),
     Iframe(Iframe),
     Code(Code),
+    Rive(Rive),
 }
 
 impl Element {
@@ -38,6 +39,7 @@ impl Element {
             "ftd#desktop" | "ftd#mobile" => {
                 Element::Device(Device::from(component, component.name.as_str()))
             }
+            "ftd#rive" => Element::Rive(Rive::from(component)),
             _ => todo!("{}", component.name.as_str()),
         }
     }
@@ -174,6 +176,16 @@ impl Element {
                 device,
                 should_return,
             ),
+            Element::Rive(rive) => rive.to_component_statements(
+                parent,
+                index,
+                doc,
+                component_definition_name,
+                loop_alias,
+                inherited_variable_name,
+                device,
+                should_return,
+            ),
         }
     }
 }
@@ -195,12 +207,12 @@ impl CheckBox {
             .unwrap();
 
         CheckBox {
-            enabled: ftd::js::value::get_properties(
+            enabled: ftd::js::value::get_optional_js_value(
                 "enabled",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            checked: ftd::js::value::get_properties(
+            checked: ftd::js::value::get_optional_js_value(
                 "checked",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -293,27 +305,27 @@ impl TextInput {
             .unwrap();
 
         TextInput {
-            placeholder: ftd::js::value::get_properties(
+            placeholder: ftd::js::value::get_optional_js_value(
                 "placeholder",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            multiline: ftd::js::value::get_properties(
+            multiline: ftd::js::value::get_optional_js_value(
                 "multiline",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            _type: ftd::js::value::get_properties(
+            _type: ftd::js::value::get_optional_js_value(
                 "type",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            default_value: ftd::js::value::get_properties(
+            default_value: ftd::js::value::get_optional_js_value(
                 "default-value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            enabled: ftd::js::value::get_properties(
+            enabled: ftd::js::value::get_optional_js_value(
                 "enabled",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -449,22 +461,22 @@ impl Iframe {
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
             ),
-            src: ftd::js::value::get_properties(
+            src: ftd::js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            srcdoc: ftd::js::value::get_properties(
+            srcdoc: ftd::js::value::get_optional_js_value(
                 "srcdoc",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            loading: ftd::js::value::get_properties(
+            loading: ftd::js::value::get_optional_js_value(
                 "loading",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            youtube: ftd::js::value::get_properties(
+            youtube: ftd::js::value::get_optional_js_value(
                 "youtube",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -576,7 +588,7 @@ impl Code {
             .component()
             .unwrap();
 
-        let raw_code = ftd::js::value::get_properties(
+        let raw_code = ftd::js::value::get_optional_js_value(
             "text",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
@@ -585,7 +597,7 @@ impl Code {
         .get_string_data()
         .unwrap();
 
-        let lang = ftd::js::value::get_properties_with_default(
+        let lang = ftd::js::value::get_js_value_with_default(
             "lang",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
@@ -594,7 +606,7 @@ impl Code {
         .get_string_data()
         .unwrap();
 
-        let theme = ftd::js::value::get_properties_with_default(
+        let theme = ftd::js::value::get_js_value_with_default(
             "theme",
             component.properties.as_slice(),
             component_definition.arguments.as_slice(),
@@ -739,9 +751,13 @@ impl Container {
         arguments: &[ftd::interpreter::Argument],
     ) -> Container {
         Container {
-            spacing: ftd::js::value::get_properties("spacing", properties, arguments),
-            wrap: ftd::js::value::get_properties("wrap", properties, arguments),
-            align_content: ftd::js::value::get_properties("align-content", properties, arguments),
+            spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
+            wrap: ftd::js::value::get_optional_js_value("wrap", properties, arguments),
+            align_content: ftd::js::value::get_optional_js_value(
+                "align-content",
+                properties,
+                arguments,
+            ),
         }
     }
 
@@ -819,8 +835,8 @@ impl InheritedProperties {
         arguments: &[ftd::interpreter::Argument],
     ) -> InheritedProperties {
         InheritedProperties {
-            colors: ftd::js::value::get_properties("colors", properties, arguments),
-            types: ftd::js::value::get_properties("types", properties, arguments),
+            colors: ftd::js::value::get_optional_js_value("colors", properties, arguments),
+            types: ftd::js::value::get_optional_js_value("types", properties, arguments),
         }
     }
 
@@ -883,7 +899,7 @@ impl Text {
             .component()
             .unwrap();
         Text {
-            text: ftd::js::value::get_properties(
+            text: ftd::js::value::get_optional_js_value(
                 "text",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -964,7 +980,7 @@ impl Integer {
             .component()
             .unwrap();
         Integer {
-            value: ftd::js::value::get_properties(
+            value: ftd::js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1045,7 +1061,7 @@ impl Decimal {
             .component()
             .unwrap();
         Decimal {
-            value: ftd::js::value::get_properties(
+            value: ftd::js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1126,7 +1142,7 @@ impl Boolean {
             .component()
             .unwrap();
         Boolean {
-            value: ftd::js::value::get_properties(
+            value: ftd::js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1609,12 +1625,20 @@ impl TextCommon {
         arguments: &[ftd::interpreter::Argument],
     ) -> TextCommon {
         TextCommon {
-            text_transform: ftd::js::value::get_properties("text-transform", properties, arguments),
-            text_indent: ftd::js::value::get_properties("text-indent", properties, arguments),
-            text_align: ftd::js::value::get_properties("text-align", properties, arguments),
-            line_clamp: ftd::js::value::get_properties("line-clamp", properties, arguments),
-            style: ftd::js::value::get_properties("style", properties, arguments),
-            display: ftd::js::value::get_properties("display", properties, arguments),
+            text_transform: ftd::js::value::get_optional_js_value(
+                "text-transform",
+                properties,
+                arguments,
+            ),
+            text_indent: ftd::js::value::get_optional_js_value(
+                "text-indent",
+                properties,
+                arguments,
+            ),
+            text_align: ftd::js::value::get_optional_js_value("text-align", properties, arguments),
+            line_clamp: ftd::js::value::get_optional_js_value("line-clamp", properties, arguments),
+            style: ftd::js::value::get_optional_js_value("style", properties, arguments),
+            display: ftd::js::value::get_optional_js_value("display", properties, arguments),
         }
     }
 
@@ -1711,6 +1735,163 @@ impl TextCommon {
 }
 
 #[derive(Debug)]
+pub struct Rive {
+    pub src: ftd::js::Value,
+    pub canvas_width: Option<ftd::js::Value>,
+    pub canvas_height: Option<ftd::js::Value>,
+    pub state_machines: ftd::js::Value,
+    pub autoplay: ftd::js::Value,
+    pub artboard: Option<ftd::js::Value>,
+    pub common: Common,
+}
+
+impl Rive {
+    pub fn from(component: &ftd::interpreter::Component) -> Rive {
+        let component_definition = ftd::interpreter::default::default_bag()
+            .get("ftd#rive")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+
+        Rive {
+            src: ftd::js::value::get_optional_js_value(
+                "src",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
+            canvas_width: ftd::js::value::get_optional_js_value(
+                "canvas-width",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            canvas_height: ftd::js::value::get_optional_js_value(
+                "canvas-height",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            state_machines: ftd::js::value::get_optional_js_value_with_default(
+                "state-machine",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
+            autoplay: ftd::js::value::get_optional_js_value(
+                "autoplay",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+            .unwrap(),
+            artboard: ftd::js::value::get_optional_js_value(
+                "artboard",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+
+        let rive_name = self.common.id.as_ref().unwrap().get_string_data().unwrap();
+
+        component_statements.push(fastn_js::ComponentStatement::AnyBlock(format!(
+            indoc::indoc! {"
+                let {rive_name} = new rive.Rive({{
+                    src: fastn_utils.getFlattenStaticValue({src}),
+                    canvas: {canvas},
+                    autoplay: fastn_utils.getStaticValue({autoplay}),
+                    stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
+                    artboard: {artboard},
+                    onLoad: (_) => {{
+                        {rive_name}.resizeDrawingSurfaceToCanvas();
+                    }},
+                }});
+            "},
+            rive_name = rive_name,
+            src = self
+                .src
+                .to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device
+                )
+                .to_js(),
+            canvas = kernel.name,
+            autoplay = self
+                .autoplay
+                .to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device
+                )
+                .to_js(),
+            state_machines = self
+                .state_machines
+                .to_set_property_value(
+                    doc,
+                    component_definition_name,
+                    loop_alias,
+                    inherited_variable_name,
+                    device
+                )
+                .to_js(),
+            artboard = self
+                .artboard
+                .as_ref()
+                .map(|v| v
+                    .to_set_property_value(
+                        doc,
+                        component_definition_name,
+                        loop_alias,
+                        inherited_variable_name,
+                        device
+                    )
+                    .to_js())
+                .unwrap_or_else(|| "null".to_string()),
+        )));
+
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            component_definition_name,
+            inherited_variable_name,
+            loop_alias,
+            device,
+        ));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+
+#[derive(Debug)]
 pub struct Common {
     pub id: Option<ftd::js::Value>,
     pub region: Option<ftd::js::Value>,
@@ -1787,163 +1968,207 @@ impl Common {
         events: &[ftd::interpreter::Event],
     ) -> Common {
         Common {
-            id: ftd::js::value::get_properties("id", properties, arguments),
-            region: ftd::js::value::get_properties("region", properties, arguments),
-            link: ftd::js::value::get_properties("link", properties, arguments),
-            open_in_new_tab: ftd::js::value::get_properties(
+            id: ftd::js::value::get_optional_js_value("id", properties, arguments),
+            region: ftd::js::value::get_optional_js_value("region", properties, arguments),
+            link: ftd::js::value::get_optional_js_value("link", properties, arguments),
+            open_in_new_tab: ftd::js::value::get_optional_js_value(
                 "open-in-new-tab",
                 properties,
                 arguments,
             ),
-            anchor: ftd::js::value::get_properties("anchor", properties, arguments),
-            classes: ftd::js::value::get_properties("classes", properties, arguments),
-            align_self: ftd::js::value::get_properties("align-self", properties, arguments),
-            width: ftd::js::value::get_properties("width", properties, arguments),
-            height: ftd::js::value::get_properties("height", properties, arguments),
-            padding: ftd::js::value::get_properties("padding", properties, arguments),
-            padding_horizontal: ftd::js::value::get_properties(
+            anchor: ftd::js::value::get_optional_js_value("anchor", properties, arguments),
+            classes: ftd::js::value::get_optional_js_value("classes", properties, arguments),
+            align_self: ftd::js::value::get_optional_js_value("align-self", properties, arguments),
+            width: ftd::js::value::get_optional_js_value("width", properties, arguments),
+            height: ftd::js::value::get_optional_js_value("height", properties, arguments),
+            padding: ftd::js::value::get_optional_js_value("padding", properties, arguments),
+            padding_horizontal: ftd::js::value::get_optional_js_value(
                 "padding-horizontal",
                 properties,
                 arguments,
             ),
-            padding_vertical: ftd::js::value::get_properties(
+            padding_vertical: ftd::js::value::get_optional_js_value(
                 "padding-vertical",
                 properties,
                 arguments,
             ),
-            padding_left: ftd::js::value::get_properties("padding-left", properties, arguments),
-            padding_right: ftd::js::value::get_properties("padding-right", properties, arguments),
-            padding_top: ftd::js::value::get_properties("padding-top", properties, arguments),
-            padding_bottom: ftd::js::value::get_properties("padding-bottom", properties, arguments),
-            margin: ftd::js::value::get_properties("margin", properties, arguments),
-            margin_horizontal: ftd::js::value::get_properties(
+            padding_left: ftd::js::value::get_optional_js_value(
+                "padding-left",
+                properties,
+                arguments,
+            ),
+            padding_right: ftd::js::value::get_optional_js_value(
+                "padding-right",
+                properties,
+                arguments,
+            ),
+            padding_top: ftd::js::value::get_optional_js_value(
+                "padding-top",
+                properties,
+                arguments,
+            ),
+            padding_bottom: ftd::js::value::get_optional_js_value(
+                "padding-bottom",
+                properties,
+                arguments,
+            ),
+            margin: ftd::js::value::get_optional_js_value("margin", properties, arguments),
+            margin_horizontal: ftd::js::value::get_optional_js_value(
                 "margin-horizontal",
                 properties,
                 arguments,
             ),
-            margin_vertical: ftd::js::value::get_properties(
+            margin_vertical: ftd::js::value::get_optional_js_value(
                 "margin-vertical",
                 properties,
                 arguments,
             ),
-            margin_left: ftd::js::value::get_properties("margin-left", properties, arguments),
-            margin_right: ftd::js::value::get_properties("margin-right", properties, arguments),
-            margin_top: ftd::js::value::get_properties("margin-top", properties, arguments),
-            margin_bottom: ftd::js::value::get_properties("margin-bottom", properties, arguments),
-            border_width: ftd::js::value::get_properties("border-width", properties, arguments),
-            border_top_width: ftd::js::value::get_properties(
+            margin_left: ftd::js::value::get_optional_js_value(
+                "margin-left",
+                properties,
+                arguments,
+            ),
+            margin_right: ftd::js::value::get_optional_js_value(
+                "margin-right",
+                properties,
+                arguments,
+            ),
+            margin_top: ftd::js::value::get_optional_js_value("margin-top", properties, arguments),
+            margin_bottom: ftd::js::value::get_optional_js_value(
+                "margin-bottom",
+                properties,
+                arguments,
+            ),
+            border_width: ftd::js::value::get_optional_js_value(
+                "border-width",
+                properties,
+                arguments,
+            ),
+            border_top_width: ftd::js::value::get_optional_js_value(
                 "border-top-width",
                 properties,
                 arguments,
             ),
-            border_bottom_width: ftd::js::value::get_properties(
+            border_bottom_width: ftd::js::value::get_optional_js_value(
                 "border-bottom-width",
                 properties,
                 arguments,
             ),
-            border_left_width: ftd::js::value::get_properties(
+            border_left_width: ftd::js::value::get_optional_js_value(
                 "border-left-width",
                 properties,
                 arguments,
             ),
-            border_right_width: ftd::js::value::get_properties(
+            border_right_width: ftd::js::value::get_optional_js_value(
                 "border-right-width",
                 properties,
                 arguments,
             ),
-            border_radius: ftd::js::value::get_properties("border-radius", properties, arguments),
-            border_top_left_radius: ftd::js::value::get_properties(
+            border_radius: ftd::js::value::get_optional_js_value(
+                "border-radius",
+                properties,
+                arguments,
+            ),
+            border_top_left_radius: ftd::js::value::get_optional_js_value(
                 "border-top-left-radius",
                 properties,
                 arguments,
             ),
-            border_top_right_radius: ftd::js::value::get_properties(
+            border_top_right_radius: ftd::js::value::get_optional_js_value(
                 "border-top-right-radius",
                 properties,
                 arguments,
             ),
-            border_bottom_left_radius: ftd::js::value::get_properties(
+            border_bottom_left_radius: ftd::js::value::get_optional_js_value(
                 "border-bottom-left-radius",
                 properties,
                 arguments,
             ),
-            border_bottom_right_radius: ftd::js::value::get_properties(
+            border_bottom_right_radius: ftd::js::value::get_optional_js_value(
                 "border-bottom-right-radius",
                 properties,
                 arguments,
             ),
-            border_style: ftd::js::value::get_properties("border-style", properties, arguments),
-            border_style_vertical: ftd::js::value::get_properties(
+            border_style: ftd::js::value::get_optional_js_value(
+                "border-style",
+                properties,
+                arguments,
+            ),
+            border_style_vertical: ftd::js::value::get_optional_js_value(
                 "border-style-vertical",
                 properties,
                 arguments,
             ),
-            border_style_horizontal: ftd::js::value::get_properties(
+            border_style_horizontal: ftd::js::value::get_optional_js_value(
                 "border-style-horizontal",
                 properties,
                 arguments,
             ),
-            border_left_style: ftd::js::value::get_properties(
+            border_left_style: ftd::js::value::get_optional_js_value(
                 "border-style-left",
                 properties,
                 arguments,
             ),
-            border_right_style: ftd::js::value::get_properties(
+            border_right_style: ftd::js::value::get_optional_js_value(
                 "border-style-right",
                 properties,
                 arguments,
             ),
-            border_top_style: ftd::js::value::get_properties(
+            border_top_style: ftd::js::value::get_optional_js_value(
                 "border-style-top",
                 properties,
                 arguments,
             ),
-            border_bottom_style: ftd::js::value::get_properties(
+            border_bottom_style: ftd::js::value::get_optional_js_value(
                 "border-style-bottom",
                 properties,
                 arguments,
             ),
-            border_color: ftd::js::value::get_properties("border-color", properties, arguments),
-            border_left_color: ftd::js::value::get_properties(
+            border_color: ftd::js::value::get_optional_js_value(
+                "border-color",
+                properties,
+                arguments,
+            ),
+            border_left_color: ftd::js::value::get_optional_js_value(
                 "border-left-color",
                 properties,
                 arguments,
             ),
-            border_right_color: ftd::js::value::get_properties(
+            border_right_color: ftd::js::value::get_optional_js_value(
                 "border-right-color",
                 properties,
                 arguments,
             ),
-            border_top_color: ftd::js::value::get_properties(
+            border_top_color: ftd::js::value::get_optional_js_value(
                 "border-top-color",
                 properties,
                 arguments,
             ),
-            border_bottom_color: ftd::js::value::get_properties(
+            border_bottom_color: ftd::js::value::get_optional_js_value(
                 "border-bottom-color",
                 properties,
                 arguments,
             ),
-            color: ftd::js::value::get_properties("color", properties, arguments),
-            background: ftd::js::value::get_properties("background", properties, arguments),
-            role: ftd::js::value::get_properties("role", properties, arguments),
-            z_index: ftd::js::value::get_properties("z-index", properties, arguments),
-            sticky: ftd::js::value::get_properties("sticky", properties, arguments),
-            top: ftd::js::value::get_properties("top", properties, arguments),
-            bottom: ftd::js::value::get_properties("bottom", properties, arguments),
-            left: ftd::js::value::get_properties("left", properties, arguments),
-            right: ftd::js::value::get_properties("right", properties, arguments),
-            overflow: ftd::js::value::get_properties("overflow", properties, arguments),
-            overflow_x: ftd::js::value::get_properties("overflow-x", properties, arguments),
-            overflow_y: ftd::js::value::get_properties("overflow-y", properties, arguments),
-            opacity: ftd::js::value::get_properties("opacity", properties, arguments),
-            cursor: ftd::js::value::get_properties("cursor", properties, arguments),
-            resize: ftd::js::value::get_properties("resize", properties, arguments),
-            max_height: ftd::js::value::get_properties("max-height", properties, arguments),
-            max_width: ftd::js::value::get_properties("max-width", properties, arguments),
-            min_height: ftd::js::value::get_properties("min-height", properties, arguments),
-            min_width: ftd::js::value::get_properties("min-width", properties, arguments),
-            whitespace: ftd::js::value::get_properties("white-space", properties, arguments),
+            color: ftd::js::value::get_optional_js_value("color", properties, arguments),
+            background: ftd::js::value::get_optional_js_value("background", properties, arguments),
+            role: ftd::js::value::get_optional_js_value("role", properties, arguments),
+            z_index: ftd::js::value::get_optional_js_value("z-index", properties, arguments),
+            sticky: ftd::js::value::get_optional_js_value("sticky", properties, arguments),
+            top: ftd::js::value::get_optional_js_value("top", properties, arguments),
+            bottom: ftd::js::value::get_optional_js_value("bottom", properties, arguments),
+            left: ftd::js::value::get_optional_js_value("left", properties, arguments),
+            right: ftd::js::value::get_optional_js_value("right", properties, arguments),
+            overflow: ftd::js::value::get_optional_js_value("overflow", properties, arguments),
+            overflow_x: ftd::js::value::get_optional_js_value("overflow-x", properties, arguments),
+            overflow_y: ftd::js::value::get_optional_js_value("overflow-y", properties, arguments),
+            opacity: ftd::js::value::get_optional_js_value("opacity", properties, arguments),
+            cursor: ftd::js::value::get_optional_js_value("cursor", properties, arguments),
+            resize: ftd::js::value::get_optional_js_value("resize", properties, arguments),
+            max_height: ftd::js::value::get_optional_js_value("max-height", properties, arguments),
+            max_width: ftd::js::value::get_optional_js_value("max-width", properties, arguments),
+            min_height: ftd::js::value::get_optional_js_value("min-height", properties, arguments),
+            min_width: ftd::js::value::get_optional_js_value("min-width", properties, arguments),
+            whitespace: ftd::js::value::get_optional_js_value("white-space", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -2894,6 +3119,10 @@ impl ftd::interpreter::EventName {
             ftd::interpreter::EventName::GlobalKeySeq(gk) => fastn_js::Event::GlobalKeySeq(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
             ),
+            ftd::interpreter::EventName::Input => fastn_js::Event::Input,
+            ftd::interpreter::EventName::Change => fastn_js::Event::Change,
+            ftd::interpreter::EventName::Blur => fastn_js::Event::Blur,
+            ftd::interpreter::EventName::Focus => fastn_js::Event::Focus,
             t => todo!("{:#?}", t),
         }
     }
@@ -2915,6 +3144,7 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#iframe",
         "ftd#code",
         "ftd#image",
+        "ftd#rive",
     ]
     .contains(&s)
 }

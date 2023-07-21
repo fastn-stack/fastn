@@ -291,16 +291,16 @@ impl ftd::interpreter::PropertyValue {
 }
 
 impl ftd::interpreter::Argument {
-    pub(crate) fn get_default_value(&self) -> Option<Value> {
+    pub(crate) fn get_default_value(&self) -> Option<ftd::js::Value> {
         if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {
-            Some(Value::Data(ftd::interpreter::Value::List {
+            Some(ftd::js::Value::Data(ftd::interpreter::Value::List {
                 data: vec![],
                 kind: self.kind.clone(),
             }))
         } else if self.kind.is_optional() {
-            Some(Value::Data(ftd::interpreter::Value::Optional {
+            Some(ftd::js::Value::Data(ftd::interpreter::Value::Optional {
                 data: Box::new(None),
                 kind: self.kind.clone(),
             }))
@@ -308,7 +308,7 @@ impl ftd::interpreter::Argument {
             None
         }
     }
-    pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> Value {
+    pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> ftd::js::Value {
         if let Some(value) = self.get_optional_value(properties) {
             value
         } else if let Some(value) = self.get_default_value() {
@@ -323,7 +323,7 @@ impl ftd::interpreter::Argument {
         properties: &[ftd::interpreter::Property],
         // doc_name: &str,
         // line_number: usize
-    ) -> Option<Value> {
+    ) -> Option<ftd::js::Value> {
         let sources = self.to_sources();
         let properties = ftd::interpreter::utils::find_properties_by_source(
             sources.as_slice(),
@@ -338,28 +338,33 @@ impl ftd::interpreter::Argument {
     }
 }
 
-pub(crate) fn get_properties(
+pub(crate) fn get_optional_js_value(
     key: &str,
     properties: &[ftd::interpreter::Property],
     arguments: &[ftd::interpreter::Argument],
-) -> Option<Value> {
-    arguments
-        .iter()
-        .find(|v| v.name.eq(key))
-        .unwrap()
-        .get_optional_value(properties)
+) -> Option<ftd::js::Value> {
+    let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
+    argument.get_optional_value(properties)
 }
 
-pub(crate) fn get_properties_with_default(
+pub(crate) fn get_optional_js_value_with_default(
     key: &str,
     properties: &[ftd::interpreter::Property],
     arguments: &[ftd::interpreter::Argument],
-    default: Value,
-) -> Value {
-    if let Some(argument) = arguments.iter().find(|v| v.name.eq(key)) {
-        return argument.get_optional_value(properties).unwrap_or(default);
-    }
-    default
+) -> Option<ftd::js::Value> {
+    let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
+    argument
+        .get_optional_value(properties)
+        .or(argument.get_default_value())
+}
+
+pub(crate) fn get_js_value_with_default(
+    key: &str,
+    properties: &[ftd::interpreter::Property],
+    arguments: &[ftd::interpreter::Argument],
+    default: ftd::js::Value,
+) -> ftd::js::Value {
+    ftd::js::value::get_optional_js_value(key, properties, arguments).unwrap_or(default)
 }
 
 impl ftd::interpreter::PropertyValue {
@@ -419,6 +424,19 @@ impl ftd::interpreter::Value {
         match self {
             ftd::interpreter::Value::Boolean { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
+            }
+            ftd::interpreter::Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_fastn_js_value(
+                        doc,
+                        component_definition_name,
+                        loop_alias,
+                        inherited_variable_name,
+                        device,
+                    )
+                } else {
+                    fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
+                }
             }
             ftd::interpreter::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))

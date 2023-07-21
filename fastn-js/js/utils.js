@@ -15,6 +15,8 @@ let fastn_utils = {
             kind === fastn_dom.ElementKind.ContainerElement ||
             kind === fastn_dom.ElementKind.Text) {
             node = "div";
+        } else if (kind === fastn_dom.ElementKind.Rive) {
+            node = "canvas";
         } else if (kind === fastn_dom.ElementKind.CheckBox) {
             node = "input";
             attributes["type"] = "checkbox";
@@ -32,6 +34,15 @@ let fastn_utils = {
         } else {
            return obj;
         }
+    },
+
+    getFlattenStaticValue(obj) {
+        let staticValue = fastn_utils.getStaticValue(obj);
+        if (Array.isArray(staticValue)) {
+            return staticValue.map(func =>
+                fastn_utils.getFlattenStaticValue(func.item));
+        }
+        return staticValue;
     },
 
     getter(value) {

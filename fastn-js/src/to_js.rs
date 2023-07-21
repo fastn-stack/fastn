@@ -108,6 +108,10 @@ impl fastn_js::Event {
                 )
                 .as_str(),
             ),
+            fastn_js::Event::Input => text("fastn_dom.Event.Input"),
+            fastn_js::Event::Change => text("fastn_dom.Event.Change"),
+            fastn_js::Event::Blur => text("fastn_dom.Event.Blur"),
+            fastn_js::Event::Focus => text("fastn_dom.Event.Focus"),
         }
     }
 }
@@ -142,6 +146,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::Device => "fastn_dom.ElementKind.Div",
             fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox",
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput",
+            fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive",
         }
     }
 }
@@ -163,6 +168,9 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::ForLoop(fl) => fl.to_js(),
             fastn_js::ComponentStatement::RecordInstance(ri) => ri.to_js(),
             fastn_js::ComponentStatement::DeviceBlock(db) => db.to_js(),
+            fastn_js::ComponentStatement::AnyBlock(ab) => {
+                text(format!("if (!ssr) {{{}}}", ab).as_str())
+            }
         }
     }
 }
