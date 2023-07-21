@@ -547,7 +547,21 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
         }
         "ftd#background-repeat" => {
             let js_variant = background_repeat_variants(variant);
-            (format!("fastn_dom.BackgroundStyle.{}", js_variant), false)
+            (format!("fastn_dom.BackgroundRepeat.{}", js_variant), false)
+        }
+        "ftd#background-size" => {
+            let js_variant = background_size_variants(variant);
+            (
+                format!("fastn_dom.BackgroundSize.{}", js_variant.0),
+                js_variant.1,
+            )
+        }
+        "ftd#background-position" => {
+            let js_variant = background_position_variants(variant);
+            (
+                format!("fastn_dom.BackgroundPosition.{}", js_variant.0),
+                js_variant.1,
+            )
         }
         "ftd#font-size" => {
             let js_variant = font_size_variants(variant);
@@ -672,10 +686,42 @@ fn background_variants(name: &str) -> &'static str {
 
 fn background_repeat_variants(name: &str) -> &'static str {
     match name {
-        "solid" => "Solid",
-        "image" => "Image",
-        "linear-gradient" => "LinearGradient",
-        t => todo!("invalid background variant {}", t),
+        "repeat" => "Repeat",
+        "repeat-x" => "RepeatX",
+        "repeat-y" => "RepeatY",
+        "no-repeat" => "NoRepeat",
+        "space" => "Space",
+        "round" => "Round",
+        t => todo!("invalid background repeat variant {}", t),
+    }
+}
+
+fn background_size_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "auto" => ("Auto", false),
+        "cover" => ("Cover", false),
+        "contain" => ("Contain", false),
+        "length" => ("Length", true),
+        t => todo!("invalid background size variant {}", t),
+    }
+}
+
+fn background_position_variants(name: &str) -> (&'static str, bool) {
+    match name {
+        "left" => ("Left", false),
+        "right" => ("Right", false),
+        "center" => ("Center", false),
+        "left-top" => ("LeftTop", false),
+        "left-center" => ("LeftCenter", false),
+        "left-bottom" => ("LeftBottom", false),
+        "center-top" => ("CenterTop", false),
+        "center-center" => ("CenterCenter", false),
+        "center-bottom" => ("CenterBottom", false),
+        "right-top" => ("RightTop", false),
+        "right-center" => ("RightCenter", false),
+        "right-bottom" => ("RightBottom", false),
+        "length" => ("Length", true),
+        t => todo!("invalid background position variant {}", t),
     }
 }
 

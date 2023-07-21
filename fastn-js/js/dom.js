@@ -413,14 +413,46 @@ fastn_dom.WhiteSpace = {
 
 fastn_dom.BackgroundStyle = {
     Solid: (value) => {
-        return [value, "solid"];
+        return [1, value];
     },
     Image: (value) => {
-        return [value, "image"];
+        return [2, value];
     },
     LinearGradient: (value) => {
-        return [value, "linear-gradient"];
+        return [3, value];
     },
+}
+
+fastn_dom.BackgroundRepeat = {
+    Repeat: "repeat",
+    RepeatX: "repeat-x",
+    RepeatY: "repeat-y",
+    NoRepeat: "no-repeat",
+    Space: "space",
+    Round: "round",
+}
+
+fastn_dom.BackgroundSize = {
+    Auto: "auto",
+    Cover: "cover",
+    Contain: "contain",
+    Length: (value) => { return value; },
+}
+
+fastn_dom.BackgroundPosition = {
+    Left: "left",
+    Right: "right",
+    Center: "center",
+    LeftTop: "left top",
+    LeftCenter: "left center",
+    LeftBottom: "left bottom",
+    CenterTop: "center top",
+    CenterCenter: "center center",
+    CenterBottom: "center bottom",
+    RightTop: "right top",
+    RightCenter: "right center",
+    RightBottom: "right bottom",
+    Length: (value) => { return value; },
 }
 
 fastn_dom.FontSize = {
@@ -653,9 +685,9 @@ class Node2 {
         let repeat = fastn_utils.getStaticValue(value.get("repeat"));
         let size = fastn_utils.getStaticValue(value.get("size"));
 
-        this.attachCss("background-repeat", repeat);
-        this.attachCss("background-position", position);
-        this.attachCss("background-size", size);
+        if (repeat !== null) this.attachCss("background-repeat", repeat);
+        if (position !== null) this.attachCss("background-position", position);
+        if (size !== null)  this.attachCss("background-size", size);
 
         if (lightValue === darkValue) {
             this.attachCss("background-image", `url(${lightValue})`, false);
@@ -935,19 +967,18 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Color) {
             this.attachColorCss("color", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Background) {
-            let backgroundType = staticValue[1];
+            let backgroundType = staticValue[0];
             console.log(backgroundType);
             switch (backgroundType) {
-                case "solid":
+                case 1:
                     console.log("SOLID background");
-                    this.attachColorCss("background-color", staticValue[0]);
+                    this.attachColorCss("background-color", staticValue[1]);
                     break;
-                case "image":
+                case 2:
                     console.log("IMAGE background");
-                    console.log(staticValue[0]);
-                    this.attachBackgroundImageCss(staticValue[0]);
+                    this.attachBackgroundImageCss(staticValue[1]);
                     break;
-                case "linear-gradient":
+                case 3:
                     console.log("LG background");
                     break;
             }

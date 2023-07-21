@@ -9,7 +9,7 @@ dark: https://picsum.photos/id/237/200/300
 -- ftd.background-image bg-image:
 src: $bg-image-src
 repeat: no-repeat
-size: cover
+size: contain
 
 -- ftd.column:
 width: fill-container
