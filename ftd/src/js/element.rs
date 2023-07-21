@@ -2923,9 +2923,9 @@ impl Common {
                 ),
             ));
         }
-        if let Some(ref background) = self.role {
+        if let Some(ref role) = self.role {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
-                background.to_set_property(
+                role.to_set_property(
                     fastn_js::PropertyKind::Role,
                     doc,
                     element_name,

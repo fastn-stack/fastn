@@ -1,0 +1,36 @@
+-- ftd.color bg-solid:
+light: red
+dark: green
+
+-- ftd.image-src bg-image-src:
+light: https://picsum.photos/id/236/200/300
+dark: https://picsum.photos/id/237/200/300
+
+-- ftd.background-image bg-image:
+src: $bg-image-src
+repeat: no-repeat
+size: cover
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-vertical.px: 30
+spacing.fixed.px: 10
+
+-- ftd.column:
+background.solid: $bg-solid
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+background.image: $bg-image
+width.fixed.px: 400
+height.fixed.px: 200
+align-self: center
+
+-- end: ftd.column
+
+-- end: ftd.column

@@ -545,6 +545,10 @@ fn ftd_to_js_variant(name: &str, variant: &str) -> (String, bool) {
             let js_variant = background_variants(variant);
             (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
         }
+        "ftd#background-repeat" => {
+            let js_variant = background_repeat_variants(variant);
+            (format!("fastn_dom.BackgroundStyle.{}", js_variant), false)
+        }
         "ftd#font-size" => {
             let js_variant = font_size_variants(variant);
             (format!("fastn_dom.FontSize.{}", js_variant), true)
@@ -660,6 +664,17 @@ fn border_style_variants(name: &str) -> &'static str {
 fn background_variants(name: &str) -> &'static str {
     match name {
         "solid" => "Solid",
+        "image" => "Image",
+        "linear-gradient" => "LinearGradient",
+        t => todo!("invalid background variant {}", t),
+    }
+}
+
+fn background_repeat_variants(name: &str) -> &'static str {
+    match name {
+        "solid" => "Solid",
+        "image" => "Image",
+        "linear-gradient" => "LinearGradient",
         t => todo!("invalid background variant {}", t),
     }
 }
