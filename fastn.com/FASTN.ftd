@@ -73,6 +73,8 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
 - Syntax Highlighting For SublimeText: /sublime/
   document: author/how-to/sublime.ftd
+- Syntax Highlighting For Visual Studio Code: /vs-code/
+  document: author/how-to/vs-code.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
 
@@ -142,6 +144,8 @@ favicon: /-/fastn.com/images/favicon.svg
 - Module: /module/
   document: /ftd/module.ftd
   skip: true
+- Commenting: /comments/
+  document: ftd/comments.ftd
 - Kernel Components: /kernel/
   document: /ftd/kernel.ftd
   - `ftd.document` 🚧: /document/

@@ -1,0 +1,27 @@
+-- ds.page: Syntax Highlighting In Visual Studio Code
+
+Visual Studio Code does not come with built in syntax highlighting support for `ftd`,
+but we can install it ourselves.
+
+-- ds.h2: Steps
+
+Follow these steps to install the "fastn-syntax" extension:
+
+1. Download the extension file from the following link: [fastn-syntax](https://github.com/harshdoesdev/fastn-syntax/blob/main/fastn-syntax-0.0.3.vsix).
+2. Open Visual Studio Code.
+3. Select `Extensions` from the Side bar.
+4. Click on the three-dot (...) icon and choose `Install from VSIX...`.
+5. Locate and select the file "fastn-syntax-0.0.3.vsix" that you downloaded in Step 1.
+6. After the installation, reload the Visual Studio Code window.
+7. Now, you can open any `.ftd` file to verify if the extension is working correctly.
+
+That's it! You have successfully installed the "fastn-syntax" extension, and it should now be active in Visual Studio Code for `.ftd` files.
+
+-- ftd.image:
+src: $fastn-assets.files.images.vs-code.linux-vs-code-syntax.png
+height.fixed.px: 400
+align-self: center
+border-radius.px: 3
+border-width.px: 1
+
+-- end: ds.page
