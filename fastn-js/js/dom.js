@@ -1031,13 +1031,13 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Background) {
             let backgroundType = staticValue[0];
             switch (backgroundType) {
-                case 1:
+                case fastn_dom.BackgroundStyle.Solid()[0]:
                     this.attachColorCss("background-color", staticValue[1]);
                     break;
-                case 2:
+                case fastn_dom.BackgroundStyle.Image()[0]:
                     this.attachBackgroundImageCss(staticValue[1]);
                     break;
-                case 3:
+                case fastn_dom.BackgroundStyle.LinearGradient()[0]:
                     this.attachLinearGradientCss(staticValue[1]);
                     break;
             }
