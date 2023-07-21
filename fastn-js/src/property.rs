@@ -287,7 +287,9 @@ pub enum PropertyKind {
     TextInputType,
     DefaultTextInputValue,
     Loading,
+    Alt,
     Src,
+    ImageSrc,
     YoutubeSrc,
     Code,
 }
@@ -381,6 +383,8 @@ impl PropertyKind {
             PropertyKind::DefaultTextInputValue => "fastn_dom.PropertyKind.DefaultTextInputValue",
             PropertyKind::Loading => "fastn_dom.PropertyKind.Loading",
             PropertyKind::Src => "fastn_dom.PropertyKind.Src",
+            PropertyKind::ImageSrc => "fastn_dom.PropertyKind.ImageSrc",
+            PropertyKind::Alt => "fastn_dom.PropertyKind.Alt",
             PropertyKind::YoutubeSrc => "fastn_dom.PropertyKind.YoutubeSrc",
             PropertyKind::Code => "fastn_dom.PropertyKind.Code",
         }
