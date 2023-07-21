@@ -137,6 +137,7 @@ fastn_dom.ElementKind = {
     CheckBox: 9,
     TextInput: 10,
     ContainerElement: 11,
+    Rive: 12
 };
 
 fastn_dom.PropertyKind = {
@@ -525,8 +526,12 @@ class Node2 {
     constructor(parent, kind) {
         this.#kind = kind;
 
-        let [node, classes] = fastn_utils.htmlNode(kind);
+        let [node, classes, attributes] = fastn_utils.htmlNode(kind);
+
         this.#node = fastn_virtual.document.createElement(node);
+        for (let key in attributes) {
+          this.#node.setAttribute(key, attributes[key])
+        }
         for (let c in classes) {
             this.#node.classList.add(classes[c]);
         }
@@ -910,14 +915,14 @@ class Node2 {
             switch (staticValue) {
                 case "true":
                 case true:
-                    this.attachAttribute("checked", null);
+                    this.attachAttribute("checked", "");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.Enabled) {
             switch (staticValue) {
                 case "false":
                 case false:
-                    this.attachAttribute("disabled", null);
+                    this.attachAttribute("disabled", "");
                     break;
             }
         } else if (kind === fastn_dom.PropertyKind.TextInputType) {
