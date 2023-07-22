@@ -1354,7 +1354,11 @@ impl Device {
             }
         }
 
-        let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Device, "root", index);
+        let kernel = fastn_js::Kernel::from_component(
+            fastn_js::ElementKind::Device,
+            fastn_js::FUNCTION_PARENT,
+            index,
+        );
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
         component_statements.extend(self.container.to_component_statements(
