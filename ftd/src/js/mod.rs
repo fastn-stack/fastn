@@ -35,7 +35,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     };
     for thing in ftd::interpreter::default::default_bag().values() {
         if let ftd::interpreter::Thing::Variable(v) = thing {
-            ftd_asts.push(v.to_ast(&doc, None));
+            ftd_asts.push(v.to_ast(&doc, None, &mut false));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             ftd_asts.push(f.to_ast(&doc));
         }
@@ -73,7 +73,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         if let ftd::interpreter::Thing::Component(c) = thing {
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
-            document_asts.push(v.to_ast(&doc, Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())));
+            document_asts.push(v.to_ast(
+                &doc,
+                Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                &mut has_rive_components,
+            ));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             document_asts.push(f.to_ast(&doc));
         }
@@ -141,7 +145,12 @@ impl ftd::interpreter::Function {
 }
 
 impl ftd::interpreter::Variable {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc, prefix: Option<String>) -> fastn_js::Ast {
+    pub fn to_ast(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        prefix: Option<String>,
+        has_rive_components: &mut bool,
+    ) -> fastn_js::Ast {
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
             if let ftd::interpreter::Kind::Record { name } = &self.kind.kind {
                 let record = doc.get_record(name, self.line_number).unwrap();
@@ -153,7 +162,7 @@ impl ftd::interpreter::Variable {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
                         fields.push((
                             field.name.to_string(),
-                            value.to_fastn_js_value_with_none(doc),
+                            value.to_fastn_js_value_with_none(doc, has_rive_components),
                         ));
                     } else {
                         fields.push((
@@ -161,7 +170,7 @@ impl ftd::interpreter::Variable {
                             field
                                 .get_default_value()
                                 .unwrap()
-                                .to_set_property_value_with_none(doc),
+                                .to_set_property_value_with_none(doc, has_rive_components),
                         ));
                     }
                 }
@@ -174,20 +183,26 @@ impl ftd::interpreter::Variable {
                 // Todo: It should be only for Mutable not Static
                 return fastn_js::Ast::MutableList(fastn_js::MutableList {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value_with_none(doc),
+                    value: self
+                        .value
+                        .to_fastn_js_value_with_none(doc, has_rive_components),
                     prefix,
                 });
             } else if self.mutable {
                 return fastn_js::Ast::MutableVariable(fastn_js::MutableVariable {
                     name: self.name.to_string(),
-                    value: self.value.to_fastn_js_value_with_none(doc),
+                    value: self
+                        .value
+                        .to_fastn_js_value_with_none(doc, has_rive_components),
                     prefix,
                 });
             }
         }
         fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
             name: self.name.to_string(),
-            value: self.value.to_fastn_js_value_with_none(doc),
+            value: self
+                .value
+                .to_fastn_js_value_with_none(doc, has_rive_components),
             prefix,
         })
     }
@@ -370,6 +385,7 @@ impl ftd::interpreter::Component {
                 inherited_variable_name,
                 device,
                 should_return,
+                has_rive_components,
             )
         } else if let Ok(component_definition) =
             doc.get_component(self.name.as_str(), self.line_number)

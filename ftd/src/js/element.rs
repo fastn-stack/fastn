@@ -56,6 +56,7 @@ impl Element {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         match self {
             Element::Text(text) => text.to_component_statements(
@@ -107,6 +108,7 @@ impl Element {
                 inherited_variable_name,
                 device,
                 should_return,
+                has_rive_components,
             ),
             Element::Row(row) => row.to_component_statements(
                 parent,
@@ -117,6 +119,7 @@ impl Element {
                 inherited_variable_name,
                 device,
                 should_return,
+                has_rive_components,
             ),
             Element::ContainerElement(container) => container.to_component_statements(
                 parent,
@@ -127,6 +130,7 @@ impl Element {
                 inherited_variable_name,
                 device,
                 should_return,
+                has_rive_components,
             ),
             Element::Image(image) => image.to_component_statements(
                 parent,
@@ -1359,6 +1363,7 @@ impl Column {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Column, parent, index);
@@ -1403,12 +1408,13 @@ impl Column {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value(
+                value: v.to_set_property_value_with_ui(
                     doc,
                     component_definition_name,
                     loop_alias,
                     &inherited_variable_name,
                     device,
+                    has_rive_components,
                 ),
                 element_name: kernel.name.to_string(),
                 inherited: inherited_variable_name.to_string(),
@@ -1461,6 +1467,7 @@ impl Row {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Row, parent, index);
@@ -1506,12 +1513,13 @@ impl Row {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value(
+                value: v.to_set_property_value_with_ui(
                     doc,
                     component_definition_name,
                     loop_alias,
                     &inherited_variable_name,
                     device,
+                    has_rive_components,
                 ),
                 element_name: kernel.name.to_string(),
                 inherited: inherited_variable_name.to_string(),
@@ -1561,6 +1569,7 @@ impl ContainerElement {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         let kernel = fastn_js::Kernel::from_component(
@@ -1601,12 +1610,13 @@ impl ContainerElement {
         component_statements.extend(self.children.iter().map(|v| {
             fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
                 kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value(
+                value: v.to_set_property_value_with_ui(
                     doc,
                     component_definition_name,
                     loop_alias,
                     &inherited_variable_name,
                     device,
+                    has_rive_components,
                 ),
                 element_name: kernel.name.to_string(),
                 inherited: inherited_variable_name.to_string(),

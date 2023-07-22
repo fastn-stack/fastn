@@ -11,8 +11,16 @@ impl Value {
     pub(crate) fn to_set_property_value_with_none(
         &self,
         doc: &ftd::interpreter::TDoc,
+        has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
+        self.to_set_property_value_with_ui(
+            doc,
+            &None,
+            &None,
+            fastn_js::INHERITED_VARIABLE,
+            &None,
+            has_rive_components,
+        )
     }
 
     pub(crate) fn to_set_property_value(
@@ -23,6 +31,25 @@ impl Value {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
+        self.to_set_property_value_with_ui(
+            doc,
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+            device,
+            &mut false,
+        )
+    }
+
+    pub(crate) fn to_set_property_value_with_ui(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        has_rive_components: &mut bool,
+    ) -> fastn_js::SetPropertyValue {
         match self {
             Value::Data(value) => value.to_fastn_js_value(
                 doc,
@@ -30,6 +57,7 @@ impl Value {
                 loop_alias,
                 inherited_variable_name,
                 device,
+                has_rive_components,
             ),
             Value::Reference(name) => {
                 fastn_js::SetPropertyValue::Reference(ftd::js::utils::update_reference(
@@ -371,8 +399,16 @@ impl ftd::interpreter::PropertyValue {
     pub(crate) fn to_fastn_js_value_with_none(
         &self,
         doc: &ftd::interpreter::TDoc,
+        has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value(doc, &None, &None, fastn_js::INHERITED_VARIABLE, &None)
+        self.to_fastn_js_value_with_ui(
+            doc,
+            &None,
+            &None,
+            fastn_js::INHERITED_VARIABLE,
+            &None,
+            has_rive_components,
+        )
     }
 
     pub(crate) fn to_fastn_js_value(
@@ -383,12 +419,32 @@ impl ftd::interpreter::PropertyValue {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
     ) -> fastn_js::SetPropertyValue {
-        self.to_value().to_set_property_value(
+        self.to_fastn_js_value_with_ui(
             doc,
             component_definition_name,
             loop_alias,
             inherited_variable_name,
             device,
+            &mut false,
+        )
+    }
+
+    pub(crate) fn to_fastn_js_value_with_ui(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        component_definition_name: &Option<String>,
+        loop_alias: &Option<String>,
+        inherited_variable_name: &str,
+        device: &Option<fastn_js::DeviceType>,
+        has_rive_components: &mut bool,
+    ) -> fastn_js::SetPropertyValue {
+        self.to_value().to_set_property_value_with_ui(
+            doc,
+            component_definition_name,
+            loop_alias,
+            inherited_variable_name,
+            device,
+            has_rive_components,
         )
     }
 
@@ -418,6 +474,7 @@ impl ftd::interpreter::Value {
         loop_alias: &Option<String>,
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
+        has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
         use itertools::Itertools;
 
@@ -433,6 +490,7 @@ impl ftd::interpreter::Value {
                         loop_alias,
                         inherited_variable_name,
                         device,
+                        has_rive_components,
                     )
                 } else {
                     fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
@@ -517,7 +575,7 @@ impl ftd::interpreter::Value {
                         fastn_js::INHERITED_VARIABLE,
                         device,
                         false,
-                        &mut false,
+                        has_rive_components,
                     ),
                 })
             }
