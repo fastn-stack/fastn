@@ -5,13 +5,13 @@ but we can install it ourselves.
 
 -- ds.h2: Steps
 
-Follow these steps to install the "fastn-syntax" extension:
+Follow these steps to install the "fastn-vscode" extension:
 
-1. Download the extension file ("fastn-syntax-*.vsix") from the releases link: [fastn-vscode](https://github.com/fastn-stack/fastn-vscode/releases/latest).
+1. Download the extension file ("fastn-vscode-*.vsix") from the releases link: [fastn-vscode](https://github.com/fastn-stack/fastn-vscode/releases/latest).
 2. Open Visual Studio Code.
 3. Select `Extensions` from the Side bar.
 4. Click on the three-dot (...) icon and choose `Install from VSIX...`.
-5. Locate and select the file "fastn-syntax-*.vsix" that you downloaded in Step 1.
+5. Locate and select the file "fastn-vscode-*.vsix" that you downloaded in Step 1.
 6. After the installation, reload the Visual Studio Code window.
 7. Now, you can open any `.ftd` file to verify if the extension is working correctly.
 
