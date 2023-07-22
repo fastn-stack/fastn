@@ -286,6 +286,7 @@ pub(crate) fn url_regex() -> regex::Regex {
     ).unwrap()
 }
 
+#[tracing::instrument]
 pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<String> {
     construct_url_and_return_response(url.to_string(), |f| async move {
         http_get_str(f.as_str()).await
@@ -293,7 +294,9 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<S
     .await
 }
 
+#[tracing::instrument]
 pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+    println!("http_download_by_id: {url}");
     construct_url_and_return_response(
         url.to_string(),
         |f| async move { http_get(f.as_str()).await },
@@ -301,6 +304,7 @@ pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u
     .await
 }
 
+#[tracing::instrument(skip(f))]
 pub(crate) async fn construct_url_and_return_response<T, F, D>(
     url: String,
     f: F,
@@ -318,6 +322,7 @@ where
     }
 }
 
+#[tracing::instrument]
 pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn_core::Result<T> {
     Ok(reqwest::Client::new()
         .get(url)
@@ -329,6 +334,7 @@ pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn
         .await?)
 }
 
+#[tracing::instrument(skip(body))]
 pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
     url: &str,
     body: B,
