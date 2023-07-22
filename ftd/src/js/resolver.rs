@@ -45,6 +45,18 @@ impl<'a> ResolverData<'a> {
         }
     }
 
+    pub(crate) fn clone_with_new_device(
+        &self,
+        device: &'a Option<fastn_js::DeviceType>,
+    ) -> ResolverData<'a> {
+        ResolverData {
+            component_definition_name: self.component_definition_name,
+            loop_alias: self.loop_alias,
+            inherited_variable_name: self.inherited_variable_name,
+            device,
+        }
+    }
+
     pub(crate) fn clone_with_new_loop_alias(
         &self,
         loop_alias: &'a Option<String>,

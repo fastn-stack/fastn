@@ -1392,7 +1392,9 @@ impl Device {
                 kind: fastn_js::PropertyKind::Children,
                 value: v.to_set_property_value_with_ui(
                     doc,
-                    &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
+                    &rdata
+                        .clone_with_new_inherited_variable(&inherited_variable_name)
+                        .clone_with_new_device(&Some(self.device.clone())),
                     has_rive_components,
                 ),
                 element_name: kernel.name.to_string(),
