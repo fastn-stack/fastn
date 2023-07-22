@@ -96,10 +96,6 @@ let foo__multiply_by_two = function (args)
   };
   return (fastn_utils.getter(__args__.a) * 2);
 }
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

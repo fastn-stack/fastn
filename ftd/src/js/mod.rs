@@ -42,6 +42,27 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
             ftd_asts.push(f.to_ast(&doc));
         }
     }
+
+    ftd_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+        name: "inherited".to_string(),
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+            fields: vec![
+                (
+                    "colors".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        ftd::js::utils::update_reference_with_none("ftd#default-colors"),
+                    ),
+                ),
+                (
+                    "types".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        ftd::js::utils::update_reference_with_none("ftd#default-types"),
+                    ),
+                ),
+            ],
+        }),
+        prefix: None,
+    }));
     ftd_asts
 }
 
@@ -84,26 +105,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             document_asts.push(f.to_ast(&doc));
         }
     }
-    document_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
-        name: "inherited".to_string(),
-        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-            fields: vec![
-                (
-                    "colors".to_string(),
-                    fastn_js::SetPropertyValue::Reference(
-                        ftd::js::utils::update_reference_with_none("ftd#default-colors"),
-                    ),
-                ),
-                (
-                    "types".to_string(),
-                    fastn_js::SetPropertyValue::Reference(
-                        ftd::js::utils::update_reference_with_none("ftd#default-types"),
-                    ),
-                ),
-            ],
-        }),
-        prefix: None,
-    }));
 
     JSAstData {
         asts: document_asts,
