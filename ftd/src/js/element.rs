@@ -1923,7 +1923,7 @@ impl Rive {
             indoc::indoc! {"
                 let {rive_name} = new rive.Rive({{
                     src: fastn_utils.getFlattenStaticValue({src}),
-                    canvas: {canvas},
+                    canvas: {canvas}.getNode(),
                     autoplay: fastn_utils.getStaticValue({autoplay}),
                     stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
                     artboard: {artboard},

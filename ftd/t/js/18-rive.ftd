@@ -1,8 +1,8 @@
 -- ftd.rive:
 id: panda
-src: ftd/ftd/t/assets/panda.riv
+src: https://cdn.rive.app/animations/vehicles.riv
 canvas-width: 500
 canvas-height: 500
-state-machine: State Machine 1
+state-machine: bumpy
 width.fixed.px: 500
 background.solid: yellow
