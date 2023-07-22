@@ -39,6 +39,9 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
         if let ftd::interpreter::Thing::Variable(v) = thing {
             ftd_asts.push(v.to_ast(&doc, None, &mut false));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
+            if f.external_implementation {
+                continue;
+            }
             ftd_asts.push(f.to_ast(&doc));
         }
     }
