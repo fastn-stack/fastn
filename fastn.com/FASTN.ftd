@@ -73,8 +73,8 @@ favicon: /-/fastn.com/images/favicon.svg
     skip: true
 - Syntax Highlighting For SublimeText: /sublime/
   document: author/how-to/sublime.ftd
-- Syntax Highlighting For Visual Studio Code: /vs-code/
-  document: author/how-to/vs-code.ftd
+- Syntax Highlighting For Visual Studio Code: /vscode/
+  document: author/how-to/vscode.ftd
 - `fastn` Community: /community/
 - Docs: /docs/
 
