@@ -342,9 +342,9 @@ impl FTDResult {
     }
 }
 
-impl Into<fastn_core::http::Response> for FTDResult {
-    fn into(self) -> fastn_core::http::Response {
-        match self {
+impl From<FTDResult> for fastn_core::http::Response {
+    fn from(val: FTDResult) -> Self {
+        match val {
             FTDResult::HTML(body) => {
                 fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
             }
