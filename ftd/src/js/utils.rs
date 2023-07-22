@@ -5,6 +5,16 @@ pub fn trim_all_lines(s: &str) -> String {
     s.split('\n').map(|v| v.trim()).join("\n")
 }
 
+pub(crate) fn get_external_scripts(has_rive_components: bool) -> Vec<String> {
+    let mut scripts = vec![];
+    if has_rive_components {
+        scripts.push(
+            "<script src=\"https://unpkg.com/@rive-app/canvas@1.0.98\"></script>".to_string(),
+        );
+    }
+    scripts
+}
+
 pub(crate) fn to_key(key: &str) -> String {
     match key {
         "ctrl" => "Control",

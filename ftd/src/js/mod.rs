@@ -43,11 +43,24 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     ftd_asts
 }
 
-/// This contains asts of things (other than `ftd`) and instructions/tree
-pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_js::Ast> {
+pub struct JSAstData {
+    /// This contains asts of things (other than `ftd`) and instructions/tree
+    pub asts: Vec<fastn_js::Ast>,
+    /// This contains external scripts provided by user and also `ftd`
+    /// internally supports (like rive).
+    pub scripts: Vec<String>,
+}
+
+pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     use itertools::Itertools;
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
-    let mut document_asts = vec![ftd::js::from_tree(document.tree.as_slice(), &doc)];
+    // Check if document tree has rive. This is used to add rive script.
+    let mut has_rive_components = false;
+    let mut document_asts = vec![ftd::js::from_tree(
+        document.tree.as_slice(),
+        &doc,
+        &mut has_rive_components,
+    )];
     let default_thing_name = ftd::interpreter::default::default_bag()
         .into_iter()
         .map(|v| v.0)
@@ -58,7 +71,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
             continue;
         }
         if let ftd::interpreter::Thing::Component(c) = thing {
-            document_asts.push(c.to_ast(&doc));
+            document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
             document_asts.push(v.to_ast(&doc, Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
@@ -85,7 +98,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> Vec<fastn_j
         }),
         prefix: None,
     }));
-    document_asts
+
+    JSAstData {
+        asts: document_asts,
+        scripts: ftd::js::utils::get_external_scripts(has_rive_components),
+    }
 }
 
 impl ftd::interpreter::Function {
@@ -177,7 +194,11 @@ impl ftd::interpreter::Variable {
 }
 
 impl ftd::interpreter::ComponentDefinition {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+    pub fn to_ast(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        has_rive_components: &mut bool,
+    ) -> fastn_js::Ast {
         use itertools::Itertools;
 
         let mut statements = vec![];
@@ -189,6 +210,7 @@ impl ftd::interpreter::ComponentDefinition {
             fastn_js::INHERITED_VARIABLE,
             &None,
             true,
+            has_rive_components,
         ));
         fastn_js::component_with_params(
             self.name.as_str(),
@@ -217,6 +239,7 @@ impl ftd::interpreter::ComponentDefinition {
 pub fn from_tree(
     tree: &[ftd::interpreter::Component],
     doc: &ftd::interpreter::TDoc,
+    has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
@@ -228,6 +251,7 @@ pub fn from_tree(
             fastn_js::INHERITED_VARIABLE,
             &None,
             false,
+            has_rive_components,
         ))
     }
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
@@ -244,6 +268,7 @@ impl ftd::interpreter::Component {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
 
@@ -258,6 +283,7 @@ impl ftd::interpreter::Component {
                 inherited_variable_name,
                 device,
                 true,
+                has_rive_components,
             )
         } else {
             self.to_component_statements_(
@@ -269,6 +295,7 @@ impl ftd::interpreter::Component {
                 inherited_variable_name,
                 device,
                 should_return,
+                has_rive_components,
             )
         };
 
@@ -327,9 +354,13 @@ impl ftd::interpreter::Component {
         inherited_variable_name: &str,
         device: &Option<fastn_js::DeviceType>,
         should_return: bool,
+        has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         use itertools::Itertools;
         if ftd::js::element::is_kernel(self.name.as_str()) {
+            if !*has_rive_components {
+                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str())
+            }
             ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
                 parent,
                 index,
