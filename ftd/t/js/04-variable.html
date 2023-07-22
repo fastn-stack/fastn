@@ -157,7 +157,6 @@ let foo__foo = function (parent, inherited, args)
 let foo__append_string = function (args) {
   let __args__ = {
     a: fastn.mutableList([]),
-    v: null,
     ...args
   };
   return (ftd.append(__args__.a, __args__.v));
