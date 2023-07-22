@@ -288,7 +288,7 @@ impl ftd::interpreter::Component {
         let loop_alias = self.iteration.clone().map(|v| v.alias);
         let mut component_statements = if self.is_loop() || self.condition.is_some() {
             self.to_component_statements_(
-                "root",
+                fastn_js::FUNCTION_PARENT,
                 0,
                 doc,
                 &rdata.clone_with_new_loop_alias(&loop_alias),
