@@ -3254,3 +3254,7 @@ pub fn is_kernel(s: &str) -> bool {
     ]
     .contains(&s)
 }
+
+pub(crate) fn is_rive_component(s: &str) -> bool {
+    "ftd#rive".eq(s)
+}

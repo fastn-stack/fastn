@@ -517,6 +517,7 @@ impl ftd::interpreter::Value {
                         fastn_js::INHERITED_VARIABLE,
                         device,
                         false,
+                        &mut false,
                     ),
                 })
             }
