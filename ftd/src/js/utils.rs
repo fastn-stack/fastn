@@ -33,24 +33,19 @@ pub(crate) fn to_key(key: &str) -> String {
 }
 
 pub(crate) fn update_reference_with_none(reference: &str) -> String {
-    update_reference(reference, &None, &None, fastn_js::INHERITED_VARIABLE)
+    update_reference(reference, &ftd::js::ResolverData::none())
 }
 
-pub(crate) fn update_reference(
-    reference: &str,
-    component_definition_name: &Option<String>,
-    loop_alias: &Option<String>,
-    inherited_variable_name: &str,
-) -> String {
+pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -> String {
     let name = reference.to_string();
 
-    if let Some(component_definition_name) = component_definition_name {
+    if let Some(component_definition_name) = rdata.component_definition_name {
         if let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {
             return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);
         }
     }
 
-    if let Some(loop_alias) = loop_alias {
+    if let Some(loop_alias) = rdata.loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
             return format!("item.{alias}");
         } else if loop_alias.eq(&name) {
@@ -59,7 +54,7 @@ pub(crate) fn update_reference(
     }
 
     if let Some(remaining) = name.strip_prefix("inherited.") {
-        return format!("{inherited_variable_name}.{remaining}");
+        return format!("{}.{remaining}", rdata.inherited_variable_name);
     }
 
     if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {

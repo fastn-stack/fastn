@@ -4,10 +4,12 @@
 #[macro_use]
 mod ftd_test_helpers;
 mod element;
+mod resolver;
 mod utils;
 mod value;
 
 pub use element::{Common, Element};
+pub use resolver::ResolverData;
 pub use value::Value;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
@@ -130,10 +132,9 @@ impl ftd::interpreter::Function {
                                 v.name.to_string(),
                                 val.to_set_property_value(
                                     doc,
-                                    &Some(self.name.to_string()),
-                                    &None,
-                                    fastn_js::INHERITED_VARIABLE,
-                                    &None,
+                                    &ftd::js::ResolverData::new_with_component_definition_name(
+                                        &Some(self.name.to_string()),
+                                    ),
                                 ),
                             )
                         })
@@ -221,9 +222,9 @@ impl ftd::interpreter::ComponentDefinition {
             "parent",
             0,
             doc,
-            &Some(self.name.to_string()),
-            fastn_js::INHERITED_VARIABLE,
-            &None,
+            &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+                self.name.to_string(),
+            )),
             true,
             has_rive_components,
         ));
@@ -238,10 +239,9 @@ impl ftd::interpreter::ComponentDefinition {
                             v.name.to_string(),
                             val.to_set_property_value(
                                 doc,
-                                &Some(self.name.to_string()),
-                                &None,
-                                fastn_js::INHERITED_VARIABLE,
-                                &None,
+                                &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+                                    self.name.to_string(),
+                                )),
                             ),
                         )
                     })
@@ -262,9 +262,7 @@ pub fn from_tree(
             "parent",
             index,
             doc,
-            &None,
-            fastn_js::INHERITED_VARIABLE,
-            &None,
+            &ftd::js::ResolverData::none(),
             false,
             has_rive_components,
         ))
@@ -273,15 +271,12 @@ pub fn from_tree(
 }
 
 impl ftd::interpreter::Component {
-    #[allow(clippy::too_many_arguments)]
     pub fn to_component_statements(
         &self,
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        component_definition_name: &Option<String>,
-        inherited_variable_name: &str,
-        device: &Option<fastn_js::DeviceType>,
+        rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -293,10 +288,7 @@ impl ftd::interpreter::Component {
                 "root",
                 0,
                 doc,
-                component_definition_name,
-                &loop_alias,
-                inherited_variable_name,
-                device,
+                &rdata.clone_with_new_loop_alias(&loop_alias),
                 true,
                 has_rive_components,
             )
@@ -305,10 +297,7 @@ impl ftd::interpreter::Component {
                 parent,
                 index,
                 doc,
-                component_definition_name,
-                &None,
-                inherited_variable_name,
-                device,
+                &rdata.clone_with_new_loop_alias(&None),
                 should_return,
                 has_rive_components,
             )
@@ -320,18 +309,10 @@ impl ftd::interpreter::Component {
                     deps: condition
                         .references
                         .values()
-                        .flat_map(|v| {
-                            v.get_deps(
-                                component_definition_name,
-                                &loop_alias,
-                                inherited_variable_name,
-                            )
-                        })
+                        .flat_map(|v| v.get_deps(&rdata.clone_with_new_loop_alias(&loop_alias)))
                         .collect_vec(),
                     condition: condition.update_node_with_variable_reference_js(
-                        component_definition_name,
-                        &loop_alias,
-                        inherited_variable_name,
+                        &rdata.clone_with_new_loop_alias(&loop_alias),
                     ),
                     statements: component_statements,
                     parent: parent.to_string(),
@@ -342,13 +323,9 @@ impl ftd::interpreter::Component {
 
         if let Some(iteration) = self.iteration.as_ref() {
             component_statements = vec![fastn_js::ComponentStatement::ForLoop(fastn_js::ForLoop {
-                list_variable: iteration.on.to_fastn_js_value(
-                    doc,
-                    component_definition_name,
-                    &loop_alias,
-                    inherited_variable_name,
-                    device,
-                ),
+                list_variable: iteration
+                    .on
+                    .to_fastn_js_value(doc, &rdata.clone_with_new_loop_alias(&loop_alias)),
                 statements: component_statements,
                 parent: parent.to_string(),
                 should_return,
@@ -358,16 +335,12 @@ impl ftd::interpreter::Component {
         component_statements
     }
 
-    #[allow(clippy::too_many_arguments)]
     fn to_component_statements_(
         &self,
         parent: &str,
         index: usize,
         doc: &ftd::interpreter::TDoc,
-        component_definition_name: &Option<String>,
-        loop_alias: &Option<String>,
-        inherited_variable_name: &str,
-        device: &Option<fastn_js::DeviceType>,
+        rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -380,10 +353,7 @@ impl ftd::interpreter::Component {
                 parent,
                 index,
                 doc,
-                component_definition_name,
-                loop_alias,
-                inherited_variable_name,
-                device,
+                rdata,
                 should_return,
                 has_rive_components,
             )
@@ -394,18 +364,8 @@ impl ftd::interpreter::Component {
                 .arguments
                 .iter()
                 .filter_map(|v| {
-                    v.get_optional_value(self.properties.as_slice()).map(|val| {
-                        (
-                            v.name.to_string(),
-                            val.to_set_property_value(
-                                doc,
-                                component_definition_name,
-                                loop_alias,
-                                inherited_variable_name,
-                                device,
-                            ),
-                        )
-                    })
+                    v.get_optional_value(self.properties.as_slice())
+                        .map(|val| (v.name.to_string(), val.to_set_property_value(doc, rdata)))
                 })
                 .collect_vec();
             // Todo: Add event
@@ -419,7 +379,7 @@ impl ftd::interpreter::Component {
                     name: self.name.to_string(),
                     arguments,
                     parent: parent.to_string(),
-                    inherited: inherited_variable_name.to_string(),
+                    inherited: rdata.inherited_variable_name.to_string(),
                     should_return,
                 },
             )]
