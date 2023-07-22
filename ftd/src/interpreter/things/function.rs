@@ -6,6 +6,7 @@ pub struct Function {
     pub expression: Vec<Expression>,
     pub js: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
+    pub external_implementation: bool,
 }
 
 impl Function {
@@ -24,6 +25,7 @@ impl Function {
             expression,
             js,
             line_number,
+            external_implementation: false,
         }
     }
 

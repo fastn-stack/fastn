@@ -34,7 +34,8 @@
           }
         ],
         "js": null,
-        "line_number": 22
+        "line_number": 22,
+        "external_implementation": false
       }
     },
     "foo#foo": {
@@ -254,7 +255,8 @@
           }
         ],
         "js": null,
-        "line_number": 16
+        "line_number": 16,
+        "external_implementation": false
       }
     },
     "foo#num": {
