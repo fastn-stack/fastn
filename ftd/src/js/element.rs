@@ -672,9 +672,8 @@ pub struct Boolean {
 
 #[derive(Debug)]
 pub struct Column {
-    pub children: Option<ftd::js::Value>,
-    pub inherited: InheritedProperties,
     pub container: Container,
+    pub container_properties: ContainerProperties,
     pub common: Common,
 }
 
@@ -685,18 +684,18 @@ pub struct InheritedProperties {
 }
 
 #[derive(Debug)]
-pub struct Container {
+pub struct ContainerProperties {
     pub spacing: Option<ftd::js::Value>,
     pub wrap: Option<ftd::js::Value>,
     pub align_content: Option<ftd::js::Value>,
 }
 
-impl Container {
+impl ContainerProperties {
     pub fn from(
         properties: &[ftd::interpreter::Property],
         arguments: &[ftd::interpreter::Argument],
-    ) -> Container {
-        Container {
+    ) -> ContainerProperties {
+        ContainerProperties {
             spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
             wrap: ftd::js::value::get_optional_js_value("wrap", properties, arguments),
             align_content: ftd::js::value::get_optional_js_value(
@@ -739,17 +738,76 @@ impl Container {
 }
 
 #[derive(Debug)]
-pub struct ContainerElement {
+pub struct Container {
     pub children: Option<ftd::js::Value>,
     pub inherited: InheritedProperties,
+}
+
+impl Container {
+    pub fn from(
+        properties: &[ftd::interpreter::Property],
+        arguments: &[ftd::interpreter::Argument],
+    ) -> Container {
+        Container {
+            children: ftd::js::utils::get_js_value_from_properties(
+                ftd::interpreter::utils::get_children_properties_from_properties(properties)
+                    .as_slice(),
+            ),
+            inherited: InheritedProperties::from(properties, arguments),
+        }
+    }
+
+    pub(crate) fn to_component_statements(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &ftd::js::ResolverData,
+        component_name: &str,
+        has_rive_components: &mut bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+
+        let inherited_variables =
+            self.inherited
+                .get_inherited_variables(doc, rdata, component_name);
+
+        let inherited_variable_name = inherited_variables
+            .as_ref()
+            .map(|v| v.name.clone())
+            .unwrap_or_else(|| rdata.inherited_variable_name.to_string());
+
+        if let Some(inherited_variables) = inherited_variables {
+            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
+                inherited_variables,
+            ));
+        }
+
+        component_statements.extend(self.children.iter().map(|v| {
+            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::Children,
+                value: v.to_set_property_value_with_ui(
+                    doc,
+                    &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
+                    has_rive_components,
+                ),
+                element_name: component_name.to_string(),
+                inherited: inherited_variable_name.to_string(),
+            })
+        }));
+
+        component_statements
+    }
+}
+
+#[derive(Debug)]
+pub struct ContainerElement {
+    pub container: Container,
     pub common: Common,
 }
 
 #[derive(Debug)]
 pub struct Row {
-    pub children: Option<ftd::js::Value>,
-    pub inherited: InheritedProperties,
     pub container: Container,
+    pub container_properties: ContainerProperties,
     pub common: Common,
 }
 
@@ -1074,14 +1132,11 @@ impl Column {
             .unwrap();
 
         Column {
-            children: ftd::js::utils::get_js_value_from_properties(
-                component.get_children_properties().as_slice(),
-            ),
-            inherited: InheritedProperties::from(
+            container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            container: Container::from(
+            container_properties: ContainerProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -1111,39 +1166,19 @@ impl Column {
             rdata,
         ));
 
-        component_statements.extend(self.container.to_set_properties(
+        component_statements.extend(self.container_properties.to_set_properties(
             kernel.name.as_str(),
             doc,
             rdata,
         ));
 
-        let inherited_variables =
-            self.inherited
-                .get_inherited_variables(doc, rdata, kernel.name.as_str());
+        component_statements.extend(self.container.to_component_statements(
+            doc,
+            rdata,
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
 
-        let inherited_variable_name = inherited_variables
-            .as_ref()
-            .map(|v| v.name.clone())
-            .unwrap_or_else(|| rdata.inherited_variable_name.to_string());
-
-        if let Some(inherited_variables) = inherited_variables {
-            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
-                inherited_variables,
-            ));
-        }
-
-        component_statements.extend(self.children.iter().map(|v| {
-            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value_with_ui(
-                    doc,
-                    &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
-                    has_rive_components,
-                ),
-                element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name.to_string(),
-            })
-        }));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -1162,14 +1197,11 @@ impl Row {
             .component()
             .unwrap();
         Row {
-            children: ftd::js::utils::get_js_value_from_properties(
-                component.get_children_properties().as_slice(),
-            ),
-            inherited: InheritedProperties::from(
+            container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            container: Container::from(
+            container_properties: ContainerProperties::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -1200,39 +1232,19 @@ impl Row {
             rdata,
         ));
 
-        component_statements.extend(self.container.to_set_properties(
+        component_statements.extend(self.container_properties.to_set_properties(
             kernel.name.as_str(),
             doc,
             rdata,
         ));
 
-        let inherited_variables =
-            self.inherited
-                .get_inherited_variables(doc, rdata, kernel.name.as_str());
+        component_statements.extend(self.container.to_component_statements(
+            doc,
+            rdata,
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
 
-        let inherited_variable_name = inherited_variables
-            .as_ref()
-            .map(|v| v.name.clone())
-            .unwrap_or_else(|| rdata.inherited_variable_name.to_string());
-
-        if let Some(inherited_variables) = inherited_variables {
-            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
-                inherited_variables,
-            ));
-        }
-
-        component_statements.extend(self.children.iter().map(|v| {
-            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value_with_ui(
-                    doc,
-                    &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
-                    has_rive_components,
-                ),
-                element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name.to_string(),
-            })
-        }));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -1252,10 +1264,7 @@ impl ContainerElement {
             .unwrap();
 
         ContainerElement {
-            children: ftd::js::utils::get_js_value_from_properties(
-                component.get_children_properties().as_slice(),
-            ),
-            inherited: InheritedProperties::from(
+            container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -1290,33 +1299,13 @@ impl ContainerElement {
             rdata,
         ));
 
-        let inherited_variables =
-            self.inherited
-                .get_inherited_variables(doc, rdata, kernel.name.as_str());
+        component_statements.extend(self.container.to_component_statements(
+            doc,
+            rdata,
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
 
-        let inherited_variable_name = inherited_variables
-            .as_ref()
-            .map(|v| v.name.clone())
-            .unwrap_or_else(|| rdata.inherited_variable_name.to_string());
-
-        if let Some(inherited_variables) = inherited_variables {
-            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
-                inherited_variables,
-            ));
-        }
-
-        component_statements.extend(self.children.iter().map(|v| {
-            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value_with_ui(
-                    doc,
-                    &rdata.clone_with_new_inherited_variable(&inherited_variable_name),
-                    has_rive_components,
-                ),
-                element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name.to_string(),
-            })
-        }));
         if should_return {
             component_statements.push(fastn_js::ComponentStatement::Return {
                 component_name: kernel.name,
@@ -1328,8 +1317,7 @@ impl ContainerElement {
 
 #[derive(Debug)]
 pub struct Device {
-    pub children: Option<ftd::js::Value>,
-    pub container: InheritedProperties,
+    pub container: Container,
     pub device: fastn_js::DeviceType,
 }
 
@@ -1342,10 +1330,7 @@ impl Device {
             .component()
             .unwrap();
         Device {
-            children: ftd::js::utils::get_js_value_from_properties(
-                component.get_children_properties().as_slice(),
-            ),
-            container: InheritedProperties::from(
+            container: Container::from(
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -1372,35 +1357,12 @@ impl Device {
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Device, "root", index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
-        let inherited_variables =
-            self.container
-                .get_inherited_variables(doc, rdata, kernel.name.as_str());
-
-        let inherited_variable_name = inherited_variables
-            .as_ref()
-            .map(|v| v.name.clone())
-            .unwrap_or_else(|| rdata.inherited_variable_name.to_string());
-
-        if let Some(inherited_variables) = inherited_variables {
-            component_statements.push(fastn_js::ComponentStatement::StaticVariable(
-                inherited_variables,
-            ));
-        }
-
-        component_statements.extend(self.children.iter().map(|v| {
-            fastn_js::ComponentStatement::SetProperty(fastn_js::SetProperty {
-                kind: fastn_js::PropertyKind::Children,
-                value: v.to_set_property_value_with_ui(
-                    doc,
-                    &rdata
-                        .clone_with_new_inherited_variable(&inherited_variable_name)
-                        .clone_with_new_device(&Some(self.device.clone())),
-                    has_rive_components,
-                ),
-                element_name: kernel.name.to_string(),
-                inherited: inherited_variable_name.to_string(),
-            })
-        }));
+        component_statements.extend(self.container.to_component_statements(
+            doc,
+            &rdata.clone_with_new_device(&Some(self.device.clone())),
+            kernel.name.as_str(),
+            has_rive_components,
+        ));
         component_statements.push(fastn_js::ComponentStatement::Return {
             component_name: kernel.name,
         });
