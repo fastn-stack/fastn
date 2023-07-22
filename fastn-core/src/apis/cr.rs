@@ -40,12 +40,14 @@ pub async fn create_cr_page(
     req: fastn_core::http::Request,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     match create_cr_page_worker(req).await {
-        Ok(body) => Ok(fastn_core::http::ok(body)),
+        Ok(body) => Ok(body),
         Err(err) => fastn_core::http::api_error(err.to_string()),
     }
 }
 
-async fn create_cr_page_worker(req: fastn_core::http::Request) -> fastn_core::Result<Vec<u8>> {
+async fn create_cr_page_worker(
+    req: fastn_core::http::Request,
+) -> fastn_core::Result<fastn_core::http::Response> {
     let mut config = fastn_core::Config::read(None, false, Some(&req)).await?;
     let create_cr_ftd = fastn_core::package_info_create_cr(&config)?;
 
@@ -56,5 +58,7 @@ async fn create_cr_page_worker(req: fastn_core::http::Request) -> fastn_core::Re
         package_name: config.package.name.clone(),
     };
 
-    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false, false).await
+    fastn_core::package::package_doc::read_ftd(&mut config, &main_document, "/", false, false)
+        .await
+        .map(Into::into)
 }
