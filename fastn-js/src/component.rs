@@ -9,7 +9,7 @@ pub struct Component {
 pub fn component0(name: &str, body: Vec<fastn_js::ComponentStatement>) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: vec!["parent".to_string()],
+        params: vec![fastn_js::COMPONENT_PARENT.to_string()],
         args: vec![],
         body,
     })
@@ -23,8 +23,8 @@ pub fn component_with_params(
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
         params: vec![
-            "parent".to_string(),
-            "inherited".to_string(),
+            fastn_js::COMPONENT_PARENT.to_string(),
+            fastn_js::INHERITED_VARIABLE.to_string(),
             "args".to_string(),
         ],
         args,
@@ -39,7 +39,7 @@ pub fn component1(
 ) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: vec!["parent".to_string(), arg1.to_string()],
+        params: vec![fastn_js::COMPONENT_PARENT.to_string(), arg1.to_string()],
         args: vec![],
         body,
     })
@@ -53,7 +53,11 @@ pub fn component2(
 ) -> fastn_js::Ast {
     fastn_js::Ast::Component(Component {
         name: name.to_string(),
-        params: vec!["parent".to_string(), arg1.to_string(), arg2.to_string()],
+        params: vec![
+            fastn_js::COMPONENT_PARENT.to_string(),
+            arg1.to_string(),
+            arg2.to_string(),
+        ],
         args: vec![],
         body,
     })

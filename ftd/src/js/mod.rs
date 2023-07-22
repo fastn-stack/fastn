@@ -222,7 +222,7 @@ impl ftd::interpreter::ComponentDefinition {
 
         let mut statements = vec![];
         statements.extend(self.definition.to_component_statements(
-            "parent",
+            fastn_js::COMPONENT_PARENT,
             0,
             doc,
             &ftd::js::ResolverData::new_with_component_definition_name(&Some(
@@ -262,7 +262,7 @@ pub fn from_tree(
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
         statements.extend(component.to_component_statements(
-            "parent",
+            fastn_js::COMPONENT_PARENT,
             index,
             doc,
             &ftd::js::ResolverData::none(),
