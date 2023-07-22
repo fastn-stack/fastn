@@ -139,7 +139,9 @@ impl ftd::interpreter::Function {
                                 ),
                             )
                         })
-                        .unwrap_or_else(|| (v.name.to_string(), fastn_js::SetPropertyValue::null()))
+                        .unwrap_or_else(|| {
+                            (v.name.to_string(), fastn_js::SetPropertyValue::undefined())
+                        })
                 })
                 .collect_vec(),
         )
