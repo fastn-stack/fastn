@@ -513,10 +513,6 @@ global.foo__colors = fastn.recordInstance({
   warning: global.foo__warning_btb_,
   custom: global.foo__custom_
 });
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();

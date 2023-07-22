@@ -166,10 +166,6 @@ let foo__append_string = function (args) {
   return (ftd.append(__args__.a, __args__.v));
 }
 global.foo__names = fastn.mutableList([]);
-let inherited = fastn.recordInstance({
-  colors: ftd.default_colors,
-  types: ftd.default_types
-});
 
         fastn_virtual.hydrate(main);
         ftd.post_init();
