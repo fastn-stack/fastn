@@ -158,18 +158,7 @@ impl Component {
     }
 
     pub fn get_children_properties(&self) -> Vec<ftd::interpreter::Property> {
-        use itertools::Itertools;
-
-        self.properties
-            .iter()
-            .filter_map(|v| {
-                if v.value.kind().inner_list().is_subsection_ui() {
-                    Some(v.to_owned())
-                } else {
-                    None
-                }
-            })
-            .collect_vec()
+        ftd::interpreter::utils::get_children_properties_from_properties(&self.properties)
     }
 
     pub fn get_children(
