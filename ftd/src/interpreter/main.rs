@@ -1065,6 +1065,23 @@ pub struct Document {
     pub css: std::collections::HashSet<String>,
 }
 
+impl Document {
+    pub fn tdoc(&self) -> ftd::interpreter::TDoc {
+        ftd::interpreter::TDoc {
+            name: self.name.as_str(),
+            aliases: &self.aliases,
+            bag: ftd::interpreter::BagOrState::Bag(&self.data),
+        }
+    }
+    pub fn get_redirect(&self) -> Option<String> {
+        self.data
+            .get("ftd#redirect")
+            .and_then(|v| v.to_owned().variable(self.name.as_str(), 0).ok())
+            .and_then(|v| v.value.resolve(&self.tdoc(), 0).ok())
+            .and_then(|v| v.string(self.name.as_str(), 0).ok())
+    }
+}
+
 #[derive(Debug)]
 pub enum StateWithThing<T> {
     Thing(T),

@@ -424,6 +424,9 @@ pub(crate) async fn read_ftd_2022(
             });
         }
     };
+    if let Some(r) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect(r));
+    }
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
@@ -496,6 +499,10 @@ pub(crate) async fn read_ftd_2023(
             });
         }
     };
+
+    if let Some(r) = main_ftd_doc.get_redirect() {
+        return Ok(FTDResult::Redirect(r));
+    }
 
     let js_ast = ftd::js::document_into_js_ast(main_ftd_doc);
     let js_document_script = fastn_js::to_js(js_ast.as_slice(), true);
