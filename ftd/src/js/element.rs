@@ -1544,8 +1544,7 @@ impl Rive {
             .common
             .id
             .as_ref()
-            .map(|v| v.get_string_data())
-            .flatten()
+            .and_then(|v| v.get_string_data())
             .map(|v| {
                 format!(
                     indoc::indoc! {"

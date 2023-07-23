@@ -27,6 +27,18 @@ let ftd = {
         const inputs = riveConst.stateMachineInputs(stateMachineName);
         const bumpTrigger = inputs.find(i => i.name === args.input);
         bumpTrigger.value = args.value;
+    },
+
+    toggle_rive_boolean(args, node) {
+        if (!!args.rive) {
+            let riveNode = ftd.riveNodes[`${args.rive}__${ftd.device.get()}`];
+            node = riveNode ? riveNode: node;
+        }
+        let riveConst = node.getExtraData().rive;
+        const stateMachineName = riveConst.stateMachineNames[0];
+        const inputs = riveConst.stateMachineInputs(stateMachineName);
+        const trigger = inputs.find(i => i.name === args.input);
+        trigger.value = !trigger.value;
     }
 
 };
