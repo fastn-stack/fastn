@@ -844,7 +844,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 js: None,
                 line_number: 0,
-                external_implementation: true
+                external_implementation: false
             })
         ),
         (
