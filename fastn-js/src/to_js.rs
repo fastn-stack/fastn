@@ -59,7 +59,14 @@ impl fastn_js::SetProperty {
         text(format!("{}.setProperty(", self.element_name).as_str())
             .append(text(format!("{},", self.kind.to_js()).as_str()))
             .append(space())
-            .append(text(format!("{},", self.value.to_js()).as_str()))
+            .append(text(
+                format!(
+                    "{},",
+                    self.value
+                        .to_js_with_element_name(&Some(self.element_name.clone()))
+                )
+                .as_str(),
+            ))
             .append(space())
             .append(text(format!("{});", self.inherited).as_str()))
     }
@@ -74,7 +81,7 @@ impl fastn_js::EventHandler {
             .append(text("function()"))
             .append(space())
             .append(text("{"))
-            .append(self.action.to_js())
+            .append(self.action.to_js(&Some(self.element_name.clone())))
             .append(text("});"))
     }
 }
@@ -117,16 +124,25 @@ impl fastn_js::Event {
 }
 
 impl fastn_js::Function {
-    pub fn to_js(&self) -> pretty::RcDoc<'static> {
+    pub fn to_js(&self, element_name: &Option<String>) -> pretty::RcDoc<'static> {
         text(format!("{}(", fastn_js::utils::name_to_js(self.name.as_str())).as_str())
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
                 self.parameters
                     .iter()
-                    .map(|(k, v)| format!("{k}: {},", v.to_js())),
+                    .map(|(k, v)| format!("{k}: {},", v.to_js_with_element_name(element_name))),
                 pretty::RcDoc::softline(),
             ))
-            .append(text("});"))
+            .append(text(
+                format!(
+                    "}}{});",
+                    element_name
+                        .as_ref()
+                        .map(|v| format!(", {}", v))
+                        .unwrap_or_default()
+                )
+                .as_str(),
+            ))
     }
 }
 

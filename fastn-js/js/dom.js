@@ -576,7 +576,17 @@ class Node2 {
     #node;
     #kind;
     #parent;
+    /**
+     * This is where we store all the attached closures, so we can free them
+     * when we are done.
+     */
     #mutables;
+    /**
+     * This is where we store the extraData related to node. This is
+     * especially useful to store data for integrated external library (like
+     * rive).
+     */
+    #extraData;
     constructor(parent, kind) {
         this.#kind = kind;
 
@@ -590,8 +600,9 @@ class Node2 {
             this.#node.classList.add(classes[c]);
         }
         this.#parent = parent;
-        // this is where we store all the attached closures, so we can free them when we are done
         this.#mutables = [];
+
+        this.#extraData = {};
         /*if (!!parent.parent) {
             parent = parent.parent();
         }*/
@@ -1149,6 +1160,10 @@ class Node2 {
     }
     getNode() {
         return this.#node;
+    }
+
+    getExtraData() {
+        return this.#extraData
     }
     addEventHandler(event, func) {
         if (event === fastn_dom.Event.Click) {

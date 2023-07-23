@@ -1540,22 +1540,20 @@ impl Rive {
         let kernel = fastn_js::Kernel::from_component(fastn_js::ElementKind::Rive, parent, index);
         component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
 
-        let rive_name = self.common.id.as_ref().unwrap().get_string_data().unwrap();
-
         component_statements.push(fastn_js::ComponentStatement::AnyBlock(format!(
             indoc::indoc! {"
-                let {rive_name} = new rive.Rive({{
+                let extraData = {canvas}.getExtraData();
+                extraData.rive = new rive.Rive({{
                     src: fastn_utils.getFlattenStaticValue({src}),
                     canvas: {canvas}.getNode(),
                     autoplay: fastn_utils.getStaticValue({autoplay}),
                     stateMachines: fastn_utils.getFlattenStaticValue({state_machines}),
                     artboard: {artboard},
                     onLoad: (_) => {{
-                        {rive_name}.resizeDrawingSurfaceToCanvas();
+                        extraData.rive.resizeDrawingSurfaceToCanvas();
                     }},
                 }});
             "},
-            rive_name = rive_name,
             src = self.src.to_set_property_value(doc, rdata).to_js(),
             canvas = kernel.name,
             autoplay = self.autoplay.to_set_property_value(doc, rdata).to_js(),
